@@ -818,7 +818,17 @@
     "cryptoAccountAlreadyExistMessage",
     "errorGeneratingProof",
     "createWalletMessage",
-    "successfullyGeneratingProof"
+    "successfullyGeneratingProof",
+    "wouldYouLikeToAcceptThisCredentialsFromThisOrganisation",
+    "thisOrganisationRequestsThisInformation",
+    "iS",
+    "isSmallerThan",
+    "isBiggerThan",
+    "isOneOfTheFollowingValues",
+    "isNotOneOfTheFollowingValues",
+    "isNot",
+    "approve",
+    "noInformationWillBeSharedFromThisCredentialMessage"
   ],
 
   "es": [
@@ -1640,7 +1650,17 @@
     "cryptoAccountAlreadyExistMessage",
     "errorGeneratingProof",
     "createWalletMessage",
-    "successfullyGeneratingProof"
+    "successfullyGeneratingProof",
+    "wouldYouLikeToAcceptThisCredentialsFromThisOrganisation",
+    "thisOrganisationRequestsThisInformation",
+    "iS",
+    "isSmallerThan",
+    "isBiggerThan",
+    "isOneOfTheFollowingValues",
+    "isNotOneOfTheFollowingValues",
+    "isNot",
+    "approve",
+    "noInformationWillBeSharedFromThisCredentialMessage"
   ],
 
   "fr": [
@@ -1765,7 +1785,17 @@
     "cryptoAccountAlreadyExistMessage",
     "errorGeneratingProof",
     "createWalletMessage",
-    "successfullyGeneratingProof"
+    "successfullyGeneratingProof",
+    "wouldYouLikeToAcceptThisCredentialsFromThisOrganisation",
+    "thisOrganisationRequestsThisInformation",
+    "iS",
+    "isSmallerThan",
+    "isBiggerThan",
+    "isOneOfTheFollowingValues",
+    "isNotOneOfTheFollowingValues",
+    "isNot",
+    "approve",
+    "noInformationWillBeSharedFromThisCredentialMessage"
   ],
 
   "it": [
@@ -2587,6 +2617,16 @@
     "cryptoAccountAlreadyExistMessage",
     "errorGeneratingProof",
     "createWalletMessage",
-    "successfullyGeneratingProof"
+    "successfullyGeneratingProof",
+    "wouldYouLikeToAcceptThisCredentialsFromThisOrganisation",
+    "thisOrganisationRequestsThisInformation",
+    "iS",
+    "isSmallerThan",
+    "isBiggerThan",
+    "isOneOfTheFollowingValues",
+    "isNotOneOfTheFollowingValues",
+    "isNot",
+    "approve",
+    "noInformationWillBeSharedFromThisCredentialMessage"
   ]
 }

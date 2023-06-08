@@ -40,10 +40,10 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
           children: <Widget>[
             // TODO(all): change UI
             Text(
-              'Would you like to accept this credential(s) from this organisation?',
+              l10n.wouldYouLikeToAcceptThisCredentialsFromThisOrganisation,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.credentialSubtitle.copyWith(
-                    color: const Color(0xFF86809D),
+                    color: Theme.of(context).colorScheme.lightPurple,
                   ),
             ),
             const SizedBox(height: 30),

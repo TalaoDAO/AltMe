@@ -115,6 +115,8 @@ extension CustomColorScheme on ColorScheme {
 
   Color get kycKeyIconColor => const Color(0xFF86809D);
 
+  Color get lightPurple => const Color(0xFF86809D);
+
   Color get popupBackground => const Color(0xff271C38);
 
   Color get cardHighlighted => const Color(0xFF251F38);

@@ -95,10 +95,12 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'This organisation requests this information for'
-                  ' ${body.reason}:',
+                  l10n.thisOrganisationRequestsThisInformation,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.credentialSubtitle,
+                  style:
+                      Theme.of(context).textTheme.credentialSubtitle.copyWith(
+                            color: Theme.of(context).colorScheme.lightPurple,
+                          ),
                 ),
                 const SizedBox(height: 10),
                 if (body.scope != null)
@@ -126,19 +128,18 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                               // handling key
                               String conditionMsg = '';
                               if (conditionKey == r'$eq') {
-                                conditionMsg = 'is';
+                                conditionMsg = l10n.iS;
                               } else if (conditionKey == r'$lt') {
-                                conditionMsg = 'is smaller than';
+                                conditionMsg = l10n.isSmallerThan;
                               } else if (conditionKey == r'$gt') {
-                                conditionMsg = 'is bigger than';
+                                conditionMsg = l10n.isBiggerThan;
                               } else if (conditionKey == r'$in') {
-                                conditionMsg =
-                                    'is one of the following values:';
+                                conditionMsg = l10n.isOneOfTheFollowingValues;
                               } else if (conditionKey == r'$nin') {
                                 conditionMsg =
-                                    'is not one of the following values:';
+                                    l10n.isNotOneOfTheFollowingValues;
                               } else if (conditionKey == r'$ne') {
-                                conditionMsg = 'is not';
+                                conditionMsg = l10n.isNot;
                               }
 
                               //handling value
@@ -176,7 +177,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'PROOF',
+                                      l10n.proof,
                                       textAlign: TextAlign.start,
                                       style: Theme.of(context)
                                           .textTheme
@@ -187,7 +188,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                                           ),
                                     ),
                                     const Icon(
-                                      Icons.check_circle_outline,
+                                      Icons.check_circle,
                                       color: Colors.green,
                                     )
                                   ],
@@ -196,6 +197,10 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                                 Text(
                                   requirementValue,
                                   textAlign: TextAlign.start,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(color: const Color(0xffD1CCE3)),
                                 ),
                                 const SizedBox(height: 10),
                                 // Text(
@@ -215,9 +220,13 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                                   Text(
                                     l10n.credentialNotFound,
                                     textAlign: TextAlign.start,
-                                    style: const TextStyle(
-                                      color: Colors.red,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.red,
+                                        ),
                                   ),
                                 ] else ...[
                                   TransparentInkWell(
@@ -235,15 +244,21 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            'From ${separateUppercaseWords(
-                                              proofScopeRequest.query.type!,
-                                            )}',
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelLarge,
+                                          Expanded(
+                                            child: Text(
+                                              '${l10n.from} ${separateUppercaseWords(
+                                                proofScopeRequest.query.type!,
+                                              )}',
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium!
+                                                  .copyWith(
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                            ),
                                           ),
+                                          const SizedBox(width: 5),
                                           const Icon(
                                             Icons.chevron_right,
                                             color: Colors.white,
@@ -270,7 +285,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       MyGradientButton(
-                        text: 'Approve',
+                        text: l10n.approve,
                         onPressed: state.canGenerateProof
                             ? () {
                                 Navigator.of(context).push<void>(
@@ -294,7 +309,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                       MyOutlinedButton(
                         verticalSpacing: 20,
                         borderRadius: 20,
-                        text: 'Cancel',
+                        text: l10n.cancel,
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                     ],

@@ -85,4 +85,5 @@ class IconStrings {
   static const String upload = '$base/upload.png';
   static const String document = '$base/document.png';
   static const String cashInHand = '$base/cash-in-hand.png';
+  static const String warning = '$base/warning.png';
 }
