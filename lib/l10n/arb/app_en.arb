@@ -904,5 +904,6 @@
   "isNotOneOfTheFollowingValues": "is not one of the following values",
   "isNot": "is not",
   "approve": "Approve",
-  "noInformationWillBeSharedFromThisCredentialMessage": "No information will be shared from this credential (Zero Knowledge Proof)."
+  "noInformationWillBeSharedFromThisCredentialMessage": "No information will be shared from this credential (Zero Knowledge Proof).",
+  "burn": "Burn"
 }

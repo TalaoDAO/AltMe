@@ -111,7 +111,20 @@ class _NftDetailsViewState extends State<NftDetailsView> {
       navigation: (widget.nftModel.isTransferable == false ||
               widget.nftModel.contractAddress
                   .equals(AltMeStrings.minterAddress))
-          ? null
+          ? widget.nftModel.contractAddress.equals(AltMeStrings.minterAddress)
+              ? SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(Sizes.spaceSmall),
+                    child: MyGradientButton(
+                      text: l10n.burn,
+                      onPressed: () {
+                        //show popup
+                        //burn
+                      },
+                    ),
+                  ),
+                )
+              : null
           : SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(Sizes.spaceSmall),

@@ -25,6 +25,47 @@ class MWeb3Client {
     return balanceInUnit;
   }
 
+  static Future<void> burnToken({
+    required String privateKey,
+    required String rpcUrl,
+    required String contractAddress,
+    required String abi,
+    required BigInt tokenId,
+    required int chainId,
+  }) async {
+    final httpClient = Client();
+    final client = Web3Client(rpcUrl, httpClient);
+
+    final credentials = EthPrivateKey.fromHex(privateKey);
+
+    final nftContract = DeployedContract(
+      ContractAbi.fromJson(abi, 'NFT'),
+      EthereumAddress.fromHex(contractAddress),
+    );
+
+    final function = nftContract.function('burn');
+    final params = [tokenId];
+
+    final transaction = Transaction.callContract(
+      contract: nftContract,
+      function: function,
+      parameters: params,
+    );
+
+    await client.signTransaction(
+      credentials,
+      transaction,
+      chainId: chainId,
+    );
+
+    final result = await client.sendTransaction(
+      credentials,
+      transaction,
+      chainId: chainId,
+    );
+    log.i('Transaction sent: $result');
+  }
+
   static double formatEthAmount({
     required BigInt amount,
     EtherUnit fromUnit = EtherUnit.wei,
