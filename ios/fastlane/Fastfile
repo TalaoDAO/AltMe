@@ -18,6 +18,10 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
+    # sync_code_signing
+    # disable_automatic_code_signing(path: "my_project.xcodeproj")
+    enable_automatic_code_signing(path: "Runner.xcodeproj")
     build_app(workspace: "Runner.xcworkspace", scheme: "production")
+    upload_to_testflight
   end
 end
