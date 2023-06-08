@@ -60,7 +60,8 @@ class CredentialModel extends Equatable {
       shareLink: oldCredentialModel.shareLink,
       display: oldCredentialModel.display,
       credentialPreview: Credential.fromJson(newData),
-      expirationDate: oldCredentialModel.expirationDate,
+      expirationDate: newData['expirationDate'] as String? ??
+          oldCredentialModel.expirationDate,
       credentialManifest: oldCredentialModel.credentialManifest,
       receivedId: oldCredentialModel.receivedId,
       challenge: oldCredentialModel.challenge,
