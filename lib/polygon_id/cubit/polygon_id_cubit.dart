@@ -78,7 +78,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           network: network,
           web3Url: Parameters.INFURA_URL,
           web3RdpUrl: Parameters.INFURA_RDP_URL,
-          web3ApiKey: dotenv.get('INFURA_POLYGON_API_KEY'),
+          web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.ID_STATE_CONTRACT_ADDR,
           pushUrl: Parameters.PUSH_URL,
         );
@@ -88,7 +88,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           network: network,
           web3Url: Parameters.INFURA_MUMBAI_URL,
           web3RdpUrl: Parameters.INFURA_MUMBAI_RDP_URL,
-          web3ApiKey: dotenv.get('INFURA_POLYGON_API_KEY'),
+          web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.MUMBAI_ID_STATE_CONTRACT_ADDR,
           pushUrl: Parameters.MUMBAI_PUSH_URL,
         );
@@ -121,7 +121,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           network: Parameters.POLYGON_MAIN_NETWORK,
           web3Url: Parameters.INFURA_URL,
           web3RdpUrl: Parameters.INFURA_RDP_URL,
-          web3ApiKey: dotenv.get('INFURA_POLYGON_API_KEY'),
+          web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.ID_STATE_CONTRACT_ADDR,
           pushUrl: Parameters.PUSH_URL,
         );
@@ -131,7 +131,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           network: Parameters.POLYGON_TEST_NETWORK,
           web3Url: Parameters.INFURA_MUMBAI_URL,
           web3RdpUrl: Parameters.INFURA_MUMBAI_RDP_URL,
-          web3ApiKey: dotenv.get('INFURA_POLYGON_API_KEY'),
+          web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.MUMBAI_ID_STATE_CONTRACT_ADDR,
           pushUrl: Parameters.MUMBAI_PUSH_URL,
         );
