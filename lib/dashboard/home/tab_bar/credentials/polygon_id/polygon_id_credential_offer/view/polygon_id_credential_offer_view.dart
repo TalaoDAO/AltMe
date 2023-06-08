@@ -38,7 +38,6 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // TODO(all): change UI
             Text(
               l10n.wouldYouLikeToAcceptThisCredentialsFromThisOrganisation,
               textAlign: TextAlign.center,
@@ -77,37 +76,19 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                     value: '',
                   );
                 } else {
-                  widget = CredentialContainer(
-                    child: AspectRatio(
-                      aspectRatio: Sizes.credentialAspectRatio,
-                      child: DecoratedBox(
-                        decoration: BaseBoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .credentialBackground,
-                          gradient: const LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color(0xff0B67C5),
-                              Color(0xff200072),
-                            ],
-                          ),
-                          shapeColor:
-                              Theme.of(context).colorScheme.documentShape,
-                          value: 1,
-                          anchors: const <Alignment>[],
-                        ),
-                        child: Center(
-                          child: MyText(
-                            separateUppercaseWords(
-                              credentialPreview.credentialSubjectModel
-                                  .credentialSubjectType.name,
-                            ),
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
-                        ),
+                  widget = DefaultCredentialListWidget(
+                    credentialModel: CredentialModel(
+                      id: credentialPreview.id,
+                      image: 'image',
+                      credentialPreview: credentialPreview,
+                      shareLink: '',
+                      display: const Display(
+                        '',
+                        '',
+                        '',
+                        '',
                       ),
+                      data: const <String, dynamic>{},
                     ),
                   );
                 }

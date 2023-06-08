@@ -98,6 +98,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           scannedResponse.substring('${Urls.appDeepLink}?uri='.length),
         );
         await verify(uri: Uri.parse(url));
+      } else if (scannedResponse.startsWith('{"body":{"credentials"')) {
+        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+        await polygonIdCubit.polygonIdFunction(scannedResponse);
       } else {
         final uri = Uri.parse(scannedResponse);
         await verify(uri: uri);

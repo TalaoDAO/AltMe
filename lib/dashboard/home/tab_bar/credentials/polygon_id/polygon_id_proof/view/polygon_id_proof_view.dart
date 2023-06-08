@@ -27,16 +27,12 @@ class PolygonIdProofPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    var credentialSubjectType = CredentialSubjectType.defaultCredential;
-
-    for (final element in CredentialSubjectType.values) {
-      if (claimEntity.type == element.name) {
-        credentialSubjectType = element;
-        break;
-      }
-    }
-
+    final jsonCredential = claimEntity.info;
+    final credentialPreview = Credential.fromJson(jsonCredential);
     Widget widget;
+
+    final credentialSubjectType =
+        credentialPreview.credentialSubjectModel.credentialSubjectType;
 
     if (credentialSubjectType == CredentialSubjectType.kycAgeCredential) {
       widget = const CredentialBaseWidget(
@@ -52,74 +48,19 @@ class PolygonIdProofPage extends StatelessWidget {
         value: '',
       );
     } else {
-      widget = CredentialContainer(
-        child: AspectRatio(
-          aspectRatio: Sizes.credentialAspectRatio,
-          child: DecoratedBox(
-            decoration: BaseBoxDecoration(
-              color: Theme.of(context).colorScheme.credentialBackground,
-              gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xff0B67C5),
-                  Color(0xff200072),
-                ],
-              ),
-              shapeColor: Theme.of(context).colorScheme.documentShape,
-              value: 1,
-              anchors: const <Alignment>[],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              separateUppercaseWords(claimEntity.type),
-                              textAlign: TextAlign.start,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              l10n.proof,
-                              textAlign: TextAlign.start,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                    color: Colors.grey.withOpacity(0.9),
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      const Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
+      widget = DefaultCredentialListWidget(
+        credentialModel: CredentialModel(
+          id: credentialPreview.id,
+          image: 'image',
+          credentialPreview: credentialPreview,
+          shareLink: '',
+          display: const Display(
+            '',
+            '',
+            '',
+            '',
           ),
+          data: const <String, dynamic>{},
         ),
       );
     }
