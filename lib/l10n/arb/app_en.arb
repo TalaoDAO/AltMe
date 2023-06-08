@@ -905,5 +905,6 @@
   "isNot": "is not",
   "approve": "Approve",
   "noInformationWillBeSharedFromThisCredentialMessage": "No information will be shared from this credential (Zero Knowledge Proof).",
-  "burn": "Burn"
+  "burn": "Burn",
+  "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT": "Would you like to confirm that you intend to burn this NFT?"
 }

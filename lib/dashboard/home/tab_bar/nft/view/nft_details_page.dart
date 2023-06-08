@@ -117,9 +117,22 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                     padding: const EdgeInsets.all(Sizes.spaceSmall),
                     child: MyGradientButton(
                       text: l10n.burn,
-                      onPressed: () {
-                        //show popup
-                        //burn
+                      onPressed: () async {
+                        final confirmed = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => ConfirmDialog(
+                            title: l10n
+                                .wouldYouLikeToConfirmThatYouIntendToBurnThisNFT,
+                            yes: l10n.yes,
+                            no: l10n.no,
+                            showNoButton: true,
+                          ),
+                        );
+                        if (confirmed ?? false) {
+                          await context
+                              .read<NftDetailsCubit>()
+                              .burnToken(nftModel: widget.nftModel);
+                        }
                       },
                     ),
                   ),
