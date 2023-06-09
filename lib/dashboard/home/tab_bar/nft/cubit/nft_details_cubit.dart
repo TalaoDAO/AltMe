@@ -6,11 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'nft_details_state.dart';
-
 part 'nft_details_cubit.g.dart';
 
-class NftDetailsCubit extends Cubit<NFtDetailsState> {
+part 'nft_details_state.dart';
+
+class NftDetailsCubit extends Cubit<NftDetailsState> {
   NftDetailsCubit({
     required this.manageNetworkCubit,
     required this.walletCubit,
@@ -19,9 +19,10 @@ class NftDetailsCubit extends Cubit<NFtDetailsState> {
   final ManageNetworkCubit manageNetworkCubit;
   final WalletCubit walletCubit;
 
-  Future<void> burnToken({required NftModel nftModel}) async {
+  Future<void> burnDefiComplianceToken({required NftModel nftModel}) async {
     final network = manageNetworkCubit.state.network;
     if (network is! EthereumNetwork) return;
+    emit(state.copyWith(status: AppStatus.loading));
     final selectedNetwork = manageNetworkCubit.state.network as EthereumNetwork;
     final rpcUrl = selectedNetwork.rpcNodeUrl;
     final chainId = selectedNetwork.chainId;
@@ -30,7 +31,7 @@ class NftDetailsCubit extends Cubit<NFtDetailsState> {
     final privateKey = walletCubit.state.currentAccount?.secretKey ?? '';
     final tokenId = nftModel.tokenId;
 
-    return MWeb3Client.burnToken(
+    await MWeb3Client.burnToken(
       privateKey: privateKey,
       rpcUrl: rpcUrl,
       contractAddress: contractAddress,
@@ -38,5 +39,6 @@ class NftDetailsCubit extends Cubit<NFtDetailsState> {
       tokenId: BigInt.parse(tokenId),
       chainId: chainId,
     );
+    emit(state.copyWith(status: AppStatus.success));
   }
 }
