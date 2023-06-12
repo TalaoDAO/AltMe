@@ -161,8 +161,11 @@ String char2Bytes(String text) {
 
 Future<bool> isConnected() async {
   final log = getLogger('Check Internet Connection');
-  if (!(await DeviceInfoPlugin().iosInfo).isPhysicalDevice) {
-    return true;
+
+  if (!isAndroid) {
+    if (!(await DeviceInfoPlugin().iosInfo).isPhysicalDevice) {
+      return true;
+    }
   }
   final connectivityResult = await Connectivity().checkConnectivity();
   if (connectivityResult == ConnectivityResult.mobile ||
