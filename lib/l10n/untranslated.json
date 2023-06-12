@@ -828,7 +828,9 @@
     "isNotOneOfTheFollowingValues",
     "isNot",
     "approve",
-    "noInformationWillBeSharedFromThisCredentialMessage"
+    "noInformationWillBeSharedFromThisCredentialMessage",
+    "burn",
+    "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT"
   ],
 
   "es": [
@@ -1660,7 +1662,9 @@
     "isNotOneOfTheFollowingValues",
     "isNot",
     "approve",
-    "noInformationWillBeSharedFromThisCredentialMessage"
+    "noInformationWillBeSharedFromThisCredentialMessage",
+    "burn",
+    "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT"
   ],
 
   "fr": [
@@ -1795,7 +1799,9 @@
     "isNotOneOfTheFollowingValues",
     "isNot",
     "approve",
-    "noInformationWillBeSharedFromThisCredentialMessage"
+    "noInformationWillBeSharedFromThisCredentialMessage",
+    "burn",
+    "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT"
   ],
 
   "it": [
@@ -2627,6 +2633,8 @@
     "isNotOneOfTheFollowingValues",
     "isNot",
     "approve",
-    "noInformationWillBeSharedFromThisCredentialMessage"
+    "noInformationWillBeSharedFromThisCredentialMessage",
+    "burn",
+    "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT"
   ]
 }
