@@ -14,6 +14,7 @@ enum CredentialCategory {
   walletIntegrity,
   blockchainAccountsCards,
   othersCards,
+  polygonidCards,
 }
 
 List<CredentialCategory> get getCredentialCategorySorted {
@@ -49,6 +50,8 @@ extension CredentialCategoryX on CredentialCategory {
         return 90;
       case CredentialCategory.walletIntegrity:
         return 80;
+      case CredentialCategory.polygonidCards:
+        return 75;
     }
   }
 
@@ -99,6 +102,8 @@ extension CredentialCategoryX on CredentialCategory {
         ];
       case CredentialCategory.walletIntegrity:
         return [];
+      case CredentialCategory.polygonidCards:
+        return [];
     }
   }
 
@@ -123,6 +128,8 @@ extension CredentialCategoryX on CredentialCategory {
       case CredentialCategory.socialMediaCards:
         return false;
       case CredentialCategory.walletIntegrity:
+        return false;
+      case CredentialCategory.polygonidCards:
         return false;
     }
   }
@@ -199,6 +206,13 @@ extension CredentialCategoryX on CredentialCategory {
           homeSubTitle: l10n.walletIntegrityCredentialsHomeSubtitle,
           discoverTitle: l10n.walletIntegrityCredentialsDiscoverTitle,
           discoverSubTitle: l10n.walletIntegrityCredentialsDiscoverSubtitle,
+        );
+      case CredentialCategory.polygonidCards:
+        return CredentialCategoryConfig(
+          homeTitle: l10n.polygonCredentialsHomeTitle,
+          homeSubTitle: l10n.polygonCredentialsHomeSubtitle,
+          discoverTitle: l10n.polygonCredentialsDiscoverTitle,
+          discoverSubTitle: l10n.polygonCredentialsDiscoverSubtitle,
         );
     }
   }

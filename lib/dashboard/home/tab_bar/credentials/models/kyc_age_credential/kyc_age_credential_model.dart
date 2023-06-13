@@ -15,7 +15,7 @@ class KYCAgeCredentialModel extends CredentialSubjectModel {
     this.documentType,
   }) : super(
           credentialSubjectType: CredentialSubjectType.kycAgeCredential,
-          credentialCategory: CredentialCategory.identityCards,
+          credentialCategory: CredentialCategory.polygonidCards,
         );
 
   factory KYCAgeCredentialModel.fromJson(Map<String, dynamic> json) =>

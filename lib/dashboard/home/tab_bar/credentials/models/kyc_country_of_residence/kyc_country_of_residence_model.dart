@@ -15,7 +15,7 @@ class KYCCountryOfResidenceModel extends CredentialSubjectModel {
     this.documentType,
   }) : super(
           credentialSubjectType: CredentialSubjectType.kycCountryOfResidence,
-          credentialCategory: CredentialCategory.identityCards,
+          credentialCategory: CredentialCategory.polygonidCards,
         );
 
   factory KYCCountryOfResidenceModel.fromJson(Map<String, dynamic> json) =>

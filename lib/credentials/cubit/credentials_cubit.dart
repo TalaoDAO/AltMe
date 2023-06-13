@@ -257,6 +257,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       case CredentialCategory.walletIntegrity:
         // TODO(all): Handle this case.
         break;
+      case CredentialCategory.polygonidCards:
+        // TODO: Handle this case.
+        break;
     }
   }
 
