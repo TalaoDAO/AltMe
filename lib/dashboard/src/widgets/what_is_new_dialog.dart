@@ -76,6 +76,15 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'PolygonID mainnet integration',
+                                'PolygonID Twitter Attestations through Clique.Social',
+                                'DeFi compliance SBT for BNB Chain',
+                                'Bug fixes',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.15.0',
+                              features: [
                                 'New cards designs',
                                 'Robust KYC solution (ID360) by Docaposte',
                                 'PolygonID integration for ZKP credentials',
