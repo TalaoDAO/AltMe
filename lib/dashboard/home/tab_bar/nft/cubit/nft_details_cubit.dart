@@ -5,9 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:web3dart/json_rpc.dart';
 
 part 'nft_details_cubit.g.dart';
-
 part 'nft_details_state.dart';
 
 class NftDetailsCubit extends Cubit<NftDetailsState> {
@@ -20,25 +20,53 @@ class NftDetailsCubit extends Cubit<NftDetailsState> {
   final WalletCubit walletCubit;
 
   Future<void> burnDefiComplianceToken({required NftModel nftModel}) async {
-    final network = manageNetworkCubit.state.network;
-    if (network is! EthereumNetwork) return;
-    emit(state.copyWith(status: AppStatus.loading));
-    final selectedNetwork = manageNetworkCubit.state.network as EthereumNetwork;
-    final rpcUrl = selectedNetwork.rpcNodeUrl;
-    final chainId = selectedNetwork.chainId;
-    final contractAddress = nftModel.contractAddress;
-    final abi = await rootBundle.loadString('assets/abi/ssi-sbt-abi.json');
-    final privateKey = walletCubit.state.currentAccount?.secretKey ?? '';
-    final tokenId = nftModel.tokenId;
+    try {
+      final network = manageNetworkCubit.state.network;
+      if (network is! EthereumNetwork) return;
+      emit(state.copyWith(status: AppStatus.loading));
+      final selectedNetwork =
+          manageNetworkCubit.state.network as EthereumNetwork;
+      final rpcUrl = selectedNetwork.rpcNodeUrl;
+      final chainId = selectedNetwork.chainId;
+      final contractAddress = nftModel.contractAddress;
+      final abi = await rootBundle.loadString('assets/abi/ssi-sbt-abi.json');
+      final privateKey = walletCubit.state.currentAccount?.secretKey ?? '';
+      final tokenId = nftModel.tokenId;
 
-    await MWeb3Client.burnToken(
-      privateKey: privateKey,
-      rpcUrl: rpcUrl,
-      contractAddress: contractAddress,
-      abi: abi,
-      tokenId: BigInt.parse(tokenId),
-      chainId: chainId,
-    );
-    emit(state.copyWith(status: AppStatus.success));
+      await MWeb3Client.burnToken(
+        privateKey: privateKey,
+        rpcUrl: rpcUrl,
+        contractAddress: contractAddress,
+        abi: abi,
+        tokenId: BigInt.parse(tokenId),
+        chainId: chainId,
+      );
+      emit(state.copyWith(status: AppStatus.success));
+    } catch (e) {
+      if (e is RPCError) {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage.error(
+              stringMessage: e.message,
+              showDialog: true,
+            ),
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+              showDialog: true,
+            ),
+          ),
+        );
+      }
+    }
   }
 }
