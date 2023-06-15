@@ -63,8 +63,14 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         } else {
           LoadingView().hide();
         }
+
         if (state.status == AppStatus.success) {
           Navigator.of(context).pop();
+        } else if (state.status == AppStatus.error && state.message != null) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: state.message!,
+          );
         }
       },
       child: BasePage(
@@ -151,6 +157,9 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                                 .read<NftDetailsCubit>()
                                 .burnDefiComplianceToken(
                                   nftModel: widget.nftModel,
+                                )
+                                .timeout(
+                                  const Duration(minutes: 1),
                                 );
                           }
                         },
