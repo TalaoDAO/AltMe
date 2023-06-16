@@ -6,6 +6,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 
 import 'package:bloc/bloc.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:ebsi/ebsi.dart';
@@ -215,11 +216,28 @@ class ScanCubit extends Cubit<ScanState> {
             List<Activity>.of(credentialModel.activities)
               ..add(Activity(acquisitionAt: DateTime.now()));
 
+        CredentialManifest? credentialManifest;
+
+        try {
+          // Try to get Credential manifest for proofOfTwitterStats
+          if (credentialModel.credentialPreview.credentialSubjectModel
+                  .credentialSubjectType ==
+              CredentialSubjectType.proofOfTwitterStats) {
+            final response = await client.get(Urls.proofOfTwitterStatsUrl);
+            credentialManifest =
+                CredentialManifest.fromJson(response as Map<String, dynamic>);
+          }
+        } catch (e) {
+          log.e('can not get the credntials manifest for proof '
+              'Of Twitter Stats error: $e');
+        }
+
         await credentialsCubit.insertCredential(
           credential: CredentialModel.copyWithData(
             oldCredentialModel: credentialModel,
             newData: jsonCredential as Map<String, dynamic>,
             activities: activities,
+            credentialManifest: credentialManifest,
           ),
         );
 

@@ -48,6 +48,9 @@ class Urls {
   static const String kycCountryOfResidenceUrl =
       'https://issuer.talao.co/credential-manifest/polygonid/kyccountryofresidencecredential';
 
+  static const String proofOfTwitterStatsUrl =
+      'https://issuer.talao.co/credential-manifest/polygonid/ProofOfTwitterStats';
+
   static const String chainbornMembershipCardUrl =
       'https://issuer.talao.co/chainborn/membershipcard/';
 

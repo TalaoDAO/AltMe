@@ -62,4 +62,5 @@ enum CredentialSubjectType {
   verifiableIdCard,
   voucher,
   walletCredential,
+  proofOfTwitterStats,
 }

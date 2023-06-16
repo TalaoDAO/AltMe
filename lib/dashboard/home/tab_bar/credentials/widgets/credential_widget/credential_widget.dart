@@ -47,6 +47,7 @@ export 'poo_address_base_widget.dart';
 export 'professional_experience_assessment_widget.dart';
 export 'professional_skill_assessment_widget.dart';
 export 'professional_student_card_widget.dart';
+export 'proof_of_twitter_stats_widget.dart';
 export 'resident_card_widget.dart';
 export 'self_issued_widget.dart';
 export 'student_card_widget.dart';

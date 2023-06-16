@@ -52,6 +52,7 @@ class CredentialModel extends Equatable {
     required CredentialModel oldCredentialModel,
     required Map<String, dynamic> newData,
     required List<Activity> activities,
+    CredentialManifest? credentialManifest,
   }) {
     return CredentialModel(
       id: oldCredentialModel.id,
@@ -62,7 +63,8 @@ class CredentialModel extends Equatable {
       credentialPreview: Credential.fromJson(newData),
       expirationDate: newData['expirationDate'] as String? ??
           oldCredentialModel.expirationDate,
-      credentialManifest: oldCredentialModel.credentialManifest,
+      credentialManifest:
+          credentialManifest ?? oldCredentialModel.credentialManifest,
       receivedId: oldCredentialModel.receivedId,
       challenge: oldCredentialModel.challenge,
       domain: oldCredentialModel.domain,
