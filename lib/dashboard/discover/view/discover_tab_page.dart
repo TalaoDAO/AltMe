@@ -126,7 +126,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                         url: Urls.discoverNftsWebView,
                         onNavigationRequest: (request) async {
                           if (request.url.startsWith(
-                            'https://discover-nfts-part.webflow.io',
+                            'https://discover-coins-part.webflow.io/prod-nota-available/nft-noir',
                           )) {
                             await LaunchUrl.launch(request.url);
                             return NavigationDecision.prevent;
@@ -141,7 +141,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                           if ((!request.url
                                   .startsWith(Urls.discoverCoinsWebView)) ||
                               request.url.startsWith(
-                                'https://discover-nfts-part.webflow.io',
+                                'https://discover-coins-part.webflow.io/prod-nota-available/nft-noir',
                               )) {
                             /// if a link has a different base URL than the
                             /// current webpage, it should be opened in an
