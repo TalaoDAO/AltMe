@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -190,17 +192,18 @@ class _DashboardViewState extends State<DashboardView> {
                           onPageChanged:
                               context.read<DashboardCubit>().onPageChanged,
                           physics: const NeverScrollableScrollPhysics(),
-                          children: const [
-                            HomePage(),
+                          children: [
+                            const HomePage(),
                             if (Parameters.walletHandlesCrypto)
-                              DiscoverTabPage()
+                              const DiscoverTabPage()
                             else
-                              DiscoverPage(),
-                            if (Parameters.walletHandlesCrypto)
-                              WertPage()
+                              const DiscoverPage(),
+                            if (Parameters.walletHandlesCrypto &&
+                                Platform.isAndroid)
+                              const WertPage()
                             else
-                              SearchPage(),
-                            AltmeSupportChatPage(),
+                              const SearchPage(),
+                            const AltmeSupportChatPage(),
                           ],
                         ),
                       ),
