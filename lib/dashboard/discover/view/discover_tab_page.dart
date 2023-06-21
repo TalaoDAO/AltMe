@@ -125,8 +125,8 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                       MWebViewPage(
                         url: Urls.discoverNftsWebView,
                         onNavigationRequest: (request) async {
-                          if (request.url.startsWith(
-                            'https://discover-coins-part.webflow.io/prod-nota-available/nft-noir',
+                          if (!request.url.startsWith(
+                            Urls.discoverNftsWebView,
                           )) {
                             await LaunchUrl.launch(request.url);
                             return NavigationDecision.prevent;
