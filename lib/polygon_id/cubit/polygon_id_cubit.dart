@@ -412,9 +412,10 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     final credentialPreview = Credential.fromJson(jsonCredential);
 
     CredentialManifest? credentialManifest;
+
     try {
       // Try to get Credential manifest for kycAgeCredential
-      // and kycCountryOfResidence
+      // and kycCountryOfResidence and proofOfTwitterStatsUrl
       if (claimEntity.type == CredentialSubjectType.kycAgeCredential.name) {
         final response = await client.get(Urls.kycAgeCredentialUrl);
         credentialManifest =
@@ -422,6 +423,11 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       } else if (claimEntity.type ==
           CredentialSubjectType.kycCountryOfResidence.name) {
         final response = await client.get(Urls.kycCountryOfResidenceUrl);
+        credentialManifest =
+            CredentialManifest.fromJson(response as Map<String, dynamic>);
+      } else if (claimEntity.type ==
+          CredentialSubjectType.proofOfTwitterStats.name) {
+        final response = await client.get(Urls.proofOfTwitterStatsUrl);
         credentialManifest =
             CredentialManifest.fromJson(response as Map<String, dynamic>);
       }

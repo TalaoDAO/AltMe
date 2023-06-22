@@ -75,6 +75,13 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                     issuerName: '',
                     value: '',
                   );
+                } else if (credentialSubjectType ==
+                    CredentialSubjectType.proofOfTwitterStats) {
+                  widget = const CredentialBaseWidget(
+                    cardBackgroundImagePath: ImageStrings.twitterStatsCard,
+                    issuerName: '',
+                    value: '',
+                  );
                 } else {
                   widget = DefaultCredentialListWidget(
                     credentialModel: CredentialModel(

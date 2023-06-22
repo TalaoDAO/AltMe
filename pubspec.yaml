@@ -106,12 +106,11 @@ dependencies:
   uni_links: ^0.5.1
   url_launcher: ^6.1.11
   uuid: ^3.0.7
-  #wallet_connect: ^1.0.4
   visibility_detector: ^0.4.0+2
   wallet_connect:
     git:
       url: https://github.com/bibash28/wallet-connect-dart.git
-      ref: fba9b209ee2b61b62ddd643f07f6a7f64426d7b2
+      ref: 5d3003d51ee5afb9911d04d15b6b2aa2f12989c8
   webview_flutter: ^4.2.1
   webview_flutter_android: ^3.7.1
   webview_flutter_wkwebview: ^3.4.4

@@ -2449,8 +2449,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: fba9b209ee2b61b62ddd643f07f6a7f64426d7b2
-      resolved-ref: fba9b209ee2b61b62ddd643f07f6a7f64426d7b2
+      ref: "5d3003d51ee5afb9911d04d15b6b2aa2f12989c8"
+      resolved-ref: "5d3003d51ee5afb9911d04d15b6b2aa2f12989c8"
       url: "https://github.com/bibash28/wallet-connect-dart.git"
     source: git
     version: "1.0.4"

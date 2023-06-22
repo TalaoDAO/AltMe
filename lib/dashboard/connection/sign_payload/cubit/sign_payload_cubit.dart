@@ -228,19 +228,24 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
               final MsgSignature signature =
                   credentials.signToEcSignature(concatPayload);
 
-              final String r = signature.r.toRadixString(16);
-              log.i('r -$r');
-              final String s = signature.s.toRadixString(16);
-              log.i('s -$s');
-              final String v = signature.v.toRadixString(16);
-              log.i('v -$v');
+              final r = signature.r;
+              final s = signature.s;
+              final v = signature.v;
 
-              final signedDataAsHex = '0x$r$s$v';
-              log.i('signedDataAsHex -$signedDataAsHex');
+              final rHex = r.toRadixString(16).padLeft(64, '0');
+              final sHex = s.toRadixString(16).padLeft(64, '0');
+              final vHex = v.toRadixString(16);
+
+              log.i('rHex -$rHex');
+              log.i('sHex -$sHex');
+              log.i('vHex -$vHex');
+
+              final signedDataHex = '0x$rHex$sHex$vHex';
+              log.i('signedDataAsHex -$signedDataHex');
 
               wcClient.approveRequest<String>(
                 id: walletConnectState.signId!,
-                result: signedDataAsHex,
+                result: signedDataHex,
               );
               success = true;
               break;

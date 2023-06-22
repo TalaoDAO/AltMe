@@ -218,20 +218,6 @@ class ScanCubit extends Cubit<ScanState> {
 
         CredentialManifest? credentialManifest;
 
-        try {
-          // Try to get Credential manifest for proofOfTwitterStats
-          if (credentialModel.credentialPreview.credentialSubjectModel
-                  .credentialSubjectType ==
-              CredentialSubjectType.proofOfTwitterStats) {
-            final response = await client.get(Urls.proofOfTwitterStatsUrl);
-            credentialManifest =
-                CredentialManifest.fromJson(response as Map<String, dynamic>);
-          }
-        } catch (e) {
-          log.e('can not get the credntials manifest for proof '
-              'Of Twitter Stats error: $e');
-        }
-
         await credentialsCubit.insertCredential(
           credential: CredentialModel.copyWithData(
             oldCredentialModel: credentialModel,
