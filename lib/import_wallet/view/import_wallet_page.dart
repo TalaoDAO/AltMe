@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
@@ -95,8 +96,12 @@ class _ImportWalletViewState extends State<ImportWalletView> {
     final l10n = context.l10n;
 
     return BlocConsumer<ImportWalletCubit, ImportWalletState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state.status == AppStatus.loading) {
+          /// Ensure we don't hide Waiting popup too soon during
+          /// onboarding with imported phrase
+          await context.read<OnboardingCubit>().emitOnboardingProcessing();
+
           LoadingView().show(context: context);
         } else {
           LoadingView().hide();
@@ -111,14 +116,14 @@ class _ImportWalletViewState extends State<ImportWalletView> {
         if (state.status == AppStatus.success) {
           /// Removes every stack except first route (splashPage)
           if (widget.isFromOnboarding) {
-            context.read<AltmeChatSupportCubit>().init();
-            Navigator.pushAndRemoveUntil<void>(
+            await context.read<AltmeChatSupportCubit>().init();
+            await Navigator.pushAndRemoveUntil<void>(
               context,
               WalletReadyPage.route(),
               (Route<dynamic> route) => route.isFirst,
             );
           } else {
-            Navigator.pushAndRemoveUntil<void>(
+            await Navigator.pushAndRemoveUntil<void>(
               context,
               DashboardPage.route(),
               (Route<dynamic> route) => route.isFirst,
