@@ -637,7 +637,7 @@
   "ageRangeHowToGetIt": "You can claim this card by following Talao’s KYC check.",
   "defiComplianceWhyGetThisCard": "Obtain verifiable proof of KYC/AML compliance, requested by compliant DeFi protocols and Web3 dApps. Once obtained, you can mint a privacy-preserving, non-transferable NFT for on-chain verification without revealing personal data.",
   "defiComplianceExpirationDate": "This credential remains active for 3 months. Renewal requires a straightforward compliance check, without new KYC.",
-  "defiComplianceHowToGetIt": "It's easy! Complete a one-time KYC check in Altme wallet (powered by ID360) and request your DeFi compliance credential.",
+  "defiComplianceHowToGetIt": "It's easy! Complete a one-time KYC check in Talao wallet (powered by ID360) and request your DeFi compliance credential.",
   "rewardDialogTitle": "Well done 🥳",
   "rewardDialogDescPart1": "You just received",
   "rewardDialogDescPart2": "on your account",

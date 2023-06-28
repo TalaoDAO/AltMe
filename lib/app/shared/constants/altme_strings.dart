@@ -24,10 +24,10 @@ class AltMeStrings {
 
   //ID360
   /// ALTME
-  static const int clientIdForID360 = 100;
+  // static const int clientIdForID360 = 100;
 
   /// TALAO
-  // static const int clientIdForID360 = 200;
+  static const int clientIdForID360 = 200;
 
   //minter
   static const String minterAddress =
