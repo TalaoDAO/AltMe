@@ -56,6 +56,7 @@ class App extends StatelessWidget {
         ),
         BlocProvider<WalletConnectCubit>(
           create: (context) => WalletConnectCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
             connectedDappRepository:
                 ConnectedDappRepository(secure_storage.getSecureStorage),
           ),

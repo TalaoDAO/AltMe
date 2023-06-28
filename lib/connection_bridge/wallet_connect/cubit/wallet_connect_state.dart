@@ -4,8 +4,10 @@ part of 'wallet_connect_cubit.dart';
 class WalletConnectState extends Equatable {
   WalletConnectState({
     this.status = WalletConnectStatus.init,
-    this.isWalletConnectStarted = false,
     this.message,
+
+    /// v1
+    this.isWalletConnectStarted = false,
     this.sessionId,
     List<WCClient>? wcClients,
     this.currentDappPeerId,
@@ -14,6 +16,9 @@ class WalletConnectState extends Equatable {
     this.signMessage,
     this.transactionId,
     this.transaction,
+
+    /// v2
+    this.sessionProposalEvent,
   }) : wcClients = wcClients ?? [];
 
   factory WalletConnectState.fromJson(Map<String, dynamic> json) =>
@@ -21,6 +26,8 @@ class WalletConnectState extends Equatable {
 
   final WalletConnectStatus? status;
   final StateMessage? message;
+
+  /// v1
   final bool isWalletConnectStarted;
   final int? sessionId;
   final String? currentDappPeerId;
@@ -34,44 +41,26 @@ class WalletConnectState extends Equatable {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final WCEthereumTransaction? transaction;
 
+  /// v2
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final SessionProposalEvent? sessionProposalEvent;
+
   Map<String, dynamic> toJson() => _$WalletConnectStateToJson(this);
 
   WalletConnectState loading() {
-    return WalletConnectState(
-      status: WalletConnectStatus.loading,
-      isWalletConnectStarted: isWalletConnectStarted,
-      sessionId: sessionId,
-      wcClients: wcClients,
-      currentDappPeerId: currentDappPeerId,
-      currentDAppPeerMeta: currentDAppPeerMeta,
-      signId: signId,
-      signMessage: signMessage,
-      transactionId: transactionId,
-      transaction: transaction,
-    );
+    return copyWith(status: WalletConnectStatus.loading);
   }
 
-  WalletConnectState error({
-    required MessageHandler messageHandler,
-  }) {
-    return WalletConnectState(
+  WalletConnectState error({required MessageHandler messageHandler}) {
+    return copyWith(
       status: WalletConnectStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
-      isWalletConnectStarted: isWalletConnectStarted,
-      currentDappPeerId: currentDappPeerId,
-      currentDAppPeerMeta: currentDAppPeerMeta,
-      sessionId: sessionId,
-      wcClients: wcClients,
-      signId: signId,
-      signMessage: signMessage,
-      transactionId: transactionId,
-      transaction: transaction,
     );
   }
 
   WalletConnectState copyWith({
     WalletConnectStatus status = WalletConnectStatus.idle,
-    MessageHandler? messageHandler,
+    StateMessage? message,
     bool? isWalletConnectStarted,
     int? sessionId,
     String? currentDappPeerId,
@@ -81,12 +70,11 @@ class WalletConnectState extends Equatable {
     WCEthereumSignMessage? signMessage,
     int? transactionId,
     WCEthereumTransaction? transaction,
+    SessionProposalEvent? sessionProposalEvent,
   }) {
     return WalletConnectState(
       status: status,
-      message: messageHandler == null
-          ? null
-          : StateMessage.success(messageHandler: messageHandler),
+      message: message,
       isWalletConnectStarted:
           isWalletConnectStarted ?? this.isWalletConnectStarted,
       currentDAppPeerMeta: currentDAppPeerMeta ?? this.currentDAppPeerMeta,
@@ -97,6 +85,7 @@ class WalletConnectState extends Equatable {
       signMessage: signMessage ?? this.signMessage,
       transactionId: transactionId ?? this.transactionId,
       transaction: transaction ?? this.transaction,
+      sessionProposalEvent: sessionProposalEvent ?? this.sessionProposalEvent,
     );
   }
 
@@ -113,5 +102,6 @@ class WalletConnectState extends Equatable {
         signMessage,
         transactionId,
         transaction,
+        sessionProposalEvent,
       ];
 }

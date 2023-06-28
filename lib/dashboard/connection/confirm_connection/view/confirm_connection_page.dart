@@ -8,6 +8,7 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
+import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 class ConfirmConnectionPage extends StatelessWidget {
   const ConfirmConnectionPage({
@@ -55,6 +56,9 @@ class ConfirmConnectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    final walletConnectCubit = context.read<WalletConnectCubit>();
+
     return BlocListener<ConfirmConnectionCubit, ConfirmConnectionState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -115,21 +119,86 @@ class ConfirmConnectionView extends StatelessWidget {
                               .request!
                               .appMetadata!
                               .name!
-                          : context
-                              .read<WalletConnectCubit>()
-                              .state
-                              .currentDAppPeerMeta!
-                              .name,
+                          // : context
+                          //     .read<WalletConnectCubit>()
+                          //     .state
+                          //     .currentDAppPeerMeta!
+                          //     .name,
+                          : walletConnectCubit.state.sessionProposalEvent!
+                              .params.proposer.metadata.name,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: Sizes.spaceXLarge),
                     const Permissions(),
                     const SizedBox(height: Sizes.spaceXLarge),
-                    SelectAccount(connectionBridgeType: connectionBridgeType),
-                    const SizedBox(
-                      height: Sizes.spaceNormal,
-                    ),
+                    if (connectionBridgeType ==
+                        ConnectionBridgeType.walletconnect) ...[
+                      Text(
+                        walletConnectCubit.state.sessionProposalEvent!.params
+                            .proposer.metadata.url,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: Sizes.spaceLarge),
+                      ListView.builder(
+                        itemCount: walletConnectCubit
+                            .state
+                            .sessionProposalEvent!
+                            .params
+                            .requiredNamespaces
+                            .length,
+                        shrinkWrap: true,
+                        physics: const ScrollPhysics(),
+                        itemBuilder: (context, i) {
+                          final key = walletConnectCubit
+                              .state
+                              .sessionProposalEvent!
+                              .params
+                              .requiredNamespaces
+                              .keys
+                              .elementAt(i);
+
+                          final RequiredNamespace ns = walletConnectCubit
+                              .state
+                              .sessionProposalEvent!
+                              .params
+                              .requiredNamespaces[key]!;
+
+                          return Column(
+                            children: [
+                              Text('$key : '),
+                              if (ns.chains != null) ...[
+                                Column(
+                                  children: [
+                                    const Text('Chains'),
+                                    Text(ns.chains!.toString()),
+                                  ],
+                                ),
+                              ],
+                              Column(
+                                children: [
+                                  const Text('Methods'),
+                                  Text(ns.methods.toString()),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  const Text('Events'),
+                                  Text(ns.events.toString()),
+                                ],
+                              ),
+                              const SizedBox(height: Sizes.spaceNormal),
+                            ],
+                          );
+                        },
+                      )
+                    ],
+                    if (connectionBridgeType !=
+                        ConnectionBridgeType.walletconnect) ...[
+                      const SizedBox(height: Sizes.spaceXLarge),
+                      SelectAccount(connectionBridgeType: connectionBridgeType),
+                    ],
+                    const SizedBox(height: Sizes.spaceNormal),
                   ],
                 ),
               ),
