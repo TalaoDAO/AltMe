@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
@@ -37,10 +38,12 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // TODO(all): change UI
-            const Text(
-              'Would you like to accept a credential from this organisation?',
+            Text(
+              l10n.wouldYouLikeToAcceptThisCredentialsFromThisOrganisation,
               textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.credentialSubtitle.copyWith(
+                    color: Theme.of(context).colorScheme.lightPurple,
+                  ),
             ),
             const SizedBox(height: 30),
             ListView.builder(
@@ -52,11 +55,54 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                 final jsonCredential = claims[i].info;
                 final credentialPreview = Credential.fromJson(jsonCredential);
 
-                return Center(
-                  child: Text(
-                    credentialPreview
-                        .credentialSubjectModel.credentialSubjectType.name,
-                  ),
+                Widget widget;
+
+                final credentialSubjectType = credentialPreview
+                    .credentialSubjectModel.credentialSubjectType;
+
+                if (credentialSubjectType ==
+                    CredentialSubjectType.kycAgeCredential) {
+                  widget = const CredentialBaseWidget(
+                    cardBackgroundImagePath: ImageStrings.kycAgeCredentialCard,
+                    issuerName: '',
+                    value: '',
+                  );
+                } else if (credentialSubjectType ==
+                    CredentialSubjectType.kycCountryOfResidence) {
+                  widget = const CredentialBaseWidget(
+                    cardBackgroundImagePath:
+                        ImageStrings.kycCountryOfResidenceCard,
+                    issuerName: '',
+                    value: '',
+                  );
+                } else if (credentialSubjectType ==
+                    CredentialSubjectType.proofOfTwitterStats) {
+                  widget = const CredentialBaseWidget(
+                    cardBackgroundImagePath: ImageStrings.twitterStatsCard,
+                    issuerName: '',
+                    value: '',
+                  );
+                } else {
+                  widget = DefaultCredentialListWidget(
+                    credentialModel: CredentialModel(
+                      id: credentialPreview.id,
+                      image: 'image',
+                      credentialPreview: credentialPreview,
+                      shareLink: '',
+                      display: const Display(
+                        '',
+                        '',
+                        '',
+                        '',
+                      ),
+                      data: const <String, dynamic>{},
+                    ),
+                  );
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: widget,
                 );
               },
             ),

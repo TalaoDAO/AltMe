@@ -56,9 +56,21 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
       late List<CredentialModel> credentialList;
 
       if (isPolygonIdCredentials) {
+        final polygonIdNetwork =
+            await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
+
+        String network = Parameters.POLYGON_MAIN_NETWORK;
+
+        if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+          network = Parameters.POLYGON_MAIN_NETWORK;
+        } else {
+          network = Parameters.POLYGON_TEST_NETWORK;
+        }
+
         final privateIdentityEntity = await polygonId.restoreIdentity(
           mnemonic: recoveryMnemonic,
           encryptedDb: text,
+          network: network,
         );
 
         final List<ClaimEntity> claims = await polygonId.restoreClaims(

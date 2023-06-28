@@ -291,7 +291,9 @@ class Ebsi {
     Response<Map<String, dynamic>> openidConfigurationResponse,
   ) {
     final jsonPath = JsonPath(r'$..issuer');
-    final data = jsonPath.read(openidConfigurationResponse.data).first.value;
+
+    final data = jsonPath.read(openidConfigurationResponse.data).first.value
+        as Map<String, dynamic>;
 
     return data['id'] as String;
   }
@@ -301,7 +303,7 @@ class Ebsi {
     Response<Map<String, dynamic>> didDocumentResponse,
   ) {
     final jsonPath = JsonPath(r'$..verificationMethod');
-    final data = jsonPath.read(didDocumentResponse.data).first.value
+    final data = (jsonPath.read(didDocumentResponse.data).first.value as List)
       ..where(
         (dynamic e) => e['id'].toString() == holderKid,
       ).toList();

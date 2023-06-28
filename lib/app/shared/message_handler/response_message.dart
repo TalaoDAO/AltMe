@@ -665,7 +665,13 @@ class ResponseMessage with MessageHandler {
               .localise(context);
         case ResponseString.RESPONSE_STRING_errorGeneratingProof:
           return ResponseString.RESPONSE_STRING_errorGeneratingProof.localise(
-              context);
+            context,
+          );
+        case ResponseString.RESPONSE_STRING_successfullyGeneratingProof:
+          return ResponseString.RESPONSE_STRING_successfullyGeneratingProof
+              .localise(
+            context,
+          );
       }
     }
     return '';

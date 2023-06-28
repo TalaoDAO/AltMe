@@ -83,6 +83,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.pcdsAgentCertificate:
       case CredentialSubjectType.euDiplomaCard:
       case CredentialSubjectType.euVerifiableId:
+      case CredentialSubjectType.proofOfTwitterStats:
         return Colors.white;
     }
   }
@@ -155,6 +156,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.euVerifiableId:
       case CredentialSubjectType.kycAgeCredential:
       case CredentialSubjectType.kycCountryOfResidence:
+      case CredentialSubjectType.proofOfTwitterStats:
         return Icons.perm_identity;
     }
   }
@@ -284,6 +286,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'KYCAgeCredential';
       case CredentialSubjectType.kycCountryOfResidence:
         return 'KYCCountryOfResidenceCredential';
+      case CredentialSubjectType.proofOfTwitterStats:
+        return 'ProofOfTwitterStats';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -405,6 +409,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return KYCAgeCredentialModel.fromJson(json);
       case CredentialSubjectType.kycCountryOfResidence:
         return KYCCountryOfResidenceModel.fromJson(json);
+      case CredentialSubjectType.proofOfTwitterStats:
+        return ProofOfTwitterStatsModel.fromJson(json);
     }
   }
 
@@ -603,6 +609,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'KYC Age Credential';
       case CredentialSubjectType.kycCountryOfResidence:
         return 'KYC Country of Residence';
+      case CredentialSubjectType.proofOfTwitterStats:
+        return 'Proof Of Twitter Stats';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -723,6 +731,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.kycAgeCredential:
         return false;
       case CredentialSubjectType.kycCountryOfResidence:
+      case CredentialSubjectType.proofOfTwitterStats:
         return false;
     }
   }
@@ -843,6 +852,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.kycAgeCredential:
         return 0;
       case CredentialSubjectType.kycCountryOfResidence:
+      case CredentialSubjectType.proofOfTwitterStats:
         return 0;
     }
   }

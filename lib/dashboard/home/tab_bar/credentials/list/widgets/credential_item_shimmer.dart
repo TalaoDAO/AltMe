@@ -10,9 +10,9 @@ class CredentialItemShimmer extends StatelessWidget {
     return BackgroundCard(
       color: Theme.of(context).colorScheme.surfaceContainer,
       padding: EdgeInsets.zero,
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           AspectRatio(
             aspectRatio: 1.5,
             child: ShimmerWidget.rectangular(height: 0),

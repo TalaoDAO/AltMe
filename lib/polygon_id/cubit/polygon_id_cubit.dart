@@ -23,12 +23,14 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     required this.secureStorageProvider,
     required this.credentialsCubit,
     required this.client,
+    required this.profileCubit,
   }) : super(const PolygonIdState());
 
   final SecureStorageProvider secureStorageProvider;
   final PolygonId polygonId;
   final CredentialsCubit credentialsCubit;
   final DioClient client;
+  final ProfileCubit profileCubit;
 
   final log = getLogger('PolygonIdCubit');
 
@@ -42,7 +44,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
 
   Future<void> initialise() async {
     try {
-      if (PolygonId().isInitialized) {
+      if (polygonId.isInitialized) {
         emit(
           state.copyWith(
             status: AppStatus.idle,
@@ -55,33 +57,96 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       /// PolygonId SDK initialization
       await dotenv.load();
 
-      await PolygonId().init(
-        web3Url: dotenv.get('INFURA_URL'),
-        web3RdpUrl: dotenv.get('INFURA_RDP_URL'),
-        web3ApiKey: dotenv.get('INFURA_MUMBAI_API_KEY'),
-        idStateContract: dotenv.get('ID_STATE_CONTRACT_ADDR'),
-        pushUrl: dotenv.get('PUSH_URL'),
-      );
+      var polygonIdNetwork =
+          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
+
+      String network = Parameters.POLYGON_MAIN_NETWORK;
+
+      // set polygon main network a first
+      if (polygonIdNetwork == null) {
+        final network = PolygonIdNetwork.PolygonMainnet.toString();
+        await secureStorageProvider.set(
+          SecureStorageKeys.polygonIdNetwork,
+          network,
+        );
+        polygonIdNetwork = network;
+      }
+
+      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+        network = Parameters.POLYGON_MAIN_NETWORK;
+        await polygonId.init(
+          network: network,
+          web3Url: Parameters.INFURA_URL,
+          web3RdpUrl: Parameters.INFURA_RDP_URL,
+          web3ApiKey: dotenv.get('INFURA_API_KEY'),
+          idStateContract: Parameters.ID_STATE_CONTRACT_ADDR,
+          pushUrl: Parameters.PUSH_URL,
+        );
+      } else {
+        network = Parameters.POLYGON_TEST_NETWORK;
+        await polygonId.init(
+          network: network,
+          web3Url: Parameters.INFURA_MUMBAI_URL,
+          web3RdpUrl: Parameters.INFURA_MUMBAI_RDP_URL,
+          web3ApiKey: dotenv.get('INFURA_API_KEY'),
+          idStateContract: Parameters.MUMBAI_ID_STATE_CONTRACT_ADDR,
+          pushUrl: Parameters.MUMBAI_PUSH_URL,
+        );
+      }
 
       final mnemonic =
           await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
       //addIdentity
-      await polygonId.addIdentity(mnemonic: mnemonic!);
-      emit(
-        state.copyWith(
-          status: AppStatus.init,
-          isInitialised: true,
-        ),
-      );
+      await polygonId.addIdentity(mnemonic: mnemonic!, network: network);
+      log.i('$network - get Identity');
+      emit(state.copyWith(status: AppStatus.init, isInitialised: true));
     } catch (e) {
-      emit(
-        state.copyWith(
-          status: AppStatus.error,
-          isInitialised: false,
-        ),
-      );
+      emit(state.copyWith(status: AppStatus.error, isInitialised: false));
       throw Exception('INIT_ISSUE - $e');
+    }
+  }
+
+  Future<void> setEnv(PolygonIdNetwork polygonIdNetwork) async {
+    try {
+      await initialise();
+
+      /// PolygonId SDK update
+      await dotenv.load();
+
+      String network = Parameters.POLYGON_MAIN_NETWORK;
+      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet) {
+        network = Parameters.POLYGON_MAIN_NETWORK;
+        await polygonId.setEnv(
+          network: Parameters.POLYGON_MAIN_NETWORK,
+          web3Url: Parameters.INFURA_URL,
+          web3RdpUrl: Parameters.INFURA_RDP_URL,
+          web3ApiKey: dotenv.get('INFURA_API_KEY'),
+          idStateContract: Parameters.ID_STATE_CONTRACT_ADDR,
+          pushUrl: Parameters.PUSH_URL,
+        );
+      } else {
+        network = Parameters.POLYGON_TEST_NETWORK;
+        await polygonId.setEnv(
+          network: Parameters.POLYGON_TEST_NETWORK,
+          web3Url: Parameters.INFURA_MUMBAI_URL,
+          web3RdpUrl: Parameters.INFURA_MUMBAI_RDP_URL,
+          web3ApiKey: dotenv.get('INFURA_API_KEY'),
+          idStateContract: Parameters.MUMBAI_ID_STATE_CONTRACT_ADDR,
+          pushUrl: Parameters.MUMBAI_PUSH_URL,
+        );
+      }
+
+      final mnemonic =
+          await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+
+      //addIdentity
+      await polygonId.addIdentity(mnemonic: mnemonic!, network: network);
+      log.i('$network - get Identity');
+      emit(state.copyWith(status: AppStatus.idle));
+    } catch (e) {
+      emit(state.copyWith(status: AppStatus.error));
+      throw Exception('UPDATE_ISSUE - $e');
     }
   }
 
@@ -156,7 +221,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
 
   Future<Iden3MessageEntity> getIden3Message({required String message}) async {
     final Iden3MessageEntity iden3MessageEntity =
-        await polygonId.getIden3Message(message: state.scannedResponse!);
+        await polygonId.getIden3Message(message: message);
     return iden3MessageEntity;
   }
 
@@ -192,6 +257,15 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           polygonAction: PolygonIdAction.offer,
         ),
       );
+    } else if (iden3MessageEntity.messageType ==
+        Iden3MessageType.contractFunctionCall) {
+      log.i('contractFunctionCall');
+      emit(
+        state.copyWith(
+          status: AppStatus.loading,
+          polygonAction: PolygonIdAction.contractFunctionCall,
+        ),
+      );
     } else {
       throw ResponseMessage(
         ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
@@ -208,11 +282,26 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       final mnemonic =
           await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
-      log.i('polygonId authentication');
+      final polygonIdNetwork =
+          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
+
+      String network = Parameters.POLYGON_MAIN_NETWORK;
+
+      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+        network = Parameters.POLYGON_MAIN_NETWORK;
+      } else {
+        network = Parameters.POLYGON_TEST_NETWORK;
+      }
+
+      log.i('iden3MessageEntity - $iden3MessageEntity');
+
+      log.i('polygonId authentication - $network');
       final isAuthenticated = await polygonId.authenticate(
         iden3MessageEntity: iden3MessageEntity,
         mnemonic: mnemonic!,
+        network: network,
       );
+      log.i('isAuthenticated - $isAuthenticated');
 
       if (isAuthenticated) {
         emit(
@@ -220,7 +309,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
             status: isGenerateProof ? AppStatus.goBack : AppStatus.idle,
             message: StateMessage.success(
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_succesfullyAuthenticated,
+                isGenerateProof
+                    ? ResponseString.RESPONSE_STRING_successfullyGeneratingProof
+                    : ResponseString.RESPONSE_STRING_succesfullyAuthenticated,
               ),
             ),
           ),
@@ -267,9 +358,22 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     required Iden3MessageEntity iden3MessageEntity,
   }) async {
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+
+    final polygonIdNetwork =
+        await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
+
+    String network = Parameters.POLYGON_MAIN_NETWORK;
+
+    if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+      network = Parameters.POLYGON_MAIN_NETWORK;
+    } else {
+      network = Parameters.POLYGON_TEST_NETWORK;
+    }
+
     final List<ClaimEntity> claims = await polygonId.getClaims(
       iden3MessageEntity: iden3MessageEntity,
       mnemonic: mnemonic!,
+      network: network,
     );
     return claims;
   }
@@ -308,9 +412,10 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     final credentialPreview = Credential.fromJson(jsonCredential);
 
     CredentialManifest? credentialManifest;
+
     try {
       // Try to get Credential manifest for kycAgeCredential
-      // and kycCountryOfResidence
+      // and kycCountryOfResidence and proofOfTwitterStatsUrl
       if (claimEntity.type == CredentialSubjectType.kycAgeCredential.name) {
         final response = await client.get(Urls.kycAgeCredentialUrl);
         credentialManifest =
@@ -318,6 +423,11 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       } else if (claimEntity.type ==
           CredentialSubjectType.kycCountryOfResidence.name) {
         final response = await client.get(Urls.kycCountryOfResidenceUrl);
+        credentialManifest =
+            CredentialManifest.fromJson(response as Map<String, dynamic>);
+      } else if (claimEntity.type ==
+          CredentialSubjectType.proofOfTwitterStats.name) {
+        final response = await client.get(Urls.proofOfTwitterStatsUrl);
         credentialManifest =
             CredentialManifest.fromJson(response as Map<String, dynamic>);
       }
@@ -352,9 +462,26 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     required Iden3MessageEntity iden3MessageEntity,
     required String mnemonic,
   }) async {
+    final polygonIdNetwork =
+        await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
+
+    String network = Parameters.POLYGON_MAIN_NETWORK;
+
+    if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+      network = Parameters.POLYGON_MAIN_NETWORK;
+    } else {
+      network = Parameters.POLYGON_TEST_NETWORK;
+    }
     return polygonId.getClaimsFromIden3Message(
       iden3MessageEntity: iden3MessageEntity,
       mnemonic: mnemonic,
+      network: network,
     );
+  }
+
+  Future<void> generateProofByContractFunctionCall({
+    required String walletAddress,
+  }) async {
+    return;
   }
 }

@@ -98,6 +98,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           scannedResponse.substring('${Urls.appDeepLink}?uri='.length),
         );
         await verify(uri: Uri.parse(url));
+      } else if (scannedResponse.startsWith('{"body":{"credentials"')) {
+        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+        await polygonIdCubit.polygonIdFunction(scannedResponse);
       } else {
         final uri = Uri.parse(scannedResponse);
         await verify(uri: uri);
@@ -354,7 +357,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             /// using JsonPath to find credential Name
             final dynamic json = jsonDecode(jsonEncode(descriptor.constraints));
             final dynamic credentialField =
-                JsonPath(r'$..fields').read(json).first.value.toList().first;
+                (JsonPath(r'$..fields').read(json).first.value as List)
+                    .toList()
+                    .first;
 
             if (credentialField['filter'] == null) {
               continue;

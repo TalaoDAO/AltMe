@@ -7,6 +7,7 @@ SecureStorageProvider get getSecureStorage {
   return SecureStorageProvider();
 }
 
+
 /// Initialize and test secure storage availability on the phone.
 Future<void> get initSecureStorage async {
   if (Platform.isAndroid) {
@@ -28,7 +29,11 @@ Future<void> get initSecureStorage async {
         aOptions: defaultAndroidOptions,
       );
       await testStorage(storage);
+      await testStorage(storage);
     }
+  } else {
+    const defaultIOSOptions =
+        IOSOptions(accessibility: KeychainAccessibility.first_unlock);
   } else {
     const defaultIOSOptions =
         IOSOptions(accessibility: KeychainAccessibility.first_unlock);

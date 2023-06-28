@@ -161,8 +161,11 @@ String char2Bytes(String text) {
 
 Future<bool> isConnected() async {
   final log = getLogger('Check Internet Connection');
-  if (!(await DeviceInfoPlugin().iosInfo).isPhysicalDevice) {
-    return true;
+
+  if (!isAndroid) {
+    if (!(await DeviceInfoPlugin().iosInfo).isPhysicalDevice) {
+      return true;
+    }
   }
   final connectivityResult = await Connectivity().checkConnectivity();
   if (connectivityResult == ConnectivityResult.mobile ||
@@ -176,30 +179,27 @@ Future<bool> isConnected() async {
 String getCredentialName(String constraints) {
   final dynamic constraintsJson = jsonDecode(constraints);
   final fieldsPath = JsonPath(r'$..fields');
-  final dynamic credentialField = fieldsPath
-      .read(constraintsJson)
-      .first
-      .value
-      .where(
-        (dynamic e) => e['path'].toString() == r'[$.credentialSubject.type]',
-      )
-      .toList()
-      .first;
+  final dynamic credentialField =
+      (fieldsPath.read(constraintsJson).first.value as List)
+          .where(
+            (dynamic e) =>
+                e['path'].toString() == r'[$.credentialSubject.type]',
+          )
+          .toList()
+          .first;
   return credentialField['filter']['pattern'] as String;
 }
 
 String getIssuersName(String constraints) {
   final dynamic constraintsJson = jsonDecode(constraints);
   final fieldsPath = JsonPath(r'$..fields');
-  final dynamic issuerField = fieldsPath
-      .read(constraintsJson)
-      .first
-      .value
-      .where(
-        (dynamic e) => e['path'].toString() == r'[$.issuer]',
-      )
-      .toList()
-      .first;
+  final dynamic issuerField =
+      (fieldsPath.read(constraintsJson).first.value as List)
+          .where(
+            (dynamic e) => e['path'].toString() == r'[$.issuer]',
+          )
+          .toList()
+          .first;
   return issuerField['filter']['pattern'] as String;
 }
 
@@ -400,4 +400,20 @@ String getSignatureType(String circuitId) {
 String separateUppercaseWords(String input) {
   final regex = RegExp('(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])');
   return input.split(regex).join(' ');
+}
+
+List<String> generateUriList(String url) {
+  final uri = Uri.parse(url);
+
+  final finalList = <String>[];
+
+  final uriList = uri.queryParametersAll['uri_list'];
+  if (uriList != null) {
+    for (final uriString in uriList) {
+      final Uri uriItem = Uri.parse(Uri.decodeComponent(uriString));
+      finalList.add(uriItem.toString());
+    }
+  }
+
+  return uriList ?? [];
 }

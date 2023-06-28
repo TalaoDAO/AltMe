@@ -96,7 +96,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            if (expirationDate != '--')
+            if (issuanceDate != null && expirationDate != '--')
               LayoutId(
                 id: 'expiration-date',
                 child: FractionallySizedBox(
@@ -108,7 +108,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            if (expirationDate != '--')
+            if (issuanceDate != null && expirationDate != '--')
               LayoutId(
                 id: 'expiration-date-value',
                 child: FractionallySizedBox(

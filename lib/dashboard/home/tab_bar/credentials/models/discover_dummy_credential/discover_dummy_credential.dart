@@ -303,6 +303,7 @@ class DiscoverDummyCredential extends Equatable {
       case CredentialSubjectType.euVerifiableId:
       case CredentialSubjectType.kycAgeCredential:
       case CredentialSubjectType.kycCountryOfResidence:
+      case CredentialSubjectType.proofOfTwitterStats:
     }
 
     return DiscoverDummyCredential(

@@ -1,7 +1,9 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
@@ -93,9 +95,12 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'This organisation requests a valid proof of this claim to vote '
-                  'for ${body.reason}:',
+                  l10n.thisOrganisationRequestsThisInformation,
                   textAlign: TextAlign.center,
+                  style:
+                      Theme.of(context).textTheme.credentialSubtitle.copyWith(
+                            color: Theme.of(context).colorScheme.lightPurple,
+                          ),
                 ),
                 const SizedBox(height: 10),
                 if (body.scope != null)
@@ -106,8 +111,8 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                     itemBuilder: (context, index) {
                       final proofScopeRequest = body.scope![index];
 
-                      final proofTypeMsg =
-                          getSignatureType(proofScopeRequest.circuitId);
+                      // final proofTypeMsg =
+                      //     getSignatureType(proofScopeRequest.circuitId);
 
                       final credentialSubject =
                           proofScopeRequest.query.credentialSubject;
@@ -116,26 +121,25 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
 
                       if (credentialSubject != null) {
                         credentialSubject.forEach((reqKey, reqValue) {
-                          requirementValue = '$requirementValue$reqKey \n';
+                          requirementValue = '$requirementValue$reqKey ';
 
                           (reqValue as Map<String, dynamic>).forEach(
                             (conditionKey, conditionValue) {
                               // handling key
                               String conditionMsg = '';
                               if (conditionKey == r'$eq') {
-                                conditionMsg = 'is';
+                                conditionMsg = l10n.iS;
                               } else if (conditionKey == r'$lt') {
-                                conditionMsg = 'is smaller than';
+                                conditionMsg = l10n.isSmallerThan;
                               } else if (conditionKey == r'$gt') {
-                                conditionMsg = 'is bigger than';
+                                conditionMsg = l10n.isBiggerThan;
                               } else if (conditionKey == r'$in') {
-                                conditionMsg =
-                                    'is one of the following values:';
+                                conditionMsg = l10n.isOneOfTheFollowingValues;
                               } else if (conditionKey == r'$nin') {
                                 conditionMsg =
-                                    'is not one of the following values:';
+                                    l10n.isNotOneOfTheFollowingValues;
                               } else if (conditionKey == r'$ne') {
-                                conditionMsg = 'is not';
+                                conditionMsg = l10n.isNot;
                               }
 
                               //handling value
@@ -160,45 +164,112 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                         });
                       }
 
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                separateUppercaseWords(
-                                  proofScopeRequest.query.type!,
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      l10n.proof,
+                                      textAlign: TextAlign.start,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                    ),
+                                    const Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green,
+                                    )
+                                  ],
                                 ),
-                                textAlign: TextAlign.start,
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                requirementValue,
-                                textAlign: TextAlign.start,
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'Allowed issuers: ${proofScopeRequest.query.allowedIssuers}',
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'Proof type: - $proofTypeMsg',
-                                textAlign: TextAlign.start,
-                              ),
-                              if (state.claimEntities!.isNotEmpty &&
-                                  state.claimEntities![index] == null) ...[
                                 const SizedBox(height: 10),
                                 Text(
-                                  'Status: - ${l10n.credentialNotFound}',
+                                  requirementValue,
                                   textAlign: TextAlign.start,
-                                  style: const TextStyle(
-                                    color: Colors.red,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(color: const Color(0xffD1CCE3)),
                                 ),
+                                const SizedBox(height: 10),
+                                // Text(
+                                //   'Allowed issuers: ${proofScopeRequest.query.allowedIssuers}',
+                                //   textAlign: TextAlign.center,
+                                // ),
+                                // const SizedBox(height: 10),
+                                // Text(
+                                //   'Proof type: $proofTypeMsg',
+                                //   textAlign: TextAlign.start,
+                                // ),
+                                // const SizedBox(height: 10),
+                                Divider(color: Colors.grey.withOpacity(0.25)),
+                                if (state.claimEntities!.isNotEmpty &&
+                                    state.claimEntities![index] == null) ...[
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    l10n.credentialNotFound,
+                                    textAlign: TextAlign.start,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.red,
+                                        ),
+                                  ),
+                                ] else ...[
+                                  TransparentInkWell(
+                                    onTap: () {
+                                      Navigator.of(context).push<void>(
+                                        PolygonIdProofPage.route(
+                                          claimEntity:
+                                              state.claimEntities![index]!,
+                                        ),
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              '${l10n.from} ${separateUppercaseWords(
+                                                proofScopeRequest.query.type!,
+                                              )}',
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium!
+                                                  .copyWith(
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 5),
+                                          const Icon(
+                                            Icons.chevron_right,
+                                            color: Colors.white,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
                         ),
                       );
@@ -214,14 +285,21 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       MyGradientButton(
-                        text: 'Accept',
+                        text: l10n.approve,
                         onPressed: state.canGenerateProof
                             ? () {
-                                Navigator.of(context)
-                                    .pushReplacement<void, void>(
-                                  PolygonIdProofPage.route(
-                                    iden3MessageEntity:
-                                        widget.iden3MessageEntity,
+                                Navigator.of(context).push<void>(
+                                  PinCodePage.route(
+                                    isValidCallback: () {
+                                      context
+                                          .read<PolygonIdCubit>()
+                                          .authenticateOrGenerateProof(
+                                            iden3MessageEntity:
+                                                widget.iden3MessageEntity,
+                                            isGenerateProof: true,
+                                          );
+                                    },
+                                    restrictToBack: false,
                                   ),
                                 );
                               }
@@ -231,7 +309,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                       MyOutlinedButton(
                         verticalSpacing: 20,
                         borderRadius: 20,
-                        text: 'Cancel',
+                        text: l10n.cancel,
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                     ],

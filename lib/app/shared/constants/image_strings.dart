@@ -98,6 +98,8 @@ class ImageStrings {
   static const String pcdsAgentCertificate =
       '$imagePath/pcds_agent_certificate.png';
 
+  static const String twitterStatsCard = '$imagePath/twitter_stats_card.png';
+
   /// dummy
   static const String dummyDefiComplianceCard =
       '$imagePath/dummy_defi-compliance-card.png';

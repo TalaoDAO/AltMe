@@ -1,25 +1,24 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
+import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
 
 class PolygonIdProofPage extends StatelessWidget {
   const PolygonIdProofPage({
     super.key,
-    required this.iden3MessageEntity,
+    required this.claimEntity,
   });
 
-  final Iden3MessageEntity iden3MessageEntity;
+  final ClaimEntity claimEntity;
 
   static Route<dynamic> route({
-    required Iden3MessageEntity iden3MessageEntity,
+    required ClaimEntity claimEntity,
   }) =>
       MaterialPageRoute<void>(
         builder: (context) => PolygonIdProofPage(
-          iden3MessageEntity: iden3MessageEntity,
+          claimEntity: claimEntity,
         ),
         settings: const RouteSettings(name: '/PolygonIdProofPage'),
       );
@@ -27,70 +26,66 @@ class PolygonIdProofPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final body = iden3MessageEntity.body as AuthBodyRequest;
-    // TODO(all): change UI
-    return BasePage(
-      title: l10n.cryptographicProof,
-      useSafeArea: true,
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Icon(Icons.home),
-            Text(
-              'You will generate proof for this organisation',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 100),
-            Text(
-              'CRYPTOGRAPHIC PROOF',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 100),
-            Text(
-              'No private data is shared, only the proof of eligibility '
-              'to access.',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 10),
-          ],
+
+    final jsonCredential = claimEntity.info;
+    final credentialPreview = Credential.fromJson(jsonCredential);
+    Widget widget;
+
+    final credentialSubjectType =
+        credentialPreview.credentialSubjectModel.credentialSubjectType;
+
+    if (credentialSubjectType == CredentialSubjectType.kycAgeCredential) {
+      widget = const CredentialBaseWidget(
+        cardBackgroundImagePath: ImageStrings.kycAgeCredentialCard,
+        issuerName: '',
+        value: '',
+      );
+    } else if (credentialSubjectType ==
+        CredentialSubjectType.kycCountryOfResidence) {
+      widget = const CredentialBaseWidget(
+        cardBackgroundImagePath: ImageStrings.kycCountryOfResidenceCard,
+        issuerName: '',
+        value: '',
+      );
+    } else {
+      widget = DefaultCredentialListWidget(
+        credentialModel: CredentialModel(
+          id: credentialPreview.id,
+          image: 'image',
+          credentialPreview: credentialPreview,
+          shareLink: '',
+          display: const Display(
+            '',
+            '',
+            '',
+            '',
+          ),
+          data: const <String, dynamic>{},
         ),
+      );
+    }
+
+    return BasePage(
+      useSafeArea: true,
+      titleLeading: const BackLeadingButton(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          widget,
+          const SizedBox(height: 40),
+          Image.asset(IconStrings.warning, height: 25),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              l10n.noInformationWillBeSharedFromThisCredentialMessage,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.subMessage,
+            ),
+          ),
+        ],
       ),
-      navigation: body.scope != null
-          ? Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  MyGradientButton(
-                    text: 'Generate Proof',
-                    onPressed: () async {
-                      await Navigator.of(context).push<void>(
-                        PinCodePage.route(
-                          isValidCallback: () {
-                            context
-                                .read<PolygonIdCubit>()
-                                .authenticateOrGenerateProof(
-                                  iden3MessageEntity: iden3MessageEntity,
-                                );
-                          },
-                          restrictToBack: false,
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  MyOutlinedButton(
-                    verticalSpacing: 20,
-                    borderRadius: 20,
-                    text: 'Cancel',
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ],
-              ),
-            )
-          : null,
     );
   }
 }

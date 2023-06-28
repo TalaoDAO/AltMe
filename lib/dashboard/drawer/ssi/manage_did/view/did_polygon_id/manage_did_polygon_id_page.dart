@@ -21,7 +21,22 @@ class ManageDidPolygonIdPage extends StatelessWidget {
       final PolygonId polygonId = PolygonId();
       final mnemonic =
           await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-      final userIdentity = await polygonId.getUserIdentity(mnemonic: mnemonic!);
+
+      final polygonIdNetwork =
+          await getSecureStorage.get(SecureStorageKeys.polygonIdNetwork);
+
+      String network = Parameters.POLYGON_MAIN_NETWORK;
+
+      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+        network = Parameters.POLYGON_MAIN_NETWORK;
+      } else {
+        network = Parameters.POLYGON_TEST_NETWORK;
+      }
+
+      final userIdentity = await polygonId.getUserIdentity(
+        mnemonic: mnemonic!,
+        network: network,
+      );
       return userIdentity.did;
     } catch (e) {
       // AlertMessage.showStateMessage(

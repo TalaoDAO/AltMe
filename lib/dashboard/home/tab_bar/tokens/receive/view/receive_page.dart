@@ -74,7 +74,7 @@ class ReceivePage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        child: QrImage(
+                        child: QrImageView(
                           data: accountAddress,
                           backgroundColor: Colors.white,
                         ),

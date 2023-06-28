@@ -207,8 +207,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
 
         if (isAlertEnable) {
-          bool isIssuerVerificationSettingTrue =
-              profileCubit.state.model.issuerVerificationUrls.isNotEmpty;
+          bool isIssuerVerificationSettingTrue = true;
 
           String issuerVerificationUrl = '';
 
@@ -538,10 +537,6 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       if (isAlertEnable) {
         /// checking if it is issuer side
 
-        final iden3MessageEntity = await polygonIdCubit.getIden3Message(
-          message: state.scannedResponse!,
-        );
-
         LoadingView().hide();
 
         // TODO(all): later choose url based on mainnet and testnet
@@ -577,6 +572,16 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
         );
         return;
       }
+    }
+
+    if (state.polygonAction == PolygonIdAction.contractFunctionCall) {
+      LoadingView().hide();
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: const StateMessage.error(
+          stringMessage: 'This feature is not available yet in our app.',
+        ),
+      );
     }
   },
 );

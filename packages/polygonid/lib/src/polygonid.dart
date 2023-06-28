@@ -3,10 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
+import 'package:polygonid_flutter_sdk/common/utils/hex_utils.dart';
+import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/jwz_proof_entity.dart';
+import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/request/onchain/contract_function_call_body_request.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/exceptions/identity_exceptions.dart';
 import 'package:polygonid_flutter_sdk/identity/libs/bjj/bjj_wallet.dart';
 import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
+import 'package:web3dart/web3dart.dart';
 
 /// {@template polygonid}
 /// A Very Good Project created by Very Good CLI.
@@ -26,9 +30,6 @@ class PolygonId {
   /// blockchain
   static const blockchain = 'polygon';
 
-  /// network
-  static const network = 'mumbai';
-
   /// isInitialized
   bool isInitialized = false;
 
@@ -41,6 +42,7 @@ class PolygonId {
     required String web3ApiKey,
     required String idStateContract,
     required String pushUrl,
+    required String network,
   }) async {
     if (isInitialized) return;
     await PolygonIdSdk.init(
@@ -55,6 +57,33 @@ class PolygonId {
       ),
     );
     isInitialized = true;
+  }
+
+  /// PolygonId SDK setEnv
+  Future<void> setEnv({
+    required String web3Url,
+    required String web3RdpUrl,
+    required String web3ApiKey,
+    required String idStateContract,
+    required String pushUrl,
+    required String network,
+  }) {
+    return PolygonIdSdk.I.setEnv(
+      env: EnvEntity(
+        blockchain: blockchain,
+        network: network,
+        web3Url: web3Url,
+        web3RdpUrl: web3RdpUrl,
+        web3ApiKey: web3ApiKey,
+        idStateContract: idStateContract,
+        pushUrl: pushUrl,
+      ),
+    );
+  }
+
+  /// PolygonId SDK getEnv
+  Future<EnvEntity> getEnv() async {
+    return PolygonIdSdk.I.getEnv();
   }
 
   /// check if curcuit is already downloaded
@@ -79,7 +108,10 @@ class PolygonId {
   /// security system, you can find the privateKey in the PrivateIdentityEntity
   /// object.
   ///
-  Future<PrivateIdentityEntity> addIdentity({required String mnemonic}) async {
+  Future<PrivateIdentityEntity> addIdentity({
+    required String mnemonic,
+    required String network,
+  }) async {
     try {
       final sdk = PolygonIdSdk.I;
       final secret = bip393.mnemonicToEntropy(mnemonic);
@@ -87,7 +119,10 @@ class PolygonId {
       return identity;
     } catch (e) {
       if (e is IdentityAlreadyExistsException) {
-        final identity = getIdentity(mnemonic: mnemonic);
+        final identity = getIdentity(
+          mnemonic: mnemonic,
+          network: network,
+        );
         return identity;
       } else {
         throw Exception('STH_WENT_WRONG - $e');
@@ -111,7 +146,10 @@ class PolygonId {
   }
 
   /// Return The Identity's did identifier with mnemonics
-  Future<UserIdentity> getUserIdentity({required String mnemonic}) async {
+  Future<UserIdentity> getUserIdentity({
+    required String mnemonic,
+    required String network,
+  }) async {
     final sdk = PolygonIdSdk.I;
     final privateKey = await getPrivateKey(mnemonic: mnemonic);
     final did = await sdk.identity.getDidIdentifier(
@@ -126,9 +164,13 @@ class PolygonId {
   /// databases associated to the identity
   Future<PrivateIdentityEntity> getIdentity({
     required String mnemonic,
+    required String network,
   }) async {
     final sdk = PolygonIdSdk.I;
-    final userIdentity = await getUserIdentity(mnemonic: mnemonic);
+    final userIdentity = await getUserIdentity(
+      mnemonic: mnemonic,
+      network: network,
+    );
     final identity = await sdk.identity.restoreIdentity(
       privateKey: userIdentity.privateKey,
       genesisDid: userIdentity.did,
@@ -140,6 +182,7 @@ class PolygonId {
   Future<void> removeIdentity({
     required String genesisDid,
     required String privateKey,
+    required String network,
   }) async {
     final sdk = PolygonIdSdk.I;
     final genesisDid = await sdk.identity.getDidIdentifier(
@@ -186,6 +229,7 @@ class PolygonId {
   /// identity and also to realize operations like generating proofs
   Future<bool> authenticate({
     required Iden3MessageEntity iden3MessageEntity,
+    required String network,
     required String mnemonic,
   }) async {
     try {
@@ -226,6 +270,7 @@ class PolygonId {
   Future<List<ClaimEntity>> getClaims({
     required Iden3MessageEntity iden3MessageEntity,
     required String mnemonic,
+    required String network,
   }) async {
     try {
       final sdk = PolygonIdSdk.I;
@@ -256,6 +301,7 @@ class PolygonId {
   Future<List<ClaimEntity>> getClaimById({
     required String claimId,
     required String mnemonic,
+    required String network,
   }) async {
     final sdk = PolygonIdSdk.I;
 
@@ -289,9 +335,13 @@ class PolygonId {
   /// [PolygonIdSdk.setEnv]
   Future<String?> backupIdentity({
     required String mnemonic,
+    required String network,
   }) async {
     final sdk = PolygonIdSdk.I;
-    final userIdentity = await getUserIdentity(mnemonic: mnemonic);
+    final userIdentity = await getUserIdentity(
+      mnemonic: mnemonic,
+      network: network,
+    );
     return sdk.identity.backupIdentity(
       privateKey: userIdentity.privateKey,
       genesisDid: userIdentity.did,
@@ -315,9 +365,13 @@ class PolygonId {
   Future<PrivateIdentityEntity> restoreIdentity({
     required String mnemonic,
     required String encryptedDb,
+    required String network,
   }) async {
     final sdk = PolygonIdSdk.I;
-    final userIdentity = await getUserIdentity(mnemonic: mnemonic);
+    final userIdentity = await getUserIdentity(
+      mnemonic: mnemonic,
+      network: network,
+    );
     final identity = await sdk.identity.restoreIdentity(
       privateKey: userIdentity.privateKey,
       genesisDid: userIdentity.did,
@@ -375,6 +429,7 @@ class PolygonId {
   Future<List<ClaimEntity?>> getClaimsFromIden3Message({
     required Iden3MessageEntity iden3MessageEntity,
     required String mnemonic,
+    required String network,
   }) async {
     try {
       final sdk = PolygonIdSdk.I;
@@ -397,5 +452,75 @@ class PolygonId {
     } catch (e) {
       throw Exception();
     }
+  }
+
+  /// generateProofByContractFunctionCall
+  Future<String> generateProofByContractFunctionCall({
+    required String walletAddress,
+    required Iden3MessageEntity contractIden3messageEntity,
+    required String mnemonic,
+    required String network,
+  }) async {
+    final sdk = PolygonIdSdk.I;
+    var challenge = walletAddress;
+
+    if (challenge.toLowerCase().startsWith('0x')) {
+      challenge = challenge.substring(2);
+    }
+
+    final swappedHex =
+        HEX.encode(Uint8List.fromList(HEX.decode(challenge).reversed.toList()));
+    challenge = BigInt.parse(swappedHex, radix: 16).toString();
+
+    final userIdentity = await getUserIdentity(
+      mnemonic: mnemonic,
+      network: network,
+    );
+
+    final List<JWZProofEntity> response = await sdk.iden3comm.getProofs(
+      message: contractIden3messageEntity,
+      genesisDid: userIdentity.did,
+      privateKey: userIdentity.privateKey,
+      challenge: challenge,
+    );
+
+    final body =
+        contractIden3messageEntity.body as ContractFunctionCallBodyRequest;
+
+    // after the creation of the proof we send the transaction
+    final String to = body.transactionData.contractAddress;
+    final JWZProofEntity proof = response.first;
+
+    const ABI =
+        '[ { "inputs": [ { "internalType": "uint64", "name": "requestId", "type": "uint64" }, { "internalType": "uint256[]", "name": "inputs", "type": "uint256[]" }, { "internalType": "uint256[2]", "name": "a", "type": "uint256[2]" }, { "internalType": "uint256[2][2]", "name": "b", "type": "uint256[2][2]" }, { "internalType": "uint256[2]", "name": "c", "type": "uint256[2]" } ], "name": "submitZKPResponse", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" } ]';
+
+    final ContractAbi cAbi = ContractAbi.fromJson(ABI, to);
+    final DeployedContract dc =
+        DeployedContract(cAbi, EthereumAddress.fromHex(to));
+
+    final zkFun = dc.findFunctionsByName('submitZKPResponse');
+
+    final List<BigInt> pubSig = proof.pubSignals.map(BigInt.parse).toList();
+
+    final funcData = zkFun.first.encodeCall([
+      BigInt.from(proof.id),
+      pubSig,
+      [BigInt.parse(proof.proof.piA[0]), BigInt.parse(proof.proof.piA[1])],
+      [
+        [
+          BigInt.parse(proof.proof.piB[0][1]),
+          BigInt.parse(proof.proof.piB[0][0])
+        ],
+        [
+          BigInt.parse(proof.proof.piB[1][1]),
+          BigInt.parse(proof.proof.piB[1][0])
+        ]
+      ],
+      [BigInt.parse(proof.proof.piC[0]), BigInt.parse(proof.proof.piC[1])]
+    ]);
+
+    final hexData = HexUtils.bytesToHex(funcData.toList());
+
+    return hexData;
   }
 }

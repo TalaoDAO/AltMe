@@ -55,6 +55,7 @@ export 'polygon_poo_address/polygon_poo_address_model.dart';
 export 'professional_experience_assessment/professional_experience_assessment_model.dart';
 export 'professional_skill_assessment/professional_skill_assessment_model.dart';
 export 'professional_student_card/professional_student_card_model.dart';
+export 'proof_of_twitter_stats/proof_of_twitter_stats_model.dart';
 export 'resident_card/resident_card_model.dart';
 export 'self_issued/self_issued_model.dart';
 export 'signature/signature.dart';

@@ -296,6 +296,9 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.kycCountryOfResidence:
         return KYCCountryOfResidenceWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.proofOfTwitterStats:
+        return ProofOfTwitterStatsWidget(credentialModel: credentialModel);
     }
   }
 }

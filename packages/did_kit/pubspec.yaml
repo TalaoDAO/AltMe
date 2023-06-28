@@ -1,5 +1,5 @@
 name: did_kit
-description: DidKit Package 
+description: DidKit Package
 version: 1.0.0+1
 publish_to: none
 
@@ -16,4 +16,4 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  very_good_analysis: ^4.0.0+1
+  very_good_analysis: ^5.0.0+1

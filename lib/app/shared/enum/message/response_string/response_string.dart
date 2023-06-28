@@ -145,4 +145,5 @@ enum ResponseString {
   RESPONSE_STRING_backupPolygonIdCredentialEmptyError,
   RESPONSE_STRING_downloadingCircuitLoadingMessage,
   RESPONSE_STRING_errorGeneratingProof,
+  RESPONSE_STRING_successfullyGeneratingProof,
 }

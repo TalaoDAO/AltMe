@@ -12,7 +12,7 @@ class ProfileModel extends Equatable {
     required this.phone,
     required this.location,
     required this.email,
-    required this.issuerVerificationUrls,
+    required this.polygonIdNetwork,
     required this.tezosNetwork,
     required this.isEnterprise,
     required this.isBiometricEnabled,
@@ -34,7 +34,7 @@ class ProfileModel extends Equatable {
         companyName: '',
         companyWebsite: '',
         jobTitle: '',
-        issuerVerificationUrls: const {},
+        polygonIdNetwork: PolygonIdNetwork.PolygonMainnet.toString(),
         isEnterprise: false,
         isBiometricEnabled: false,
         isAlertEnabled: false,
@@ -49,7 +49,7 @@ class ProfileModel extends Equatable {
   final String companyName;
   final String companyWebsite;
   final String jobTitle;
-  final Set<String> issuerVerificationUrls;
+  final String polygonIdNetwork;
   final TezosNetwork tezosNetwork;
   final bool isEnterprise;
   final bool isBiometricEnabled;
@@ -62,7 +62,7 @@ class ProfileModel extends Equatable {
         phone,
         location,
         email,
-        issuerVerificationUrls,
+        polygonIdNetwork,
         tezosNetwork,
         companyName,
         companyWebsite,
@@ -83,7 +83,7 @@ class ProfileModel extends Equatable {
     String? companyName,
     String? companyWebsite,
     String? jobTitle,
-    Set<String>? issuerVerificationUrls,
+    String? polygonIdNetwork,
     TezosNetwork? tezosNetwork,
     bool? isEnterprise,
     bool? isBiometricEnabled,
@@ -98,8 +98,7 @@ class ProfileModel extends Equatable {
       companyName: companyName ?? this.companyName,
       companyWebsite: companyWebsite ?? this.companyWebsite,
       jobTitle: jobTitle ?? this.jobTitle,
-      issuerVerificationUrls:
-          issuerVerificationUrls ?? this.issuerVerificationUrls,
+      polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
       tezosNetwork: tezosNetwork ?? this.tezosNetwork,
       isEnterprise: isEnterprise ?? this.isEnterprise,
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
