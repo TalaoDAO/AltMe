@@ -7,7 +7,6 @@ SecureStorageProvider get getSecureStorage {
   return SecureStorageProvider();
 }
 
-
 /// Initialize and test secure storage availability on the phone.
 Future<void> get initSecureStorage async {
   if (Platform.isAndroid) {
@@ -34,9 +33,6 @@ Future<void> get initSecureStorage async {
   } else {
     const defaultIOSOptions =
         IOSOptions(accessibility: KeychainAccessibility.first_unlock);
-  } else {
-    const defaultIOSOptions =
-        IOSOptions(accessibility: KeychainAccessibility.first_unlock);
 
     const storage = FlutterSecureStorage(
       iOptions: defaultIOSOptions,
@@ -50,6 +46,7 @@ Future<void> get initSecureStorage async {
 /// proper phone secure storage.
 Future<void> testStorage(FlutterSecureStorage storage) async {
   final secureStorage = SecureStorageProvider(storage: storage);
+  // ignore: unused_local_variable
   final testCompatibility = await secureStorage.getAllValues();
 }
 

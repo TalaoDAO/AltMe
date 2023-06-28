@@ -12,7 +12,6 @@ import 'package:altme/app/app.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class AppBlocObserver extends BlocObserver {
@@ -34,18 +33,17 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await LocalNotification().init();
-  await initSecureStorage;
-
-  /// Disable Http google font
-  // GoogleFonts.config.allowRuntimeFetching = false;
-
-  await Dartez().init();
-
   await runZonedGuarded(
     () async {
+      WidgetsFlutterBinding.ensureInitialized();
+
+      await LocalNotification().init();
+      await initSecureStorage;
+
+      /// Disable Http google font
+      // GoogleFonts.config.allowRuntimeFetching = false;
+
+      await Dartez().init();
       Bloc.observer = AppBlocObserver();
       runApp(await builder());
     },
