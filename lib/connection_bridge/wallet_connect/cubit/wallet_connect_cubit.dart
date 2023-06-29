@@ -8,7 +8,6 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:convert/convert.dart';
 import 'package:equatable/equatable.dart';
-import 'package:eth_sig_util/eth_sig_util.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -135,7 +134,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           _web3Wallet!.registerRequestHandler(
             chainId: accounts.blockchainType.chain,
             method: Parameters.ETH_SIGN_TYPE_DATA,
-            handler: ethSignTransaction,
+            handler: ethSignTypedData,
           );
           _web3Wallet!.registerRequestHandler(
             chainId: accounts.blockchainType.chain,
@@ -419,58 +418,47 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   //   return null;
   // }
 
-  Completer<String>? completer;
+  List<Completer<String>?> completer = <Completer<String>?>[];
 
   Future<String> personalSign(String topic, dynamic parameters) async {
     log.i('received personal sign request: $parameters');
+    log.i('topic: $topic');
 
-    completer = Completer<String>();
+    log.i('completer initialise');
+    completer.add(Completer<String>());
 
-    log.i('completer');
     emit(
       state.copyWith(
         status: WalletConnectStatus.signPayload,
         parameters: parameters,
+        signType: Parameters.PERSONAL_SIGN,
       ),
     );
 
-    final String result = await completer!.future;
+    final String result = await completer[completer.length - 1]!.future;
     log.i('complete - $result');
-    completer = null;
+    completer.removeLast();
     return result;
   }
 
   Future<String> ethSign(String topic, dynamic parameters) async {
-    print('received eth sign request: $parameters');
+    log.i('received eth sign request: $parameters');
 
-    final String message = getUtf8Message(parameters[1].toString());
+    log.i('completer initialise');
+    completer.add(Completer<String>());
 
-    // final String? authAcquired = await requestAuthorization(message);
-    // if (authAcquired != null) {
-    //   return authAcquired;
-    // }
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.signPayload,
+        parameters: parameters,
+        signType: Parameters.ETH_SIGN,
+      ),
+    );
 
-    try {
-      // Load the private key
-
-      final EthPrivateKey credentials = EthPrivateKey.fromHex(
-        'keys[0].privateKey',
-      );
-      final String signature = hex.encode(
-        credentials.signPersonalMessageToUint8List(
-          Uint8List.fromList(
-            utf8.encode(message),
-          ),
-        ),
-      );
-      print(signature);
-
-      return '0x$signature';
-    } catch (e) {
-      print('error:');
-      print(e);
-      return 'Failed';
-    }
+    final String result = await completer[completer.length - 1]!.future;
+    log.i('complete - $result');
+    completer.removeLast();
+    return result;
   }
 
   Future<String> ethSignTransaction(String topic, dynamic parameters) async {
@@ -553,25 +541,23 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   }
 
   Future<String> ethSignTypedData(String topic, dynamic parameters) async {
-    print('received eth sign typed data request: $parameters');
-    final String data = parameters[1] as String;
-    // final String? authAcquired = await requestAuthorization(data);
-    // if (authAcquired != null) {
-    //   return authAcquired;
-    // }
+    log.i('received eth sign typed data request: $parameters');
 
-    // final List<ChainKey> keys = GetIt.I<IKeyService>().getKeysForChain(
-    //   getChainId(),
-    // );
+    log.i('completer initialise');
+    completer.add(Completer<String>());
 
-    // EthPrivateKey credentials = EthPrivateKey.fromHex(keys[0].privateKey);
-    // credentials.
-
-    return EthSigUtil.signTypedData(
-      privateKey: 'keys[0].privateKey',
-      jsonData: data,
-      version: TypedDataVersion.V4,
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.signPayload,
+        parameters: parameters,
+        signType: Parameters.ETH_SIGN_TYPE_DATA,
+      ),
     );
+
+    final String result = await completer[completer.length - 1]!.future;
+    log.i('complete - $result');
+    completer.removeLast();
+    return result;
   }
 
   Future<void> dispose() async {
