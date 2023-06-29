@@ -141,7 +141,7 @@ class _DashboardViewState extends State<DashboardView> {
             if (state.status == KycVerificationStatus.loading) {
               LoadingView().show(context: context);
             } else {
-              LoadingView().hide();
+              LoadingView().hide(context: context);
             }
           },
         ),

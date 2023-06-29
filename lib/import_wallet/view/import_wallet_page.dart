@@ -104,7 +104,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
 
           LoadingView().show(context: context);
         } else {
-          LoadingView().hide(context: context);
+          LoadingView().hide(context: context, forceHide: false);
         }
 
         if (state.message != null) {

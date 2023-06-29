@@ -61,7 +61,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          LoadingView().hide();
+          LoadingView().hide(context: context);
         }
 
         if (state.status == AppStatus.success) {

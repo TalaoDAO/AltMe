@@ -29,11 +29,15 @@ class LoadingView {
     }
   }
 
-  void hide({required BuildContext context}) {
+  void hide({required BuildContext context, bool forceHide = true}) {
     logger.i(
       'hide(${context.widget.runtimeType})',
     );
-    if (widgetEnabledLoadingTypes.contains(context.widget.runtimeType)) {
+    if (forceHide) {
+      controller?.close();
+      controller = null;
+      widgetEnabledLoadingTypes.clear();
+    } else if (widgetEnabledLoadingTypes.contains(context.widget.runtimeType)) {
       widgetEnabledLoadingTypes.remove(context.widget.runtimeType);
       if (widgetEnabledLoadingTypes.isEmpty) {
         controller?.close();

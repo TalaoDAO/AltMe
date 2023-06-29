@@ -502,12 +502,12 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
         final List<ClaimEntity> claims = await polygonIdCubit.getClaims(
           iden3MessageEntity: iden3MessageEntity,
         );
-        LoadingView().hide();
+        LoadingView().hide(context: context);
         await Navigator.of(context)
             .push<void>(PolygonIdCredentialOfferPage.route(claims: claims));
       } catch (e) {
         final l10n = context.l10n;
-        LoadingView().hide();
+        LoadingView().hide(context: context);
         AlertMessage.showStateMessage(
           context: context,
           stateMessage: StateMessage.error(
@@ -520,7 +520,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
     if (state.polygonAction == PolygonIdAction.verifier) {
       final Iden3MessageEntity iden3MessageEntity =
           await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
-      LoadingView().hide();
+      LoadingView().hide(context: context);
       await Navigator.of(context).push<void>(
         PolygonIdVerificationPage.route(iden3MessageEntity: iden3MessageEntity),
       );
@@ -537,7 +537,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       if (isAlertEnable) {
         /// checking if it is issuer side
 
-        LoadingView().hide();
+        LoadingView().hide(context: context);
 
         // TODO(all): later choose url based on mainnet and testnet
         accept = await showDialog<bool>(
@@ -553,7 +553,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
             false;
       }
 
-      LoadingView().hide();
+      LoadingView().hide(context: context);
 
       if (accept) {
         final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
@@ -575,7 +575,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
     }
 
     if (state.polygonAction == PolygonIdAction.contractFunctionCall) {
-      LoadingView().hide();
+      LoadingView().hide(context: context);
       AlertMessage.showStateMessage(
         context: context,
         stateMessage: const StateMessage.error(

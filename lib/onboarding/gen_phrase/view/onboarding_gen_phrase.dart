@@ -63,7 +63,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BlocListener<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
+    return BlocConsumer<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
