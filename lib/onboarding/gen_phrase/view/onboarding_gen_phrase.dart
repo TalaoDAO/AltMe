@@ -64,10 +64,13 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
     final l10n = context.l10n;
 
     return BlocConsumer<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
+          if (state.status == AppStatus.success) {
+            await context.read<AltmeChatSupportCubit>().init();
+          }
           LoadingView().hide();
         }
 
@@ -79,8 +82,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
         }
 
         if (state.status == AppStatus.success) {
-          context.read<AltmeChatSupportCubit>().init();
-          Navigator.pushAndRemoveUntil<void>(
+          await Navigator.pushAndRemoveUntil<void>(
             context,
             WalletReadyPage.route(),
             (Route<dynamic> route) => route.isFirst,
