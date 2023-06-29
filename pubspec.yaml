@@ -111,6 +111,7 @@ dependencies:
     git:
       url: https://github.com/bibash28/wallet-connect-dart.git
       ref: 5d3003d51ee5afb9911d04d15b6b2aa2f12989c8
+  walletconnect_flutter_v2: ^2.0.10
   webview_flutter: ^4.2.1
   webview_flutter_android: ^3.7.1
   webview_flutter_wkwebview: ^3.4.4
