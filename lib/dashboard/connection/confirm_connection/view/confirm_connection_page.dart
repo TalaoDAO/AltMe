@@ -165,29 +165,35 @@ class ConfirmConnectionView extends StatelessWidget {
                               .requiredNamespaces[key]!;
 
                           return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('$key : '),
                               if (ns.chains != null) ...[
                                 Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text('Chains'),
                                     Text(ns.chains!.toString()),
                                   ],
                                 ),
+                                const SizedBox(height: Sizes.spaceSmall),
                               ],
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text('Methods'),
                                   Text(ns.methods.toString()),
                                 ],
                               ),
+                              const SizedBox(height: Sizes.spaceSmall),
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text('Events'),
                                   Text(ns.events.toString()),
                                 ],
                               ),
-                              const SizedBox(height: Sizes.spaceNormal),
+                              const SizedBox(height: Sizes.spaceSmall),
                             ],
                           );
                         },

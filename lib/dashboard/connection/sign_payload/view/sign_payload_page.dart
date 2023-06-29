@@ -132,10 +132,11 @@ class _SignPayloadViewState extends State<SignPayloadView> {
                                 ConnectionBridgeType.beacon
                             ? beaconRequest!.request!.appMetadata!.name!
                             : context
-                                .read<WalletConnectCubit>()
-                                .state
-                                .currentDAppPeerMeta!
-                                .name,
+                                    .read<WalletConnectCubit>()
+                                    .state
+                                    .currentDAppPeerMeta
+                                    ?.name ??
+                                '',
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),

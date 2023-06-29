@@ -299,7 +299,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     if (args != null) {
       //pairings.value = _web3Wallet!.pairings.getAll();
       log.i('onPairingsSync');
-      print(_web3Wallet!.pairings.getAll());
+      log.i(_web3Wallet!.pairings.getAll());
     }
   }
 
@@ -318,19 +318,19 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
   void _onSessionProposalError(SessionProposalErrorEvent? args) {
     log.i('onSessionProposalError');
-    print(args);
+    log.i(args);
   }
 
   void _onSessionConnect(SessionConnect? args) {
     if (args != null) {
-      print(args);
-      print(args.session);
+      log.i(args);
+      log.i(args.session);
       //sessions.value.add(args.session);
     }
   }
 
   void _onPairingCreate(PairingEvent? args) {
-    print('Pairing Create Event: $args');
+    log.i('Pairing Create Event: $args');
   }
 
   Future<void> _onAuthRequest(AuthRequest? args) async {
@@ -419,35 +419,25 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   //   return null;
   // }
 
+  Completer<String>? completer;
+
   Future<String> personalSign(String topic, dynamic parameters) async {
-    print('received personal sign request: $parameters');
+    log.i('received personal sign request: $parameters');
 
-    final String message = getUtf8Message(parameters[0].toString());
+    completer = Completer<String>();
 
-    // final String? authAcquired = await requestAuthorization(message);
-    // if (authAcquired != null) {
-    //   return authAcquired;
-    // }
+    log.i('completer');
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.signPayload,
+        parameters: parameters,
+      ),
+    );
 
-    try {
-      // Load the private key
-
-      final Credentials credentials =
-          EthPrivateKey.fromHex('keys[0].privateKey');
-
-      final String signature = hex.encode(
-        credentials.signPersonalMessageToUint8List(
-          Uint8List.fromList(
-            utf8.encode(message),
-          ),
-        ),
-      );
-
-      return '0x$signature';
-    } catch (e) {
-      print(e);
-      return 'Failed';
-    }
+    final String result = await completer!.future;
+    log.i('complete - $result');
+    completer = null;
+    return result;
   }
 
   Future<String> ethSign(String topic, dynamic parameters) async {

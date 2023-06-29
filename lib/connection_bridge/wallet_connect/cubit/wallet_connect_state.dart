@@ -19,6 +19,7 @@ class WalletConnectState extends Equatable {
 
     /// v2
     this.sessionProposalEvent,
+    this.parameters,
   }) : wcClients = wcClients ?? [];
 
   factory WalletConnectState.fromJson(Map<String, dynamic> json) =>
@@ -40,6 +41,7 @@ class WalletConnectState extends Equatable {
   final int? transactionId;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final WCEthereumTransaction? transaction;
+  final dynamic parameters;
 
   /// v2
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -71,6 +73,7 @@ class WalletConnectState extends Equatable {
     int? transactionId,
     WCEthereumTransaction? transaction,
     SessionProposalEvent? sessionProposalEvent,
+    dynamic parameters,
   }) {
     return WalletConnectState(
       status: status,
@@ -86,6 +89,7 @@ class WalletConnectState extends Equatable {
       transactionId: transactionId ?? this.transactionId,
       transaction: transaction ?? this.transaction,
       sessionProposalEvent: sessionProposalEvent ?? this.sessionProposalEvent,
+      parameters: parameters ?? this.parameters,
     );
   }
 
@@ -103,5 +107,6 @@ class WalletConnectState extends Equatable {
         transactionId,
         transaction,
         sessionProposalEvent,
+        parameters,
       ];
 }
