@@ -1,20 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
-import 'package:convert/convert.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:wallet_connect/wallet_connect.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
-import 'package:web3dart/web3dart.dart';
 
 part 'wallet_connect_cubit.g.dart';
 part 'wallet_connect_state.dart';
@@ -291,7 +287,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   }
 
   void _onPairingInvalid(PairingInvalidEvent? args) {
-    print('Pairing Invalid Event: $args');
+    log.i('Pairing Invalid Event: $args');
   }
 
   void _onPairingsSync(StoreSyncEvent? args) {
@@ -397,27 +393,6 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     }
   }
 
-  // Future<String?> requestAuthorization(String text) async {
-  //   final bool? approved = await _bottomSheetService.queueBottomSheet(
-  //     widget: WCRequestWidget(
-  //       child: WCConnectionWidget(
-  //         title: 'Sign Transaction',
-  //         info: [
-  //           WCConnectionModel(
-  //             text: text,
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-
-  //   if (approved != null && approved == false) {
-  //     return 'User rejected signature';
-  //   }
-
-  //   return null;
-  // }
-
   List<Completer<String>?> completer = <Completer<String>?>[];
 
   Future<String> personalSign(String topic, dynamic parameters) async {
@@ -462,82 +437,23 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   }
 
   Future<String> ethSignTransaction(String topic, dynamic parameters) async {
-    print('received eth sign transaction request: $parameters');
-    // final String? authAcquired = await requestAuthorization(
-    //   jsonEncode(
-    //     parameters[0],
-    //   ),
-    // );
-    // if (authAcquired != null) {
-    //   return authAcquired;
-    // }
+    log.i('received eth sign transaction request: $parameters');
 
-    // Load the private key
+    log.i('completer initialise');
+    completer.add(Completer<String>());
 
-    final Credentials credentials = EthPrivateKey.fromHex(
-      '0xkeys[0].privateKey',
-    );
-
-    final EthereumTransaction ethTransaction = EthereumTransaction.fromJson(
-      parameters[0] as Map<String, dynamic>,
-    );
-
-    // Construct a transaction from the EthereumTransaction object
-    final transaction = Transaction(
-      from: EthereumAddress.fromHex(ethTransaction.from),
-      to: EthereumAddress.fromHex(ethTransaction.to),
-      value: EtherAmount.fromUnitAndValue(
-        EtherUnit.wei,
-        BigInt.tryParse(ethTransaction.value) ?? BigInt.zero,
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.signPayload,
+        parameters: parameters,
+        signType: Parameters.ETH_SIGN_TRANSACTION,
       ),
-      gasPrice: ethTransaction.gasPrice != null
-          ? EtherAmount.fromUnitAndValue(
-              EtherUnit.gwei,
-              BigInt.tryParse(ethTransaction.gasPrice!) ?? BigInt.zero,
-            )
-          : null,
-      maxFeePerGas: ethTransaction.maxFeePerGas != null
-          ? EtherAmount.fromUnitAndValue(
-              EtherUnit.gwei,
-              BigInt.tryParse(ethTransaction.maxFeePerGas!) ?? BigInt.zero,
-            )
-          : null,
-      maxPriorityFeePerGas: ethTransaction.maxPriorityFeePerGas != null
-          ? EtherAmount.fromUnitAndValue(
-              EtherUnit.gwei,
-              BigInt.tryParse(ethTransaction.maxPriorityFeePerGas!) ??
-                  BigInt.zero,
-            )
-          : null,
-      maxGas: int.tryParse(ethTransaction.gasLimit ?? ''),
-      nonce: int.tryParse(ethTransaction.nonce ?? ''),
-      data: (ethTransaction.data != null && ethTransaction.data != '0x')
-          ? Uint8List.fromList(hex.decode(ethTransaction.data!))
-          : null,
     );
 
-    try {
-      await dotenv.load();
-      final infuraApiKey = dotenv.get('INFURA_API_KEY');
-      final ethRpcUrl = Urls.infuraBaseUrl + infuraApiKey;
-      final httpClient = Client();
-
-      final Web3Client ethClient = Web3Client(ethRpcUrl, httpClient);
-
-      final Uint8List sig = await ethClient.signTransaction(
-        credentials,
-        transaction,
-      );
-
-      // Sign the transaction
-      final String signedTx = hex.encode(sig);
-
-      // Return the signed transaction as a hexadecimal string
-      return '0x$signedTx';
-    } catch (e) {
-      print(e);
-      return 'Failed';
-    }
+    final String result = await completer[completer.length - 1]!.future;
+    log.i('complete - $result');
+    completer.removeLast();
+    return result;
   }
 
   Future<String> ethSignTypedData(String topic, dynamic parameters) async {

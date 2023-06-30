@@ -12,8 +12,9 @@ import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:eth_sig_util/eth_sig_util.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallet_connect/wallet_connect.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -93,6 +94,9 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           } else if (walletConnectCubit.state.signType ==
               Parameters.ETH_SIGN_TYPE_DATA) {
             payloadMessage = walletConnectCubit.state.parameters[1] as String;
+          } else if (walletConnectCubit.state.signType ==
+              Parameters.ETH_SIGN_TRANSACTION) {
+            payloadMessage = jsonEncode(walletConnectCubit.state.parameters[0]);
           } else {
             throw ResponseMessage(
               ResponseString
@@ -285,6 +289,9 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           } else if (walletConnectCubit.state.signType ==
               Parameters.PERSONAL_SIGN) {
             publicKey = walletConnectState.parameters[1].toString();
+          } else if (walletConnectCubit.state.signType ==
+              Parameters.ETH_SIGN_TRANSACTION) {
+            publicKey = walletConnectState.parameters[0]['from'].toString();
           } else {
             throw ResponseMessage(
               ResponseString
@@ -331,6 +338,69 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             walletConnectCubit
                 .completer[walletConnectCubit.completer.length - 1]!
                 .complete(signTypedData);
+            success = true;
+          } else if (walletConnectCubit.state.signType ==
+              Parameters.ETH_SIGN_TRANSACTION) {
+            final EthereumTransaction ethTransaction =
+                EthereumTransaction.fromJson(
+              walletConnectCubit.state.parameters[0] as Map<String, dynamic>,
+            );
+
+            // Construct a transaction from the EthereumTransaction object
+            final transaction = Transaction(
+              from: EthereumAddress.fromHex(ethTransaction.from),
+              to: EthereumAddress.fromHex(ethTransaction.to),
+              value: EtherAmount.fromUnitAndValue(
+                EtherUnit.wei,
+                BigInt.tryParse(ethTransaction.value) ?? BigInt.zero,
+              ),
+              gasPrice: ethTransaction.gasPrice != null
+                  ? EtherAmount.fromUnitAndValue(
+                      EtherUnit.gwei,
+                      BigInt.tryParse(ethTransaction.gasPrice!) ?? BigInt.zero,
+                    )
+                  : null,
+              maxFeePerGas: ethTransaction.maxFeePerGas != null
+                  ? EtherAmount.fromUnitAndValue(
+                      EtherUnit.gwei,
+                      BigInt.tryParse(ethTransaction.maxFeePerGas!) ??
+                          BigInt.zero,
+                    )
+                  : null,
+              maxPriorityFeePerGas: ethTransaction.maxPriorityFeePerGas != null
+                  ? EtherAmount.fromUnitAndValue(
+                      EtherUnit.gwei,
+                      BigInt.tryParse(ethTransaction.maxPriorityFeePerGas!) ??
+                          BigInt.zero,
+                    )
+                  : null,
+              maxGas: int.tryParse(ethTransaction.gasLimit ?? ''),
+              nonce: int.tryParse(ethTransaction.nonce ?? ''),
+              data: (ethTransaction.data != null && ethTransaction.data != '0x')
+                  ? Uint8List.fromList(hex.decode(ethTransaction.data!))
+                  : null,
+            );
+
+            await dotenv.load();
+            final infuraApiKey = dotenv.get('INFURA_API_KEY');
+            final ethRpcUrl = Urls.infuraBaseUrl + infuraApiKey;
+            final httpClient = Client();
+
+            final Web3Client ethClient = Web3Client(ethRpcUrl, httpClient);
+
+            final Uint8List sig = await ethClient.signTransaction(
+              credentials,
+              transaction,
+            );
+
+            // Sign the transaction
+            final String signedTx = hex.encode(sig);
+
+            // Return the signed transaction as a hexadecimal string
+
+            walletConnectCubit
+                .completer[walletConnectCubit.completer.length - 1]!
+                .complete('0x$signedTx');
             success = true;
           } else {
             throw ResponseMessage(
