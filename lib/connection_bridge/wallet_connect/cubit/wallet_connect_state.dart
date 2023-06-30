@@ -15,12 +15,13 @@ class WalletConnectState extends Equatable {
     this.signId,
     this.signMessage,
     this.transactionId,
-    this.transaction,
+    this.wcTransaction,
 
     /// v2
     this.sessionProposalEvent,
     this.parameters,
     this.signType,
+    this.transaction,
   }) : wcClients = wcClients ?? [];
 
   factory WalletConnectState.fromJson(Map<String, dynamic> json) =>
@@ -41,13 +42,15 @@ class WalletConnectState extends Equatable {
   final WCEthereumSignMessage? signMessage;
   final int? transactionId;
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final WCEthereumTransaction? transaction;
-  final dynamic parameters;
-  final String? signType;
+  final WCEthereumTransaction? wcTransaction;
 
   /// v2
   @JsonKey(includeFromJson: false, includeToJson: false)
   final SessionProposalEvent? sessionProposalEvent;
+  final dynamic parameters;
+  final String? signType;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final Transaction? transaction;
 
   Map<String, dynamic> toJson() => _$WalletConnectStateToJson(this);
 
@@ -73,10 +76,11 @@ class WalletConnectState extends Equatable {
     int? signId,
     WCEthereumSignMessage? signMessage,
     int? transactionId,
-    WCEthereumTransaction? transaction,
+    WCEthereumTransaction? wcTransaction,
     SessionProposalEvent? sessionProposalEvent,
     dynamic parameters,
     String? signType,
+    Transaction? transaction,
   }) {
     return WalletConnectState(
       status: status,
@@ -90,10 +94,11 @@ class WalletConnectState extends Equatable {
       signId: signId ?? this.signId,
       signMessage: signMessage ?? this.signMessage,
       transactionId: transactionId ?? this.transactionId,
-      transaction: transaction ?? this.transaction,
+      wcTransaction: wcTransaction ?? this.wcTransaction,
       sessionProposalEvent: sessionProposalEvent ?? this.sessionProposalEvent,
       parameters: parameters ?? this.parameters,
       signType: signType ?? this.signType,
+      transaction: transaction ?? this.transaction,
     );
   }
 
@@ -109,9 +114,10 @@ class WalletConnectState extends Equatable {
         signId,
         signMessage,
         transactionId,
-        transaction,
+        wcTransaction,
         sessionProposalEvent,
         parameters,
         signType,
+        transaction,
       ];
 }

@@ -301,7 +301,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
           final CryptoAccountData? currentAccount =
               walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-                  (element) => element.walletAddress == publicKey);
+            (element) => element.walletAddress == publicKey,
+          );
 
           log.i('currentAccount -$currentAccount');
           if (currentAccount == null) {
@@ -341,46 +342,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             success = true;
           } else if (walletConnectCubit.state.signType ==
               Parameters.ETH_SIGN_TRANSACTION) {
-            final EthereumTransaction ethTransaction =
-                EthereumTransaction.fromJson(
-              walletConnectCubit.state.parameters[0] as Map<String, dynamic>,
-            );
-
-            // Construct a transaction from the EthereumTransaction object
-            final transaction = Transaction(
-              from: EthereumAddress.fromHex(ethTransaction.from),
-              to: EthereumAddress.fromHex(ethTransaction.to),
-              value: EtherAmount.fromUnitAndValue(
-                EtherUnit.wei,
-                BigInt.tryParse(ethTransaction.value) ?? BigInt.zero,
-              ),
-              gasPrice: ethTransaction.gasPrice != null
-                  ? EtherAmount.fromUnitAndValue(
-                      EtherUnit.gwei,
-                      BigInt.tryParse(ethTransaction.gasPrice!) ?? BigInt.zero,
-                    )
-                  : null,
-              maxFeePerGas: ethTransaction.maxFeePerGas != null
-                  ? EtherAmount.fromUnitAndValue(
-                      EtherUnit.gwei,
-                      BigInt.tryParse(ethTransaction.maxFeePerGas!) ??
-                          BigInt.zero,
-                    )
-                  : null,
-              maxPriorityFeePerGas: ethTransaction.maxPriorityFeePerGas != null
-                  ? EtherAmount.fromUnitAndValue(
-                      EtherUnit.gwei,
-                      BigInt.tryParse(ethTransaction.maxPriorityFeePerGas!) ??
-                          BigInt.zero,
-                    )
-                  : null,
-              maxGas: int.tryParse(ethTransaction.gasLimit ?? ''),
-              nonce: int.tryParse(ethTransaction.nonce ?? ''),
-              data: (ethTransaction.data != null && ethTransaction.data != '0x')
-                  ? Uint8List.fromList(hex.decode(ethTransaction.data!))
-                  : null,
-            );
-
             await dotenv.load();
             final infuraApiKey = dotenv.get('INFURA_API_KEY');
             final ethRpcUrl = Urls.infuraBaseUrl + infuraApiKey;
@@ -390,7 +351,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
             final Uint8List sig = await ethClient.signTransaction(
               credentials,
-              transaction,
+              walletConnectCubit.state.transaction!,
             );
 
             // Sign the transaction

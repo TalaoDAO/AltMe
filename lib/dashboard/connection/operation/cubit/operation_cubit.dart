@@ -12,7 +12,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:tezart/tezart.dart';
-import 'package:wallet_connect/wallet_connect.dart';
+//import 'package:wallet_connect/wallet_connect.dart';
 import 'package:web3dart/web3dart.dart';
 
 part 'operation_cubit.g.dart';
@@ -43,7 +43,7 @@ class OperationCubit extends Cubit<OperationState> {
 
   final log = getLogger('OperationCubit');
 
-  late WCClient? wcClient;
+  //late WCClient? wcClient;
 
   Future<void> initialise(ConnectionBridgeType connectionBridgeType) async {
     if (isClosed) return;
@@ -56,63 +56,83 @@ class OperationCubit extends Cubit<OperationState> {
           break;
         case ConnectionBridgeType.walletconnect:
           final walletConnectState = walletConnectCubit.state;
-          wcClient = walletConnectState.wcClients.firstWhereOrNull(
-            (element) =>
-                element.remotePeerId ==
-                walletConnectCubit.state.currentDappPeerId,
-          );
+          // wcClient = walletConnectState.wcClients.firstWhereOrNull(
+          //   (element) =>
+          //       element.remotePeerId ==
+          //       walletConnectCubit.state.currentDappPeerId,
+          // );
 
-          log.i('wcClient -$wcClient');
-          if (wcClient == null) {
-            throw ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            );
-          }
+          // log.i('wcClient -$wcClient');
+          // if (wcClient == null) {
+          //   throw ResponseMessage(
+          //     ResponseString
+          //         .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          //   );
+          // }
 
-          final List<SavedDappData> savedDapps =
-              await connectedDappRepository.findAll();
+          // final List<SavedDappData> savedDapps =
+          //     await connectedDappRepository.findAll();
 
-          final SavedDappData? dappData = savedDapps.firstWhereOrNull(
-            (element) {
-              return element.wcSessionStore != null &&
-                  element.wcSessionStore!.session.key ==
-                      wcClient!.sessionStore.session.key;
-            },
-          );
+          // final SavedDappData? dappData = savedDapps.firstWhereOrNull(
+          //   (element) {
+          //     return element.wcSessionStore != null &&
+          //         element.wcSessionStore!.session.key ==
+          //             wcClient!.sessionStore.session.key;
+          //   },
+          // );
 
-          log.i('dappData -$dappData');
-          if (dappData == null) {
-            throw ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            );
-          }
+          // log.i('dappData -$dappData');
+          // if (dappData == null) {
+          //   throw ResponseMessage(
+          //     ResponseString
+          //         .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          //   );
+          // }
 
-          if (walletConnectState.transaction!.from != dappData.walletAddress) {
-            throw ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            );
-          }
+          // if (walletConnectState.transaction!.from != dappData.walletAddress) {
+          //   throw ResponseMessage(
+          //     ResponseString
+          //         .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          //   );
+          // }
 
-          final CryptoAccountData? cryptoAccountData =
+          // final CryptoAccountData? cryptoAccountData =
+          //     walletCubit.state.cryptoAccount.data.firstWhereOrNull(
+          //   (element) =>
+          //       element.walletAddress == dappData.walletAddress &&
+          //       element.blockchainType == dappData.blockchainType,
+          // );
+
+          // log.i('cryptoAccountData -$cryptoAccountData');
+          // if (cryptoAccountData == null) {
+          //   throw ResponseMessage(
+          //     ResponseString
+          //         .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          //   );
+          // } else {
+          //   emit(state.copyWith(cryptoAccountData: cryptoAccountData));
+          //   await getUsdPrice(connectionBridgeType);
+          // }
+
+          final publicKey = walletConnectState.parameters[0]['from'].toString();
+
+          final CryptoAccountData? currentAccount =
               walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-            (element) =>
-                element.walletAddress == dappData.walletAddress &&
-                element.blockchainType == dappData.blockchainType,
+            (element) => element.walletAddress == publicKey,
           );
 
-          log.i('cryptoAccountData -$cryptoAccountData');
-          if (cryptoAccountData == null) {
+          log.i('currentAccount -$currentAccount');
+          if (currentAccount == null) {
             throw ResponseMessage(
               ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             );
           } else {
-            emit(state.copyWith(cryptoAccountData: cryptoAccountData));
+            emit(state.copyWith(cryptoAccountData: currentAccount));
+
             await getUsdPrice(connectionBridgeType);
           }
+
           break;
       }
     } catch (e) {
@@ -222,31 +242,50 @@ class OperationCubit extends Cubit<OperationState> {
               1e6;
           break;
         case ConnectionBridgeType.walletconnect:
-          final WCEthereumTransaction transaction =
-              walletConnectCubit.state.transaction!;
+          // final WCEthereumTransaction transaction =
+          //     walletConnectCubit.state.wcTransaction!;
 
-          late EtherAmount ethAmount;
+          // late EtherAmount ethAmount;
 
-          if (transaction.value != null) {
-            ethAmount = EtherAmount.fromBase10String(
-              EtherUnit.wei,
-              transaction.value!,
-            );
-          } else {
-            ethAmount = EtherAmount.fromInt(EtherUnit.wei, 0);
-          }
+          // if (transaction.value != null) {
+          //   ethAmount = EtherAmount.fromBase10String(
+          //     EtherUnit.wei,
+          //     transaction.value!,
+          //   );
+          // } else {
+          //   ethAmount = EtherAmount.fromInt(EtherUnit.wei, 0);
+          // }
 
+          // amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
+
+          // final String web3RpcURL = await web3RpcMainnetInfuraURL();
+
+          // final feeData = await MWeb3Client.estimateEthereumFee(
+          //   web3RpcURL: web3RpcURL,
+          //   sender: EthereumAddress.fromHex(transaction.from),
+          //   reciever: EthereumAddress.fromHex(transaction.to!),
+          //   amount: ethAmount,
+          //   data: transaction.data,
+          // );
+          // fee = MWeb3Client.formatEthAmount(amount: feeData);
+
+          final EtherAmount ethAmount =
+              walletConnectCubit.state.transaction!.value!;
           amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
 
           final String web3RpcURL = await web3RpcMainnetInfuraURL();
+          log.i('web3RpcURL - $web3RpcURL');
 
           final feeData = await MWeb3Client.estimateEthereumFee(
             web3RpcURL: web3RpcURL,
-            sender: EthereumAddress.fromHex(transaction.from),
-            reciever: EthereumAddress.fromHex(transaction.to!),
+            sender: walletConnectCubit.state.transaction!.from!,
+            reciever: walletConnectCubit.state.transaction!.to!,
             amount: ethAmount,
-            data: transaction.data,
+            data: walletConnectCubit.state.transaction?.data == null
+                ? null
+                : utf8.decode(walletConnectCubit.state.transaction!.data!),
           );
+
           fee = MWeb3Client.formatEthAmount(amount: feeData);
           break;
       }
@@ -370,22 +409,65 @@ class OperationCubit extends Cubit<OperationState> {
           success = json.decode(response['success'].toString()) as bool;
           break;
         case ConnectionBridgeType.walletconnect:
+          // final CryptoAccountData transactionAccountData =
+          //     state.cryptoAccountData!;
+
+          // final WCEthereumTransaction transaction =
+          //     walletConnectCubit.state.wcTransaction!;
+
+          // late EtherAmount ethAmount;
+
+          // if (transaction.value != null) {
+          //   ethAmount = EtherAmount.fromBase10String(
+          //     EtherUnit.wei,
+          //     transaction.value!,
+          //   );
+          // } else {
+          //   ethAmount = EtherAmount.fromInt(EtherUnit.wei, 0);
+          // }
+
+          // late String rpcUrl;
+
+          // switch (transactionAccountData.blockchainType) {
+          //   case BlockchainType.tezos:
+          //     throw Exception();
+          //   case BlockchainType.ethereum:
+          //     rpcUrl = await web3RpcMainnetInfuraURL();
+          //     break;
+          //   case BlockchainType.fantom:
+          //     rpcUrl = FantomNetwork.mainNet().rpcNodeUrl;
+          //     break;
+          //   case BlockchainType.polygon:
+          //     rpcUrl = PolygonNetwork.mainNet().rpcNodeUrl;
+          //     break;
+          //   case BlockchainType.binance:
+          //     rpcUrl = BinanceNetwork.mainNet().rpcNodeUrl;
+          //     break;
+          // }
+
+          // log.i('rpcUrl - $rpcUrl');
+
+          // final String transactionHash =
+          //     await MWeb3Client.sendEthereumTransaction(
+          //   chainId: transactionAccountData.blockchainType.chainId,
+          //   web3RpcURL: rpcUrl,
+          //   privateKey: transactionAccountData.secretKey,
+          //   sender: EthereumAddress.fromHex(transaction.from),
+          //   reciever: EthereumAddress.fromHex(transaction.to!),
+          //   amount: ethAmount,
+          //   data: transaction.data,
+          // );
+
+          // wcClient!.approveRequest<String>(
+          //   id: walletConnectCubit.state.transactionId!,
+          //   result: transactionHash,
+          // );
+
           final CryptoAccountData transactionAccountData =
               state.cryptoAccountData!;
 
-          final WCEthereumTransaction transaction =
-              walletConnectCubit.state.transaction!;
-
-          late EtherAmount ethAmount;
-
-          if (transaction.value != null) {
-            ethAmount = EtherAmount.fromBase10String(
-              EtherUnit.wei,
-              transaction.value!,
-            );
-          } else {
-            ethAmount = EtherAmount.fromInt(EtherUnit.wei, 0);
-          }
+          final EtherAmount ethAmount =
+              walletConnectCubit.state.transaction!.value!;
 
           late String rpcUrl;
 
@@ -413,16 +495,17 @@ class OperationCubit extends Cubit<OperationState> {
             chainId: transactionAccountData.blockchainType.chainId,
             web3RpcURL: rpcUrl,
             privateKey: transactionAccountData.secretKey,
-            sender: EthereumAddress.fromHex(transaction.from),
-            reciever: EthereumAddress.fromHex(transaction.to!),
+            sender: walletConnectCubit.state.transaction!.from!,
+            reciever: walletConnectCubit.state.transaction!.to!,
             amount: ethAmount,
-            data: transaction.data,
+            data: walletConnectCubit.state.transaction?.data == null
+                ? null
+                : utf8.decode(walletConnectCubit.state.transaction!.data!),
           );
 
-          wcClient!.approveRequest<String>(
-            id: walletConnectCubit.state.transactionId!,
-            result: transactionHash,
-          );
+          walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
+              .complete(transactionHash);
+          success = true;
 
           success = true;
           break;
@@ -479,6 +562,11 @@ class OperationCubit extends Cubit<OperationState> {
           ),
         );
       }
+
+      if (connectionBridgeType == ConnectionBridgeType.walletconnect) {
+        walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
+            .complete('Failed');
+      }
     }
   }
 
@@ -494,17 +582,19 @@ class OperationCubit extends Cubit<OperationState> {
         break;
       case ConnectionBridgeType.walletconnect:
         log.i('walletconnect  connection rejected');
-        final walletConnectState = walletConnectCubit.state;
+        // final walletConnectState = walletConnectCubit.state;
 
-        final wcClient = walletConnectState.wcClients.firstWhereOrNull(
-          (element) =>
-              element.remotePeerId ==
-              walletConnectCubit.state.currentDappPeerId,
-        );
+        // final wcClient = walletConnectState.wcClients.firstWhereOrNull(
+        //   (element) =>
+        //       element.remotePeerId ==
+        //       walletConnectCubit.state.currentDappPeerId,
+        // );
 
-        if (wcClient != null) {
-          wcClient.rejectRequest(id: walletConnectState.transactionId!);
-        }
+        // if (wcClient != null) {
+        //   wcClient.rejectRequest(id: walletConnectState.transactionId!);
+        // }
+        walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
+            .complete('Failed');
         break;
     }
 

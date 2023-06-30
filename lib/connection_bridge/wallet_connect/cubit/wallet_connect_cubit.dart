@@ -1,16 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
+import 'package:convert/convert.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:wallet_connect/wallet_connect.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:web3dart/web3dart.dart';
 
 part 'wallet_connect_cubit.g.dart';
 part 'wallet_connect_state.dart';
@@ -135,7 +138,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           _web3Wallet!.registerRequestHandler(
             chainId: accounts.blockchainType.chain,
             method: Parameters.ETH_SEND_TRANSACTION,
-            handler: ethSignTypedData,
+            handler: ethSendTransaction,
           );
         }
       }
@@ -261,10 +264,10 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
             break;
         }
       },
-      onEthSendTransaction: (int id, WCEthereumTransaction transaction) {
+      onEthSendTransaction: (int id, WCEthereumTransaction wcTransaction) {
         log.i('onEthSendTransaction');
         log.i('id: $id');
-        log.i('tx: $transaction');
+        log.i('tx: $wcTransaction');
         log.i('dAppPeerId: $currentPeerId');
         log.i('currentDAppPeerMeta: $currentPeerMeta');
         emit(
@@ -272,7 +275,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
             signId: id,
             status: WalletConnectStatus.operation,
             transactionId: id,
-            transaction: transaction,
+            wcTransaction: wcTransaction,
             currentDappPeerId: currentPeerId,
             currentDAppPeerMeta: currentPeerMeta,
           ),
@@ -442,11 +445,14 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('completer initialise');
     completer.add(Completer<String>());
 
+    final transaction = getTransaction(parameters);
+
     emit(
       state.copyWith(
         status: WalletConnectStatus.signPayload,
         parameters: parameters,
         signType: Parameters.ETH_SIGN_TRANSACTION,
+        transaction: transaction,
       ),
     );
 
@@ -454,6 +460,71 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('complete - $result');
     completer.removeLast();
     return result;
+  }
+
+  Future<String> ethSendTransaction(String topic, dynamic parameters) async {
+    log.i('received eth send transaction request: $parameters');
+
+    log.i('completer initialise');
+    completer.add(Completer<String>());
+
+    final transaction = getTransaction(parameters);
+
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.operation,
+        parameters: parameters,
+        signType: Parameters.ETH_SIGN_TRANSACTION,
+        transaction: transaction,
+      ),
+    );
+
+    final String result = await completer[completer.length - 1]!.future;
+    log.i('complete - $result');
+    completer.removeLast();
+    return result;
+  }
+
+  Transaction getTransaction(dynamic parameters) {
+    final EthereumTransaction ethTransaction = EthereumTransaction.fromJson(
+      parameters[0] as Map<String, dynamic>,
+    );
+
+    // Construct a transaction from the EthereumTransaction object
+    final transaction = Transaction(
+      from: EthereumAddress.fromHex(ethTransaction.from),
+      to: EthereumAddress.fromHex(ethTransaction.to),
+      value: EtherAmount.fromBigInt(
+        EtherUnit.wei,
+        BigInt.tryParse(ethTransaction.value) ?? BigInt.zero,
+      ),
+      gasPrice: ethTransaction.gasPrice != null
+          ? EtherAmount.fromBigInt(
+              EtherUnit.gwei,
+              BigInt.tryParse(ethTransaction.gasPrice!) ?? BigInt.zero,
+            )
+          : null,
+      maxFeePerGas: ethTransaction.maxFeePerGas != null
+          ? EtherAmount.fromBigInt(
+              EtherUnit.gwei,
+              BigInt.tryParse(ethTransaction.maxFeePerGas!) ?? BigInt.zero,
+            )
+          : null,
+      maxPriorityFeePerGas: ethTransaction.maxPriorityFeePerGas != null
+          ? EtherAmount.fromBigInt(
+              EtherUnit.gwei,
+              BigInt.tryParse(ethTransaction.maxPriorityFeePerGas!) ??
+                  BigInt.zero,
+            )
+          : null,
+      maxGas: int.tryParse(ethTransaction.gasLimit ?? ''),
+      nonce: int.tryParse(ethTransaction.nonce ?? ''),
+      data: (ethTransaction.data != null && ethTransaction.data != '0x')
+          ? Uint8List.fromList(hex.decode(ethTransaction.data!))
+          : null,
+    );
+
+    return transaction;
   }
 
   Future<String> ethSignTypedData(String topic, dynamic parameters) async {
