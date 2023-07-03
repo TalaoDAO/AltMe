@@ -553,6 +553,14 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     return result;
   }
 
+  Future<void> disconnectSession(PairingInfo pairing) async {
+    log.i('rdisconnectSession: ${pairing.topic}');
+    await _web3Wallet!.disconnectSession(
+      topic: pairing.topic,
+      reason: Errors.getSdkError(Errors.USER_DISCONNECTED),
+    );
+  }
+
   Future<void> dispose() async {
     log.i('web3wallet dispose');
     _web3Wallet!.core.pairing.onPairingInvalid.unsubscribe(_onPairingInvalid);
