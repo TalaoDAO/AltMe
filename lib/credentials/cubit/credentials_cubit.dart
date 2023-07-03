@@ -167,6 +167,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> insertCredential({
     required CredentialModel credential,
     bool showMessage = true,
+    bool showStatus = true,
   }) async {
     late final List<CredentialModel> credentials;
 
@@ -197,7 +198,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     emit(
       state.copyWith(
-        status: CredentialsStatus.insert,
+        status: showStatus ? CredentialsStatus.insert : CredentialsStatus.idle,
         credentials: credentials,
         dummyCredentials: dummies,
         messageHandler: showMessage

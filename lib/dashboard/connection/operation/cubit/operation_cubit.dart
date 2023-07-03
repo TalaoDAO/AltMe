@@ -507,7 +507,6 @@ class OperationCubit extends Cubit<OperationState> {
               .complete(transactionHash);
           success = true;
 
-          success = true;
           break;
       }
 

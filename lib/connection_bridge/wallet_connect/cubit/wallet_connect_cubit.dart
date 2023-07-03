@@ -37,6 +37,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
   Future<void> initialise() async {
     try {
+      _web3Wallet = null;
       //log.i('initialise');
       // final List<SavedDappData> savedDapps =
       //     await connectedDappRepository.findAll();
@@ -100,11 +101,6 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
         for (final accounts in eVMAccounts) {
           log.i(accounts.blockchainType);
-          log.i('registerAccount');
-          _web3Wallet!.registerAccount(
-            chainId: accounts.blockchainType.chain,
-            accountAddress: accounts.walletAddress,
-          );
 
           log.i('registerEventEmitter');
           for (final String event in events) {
@@ -113,6 +109,8 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
               event: event,
             );
           }
+
+          registerAccount(accounts);
 
           log.i('registerRequestHandler');
           _web3Wallet!.registerRequestHandler(
@@ -166,6 +164,14 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     } catch (e) {
       log.e(e);
     }
+  }
+
+  void registerAccount(CryptoAccountData cryptoAccountData) {
+    log.i('registerAccount - $cryptoAccountData');
+    _web3Wallet!.registerAccount(
+      chainId: cryptoAccountData.blockchainType.chain,
+      accountAddress: cryptoAccountData.walletAddress,
+    );
   }
 
   Future<void> connect(String walletConnectUri) async {

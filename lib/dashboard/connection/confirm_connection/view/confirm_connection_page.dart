@@ -222,20 +222,22 @@ class ConfirmConnectionView extends StatelessWidget {
                 children: [
                   BlocBuilder<WalletCubit, WalletState>(
                     builder: (context, walletState) {
+                      if (connectionBridgeType == ConnectionBridgeType.beacon &&
+                          walletState.currentAccount!.blockchainType
+                                  .connectionBridge !=
+                              connectionBridgeType) {
+                        return Container();
+                      }
+
                       return MyGradientButton(
                         verticalSpacing: 15,
                         borderRadius: Sizes.normalRadius,
                         text: l10n.connect,
-                        onPressed: walletState.currentAccount!.blockchainType
-                                    .connectionBridge !=
-                                connectionBridgeType
-                            ? null
-                            : () {
-                                context.read<ConfirmConnectionCubit>().connect(
-                                      connectionBridgeType:
-                                          connectionBridgeType,
-                                    );
-                              },
+                        onPressed: () {
+                          context.read<ConfirmConnectionCubit>().connect(
+                                connectionBridgeType: connectionBridgeType,
+                              );
+                        },
                       );
                     },
                   ),
