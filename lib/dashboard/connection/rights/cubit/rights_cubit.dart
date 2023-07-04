@@ -36,8 +36,7 @@ class RightsCubit extends Cubit<RightsState> {
         );
       }
 
-      if (savedDappData.blockchainType != null &&
-          savedDappData.blockchainType == BlockchainType.tezos) {
+      if (savedDappData.walletAddress != null) {
         final Map<dynamic, dynamic> response =
             await beacon.removePeerUsingPublicKey(
           publicKey: savedDappData.peer!.publicKey,

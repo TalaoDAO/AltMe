@@ -12,7 +12,6 @@ class SavedDappData extends Equatable {
   const SavedDappData({
     this.peer,
     this.walletAddress,
-    this.blockchainType,
     this.wcSessionStore,
 
     //v2
@@ -24,7 +23,6 @@ class SavedDappData extends Equatable {
 
   final P2PPeer? peer;
   final String? walletAddress;
-  final BlockchainType? blockchainType;
   final WCSessionStore? wcSessionStore;
 
   //v2
@@ -36,7 +34,6 @@ class SavedDappData extends Equatable {
   List<Object?> get props => [
         peer,
         walletAddress,
-        blockchainType,
         wcSessionStore,
         sessionData,
       ];

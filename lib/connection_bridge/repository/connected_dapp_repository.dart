@@ -65,8 +65,7 @@ class ConnectedDappRepository {
   Future<bool> delete(SavedDappData savedDappData) async {
     late String id;
 
-    if (savedDappData.blockchainType != null &&
-        savedDappData.blockchainType == BlockchainType.tezos) {
+    if (savedDappData.walletAddress != null) {
       id = savedDappData.peer!.publicKey;
     } else {
       id = savedDappData.sessionData!.pairingTopic;
@@ -113,8 +112,7 @@ class ConnectedDappRepository {
     //   /// Note: Assumption - name is always unique
     // );
 
-    if (savedDappData.blockchainType != null &&
-        savedDappData.blockchainType == BlockchainType.tezos) {
+    if (savedDappData.walletAddress != null) {
       final SavedDappData? matchedData = savedPeerDatas.firstWhereOrNull(
         (SavedDappData savedData) =>
             savedData.walletAddress == savedDappData.walletAddress &&
@@ -141,8 +139,7 @@ class ConnectedDappRepository {
     //     break;
     // }
 
-    if (savedDappData.blockchainType != null &&
-        savedDappData.blockchainType == BlockchainType.tezos) {
+    if (savedDappData.walletAddress != null) {
       id = savedDappData.peer!.publicKey;
     } else {
       id = savedDappData.sessionData!.pairingTopic;

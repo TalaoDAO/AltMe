@@ -71,7 +71,6 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
             final savedPeerData = SavedDappData(
               peer: beaconCubit.state.beaconRequest!.peer,
               walletAddress: currentAccount.walletAddress,
-              blockchainType: BlockchainType.tezos,
             );
             await connectedDappRepository.insert(savedPeerData);
           } else {
