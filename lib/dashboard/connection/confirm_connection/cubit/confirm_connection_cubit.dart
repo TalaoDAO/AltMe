@@ -8,7 +8,6 @@ import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallet_connect/wallet_connect.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 part 'confirm_connection_cubit.g.dart';
@@ -80,43 +79,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           }
           break;
         case ConnectionBridgeType.walletconnect:
-          // final List<String> walletAddresses = [currentAccount.walletAddress];
-
           final walletConnectState = walletConnectCubit.state;
-          // final wcClient = walletConnectState.wcClients.firstWhereOrNull(
-          //   (element) =>
-          //       element.remotePeerId ==
-          //       walletConnectCubit.state.currentDappPeerId,
-          // );
-          // if (wcClient == null) {
-          //   throw ResponseMessage(
-          //     ResponseString
-          //         .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          //   );
-          // }
-
-          // wcClient.approveSession(
-          //   accounts: walletAddresses,
-          //   chainId: currentAccount.blockchainType.chainId,
-          // );
-
-          // log.i('Connected to walletconnect');
-
-          // final savedDappData = SavedDappData(
-          //   walletAddress: currentAccount.walletAddress,
-          //   blockchainType: currentAccount.blockchainType,
-          //   wcSessionStore: WCSessionStore(
-          //     session: wcClient.session!,
-          //     peerMeta: wcClient.peerMeta!,
-          //     peerId: wcClient.peerId!,
-          //     remotePeerId: wcClient.remotePeerId!,
-          //     remotePeerMeta: wcClient.remotePeerMeta!,
-          //     chainId: currentAccount.blockchainType.chainId,
-          //   ),
-          // );
-
-          // log.i(savedDappData.toJson());
-          // await connectedDappRepository.insert(savedDappData);
 
           final SessionProposalEvent? sessionProposalEvent =
               walletConnectState.sessionProposalEvent;
@@ -126,7 +89,6 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
             namespaces: sessionProposalEvent.params.generatedNamespaces!,
           );
 
-          /// v2
           /// dApp saved onSessionConnect function in wallet connect cubit
 
           break;
@@ -173,17 +135,6 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
         log.i('walletconnect  connection rejected');
         final walletConnectState = walletConnectCubit.state;
 
-        // final wcClient = walletConnectState.wcClients.firstWhereOrNull(
-        //   (element) =>
-        //       element.remotePeerId ==
-        //       walletConnectCubit.state.currentDappPeerId,
-        // );
-
-        // if (wcClient != null) {
-        //   wcClient.rejectRequest(id: walletConnectState.sessionId!);
-        // }
-
-        /// v2
         final SessionProposalEvent? sessionProposalEvent =
             walletConnectState.sessionProposalEvent;
 

@@ -119,11 +119,6 @@ class ConfirmConnectionView extends StatelessWidget {
                               .request!
                               .appMetadata!
                               .name!
-                          // : context
-                          //     .read<WalletConnectCubit>()
-                          //     .state
-                          //     .currentDAppPeerMeta!
-                          //     .name,
                           : walletConnectCubit.state.sessionProposalEvent!
                               .params.proposer.metadata.name,
                       textAlign: TextAlign.center,

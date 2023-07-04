@@ -2477,15 +2477,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.12+1"
-  wallet_connect:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: "5d3003d51ee5afb9911d04d15b6b2aa2f12989c8"
-      resolved-ref: "5d3003d51ee5afb9911d04d15b6b2aa2f12989c8"
-      url: "https://github.com/bibash28/wallet-connect-dart.git"
-    source: git
-    version: "1.0.4"
   walletconnect_flutter_v2:
     dependency: "direct main"
     description:

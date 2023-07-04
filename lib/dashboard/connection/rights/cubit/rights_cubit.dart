@@ -75,64 +75,6 @@ class RightsCubit extends Cubit<RightsState> {
           ),
         );
       }
-
-      // switch (savedDappData.blockchainType) {
-      //   case BlockchainType.ethereum:
-      //   case BlockchainType.fantom:
-      //   case BlockchainType.polygon:
-      //   case BlockchainType.binance:
-      //     final walletConnectState = walletConnectCubit.state;
-      //     final wcClient = walletConnectState.wcClients.firstWhereOrNull(
-      //       (element) =>
-      //           element.remotePeerId ==
-      //           walletConnectCubit.state.currentDappPeerId,
-      //     );
-      //     if (wcClient != null) {
-      //       log.i(
-      //         '''disconnected - ${savedDappData.wcSessionStore!.remotePeerMeta}''',
-      //       );
-      //       wcClient.disconnect();
-      //       //remove from collection
-      //     }
-
-      //     await connectedDappRepository.delete(savedDappData);
-      //     emit(
-      //       state.copyWith(
-      //         appStatus: AppStatus.success,
-      //         messageHandler: ResponseMessage(
-      //           ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP,
-      //         ),
-      //       ),
-      //     );
-      //     break;
-      //   case BlockchainType.tezos:
-      //     final Map<dynamic, dynamic> response =
-      //         await beacon.removePeerUsingPublicKey(
-      //       publicKey: savedDappData.peer!.publicKey,
-      //     );
-
-      //     final bool success =
-      //         json.decode(response['success'].toString()) as bool;
-
-      //     if (success) {
-      //       log.i('Disconnect success');
-      //       await connectedDappRepository.delete(savedDappData);
-      //       emit(
-      //         state.copyWith(
-      //           appStatus: AppStatus.success,
-      //           messageHandler: ResponseMessage(
-      //             ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP,
-      //           ),
-      //         ),
-      //       );
-      //     } else {
-      //       throw ResponseMessage(
-      //         ResponseString
-      //             .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-      //       );
-      //     }
-      //     break;
-      // }
     } catch (e, s) {
       log.e('disconnect failure , e: $e, s: $s');
       if (e is MessageHandler) {

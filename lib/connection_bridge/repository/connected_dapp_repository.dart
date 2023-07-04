@@ -70,23 +70,7 @@ class ConnectedDappRepository {
     } else {
       id = savedDappData.sessionData!.pairingTopic;
     }
-    // switch (savedDappData.blockchainType) {
-    //   case BlockchainType.ethereum:
-    //     id = savedDappData.wcSessionStore!.session.topic;
-    //     break;
-    //   case BlockchainType.tezos:
-    //     id = savedDappData.peer!.publicKey;
-    //     break;
-    //   case BlockchainType.fantom:
-    //     id = savedDappData.wcSessionStore!.session.topic;
-    //     break;
-    //   case BlockchainType.polygon:
-    //     id = savedDappData.wcSessionStore!.session.topic;
-    //     break;
-    //   case BlockchainType.binance:
-    //     id = savedDappData.wcSessionStore!.session.topic;
-    //     break;
-    // }
+
     log.i('deleteing dapp data - ${SecureStorageKeys.savedDaaps}/$id');
     await _secureStorageProvider.delete('${SecureStorageKeys.savedDaaps}/$id');
     return true;
@@ -94,23 +78,6 @@ class ConnectedDappRepository {
 
   Future<int> insert(SavedDappData savedDappData) async {
     final List<SavedDappData> savedPeerDatas = await findAll();
-
-    // final SavedDappData? matchedData = savedPeerDatas.firstWhereOrNull(
-    //   (SavedDappData savedData) {
-    //     switch (savedDappData.blockchainType) {
-    //       case BlockchainType.ethereum:
-    //       case BlockchainType.fantom:
-    //       case BlockchainType.polygon:
-    //       case BlockchainType.binance:
-    //         return false;
-    //       case BlockchainType.tezos:
-    //         return savedData.walletAddress == savedDappData.walletAddress &&
-    //             savedData.peer!.name == savedDappData.peer!.name;
-    //     }
-    //   },
-
-    //   /// Note: Assumption - name is always unique
-    // );
 
     if (savedDappData.walletAddress != null) {
       final SavedDappData? matchedData = savedPeerDatas.firstWhereOrNull(
@@ -127,17 +94,6 @@ class ConnectedDappRepository {
 
     log.i('saving dapp Data');
     late String id;
-    // switch (savedDappData.blockchainType) {
-    //   case BlockchainType.ethereum:
-    //   case BlockchainType.fantom:
-    //   case BlockchainType.polygon:
-    //   case BlockchainType.binance:
-    //     id = savedDappData.wcSessionStore!.session.topic;
-    //     break;
-    //   case BlockchainType.tezos:
-    //     id = savedDappData.peer!.publicKey;
-    //     break;
-    // }
 
     if (savedDappData.walletAddress != null) {
       id = savedDappData.peer!.publicKey;

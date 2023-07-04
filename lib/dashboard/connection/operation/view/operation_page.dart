@@ -125,12 +125,8 @@ class _OperationViewState extends State<OperationView> {
             break;
 
           case ConnectionBridgeType.walletconnect:
-            // dAppName = walletConnectState.currentDAppPeerMeta?.name ?? '';
-            // symbol = state.cryptoAccountData?.blockchainType.symbol;
-            // sender = walletConnectState.wcTransaction!.from;
-            // reciever = walletConnectState.wcTransaction!.to ?? '';
-
-            dAppName = walletConnectState.currentDAppPeerMeta?.name ?? '--';
+            // TODO(bibash): add name
+            dAppName = '--';
             symbol = state.cryptoAccountData?.blockchainType.symbol;
             sender = walletConnectState.transaction!.from!.toString();
             reciever = walletConnectState.transaction!.to!.toString();

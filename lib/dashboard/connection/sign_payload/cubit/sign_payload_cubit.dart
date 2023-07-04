@@ -182,102 +182,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           break;
         case ConnectionBridgeType.walletconnect:
           final walletConnectState = walletConnectCubit.state;
-          // final wcClient = walletConnectState.wcClients.firstWhereOrNull(
-          //   (element) =>
-          //       element.remotePeerId ==
-          //       walletConnectCubit.state.currentDappPeerId,
-          // );
-
-          // log.i('wcClient -$wcClient');
-          // if (wcClient == null) {
-          //   throw ResponseMessage(
-          //     ResponseString
-          //         .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          //   );
-          // }
-
-          // final List<SavedDappData> savedDapps =
-          //     await connectedDappRepository.findAll();
-
-          // final SavedDappData? dappData = savedDapps.firstWhereOrNull(
-          //   (element) {
-          //     return element.wcSessionStore != null &&
-          //         element.wcSessionStore!.session.key ==
-          //             wcClient.sessionStore.session.key;
-          //   },
-          // );
-
-          // log.i('dappData -$dappData');
-          // if (dappData == null) {
-          //   throw ResponseMessage(
-          //     ResponseString
-          //         .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          //   );
-          // }
-
-          // final CryptoAccountData? currentAccount =
-          //     walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-          //   (element) =>
-          //       element.walletAddress == dappData.walletAddress &&
-          //       element.blockchainType == dappData.blockchainType,
-          // );
-
-          // log.i('currentAccount -$currentAccount');
-          // // ignore: invariant_booleans
-          // if (currentAccount == null) {
-          //   throw ResponseMessage(
-          //     ResponseString
-          //         .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          //   );
-          // }
-
-          // log.i('type -${walletConnectCubit.state.signMessage!.type}}');
-
-          // switch (walletConnectCubit.state.signMessage!.type) {
-          //   /// rejected in wallet_connect_cubit
-          //   case WCSignType.MESSAGE:
-          //     break;
-
-          //   /// rejected in wallet_connect_cubit
-          //   case WCSignType.TYPED_MESSAGE:
-          //     break;
-
-          //   case WCSignType.PERSONAL_MESSAGE:
-          //     const messagePrefix = '\u0019Ethereum Signed Message:\n';
-
-          //     final payloadBytes = hexToBytes(encodedPayload);
-
-          //     final prefix = messagePrefix + payloadBytes.length.toString();
-          //     final prefixBytes = ascii.encode(prefix);
-
-          //     final concatPayload =
-          //         Uint8List.fromList(prefixBytes + payloadBytes);
-
-          //     final Credentials credentials =
-          //         EthPrivateKey.fromHex(currentAccount.secretKey);
-
-          //     final MsgSignature signature =
-          //         credentials.signToEcSignature(concatPayload);
-
-          //     final String r = signature.r.toRadixString(16);
-          //     log.i('r -$r');
-          //     final String s = signature.s.toRadixString(16);
-          //     log.i('s -$s');
-          //     final String v = signature.v.toRadixString(16);
-          //     log.i('v -$v');
-
-          //     final signedDataAsHex = '0x$r$s$v';
-          //     log.i('signedDataAsHex -$signedDataAsHex');
-
-          //     wcClient.approveRequest<String>(
-          //       id: walletConnectState.signId!,
-          //       result: signedDataAsHex,
-          //     );
-          //     success = true;
-          //     break;
-          // }
-
-          //v2
 
           final String publicKey;
 
@@ -438,17 +342,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         break;
       case ConnectionBridgeType.walletconnect:
         log.i('walletconnect Signing rejected');
-        // final walletConnectState = walletConnectCubit.state;
 
-        // final wcClient = walletConnectState.wcClients.firstWhereOrNull(
-        //   (element) =>
-        //       element.remotePeerId ==
-        //       walletConnectCubit.state.currentDappPeerId,
-        // );
-
-        // if (wcClient != null) {
-        //   wcClient.rejectRequest(id: walletConnectState.signId!);
-        // }
         walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
             .complete('Failed');
         break;

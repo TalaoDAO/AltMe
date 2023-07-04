@@ -11,7 +11,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:wallet_connect/wallet_connect.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -22,7 +21,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   WalletConnectCubit({
     required this.connectedDappRepository,
     required this.secureStorageProvider,
-  }) : super(WalletConnectState()) {
+  }) : super(const WalletConnectState()) {
     initialise();
   }
 
@@ -38,33 +37,6 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   Future<void> initialise() async {
     try {
       _web3Wallet = null;
-      //log.i('initialise');
-      // final List<SavedDappData> savedDapps =
-      //     await connectedDappRepository.findAll();
-
-      // final connectedDapps = List.of(savedDapps).where(
-      //   (element) => element.blockchainType != BlockchainType.tezos,
-      // );
-
-      // Await the initialization of the web3wallet
-
-      // final List<WCClient> wcClients = List.empty(growable: true);
-      // for (final element in connectedDapps) {
-      //   final sessionStore = element.wcSessionStore;
-
-      //   final WCClient? wcClient = createWCClient(element.wcSessionStore);
-
-      //   await wcClient!.connectFromSessionStore(sessionStore!);
-      //   log.i('sessionStore: ${wcClient.sessionStore.toJson()}');
-      //   wcClients.add(wcClient);
-      //}
-
-      // emit(
-      //   state.copyWith(
-      //     status: WalletConnectStatus.idle,
-      //     // wcClients: wcClients,
-      //   ),
-      // );
 
       final String? savedCryptoAccount =
           await secureStorageProvider.get(SecureStorageKeys.cryptoAccount);
@@ -176,123 +148,12 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
   Future<void> connect(String walletConnectUri) async {
     log.i('walletConnectUri - $walletConnectUri');
-    // final WCSession session = WCSession.from(walletConnectUri);
-    // final WCPeerMeta walletPeerMeta = WCPeerMeta(
-    //   name: 'Altme',
-    //   url: 'https://altme.io',
-    //   description: 'Altme Wallet',
-    //   icons: [],
-    // );
 
-    // final WCClient? wcClient = createWCClient(null);
-    // log.i('wcClient: $wcClient');
-    // if (wcClient == null) return;
-
-    // await wcClient.connectNewSession(
-    //   session: session,
-    //   peerMeta: walletPeerMeta,
-    // );
-
-    // final wcClients = List.of(state.wcClients)..add(wcClient);
-    // emit(
-    //   state.copyWith(
-    //     status: WalletConnectStatus.idle,
-    //     wcClients: wcClients,
-    //   ),
-    // );
     final Uri uriData = Uri.parse(walletConnectUri);
     final PairingInfo pairingInfo = await _web3Wallet!.pair(
       uri: uriData,
     );
     log.i(pairingInfo);
-  }
-
-  WCClient? createWCClient(WCSessionStore? sessionStore) {
-    WCPeerMeta? currentPeerMeta = sessionStore?.remotePeerMeta;
-    String? currentPeerId = sessionStore?.remotePeerId;
-    return WCClient(
-      onConnect: () {
-        log.i('connected');
-      },
-      onDisconnect: (code, reason) {
-        log.i('onDisconnect - code: $code reason:  $reason');
-      },
-      onFailure: (dynamic error) {
-        log.e('Failed to connect: $error');
-      },
-      onSessionRequest: (int id, String dAppPeerId, WCPeerMeta dAppPeerMeta) {
-        log.i('onSessionRequest');
-        log.i('id: $id');
-
-        currentPeerId = dAppPeerId;
-        currentPeerMeta = dAppPeerMeta;
-
-        log.i('dAppPeerId: $currentPeerId');
-        log.i('currentDAppPeerMeta: $currentPeerMeta');
-        emit(
-          state.copyWith(
-            sessionId: id,
-            status: WalletConnectStatus.permission,
-            currentDappPeerId: dAppPeerId,
-            currentDAppPeerMeta: currentPeerMeta,
-          ),
-        );
-      },
-      onEthSign: (int id, WCEthereumSignMessage message) {
-        log.i('onEthSign');
-        log.i('id: $id');
-        //log.i('message: ${message.raw}');
-        log.i('data: ${message.data}');
-        log.i('type: ${message.type}');
-        log.i('dAppPeerId: $currentPeerId');
-        log.i('currentDAppPeerMeta: $currentPeerMeta');
-
-        switch (message.type) {
-          case WCSignType.MESSAGE:
-          case WCSignType.TYPED_MESSAGE:
-            final wcClient = state.wcClients.firstWhereOrNull(
-              (element) => element.remotePeerId == currentPeerId,
-            );
-            if (wcClient != null) {
-              wcClient.rejectRequest(id: id);
-            }
-            break;
-          case WCSignType.PERSONAL_MESSAGE:
-            emit(
-              state.copyWith(
-                signId: id,
-                status: WalletConnectStatus.signPayload,
-                signMessage: message,
-                currentDappPeerId: currentPeerId,
-                currentDAppPeerMeta: currentPeerMeta,
-              ),
-            );
-            break;
-        }
-      },
-      onEthSendTransaction: (int id, WCEthereumTransaction wcTransaction) {
-        log.i('onEthSendTransaction');
-        log.i('id: $id');
-        log.i('tx: $wcTransaction');
-        log.i('dAppPeerId: $currentPeerId');
-        log.i('currentDAppPeerMeta: $currentPeerMeta');
-        emit(
-          state.copyWith(
-            signId: id,
-            status: WalletConnectStatus.operation,
-            transactionId: id,
-            wcTransaction: wcTransaction,
-            currentDappPeerId: currentPeerId,
-            currentDAppPeerMeta: currentPeerMeta,
-          ),
-        );
-      },
-      onEthSignTransaction: (id, tx) {
-        log.i('onEthSignTransaction');
-        log.i('id: $id');
-        log.i('tx: $tx');
-      },
-    );
   }
 
   void _onPairingInvalid(PairingInvalidEvent? args) {
@@ -343,7 +204,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
   Future<void> _onAuthRequest(AuthRequest? args) async {
     if (args != null) {
-      print(args);
+      log.i(args);
       // List<ChainKey> chainKeys = GetIt.I<IKeyService>().getKeysForChain(
       //   'eip155:1',
       // );

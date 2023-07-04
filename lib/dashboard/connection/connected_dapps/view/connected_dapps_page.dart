@@ -164,8 +164,6 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                                                 ? savedDappData.peer!.name
                                                 : savedDappData.sessionData!
                                                     .peer.metadata.name,
-                                            // : savedDappData.wcSessionStore!
-                                            //     .remotePeerMeta.name,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .dappName,

@@ -4,17 +4,6 @@ part 'ethereum_transaction.g.dart';
 
 @JsonSerializable(includeIfNull: false)
 class EthereumTransaction {
-  final String from;
-  final String to;
-  final String value;
-  final String? nonce;
-  final String? gasPrice;
-  final String? maxFeePerGas;
-  final String? maxPriorityFeePerGas;
-  final String? gas;
-  final String? gasLimit;
-  final String? data;
-
   EthereumTransaction({
     required this.from,
     required this.to,
@@ -30,6 +19,16 @@ class EthereumTransaction {
 
   factory EthereumTransaction.fromJson(Map<String, dynamic> json) =>
       _$EthereumTransactionFromJson(json);
+  final String from;
+  final String to;
+  final String value;
+  final String? nonce;
+  final String? gasPrice;
+  final String? maxFeePerGas;
+  final String? maxPriorityFeePerGas;
+  final String? gas;
+  final String? gasLimit;
+  final String? data;
 
   Map<String, dynamic> toJson() => _$EthereumTransactionToJson(this);
 

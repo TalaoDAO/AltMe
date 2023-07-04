@@ -10,9 +10,9 @@ class NftItemShimmer extends StatelessWidget {
     return BackgroundCard(
       color: Theme.of(context).colorScheme.surfaceContainer,
       padding: const EdgeInsets.all(10),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           AspectRatio(
             aspectRatio: 1,
             child: ShimmerWidget.rectangular(height: 0),
