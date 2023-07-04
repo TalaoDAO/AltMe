@@ -89,41 +89,56 @@ class ConnectedDappRepository {
   Future<int> insert(SavedDappData savedDappData) async {
     final List<SavedDappData> savedPeerDatas = await findAll();
 
-    final SavedDappData? matchedData = savedPeerDatas.firstWhereOrNull(
-      (SavedDappData savedData) {
-        switch (savedDappData.blockchainType) {
-          case BlockchainType.ethereum:
-          case BlockchainType.fantom:
-          case BlockchainType.polygon:
-          case BlockchainType.binance:
-            return savedData.walletAddress == savedDappData.walletAddress &&
-                savedData.wcSessionStore!.remotePeerMeta.name ==
-                    savedDappData.wcSessionStore!.remotePeerMeta.name;
-          case BlockchainType.tezos:
-            return savedData.walletAddress == savedDappData.walletAddress &&
-                savedData.peer!.name == savedDappData.peer!.name;
-        }
-      },
+    // final SavedDappData? matchedData = savedPeerDatas.firstWhereOrNull(
+    //   (SavedDappData savedData) {
+    //     switch (savedDappData.blockchainType) {
+    //       case BlockchainType.ethereum:
+    //       case BlockchainType.fantom:
+    //       case BlockchainType.polygon:
+    //       case BlockchainType.binance:
+    //         return false;
+    //       case BlockchainType.tezos:
+    //         return savedData.walletAddress == savedDappData.walletAddress &&
+    //             savedData.peer!.name == savedDappData.peer!.name;
+    //     }
+    //   },
 
-      /// Note: Assumption - name is always unique
-    );
+    //   /// Note: Assumption - name is always unique
+    // );
 
-    if (matchedData != null) {
-      await delete(matchedData);
+    if (savedDappData.blockchainType != null &&
+        savedDappData.blockchainType == BlockchainType.tezos) {
+      final SavedDappData? matchedData = savedPeerDatas.firstWhereOrNull(
+        (SavedDappData savedData) =>
+            savedData.walletAddress == savedDappData.walletAddress &&
+            savedData.peer!.name == savedDappData.peer!.name,
+
+        /// Note: Assumption - name is always unique
+      );
+      if (matchedData != null) {
+        await delete(matchedData);
+      }
     }
 
     log.i('saving dapp Data');
     late String id;
-    switch (savedDappData.blockchainType) {
-      case BlockchainType.ethereum:
-      case BlockchainType.fantom:
-      case BlockchainType.polygon:
-      case BlockchainType.binance:
-        id = savedDappData.wcSessionStore!.session.topic;
-        break;
-      case BlockchainType.tezos:
-        id = savedDappData.peer!.publicKey;
-        break;
+    // switch (savedDappData.blockchainType) {
+    //   case BlockchainType.ethereum:
+    //   case BlockchainType.fantom:
+    //   case BlockchainType.polygon:
+    //   case BlockchainType.binance:
+    //     id = savedDappData.wcSessionStore!.session.topic;
+    //     break;
+    //   case BlockchainType.tezos:
+    //     id = savedDappData.peer!.publicKey;
+    //     break;
+    // }
+
+    if (savedDappData.blockchainType != null &&
+        savedDappData.blockchainType == BlockchainType.tezos) {
+      id = savedDappData.peer!.publicKey;
+    } else {
+      id = savedDappData.sessionConnect!.session.pairingTopic;
     }
 
     await _secureStorageProvider.set(

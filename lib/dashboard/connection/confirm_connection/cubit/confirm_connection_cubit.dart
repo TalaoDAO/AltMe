@@ -119,7 +119,6 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           // log.i(savedDappData.toJson());
           // await connectedDappRepository.insert(savedDappData);
 
-          /// v2
           final SessionProposalEvent? sessionProposalEvent =
               walletConnectState.sessionProposalEvent;
 
@@ -127,6 +126,9 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
             id: sessionProposalEvent!.id,
             namespaces: sessionProposalEvent.params.generatedNamespaces!,
           );
+
+          /// v2
+          /// dApp saved onSessionConnect function in wallet connect cubit
 
           break;
       }

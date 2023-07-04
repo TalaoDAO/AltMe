@@ -328,8 +328,12 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   void _onSessionConnect(SessionConnect? args) {
     if (args != null) {
       log.i(args);
-      log.i(args.session);
       //sessions.value.add(args.session);
+
+      final savedDappData = SavedDappData(sessionConnect: args);
+
+      log.i(savedDappData.toJson());
+      unawaited(connectedDappRepository.insert(savedDappData));
     }
   }
 
@@ -554,7 +558,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   }
 
   Future<void> disconnectSession(PairingInfo pairing) async {
-    log.i('rdisconnectSession: ${pairing.topic}');
+    log.i('disconnectSession: ${pairing.topic}');
     await _web3Wallet!.disconnectSession(
       topic: pairing.topic,
       reason: Errors.getSdkError(Errors.USER_DISCONNECTED),

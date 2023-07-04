@@ -3,6 +3,7 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wallet_connect/wallet_connect.dart';
+import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 part 'saved_dapp_data.g.dart';
 
@@ -10,22 +11,34 @@ part 'saved_dapp_data.g.dart';
 class SavedDappData extends Equatable {
   const SavedDappData({
     this.peer,
-    required this.walletAddress,
-    required this.blockchainType,
+    this.walletAddress,
+    this.blockchainType,
     this.wcSessionStore,
+
+    //v2
+    this.sessionConnect,
   });
 
   factory SavedDappData.fromJson(Map<String, dynamic> json) =>
       _$SavedDappDataFromJson(json);
 
   final P2PPeer? peer;
-  final String walletAddress;
-  final BlockchainType blockchainType;
+  final String? walletAddress;
+  final BlockchainType? blockchainType;
   final WCSessionStore? wcSessionStore;
+
+  //v2
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final SessionConnect? sessionConnect;
 
   Map<String, dynamic> toJson() => _$SavedDappDataToJson(this);
 
   @override
-  List<Object?> get props =>
-      [peer, walletAddress, blockchainType, wcSessionStore];
+  List<Object?> get props => [
+        peer,
+        walletAddress,
+        blockchainType,
+        wcSessionStore,
+        sessionConnect,
+      ];
 }
