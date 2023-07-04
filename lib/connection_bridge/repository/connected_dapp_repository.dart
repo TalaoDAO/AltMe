@@ -64,23 +64,30 @@ class ConnectedDappRepository {
 
   Future<bool> delete(SavedDappData savedDappData) async {
     late String id;
-    switch (savedDappData.blockchainType) {
-      case BlockchainType.ethereum:
-        id = savedDappData.wcSessionStore!.session.topic;
-        break;
-      case BlockchainType.tezos:
-        id = savedDappData.peer!.publicKey;
-        break;
-      case BlockchainType.fantom:
-        id = savedDappData.wcSessionStore!.session.topic;
-        break;
-      case BlockchainType.polygon:
-        id = savedDappData.wcSessionStore!.session.topic;
-        break;
-      case BlockchainType.binance:
-        id = savedDappData.wcSessionStore!.session.topic;
-        break;
+
+    if (savedDappData.blockchainType != null &&
+        savedDappData.blockchainType == BlockchainType.tezos) {
+      id = savedDappData.peer!.publicKey;
+    } else {
+      id = savedDappData.sessionData!.pairingTopic;
     }
+    // switch (savedDappData.blockchainType) {
+    //   case BlockchainType.ethereum:
+    //     id = savedDappData.wcSessionStore!.session.topic;
+    //     break;
+    //   case BlockchainType.tezos:
+    //     id = savedDappData.peer!.publicKey;
+    //     break;
+    //   case BlockchainType.fantom:
+    //     id = savedDappData.wcSessionStore!.session.topic;
+    //     break;
+    //   case BlockchainType.polygon:
+    //     id = savedDappData.wcSessionStore!.session.topic;
+    //     break;
+    //   case BlockchainType.binance:
+    //     id = savedDappData.wcSessionStore!.session.topic;
+    //     break;
+    // }
     log.i('deleteing dapp data - ${SecureStorageKeys.savedDaaps}/$id');
     await _secureStorageProvider.delete('${SecureStorageKeys.savedDaaps}/$id');
     return true;
@@ -138,7 +145,7 @@ class ConnectedDappRepository {
         savedDappData.blockchainType == BlockchainType.tezos) {
       id = savedDappData.peer!.publicKey;
     } else {
-      id = savedDappData.sessionConnect!.session.pairingTopic;
+      id = savedDappData.sessionData!.pairingTopic;
     }
 
     await _secureStorageProvider.set(

@@ -16,7 +16,7 @@ class SavedDappData extends Equatable {
     this.wcSessionStore,
 
     //v2
-    this.sessionConnect,
+    this.sessionData,
   });
 
   factory SavedDappData.fromJson(Map<String, dynamic> json) =>
@@ -28,8 +28,7 @@ class SavedDappData extends Equatable {
   final WCSessionStore? wcSessionStore;
 
   //v2
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final SessionConnect? sessionConnect;
+  final SessionData? sessionData;
 
   Map<String, dynamic> toJson() => _$SavedDappDataToJson(this);
 
@@ -39,6 +38,6 @@ class SavedDappData extends Equatable {
         walletAddress,
         blockchainType,
         wcSessionStore,
-        sessionConnect,
+        sessionData,
       ];
 }

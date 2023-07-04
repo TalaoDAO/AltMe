@@ -115,6 +115,8 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
         /// display data for selected walletAddress only
         if (walletAddress == savedData.walletAddress) {
           peersListToShow.add(savedData);
+        } else if (savedData.walletAddress == null) {
+          peersListToShow.add(savedData);
         }
       }
 

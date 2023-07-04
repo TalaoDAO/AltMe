@@ -163,8 +163,10 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                                             savedDappData.blockchainType ==
                                                     BlockchainType.tezos
                                                 ? savedDappData.peer!.name
-                                                : savedDappData.wcSessionStore!
-                                                    .remotePeerMeta.name,
+                                                : savedDappData.sessionData!
+                                                    .peer.metadata.name,
+                                            // : savedDappData.wcSessionStore!
+                                            //     .remotePeerMeta.name,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .dappName,
