@@ -43,9 +43,9 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   late String encodedPayload;
   SigningType signingType = SigningType.micheline;
 
-  void decodeMessage({
+  Future<void> init({
     required ConnectionBridgeType connectionBridgeType,
-  }) {
+  }) async {
     if (isClosed) return;
     try {
       emit(state.loading());
@@ -76,13 +76,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
           break;
         case ConnectionBridgeType.walletconnect:
-          // encodedPayload = walletConnectCubit.state.signMessage!.data!;
-          // signingType = SigningType.raw;
-          // final bytes = hexToBytes(encodedPayload);
-          // payloadMessage = utf8.decode(bytes, allowMalformed: true);
-
-          // v2
-
           if (walletConnectCubit.state.signType == Parameters.PERSONAL_SIGN) {
             payloadMessage = getUtf8Message(
               walletConnectCubit.state.parameters[0] as String,
@@ -109,10 +102,36 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
       log.i('payloadMessage - $payloadMessage');
 
+      String dAppName = '';
+      switch (connectionBridgeType) {
+        case ConnectionBridgeType.beacon:
+          dAppName =
+              beaconCubit.state.beaconRequest?.request?.appMetadata?.name ?? '';
+          break;
+        case ConnectionBridgeType.walletconnect:
+          final List<SavedDappData> savedDapps =
+              await connectedDappRepository.findAll();
+
+          final SavedDappData? savedDappData =
+              savedDapps.firstWhereOrNull((SavedDappData element) {
+            return walletConnectCubit.state.sessionTopic ==
+                element.sessionData!.topic;
+          });
+
+          if (savedDappData != null) {
+            dAppName = savedDappData.sessionData!.peer.metadata.name;
+          }
+
+          break;
+      }
+
+      log.i('dAppName - $dAppName');
+
       emit(
         state.copyWith(
-          appStatus: AppStatus.idle,
+          status: AppStatus.idle,
           payloadMessage: payloadMessage,
+          dAppName: dAppName,
         ),
       );
     } catch (e) {
@@ -284,9 +303,11 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           final uri = Uri.parse(url);
           emit(
             state.copyWith(
-              appStatus: AppStatus.success,
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+              status: AppStatus.success,
+              message: StateMessage.success(
+                messageHandler: ResponseMessage(
+                  ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+                ),
               ),
             ),
           );
@@ -294,9 +315,11 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         } else {
           emit(
             state.copyWith(
-              appStatus: AppStatus.success,
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+              status: AppStatus.success,
+              message: StateMessage.success(
+                messageHandler: ResponseMessage(
+                  ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+                ),
               ),
             ),
           );
@@ -347,6 +370,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             .complete('Failed');
         break;
     }
-    emit(state.copyWith(appStatus: AppStatus.goBack));
+    emit(state.copyWith(status: AppStatus.goBack));
   }
 }

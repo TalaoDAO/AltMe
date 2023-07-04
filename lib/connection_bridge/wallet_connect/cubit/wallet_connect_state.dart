@@ -5,6 +5,7 @@ class WalletConnectState extends Equatable {
   const WalletConnectState({
     this.status = WalletConnectStatus.init,
     this.message,
+    this.sessionTopic,
     this.sessionProposalEvent,
     this.parameters,
     this.signType,
@@ -18,6 +19,7 @@ class WalletConnectState extends Equatable {
   final StateMessage? message;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final SessionProposalEvent? sessionProposalEvent;
+  final String? sessionTopic;
   final dynamic parameters;
   final String? signType;
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -40,6 +42,7 @@ class WalletConnectState extends Equatable {
     WalletConnectStatus status = WalletConnectStatus.idle,
     StateMessage? message,
     SessionProposalEvent? sessionProposalEvent,
+    String? sessionTopic,
     dynamic parameters,
     String? signType,
     Transaction? transaction,
@@ -48,6 +51,7 @@ class WalletConnectState extends Equatable {
       status: status,
       message: message,
       sessionProposalEvent: sessionProposalEvent ?? this.sessionProposalEvent,
+      sessionTopic: sessionTopic ?? this.sessionTopic,
       parameters: parameters ?? this.parameters,
       signType: signType ?? this.signType,
       transaction: transaction ?? this.transaction,

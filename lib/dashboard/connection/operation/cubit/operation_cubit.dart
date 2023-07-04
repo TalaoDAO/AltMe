@@ -49,6 +49,34 @@ class OperationCubit extends Cubit<OperationState> {
 
     try {
       emit(state.loading());
+
+      String dAppName = '';
+      switch (connectionBridgeType) {
+        case ConnectionBridgeType.beacon:
+          dAppName =
+              beaconCubit.state.beaconRequest?.request?.appMetadata?.name ?? '';
+          break;
+        case ConnectionBridgeType.walletconnect:
+          final List<SavedDappData> savedDapps =
+              await connectedDappRepository.findAll();
+
+          final SavedDappData? savedDappData =
+              savedDapps.firstWhereOrNull((SavedDappData element) {
+            return walletConnectCubit.state.sessionTopic ==
+                element.sessionData!.topic;
+          });
+
+          if (savedDappData != null) {
+            dAppName = savedDappData.sessionData!.peer.metadata.name;
+          }
+
+          break;
+      }
+
+      log.i('dAppName - $dAppName');
+
+      emit(state.copyWith(dAppName: dAppName));
+
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
           await getUsdPrice(connectionBridgeType);

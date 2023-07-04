@@ -64,7 +64,7 @@ class _SignPayloadViewState extends State<SignPayloadView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => context.read<SignPayloadCubit>().decodeMessage(
+      (_) => context.read<SignPayloadCubit>().init(
             connectionBridgeType: widget.connectionBridgeType,
           ),
     );
@@ -128,10 +128,7 @@ class _SignPayloadViewState extends State<SignPayloadView> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(
-                        widget.connectionBridgeType ==
-                                ConnectionBridgeType.beacon
-                            ? beaconRequest!.request!.appMetadata!.name!
-                            : '', // TOOD(bibash): add name
+                        state.dAppName,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),

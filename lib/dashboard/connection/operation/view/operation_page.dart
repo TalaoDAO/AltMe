@@ -110,7 +110,6 @@ class _OperationViewState extends State<OperationView> {
         final WalletConnectState walletConnectState =
             context.read<WalletConnectCubit>().state;
 
-        late String dAppName;
         late String sender;
         late String reciever;
 
@@ -118,15 +117,12 @@ class _OperationViewState extends State<OperationView> {
 
         switch (widget.connectionBridgeType) {
           case ConnectionBridgeType.beacon:
-            dAppName = beaconRequest!.request!.appMetadata!.name!;
             symbol = 'XTZ';
-            sender = beaconRequest.request!.sourceAddress!;
+            sender = beaconRequest!.request!.sourceAddress!;
             reciever = beaconRequest.operationDetails!.first.destination!;
             break;
 
           case ConnectionBridgeType.walletconnect:
-            // TODO(bibash): add name
-            dAppName = '--';
             symbol = state.cryptoAccountData?.blockchainType.symbol;
             sender = walletConnectState.transaction!.from!.toString();
             reciever = walletConnectState.transaction!.to!.toString();
@@ -176,7 +172,7 @@ class _OperationViewState extends State<OperationView> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Text(
-                              dAppName,
+                              state.dAppName,
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
@@ -202,7 +198,7 @@ class _OperationViewState extends State<OperationView> {
                             SenderReceiver(
                               from: sender,
                               to: reciever,
-                              dAppName: dAppName,
+                              dAppName: state.dAppName,
                             ),
                             const SizedBox(height: Sizes.spaceNormal),
                             Image.asset(

@@ -280,6 +280,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       state.copyWith(
         status: WalletConnectStatus.signPayload,
         parameters: parameters,
+        sessionTopic: topic,
         signType: Parameters.PERSONAL_SIGN,
       ),
     );
@@ -300,6 +301,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       state.copyWith(
         status: WalletConnectStatus.signPayload,
         parameters: parameters,
+        sessionTopic: topic,
         signType: Parameters.ETH_SIGN,
       ),
     );
@@ -322,6 +324,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       state.copyWith(
         status: WalletConnectStatus.signPayload,
         parameters: parameters,
+        sessionTopic: topic,
         signType: Parameters.ETH_SIGN_TRANSACTION,
         transaction: transaction,
       ),
@@ -345,6 +348,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       state.copyWith(
         status: WalletConnectStatus.operation,
         parameters: parameters,
+        sessionTopic: topic,
         signType: Parameters.ETH_SIGN_TRANSACTION,
         transaction: transaction,
       ),
@@ -408,6 +412,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       state.copyWith(
         status: WalletConnectStatus.signPayload,
         parameters: parameters,
+        sessionTopic: topic,
         signType: Parameters.ETH_SIGN_TYPE_DATA,
       ),
     );

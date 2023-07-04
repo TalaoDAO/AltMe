@@ -120,9 +120,7 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
         }
       }
 
-      emit(
-        state.copyWith(status: AppStatus.idle, savedDapps: peersListToShow),
-      );
+      emit(state.copyWith(status: AppStatus.idle, savedDapps: peersListToShow));
     } catch (e) {
       log.e('getPeers failure , e: $e');
       if (e is MessageHandler) {
