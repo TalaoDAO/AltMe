@@ -115,12 +115,12 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
         /// display data for selected walletAddress only
         if (walletAddress == savedData.walletAddress) {
           peersListToShow.add(savedData);
+        } else if (savedData.walletAddress == null) {
+          peersListToShow.add(savedData);
         }
       }
 
-      emit(
-        state.copyWith(status: AppStatus.idle, savedDapps: peersListToShow),
-      );
+      emit(state.copyWith(status: AppStatus.idle, savedDapps: peersListToShow));
     } catch (e) {
       log.e('getPeers failure , e: $e');
       if (e is MessageHandler) {

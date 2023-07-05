@@ -30,7 +30,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   final logger = getLogger('ConfirmWithdrawal');
 
   Future<void> getXtzUSDPrice() async {
-    
     await dotenv.load();
     final apiKey = dotenv.get('COIN_GECKO_API_KEY');
 
@@ -222,7 +221,10 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   }
 
   Future<OperationsList> prepareTezosOperation(
-      Keystore keystore, TezartClient client, int transactionAmount) async {
+    Keystore keystore,
+    TezartClient client,
+    int transactionAmount,
+  ) async {
     final operationList = OperationsList(
       source: keystore,
       publicKey: keystore.publicKey,

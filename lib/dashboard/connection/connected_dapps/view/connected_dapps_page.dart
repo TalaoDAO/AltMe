@@ -160,11 +160,10 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                                       children: [
                                         Expanded(
                                           child: Text(
-                                            savedDappData.blockchainType ==
-                                                    BlockchainType.tezos
+                                            savedDappData.walletAddress != null
                                                 ? savedDappData.peer!.name
-                                                : savedDappData.wcSessionStore!
-                                                    .remotePeerMeta.name,
+                                                : savedDappData.sessionData!
+                                                    .peer.metadata.name,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .dappName,

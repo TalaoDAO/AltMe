@@ -42,6 +42,7 @@ dependencies:
     path: packages/ebsi
   ed25519_hd_key: ^2.2.0
   equatable: ^2.0.5
+  eth_sig_util: ^0.0.9
   file_picker: ^5.3.1
   file_saver: ^0.2.4
   flutter:
@@ -106,10 +107,7 @@ dependencies:
   url_launcher: ^6.1.11
   uuid: ^3.0.7
   visibility_detector: ^0.4.0+2
-  wallet_connect:
-    git:
-      url: https://github.com/bibash28/wallet-connect-dart.git
-      ref: 5d3003d51ee5afb9911d04d15b6b2aa2f12989c8
+  walletconnect_flutter_v2: ^2.0.10
   webview_flutter: ^4.2.1
   webview_flutter_android: ^3.7.1
   webview_flutter_wkwebview: ^3.4.4

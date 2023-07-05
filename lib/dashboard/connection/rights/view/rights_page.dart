@@ -85,7 +85,7 @@ class RightsView extends StatelessWidget {
                   Text(
                     savedDappData.peer != null
                         ? savedDappData.peer!.name
-                        : savedDappData.wcSessionStore!.remotePeerMeta.name,
+                        : savedDappData.sessionData!.peer.metadata.name,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
@@ -112,7 +112,7 @@ class RightsView extends StatelessWidget {
                   context: context,
                   title: l10n.revokeAllRights,
                   subtitle:
-                      '''${l10n.revokeSubtitleMessage} on ${savedDappData.peer != null ? savedDappData.peer!.name : savedDappData.wcSessionStore!.remotePeerMeta.name}?''',
+                      '''${l10n.revokeSubtitleMessage} on ${savedDappData.peer != null ? savedDappData.peer!.name : savedDappData.sessionData!.peer.metadata.name}?''',
                   no: l10n.cancel,
                   yes: l10n.revokeAll,
                   onContinueClick: () {

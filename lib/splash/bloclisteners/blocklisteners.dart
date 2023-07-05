@@ -66,6 +66,10 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
 final credentialsBlocListener =
     BlocListener<CredentialsCubit, CredentialsState>(
   listener: (BuildContext context, CredentialsState state) async {
+    if (state.status == CredentialsStatus.idle) {
+      return;
+    }
+
     if (state.status == CredentialsStatus.loading) {
       LoadingView().show(context: context);
     } else {

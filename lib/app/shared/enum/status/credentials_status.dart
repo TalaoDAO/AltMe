@@ -1,5 +1,6 @@
 enum CredentialsStatus {
   init,
+  idle,
   populate,
   loading,
   insert,
