@@ -64,23 +64,13 @@ class ConnectedDappRepository {
 
   Future<bool> delete(SavedDappData savedDappData) async {
     late String id;
-    switch (savedDappData.blockchainType) {
-      case BlockchainType.ethereum:
-        id = savedDappData.wcSessionStore!.session.topic;
-        break;
-      case BlockchainType.tezos:
-        id = savedDappData.peer!.publicKey;
-        break;
-      case BlockchainType.fantom:
-        id = savedDappData.wcSessionStore!.session.topic;
-        break;
-      case BlockchainType.polygon:
-        id = savedDappData.wcSessionStore!.session.topic;
-        break;
-      case BlockchainType.binance:
-        id = savedDappData.wcSessionStore!.session.topic;
-        break;
+
+    if (savedDappData.walletAddress != null) {
+      id = savedDappData.peer!.publicKey;
+    } else {
+      id = savedDappData.sessionData!.pairingTopic;
     }
+
     log.i('deleteing dapp data - ${SecureStorageKeys.savedDaaps}/$id');
     await _secureStorageProvider.delete('${SecureStorageKeys.savedDaaps}/$id');
     return true;
@@ -89,41 +79,26 @@ class ConnectedDappRepository {
   Future<int> insert(SavedDappData savedDappData) async {
     final List<SavedDappData> savedPeerDatas = await findAll();
 
-    final SavedDappData? matchedData = savedPeerDatas.firstWhereOrNull(
-      (SavedDappData savedData) {
-        switch (savedDappData.blockchainType) {
-          case BlockchainType.ethereum:
-          case BlockchainType.fantom:
-          case BlockchainType.polygon:
-          case BlockchainType.binance:
-            return savedData.walletAddress == savedDappData.walletAddress &&
-                savedData.wcSessionStore!.remotePeerMeta.name ==
-                    savedDappData.wcSessionStore!.remotePeerMeta.name;
-          case BlockchainType.tezos:
-            return savedData.walletAddress == savedDappData.walletAddress &&
-                savedData.peer!.name == savedDappData.peer!.name;
-        }
-      },
+    if (savedDappData.walletAddress != null) {
+      final SavedDappData? matchedData = savedPeerDatas.firstWhereOrNull(
+        (SavedDappData savedData) =>
+            savedData.walletAddress == savedDappData.walletAddress &&
+            savedData.peer!.name == savedDappData.peer!.name,
 
-      /// Note: Assumption - name is always unique
-    );
-
-    if (matchedData != null) {
-      await delete(matchedData);
+        /// Note: Assumption - name is always unique
+      );
+      if (matchedData != null) {
+        await delete(matchedData);
+      }
     }
 
     log.i('saving dapp Data');
     late String id;
-    switch (savedDappData.blockchainType) {
-      case BlockchainType.ethereum:
-      case BlockchainType.fantom:
-      case BlockchainType.polygon:
-      case BlockchainType.binance:
-        id = savedDappData.wcSessionStore!.session.topic;
-        break;
-      case BlockchainType.tezos:
-        id = savedDappData.peer!.publicKey;
-        break;
+
+    if (savedDappData.walletAddress != null) {
+      id = savedDappData.peer!.publicKey;
+    } else {
+      id = savedDappData.sessionData!.pairingTopic;
     }
 
     await _secureStorageProvider.set(

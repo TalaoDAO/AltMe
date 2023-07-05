@@ -9,6 +9,7 @@ class OperationState extends Equatable {
     this.fee = 0,
     this.usdRate = 0,
     this.cryptoAccountData,
+    this.dAppName = '',
   });
 
   factory OperationState.fromJson(Map<String, dynamic> json) =>
@@ -20,27 +21,18 @@ class OperationState extends Equatable {
   final double fee;
   final double usdRate;
   final CryptoAccountData? cryptoAccountData;
+  final String dAppName;
 
   OperationState loading() {
-    return OperationState(
-      status: AppStatus.loading,
-      amount: amount,
-      fee: fee,
-      usdRate: usdRate,
-      cryptoAccountData: cryptoAccountData,
-    );
+    return copyWith(status: AppStatus.loading);
   }
 
   OperationState error({
     required MessageHandler messageHandler,
   }) {
-    return OperationState(
+    return copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
-      amount: amount,
-      fee: fee,
-      usdRate: usdRate,
-      cryptoAccountData: cryptoAccountData,
     );
   }
 
@@ -52,6 +44,7 @@ class OperationState extends Equatable {
     double? usdRate,
     int? selectedIndex,
     CryptoAccountData? cryptoAccountData,
+    String? dAppName,
   }) {
     return OperationState(
       status: status ?? this.status,
@@ -60,6 +53,7 @@ class OperationState extends Equatable {
       fee: fee ?? this.usdRate,
       usdRate: usdRate ?? this.usdRate,
       cryptoAccountData: cryptoAccountData ?? this.cryptoAccountData,
+      dAppName: dAppName ?? this.dAppName,
     );
   }
 
@@ -73,5 +67,6 @@ class OperationState extends Equatable {
         fee,
         usdRate,
         cryptoAccountData,
+        dAppName,
       ];
 }

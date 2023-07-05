@@ -62,6 +62,31 @@ extension BlockchainTypeX on BlockchainType {
     }
   }
 
+  String get chain {
+    String name = '';
+    switch (this) {
+      case BlockchainType.tezos:
+        throw Exception();
+
+      case BlockchainType.ethereum:
+        name = '1';
+        break;
+      case BlockchainType.fantom:
+        name = '250';
+        break;
+
+      case BlockchainType.polygon:
+        name = '137';
+        break;
+
+      case BlockchainType.binance:
+        name = '56';
+        break;
+    }
+
+    return '${Parameters.NAMESPACE}:$name';
+  }
+
   int get chainId {
     switch (this) {
       case BlockchainType.tezos:

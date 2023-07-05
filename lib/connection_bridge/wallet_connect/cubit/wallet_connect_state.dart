@@ -2,100 +2,58 @@ part of 'wallet_connect_cubit.dart';
 
 @JsonSerializable()
 class WalletConnectState extends Equatable {
-  WalletConnectState({
+  const WalletConnectState({
     this.status = WalletConnectStatus.init,
-    this.isWalletConnectStarted = false,
     this.message,
-    this.sessionId,
-    List<WCClient>? wcClients,
-    this.currentDappPeerId,
-    this.currentDAppPeerMeta,
-    this.signId,
-    this.signMessage,
-    this.transactionId,
+    this.sessionTopic,
+    this.sessionProposalEvent,
+    this.parameters,
+    this.signType,
     this.transaction,
-  }) : wcClients = wcClients ?? [];
+  });
 
   factory WalletConnectState.fromJson(Map<String, dynamic> json) =>
       _$WalletConnectStateFromJson(json);
 
   final WalletConnectStatus? status;
   final StateMessage? message;
-  final bool isWalletConnectStarted;
-  final int? sessionId;
-  final String? currentDappPeerId;
-  final WCPeerMeta? currentDAppPeerMeta;
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final List<WCClient> wcClients;
-  final int? signId;
+  final SessionProposalEvent? sessionProposalEvent;
+  final String? sessionTopic;
+  final dynamic parameters;
+  final String? signType;
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final WCEthereumSignMessage? signMessage;
-  final int? transactionId;
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final WCEthereumTransaction? transaction;
+  final Transaction? transaction;
 
   Map<String, dynamic> toJson() => _$WalletConnectStateToJson(this);
 
   WalletConnectState loading() {
-    return WalletConnectState(
-      status: WalletConnectStatus.loading,
-      isWalletConnectStarted: isWalletConnectStarted,
-      sessionId: sessionId,
-      wcClients: wcClients,
-      currentDappPeerId: currentDappPeerId,
-      currentDAppPeerMeta: currentDAppPeerMeta,
-      signId: signId,
-      signMessage: signMessage,
-      transactionId: transactionId,
-      transaction: transaction,
-    );
+    return copyWith(status: WalletConnectStatus.loading);
   }
 
-  WalletConnectState error({
-    required MessageHandler messageHandler,
-  }) {
-    return WalletConnectState(
+  WalletConnectState error({required MessageHandler messageHandler}) {
+    return copyWith(
       status: WalletConnectStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
-      isWalletConnectStarted: isWalletConnectStarted,
-      currentDappPeerId: currentDappPeerId,
-      currentDAppPeerMeta: currentDAppPeerMeta,
-      sessionId: sessionId,
-      wcClients: wcClients,
-      signId: signId,
-      signMessage: signMessage,
-      transactionId: transactionId,
-      transaction: transaction,
     );
   }
 
   WalletConnectState copyWith({
     WalletConnectStatus status = WalletConnectStatus.idle,
-    MessageHandler? messageHandler,
-    bool? isWalletConnectStarted,
-    int? sessionId,
-    String? currentDappPeerId,
-    WCPeerMeta? currentDAppPeerMeta,
-    List<WCClient>? wcClients,
-    int? signId,
-    WCEthereumSignMessage? signMessage,
-    int? transactionId,
-    WCEthereumTransaction? transaction,
+    StateMessage? message,
+    SessionProposalEvent? sessionProposalEvent,
+    String? sessionTopic,
+    dynamic parameters,
+    String? signType,
+    Transaction? transaction,
   }) {
     return WalletConnectState(
       status: status,
-      message: messageHandler == null
-          ? null
-          : StateMessage.success(messageHandler: messageHandler),
-      isWalletConnectStarted:
-          isWalletConnectStarted ?? this.isWalletConnectStarted,
-      currentDAppPeerMeta: currentDAppPeerMeta ?? this.currentDAppPeerMeta,
-      currentDappPeerId: currentDappPeerId ?? this.currentDappPeerId,
-      sessionId: sessionId ?? this.sessionId,
-      wcClients: wcClients ?? this.wcClients,
-      signId: signId ?? this.signId,
-      signMessage: signMessage ?? this.signMessage,
-      transactionId: transactionId ?? this.transactionId,
+      message: message,
+      sessionProposalEvent: sessionProposalEvent ?? this.sessionProposalEvent,
+      sessionTopic: sessionTopic ?? this.sessionTopic,
+      parameters: parameters ?? this.parameters,
+      signType: signType ?? this.signType,
       transaction: transaction ?? this.transaction,
     );
   }
@@ -104,14 +62,9 @@ class WalletConnectState extends Equatable {
   List<Object?> get props => [
         status,
         message,
-        isWalletConnectStarted,
-        sessionId,
-        currentDappPeerId,
-        currentDAppPeerMeta,
-        wcClients,
-        signId,
-        signMessage,
-        transactionId,
+        sessionProposalEvent,
+        parameters,
+        signType,
         transaction,
       ];
 }

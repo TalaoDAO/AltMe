@@ -37,4 +37,11 @@ class Parameters {
   static const MUMBAI_ID_STATE_CONTRACT_ADDR =
       '0x134B1BE34911E39A8397ec6289782989729807a4';
   static const MUMBAI_PUSH_URL = 'https://push-staging.polygonid.com/api/v1';
+
+  static const NAMESPACE = 'eip155';
+  static const PERSONAL_SIGN = 'personal_sign';
+  static const ETH_SIGN = 'eth_sign';
+  static const ETH_SIGN_TRANSACTION = 'eth_signTransaction';
+  static const ETH_SIGN_TYPE_DATA = 'eth_signTypedData';
+  static const ETH_SEND_TRANSACTION = 'eth_sendTransaction';
 }

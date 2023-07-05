@@ -104,6 +104,9 @@ class _ImportWalletViewState extends State<ImportWalletView> {
 
           LoadingView().show(context: context);
         } else {
+          if (state.status == AppStatus.success && widget.isFromOnboarding) {
+            await context.read<AltmeChatSupportCubit>().init();
+          }
           LoadingView().hide();
         }
 
@@ -116,7 +119,6 @@ class _ImportWalletViewState extends State<ImportWalletView> {
         if (state.status == AppStatus.success) {
           /// Removes every stack except first route (splashPage)
           if (widget.isFromOnboarding) {
-            await context.read<AltmeChatSupportCubit>().init();
             await Navigator.pushAndRemoveUntil<void>(
               context,
               WalletReadyPage.route(),

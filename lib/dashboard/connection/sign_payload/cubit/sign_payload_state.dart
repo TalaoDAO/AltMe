@@ -6,6 +6,7 @@ class SignPayloadState extends Equatable {
     this.status = AppStatus.init,
     this.message,
     this.payloadMessage,
+    this.dAppName = '',
   });
 
   factory SignPayloadState.fromJson(Map<String, dynamic> json) =>
@@ -14,35 +15,32 @@ class SignPayloadState extends Equatable {
   final AppStatus status;
   final StateMessage? message;
   final String? payloadMessage;
+  final String dAppName;
 
   SignPayloadState loading() {
-    return SignPayloadState(
-      status: AppStatus.loading,
-      payloadMessage: payloadMessage,
-    );
+    return copyWith(status: AppStatus.loading);
   }
 
   SignPayloadState error({
     required MessageHandler messageHandler,
   }) {
-    return SignPayloadState(
+    return copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
-      payloadMessage: payloadMessage,
     );
   }
 
   SignPayloadState copyWith({
-    AppStatus appStatus = AppStatus.idle,
-    MessageHandler? messageHandler,
+    AppStatus status = AppStatus.idle,
+    StateMessage? message,
     String? payloadMessage,
+    String? dAppName,
   }) {
     return SignPayloadState(
-      status: appStatus,
-      message: messageHandler == null
-          ? null
-          : StateMessage.success(messageHandler: messageHandler),
+      status: status,
+      message: message,
       payloadMessage: payloadMessage ?? this.payloadMessage,
+      dAppName: dAppName ?? this.dAppName,
     );
   }
 
@@ -53,5 +51,6 @@ class SignPayloadState extends Equatable {
         status,
         message,
         payloadMessage,
+        dAppName,
       ];
 }
