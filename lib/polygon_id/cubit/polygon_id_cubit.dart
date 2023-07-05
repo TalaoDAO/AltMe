@@ -60,6 +60,12 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       var polygonIdNetwork =
           await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
 
+      final String ipfsApiKey = dotenv.get('IPFS_API_KEY');
+      final String ipfsApiKeySecret = dotenv.get('IPFS_API_KEY_SECRET');
+
+      final String ipfsUrl =
+          'https://$ipfsApiKey:$ipfsApiKeySecret@ipfs.infura.io:5001';
+
       String network = Parameters.POLYGON_MAIN_NETWORK;
 
       // set polygon main network a first
@@ -81,6 +87,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.ID_STATE_CONTRACT_ADDR,
           pushUrl: Parameters.PUSH_URL,
+          ipfsUrl: ipfsUrl,
         );
       } else {
         network = Parameters.POLYGON_TEST_NETWORK;
@@ -91,6 +98,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.MUMBAI_ID_STATE_CONTRACT_ADDR,
           pushUrl: Parameters.MUMBAI_PUSH_URL,
+          ipfsUrl: ipfsUrl,
         );
       }
 
@@ -114,6 +122,12 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       /// PolygonId SDK update
       await dotenv.load();
 
+      final String ipfsApiKey = dotenv.get('IPFS_API_KEY');
+      final String ipfsApiKeySecret = dotenv.get('IPFS_API_KEY_SECRET');
+
+      final String ipfsUrl =
+          'https://$ipfsApiKey:$ipfsApiKeySecret@ipfs.infura.io:5001';
+
       String network = Parameters.POLYGON_MAIN_NETWORK;
       if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet) {
         network = Parameters.POLYGON_MAIN_NETWORK;
@@ -124,6 +138,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.ID_STATE_CONTRACT_ADDR,
           pushUrl: Parameters.PUSH_URL,
+          ipfsUrl: ipfsUrl,
         );
       } else {
         network = Parameters.POLYGON_TEST_NETWORK;
@@ -134,6 +149,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.MUMBAI_ID_STATE_CONTRACT_ADDR,
           pushUrl: Parameters.MUMBAI_PUSH_URL,
+          ipfsUrl: ipfsUrl,
         );
       }
 
@@ -229,7 +245,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     final Iden3MessageEntity iden3MessageEntity =
         await getIden3Message(message: state.scannedResponse!);
 
-    if (iden3MessageEntity.messageType == Iden3MessageType.auth) {
+    if (iden3MessageEntity.messageType == Iden3MessageType.authRequest) {
       final body = iden3MessageEntity.body as AuthBodyRequest;
 
       if (body.scope!.isEmpty) {
@@ -249,7 +265,8 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           ),
         );
       }
-    } else if (iden3MessageEntity.messageType == Iden3MessageType.offer) {
+    } else if (iden3MessageEntity.messageType ==
+        Iden3MessageType.credentialOffer) {
       log.i('get claims');
       emit(
         state.copyWith(
@@ -258,7 +275,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         ),
       );
     } else if (iden3MessageEntity.messageType ==
-        Iden3MessageType.contractFunctionCall) {
+        Iden3MessageType.proofContractInvokeRequest) {
       log.i('contractFunctionCall');
       emit(
         state.copyWith(
