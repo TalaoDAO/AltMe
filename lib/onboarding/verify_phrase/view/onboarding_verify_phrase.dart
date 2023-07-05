@@ -88,10 +88,13 @@ class _OnBoardingVerifyPhraseViewState
 
     return BlocConsumer<OnBoardingVerifyPhraseCubit,
         OnBoardingVerifyPhraseState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
+          if (state.status == AppStatus.success && widget.isFromOnboarding) {
+            await context.read<AltmeChatSupportCubit>().init();
+          }
           LoadingView().hide();
         }
 
@@ -104,14 +107,13 @@ class _OnBoardingVerifyPhraseViewState
 
         if (state.status == AppStatus.success) {
           if (widget.isFromOnboarding) {
-            context.read<AltmeChatSupportCubit>().init();
-            Navigator.pushAndRemoveUntil<void>(
+            await Navigator.pushAndRemoveUntil<void>(
               context,
               WalletReadyPage.route(),
               (Route<dynamic> route) => route.isFirst,
             );
           } else {
-            Navigator.pushReplacement<void, void>(
+            await Navigator.pushReplacement<void, void>(
               context,
               KeyVerifiedPage.route(),
             );
