@@ -17,13 +17,11 @@ class PolygonIdVerificationPage extends StatelessWidget {
 
   final Iden3MessageEntity iden3MessageEntity;
 
-  static Route<dynamic> route({
-    required Iden3MessageEntity iden3MessageEntity,
-  }) =>
+  static Route<dynamic> route(
+          {required Iden3MessageEntity iden3MessageEntity}) =>
       MaterialPageRoute<void>(
-        builder: (context) => PolygonIdVerificationPage(
-          iden3MessageEntity: iden3MessageEntity,
-        ),
+        builder: (context) =>
+            PolygonIdVerificationPage(iden3MessageEntity: iden3MessageEntity),
         settings: const RouteSettings(name: '/PolygonIdVerification'),
       );
 
@@ -68,7 +66,15 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final body = widget.iden3MessageEntity.body as AuthBodyRequest;
+    final body = widget.iden3MessageEntity.body;
+
+    late int scopeLength;
+
+    if (body is AuthBodyRequest) {
+      scopeLength = body.scope!.length;
+    } else if (body is ContractFunctionCallBodyRequest) {
+      scopeLength = body.scope!.length;
+    }
     // TODO(all): change UI
     return BlocConsumer<PolygonIdVerificationCubit, PolygonIdVerificationState>(
       listener: (context, state) {
@@ -107,9 +113,17 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                   ListView.builder(
                     physics: const ScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: body.scope!.length,
+                    itemCount: scopeLength,
                     itemBuilder: (context, index) {
-                      final proofScopeRequest = body.scope![index];
+                      late ProofScopeRequest proofScopeRequest;
+
+                      if (body is AuthBodyRequest) {
+                        proofScopeRequest = body.scope![index];
+                      } else if (body is ContractFunctionCallBodyRequest) {
+                        proofScopeRequest = body.scope![index];
+                      }
+
+                      final String? queryType = proofScopeRequest.query.type!;
 
                       // final proofTypeMsg =
                       //     getSignatureType(proofScopeRequest.circuitId);
@@ -247,7 +261,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                                           Expanded(
                                             child: Text(
                                               '${l10n.from} ${separateUppercaseWords(
-                                                proofScopeRequest.query.type!,
+                                                queryType!,
                                               )}',
                                               textAlign: TextAlign.start,
                                               style: Theme.of(context)
@@ -296,7 +310,6 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                                           .authenticateOrGenerateProof(
                                             iden3MessageEntity:
                                                 widget.iden3MessageEntity,
-                                            isGenerateProof: true,
                                           );
                                     },
                                     restrictToBack: false,

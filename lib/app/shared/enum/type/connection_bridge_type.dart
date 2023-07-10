@@ -1,1 +1,5 @@
-enum ConnectionBridgeType { beacon, walletconnect }
+enum ConnectionBridgeType {
+  beacon,
+  walletconnect,
+  polygonIdSendTranscation,
+}

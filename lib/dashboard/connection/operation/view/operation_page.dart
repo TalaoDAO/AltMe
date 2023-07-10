@@ -2,13 +2,14 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
+import 'package:key_generator/key_generator.dart'; 
 import 'package:secure_storage/secure_storage.dart';
 
 class OperationPage extends StatelessWidget {
@@ -42,7 +43,9 @@ class OperationPage extends StatelessWidget {
         nftCubit: context.read<NftCubit>(),
         tokensCubit: context.read<TokensCubit>(),
         walletConnectCubit: context.read<WalletConnectCubit>(),
+        polygonIdCubit: context.read<PolygonIdCubit>(),
         connectedDappRepository: ConnectedDappRepository(getSecureStorage),
+        secureStorageProvider: getSecureStorage,
       ),
       child: OperationView(connectionBridgeType: connectionBridgeType),
     );
@@ -104,12 +107,6 @@ class _OperationViewState extends State<OperationView> {
         }
       },
       builder: (context, state) {
-        final BeaconRequest? beaconRequest =
-            context.read<BeaconCubit>().state.beaconRequest;
-
-        final WalletConnectState walletConnectState =
-            context.read<WalletConnectCubit>().state;
-
         late String sender;
         late String reciever;
 
@@ -117,15 +114,27 @@ class _OperationViewState extends State<OperationView> {
 
         switch (widget.connectionBridgeType) {
           case ConnectionBridgeType.beacon:
+            final BeaconRequest? beaconRequest =
+                context.read<BeaconCubit>().state.beaconRequest;
             symbol = 'XTZ';
             sender = beaconRequest!.request!.sourceAddress!;
             reciever = beaconRequest.operationDetails!.first.destination!;
             break;
 
           case ConnectionBridgeType.walletconnect:
+            final WalletConnectState walletConnectState =
+                context.read<WalletConnectCubit>().state;
             symbol = state.cryptoAccountData?.blockchainType.symbol;
             sender = walletConnectState.transaction!.from!.toString();
             reciever = walletConnectState.transaction!.to!.toString();
+            break;
+
+          case ConnectionBridgeType.polygonIdSendTranscation:
+            final PolygonIdState polygonIdState =
+                context.read<PolygonIdCubit>().state;
+            symbol = 'ETH';
+            sender = polygonIdState.transaction!.from!.toString();
+            reciever = polygonIdState.transaction!.to!.toString();
             break;
         }
 

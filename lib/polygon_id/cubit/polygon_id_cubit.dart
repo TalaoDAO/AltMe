@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
@@ -11,8 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:polygonid/polygonid.dart';
-
 import 'package:secure_storage/secure_storage.dart';
+import 'package:web3dart/web3dart.dart';
 
 part 'polygon_id_cubit.g.dart';
 part 'polygon_id_state.dart';
@@ -24,6 +27,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     required this.credentialsCubit,
     required this.client,
     required this.profileCubit,
+    required this.walletCubit,
   }) : super(const PolygonIdState());
 
   final SecureStorageProvider secureStorageProvider;
@@ -31,6 +35,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   final CredentialsCubit credentialsCubit;
   final DioClient client;
   final ProfileCubit profileCubit;
+  final WalletCubit walletCubit;
 
   final log = getLogger('PolygonIdCubit');
 
@@ -276,11 +281,13 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       );
     } else if (iden3MessageEntity.messageType ==
         Iden3MessageType.proofContractInvokeRequest) {
-      log.i('contractFunctionCall');
+      log.i('contractFunctionCall verifier');
+      final bodys = iden3MessageEntity.body as ContractFunctionCallBodyRequest;
+      log.i(bodys.transactionData.toString());
       emit(
         state.copyWith(
           status: AppStatus.loading,
-          polygonAction: PolygonIdAction.contractFunctionCall,
+          polygonAction: PolygonIdAction.verifier,
         ),
       );
     } else {
@@ -292,52 +299,136 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
 
   Future<void> authenticateOrGenerateProof({
     required Iden3MessageEntity iden3MessageEntity,
-    bool isGenerateProof = true,
   }) async {
     try {
       emit(state.copyWith(status: AppStatus.loading));
-      final mnemonic =
-          await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
-      final polygonIdNetwork =
-          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
+      if (iden3MessageEntity.messageType == Iden3MessageType.authRequest) {
+        final body = iden3MessageEntity.body as AuthBodyRequest;
 
-      String network = Parameters.POLYGON_MAIN_NETWORK;
+        bool isGenerateProof = false;
 
-      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
-        network = Parameters.POLYGON_MAIN_NETWORK;
-      } else {
-        network = Parameters.POLYGON_TEST_NETWORK;
-      }
+        if (body.scope!.isEmpty) {
+          log.i('issuer');
+          isGenerateProof = false;
+        } else {
+          log.i('verifier');
+          isGenerateProof = true;
+        }
 
-      log.i('iden3MessageEntity - $iden3MessageEntity');
+        final mnemonic =
+            await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
-      log.i('polygonId authentication - $network');
-      final isAuthenticated = await polygonId.authenticate(
-        iden3MessageEntity: iden3MessageEntity,
-        mnemonic: mnemonic!,
-        network: network,
-      );
-      log.i('isAuthenticated - $isAuthenticated');
+        final polygonIdNetwork =
+            await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
 
-      if (isAuthenticated) {
-        emit(
-          state.copyWith(
-            status: isGenerateProof ? AppStatus.goBack : AppStatus.idle,
-            message: StateMessage.success(
-              messageHandler: ResponseMessage(
-                isGenerateProof
-                    ? ResponseString.RESPONSE_STRING_successfullyGeneratingProof
-                    : ResponseString.RESPONSE_STRING_succesfullyAuthenticated,
+        String network = Parameters.POLYGON_MAIN_NETWORK;
+
+        if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+          network = Parameters.POLYGON_MAIN_NETWORK;
+        } else {
+          network = Parameters.POLYGON_TEST_NETWORK;
+        }
+
+        log.i('iden3MessageEntity - $iden3MessageEntity');
+
+        log.i('polygonId authentication - $network');
+        final isAuthenticated = await polygonId.authenticate(
+          iden3MessageEntity: iden3MessageEntity,
+          mnemonic: mnemonic!,
+          network: network,
+        );
+        log.i('isAuthenticated - $isAuthenticated');
+
+        if (isAuthenticated) {
+          emit(
+            state.copyWith(
+              status: isGenerateProof ? AppStatus.goBack : AppStatus.idle,
+              message: StateMessage.success(
+                messageHandler: ResponseMessage(
+                  isGenerateProof
+                      ? ResponseString
+                          .RESPONSE_STRING_successfullyGeneratingProof
+                      : ResponseString.RESPONSE_STRING_succesfullyAuthenticated,
+                ),
               ),
             ),
+          );
+        } else {
+          throw ResponseMessage(
+            isGenerateProof
+                ? ResponseString.RESPONSE_STRING_errorGeneratingProof
+                : ResponseString.RESPONSE_STRING_authenticationFailed,
+          );
+        }
+      } else if (iden3MessageEntity.messageType ==
+          Iden3MessageType.proofContractInvokeRequest) {
+        log.i('contractFunctionCall ');
+
+        final Iden3MessageEntity iden3MessageEntity =
+            await getIden3Message(message: state.scannedResponse!);
+
+        final currentAccount = walletCubit.state.currentAccount;
+
+        if (currentAccount == null) {
+          throw ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          );
+        }
+
+        if (currentAccount.blockchainType == BlockchainType.tezos) {
+          // TODO(bibash): throw correct error
+          print('Not compatible');
+          throw ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          );
+        }
+
+        final body = iden3MessageEntity.body as ContractFunctionCallBodyRequest;
+
+        final mnemonic =
+            await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+
+        final polygonIdNetwork =
+            await getSecureStorage.get(SecureStorageKeys.polygonIdNetwork);
+
+        String network = Parameters.POLYGON_MAIN_NETWORK;
+
+        if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+          network = Parameters.POLYGON_MAIN_NETWORK;
+        } else {
+          network = Parameters.POLYGON_TEST_NETWORK;
+        }
+
+        final walletAddress = currentAccount.walletAddress;
+        final hexdata = await polygonId.generateProofByContractFunctionCall(
+          contractIden3messageEntity: iden3MessageEntity,
+          mnemonic: mnemonic!,
+          network: network,
+          walletAddress: walletAddress,
+        );
+
+        log.i('hexdata - $hexdata');
+
+        final transaction = Transaction(
+          from: EthereumAddress.fromHex(currentAccount.walletAddress),
+          to: EthereumAddress.fromHex(body.transactionData.contractAddress),
+          value: EtherAmount.fromBigInt(EtherUnit.wei, BigInt.zero),
+          data: Uint8List.fromList(utf8.encode(hexdata)),
+        );
+
+        log.i('transaction - $transaction');
+
+        emit(
+          state.copyWith(
+            status: AppStatus.loading,
+            polygonAction: PolygonIdAction.contractFunctionCall,
+            transaction: transaction,
           ),
         );
       } else {
         throw ResponseMessage(
-          isGenerateProof
-              ? ResponseString.RESPONSE_STRING_errorGeneratingProof
-              : ResponseString.RESPONSE_STRING_authenticationFailed,
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
         );
       }
     } catch (e) {
@@ -494,11 +585,5 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       mnemonic: mnemonic,
       network: network,
     );
-  }
-
-  Future<void> generateProofByContractFunctionCall({
-    required String walletAddress,
-  }) async {
-    return;
   }
 }

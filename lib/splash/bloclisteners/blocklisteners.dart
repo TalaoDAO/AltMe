@@ -568,7 +568,6 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
             isValidCallback: () {
               context.read<PolygonIdCubit>().authenticateOrGenerateProof(
                     iden3MessageEntity: iden3MessageEntity,
-                    isGenerateProof: false,
                   );
             },
             restrictToBack: false,
@@ -580,10 +579,9 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
 
     if (state.polygonAction == PolygonIdAction.contractFunctionCall) {
       LoadingView().hide();
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: const StateMessage.error(
-          stringMessage: 'This feature is not available yet in our app.',
+      await Navigator.of(context).push<void>(
+        OperationPage.route(
+          connectionBridgeType: ConnectionBridgeType.polygonIdSendTranscation,
         ),
       );
     }

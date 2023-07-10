@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/home/home.dart';
+import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
@@ -11,6 +12,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:secure_storage/secure_storage.dart';
 import 'package:tezart/tezart.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -27,7 +29,9 @@ class OperationCubit extends Cubit<OperationState> {
     required this.nftCubit,
     required this.tokensCubit,
     required this.walletConnectCubit,
+    required this.polygonIdCubit,
     required this.connectedDappRepository,
+    required this.secureStorageProvider,
   }) : super(const OperationState());
 
   final WalletCubit walletCubit;
@@ -38,11 +42,11 @@ class OperationCubit extends Cubit<OperationState> {
   final NftCubit nftCubit;
   final TokensCubit tokensCubit;
   final WalletConnectCubit walletConnectCubit;
+  final PolygonIdCubit polygonIdCubit;
   final ConnectedDappRepository connectedDappRepository;
+  final SecureStorageProvider secureStorageProvider;
 
   final log = getLogger('OperationCubit');
-
-  //late WCClient? wcClient;
 
   Future<void> initialise(ConnectionBridgeType connectionBridgeType) async {
     if (isClosed) return;
@@ -71,6 +75,10 @@ class OperationCubit extends Cubit<OperationState> {
           }
 
           break;
+
+        case ConnectionBridgeType.polygonIdSendTranscation:
+          dAppName = 'Polygon Id';
+          break;
       }
 
       log.i('dAppName - $dAppName');
@@ -79,6 +87,7 @@ class OperationCubit extends Cubit<OperationState> {
 
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
+        case ConnectionBridgeType.polygonIdSendTranscation:
           await getUsdPrice(connectionBridgeType);
           break;
         case ConnectionBridgeType.walletconnect:
@@ -132,9 +141,14 @@ class OperationCubit extends Cubit<OperationState> {
           emit(state.copyWith(usdRate: xtzUsdPrice));
           break;
         case ConnectionBridgeType.walletconnect:
+        case ConnectionBridgeType.polygonIdSendTranscation:
           log.i('fetching evm USDprice');
 
-          final symbol = state.cryptoAccountData!.blockchainType.symbol;
+          var symbol = 'ETH';
+
+          if (connectionBridgeType == ConnectionBridgeType.walletconnect) {
+            symbol = state.cryptoAccountData!.blockchainType.symbol;
+          }
 
           final response = await dioClient.get(Urls.ethPrice(symbol))
               as Map<String, dynamic>;
@@ -212,11 +226,31 @@ class OperationCubit extends Cubit<OperationState> {
               1e6;
           break;
         case ConnectionBridgeType.walletconnect:
+          final CryptoAccountData transactionAccountData =
+              state.cryptoAccountData!;
+
           final EtherAmount ethAmount =
               walletConnectCubit.state.transaction!.value!;
           amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
 
-          final String web3RpcURL = await web3RpcMainnetInfuraURL();
+          late String web3RpcURL;
+
+          switch (transactionAccountData.blockchainType) {
+            case BlockchainType.tezos:
+              throw Exception();
+            case BlockchainType.ethereum:
+              web3RpcURL = await web3RpcMainnetInfuraURL();
+              break;
+            case BlockchainType.fantom:
+              web3RpcURL = FantomNetwork.mainNet().rpcNodeUrl;
+              break;
+            case BlockchainType.polygon:
+              web3RpcURL = PolygonNetwork.mainNet().rpcNodeUrl;
+              break;
+            case BlockchainType.binance:
+              web3RpcURL = BinanceNetwork.mainNet().rpcNodeUrl;
+              break;
+          }
           log.i('web3RpcURL - $web3RpcURL');
 
           final feeData = await MWeb3Client.estimateEthereumFee(
@@ -231,18 +265,29 @@ class OperationCubit extends Cubit<OperationState> {
 
           fee = MWeb3Client.formatEthAmount(amount: feeData);
           break;
+        case ConnectionBridgeType.polygonIdSendTranscation:
+          final web3RpcURL = await web3RpcMainnetInfuraURL();
+
+          log.i(polygonIdCubit.state.transaction);
+          final feeData = await MWeb3Client.estimateEthereumFee(
+            web3RpcURL: web3RpcURL,
+            sender: polygonIdCubit.state.transaction!.from!,
+            reciever: polygonIdCubit.state.transaction!.to!,
+            amount: polygonIdCubit.state.transaction!.value!,
+            data: utf8.decode(polygonIdCubit.state.transaction!.data!),
+          );
+
+          fee = MWeb3Client.formatEthAmount(amount: feeData);
+          amount = MWeb3Client.formatEthAmount(
+            amount: polygonIdCubit.state.transaction!.value!.getInWei,
+          );
+          break;
       }
 
       log.i('amount - $amount');
       log.i('fee - $fee');
 
-      emit(
-        state.copyWith(
-          status: AppStatus.idle,
-          amount: amount,
-          fee: fee,
-        ),
-      );
+      emit(state.copyWith(status: AppStatus.idle, amount: amount, fee: fee));
     } catch (e) {
       log.e('cost estimation failure , e: $e');
       if (e is MessageHandler) {
@@ -397,6 +442,32 @@ class OperationCubit extends Cubit<OperationState> {
           success = true;
 
           break;
+
+        case ConnectionBridgeType.polygonIdSendTranscation:
+          final currentAccount = walletCubit.state.currentAccount;
+
+          if (currentAccount == null) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
+
+          final String rpcUrl = await web3RpcMainnetInfuraURL();
+
+          await MWeb3Client.sendEthereumTransaction(
+            chainId: BlockchainType.ethereum.chainId,
+            web3RpcURL: rpcUrl,
+            privateKey: currentAccount.secretKey,
+            sender: polygonIdCubit.state.transaction!.from!,
+            reciever: polygonIdCubit.state.transaction!.to!,
+            amount: polygonIdCubit.state.transaction!.value!,
+            data: utf8.decode(polygonIdCubit.state.transaction!.data!),
+          );
+
+          success = true;
+
+          break;
       }
 
       if (success) {
@@ -472,6 +543,9 @@ class OperationCubit extends Cubit<OperationState> {
         log.i('walletconnect  connection rejected');
         walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
             .complete('Failed');
+        break;
+      case ConnectionBridgeType.polygonIdSendTranscation:
+        log.i('polygonIdSendTranscation rejected');
         break;
     }
 

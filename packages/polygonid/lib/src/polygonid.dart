@@ -492,6 +492,10 @@ class PolygonId {
       challenge: challenge,
     );
 
+    if (response.isEmpty) {
+      throw Exception('PROOF_CREATION_ERROR');
+    }
+
     final body =
         contractIden3messageEntity.body as ContractFunctionCallBodyRequest;
 
@@ -499,6 +503,15 @@ class PolygonId {
     final String to = body.transactionData.contractAddress;
     final Iden3commProofEntity proof = response.first;
 
+    final hexData = sendTransactionZK(to, proof);
+
+    return hexData;
+  }
+
+  Future<String> sendTransactionZK(
+    String to,
+    Iden3commProofEntity proof,
+  ) async {
     const ABI =
         '[ { "inputs": [ { "internalType": "uint64", "name": "requestId", "type": "uint64" }, { "internalType": "uint256[]", "name": "inputs", "type": "uint256[]" }, { "internalType": "uint256[2]", "name": "a", "type": "uint256[2]" }, { "internalType": "uint256[2][2]", "name": "b", "type": "uint256[2][2]" }, { "internalType": "uint256[2]", "name": "c", "type": "uint256[2]" } ], "name": "submitZKPResponse", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" } ]';
 

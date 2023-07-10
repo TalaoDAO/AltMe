@@ -92,6 +92,8 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           /// dApp saved onSessionConnect function in wallet connect cubit
 
           break;
+        case ConnectionBridgeType.polygonIdSendTranscation:
+          break;
       }
       emit(
         state.copyWith(
@@ -144,6 +146,8 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
             Errors.USER_REJECTED,
           ),
         );
+        break;
+      case ConnectionBridgeType.polygonIdSendTranscation:
         break;
     }
     emit(state.copyWith(appStatus: AppStatus.goBack));

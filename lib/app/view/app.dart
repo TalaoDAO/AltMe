@@ -136,6 +136,7 @@ class App extends StatelessWidget {
             polygonId: PolygonId(),
             credentialsCubit: context.read<CredentialsCubit>(),
             profileCubit: context.read<ProfileCubit>(),
+            walletCubit: context.read<WalletCubit>(),
           ),
         ),
         BlocProvider<ScanCubit>(

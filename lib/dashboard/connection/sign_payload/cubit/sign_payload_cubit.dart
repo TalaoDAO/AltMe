@@ -98,6 +98,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           }
           signingType = SigningType.raw;
           break;
+        case ConnectionBridgeType.polygonIdSendTranscation:
+          break;
       }
 
       log.i('payloadMessage - $payloadMessage');
@@ -122,6 +124,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             dAppName = savedDappData.sessionData!.peer.metadata.name;
           }
 
+          break;
+        case ConnectionBridgeType.polygonIdSendTranscation:
           break;
       }
 
@@ -294,6 +298,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           }
 
           break;
+        case ConnectionBridgeType.polygonIdSendTranscation:
+          break;
       }
 
       if (success) {
@@ -368,6 +374,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
         walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
             .complete('Failed');
+        break;
+      case ConnectionBridgeType.polygonIdSendTranscation:
         break;
     }
     emit(state.copyWith(status: AppStatus.goBack));
