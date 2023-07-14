@@ -69,51 +69,11 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
             .where((e) => e.blockchainType != BlockchainType.tezos)
             .toList();
 
-        final events = ['chainChanged', 'accountsChanged'];
-
-        for (final accounts in eVMAccounts) {
-          log.i(accounts.blockchainType);
-
-          log.i('registerEventEmitter');
-          for (final String event in events) {
-            _web3Wallet!.registerEventEmitter(
-              chainId: accounts.blockchainType.chain,
-              event: event,
-            );
-          }
-
-          registerAccount(accounts);
-
-          log.i('registerRequestHandler');
-          _web3Wallet!.registerRequestHandler(
-            chainId: accounts.blockchainType.chain,
-            method: Parameters.PERSONAL_SIGN,
-            handler: personalSign,
-          );
-          _web3Wallet!.registerRequestHandler(
-            chainId: accounts.blockchainType.chain,
-            method: Parameters.ETH_SIGN,
-            handler: ethSign,
-          );
-          _web3Wallet!.registerRequestHandler(
-            chainId: accounts.blockchainType.chain,
-            method: Parameters.ETH_SIGN_TRANSACTION,
-            handler: ethSignTransaction,
-          );
-          _web3Wallet!.registerRequestHandler(
-            chainId: accounts.blockchainType.chain,
-            method: Parameters.ETH_SIGN_TYPE_DATA,
-            handler: ethSignTypedData,
-          );
-          _web3Wallet!.registerRequestHandler(
-            chainId: accounts.blockchainType.chain,
-            method: Parameters.ETH_SIGN_TYPE_DATA_V4,
-            handler: ethSignTypedDataV4,
-          );
-          _web3Wallet!.registerRequestHandler(
-            chainId: accounts.blockchainType.chain,
-            method: Parameters.ETH_SEND_TRANSACTION,
-            handler: ethSendTransaction,
+        log.i('registering acconts');
+        for (final evm in eVMAccounts) {
+          _web3Wallet!.registerAccount(
+            chainId: evm.blockchainType.chain,
+            accountAddress: evm.walletAddress,
           );
         }
       }
@@ -126,6 +86,20 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       _web3Wallet!.onSessionProposalError.subscribe(_onSessionProposalError);
       _web3Wallet!.onSessionConnect.subscribe(_onSessionConnect);
       _web3Wallet!.onAuthRequest.subscribe(_onAuthRequest);
+
+      /// register request emitter and request handler for all supported evms
+
+      for (final blockchainType in BlockchainType.values) {
+        if (blockchainType == BlockchainType.tezos) {
+          continue;
+        }
+        log.i(blockchainType);
+        log.i('registerEventEmitter');
+        registerEventEmitter(blockchainType.chain);
+
+        log.i('registerRequestHandler');
+        registerRequestHandler(blockchainType.chain);
+      }
 
       log.i('web3wallet init');
       await _web3Wallet!.init();
@@ -143,11 +117,45 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     }
   }
 
-  void registerAccount(CryptoAccountData cryptoAccountData) {
-    log.i('registerAccount - $cryptoAccountData');
-    _web3Wallet!.registerAccount(
-      chainId: cryptoAccountData.blockchainType.chain,
-      accountAddress: cryptoAccountData.walletAddress,
+  void registerEventEmitter(String chain) {
+    for (final String event in Parameters.walletConnectEvents) {
+      _web3Wallet!.registerEventEmitter(
+        chainId: chain,
+        event: event,
+      );
+    }
+  }
+
+  void registerRequestHandler(String chain) {
+    _web3Wallet!.registerRequestHandler(
+      chainId: chain,
+      method: Parameters.PERSONAL_SIGN,
+      handler: personalSign,
+    );
+    _web3Wallet!.registerRequestHandler(
+      chainId: chain,
+      method: Parameters.ETH_SIGN,
+      handler: ethSign,
+    );
+    _web3Wallet!.registerRequestHandler(
+      chainId: chain,
+      method: Parameters.ETH_SIGN_TRANSACTION,
+      handler: ethSignTransaction,
+    );
+    _web3Wallet!.registerRequestHandler(
+      chainId: chain,
+      method: Parameters.ETH_SIGN_TYPE_DATA,
+      handler: ethSignTypedData,
+    );
+    _web3Wallet!.registerRequestHandler(
+      chainId: chain,
+      method: Parameters.ETH_SIGN_TYPE_DATA_V4,
+      handler: ethSignTypedDataV4,
+    );
+    _web3Wallet!.registerRequestHandler(
+      chainId: chain,
+      method: Parameters.ETH_SEND_TRANSACTION,
+      handler: ethSendTransaction,
     );
   }
 
@@ -196,7 +204,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       log.i(args);
       //sessions.value.add(args.session);
 
-      final savedDappData = SavedDappData(sessionData: args.session);
+      final savedDappData = SavedDappData(
+        sessionData: args.session,
+      );
 
       log.i(savedDappData.toJson());
       connectedDappRepository.insert(savedDappData);

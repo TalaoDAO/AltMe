@@ -45,4 +45,16 @@ class Parameters {
   static const ETH_SIGN_TYPE_DATA = 'eth_signTypedData';
   static const ETH_SEND_TRANSACTION = 'eth_sendTransaction';
   static const ETH_SIGN_TYPE_DATA_V4 = 'eth_signTypedData_v4';
+
+  static const walletConnectMethods = [
+    PERSONAL_SIGN,
+    ETH_SIGN,
+    ETH_SIGN,
+    ETH_SIGN_TRANSACTION,
+    ETH_SIGN_TYPE_DATA,
+    ETH_SEND_TRANSACTION,
+    ETH_SIGN_TYPE_DATA_V4,
+  ];
+
+  static const walletConnectEvents = ['chainChanged', 'accountsChanged'];
 }

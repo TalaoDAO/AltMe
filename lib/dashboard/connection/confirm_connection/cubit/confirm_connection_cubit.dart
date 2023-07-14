@@ -84,9 +84,38 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           final SessionProposalEvent? sessionProposalEvent =
               walletConnectState.sessionProposalEvent;
 
+          final eVMAccounts = walletCubit.state.cryptoAccount.data
+              .where((e) => e.blockchainType != BlockchainType.tezos)
+              .toList();
+
+          final accounts = <String>[];
+
+          final allowedNamespaces = [
+            ...sessionProposalEvent!
+                .params.optionalNamespaces['eip155']!.chains!,
+            ...sessionProposalEvent
+                .params.requiredNamespaces['eip155']!.chains!,
+          ];
+
+          log.i(allowedNamespaces);
+
+          for (final evm in eVMAccounts) {
+            if (allowedNamespaces.contains(evm.blockchainType.chain)) {
+              accounts.add('${evm.blockchainType.chain}:${evm.walletAddress}');
+            }
+          }
+
+          final walletNamespaces = {
+            'eip155': Namespace(
+              accounts: accounts,
+              methods: Parameters.walletConnectMethods,
+              events: Parameters.walletConnectEvents,
+            ),
+          };
+
           await walletConnectCubit.web3Wallet!.approveSession(
             id: sessionProposalEvent!.id,
-            namespaces: sessionProposalEvent.params.generatedNamespaces!,
+            namespaces: walletNamespaces,
           );
 
           /// dApp saved onSessionConnect function in wallet connect cubit

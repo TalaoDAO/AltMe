@@ -126,7 +126,7 @@ class ConfirmConnectionView extends StatelessWidget {
                     ),
                     const SizedBox(height: Sizes.spaceXLarge),
                     const Permissions(),
-                    const SizedBox(height: Sizes.spaceXLarge),
+                    const SizedBox(height: Sizes.spaceNormal),
                     if (connectionBridgeType ==
                         ConnectionBridgeType.walletconnect) ...[
                       Text(
@@ -134,12 +134,12 @@ class ConfirmConnectionView extends StatelessWidget {
                             .proposer.metadata.url,
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: Sizes.spaceLarge),
-                      Text(
-                        walletConnectCubit.state.sessionProposalEvent!.params
-                            .generatedNamespaces!
-                            .toString(),
-                      ),
+                      const SizedBox(height: Sizes.spaceNormal),
+                      // Text(
+                      //   walletConnectCubit.state.sessionProposalEvent!.params
+                      //       .generatedNamespaces!
+                      //       .toString(),
+                      // ),
                       // ListView.builder(
                       //   itemCount: walletConnectCubit
                       //       .state
@@ -199,11 +199,7 @@ class ConfirmConnectionView extends StatelessWidget {
                       //   },
                       // )
                     ],
-                    if (connectionBridgeType !=
-                        ConnectionBridgeType.walletconnect) ...[
-                      const SizedBox(height: Sizes.spaceXLarge),
-                      SelectAccount(connectionBridgeType: connectionBridgeType),
-                    ],
+                    SelectAccount(connectionBridgeType: connectionBridgeType),
                     const SizedBox(height: Sizes.spaceNormal),
                   ],
                 ),
