@@ -85,8 +85,13 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
               walletConnectCubit.state.parameters[1] as String,
             );
           } else if (walletConnectCubit.state.signType ==
-              Parameters.ETH_SIGN_TYPE_DATA) {
+                  Parameters.ETH_SIGN_TYPE_DATA ||
+              walletConnectCubit.state.signType ==
+                  Parameters.ETH_SIGN_TYPE_DATA_V4) {
             payloadMessage = walletConnectCubit.state.parameters[1] as String;
+          } else if (walletConnectCubit.state.signType ==
+              Parameters.ETH_SIGN_TRANSACTION) {
+            payloadMessage = jsonEncode(walletConnectCubit.state.parameters[0]);
           } else if (walletConnectCubit.state.signType ==
               Parameters.ETH_SIGN_TRANSACTION) {
             payloadMessage = jsonEncode(walletConnectCubit.state.parameters[0]);
@@ -207,6 +212,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           /// Extracting secret key
           if (walletConnectCubit.state.signType ==
                   Parameters.ETH_SIGN_TYPE_DATA ||
+              walletConnectCubit.state.signType ==
+                  Parameters.ETH_SIGN_TYPE_DATA_V4 ||
               walletConnectCubit.state.signType == Parameters.ETH_SIGN) {
             publicKey = walletConnectState.parameters[0].toString();
           } else if (walletConnectCubit.state.signType ==
@@ -253,7 +260,9 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
                 .complete('0x$signature');
             success = true;
           } else if (walletConnectCubit.state.signType ==
-              Parameters.ETH_SIGN_TYPE_DATA) {
+                  Parameters.ETH_SIGN_TYPE_DATA ||
+              walletConnectCubit.state.signType ==
+                  Parameters.ETH_SIGN_TYPE_DATA_V4) {
             final signTypedData = EthSigUtil.signTypedData(
               privateKey: currentAccount.secretKey,
               jsonData: state.payloadMessage!,

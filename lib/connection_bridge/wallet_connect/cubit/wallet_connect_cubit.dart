@@ -107,6 +107,11 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           );
           _web3Wallet!.registerRequestHandler(
             chainId: accounts.blockchainType.chain,
+            method: Parameters.ETH_SIGN_TYPE_DATA_V4,
+            handler: ethSignTypedDataV4,
+          );
+          _web3Wallet!.registerRequestHandler(
+            chainId: accounts.blockchainType.chain,
             method: Parameters.ETH_SEND_TRANSACTION,
             handler: ethSendTransaction,
           );
@@ -360,6 +365,48 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     return result;
   }
 
+  Future<String> ethSignTypedData(String topic, dynamic parameters) async {
+    log.i('received eth sign typed data request: $parameters');
+
+    log.i('completer initialise');
+    completer.add(Completer<String>());
+
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.signPayload,
+        parameters: parameters,
+        sessionTopic: topic,
+        signType: Parameters.ETH_SIGN_TYPE_DATA,
+      ),
+    );
+
+    final String result = await completer[completer.length - 1]!.future;
+    log.i('complete - $result');
+    completer.removeLast();
+    return result;
+  }
+
+  Future<String> ethSignTypedDataV4(String topic, dynamic parameters) async {
+    log.i('received eth sign typed data request: $parameters');
+
+    log.i('completer initialise');
+    completer.add(Completer<String>());
+
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.signPayload,
+        parameters: parameters,
+        sessionTopic: topic,
+        signType: Parameters.ETH_SIGN_TYPE_DATA_V4,
+      ),
+    );
+
+    final String result = await completer[completer.length - 1]!.future;
+    log.i('complete - $result');
+    completer.removeLast();
+    return result;
+  }
+
   Transaction getTransaction(dynamic parameters) {
     final EthereumTransaction ethTransaction = EthereumTransaction.fromJson(
       parameters[0] as Map<String, dynamic>,
@@ -400,27 +447,6 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     );
 
     return transaction;
-  }
-
-  Future<String> ethSignTypedData(String topic, dynamic parameters) async {
-    log.i('received eth sign typed data request: $parameters');
-
-    log.i('completer initialise');
-    completer.add(Completer<String>());
-
-    emit(
-      state.copyWith(
-        status: WalletConnectStatus.signPayload,
-        parameters: parameters,
-        sessionTopic: topic,
-        signType: Parameters.ETH_SIGN_TYPE_DATA,
-      ),
-    );
-
-    final String result = await completer[completer.length - 1]!.future;
-    log.i('complete - $result');
-    completer.removeLast();
-    return result;
   }
 
   Future<void> disconnectSession(String topic) async {

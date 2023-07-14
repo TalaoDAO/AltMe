@@ -44,4 +44,5 @@ class Parameters {
   static const ETH_SIGN_TRANSACTION = 'eth_signTransaction';
   static const ETH_SIGN_TYPE_DATA = 'eth_signTypedData';
   static const ETH_SEND_TRANSACTION = 'eth_sendTransaction';
+  static const ETH_SIGN_TYPE_DATA_V4 = 'eth_signTypedData_v4';
 }

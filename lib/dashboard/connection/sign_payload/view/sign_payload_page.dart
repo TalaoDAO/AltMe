@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -100,6 +102,36 @@ class _SignPayloadViewState extends State<SignPayloadView> {
         }
       },
       builder: (context, state) {
+        final walletConnectCubit = context.read<WalletConnectCubit>();
+
+        String message = '';
+
+        if (walletConnectCubit.state.signType ==
+                Parameters.ETH_SIGN_TYPE_DATA ||
+            walletConnectCubit.state.signType ==
+                Parameters.ETH_SIGN_TYPE_DATA_V4) {
+          final jsonData = jsonDecode(
+            walletConnectCubit.state.parameters[1] as String,
+          )['message'];
+
+          String output = '';
+
+          /// extracting message
+          jsonData.forEach((String key, dynamic value) {
+            if (value is Map) {
+              output += '$key:\n';
+              value.forEach((subKey, subValue) {
+                output += '$subKey: $subValue\n';
+              });
+            } else {
+              output += '$key: $value\n';
+            }
+          });
+          message = output;
+        } else {
+          message = state.payloadMessage ?? '';
+        }
+
         return WillPopScope(
           onWillPop: () async {
             context.read<SignPayloadCubit>().rejectSigning(
@@ -152,13 +184,13 @@ class _SignPayloadViewState extends State<SignPayloadView> {
                       ],
                       Text(
                         l10n.payload_to_sign,
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      const SizedBox(height: Sizes.spaceXSmall),
+                      const SizedBox(height: Sizes.spaceXLarge),
                       Text(
-                        state.payloadMessage ?? '',
-                        textAlign: TextAlign.center,
+                        message,
+                        textAlign: TextAlign.left,
                         style: Theme.of(context).textTheme.beaconPayload,
                       ),
                       const SizedBox(height: Sizes.spaceNormal),

@@ -135,64 +135,69 @@ class ConfirmConnectionView extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: Sizes.spaceLarge),
-                      ListView.builder(
-                        itemCount: walletConnectCubit
-                            .state
-                            .sessionProposalEvent!
-                            .params
-                            .requiredNamespaces
-                            .length,
-                        shrinkWrap: true,
-                        physics: const ScrollPhysics(),
-                        itemBuilder: (context, i) {
-                          final key = walletConnectCubit
-                              .state
-                              .sessionProposalEvent!
-                              .params
-                              .requiredNamespaces
-                              .keys
-                              .elementAt(i);
+                      Text(
+                        walletConnectCubit.state.sessionProposalEvent!.params
+                            .generatedNamespaces!
+                            .toString(),
+                      ),
+                      // ListView.builder(
+                      //   itemCount: walletConnectCubit
+                      //       .state
+                      //       .sessionProposalEvent!
+                      //       .params
+                      //       .requiredNamespaces
+                      //       .length,
+                      //   shrinkWrap: true,
+                      //   physics: const ScrollPhysics(),
+                      //   itemBuilder: (context, i) {
+                      //     final key = walletConnectCubit
+                      //         .state
+                      //         .sessionProposalEvent!
+                      //         .params
+                      //         .requiredNamespaces
+                      //         .keys
+                      //         .elementAt(i);
 
-                          final RequiredNamespace ns = walletConnectCubit
-                              .state
-                              .sessionProposalEvent!
-                              .params
-                              .requiredNamespaces[key]!;
+                      //     final RequiredNamespace ns = walletConnectCubit
+                      //         .state
+                      //         .sessionProposalEvent!
+                      //         .params
+                      //         .requiredNamespaces[key]!;
 
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('$key : '),
-                              if (ns.chains != null) ...[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text('Chains'),
-                                    Text(ns.chains!.toString()),
-                                  ],
-                                ),
-                                const SizedBox(height: Sizes.spaceSmall),
-                              ],
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text('Methods'),
-                                  Text(ns.methods.toString()),
-                                ],
-                              ),
-                              const SizedBox(height: Sizes.spaceSmall),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text('Events'),
-                                  Text(ns.events.toString()),
-                                ],
-                              ),
-                              const SizedBox(height: Sizes.spaceSmall),
-                            ],
-                          );
-                        },
-                      )
+                      //     return Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         Text('$key : '),
+                      //         if (ns.chains != null) ...[
+                      //           Column(
+                      //             crossAxisAlignment: CrossAxisAlignment.start,
+                      //             children: [
+                      //               const Text('Chains'),
+                      //               Text(ns.chains!.toString()),
+                      //             ],
+                      //           ),
+                      //           const SizedBox(height: Sizes.spaceSmall),
+                      //         ],
+                      //         Column(
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: [
+                      //             const Text('Methods'),
+                      //             Text(ns.methods.toString()),
+                      //           ],
+                      //         ),
+                      //         const SizedBox(height: Sizes.spaceSmall),
+                      //         Column(
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: [
+                      //             const Text('Events'),
+                      //             Text(ns.events.toString()),
+                      //           ],
+                      //         ),
+                      //         const SizedBox(height: Sizes.spaceSmall),
+                      //       ],
+                      //     );
+                      //   },
+                      // )
                     ],
                     if (connectionBridgeType !=
                         ConnectionBridgeType.walletconnect) ...[
