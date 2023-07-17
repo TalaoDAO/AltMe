@@ -106,6 +106,12 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                 } else {
                   LoadingView().hide();
                 }
+                if (scanState.message != null) {
+                  AlertMessage.showStateMessage(
+                    context: context,
+                    stateMessage: scanState.message!,
+                  );
+                }
               },
               child: credentialManifestState.filteredCredentialList.isEmpty
                   ? const RequiredCredentialNotFound()

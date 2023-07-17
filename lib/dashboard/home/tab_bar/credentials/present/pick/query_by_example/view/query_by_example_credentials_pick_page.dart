@@ -115,6 +115,12 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                 } else {
                   LoadingView().hide();
                 }
+                if (scanState.message != null) {
+                  AlertMessage.showStateMessage(
+                    context: context,
+                    stateMessage: scanState.message!,
+                  );
+                }
               },
               child: BasePage(
                 title: l10n.credentialPickTitle,

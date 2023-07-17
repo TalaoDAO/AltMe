@@ -770,10 +770,10 @@ packages:
     dependency: transitive
     description:
       name: ffigen
-      sha256: "94587f4c9699a4d0a25da95dc0b41903ddc69201d9bac3ca128ade8e67d56015"
+      sha256: "4bbf1fa19723a90578e991b9a95afca43bea856809890a26609618fa29087427"
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.10"
+    version: "7.2.11"
   file:
     dependency: transitive
     description:
@@ -1094,10 +1094,10 @@ packages:
     dependency: transitive
     description:
       name: get_it
-      sha256: "290fde3a86072e4b37dbb03c07bec6126f0ecc28dad403c12ffe2e5a2d751ab7"
+      sha256: "529de303c739fca98cd7ece5fca500d8ff89649f1bb4b4e94fb20954abcd7468"
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.0"
+    version: "7.6.0"
   glob:
     dependency: transitive
     description:
@@ -1995,10 +1995,10 @@ packages:
     dependency: transitive
     description:
       name: sembast
-      sha256: "24829715d11c2c437e67b413f29ff91b5325daa9632f851d44deeea7a29bde9e"
+      sha256: da8dd3774b6001bde09378da28e94c40bd4daecde32adb44837517c12e991321
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.3+1"
+    version: "3.4.9"
   share_plus:
     dependency: "direct main"
     description:
@@ -2617,10 +2617,10 @@ packages:
     dependency: transitive
     description:
       name: yaml_edit
-      sha256: "0b968021754d8fbd3e9c83563b538ee417d88b2cc587606da5615546b7ee033b"
+      sha256: "1579d4a0340a83cf9e4d580ea51a16329c916973bffd5bd4b45e911b25d46bfd"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
 sdks:
   dart: ">=3.0.0 <3.7.0"
   flutter: ">=3.10.0"
