@@ -165,6 +165,14 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
         Navigator.of(context).pop();
       }
     }
+
+    if (state.message != null) {
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: state.message!,
+      );
+    }
+
     if (state.status == ScanStatus.success) {
       /// should pop until dashboard. Doing such we don't have to consider
       /// different scanCubit scenarii (DIDAuth, scan or deeplink,
@@ -175,15 +183,9 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
         (Route<dynamic> route) => route.isFirst,
       );
     }
+
     if (state.status == ScanStatus.error) {
       Navigator.of(context).pop();
-    }
-
-    if (state.message != null) {
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: state.message!,
-      );
     }
   },
 );
