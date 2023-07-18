@@ -12,7 +12,11 @@ class AlertMessage {
     String message = '';
 
     if (messageHandler != null) {
-      message = messageHandler.getMessage(context, messageHandler);
+      if (messageHandler is NetworkException && messageHandler.data is String) {
+        message = messageHandler.data as String;
+      } else {
+        message = messageHandler.getMessage(context, messageHandler);
+      }
     }
 
     if (stringMessage != null) {

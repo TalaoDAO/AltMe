@@ -48,6 +48,12 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
         } else {
           LoadingView().hide();
         }
+        if (state.message != null) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: state.message!,
+          );
+        }
       },
       builder: (context, state) {
         final credentialModel = CredentialModel.fromJson(widget.preview);
