@@ -7,7 +7,7 @@ class EthereumTransaction {
   EthereumTransaction({
     required this.from,
     required this.to,
-    required this.value,
+    this.value,
     this.nonce,
     this.gasPrice,
     this.maxFeePerGas,
@@ -21,7 +21,7 @@ class EthereumTransaction {
       _$EthereumTransactionFromJson(json);
   final String from;
   final String to;
-  final String value;
+  final String? value;
   final String? nonce;
   final String? gasPrice;
   final String? maxFeePerGas;

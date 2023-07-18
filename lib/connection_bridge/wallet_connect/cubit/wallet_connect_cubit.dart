@@ -357,7 +357,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('completer initialise');
     completer.add(Completer<String>());
 
-    final transaction = getTransaction(parameters);
+    final Transaction transaction = getTransaction(parameters);
 
     emit(
       state.copyWith(
@@ -422,38 +422,50 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       parameters[0] as Map<String, dynamic>,
     );
 
+    final from = EthereumAddress.fromHex(ethTransaction.from);
+    final to = EthereumAddress.fromHex(ethTransaction.to);
+    final value = EtherAmount.fromBigInt(
+      EtherUnit.wei,
+      ethTransaction.value != null
+          ? BigInt.tryParse(ethTransaction.value!) ?? BigInt.zero
+          : BigInt.zero,
+    );
+    // final gasPrice = ethTransaction.gasPrice != null
+    //     ? EtherAmount.fromBigInt(
+    //         EtherUnit.gwei,
+    //         BigInt.tryParse(ethTransaction.gasPrice!) ?? BigInt.zero,
+    //       )
+    //     : null;
+    // final maxFeePerGas = ethTransaction.maxFeePerGas != null
+    //     ? EtherAmount.fromBigInt(
+    //         EtherUnit.gwei,
+    //         BigInt.tryParse(ethTransaction.maxFeePerGas!) ?? BigInt.zero,
+    //       )
+    //     : null;
+    // final maxPriorityFeePerGas = ethTransaction.maxPriorityFeePerGas != null
+    //     ? EtherAmount.fromBigInt(
+    //         EtherUnit.gwei,
+    //         BigInt.tryParse(ethTransaction.maxPriorityFeePerGas!) ??
+    //             BigInt.zero,
+    //       )
+    //     : null;
+    // final maxGas = int.tryParse(ethTransaction.gasLimit ?? '');
+    // final nonce = int.tryParse(ethTransaction.nonce ?? '');
+    final data = (ethTransaction.data != null && ethTransaction.data != '0x')
+        ? Uint8List.fromList(utf8.encode(ethTransaction.data!))
+        : null;
+
     // Construct a transaction from the EthereumTransaction object
     final transaction = Transaction(
-      from: EthereumAddress.fromHex(ethTransaction.from),
-      to: EthereumAddress.fromHex(ethTransaction.to),
-      value: EtherAmount.fromBigInt(
-        EtherUnit.wei,
-        BigInt.tryParse(ethTransaction.value) ?? BigInt.zero,
-      ),
-      gasPrice: ethTransaction.gasPrice != null
-          ? EtherAmount.fromBigInt(
-              EtherUnit.gwei,
-              BigInt.tryParse(ethTransaction.gasPrice!) ?? BigInt.zero,
-            )
-          : null,
-      maxFeePerGas: ethTransaction.maxFeePerGas != null
-          ? EtherAmount.fromBigInt(
-              EtherUnit.gwei,
-              BigInt.tryParse(ethTransaction.maxFeePerGas!) ?? BigInt.zero,
-            )
-          : null,
-      maxPriorityFeePerGas: ethTransaction.maxPriorityFeePerGas != null
-          ? EtherAmount.fromBigInt(
-              EtherUnit.gwei,
-              BigInt.tryParse(ethTransaction.maxPriorityFeePerGas!) ??
-                  BigInt.zero,
-            )
-          : null,
-      maxGas: int.tryParse(ethTransaction.gasLimit ?? ''),
-      nonce: int.tryParse(ethTransaction.nonce ?? ''),
-      data: (ethTransaction.data != null && ethTransaction.data != '0x')
-          ? Uint8List.fromList(hex.decode(ethTransaction.data!))
-          : null,
+      from: from,
+      to: to,
+      value: value,
+      // gasPrice: gasPrice,
+      // maxFeePerGas: maxFeePerGas,
+      // maxPriorityFeePerGas: maxPriorityFeePerGas,
+      // maxGas: maxGas,
+      // nonce: nonce,
+      data: data,
     );
 
     return transaction;

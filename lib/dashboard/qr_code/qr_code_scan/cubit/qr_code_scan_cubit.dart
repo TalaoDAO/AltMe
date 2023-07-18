@@ -89,7 +89,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         /// wallet connect
         await walletConnectCubit.connect(scannedResponse);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-      } else if (scannedResponse.startsWith('{"id":')) {
+      } else if (scannedResponse.startsWith('{"id":') ||
+          scannedResponse.startsWith('{"body":{"callbackUrl":"') ||
+          scannedResponse.startsWith('{"from": "did:polygonid:')) {
         /// polygon id
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
         await polygonIdCubit.polygonIdFunction(scannedResponse);
