@@ -323,21 +323,28 @@ class ScanCubit extends Cubit<ScanState> {
         'presentation': presentation,
       });
 
-      await client.post(url, data: formData);
+      final result = await client.post(url, data: formData);
 
       await presentationActivity(
         credentialModels: credentialsToBePresented,
         issuer: issuer,
       );
 
+      String? responseMessage;
+      if (result is String?) {
+        responseMessage = result;
+      }
       emit(
         state.copyWith(
           status: ScanStatus.success,
           message: StateMessage.success(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
-            ),
+            stringMessage: responseMessage,
+            messageHandler: responseMessage != null
+                ? null
+                : ResponseMessage(
+                    ResponseString
+                        .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+                  ),
           ),
         ),
       );
