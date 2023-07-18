@@ -16,7 +16,7 @@ dependencies:
       ref: fca8038d3c6378341a2e57d2cb1cceaba9f35561
   # beacon_flutter:
   #   path: ../beacon
-  bip39: ^1.0.6te
+  bip39: ^1.0.6
   bloc: ^8.1.2
   cached_network_image: ^3.2.3
   camera: ^0.10.5+2
