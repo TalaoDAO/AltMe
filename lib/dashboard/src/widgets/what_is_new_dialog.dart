@@ -76,6 +76,13 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'Wallet connect V2 integration',
+                                'Bug fixes',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.16.2',
+                              features: [
                                 'PolygonID mainnet integration',
                                 'PolygonID Twitter Attestations through Clique.Social',
                                 'DeFi compliance SBT for BNB Chain',
