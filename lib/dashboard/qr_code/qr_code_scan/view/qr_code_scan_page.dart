@@ -67,38 +67,26 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
           },
         ),
       ],
-      child: BasePage(
-        padding: EdgeInsets.zero,
+      child: QrCameraView(
         title: l10n.scanTitle,
-        titleAlignment: Alignment.topCenter,
-        scrollView: false,
-        extendBelow: true,
-        titleLeading: const BackLeadingButton(),
-        useSafeArea: false,
-        backgroundColor: Colors.black,
-        body: Center(
-          child: QrCameraView(
-            onImage: (InputImage inputImage) async {
-              if (!isScanned) {
-                final barcodes =
-                    await _barcodeScannerController.processImage(inputImage);
-                if (barcodes.isEmpty) {
-                  return;
-                }
+        onImage: (InputImage inputImage) async {
+          if (!isScanned) {
+            final barcodes =
+                await _barcodeScannerController.processImage(inputImage);
+            if (barcodes.isEmpty) {
+              return;
+            }
 
-                if (isScanned) return;
-                isScanned = true;
+            if (isScanned) return;
+            isScanned = true;
 
-                await context
-                    .read<QRCodeScanCubit>()
-                    .process(scannedResponse: barcodes.first.rawValue);
-              }
-            },
-            initialCameraLensDirection: _cameraLensDirection,
-            onCameraLensDirectionChanged: (value) =>
-                _cameraLensDirection = value,
-          ),
-        ),
+            await context
+                .read<QRCodeScanCubit>()
+                .process(scannedResponse: barcodes.first.rawValue);
+          }
+        },
+        initialCameraLensDirection: _cameraLensDirection,
+        onCameraLensDirectionChanged: (value) => _cameraLensDirection = value,
       ),
     );
   }

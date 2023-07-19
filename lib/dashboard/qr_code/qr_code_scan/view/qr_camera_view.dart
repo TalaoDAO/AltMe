@@ -1,19 +1,25 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:altme/app/app.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 
 class QrCameraView extends StatefulWidget {
-  const QrCameraView(
-      {super.key,
-      required this.onImage,
-      this.onCameraFeedReady,
-      this.onDetectorViewModeChanged,
-      this.onCameraLensDirectionChanged,
-      this.initialCameraLensDirection = CameraLensDirection.back});
+  const QrCameraView({
+    super.key,
+    required this.title,
+    required this.onImage,
+    this.onCameraFeedReady,
+    this.onDetectorViewModeChanged,
+    this.onCameraLensDirectionChanged,
+    this.initialCameraLensDirection = CameraLensDirection.back,
+  });
 
+  final String title;
   final Function(InputImage inputImage) onImage;
   final VoidCallback? onCameraFeedReady;
   final VoidCallback? onDetectorViewModeChanged;
@@ -39,7 +45,6 @@ class _QrCameraViewState extends State<QrCameraView> {
   @override
   void initState() {
     super.initState();
-
     _initialize();
   }
 
@@ -54,7 +59,7 @@ class _QrCameraViewState extends State<QrCameraView> {
       }
     }
     if (_cameraIndex != -1) {
-      _startLiveFeed();
+      unawaited(_startLiveFeed());
     }
   }
 
@@ -66,27 +71,33 @@ class _QrCameraViewState extends State<QrCameraView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _liveFeedBody());
-  }
-
-  Widget _liveFeedBody() {
     if (_cameras.isEmpty) return Container();
     if (_controller == null) return Container();
     if (_controller?.value.isInitialized == false) return Container();
-    return ColoredBox(
-      color: Colors.black,
-      child: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Center(
-            child: _changingCameraLens
-                ? Container()
-                : CameraPreview(
-                    _controller!,
-                    child: null,
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        title: Text(
+          widget.title,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.appBar,
+        ),
+        leading: const BackLeadingButton(),
+        backgroundColor: Theme.of(context).colorScheme.background,
+      ),
+      body: ColoredBox(
+        color: Theme.of(context).colorScheme.background,
+        child: Center(
+          child: _changingCameraLens
+              ? Container()
+              : CameraPreview(
+                  _controller!,
+                  child: CustomPaint(
+                    painter: BlurPainter(),
+                    child: Container(),
                   ),
-          )
-        ],
+                ),
+        ),
       ),
     );
   }
@@ -210,29 +221,39 @@ class _QrCameraViewState extends State<QrCameraView> {
   }
 }
 
-class SquarePainter extends CustomPainter {
+class BlurPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final double squareLength = 100;
-    final double borderWidth = 3;
-    final double borderRadius = 5;
+    // Create a Rect to represent the entire canvas
+    final Rect rect = Offset.zero & size;
 
-    final Offset center = size.center(Offset.zero);
-    final Rect squareRect = Rect.fromCenter(
-      center: center,
-      width: squareLength,
-      height: squareLength,
+    // Create a Paint object for the blur effect
+    final Paint blurPaint = Paint();
+    blurPaint.color = Colors.black.withOpacity(0.5);
+
+    // Calculate the size of the middle square
+    final double squareSize = size.width * 0.8;
+    final double squareOffsetX = (size.width - squareSize) / 2;
+    final double squareOffsetY = (size.height - squareSize) / 2;
+    final Rect middleSquare = Rect.fromLTWH(
+      squareOffsetX,
+      squareOffsetY,
+      squareSize,
+      squareSize,
     );
 
-    final Paint borderPaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = borderWidth;
+    // Create a Path object for the middle square
+    final Path squarePath = Path()..addRect(middleSquare);
 
-    final RRect squareRRect =
-        RRect.fromRectAndRadius(squareRect, Radius.circular(borderRadius));
+    // Create a Path object for the entire canvas
+    final Path canvasPath = Path()..addRect(rect);
 
-    canvas.drawRRect(squareRRect, borderPaint);
+    // Subtract the middle square path from the canvas path
+    final Path blurredPath =
+        Path.combine(PathOperation.difference, canvasPath, squarePath);
+
+    // Draw the blurred path on the canvas
+    canvas.drawPath(blurredPath, blurPaint);
   }
 
   @override

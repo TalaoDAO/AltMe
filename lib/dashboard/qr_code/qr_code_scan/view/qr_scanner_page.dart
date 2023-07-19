@@ -33,45 +33,25 @@ class _QrScannerPageState extends State<QrScannerPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BasePage(
-      padding: EdgeInsets.zero,
+    return QrCameraView(
       title: l10n.scanTitle,
-      scrollView: false,
-      extendBelow: true,
-      titleLeading: const BackLeadingButton(),
-      body: SafeArea(
-        child: Center(
-          child: Container(
-            margin: const EdgeInsets.only(bottom: Sizes.appBarHeight),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: SizedBox.square(
-                dimension: MediaQuery.of(context).size.shortestSide * 0.8,
-                child: QrCameraView(
-                  onImage: (InputImage inputImage) async {
-                    if (!isScanned) {
-                      final barcodes = await _barcodeScannerController
-                          .processImage(inputImage);
-                      if (barcodes.isEmpty) {
-                        return;
-                      }
+      onImage: (InputImage inputImage) async {
+        if (!isScanned) {
+          final barcodes =
+              await _barcodeScannerController.processImage(inputImage);
+          if (barcodes.isEmpty) {
+            return;
+          }
 
-                      if (isScanned) return;
-                      isScanned = true;
+          if (isScanned) return;
+          isScanned = true;
 
-                      await _barcodeScannerController.close();
-                      Navigator.of(context).pop(barcodes.first.rawValue);
-                    }
-                  },
-                  initialCameraLensDirection: _cameraLensDirection,
-                  onCameraLensDirectionChanged: (value) =>
-                      _cameraLensDirection = value,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+          await _barcodeScannerController.close();
+          Navigator.of(context).pop(barcodes.first.rawValue);
+        }
+      },
+      initialCameraLensDirection: _cameraLensDirection,
+      onCameraLensDirectionChanged: (value) => _cameraLensDirection = value,
     );
   }
 }
