@@ -3,9 +3,10 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/route/route_name.dart';
 import 'package:altme/scan/scan.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 
 class QrCodeScanPage extends StatefulWidget {
   const QrCodeScanPage({super.key});
@@ -20,19 +21,17 @@ class QrCodeScanPage extends StatefulWidget {
 }
 
 class _QrCodeScanPageState extends State<QrCodeScanPage> {
-  final qrKey = GlobalKey(debugLabel: 'QR');
-
-  MobileScannerController scannerController = MobileScannerController(
-    formats: [BarcodeFormat.qrCode],
-  );
-
-  bool isScanned = false;
+  final BarcodeScanner _barcodeScannerController =
+      BarcodeScanner(formats: [BarcodeFormat.qrCode]);
 
   @override
   void dispose() {
+    _barcodeScannerController.close();
     super.dispose();
-    scannerController.dispose();
   }
+
+  bool isScanned = false;
+  var _cameraLensDirection = CameraLensDirection.back;
 
   @override
   Widget build(BuildContext context) {
@@ -75,64 +74,35 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
         scrollView: false,
         extendBelow: true,
         titleLeading: const BackLeadingButton(),
-        titleTrailing: IconButton(
-          color: Colors.white,
-          icon: ValueListenableBuilder(
-            valueListenable: scannerController.torchState,
-            builder: (context, state, child) {
-              switch (state) {
-                case TorchState.off:
-                  return const Icon(Icons.flash_off, color: Colors.grey);
-                case TorchState.on:
-                  return const Icon(Icons.flash_on, color: Colors.yellow);
+        useSafeArea: false,
+        backgroundColor: Colors.black,
+        body: Center(
+          child: QrCameraView(
+            onImage: (InputImage inputImage) async {
+              if (!isScanned) {
+                final barcodes =
+                    await _barcodeScannerController.processImage(inputImage);
+                if (barcodes.isEmpty) {
+                  return;
+                }
+
+                if (isScanned) return;
+                isScanned = true;
+
+                await context
+                    .read<QRCodeScanCubit>()
+                    .process(scannedResponse: barcodes.first.rawValue);
               }
             },
-          ),
-          iconSize: 32,
-          onPressed: () => scannerController.toggleTorch(),
-        ),
-        body: SafeArea(
-          child: Center(
-            child: Container(
-              margin: const EdgeInsets.only(bottom: Sizes.appBarHeight),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: SizedBox.square(
-                  dimension: MediaQuery.of(context).size.shortestSide * 0.8,
-                  child: MobileScanner(
-                    key: qrKey,
-                    controller: scannerController,
-                    onDetect: (capture) {
-                      final List<Barcode> qrcodes = capture.barcodes;
-                      final Barcode qrcode = qrcodes[0];
-                      for (final barcode in qrcodes) {
-                        debugPrint('Barcode found! ${barcode.rawValue}');
-                      }
-                      if (qrcode.rawValue == null) {
-                        context.read<QRCodeScanCubit>().emitError(
-                              ResponseMessage(
-                                ResponseString
-                                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-                              ),
-                            );
-                      } else {
-                        if (!isScanned) {
-                          isScanned = true;
-                          final String code = qrcode.rawValue!;
-                          context
-                              .read<QRCodeScanCubit>()
-                              .process(scannedResponse: code);
-                          scannerController.stop();
-                        }
-                      }
-                    },
-                  ),
-                ),
-              ),
-            ),
+            initialCameraLensDirection: _cameraLensDirection,
+            onCameraLensDirectionChanged: (value) =>
+                _cameraLensDirection = value,
           ),
         ),
       ),
     );
   }
 }
+
+
+//qr is scanning twice

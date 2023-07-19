@@ -1,7 +1,9 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 
 class QrScannerPage extends StatefulWidget {
   const QrScannerPage({super.key});
@@ -16,17 +18,17 @@ class QrScannerPage extends StatefulWidget {
 }
 
 class _QrScannerPageState extends State<QrScannerPage> {
-  final qrKey = GlobalKey(debugLabel: 'TokenQR');
-
-  MobileScannerController scannerController = MobileScannerController(
-    formats: [BarcodeFormat.qrCode],
-  );
+  final BarcodeScanner _barcodeScannerController =
+      BarcodeScanner(formats: [BarcodeFormat.qrCode]);
 
   @override
   void dispose() {
+    _barcodeScannerController.close();
     super.dispose();
-    scannerController.dispose();
   }
+
+  bool isScanned = false;
+  var _cameraLensDirection = CameraLensDirection.back;
 
   @override
   Widget build(BuildContext context) {
@@ -37,22 +39,6 @@ class _QrScannerPageState extends State<QrScannerPage> {
       scrollView: false,
       extendBelow: true,
       titleLeading: const BackLeadingButton(),
-      titleTrailing: IconButton(
-        color: Colors.white,
-        icon: ValueListenableBuilder(
-          valueListenable: scannerController.torchState,
-          builder: (context, state, child) {
-            switch (state) {
-              case TorchState.off:
-                return const Icon(Icons.flash_off, color: Colors.grey);
-              case TorchState.on:
-                return const Icon(Icons.flash_on, color: Colors.yellow);
-            }
-          },
-        ),
-        iconSize: 32,
-        onPressed: () => scannerController.toggleTorch(),
-      ),
       body: SafeArea(
         child: Center(
           child: Container(
@@ -61,21 +47,25 @@ class _QrScannerPageState extends State<QrScannerPage> {
               borderRadius: BorderRadius.circular(15),
               child: SizedBox.square(
                 dimension: MediaQuery.of(context).size.shortestSide * 0.8,
-                child: MobileScanner(
-                  key: qrKey,
-                  fit: BoxFit.cover,
-                  controller: scannerController,
-                  onDetect: (capture) {
-                    final List<Barcode> qrcodes = capture.barcodes;
-                    final Barcode qrcode = qrcodes[0];
-                    if (qrcode.rawValue == null) {
-                      Navigator.of(context).pop();
-                    } else {
-                      final String code = qrcode.rawValue!;
-                      scannerController.stop();
-                      Navigator.of(context).pop(code);
+                child: QrCameraView(
+                  onImage: (InputImage inputImage) async {
+                    if (!isScanned) {
+                      final barcodes = await _barcodeScannerController
+                          .processImage(inputImage);
+                      if (barcodes.isEmpty) {
+                        return;
+                      }
+
+                      if (isScanned) return;
+                      isScanned = true;
+
+                      await _barcodeScannerController.close();
+                      Navigator.of(context).pop(barcodes.first.rawValue);
                     }
                   },
+                  initialCameraLensDirection: _cameraLensDirection,
+                  onCameraLensDirectionChanged: (value) =>
+                      _cameraLensDirection = value,
                 ),
               ),
             ),
