@@ -8,7 +8,6 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 class ConfirmConnectionPage extends StatelessWidget {
   const ConfirmConnectionPage({

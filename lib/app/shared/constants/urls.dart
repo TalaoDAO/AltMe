@@ -51,6 +51,9 @@ class Urls {
   static const String proofOfTwitterStatsUrl =
       'https://issuer.talao.co/credential-manifest/polygonid/ProofOfTwitterStats';
 
+  static const String civicPassCredentialUrl =
+      'https://issuer.talao.co/credential-manifest/polygonid/civicpasscredential';
+
   static const String chainbornMembershipCardUrl =
       'https://issuer.talao.co/chainborn/membershipcard/';
 

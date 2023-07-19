@@ -447,6 +447,11 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         final response = await client.get(Urls.proofOfTwitterStatsUrl);
         credentialManifest =
             CredentialManifest.fromJson(response as Map<String, dynamic>);
+      } else if (claimEntity.type ==
+          CredentialSubjectType.civicPassCredential.name) {
+        final response = await client.get(Urls.civicPassCredentialUrl);
+        credentialManifest =
+            CredentialManifest.fromJson(response as Map<String, dynamic>);
       }
     } catch (e) {
       log.e('can not get the credntials manifest for polygon error: $e');

@@ -84,6 +84,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.euDiplomaCard:
       case CredentialSubjectType.euVerifiableId:
       case CredentialSubjectType.proofOfTwitterStats:
+      case CredentialSubjectType.civicPassCredential:
         return Colors.white;
     }
   }
@@ -157,6 +158,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.kycAgeCredential:
       case CredentialSubjectType.kycCountryOfResidence:
       case CredentialSubjectType.proofOfTwitterStats:
+      case CredentialSubjectType.civicPassCredential:
         return Icons.perm_identity;
     }
   }
@@ -288,6 +290,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'KYCCountryOfResidenceCredential';
       case CredentialSubjectType.proofOfTwitterStats:
         return 'ProofOfTwitterStats';
+      case CredentialSubjectType.civicPassCredential:
+        return 'CivicPassCredential';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -411,6 +415,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return KYCCountryOfResidenceModel.fromJson(json);
       case CredentialSubjectType.proofOfTwitterStats:
         return ProofOfTwitterStatsModel.fromJson(json);
+      case CredentialSubjectType.civicPassCredential:
+        return CivicPassCredentialModel.fromJson(json);
     }
   }
 
@@ -611,6 +617,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'KYC Country of Residence';
       case CredentialSubjectType.proofOfTwitterStats:
         return 'Proof Of Twitter Stats';
+      case CredentialSubjectType.civicPassCredential:
+        return 'Civic Pass Credential';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -619,7 +627,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
   bool get weCanRemoveItIfCredentialExist {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
-        return true;
       case CredentialSubjectType.bloometaPass:
         return true;
       case CredentialSubjectType.troopezPass:
@@ -732,6 +739,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return false;
       case CredentialSubjectType.kycCountryOfResidence:
       case CredentialSubjectType.proofOfTwitterStats:
+      case CredentialSubjectType.civicPassCredential:
         return false;
     }
   }
@@ -853,6 +861,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 0;
       case CredentialSubjectType.kycCountryOfResidence:
       case CredentialSubjectType.proofOfTwitterStats:
+      case CredentialSubjectType.civicPassCredential:
         return 0;
     }
   }

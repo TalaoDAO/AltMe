@@ -82,6 +82,13 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                     issuerName: '',
                     value: '',
                   );
+                } else if (credentialSubjectType ==
+                    CredentialSubjectType.civicPassCredential) {
+                  widget = const CredentialBaseWidget(
+                    cardBackgroundImagePath: ImageStrings.civicPassCard,
+                    issuerName: 'CIVIC',
+                    value: '',
+                  );
                 } else {
                   widget = DefaultCredentialListWidget(
                     credentialModel: CredentialModel(

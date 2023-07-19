@@ -12,6 +12,7 @@ export 'bloometa/bloometa_pass_model.dart';
 export 'bunny_pass/bunny_pass_model.dart';
 export 'certificate_of_employment/certificate_of_employment_model.dart';
 export 'chainborn_membership/chainborn_membership_model.dart';
+export 'civic_pass_credential/civic_pass_credential_model.dart';
 export 'credential/credential.dart';
 export 'credential/evidence.dart';
 export 'credential/proof.dart';

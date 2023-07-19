@@ -304,6 +304,7 @@ class DiscoverDummyCredential extends Equatable {
       case CredentialSubjectType.kycAgeCredential:
       case CredentialSubjectType.kycCountryOfResidence:
       case CredentialSubjectType.proofOfTwitterStats:
+      case CredentialSubjectType.civicPassCredential:
     }
 
     return DiscoverDummyCredential(

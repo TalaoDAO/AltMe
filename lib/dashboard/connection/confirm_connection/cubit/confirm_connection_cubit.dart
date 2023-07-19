@@ -114,7 +114,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           };
 
           await walletConnectCubit.web3Wallet!.approveSession(
-            id: sessionProposalEvent!.id,
+            id: sessionProposalEvent.id,
             namespaces: walletNamespaces,
           );
 

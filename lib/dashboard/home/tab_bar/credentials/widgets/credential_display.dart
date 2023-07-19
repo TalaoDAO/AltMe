@@ -299,6 +299,9 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.proofOfTwitterStats:
         return ProofOfTwitterStatsWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.civicPassCredential:
+        return CivicPassCredentialWidget(credentialModel: credentialModel);
     }
   }
 }
