@@ -228,6 +228,19 @@ class WalletCubit extends Cubit<WalletState> {
             showStatus: showStatus,
           ),
         );
+
+        /// Ethereum at start
+        cryptoAccountDataList.add(
+          await _createBlockchainAccount(
+            accountName: accountName,
+            mnemonicOrKey: mnemonicOrKey,
+            isImported: isImported,
+            isSecretKey: isSecretKey,
+            blockchainType: BlockchainType.ethereum,
+            totalAccountsYet: accountsCount + 3,
+            showStatus: showStatus,
+          ),
+        );
       }
     }
 
