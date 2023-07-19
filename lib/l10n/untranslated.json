@@ -834,7 +834,8 @@
     "approve",
     "noInformationWillBeSharedFromThisCredentialMessage",
     "burn",
-    "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT"
+    "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT",
+    "pleaseAddXtoConnectToTheDapp"
   ],
 
   "es": [
@@ -1672,7 +1673,8 @@
     "approve",
     "noInformationWillBeSharedFromThisCredentialMessage",
     "burn",
-    "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT"
+    "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT",
+    "pleaseAddXtoConnectToTheDapp"
   ],
 
   "fr": [
@@ -1813,7 +1815,8 @@
     "approve",
     "noInformationWillBeSharedFromThisCredentialMessage",
     "burn",
-    "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT"
+    "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT",
+    "pleaseAddXtoConnectToTheDapp"
   ],
 
   "it": [
@@ -2651,6 +2654,7 @@
     "approve",
     "noInformationWillBeSharedFromThisCredentialMessage",
     "burn",
-    "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT"
+    "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT",
+    "pleaseAddXtoConnectToTheDapp"
   ]
 }

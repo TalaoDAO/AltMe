@@ -150,7 +150,11 @@ class NetworkException with MessageHandler {
   }
 
   @override
-  String getMessage(BuildContext context, MessageHandler messageHandler) {
+  String getMessage(
+    BuildContext context,
+    MessageHandler messageHandler, {
+    String? injectedMessage,
+  }) {
     if (messageHandler is NetworkException) {
       switch (messageHandler.message) {
         case NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED:

@@ -196,6 +196,45 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   void _onSessionProposalError(SessionProposalErrorEvent? args) {
     log.i('onSessionProposalError');
     log.i(args);
+    final requiredChains = args?.requiredNamespaces['eip155']?.chains;
+
+    if (requiredChains != null && requiredChains.isNotEmpty) {
+      final requiredChain = requiredChains[0];
+
+      String value = requiredChain;
+
+      for (final evm in BlockchainType.values) {
+        if (evm == BlockchainType.tezos) continue;
+
+        if (evm.chain == value) {
+          value = evm.name;
+          break;
+        }
+      }
+      emit(
+        state.copyWith(
+          status: WalletConnectStatus.error,
+          message: StateMessage.error(
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp,
+            ),
+            injectedMessage: value,
+          ),
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          status: WalletConnectStatus.error,
+          message: StateMessage.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   void _onSessionConnect(SessionConnect? args) {

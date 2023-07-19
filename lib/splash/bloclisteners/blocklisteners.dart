@@ -470,6 +470,13 @@ final walletConnectBlocListener =
           ),
         );
       }
+
+      if (state.message != null) {
+        AlertMessage.showStateMessage(
+          context: context,
+          stateMessage: state.message!,
+        );
+      }
     } catch (e) {
       log.e(e);
     }

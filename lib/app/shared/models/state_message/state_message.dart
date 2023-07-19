@@ -10,6 +10,7 @@ class StateMessage extends Equatable {
     this.type = MessageType.error,
     this.messageHandler,
     this.stringMessage,
+    this.injectedMessage,
     this.showDialog = false,
   });
 
@@ -19,24 +20,28 @@ class StateMessage extends Equatable {
   const StateMessage.error({
     this.messageHandler,
     this.stringMessage,
+    this.injectedMessage,
     this.showDialog = false,
   }) : type = MessageType.error;
 
   const StateMessage.warning({
     this.messageHandler,
     this.stringMessage,
+    this.injectedMessage,
     this.showDialog = false,
   }) : type = MessageType.warning;
 
   const StateMessage.info({
     this.messageHandler,
     this.stringMessage,
+    this.injectedMessage,
     this.showDialog = false,
   }) : type = MessageType.info;
 
   const StateMessage.success({
     this.messageHandler,
     this.stringMessage,
+    this.injectedMessage,
     this.showDialog = false,
   }) : type = MessageType.success;
 
@@ -44,10 +49,12 @@ class StateMessage extends Equatable {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? messageHandler;
   final String? stringMessage;
+  final String? injectedMessage;
   final bool showDialog;
 
   Map<String, dynamic> toJson() => _$StateMessageToJson(this);
 
   @override
-  List<Object?> get props => [type, messageHandler, stringMessage, showDialog];
+  List<Object?> get props =>
+      [type, messageHandler, stringMessage, injectedMessage, showDialog];
 }

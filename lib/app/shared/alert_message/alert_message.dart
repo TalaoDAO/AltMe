@@ -9,13 +9,18 @@ class AlertMessage {
   }) {
     final MessageHandler? messageHandler = stateMessage.messageHandler;
     final String? stringMessage = stateMessage.stringMessage;
+    final String? injectedMessage = stateMessage.injectedMessage;
     String message = '';
 
     if (messageHandler != null) {
       if (messageHandler is NetworkException && messageHandler.data is String) {
         message = messageHandler.data as String;
       } else {
-        message = messageHandler.getMessage(context, messageHandler);
+        message = messageHandler.getMessage(
+          context,
+          messageHandler,
+          injectedMessage: injectedMessage,
+        );
       }
     }
 

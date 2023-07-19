@@ -910,5 +910,12 @@
   "approve": "Approve",
   "noInformationWillBeSharedFromThisCredentialMessage": "No information will be shared from this credential (Zero Knowledge Proof).",
   "burn": "Burn",
-  "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT": "Do you really want to burn this NFT ?"
+  "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT": "Do you really want to burn this NFT ?",
+  "pleaseAddXtoConnectToTheDapp": "Please add {chain} account to connect to the dapp.",
+  "@pleaseAddXtoConnectToTheDapp": {
+    "description": "",
+    "placeholders": {
+      "chain": {}
+    }
+  }
 }

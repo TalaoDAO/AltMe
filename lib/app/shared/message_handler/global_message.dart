@@ -367,4 +367,6 @@ class GlobalMessage {
   String get RESPONSE_STRING_errorGeneratingProof => l10n.errorGeneratingProof;
   String get RESPONSE_STRING_successfullyGeneratingProof =>
       l10n.successfullyGeneratingProof;
+  String RESPONSE_STRING_pleaseAddXtoConnectToTheDapp(String value) =>
+      l10n.pleaseAddXtoConnectToTheDapp(value);
 }

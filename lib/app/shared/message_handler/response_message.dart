@@ -7,7 +7,11 @@ class ResponseMessage with MessageHandler {
   final ResponseString message;
 
   @override
-  String getMessage(BuildContext context, MessageHandler messageHandler) {
+  String getMessage(
+    BuildContext context,
+    MessageHandler messageHandler, {
+    String? injectedMessage,
+  }) {
     if (messageHandler is ResponseMessage) {
       switch (messageHandler.message) {
         case ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard:
@@ -63,13 +67,13 @@ class ResponseMessage with MessageHandler {
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_FAILED_TO_CREATE_SELF_ISSUED_CREDENTIAL:
+              .RESPONSE_STRING_FAILED_TO_CREATE_SELF_ISSUED_CREDENTIAL:
           return ResponseString
               .RESPONSE_STRING_FAILED_TO_CREATE_SELF_ISSUED_CREDENTIAL
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL:
+              .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL:
           return ResponseString
               .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL
               .localise(context);
@@ -101,25 +105,25 @@ class ResponseMessage with MessageHandler {
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE:
+              .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE:
           return ResponseString
               .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE:
+              .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE:
           return ResponseString
               .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_RECOVERY_CREDENTIAL_AUTH_ERROR_MESSAGE:
+              .RESPONSE_STRING_RECOVERY_CREDENTIAL_AUTH_ERROR_MESSAGE:
           return ResponseString
               .RESPONSE_STRING_RECOVERY_CREDENTIAL_AUTH_ERROR_MESSAGE
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_RECOVERY_CREDENTIAL_DEFAULT_ERROR_MESSAGE:
+              .RESPONSE_STRING_RECOVERY_CREDENTIAL_DEFAULT_ERROR_MESSAGE:
           return ResponseString
               .RESPONSE_STRING_RECOVERY_CREDENTIAL_DEFAULT_ERROR_MESSAGE
               .localise(context);
@@ -129,13 +133,13 @@ class ResponseMessage with MessageHandler {
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE:
+              .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE:
           return ResponseString
               .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING:
+              .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING:
           return ResponseString
               .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING
               .localise(context);
@@ -149,13 +153,13 @@ class ResponseMessage with MessageHandler {
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER:
+              .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER:
           return ResponseString
               .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL:
+              .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL:
           return ResponseString
               .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL
               .localise(context);
@@ -169,13 +173,13 @@ class ResponseMessage with MessageHandler {
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE:
+              .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE:
           return ResponseString
               .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER:
+              .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER:
           return ResponseString
               .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER
               .localise(context);
@@ -185,7 +189,7 @@ class ResponseMessage with MessageHandler {
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_FAILED_TO_SAVE_MNEMONIC_PLEASE_TRY_AGAIN:
+              .RESPONSE_STRING_FAILED_TO_SAVE_MNEMONIC_PLEASE_TRY_AGAIN:
           return ResponseString
               .RESPONSE_STRING_FAILED_TO_SAVE_MNEMONIC_PLEASE_TRY_AGAIN
               .localise(context);
@@ -215,7 +219,7 @@ class ResponseMessage with MessageHandler {
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY:
+              .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY:
           return ResponseString
               .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY
               .localise(context);
@@ -233,7 +237,7 @@ class ResponseMessage with MessageHandler {
               .localise(context);
 
         case ResponseString
-            .RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE:
+              .RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE:
           return ResponseString
               .RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE
               .localise(context);
@@ -671,6 +675,12 @@ class ResponseMessage with MessageHandler {
           return ResponseString.RESPONSE_STRING_successfullyGeneratingProof
               .localise(
             context,
+          );
+        case ResponseString.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp:
+          return ResponseString.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp
+              .localise(
+            context,
+            injectedMessage: injectedMessage,
           );
       }
     }
