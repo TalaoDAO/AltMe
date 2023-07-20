@@ -16,24 +16,37 @@ class CivicPassCredentialWidget extends StatelessWidget {
     // final civicPassCredentialModel = credentialModel
     //    .credentialPreview.credentialSubjectModel as CivicPassCredentialModel;
 
-    final DisplayMapping? displayMapping = credentialModel
+    final DisplayMapping? titleDisplayMapping = credentialModel
         .credentialManifest!.outputDescriptors?.first.display?.title;
 
     var title = '';
 
-    if (displayMapping is DisplayMappingText) {
-      title = displayMapping.text;
+    if (titleDisplayMapping is DisplayMappingText) {
+      title = titleDisplayMapping.text;
     }
 
-    if (displayMapping is DisplayMappingPath) {
-      title = displayMapping.fallback ?? '';
+    if (titleDisplayMapping is DisplayMappingPath) {
+      title = titleDisplayMapping.fallback ?? '';
+    }
+
+    final DisplayMapping? subTitleDisplayMapping = credentialModel
+        .credentialManifest!.outputDescriptors?.first.display?.subtitle;
+
+    var subTitle = '';
+
+    if (subTitleDisplayMapping is DisplayMappingText) {
+      subTitle = subTitleDisplayMapping.text;
+    }
+
+    if (subTitleDisplayMapping is DisplayMappingPath) {
+      subTitle = subTitleDisplayMapping.fallback ?? '';
     }
 
     return CredentialBaseWidget(
       title: title,
       cardBackgroundImagePath: ImageStrings.civicPassCard,
       issuerName: 'CIVIC',
-      value: 'Your ID is verified',
+      value: subTitle,
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
