@@ -291,7 +291,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.proofOfTwitterStats:
         return 'ProofOfTwitterStats';
       case CredentialSubjectType.civicPassCredential:
-        return 'CivicPassCredential';
+        return 'CivicPassCredentials';
       case CredentialSubjectType.defaultCredential:
         return '';
     }

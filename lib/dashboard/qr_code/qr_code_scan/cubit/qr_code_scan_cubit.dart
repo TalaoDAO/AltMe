@@ -90,8 +90,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         await walletConnectCubit.connect(scannedResponse);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith('{"id":') ||
-          scannedResponse.startsWith('{"body":{"callbackUrl":"') ||
-          scannedResponse.startsWith('{"from": "did:polygonid:')) {
+          scannedResponse.startsWith('{"body":{"') ||
+          scannedResponse.startsWith('{"from": "did:polygonid:') ||
+          scannedResponse.startsWith('{"to": "did:polygonid:') ||
+          scannedResponse.startsWith('{"thid":') ||
+          scannedResponse.startsWith('{"typ":') ||
+          scannedResponse.startsWith('{"type":')) {
         /// polygon id
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
         await polygonIdCubit.polygonIdFunction(scannedResponse);
@@ -100,9 +104,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           scannedResponse.substring('${Urls.appDeepLink}?uri='.length),
         );
         await verify(uri: Uri.parse(url));
-      } else if (scannedResponse.startsWith('{"body":{"credentials"')) {
-        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-        await polygonIdCubit.polygonIdFunction(scannedResponse);
       } else {
         final uri = Uri.parse(scannedResponse);
         await verify(uri: uri);
