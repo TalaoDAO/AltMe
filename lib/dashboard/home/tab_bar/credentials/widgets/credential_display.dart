@@ -71,18 +71,22 @@ class CredentialDisplay extends StatelessWidget {
         }
 
       case CredentialSubjectType.defaultCredential:
-        switch (credDisplayType) {
-          case CredDisplayType.List:
-            return DefaultCredentialListWidget(
-              credentialModel: credentialModel,
-              showBgDecoration: false,
-            );
-          case CredDisplayType.Detail:
-            return DefaultCredentialDetailWidget(
-              credentialModel: credentialModel,
-              showBgDecoration: false,
-              fromCredentialOffer: fromCredentialOffer!,
-            );
+        if (isPolygonIdCard(credentialModel)) {
+          return DefaultPolygonIdCardWidget(credentialModel: credentialModel);
+        } else {
+          switch (credDisplayType) {
+            case CredDisplayType.List:
+              return DefaultCredentialListWidget(
+                credentialModel: credentialModel,
+                showBgDecoration: false,
+              );
+            case CredDisplayType.Detail:
+              return DefaultCredentialDetailWidget(
+                credentialModel: credentialModel,
+                showBgDecoration: false,
+                fromCredentialOffer: fromCredentialOffer!,
+              );
+          }
         }
 
       case CredentialSubjectType.ecole42LearningAchievement:

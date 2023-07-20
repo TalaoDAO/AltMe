@@ -70,6 +70,8 @@ class ImageStrings {
   static const String kycCountryOfResidenceCard =
       '$imagePath/kyc_country_of_residence_card.png';
   static const String civicPassCard = '$imagePath/civic_pass_card.png';
+  static const String defaultPolygonCard =
+      '$imagePath/default_polygon_card.png';
   static const String euDiplomaCard = '$imagePath/eu_diploma_card.png';
   static const String defiComplianceCard =
       '$imagePath/defi-compliance-card.png';

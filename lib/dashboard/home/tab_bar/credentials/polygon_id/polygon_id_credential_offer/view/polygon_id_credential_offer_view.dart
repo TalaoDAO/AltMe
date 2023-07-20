@@ -49,6 +49,37 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                 final jsonCredential = polygonIdCubitState.claims![i].info;
                 final credentialPreview = Credential.fromJson(jsonCredential);
 
+                final DisplayMapping? titleDisplayMapping = polygonIdCubitState
+                    .credentialManifests![i]
+                    .outputDescriptors
+                    ?.first
+                    .display
+                    ?.title;
+
+                var title = '';
+
+                if (titleDisplayMapping is DisplayMappingText) {
+                  title = titleDisplayMapping.text;
+                }
+
+                if (titleDisplayMapping is DisplayMappingPath) {
+                  title = titleDisplayMapping.fallback ?? '';
+                }
+
+                final DisplayMapping? subTitleDisplayMapping =
+                    polygonIdCubitState.credentialManifests![i]
+                        .outputDescriptors?.first.display?.subtitle;
+
+                var subTitle = '';
+
+                if (subTitleDisplayMapping is DisplayMappingText) {
+                  subTitle = subTitleDisplayMapping.text;
+                }
+
+                if (subTitleDisplayMapping is DisplayMappingPath) {
+                  subTitle = subTitleDisplayMapping.fallback ?? '';
+                }
+
                 Widget widget;
 
                 final credentialSubjectType = credentialPreview
@@ -78,35 +109,6 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                   );
                 } else if (credentialSubjectType ==
                     CredentialSubjectType.civicPassCredential) {
-                  final polygonIdCubitState =
-                      context.read<PolygonIdCubit>().state;
-                  final DisplayMapping? titleDisplayMapping =
-                      polygonIdCubitState.credentialManifests![i]
-                          .outputDescriptors?.first.display?.title;
-
-                  var title = '';
-
-                  if (titleDisplayMapping is DisplayMappingText) {
-                    title = titleDisplayMapping.text;
-                  }
-
-                  if (titleDisplayMapping is DisplayMappingPath) {
-                    title = titleDisplayMapping.fallback ?? '';
-                  }
-
-                  final DisplayMapping? subTitleDisplayMapping =
-                      polygonIdCubitState.credentialManifests![i]
-                          .outputDescriptors?.first.display?.subtitle;
-
-                  var subTitle = '';
-
-                  if (subTitleDisplayMapping is DisplayMappingText) {
-                    subTitle = subTitleDisplayMapping.text;
-                  }
-
-                  if (subTitleDisplayMapping is DisplayMappingPath) {
-                    subTitle = subTitleDisplayMapping.fallback ?? '';
-                  }
                   widget = CredentialBaseWidget(
                     title: title,
                     cardBackgroundImagePath: ImageStrings.civicPassCard,
@@ -114,22 +116,16 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                     value: subTitle,
                   );
                 } else {
-                  widget = DefaultCredentialListWidget(
-                    credentialModel: CredentialModel(
-                      id: credentialPreview.id,
-                      image: 'image',
-                      credentialPreview: credentialPreview,
-                      shareLink: '',
-                      display: const Display(
-                        '',
-                        '',
-                        '',
-                        '',
-                      ),
-                      data: const <String, dynamic>{},
-                    ),
+                  widget = CredentialBaseWidget(
+                    title: title,
+                    cardBackgroundImagePath: ImageStrings.defaultPolygonCard,
+                    issuerName: 'ALTME',
+                    value: subTitle,
                   );
                 }
+
+                print(credentialPreview
+                    .credentialSubjectModel.credentialSubjectType);
 
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 15),

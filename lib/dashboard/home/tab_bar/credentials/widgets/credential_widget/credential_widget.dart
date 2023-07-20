@@ -15,6 +15,7 @@ export 'civic_pass_credential_widget.dart';
 export 'credential_base_widget.dart';
 export 'default_credential_detail_widget.dart';
 export 'default_credential_list_widget.dart';
+export 'default_polygonid_card.dart';
 export 'defi_complinace_credential_widget.dart';
 export 'diploma_card_widget.dart';
 export 'dogami_pass_widget.dart';

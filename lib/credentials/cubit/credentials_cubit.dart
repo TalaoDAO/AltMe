@@ -55,10 +55,45 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     emit(state.copyWith(status: CredentialsStatus.loading));
     final savedCredentials = await credentialsRepository.findAll(/* filters */);
     final dummies = _getAvalaibleDummyCredentials(savedCredentials);
+
+    final List<CredentialModel> updatedCredentials = <CredentialModel>[];
+
+    /// manually categorizing default credential
+    for (final credential in savedCredentials) {
+      final isDefaultCredential = credential
+              .credentialPreview.credentialSubjectModel.credentialSubjectType ==
+          CredentialSubjectType.defaultCredential;
+
+      if (isDefaultCredential && isVerifiableDiplomaType(credential)) {
+        final updatedCredential = credential.copyWith(
+          credentialPreview: credential.credentialPreview.copyWith(
+            credentialSubjectModel:
+                credential.credentialPreview.credentialSubjectModel.copyWith(
+              credentialCategory: CredentialCategory.educationCards,
+            ),
+          ),
+        );
+        updatedCredentials.add(updatedCredential);
+      } else if (isDefaultCredential && isPolygonIdCard(credential)) {
+        final updatedCredential = credential.copyWith(
+          credentialPreview: credential.credentialPreview.copyWith(
+            credentialSubjectModel:
+                credential.credentialPreview.credentialSubjectModel.copyWith(
+              credentialCategory: CredentialCategory.polygonidCards,
+            ),
+          ),
+        );
+
+        updatedCredentials.add(updatedCredential);
+      } else {
+        updatedCredentials.add(credential);
+      }
+    }
+
     emit(
       state.copyWith(
         status: CredentialsStatus.populate,
-        credentials: savedCredentials,
+        credentials: updatedCredentials,
         dummyCredentials: dummies,
       ),
     );
@@ -171,12 +206,28 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   }) async {
     late final List<CredentialModel> credentials;
 
-    if (isVerifiableDiplomaType(credential)) {
+    final isDefaultCredential = credential
+            .credentialPreview.credentialSubjectModel.credentialSubjectType ==
+        CredentialSubjectType.defaultCredential;
+
+    if (isDefaultCredential && isVerifiableDiplomaType(credential)) {
       final updatedCredential = credential.copyWith(
         credentialPreview: credential.credentialPreview.copyWith(
           credentialSubjectModel:
               credential.credentialPreview.credentialSubjectModel.copyWith(
             credentialCategory: CredentialCategory.educationCards,
+          ),
+        ),
+      );
+      await replaceCredential(credential: updatedCredential);
+      await credentialsRepository.insert(updatedCredential);
+      credentials = List.of(state.credentials)..add(updatedCredential);
+    } else if (isDefaultCredential && isPolygonIdCard(credential)) {
+      final updatedCredential = credential.copyWith(
+        credentialPreview: credential.credentialPreview.copyWith(
+          credentialSubjectModel:
+              credential.credentialPreview.credentialSubjectModel.copyWith(
+            credentialCategory: CredentialCategory.polygonidCards,
           ),
         ),
       );

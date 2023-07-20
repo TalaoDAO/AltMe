@@ -336,6 +336,12 @@ bool isVerifiableDiplomaType(CredentialModel credentialModel) {
   return credentialModel.credentialPreview.type.contains('VerifiableDiploma');
 }
 
+bool isPolygonIdCard(CredentialModel credentialModel) {
+  return credentialModel.credentialPreview.credentialSubjectModel.id
+          ?.contains('did:polygonid:polygon:') ??
+      false;
+}
+
 Map<String, dynamic> decodePayload({
   required JWTDecode jwtDecode,
   required String token,

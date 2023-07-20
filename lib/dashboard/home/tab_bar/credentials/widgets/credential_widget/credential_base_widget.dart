@@ -38,7 +38,7 @@ class CredentialBaseWidget extends StatelessWidget {
               LayoutId(
                 id: 'title',
                 child: FractionallySizedBox(
-                  widthFactor: 0.75,
+                  widthFactor: 0.7,
                   heightFactor: 0.19,
                   child: Container(
                     alignment: Alignment.centerLeft,
