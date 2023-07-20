@@ -267,13 +267,59 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       }
     } else if (iden3MessageEntity.messageType ==
         Iden3MessageType.credentialOffer) {
-      log.i('get claims');
-      emit(
-        state.copyWith(
-          status: AppStatus.loading,
-          polygonAction: PolygonIdAction.offer,
-        ),
-      );
+      try {
+        final List<ClaimEntity> claims = await getClaims(
+          iden3MessageEntity: iden3MessageEntity,
+        );
+
+        final List<CredentialManifest> credentialManifests =
+            <CredentialManifest>[];
+
+        for (final claimEntity in claims) {
+          dynamic response;
+
+          // Try to get Credential manifest for kycAgeCredential
+          // and kycCountryOfResidence and proofOfTwitterStatsUrl
+          if (claimEntity.type == CredentialSubjectType.kycAgeCredential.name) {
+            response = await client.get(Urls.kycAgeCredentialUrl);
+          } else if (claimEntity.type ==
+              CredentialSubjectType.kycCountryOfResidence.name) {
+            response = await client.get(Urls.kycCountryOfResidenceUrl);
+          } else if (claimEntity.type ==
+              CredentialSubjectType.proofOfTwitterStats.name) {
+            response = await client.get(Urls.proofOfTwitterStatsUrl);
+          } else if (claimEntity.type ==
+              CredentialSubjectType.civicPassCredential.name) {
+            response = await client.get(Urls.civicPassCredentialUrl);
+          } else {
+            response = await client.get(Urls.defaultPolygonIdCardUrl);
+          }
+
+          final CredentialManifest credentialManifest =
+              CredentialManifest.fromJson(response as Map<String, dynamic>);
+
+          credentialManifests.add(credentialManifest);
+        }
+
+        if (claims.length != credentialManifests.length) {
+          throw Exception();
+        }
+
+        log.i('get claims');
+        emit(
+          state.copyWith(
+            status: AppStatus.loading,
+            polygonAction: PolygonIdAction.offer,
+            claims: claims,
+            credentialManifests: credentialManifests,
+          ),
+        );
+      } catch (e) {
+        log.e('can not get the credntials manifest for polygon error: $e');
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
     } else if (iden3MessageEntity.messageType ==
         Iden3MessageType.proofContractInvokeRequest) {
       log.i('contractFunctionCall');
@@ -395,14 +441,15 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     return claims;
   }
 
-  Future<void> addPolygonIdCredentials({
-    required List<ClaimEntity> claims,
-  }) async {
+  Future<void> addPolygonIdCredentials() async {
     try {
       log.i('add Claims');
       emit(state.copyWith(status: AppStatus.loading));
-      for (final claim in claims) {
-        await addToList(claim);
+      for (int i = 0; i < state.claims!.length; i++) {
+        await addToList(
+          claimEntity: state.claims![i],
+          credentialManifest: state.credentialManifests![i],
+        );
       }
       emit(state.copyWith(status: AppStatus.goBack));
     } catch (e) {
@@ -424,38 +471,12 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     }
   }
 
-  Future<void> addToList(ClaimEntity claimEntity) async {
+  Future<void> addToList({
+    required ClaimEntity claimEntity,
+    required CredentialManifest credentialManifest,
+  }) async {
     final jsonCredential = claimEntity.info;
     final credentialPreview = Credential.fromJson(jsonCredential);
-
-    CredentialManifest? credentialManifest;
-
-    try {
-      // Try to get Credential manifest for kycAgeCredential
-      // and kycCountryOfResidence and proofOfTwitterStatsUrl
-      if (claimEntity.type == CredentialSubjectType.kycAgeCredential.name) {
-        final response = await client.get(Urls.kycAgeCredentialUrl);
-        credentialManifest =
-            CredentialManifest.fromJson(response as Map<String, dynamic>);
-      } else if (claimEntity.type ==
-          CredentialSubjectType.kycCountryOfResidence.name) {
-        final response = await client.get(Urls.kycCountryOfResidenceUrl);
-        credentialManifest =
-            CredentialManifest.fromJson(response as Map<String, dynamic>);
-      } else if (claimEntity.type ==
-          CredentialSubjectType.proofOfTwitterStats.name) {
-        final response = await client.get(Urls.proofOfTwitterStatsUrl);
-        credentialManifest =
-            CredentialManifest.fromJson(response as Map<String, dynamic>);
-      } else if (claimEntity.type ==
-          CredentialSubjectType.civicPassCredential.name) {
-        final response = await client.get(Urls.civicPassCredentialUrl);
-        credentialManifest =
-            CredentialManifest.fromJson(response as Map<String, dynamic>);
-      }
-    } catch (e) {
-      log.e('can not get the credntials manifest for polygon error: $e');
-    }
 
     final credentialModel = CredentialModel(
       id: claimEntity.id,

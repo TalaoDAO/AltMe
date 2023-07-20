@@ -43,6 +43,9 @@ class Urls {
 
   static const String bloometaCardUrl = 'https://issuer.talao.co/bloometa';
 
+  static const String defaultPolygonIdCardUrl =
+      'https://issuer.talao.co/credential-manifest/polygonid/default';
+
   static const String kycAgeCredentialUrl =
       'https://issuer.talao.co/credential-manifest/polygonid/kycagecredential';
   static const String kycCountryOfResidenceUrl =

@@ -510,14 +510,9 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
 
     if (state.polygonAction == PolygonIdAction.offer) {
       try {
-        final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
-            .getIden3Message(message: state.scannedResponse!);
-        final List<ClaimEntity> claims = await polygonIdCubit.getClaims(
-          iden3MessageEntity: iden3MessageEntity,
-        );
         LoadingView().hide();
         await Navigator.of(context)
-            .push<void>(PolygonIdCredentialOfferPage.route(claims: claims));
+            .push<void>(PolygonIdCredentialOfferPage.route());
       } catch (e) {
         final l10n = context.l10n;
         LoadingView().hide();

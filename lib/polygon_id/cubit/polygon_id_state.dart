@@ -9,6 +9,8 @@ class PolygonIdState extends Equatable {
     this.message,
     this.loadingText,
     this.scannedResponse,
+    this.claims,
+    this.credentialManifests,
   });
 
   factory PolygonIdState.fromJson(Map<String, dynamic> json) =>
@@ -21,12 +23,13 @@ class PolygonIdState extends Equatable {
   final MessageHandler? loadingText;
   final bool isInitialised;
   final String? scannedResponse;
+  final List<ClaimEntity>? claims;
+  final List<CredentialManifest>? credentialManifests;
 
   PolygonIdState error({required StateMessage message}) {
-    return PolygonIdState(
+    return copyWith(
       status: AppStatus.error,
       message: message,
-      scannedResponse: scannedResponse,
     );
   }
 
@@ -38,6 +41,8 @@ class PolygonIdState extends Equatable {
     MessageHandler? loadingText,
     Route<dynamic>? route,
     String? scannedResponse,
+    List<ClaimEntity>? claims,
+    List<CredentialManifest>? credentialManifests,
   }) {
     return PolygonIdState(
       status: status,
@@ -46,6 +51,8 @@ class PolygonIdState extends Equatable {
       loadingText: loadingText,
       isInitialised: isInitialised ?? this.isInitialised,
       scannedResponse: scannedResponse ?? this.scannedResponse,
+      claims: claims ?? this.claims,
+      credentialManifests: credentialManifests ?? this.credentialManifests,
     );
   }
 
@@ -59,5 +66,6 @@ class PolygonIdState extends Equatable {
         isInitialised,
         scannedResponse,
         loadingText,
+        credentialManifests,
       ];
 }
