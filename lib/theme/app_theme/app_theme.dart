@@ -815,6 +815,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffFFFFFF),
       );
 
+  TextStyle get identitiyBaseTitleText => GoogleFonts.roboto(
+        fontSize: 36,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xffFFFFFF),
+      );
+
   TextStyle get copyToClipBoard => GoogleFonts.nunito(
         fontSize: 18,
         fontWeight: FontWeight.w400,
