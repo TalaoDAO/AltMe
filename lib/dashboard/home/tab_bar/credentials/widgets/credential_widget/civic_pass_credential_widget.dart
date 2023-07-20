@@ -30,7 +30,7 @@ class CivicPassCredentialWidget extends StatelessWidget {
     }
 
     final DisplayMapping? subTitleDisplayMapping = credentialModel
-        .credentialManifest!.outputDescriptors?.first.display?.subtitle;
+        .credentialManifest?.outputDescriptors?.first.display?.subtitle;
 
     var subTitle = '';
 
@@ -45,7 +45,7 @@ class CivicPassCredentialWidget extends StatelessWidget {
     return CredentialBaseWidget(
       title: title,
       cardBackgroundImagePath: ImageStrings.civicPassCard,
-      issuerName: 'CIVIC',
+      issuerName: credentialModel.credentialManifest?.issuedBy?.name,
       value: subTitle,
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,

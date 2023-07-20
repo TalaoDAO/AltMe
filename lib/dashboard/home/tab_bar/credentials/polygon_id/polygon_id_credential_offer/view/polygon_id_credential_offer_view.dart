@@ -67,7 +67,7 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                 }
 
                 final DisplayMapping? subTitleDisplayMapping =
-                    polygonIdCubitState.credentialManifests![i]
+                    polygonIdCubitState.credentialManifests?[i]
                         .outputDescriptors?.first.display?.subtitle;
 
                 var subTitle = '';
@@ -112,20 +112,19 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                   widget = CredentialBaseWidget(
                     title: title,
                     cardBackgroundImagePath: ImageStrings.civicPassCard,
-                    issuerName: 'CIVIC',
+                    issuerName: polygonIdCubitState
+                        .credentialManifests?[i].issuedBy?.name,
                     value: subTitle,
                   );
                 } else {
                   widget = CredentialBaseWidget(
                     title: title,
                     cardBackgroundImagePath: ImageStrings.defaultPolygonCard,
-                    issuerName: 'ALTME',
+                    issuerName: polygonIdCubitState
+                        .credentialManifests?[i].issuedBy?.name,
                     value: subTitle,
                   );
                 }
-
-                print(credentialPreview
-                    .credentialSubjectModel.credentialSubjectType);
 
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 15),
