@@ -322,7 +322,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     try {
       /// ebsi credential
       /// issuer side (oidc4VCI)
-      if (state.uri.toString().startsWith('openid://initiate_issuance?')) {
+      if (state.uri.toString().startsWith('openid://initiate_issuance?') ||
+          state.uri.toString().startsWith('openid-initiate_issuance://')) {
         await initiateEbsiCredentialIssuance(
           state.uri.toString(),
           client,
