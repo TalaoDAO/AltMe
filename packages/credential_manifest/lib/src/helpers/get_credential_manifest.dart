@@ -34,15 +34,17 @@ Future<CredentialManifest> getCredentialManifest(
   );
 
   /// There are some possible issues with this way of filtering :-/
-  final Map<String, dynamic> outputDescriptorMap = outputDescriptorPath
-      .read(jsonDecode(wellKnown.data as String))
-      .first
-      .value as Map<String, dynamic>;
-  final OutputDescriptor outputDescriptor =
-      OutputDescriptor.fromJson(outputDescriptorMap);
-
-  final CredentialManifest sanitizedCredentialManifest =
-      credentialManifest.copyWith(outputDescriptors: [outputDescriptor]);
-
-  return sanitizedCredentialManifest;
+  final outputDescriptorList =
+      outputDescriptorPath.read(jsonDecode(wellKnown.data as String));
+  if (outputDescriptorList.isNotEmpty) {
+    final Map<String, dynamic> outputDescriptorMap =
+        outputDescriptorList.first.value as Map<String, dynamic>;
+    final OutputDescriptor outputDescriptor =
+        OutputDescriptor.fromJson(outputDescriptorMap);
+    final CredentialManifest sanitizedCredentialManifest =
+        credentialManifest.copyWith(outputDescriptors: [outputDescriptor]);
+    return sanitizedCredentialManifest;
+  } else {
+    return credentialManifest;
+  }
 }
