@@ -23,7 +23,18 @@ class DefaultPolygonIdCardWidget extends StatelessWidget {
     }
 
     if (titleDisplayMapping is DisplayMappingPath) {
-      title = titleDisplayMapping.fallback ?? '';
+      if (titleDisplayMapping.path.isNotEmpty) {
+        title = getTextsFromCredential(
+          titleDisplayMapping.path.first,
+          credentialModel.data,
+        ).first;
+      }
+      if (title == '') {
+        title = titleDisplayMapping.fallback ?? '';
+      } else {
+        final regex = RegExp('(?=[A-Z](?![A-Z]))');
+        title = title.replaceAll(regex, ' ');
+      }
     }
 
     final DisplayMapping? subTitleDisplayMapping = credentialModel
