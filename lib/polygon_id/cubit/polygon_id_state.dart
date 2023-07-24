@@ -11,6 +11,7 @@ class PolygonIdState extends Equatable {
     this.scannedResponse,
     this.claims,
     this.credentialManifests,
+    this.currentNetwork = PolygonIdNetwork.PolygonMainnet,
   });
 
   factory PolygonIdState.fromJson(Map<String, dynamic> json) =>
@@ -25,6 +26,7 @@ class PolygonIdState extends Equatable {
   final String? scannedResponse;
   final List<ClaimEntity>? claims;
   final List<CredentialManifest>? credentialManifests;
+  final PolygonIdNetwork currentNetwork;
 
   PolygonIdState error({required StateMessage message}) {
     return copyWith(
@@ -43,6 +45,7 @@ class PolygonIdState extends Equatable {
     String? scannedResponse,
     List<ClaimEntity>? claims,
     List<CredentialManifest>? credentialManifests,
+    PolygonIdNetwork? currentNetwork,
   }) {
     return PolygonIdState(
       status: status,
@@ -53,6 +56,7 @@ class PolygonIdState extends Equatable {
       scannedResponse: scannedResponse ?? this.scannedResponse,
       claims: claims ?? this.claims,
       credentialManifests: credentialManifests ?? this.credentialManifests,
+      currentNetwork: currentNetwork ?? this.currentNetwork,
     );
   }
 
@@ -65,6 +69,7 @@ class PolygonIdState extends Equatable {
         message,
         isInitialised,
         scannedResponse,
+        currentNetwork,
         loadingText,
         credentialManifests,
       ];

@@ -147,4 +147,5 @@ enum ResponseString {
   RESPONSE_STRING_errorGeneratingProof,
   RESPONSE_STRING_successfullyGeneratingProof,
   RESPONSE_STRING_pleaseAddXtoConnectToTheDapp,
+  RESPONSE_STRING_pleaseSwitchPolygonNetwork,
 }
