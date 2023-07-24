@@ -835,7 +835,8 @@
     "noInformationWillBeSharedFromThisCredentialMessage",
     "burn",
     "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT",
-    "pleaseAddXtoConnectToTheDapp"
+    "pleaseAddXtoConnectToTheDapp",
+    "pleaseSwitchPolygonNetwork"
   ],
 
   "es": [
@@ -1674,7 +1675,8 @@
     "noInformationWillBeSharedFromThisCredentialMessage",
     "burn",
     "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT",
-    "pleaseAddXtoConnectToTheDapp"
+    "pleaseAddXtoConnectToTheDapp",
+    "pleaseSwitchPolygonNetwork"
   ],
 
   "fr": [
@@ -1816,7 +1818,8 @@
     "noInformationWillBeSharedFromThisCredentialMessage",
     "burn",
     "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT",
-    "pleaseAddXtoConnectToTheDapp"
+    "pleaseAddXtoConnectToTheDapp",
+    "pleaseSwitchPolygonNetwork"
   ],
 
   "it": [
@@ -2655,6 +2658,7 @@
     "noInformationWillBeSharedFromThisCredentialMessage",
     "burn",
     "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT",
-    "pleaseAddXtoConnectToTheDapp"
+    "pleaseAddXtoConnectToTheDapp",
+    "pleaseSwitchPolygonNetwork"
   ]
 }

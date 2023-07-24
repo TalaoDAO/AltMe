@@ -67,6 +67,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           'https://$ipfsApiKey:$ipfsApiKeySecret@ipfs.infura.io:5001';
 
       String network = Parameters.POLYGON_MAIN_NETWORK;
+      PolygonIdNetwork currentNetwork = PolygonIdNetwork.PolygonMainnet;
 
       // set polygon main network a first
       if (polygonIdNetwork == null) {
@@ -80,6 +81,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
 
       if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
         network = Parameters.POLYGON_MAIN_NETWORK;
+        currentNetwork = PolygonIdNetwork.PolygonMainnet;
         await polygonId.init(
           network: network,
           web3Url: Parameters.INFURA_URL,
@@ -91,6 +93,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         );
       } else {
         network = Parameters.POLYGON_TEST_NETWORK;
+        currentNetwork = PolygonIdNetwork.PolygonMumbai;
         await polygonId.init(
           network: network,
           web3Url: Parameters.INFURA_MUMBAI_URL,
@@ -108,7 +111,13 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       //addIdentity
       await polygonId.addIdentity(mnemonic: mnemonic!, network: network);
       log.i('$network - get Identity');
-      emit(state.copyWith(status: AppStatus.init, isInitialised: true));
+      emit(
+        state.copyWith(
+          status: AppStatus.init,
+          isInitialised: true,
+          currentNetwork: currentNetwork,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AppStatus.error, isInitialised: false));
       throw Exception('INIT_ISSUE - $e');
@@ -159,7 +168,12 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       //addIdentity
       await polygonId.addIdentity(mnemonic: mnemonic!, network: network);
       log.i('$network - get Identity');
-      emit(state.copyWith(status: AppStatus.idle));
+      emit(
+        state.copyWith(
+          status: AppStatus.idle,
+          currentNetwork: polygonIdNetwork,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AppStatus.error));
       throw Exception('UPDATE_ISSUE - $e');
@@ -244,6 +258,33 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   Future<void> polygonActions() async {
     final Iden3MessageEntity iden3MessageEntity =
         await getIden3Message(message: state.scannedResponse!);
+
+    bool checkNetwork = true;
+
+    if (iden3MessageEntity.messageType == Iden3MessageType.authRequest) {
+      final body = iden3MessageEntity.body as AuthBodyRequest;
+
+      if (body.scope!.isNotEmpty) {
+        log.i('do not consider network for verifier');
+        checkNetwork = false;
+      }
+    }
+
+    if (checkNetwork &&
+        !iden3MessageEntity.from.contains(state.currentNetwork.tester)) {
+      emit(
+        state.copyWith(
+          status: AppStatus.error,
+          message: StateMessage.error(
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_pleaseSwitchPolygonNetwork,
+            ),
+            injectedMessage: state.currentNetwork.oppositeNetwork,
+          ),
+        ),
+      );
+      return;
+    }
 
     if (iden3MessageEntity.messageType == Iden3MessageType.authRequest) {
       final body = iden3MessageEntity.body as AuthBodyRequest;
@@ -345,12 +386,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       final mnemonic =
           await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
-      final polygonIdNetwork =
-          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
-
       String network = Parameters.POLYGON_MAIN_NETWORK;
 
-      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+      if (state.currentNetwork == PolygonIdNetwork.PolygonMainnet) {
         network = Parameters.POLYGON_MAIN_NETWORK;
       } else {
         network = Parameters.POLYGON_TEST_NETWORK;
@@ -422,12 +460,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   }) async {
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
 
-    final polygonIdNetwork =
-        await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
-
     String network = Parameters.POLYGON_MAIN_NETWORK;
 
-    if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+    if (state.currentNetwork == PolygonIdNetwork.PolygonMainnet) {
       network = Parameters.POLYGON_MAIN_NETWORK;
     } else {
       network = Parameters.POLYGON_TEST_NETWORK;
@@ -505,12 +540,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     required Iden3MessageEntity iden3MessageEntity,
     required String mnemonic,
   }) async {
-    final polygonIdNetwork =
-        await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
-
     String network = Parameters.POLYGON_MAIN_NETWORK;
 
-    if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+    if (state.currentNetwork == PolygonIdNetwork.PolygonMainnet) {
       network = Parameters.POLYGON_MAIN_NETWORK;
     } else {
       network = Parameters.POLYGON_TEST_NETWORK;

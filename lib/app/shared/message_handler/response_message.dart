@@ -682,6 +682,12 @@ class ResponseMessage with MessageHandler {
             context,
             injectedMessage: injectedMessage,
           );
+        case ResponseString.RESPONSE_STRING_pleaseSwitchPolygonNetwork:
+          return ResponseString.RESPONSE_STRING_pleaseSwitchPolygonNetwork
+              .localise(
+            context,
+            injectedMessage: injectedMessage,
+          );
       }
     }
     return '';

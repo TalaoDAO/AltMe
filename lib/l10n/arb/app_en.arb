@@ -917,5 +917,12 @@
     "placeholders": {
       "chain": {}
     }
+  },
+  "pleaseSwitchPolygonNetwork": "Please switch to polygon {networkType} to perform this action.",
+  "@pleaseSwitchPolygonNetwork": {
+    "description": "",
+    "placeholders": {
+      "networkType": {}
+    }
   }
 }

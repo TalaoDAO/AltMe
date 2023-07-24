@@ -369,4 +369,6 @@ class GlobalMessage {
       l10n.successfullyGeneratingProof;
   String RESPONSE_STRING_pleaseAddXtoConnectToTheDapp(String value) =>
       l10n.pleaseAddXtoConnectToTheDapp(value);
+  String RESPONSE_STRING_pleaseSwitchPolygonNetwork(String value) =>
+      l10n.pleaseSwitchPolygonNetwork(value);
 }

@@ -460,6 +460,11 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp(
           injectedMessage ?? '',
         );
+
+      case ResponseString.RESPONSE_STRING_pleaseSwitchPolygonNetwork:
+        return globalMessage.RESPONSE_STRING_pleaseSwitchPolygonNetwork(
+          injectedMessage ?? '',
+        );
     }
   }
 }
