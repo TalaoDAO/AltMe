@@ -36,14 +36,14 @@ class ScanCubit extends Cubit<ScanState> {
     required this.credentialsCubit,
     required this.didKitProvider,
     required this.secureStorageProvider,
-    required this.oidc4vc,
+    required this.profileCubit,
   }) : super(const ScanState());
 
   final DioClient client;
   final CredentialsCubit credentialsCubit;
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
-  final OIDC4VC oidc4vc;
+  final ProfileCubit profileCubit;
 
   Future<void> credentialOffer({
     required Uri uri,
@@ -59,7 +59,7 @@ class ScanCubit extends Cubit<ScanState> {
     try {
       if (uri.queryParameters['scope'] == 'openid' ||
           uri.toString().startsWith('openid://?client_id')) {
-        final oidc4vc = OIDC4VC(Dio());
+        final OIDC4VC oidc4vc = profileCubit.state.model.oidc4vcType.getOIDC4VC;
         final mnemonic =
             await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
         final privateKey =

@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -55,7 +54,7 @@ class CredentialsDetailsPage extends StatelessWidget {
             secureStorageProvider: getSecureStorage,
             client: DioClient('', Dio()),
             jwtDecode: JWTDecode(),
-            polygonId: PolygonId(),
+            profileCubit: context.read<ProfileCubit>(),
             polygonIdCubit: context.read<PolygonIdCubit>(),
           ),
         ),

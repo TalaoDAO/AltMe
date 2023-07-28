@@ -1,4 +1,7 @@
-enum OIDC4VCTye {
+import 'package:dio/dio.dart';
+import 'package:oidc4vc/oidc4vc.dart';
+
+enum OIDC4VCType {
   EBSIV2(
     issuerVcType: 'jwt_vc',
     verifierVpType: 'jwt_vp',
@@ -151,7 +154,7 @@ enum OIDC4VCTye {
     serviceDocumentation: '',
   );
 
-  const OIDC4VCTye({
+  const OIDC4VCType({
     required this.issuerVcType,
     required this.verifierVpType,
     required this.offerPrefix,
@@ -180,4 +183,28 @@ enum OIDC4VCTye {
   final String oidc4VciDraft;
   final String siopv2Draft;
   final String serviceDocumentation;
+}
+
+extension OIDC4VCTypeX on OIDC4VCType {
+  OIDC4VC get getOIDC4VC {
+    return OIDC4VC(
+      client: Dio(),
+      oidc4vcModel: OIDC4VCModel(
+        issuerVcType: issuerVcType,
+        verifierVpType: verifierVpType,
+        offerPrefix: offerPrefix,
+        presentationPrefix: presentationPrefix,
+        cryptographicBindingMethodsSupported:
+            cryptographicBindingMethodsSupported,
+        cryptographicSuitesSupported: cryptographicSuitesSupported,
+        subjectSyntaxTypesSupported: subjectSyntaxTypesSupported,
+        grantTypesSupported: grantTypesSupported,
+        credentialSupported: credentialSupported,
+        schemaForType: schemaForType,
+        oidc4VciDraft: oidc4VciDraft,
+        siopv2Draft: siopv2Draft,
+        serviceDocumentation: serviceDocumentation,
+      ),
+    );
+  }
 }

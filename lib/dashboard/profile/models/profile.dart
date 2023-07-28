@@ -40,7 +40,7 @@ class ProfileModel extends Equatable {
         isBiometricEnabled: false,
         isAlertEnabled: false,
         tezosNetwork: TezosNetwork.mainNet(),
-        oidc4vcType: OIDC4VCTye.EBSIV2.toString(),
+        oidc4vcType: OIDC4VCType.EBSIV2,
       );
 
   final String firstName;
@@ -56,7 +56,7 @@ class ProfileModel extends Equatable {
   final bool isEnterprise;
   final bool isBiometricEnabled;
   final bool isAlertEnabled;
-  final String oidc4vcType;
+  final OIDC4VCType oidc4vcType;
 
   @override
   List<Object> get props => [
@@ -92,7 +92,7 @@ class ProfileModel extends Equatable {
     bool? isEnterprise,
     bool? isBiometricEnabled,
     bool? isAlertEnabled,
-    String? oidc4vcType,
+    OIDC4VCType? oidc4vcType,
   }) {
     return ProfileModel(
       firstName: firstName ?? this.firstName,

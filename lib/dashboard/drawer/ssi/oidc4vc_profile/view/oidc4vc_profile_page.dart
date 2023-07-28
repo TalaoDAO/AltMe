@@ -41,7 +41,7 @@ class OIDC4VCProfilePage extends StatelessWidget {
                   ),
                 ),
                 child: ListView.builder(
-                  itemCount: OIDC4VCTye.values.length,
+                  itemCount: OIDC4VCType.values.length,
                   shrinkWrap: true,
                   physics: const ScrollPhysics(),
                   itemBuilder: (context, index) {
@@ -51,28 +51,29 @@ class OIDC4VCProfilePage extends StatelessWidget {
                           onTap: () {
                             context
                                 .read<ProfileCubit>()
-                                .updateOIDC4VCType(OIDC4VCTye.values[index]);
+                                .updateOIDC4VCType(OIDC4VCType.values[index]);
                           },
                           shape: const RoundedRectangleBorder(
                             side: BorderSide(
-                                color: Color(0xFFDDDDEE), width: 0.5),
+                              color: Color(0xFFDDDDEE),
+                              width: 0.5,
+                            ),
                           ),
                           title: Text(
-                            OIDC4VCTye.values[index].name,
+                            OIDC4VCType.values[index].name,
                             style: Theme.of(context)
                                 .listTileTheme
                                 .titleTextStyle
                                 ?.copyWith(color: const Color(0xFF080F33)),
                           ),
                           trailing: Icon(
-                            state.model.oidc4vcType ==
-                                    OIDC4VCTye.values[index].toString()
+                            state.model.oidc4vcType == OIDC4VCType.values[index]
                                 ? Icons.radio_button_checked
                                 : Icons.radio_button_unchecked,
                             size: Sizes.icon2x,
                           ),
                         ),
-                        if (index < OIDC4VCTye.values.length - 1)
+                        if (index < OIDC4VCType.values.length - 1)
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: Sizes.spaceSmall,

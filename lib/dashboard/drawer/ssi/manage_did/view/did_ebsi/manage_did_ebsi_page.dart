@@ -1,12 +1,11 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/drawer.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class ManageDidEbsiPage extends StatelessWidget {
+class ManageDidEbsiPage extends StatefulWidget {
   const ManageDidEbsiPage({super.key});
 
   static Route<dynamic> route() {
@@ -16,8 +15,14 @@ class ManageDidEbsiPage extends StatelessWidget {
     );
   }
 
+  @override
+  State<ManageDidEbsiPage> createState() => _ManageDidEbsiPageState();
+}
+
+class _ManageDidEbsiPageState extends State<ManageDidEbsiPage> {
   Future<String> getDid() async {
-    final oidc4vc = OIDC4VC(Dio());
+    final oidc4vc =
+        context.read<ProfileCubit>().state.model.oidc4vcType.getOIDC4VC;
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
     final privateKey =
         await oidc4vc.privateKeyFromMnemonic(mnemonic: mnemonic!);

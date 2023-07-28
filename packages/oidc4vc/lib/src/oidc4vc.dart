@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
 import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
+import 'package:oidc4vc/src/iodc4vc_model.dart';
 import 'package:oidc4vc/src/issuer_token_parameters.dart';
 import 'package:oidc4vc/src/token_parameters.dart';
 import 'package:oidc4vc/src/verification_type.dart';
@@ -22,10 +23,14 @@ import 'package:uuid/uuid.dart';
 /// {@endtemplate}
 class OIDC4VC {
   /// {@macro ebsi}
-  OIDC4VC(this.client);
+  OIDC4VC({
+    required this.client,
+    required this.oidc4vcModel,
+  });
 
   ///
   final Dio client;
+  final OIDC4VCModel oidc4vcModel;
 
   /// create JWK from mnemonic
   Future<String> privateKeyFromMnemonic({required String mnemonic}) async {

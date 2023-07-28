@@ -33,7 +33,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:oidc4vc/oidc4vc.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:secure_storage/secure_storage.dart';
@@ -144,7 +143,7 @@ class App extends StatelessWidget {
             credentialsCubit: context.read<CredentialsCubit>(),
             didKitProvider: DIDKitProvider(),
             secureStorageProvider: secure_storage.getSecureStorage,
-            oidc4vc: OIDC4VC(Dio()),
+            profileCubit: context.read<ProfileCubit>(),
           ),
         ),
         BlocProvider<QRCodeScanCubit>(

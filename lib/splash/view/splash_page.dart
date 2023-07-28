@@ -11,7 +11,6 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
@@ -147,11 +146,10 @@ class _SplashViewState extends State<SplashView> {
         beaconData = value;
       }
       if (uri.scheme == 'openid' && uri.authority == 'initiate_issuance') {
-        final DioClient client = DioClient('', Dio());
         await initiateEbsiCredentialIssuance(
           uri.toString(),
-          client,
           context.read<CredentialsCubit>(),
+          context.read<ProfileCubit>(),
           secure_storage.getSecureStorage,
         );
       }

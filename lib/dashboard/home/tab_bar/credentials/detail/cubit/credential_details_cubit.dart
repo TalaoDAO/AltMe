@@ -23,7 +23,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     required this.secureStorageProvider,
     required this.client,
     required this.jwtDecode,
-    required this.polygonId,
+    required this.profileCubit,
     required this.polygonIdCubit,
   }) : super(const CredentialDetailsState());
 
@@ -31,7 +31,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   final SecureStorageProvider secureStorageProvider;
   final DioClient client;
   final JWTDecode jwtDecode;
-  final PolygonId polygonId;
+  final ProfileCubit profileCubit;
   final PolygonIdCubit polygonIdCubit;
 
   void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {
@@ -70,6 +70,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         issuerDid,
         issuerKid,
         item.jwt!,
+        profileCubit,
       );
 
       late CredentialStatus credentialStatus;
@@ -103,7 +104,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         network = Parameters.POLYGON_TEST_NETWORK;
       }
 
-      final List<ClaimEntity> claim = await polygonId.getClaimById(
+      final List<ClaimEntity> claim =
+          await polygonIdCubit.polygonId.getClaimById(
         claimId: item.id,
         mnemonic: mnemonic!,
         network: network,

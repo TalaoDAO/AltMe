@@ -301,6 +301,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         issuerDid,
         issuerKid,
         encodedData.toString(),
+        profileCubit,
       );
 
       if (isVerified == VerificationType.verified) {
@@ -326,8 +327,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           state.uri.toString().startsWith('openid-initiate_issuance://')) {
         await initiateEbsiCredentialIssuance(
           state.uri.toString(),
-          client,
           credentialsCubit,
+          profileCubit,
           getSecureStorage,
         );
 
