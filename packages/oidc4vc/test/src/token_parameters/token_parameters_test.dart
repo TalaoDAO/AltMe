@@ -8,9 +8,9 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:dio/dio.dart';
-import 'package:ebsi/ebsi.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 import 'token_parameters_class.dart';
 

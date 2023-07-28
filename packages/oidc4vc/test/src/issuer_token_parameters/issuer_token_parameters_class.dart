@@ -1,5 +1,5 @@
-import 'package:ebsi/ebsi.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 import '../const_values.dart';
 import '../token_parameters/token_parameters_class.dart';

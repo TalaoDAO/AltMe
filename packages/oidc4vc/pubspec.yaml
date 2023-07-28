@@ -1,5 +1,5 @@
-name: ebsi
-description: EBSI wallet compliance
+name: oidc4vc
+description: OIDC4VC wallet compliance
 version: 0.1.0+1
 publish_to: none
 

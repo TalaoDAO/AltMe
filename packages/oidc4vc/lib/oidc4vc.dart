@@ -8,8 +8,8 @@
 /// EBSI wallet compliance
 library ebsi;
 
-export 'src/ebsi.dart';
 export 'src/issuer_token_parameters.dart';
+export 'src/oidc4vc.dart';
 export 'src/token_parameters.dart';
 export 'src/verification_type.dart';
 export 'src/verifier_token_parameters.dart';

@@ -28,12 +28,12 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
-import 'package:ebsi/ebsi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:secure_storage/secure_storage.dart';
@@ -144,7 +144,7 @@ class App extends StatelessWidget {
             credentialsCubit: context.read<CredentialsCubit>(),
             didKitProvider: DIDKitProvider(),
             secureStorageProvider: secure_storage.getSecureStorage,
-            ebsi: Ebsi(Dio()),
+            oidc4vc: OIDC4VC(Dio()),
           ),
         ),
         BlocProvider<QRCodeScanCubit>(

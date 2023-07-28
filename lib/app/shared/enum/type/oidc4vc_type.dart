@@ -1,29 +1,30 @@
-enum OIDC4VC {
+enum OIDC4VCTye {
   EBSIV2(
-      issuerVcType: 'jwt_vc',
-      verifierVpType: 'jwt_vp',
-      offerPrefix: 'openid://initiate_issuance',
-      presentationPrefix: 'openid-vc://',
-      cryptographicBindingMethodsSupported: ['DID'],
-      cryptographicSuitesSupported: [
-        'ES256K',
-        'ES256',
-        'ES384',
-        'ES512',
-        'RS256'
-      ],
-      subjectSyntaxTypesSupported: ['did:ebsi'],
-      grantTypesSupported: [
-        'authorization_code',
-        'urn:ietf:params:oauth:grant-type:pre-authorized_code'
-      ],
-      credentialSupported: ['VerifiableDiploma', 'VerifiableId'],
-      schemaForType: true,
-      oidc4VciDraft:
-          'https://openid.net/specs/openid-connect-4-verifiable-credential-issuance-1_0-05.html#abstract',
-      siopv2Draft: '',
-      serviceDocumentation:
-          'It is the profile of the EBSI V2 compliant test. DID for natural person is did:ebsi. The schema url is used as the VC type in the credential offer QR code. The prefix openid_initiate_issuance://'),
+    issuerVcType: 'jwt_vc',
+    verifierVpType: 'jwt_vp',
+    offerPrefix: 'openid://initiate_issuance',
+    presentationPrefix: 'openid-vc://',
+    cryptographicBindingMethodsSupported: ['DID'],
+    cryptographicSuitesSupported: [
+      'ES256K',
+      'ES256',
+      'ES384',
+      'ES512',
+      'RS256'
+    ],
+    subjectSyntaxTypesSupported: ['did:ebsi'],
+    grantTypesSupported: [
+      'authorization_code',
+      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
+    ],
+    credentialSupported: ['VerifiableDiploma', 'VerifiableId'],
+    schemaForType: true,
+    oidc4VciDraft:
+        'https://openid.net/specs/openid-connect-4-verifiable-credential-issuance-1_0-05.html#abstract',
+    siopv2Draft: '',
+    serviceDocumentation:
+        'It is the profile of the EBSI V2 compliant test. DID for natural person is did:ebsi. The schema url is used as the VC type in the credential offer QR code. The prefix openid_initiate_issuance://',
+  ),
 
   EBSIV3(
     issuerVcType: 'jwt_vc',
@@ -78,34 +79,30 @@ enum OIDC4VC {
   ),
 
   DEFAULT(
-      issuerVcType: 'ldp_vc',
-      verifierVpType: 'ldp_vp',
-      offerPrefix: 'openid-credential-offer://',
-      presentationPrefix: 'openid-vc://',
-      cryptographicBindingMethodsSupported: ['DID'],
-      credentialSupported: [],
-      grantTypesSupported: [
-        'authorization_code',
-        'urn:ietf:params:oauth:grant-type:pre-authorized_code'
-      ],
-      cryptographicSuitesSupported: [
-        'ES256K',
-        'ES256',
-        'ES384',
-        'ES512',
-        'RS256'
-      ],
-      subjectSyntaxTypesSupported: [
-        'did:ebsi',
-        'did:key',
-        'did:ethr',
-        'did:tz'
-      ],
-      schemaForType: false,
-      oidc4VciDraft:
-          'https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html',
-      siopv2Draft: '',
-      serviceDocumentation: 'Last release of the OIDC4VC documentation'),
+    issuerVcType: 'ldp_vc',
+    verifierVpType: 'ldp_vp',
+    offerPrefix: 'openid-credential-offer://',
+    presentationPrefix: 'openid-vc://',
+    cryptographicBindingMethodsSupported: ['DID'],
+    credentialSupported: [],
+    grantTypesSupported: [
+      'authorization_code',
+      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
+    ],
+    cryptographicSuitesSupported: [
+      'ES256K',
+      'ES256',
+      'ES384',
+      'ES512',
+      'RS256'
+    ],
+    subjectSyntaxTypesSupported: ['did:ebsi', 'did:key', 'did:ethr', 'did:tz'],
+    schemaForType: false,
+    oidc4VciDraft:
+        'https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html',
+    siopv2Draft: '',
+    serviceDocumentation: 'Last release of the OIDC4VC documentation',
+  ),
 
   ARF(
     issuerVcType: 'jwt_vc',
@@ -154,7 +151,7 @@ enum OIDC4VC {
     serviceDocumentation: '',
   );
 
-  const OIDC4VC({
+  const OIDC4VCTye({
     required this.issuerVcType,
     required this.verifierVpType,
     required this.offerPrefix,

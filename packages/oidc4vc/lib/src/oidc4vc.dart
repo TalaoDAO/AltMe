@@ -6,23 +6,23 @@ import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
 import 'package:cryptography/cryptography.dart' as cryptography;
 import 'package:dio/dio.dart';
-import 'package:ebsi/src/issuer_token_parameters.dart';
-import 'package:ebsi/src/token_parameters.dart';
-import 'package:ebsi/src/verification_type.dart';
-import 'package:ebsi/src/verifier_token_parameters.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
 import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
+import 'package:oidc4vc/src/issuer_token_parameters.dart';
+import 'package:oidc4vc/src/token_parameters.dart';
+import 'package:oidc4vc/src/verification_type.dart';
+import 'package:oidc4vc/src/verifier_token_parameters.dart';
 import 'package:secp256k1/secp256k1.dart';
 import 'package:uuid/uuid.dart';
 
 /// {@template ebsi}
 /// EBSI wallet compliance
 /// {@endtemplate}
-class Ebsi {
+class OIDC4VC {
   /// {@macro ebsi}
-  Ebsi(this.client);
+  OIDC4VC(this.client);
 
   ///
   final Dio client;

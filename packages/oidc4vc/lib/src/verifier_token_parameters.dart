@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ebsi/src/token_parameters.dart';
+import 'package:oidc4vc/src/token_parameters.dart';
 
 /// Extends [TokenParameters] to handle additional parameters
 /// for verifier interactions.

@@ -2,8 +2,8 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:dio/dio.dart';
-import 'package:ebsi/ebsi.dart';
 import 'package:flutter/material.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ManageDidEbsiPage extends StatelessWidget {
@@ -17,10 +17,11 @@ class ManageDidEbsiPage extends StatelessWidget {
   }
 
   Future<String> getDid() async {
-    final ebsi = Ebsi(Dio());
+    final oidc4vc = OIDC4VC(Dio());
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-    final privateKey = await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic!);
-    final did = await ebsi.getDidFromMnemonic(null, privateKey);
+    final privateKey =
+        await oidc4vc.privateKeyFromMnemonic(mnemonic: mnemonic!);
+    final did = await oidc4vc.getDidFromMnemonic(null, privateKey);
     return did;
   }
 

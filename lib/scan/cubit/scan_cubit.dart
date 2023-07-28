@@ -9,10 +9,10 @@ import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
-import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:jose/jose.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -36,14 +36,14 @@ class ScanCubit extends Cubit<ScanState> {
     required this.credentialsCubit,
     required this.didKitProvider,
     required this.secureStorageProvider,
-    required this.ebsi,
+    required this.oidc4vc,
   }) : super(const ScanState());
 
   final DioClient client;
   final CredentialsCubit credentialsCubit;
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
-  final Ebsi ebsi;
+  final OIDC4VC oidc4vc;
 
   Future<void> credentialOffer({
     required Uri uri,
@@ -59,17 +59,17 @@ class ScanCubit extends Cubit<ScanState> {
     try {
       if (uri.queryParameters['scope'] == 'openid' ||
           uri.toString().startsWith('openid://?client_id')) {
-        final ebsi = Ebsi(Dio());
+        final oidc4vc = OIDC4VC(Dio());
         final mnemonic =
             await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
         final privateKey =
-            await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic!);
+            await oidc4vc.privateKeyFromMnemonic(mnemonic: mnemonic!);
 
         final credentialList = credentialsToBePresented!
             .map((e) => jsonEncode(e.toJson()))
             .toList();
 
-        await ebsi.sendPresentation(uri, credentialList, null, privateKey);
+        await oidc4vc.sendPresentation(uri, credentialList, null, privateKey);
 
         await presentationActivity(
           credentialModels: credentialsToBePresented,

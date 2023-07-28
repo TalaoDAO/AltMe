@@ -38,8 +38,6 @@ dependencies:
   did_kit:
     path: packages/did_kit
   dotted_border: ^2.0.0+3
-  ebsi:
-    path: packages/ebsi
   ed25519_hd_key: ^2.2.0
   equatable: ^2.0.5
   eth_sig_util: ^0.0.9
@@ -80,6 +78,8 @@ dependencies:
   mobile_scanner: ^3.2.0
   network_image_mock: ^2.1.1
   no_screenshot: ^0.0.1+6
+  oidc4vc:
+    path: packages/oidc4vc
   open_filex: ^4.3.2
   package_info_plus: ^4.0.2
   path: ^1.8.3

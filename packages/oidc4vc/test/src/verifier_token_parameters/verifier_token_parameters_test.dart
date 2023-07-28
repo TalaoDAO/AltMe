@@ -5,8 +5,8 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
-import 'package:ebsi/ebsi.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 import 'verifier_token_parameters_class.dart';
 

@@ -655,13 +655,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0+3"
-  ebsi:
-    dependency: "direct main"
-    description:
-      path: "packages/ebsi"
-      relative: true
-    source: path
-    version: "0.1.0+1"
   ed25519_edwards:
     dependency: transitive
     description:
@@ -1544,6 +1537,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  oidc4vc:
+    dependency: "direct main"
+    description:
+      path: "packages/oidc4vc"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   olm:
     dependency: transitive
     description:

@@ -2,9 +2,9 @@ import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:dio/dio.dart';
-import 'package:ebsi/ebsi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class DidEbsiPrivateKeyPage extends StatefulWidget {
@@ -27,9 +27,10 @@ class _DidEbsiPrivateKeyPageState extends State<DidEbsiPrivateKeyPage>
   late AnimationController animationController;
 
   Future<String> getPrivateKey() async {
-    final ebsi = Ebsi(Dio());
+    final oidc4vc = OIDC4VC(Dio());
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-    final privateKey = await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic!);
+    final privateKey =
+        await oidc4vc.privateKeyFromMnemonic(mnemonic: mnemonic!);
     return privateKey;
   }
 
