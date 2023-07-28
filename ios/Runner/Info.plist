@@ -80,6 +80,16 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>wc-altme</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wc-altme</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>tezos</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
