@@ -924,5 +924,6 @@
     "placeholders": {
       "networkType": {}
     }
-  }
+  },
+  "oidc4vcProfile": "OIDC4VC Profile"
 }

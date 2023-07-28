@@ -94,6 +94,10 @@ class ProfileCubit extends Cubit<ProfileState> {
           (await secureStorageProvider.get(SecureStorageKeys.alertEnabled)) ==
               'true';
 
+      final oidc4vcType =
+          (await secureStorageProvider.get(SecureStorageKeys.oidc4vcType)) ??
+              OIDC4VCTye.EBSIV2.toString();
+
       final profileModel = ProfileModel(
         firstName: firstName,
         lastName: lastName,
@@ -108,6 +112,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         isEnterprise: isEnterprise,
         isBiometricEnabled: isBiometricEnabled,
         isAlertEnabled: isAlertEnabled,
+        oidc4vcType: oidc4vcType,
       );
 
       emit(
@@ -185,6 +190,11 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.isAlertEnabled.toString(),
       );
 
+      await secureStorageProvider.set(
+        SecureStorageKeys.oidc4vcType,
+        profileModel.oidc4vcType,
+      );
+
       emit(
         state.copyWith(
           model: profileModel,
@@ -223,6 +233,14 @@ class ProfileCubit extends Cubit<ProfileState> {
         state.model.copyWith(polygonIdNetwork: polygonIdNetwork.toString());
 
     await polygonIdCubit.setEnv(polygonIdNetwork);
+
+    await update(profileModel);
+  }
+
+  Future<void> updateOIDC4VCType(OIDC4VCTye oidc4vcTye) async {
+    emit(state.copyWith(status: AppStatus.loading));
+    final profileModel =
+        state.model.copyWith(oidc4vcType: oidc4vcTye.toString());
 
     await update(profileModel);
   }

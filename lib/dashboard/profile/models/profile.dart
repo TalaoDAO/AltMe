@@ -20,6 +20,7 @@ class ProfileModel extends Equatable {
     this.companyName = '',
     this.companyWebsite = '',
     this.jobTitle = '',
+    required this.oidc4vcType,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
@@ -39,6 +40,7 @@ class ProfileModel extends Equatable {
         isBiometricEnabled: false,
         isAlertEnabled: false,
         tezosNetwork: TezosNetwork.mainNet(),
+        oidc4vcType: OIDC4VCTye.EBSIV2.toString(),
       );
 
   final String firstName;
@@ -54,6 +56,7 @@ class ProfileModel extends Equatable {
   final bool isEnterprise;
   final bool isBiometricEnabled;
   final bool isAlertEnabled;
+  final String oidc4vcType;
 
   @override
   List<Object> get props => [
@@ -69,7 +72,8 @@ class ProfileModel extends Equatable {
         jobTitle,
         isEnterprise,
         isBiometricEnabled,
-        isAlertEnabled
+        isAlertEnabled,
+        oidc4vcType,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
@@ -88,6 +92,7 @@ class ProfileModel extends Equatable {
     bool? isEnterprise,
     bool? isBiometricEnabled,
     bool? isAlertEnabled,
+    String? oidc4vcType,
   }) {
     return ProfileModel(
       firstName: firstName ?? this.firstName,
@@ -103,6 +108,7 @@ class ProfileModel extends Equatable {
       isEnterprise: isEnterprise ?? this.isEnterprise,
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
       isAlertEnabled: isAlertEnabled ?? this.isAlertEnabled,
+      oidc4vcType: oidc4vcType ?? this.oidc4vcType,
     );
   }
 }
