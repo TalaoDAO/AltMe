@@ -85,7 +85,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         await beacon.pair(pairingRequest: pairingRequest);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-      } else if (scannedResponse.startsWith('wc:')) {
+      } else if (scannedResponse.startsWith('wc:') ||
+          scannedResponse.startsWith('wc-altme:')) {
         /// wallet connect
         await walletConnectCubit.connect(scannedResponse);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
