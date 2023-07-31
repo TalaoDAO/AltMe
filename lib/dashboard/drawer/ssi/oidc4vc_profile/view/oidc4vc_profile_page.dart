@@ -45,13 +45,17 @@ class OIDC4VCProfilePage extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const ScrollPhysics(),
                   itemBuilder: (context, index) {
+                    final OIDC4VCType currentType = OIDC4VCType.values[index];
                     return Column(
                       children: [
                         ListTile(
                           onTap: () {
+                            if (!currentType.isEnabled) {
+                              return;
+                            }
                             context
                                 .read<ProfileCubit>()
-                                .updateOIDC4VCType(OIDC4VCType.values[index]);
+                                .updateOIDC4VCType(currentType);
                           },
                           shape: const RoundedRectangleBorder(
                             side: BorderSide(
@@ -60,17 +64,24 @@ class OIDC4VCProfilePage extends StatelessWidget {
                             ),
                           ),
                           title: Text(
-                            OIDC4VCType.values[index].name,
+                            OIDC4VCType.values[index].rename,
                             style: Theme.of(context)
-                                .listTileTheme
-                                .titleTextStyle
-                                ?.copyWith(color: const Color(0xFF080F33)),
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                  color: currentType.isEnabled
+                                      ? Theme.of(context).colorScheme.onPrimary
+                                      : Theme.of(context).colorScheme.lightGrey,
+                                ),
                           ),
                           trailing: Icon(
-                            state.model.oidc4vcType == OIDC4VCType.values[index]
+                            state.model.oidc4vcType == currentType
                                 ? Icons.radio_button_checked
                                 : Icons.radio_button_unchecked,
                             size: Sizes.icon2x,
+                            color: currentType.isEnabled
+                                ? Theme.of(context).colorScheme.onPrimary
+                                : Theme.of(context).colorScheme.lightGrey,
                           ),
                         ),
                         if (index < OIDC4VCType.values.length - 1)

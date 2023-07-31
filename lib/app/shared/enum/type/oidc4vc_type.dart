@@ -2,6 +2,32 @@ import 'package:dio/dio.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 enum OIDC4VCType {
+  DEFAULT(
+    issuerVcType: 'ldp_vc',
+    verifierVpType: 'ldp_vp',
+    offerPrefix: 'openid-credential-offer://',
+    presentationPrefix: 'openid-vc://',
+    cryptographicBindingMethodsSupported: ['DID'],
+    credentialSupported: [],
+    grantTypesSupported: [
+      'authorization_code',
+      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
+    ],
+    cryptographicSuitesSupported: [
+      'ES256K',
+      'ES256',
+      'ES384',
+      'ES512',
+      'RS256'
+    ],
+    subjectSyntaxTypesSupported: ['did:ebsi', 'did:key', 'did:ethr', 'did:tz'],
+    schemaForType: false,
+    oidc4VciDraft:
+        'https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html',
+    siopv2Draft: '',
+    serviceDocumentation: 'Last release of the OIDC4VC documentation',
+  ),
+
   EBSIV2(
     issuerVcType: 'jwt_vc',
     verifierVpType: 'jwt_vp',
@@ -29,6 +55,31 @@ enum OIDC4VCType {
         'It is the profile of the EBSI V2 compliant test. DID for natural person is did:ebsi. The schema url is used as the VC type in the credential offer QR code. The prefix openid_initiate_issuance://',
   ),
 
+  ARF(
+    issuerVcType: 'jwt_vc',
+    verifierVpType: 'jwt_vp',
+    offerPrefix: 'openid-credential-offer://',
+    presentationPrefix: 'openid-vc://',
+    cryptographicBindingMethodsSupported: ['DID'],
+    credentialSupported: [],
+    grantTypesSupported: [
+      'authorization_code',
+      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
+    ],
+    cryptographicSuitesSupported: [
+      'ES256K',
+      'ES256',
+      'ES384',
+      'ES512',
+      'RS256'
+    ],
+    subjectSyntaxTypesSupported: ['did:ebsi', 'did:key', 'did:ethr', 'did:tz'],
+    schemaForType: false,
+    oidc4VciDraft: '',
+    siopv2Draft: '',
+    serviceDocumentation: '',
+  ),
+
   EBSIV3(
     issuerVcType: 'jwt_vc',
     verifierVpType: 'jwt_vp',
@@ -51,83 +102,6 @@ enum OIDC4VCType {
     schemaForType: false,
     oidc4VciDraft:
         'https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html',
-    siopv2Draft: '',
-    serviceDocumentation: '',
-  ),
-
-  GAIAX(
-    issuerVcType: 'ldp_vc',
-    verifierVpType: 'ldp_vp',
-    offerPrefix: 'openid-initiate-issuance://',
-    presentationPrefix: 'openid-vc://',
-    cryptographicBindingMethodsSupported: ['DID'],
-    credentialSupported: ['EmployeeCredential'],
-    grantTypesSupported: [
-      'authorization_code',
-      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
-    ],
-    cryptographicSuitesSupported: [
-      'ES256K',
-      'ES256',
-      'ES384',
-      'ES512',
-      'RS256'
-    ],
-    subjectSyntaxTypesSupported: ['did:key'],
-    schemaForType: false,
-    oidc4VciDraft:
-        'https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html',
-    siopv2Draft: '',
-    serviceDocumentation: 'Issuer pour projet Docaposte Gaia-X',
-  ),
-
-  DEFAULT(
-    issuerVcType: 'ldp_vc',
-    verifierVpType: 'ldp_vp',
-    offerPrefix: 'openid-credential-offer://',
-    presentationPrefix: 'openid-vc://',
-    cryptographicBindingMethodsSupported: ['DID'],
-    credentialSupported: [],
-    grantTypesSupported: [
-      'authorization_code',
-      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
-    ],
-    cryptographicSuitesSupported: [
-      'ES256K',
-      'ES256',
-      'ES384',
-      'ES512',
-      'RS256'
-    ],
-    subjectSyntaxTypesSupported: ['did:ebsi', 'did:key', 'did:ethr', 'did:tz'],
-    schemaForType: false,
-    oidc4VciDraft:
-        'https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html',
-    siopv2Draft: '',
-    serviceDocumentation: 'Last release of the OIDC4VC documentation',
-  ),
-
-  ARF(
-    issuerVcType: 'jwt_vc',
-    verifierVpType: 'jwt_vp',
-    offerPrefix: 'openid-credential-offer://',
-    presentationPrefix: 'openid-vc://',
-    cryptographicBindingMethodsSupported: ['DID'],
-    credentialSupported: [],
-    grantTypesSupported: [
-      'authorization_code',
-      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
-    ],
-    cryptographicSuitesSupported: [
-      'ES256K',
-      'ES256',
-      'ES384',
-      'ES512',
-      'RS256'
-    ],
-    subjectSyntaxTypesSupported: ['did:ebsi', 'did:key', 'did:ethr', 'did:tz'],
-    schemaForType: false,
-    oidc4VciDraft: '',
     siopv2Draft: '',
     serviceDocumentation: '',
   ),
@@ -206,5 +180,32 @@ extension OIDC4VCTypeX on OIDC4VCType {
         serviceDocumentation: serviceDocumentation,
       ),
     );
+  }
+
+  String get rename {
+    switch (this) {
+      case OIDC4VCType.DEFAULT:
+        return 'DEFAULT';
+      case OIDC4VCType.EBSIV2:
+        return 'EBSI-V2';
+      case OIDC4VCType.EBSIV3:
+        return 'EBSI-V3';
+      case OIDC4VCType.ARF:
+        return 'ARF';
+      case OIDC4VCType.JWTVC:
+        return 'JWT-VC';
+    }
+  }
+
+  bool get isEnabled {
+    switch (this) {
+      case OIDC4VCType.DEFAULT:
+      case OIDC4VCType.EBSIV2:
+      case OIDC4VCType.ARF:
+        return true;
+      case OIDC4VCType.EBSIV3:
+      case OIDC4VCType.JWTVC:
+        return false;
+    }
   }
 }
