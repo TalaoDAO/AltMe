@@ -6,6 +6,7 @@ import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
+import 'package:altme/did/did.dart';
 import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
 import 'package:altme/ebsi/verify_encoded_data.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
@@ -15,6 +16,7 @@ import 'package:altme/scan/scan.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
+import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -40,6 +42,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.walletConnectCubit,
     required this.secureStorageProvider,
     required this.polygonIdCubit,
+    required this.didCubit,
+    required this.didKitProvider,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -54,6 +58,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final WalletConnectCubit walletConnectCubit;
   final SecureStorageProvider secureStorageProvider;
   final PolygonIdCubit polygonIdCubit;
+  final DIDCubit didCubit;
+  final DIDKitProvider didKitProvider;
 
   final log = getLogger('QRCodeScanCubit');
 
@@ -322,26 +328,37 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     late final dynamic data;
 
     try {
-      /// ebsi credential
-      /// issuer side (oidc4VCI)
-      if (state.uri.toString().startsWith('openid://initiate_issuance?') ||
-          state.uri.toString().startsWith('openid-initiate_issuance://')) {
-        await initiateEbsiCredentialIssuance(
-          state.uri.toString(),
-          credentialsCubit,
-          profileCubit,
-          getSecureStorage,
-        );
+      /// OIDC4VC case
+      if (state.uri.toString().startsWith('openid')) {
+        OIDC4VCType? currentOIIDC4VCType;
 
-        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-        return;
-      }
+        for (final oidc4vcType in OIDC4VCType.values) {
+          if (oidc4vcType.isEnabled &&
+              state.uri.toString().startsWith(oidc4vcType.offerPrefix)) {
+            currentOIIDC4VCType = oidc4vcType;
+          }
+        }
 
-      if (state.uri.toString().startsWith('openid://?client_id')) {
-        /// ebsi presentation
-        /// verifier side (siopv2) with request_uri
-        await launchSiopV2WithRequestUriFlow(state.uri);
-        return;
+        if (currentOIIDC4VCType != null) {
+          /// issuer side (oidc4VCI)
+          await initiateEbsiCredentialIssuance(
+            state.uri.toString(),
+            credentialsCubit,
+            currentOIIDC4VCType,
+            getSecureStorage,
+            didKitProvider,
+          );
+
+          emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+          return;
+        }
+
+        if (state.uri.toString().startsWith('openid://?client_id')) {
+          /// ebsi presentation
+          /// verifier side (siopv2) with request_uri
+          await launchSiopV2WithRequestUriFlow(state.uri);
+          return;
+        }
       }
 
       /// did credential addition and presentation

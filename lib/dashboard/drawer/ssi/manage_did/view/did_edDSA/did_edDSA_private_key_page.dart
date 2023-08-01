@@ -5,39 +5,43 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
-class DidEbsiPrivateKeyPage extends StatefulWidget {
-  const DidEbsiPrivateKeyPage({super.key});
+class DIDEdDSAPrivateKeyPage extends StatelessWidget {
+  const DIDEdDSAPrivateKeyPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => const DidEbsiPrivateKeyPage(),
-      settings: const RouteSettings(name: '/DidEbsiPrivateKeyPage'),
+      builder: (_) => const DIDEdDSAPrivateKeyPage(),
+      settings: const RouteSettings(name: '/DIDEdDSAPrivateKeyPage'),
     );
   }
 
   @override
-  State<DidEbsiPrivateKeyPage> createState() => _DidEbsiPrivateKeyPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider<DIDPrivateKeyCubit>.value(
+      value: context.read<DIDPrivateKeyCubit>(),
+      child: const DIDPrivateKeyView(),
+    );
+  }
 }
 
-class _DidEbsiPrivateKeyPageState extends State<DidEbsiPrivateKeyPage>
+class DIDPrivateKeyView extends StatefulWidget {
+  const DIDPrivateKeyView({super.key});
+
+  @override
+  State<DIDPrivateKeyView> createState() => _DIDPrivateKeyViewState();
+}
+
+class _DIDPrivateKeyViewState extends State<DIDPrivateKeyView>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
 
-  Future<String> getPrivateKey() async {
-    final oidc4vc =
-        context.read<ProfileCubit>().state.model.oidc4vcType.getOIDC4VC;
-    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-    final privateKey =
-        await oidc4vc.privateKeyFromMnemonic(mnemonic: mnemonic!);
-    return privateKey;
-  }
-
   @override
   void initState() {
     super.initState();
+    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
+
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 20),
@@ -83,39 +87,31 @@ class _DidEbsiPrivateKeyPageState extends State<DidEbsiPrivateKeyPage>
             const SizedBox(
               height: Sizes.spaceNormal,
             ),
-            FutureBuilder<String>(
-              future: getPrivateKey(),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.done:
-                    return Column(
-                      children: [
-                        Text(
-                          snapshot.data!,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: Sizes.spaceXLarge),
-                        CopyButton(
-                          onTap: () async {
-                            await Clipboard.setData(
-                              ClipboardData(text: snapshot.data!),
-                            );
-                            AlertMessage.showStateMessage(
-                              context: context,
-                              stateMessage: StateMessage.success(
-                                stringMessage: l10n.copiedToClipboard,
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    );
-                  case ConnectionState.waiting:
-                  case ConnectionState.none:
-                  case ConnectionState.active:
-                    return const Text('');
-                }
+            BlocBuilder<DIDPrivateKeyCubit, String>(
+              builder: (context, state) {
+                return Column(
+                  children: [
+                    Text(
+                      state,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: Sizes.spaceXLarge),
+                    CopyButton(
+                      onTap: () async {
+                        await Clipboard.setData(
+                          ClipboardData(text: state),
+                        );
+                        AlertMessage.showStateMessage(
+                          context: context,
+                          stateMessage: StateMessage.success(
+                            stringMessage: l10n.copiedToClipboard,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                );
               },
             ),
             Expanded(

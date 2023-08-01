@@ -4,12 +4,15 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:altme/did/did.dart';
+import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fast_base58/fast_base58.dart';
 import 'package:jose/jose.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -37,6 +40,7 @@ class ScanCubit extends Cubit<ScanState> {
     required this.didKitProvider,
     required this.secureStorageProvider,
     required this.profileCubit,
+    required this.didCubit,
   }) : super(const ScanState());
 
   final DioClient client;
@@ -44,6 +48,7 @@ class ScanCubit extends Cubit<ScanState> {
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
   final ProfileCubit profileCubit;
+  final DIDCubit didCubit;
 
   Future<void> credentialOffer({
     required Uri uri,
@@ -59,17 +64,63 @@ class ScanCubit extends Cubit<ScanState> {
     try {
       if (uri.queryParameters['scope'] == 'openid' ||
           uri.toString().startsWith('openid://?client_id')) {
-        final OIDC4VC oidc4vc = profileCubit.state.model.oidc4vcType.getOIDC4VC;
+        OIDC4VCType? currentOIIDC4VCType;
+
+        for (final oidc4vcType in OIDC4VCType.values) {
+          if (oidc4vcType.isEnabled &&
+              state.uri.toString().startsWith(oidc4vcType.offerPrefix)) {
+            currentOIIDC4VCType = oidc4vcType;
+          }
+        }
+
+        if (currentOIIDC4VCType == null) {
+          return;
+        }
+
+        final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
         final mnemonic =
             await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-        final privateKey =
-            await oidc4vc.privateKeyFromMnemonic(mnemonic: mnemonic!);
+        final privateKey = await oidc4vc.privateKeyFromMnemonic(
+          mnemonic: mnemonic!,
+          index: currentOIIDC4VCType.index,
+        );
+
+        late String did;
+        late String kid;
+
+        switch (currentOIIDC4VCType) {
+          case OIDC4VCType.DEFAULT:
+            const didMethod = AltMeStrings.defaultDIDMethod;
+            did = didKitProvider.keyToDID(didMethod, privateKey);
+            kid = await didKitProvider.keyToVerificationMethod(
+                didMethod, privateKey);
+            break;
+          case OIDC4VCType.EBSIV2:
+            final private = await oidc4vc.getPrivateKey(mnemonic, privateKey);
+
+            final thumbprint = getThumbprint(private);
+            final encodedAddress = Base58Encode([2, ...thumbprint]);
+            did = 'did:ebsi:z$encodedAddress';
+            final lastPart = Base58Encode(thumbprint);
+            kid = '$did#$lastPart';
+            break;
+          case OIDC4VCType.EBSIV3:
+          case OIDC4VCType.JWTVC:
+            break;
+        }
 
         final credentialList = credentialsToBePresented!
             .map((e) => jsonEncode(e.toJson()))
             .toList();
 
-        await oidc4vc.sendPresentation(uri, credentialList, null, privateKey);
+        await oidc4vc.sendPresentation(
+          uri,
+          credentialList,
+          null,
+          privateKey,
+          did,
+          kid,
+        );
 
         await presentationActivity(
           credentialModels: credentialsToBePresented,

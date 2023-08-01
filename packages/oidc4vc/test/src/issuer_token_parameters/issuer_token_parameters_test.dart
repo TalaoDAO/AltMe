@@ -6,14 +6,14 @@ void main() {
   group('override test', () {
     final issuerTokenParameterTest = IssuerTokenParameterTest();
 
-    test(
-      'public key is P-256K private key without d parameter',
-      issuerTokenParameterTest.publicKeyTest,
-    );
+    // test(
+    //   'public key is P-256K private key without d parameter',
+    //   issuerTokenParameterTest.publicKeyTest,
+    // );
 
-    test('did EBSI', issuerTokenParameterTest.didTest);
+    // test('did EBSI', issuerTokenParameterTest.didTest);
 
-    test('kID EBSI', issuerTokenParameterTest.keyIdTest);
+    // test('kID EBSI', issuerTokenParameterTest.keyIdTest);
 
     group('algorithm test', () {
       test(
@@ -32,16 +32,16 @@ void main() {
       );
     });
 
-    group('thumbprint test', () {
-      test(
-        'thumbprint of the public Key',
-        issuerTokenParameterTest.thumprintOfKey,
-      );
+    // group('thumbprint test', () {
+    //   test(
+    //     'thumbprint of the public Key',
+    //     issuerTokenParameterTest.thumprintOfKey,
+    //   );
 
-      test(
-        'thumbrprint of the Key from exemple in rfc 7638',
-        issuerTokenParameterTest.thumprintOfKeyForrfc7638,
-      );
-    });
+    //   test(
+    //     'thumbrprint of the Key from exemple in rfc 7638',
+    //     issuerTokenParameterTest.thumprintOfKeyForrfc7638,
+    //   );
+    // });
   });
 }

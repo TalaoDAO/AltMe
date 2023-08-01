@@ -10,8 +10,7 @@ class OIDC4VCModel {
     required this.grantTypesSupported,
     required this.credentialSupported,
     required this.schemaForType,
-    required this.oidc4VciDraft,
-    required this.siopv2Draft,
+    required this.publicJWKNeeded,
     required this.serviceDocumentation,
   });
 
@@ -25,7 +24,6 @@ class OIDC4VCModel {
   final List<String> grantTypesSupported;
   final List<String> credentialSupported;
   final bool schemaForType;
-  final String oidc4VciDraft;
-  final String siopv2Draft;
+  final bool publicJWKNeeded;
   final String serviceDocumentation;
 }

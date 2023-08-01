@@ -6,7 +6,13 @@ import 'package:oidc4vc/src/token_parameters.dart';
 /// for verifier interactions.
 class VerifierTokenParameters extends TokenParameters {
   ///
-  VerifierTokenParameters(super.privateKey, this.uri, this.credentials);
+  VerifierTokenParameters(
+    super.privateKey,
+    super.did,
+    super.kid,
+    this.uri,
+    this.credentials,
+  );
 
   /// [uri] provided by verifier and containing nonce
   final Uri uri;

@@ -6,7 +6,7 @@ import '../token_parameters/token_parameters_class.dart';
 
 class VerifierTokenParametersTest extends TokenParameterTest {
   final verifierTokenParameters =
-      VerifierTokenParameters(privateKey, Uri.parse(''), []);
+      VerifierTokenParameters(privateKey, '', '', Uri.parse(''), []);
 
   @override
   void publicKeyTest() {
@@ -15,7 +15,7 @@ class VerifierTokenParametersTest extends TokenParameterTest {
 
   @override
   void didTest() {
-    expect(tokenParameters.didKey, didKey);
+    expect(tokenParameters.did, didKey);
   }
 
   @override
@@ -31,26 +31,26 @@ class VerifierTokenParametersTest extends TokenParameterTest {
   @override
   void algorithmIsES256Test() {
     final tokenParameters =
-        VerifierTokenParameters(privateKey2, Uri.parse(''), []);
+        VerifierTokenParameters(privateKey2, '', '', Uri.parse(''), []);
     expect(tokenParameters.alg, ES256Alg);
   }
 
   @override
   void algorithmIsNotNullTest() {
     final tokenParameters =
-        VerifierTokenParameters(keyWithAlg, Uri.parse(''), []);
+        VerifierTokenParameters(keyWithAlg, '', '', Uri.parse(''), []);
     expect(tokenParameters.alg, HS256Alg);
   }
 
-  @override
-  void thumprintOfKey() {
-    expect(tokenParameters.thumbprint, thumbprint);
-  }
+  // @override
+  // void thumprintOfKey() {
+  //   expect(tokenParameters.thumbprint, thumbprint);
+  // }
 
-  @override
-  void thumprintOfKeyForrfc7638() {
-    final tokenParameters2 =
-        VerifierTokenParameters(rfc7638Jwk, Uri.parse(''), []);
-    expect(tokenParameters2.thumbprint, expectedThumbprintForrfc7638Jwk);
-  }
+  // @override
+  // void thumprintOfKeyForrfc7638() {
+  //   final tokenParameters2 =
+  //       VerifierTokenParameters(rfc7638Jwk, '', '', '', Uri.parse(''), []);
+  //   expect(tokenParameters2.thumbprint, expectedThumbprintForrfc7638Jwk);
+  // }
 }

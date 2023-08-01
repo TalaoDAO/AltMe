@@ -5,13 +5,13 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ManageDIDPage extends StatelessWidget {
-  const ManageDIDPage({super.key});
+class ManageDIDEdDSAPage extends StatelessWidget {
+  const ManageDIDEdDSAPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => const ManageDIDPage(),
-      settings: const RouteSettings(name: '/ManageDIDPage'),
+      builder: (_) => const ManageDIDEdDSAPage(),
+      settings: const RouteSettings(name: '/ManageDIDEdDSAPage'),
     );
   }
 
@@ -20,7 +20,7 @@ class ManageDIDPage extends StatelessWidget {
     final l10n = context.l10n;
     final did = context.read<DIDCubit>().state.did ?? '...';
     return BasePage(
-      title: l10n.manageKeyDecentralizedId,
+      title: l10n.manageKeyDecentralizedIdEdSA,
       titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
@@ -38,7 +38,7 @@ class ManageDIDPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
               child: Divider(),
             ),
-            DidPrivateKey(route: DIDPrivateKeyPage.route()),
+            DidPrivateKey(route: DIDEdDSAPrivateKeyPage.route()),
           ],
         ),
       ),

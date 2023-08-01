@@ -10,6 +10,7 @@ Future<void> addEbsiCredential(
   Uri uri,
   CredentialsCubit credentialsCubit,
 ) async {
+  //jwt_vc
   final jws = JsonWebSignature.fromCompactSerialization(
     encodedCredentialFromEbsi['credential'] as String,
   );

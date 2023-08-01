@@ -11,6 +11,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
+import 'package:did_kit/did_kit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
@@ -146,12 +147,24 @@ class _SplashViewState extends State<SplashView> {
         beaconData = value;
       }
       if (uri.scheme == 'openid' && uri.authority == 'initiate_issuance') {
-        await initiateEbsiCredentialIssuance(
-          uri.toString(),
-          context.read<CredentialsCubit>(),
-          context.read<ProfileCubit>(),
-          secure_storage.getSecureStorage,
-        );
+        OIDC4VCType? currentOIIDC4VCType;
+
+        for (final oidc4vcType in OIDC4VCType.values) {
+          if (oidc4vcType.isEnabled &&
+              uri.toString().startsWith(oidc4vcType.offerPrefix)) {
+            currentOIIDC4VCType = oidc4vcType;
+          }
+        }
+
+        if (currentOIIDC4VCType != null) {
+          await initiateEbsiCredentialIssuance(
+            uri.toString(),
+            context.read<CredentialsCubit>(),
+            currentOIIDC4VCType,
+            secure_storage.getSecureStorage,
+            DIDKitProvider(),
+          );
+        }
       }
     });
     if (isBeaconRequest && beaconData != '') {

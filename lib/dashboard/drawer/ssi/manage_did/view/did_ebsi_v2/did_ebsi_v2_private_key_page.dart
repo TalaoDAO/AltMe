@@ -1,47 +1,43 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
-class DIDPrivateKeyPage extends StatelessWidget {
-  const DIDPrivateKeyPage({super.key});
+class DidEbsiV2PrivateKeyPage extends StatefulWidget {
+  const DidEbsiV2PrivateKeyPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => const DIDPrivateKeyPage(),
-      settings: const RouteSettings(name: '/DIDPrivateKeyPage'),
+      builder: (_) => const DidEbsiV2PrivateKeyPage(),
+      settings: const RouteSettings(name: '/DidEbsiV2PrivateKeyPage'),
     );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider<DIDPrivateKeyCubit>.value(
-      value: context.read<DIDPrivateKeyCubit>(),
-      child: const DIDPrivateKeyView(),
-    );
-  }
+  State<DidEbsiV2PrivateKeyPage> createState() =>
+      _DidEbsiV2PrivateKeyPageState();
 }
 
-class DIDPrivateKeyView extends StatefulWidget {
-  const DIDPrivateKeyView({super.key});
-
-  @override
-  State<DIDPrivateKeyView> createState() => _DIDPrivateKeyViewState();
-}
-
-class _DIDPrivateKeyViewState extends State<DIDPrivateKeyView>
+class _DidEbsiV2PrivateKeyPageState extends State<DidEbsiV2PrivateKeyPage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
 
+  Future<String> getPrivateKey() async {
+    final oidc4vc = OIDC4VCType.EBSIV2.getOIDC4VC;
+    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+    final privateKey = await oidc4vc.privateKeyFromMnemonic(
+      mnemonic: mnemonic!,
+      index: OIDC4VCType.EBSIV2.index,
+    );
+    return privateKey;
+  }
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
-
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 20),
@@ -87,31 +83,39 @@ class _DIDPrivateKeyViewState extends State<DIDPrivateKeyView>
             const SizedBox(
               height: Sizes.spaceNormal,
             ),
-            BlocBuilder<DIDPrivateKeyCubit, String>(
-              builder: (context, state) {
-                return Column(
-                  children: [
-                    Text(
-                      state,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: Sizes.spaceXLarge),
-                    CopyButton(
-                      onTap: () async {
-                        await Clipboard.setData(
-                          ClipboardData(text: state),
-                        );
-                        AlertMessage.showStateMessage(
-                          context: context,
-                          stateMessage: StateMessage.success(
-                            stringMessage: l10n.copiedToClipboard,
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                );
+            FutureBuilder<String>(
+              future: getPrivateKey(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.done:
+                    return Column(
+                      children: [
+                        Text(
+                          snapshot.data!,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: Sizes.spaceXLarge),
+                        CopyButton(
+                          onTap: () async {
+                            await Clipboard.setData(
+                              ClipboardData(text: snapshot.data!),
+                            );
+                            AlertMessage.showStateMessage(
+                              context: context,
+                              stateMessage: StateMessage.success(
+                                stringMessage: l10n.copiedToClipboard,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                  case ConnectionState.active:
+                    return const Text('');
+                }
               },
             ),
             Expanded(

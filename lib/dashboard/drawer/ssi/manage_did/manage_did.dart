@@ -1,8 +1,10 @@
 export 'cubit/did_private_key_cubit.dart';
 export 'cubit/did_private_key_dialog_cubit.dart';
-export 'view/did/did_private_key_page.dart';
-export 'view/did/manage_did_page.dart';
-export 'view/did_ebsi/did_ebsi_private_key_page.dart';
-export 'view/did_ebsi/manage_did_ebsi_page.dart';
+export 'view/did_ebsi_v2/did_ebsi_v2_private_key_page.dart';
+export 'view/did_ebsi_v2/manage_did_ebsi_v2_page.dart';
+export 'view/did_edDSA/did_edDSA_private_key_page.dart';
+export 'view/did_edDSA/manage_did_edDSA_page.dart';
 export 'view/did_polygon_id/manage_did_polygon_id_page.dart';
+export 'view/did_secp256k1/did_secp256k1_private_key_page.dart';
+export 'view/did_secp256k1/manage_did_secp256k1_page.dart';
 export 'widgets/widgets.dart';

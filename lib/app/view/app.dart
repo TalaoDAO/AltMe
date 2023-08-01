@@ -144,6 +144,7 @@ class App extends StatelessWidget {
             didKitProvider: DIDKitProvider(),
             secureStorageProvider: secure_storage.getSecureStorage,
             profileCubit: context.read<ProfileCubit>(),
+            didCubit: context.read<DIDCubit>(),
           ),
         ),
         BlocProvider<QRCodeScanCubit>(
@@ -160,6 +161,8 @@ class App extends StatelessWidget {
             walletConnectCubit: context.read<WalletConnectCubit>(),
             secureStorageProvider: secure_storage.getSecureStorage,
             polygonIdCubit: context.read<PolygonIdCubit>(),
+            didCubit: context.read<DIDCubit>(),
+            didKitProvider: DIDKitProvider(),
           ),
         ),
         BlocProvider(

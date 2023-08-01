@@ -6,10 +6,12 @@ class DrawerItem extends StatelessWidget {
   const DrawerItem({
     super.key,
     required this.title,
+    this.isDisabled = false,
     this.onTap,
     this.trailing,
   });
 
+  final bool isDisabled;
   final Widget? trailing;
   final String title;
   final VoidCallback? onTap;
@@ -35,7 +37,11 @@ class DrawerItem extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: Theme.of(context).textTheme.drawerItem,
+                style: Theme.of(context).textTheme.drawerItem.copyWith(
+                      color: isDisabled
+                          ? Theme.of(context).colorScheme.lightGrey
+                          : null,
+                    ),
               ),
             ),
             if (trailing != null)
@@ -45,7 +51,9 @@ class DrawerItem extends StatelessWidget {
               Icon(
                 Icons.chevron_right,
                 size: 26,
-                color: Theme.of(context).colorScheme.unSelectedLabel,
+                color: isDisabled
+                    ? Theme.of(context).colorScheme.lightGrey
+                    : Theme.of(context).colorScheme.unSelectedLabel,
               )
             ],
           ],

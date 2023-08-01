@@ -8,7 +8,7 @@ enum OIDC4VCType {
     offerPrefix: 'openid-credential-offer://',
     presentationPrefix: 'openid-vc://',
     cryptographicBindingMethodsSupported: ['DID'],
-    credentialSupported: [],
+    credentialSupported: ['EmployeeCredential', 'VerifiableId'],
     grantTypesSupported: [
       'authorization_code',
       'urn:ietf:params:oauth:grant-type:pre-authorized_code'
@@ -20,12 +20,15 @@ enum OIDC4VCType {
       'ES512',
       'RS256'
     ],
-    subjectSyntaxTypesSupported: ['did:ebsi', 'did:key', 'did:ethr', 'did:tz'],
+    subjectSyntaxTypesSupported: ['did:key'],
     schemaForType: false,
-    oidc4VciDraft:
-        'https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html',
-    siopv2Draft: '',
-    serviceDocumentation: 'Last release of the OIDC4VC documentation',
+    publicJWKNeeded: false,
+    serviceDocumentation:
+        '''WORK IN PROGRESS. WE use JSON-LD VC and VP and last release of the specs.\n'''
+        '''oidc4vci_draft : https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html\n'''
+        '''siopv2_draft : https://openid.net/specs/openid-connect-self-issued-v2-1_0.html\n'''
+        '''oidc4vp_draft : https://openid.net/specs/openid-4-verifiable-presentations-1_0.html\n'''
+        '''Issuer pour projet Docaposte Gaia-X''',
   ),
 
   EBSIV2(
@@ -48,37 +51,35 @@ enum OIDC4VCType {
     ],
     credentialSupported: ['VerifiableDiploma', 'VerifiableId'],
     schemaForType: true,
-    oidc4VciDraft:
-        'https://openid.net/specs/openid-connect-4-verifiable-credential-issuance-1_0-05.html#abstract',
-    siopv2Draft: '',
+    publicJWKNeeded: true,
     serviceDocumentation:
         'It is the profile of the EBSI V2 compliant test. DID for natural person is did:ebsi. The schema url is used as the VC type in the credential offer QR code. The prefix openid_initiate_issuance://',
   ),
 
-  ARF(
-    issuerVcType: 'jwt_vc',
-    verifierVpType: 'jwt_vp',
-    offerPrefix: 'openid-credential-offer://',
-    presentationPrefix: 'openid-vc://',
-    cryptographicBindingMethodsSupported: ['DID'],
-    credentialSupported: [],
-    grantTypesSupported: [
-      'authorization_code',
-      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
-    ],
-    cryptographicSuitesSupported: [
-      'ES256K',
-      'ES256',
-      'ES384',
-      'ES512',
-      'RS256'
-    ],
-    subjectSyntaxTypesSupported: ['did:ebsi', 'did:key', 'did:ethr', 'did:tz'],
-    schemaForType: false,
-    oidc4VciDraft: '',
-    siopv2Draft: '',
-    serviceDocumentation: '',
-  ),
+  // ARF(
+  //   issuerVcType: 'jwt_vc',
+  //   verifierVpType: 'jwt_vp',
+  //   offerPrefix: 'openid-credential-offer://',
+  //   presentationPrefix: 'openid-vc://',
+  //   cryptographicBindingMethodsSupported: ['DID'],
+  //   credentialSupported: [],
+  //   grantTypesSupported: [
+  //     'authorization_code',
+  //     'urn:ietf:params:oauth:grant-type:pre-authorized_code'
+  //   ],
+  //   cryptographicSuitesSupported: [
+  //     'ES256K',
+  //     'ES256',
+  //     'ES384',
+  //     'ES512',
+  //     'RS256'
+  //   ],
+  //   subjectSyntaxTypesSupported: ['did:ebsi', 'did:key', 'did:ethr', 'did:tz'],
+  //   schemaForType: false,
+  //   oidc4VciDraft: '',
+  //   siopv2Draft: '',
+  //   serviceDocumentation: '',
+  // ),
 
   EBSIV3(
     issuerVcType: 'jwt_vc',
@@ -100,9 +101,7 @@ enum OIDC4VCType {
     ],
     subjectSyntaxTypesSupported: ['did:key'],
     schemaForType: false,
-    oidc4VciDraft:
-        'https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html',
-    siopv2Draft: '',
+    publicJWKNeeded: true,
     serviceDocumentation: '',
   ),
 
@@ -123,8 +122,7 @@ enum OIDC4VCType {
     ],
     subjectSyntaxTypesSupported: ['did:ion'],
     schemaForType: false,
-    oidc4VciDraft: '',
-    siopv2Draft: '',
+    publicJWKNeeded: true,
     serviceDocumentation: '',
   );
 
@@ -139,8 +137,7 @@ enum OIDC4VCType {
     required this.grantTypesSupported,
     required this.credentialSupported,
     required this.schemaForType,
-    required this.oidc4VciDraft,
-    required this.siopv2Draft,
+    required this.publicJWKNeeded,
     required this.serviceDocumentation,
   });
 
@@ -154,8 +151,7 @@ enum OIDC4VCType {
   final List<String> grantTypesSupported;
   final List<String> credentialSupported;
   final bool schemaForType;
-  final String oidc4VciDraft;
-  final String siopv2Draft;
+  final bool publicJWKNeeded;
   final String serviceDocumentation;
 }
 
@@ -175,8 +171,7 @@ extension OIDC4VCTypeX on OIDC4VCType {
         grantTypesSupported: grantTypesSupported,
         credentialSupported: credentialSupported,
         schemaForType: schemaForType,
-        oidc4VciDraft: oidc4VciDraft,
-        siopv2Draft: siopv2Draft,
+        publicJWKNeeded: publicJWKNeeded,
         serviceDocumentation: serviceDocumentation,
       ),
     );
@@ -190,10 +185,19 @@ extension OIDC4VCTypeX on OIDC4VCType {
         return 'EBSI-V2';
       case OIDC4VCType.EBSIV3:
         return 'EBSI-V3';
-      case OIDC4VCType.ARF:
-        return 'ARF';
       case OIDC4VCType.JWTVC:
         return 'JWT-VC';
+    }
+  }
+
+  int get index {
+    switch (this) {
+      case OIDC4VCType.DEFAULT:
+        return 2;
+      case OIDC4VCType.EBSIV2:
+      case OIDC4VCType.EBSIV3:
+      case OIDC4VCType.JWTVC:
+        return 1;
     }
   }
 
@@ -201,7 +205,7 @@ extension OIDC4VCTypeX on OIDC4VCType {
     switch (this) {
       case OIDC4VCType.DEFAULT:
       case OIDC4VCType.EBSIV2:
-      case OIDC4VCType.ARF:
+        //case OIDC4VCType.ARF:
         return true;
       case OIDC4VCType.EBSIV3:
       case OIDC4VCType.JWTVC:
