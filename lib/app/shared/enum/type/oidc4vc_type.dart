@@ -53,33 +53,11 @@ enum OIDC4VCType {
     schemaForType: true,
     publicJWKNeeded: true,
     serviceDocumentation:
-        'It is the profile of the EBSI V2 compliant test. DID for natural person is did:ebsi. The schema url is used as the VC type in the credential offer QR code. The prefix openid_initiate_issuance://',
+        '''EBSI V2 COMPLIANCE. It is the profile of the EBSI V2 compliant test. DID for natural person is did:ebsi.\n'''
+        '''The schema url is used as the VC type in the credential offer QR code.\n'''
+        '''The prefix openid_initiate_issuance://\n'''
+        '''oidc4vci_draft : https://openid.net/specs/openid-connect-4-verifiable-credential-issuance-1_0-05.html#abstract''',
   ),
-
-  // ARF(
-  //   issuerVcType: 'jwt_vc',
-  //   verifierVpType: 'jwt_vp',
-  //   offerPrefix: 'openid-credential-offer://',
-  //   presentationPrefix: 'openid-vc://',
-  //   cryptographicBindingMethodsSupported: ['DID'],
-  //   credentialSupported: [],
-  //   grantTypesSupported: [
-  //     'authorization_code',
-  //     'urn:ietf:params:oauth:grant-type:pre-authorized_code'
-  //   ],
-  //   cryptographicSuitesSupported: [
-  //     'ES256K',
-  //     'ES256',
-  //     'ES384',
-  //     'ES512',
-  //     'RS256'
-  //   ],
-  //   subjectSyntaxTypesSupported: ['did:ebsi', 'did:key', 'did:ethr', 'did:tz'],
-  //   schemaForType: false,
-  //   oidc4VciDraft: '',
-  //   siopv2Draft: '',
-  //   serviceDocumentation: '',
-  // ),
 
   EBSIV3(
     issuerVcType: 'jwt_vc',
@@ -102,7 +80,7 @@ enum OIDC4VCType {
     subjectSyntaxTypesSupported: ['did:key'],
     schemaForType: false,
     publicJWKNeeded: true,
-    serviceDocumentation: '',
+    serviceDocumentation: 'New environment for V3 compliance test',
   ),
 
   JWTVC(
@@ -120,10 +98,11 @@ enum OIDC4VCType {
       'ES512',
       'RS256'
     ],
-    subjectSyntaxTypesSupported: ['did:ion'],
+    subjectSyntaxTypesSupported: ['did:ion', 'did:web'],
     schemaForType: false,
     publicJWKNeeded: true,
-    serviceDocumentation: '',
+    serviceDocumentation:
+        'https://identity.foundation/jwt-vc-presentation-profile/',
   );
 
   const OIDC4VCType({
