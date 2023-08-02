@@ -27,6 +27,7 @@ export 'display/display.dart';
 export 'dogami_pass/dogami_pass_model.dart';
 export 'ecole_42_learning_achievement/ecole_42_learning_achievement_model.dart';
 export 'email_pass/email_pass_model.dart';
+export 'employee_credential/employee_credential_model.dart';
 export 'ethereum_associated_address/ethereum_associated_address_credential.dart';
 export 'ethereum_associated_address/ethereum_associated_address_model.dart';
 export 'ethereum_poo_address/ethereum_poo_address_model.dart';

@@ -70,7 +70,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         issuerDid,
         issuerKid,
         item.jwt!,
-        profileCubit,
       );
 
       late CredentialStatus credentialStatus;

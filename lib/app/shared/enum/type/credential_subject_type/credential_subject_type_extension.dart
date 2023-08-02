@@ -85,6 +85,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.euVerifiableId:
       case CredentialSubjectType.proofOfTwitterStats:
       case CredentialSubjectType.civicPassCredential:
+      case CredentialSubjectType.employeeCredential:
         return Colors.white;
     }
   }
@@ -159,6 +160,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.kycCountryOfResidence:
       case CredentialSubjectType.proofOfTwitterStats:
       case CredentialSubjectType.civicPassCredential:
+      case CredentialSubjectType.employeeCredential:
         return Icons.perm_identity;
     }
   }
@@ -256,6 +258,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'ProfessionalStudentCard';
       case CredentialSubjectType.residentCard:
         return 'ResidentCard';
+      case CredentialSubjectType.employeeCredential:
+        //return 'EmployeeCredential';
+        return 'https://raw.githubusercontent.com/walt-id/waltid-ssikit-vclib/master/src/test/resources/schemas/ParticipantCredential.json';
       case CredentialSubjectType.selfIssued:
         return 'SelfIssued';
       case CredentialSubjectType.studentCard:
@@ -417,6 +422,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return ProofOfTwitterStatsModel.fromJson(json);
       case CredentialSubjectType.civicPassCredential:
         return CivicPassCredentialModel.fromJson(json);
+      case CredentialSubjectType.employeeCredential:
+        return EmployeeCredentialModel.fromJson(json);
     }
   }
 
@@ -619,6 +626,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Proof Of Twitter Stats';
       case CredentialSubjectType.civicPassCredential:
         return 'Civic Pass Credential';
+      case CredentialSubjectType.employeeCredential:
+        return 'Employee Credential';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -740,6 +749,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.kycCountryOfResidence:
       case CredentialSubjectType.proofOfTwitterStats:
       case CredentialSubjectType.civicPassCredential:
+      case CredentialSubjectType.employeeCredential:
         return false;
     }
   }
@@ -862,6 +872,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.kycCountryOfResidence:
       case CredentialSubjectType.proofOfTwitterStats:
       case CredentialSubjectType.civicPassCredential:
+      case CredentialSubjectType.employeeCredential:
         return 0;
     }
   }

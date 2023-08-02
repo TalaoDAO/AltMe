@@ -21,6 +21,7 @@ export 'diploma_card_widget.dart';
 export 'dogami_pass_widget.dart';
 export 'ecole_42_learning_achievement_widget.dart';
 export 'email_pass_widget.dart';
+export 'employee_credential_widget.dart';
 export 'ethereum_associated_address_widget.dart';
 export 'ethereum_poo_address_widget.dart';
 export 'eu_diploma_card_widget.dart';

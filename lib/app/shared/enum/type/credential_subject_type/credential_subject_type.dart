@@ -64,4 +64,5 @@ enum CredentialSubjectType {
   walletCredential,
   proofOfTwitterStats,
   civicPassCredential,
+  employeeCredential,
 }

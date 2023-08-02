@@ -308,7 +308,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         issuerDid,
         issuerKid,
         encodedData.toString(),
-        profileCubit,
       );
 
       if (isVerified == VerificationType.verified) {

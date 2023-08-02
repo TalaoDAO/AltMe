@@ -73,6 +73,7 @@ class ImageStrings {
   static const String defaultPolygonCard =
       '$imagePath/default_polygon_card.png';
   static const String euDiplomaCard = '$imagePath/eu_diploma_card.png';
+  static const String employeeCard = '$imagePath/employee_credential.png';
   static const String defiComplianceCard =
       '$imagePath/defi-compliance-card.png';
   static const String euVerifiableId = '$imagePath/eu_verifiable_id.png';

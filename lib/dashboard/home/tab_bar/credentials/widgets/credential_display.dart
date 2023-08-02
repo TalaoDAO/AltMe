@@ -201,6 +201,9 @@ class CredentialDisplay extends StatelessWidget {
             return ResidentCardWidget(credentialModel: credentialModel);
         }
 
+      case CredentialSubjectType.employeeCredential:
+        return EmployeeCredentialWidget(credentialModel: credentialModel);
+
       case CredentialSubjectType.selfIssued:
         switch (credDisplayType) {
           case CredDisplayType.List:
