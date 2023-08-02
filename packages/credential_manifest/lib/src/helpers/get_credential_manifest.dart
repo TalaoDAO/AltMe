@@ -7,7 +7,8 @@ import 'package:json_path/json_path.dart';
 Future<CredentialManifest> getCredentialManifest(
   Dio client,
   String baseUrl,
-  String type,
+  String credentialTypeOrId,
+  bool schemaForType,
 ) async {
   final dynamic wellKnown = await client.get<String>(
     '$baseUrl/.well-known/openid-configuration',
@@ -27,10 +28,12 @@ Future<CredentialManifest> getCredentialManifest(
     credentialManifestMap,
   );
 
+  final String key = schemaForType ? 'schema' : 'id';
+
   /// select wanted output desciptor
   final JsonPath outputDescriptorPath = JsonPath(
     // ignore: prefer_interpolation_to_compose_strings
-    r'$..output_descriptors[?(@.schema=="' + type + '")]',
+    r'$..output_descriptors[?(@.' + key + '=="' + credentialTypeOrId + '")]',
   );
 
   /// There are some possible issues with this way of filtering :-/

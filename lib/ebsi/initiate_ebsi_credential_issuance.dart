@@ -22,7 +22,7 @@ Future<void> initiateEbsiCredentialIssuance(
 
   String? preAuthorizedCode;
   late String issuer;
-  late String type;
+  late String credentialTypeOrId;
   late String did;
   late String kid;
 
@@ -43,17 +43,18 @@ Future<void> initiateEbsiCredentialIssuance(
               ['pre-authorized_code']
           .toString();
       issuer = credentialOfferJson['credential_issuer'].toString();
-      type = credentialOfferJson['credentials'][0].toString();
+      credentialTypeOrId = credentialOfferJson['credentials'][0].toString();
 
       const didMethod = AltMeStrings.defaultDIDMethod;
       did = didKitProvider.keyToDID(didMethod, privateKey);
       kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
+
       break;
     case OIDC4VCType.EBSIV2:
       preAuthorizedCode =
           uriFromScannedResponse.queryParameters['pre-authorized_code'];
       issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
-      type =
+      credentialTypeOrId =
           uriFromScannedResponse.queryParameters['credential_type'].toString();
 
       final private = await oidc4vc.getPrivateKey(mnemonic, privateKey);
@@ -70,10 +71,10 @@ Future<void> initiateEbsiCredentialIssuance(
   }
 
   if (preAuthorizedCode != null) {
-    final dynamic encodedCredentialFromEbsi = await oidc4vc.getCredential(
+    final dynamic encodedCredentialFromOIDC4VC = await oidc4vc.getCredential(
       preAuthorizedCode,
       issuer,
-      type,
+      credentialTypeOrId,
       did,
       kid,
       uriFromScannedResponse,
@@ -81,12 +82,13 @@ Future<void> initiateEbsiCredentialIssuance(
       privateKey,
     );
 
-    print(encodedCredentialFromEbsi);
-
-    await addEbsiCredential(
-      encodedCredentialFromEbsi,
+    await addOIDC4VCCredential(
+      encodedCredentialFromOIDC4VC,
       uriFromScannedResponse,
       credentialsCubit,
+      oidc4vcType,
+      issuer,
+      credentialTypeOrId,
     );
   } else {
     final Uri ebsiAuthenticationUri =
