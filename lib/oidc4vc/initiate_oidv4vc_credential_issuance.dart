@@ -35,6 +35,7 @@ Future<void> initiateOIDC4VCCredentialIssuance(
 
   switch (oidc4vcType) {
     case OIDC4VCType.DEFAULT:
+    case OIDC4VCType.HEDERA:
       final credentialOfferJson = jsonDecode(
         uriFromScannedResponse.queryParameters['credential_offer'].toString(),
       );

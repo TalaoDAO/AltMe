@@ -62,16 +62,14 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
       late final String issuerKid;
       late final String encodedData;
-      if (item.issuer.startsWith('did:web')) {
+      if (item.jwt == null) {
         issuerKid = item.data['proof']['verificationMethod'] as String;
-      } else if (item.issuer.startsWith('did:ebsi')) {
+      } else {
         encodedData = item.jwt!;
 
         final Map<String, dynamic> header =
             decodeHeader(jwtDecode: jwtDecode, token: encodedData);
         issuerKid = jsonEncode(header['kid']);
-      } else {
-        throw Exception();
       }
 
       final VerificationType isVerified = await verifyEncodedData(

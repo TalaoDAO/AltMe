@@ -87,6 +87,35 @@ enum OIDC4VCType {
         '''oidc4vp_draft : https://openid.net/specs/openid-4-verifiable-presentations-1_0.html''',
   ),
 
+  HEDERA(
+    issuerVcType: 'jwt_vc',
+    verifierVpType: 'jwt_vp',
+    offerPrefix: 'openid-credential-offer-hedera://',
+    presentationPrefix: 'openid-hedera://',
+    cryptographicBindingMethodsSupported: ['DID'],
+    credentialSupported: ['EmployeeCredential', 'ProofOfAsset'],
+    grantTypesSupported: [
+      'authorization_code',
+      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
+    ],
+    cryptographicSuitesSupported: [
+      'ES256K',
+      'ES256',
+      'ES384',
+      'ES512',
+      'RS256'
+    ],
+    subjectSyntaxTypesSupported: ['did:key', 'did:pkh'],
+    schemaForType: false,
+    publicJWKNeeded: true,
+    serviceDocumentation:
+        '''WORK IN PROGRESS EON project. last release of the specs.\n'''
+        '''oidc4vci_draft : https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html\n'''
+        '''siopv2_draft : https://openid.net/specs/openid-connect-self-issued-v2-1_0.html\n'''
+        '''oidc4vp_draft : https://openid.net/specs/openid-4-verifiable-presentations-1_0.html\n'''
+        '''Issuer and verifier for marjetplace and WCM\n''',
+  ),
+
   EBSIV3(
     issuerVcType: 'jwt_vc',
     verifierVpType: 'jwt_vp',
@@ -194,6 +223,8 @@ extension OIDC4VCTypeX on OIDC4VCType {
         return 'EBSI-V2';
       case OIDC4VCType.EBSIV3:
         return 'EBSI-V3';
+      case OIDC4VCType.HEDERA:
+        return 'HEDERA';
       case OIDC4VCType.JWTVC:
         return 'JWT-VC';
     }
@@ -204,6 +235,7 @@ extension OIDC4VCTypeX on OIDC4VCType {
       case OIDC4VCType.DEFAULT:
       case OIDC4VCType.EBSIV2:
       case OIDC4VCType.GAIAX:
+      case OIDC4VCType.HEDERA:
         return true;
       case OIDC4VCType.EBSIV3:
       case OIDC4VCType.JWTVC:

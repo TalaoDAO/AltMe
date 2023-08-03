@@ -88,28 +88,23 @@ class ScanCubit extends Cubit<ScanState> {
         late String did;
         late String kid;
 
-        switch (currentOIIDC4VCType) {
-          case OIDC4VCType.DEFAULT:
-          case OIDC4VCType.GAIAX:
-            const didMethod = AltMeStrings.defaultDIDMethod;
-            did = didKitProvider.keyToDID(didMethod, privateKey);
-            kid = await didKitProvider.keyToVerificationMethod(
-              didMethod,
-              privateKey,
-            );
-            break;
-          case OIDC4VCType.EBSIV2:
-            final private = await oidc4vc.getPrivateKey(mnemonic, privateKey);
+        if (currentOIIDC4VCType.issuerVcType == 'ldp_vc') {
+          const didMethod = AltMeStrings.defaultDIDMethod;
+          did = didKitProvider.keyToDID(didMethod, privateKey);
+          kid = await didKitProvider.keyToVerificationMethod(
+            didMethod,
+            privateKey,
+          );
+        } else if (currentOIIDC4VCType.issuerVcType == 'jwt_vc') {
+          final private = await oidc4vc.getPrivateKey(mnemonic, privateKey);
 
-            final thumbprint = getThumbprint(private);
-            final encodedAddress = Base58Encode([2, ...thumbprint]);
-            did = 'did:ebsi:z$encodedAddress';
-            final lastPart = Base58Encode(thumbprint);
-            kid = '$did#$lastPart';
-            break;
-          case OIDC4VCType.EBSIV3:
-          case OIDC4VCType.JWTVC:
-            break;
+          final thumbprint = getThumbprint(private);
+          final encodedAddress = Base58Encode([2, ...thumbprint]);
+          did = 'did:ebsi:z$encodedAddress';
+          final lastPart = Base58Encode(thumbprint);
+          kid = '$did#$lastPart';
+        } else {
+          throw Exception();
         }
 
         final credentialList = credentialsToBePresented!
