@@ -282,12 +282,41 @@ class OIDC4VC {
 
   Future<Response<Map<String, dynamic>>> getDidDocument(String didKey) async {
     try {
-      final didDocument = await client.get<Map<String, dynamic>>(
-        'https://api-pilot.ebsi.eu/did-registry/v3/identifiers/$didKey',
-      );
-      return didDocument;
+      if (didKey.startsWith('did:ebsi')) {
+        final didDocument = await client.get<Map<String, dynamic>>(
+          'https://api-pilot.ebsi.eu/did-registry/v3/identifiers/$didKey',
+        );
+        return didDocument;
+      } else if (didKey.startsWith('did:web')) {
+        final url = didWebToUrl(didKey);
+        final didDocument = await client.get<Map<String, dynamic>>(url);
+        return didDocument;
+      } else {
+        throw Exception();
+      }
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+  String didWebToUrl(String didKey) {
+    if (!didKey.startsWith('did:web:')) {
+      throw const FormatException('Invalid DID format');
+    }
+
+    // Extract the path after 'did:web:'
+    final didPath = didKey.substring('did:web:'.length);
+
+    if (didPath.contains(':')) {
+      final parts = didPath.split(':');
+      final domain = parts[0];
+      final issuer = parts[1];
+
+      final url = 'https://$domain/$issuer/did.json';
+      return url;
+    } else {
+      final url = 'https://$didPath/.well-known/did.json';
+      return url;
     }
   }
 
@@ -318,9 +347,10 @@ class OIDC4VC {
   ) {
     final jsonPath = JsonPath(r'$..verificationMethod');
     final data = (jsonPath.read(didDocumentResponse.data).first.value as List)
-      ..where(
-        (dynamic e) => e['id'].toString() == holderKid,
-      ).toList();
+        .where(
+          (dynamic e) => e['id'].toString() == holderKid,
+        )
+        .toList();
 
     final value = data.first['publicKeyJwk'];
 
@@ -418,7 +448,6 @@ class OIDC4VC {
 
         isVerified = await verifyJwt(jwt, publicKey);
       } else {
-        // create a JsonWebSignature from the encoded string
         final jws = JsonWebSignature.fromCompactSerialization(jwt);
 
         // create a JsonWebKey for verifying the signature

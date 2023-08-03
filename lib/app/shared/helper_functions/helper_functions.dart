@@ -101,10 +101,6 @@ String getIssuerDid({required Uri uriToCheck}) {
   return did;
 }
 
-bool isEbsiIssuer(CredentialModel credentialModel) {
-  return credentialModel.issuer.startsWith('did:ebsi');
-}
-
 bool isPolygonssuer(CredentialModel credentialModel) {
   return credentialModel.issuer.contains('did:polygonid');
 }

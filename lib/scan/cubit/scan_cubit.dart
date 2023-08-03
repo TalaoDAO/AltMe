@@ -219,8 +219,8 @@ class ScanCubit extends Cubit<ScanState> {
         final dynamic jsonCredential =
             credential is String ? jsonDecode(credential) : credential;
 
-        if (!isEbsiIssuer(credentialModel)) {
-          /// not verifying credential for did:ebsi issuer
+        if (credentialModel.jwt == null) {
+          /// not verifying credential for did:ebsi and did:web issuer
           log.i('verifying Credential');
 
           final vcStr = jsonEncode(jsonCredential);
