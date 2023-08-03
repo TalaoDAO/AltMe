@@ -5,7 +5,7 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
+import 'package:altme/oidc4vc/initiate_oidv4vc_credential_issuance.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -90,10 +90,13 @@ class ScanCubit extends Cubit<ScanState> {
 
         switch (currentOIIDC4VCType) {
           case OIDC4VCType.DEFAULT:
+          case OIDC4VCType.GAIAX:
             const didMethod = AltMeStrings.defaultDIDMethod;
             did = didKitProvider.keyToDID(didMethod, privateKey);
             kid = await didKitProvider.keyToVerificationMethod(
-                didMethod, privateKey);
+              didMethod,
+              privateKey,
+            );
             break;
           case OIDC4VCType.EBSIV2:
             final private = await oidc4vc.getPrivateKey(mnemonic, privateKey);

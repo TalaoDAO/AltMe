@@ -7,8 +7,8 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
-import 'package:altme/ebsi/verify_encoded_data.dart';
+import 'package:altme/oidc4vc/initiate_oidv4vc_credential_issuance.dart';
+import 'package:altme/oidc4vc/verify_encoded_data.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
@@ -340,7 +340,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         if (currentOIIDC4VCType != null) {
           /// issuer side (oidc4VCI)
-          await initiateEbsiCredentialIssuance(
+          await initiateOIDC4VCCredentialIssuance(
             state.uri.toString(),
             credentialsCubit,
             currentOIIDC4VCType,

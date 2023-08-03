@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
-import 'package:altme/ebsi/add_ebsi_credential.dart';
+import 'package:altme/oidc4vc/add_oidc4vc_credential.dart';
 import 'package:crypto/crypto.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-Future<void> initiateEbsiCredentialIssuance(
+Future<void> initiateOIDC4VCCredentialIssuance(
   String scannedResponse,
   CredentialsCubit credentialsCubit,
   OIDC4VCType oidc4vcType,
@@ -44,6 +44,19 @@ Future<void> initiateEbsiCredentialIssuance(
           .toString();
       issuer = credentialOfferJson['credential_issuer'].toString();
       credentialTypeOrId = credentialOfferJson['credentials'][0].toString();
+
+      const didMethod = AltMeStrings.defaultDIDMethod;
+      did = didKitProvider.keyToDID(didMethod, privateKey);
+      kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
+
+      break;
+    case OIDC4VCType.GAIAX:
+      final credentialOfferJson = jsonDecode(
+        uriFromScannedResponse.queryParameters['credential_offer'].toString(),
+      );
+      preAuthorizedCode = credentialOfferJson['pre-authorized_code'].toString();
+      issuer = credentialOfferJson['issuer'].toString();
+      credentialTypeOrId = credentialOfferJson['credential_type'].toString();
 
       const didMethod = AltMeStrings.defaultDIDMethod;
       did = didKitProvider.keyToDID(didMethod, privateKey);

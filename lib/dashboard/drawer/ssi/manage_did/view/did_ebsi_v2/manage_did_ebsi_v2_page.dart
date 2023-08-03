@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
+import 'package:altme/oidc4vc/initiate_oidv4vc_credential_issuance.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter/material.dart';

@@ -59,6 +59,34 @@ enum OIDC4VCType {
         '''oidc4vci_draft : https://openid.net/specs/openid-connect-4-verifiable-credential-issuance-1_0-05.html#abstract''',
   ),
 
+  GAIAX(
+    issuerVcType: 'ldp_vc',
+    verifierVpType: 'ldp_vp',
+    offerPrefix: 'openid-initiate-issuance://',
+    presentationPrefix: 'openid-vc://',
+    cryptographicBindingMethodsSupported: ['DID'],
+    credentialSupported: ['EmployeeCredential', 'VerifiableId'],
+    grantTypesSupported: [
+      'authorization_code',
+      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
+    ],
+    cryptographicSuitesSupported: [
+      'ES256K',
+      'ES256',
+      'ES384',
+      'ES512',
+      'RS256'
+    ],
+    subjectSyntaxTypesSupported: ['did:key'],
+    schemaForType: false,
+    publicJWKNeeded: true,
+    serviceDocumentation:
+        '''WORK IN PROGRESS. WE use JSON-LD VC and VP and last release of the specs.\n'''
+        '''oidc4vci_draft : https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html\n'''
+        '''siopv2_draft : https://openid.net/specs/openid-connect-self-issued-v2-1_0.html\n'''
+        '''oidc4vp_draft : https://openid.net/specs/openid-4-verifiable-presentations-1_0.html''',
+  ),
+
   EBSIV3(
     issuerVcType: 'jwt_vc',
     verifierVpType: 'jwt_vp',
@@ -160,6 +188,8 @@ extension OIDC4VCTypeX on OIDC4VCType {
     switch (this) {
       case OIDC4VCType.DEFAULT:
         return 'DEFAULT';
+      case OIDC4VCType.GAIAX:
+        return 'GAIA-X';
       case OIDC4VCType.EBSIV2:
         return 'EBSI-V2';
       case OIDC4VCType.EBSIV3:
@@ -169,22 +199,11 @@ extension OIDC4VCTypeX on OIDC4VCType {
     }
   }
 
-  int get index {
-    switch (this) {
-      case OIDC4VCType.DEFAULT:
-        return 2;
-      case OIDC4VCType.EBSIV2:
-      case OIDC4VCType.EBSIV3:
-      case OIDC4VCType.JWTVC:
-        return 1;
-    }
-  }
-
   bool get isEnabled {
     switch (this) {
       case OIDC4VCType.DEFAULT:
       case OIDC4VCType.EBSIV2:
-        //case OIDC4VCType.ARF:
+      case OIDC4VCType.GAIAX:
         return true;
       case OIDC4VCType.EBSIV3:
       case OIDC4VCType.JWTVC:
