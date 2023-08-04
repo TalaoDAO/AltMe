@@ -138,12 +138,7 @@ class CredentialModel extends Equatable {
 
   static Display fromJsonDisplay(dynamic json) {
     if (json == null || json == '') {
-      return const Display(
-        '',
-        '',
-        '',
-        '',
-      );
+      return const Display('', '', '', '');
     }
     return Display.fromJson(json as Map<String, dynamic>);
   }

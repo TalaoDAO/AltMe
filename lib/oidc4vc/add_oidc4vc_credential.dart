@@ -15,6 +15,7 @@ Future<void> addOIDC4VCCredential(
   OIDC4VCType oidc4vcType,
   String issuer,
   String credentialTypeOrId,
+  bool isLastCall,
 ) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
   if (oidc4vcType.issuerVcType == 'jwt_vc') {
@@ -74,5 +75,9 @@ Future<void> addOIDC4VCCredential(
   );
 
   // insert the credential in the wallet
-  await credentialsCubit.insertCredential(credential: credentialModel);
+  await credentialsCubit.insertCredential(
+    credential: credentialModel,
+    showStatus: false,
+    showMessage: isLastCall,
+  );
 }

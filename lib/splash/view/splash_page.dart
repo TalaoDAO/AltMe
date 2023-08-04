@@ -158,11 +158,12 @@ class _SplashViewState extends State<SplashView> {
 
         if (currentOIIDC4VCType != null) {
           await initiateOIDC4VCCredentialIssuance(
-            uri.toString(),
-            context.read<CredentialsCubit>(),
-            currentOIIDC4VCType,
-            secure_storage.getSecureStorage,
-            DIDKitProvider(),
+            scannedResponse: uri.toString(),
+            credentialsCubit: context.read<CredentialsCubit>(),
+            oidc4vcType: currentOIIDC4VCType,
+            didKitProvider: DIDKitProvider(),
+            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            secureStorageProvider: secure_storage.getSecureStorage,
           );
         }
       }

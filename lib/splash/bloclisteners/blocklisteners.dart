@@ -67,6 +67,12 @@ final credentialsBlocListener =
     BlocListener<CredentialsCubit, CredentialsState>(
   listener: (BuildContext context, CredentialsState state) async {
     if (state.status == CredentialsStatus.idle) {
+      if (state.message != null) {
+        AlertMessage.showStateMessage(
+          context: context,
+          stateMessage: state.message!,
+        );
+      }
       return;
     }
 
@@ -306,7 +312,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         }
 
         if (acceptHost) {
-          await context.read<QRCodeScanCubit>().accept(issuer: approvedIssuer);
+          await context.read<QRCodeScanCubit>().accept(
+                issuer: approvedIssuer,
+                qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+              );
         } else {
           await context.read<QRCodeScanCubit>().emitError(
                 ResponseMessage(

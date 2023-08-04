@@ -7,9 +7,9 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
+import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/oidc4vc/initiate_oidv4vc_credential_issuance.dart';
 import 'package:altme/oidc4vc/verify_encoded_data.dart';
-import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
@@ -320,7 +320,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> accept({required Issuer issuer}) async {
+  Future<void> accept({
+    required Issuer issuer,
+    required QRCodeScanCubit qrCodeScanCubit,
+  }) async {
     emit(state.loading());
     final log = getLogger('QRCodeScanCubit - accept');
 
@@ -340,15 +343,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         if (currentOIIDC4VCType != null) {
           /// issuer side (oidc4VCI)
-          await initiateOIDC4VCCredentialIssuance(
-            state.uri.toString(),
-            credentialsCubit,
-            currentOIIDC4VCType,
-            getSecureStorage,
-            didKitProvider,
-          );
 
-          emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+          await initiateOIDC4VCCredentialIssuance(
+            scannedResponse: state.uri.toString(),
+            credentialsCubit: credentialsCubit,
+            oidc4vcType: currentOIIDC4VCType,
+            didKitProvider: didKitProvider,
+            qrCodeScanCubit: qrCodeScanCubit,
+            secureStorageProvider: getSecureStorage,
+          );
           return;
         }
 
@@ -528,6 +531,45 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           ),
         );
       }
+    }
+  }
+
+  void navigateToOidc4vcCredentialPickPage(List<dynamic> credentials) {
+    emit(
+      state.copyWith(
+        qrScanStatus: QrScanStatus.success,
+        route: Oidc4vcCredentialPickPage.route(credentials: credentials),
+      ),
+    );
+  }
+
+  Future<void> addCredentialsInLoop(List<dynamic> credentials) async {
+    OIDC4VCType? currentOIIDC4VCType;
+    for (final oidc4vcType in OIDC4VCType.values) {
+      if (oidc4vcType.isEnabled &&
+          state.uri.toString().startsWith(oidc4vcType.offerPrefix)) {
+        currentOIIDC4VCType = oidc4vcType;
+      }
+    }
+
+    if (currentOIIDC4VCType != null) {
+      final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
+      for (int i = 0; i < credentials.length; i++) {
+        emit(state.loading());
+        final credentialTypeOrId = credentials[i];
+        await getAndAddCredential(
+          scannedResponse: state.uri.toString(),
+          credentialsCubit: credentialsCubit,
+          oidc4vc: oidc4vc,
+          oidc4vcType: currentOIIDC4VCType,
+          didKitProvider: didKitProvider,
+          secureStorageProvider: getSecureStorage,
+          credentialTypeOrId: credentialTypeOrId.toString(),
+          isLastCall: i + 1 == credentials.length,
+        );
+      }
+      oidc4vc.resetNonceAndAccessToken();
+      emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
     }
   }
 

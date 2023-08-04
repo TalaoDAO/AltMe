@@ -182,6 +182,9 @@ class OIDC4VC {
     return issuer;
   }
 
+  String? nonce;
+  String? accessToken;
+
   /// Retreive credential_type from url
   Future<dynamic> getCredential(
     String? preAuthorizedCode,
@@ -208,7 +211,11 @@ class OIDC4VC {
 
     final tokenEndPoint = readTokenEndPoint(openidConfigurationResponse);
 
-    final response = await getToken(tokenEndPoint, tokenData);
+    if (nonce == null || accessToken == null) {
+      final response = await getToken(tokenEndPoint, tokenData);
+      nonce = response['c_nonce'] as String;
+      accessToken = response['access_token'] as String;
+    }
 
     final private = await getPrivateKey(mnemonic, privateKey);
 
@@ -219,8 +226,10 @@ class OIDC4VC {
       kIssuer,
     );
 
+    if (nonce == null) throw Exception();
+
     final credentialData = await buildCredentialData(
-      response as Map<String, dynamic>,
+      nonce!,
       issuerTokenParameters,
       credentialRequestUri,
       openidConfigurationResponse,
@@ -232,7 +241,9 @@ class OIDC4VC {
     final credentialEndpoint =
         readCredentialEndpoint(openidConfigurationResponse);
 
-    final credentialHeaders = buildCredentialHeaders(response);
+    if (accessToken == null) throw Exception();
+
+    final credentialHeaders = buildCredentialHeaders(accessToken!);
 
     final dynamic credentialResponse = await client.post<dynamic>(
       credentialEndpoint,
@@ -240,7 +251,14 @@ class OIDC4VC {
       data: credentialData,
     );
 
+    nonce = credentialResponse.data['c_nonce'].toString();
+
     return credentialResponse.data;
+  }
+
+  void resetNonceAndAccessToken() {
+    nonce = null;
+    accessToken = null;
   }
 
   Map<String, dynamic> buildTokenData(
@@ -385,14 +403,12 @@ class OIDC4VC {
   }
 
   Future<Map<String, dynamic>> buildCredentialData(
-    Map<String, dynamic> response,
+    String nonce,
     IssuerTokenParameters issuerTokenParameters,
     Uri credentialRequestUri,
     Response<Map<String, dynamic>> openidConfigurationResponse,
     String credentialTypeOrId,
   ) async {
-    final nonce = response['c_nonce'] as String;
-
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
 
     //final issuerDid = readIssuerDid(openidConfigurationResponse);
@@ -507,8 +523,7 @@ class OIDC4VC {
     return credentialEndpoint;
   }
 
-  Map<String, dynamic> buildCredentialHeaders(dynamic response) {
-    final accessToken = response['access_token'] as String;
+  Map<String, dynamic> buildCredentialHeaders(String accessToken) {
     final credentialHeaders = <String, dynamic>{
       // 'Conformance': conformance,
       'Content-Type': 'application/json',

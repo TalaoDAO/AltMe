@@ -58,13 +58,12 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
             } else {
               LoadingView().hide();
             }
-            if (state.status == ScanStatus.success &&
-                    state.message != null) {
-                  AlertMessage.showStateMessage(
-                    context: context,
-                    stateMessage: state.message!,
-                  );
-                }
+            if (state.status == ScanStatus.success && state.message != null) {
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: state.message!,
+              );
+            }
           },
         ),
       ],
