@@ -148,6 +148,8 @@ Future<void> getAndAddCredential({
       privateKey,
     );
 
+    print(encodedCredentialFromOIDC4VC);
+
     await addOIDC4VCCredential(
       encodedCredentialFromOIDC4VC,
       uriFromScannedResponse,

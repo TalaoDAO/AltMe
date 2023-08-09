@@ -259,8 +259,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.residentCard:
         return 'ResidentCard';
       case CredentialSubjectType.employeeCredential:
-        //return 'EmployeeCredential';
-        return 'https://raw.githubusercontent.com/walt-id/waltid-ssikit-vclib/master/src/test/resources/schemas/ParticipantCredential.json';
+        return 'EmployeeCredential';
       case CredentialSubjectType.selfIssued:
         return 'SelfIssued';
       case CredentialSubjectType.studentCard:

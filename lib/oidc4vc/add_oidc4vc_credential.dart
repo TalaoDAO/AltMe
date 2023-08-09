@@ -46,9 +46,12 @@ Future<void> addOIDC4VCCredential(
 
   newCredential['credentialPreview'] = credentialFromOIDC4VC;
 
-  /// added id as type to recognise the card
-  newCredential['credentialPreview']['credentialSubject']['type'] =
-      credentialFromOIDC4VC['credentialSchema']['id'];
+  if (oidc4vcType == OIDC4VCType.EBSIV2) {
+    /// added id as type to recognise the card
+    /// for ebsiv2 only
+    newCredential['credentialPreview']['credentialSubject']['type'] =
+        credentialFromOIDC4VC['credentialSchema']['id'];
+  }
 
   final CredentialManifest credentialManifest = await getCredentialManifest(
     Dio(),
