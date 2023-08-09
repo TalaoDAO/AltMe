@@ -569,8 +569,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
       oidc4vc.resetNonceAndAccessToken();
-      emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+      goBack();
     }
+  }
+
+  void goBack() {
+    emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
   }
 
   Future<void> launchSiopV2WithRequestUriFlow(Uri? uri) async {

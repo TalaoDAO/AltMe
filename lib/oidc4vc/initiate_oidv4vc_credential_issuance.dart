@@ -62,6 +62,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       isLastCall: true,
     );
     oidc4vc.resetNonceAndAccessToken();
+    qrCodeScanCubit.goBack();
   }
 }
 
