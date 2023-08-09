@@ -544,32 +544,49 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> addCredentialsInLoop(List<dynamic> credentials) async {
-    OIDC4VCType? currentOIIDC4VCType;
-    for (final oidc4vcType in OIDC4VCType.values) {
-      if (oidc4vcType.isEnabled &&
-          state.uri.toString().startsWith(oidc4vcType.offerPrefix)) {
-        currentOIIDC4VCType = oidc4vcType;
+    try {
+      OIDC4VCType? currentOIIDC4VCType;
+      for (final oidc4vcType in OIDC4VCType.values) {
+        if (oidc4vcType.isEnabled &&
+            state.uri.toString().startsWith(oidc4vcType.offerPrefix)) {
+          currentOIIDC4VCType = oidc4vcType;
+        }
       }
-    }
 
-    if (currentOIIDC4VCType != null) {
-      final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
-      for (int i = 0; i < credentials.length; i++) {
-        emit(state.loading());
-        final credentialTypeOrId = credentials[i];
-        await getAndAddCredential(
-          scannedResponse: state.uri.toString(),
-          credentialsCubit: credentialsCubit,
-          oidc4vc: oidc4vc,
-          oidc4vcType: currentOIIDC4VCType,
-          didKitProvider: didKitProvider,
-          secureStorageProvider: getSecureStorage,
-          credentialTypeOrId: credentialTypeOrId.toString(),
-          isLastCall: i + 1 == credentials.length,
+      if (currentOIIDC4VCType != null) {
+        final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
+        for (int i = 0; i < credentials.length; i++) {
+          emit(state.loading());
+          final credentialTypeOrId = credentials[i];
+          await getAndAddCredential(
+            scannedResponse: state.uri.toString(),
+            credentialsCubit: credentialsCubit,
+            oidc4vc: oidc4vc,
+            oidc4vcType: currentOIIDC4VCType,
+            didKitProvider: didKitProvider,
+            secureStorageProvider: getSecureStorage,
+            credentialTypeOrId: credentialTypeOrId.toString(),
+            isLastCall: i + 1 == credentials.length,
+          );
+        }
+        oidc4vc.resetNonceAndAccessToken();
+        goBack();
+      }
+    } catch (e) {
+      if (e is MessageHandler) {
+        emit(state.copyWith(message: StateMessage.error(messageHandler: e)));
+      } else {
+        emit(
+          state.copyWith(
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          ),
         );
       }
-      oidc4vc.resetNonceAndAccessToken();
-      goBack();
     }
   }
 
