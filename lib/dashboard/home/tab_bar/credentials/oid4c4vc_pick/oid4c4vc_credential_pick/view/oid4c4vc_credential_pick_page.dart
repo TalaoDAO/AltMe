@@ -88,38 +88,74 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                     final CredentialSubjectType credentialSubjectType =
                         getCredTypeFromName(credentials[index].toString()) ??
                             CredentialSubjectType.defaultCredential;
-                    return CredentialsListPageItem(
-                      credentialModel: CredentialModel(
-                        id: '',
-                        credentialPreview: Credential(
-                          'dummy1',
-                          ['dummy2'],
-                          [credentials[index].toString()],
-                          'dummy4',
-                          'dummy5',
-                          'dummy6',
-                          [
-                            Proof.dummy(),
-                          ],
-                          DefaultCredentialSubjectModel(
-                            'dummy7',
-                            'dummy8',
-                            const Author(''),
-                          ),
-                          [Translation('en', '')],
-                          [Translation('en', '')],
-                          CredentialStatusField.emptyCredentialStatusField(),
-                          [Evidence.emptyEvidence()],
-                        ),
-                        data: const {},
-                        display: Display.emptyDisplay(),
-                        image: '',
-                        shareLink: '',
-                      ),
-                      selected: state.contains(index),
+
+                    final DiscoverDummyCredential discoverDummyCredential =
+                        DiscoverDummyCredential.fromSubjectType(
+                      credentialSubjectType,
+                    );
+
+                    return TransparentInkWell(
                       onTap: () => context
                           .read<Oidc4vcCredentialPickCubit>()
                           .updateList(index),
+                      child: Column(
+                        children: [
+                          if (discoverDummyCredential.image != null) ...[
+                            AspectRatio(
+                              aspectRatio: Sizes.credentialAspectRatio,
+                              child: CredentialImage(
+                                image: discoverDummyCredential.image!,
+                              ),
+                            ),
+                          ] else ...[
+                            AspectRatio(
+                              aspectRatio: Sizes.credentialAspectRatio,
+                              child: DefaultCredentialListWidget(
+                                credentialModel: CredentialModel(
+                                  id: '',
+                                  credentialPreview: Credential(
+                                    'dummy1',
+                                    ['dummy2'],
+                                    [credentials[index].toString()],
+                                    'dummy4',
+                                    'dummy5',
+                                    'dummy6',
+                                    [Proof.dummy()],
+                                    DefaultCredentialSubjectModel(
+                                      'dummy7',
+                                      'dummy8',
+                                      const Author(''),
+                                    ),
+                                    [Translation('en', '')],
+                                    [Translation('en', '')],
+                                    CredentialStatusField
+                                        .emptyCredentialStatusField(),
+                                    [Evidence.emptyEvidence()],
+                                  ),
+                                  data: const {},
+                                  display: Display.emptyDisplay(),
+                                  image: '',
+                                  shareLink: '',
+                                ),
+                                showBgDecoration: false,
+                              ),
+                            )
+                          ],
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Icon(
+                                state.contains(index)
+                                    ? Icons.check_box
+                                    : Icons.check_box_outline_blank,
+                                size: 25,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
