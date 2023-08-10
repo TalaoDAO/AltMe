@@ -186,16 +186,17 @@ class OIDC4VC {
   String? accessToken;
 
   /// Retreive credential_type from url
-  Future<dynamic> getCredential(
+  Future<dynamic> getCredential({
+    required String issuer,
+    required String credentialTypeOrId,
+    required String did,
+    required String kid,
+    required Uri credentialRequestUri,
+    required List<String> credentialSupportedTypes,
     String? preAuthorizedCode,
-    String issuer,
-    String credentialTypeOrId,
-    String did,
-    String kid,
-    Uri credentialRequestUri,
     String? mnemonic,
     String? privateKey,
-  ) async {
+  }) async {
     final kIssuer = getIssuer(
       preAuthorizedCode: preAuthorizedCode,
       issuer: issuer,
@@ -229,11 +230,12 @@ class OIDC4VC {
     if (nonce == null) throw Exception();
 
     final credentialData = await buildCredentialData(
-      nonce!,
-      issuerTokenParameters,
-      credentialRequestUri,
-      openidConfigurationResponse,
-      credentialTypeOrId,
+      nonce: nonce!,
+      issuerTokenParameters: issuerTokenParameters,
+      credentialRequestUri: credentialRequestUri,
+      openidConfigurationResponse: openidConfigurationResponse,
+      credentialTypeOrId: credentialTypeOrId,
+      credentialSupportedTypes: credentialSupportedTypes,
     );
 
     /// sign proof
@@ -402,13 +404,14 @@ class OIDC4VC {
     return private;
   }
 
-  Future<Map<String, dynamic>> buildCredentialData(
-    String nonce,
-    IssuerTokenParameters issuerTokenParameters,
-    Uri credentialRequestUri,
-    Response<Map<String, dynamic>> openidConfigurationResponse,
-    String credentialTypeOrId,
-  ) async {
+  Future<Map<String, dynamic>> buildCredentialData({
+    required String nonce,
+    required IssuerTokenParameters issuerTokenParameters,
+    required Uri credentialRequestUri,
+    required Response<Map<String, dynamic>> openidConfigurationResponse,
+    required String credentialTypeOrId,
+    required List<String> credentialSupportedTypes,
+  }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
 
     //final issuerDid = readIssuerDid(openidConfigurationResponse);
@@ -425,6 +428,7 @@ class OIDC4VC {
 
     final credentialData = <String, dynamic>{
       'type': credentialTypeOrId,
+      'types': credentialSupportedTypes,
       'format': oidc4vcModel.issuerVcType,
       'proof': {
         'proof_type': 'jwt',

@@ -149,24 +149,24 @@ Future<void> getAndAddCredential({
 
   if (preAuthorizedCode != null) {
     final dynamic encodedCredentialFromOIDC4VC = await oidc4vc.getCredential(
-      preAuthorizedCode,
-      issuer,
-      credentialTypeOrId,
-      did,
-      kid,
-      uriFromScannedResponse,
-      null,
-      privateKey,
+      preAuthorizedCode: preAuthorizedCode,
+      issuer: issuer,
+      credentialTypeOrId: credentialTypeOrId,
+      did: did,
+      kid: kid,
+      credentialRequestUri: uriFromScannedResponse,
+      privateKey: privateKey,
+      credentialSupportedTypes: oidc4vcType.credentialSupported,
     );
 
     await addOIDC4VCCredential(
-      encodedCredentialFromOIDC4VC,
-      uriFromScannedResponse,
-      credentialsCubit,
-      oidc4vcType,
-      issuer,
-      credentialTypeOrId,
-      isLastCall,
+      encodedCredentialFromOIDC4VC: encodedCredentialFromOIDC4VC,
+      uri: uriFromScannedResponse,
+      credentialsCubit: credentialsCubit,
+      oidc4vcType: oidc4vcType,
+      issuer: issuer,
+      credentialTypeOrId: credentialTypeOrId,
+      isLastCall: isLastCall,
     );
   } else {
     final Uri ebsiAuthenticationUri =

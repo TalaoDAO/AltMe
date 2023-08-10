@@ -8,15 +8,15 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dio/dio.dart';
 import 'package:jose/jose.dart';
 
-Future<void> addOIDC4VCCredential(
-  dynamic encodedCredentialFromOIDC4VC,
-  Uri uri,
-  CredentialsCubit credentialsCubit,
-  OIDC4VCType oidc4vcType,
-  String issuer,
-  String credentialTypeOrId,
-  bool isLastCall,
-) async {
+Future<void> addOIDC4VCCredential({
+  required dynamic encodedCredentialFromOIDC4VC,
+  required Uri uri,
+  required CredentialsCubit credentialsCubit,
+  required OIDC4VCType oidc4vcType,
+  required String issuer,
+  required String credentialTypeOrId,
+  required bool isLastCall,
+}) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
   if (oidc4vcType.issuerVcType == 'jwt_vc') {
     //jwt_vc_json
