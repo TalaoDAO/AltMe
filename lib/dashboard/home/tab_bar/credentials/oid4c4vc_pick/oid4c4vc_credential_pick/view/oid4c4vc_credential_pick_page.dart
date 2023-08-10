@@ -59,27 +59,28 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
               horizontal: 16,
             ),
             navigation: SafeArea(
-                child: Container(
-              padding: const EdgeInsets.all(16),
-              child: MyGradientButton(
-                onPressed: state.isEmpty
-                    ? null
-                    : () {
-                        if (state.isEmpty) return;
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: MyGradientButton(
+                  onPressed: state.isEmpty
+                      ? null
+                      : () {
+                          if (state.isEmpty) return;
 
-                        final creds = <dynamic>[];
+                          final creds = <dynamic>[];
 
-                        for (int i = 0; i < state.length; i++) {
-                          creds.add(credentials[i]);
-                        }
+                          for (final i in state) {
+                            creds.add(credentials[i]);
+                          }
 
-                        context
-                            .read<QRCodeScanCubit>()
-                            .addCredentialsInLoop(creds);
-                      },
-                text: l10n.proceed,
+                          context
+                              .read<QRCodeScanCubit>()
+                              .addCredentialsInLoop(creds);
+                        },
+                  text: l10n.proceed,
+                ),
               ),
-            )),
+            ),
             body: Column(
               children: <Widget>[
                 ...List.generate(

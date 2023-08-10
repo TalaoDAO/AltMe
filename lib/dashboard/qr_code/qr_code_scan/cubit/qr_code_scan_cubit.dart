@@ -556,6 +556,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       if (currentOIIDC4VCType != null) {
         final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
+
         for (int i = 0; i < credentials.length; i++) {
           emit(state.loading());
           final credentialTypeOrId = credentials[i];
