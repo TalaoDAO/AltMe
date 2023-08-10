@@ -101,11 +101,8 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                       child: Column(
                         children: [
                           if (discoverDummyCredential.image != null) ...[
-                            AspectRatio(
-                              aspectRatio: Sizes.credentialAspectRatio,
-                              child: CredentialImage(
-                                image: discoverDummyCredential.image!,
-                              ),
+                            DummyCredentialImage(
+                              discoverDummyCredential: discoverDummyCredential,
                             ),
                           ] else ...[
                             AspectRatio(

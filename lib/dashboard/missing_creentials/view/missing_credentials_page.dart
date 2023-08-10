@@ -94,8 +94,9 @@ class MissingCredentialsView extends StatelessWidget {
                   physics: const ScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, i) {
-                    final homeCredential = state.dummyCredentials[i];
-                    final credentialType = homeCredential.credentialSubjectType;
+                    final discoverDummyCredential = state.dummyCredentials[i];
+                    final credentialType =
+                        discoverDummyCredential.credentialSubjectType;
                     return Container(
                       margin: const EdgeInsets.only(
                         bottom: 15,
@@ -104,10 +105,8 @@ class MissingCredentialsView extends StatelessWidget {
                       ),
                       child: credentialType.isBlockchainAccount
                           ? credentialType.blockchainWidget
-                          : AspectRatio(
-                              aspectRatio: Sizes.credentialAspectRatio,
-                              child:
-                                  CredentialImage(image: homeCredential.image!),
+                          : DummyCredentialImage(
+                              discoverDummyCredential: discoverDummyCredential,
                             ),
                     );
                   },

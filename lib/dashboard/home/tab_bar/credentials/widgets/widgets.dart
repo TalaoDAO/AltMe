@@ -21,6 +21,7 @@ export 'display_name_card.dart';
 export 'display_properties_widget.dart';
 export 'display_signature.dart';
 export 'display_title_widget.dart';
+export 'dummy_credential_image.dart';
 export 'labeled_display_mapping_widget.dart';
 export 'list_item.dart';
 export 'skills_list_display.dart';

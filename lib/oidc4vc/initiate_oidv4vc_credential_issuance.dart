@@ -7,6 +7,7 @@ import 'package:altme/oidc4vc/add_oidc4vc_credential.dart';
 import 'package:crypto/crypto.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:fast_base58/fast_base58.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -17,6 +18,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
   required SecureStorageProvider secureStorageProvider,
+  required JWTDecode jwtDecode,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -31,12 +33,6 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       credentialTypeOrId = credentialOfferJson['credentials'];
       break;
     case OIDC4VCType.GAIAX:
-      final credentialOfferJson = jsonDecode(
-        uriFromScannedResponse.queryParameters['credential_offer'].toString(),
-      );
-      credentialTypeOrId = credentialOfferJson['credential_type'];
-
-      break;
     case OIDC4VCType.EBSIV2:
       credentialTypeOrId =
           uriFromScannedResponse.queryParameters['credential_type'];
@@ -60,6 +56,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       credentialTypeOrId: credentialTypeOrId.toString(),
       secureStorageProvider: secureStorageProvider,
       isLastCall: true,
+      jwtDecode: jwtDecode,
     );
     oidc4vc.resetNonceAndAccessToken();
     qrCodeScanCubit.goBack();
@@ -75,11 +72,46 @@ Future<void> getAndAddCredential({
   required String credentialTypeOrId,
   required SecureStorageProvider secureStorageProvider,
   required bool isLastCall,
+  required JWTDecode jwtDecode,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
   String? preAuthorizedCode;
   late String issuer;
+
+  switch (oidc4vcType) {
+    case OIDC4VCType.DEFAULT:
+    case OIDC4VCType.HEDERA:
+      final credentialOfferJson = jsonDecode(
+        uriFromScannedResponse.queryParameters['credential_offer'].toString(),
+      );
+      preAuthorizedCode = credentialOfferJson['grants']
+                  ['urn:ietf:params:oauth:grant-type:pre-authorized_code']
+              ['pre-authorized_code']
+          .toString();
+      issuer = credentialOfferJson['credential_issuer'].toString();
+      break;
+    case OIDC4VCType.GAIAX:
+    case OIDC4VCType.EBSIV2:
+      issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
+      preAuthorizedCode =
+          uriFromScannedResponse.queryParameters['pre-authorized_code'];
+
+      break;
+    case OIDC4VCType.EBSIV3:
+    case OIDC4VCType.JWTVC:
+      break;
+  }
+
+  /// if preAuthorizedCode is jwt then parse it
+  if (preAuthorizedCode != null) {
+    final isJwt = jwtDecode.isJWT(preAuthorizedCode);
+    if (isJwt) {
+      final data = jwtDecode.parseJwt(preAuthorizedCode);
+      preAuthorizedCode = data['sub'].toString();
+    }
+  }
+
   late String did;
   late String kid;
 
@@ -94,35 +126,14 @@ Future<void> getAndAddCredential({
   switch (oidc4vcType) {
     case OIDC4VCType.DEFAULT:
     case OIDC4VCType.HEDERA:
-      final credentialOfferJson = jsonDecode(
-        uriFromScannedResponse.queryParameters['credential_offer'].toString(),
-      );
-      preAuthorizedCode = credentialOfferJson['grants']
-                  ['urn:ietf:params:oauth:grant-type:pre-authorized_code']
-              ['pre-authorized_code']
-          .toString();
-      issuer = credentialOfferJson['credential_issuer'].toString();
-
-      const didMethod = AltMeStrings.defaultDIDMethod;
-      did = didKitProvider.keyToDID(didMethod, privateKey);
-      kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
-      break;
     case OIDC4VCType.GAIAX:
-      final credentialOfferJson = jsonDecode(
-        uriFromScannedResponse.queryParameters['credential_offer'].toString(),
-      );
-      preAuthorizedCode = credentialOfferJson['pre-authorized_code'].toString();
-      issuer = credentialOfferJson['issuer'].toString();
-
       const didMethod = AltMeStrings.defaultDIDMethod;
       did = didKitProvider.keyToDID(didMethod, privateKey);
       kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
-      break;
-    case OIDC4VCType.EBSIV2:
-      preAuthorizedCode =
-          uriFromScannedResponse.queryParameters['pre-authorized_code'];
-      issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
 
+      break;
+
+    case OIDC4VCType.EBSIV2:
       final private = await oidc4vc.getPrivateKey(mnemonic, privateKey);
 
       final thumbprint = getThumbprint(private);
@@ -147,8 +158,6 @@ Future<void> getAndAddCredential({
       null,
       privateKey,
     );
-
-    print(encodedCredentialFromOIDC4VC);
 
     await addOIDC4VCCredential(
       encodedCredentialFromOIDC4VC,

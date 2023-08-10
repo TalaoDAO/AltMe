@@ -275,6 +275,10 @@ class DiscoverDummyCredential extends Equatable {
         image = ImageStrings.tezosOwnershipCard;
         break;
 
+      case CredentialSubjectType.employeeCredential:
+        image = ImageStrings.dummyEmployeeCard;
+        break;
+
       case CredentialSubjectType.voucher:
       case CredentialSubjectType.selfIssued:
       case CredentialSubjectType.defaultCredential:
@@ -305,7 +309,6 @@ class DiscoverDummyCredential extends Equatable {
       case CredentialSubjectType.kycCountryOfResidence:
       case CredentialSubjectType.proofOfTwitterStats:
       case CredentialSubjectType.civicPassCredential:
-      case CredentialSubjectType.employeeCredential:
     }
 
     return DiscoverDummyCredential(

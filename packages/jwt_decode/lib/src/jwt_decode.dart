@@ -4,6 +4,28 @@ import 'dart:convert';
 /// JWT decode package
 /// {@endtemplate}
 class JWTDecode {
+  ///isJWT
+  bool isJWT(String input) {
+    final parts = input.split('.');
+
+    if (parts.length != 3) {
+      return false;
+    }
+
+    try {
+      final payload = _decodeBase64(parts[1]);
+
+      final dynamic payloadMap = json.decode(payload);
+      if (payloadMap is! Map<String, dynamic>) {
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   ///parseJwt
   Map<String, dynamic> parseJwt(String token) {
     final parts = token.split('.');
