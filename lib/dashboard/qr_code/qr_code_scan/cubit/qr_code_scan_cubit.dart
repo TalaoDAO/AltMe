@@ -351,7 +351,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             didKitProvider: didKitProvider,
             qrCodeScanCubit: qrCodeScanCubit,
             secureStorageProvider: getSecureStorage,
-            jwtDecode: jwtDecode,
           );
           return;
         }
@@ -569,7 +568,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             secureStorageProvider: getSecureStorage,
             credentialTypeOrId: credentialTypeOrId.toString(),
             isLastCall: i + 1 == credentials.length,
-            jwtDecode: jwtDecode,
           );
         }
         oidc4vc.resetNonceAndAccessToken();

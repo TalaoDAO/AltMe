@@ -164,7 +164,6 @@ class _SplashViewState extends State<SplashView> {
             didKitProvider: DIDKitProvider(),
             qrCodeScanCubit: context.read<QRCodeScanCubit>(),
             secureStorageProvider: secure_storage.getSecureStorage,
-            jwtDecode: JWTDecode(),
           );
         }
       }

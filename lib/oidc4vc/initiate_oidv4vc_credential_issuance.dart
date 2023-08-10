@@ -7,7 +7,6 @@ import 'package:altme/oidc4vc/add_oidc4vc_credential.dart';
 import 'package:crypto/crypto.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:fast_base58/fast_base58.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -18,7 +17,6 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
   required SecureStorageProvider secureStorageProvider,
-  required JWTDecode jwtDecode,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -56,7 +54,6 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       credentialTypeOrId: credentialTypeOrId.toString(),
       secureStorageProvider: secureStorageProvider,
       isLastCall: true,
-      jwtDecode: jwtDecode,
     );
     oidc4vc.resetNonceAndAccessToken();
     qrCodeScanCubit.goBack();
@@ -72,7 +69,6 @@ Future<void> getAndAddCredential({
   required String credentialTypeOrId,
   required SecureStorageProvider secureStorageProvider,
   required bool isLastCall,
-  required JWTDecode jwtDecode,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -101,15 +97,6 @@ Future<void> getAndAddCredential({
     case OIDC4VCType.EBSIV3:
     case OIDC4VCType.JWTVC:
       break;
-  }
-
-  /// if preAuthorizedCode is jwt then parse it
-  if (preAuthorizedCode != null) {
-    final isJwt = jwtDecode.isJWT(preAuthorizedCode);
-    if (isJwt) {
-      final data = jwtDecode.parseJwt(preAuthorizedCode);
-      preAuthorizedCode = data['sub'].toString();
-    }
   }
 
   late String did;

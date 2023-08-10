@@ -29,8 +29,11 @@ Future<void> addOIDC4VCCredential({
   } else if (oidc4vcType.issuerVcType == 'ldp_vc') {
     //ldp_vc
 
-    credentialFromOIDC4VC =
-        jsonDecode(encodedCredentialFromOIDC4VC['credential'].toString())
+    final data = encodedCredentialFromOIDC4VC['credential'];
+
+    credentialFromOIDC4VC = data is Map<String, dynamic>
+        ? data
+        : jsonDecode(encodedCredentialFromOIDC4VC['credential'].toString())
             as Map<String, dynamic>;
   } else {
     throw Exception();

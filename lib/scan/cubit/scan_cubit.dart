@@ -68,7 +68,8 @@ class ScanCubit extends Cubit<ScanState> {
 
         for (final oidc4vcType in OIDC4VCType.values) {
           if (oidc4vcType.isEnabled &&
-              state.uri.toString().startsWith(oidc4vcType.offerPrefix)) {
+              state.uri.toString().startsWith(oidc4vcType.offerPrefix) &&
+              state.uri.toString().startsWith(oidc4vcType.presentationPrefix)) {
             currentOIIDC4VCType = oidc4vcType;
           }
         }
