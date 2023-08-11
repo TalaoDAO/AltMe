@@ -840,7 +840,8 @@
     "pleaseAddXtoConnectToTheDapp",
     "pleaseSwitchPolygonNetwork",
     "oidc4vcProfile",
-    "pleaseSwitchToCorrectOIDC4VCProfile"
+    "pleaseSwitchToCorrectOIDC4VCProfile",
+    "authenticationSuccess"
   ],
 
   "es": [
@@ -1684,7 +1685,8 @@
     "pleaseAddXtoConnectToTheDapp",
     "pleaseSwitchPolygonNetwork",
     "oidc4vcProfile",
-    "pleaseSwitchToCorrectOIDC4VCProfile"
+    "pleaseSwitchToCorrectOIDC4VCProfile",
+    "authenticationSuccess"
   ],
 
   "fr": [
@@ -1831,7 +1833,8 @@
     "pleaseAddXtoConnectToTheDapp",
     "pleaseSwitchPolygonNetwork",
     "oidc4vcProfile",
-    "pleaseSwitchToCorrectOIDC4VCProfile"
+    "pleaseSwitchToCorrectOIDC4VCProfile",
+    "authenticationSuccess"
   ],
 
   "it": [
@@ -2675,6 +2678,7 @@
     "pleaseAddXtoConnectToTheDapp",
     "pleaseSwitchPolygonNetwork",
     "oidc4vcProfile",
-    "pleaseSwitchToCorrectOIDC4VCProfile"
+    "pleaseSwitchToCorrectOIDC4VCProfile",
+    "authenticationSuccess"
   ]
 }

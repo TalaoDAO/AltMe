@@ -17,6 +17,7 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -181,12 +182,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
 
     try {
+      /// SIOPV2 : wallet returns an id_token which is a simple jwt
+
+      ///OIDC4VP : wallet returns one or several VP according to the request :
+      ///the complex part is the syntax of teh request inside teh
+      /// presentation_definition as the verifier can request with AND / OR as :
+      ///  i want to see your Passport OR your ID card AND your email pass...
+
       /// verifier side (siopv2) without request_uri
       if (state.uri?.queryParameters['scope'] == 'openid') {
         // Check if we can respond to presentation request:
         // having credentials?
         // having correct crv in ebsi key
-        await launchSiopV2RequestFlow();
+        await launchOIDC4VPAndSiopV2RequestFlow();
 
         // final openIdCredential = getCredentialName(sIOPV2Param.claims!);
         // final openIdIssuer = getIssuersName(sIOPV2Param.claims!);
@@ -244,10 +252,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         //     ),
         //   ),
         // );
-      } else if (state.uri.toString().startsWith('openid://?client_id')) {
+      } else if (state.uri.toString().startsWith('openid://?client_id') ||
+          state.uri.toString().startsWith('openid-vc://?client_id')) {
         /// ebsi v2 presentation
         /// verifier side (siopv2) with request_uri
-        await verifySiopv2Jwt(state.uri);
+
+        await verifyOIDC4VPAndSiopv2Jwt(state.uri);
       } else {
         emit(state.acceptHost(isRequestVerified: true));
       }
@@ -268,7 +278,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> launchSiopV2RequestFlow() async {
+  Future<void> launchOIDC4VPAndSiopV2RequestFlow() async {
     // Check if we can respond to presentation request:
     // having credentials?
     // having correct crv in ebsi key
@@ -289,7 +299,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       return;
     }
 
-    if (!await isSiopV2WithRequestURIValid(state.uri!)) {
+    if (!await isOIDC4VPAndSiopV2WithRequestURIValid(state.uri!)) {
       emit(
         state.copyWith(
           qrScanStatus: QrScanStatus.success,
@@ -304,7 +314,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   late dynamic encodedData;
 
-  Future<void> verifySiopv2Jwt(Uri? uri) async {
+  Future<void> verifyOIDC4VPAndSiopv2Jwt(Uri? uri) async {
     final OIDC4VCType currentOIIDC4VCType =
         profileCubit.state.model.oidc4vcType;
 
@@ -361,37 +371,39 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     late final dynamic data;
 
     try {
-      /// OIDC4VC case
-      if (state.uri.toString().startsWith('openid')) {
-        OIDC4VCType? currentOIIDC4VCType;
+      OIDC4VCType? currentOIIDC4VCType;
 
-        for (final oidc4vcType in OIDC4VCType.values) {
-          if (oidc4vcType.isEnabled &&
-              state.uri.toString().startsWith(oidc4vcType.offerPrefix)) {
-            currentOIIDC4VCType = oidc4vcType;
-          }
+      for (final oidc4vcType in OIDC4VCType.values) {
+        if (oidc4vcType.isEnabled &&
+            state.uri.toString().startsWith(oidc4vcType.offerPrefix)) {
+          currentOIIDC4VCType = oidc4vcType;
         }
+      }
 
-        if (currentOIIDC4VCType != null) {
-          /// issuer side (oidc4VCI)
+      if (currentOIIDC4VCType != null) {
+        /// issuer side (oidc4VCI)
 
-          await initiateOIDC4VCCredentialIssuance(
-            scannedResponse: state.uri.toString(),
-            credentialsCubit: credentialsCubit,
-            oidc4vcType: currentOIIDC4VCType,
-            didKitProvider: didKitProvider,
-            qrCodeScanCubit: qrCodeScanCubit,
-            secureStorageProvider: getSecureStorage,
-          );
-          return;
-        }
+        await initiateOIDC4VCCredentialIssuance(
+          scannedResponse: state.uri.toString(),
+          credentialsCubit: credentialsCubit,
+          oidc4vcType: currentOIIDC4VCType,
+          didKitProvider: didKitProvider,
+          qrCodeScanCubit: qrCodeScanCubit,
+          secureStorageProvider: getSecureStorage,
+        );
+        return;
+      }
 
-        if (state.uri.toString().startsWith('openid://?client_id')) {
-          /// ebsi presentation
-          /// verifier side (siopv2) with request_uri
-          await launchSiopV2WithRequestUriFlow(state.uri);
-          return;
-        }
+      if (state.uri.toString().startsWith('openid://?client_id')) {
+        /// verifier side (OIDC4VP And siopv2) with request_uri
+        await launchOIDC4VPAndSiopV2WithRequestUriFlow(state.uri);
+        return;
+      }
+
+      if (state.uri.toString().startsWith('openid-vc://?client_id')) {
+        /// verifier side (siopv2) with request_uri
+        await launchSiopV2WithRequestUriFlow(state.uri);
+        return;
       }
 
       /// did credential addition and presentation
@@ -627,6 +639,68 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> launchSiopV2WithRequestUriFlow(Uri? uri) async {
+    try {
+      final Map<String, dynamic> response =
+          decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
+
+      final redirectUri = response['redirect_uri'] ?? '';
+      final nonce = response['nonce'] ?? '';
+
+      final OIDC4VCType currentOIIDC4VCType =
+          profileCubit.state.model.oidc4vcType;
+
+      final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
+      final mnemonic =
+          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+      final privateKey = await oidc4vc.privateKeyFromMnemonic(
+        mnemonic: mnemonic!,
+        index: currentOIIDC4VCType.index,
+      );
+
+      const didMethod = AltMeStrings.defaultDIDMethod;
+      final did = didKitProvider.keyToDID(didMethod, privateKey);
+      final kid =
+          await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
+
+      await oidc4vc.proveOwnershipOfDid(
+        uri: uri!,
+        privateKey: privateKey,
+        did: did,
+        kid: kid,
+        redirectUri: redirectUri.toString(),
+        nonce: nonce.toString(),
+      );
+      emit(
+        state.copyWith(
+          qrScanStatus: QrScanStatus.success,
+          message: StateMessage.success(
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_authenticationSuccess,
+            ),
+          ),
+        ),
+      );
+      goBack();
+    } catch (e) {
+      if (e is MessageHandler) {
+        emit(
+          state.error(messageHandler: e),
+        );
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+            ),
+          ),
+        );
+      }
+      return;
+    }
+  }
+
+  Future<void> launchOIDC4VPAndSiopV2WithRequestUriFlow(Uri? uri) async {
     final Map<String, dynamic> response =
         decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
 
@@ -761,7 +835,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return data;
   }
 
-  Future<bool> isSiopV2WithRequestURIValid(Uri uri) async {
+  Future<bool> isOIDC4VPAndSiopV2WithRequestURIValid(Uri uri) async {
     bool isValid = true;
 
     ///credential should not be empty since we have to present

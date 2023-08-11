@@ -600,10 +600,14 @@ class OIDC4VC {
         kid,
         uri,
         credentialsToBePresented,
+        uri.queryParameters['nonce'] ?? '',
       );
 
       // structures
-      final verifierIdToken = await getIdToken(tokenParameters);
+      final verifierIdToken = await getIdToken(
+        tokenParameters: tokenParameters,
+        isSIOPV2Only: false,
+      );
 
       /// build vp token
 
@@ -620,6 +624,51 @@ class OIDC4VC {
 
       await client.post<dynamic>(
         uri.queryParameters['redirect_uri']!,
+        options: Options(headers: responseHeaders),
+        data: responseData,
+      );
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> proveOwnershipOfDid({
+    required Uri uri,
+    required String did,
+    required String kid,
+    required String redirectUri,
+    required String nonce,
+    String? mnemonic,
+    String? privateKey,
+  }) async {
+    try {
+      final private = await getPrivateKey(mnemonic, privateKey);
+
+      final tokenParameters = VerifierTokenParameters(
+        private,
+        did,
+        kid,
+        uri,
+        [],
+        nonce,
+      );
+
+      // structures
+      final verifierIdToken = await getIdToken(
+        tokenParameters: tokenParameters,
+        isSIOPV2Only: true,
+      );
+
+      final responseHeaders = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      };
+
+      final responseData = <String, dynamic>{
+        'id_token': verifierIdToken,
+      };
+
+      await client.post<dynamic>(
+        redirectUri,
         options: Options(headers: responseHeaders),
         data: responseData,
       );
@@ -696,9 +745,10 @@ class OIDC4VC {
   }
 
   @visibleForTesting
-  Future<String> getIdToken(
-    VerifierTokenParameters tokenParameters,
-  ) async {
+  Future<String> getIdToken({
+    required VerifierTokenParameters tokenParameters,
+    required bool isSIOPV2Only,
+  }) async {
     final uuid1 = const Uuid().v4();
     final uuid2 = const Uuid().v4();
 
@@ -708,9 +758,12 @@ class OIDC4VC {
       'aud': tokenParameters.audience, // devrait être verifier
       'exp': DateTime.now().microsecondsSinceEpoch + 1000,
       'sub': tokenParameters.did,
-      'iss': 'https://self-issued.me/v2',
+      'iss': isSIOPV2Only ? tokenParameters.did : 'https://self-issued.me/v2',
       'nonce': tokenParameters.nonce,
-      '_vp_token': {
+    };
+
+    if (!isSIOPV2Only) {
+      payload['_vp_token'] = {
         'presentation_submission': {
           'definition_id': 'Altme defintion for EBSI project',
           'id': uuid1,
@@ -722,8 +775,9 @@ class OIDC4VC {
             }
           ]
         }
-      }
-    };
+      };
+    }
+
     final verifierIdJwt = generateToken(payload, tokenParameters);
     return verifierIdJwt;
   }
@@ -744,7 +798,7 @@ class OIDC4VC {
     return tokenParameters.did;
   }
 
-  Future<String> getKid(
+  Future<String?> getKid(
     String? mnemonic,
     String? privateKey,
     String did,

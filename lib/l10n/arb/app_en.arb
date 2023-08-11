@@ -928,5 +928,6 @@
     }
   },
   "oidc4vcProfile": "OIDC4VC Profile",
-  "pleaseSwitchToCorrectOIDC4VCProfile": "Please switch to correct OIDC4VC profile."
+  "pleaseSwitchToCorrectOIDC4VCProfile": "Please switch to correct OIDC4VC profile.",
+  "authenticationSuccess": "Authentication Success"
 }

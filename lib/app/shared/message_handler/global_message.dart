@@ -374,4 +374,6 @@ class GlobalMessage {
 
   String get RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile =>
       l10n.pleaseSwitchToCorrectOIDC4VCProfile;
+  String get RESPONSE_STRING_authenticationSuccess =>
+      l10n.authenticationSuccess;
 }

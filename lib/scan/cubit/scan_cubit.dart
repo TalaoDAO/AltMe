@@ -517,7 +517,7 @@ class ScanCubit extends Cubit<ScanState> {
       // There is a stackoverflow question about How to post
       // x-www-form-urlencoded in Flutter
 
-      // execute the request
+      // execute the request////////
       // Request is sent to redirect_uri.
 
       final dynamic result = await client.post(

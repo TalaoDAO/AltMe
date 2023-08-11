@@ -469,6 +469,9 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile:
         return globalMessage
             .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile;
+
+      case ResponseString.RESPONSE_STRING_authenticationSuccess:
+        return globalMessage.RESPONSE_STRING_authenticationSuccess;
     }
   }
 }

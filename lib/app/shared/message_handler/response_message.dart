@@ -694,6 +694,11 @@ class ResponseMessage with MessageHandler {
               .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile.localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_authenticationSuccess:
+          return ResponseString.RESPONSE_STRING_authenticationSuccess.localise(
+            context,
+          );
       }
     }
     return '';

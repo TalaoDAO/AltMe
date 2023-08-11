@@ -12,6 +12,7 @@ class VerifierTokenParameters extends TokenParameters {
     super.kid,
     this.uri,
     this.credentials,
+    this.nonce,
   );
 
   /// [uri] provided by verifier and containing nonce
@@ -21,7 +22,7 @@ class VerifierTokenParameters extends TokenParameters {
   final List<String> credentials;
 
   /// [nonce] is a number given by verifier to handle request authentication
-  String get nonce => uri.queryParameters['nonce'] ?? '';
+  final String nonce;
 
   /// [jsonIdOrJwtList] is list of jwt or jsonIds from the credentials
   ///  wich contains other credential's metadata
