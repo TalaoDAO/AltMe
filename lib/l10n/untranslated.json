@@ -839,7 +839,8 @@
     "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT",
     "pleaseAddXtoConnectToTheDapp",
     "pleaseSwitchPolygonNetwork",
-    "oidc4vcProfile"
+    "oidc4vcProfile",
+    "pleaseSwitchToCorrectOIDC4VCProfile"
   ],
 
   "es": [
@@ -1682,7 +1683,8 @@
     "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT",
     "pleaseAddXtoConnectToTheDapp",
     "pleaseSwitchPolygonNetwork",
-    "oidc4vcProfile"
+    "oidc4vcProfile",
+    "pleaseSwitchToCorrectOIDC4VCProfile"
   ],
 
   "fr": [
@@ -1828,7 +1830,8 @@
     "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT",
     "pleaseAddXtoConnectToTheDapp",
     "pleaseSwitchPolygonNetwork",
-    "oidc4vcProfile"
+    "oidc4vcProfile",
+    "pleaseSwitchToCorrectOIDC4VCProfile"
   ],
 
   "it": [
@@ -2671,6 +2674,7 @@
     "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT",
     "pleaseAddXtoConnectToTheDapp",
     "pleaseSwitchPolygonNetwork",
-    "oidc4vcProfile"
+    "oidc4vcProfile",
+    "pleaseSwitchToCorrectOIDC4VCProfile"
   ]
 }

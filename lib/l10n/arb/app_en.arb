@@ -927,5 +927,6 @@
       "networkType": {}
     }
   },
-  "oidc4vcProfile": "OIDC4VC Profile"
+  "oidc4vcProfile": "OIDC4VC Profile",
+  "pleaseSwitchToCorrectOIDC4VCProfile": "Please switch to correct OIDC4VC profile."
 }

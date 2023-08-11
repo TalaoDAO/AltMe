@@ -688,6 +688,12 @@ class ResponseMessage with MessageHandler {
             context,
             injectedMessage: injectedMessage,
           );
+
+        case ResponseString.RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile:
+          return ResponseString
+              .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile.localise(
+            context,
+          );
       }
     }
     return '';

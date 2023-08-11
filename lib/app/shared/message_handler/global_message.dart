@@ -371,4 +371,7 @@ class GlobalMessage {
       l10n.pleaseAddXtoConnectToTheDapp(value);
   String RESPONSE_STRING_pleaseSwitchPolygonNetwork(String value) =>
       l10n.pleaseSwitchPolygonNetwork(value);
+
+  String get RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile =>
+      l10n.pleaseSwitchToCorrectOIDC4VCProfile;
 }

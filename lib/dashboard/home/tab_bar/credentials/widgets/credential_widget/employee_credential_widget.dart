@@ -14,7 +14,7 @@ class EmployeeCredentialWidget extends StatelessWidget {
     //     .credentialPreview.credentialSubjectModel as EmployeeCredentialModel;
 
     final DisplayMapping? titleDisplayMapping = credentialModel
-        .credentialManifest!.outputDescriptors?.first.display?.title;
+        .credentialManifest?.outputDescriptors?.first.display?.title;
 
     var title = '';
 

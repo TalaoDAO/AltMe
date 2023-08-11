@@ -35,7 +35,7 @@ enum OIDC4VCType {
     issuerVcType: 'jwt_vc',
     verifierVpType: 'jwt_vp',
     offerPrefix: 'openid://initiate_issuance',
-    presentationPrefix: 'openid-vc://',
+    presentationPrefix: 'openid://',
     cryptographicBindingMethodsSupported: ['DID'],
     cryptographicSuitesSupported: [
       'ES256K',

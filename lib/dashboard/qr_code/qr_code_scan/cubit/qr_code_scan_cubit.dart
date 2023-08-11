@@ -245,7 +245,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         //   ),
         // );
       } else if (state.uri.toString().startsWith('openid://?client_id')) {
-        /// ebsi presentation
+        /// ebsi v2 presentation
         /// verifier side (siopv2) with request_uri
         await verifySiopv2Jwt(state.uri);
       } else {
@@ -273,6 +273,22 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     // having credentials?
     // having correct crv in ebsi key
 
+    final OIDC4VCType currentOIIDC4VCType =
+        profileCubit.state.model.oidc4vcType;
+
+    if (!state.uri
+        .toString()
+        .startsWith(currentOIIDC4VCType.presentationPrefix)) {
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
+          ),
+        ),
+      );
+      return;
+    }
+
     if (!await isSiopV2WithRequestURIValid(state.uri!)) {
       emit(
         state.copyWith(
@@ -289,6 +305,21 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   late dynamic encodedData;
 
   Future<void> verifySiopv2Jwt(Uri? uri) async {
+    final OIDC4VCType currentOIIDC4VCType =
+        profileCubit.state.model.oidc4vcType;
+
+    if (!state.uri
+        .toString()
+        .startsWith(currentOIIDC4VCType.presentationPrefix)) {
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
+          ),
+        ),
+      );
+      return;
+    }
     final requestUri = state.uri!.queryParameters['request_uri'].toString();
 
     encodedData = await fetchRequestUriPayload(url: requestUri);

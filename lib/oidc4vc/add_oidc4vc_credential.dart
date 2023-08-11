@@ -63,7 +63,7 @@ Future<void> addOIDC4VCCredential({
     oidc4vcType.schemaForType,
   );
 
-  if (credentialManifest.outputDescriptors!.isNotEmpty) {
+  if (credentialManifest.outputDescriptors?.isNotEmpty ?? false) {
     newCredential['credential_manifest'] = CredentialManifest(
       credentialManifest.id,
       credentialManifest.issuedBy,

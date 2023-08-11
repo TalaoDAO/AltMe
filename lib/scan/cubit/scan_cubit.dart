@@ -56,6 +56,7 @@ class ScanCubit extends Cubit<ScanState> {
     required String keyId,
     List<CredentialModel>? credentialsToBePresented,
     required Issuer issuer,
+    required bool isFromPresentation,
   }) async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -66,16 +67,19 @@ class ScanCubit extends Cubit<ScanState> {
           uri.toString().startsWith('openid://?client_id')) {
         OIDC4VCType? currentOIIDC4VCType;
 
-        for (final oidc4vcType in OIDC4VCType.values) {
-          if (oidc4vcType.isEnabled &&
-              state.uri.toString().startsWith(oidc4vcType.offerPrefix) &&
-              state.uri.toString().startsWith(oidc4vcType.presentationPrefix)) {
-            currentOIIDC4VCType = oidc4vcType;
+        if (isFromPresentation) {
+          currentOIIDC4VCType = profileCubit.state.model.oidc4vcType;
+        } else {
+          for (final oidc4vcType in OIDC4VCType.values) {
+            if (oidc4vcType.isEnabled &&
+                uri.toString().startsWith(oidc4vcType.offerPrefix)) {
+              currentOIIDC4VCType = oidc4vcType;
+            }
           }
         }
 
         if (currentOIIDC4VCType == null) {
-          return;
+          throw Exception();
         }
 
         final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;

@@ -465,6 +465,10 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_pleaseSwitchPolygonNetwork(
           injectedMessage ?? '',
         );
+
+      case ResponseString.RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile:
+        return globalMessage
+            .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile;
     }
   }
 }
