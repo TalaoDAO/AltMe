@@ -124,6 +124,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     final l10n = context.l10n;
     final outputDescriptors =
         widget.credentialModel.credentialManifest?.outputDescriptors;
+
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {

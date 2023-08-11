@@ -26,6 +26,11 @@ class EmployeeCredentialWidget extends StatelessWidget {
       title = titleDisplayMapping.fallback ?? '';
     }
 
+    if (title == '') {
+      title = credentialModel
+          .credentialPreview.credentialSubjectModel.credentialSubjectType.title;
+    }
+
     final DisplayMapping? subTitleDisplayMapping = credentialModel
         .credentialManifest?.outputDescriptors?.first.display?.subtitle;
 
