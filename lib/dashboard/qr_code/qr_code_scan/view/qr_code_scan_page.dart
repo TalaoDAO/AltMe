@@ -42,8 +42,7 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
           listener: (context, state) async {
             if (state.status == QrScanStatus.error) {
               if (state.message != null) {
-                final Route<dynamic>? currentRoute = ModalRoute.of(context);
-                currentRoute!.didPop(true);
+                Navigator.of(context).pop();
               }
             }
 

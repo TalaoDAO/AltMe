@@ -246,8 +246,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         //     ),
         //   ),
         // );
-      } else if (state.uri.toString().startsWith('openid://?client_id') ||
-          state.uri.toString().startsWith('openid-vc://?client_id')) {
+      } else if (state.uri.toString().startsWith('openid://') ||
+          state.uri.toString().startsWith('openid-vc://')) {
         /// ebsi v2 presentation
         /// verifier side (siopv2) with request_uri
 
@@ -292,14 +292,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               ResponseString
                   .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
             ),
-            showDialog: true,
+            showDialog: false,
+            duration: const Duration(seconds: 20),
           ),
         ),
       );
       return;
     }
 
-    if (!await isOIDC4VPAndSiopV2WithRequestURIValid(state.uri!)) {
+    final isRequestValid =
+        await isOIDC4VPAndSiopV2WithRequestURIValid(state.uri!);
+    if (!isRequestValid) {
       emit(
         state.copyWith(
           qrScanStatus: QrScanStatus.success,
@@ -328,7 +331,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               ResponseString
                   .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
             ),
-            showDialog: true,
+            showDialog: false,
+            duration: const Duration(seconds: 20),
           ),
         ),
       );
@@ -398,13 +402,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         return;
       }
 
-      if (state.uri.toString().startsWith('openid://?client_id')) {
+      if (state.uri.toString().startsWith('openid://')) {
         /// verifier side (OIDC4VP And siopv2) with request_uri
         await launchOIDC4VPAndSiopV2WithRequestUriFlow(state.uri);
         return;
       }
 
-      if (state.uri.toString().startsWith('openid-vc://?client_id')) {
+      if (state.uri.toString().startsWith('openid-vc://')) {
         /// verifier side (siopv2) with request_uri
         await launchSiopV2WithRequestUriFlow(state.uri);
         return;
@@ -831,24 +835,23 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<bool> isOIDC4VPAndSiopV2WithRequestURIValid(Uri uri) async {
-    bool isValid = true;
-
     ///credential should not be empty since we have to present
     if (credentialsCubit.state.credentials.isEmpty) {
-      emitError(
-        ResponseMessage(ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR),
-      );
-      isValid = false;
+      // emitError(
+      //   ResponseMessage(ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR),
+      // );
+
+      return false;
     }
 
     ///request attribute check
-    if (requestAttributeExists(uri) && isValid) {
-      isValid = false;
-      emitError(
-        ResponseMessage(
-          ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
-        ),
-      );
+    if (requestAttributeExists(uri)) {
+      // emitError(
+      //   ResponseMessage(
+      //     ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
+      //   ),
+      // );
+      return false;
     }
 
     ///request_uri attribute check
@@ -861,14 +864,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     final sIOPV2Param = await getSIOPV2Parameters(uri);
 
     ///check if claims exists
-    if (sIOPV2Param.claims == null && isValid) {
-      emitError(
-        ResponseMessage(
-          ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
-        ),
-      );
-      isValid = false;
+    if (sIOPV2Param.claims == null) {
+      // emitError(
+      //   ResponseMessage(
+      //     ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
+      //   ),
+      // );
+      return false;
     }
-    return isValid;
+    return true;
   }
 }
