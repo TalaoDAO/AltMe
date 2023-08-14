@@ -188,7 +188,39 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         // Check if we can respond to presentation request:
         // having credentials?
         // having correct crv in ebsi key
-        await launchOIDC4VPAndSiopV2RequestFlow();
+
+        final OIDC4VCType currentOIIDC4VCType =
+            profileCubit.state.model.oidc4vcType;
+
+        if (!state.uri
+            .toString()
+            .startsWith(currentOIIDC4VCType.presentationPrefix)) {
+          emit(
+            state.error(
+              message: StateMessage.error(
+                messageHandler: ResponseMessage(
+                  ResponseString
+                      .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
+                ),
+                showDialog: false,
+                duration: const Duration(seconds: 20),
+              ),
+            ),
+          );
+          return;
+        }
+
+        if (state.uri.toString().startsWith('openid://?')) {
+          /// verifier side (OIDC4VP And siopv2) with request uri as value
+          await launchOIDC4VPAndSiopV2RequestAsValueFlow();
+          return;
+        }
+
+        if (state.uri.toString().startsWith('openid-vc://?')) {
+          /// verifier side (siopv2) with request uri as value
+          await launchSiopV2WithRequestUriAsValueFlow();
+          return;
+        }
 
         // final openIdCredential = getCredentialName(sIOPV2Param.claims!);
         // final openIdIssuer = getIssuersName(sIOPV2Param.claims!);
@@ -250,7 +282,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           state.uri.toString().startsWith('openid-vc://?')) {
         /// ebsi v2 presentation
         /// verifier side (siopv2) with request_uri
-        await verifyOIDC4VPAndSiopv2Jwt(state.uri);
+        await launchOIDC4VPAndSiopV2RequestAsURIFlow(state.uri);
       } else {
         emit(state.acceptHost(isRequestVerified: true));
       }
@@ -273,31 +305,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> launchOIDC4VPAndSiopV2RequestFlow() async {
+  late dynamic encodedData;
+
+  Future<void> launchOIDC4VPAndSiopV2RequestAsValueFlow() async {
     // Check if we can respond to presentation request:
     // having credentials?
     // having correct crv in ebsi key
-
-    final OIDC4VCType currentOIIDC4VCType =
-        profileCubit.state.model.oidc4vcType;
-
-    if (!state.uri
-        .toString()
-        .startsWith(currentOIIDC4VCType.presentationPrefix)) {
-      emit(
-        state.error(
-          message: StateMessage.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
-            ),
-            showDialog: false,
-            duration: const Duration(seconds: 20),
-          ),
-        ),
-      );
-      return;
-    }
 
     final isRequestValid =
         await isOIDC4VPAndSiopV2WithRequestURIValid(state.uri!);
@@ -310,13 +323,42 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
     } else {
       final claims = state.uri?.queryParameters['claims'] ?? '';
-      await completeSiopV2WithClaim(claims: claims);
+      await completeOIDC4VPAndSiopV2WithClaim(claims: claims);
     }
   }
 
-  late dynamic encodedData;
+  Future<void> launchSiopV2WithRequestUriAsValueFlow() async {
+    final keys = <String>[];
+    state.uri!.queryParameters.forEach((key, value) {
+      keys.add(key);
+    });
 
-  Future<void> verifyOIDC4VPAndSiopv2Jwt(Uri? uri) async {
+    final isRequestValid = keys.contains('client_id') &&
+        keys.contains('redirect_uri') &&
+        keys.contains('nonce');
+
+    if (isRequestValid) {
+      final redirectUri = state.uri?.queryParameters['redirect_uri'] ?? '';
+      final nonce = state.uri?.queryParameters['nonce'] ?? '';
+      await completeSiopV2WithData(
+        redirectUri: redirectUri,
+        nonce: nonce,
+      );
+    } else {
+      emit(
+        state.error(
+          message: StateMessage.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> launchOIDC4VPAndSiopV2RequestAsURIFlow(Uri? uri) async {
     final OIDC4VCType currentOIIDC4VCType =
         profileCubit.state.model.oidc4vcType;
 
@@ -409,7 +451,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       if (state.uri.toString().startsWith('openid-vc://?')) {
         /// verifier side (siopv2) with request_uri
-        await launchSiopV2WithRequestUriFlow(state.uri);
+        await launchSiopV2WithRequestUriFlow();
         return;
       }
 
@@ -590,6 +632,144 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
   }
 
+  Future<void> launchSiopV2WithRequestUriFlow() async {
+    try {
+      final Map<String, dynamic> response =
+          decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
+
+      final redirectUri = response['redirect_uri'] ?? '';
+      final nonce = response['nonce'] ?? '';
+
+      await completeSiopV2WithData(
+        redirectUri: redirectUri.toString(),
+        nonce: nonce.toString(),
+      );
+    } catch (e) {
+      emitError(
+        ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        ),
+      );
+    }
+  }
+
+  Future<void> completeSiopV2WithData({
+    required String redirectUri,
+    required String nonce,
+  }) async {
+    try {
+      final OIDC4VCType currentOIIDC4VCType =
+          profileCubit.state.model.oidc4vcType;
+
+      final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
+      final mnemonic =
+          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+      final privateKey = await oidc4vc.privateKeyFromMnemonic(
+        mnemonic: mnemonic!,
+        index: currentOIIDC4VCType.index,
+      );
+
+      const didMethod = AltMeStrings.defaultDIDMethod;
+      final did = didKitProvider.keyToDID(didMethod, privateKey);
+      final kid =
+          await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
+
+      await oidc4vc.proveOwnershipOfDid(
+        uri: state.uri!,
+        privateKey: privateKey,
+        did: did,
+        kid: kid,
+        redirectUri: redirectUri,
+        nonce: nonce,
+      );
+      emit(
+        state.copyWith(
+          qrScanStatus: QrScanStatus.success,
+          message: StateMessage.success(
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_authenticationSuccess,
+            ),
+          ),
+        ),
+      );
+      goBack();
+    } catch (e) {
+      if (e is MessageHandler) {
+        emitError(e);
+      } else {
+        emitError(
+          ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> launchOIDC4VPAndSiopV2WithRequestUriFlow(Uri? uri) async {
+    final Map<String, dynamic> response =
+        decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
+
+    final String claims = jsonEncode(response['claims']);
+
+    //update uri
+
+    final redirectUri = response['redirect_uri'] ?? '';
+    final nonce = response['nonce'] ?? '';
+
+    final updatedUri = Uri.parse(
+      '${state.uri}&redirect_uri=$redirectUri&nonce=$nonce',
+    );
+
+    emit(state.copyWith(uri: updatedUri));
+    await completeOIDC4VPAndSiopV2WithClaim(claims: claims);
+  }
+
+  Future<void> completeOIDC4VPAndSiopV2WithClaim({
+    required String claims,
+  }) async {
+    // TODO(hawkbee): change when correction is done on verifier
+    claims = claims
+        .replaceAll("'email': None", "'email': 'None'")
+        .replaceAll("'", '"');
+
+    final jsonPath = JsonPath(r'$..input_descriptors');
+    final outputDescriptors =
+        jsonPath.readValues(jsonDecode(claims)).first as List;
+    final inputDescriptorList = outputDescriptors
+        .map((e) => InputDescriptor.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    final PresentationDefinition presentationDefinition =
+        PresentationDefinition(inputDescriptorList);
+    final CredentialModel credentialPreview = CredentialModel(
+      id: 'id',
+      image: 'image',
+      credentialPreview: Credential.dummy(),
+      shareLink: 'shareLink',
+      display: Display.emptyDisplay(),
+      data: const {},
+      credentialManifest: CredentialManifest(
+        'id',
+        IssuedBy('', ''),
+        null,
+        presentationDefinition,
+      ),
+    );
+    emit(
+      state.copyWith(
+        qrScanStatus: QrScanStatus.success,
+        route: CredentialManifestOfferPickPage.route(
+          uri: state.uri!,
+          credential: credentialPreview,
+          issuer: Issuer.emptyIssuer('domain'),
+          inputDescriptorIndex: 0,
+          credentialsToBePresented: [],
+        ),
+      ),
+    );
+  }
+
   Future<void> addCredentialsInLoop(List<dynamic> credentials) async {
     try {
       OIDC4VCType? currentOIIDC4VCType;
@@ -640,124 +820,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   void goBack() {
     emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-  }
-
-  Future<void> launchSiopV2WithRequestUriFlow(Uri? uri) async {
-    try {
-      final Map<String, dynamic> response =
-          decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
-
-      final redirectUri = response['redirect_uri'] ?? '';
-      final nonce = response['nonce'] ?? '';
-
-      final OIDC4VCType currentOIIDC4VCType =
-          profileCubit.state.model.oidc4vcType;
-
-      final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
-      final mnemonic =
-          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-      final privateKey = await oidc4vc.privateKeyFromMnemonic(
-        mnemonic: mnemonic!,
-        index: currentOIIDC4VCType.index,
-      );
-
-      const didMethod = AltMeStrings.defaultDIDMethod;
-      final did = didKitProvider.keyToDID(didMethod, privateKey);
-      final kid =
-          await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
-
-      await oidc4vc.proveOwnershipOfDid(
-        uri: uri!,
-        privateKey: privateKey,
-        did: did,
-        kid: kid,
-        redirectUri: redirectUri.toString(),
-        nonce: nonce.toString(),
-      );
-      emit(
-        state.copyWith(
-          qrScanStatus: QrScanStatus.success,
-          message: StateMessage.success(
-            messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_authenticationSuccess,
-            ),
-          ),
-        ),
-      );
-      goBack();
-    } catch (e) {
-      if (e is MessageHandler) {
-        emitError(e);
-      } else {
-        emitError(
-          ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          ),
-        );
-      }
-    }
-  }
-
-  Future<void> launchOIDC4VPAndSiopV2WithRequestUriFlow(Uri? uri) async {
-    final Map<String, dynamic> response =
-        decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
-
-    final String claims = jsonEncode(response['claims']);
-
-    //update uri
-
-    final redirectUri = response['redirect_uri'] ?? '';
-    final nonce = response['nonce'] ?? '';
-
-    final updatedUri = Uri.parse(
-      '${state.uri}&redirect_uri=$redirectUri&nonce=$nonce',
-    );
-
-    emit(state.copyWith(uri: updatedUri));
-    await completeSiopV2WithClaim(claims: claims);
-  }
-
-  Future<void> completeSiopV2WithClaim({required String claims}) async {
-    // TODO(hawkbee): change when correction is done on verifier
-    claims = claims
-        .replaceAll("'email': None", "'email': 'None'")
-        .replaceAll("'", '"');
-
-    final jsonPath = JsonPath(r'$..input_descriptors');
-    final outputDescriptors =
-        jsonPath.readValues(jsonDecode(claims)).first as List;
-    final inputDescriptorList = outputDescriptors
-        .map((e) => InputDescriptor.fromJson(e as Map<String, dynamic>))
-        .toList();
-
-    final PresentationDefinition presentationDefinition =
-        PresentationDefinition(inputDescriptorList);
-    final CredentialModel credentialPreview = CredentialModel(
-      id: 'id',
-      image: 'image',
-      credentialPreview: Credential.dummy(),
-      shareLink: 'shareLink',
-      display: Display.emptyDisplay(),
-      data: const {},
-      credentialManifest: CredentialManifest(
-        'id',
-        IssuedBy('', ''),
-        null,
-        presentationDefinition,
-      ),
-    );
-    emit(
-      state.copyWith(
-        qrScanStatus: QrScanStatus.success,
-        route: CredentialManifestOfferPickPage.route(
-          uri: state.uri!,
-          credential: credentialPreview,
-          issuer: Issuer.emptyIssuer('domain'),
-          inputDescriptorIndex: 0,
-          credentialsToBePresented: [],
-        ),
-      ),
-    );
   }
 
   bool requestAttributeExists(Uri uri) {
