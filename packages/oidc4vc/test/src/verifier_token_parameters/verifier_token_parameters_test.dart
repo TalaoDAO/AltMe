@@ -36,6 +36,7 @@ void main() {
       '',
       uri,
       credentialsToBePresented,
+      '',
     );
 
     const nonce = '69165b47-a851-11ed-bd52-0a1628958560';

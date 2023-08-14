@@ -42,10 +42,10 @@ class QRCodeScanState extends Equatable {
     );
   }
 
-  QRCodeScanState error({required MessageHandler messageHandler}) {
+  QRCodeScanState error({required StateMessage message}) {
     return QRCodeScanState(
       status: QrScanStatus.error,
-      message: StateMessage.error(messageHandler: messageHandler),
+      message: message,
       isScan: isScan,
       uri: uri,
       isRequestVerified: isRequestVerified,

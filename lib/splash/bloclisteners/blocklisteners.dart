@@ -253,9 +253,9 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             } catch (e) {
               log.e(e);
               if (e is MessageHandler) {
-                await context.read<QRCodeScanCubit>().emitError(e);
+                context.read<QRCodeScanCubit>().emitError(e);
               } else {
-                await context.read<QRCodeScanCubit>().emitError(
+                context.read<QRCodeScanCubit>().emitError(
                       ResponseMessage(
                         ResponseString
                             .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
@@ -317,7 +317,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                 qrCodeScanCubit: context.read<QRCodeScanCubit>(),
               );
         } else {
-          await context.read<QRCodeScanCubit>().emitError(
+          context.read<QRCodeScanCubit>().emitError(
                 ResponseMessage(
                   ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
                 ),

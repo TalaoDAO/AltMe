@@ -17,7 +17,6 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -118,17 +117,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
     } on FormatException {
       log.i('Format Exception');
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
-          ),
+      emitError(
+        ResponseMessage(
+          ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
         ),
       );
     } catch (e, s) {
       log.e('Error -$e, stack: $s');
       if (e is MessageHandler) {
-        emit(state.error(messageHandler: e));
+        emitError(e);
       } else {
         var message =
             ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER;
@@ -140,10 +137,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         if (e.toString().startsWith('Exception: INIT_ISSUE')) {
           message = ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage;
         }
-
-        emit(
-          state.error(messageHandler: ResponseMessage(message)),
-        );
+        emitError(ResponseMessage(message));
       }
     }
   }
@@ -156,20 +150,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       try {
         await verify(uri: Uri.parse(deepLinkUrl));
       } on FormatException {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
-            ),
+        emitError(
+          ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
           ),
         );
       }
     }
   }
 
-  Future<void> emitError(MessageHandler messageHandler) async {
-    emit(state.error(messageHandler: messageHandler));
+  void emitError(MessageHandler messageHandler) {
+    emit(
+      state.error(message: StateMessage.error(messageHandler: messageHandler)),
+    );
   }
 
   Future<void> verify({required Uri uri, bool? isScan}) async {
@@ -264,13 +258,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     } catch (e) {
       log.e(e);
       if (e is MessageHandler) {
-        emit(state.error(messageHandler: e));
+        emit(state.error(message: StateMessage.error(messageHandler: e)));
       } else {
         emit(
           state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
             ),
           ),
         );
@@ -291,8 +287,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         .startsWith(currentOIIDC4VCType.presentationPrefix)) {
       emit(
         state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
+          message: StateMessage.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
+            ),
+            showDialog: true,
           ),
         ),
       );
@@ -323,8 +323,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         .startsWith(currentOIIDC4VCType.presentationPrefix)) {
       emit(
         state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
+          message: StateMessage.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
+            ),
+            showDialog: true,
           ),
         ),
       );
@@ -563,14 +567,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         'An error occurred while connecting to the server. $e',
       );
       if (e is MessageHandler) {
-        emit(state.error(messageHandler: e));
+        emitError(e);
       } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            ),
+        emitError(
+          ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           ),
         );
       }
@@ -683,20 +684,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       goBack();
     } catch (e) {
       if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
+        emitError(e);
       } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-            ),
+        emitError(
+          ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           ),
         );
       }
-      return;
     }
   }
 
@@ -840,12 +835,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     ///credential should not be empty since we have to present
     if (credentialsCubit.state.credentials.isEmpty) {
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR,
-          ),
-        ),
+      emitError(
+        ResponseMessage(ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR),
       );
       isValid = false;
     }
@@ -853,11 +844,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     ///request attribute check
     if (requestAttributeExists(uri) && isValid) {
       isValid = false;
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
-          ),
+      emitError(
+        ResponseMessage(
+          ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
         ),
       );
     }
@@ -873,11 +862,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     ///check if claims exists
     if (sIOPV2Param.claims == null && isValid) {
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
-          ),
+      emitError(
+        ResponseMessage(
+          ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
         ),
       );
       isValid = false;
