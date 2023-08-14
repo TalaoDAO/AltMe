@@ -757,8 +757,8 @@ class OIDC4VC {
       'iat': DateTime.now().microsecondsSinceEpoch,
       'aud': tokenParameters.audience, // devrait être verifier
       'exp': DateTime.now().microsecondsSinceEpoch + 1000,
-      'sub': isSIOPV2Only ? tokenParameters.did : 'https://self-issued.me/v2',
-      'iss': isSIOPV2Only ? tokenParameters.did : 'https://self-issued.me/v2',
+      'sub': tokenParameters.did,
+      'iss': tokenParameters.did, //'https://self-issued.me/v2',
       'nonce': tokenParameters.nonce,
     };
 

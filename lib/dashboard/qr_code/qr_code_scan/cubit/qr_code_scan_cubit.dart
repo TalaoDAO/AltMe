@@ -246,11 +246,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         //     ),
         //   ),
         // );
-      } else if (state.uri.toString().startsWith('openid://') ||
-          state.uri.toString().startsWith('openid-vc://')) {
+      } else if (state.uri.toString().startsWith('openid://?') ||
+          state.uri.toString().startsWith('openid-vc://?')) {
         /// ebsi v2 presentation
         /// verifier side (siopv2) with request_uri
-
         await verifyOIDC4VPAndSiopv2Jwt(state.uri);
       } else {
         emit(state.acceptHost(isRequestVerified: true));
@@ -402,13 +401,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         return;
       }
 
-      if (state.uri.toString().startsWith('openid://')) {
+      if (state.uri.toString().startsWith('openid://?')) {
         /// verifier side (OIDC4VP And siopv2) with request_uri
         await launchOIDC4VPAndSiopV2WithRequestUriFlow(state.uri);
         return;
       }
 
-      if (state.uri.toString().startsWith('openid-vc://')) {
+      if (state.uri.toString().startsWith('openid-vc://?')) {
         /// verifier side (siopv2) with request_uri
         await launchSiopV2WithRequestUriFlow(state.uri);
         return;
