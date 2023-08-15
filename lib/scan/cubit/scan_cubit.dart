@@ -64,7 +64,7 @@ class ScanCubit extends Cubit<ScanState> {
 
     try {
       if (uri.queryParameters['scope'] == 'openid' ||
-          uri.toString().startsWith('openid://?')) {
+          uri.toString().startsWith('openid://')) {
         OIDC4VCType? currentOIIDC4VCType;
 
         if (isFromPresentation) {

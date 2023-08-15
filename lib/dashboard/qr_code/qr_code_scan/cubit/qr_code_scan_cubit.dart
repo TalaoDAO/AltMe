@@ -183,50 +183,99 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       ),
     );
 
-    /// getting list of all
-    state.uri!.queryParameters.forEach((key, value) => keys.add(key));
-
     try {
+      final isOID4VCUrl = state.uri.toString().startsWith('openid');
+
+      if (!isOID4VCUrl) {
+        emit(state.acceptHost(isRequestVerified: true));
+      }
+
       /// SIOPV2 : wallet returns an id_token which is a simple jwt
 
       /// OIDC4VP : wallet returns one or several VP according to the request :
       /// the complex part is the syntax of teh request inside teh
       /// presentation_definition as the verifier can request with AND / OR as :
-      ///  i want to see your Passport OR your ID card AND your email pass...
+      /// i want to see your Passport OR your ID card AND your email pass...
 
-      /// verifier side (siopv2) without request_uri
-      if (state.uri?.queryParameters['scope'] == 'openid') {
-        final OIDC4VCType currentOIIDC4VCType =
-            profileCubit.state.model.oidc4vcType;
+      /// getting list of all
+      state.uri?.queryParameters.forEach((key, value) => keys.add(key));
 
-        /// checking if presentation prefix match for current OIDC4VC profile
-        if (!state.uri
-            .toString()
-            .startsWith(currentOIIDC4VCType.presentationPrefix)) {
-          emit(
-            state.error(
-              message: StateMessage.error(
-                messageHandler: ResponseMessage(
-                  ResponseString
-                      .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
-                ),
-                showDialog: false,
-                duration: const Duration(seconds: 20),
+      final OIDC4VCType currentOIIDC4VCType =
+          profileCubit.state.model.oidc4vcType;
+
+      /// checking if presentation prefix match for current OIDC4VC profile
+      if (!state.uri
+          .toString()
+          .startsWith(currentOIIDC4VCType.presentationPrefix)) {
+        emit(
+          state.error(
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
               ),
+              showDialog: false,
+              duration: const Duration(seconds: 20),
             ),
-          );
-          return;
-        }
+          ),
+        );
+        return;
+      }
+
+      final bool isRequestPassedAsValue =
+          state.uri?.queryParameters['response_type'] != null;
+
+      /// verifier side (siopv2 oidc4vc) with request_uri as value
+      if (isRequestPassedAsValue) {
+        final responseType = state.uri?.queryParameters['response_type'] ?? '';
 
         /// verifier side (OIDC4VP And siopv2) with request uri as value
-        if (state.uri.toString().startsWith('openid://?')) {
+        if (state.uri.toString().startsWith('openid://')) {
           await launchOIDC4VPAndSiopV2RequestAsValueFlow();
           return;
         }
 
-        /// verifier side (siopv2) with request uri as value
-        if (state.uri.toString().startsWith('openid-vc://?')) {
-          await launchSiopV2WithRequestUriAsValueFlow();
+        if (state.uri.toString().startsWith('openid-vc://')) {
+          if (responseType == 'id_token') {
+            /// verifier side (siopv2) with request uri as value
+            await launchSiopV2WithRequestUriAsValueFlow();
+          } else if (responseType == 'vp_token') {
+            /// verifier side (oidc4vp) with request uri as value
+            final String? presentationDefinitionValue =
+                uri.queryParameters['presentation_definition'];
+
+            if (presentationDefinitionValue == null) {
+              throw Exception();
+            }
+
+            final json =
+                jsonDecode(presentationDefinitionValue.replaceAll("'", '"'))
+                    as Map<String, dynamic>;
+
+            final PresentationDefinition presentationDefinition =
+                PresentationDefinition.fromJson(json);
+
+            final CredentialManifest credentialManifest = CredentialManifest(
+              '',
+              IssuedBy('', ''),
+              [],
+              presentationDefinition,
+            );
+            final isPresentable = await isVCPresentable(presentationDefinition);
+            if (!isPresentable) {
+              emit(
+                state.copyWith(
+                  qrScanStatus: QrScanStatus.success,
+                  route: MissingCredentialsPage.route(
+                    credentialManifest: credentialManifest,
+                  ),
+                ),
+              );
+              return;
+            }
+          } else {
+            throw Exception();
+          }
           return;
         }
 
@@ -286,34 +335,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         //     ),
         //   ),
         // );
-      } else if (state.uri.toString().startsWith('openid://?') ||
-          state.uri.toString().startsWith('openid-vc://?')) {
+      } else if (state.uri.toString().startsWith('openid://') ||
+          state.uri.toString().startsWith('openid-vc://')) {
         /// verifier side (siopv2 oidc4vc) with request_uri
-
-        final OIDC4VCType currentOIIDC4VCType =
-            profileCubit.state.model.oidc4vcType;
-
-        if (!state.uri
-            .toString()
-            .startsWith(currentOIIDC4VCType.presentationPrefix)) {
-          emit(
-            state.error(
-              message: StateMessage.error(
-                messageHandler: ResponseMessage(
-                  ResponseString
-                      .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
-                ),
-                showDialog: false,
-                duration: const Duration(seconds: 20),
-              ),
-            ),
-          );
-          return;
-        }
 
         await launchOIDC4VPAndSiopV2RequestAsURIFlow();
       } else {
-        emit(state.acceptHost(isRequestVerified: true));
+        throw Exception();
       }
     } catch (e) {
       log.e(e);
@@ -370,13 +398,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
 
       /// verifier side (OIDC4VP And siopv2) with request_uri
-      if (state.uri.toString().startsWith('openid://?')) {
+      if (state.uri.toString().startsWith('openid://')) {
         await launchOIDC4VPAndSiopV2WithRequestUriFlow(state.uri);
         return;
       }
 
       /// verifier side (siopv2) with request_uri
-      if (state.uri.toString().startsWith('openid-vc://?')) {
+      if (state.uri.toString().startsWith('openid-vc://')) {
         await launchSiopV2WithRequestUriFlow();
         return;
       }
@@ -394,37 +422,18 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
         final PresentationDefinition? presentationDefinition =
             credentialManifest.presentationDefinition;
-        if (presentationDefinition != null &&
-            presentationDefinition.inputDescriptors.isNotEmpty) {
-          for (final descriptor in presentationDefinition.inputDescriptors) {
-            /// using JsonPath to find credential Name
-            final dynamic json = jsonDecode(jsonEncode(descriptor.constraints));
-            final dynamic credentialField =
-                (JsonPath(r'$..fields').read(json).first.value as List)
-                    .toList()
-                    .first;
+        final isPresentable = await isVCPresentable(presentationDefinition);
 
-            if (credentialField['filter'] == null) {
-              continue;
-            }
-
-            final credentialName =
-                credentialField['filter']['pattern'] as String;
-
-            final isPresentable = await isCredentialPresentable(credentialName);
-
-            if (!isPresentable) {
-              emit(
-                state.copyWith(
-                  qrScanStatus: QrScanStatus.success,
-                  route: MissingCredentialsPage.route(
-                    credentialManifest: credentialManifest,
-                  ),
-                ),
-              );
-              return;
-            }
-          }
+        if (!isPresentable) {
+          emit(
+            state.copyWith(
+              qrScanStatus: QrScanStatus.success,
+              route: MissingCredentialsPage.route(
+                credentialManifest: credentialManifest,
+              ),
+            ),
+          );
+          return;
         }
       }
 
@@ -547,6 +556,32 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
     }
+  }
+
+  Future<bool> isVCPresentable(
+      PresentationDefinition? presentationDefinition) async {
+    if (presentationDefinition != null &&
+        presentationDefinition.inputDescriptors.isNotEmpty) {
+      for (final descriptor in presentationDefinition.inputDescriptors) {
+        /// using JsonPath to find credential Name
+        final dynamic json = jsonDecode(jsonEncode(descriptor.constraints));
+        final dynamic credentialField =
+            (JsonPath(r'$..fields').read(json).first.value as List)
+                .toList()
+                .first;
+
+        if (credentialField['filter'] == null) {
+          continue;
+        }
+
+        final credentialName = credentialField['filter']['pattern'] as String;
+
+        final isPresentable = await isCredentialPresentable(credentialName);
+
+        return isPresentable;
+      }
+    }
+    return false;
   }
 
   void navigateToOidc4vcCredentialPickPage(List<dynamic> credentials) {
