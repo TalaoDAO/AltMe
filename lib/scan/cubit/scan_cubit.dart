@@ -75,8 +75,8 @@ class ScanCubit extends Cubit<ScanState> {
           return;
         }
 
-        if (uri.toString().startsWith('openid-vc://') ||
-            uri.toString().startsWith('openid-hedera://')) {
+        if (uri.toString().startsWith('openid-vc://?') ||
+            uri.toString().startsWith('openid-hedera://?')) {
           if (responseType == 'id_token') {
             /// verifier side (siopv2) with request uri as value
             throw Exception();

@@ -236,8 +236,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           return;
         }
 
-        if (state.uri.toString().startsWith('openid-vc://') ||
-            uri.toString().startsWith('openid-hedera://')) {
+        if (state.uri.toString().startsWith('openid-vc://?') ||
+            uri.toString().startsWith('openid-hedera://?')) {
           if (responseType == 'id_token') {
             /// verifier side (siopv2) with request uri as value
             await launchSiopV2WithRequestUriAsValueFlow();
@@ -307,9 +307,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         //     ),
         //   ),
         // );
-      } else if (state.uri.toString().startsWith('openid://') ||
-          state.uri.toString().startsWith('openid-vc://') ||
-          state.uri.toString().startsWith('openid-hedera://')) {
+      } else if (state.uri.toString().startsWith('openid://?') ||
+          state.uri.toString().startsWith('openid-vc://?') ||
+          state.uri.toString().startsWith('openid-hedera://?')) {
         /// verifier side (siopv2 oidc4vc) with request_uri
 
         await launchOIDC4VPAndSiopV2RequestAsURIFlow();
@@ -371,13 +371,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
 
       /// verifier side (OIDC4VP And siopv2) with request_uri
-      if (state.uri.toString().startsWith('openid://')) {
+      if (state.uri.toString().startsWith('openid://?')) {
         await launchOIDC4VPAndSiopV2WithRequestUriFlow(state.uri);
         return;
       }
 
       /// verifier side (siopv2) with request_uri
-      if (state.uri.toString().startsWith('openid-vc://')) {
+      if (state.uri.toString().startsWith('openid-vc://?')) {
         await launchSiopV2WithRequestUriFlow();
         return;
       }
