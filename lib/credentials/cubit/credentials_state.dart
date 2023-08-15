@@ -44,7 +44,7 @@ class CredentialsState extends Equatable {
     return CredentialsState(
       status: status,
       message: messageHandler == null
-          ? message
+          ? null
           : StateMessage.success(messageHandler: messageHandler),
       credentials: credentials ?? this.credentials,
       dummyCredentials: dummyCredentials ?? this.dummyCredentials,
