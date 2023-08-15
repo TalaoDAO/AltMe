@@ -652,10 +652,8 @@ class ScanCubit extends Cubit<ScanState> {
       final uuid1 = const Uuid().v4();
 
       final Map<String, dynamic> presentationSubmission = {
-        'presentation_submission': {
-          'id': uuid1,
-          'definition_id': presentationDefinition.id,
-        }
+        'id': uuid1,
+        'definition_id': presentationDefinition.id,
       };
 
       final inputDescriptors = <Map<String, dynamic>>[];
@@ -670,16 +668,26 @@ class ScanCubit extends Cubit<ScanState> {
 
       presentationSubmission['descriptor_map'] = inputDescriptors;
 
+      final presentationSubmissionString = jsonEncode(presentationSubmission);
+
+      print(presentationSubmissionString);
+
+      final formData = FormData.fromMap(<String, dynamic>{
+        'vp_token': vpToken,
+        'presentation_submission': presentationSubmissionString,
+      });
+
+      print(formData);
+
       final result = await client.post(
         redirectUri,
-        data: FormData.fromMap(<String, dynamic>{
-          'vp_token': vpToken,
-          'presentation_submission': presentationSubmission,
-        }),
+        data: formData,
         headers: <String, dynamic>{
           'Content-Type': 'application/x-www-form-urlencoded'
         },
       );
+
+      print(result);
 
       if (result['status_code'] == 200) {
         await presentationActivity(
