@@ -201,33 +201,33 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       /// getting list of all
       state.uri?.queryParameters.forEach((key, value) => keys.add(key));
 
-      final OIDC4VCType currentOIIDC4VCType =
-          profileCubit.state.model.oidc4vcType;
-
-      /// checking if presentation prefix match for current OIDC4VC profile
-      if (!state.uri
-          .toString()
-          .startsWith(currentOIIDC4VCType.presentationPrefix)) {
-        emit(
-          state.error(
-            message: StateMessage.error(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
-              ),
-              showDialog: false,
-              duration: const Duration(seconds: 20),
-            ),
-          ),
-        );
-        return;
-      }
-
       final bool isRequestPassedAsValue =
           state.uri?.queryParameters['response_type'] != null;
 
       /// verifier side (siopv2 oidc4vc) with request_uri as value
       if (isRequestPassedAsValue) {
+        final OIDC4VCType currentOIIDC4VCType =
+            profileCubit.state.model.oidc4vcType;
+
+        /// checking if presentation prefix match for current OIDC4VC profile
+        if (!state.uri
+            .toString()
+            .startsWith(currentOIIDC4VCType.presentationPrefix)) {
+          emit(
+            state.error(
+              message: StateMessage.error(
+                messageHandler: ResponseMessage(
+                  ResponseString
+                      .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
+                ),
+                showDialog: false,
+                duration: const Duration(seconds: 20),
+              ),
+            ),
+          );
+          return;
+        }
+
         final responseType = state.uri?.queryParameters['response_type'] ?? '';
 
         /// verifier side (OIDC4VP And siopv2) with request uri as value
@@ -236,7 +236,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           return;
         }
 
-        if (state.uri.toString().startsWith('openid-vc://')) {
+        if (state.uri.toString().startsWith('openid-vc://') ||
+            uri.toString().startsWith('openid-hedera://')) {
           if (responseType == 'id_token') {
             /// verifier side (siopv2) with request uri as value
             await launchSiopV2WithRequestUriAsValueFlow();
@@ -307,12 +308,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         //   ),
         // );
       } else if (state.uri.toString().startsWith('openid://') ||
-          state.uri.toString().startsWith('openid-vc://')) {
+          state.uri.toString().startsWith('openid-vc://') ||
+          state.uri.toString().startsWith('openid-hedera://')) {
         /// verifier side (siopv2 oidc4vc) with request_uri
 
         await launchOIDC4VPAndSiopV2RequestAsURIFlow();
       } else {
-        throw Exception();
+        emit(state.acceptHost(isRequestVerified: true));
       }
     } catch (e) {
       log.e(e);

@@ -22,39 +22,72 @@ class DummyCredentialImage extends StatelessWidget {
       title = discoverDummyCredential.credentialSubjectType.title;
     }
 
-    return CredentialContainer(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.fill,
-            image: AssetImage(discoverDummyCredential.image!),
-          ),
-        ),
-        child: AspectRatio(
-          aspectRatio: aspectRatio,
-          child: CustomMultiChildLayout(
-            delegate: CredentialBaseWidgetDelegate(position: Offset.zero),
-            children: [
-              if (title != null)
-                LayoutId(
-                  id: 'title',
-                  child: FractionallySizedBox(
-                    widthFactor: 0.7,
-                    heightFactor: 0.19,
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: MyText(
-                        title,
-                        style:
-                            Theme.of(context).textTheme.identitiyBaseTitleText,
-                      ),
-                    ),
+    return discoverDummyCredential.image == null
+        ? AspectRatio(
+            aspectRatio: Sizes.credentialAspectRatio,
+            child: DefaultCredentialListWidget(
+              credentialModel: CredentialModel(
+                id: '',
+                credentialPreview: Credential(
+                  'dummy1',
+                  ['dummy2'],
+                  [discoverDummyCredential.credentialSubjectType.title],
+                  'dummy4',
+                  'dummy5',
+                  'dummy6',
+                  [Proof.dummy()],
+                  DefaultCredentialSubjectModel(
+                    'dummy7',
+                    'dummy8',
+                    const Author(''),
                   ),
+                  [Translation('en', '')],
+                  [Translation('en', '')],
+                  CredentialStatusField.emptyCredentialStatusField(),
+                  [Evidence.emptyEvidence()],
                 ),
-            ],
-          ),
-        ),
-      ),
-    );
+                data: const {},
+                display: Display.emptyDisplay(),
+                image: '',
+                shareLink: '',
+              ),
+              showBgDecoration: false,
+            ),
+          )
+        : CredentialContainer(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: AssetImage(discoverDummyCredential.image!),
+                ),
+              ),
+              child: AspectRatio(
+                aspectRatio: aspectRatio,
+                child: CustomMultiChildLayout(
+                  delegate: CredentialBaseWidgetDelegate(position: Offset.zero),
+                  children: [
+                    if (title != null)
+                      LayoutId(
+                        id: 'title',
+                        child: FractionallySizedBox(
+                          widthFactor: 0.7,
+                          heightFactor: 0.19,
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: MyText(
+                              title,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .identitiyBaseTitleText,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          );
   }
 }
