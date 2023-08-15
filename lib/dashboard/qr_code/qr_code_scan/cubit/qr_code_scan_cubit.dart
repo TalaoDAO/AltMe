@@ -289,7 +289,29 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       } else if (state.uri.toString().startsWith('openid://?') ||
           state.uri.toString().startsWith('openid-vc://?')) {
         /// verifier side (siopv2 oidc4vc) with request_uri
-        await launchOIDC4VPAndSiopV2RequestAsURIFlow(state.uri);
+
+        final OIDC4VCType currentOIIDC4VCType =
+            profileCubit.state.model.oidc4vcType;
+
+        if (!state.uri
+            .toString()
+            .startsWith(currentOIIDC4VCType.presentationPrefix)) {
+          emit(
+            state.error(
+              message: StateMessage.error(
+                messageHandler: ResponseMessage(
+                  ResponseString
+                      .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
+                ),
+                showDialog: false,
+                duration: const Duration(seconds: 20),
+              ),
+            ),
+          );
+          return;
+        }
+
+        await launchOIDC4VPAndSiopV2RequestAsURIFlow();
       } else {
         emit(state.acceptHost(isRequestVerified: true));
       }
@@ -572,27 +594,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> launchOIDC4VPAndSiopV2RequestAsURIFlow(Uri? uri) async {
-    final OIDC4VCType currentOIIDC4VCType =
-        profileCubit.state.model.oidc4vcType;
-
-    if (!state.uri
-        .toString()
-        .startsWith(currentOIIDC4VCType.presentationPrefix)) {
-      emit(
-        state.error(
-          message: StateMessage.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
-            ),
-            showDialog: false,
-            duration: const Duration(seconds: 20),
-          ),
-        ),
-      );
-      return;
-    }
+  Future<void> launchOIDC4VPAndSiopV2RequestAsURIFlow() async {
     final requestUri = state.uri!.queryParameters['request_uri'].toString();
 
     encodedData = await fetchRequestUriPayload(url: requestUri);
