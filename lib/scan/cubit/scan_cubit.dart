@@ -658,26 +658,33 @@ class ScanCubit extends Cubit<ScanState> {
 
       final inputDescriptors = <Map<String, dynamic>>[];
 
-      for (final inputDescriptor in presentationDefinition.inputDescriptors) {
+      if (presentationDefinition.inputDescriptors.length == 1) {
         inputDescriptors.add({
-          'id': inputDescriptor.id,
+          'id': presentationDefinition.inputDescriptors[0].id,
           'format': 'ldp_vc', // type of the VC
           'path': r'$.verifiableCredential'
         });
+      } else {
+        for (int i = 0;
+            i < presentationDefinition.inputDescriptors.length;
+            i++) {
+          inputDescriptors.add({
+            'id': presentationDefinition.inputDescriptors[i].id,
+            'format': 'ldp_vc', // type of the VC
+            // ignore: prefer_interpolation_to_compose_strings
+            'path': r'$.verifiableCredential[' + i.toString() + ']'
+          });
+        }
       }
 
       presentationSubmission['descriptor_map'] = inputDescriptors;
 
       final presentationSubmissionString = jsonEncode(presentationSubmission);
 
-      print(presentationSubmissionString);
-
       final formData = FormData.fromMap(<String, dynamic>{
         'vp_token': vpToken,
         'presentation_submission': presentationSubmissionString,
       });
-
-      print(formData);
 
       final result = await client.post(
         redirectUri,
@@ -686,8 +693,6 @@ class ScanCubit extends Cubit<ScanState> {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
       );
-
-      print(result);
 
       if (result['status_code'] == 200) {
         await presentationActivity(
