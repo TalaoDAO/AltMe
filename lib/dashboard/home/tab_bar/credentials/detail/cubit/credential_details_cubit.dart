@@ -69,7 +69,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
         final Map<String, dynamic> header =
             decodeHeader(jwtDecode: jwtDecode, token: encodedData);
-        issuerKid = jsonEncode(header['kid']);
+        issuerKid = header['kid'].toString();
       }
 
       final VerificationType isVerified = await verifyEncodedData(
