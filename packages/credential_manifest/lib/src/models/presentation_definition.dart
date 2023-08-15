@@ -5,10 +5,14 @@ part 'presentation_definition.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class PresentationDefinition {
-  PresentationDefinition(this.inputDescriptors);
+  PresentationDefinition({
+    required this.inputDescriptors,
+    this.id,
+  });
 
   factory PresentationDefinition.fromJson(Map<String, dynamic> json) =>
       _$PresentationDefinitionFromJson(json);
+  final String? id;
   @JsonKey(name: 'input_descriptors')
   final List<InputDescriptor> inputDescriptors;
 

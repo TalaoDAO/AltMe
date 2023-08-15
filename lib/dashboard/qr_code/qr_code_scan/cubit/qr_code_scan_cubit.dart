@@ -188,6 +188,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       if (!isOID4VCUrl) {
         emit(state.acceptHost(isRequestVerified: true));
+        return;
       }
 
       /// SIOPV2 : wallet returns an id_token which is a simple jwt
@@ -241,38 +242,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             await launchSiopV2WithRequestUriAsValueFlow();
           } else if (responseType == 'vp_token') {
             /// verifier side (oidc4vp) with request uri as value
-            final String? presentationDefinitionValue =
-                uri.queryParameters['presentation_definition'];
-
-            if (presentationDefinitionValue == null) {
-              throw Exception();
-            }
-
-            final json =
-                jsonDecode(presentationDefinitionValue.replaceAll("'", '"'))
-                    as Map<String, dynamic>;
-
-            final PresentationDefinition presentationDefinition =
-                PresentationDefinition.fromJson(json);
-
-            final CredentialManifest credentialManifest = CredentialManifest(
-              '',
-              IssuedBy('', ''),
-              [],
-              presentationDefinition,
-            );
-            final isPresentable = await isVCPresentable(presentationDefinition);
-            if (!isPresentable) {
-              emit(
-                state.copyWith(
-                  qrScanStatus: QrScanStatus.success,
-                  route: MissingCredentialsPage.route(
-                    credentialManifest: credentialManifest,
-                  ),
-                ),
-              );
-              return;
-            }
+            await launchOIDC4VPWithRequestUriAsValueFlow();
+            return;
           } else {
             throw Exception();
           }
@@ -581,7 +552,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         return isPresentable;
       }
     }
-    return false;
+    return true;
   }
 
   void navigateToOidc4vcCredentialPickPage(List<dynamic> credentials) {
@@ -614,6 +585,72 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       await completeSiopV2WithData(
         redirectUri: redirectUri,
         nonce: nonce,
+      );
+    } else {
+      emit(
+        state.error(
+          message: StateMessage.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> launchOIDC4VPWithRequestUriAsValueFlow() async {
+    if (isUriAsValueValid && keys.contains('presentation_definition')) {
+      final String presentationDefinitionValue =
+          state.uri?.queryParameters['presentation_definition'] ?? '';
+
+      final json = jsonDecode(presentationDefinitionValue.replaceAll("'", '"'))
+          as Map<String, dynamic>;
+
+      final PresentationDefinition presentationDefinition =
+          PresentationDefinition.fromJson(json);
+
+      final CredentialManifest credentialManifest = CredentialManifest(
+        'id',
+        IssuedBy('', ''),
+        null,
+        presentationDefinition,
+      );
+      final isPresentable = await isVCPresentable(presentationDefinition);
+      if (!isPresentable) {
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.success,
+            route: MissingCredentialsPage.route(
+              credentialManifest: credentialManifest,
+            ),
+          ),
+        );
+        return;
+      }
+
+      final CredentialModel credentialPreview = CredentialModel(
+        id: 'id',
+        image: 'image',
+        credentialPreview: Credential.dummy(),
+        shareLink: 'shareLink',
+        display: Display.emptyDisplay(),
+        data: const {},
+        credentialManifest: credentialManifest,
+      );
+
+      emit(
+        state.copyWith(
+          qrScanStatus: QrScanStatus.success,
+          route: CredentialManifestOfferPickPage.route(
+            uri: state.uri!,
+            credential: credentialPreview,
+            issuer: Issuer.emptyIssuer('domain'),
+            inputDescriptorIndex: 0,
+            credentialsToBePresented: [],
+          ),
+        ),
       );
     } else {
       emit(
@@ -770,7 +807,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         .toList();
 
     final PresentationDefinition presentationDefinition =
-        PresentationDefinition(inputDescriptorList);
+        PresentationDefinition(inputDescriptors: inputDescriptorList);
     final CredentialModel credentialPreview = CredentialModel(
       id: 'id',
       image: 'image',

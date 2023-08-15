@@ -50,11 +50,11 @@ class ScanCubit extends Cubit<ScanState> {
   final ProfileCubit profileCubit;
   final DIDCubit didCubit;
 
-  Future<void> credentialOffer({
+  Future<void> credentialOfferOrPresent({
     required Uri uri,
     required CredentialModel credentialModel,
     required String keyId,
-    List<CredentialModel>? credentialsToBePresented,
+    required List<CredentialModel>? credentialsToBePresented,
     required Issuer issuer,
     required bool isFromPresentation,
   }) async {
@@ -63,84 +63,40 @@ class ScanCubit extends Cubit<ScanState> {
     final log = getLogger('ScanCubit - credentialOffer');
 
     try {
-      if (uri.queryParameters['scope'] == 'openid' ||
-          uri.toString().startsWith('openid://')) {
-        OIDC4VCType? currentOIIDC4VCType;
+      if (uri.toString().startsWith('openid')) {
+        final responseType = uri.queryParameters['response_type'] ?? '';
+        if (uri.toString().startsWith('openid://')) {
+          await presentCredentialToOIDC4VPAndSiopV2Request(
+            credentialsToBePresented: credentialsToBePresented,
+            isFromPresentation: isFromPresentation,
+            issuer: issuer,
+            uri: uri,
+          );
+          return;
+        }
 
-        if (isFromPresentation) {
-          currentOIIDC4VCType = profileCubit.state.model.oidc4vcType;
-        } else {
-          for (final oidc4vcType in OIDC4VCType.values) {
-            if (oidc4vcType.isEnabled &&
-                uri.toString().startsWith(oidc4vcType.offerPrefix)) {
-              currentOIIDC4VCType = oidc4vcType;
-            }
+        if (uri.toString().startsWith('openid-vc://')) {
+          if (responseType == 'id_token') {
+            /// verifier side (siopv2) with request uri as value
+            throw Exception();
+          } else if (responseType == 'vp_token') {
+            /// verifier side (oidc4vp) with request uri as value
+
+            final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
+            final nonce = uri.queryParameters['nonce'] ?? '';
+            await presentCredentialToOID4VPRequest(
+              issuer: issuer,
+              credentialsToBePresented: credentialsToBePresented,
+              nonce: nonce,
+              presentationDefinition:
+                  credentialModel.credentialManifest!.presentationDefinition!,
+              redirectUri: redirectUri,
+            );
+            return;
+          } else {
+            throw Exception();
           }
         }
-
-        if (currentOIIDC4VCType == null) {
-          throw Exception();
-        }
-
-        final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
-        final mnemonic =
-            await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-        final privateKey = await oidc4vc.privateKeyFromMnemonic(
-          mnemonic: mnemonic!,
-          index: currentOIIDC4VCType.index,
-        );
-
-        late String did;
-        late String kid;
-
-        if (currentOIIDC4VCType.issuerVcType == 'ldp_vc') {
-          const didMethod = AltMeStrings.defaultDIDMethod;
-          did = didKitProvider.keyToDID(didMethod, privateKey);
-          kid = await didKitProvider.keyToVerificationMethod(
-            didMethod,
-            privateKey,
-          );
-        } else if (currentOIIDC4VCType.issuerVcType == 'jwt_vc') {
-          final private = await oidc4vc.getPrivateKey(mnemonic, privateKey);
-
-          final thumbprint = getThumbprint(private);
-          final encodedAddress = Base58Encode([2, ...thumbprint]);
-          did = 'did:ebsi:z$encodedAddress';
-          final lastPart = Base58Encode(thumbprint);
-          kid = '$did#$lastPart';
-        } else {
-          throw Exception();
-        }
-
-        final credentialList = credentialsToBePresented!
-            .map((e) => jsonEncode(e.toJson()))
-            .toList();
-
-        await oidc4vc.sendPresentation(
-          uri,
-          credentialList,
-          null,
-          privateKey,
-          did,
-          kid,
-        );
-
-        await presentationActivity(
-          credentialModels: credentialsToBePresented,
-          issuer: issuer,
-        );
-
-        emit(
-          state.copyWith(
-            status: ScanStatus.success,
-            message: StateMessage.success(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
-              ),
-            ),
-          ),
-        );
       } else {
         final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
 
@@ -505,7 +461,7 @@ class ScanCubit extends Cubit<ScanState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
       final vpToken = await createVpToken(
-        credential: credential,
+        credentialsToBePresented: [credential],
         challenge: sIOPV2Param.nonce!,
       );
       final idToken = await createIdToken(nonce: sIOPV2Param.nonce!);
@@ -572,6 +528,199 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
+  Future<dynamic> presentCredentialToOIDC4VPAndSiopV2Request({
+    required List<CredentialModel>? credentialsToBePresented,
+    required Issuer issuer,
+    required Uri uri,
+    required bool isFromPresentation,
+  }) async {
+    final log =
+        getLogger('ScanCubit - presentCredentialToOIDC4VPAndSiopV2Request');
+    try {
+      OIDC4VCType? currentOIIDC4VCType;
+
+      if (isFromPresentation) {
+        currentOIIDC4VCType = profileCubit.state.model.oidc4vcType;
+      } else {
+        for (final oidc4vcType in OIDC4VCType.values) {
+          if (oidc4vcType.isEnabled &&
+              uri.toString().startsWith(oidc4vcType.offerPrefix)) {
+            currentOIIDC4VCType = oidc4vcType;
+          }
+        }
+      }
+
+      if (currentOIIDC4VCType == null) {
+        throw Exception();
+      }
+
+      final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
+      final mnemonic =
+          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+      final privateKey = await oidc4vc.privateKeyFromMnemonic(
+        mnemonic: mnemonic!,
+        index: currentOIIDC4VCType.index,
+      );
+
+      late String did;
+      late String kid;
+
+      if (currentOIIDC4VCType.issuerVcType == 'ldp_vc') {
+        const didMethod = AltMeStrings.defaultDIDMethod;
+        did = didKitProvider.keyToDID(didMethod, privateKey);
+        kid = await didKitProvider.keyToVerificationMethod(
+          didMethod,
+          privateKey,
+        );
+      } else if (currentOIIDC4VCType.issuerVcType == 'jwt_vc') {
+        final private = await oidc4vc.getPrivateKey(mnemonic, privateKey);
+
+        final thumbprint = getThumbprint(private);
+        final encodedAddress = Base58Encode([2, ...thumbprint]);
+        did = 'did:ebsi:z$encodedAddress';
+        final lastPart = Base58Encode(thumbprint);
+        kid = '$did#$lastPart';
+      } else {
+        throw Exception();
+      }
+
+      final credentialList =
+          credentialsToBePresented!.map((e) => jsonEncode(e.toJson())).toList();
+
+      await oidc4vc.sendPresentation(
+        uri,
+        credentialList,
+        null,
+        privateKey,
+        did,
+        kid,
+      );
+
+      await presentationActivity(
+        credentialModels: credentialsToBePresented,
+        issuer: issuer,
+      );
+
+      emit(
+        state.copyWith(
+          status: ScanStatus.success,
+          message: StateMessage.success(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+            ),
+          ),
+        ),
+      );
+    } catch (e) {
+      log.e('something went wrong', e);
+      if (e is MessageHandler) {
+        emit(
+          state.error(messageHandler: e),
+        );
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+            ),
+          ),
+        );
+      }
+      return;
+    }
+  }
+
+  Future<dynamic> presentCredentialToOID4VPRequest({
+    required List<CredentialModel>? credentialsToBePresented,
+    required PresentationDefinition presentationDefinition,
+    required String nonce,
+    required String redirectUri,
+    required Issuer issuer,
+  }) async {
+    final log = getLogger('ScanCubit - presentCredentialToOID4VPRequest');
+    emit(state.loading());
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+    try {
+      final vpToken = await createVpToken(
+        credentialsToBePresented: credentialsToBePresented!,
+        challenge: nonce,
+      );
+
+      final uuid1 = const Uuid().v4();
+
+      final Map<String, dynamic> presentationSubmission = {
+        'presentation_submission': {
+          'id': uuid1,
+          'definition_id': presentationDefinition.id,
+        }
+      };
+
+      final inputDescriptors = <Map<String, dynamic>>[];
+
+      for (final inputDescriptor in presentationDefinition.inputDescriptors) {
+        inputDescriptors.add({
+          'id': inputDescriptor.id,
+          'format': 'ldp_vc', // type of the VC
+          'path': r'$.verifiableCredential'
+        });
+      }
+
+      presentationSubmission['descriptor_map'] = inputDescriptors;
+
+      final result = await client.post(
+        redirectUri,
+        data: FormData.fromMap(<String, dynamic>{
+          'vp_token': vpToken,
+          'presentation_submission': presentationSubmission,
+        }),
+        headers: <String, dynamic>{
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+      );
+
+      if (result['status_code'] == 200) {
+        await presentationActivity(
+          credentialModels: credentialsToBePresented,
+          issuer: issuer,
+        );
+        emit(
+          state.copyWith(
+            status: ScanStatus.success,
+            message: StateMessage.success(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+              ),
+            ),
+          ),
+        );
+      } else {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
+    } catch (e) {
+      log.e('something went wrong', e);
+      if (e is MessageHandler) {
+        emit(
+          state.error(messageHandler: e),
+        );
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+            ),
+          ),
+        );
+      }
+      return;
+    }
+  }
+
   Future<void> askPermissionDIDAuthCHAPI({
     required String keyId,
     String? challenge,
@@ -592,7 +741,7 @@ class ScanCubit extends Cubit<ScanState> {
 
   Future<String> createVpToken({
     required String challenge,
-    required CredentialModel credential,
+    required List<CredentialModel> credentialsToBePresented,
   }) async {
     final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
     final did = await secureStorageProvider.get(SecureStorageKeys.did);
@@ -609,7 +758,9 @@ class ScanCubit extends Cubit<ScanState> {
         'type': ['VerifiablePresentation'],
         'id': presentationId,
         'holder': did,
-        'verifiableCredential': credential.data,
+        'verifiableCredential': credentialsToBePresented.length == 1
+            ? credentialsToBePresented.first.data
+            : credentialsToBePresented.map((c) => c.data).toList(),
       }),
       options,
       ssiKey!,
