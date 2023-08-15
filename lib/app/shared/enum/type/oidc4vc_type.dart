@@ -106,7 +106,7 @@ enum OIDC4VCType {
       'RS256'
     ],
     subjectSyntaxTypesSupported: ['did:key', 'did:pkh'],
-    schemaForType: false,
+    schemaForType: true,
     publicJWKNeeded: true,
     serviceDocumentation:
         '''WORK IN PROGRESS EON project. last release of the specs.\n'''
