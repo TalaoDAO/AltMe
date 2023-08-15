@@ -530,7 +530,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<bool> isVCPresentable(
-      PresentationDefinition? presentationDefinition) async {
+    PresentationDefinition? presentationDefinition,
+  ) async {
     if (presentationDefinition != null &&
         presentationDefinition.inputDescriptors.isNotEmpty) {
       for (final descriptor in presentationDefinition.inputDescriptors) {
@@ -548,8 +549,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final credentialName = credentialField['filter']['pattern'] as String;
 
         final isPresentable = await isCredentialPresentable(credentialName);
-
-        return isPresentable;
+        if (!isPresentable) {
+          return false;
+        }
       }
     }
     return true;
