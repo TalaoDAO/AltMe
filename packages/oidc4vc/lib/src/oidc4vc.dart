@@ -632,6 +632,34 @@ class OIDC4VC {
     }
   }
 
+  Future<String> extractVpToken({
+    required Uri uri,
+    required List<String> credentialsToBePresented,
+    required String did,
+    required String kid,
+    String? mnemonic,
+    String? privateKey,
+  }) async {
+    try {
+      final private = await getPrivateKey(mnemonic, privateKey);
+
+      final tokenParameters = VerifierTokenParameters(
+        private,
+        did,
+        kid,
+        uri,
+        credentialsToBePresented,
+        uri.queryParameters['nonce'] ?? '',
+      );
+
+      final vpToken = await getVpToken(tokenParameters);
+
+      return vpToken;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<void> proveOwnershipOfDid({
     required Uri uri,
     required String did,

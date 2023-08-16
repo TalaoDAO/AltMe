@@ -79,7 +79,7 @@ enum OIDC4VCType {
     ],
     subjectSyntaxTypesSupported: ['did:key'],
     schemaForType: false,
-    publicJWKNeeded: true,
+    publicJWKNeeded: false,
     serviceDocumentation:
         '''WORK IN PROGRESS. WE use JSON-LD VC and VP and last release of the specs.\n'''
         '''oidc4vci_draft : https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html\n'''
@@ -107,7 +107,7 @@ enum OIDC4VCType {
     ],
     subjectSyntaxTypesSupported: ['did:key', 'did:pkh'],
     schemaForType: false,
-    publicJWKNeeded: true,
+    publicJWKNeeded: false,
     serviceDocumentation:
         '''WORK IN PROGRESS EON project. last release of the specs.\n'''
         '''oidc4vci_draft : https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html\n'''
@@ -136,7 +136,7 @@ enum OIDC4VCType {
     ],
     subjectSyntaxTypesSupported: ['did:key'],
     schemaForType: false,
-    publicJWKNeeded: true,
+    publicJWKNeeded: false,
     serviceDocumentation: 'New environment for V3 compliance test',
   ),
 
@@ -157,7 +157,7 @@ enum OIDC4VCType {
     ],
     subjectSyntaxTypesSupported: ['did:ion', 'did:web'],
     schemaForType: false,
-    publicJWKNeeded: true,
+    publicJWKNeeded: false,
     serviceDocumentation:
         'https://identity.foundation/jwt-vc-presentation-profile/',
   );
