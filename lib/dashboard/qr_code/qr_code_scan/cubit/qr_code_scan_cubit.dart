@@ -233,7 +233,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         /// verifier side (OIDC4VP And siopv2) with request uri as value
         if (state.uri.toString().startsWith('openid://')) {
-          await launchOIDC4VPAndSiopV2RequestAsValueFlow();
+          await launchOIDC4VPAndSiopV2RequestAsValueFlowWithClaims();
           return;
         }
 
@@ -244,7 +244,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             await launchSiopV2WithRequestUriAsValueFlow();
           } else if (responseType == 'vp_token') {
             /// verifier side (oidc4vp) with request uri as value
-            await launchOIDC4VPWithRequestUriAsValueFlow();
+            await launchOIDC4VPAndSIOPV2WithRequestUriAsValueFlow();
+            return;
+          } else if (responseType == 'id_token vp_token') {
+            /// verifier side (oidc4vp and siopv2) with request uri as value
+            await launchOIDC4VPAndSIOPV2WithRequestUriAsValueFlow();
             return;
           } else {
             throw Exception();
@@ -375,7 +379,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       /// verifier side (OIDC4VP And siopv2) with request_uri
       if (state.uri.toString().startsWith('openid://?')) {
-        await launchOIDC4VPAndSiopV2WithRequestUriFlow(state.uri);
+        await launchOIDC4VPAndSiopV2WithRequestUriFlow();
         return;
       }
 
@@ -571,7 +575,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
   }
 
-  Future<void> launchOIDC4VPAndSiopV2RequestAsValueFlow() async {
+  Future<void> launchOIDC4VPAndSiopV2RequestAsValueFlowWithClaims() async {
     if (isUriAsValueValid) {
       final claims = state.uri?.queryParameters['claims'] ?? '';
       await completeOIDC4VPAndSiopV2WithClaim(claims: claims);
@@ -607,7 +611,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> launchOIDC4VPWithRequestUriAsValueFlow() async {
+  Future<void> launchOIDC4VPAndSIOPV2WithRequestUriAsValueFlow() async {
     if (isUriAsValueValid &&
         keys.contains('presentation_definition') &&
         keys.contains('aud')) {
@@ -756,6 +760,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         kid: kid,
         redirectUri: redirectUri,
         nonce: nonce,
+        isEBSIV2: currentOIIDC4VCType == OIDC4VCType.EBSIV2,
       );
       emit(
         state.copyWith(
@@ -781,7 +786,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> launchOIDC4VPAndSiopV2WithRequestUriFlow(Uri? uri) async {
+  Future<void> launchOIDC4VPAndSiopV2WithRequestUriFlow() async {
     final Map<String, dynamic> response =
         decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
 
@@ -918,46 +923,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return condition;
   }
 
-  Future<SIOPV2Param> getSIOPV2Parameters(Uri uri) async {
-    String? nonce;
-    String? redirect_uri;
-    String? request_uri;
-    String? claims;
-    String? requestUriPayload;
-
-    uri.queryParameters.forEach((key, value) {
-      if (key == 'nonce') {
-        nonce = value;
-      }
-      if (key == 'redirect_uri') {
-        redirect_uri = value;
-      }
-      if (key == 'claims') {
-        claims = value;
-      }
-      if (key == 'request_uri') {
-        request_uri = value;
-      }
-    });
-
-    if (request_uri != null) {
-      final dynamic encodedData =
-          await fetchRequestUriPayload(url: request_uri!);
-      if (encodedData != null) {
-        requestUriPayload =
-            decodePayload(jwtDecode: jwtDecode, token: encodedData as String)
-                .toString();
-      }
-    }
-    return SIOPV2Param(
-      claims: claims,
-      nonce: nonce,
-      redirect_uri: redirect_uri,
-      request_uri: request_uri,
-      requestUriPayload: requestUriPayload,
-    );
-  }
-
   Future<dynamic> fetchRequestUriPayload({required String url}) async {
     final log = getLogger('QRCodeScanCubit - fetchRequestUriPayload');
     late final dynamic data;
@@ -969,46 +934,5 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       log.e('An error occurred while connecting to the server.', e);
     }
     return data;
-  }
-
-  Future<bool> isOIDC4VPAndSiopV2WithRequestURIValid(Uri uri) async {
-    ///credential should not be empty since we have to present
-    if (credentialsCubit.state.credentials.isEmpty) {
-      // emitError(
-      //   ResponseMessage(ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR),
-      // );
-
-      return false;
-    }
-
-    ///request attribute check
-    if (requestAttributeExists(uri)) {
-      // emitError(
-      //   ResponseMessage(
-      //     ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
-      //   ),
-      // );
-      return false;
-    }
-
-    ///request_uri attribute check
-    // if (!requestUriAttributeExists(uri)) {
-    //   throw ResponseMessage(
-    //     ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
-    //   );
-    // }
-
-    final sIOPV2Param = await getSIOPV2Parameters(uri);
-
-    ///check if claims exists
-    if (sIOPV2Param.claims == null) {
-      // emitError(
-      //   ResponseMessage(
-      //     ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
-      //   ),
-      // );
-      return false;
-    }
-    return true;
   }
 }

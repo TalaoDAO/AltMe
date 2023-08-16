@@ -574,14 +574,16 @@ class OIDC4VC {
     }
   }
 
-  Future<void> sendPresentation(
-    Uri uri,
-    List<String> credentialsToBePresented,
+  Future<void> sendPresentation({
+    required Uri uri,
+    required String did,
+    required String kid,
+    required List<String> credentialsToBePresented,
+    required String nonce,
+    required bool isEBSIV2,
     String? mnemonic,
     String? privateKey,
-    String did,
-    String kid,
-  ) async {
+  }) async {
     // TODO(bibash):  if the "request_uri" attribute exists,
     //wallet must do a GET to endpoint to get the request value as a
     //json. The wallet receives a JWT which must be verified wit the public key
@@ -600,13 +602,13 @@ class OIDC4VC {
         kid,
         uri,
         credentialsToBePresented,
-        uri.queryParameters['nonce'] ?? '',
+        nonce,
       );
 
       // structures
       final verifierIdToken = await getIdToken(
         tokenParameters: tokenParameters,
-        isSIOPV2Only: false,
+        isEBSIV2: isEBSIV2,
       );
 
       /// build vp token
@@ -660,12 +662,46 @@ class OIDC4VC {
     }
   }
 
+  Future<String> extractIdToken({
+    required Uri uri,
+    required List<String> credentialsToBePresented,
+    required String did,
+    required String kid,
+    required String nonce,
+    required bool isEBSIV2,
+    String? mnemonic,
+    String? privateKey,
+  }) async {
+    try {
+      final private = await getPrivateKey(mnemonic, privateKey);
+
+      final tokenParameters = VerifierTokenParameters(
+        private,
+        did,
+        kid,
+        uri,
+        credentialsToBePresented,
+        nonce,
+      );
+
+      final verifierIdToken = await getIdToken(
+        tokenParameters: tokenParameters,
+        isEBSIV2: isEBSIV2,
+      );
+
+      return verifierIdToken;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<void> proveOwnershipOfDid({
     required Uri uri,
     required String did,
     required String kid,
     required String redirectUri,
     required String nonce,
+    required bool isEBSIV2,
     String? mnemonic,
     String? privateKey,
   }) async {
@@ -684,7 +720,7 @@ class OIDC4VC {
       // structures
       final verifierIdToken = await getIdToken(
         tokenParameters: tokenParameters,
-        isSIOPV2Only: true,
+        isEBSIV2: isEBSIV2,
       );
 
       final responseHeaders = {
@@ -775,7 +811,7 @@ class OIDC4VC {
   @visibleForTesting
   Future<String> getIdToken({
     required VerifierTokenParameters tokenParameters,
-    required bool isSIOPV2Only,
+    required bool isEBSIV2,
   }) async {
     final uuid1 = const Uuid().v4();
     final uuid2 = const Uuid().v4();
@@ -790,7 +826,7 @@ class OIDC4VC {
       'nonce': tokenParameters.nonce,
     };
 
-    if (!isSIOPV2Only) {
+    if (isEBSIV2) {
       payload['_vp_token'] = {
         'presentation_submission': {
           'definition_id': 'Altme defintion for EBSI project',

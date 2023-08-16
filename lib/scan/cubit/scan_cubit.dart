@@ -122,6 +122,7 @@ class ScanCubit extends Cubit<ScanState> {
             did: did,
             kid: kid,
             privateKey: privateKey,
+            isEBSIV2: currentOIIDC4VCType == OIDC4VCType.EBSIV2,
           );
           return;
         }
@@ -134,18 +135,28 @@ class ScanCubit extends Cubit<ScanState> {
           } else if (responseType == 'vp_token') {
             /// verifier side (oidc4vp) with request uri as value
 
-            final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
-            final nonce = uri.queryParameters['nonce'] ?? '';
-            final aud = uri.queryParameters['aud'] ?? '';
             await presentCredentialToOID4VPRequest(
               uri: uri,
               issuer: issuer,
               credentialsToBePresented: credentialsToBePresented,
-              nonce: nonce,
-              domain: aud,
               presentationDefinition:
                   credentialModel.credentialManifest!.presentationDefinition!,
-              redirectUri: redirectUri,
+              oidc4vcType: currentOIIDC4VCType,
+              oidc4vc: oidc4vc,
+              did: did,
+              kid: kid,
+              privateKey: privateKey,
+            );
+            return;
+          } else if (responseType == 'id_token vp_token') {
+            /// verifier side (oidc4vp and siopv2) with request uri as value
+
+            await presentCredentialToOIDC4VPAndSIOPV2Request(
+              uri: uri,
+              issuer: issuer,
+              credentialsToBePresented: credentialsToBePresented,
+              presentationDefinition:
+                  credentialModel.credentialManifest!.presentationDefinition!,
               oidc4vcType: currentOIIDC4VCType,
               oidc4vc: oidc4vc,
               did: did,
@@ -511,84 +522,6 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  Future<dynamic> presentCredentialToSiopV2Request({
-    required CredentialModel credential,
-    required SIOPV2Param sIOPV2Param,
-    required Issuer issuer,
-  }) async {
-    final log = getLogger('ScanCubit - presentCredentialToSiopV2Request');
-    emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
-    try {
-      final vpToken = await createVpToken(
-        credentialsToBePresented: [credential],
-        challenge: sIOPV2Param.nonce!,
-        domain: '',
-      );
-      final idToken = await createIdToken(nonce: sIOPV2Param.nonce!);
-      // prepare the post request
-      // Content-Type: application/x-www-form-urlencoded
-      // data =
-      // id_token=encoded_jwt&vp_token=verifiable_presentation
-
-      // There is a stackoverflow question about How to post
-      // x-www-form-urlencoded in Flutter
-
-      // execute the request////////
-      // Request is sent to redirect_uri.
-
-      final dynamic result = await client.post(
-        sIOPV2Param.redirect_uri!,
-        data: FormData.fromMap(<String, dynamic>{
-          'vp_token': vpToken,
-          'id_token': idToken,
-        }),
-        headers: <String, dynamic>{
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-      );
-
-      if (result == 'Congrats ! Everything is ok') {
-        await presentationActivity(
-          credentialModels: [credential],
-          issuer: issuer,
-        );
-        emit(
-          state.copyWith(
-            status: ScanStatus.success,
-            message: StateMessage.success(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
-              ),
-            ),
-          ),
-        );
-      } else {
-        throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-        );
-      }
-    } catch (e) {
-      log.e('something went wrong', e);
-      if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
-      } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-            ),
-          ),
-        );
-      }
-      return;
-    }
-  }
-
   Future<dynamic> presentCredentialToOIDC4VPAndSiopV2Request({
     required List<CredentialModel>? credentialsToBePresented,
     required Issuer issuer,
@@ -598,21 +531,25 @@ class ScanCubit extends Cubit<ScanState> {
     required String privateKey,
     required String did,
     required String kid,
+    required bool isEBSIV2,
   }) async {
     final log =
         getLogger('ScanCubit - presentCredentialToOIDC4VPAndSiopV2Request');
+
+    final nonce = uri.queryParameters['nonce'] ?? '';
 
     final credentialList =
         credentialsToBePresented!.map((e) => jsonEncode(e.toJson())).toList();
 
     try {
       await oidc4vc.sendPresentation(
-        uri,
-        credentialList,
-        null,
-        privateKey,
-        did,
-        kid,
+        uri: uri,
+        credentialsToBePresented: credentialList,
+        privateKey: privateKey,
+        did: did,
+        kid: kid,
+        nonce: nonce,
+        isEBSIV2: isEBSIV2,
       );
 
       await presentationActivity(
@@ -654,9 +591,6 @@ class ScanCubit extends Cubit<ScanState> {
   Future<dynamic> presentCredentialToOID4VPRequest({
     required List<CredentialModel>? credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
-    required String nonce,
-    required String domain,
-    required String redirectUri,
     required Issuer issuer,
     required OIDC4VC oidc4vc,
     required OIDC4VCType oidc4vcType,
@@ -670,61 +604,22 @@ class ScanCubit extends Cubit<ScanState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
-      late String vpToken;
+      final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
 
-      if (oidc4vcType.issuerVcType == 'ldp_vc') {
-        vpToken = await createVpToken(
-          credentialsToBePresented: credentialsToBePresented!,
-          challenge: nonce,
-          domain: domain,
-        );
-      } else if (oidc4vcType.issuerVcType == 'jwt_vc') {
-        final credentialList = credentialsToBePresented!
-            .map((e) => jsonEncode(e.toJson()))
-            .toList();
+      final String vpToken = await createVpToken(
+        credentialsToBePresented: credentialsToBePresented!,
+        did: did,
+        kid: kid,
+        oidc4vc: oidc4vc,
+        oidc4vcType: oidc4vcType,
+        privateKey: privateKey,
+        uri: uri,
+      );
 
-        vpToken = await oidc4vc.extractVpToken(
-          uri: uri,
-          credentialsToBePresented: credentialList,
-          did: did,
-          kid: kid,
-          privateKey: privateKey,
-        );
-      } else {
-        throw Exception();
-      }
-
-      final uuid1 = const Uuid().v4();
-
-      final Map<String, dynamic> presentationSubmission = {
-        'id': uuid1,
-        'definition_id': presentationDefinition.id,
-      };
-
-      final inputDescriptors = <Map<String, dynamic>>[];
-
-      if (presentationDefinition.inputDescriptors.length == 1) {
-        inputDescriptors.add({
-          'id': presentationDefinition.inputDescriptors[0].id,
-          'format': oidc4vcType.issuerVcType,
-          'path': r'$.verifiableCredential'
-        });
-      } else {
-        for (int i = 0;
-            i < presentationDefinition.inputDescriptors.length;
-            i++) {
-          inputDescriptors.add({
-            'id': presentationDefinition.inputDescriptors[i].id,
-            'format': oidc4vcType.issuerVcType,
-            // ignore: prefer_interpolation_to_compose_strings
-            'path': r'$.verifiableCredential[' + i.toString() + ']'
-          });
-        }
-      }
-
-      presentationSubmission['descriptor_map'] = inputDescriptors;
-
-      final presentationSubmissionString = jsonEncode(presentationSubmission);
+      final presentationSubmissionString = getPresentationSubmission(
+        oidc4vcType: oidc4vcType,
+        presentationDefinition: presentationDefinition,
+      );
 
       final formData = FormData.fromMap(<String, dynamic>{
         'vp_token': vpToken,
@@ -780,6 +675,142 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
+  Future<dynamic> presentCredentialToOIDC4VPAndSIOPV2Request({
+    required List<CredentialModel>? credentialsToBePresented,
+    required PresentationDefinition presentationDefinition,
+    required Issuer issuer,
+    required OIDC4VC oidc4vc,
+    required OIDC4VCType oidc4vcType,
+    required String privateKey,
+    required String did,
+    required String kid,
+    required Uri uri,
+  }) async {
+    final log =
+        getLogger('ScanCubit - presentCredentialToOIDC4VPAndSIOPV2Request');
+    emit(state.loading());
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    try {
+      final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
+
+      final String idToken = await createIdToken(
+        credentialsToBePresented: credentialsToBePresented!,
+        did: did,
+        kid: kid,
+        oidc4vc: oidc4vc,
+        privateKey: privateKey,
+        uri: uri,
+        isEBSIV2: oidc4vcType == OIDC4VCType.EBSIV2,
+      );
+
+      final String vpToken = await createVpToken(
+        credentialsToBePresented: credentialsToBePresented!,
+        did: did,
+        kid: kid,
+        oidc4vc: oidc4vc,
+        oidc4vcType: oidc4vcType,
+        privateKey: privateKey,
+        uri: uri,
+      );
+
+      final presentationSubmissionString = getPresentationSubmission(
+        oidc4vcType: oidc4vcType,
+        presentationDefinition: presentationDefinition,
+      );
+
+      final formData = FormData.fromMap(<String, dynamic>{
+        'id_token': idToken,
+        'vp_token': vpToken,
+        'presentation_submission': presentationSubmissionString,
+      });
+
+      final result = await client.post(
+        redirectUri,
+        data: formData,
+        headers: <String, dynamic>{
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+      );
+
+      if (result['status_code'] == 200) {
+        await presentationActivity(
+          credentialModels: credentialsToBePresented,
+          issuer: issuer,
+        );
+        emit(
+          state.copyWith(
+            status: ScanStatus.success,
+            message: StateMessage.success(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+              ),
+            ),
+          ),
+        );
+      } else {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
+    } catch (e) {
+      log.e('something went wrong', e);
+      if (e is MessageHandler) {
+        emit(
+          state.error(messageHandler: e),
+        );
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+            ),
+          ),
+        );
+      }
+      return;
+    }
+  }
+
+  String getPresentationSubmission({
+    required PresentationDefinition presentationDefinition,
+    required OIDC4VCType oidc4vcType,
+  }) {
+    final uuid1 = const Uuid().v4();
+
+    final Map<String, dynamic> presentationSubmission = {
+      'id': uuid1,
+      'definition_id': presentationDefinition.id,
+    };
+
+    final inputDescriptors = <Map<String, dynamic>>[];
+
+    if (presentationDefinition.inputDescriptors.length == 1) {
+      inputDescriptors.add({
+        'id': presentationDefinition.inputDescriptors[0].id,
+        'format': oidc4vcType.issuerVcType,
+        'path': r'$.verifiableCredential'
+      });
+    } else {
+      for (int i = 0; i < presentationDefinition.inputDescriptors.length; i++) {
+        inputDescriptors.add({
+          'id': presentationDefinition.inputDescriptors[i].id,
+          'format': oidc4vcType.issuerVcType,
+          // ignore: prefer_interpolation_to_compose_strings
+          'path': r'$.verifiableCredential[' + i.toString() + ']'
+        });
+      }
+    }
+
+    presentationSubmission['descriptor_map'] = inputDescriptors;
+
+    final presentationSubmissionString = jsonEncode(presentationSubmission);
+
+    return presentationSubmissionString;
+  }
+
   Future<void> askPermissionDIDAuthCHAPI({
     required String keyId,
     String? challenge,
@@ -799,70 +830,85 @@ class ScanCubit extends Cubit<ScanState> {
   }
 
   Future<String> createVpToken({
-    required String challenge,
-    required String domain,
     required List<CredentialModel> credentialsToBePresented,
+    required OIDC4VC oidc4vc,
+    required OIDC4VCType oidc4vcType,
+    required String privateKey,
+    required String did,
+    required String kid,
+    required Uri uri,
   }) async {
-    final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
-    final did = await secureStorageProvider.get(SecureStorageKeys.did);
-    final options = jsonEncode({
-      'verificationMethod':
-          await secureStorageProvider.get(SecureStorageKeys.verificationMethod),
-      'proofPurpose': 'authentication',
-      'challenge': challenge,
-      'domain': domain,
-    });
-    final presentationId = 'urn:uuid:${const Uuid().v4()}';
-    final vpToken = await didKitProvider.issuePresentation(
-      jsonEncode({
-        '@context': ['https://www.w3.org/2018/credentials/v1'],
-        'type': ['VerifiablePresentation'],
-        'id': presentationId,
-        'holder': did,
-        'verifiableCredential': credentialsToBePresented.length == 1
-            ? credentialsToBePresented.first.data
-            : credentialsToBePresented.map((c) => c.data).toList(),
-      }),
-      options,
-      ssiKey!,
-    );
-    return vpToken;
+    if (oidc4vcType.issuerVcType == 'ldp_vc') {
+      final nonce = uri.queryParameters['nonce'] ?? '';
+      final clientId = uri.queryParameters['client_id'] ?? '';
+
+      final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+      final did = await secureStorageProvider.get(SecureStorageKeys.did);
+      final options = jsonEncode({
+        'verificationMethod': await secureStorageProvider
+            .get(SecureStorageKeys.verificationMethod),
+        'proofPurpose': 'authentication',
+        'challenge': nonce,
+        'domain': clientId,
+      });
+      final presentationId = 'urn:uuid:${const Uuid().v4()}';
+      final vpToken = await didKitProvider.issuePresentation(
+        jsonEncode({
+          '@context': ['https://www.w3.org/2018/credentials/v1'],
+          'type': ['VerifiablePresentation'],
+          'id': presentationId,
+          'holder': did,
+          'verifiableCredential': credentialsToBePresented.length == 1
+              ? credentialsToBePresented.first.data
+              : credentialsToBePresented.map((c) => c.data).toList(),
+        }),
+        options,
+        ssiKey!,
+      );
+      return vpToken;
+    } else if (oidc4vcType.issuerVcType == 'jwt_vc') {
+      final credentialList =
+          credentialsToBePresented.map((e) => jsonEncode(e.toJson())).toList();
+
+      final vpToken = await oidc4vc.extractVpToken(
+        uri: uri,
+        credentialsToBePresented: credentialList,
+        did: did,
+        kid: kid,
+        privateKey: privateKey,
+      );
+
+      return vpToken;
+    } else {
+      throw Exception();
+    }
   }
 
-  Future<String> createIdToken({required String nonce}) async {
-    final log = getLogger('ScanCubit - createIdToken');
-    final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
-    final did = await secureStorageProvider.get(SecureStorageKeys.did);
+  Future<String> createIdToken({
+    required List<CredentialModel> credentialsToBePresented,
+    required OIDC4VC oidc4vc,
+    required String privateKey,
+    required String did,
+    required String kid,
+    required Uri uri,
+    required bool isEBSIV2,
+  }) async {
+    final credentialList =
+        credentialsToBePresented.map((e) => jsonEncode(e.toJson())).toList();
 
-    final timeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    final dynamic claims = JsonWebTokenClaims.fromJson(<String, dynamic>{
-      'exp': timeStamp + 600,
-      'iat': timeStamp,
-      'i_am_siop': true,
-      'sub': did,
-      'nonce': nonce,
-    });
+    final nonce = uri.queryParameters['nonce'] ?? '';
 
-    // create a builder, decoding the JWT in a JWS, so using a
-    // JsonWebSignatureBuilder
-    final builder = JsonWebSignatureBuilder();
-
-    // set the content
-    builder.jsonContent = claims.toJson();
-
-    // add a key to sign, can only add one for JWT
-    builder.addRecipient(
-      JsonWebKey.fromJson(jsonDecode(ssiKey!) as Map<String, dynamic>),
-      algorithm: 'RS256',
+    final idToken = await oidc4vc.extractIdToken(
+      uri: uri,
+      credentialsToBePresented: credentialList,
+      did: did,
+      kid: kid,
+      privateKey: privateKey,
+      nonce: nonce,
+      isEBSIV2: isEBSIV2,
     );
 
-    // build the jws
-    final jws = builder.build();
-
-    // output the compact serialization
-    log.i('jwt compact serialization: ${jws.toCompactSerialization()}');
-
-    return jws.toCompactSerialization();
+    return idToken;
   }
 
   Future<void> presentationActivity({
