@@ -320,23 +320,15 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               );
                             } else {
                               if (isEbsiCard) {
-                                /// removing type that was added in add_ebsi_credential.dart // ignore: lines_longer_than_80_chars
+                                /// removing type that was added in add_ebsi_credential.dart
                                 widget.credentialModel.data['credentialSubject']
                                     .remove('type');
                               }
 
                               late String data;
-
-                              if (isVerifiableDiplomaType(
-                                widget.credentialModel,
-                              )) {
-                                final String? jwt = widget.credentialModel.jwt;
-                                if (jwt != null) {
-                                  data = jwt;
-                                } else {
-                                  data =
-                                      jsonEncode(widget.credentialModel.data);
-                                }
+                              final String? jwt = widget.credentialModel.jwt;
+                              if (jwt != null) {
+                                data = jwt;
                               } else {
                                 data = jsonEncode(widget.credentialModel.data);
                               }
