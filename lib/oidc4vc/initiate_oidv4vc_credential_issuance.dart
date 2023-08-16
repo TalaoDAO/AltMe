@@ -17,6 +17,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
   required SecureStorageProvider secureStorageProvider,
+  required DioClient dioClient,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -25,9 +26,12 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   switch (oidc4vcType) {
     case OIDC4VCType.DEFAULT:
     case OIDC4VCType.HEDERA:
-      final credentialOfferJson = jsonDecode(
-        uriFromScannedResponse.queryParameters['credential_offer'].toString(),
+      final dynamic credentialOfferJson = await getCredentialOfferJson(
+        scannedResponse: scannedResponse,
+        dioClient: dioClient,
       );
+      if (credentialOfferJson == null) throw Exception();
+
       credentialTypeOrId = credentialOfferJson['credentials'];
       break;
     case OIDC4VCType.GAIAX:
@@ -54,6 +58,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       credentialTypeOrId: credentialTypeOrId.toString(),
       secureStorageProvider: secureStorageProvider,
       isLastCall: true,
+      dioClient: dioClient,
     );
     oidc4vc.resetNonceAndAccessToken();
     qrCodeScanCubit.goBack();
@@ -69,6 +74,7 @@ Future<void> getAndAddCredential({
   required String credentialTypeOrId,
   required SecureStorageProvider secureStorageProvider,
   required bool isLastCall,
+  required DioClient dioClient,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -78,9 +84,12 @@ Future<void> getAndAddCredential({
   switch (oidc4vcType) {
     case OIDC4VCType.DEFAULT:
     case OIDC4VCType.HEDERA:
-      final credentialOfferJson = jsonDecode(
-        uriFromScannedResponse.queryParameters['credential_offer'].toString(),
+      final dynamic credentialOfferJson = await getCredentialOfferJson(
+        scannedResponse: scannedResponse,
+        dioClient: dioClient,
       );
+      if (credentialOfferJson == null) throw Exception();
+
       preAuthorizedCode = credentialOfferJson['grants']
                   ['urn:ietf:params:oauth:grant-type:pre-authorized_code']
               ['pre-authorized_code']
@@ -188,4 +197,33 @@ List<int> getThumbprint(Map<String, dynamic> privateKey) {
   final sha256Digest = sha256.convert(bytesToHash);
 
   return sha256Digest.bytes;
+}
+
+Future<dynamic> getCredentialOfferJson({
+  required String scannedResponse,
+  required DioClient dioClient,
+}) async {
+  final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
+
+  final keys = <String>[];
+  uriFromScannedResponse.queryParameters.forEach((key, value) => keys.add(key));
+
+  dynamic credentialOfferJson;
+
+  if (keys.contains('credential_offer')) {
+    credentialOfferJson = jsonDecode(
+      uriFromScannedResponse.queryParameters['credential_offer'].toString(),
+    );
+  } else if (keys.contains('credential_offer_uri')) {
+    final url = uriFromScannedResponse.queryParameters['credential_offer_uri']
+        .toString();
+    final responseUrl = await dioClient.get(url);
+    final Uri uriFromResponseUrl = Uri.parse(responseUrl as String);
+
+    credentialOfferJson = jsonDecode(
+      uriFromResponseUrl.queryParameters['credential_offer'].toString(),
+    );
+  }
+
+  return credentialOfferJson;
 }

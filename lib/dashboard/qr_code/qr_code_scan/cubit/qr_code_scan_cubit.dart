@@ -17,6 +17,7 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -340,6 +341,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> accept({
     required Issuer issuer,
     required QRCodeScanCubit qrCodeScanCubit,
+    required DioClient dioClient,
   }) async {
     emit(state.loading());
     final log = getLogger('QRCodeScanCubit - accept');
@@ -366,6 +368,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           didKitProvider: didKitProvider,
           qrCodeScanCubit: qrCodeScanCubit,
           secureStorageProvider: getSecureStorage,
+          dioClient: dioClient,
         );
         return;
       }
@@ -865,6 +868,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             secureStorageProvider: getSecureStorage,
             credentialTypeOrId: credentialTypeOrId.toString(),
             isLastCall: i + 1 == credentials.length,
+            dioClient: DioClient('', Dio()),
           );
         }
         oidc4vc.resetNonceAndAccessToken();

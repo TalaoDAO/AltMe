@@ -12,6 +12,7 @@ import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
@@ -157,6 +158,7 @@ class _SplashViewState extends State<SplashView> {
         }
 
         if (currentOIIDC4VCType != null) {
+          // ignore: require_trailing_commas
           await initiateOIDC4VCCredentialIssuance(
             scannedResponse: uri.toString(),
             credentialsCubit: context.read<CredentialsCubit>(),
@@ -164,6 +166,7 @@ class _SplashViewState extends State<SplashView> {
             didKitProvider: DIDKitProvider(),
             qrCodeScanCubit: context.read<QRCodeScanCubit>(),
             secureStorageProvider: secure_storage.getSecureStorage,
+            dioClient: DioClient('', Dio()),
           );
         }
       }
