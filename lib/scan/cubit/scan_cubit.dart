@@ -136,11 +136,13 @@ class ScanCubit extends Cubit<ScanState> {
 
             final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
             final nonce = uri.queryParameters['nonce'] ?? '';
+            final aud = uri.queryParameters['aud'] ?? '';
             await presentCredentialToOID4VPRequest(
               uri: uri,
               issuer: issuer,
               credentialsToBePresented: credentialsToBePresented,
               nonce: nonce,
+              domain: aud,
               presentationDefinition:
                   credentialModel.credentialManifest!.presentationDefinition!,
               redirectUri: redirectUri,
@@ -521,6 +523,7 @@ class ScanCubit extends Cubit<ScanState> {
       final vpToken = await createVpToken(
         credentialsToBePresented: [credential],
         challenge: sIOPV2Param.nonce!,
+        domain: '',
       );
       final idToken = await createIdToken(nonce: sIOPV2Param.nonce!);
       // prepare the post request
@@ -652,6 +655,7 @@ class ScanCubit extends Cubit<ScanState> {
     required List<CredentialModel>? credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
     required String nonce,
+    required String domain,
     required String redirectUri,
     required Issuer issuer,
     required OIDC4VC oidc4vc,
@@ -672,6 +676,7 @@ class ScanCubit extends Cubit<ScanState> {
         vpToken = await createVpToken(
           credentialsToBePresented: credentialsToBePresented!,
           challenge: nonce,
+          domain: domain,
         );
       } else if (oidc4vcType.issuerVcType == 'jwt_vc') {
         final credentialList = credentialsToBePresented!
@@ -795,6 +800,7 @@ class ScanCubit extends Cubit<ScanState> {
 
   Future<String> createVpToken({
     required String challenge,
+    required String domain,
     required List<CredentialModel> credentialsToBePresented,
   }) async {
     final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
@@ -803,7 +809,8 @@ class ScanCubit extends Cubit<ScanState> {
       'verificationMethod':
           await secureStorageProvider.get(SecureStorageKeys.verificationMethod),
       'proofPurpose': 'authentication',
-      'challenge': challenge
+      'challenge': challenge,
+      'domain': domain,
     });
     final presentationId = 'urn:uuid:${const Uuid().v4()}';
     final vpToken = await didKitProvider.issuePresentation(

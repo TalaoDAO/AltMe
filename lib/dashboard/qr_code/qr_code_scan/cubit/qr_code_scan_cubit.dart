@@ -608,7 +608,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> launchOIDC4VPWithRequestUriAsValueFlow() async {
-    if (isUriAsValueValid && keys.contains('presentation_definition')) {
+    if (isUriAsValueValid &&
+        keys.contains('presentation_definition') &&
+        keys.contains('aud')) {
       final String presentationDefinitionValue =
           state.uri?.queryParameters['presentation_definition'] ?? '';
 
@@ -858,7 +860,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         for (int i = 0; i < credentials.length; i++) {
           emit(state.loading());
-          final credentialTypeOrId = credentials[i];
+          final credentialType = credentials[i];
           await getAndAddCredential(
             scannedResponse: state.uri.toString(),
             credentialsCubit: credentialsCubit,
@@ -866,7 +868,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             oidc4vcType: currentOIIDC4VCType,
             didKitProvider: didKitProvider,
             secureStorageProvider: getSecureStorage,
-            credentialTypeOrId: credentialTypeOrId.toString(),
+            credentialType: credentialType.toString(),
             isLastCall: i + 1 == credentials.length,
             dioClient: DioClient('', Dio()),
           );

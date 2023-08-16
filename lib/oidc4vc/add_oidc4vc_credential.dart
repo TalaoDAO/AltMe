@@ -14,7 +14,7 @@ Future<void> addOIDC4VCCredential({
   required CredentialsCubit credentialsCubit,
   required OIDC4VCType oidc4vcType,
   required String issuer,
-  required String credentialTypeOrId,
+  required String credentialType,
   required bool isLastCall,
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
@@ -59,7 +59,7 @@ Future<void> addOIDC4VCCredential({
   final CredentialManifest? credentialManifest = await getCredentialManifest(
     Dio(),
     issuer,
-    credentialTypeOrId,
+    credentialType,
     oidc4vcType.schemaForType,
   );
 

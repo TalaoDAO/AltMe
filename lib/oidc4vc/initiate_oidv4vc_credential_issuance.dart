@@ -21,7 +21,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
-  late dynamic credentialTypeOrId;
+  late dynamic credentialType;
 
   switch (oidc4vcType) {
     case OIDC4VCType.DEFAULT:
@@ -32,11 +32,11 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       );
       if (credentialOfferJson == null) throw Exception();
 
-      credentialTypeOrId = credentialOfferJson['credentials'];
+      credentialType = credentialOfferJson['credentials'];
       break;
     case OIDC4VCType.GAIAX:
     case OIDC4VCType.EBSIV2:
-      credentialTypeOrId =
+      credentialType =
           uriFromScannedResponse.queryParameters['credential_type'];
 
       break;
@@ -45,8 +45,8 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       break;
   }
 
-  if (credentialTypeOrId is List<dynamic>) {
-    qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(credentialTypeOrId);
+  if (credentialType is List<dynamic>) {
+    qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(credentialType);
   } else {
     final OIDC4VC oidc4vc = oidc4vcType.getOIDC4VC;
     await getAndAddCredential(
@@ -55,7 +55,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       oidc4vc: oidc4vc,
       didKitProvider: didKitProvider,
       credentialsCubit: credentialsCubit,
-      credentialTypeOrId: credentialTypeOrId.toString(),
+      credentialType: credentialType.toString(),
       secureStorageProvider: secureStorageProvider,
       isLastCall: true,
       dioClient: dioClient,
@@ -71,7 +71,7 @@ Future<void> getAndAddCredential({
   required OIDC4VCType oidc4vcType,
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
-  required String credentialTypeOrId,
+  required String credentialType,
   required SecureStorageProvider secureStorageProvider,
   required bool isLastCall,
   required DioClient dioClient,
@@ -147,7 +147,7 @@ Future<void> getAndAddCredential({
     final dynamic encodedCredentialFromOIDC4VC = await oidc4vc.getCredential(
       preAuthorizedCode: preAuthorizedCode,
       issuer: issuer,
-      credentialTypeOrId: credentialTypeOrId,
+      credentialType: credentialType,
       did: did,
       kid: kid,
       credentialRequestUri: uriFromScannedResponse,
@@ -161,7 +161,7 @@ Future<void> getAndAddCredential({
       credentialsCubit: credentialsCubit,
       oidc4vcType: oidc4vcType,
       issuer: issuer,
-      credentialTypeOrId: credentialTypeOrId,
+      credentialType: credentialType,
       isLastCall: isLastCall,
     );
   } else {

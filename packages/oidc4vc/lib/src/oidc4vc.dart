@@ -188,7 +188,7 @@ class OIDC4VC {
   /// Retreive credential_type from url
   Future<dynamic> getCredential({
     required String issuer,
-    required String credentialTypeOrId,
+    required String credentialType,
     required String did,
     required String kid,
     required Uri credentialRequestUri,
@@ -234,7 +234,7 @@ class OIDC4VC {
       issuerTokenParameters: issuerTokenParameters,
       credentialRequestUri: credentialRequestUri,
       openidConfigurationResponse: openidConfigurationResponse,
-      credentialTypeOrId: credentialTypeOrId,
+      credentialType: credentialType,
       credentialSupportedTypes: credentialSupportedTypes,
     );
 
@@ -409,7 +409,7 @@ class OIDC4VC {
     required IssuerTokenParameters issuerTokenParameters,
     required Uri credentialRequestUri,
     required Response<Map<String, dynamic>> openidConfigurationResponse,
-    required String credentialTypeOrId,
+    required String credentialType,
     required List<String> credentialSupportedTypes,
   }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
@@ -427,7 +427,7 @@ class OIDC4VC {
     // }
 
     final credentialData = <String, dynamic>{
-      'type': credentialTypeOrId,
+      'type': credentialType,
       'types': credentialSupportedTypes,
       'format': oidc4vcModel.issuerVcType,
       'proof': {
