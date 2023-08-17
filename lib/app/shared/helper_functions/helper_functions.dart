@@ -505,3 +505,9 @@ List<int> sortedPublcJwk(Map<String, dynamic> privateKey) {
   final jsonString = jsonEncode(sortedJwk).replaceAll(' ', '');
   return utf8.encode(jsonString);
 }
+
+bool isUriAsValueValid(List<String> keys) =>
+    keys.contains('response_type') &&
+    keys.contains('client_id') &&
+    keys.contains('redirect_uri') &&
+    keys.contains('nonce');

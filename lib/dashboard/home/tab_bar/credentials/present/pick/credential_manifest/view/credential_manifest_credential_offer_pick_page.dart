@@ -293,7 +293,6 @@ class CredentialManifestOfferPickView extends StatelessWidget {
             keyId: SecureStorageKeys.ssiKey,
             credentialsToBePresented: updatedCredentials,
             issuer: issuer,
-            isFromPresentation: true,
           );
     }
   }

@@ -144,7 +144,6 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                         credentialModel: credentialModel,
                         keyId: SecureStorageKeys.ssiKey,
                         issuer: widget.issuer,
-                        isFromPresentation: false,
                         credentialsToBePresented: [],
                       );
                     }

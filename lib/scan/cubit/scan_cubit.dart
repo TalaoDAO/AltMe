@@ -53,7 +53,6 @@ class ScanCubit extends Cubit<ScanState> {
     required String keyId,
     required List<CredentialModel>? credentialsToBePresented,
     required Issuer issuer,
-    required bool isFromPresentation,
   }) async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -61,22 +60,8 @@ class ScanCubit extends Cubit<ScanState> {
 
     try {
       if (uri.toString().startsWith('openid')) {
-        OIDC4VCType? currentOIIDC4VCType;
-
-        if (isFromPresentation) {
-          currentOIIDC4VCType = profileCubit.state.model.oidc4vcType;
-        } else {
-          for (final oidc4vcType in OIDC4VCType.values) {
-            if (oidc4vcType.isEnabled &&
-                uri.toString().startsWith(oidc4vcType.offerPrefix)) {
-              currentOIIDC4VCType = oidc4vcType;
-            }
-          }
-        }
-
-        if (currentOIIDC4VCType == null) {
-          throw Exception();
-        }
+        final OIDC4VCType currentOIIDC4VCType =
+            profileCubit.state.model.oidc4vcType;
 
         final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
 
@@ -95,23 +80,8 @@ class ScanCubit extends Cubit<ScanState> {
 
         final responseType = uri.queryParameters['response_type'] ?? '';
 
-        if (uri.toString().startsWith('openid://')) {
-          await presentCredentialToOIDC4VPAndSiopV2Request(
-            credentialsToBePresented: credentialsToBePresented,
-            isFromPresentation: isFromPresentation,
-            issuer: issuer,
-            uri: uri,
-            oidc4vc: oidc4vc,
-            did: did,
-            kid: kid,
-            privateKey: privateKey,
-            isEBSIV2: currentOIIDC4VCType == OIDC4VCType.EBSIV2,
-            indexValue: currentOIIDC4VCType.indexValue,
-          );
-          return;
-        }
-
-        if (uri.toString().startsWith('openid-vc://?') ||
+        if (uri.toString().startsWith('openid://') ||
+            uri.toString().startsWith('openid-vc://?') ||
             uri.toString().startsWith('openid-hedera://?')) {
           if (responseType == 'id_token') {
             /// verifier side (siopv2) with request uri as value
@@ -136,19 +106,55 @@ class ScanCubit extends Cubit<ScanState> {
           } else if (responseType == 'id_token vp_token') {
             /// verifier side (oidc4vp and siopv2) with request uri as value
 
-            await presentCredentialToOIDC4VPAndSIOPV2Request(
-              uri: uri,
-              issuer: issuer,
-              credentialsToBePresented: credentialsToBePresented,
-              presentationDefinition:
-                  credentialModel.credentialManifest!.presentationDefinition!,
-              oidc4vcType: currentOIIDC4VCType,
-              oidc4vc: oidc4vc,
-              did: did,
-              kid: kid,
-              privateKey: privateKey,
-              indexValue: currentOIIDC4VCType.indexValue,
-            );
+            /// EBSI V2 contains claimns
+            /// EBSI V2 and GAIAX has same starting uri
+            final String? claims = uri.queryParameters['claims'];
+
+            if (claims != null) {
+              if (currentOIIDC4VCType == OIDC4VCType.EBSIV2) {
+                await presentCredentialToOIDC4VPAndSiopV2RequestForEBSIV2(
+                  credentialsToBePresented: credentialsToBePresented,
+                  issuer: issuer,
+                  uri: uri,
+                  oidc4vc: oidc4vc,
+                  did: did,
+                  kid: kid,
+                  privateKey: privateKey,
+                  isEBSIV2: currentOIIDC4VCType == OIDC4VCType.EBSIV2,
+                  indexValue: currentOIIDC4VCType.indexValue,
+                );
+              } else {
+                emit(
+                  state.copyWith(
+                    status: ScanStatus.error,
+                    message: StateMessage.error(
+                      messageHandler: ResponseMessage(
+                        ResponseString
+                            .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
+                      ),
+                      showDialog: false,
+                      duration: const Duration(seconds: 20),
+                    ),
+                  ),
+                );
+                return;
+              }
+            } else {
+              await presentCredentialToOIDC4VPAndSIOPV2RequestForOthers(
+                uri: uri,
+                issuer: issuer,
+                credentialsToBePresented: credentialsToBePresented,
+                presentationDefinition:
+                    credentialModel.credentialManifest!.presentationDefinition!,
+                oidc4vcType: currentOIIDC4VCType,
+                oidc4vc: oidc4vc,
+                did: did,
+                kid: kid,
+                privateKey: privateKey,
+                indexValue: currentOIIDC4VCType.indexValue,
+              );
+            }
+
             return;
           } else {
             throw Exception();
@@ -511,11 +517,10 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  Future<dynamic> presentCredentialToOIDC4VPAndSiopV2Request({
+  Future<dynamic> presentCredentialToOIDC4VPAndSiopV2RequestForEBSIV2({
     required List<CredentialModel>? credentialsToBePresented,
     required Issuer issuer,
     required Uri uri,
-    required bool isFromPresentation,
     required OIDC4VC oidc4vc,
     required String privateKey,
     required String did,
@@ -671,7 +676,7 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  Future<dynamic> presentCredentialToOIDC4VPAndSIOPV2Request({
+  Future<dynamic> presentCredentialToOIDC4VPAndSIOPV2RequestForOthers({
     required List<CredentialModel>? credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
     required Issuer issuer,

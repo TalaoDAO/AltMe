@@ -70,14 +70,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return super.close();
   }
 
-  final keys = <String>[];
-
-  bool get isUriAsValueValid =>
-      keys.contains('response_type') &&
-      keys.contains('client_id') &&
-      keys.contains('redirect_uri') &&
-      keys.contains('nonce');
-
   Future<void> process({required String? scannedResponse}) async {
     log.i('processing scanned qr code - $scannedResponse');
     emit(state.loading(isScan: true));
@@ -200,6 +192,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       /// i want to see your Passport OR your ID card AND your email pass...
 
       /// getting list of all
+      final keys = <String>[];
       state.uri?.queryParameters.forEach((key, value) => keys.add(key));
 
       final bool isRequestPassedAsValue =
@@ -231,13 +224,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         final responseType = state.uri?.queryParameters['response_type'] ?? '';
 
-        /// verifier side (OIDC4VP And siopv2) with request uri as value
-        if (state.uri.toString().startsWith('openid://')) {
-          await launchOIDC4VPAndSiopV2RequestAsValueFlowWithClaims();
-          return;
-        }
-
-        if (state.uri.toString().startsWith('openid-vc://?') ||
+        if (uri.toString().startsWith('openid://?') ||
+            uri.toString().startsWith('openid-vc://?') ||
             uri.toString().startsWith('openid-hedera://?')) {
           if (responseType == 'id_token') {
             /// verifier side (siopv2) with request uri as value
@@ -253,68 +241,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           } else {
             throw Exception();
           }
-          return;
+        } else {
+          emit(state.acceptHost(isRequestVerified: true));
         }
-
-        // final openIdCredential = getCredentialName(sIOPV2Param.claims!);
-        // final openIdIssuer = getIssuersName(sIOPV2Param.claims!);
-
-        // ///check if credential and issuer both are not present
-        // if (openIdCredential == '' && openIdIssuer == '') {
-        //   throw ResponseMessage(
-        //     ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
-        //   );
-        // }
-
-        // final selectedCredentials = <CredentialModel>[];
-        // for (final credentialModel in credentialsCubit.state.credentials) {
-        //   final credentialTypeList = credentialModel.credentialPreview.type;
-        //   final issuer = credentialModel.credentialPreview.issuer;
-
-        //   ///credential and issuer provided in claims
-        //   if (openIdCredential != '' && openIdIssuer != '') {
-        //     if (credentialTypeList.contains(openIdCredential) &&
-        //         openIdIssuer == issuer) {}
-        //   }
-
-        //   ///credential provided in claims
-        //   if (openIdCredential != '' && openIdIssuer == '') {
-        //     if (credentialTypeList.contains(openIdCredential)) {
-        //       selectedCredentials.add(credentialModel);
-        //     }
-        //   }
-
-        //   ///issuer provided in claims
-        //   if (openIdCredential == '' && openIdIssuer != '') {
-        //     if (openIdIssuer == issuer) {
-        //       selectedCredentials.add(credentialModel);
-        //     }
-        //   }
-        // }
-
-        // if (selectedCredentials.isEmpty) {
-        //   emit(
-        //     state.copyWith(
-        //       qrScanStatus: QrScanStatus.success,
-        //       route: IssuerWebsitesPage.route(openIdCredential),
-        //     ),
-        //   );
-        //   return;
-        // }
-
-        // emit(
-        //   state.copyWith(
-        //     qrScanStatus: QrScanStatus.success,
-        //     route: SIOPV2CredentialPickPage.route(
-        //       credentials: selectedCredentials,
-        //       sIOPV2Param: sIOPV2Param,
-        //       issuer: Issuer.emptyIssuer(uri.toString()),
-        //     ),
-        //   ),
-        // );
-      } else if (state.uri.toString().startsWith('openid://?') ||
-          state.uri.toString().startsWith('openid-vc://?') ||
-          state.uri.toString().startsWith('openid-hedera://?')) {
+      } else if (uri.toString().startsWith('openid://?') ||
+          uri.toString().startsWith('openid-vc://?') ||
+          uri.toString().startsWith('openid-hedera://?')) {
         /// verifier side (siopv2 oidc4vc) with request_uri
 
         await launchOIDC4VPAndSiopV2RequestAsURIFlow();
@@ -572,22 +504,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
   }
 
-  Future<void> launchOIDC4VPAndSiopV2RequestAsValueFlowWithClaims() async {
-    if (isUriAsValueValid) {
-      final claims = state.uri?.queryParameters['claims'] ?? '';
-      await completeOIDC4VPAndSiopV2WithClaim(claims: claims);
-    } else {
-      emit(
-        state.copyWith(
-          qrScanStatus: QrScanStatus.success,
-          route: IssuerWebsitesPage.route(''),
-        ),
-      );
-    }
-  }
-
   Future<void> launchSiopV2WithRequestUriAsValueFlow() async {
-    if (isUriAsValueValid) {
+    final keys = <String>[];
+    state.uri?.queryParameters.forEach((key, value) => keys.add(key));
+    if (isUriAsValueValid(keys)) {
       final redirectUri = state.uri?.queryParameters['redirect_uri'] ?? '';
       final nonce = state.uri?.queryParameters['nonce'] ?? '';
       final clientId = state.uri?.queryParameters['client_id'] ?? '';
@@ -611,59 +531,68 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> launchOIDC4VPAndSIOPV2WithRequestUriAsValueFlow() async {
-    if (isUriAsValueValid &&
-        keys.contains('presentation_definition') &&
-        keys.contains('aud')) {
-      final String presentationDefinitionValue =
-          state.uri?.queryParameters['presentation_definition'] ?? '';
+    final keys = <String>[];
+    state.uri?.queryParameters.forEach((key, value) => keys.add(key));
+    if (isUriAsValueValid(keys)) {
+      if (keys.contains('claims')) {
+        // EBSIV2 normally
+        final claims = state.uri?.queryParameters['claims'] ?? '';
+        await completeOIDC4VPAndSiopV2WithClaim(claims: claims);
+      } else if (keys.contains('presentation_definition')) {
+        final String presentationDefinitionValue =
+            state.uri?.queryParameters['presentation_definition'] ?? '';
 
-      final json = jsonDecode(presentationDefinitionValue.replaceAll("'", '"'))
-          as Map<String, dynamic>;
+        final json =
+            jsonDecode(presentationDefinitionValue.replaceAll("'", '"'))
+                as Map<String, dynamic>;
 
-      final PresentationDefinition presentationDefinition =
-          PresentationDefinition.fromJson(json);
+        final PresentationDefinition presentationDefinition =
+            PresentationDefinition.fromJson(json);
 
-      final CredentialManifest credentialManifest = CredentialManifest(
-        'id',
-        IssuedBy('', ''),
-        null,
-        presentationDefinition,
-      );
-      final isPresentable = await isVCPresentable(presentationDefinition);
-      if (!isPresentable) {
+        final CredentialManifest credentialManifest = CredentialManifest(
+          'id',
+          IssuedBy('', ''),
+          null,
+          presentationDefinition,
+        );
+        final isPresentable = await isVCPresentable(presentationDefinition);
+        if (!isPresentable) {
+          emit(
+            state.copyWith(
+              qrScanStatus: QrScanStatus.success,
+              route: MissingCredentialsPage.route(
+                credentialManifest: credentialManifest,
+              ),
+            ),
+          );
+          return;
+        }
+
+        final CredentialModel credentialPreview = CredentialModel(
+          id: 'id',
+          image: 'image',
+          credentialPreview: Credential.dummy(),
+          shareLink: 'shareLink',
+          display: Display.emptyDisplay(),
+          data: const {},
+          credentialManifest: credentialManifest,
+        );
+
         emit(
           state.copyWith(
             qrScanStatus: QrScanStatus.success,
-            route: MissingCredentialsPage.route(
-              credentialManifest: credentialManifest,
+            route: CredentialManifestOfferPickPage.route(
+              uri: state.uri!,
+              credential: credentialPreview,
+              issuer: Issuer.emptyIssuer('domain'),
+              inputDescriptorIndex: 0,
+              credentialsToBePresented: [],
             ),
           ),
         );
-        return;
+      } else {
+        throw Exception();
       }
-
-      final CredentialModel credentialPreview = CredentialModel(
-        id: 'id',
-        image: 'image',
-        credentialPreview: Credential.dummy(),
-        shareLink: 'shareLink',
-        display: Display.emptyDisplay(),
-        data: const {},
-        credentialManifest: credentialManifest,
-      );
-
-      emit(
-        state.copyWith(
-          qrScanStatus: QrScanStatus.success,
-          route: CredentialManifestOfferPickPage.route(
-            uri: state.uri!,
-            credential: credentialPreview,
-            issuer: Issuer.emptyIssuer('domain'),
-            inputDescriptorIndex: 0,
-            credentialsToBePresented: [],
-          ),
-        ),
-      );
     } else {
       emit(
         state.error(
