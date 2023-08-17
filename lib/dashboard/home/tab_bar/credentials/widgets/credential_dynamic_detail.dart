@@ -55,9 +55,9 @@ class CredentialDynamicDetial extends StatelessWidget {
 
     return Padding(
       padding: padding,
-      child: RichText(
+      child: SelectableText.rich(
         textAlign: TextAlign.left,
-        text: TextSpan(
+        TextSpan(
           children: <InlineSpan>[
             TextSpan(text: '$title: ', style: titleTheme),
             TextSpan(

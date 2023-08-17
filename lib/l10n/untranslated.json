@@ -841,7 +841,8 @@
     "pleaseSwitchPolygonNetwork",
     "oidc4vcProfile",
     "pleaseSwitchToCorrectOIDC4VCProfile",
-    "authenticationSuccess"
+    "authenticationSuccess",
+    "format"
   ],
 
   "es": [
@@ -1686,7 +1687,8 @@
     "pleaseSwitchPolygonNetwork",
     "oidc4vcProfile",
     "pleaseSwitchToCorrectOIDC4VCProfile",
-    "authenticationSuccess"
+    "authenticationSuccess",
+    "format"
   ],
 
   "fr": [
@@ -1834,7 +1836,8 @@
     "pleaseSwitchPolygonNetwork",
     "oidc4vcProfile",
     "pleaseSwitchToCorrectOIDC4VCProfile",
-    "authenticationSuccess"
+    "authenticationSuccess",
+    "format"
   ],
 
   "it": [
@@ -2679,6 +2682,7 @@
     "pleaseSwitchPolygonNetwork",
     "oidc4vcProfile",
     "pleaseSwitchToCorrectOIDC4VCProfile",
-    "authenticationSuccess"
+    "authenticationSuccess",
+    "format"
   ]
 }

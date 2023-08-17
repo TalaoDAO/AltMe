@@ -52,9 +52,9 @@ class DisplayCredentialField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: padding,
-      child: RichText(
+      child: SelectableText.rich(
         textAlign: TextAlign.left,
-        text: TextSpan(
+        TextSpan(
           children: <InlineSpan>[
             if (title != null)
               TextSpan(
