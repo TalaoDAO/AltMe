@@ -101,7 +101,7 @@ class IdentityPassWidget extends StatelessWidget {
                 issuer: identityPassModel.issuedBy!,
               ),
             ),
-          )
+          ),
         ],
       ),
     );

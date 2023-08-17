@@ -57,7 +57,7 @@ class ActivityWidget extends StatelessWidget {
                 .copyWith(color: valueColor),
             maxLines: 5,
             overflow: TextOverflow.ellipsis,
-          )
+          ),
         ],
         if (activity.acquisitionAt != null) ...[
           CredentialField(

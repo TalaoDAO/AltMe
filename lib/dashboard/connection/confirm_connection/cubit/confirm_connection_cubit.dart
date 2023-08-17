@@ -77,7 +77,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
               ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON,
             );
           }
-          break;
+
         case ConnectionBridgeType.walletconnect:
           final walletConnectState = walletConnectCubit.state;
 
@@ -118,9 +118,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
             namespaces: walletNamespaces,
           );
 
-          /// dApp saved onSessionConnect function in wallet connect cubit
-
-          break;
+        /// dApp saved onSessionConnect function in wallet connect cubit
       }
       emit(
         state.copyWith(
@@ -159,7 +157,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           publicKey: null,
           address: null,
         );
-        break;
+
       case ConnectionBridgeType.walletconnect:
         log.i('walletconnect  connection rejected');
         final walletConnectState = walletConnectCubit.state;
@@ -173,7 +171,6 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
             Errors.USER_REJECTED,
           ),
         );
-        break;
     }
     emit(state.copyWith(appStatus: AppStatus.goBack));
   }

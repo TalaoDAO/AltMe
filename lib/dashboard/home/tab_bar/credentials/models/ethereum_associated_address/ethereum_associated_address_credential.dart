@@ -35,7 +35,7 @@ class EthereumAssociatedAddressCredential {
 
   static const List<String> _type = [
     'VerifiableCredential',
-    'EthereumAssociatedAddress'
+    'EthereumAssociatedAddress',
   ];
 
   static const List<dynamic> _context = <dynamic>[
@@ -61,11 +61,11 @@ class EthereumAssociatedAddressCredential {
               '@protected': true,
               'schema': 'https://schema.org/',
               'name': 'schema:legalName',
-              'logo': {'@id': 'schema:logo', '@type': '@id'}
-            }
-          }
-        }
-      }
+              'logo': {'@id': 'schema:logo', '@type': '@id'},
+            },
+          },
+        },
+      },
     }
   ];
 }

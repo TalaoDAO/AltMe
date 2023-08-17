@@ -74,7 +74,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           final bytes = hexToBytes(encodedPayload);
           payloadMessage = utf8.decode(bytes, allowMalformed: true);
 
-          break;
         case ConnectionBridgeType.walletconnect:
           if (walletConnectCubit.state.signType == Parameters.PERSONAL_SIGN) {
             payloadMessage = getUtf8Message(
@@ -102,7 +101,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             );
           }
           signingType = SigningType.raw;
-          break;
       }
 
       log.i('payloadMessage - $payloadMessage');
@@ -112,7 +110,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         case ConnectionBridgeType.beacon:
           dAppName =
               beaconCubit.state.beaconRequest?.request?.appMetadata?.name ?? '';
-          break;
         case ConnectionBridgeType.walletconnect:
           final List<SavedDappData> savedDapps =
               await connectedDappRepository.findAll();
@@ -126,8 +123,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           if (savedDappData != null) {
             dAppName = savedDappData.sessionData!.peer.metadata.name;
           }
-
-          break;
       }
 
       log.i('dAppName - $dAppName');
@@ -203,7 +198,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
           success = json.decode(response['success'].toString()) as bool;
 
-          break;
         case ConnectionBridgeType.walletconnect:
           final walletConnectState = walletConnectCubit.state;
 
@@ -301,8 +295,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             );
           }
-
-          break;
       }
 
       if (success) {
@@ -371,13 +363,11 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           id: beaconCubit.state.beaconRequest!.request!.id!,
           signature: null,
         );
-        break;
       case ConnectionBridgeType.walletconnect:
         log.i('walletconnect Signing rejected');
 
         walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
             .complete('Failed');
-        break;
     }
     emit(state.copyWith(status: AppStatus.goBack));
   }

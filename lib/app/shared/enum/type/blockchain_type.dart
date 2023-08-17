@@ -70,18 +70,15 @@ extension BlockchainTypeX on BlockchainType {
 
       case BlockchainType.ethereum:
         name = '1';
-        break;
+
       case BlockchainType.fantom:
         name = '250';
-        break;
 
       case BlockchainType.polygon:
         name = '137';
-        break;
 
       case BlockchainType.binance:
         name = '56';
-        break;
     }
 
     return '${Parameters.NAMESPACE}:$name';

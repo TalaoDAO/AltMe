@@ -171,7 +171,7 @@ class CertificateOfEmploymentVerso extends Verso {
                       ),
                     )
                   else
-                    const SizedBox.shrink()
+                    const SizedBox.shrink(),
                 ],
               ),
             ),

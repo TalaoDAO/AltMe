@@ -267,7 +267,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                         ),
                       ),
                   ],
-                )
+                ),
               ],
             );
           },

@@ -40,7 +40,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_defiComplianceExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_defiComplianceHowToGetIt;
-        break;
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.ageRange:
         image = ImageStrings.dummyAgeRangeCard;
@@ -49,7 +48,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_ageRangeExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_ageRangeHowToGetIt;
-        break;
 
       case CredentialSubjectType.nationality:
         image = ImageStrings.dummyNationalityCard;
@@ -59,7 +57,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_nationalityExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_nationalityHowToGetIt;
-        break;
 
       case CredentialSubjectType.gender:
         image = ImageStrings.dummyGenderCard;
@@ -68,7 +65,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_genderExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_genderHowToGetIt;
-        break;
 
       case CredentialSubjectType.emailPass:
         image = ImageStrings.dummyEmailPassCard;
@@ -77,7 +73,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_emailPassExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_emailPassHowToGetIt;
-        break;
 
       case CredentialSubjectType.over18:
         image = ImageStrings.dummyOver18Card;
@@ -86,7 +81,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
-        break;
 
       case CredentialSubjectType.over13:
         image = ImageStrings.dummyOver13Card;
@@ -95,7 +89,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over13ExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_over13HowToGetIt;
-        break;
 
       case CredentialSubjectType.over15:
         image = ImageStrings.dummyOver15Card;
@@ -104,7 +97,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over15ExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_over15HowToGetIt;
-        break;
 
       case CredentialSubjectType.passportFootprint:
         image = ImageStrings.dummyPassportFootprintCard;
@@ -114,7 +106,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_passportFootprintExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_passportFootprintHowToGetIt;
-        break;
 
       case CredentialSubjectType.tezVoucher:
         image = ImageStrings.dummyTezotopiaVoucherCard;
@@ -125,12 +116,10 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_tezVoucherExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_tezVoucherHowToGetIt;
-        break;
 
       case CredentialSubjectType.talaoCommunityCard:
         image = ImageStrings.dummyTalaoCommunityCardCard;
         link = Urls.talaoCommunityCardUrl;
-        break;
 
       case CredentialSubjectType.verifiableIdCard:
         image = ImageStrings.dummyVerifiableIdCard;
@@ -140,7 +129,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_verifiableIdCardExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_verifiableIdCardHowToGetIt;
-        break;
 
       case CredentialSubjectType.linkedInCard:
         image = ImageStrings.dummyLinkedinCard;
@@ -150,7 +138,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_linkedinCardExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt;
-        break;
 
       case CredentialSubjectType.tezotopiaMembership:
         image = ImageStrings.tezotopiaMemberShipDummy;
@@ -163,7 +150,6 @@ class DiscoverDummyCredential extends Equatable {
             ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt;
         longDescription =
             ResponseString.RESPONSE_STRING_tezotopiaMembershipLongDescription;
-        break;
 
       case CredentialSubjectType.chainbornMembership:
         image = ImageStrings.chainbornMemberShipDummy;
@@ -177,7 +163,6 @@ class DiscoverDummyCredential extends Equatable {
             ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt;
         longDescription =
             ResponseString.RESPONSE_STRING_chainbornMembershipLongDescription;
-        break;
 
       case CredentialSubjectType.twitterCard:
         image = ImageStrings.twitterCardDummy;
@@ -186,7 +171,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_twitterExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_twitterHowToGetIt;
-        break;
 
       case CredentialSubjectType.bunnyPass:
         image = ImageStrings.bunnyPassDummy;
@@ -195,7 +179,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_bunnyPassExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_bunnyPassHowToGetIt;
-        break;
 
       case CredentialSubjectType.dogamiPass:
         image = ImageStrings.dogamiPassDummy;
@@ -205,7 +188,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_dogamiPassExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_dogamiPassHowToGetIt;
-        break;
 
       case CredentialSubjectType.matterlightPass:
         image = ImageStrings.matterlightPassDummy;
@@ -215,7 +197,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_matterlightPassExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_matterlightPassHowToGetIt;
-        break;
 
       case CredentialSubjectType.pigsPass:
         image = ImageStrings.pigsPassDummy;
@@ -224,7 +205,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_pigsPassExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_pigsPassHowToGetIt;
-        break;
 
       case CredentialSubjectType.troopezPass:
         image = ImageStrings.trooperzPassDummy;
@@ -234,7 +214,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_trooperzPassExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt;
-        break;
 
       case CredentialSubjectType.phonePass:
         image = ImageStrings.dummyPhonePassCard;
@@ -244,7 +223,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_phoneProofExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_phoneProofHowToGetIt;
-        break;
 
       case CredentialSubjectType.bloometaPass:
         image = ImageStrings.bloometaDummy;
@@ -257,27 +235,20 @@ class DiscoverDummyCredential extends Equatable {
         howToGetIt = ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt;
         longDescription =
             ResponseString.RESPONSE_STRING_bloometaPassLongDescription;
-        break;
 
       case CredentialSubjectType.ethereumAssociatedWallet:
         image = ImageStrings.ethereumOwnershipCard;
-        break;
       case CredentialSubjectType.fantomAssociatedWallet:
         image = ImageStrings.fantomOwnershipCard;
-        break;
       case CredentialSubjectType.polygonAssociatedWallet:
         image = ImageStrings.polygonOwnershipCard;
-        break;
       case CredentialSubjectType.binanceAssociatedWallet:
         image = ImageStrings.binanceOwnershipCard;
-        break;
       case CredentialSubjectType.tezosAssociatedWallet:
         image = ImageStrings.tezosOwnershipCard;
-        break;
 
       case CredentialSubjectType.employeeCredential:
         image = ImageStrings.dummyEmployeeCard;
-        break;
 
       case CredentialSubjectType.voucher:
       case CredentialSubjectType.selfIssued:

@@ -30,7 +30,7 @@ class _DidEbsiV2PrivateKeyPageState extends State<DidEbsiV2PrivateKeyPage>
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
     final privateKey = await oidc4vc.privateKeyFromMnemonic(
       mnemonic: mnemonic!,
-      index: OIDC4VCType.EBSIV2.index,
+      indexValue: OIDC4VCType.EBSIV2.indexValue,
     );
     return privateKey;
   }

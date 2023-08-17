@@ -34,7 +34,7 @@ class WalletCredential {
 
   static const List<String> _type = [
     'VerifiableCredential',
-    'WalletCredential'
+    'WalletCredential',
   ];
 
   static const List<dynamic> _context = <dynamic>[
@@ -57,11 +57,11 @@ class WalletCredential {
             '@context': {
               '@version': 1.1,
               '@protected': true,
-              'name': 'https://schema.org/name'
-            }
-          }
-        }
-      }
+              'name': 'https://schema.org/name',
+            },
+          },
+        },
+      },
     }
   ];
 }

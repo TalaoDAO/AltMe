@@ -201,7 +201,7 @@ class LearningAchievementVerso extends Verso {
                       text: credentialModel.credentialPreview.evidence.first.id,
                       textStyle: Theme.of(context).textTheme.studentCardData,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

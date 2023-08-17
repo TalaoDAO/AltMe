@@ -190,7 +190,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                                     const Icon(
                                       Icons.check_circle,
                                       color: Colors.green,
-                                    )
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: 10),

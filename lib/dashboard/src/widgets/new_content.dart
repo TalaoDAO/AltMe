@@ -59,7 +59,7 @@ class NewContent extends StatelessWidget {
               ),
             );
           },
-        )
+        ),
       ],
     );
   }

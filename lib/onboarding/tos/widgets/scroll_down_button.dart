@@ -25,7 +25,7 @@ class ScrollDownButton extends StatelessWidget {
             const Icon(
               Icons.keyboard_arrow_down_rounded,
               size: 30,
-            )
+            ),
           ],
         ),
       ),

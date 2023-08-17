@@ -55,7 +55,6 @@ class OperationCubit extends Cubit<OperationState> {
         case ConnectionBridgeType.beacon:
           dAppName =
               beaconCubit.state.beaconRequest?.request?.appMetadata?.name ?? '';
-          break;
         case ConnectionBridgeType.walletconnect:
           final List<SavedDappData> savedDapps =
               await connectedDappRepository.findAll();
@@ -69,8 +68,6 @@ class OperationCubit extends Cubit<OperationState> {
           if (savedDappData != null) {
             dAppName = savedDappData.sessionData!.peer.metadata.name;
           }
-
-          break;
       }
 
       log.i('dAppName - $dAppName');
@@ -80,7 +77,6 @@ class OperationCubit extends Cubit<OperationState> {
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
           await getUsdPrice(connectionBridgeType);
-          break;
         case ConnectionBridgeType.walletconnect:
           final walletConnectState = walletConnectCubit.state;
 
@@ -102,8 +98,6 @@ class OperationCubit extends Cubit<OperationState> {
 
             await getUsdPrice(connectionBridgeType);
           }
-
-          break;
       }
     } catch (e) {
       log.e('intialisation , e: $e');
@@ -130,7 +124,6 @@ class OperationCubit extends Cubit<OperationState> {
           log.i('fetching xtz USDprice');
           final xtzUsdPrice = await _getTezosCurrentPriceInUSD();
           emit(state.copyWith(usdRate: xtzUsdPrice));
-          break;
         case ConnectionBridgeType.walletconnect:
           log.i('fetching evm USDprice');
 
@@ -141,7 +134,6 @@ class OperationCubit extends Cubit<OperationState> {
           log.i('response - $response');
           final double usdRate = response['USD'] as double;
           emit(state.copyWith(usdRate: usdRate));
-          break;
       }
       await getOtherPrices(connectionBridgeType);
     } catch (e) {
@@ -210,7 +202,6 @@ class OperationCubit extends Cubit<OperationState> {
                   .map((Operation e) => e.totalFee)
                   .reduce((int value, int element) => value + element) /
               1e6;
-          break;
         case ConnectionBridgeType.walletconnect:
           final EtherAmount ethAmount =
               walletConnectCubit.state.transaction!.value!;
@@ -230,7 +221,6 @@ class OperationCubit extends Cubit<OperationState> {
           );
 
           fee = MWeb3Client.formatEthAmount(amount: feeData);
-          break;
       }
 
       log.i('amount - $amount');
@@ -350,7 +340,6 @@ class OperationCubit extends Cubit<OperationState> {
           );
 
           success = json.decode(response['success'].toString()) as bool;
-          break;
         case ConnectionBridgeType.walletconnect:
           final CryptoAccountData transactionAccountData =
               state.cryptoAccountData!;
@@ -365,16 +354,12 @@ class OperationCubit extends Cubit<OperationState> {
               throw Exception();
             case BlockchainType.ethereum:
               rpcUrl = await web3RpcMainnetInfuraURL();
-              break;
             case BlockchainType.fantom:
               rpcUrl = FantomNetwork.mainNet().rpcNodeUrl;
-              break;
             case BlockchainType.polygon:
               rpcUrl = PolygonNetwork.mainNet().rpcNodeUrl;
-              break;
             case BlockchainType.binance:
               rpcUrl = BinanceNetwork.mainNet().rpcNodeUrl;
-              break;
           }
 
           log.i('rpcUrl - $rpcUrl');
@@ -395,8 +380,6 @@ class OperationCubit extends Cubit<OperationState> {
           walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
               .complete(transactionHash);
           success = true;
-
-          break;
       }
 
       if (success) {
@@ -467,12 +450,10 @@ class OperationCubit extends Cubit<OperationState> {
           id: beaconCubit.state.beaconRequest!.request!.id!,
           transactionHash: null,
         );
-        break;
       case ConnectionBridgeType.walletconnect:
         log.i('walletconnect  connection rejected');
         walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
             .complete('Failed');
-        break;
     }
 
     emit(state.copyWith(status: AppStatus.goBack));
@@ -505,11 +486,9 @@ class OperationCubit extends Cubit<OperationState> {
         case NetworkType.mainnet:
           baseUrl = TezosNetwork.mainNet().apiUrl;
           rpcNodeUrl = TezosNetwork.mainNet().rpcNodeUrl;
-          break;
         case NetworkType.ghostnet:
           baseUrl = TezosNetwork.ghostnet().apiUrl;
           rpcNodeUrl = TezosNetwork.ghostnet().rpcNodeUrl;
-          break;
         case NetworkType.mondaynet:
         case NetworkType.delphinet:
         case NetworkType.edonet:

@@ -430,7 +430,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               ),
             ),
           );
-          break;
 
         case 'VerifiablePresentationRequest':
           if (data['query'] != null) {
@@ -502,7 +501,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               ),
             );
           }
-          break;
         case 'object':
           log.i('object');
           emit(
@@ -515,7 +513,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               ),
             ),
           );
-          break;
 
         default:
           throw ResponseMessage(
@@ -593,9 +590,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     if (isUriAsValueValid) {
       final redirectUri = state.uri?.queryParameters['redirect_uri'] ?? '';
       final nonce = state.uri?.queryParameters['nonce'] ?? '';
+      final clientId = state.uri?.queryParameters['client_id'] ?? '';
       await completeSiopV2WithData(
         redirectUri: redirectUri,
         nonce: nonce,
+        clientId: clientId,
       );
     } else {
       emit(
@@ -718,10 +717,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       final redirectUri = response['redirect_uri'] ?? '';
       final nonce = response['nonce'] ?? '';
+      final clientId = response['client_id'] ?? '';
 
       await completeSiopV2WithData(
         redirectUri: redirectUri.toString(),
         nonce: nonce.toString(),
+        clientId: clientId.toString(),
       );
     } catch (e) {
       emitError(
@@ -735,6 +736,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> completeSiopV2WithData({
     required String redirectUri,
     required String nonce,
+    required String clientId,
   }) async {
     try {
       final OIDC4VCType currentOIIDC4VCType =
@@ -745,7 +747,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
       final privateKey = await oidc4vc.privateKeyFromMnemonic(
         mnemonic: mnemonic!,
-        index: currentOIIDC4VCType.index,
+        indexValue: currentOIIDC4VCType.indexValue,
       );
 
       const didMethod = AltMeStrings.defaultDIDMethod;
@@ -754,13 +756,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
 
       await oidc4vc.proveOwnershipOfDid(
-        uri: state.uri!,
+        clientId: clientId,
         privateKey: privateKey,
         did: did,
         kid: kid,
         redirectUri: redirectUri,
         nonce: nonce,
         isEBSIV2: currentOIIDC4VCType == OIDC4VCType.EBSIV2,
+        indexValue: currentOIIDC4VCType.indexValue,
       );
       emit(
         state.copyWith(

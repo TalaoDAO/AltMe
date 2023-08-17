@@ -48,7 +48,7 @@ class PageTracker extends StatelessWidget {
                 : Theme.of(context).colorScheme.onPrimary,
             borderRadius: BorderRadius.circular(radius),
           ),
-        )
+        ),
       ],
     );
   }

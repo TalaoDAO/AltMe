@@ -47,7 +47,7 @@ class CredentialManifestCard extends StatelessWidget {
                               textColor: textColor,
                             )
                           : const Text(''),
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -57,7 +57,7 @@ class CredentialManifestCard extends StatelessWidget {
                     credentialModel: credentialModel,
                     textColor: textColor,
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -71,7 +71,7 @@ class CredentialManifestCard extends StatelessWidget {
                 textColor: textColor,
               ),
             ),
-          )
+          ),
         ],
       ),
     );

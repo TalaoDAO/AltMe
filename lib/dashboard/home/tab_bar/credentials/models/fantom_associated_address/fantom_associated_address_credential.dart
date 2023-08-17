@@ -34,7 +34,7 @@ class FantomAssociatedAddressCredential {
 
   static const List<String> _type = [
     'VerifiableCredential',
-    'FantomAssociatedAddress'
+    'FantomAssociatedAddress',
   ];
 
   static const List<dynamic> _context = <dynamic>[
@@ -58,11 +58,11 @@ class FantomAssociatedAddressCredential {
               '@version': 1.1,
               '@protected': true,
               'schema': 'https://schema.org/',
-              'name': 'schema:legalName'
-            }
-          }
-        }
-      }
+              'name': 'schema:legalName',
+            },
+          },
+        },
+      },
     }
   ];
 }

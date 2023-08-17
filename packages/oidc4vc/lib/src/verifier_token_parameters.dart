@@ -10,13 +10,13 @@ class VerifierTokenParameters extends TokenParameters {
     super.privateKey,
     super.did,
     super.kid,
-    this.uri,
+    this.audience,
     this.credentials,
     this.nonce,
   );
 
-  /// [uri] provided by verifier and containing nonce
-  final Uri uri;
+  /// [audience] is is client id of the request
+  final String audience;
 
   /// [credentials] is list of credentials to be presented
   final List<String> credentials;
@@ -39,7 +39,4 @@ class VerifierTokenParameters extends TokenParameters {
     }
     return list;
   }
-
-  /// [audience] is is client id of the request
-  String get audience => uri.queryParameters['client_id'] ?? '';
 }

@@ -1,8 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/oidc4vc/initiate_oidv4vc_credential_issuance.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter/material.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -22,19 +20,22 @@ class ManageDidEbsiV2Page extends StatefulWidget {
 
 class _ManageDidEbsiPageState extends State<ManageDidEbsiV2Page> {
   Future<String> getDid() async {
-    final oidc4vc = OIDC4VCType.EBSIV2.getOIDC4VC;
+    const oidc4vcType = OIDC4VCType.EBSIV2;
+
+    final oidc4vc = oidc4vcType.getOIDC4VC;
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
 
     final privateKey = await oidc4vc.privateKeyFromMnemonic(
       mnemonic: mnemonic!,
-      index: OIDC4VCType.EBSIV2.index,
+      indexValue: oidc4vcType.indexValue,
     );
 
-    final private = await oidc4vc.getPrivateKey(mnemonic, privateKey);
+    final (did, _) = await getDidAndKid(
+      oidc4vcType: oidc4vcType,
+      privateKey: privateKey,
+    );
 
-    final thumbprint = getThumbprint(private);
-    final encodedAddress = Base58Encode([2, ...thumbprint]);
-    return 'did:ebsi:z$encodedAddress';
+    return did;
   }
 
   @override

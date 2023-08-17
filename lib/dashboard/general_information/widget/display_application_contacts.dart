@@ -32,7 +32,7 @@ class DisplayAltmeContacts extends StatelessWidget {
                         color: Theme.of(context).colorScheme.markDownA,
                         decoration: TextDecoration.underline,
                       ),
-                )
+                ),
               ],
             ),
           ),

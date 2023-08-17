@@ -38,7 +38,7 @@ class DialogCloseButton extends StatelessWidget {
               size: Sizes.icon,
               color: Colors.white,
             ),
-          )
+          ),
         ],
       ),
     );

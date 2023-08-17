@@ -117,7 +117,7 @@ class SnackBarContent extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-          )
+          ),
         ],
       ),
     );

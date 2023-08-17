@@ -54,7 +54,7 @@ class DrawerItem extends StatelessWidget {
                 color: isDisabled
                     ? Theme.of(context).colorScheme.lightGrey
                     : Theme.of(context).colorScheme.unSelectedLabel,
-              )
+              ),
             ],
           ],
         ),

@@ -34,7 +34,7 @@ class BinanceAssociatedAddressCredential {
 
   static const List<String> _type = [
     'VerifiableCredential',
-    'BinanceAssociatedAddress'
+    'BinanceAssociatedAddress',
   ];
 
   static const List<dynamic> _context = <dynamic>[
@@ -58,11 +58,11 @@ class BinanceAssociatedAddressCredential {
               '@version': 1.1,
               '@protected': true,
               'schema': 'https://schema.org/',
-              'name': 'schema:legalName'
-            }
-          }
-        }
-      }
+              'name': 'schema:legalName',
+            },
+          },
+        },
+      },
     }
   ];
 }

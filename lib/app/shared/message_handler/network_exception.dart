@@ -94,37 +94,36 @@ class NetworkException with MessageHandler {
               message: NetworkError.NETWORK_ERROR_REQUEST_CANCELLED,
               data: error.response?.data,
             );
-            break;
+
           case DioErrorType.connectTimeout:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT,
               data: error.response?.data,
             );
-            break;
+
           case DioErrorType.other:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
               data: error.response?.data,
             );
-            break;
+
           case DioErrorType.receiveTimeout:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_SEND_TIMEOUT,
               data: error.response?.data,
             );
-            break;
+
           case DioErrorType.response:
             networkException = handleResponse(
               error.response?.statusCode,
               error,
             );
-            break;
+
           case DioErrorType.sendTimeout:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_SEND_TIMEOUT,
               data: error.response?.data,
             );
-            break;
         }
       } else if (error is SocketException) {
         networkException = NetworkException(

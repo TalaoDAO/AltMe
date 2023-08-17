@@ -517,14 +517,14 @@ class PolygonId {
       [
         [
           BigInt.parse(proof.proof.piB[0][1]),
-          BigInt.parse(proof.proof.piB[0][0])
+          BigInt.parse(proof.proof.piB[0][0]),
         ],
         [
           BigInt.parse(proof.proof.piB[1][1]),
-          BigInt.parse(proof.proof.piB[1][0])
+          BigInt.parse(proof.proof.piB[1][0]),
         ]
       ],
-      [BigInt.parse(proof.proof.piC[0]), BigInt.parse(proof.proof.piC[1])]
+      [BigInt.parse(proof.proof.piC[0]), BigInt.parse(proof.proof.piC[1])],
     ]);
 
     final hexData = HexUtils.bytesToHex(funcData.toList());

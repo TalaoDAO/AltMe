@@ -42,7 +42,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                           credentialModel: credentialModel,
                           style: Theme.of(context).textTheme.credentialTitle,
                         ),
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -52,7 +52,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                       style: Theme.of(context).textTheme.credentialDescription,
                       maxLines: descriptionMaxLine,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -63,7 +63,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
               issuer: credentialModel
                   .credentialPreview.credentialSubjectModel.issuedBy!,
             ),
-          )
+          ),
         ],
       ),
     );

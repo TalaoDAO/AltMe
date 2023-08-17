@@ -41,7 +41,7 @@ class DioClient {
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
     Map<String, dynamic> headers = const <String, dynamic>{
-      'Content-Type': 'application/json; charset=UTF-8'
+      'Content-Type': 'application/json; charset=UTF-8',
     },
   }) async {
     try {
@@ -106,7 +106,7 @@ class DioClient {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
     Map<String, dynamic> headers = const <String, dynamic>{
-      'Content-Type': 'application/json; charset=UTF-8'
+      'Content-Type': 'application/json; charset=UTF-8',
     },
   }) async {
     try {

@@ -100,7 +100,7 @@ class _SoftwareLicenseViewState extends State<SoftwareLicenseView> {
                         Icon(
                           Icons.chevron_right,
                           color: Theme.of(context).colorScheme.onBackground,
-                        )
+                        ),
                       ],
                     ),
                   ),

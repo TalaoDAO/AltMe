@@ -35,7 +35,7 @@ class TezosAssociatedAddressCredential {
 
   static const List<String> _type = [
     'VerifiableCredential',
-    'TezosAssociatedAddress'
+    'TezosAssociatedAddress',
   ];
 
   static const List<dynamic> _context = <dynamic>[
@@ -59,11 +59,11 @@ class TezosAssociatedAddressCredential {
               '@version': 1.1,
               '@protected': true,
               'schema': 'https://schema.org/',
-              'name': 'schema:legalName'
-            }
-          }
-        }
-      }
+              'name': 'schema:legalName',
+            },
+          },
+        },
+      },
     }
   ];
 }

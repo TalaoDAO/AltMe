@@ -8,31 +8,45 @@ enum OIDC4VCType {
     offerPrefix: 'openid-credential-offer://',
     presentationPrefix: 'openid-vc://',
     cryptographicBindingMethodsSupported: ['DID'],
-    credentialSupported: ['EmployeeCredential', 'VerifiableId'],
+    credentialSupported: [
+      'EmployeeCredential',
+      'VerifiableId',
+      'EmailPass',
+      'PhoneProof',
+      'GreencypherPass',
+    ],
     grantTypesSupported: [
       'authorization_code',
-      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
+      'urn:ietf:params:oauth:grant-type:pre-authorized_code',
     ],
     cryptographicSuitesSupported: [
       'ES256K',
       'ES256',
       'ES384',
       'ES512',
-      'RS256'
+      'RS256',
     ],
-    subjectSyntaxTypesSupported: ['did:key'],
+    subjectSyntaxTypesSupported: ['did:key', 'did:pkh'],
     schemaForType: false,
     publicJWKNeeded: false,
     serviceDocumentation:
-        '''WORK IN PROGRESS. WE use JSON-LD VC and VP and last release of the specs.\n'''
+        '''We use JSON-LD VC and VP and last release of the specs.\n'''
         '''oidc4vci_draft : https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html\n'''
         '''siopv2_draft : https://openid.net/specs/openid-connect-self-issued-v2-1_0.html\n'''
-        '''oidc4vp_draft : https://openid.net/specs/openid-4-verifiable-presentations-1_0.html\n'''
-        '''Issuer pour projet Docaposte Gaia-X''',
+        '''oidc4vp_draft : https://openid.net/specs/openid-4-verifiable-presentations-1_0.html\n''',
+    walletMetaData: {
+      'response_types_supported': ['vp_token', 'id_token'],
+      'scopes_supported': ['openid'],
+      'subject_types_supported': ['pairwise'],
+      'id_token_signing_alg_values_supported': ['ES256K'],
+      'request_object_signing_alg_values_supported': ['ES256K'],
+      'subject_syntax_types_supported': ['did:key'],
+      'id_token_types_supported': ['subject_signed_id_token'],
+    },
   ),
 
   EBSIV2(
-    issuerVcType: 'jwt_vc',
+    issuerVcType: 'jwt_vc', // jwt_vc_json, jwt_vc_json-ld, ldp_vc
     verifierVpType: 'jwt_vp',
     offerPrefix: 'openid://initiate_issuance',
     presentationPrefix: 'openid://',
@@ -42,18 +56,18 @@ enum OIDC4VCType {
       'ES256',
       'ES384',
       'ES512',
-      'RS256'
+      'RS256',
     ],
     subjectSyntaxTypesSupported: ['did:ebsi'],
     grantTypesSupported: [
       'authorization_code',
-      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
+      'urn:ietf:params:oauth:grant-type:pre-authorized_code',
     ],
     credentialSupported: ['VerifiableDiploma', 'VerifiableId'],
     schemaForType: true,
     publicJWKNeeded: true,
     serviceDocumentation:
-        '''EBSI V2 COMPLIANCE. It is the profile of the EBSI V2 compliant test. DID for natural person is did:ebsi.\n'''
+        '''THIS PROFILE OF OIDC4VCI IS DEPRECATED. EBSI V2 COMPLIANCE. It is the profile of the EBSI V2 compliant test. DID for natural person is did:ebsi.\n'''
         '''The schema url is used as the VC type in the credential offer QR code.\n'''
         '''The prefix openid_initiate_issuance://\n'''
         '''oidc4vci_draft : https://openid.net/specs/openid-connect-4-verifiable-credential-issuance-1_0-05.html#abstract''',
@@ -63,26 +77,30 @@ enum OIDC4VCType {
     issuerVcType: 'ldp_vc',
     verifierVpType: 'ldp_vp',
     offerPrefix: 'openid-initiate-issuance://',
-    presentationPrefix: 'openid-vc://',
+    presentationPrefix: 'openid://',
     cryptographicBindingMethodsSupported: ['DID'],
-    credentialSupported: ['EmployeeCredential', 'VerifiableId'],
+    credentialSupported: [
+      'EmployeeCredential',
+      'VerifiableId',
+      'GreencypherPass',
+      'EmailPass',
+    ],
     grantTypesSupported: [
       'authorization_code',
-      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
+      'urn:ietf:params:oauth:grant-type:pre-authorized_code',
     ],
     cryptographicSuitesSupported: [
       'ES256K',
       'ES256',
       'ES384',
       'ES512',
-      'RS256'
+      'RS256',
     ],
     subjectSyntaxTypesSupported: ['did:key'],
     schemaForType: false,
     publicJWKNeeded: false,
-    serviceDocumentation:
-        '''WORK IN PROGRESS. WE use JSON-LD VC and VP and last release of the specs.\n'''
-        '''oidc4vci_draft : https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html\n'''
+    serviceDocumentation: '''THIS PROFILE OF OIDC4VCI IS DEPRECATED.\n'''
+        '''oidc4vci_draft : https://openid.net/specs/openid-connect-4-verifiable-credential-issuance-1_0-05.html#name-credential-endpoint\n'''
         '''siopv2_draft : https://openid.net/specs/openid-connect-self-issued-v2-1_0.html\n'''
         '''oidc4vp_draft : https://openid.net/specs/openid-4-verifiable-presentations-1_0.html''',
   ),
@@ -93,19 +111,32 @@ enum OIDC4VCType {
     offerPrefix: 'openid-credential-offer-hedera://',
     presentationPrefix: 'openid-hedera://',
     cryptographicBindingMethodsSupported: ['DID'],
-    credentialSupported: ['EmployeeCredential', 'ProofOfAsset'],
+    credentialSupported: [
+      'EmployeeCredential',
+      'VerifiableId',
+      'GreencypherPass',
+      'ListOfProjects',
+      'PhoneProof',
+      'EmailPass',
+      'Over18',
+    ],
     grantTypesSupported: [
       'authorization_code',
-      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
+      'urn:ietf:params:oauth:grant-type:pre-authorized_code',
     ],
     cryptographicSuitesSupported: [
       'ES256K',
       'ES256',
       'ES384',
       'ES512',
-      'RS256'
+      'RS256',
     ],
-    subjectSyntaxTypesSupported: ['did:key', 'did:pkh'],
+    subjectSyntaxTypesSupported: [
+      'did:key',
+      'did:pkh',
+      'did:web',
+      'did;hedera',
+    ],
     schemaForType: false,
     publicJWKNeeded: false,
     serviceDocumentation:
@@ -122,22 +153,54 @@ enum OIDC4VCType {
     offerPrefix: 'openid://initiate_issuance',
     presentationPrefix: 'openid-vc://',
     cryptographicBindingMethodsSupported: ['DID'],
-    credentialSupported: ['VerifiableDiploma', 'VerifiableId'],
+    credentialSupported: [
+      'VerifiableDiploma',
+      'VerifiableId',
+      'GreencypherPass',
+      'ListOfProjects',
+    ],
     grantTypesSupported: [
       'authorization_code',
-      'urn:ietf:params:oauth:grant-type:pre-authorized_code'
+      'urn:ietf:params:oauth:grant-type:pre-authorized_code',
     ],
     cryptographicSuitesSupported: [
       'ES256K',
       'ES256',
       'ES384',
       'ES512',
-      'RS256'
+      'RS256',
     ],
+    trustFramework: {
+      'name': 'ebsi',
+      'type': 'Accreditation',
+      'uri': 'TIR link towards accreditation',
+    },
     subjectSyntaxTypesSupported: ['did:key'],
     schemaForType: false,
     publicJWKNeeded: false,
-    serviceDocumentation: 'New environment for V3 compliance test',
+    serviceDocumentation:
+        'New environment for V3 compliance test, use specific did:key',
+    walletMetaData: {
+      'authorization_endpoint': 'openid:',
+      'response_types_supported': ['vp_token', 'id_token'],
+      'vp_formats_supported': {
+        'jwt_vp': {
+          'alg_values_supported': ['ES256'],
+        },
+        'jwt_vc': {
+          'alg_values_supported': ['ES256'],
+        },
+      },
+      'scopes_supported': ['openid'],
+      'subject_types_supported': ['public'],
+      'id_token_signing_alg_values_supported': ['ES256'],
+      'request_object_signing_alg_values_supported': ['ES256'],
+      'subject_syntax_types_supported': [
+        'urn:ietf:params:oauth:jwk-thumbprint',
+        'did:key:jwk_jcs-pub',
+      ],
+      'id_token_types_supported': ['subject_signed_id_token'],
+    },
   ),
 
   JWTVC(
@@ -153,7 +216,7 @@ enum OIDC4VCType {
       'ES256',
       'ES384',
       'ES512',
-      'RS256'
+      'RS256',
     ],
     subjectSyntaxTypesSupported: ['did:ion', 'did:web'],
     schemaForType: false,
@@ -175,6 +238,8 @@ enum OIDC4VCType {
     required this.schemaForType,
     required this.publicJWKNeeded,
     required this.serviceDocumentation,
+    this.walletMetaData,
+    this.trustFramework,
   });
 
   final String issuerVcType;
@@ -184,11 +249,13 @@ enum OIDC4VCType {
   final List<String> cryptographicBindingMethodsSupported;
   final List<String> cryptographicSuitesSupported;
   final List<String> subjectSyntaxTypesSupported;
+  final Map<String, dynamic>? trustFramework;
   final List<String> grantTypesSupported;
   final List<String> credentialSupported;
   final bool schemaForType;
   final bool publicJWKNeeded;
   final String serviceDocumentation;
+  final Map<String, dynamic>? walletMetaData;
 }
 
 extension OIDC4VCTypeX on OIDC4VCType {
@@ -209,6 +276,8 @@ extension OIDC4VCTypeX on OIDC4VCType {
         schemaForType: schemaForType,
         publicJWKNeeded: publicJWKNeeded,
         serviceDocumentation: serviceDocumentation,
+        trustFramework: trustFramework,
+        walletMetaData: walletMetaData,
       ),
     );
   }
@@ -227,6 +296,20 @@ extension OIDC4VCTypeX on OIDC4VCType {
         return 'HEDERA';
       case OIDC4VCType.JWTVC:
         return 'JWT-VC';
+    }
+  }
+
+  int get indexValue {
+    switch (this) {
+      case OIDC4VCType.DEFAULT:
+      case OIDC4VCType.GAIAX:
+      case OIDC4VCType.HEDERA:
+      case OIDC4VCType.JWTVC:
+        return 1;
+      case OIDC4VCType.EBSIV2:
+        return 2;
+      case OIDC4VCType.EBSIV3:
+        return 3;
     }
   }
 

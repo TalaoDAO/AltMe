@@ -42,7 +42,7 @@ class MStepper extends StatelessWidget {
               width: ((size / 2) / totalStep) - (totalStep * 4),
             ),
           ),
-        )
+        ),
       ],
     );
   }

@@ -120,13 +120,11 @@ class _OperationViewState extends State<OperationView> {
             symbol = 'XTZ';
             sender = beaconRequest!.request!.sourceAddress!;
             reciever = beaconRequest.operationDetails!.first.destination!;
-            break;
 
           case ConnectionBridgeType.walletconnect:
             symbol = state.cryptoAccountData?.blockchainType.symbol;
             sender = walletConnectState.transaction!.from!.toString();
             reciever = walletConnectState.transaction!.to!.toString();
-            break;
         }
 
         String message = '';

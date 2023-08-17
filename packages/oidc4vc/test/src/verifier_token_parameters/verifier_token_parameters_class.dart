@@ -6,7 +6,7 @@ import '../token_parameters/token_parameters_class.dart';
 
 class VerifierTokenParametersTest extends TokenParameterTest {
   final verifierTokenParameters =
-      VerifierTokenParameters(privateKey, '', '', Uri.parse(''), [], '');
+      VerifierTokenParameters(privateKey, '', '', '', [], '');
 
   @override
   void publicKeyTest() {
@@ -31,14 +31,14 @@ class VerifierTokenParametersTest extends TokenParameterTest {
   @override
   void algorithmIsES256Test() {
     final tokenParameters =
-        VerifierTokenParameters(privateKey2, '', '', Uri.parse(''), [], '');
+        VerifierTokenParameters(privateKey2, '', '', '', [], '');
     expect(tokenParameters.alg, ES256Alg);
   }
 
   @override
   void algorithmIsNotNullTest() {
     final tokenParameters =
-        VerifierTokenParameters(keyWithAlg, '', '', Uri.parse(''), [], '');
+        VerifierTokenParameters(keyWithAlg, '', '', '', [], '');
     expect(tokenParameters.alg, HS256Alg);
   }
 

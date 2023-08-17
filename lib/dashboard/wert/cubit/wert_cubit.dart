@@ -24,13 +24,10 @@ class WertCubit extends Cubit<String> {
     switch (walletCubit.state.currentAccount!.blockchainType) {
       case BlockchainType.tezos:
         link = '$link&commodities=XTZ&commodity=XTZ';
-        break;
       case BlockchainType.ethereum:
         link = '$link&commodities=ETH&commodity=ETH';
-        break;
       case BlockchainType.polygon:
         link = '$link&commodities=MATIC&commodity=MATIC';
-        break;
       case BlockchainType.fantom:
       case BlockchainType.binance:
         break;

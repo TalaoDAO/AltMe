@@ -20,7 +20,7 @@ void main() {
           'proofPurpose': 'proofPurpose',
           'verificationMethod': 'verificationMethod',
           'created': 'created',
-          'jws': 'jws'
+          'jws': 'jws',
         },
       );
       expect(proof.type, 'type');
@@ -36,7 +36,7 @@ void main() {
         'proofPurpose': 'proofPurpose',
         'verificationMethod': 'verificationMethod',
         'created': 'created',
-        'jws': 'jws'
+        'jws': 'jws',
       };
       final proof = Proof.fromJson(json);
 

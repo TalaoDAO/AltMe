@@ -148,7 +148,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                   cancelCallback: widget.cancelCallback,
                                   allowAction: widget.allowAction,
                                 ),
-                                widget.bottomWidget ?? Container()
+                                widget.bottomWidget ?? Container(),
                               ],
                             ),
                             Positioned(
@@ -247,7 +247,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                       ),
                                     )
                                   else
-                                    Container()
+                                    Container(),
                                 ],
                               ),
                             ),
@@ -276,7 +276,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                             keyboardUIConfig: widget.keyboardUIConfig,
                           ),
                         ),
-                      )
+                      ),
                     ],
                   );
           },

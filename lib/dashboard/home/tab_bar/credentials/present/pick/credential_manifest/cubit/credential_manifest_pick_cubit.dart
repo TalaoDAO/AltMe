@@ -49,7 +49,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
         state.copyWith(
           selected: [
             ...state.selected,
-            ...[index]
+            ...[index],
           ],
         ),
       );

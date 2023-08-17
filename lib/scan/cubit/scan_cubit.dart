@@ -5,15 +5,12 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/oidc4vc/initiate_oidv4vc_credential_issuance.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fast_base58/fast_base58.dart';
-import 'package:jose/jose.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
@@ -87,28 +84,14 @@ class ScanCubit extends Cubit<ScanState> {
             await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
         final privateKey = await oidc4vc.privateKeyFromMnemonic(
           mnemonic: mnemonic!,
-          index: currentOIIDC4VCType.index,
+          indexValue: currentOIIDC4VCType.indexValue,
         );
 
-        late String did;
-        late String kid;
-
-        if (currentOIIDC4VCType == OIDC4VCType.EBSIV2) {
-          final private = await oidc4vc.getPrivateKey(mnemonic, privateKey);
-
-          final thumbprint = getThumbprint(private);
-          final encodedAddress = Base58Encode([2, ...thumbprint]);
-          did = 'did:ebsi:z$encodedAddress';
-          final lastPart = Base58Encode(thumbprint);
-          kid = '$did#$lastPart';
-        } else {
-          const didMethod = AltMeStrings.defaultDIDMethod;
-          did = didKitProvider.keyToDID(didMethod, privateKey);
-          kid = await didKitProvider.keyToVerificationMethod(
-            didMethod,
-            privateKey,
-          );
-        }
+        final (did, kid) = await getDidAndKid(
+          oidc4vcType: currentOIIDC4VCType,
+          privateKey: privateKey,
+          didKitProvider: didKitProvider,
+        );
 
         final responseType = uri.queryParameters['response_type'] ?? '';
 
@@ -123,6 +106,7 @@ class ScanCubit extends Cubit<ScanState> {
             kid: kid,
             privateKey: privateKey,
             isEBSIV2: currentOIIDC4VCType == OIDC4VCType.EBSIV2,
+            indexValue: currentOIIDC4VCType.indexValue,
           );
           return;
         }
@@ -146,6 +130,7 @@ class ScanCubit extends Cubit<ScanState> {
               did: did,
               kid: kid,
               privateKey: privateKey,
+              indexValue: currentOIIDC4VCType.indexValue,
             );
             return;
           } else if (responseType == 'id_token vp_token') {
@@ -162,6 +147,7 @@ class ScanCubit extends Cubit<ScanState> {
               did: did,
               kid: kid,
               privateKey: privateKey,
+              indexValue: currentOIIDC4VCType.indexValue,
             );
             return;
           } else {
@@ -535,24 +521,29 @@ class ScanCubit extends Cubit<ScanState> {
     required String did,
     required String kid,
     required bool isEBSIV2,
+    required int indexValue,
   }) async {
     final log =
         getLogger('ScanCubit - presentCredentialToOIDC4VPAndSiopV2Request');
 
     final nonce = uri.queryParameters['nonce'] ?? '';
+    final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
+    final clientId = uri.queryParameters['client_id'] ?? '';
 
     final credentialList =
         credentialsToBePresented!.map((e) => jsonEncode(e.toJson())).toList();
 
     try {
       await oidc4vc.sendPresentation(
-        uri: uri,
+        clientId: clientId,
+        redirectUrl: redirectUri,
         credentialsToBePresented: credentialList,
         privateKey: privateKey,
         did: did,
         kid: kid,
         nonce: nonce,
         isEBSIV2: isEBSIV2,
+        indexValue: indexValue,
       );
 
       await presentationActivity(
@@ -601,6 +592,7 @@ class ScanCubit extends Cubit<ScanState> {
     required String did,
     required String kid,
     required Uri uri,
+    required int indexValue,
   }) async {
     final log = getLogger('ScanCubit - presentCredentialToOID4VPRequest');
     emit(state.loading());
@@ -617,6 +609,7 @@ class ScanCubit extends Cubit<ScanState> {
         oidc4vcType: oidc4vcType,
         privateKey: privateKey,
         uri: uri,
+        indexValue: indexValue,
       );
 
       final presentationSubmissionString = getPresentationSubmission(
@@ -633,7 +626,7 @@ class ScanCubit extends Cubit<ScanState> {
         redirectUri,
         data: formData,
         headers: <String, dynamic>{
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
       );
 
@@ -688,6 +681,7 @@ class ScanCubit extends Cubit<ScanState> {
     required String did,
     required String kid,
     required Uri uri,
+    required int indexValue,
   }) async {
     final log =
         getLogger('ScanCubit - presentCredentialToOIDC4VPAndSIOPV2Request');
@@ -705,16 +699,18 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey: privateKey,
         uri: uri,
         isEBSIV2: oidc4vcType == OIDC4VCType.EBSIV2,
+        indexValue: indexValue,
       );
 
       final String vpToken = await createVpToken(
-        credentialsToBePresented: credentialsToBePresented!,
+        credentialsToBePresented: credentialsToBePresented,
         did: did,
         kid: kid,
         oidc4vc: oidc4vc,
         oidc4vcType: oidc4vcType,
         privateKey: privateKey,
         uri: uri,
+        indexValue: indexValue,
       );
 
       final presentationSubmissionString = getPresentationSubmission(
@@ -732,7 +728,7 @@ class ScanCubit extends Cubit<ScanState> {
         redirectUri,
         data: formData,
         headers: <String, dynamic>{
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
       );
 
@@ -794,7 +790,7 @@ class ScanCubit extends Cubit<ScanState> {
       inputDescriptors.add({
         'id': presentationDefinition.inputDescriptors[0].id,
         'format': oidc4vcType.issuerVcType,
-        'path': r'$.verifiableCredential'
+        'path': r'$.verifiableCredential',
       });
     } else {
       for (int i = 0; i < presentationDefinition.inputDescriptors.length; i++) {
@@ -802,7 +798,7 @@ class ScanCubit extends Cubit<ScanState> {
           'id': presentationDefinition.inputDescriptors[i].id,
           'format': oidc4vcType.issuerVcType,
           // ignore: prefer_interpolation_to_compose_strings
-          'path': r'$.verifiableCredential[' + i.toString() + ']'
+          'path': r'$.verifiableCredential[' + i.toString() + ']',
         });
       }
     }
@@ -840,11 +836,12 @@ class ScanCubit extends Cubit<ScanState> {
     required String did,
     required String kid,
     required Uri uri,
+    required int indexValue,
   }) async {
-    if (oidc4vcType.issuerVcType == 'ldp_vc') {
-      final nonce = uri.queryParameters['nonce'] ?? '';
-      final clientId = uri.queryParameters['client_id'] ?? '';
+    final nonce = uri.queryParameters['nonce'] ?? '';
+    final clientId = uri.queryParameters['client_id'] ?? '';
 
+    if (oidc4vcType.issuerVcType == 'ldp_vc') {
       final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
       final did = await secureStorageProvider.get(SecureStorageKeys.did);
       final options = jsonEncode({
@@ -874,11 +871,13 @@ class ScanCubit extends Cubit<ScanState> {
           credentialsToBePresented.map((e) => jsonEncode(e.toJson())).toList();
 
       final vpToken = await oidc4vc.extractVpToken(
-        uri: uri,
+        clientId: clientId,
         credentialsToBePresented: credentialList,
         did: did,
         kid: kid,
         privateKey: privateKey,
+        indexValue: indexValue,
+        nonce: nonce,
       );
 
       return vpToken;
@@ -895,20 +894,23 @@ class ScanCubit extends Cubit<ScanState> {
     required String kid,
     required Uri uri,
     required bool isEBSIV2,
+    required int indexValue,
   }) async {
     final credentialList =
         credentialsToBePresented.map((e) => jsonEncode(e.toJson())).toList();
 
     final nonce = uri.queryParameters['nonce'] ?? '';
+    final clientId = uri.queryParameters['client_id'] ?? '';
 
     final idToken = await oidc4vc.extractIdToken(
-      uri: uri,
+      clientId: clientId,
       credentialsToBePresented: credentialList,
       did: did,
       kid: kid,
       privateKey: privateKey,
       nonce: nonce,
       isEBSIV2: isEBSIV2,
+      indexValue: indexValue,
     );
 
     return idToken;

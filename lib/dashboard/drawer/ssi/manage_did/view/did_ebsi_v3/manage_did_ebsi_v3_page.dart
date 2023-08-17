@@ -1,36 +1,40 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class ManageDidSecp256k1Page extends StatefulWidget {
-  const ManageDidSecp256k1Page({super.key});
+class ManageDidEbsiV3Page extends StatefulWidget {
+  const ManageDidEbsiV3Page({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => const ManageDidSecp256k1Page(),
-      settings: const RouteSettings(name: '/ManageDidSecp256k1Page'),
+      builder: (_) => const ManageDidEbsiV3Page(),
+      settings: const RouteSettings(name: '/ManageDidEbsiV3Page'),
     );
   }
 
   @override
-  State<ManageDidSecp256k1Page> createState() => _ManageDidEbsiPageState();
+  State<ManageDidEbsiV3Page> createState() => _ManageDidEbsiPageState();
 }
 
-class _ManageDidEbsiPageState extends State<ManageDidSecp256k1Page> {
+class _ManageDidEbsiPageState extends State<ManageDidEbsiV3Page> {
   Future<String> getDid() async {
-    final oidc4vc = OIDC4VCType.DEFAULT.getOIDC4VC;
+    const oidc4vcType = OIDC4VCType.EBSIV3;
+
+    final oidc4vc = oidc4vcType.getOIDC4VC;
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
 
     final privateKey = await oidc4vc.privateKeyFromMnemonic(
       mnemonic: mnemonic!,
-      indexValue: OIDC4VCType.DEFAULT.indexValue,
+      indexValue: oidc4vcType.indexValue,
     );
 
-    const didMethod = AltMeStrings.defaultDIDMethod;
-    final did = DIDKitProvider().keyToDID(didMethod, privateKey);
+    final (did, _) = await getDidAndKid(
+      oidc4vcType: oidc4vcType,
+      privateKey: privateKey,
+    );
+
     return did;
   }
 
@@ -38,7 +42,7 @@ class _ManageDidEbsiPageState extends State<ManageDidSecp256k1Page> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.manageKeyDecentralizedIDSecp256k1,
+      title: l10n.manageEbsiV3DecentralizedId,
       titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
@@ -69,7 +73,7 @@ class _ManageDidEbsiPageState extends State<ManageDidSecp256k1Page> {
               padding: EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
               child: Divider(),
             ),
-            DidPrivateKey(route: DidSecp256k1PrivateKeyPage.route()),
+            DidPrivateKey(route: DidEbsiV3PrivateKeyPage.route()),
           ],
         ),
       ),

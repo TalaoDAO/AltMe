@@ -47,7 +47,7 @@ class BiometricsSwitch extends StatelessWidget {
             trackColor: Theme.of(context).colorScheme.surface,
             activeColor: Theme.of(context).colorScheme.primary,
             onChanged: onChange,
-          )
+          ),
         ],
       ),
     );

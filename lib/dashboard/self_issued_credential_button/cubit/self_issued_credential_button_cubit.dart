@@ -48,7 +48,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
 
       final options = {
         'proofPurpose': 'assertionMethod',
-        'verificationMethod': didCubit.state.verificationMethod
+        'verificationMethod': didCubit.state.verificationMethod,
       };
       final verifyOptions = {'proofPurpose': 'assertionMethod'};
       final id = 'urn:uuid:${const Uuid().v4()}';

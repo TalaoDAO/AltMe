@@ -267,36 +267,32 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         if (!advanceSettingsCubit.state.isGamingEnabled) {
           advanceSettingsCubit.toggleGamingRadio();
         }
-        break;
+
       case CredentialCategory.contactInfoCredentials:
         if (!advanceSettingsCubit.state.isCommunityEnabled) {
           advanceSettingsCubit.toggleCommunityRadio();
         }
-        break;
 
       case CredentialCategory.identityCards:
         if (!advanceSettingsCubit.state.isIdentityEnabled) {
           advanceSettingsCubit.toggleIdentityRadio();
         }
-        break;
 
       case CredentialCategory.blockchainAccountsCards:
         if (!advanceSettingsCubit.state.isBlockchainAccountsEnabled) {
           advanceSettingsCubit.toggleBlockchainAccountsRadio();
         }
-        break;
 
       case CredentialCategory.educationCards:
         if (!advanceSettingsCubit.state.isEducationEnabled) {
           advanceSettingsCubit.toggleEducationRadio();
         }
-        break;
 
       case CredentialCategory.othersCards:
         if (!advanceSettingsCubit.state.isOtherEnabled) {
           advanceSettingsCubit.toggleOtherRadio();
         }
-        break;
+
       case CredentialCategory.financeCards:
         // TODO(all): Handle this case.
         break;

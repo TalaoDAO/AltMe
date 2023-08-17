@@ -12,6 +12,8 @@ class OIDC4VCModel {
     required this.schemaForType,
     required this.publicJWKNeeded,
     required this.serviceDocumentation,
+    this.walletMetaData,
+    this.trustFramework,
   });
 
   final String issuerVcType;
@@ -21,9 +23,11 @@ class OIDC4VCModel {
   final List<String> cryptographicBindingMethodsSupported;
   final List<String> cryptographicSuitesSupported;
   final List<String> subjectSyntaxTypesSupported;
+  final Map<String, dynamic>? trustFramework;
   final List<String> grantTypesSupported;
   final List<String> credentialSupported;
   final bool schemaForType;
   final bool publicJWKNeeded;
   final String serviceDocumentation;
+  final Map<String, dynamic>? walletMetaData;
 }

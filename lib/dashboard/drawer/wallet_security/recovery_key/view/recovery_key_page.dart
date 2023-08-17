@@ -110,6 +110,7 @@ class _RecoveryKeyViewState extends State<RecoveryKeyView>
           scrollView: false,
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            // ignore: require_trailing_commas
             children: <Widget>[
               Column(
                 children: [
@@ -128,7 +129,7 @@ class _RecoveryKeyViewState extends State<RecoveryKeyView>
               ),
               const SizedBox(height: 32),
               if (state.mnemonics != null)
-                MnemonicDisplay(mnemonic: state.mnemonics!)
+                MnemonicDisplay(mnemonic: state.mnemonics!),
             ],
           ),
           navigation: state.mnemonics != null && !state.hasVerifiedMnemonics

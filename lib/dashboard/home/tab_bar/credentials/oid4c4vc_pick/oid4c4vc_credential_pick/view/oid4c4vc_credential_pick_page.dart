@@ -137,7 +137,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                 ),
                                 showBgDecoration: false,
                               ),
-                            )
+                            ),
                           ],
                           Align(
                             alignment: Alignment.centerRight,

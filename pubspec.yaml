@@ -4,7 +4,7 @@ version: 1.19.8+245
 publish_to: none
 
 environment:
-  sdk: ">=2.19.0 <3.7.0"
+  sdk: ">=3.0.0 <3.7.0"
 
 dependencies:
   async: ^2.11.0

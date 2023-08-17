@@ -49,7 +49,7 @@ class TezotopiaVoucherWidget extends StatelessWidget {
                       ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

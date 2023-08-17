@@ -174,7 +174,7 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onPrimary,
-                                        )
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -195,7 +195,7 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                                 color:
                                     Theme.of(context).colorScheme.borderColor,
                               ),
-                            )
+                            ),
                         ],
                       ),
                     ),

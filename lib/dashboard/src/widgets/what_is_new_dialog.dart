@@ -205,7 +205,7 @@ class WhatIsNewDialog extends StatelessWidget {
                               version: '1.5.6',
                               features: [
                                 'Age range with Al as 551 issuer',
-                                'Al issuer optimization'
+                                'Al issuer optimization',
                               ],
                             ),
                             const NewContent(
@@ -215,14 +215,14 @@ class WhatIsNewDialog extends StatelessWidget {
                                 'Ethereum support',
                                 'Privacy and terms update',
                                 'Enforced security',
-                                'User experience improvements'
+                                'User experience improvements',
                               ],
                             ),
                             const NewContent(
                               version: '1.4.8',
                               features: [
                                 'Add Tezotopia membership card in Discover',
-                                'Update design of credentials'
+                                'Update design of credentials',
                               ],
                             ),
                             const NewContent(
@@ -276,7 +276,7 @@ class WhatIsNewDialog extends StatelessWidget {
                         Navigator.of(context).pop();
                       },
                     ),
-                  )
+                  ),
                 ],
               ),
               const Align(

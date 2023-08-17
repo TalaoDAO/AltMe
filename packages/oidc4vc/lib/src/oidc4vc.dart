@@ -35,13 +35,13 @@ class OIDC4VC {
   /// create JWK from mnemonic
   Future<String> privateKeyFromMnemonic({
     required String mnemonic,
-    required int index,
+    required int indexValue,
   }) async {
     final seed = bip393.mnemonicToSeed(mnemonic);
 
     final rootKey = bip32.BIP32.fromSeed(seed); //Instance of 'BIP32'
     final child = rootKey.derivePath(
-      "m/44'/5467'/0'/$index'",
+      "m/44'/5467'/0'/$indexValue'",
     ); //Instance of 'BIP32'
     final Iterable<int> iterable = child.privateKey!;
     final seedBytes = Uint8List.fromList(List.from(iterable));
@@ -136,13 +136,13 @@ class OIDC4VC {
         {
           'type': 'openid_credential',
           'credential_type': credentialType,
-          'format': 'jwt_vc'
+          'format': 'jwt_vc',
         }
       ]),
       'redirect_uri':
           '$redirectUrl?credential_type=$credentialType&issuer=$issuer',
       'state': opState,
-      'op_state': opState
+      'op_state': opState,
     };
     return myRequest;
   }
@@ -193,6 +193,7 @@ class OIDC4VC {
     required String kid,
     required Uri credentialRequestUri,
     required List<String> credentialSupportedTypes,
+    required int indexValue,
     String? preAuthorizedCode,
     String? mnemonic,
     String? privateKey,
@@ -218,7 +219,11 @@ class OIDC4VC {
       accessToken = response['access_token'] as String;
     }
 
-    final private = await getPrivateKey(mnemonic, privateKey);
+    final private = await getPrivateKey(
+      mnemonic: mnemonic,
+      privateKey: privateKey,
+      indexValue: indexValue,
+    );
 
     final issuerTokenParameters = IssuerTokenParameters(
       private,
@@ -377,25 +382,18 @@ class OIDC4VC {
     return jsonDecode(jsonEncode(value)) as Map<String, dynamic>;
   }
 
-  Future<Map<String, dynamic>> getPrivateKey(
+  Future<Map<String, dynamic>> getPrivateKey({
+    required int indexValue,
     String? mnemonic,
     String? privateKey,
-  ) async {
+  }) async {
     late Map<String, dynamic> private;
-
-    var index = 1;
-
-    if (oidc4vcModel.cryptographicSuitesSupported[0] == 'did:ebsi') {
-      index = 1;
-    } else if (oidc4vcModel.cryptographicSuitesSupported[0] == 'did:key') {
-      index = 2;
-    }
 
     if (mnemonic != null) {
       private = jsonDecode(
         await privateKeyFromMnemonic(
           mnemonic: mnemonic,
-          index: index,
+          indexValue: indexValue,
         ),
       ) as Map<String, dynamic>;
     } else {
@@ -433,7 +431,7 @@ class OIDC4VC {
       'proof': {
         'proof_type': 'jwt',
         'jwt': vcJwt,
-      }
+      },
     };
     return credentialData;
   }
@@ -531,7 +529,7 @@ class OIDC4VC {
     final credentialHeaders = <String, dynamic>{
       // 'Conformance': conformance,
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken'
+      'Authorization': 'Bearer $accessToken',
     };
     return credentialHeaders;
   }
@@ -545,7 +543,7 @@ class OIDC4VC {
       'iss': tokenParameters.did,
       'nonce': nonce,
       'iat': DateTime.now().microsecondsSinceEpoch,
-      'aud': tokenParameters.issuer
+      'aud': tokenParameters.issuer,
     };
 
     final jwt = generateToken(payload, tokenParameters);
@@ -560,7 +558,7 @@ class OIDC4VC {
     try {
       /// getting token
       final tokenHeaders = <String, dynamic>{
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
       };
 
       final dynamic tokenResponse = await client.post<Map<String, dynamic>>(
@@ -575,32 +573,29 @@ class OIDC4VC {
   }
 
   Future<void> sendPresentation({
-    required Uri uri,
+    required String clientId,
+    required String redirectUrl,
     required String did,
     required String kid,
     required List<String> credentialsToBePresented,
     required String nonce,
     required bool isEBSIV2,
+    required int indexValue,
     String? mnemonic,
     String? privateKey,
   }) async {
-    // TODO(bibash):  if the "request_uri" attribute exists,
-    //wallet must do a GET to endpoint to get the request value as a
-    //json. The wallet receives a JWT which must be verified wit the public key
-    // of the verifier. It means that wallety must call the API to get teh DID
-    //document from EBSI and extract the correct public key with teh kid.
-
     try {
-      // final dynamic response =
-      //     await client.get<dynamic>(uri.queryParameters['request_uri']!);
-
-      final private = await getPrivateKey(mnemonic, privateKey);
+      final private = await getPrivateKey(
+        mnemonic: mnemonic,
+        privateKey: privateKey,
+        indexValue: indexValue,
+      );
 
       final tokenParameters = VerifierTokenParameters(
         private,
         did,
         kid,
-        uri,
+        clientId,
         credentialsToBePresented,
         nonce,
       );
@@ -621,11 +616,11 @@ class OIDC4VC {
 
       final responseData = <String, dynamic>{
         'id_token': verifierIdToken,
-        'vp_token': vpToken
+        'vp_token': vpToken,
       };
 
       await client.post<dynamic>(
-        uri.queryParameters['redirect_uri']!,
+        redirectUrl,
         options: Options(headers: responseHeaders),
         data: responseData,
       );
@@ -635,23 +630,29 @@ class OIDC4VC {
   }
 
   Future<String> extractVpToken({
-    required Uri uri,
+    required String clientId,
+    required String nonce,
     required List<String> credentialsToBePresented,
     required String did,
     required String kid,
+    required int indexValue,
     String? mnemonic,
     String? privateKey,
   }) async {
     try {
-      final private = await getPrivateKey(mnemonic, privateKey);
+      final private = await getPrivateKey(
+        mnemonic: mnemonic,
+        privateKey: privateKey,
+        indexValue: indexValue,
+      );
 
       final tokenParameters = VerifierTokenParameters(
         private,
         did,
         kid,
-        uri,
+        clientId,
         credentialsToBePresented,
-        uri.queryParameters['nonce'] ?? '',
+        nonce,
       );
 
       final vpToken = await getVpToken(tokenParameters);
@@ -663,23 +664,28 @@ class OIDC4VC {
   }
 
   Future<String> extractIdToken({
-    required Uri uri,
+    required String clientId,
     required List<String> credentialsToBePresented,
     required String did,
     required String kid,
     required String nonce,
     required bool isEBSIV2,
+    required int indexValue,
     String? mnemonic,
     String? privateKey,
   }) async {
     try {
-      final private = await getPrivateKey(mnemonic, privateKey);
+      final private = await getPrivateKey(
+        mnemonic: mnemonic,
+        privateKey: privateKey,
+        indexValue: indexValue,
+      );
 
       final tokenParameters = VerifierTokenParameters(
         private,
         did,
         kid,
-        uri,
+        clientId,
         credentialsToBePresented,
         nonce,
       );
@@ -696,23 +702,28 @@ class OIDC4VC {
   }
 
   Future<void> proveOwnershipOfDid({
-    required Uri uri,
+    required String clientId,
     required String did,
     required String kid,
     required String redirectUri,
     required String nonce,
     required bool isEBSIV2,
+    required int indexValue,
     String? mnemonic,
     String? privateKey,
   }) async {
     try {
-      final private = await getPrivateKey(mnemonic, privateKey);
+      final private = await getPrivateKey(
+        mnemonic: mnemonic,
+        privateKey: privateKey,
+        indexValue: indexValue,
+      );
 
       final tokenParameters = VerifierTokenParameters(
         private,
         did,
         kid,
-        uri,
+        clientId,
         [],
         nonce,
       );
@@ -759,9 +770,9 @@ class OIDC4VC {
         'id': 'http://example.org/presentations/talao/01',
         'type': ['VerifiablePresentation'],
         'holder': tokenParameters.did,
-        'verifiableCredential': tokenParameters.jsonIdOrJwtList
+        'verifiableCredential': tokenParameters.jsonIdOrJwtList,
       },
-      'nonce': tokenParameters.nonce
+      'nonce': tokenParameters.nonce,
     };
 
     final verifierVpJwt = generateToken(vpTokenPayload, tokenParameters);
@@ -838,8 +849,8 @@ class OIDC4VC {
               'format': 'jwt_vp',
               'path': r'$',
             }
-          ]
-        }
+          ],
+        },
       };
     }
 
@@ -847,13 +858,18 @@ class OIDC4VC {
     return verifierIdJwt;
   }
 
-  Future<String> getDidFromMnemonic(
+  Future<String> getDidFromMnemonic({
+    required String did,
+    required String kid,
+    required int indexValue,
     String? mnemonic,
     String? privateKey,
-    String did,
-    String kid,
-  ) async {
-    final private = await getPrivateKey(mnemonic, privateKey);
+  }) async {
+    final private = await getPrivateKey(
+      mnemonic: mnemonic,
+      privateKey: privateKey,
+      indexValue: indexValue,
+    );
 
     final tokenParameters = TokenParameters(
       private,
@@ -863,13 +879,18 @@ class OIDC4VC {
     return tokenParameters.did;
   }
 
-  Future<String?> getKid(
+  Future<String?> getKid({
+    required String did,
+    required String kid,
+    required int indexValue,
     String? mnemonic,
     String? privateKey,
-    String did,
-    String kid,
-  ) async {
-    final private = await getPrivateKey(mnemonic, privateKey);
+  }) async {
+    final private = await getPrivateKey(
+      mnemonic: mnemonic,
+      privateKey: privateKey,
+      indexValue: indexValue,
+    );
 
     final tokenParameters = TokenParameters(
       private,

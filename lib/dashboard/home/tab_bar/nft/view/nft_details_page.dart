@@ -239,7 +239,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             Text(
               nftModel.identifier ?? '?',
               style: Theme.of(context).textTheme.bodySmall3,
-            )
+            ),
           ],
         ),
       ],
@@ -322,7 +322,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
           ],
         ),
-      ]
+      ],
     ];
   }
 
@@ -404,7 +404,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
           ],
         ),
-      ]
+      ],
     ];
   }
 }

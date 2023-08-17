@@ -69,6 +69,13 @@ class DidView extends StatelessWidget {
                   },
                 ),
                 DrawerItem(
+                  title: l10n.manageEbsiV3DecentralizedId,
+                  onTap: () {
+                    Navigator.of(context)
+                        .push<void>(ManageDidEbsiV3Page.route());
+                  },
+                ),
+                DrawerItem(
                   title: l10n.polygonDecentralizedID,
                   onTap: () async {
                     LoadingView().show(context: context);
@@ -93,11 +100,6 @@ class DidView extends StatelessWidget {
                       );
                     }
                   },
-                ),
-                DrawerItem(
-                  isDisabled: true,
-                  title: l10n.manageEbsiV3DecentralizedId,
-                  onTap: null,
                 ),
               ],
             ),

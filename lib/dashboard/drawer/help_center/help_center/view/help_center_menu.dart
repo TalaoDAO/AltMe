@@ -88,7 +88,7 @@ class HelpCenterView extends StatelessWidget {
                           Icons.chevron_right,
                           size: 26,
                           color: Theme.of(context).colorScheme.unSelectedLabel,
-                        )
+                        ),
                       ],
                     ),
                   ),

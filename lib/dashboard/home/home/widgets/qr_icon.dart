@@ -59,7 +59,7 @@ class QRIcon extends StatelessWidget {
                     blurRadius: 12,
                     spreadRadius: -12,
                     offset: Offset.zero,
-                  )
+                  ),
                 ],
               ),
             ),

@@ -75,8 +75,8 @@ class ActivateBiometricsView extends StatelessWidget {
             LoadingView().show(context: context);
           } else {
             if (state.status == AppStatus.success) {
-            await context.read<AltmeChatSupportCubit>().init();
-          }
+              await context.read<AltmeChatSupportCubit>().init();
+            }
             LoadingView().hide();
           }
 
@@ -197,7 +197,7 @@ class ActivateBiometricsView extends StatelessWidget {
               ),
               const SizedBox(
                 height: Sizes.spaceXSmall,
-              )
+              ),
             ],
           ),
         ),

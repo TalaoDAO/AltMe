@@ -22,7 +22,7 @@
 // void main() {
 //   final client = Dio();
 //   final dioAdapter =
-//       DioAdapter(dio: Dio(BaseOptions()), matcher: const UrlRequestMatcher());
+//      DioAdapter(dio: Dio(BaseOptions()), matcher: const UrlRequestMatcher());
 //   client.httpClientAdapter = dioAdapter;
 
 //   const mnemonic =
@@ -111,7 +111,7 @@
 //     });
 
 //     test('JWK from seeds', () {
-//       final jwk = oidc4vc.jwkFromSeed(seedBytes: Uint8List.fromList(seedBytes));
+//    final jwk = oidc4vc.jwkFromSeed(seedBytes: Uint8List.fromList(seedBytes));
 //       expect(jwk, expectedJwk);
 //     });
 

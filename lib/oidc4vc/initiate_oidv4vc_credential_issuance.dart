@@ -4,9 +4,8 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/add_oidc4vc_credential.dart';
-import 'package:crypto/crypto.dart';
+
 import 'package:did_kit/did_kit.dart';
-import 'package:fast_base58/fast_base58.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -33,13 +32,12 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       if (credentialOfferJson == null) throw Exception();
 
       credentialType = credentialOfferJson['credentials'];
-      break;
+
     case OIDC4VCType.GAIAX:
     case OIDC4VCType.EBSIV2:
       credentialType =
           uriFromScannedResponse.queryParameters['credential_type'];
 
-      break;
     case OIDC4VCType.EBSIV3:
     case OIDC4VCType.JWTVC:
       break;
@@ -95,53 +93,31 @@ Future<void> getAndAddCredential({
               ['pre-authorized_code']
           .toString();
       issuer = credentialOfferJson['credential_issuer'].toString();
-      break;
+
     case OIDC4VCType.GAIAX:
     case OIDC4VCType.EBSIV2:
       issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
       preAuthorizedCode =
           uriFromScannedResponse.queryParameters['pre-authorized_code'];
 
-      break;
     case OIDC4VCType.EBSIV3:
     case OIDC4VCType.JWTVC:
-      break;
+      throw Exception();
   }
-
-  late String did;
-  late String kid;
 
   final mnemonic =
       await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
   final privateKey = await oidc4vc.privateKeyFromMnemonic(
     mnemonic: mnemonic!,
-    index: oidc4vcType.index,
+    indexValue: oidc4vcType.indexValue,
   );
 
-  switch (oidc4vcType) {
-    case OIDC4VCType.DEFAULT:
-    case OIDC4VCType.HEDERA:
-    case OIDC4VCType.GAIAX:
-      const didMethod = AltMeStrings.defaultDIDMethod;
-      did = didKitProvider.keyToDID(didMethod, privateKey);
-      kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
-
-      break;
-
-    case OIDC4VCType.EBSIV2:
-      final private = await oidc4vc.getPrivateKey(mnemonic, privateKey);
-
-      final thumbprint = getThumbprint(private);
-      final encodedAddress = Base58Encode([2, ...thumbprint]);
-      did = 'did:ebsi:z$encodedAddress';
-      final lastPart = Base58Encode(thumbprint);
-      kid = '$did#$lastPart';
-      break;
-    case OIDC4VCType.EBSIV3:
-    case OIDC4VCType.JWTVC:
-      break;
-  }
+  final (did, kid) = await getDidAndKid(
+    oidc4vcType: oidc4vcType,
+    privateKey: privateKey,
+    didKitProvider: didKitProvider,
+  );
 
   if (preAuthorizedCode != null) {
     final dynamic encodedCredentialFromOIDC4VC = await oidc4vc.getCredential(
@@ -153,6 +129,7 @@ Future<void> getAndAddCredential({
       credentialRequestUri: uriFromScannedResponse,
       privateKey: privateKey,
       credentialSupportedTypes: oidc4vcType.credentialSupported,
+      indexValue: oidc4vcType.indexValue,
     );
 
     await addOIDC4VCCredential(
@@ -172,31 +149,6 @@ Future<void> getAndAddCredential({
     );
     await LaunchUrl.launchUri(ebsiAuthenticationUri);
   }
-}
-
-List<int> getThumbprint(Map<String, dynamic> privateKey) {
-  final publicJWK = Map.of(privateKey)..removeWhere((key, value) => key == 'd');
-
-  /// we use crv P-256K in the rest of the package to ensure compatibility
-  /// with jose dart package. In fact our crv is secp256k1 wich change the
-  /// fingerprint
-
-  final sortedJwk = Map.fromEntries(
-    publicJWK.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
-  )
-    ..removeWhere((key, value) => key == 'use')
-    ..removeWhere((key, value) => key == 'alg');
-
-  /// this test is to be crv agnostic and respect https://www.rfc-editor.org/rfc/rfc7638
-  if (sortedJwk['crv'] == 'P-256K') {
-    sortedJwk['crv'] = 'secp256k1';
-  }
-
-  final jsonString = jsonEncode(sortedJwk);
-  final bytesToHash = utf8.encode(jsonString);
-  final sha256Digest = sha256.convert(bytesToHash);
-
-  return sha256Digest.bytes;
 }
 
 Future<dynamic> getCredentialOfferJson({

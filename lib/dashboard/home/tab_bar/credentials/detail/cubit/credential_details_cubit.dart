@@ -83,11 +83,9 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       switch (isVerified) {
         case VerificationType.verified:
           credentialStatus = CredentialStatus.active;
-          break;
         case VerificationType.notVerified:
         case VerificationType.unKnown:
           credentialStatus = CredentialStatus.suspended;
-          break;
       }
 
       emit(
@@ -124,16 +122,12 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         switch (claim[0].state) {
           case ClaimState.active:
             credentialStatus = CredentialStatus.active;
-            break;
           case ClaimState.expired:
             credentialStatus = CredentialStatus.suspended;
-            break;
           case ClaimState.pending:
             credentialStatus = CredentialStatus.pending;
-            break;
           case ClaimState.revoked:
             credentialStatus = CredentialStatus.suspended;
-            break;
         }
       }
 

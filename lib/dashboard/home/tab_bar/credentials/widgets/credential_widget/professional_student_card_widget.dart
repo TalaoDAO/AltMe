@@ -83,7 +83,7 @@ class JobStudentCardRecto extends Recto {
                 professionalStudentCardModel.recipient!.image,
                 fit: BoxFit.cover,
               ),
-            )
+            ),
           ],
         ),
       ),

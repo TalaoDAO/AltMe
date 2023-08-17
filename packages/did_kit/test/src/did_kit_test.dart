@@ -25,7 +25,7 @@ void main() {
     'type': ['VerifiableCredential'],
     'issuer': did,
     'issuanceDate': '2020-08-19T21:41:50Z',
-    'credentialSubject': {'id': 'did:example:d23dd687a7dc6787646f2eb98d0'}
+    'credentialSubject': {'id': 'did:example:d23dd687a7dc6787646f2eb98d0'},
   };
 
   const vc = '';
@@ -45,14 +45,14 @@ void main() {
       'type': ['VerifiableCredential'],
       'issuer': 'did:example:30e07a529f32d234f6181736bd3',
       'issuanceDate': '2020-08-19T21:41:50Z',
-      'credentialSubject': {'id': 'did:example:d23dd687a7dc6787646f2eb98d0'}
-    }
+      'credentialSubject': {'id': 'did:example:d23dd687a7dc6787646f2eb98d0'},
+    },
   };
 
   final proofOptions = jsonEncode({
     'proofPurpose': 'assertionMethod',
     'verificationMethod': vm,
-    'challenge': 'Uuid().v4()'
+    'challenge': 'Uuid().v4()',
   });
 
   late DIDKitProvider didKitProvider;

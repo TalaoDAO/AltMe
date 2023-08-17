@@ -105,7 +105,7 @@ class ConfirmDialog extends StatelessWidget {
                     Navigator.of(context).pop(true);
                   },
                 ),
-              )
+              ),
             ],
           ),
         ],

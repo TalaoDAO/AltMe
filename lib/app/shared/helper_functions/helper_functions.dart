@@ -5,8 +5,11 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart';
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:did_kit/did_kit.dart';
+import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:jose/jose.dart';
@@ -427,4 +430,78 @@ String getUtf8Message(String maybeHex) {
   }
 
   return maybeHex;
+}
+
+Future<(String, String)> getDidAndKid({
+  required OIDC4VCType oidc4vcType,
+  required String privateKey,
+  DIDKitProvider? didKitProvider,
+}) async {
+  late String did;
+  late String kid;
+
+  switch (oidc4vcType) {
+    case OIDC4VCType.DEFAULT:
+    case OIDC4VCType.HEDERA:
+    case OIDC4VCType.GAIAX:
+      const didMethod = AltMeStrings.defaultDIDMethod;
+      did = didKitProvider!.keyToDID(didMethod, privateKey);
+      kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
+
+    case OIDC4VCType.EBSIV2:
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
+      final thumbprint = getThumbprintForEBSIV2(private);
+      final encodedAddress = Base58Encode([2, ...thumbprint]);
+      did = 'did:ebsi:z$encodedAddress';
+      final lastPart = Base58Encode(thumbprint);
+      kid = '$did#$lastPart';
+
+    case OIDC4VCType.EBSIV3:
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
+      //b'\xd1\xd6\x03' in python
+      final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
+      final List<int> prefix = prefixByteList.map((byte) => byte).toList();
+
+      final encodedData = sortedPublcJwk(private);
+      final encodedAddress = Base58Encode([...prefix, ...encodedData]);
+
+      did = 'did:ebsi:z$encodedAddress';
+      final lastPart = Base58Encode(encodedData);
+      kid = '$did#$lastPart';
+
+    case OIDC4VCType.JWTVC:
+      throw Exception();
+  }
+  return (did, kid);
+}
+
+List<int> getThumbprintForEBSIV2(Map<String, dynamic> privateKey) {
+  final bytesToHash = sortedPublcJwk(privateKey);
+  final sha256Digest = sha256.convert(bytesToHash);
+
+  return sha256Digest.bytes;
+}
+
+List<int> sortedPublcJwk(Map<String, dynamic> privateKey) {
+  final publicJWK = Map.of(privateKey)..removeWhere((key, value) => key == 'd');
+
+  /// we use crv P-256K in the rest of the package to ensure compatibility
+  /// with jose dart package. In fact our crv is secp256k1 wich change the
+  /// fingerprint
+
+  final sortedJwk = Map.fromEntries(
+    publicJWK.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
+  )
+    ..removeWhere((key, value) => key == 'use')
+    ..removeWhere((key, value) => key == 'alg');
+
+  /// this test is to be crv agnostic and respect https://www.rfc-editor.org/rfc/rfc7638
+  if (sortedJwk['crv'] == 'P-256K') {
+    sortedJwk['crv'] = 'secp256k1';
+  }
+
+  final jsonString = jsonEncode(sortedJwk).replaceAll(' ', '');
+  return utf8.encode(jsonString);
 }

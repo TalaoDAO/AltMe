@@ -40,18 +40,18 @@ class SelfIssuedCredential {
     {
       '@language': 'en',
       '@value':
-          '''This signed electronic certificate has been issued by the user itself.'''
+          '''This signed electronic certificate has been issued by the user itself.''',
     },
     {'@language': 'de', '@value': ''},
     {
       '@language': 'fr',
-      '@value': "Cette attestation électronique est signée par l'utilisateur."
+      '@value': "Cette attestation électronique est signée par l'utilisateur.",
     }
   ];
   static const List<dynamic> _name = <dynamic>[
     {'@language': 'en', '@value': 'Self Issued credential'},
     {'@language': 'de', '@value': ''},
-    {'@language': 'fr', '@value': 'Attestation déclarative'}
+    {'@language': 'fr', '@value': 'Attestation déclarative'},
   ];
 
   static const List<dynamic> _context = <dynamic>[
@@ -73,10 +73,10 @@ class SelfIssuedCredential {
           'id': '@id',
           'schema': 'https://schema.org/',
           'telephone': 'schema:telephone',
-          'type': '@type'
+          'type': '@type',
         },
-        '@id': 'https://github.com/TalaoDAO/context/blob/main/README.md'
-      }
+        '@id': 'https://github.com/TalaoDAO/context/blob/main/README.md',
+      },
     }
   ];
 }

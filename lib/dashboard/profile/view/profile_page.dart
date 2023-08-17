@@ -455,7 +455,7 @@ class _PersonalPageState extends State<ProfileView> {
                       profileCheckboxCubit.jobTitleCheckBoxChange(value: value),
                 ),
         ),
-        _textFieldSpace()
+        _textFieldSpace(),
       ],
     );
   }

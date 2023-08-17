@@ -5,32 +5,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class DidSecp256k1PrivateKeyPage extends StatefulWidget {
-  const DidSecp256k1PrivateKeyPage({super.key});
+class DidEbsiV3PrivateKeyPage extends StatefulWidget {
+  const DidEbsiV3PrivateKeyPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => const DidSecp256k1PrivateKeyPage(),
-      settings: const RouteSettings(name: '/Didsecp256k1PrivateKeyPage'),
+      builder: (_) => const DidEbsiV3PrivateKeyPage(),
+      settings: const RouteSettings(name: '/DidEbsiV3PrivateKeyPage'),
     );
   }
 
   @override
-  State<DidSecp256k1PrivateKeyPage> createState() =>
-      _DidSecp256k1PrivateKeyPageState();
+  State<DidEbsiV3PrivateKeyPage> createState() =>
+      _DidEbsiV3PrivateKeyPageState();
 }
 
-class _DidSecp256k1PrivateKeyPageState extends State<DidSecp256k1PrivateKeyPage>
+class _DidEbsiV3PrivateKeyPageState extends State<DidEbsiV3PrivateKeyPage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
 
   Future<String> getPrivateKey() async {
-    final oidc4vc = OIDC4VCType.DEFAULT.getOIDC4VC;
+    final oidc4vc = OIDC4VCType.EBSIV3.getOIDC4VC;
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
     final privateKey = await oidc4vc.privateKeyFromMnemonic(
       mnemonic: mnemonic!,
-      indexValue: OIDC4VCType.DEFAULT.indexValue,
+      indexValue: OIDC4VCType.EBSIV3.indexValue,
     );
     return privateKey;
   }

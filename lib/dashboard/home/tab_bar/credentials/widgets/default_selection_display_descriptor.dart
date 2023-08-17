@@ -68,7 +68,7 @@ class DefaultSelectionDisplayDescriptor extends StatelessWidget {
               ),
             )
           else
-            const SizedBox.shrink()
+            const SizedBox.shrink(),
         ],
       ),
     );

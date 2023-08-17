@@ -119,7 +119,7 @@ class AccountPublicAddressPage extends StatelessWidget {
                       },
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),

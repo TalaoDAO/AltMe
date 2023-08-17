@@ -176,7 +176,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                                             ),
                                       ),
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),

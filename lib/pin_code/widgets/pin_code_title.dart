@@ -39,7 +39,7 @@ class PinCodeTitle extends StatelessWidget {
                     .copyWith(color: Theme.of(context).colorScheme.redColor),
             textAlign: TextAlign.center,
           ),
-        ]
+        ],
       ],
     );
   }
