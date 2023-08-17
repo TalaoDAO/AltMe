@@ -13,11 +13,13 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
     List<CredentialModel> credentialList = const <CredentialModel>[],
     Map<String, dynamic> presentationDefinition = const <String, dynamic>{},
     required int inputDescriptorIndex,
+    bool? isJwtVpInJwtVCRequired,
   }) : super(const CredentialManifestPickState(filteredCredentialList: [])) {
     filterList(
       credentialList: credentialList,
       presentationDefinition: presentationDefinition,
       inputDescriptorIndex: inputDescriptorIndex,
+      isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
     );
   }
 
@@ -25,6 +27,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
     required List<CredentialModel> credentialList,
     required Map<String, dynamic> presentationDefinition,
     required int inputDescriptorIndex,
+    bool? isJwtVpInJwtVCRequired,
   }) {
     /// Get instruction to filter credentials of the wallet
     final filteredCredentialList = getCredentialsFromPresentationDefinition(
@@ -32,6 +35,12 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
       credentialList: List.from(credentialList),
       inputDescriptorIndex: inputDescriptorIndex,
     );
+
+    if (isJwtVpInJwtVCRequired != null && isJwtVpInJwtVCRequired) {
+      filteredCredentialList.removeWhere(
+        (CredentialModel credentialModel) => credentialModel.jwt == null,
+      );
+    }
 
     emit(state.copyWith(filteredCredentialList: filteredCredentialList));
   }

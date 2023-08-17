@@ -167,7 +167,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
   }
 
-  Future<void> verify({required Uri uri, bool? isScan}) async {
+  Future<void> verify({
+    required Uri uri,
+    bool? isScan,
+  }) async {
     emit(
       state.copyWith(
         uri: uri,
@@ -232,11 +235,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             await launchSiopV2WithRequestUriAsValueFlow();
           } else if (responseType == 'vp_token') {
             /// verifier side (oidc4vp) with request uri as value
-            await launchOIDC4VPAndSIOPV2WithRequestUriAsValueFlow();
+            await launchOIDC4VPAndSIOPV2WithRequestUriAsValueFlow(
+              currentOIIDC4VCType,
+            );
             return;
           } else if (responseType == 'id_token vp_token') {
             /// verifier side (oidc4vp and siopv2) with request uri as value
-            await launchOIDC4VPAndSIOPV2WithRequestUriAsValueFlow();
+            await launchOIDC4VPAndSIOPV2WithRequestUriAsValueFlow(
+              currentOIIDC4VCType,
+            );
             return;
           } else {
             throw Exception();
@@ -311,7 +318,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       /// verifier side (OIDC4VP And siopv2) with request_uri
       if (state.uri.toString().startsWith('openid://?')) {
-        await launchOIDC4VPAndSiopV2WithRequestUriFlow();
+        final OIDC4VCType currentOIIDC4VCType =
+            profileCubit.state.model.oidc4vcType;
+        await launchOIDC4VPAndSiopV2WithRequestUriFlow(currentOIIDC4VCType);
         return;
       }
 
@@ -530,14 +539,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> launchOIDC4VPAndSIOPV2WithRequestUriAsValueFlow() async {
+  Future<void> launchOIDC4VPAndSIOPV2WithRequestUriAsValueFlow(
+    OIDC4VCType currentOIIDC4VCType,
+  ) async {
     final keys = <String>[];
     state.uri?.queryParameters.forEach((key, value) => keys.add(key));
     if (isUriAsValueValid(keys)) {
       if (keys.contains('claims')) {
         // EBSIV2 normally
         final claims = state.uri?.queryParameters['claims'] ?? '';
-        await completeOIDC4VPAndSiopV2WithClaim(claims: claims);
+        await completeOIDC4VPAndSiopV2WithClaim(
+          claims: claims,
+          currentOIIDC4VCType: currentOIIDC4VCType,
+        );
       } else if (keys.contains('presentation_definition')) {
         final String presentationDefinitionValue =
             state.uri?.queryParameters['presentation_definition'] ?? '';
@@ -587,6 +601,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               issuer: Issuer.emptyIssuer('domain'),
               inputDescriptorIndex: 0,
               credentialsToBePresented: [],
+              isJwtVpInJwtVCRequired:
+                  currentOIIDC4VCType.isJwtVpInJwtVCRequired,
             ),
           ),
         );
@@ -718,7 +734,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> launchOIDC4VPAndSiopV2WithRequestUriFlow() async {
+  Future<void> launchOIDC4VPAndSiopV2WithRequestUriFlow(
+    OIDC4VCType currentOIIDC4VCType,
+  ) async {
     final Map<String, dynamic> response =
         decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
 
@@ -734,11 +752,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
 
     emit(state.copyWith(uri: updatedUri));
-    await completeOIDC4VPAndSiopV2WithClaim(claims: claims);
+    await completeOIDC4VPAndSiopV2WithClaim(
+      claims: claims,
+      currentOIIDC4VCType: currentOIIDC4VCType,
+    );
   }
 
   Future<void> completeOIDC4VPAndSiopV2WithClaim({
     required String claims,
+    required OIDC4VCType currentOIIDC4VCType,
   }) async {
     // TODO(hawkbee): change when correction is done on verifier
     claims = claims
@@ -777,6 +799,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           issuer: Issuer.emptyIssuer('domain'),
           inputDescriptorIndex: 0,
           credentialsToBePresented: [],
+          isJwtVpInJwtVCRequired: currentOIIDC4VCType.isJwtVpInJwtVCRequired,
         ),
       ),
     );

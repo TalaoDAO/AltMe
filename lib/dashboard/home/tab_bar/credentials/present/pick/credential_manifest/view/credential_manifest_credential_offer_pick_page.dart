@@ -18,6 +18,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     required this.issuer,
     required this.inputDescriptorIndex,
     required this.credentialsToBePresented,
+    required this.isJwtVpInJwtVCRequired,
   });
 
   final Uri uri;
@@ -25,6 +26,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
   final Issuer issuer;
   final int inputDescriptorIndex;
   final List<CredentialModel> credentialsToBePresented;
+  final bool? isJwtVpInJwtVCRequired;
 
   static Route<dynamic> route({
     required Uri uri,
@@ -32,6 +34,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     required Issuer issuer,
     required int inputDescriptorIndex,
     required List<CredentialModel> credentialsToBePresented,
+    bool? isJwtVpInJwtVCRequired,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => CredentialManifestOfferPickPage(
@@ -40,6 +43,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
         issuer: issuer,
         inputDescriptorIndex: inputDescriptorIndex,
         credentialsToBePresented: credentialsToBePresented,
+        isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
       ),
       settings: const RouteSettings(name: '/CredentialManifestOfferPickPage'),
     );
@@ -55,6 +59,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
           presentationDefinition: presentationDefinition.toJson(),
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
+          isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
         );
       },
       child: CredentialManifestOfferPickView(

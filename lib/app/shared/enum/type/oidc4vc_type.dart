@@ -325,4 +325,7 @@ extension OIDC4VCTypeX on OIDC4VCType {
         return false;
     }
   }
+
+  bool get isJwtVpInJwtVCRequired =>
+      issuerVcType == 'jwt_vc' && verifierVpType == 'jwt_vp';
 }
