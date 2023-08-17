@@ -90,12 +90,12 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
         log.w(
           'credential verification return warnings',
-          jsonVerification['warnings'],
+          error: jsonVerification['warnings'],
         );
       }
 
       if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
-        log.e('failed to verify credential', jsonVerification['errors']);
+        log.e('failed to verify credential', error: jsonVerification['errors']);
         if (jsonVerification['errors'][0] != 'No applicable proof') {
           throw ResponseMessage(
             ResponseString
@@ -109,7 +109,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       }
       emit(state.success());
     } catch (e, s) {
-      log.e('something went wrong', e, s);
+      log.e('something went wrong', error: e, stackTrace: s);
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {

@@ -794,6 +794,7 @@ class OIDC4VC {
       // ignore: avoid_single_cascade_in_expression_statements
       vpBuilder..setProtectedHeader('jwk', tokenParameters.publicJWK);
     }
+
     vpBuilder
       ..setProtectedHeader('kid', tokenParameters.kid)
 

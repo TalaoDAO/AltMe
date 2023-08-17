@@ -127,7 +127,7 @@ class PolygonId {
       return identity;
     } catch (e) {
       if (e is IdentityAlreadyExistsException) {
-        final identity = getIdentity(
+        final identity = await getIdentity(
           mnemonic: mnemonic,
           network: network,
         );

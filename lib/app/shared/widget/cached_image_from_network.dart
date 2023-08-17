@@ -25,7 +25,7 @@ class CachedImageFromNetwork extends StatelessWidget {
   Widget build(BuildContext context) {
     if (url.startsWith('assets')) {
       return ClipRRect(
-        borderRadius: borderRadius,
+        borderRadius: borderRadius ?? BorderRadius.zero,
         child: Image.asset(
           url,
           width: width,

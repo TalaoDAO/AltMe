@@ -348,8 +348,8 @@ Map<String, dynamic> decodePayload({
   try {
     final payload = jwtDecode.parseJwt(token);
     data = payload;
-  } catch (e) {
-    log.e('An error occurred while decoding.', e);
+  } catch (e, s) {
+    log.e('An error occurred while decoding.', error: e, stackTrace: s);
   }
   return data;
 }
@@ -364,8 +364,8 @@ Map<String, dynamic> decodeHeader({
   try {
     final header = jwtDecode.parseJwtHeader(token);
     data = header;
-  } catch (e) {
-    log.e('An error occurred while decoding.', e);
+  } catch (e, s) {
+    log.e('An error occurred while decoding.', error: e, stackTrace: s);
   }
   return data;
 }

@@ -54,8 +54,12 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         'no',
       );
       emit(state.success());
-    } catch (error) {
-      log.e('something went wrong when generating a key', error);
+    } catch (e, s) {
+      log.e(
+        'something went wrong when generating a key',
+        error: e,
+        stackTrace: s,
+      );
       emit(
         state.error(
           messageHandler: ResponseMessage(

@@ -130,8 +130,12 @@ class ProfileCubit extends Cubit<ProfileState> {
           status: AppStatus.success,
         ),
       );
-    } catch (e) {
-      log.e('something went wrong', e);
+    } catch (e, s) {
+      log.e(
+        'something went wrong',
+        error: e,
+        stackTrace: s,
+      );
       emit(
         state.error(
           messageHandler: ResponseMessage(
@@ -210,8 +214,12 @@ class ProfileCubit extends Cubit<ProfileState> {
           status: AppStatus.success,
         ),
       );
-    } catch (e) {
-      log.e('something went wrong', e);
+    } catch (e, s) {
+      log.e(
+        'something went wrong',
+        error: e,
+        stackTrace: s,
+      );
 
       emit(
         state.error(

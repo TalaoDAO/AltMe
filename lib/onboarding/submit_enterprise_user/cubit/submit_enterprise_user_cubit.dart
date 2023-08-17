@@ -103,7 +103,7 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
       }
       emit(state.success());
     } catch (e, s) {
-      log.e('error in verifying RSA key :$e}, s: $s', e, s);
+      log.e('error in verifying RSA key :$e}, s: $s', error: e, stackTrace: s);
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {

@@ -117,7 +117,7 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
             if (snapshot.error != null) {
               log.e(
                 'something went wrong when loading privacy file',
-                snapshot.error,
+                error: snapshot.error,
               );
               return const SizedBox.shrink();
             }

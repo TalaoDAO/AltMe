@@ -930,8 +930,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     try {
       final dynamic response = await requestClient.get(url);
       data = response.toString();
-    } catch (e) {
-      log.e('An error occurred while connecting to the server.', e);
+    } catch (e, s) {
+      log.e(
+        'An error occurred while connecting to the server.',
+        error: e,
+        stackTrace: s,
+      );
     }
     return data;
   }

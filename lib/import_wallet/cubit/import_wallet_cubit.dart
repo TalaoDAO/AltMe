@@ -134,9 +134,12 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
 
       await homeCubit.emitHasWallet();
       emit(state.success());
-    } catch (error, stack) {
-      log.e('error: $error,stack: $stack');
-      log.e('something went wrong when generating a key', error);
+    } catch (e, s) {
+      log.e(
+        'something went wrong when generating a key',
+        error: e,
+        stackTrace: s,
+      );
       emit(
         state.error(
           messageHandler: ResponseMessage(

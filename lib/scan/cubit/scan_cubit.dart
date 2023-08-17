@@ -270,7 +270,7 @@ class ScanCubit extends Cubit<ScanState> {
           if ((jsonVerification['warnings'] as List).isNotEmpty) {
             log.w(
               'credential verification return warnings',
-              jsonVerification['warnings'],
+              error: jsonVerification['warnings'],
             );
 
             emit(
@@ -284,7 +284,10 @@ class ScanCubit extends Cubit<ScanState> {
           }
 
           if ((jsonVerification['errors'] as List).isNotEmpty) {
-            log.w('failed to verify credential', jsonVerification['errors']);
+            log.w(
+              'failed to verify credential',
+              error: jsonVerification['errors'],
+            );
             if (jsonVerification['errors'][0] != 'No applicable proof') {
               throw ResponseMessage(
                 ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
@@ -503,8 +506,8 @@ class ScanCubit extends Cubit<ScanState> {
       } else {
         throw Exception('DID is not set. It is required to present DIDAuth');
       }
-    } catch (e) {
-      log.e('something went wrong', e);
+    } catch (e, s) {
+      log.e('something went wrong', error: e, stackTrace: s);
       if (e is MessageHandler) {
         emit(
           state.error(messageHandler: e),
@@ -568,8 +571,8 @@ class ScanCubit extends Cubit<ScanState> {
           ),
         ),
       );
-    } catch (e) {
-      log.e('something went wrong', e);
+    } catch (e, s) {
+      log.e('something went wrong', error: e, stackTrace: s);
       if (e is MessageHandler) {
         emit(
           state.error(messageHandler: e),
@@ -655,8 +658,8 @@ class ScanCubit extends Cubit<ScanState> {
           ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
         );
       }
-    } catch (e) {
-      log.e('something went wrong', e);
+    } catch (e, s) {
+      log.e('something went wrong', error: e, stackTrace: s);
       if (e is MessageHandler) {
         emit(
           state.error(messageHandler: e),
@@ -754,8 +757,8 @@ class ScanCubit extends Cubit<ScanState> {
           ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
         );
       }
-    } catch (e) {
-      log.e('something went wrong', e);
+    } catch (e, s) {
+      log.e('something went wrong', error: e, stackTrace: s);
       if (e is MessageHandler) {
         emit(
           state.error(messageHandler: e),

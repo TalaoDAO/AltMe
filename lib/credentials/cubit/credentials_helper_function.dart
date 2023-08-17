@@ -161,7 +161,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
       log.w(
         'credential verification return warnings',
-        jsonVerification['warnings'],
+        error: jsonVerification['warnings'],
       );
     }
 
@@ -181,7 +181,11 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       return _createCredential(vc, oldId, credentialManifest);
     }
   } catch (e, s) {
-    log.e('something went wrong e: $e, stackTrace: $s', e, s);
+    log.e(
+      'something went wrong e: $e, stackTrace: $s',
+      error: e,
+      stackTrace: s,
+    );
     return null;
   }
 }
@@ -289,7 +293,7 @@ Future<CredentialModel?> generateWalletCredential({
     if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
       log.w(
         'credential verification return warnings',
-        jsonVerification['warnings'],
+        error: jsonVerification['warnings'],
       );
     }
 
@@ -307,7 +311,11 @@ Future<CredentialModel?> generateWalletCredential({
       return _createCredential(vc, oldId, credentialManifest);
     }
   } catch (e, s) {
-    log.e('something went wrong e: $e, stackTrace: $s', e, s);
+    log.e(
+      'something went wrong e: $e, stackTrace: $s',
+      error: e,
+      stackTrace: s,
+    );
     return null;
   }
 }
