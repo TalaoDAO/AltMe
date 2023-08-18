@@ -467,7 +467,7 @@ Future<(String, String)> getDidAndKid({
       final encodedData = sortedPublcJwk(private);
       final encodedAddress = Base58Encode([...prefix, ...encodedData]);
 
-      did = 'did:ebsi:z$encodedAddress';
+      did = 'did:key:z$encodedAddress';
       final lastPart = Base58Encode(encodedData);
       kid = '$did#$lastPart';
 
