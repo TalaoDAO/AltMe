@@ -7,7 +7,6 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/oidc4vc/initiate_oidv4vc_credential_issuance.dart';
 import 'package:altme/oidc4vc/verify_encoded_data.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
