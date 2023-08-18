@@ -207,6 +207,19 @@ class CredentialModel extends Equatable {
       credentialPreview.credentialSubjectModel.credentialSubjectType ==
       CredentialSubjectType.defaultCredential;
 
+  bool get isLinkeInCard =>
+      credentialPreview.credentialSubjectModel.credentialSubjectType ==
+      CredentialSubjectType.linkedInCard;
+
+  bool get isEbsiCard =>
+      credentialPreview.credentialSubjectModel.credentialSubjectType.isEbsiCard;
+
+  bool get disAllowDelete =>
+      credentialPreview.credentialSubjectModel.credentialSubjectType ==
+          CredentialSubjectType.walletCredential ||
+      credentialPreview.credentialSubjectModel.credentialCategory ==
+          CredentialCategory.blockchainAccountsCards;
+
   @override
   List<Object?> get props => [
         id,

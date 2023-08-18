@@ -152,19 +152,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.removeLast();
         }
 
-        final bool isLinkeInCard = widget.credentialModel.credentialPreview
-                .credentialSubjectModel.credentialSubjectType ==
-            CredentialSubjectType.linkedInCard;
-
-        final bool isEbsiCard = widget.credentialModel.credentialPreview
-            .credentialSubjectModel.credentialSubjectType.isEbsiCard;
-
-        final bool disAllowDelete = widget.credentialModel.credentialPreview
-                    .credentialSubjectModel.credentialSubjectType ==
-                CredentialSubjectType.walletCredential ||
-            widget.credentialModel.credentialPreview.credentialSubjectModel
-                    .credentialCategory ==
-                CredentialCategory.blockchainAccountsCards;
+        final data = widget.credentialModel.jwt ?? widget.credentialModel.data;
 
         return BasePage(
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
@@ -270,6 +258,18 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               credentialModel: widget.credentialModel,
                             ),
                           ],
+                          CredentialField(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 8,
+                            ),
+                            title: l10n.format,
+                            value: data.toString(),
+                            titleColor:
+                                Theme.of(context).colorScheme.titleColor,
+                            valueColor:
+                                Theme.of(context).colorScheme.valueColor,
+                          ),
                         ],
                         if (state.credentialDetailTabStatus ==
                             CredentialDetailTabStatus.activity) ...[
@@ -303,23 +303,25 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         MyOutlinedButton(
-                          onPressed: disAllowDelete ? null : delete,
+                          onPressed: widget.credentialModel.disAllowDelete
+                              ? null
+                              : delete,
                           text: l10n.credentialDetailDeleteCard,
                         ),
                         const SizedBox(height: 8),
                         MyOutlinedButton(
-                          text: isLinkeInCard
+                          text: widget.credentialModel.isLinkeInCard
                               ? l10n.exportToLinkedIn
                               : l10n.share,
                           onPressed: () {
-                            if (isLinkeInCard) {
+                            if (widget.credentialModel.isLinkeInCard) {
                               Navigator.of(context).push<void>(
                                 GetLinkedinInfoPage.route(
                                   credentialModel: widget.credentialModel,
                                 ),
                               );
                             } else {
-                              if (isEbsiCard) {
+                              if (widget.credentialModel.isEbsiCard) {
                                 /// removing type that was added in add_ebsi_credential.dart
                                 widget.credentialModel.data['credentialSubject']
                                     .remove('type');

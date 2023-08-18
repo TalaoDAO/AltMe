@@ -20,10 +20,6 @@ class CredentialManifestDetails extends StatelessWidget {
     final titleColor = Theme.of(context).colorScheme.titleColor;
     final valueColor = Theme.of(context).colorScheme.valueColor;
 
-    final l10n = context.l10n;
-
-    final data = credentialModel.jwt ?? credentialModel.data;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -37,13 +33,6 @@ class CredentialManifestDetails extends StatelessWidget {
         DisplayPropertiesWidget(
           properties: outputDescriptor.display?.properties,
           credentialModel: credentialModel,
-          titleColor: titleColor,
-          valueColor: valueColor,
-        ),
-        CredentialField(
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-          title: l10n.format,
-          value: data.toString(),
           titleColor: titleColor,
           valueColor: valueColor,
         ),
