@@ -193,6 +193,20 @@ class CredentialModel extends Equatable {
     return map['id'] as String?;
   }
 
+  bool get isPolygonssuer => issuer.contains('did:polygonid');
+
+  bool get isVerifiableDiplomaType =>
+      credentialPreview.type.contains('VerifiableDiploma');
+
+  bool get isPolygonIdCard =>
+      credentialPreview.credentialSubjectModel.id
+          ?.contains('did:polygonid:polygon:') ??
+      false;
+
+  bool get isDefaultCredential =>
+      credentialPreview.credentialSubjectModel.credentialSubjectType ==
+      CredentialSubjectType.defaultCredential;
+
   @override
   List<Object?> get props => [
         id,

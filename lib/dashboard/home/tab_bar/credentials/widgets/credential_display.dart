@@ -71,7 +71,7 @@ class CredentialDisplay extends StatelessWidget {
         }
 
       case CredentialSubjectType.defaultCredential:
-        if (isPolygonIdCard(credentialModel)) {
+        if (credentialModel.isPolygonIdCard) {
           return DefaultPolygonIdCardWidget(credentialModel: credentialModel);
         } else {
           switch (credDisplayType) {

@@ -74,7 +74,7 @@ class DefaultCredentialDetailWidget extends StatelessWidget {
             decoration: BaseBoxDecoration(
               borderRadius: BorderRadius.circular(Sizes.credentialBorderRadius),
               color: backgroundColor,
-              gradient: isVerifiableDiplomaType(credentialModel)
+              gradient: credentialModel.isVerifiableDiplomaType
                   ? const LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,

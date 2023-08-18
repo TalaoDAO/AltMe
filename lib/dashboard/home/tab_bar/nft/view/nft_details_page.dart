@@ -217,10 +217,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                   size: Sizes.icon,
                 ),
                 onPressed: () {
-                  openAddressBlockchainExplorer(
-                    context.read<ManageNetworkCubit>().state.network,
-                    nftModel.contractAddress,
-                  );
+                  context
+                      .read<ManageNetworkCubit>()
+                      .state
+                      .network
+                      .openAddressBlockchainExplorer(nftModel.contractAddress);
                 },
               ),
             ],
@@ -265,10 +266,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 size: Sizes.icon,
               ),
               onPressed: () {
-                openAddressBlockchainExplorer(
-                  context.read<ManageNetworkCubit>().state.network,
-                  nftModel.creators!.first,
-                );
+                context
+                    .read<ManageNetworkCubit>()
+                    .state
+                    .network
+                    .openAddressBlockchainExplorer(nftModel.creators!.first);
               },
             ),
           ],
@@ -296,10 +298,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 size: Sizes.icon,
               ),
               onPressed: () {
-                openAddressBlockchainExplorer(
-                  context.read<ManageNetworkCubit>().state.network,
-                  nftModel.publishers!.first,
-                );
+                context
+                    .read<ManageNetworkCubit>()
+                    .state
+                    .network
+                    .openAddressBlockchainExplorer(nftModel.publishers!.first);
               },
             ),
           ],
@@ -348,10 +351,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               size: Sizes.icon,
             ),
             onPressed: () {
-              openAddressBlockchainExplorer(
-                context.read<ManageNetworkCubit>().state.network,
-                nftModel.contractAddress,
-              );
+              context
+                  .read<ManageNetworkCubit>()
+                  .state
+                  .network
+                  .openAddressBlockchainExplorer(nftModel.contractAddress);
             },
           ),
         ],
@@ -378,10 +382,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 size: Sizes.icon,
               ),
               onPressed: () {
-                openAddressBlockchainExplorer(
-                  context.read<ManageNetworkCubit>().state.network,
-                  nftModel.minterAddress!,
-                );
+                context
+                    .read<ManageNetworkCubit>()
+                    .state
+                    .network
+                    .openAddressBlockchainExplorer(nftModel.minterAddress!);
               },
             ),
           ],

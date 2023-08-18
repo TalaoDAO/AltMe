@@ -60,11 +60,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     /// manually categorizing default credential
     for (final credential in savedCredentials) {
-      final isDefaultCredential = credential
-              .credentialPreview.credentialSubjectModel.credentialSubjectType ==
-          CredentialSubjectType.defaultCredential;
-
-      if (isDefaultCredential && isVerifiableDiplomaType(credential)) {
+      if (credential.isDefaultCredential &&
+          credential.isVerifiableDiplomaType) {
         final updatedCredential = credential.copyWith(
           credentialPreview: credential.credentialPreview.copyWith(
             credentialSubjectModel:
@@ -74,7 +71,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           ),
         );
         updatedCredentials.add(updatedCredential);
-      } else if (isDefaultCredential && isPolygonIdCard(credential)) {
+      } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
         final updatedCredential = credential.copyWith(
           credentialPreview: credential.credentialPreview.copyWith(
             credentialSubjectModel:
@@ -206,11 +203,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   }) async {
     late final List<CredentialModel> credentials;
 
-    final isDefaultCredential = credential
-            .credentialPreview.credentialSubjectModel.credentialSubjectType ==
-        CredentialSubjectType.defaultCredential;
-
-    if (isDefaultCredential && isVerifiableDiplomaType(credential)) {
+    if (credential.isDefaultCredential && credential.isVerifiableDiplomaType) {
       final updatedCredential = credential.copyWith(
         credentialPreview: credential.credentialPreview.copyWith(
           credentialSubjectModel:
@@ -222,7 +215,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       await replaceCredential(credential: updatedCredential);
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
-    } else if (isDefaultCredential && isPolygonIdCard(credential)) {
+    } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
       final updatedCredential = credential.copyWith(
         credentialPreview: credential.credentialPreview.copyWith(
           credentialSubjectModel:

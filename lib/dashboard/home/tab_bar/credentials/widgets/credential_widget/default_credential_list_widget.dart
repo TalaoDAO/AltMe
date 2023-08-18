@@ -53,7 +53,7 @@ class DefaultCredentialListWidget extends StatelessWidget {
         child: DecoratedBox(
           decoration: BaseBoxDecoration(
             color: backgroundColor,
-            gradient: isVerifiableDiplomaType(credentialModel)
+            gradient: credentialModel.isVerifiableDiplomaType
                 ? const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,

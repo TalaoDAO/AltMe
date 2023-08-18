@@ -136,7 +136,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
             onTrasactionHashTap: () {
               final network = context.read<ManageNetworkCubit>().state.network;
               if (state.transactionHash != null) {
-                openBlockchainExplorer(network, state.transactionHash!);
+                network.openBlockchainExplorer(state.transactionHash!);
               }
             },
             onDoneButtonClick: () {

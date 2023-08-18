@@ -19,64 +19,6 @@ import 'package:key_generator/key_generator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-Future<void> openBlockchainExplorer(
-  BlockchainNetwork network,
-  String txHash,
-) async {
-  if (network is TezosNetwork) {
-    await LaunchUrl.launch(
-      'https://tzkt.io/$txHash',
-    );
-  } else if (network is PolygonNetwork) {
-    await LaunchUrl.launch(
-      'https://polygonscan.com/tx/$txHash',
-    );
-  } else if (network is BinanceNetwork) {
-    await LaunchUrl.launch(
-      'https://www.bscscan.com/tx/$txHash',
-    );
-  } else if (network is FantomNetwork) {
-    await LaunchUrl.launch(
-      'https://ftmscan.com/tx/$txHash',
-    );
-  } else if (network is EthereumNetwork) {
-    await LaunchUrl.launch(
-      'https://etherscan.io/tx/$txHash',
-    );
-  } else {
-    UnimplementedError();
-  }
-}
-
-Future<void> openAddressBlockchainExplorer(
-  BlockchainNetwork network,
-  String address,
-) async {
-  if (network is TezosNetwork) {
-    await LaunchUrl.launch(
-      'https://tzkt.io/$address/operations',
-    );
-  } else if (network is PolygonNetwork) {
-    await LaunchUrl.launch(
-      'https://polygonscan.com/address/$address',
-    );
-  } else if (network is BinanceNetwork) {
-    await LaunchUrl.launch(
-      'https://www.bscscan.com/address/$address',
-    );
-  } else if (network is FantomNetwork) {
-    await LaunchUrl.launch(
-      'https://ftmscan.com/address/$address',
-    );
-  } else if (network is EthereumNetwork) {
-    await LaunchUrl.launch(
-      'https://etherscan.io/address/$address',
-    );
-  } else {
-    UnimplementedError();
-  }
-}
-
 String generateDefaultAccountName(
   int accountIndex,
   List<String> accountNameList,
@@ -102,10 +44,6 @@ String getIssuerDid({required Uri uriToCheck}) {
     }
   });
   return did;
-}
-
-bool isPolygonssuer(CredentialModel credentialModel) {
-  return credentialModel.issuer.contains('did:polygonid');
 }
 
 bool isValidPrivateKey(String value) {
@@ -329,16 +267,6 @@ Future<String> getRandomP256PrivateKey(
   } else {
     return p256PrivateKey;
   }
-}
-
-bool isVerifiableDiplomaType(CredentialModel credentialModel) {
-  return credentialModel.credentialPreview.type.contains('VerifiableDiploma');
-}
-
-bool isPolygonIdCard(CredentialModel credentialModel) {
-  return credentialModel.credentialPreview.credentialSubjectModel.id
-          ?.contains('did:polygonid:polygon:') ??
-      false;
 }
 
 Map<String, dynamic> decodePayload({

@@ -94,7 +94,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           status: AppStatus.idle,
         ),
       );
-    } else if (isPolygonssuer(item)) {
+    } else if (item.isPolygonssuer) {
       final mnemonic =
           await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
       await polygonIdCubit.initialise();
