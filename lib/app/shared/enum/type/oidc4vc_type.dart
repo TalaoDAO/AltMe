@@ -319,8 +319,8 @@ extension OIDC4VCTypeX on OIDC4VCType {
       case OIDC4VCType.EBSIV2:
       case OIDC4VCType.GAIAX:
       case OIDC4VCType.HEDERA:
-        return true;
       case OIDC4VCType.EBSIV3:
+        return true;
       case OIDC4VCType.JWTVC:
         return false;
     }
