@@ -152,7 +152,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.removeLast();
         }
 
-        final data = widget.credentialModel.jwt ?? widget.credentialModel.data;
+        final String format =
+            widget.credentialModel.jwt != null ? 'JWT Proof' : 'LDP Proof';
 
         return BasePage(
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
@@ -264,7 +265,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               vertical: 8,
                             ),
                             title: l10n.format,
-                            value: data.toString(),
+                            value: format,
                             titleColor:
                                 Theme.of(context).colorScheme.titleColor,
                             valueColor:
