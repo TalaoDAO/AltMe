@@ -111,7 +111,7 @@ class _UserPinViewState extends State<UserPinView> {
             children: [
               const SizedBox(height: Sizes.space2XLarge),
               Text(
-                "Please insert your pin.????",
+                l10n.pleaseInsertThePinCode,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge,
               ),

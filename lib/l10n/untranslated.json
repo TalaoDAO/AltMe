@@ -842,7 +842,8 @@
     "oidc4vcProfile",
     "pleaseSwitchToCorrectOIDC4VCProfile",
     "authenticationSuccess",
-    "format"
+    "format",
+    "pleaseInsertThePinCode"
   ],
 
   "es": [
@@ -1688,7 +1689,8 @@
     "oidc4vcProfile",
     "pleaseSwitchToCorrectOIDC4VCProfile",
     "authenticationSuccess",
-    "format"
+    "format",
+    "pleaseInsertThePinCode"
   ],
 
   "fr": [
@@ -1837,7 +1839,8 @@
     "oidc4vcProfile",
     "pleaseSwitchToCorrectOIDC4VCProfile",
     "authenticationSuccess",
-    "format"
+    "format",
+    "pleaseInsertThePinCode"
   ],
 
   "it": [
@@ -2683,6 +2686,7 @@
     "oidc4vcProfile",
     "pleaseSwitchToCorrectOIDC4VCProfile",
     "authenticationSuccess",
-    "format"
+    "format",
+    "pleaseInsertThePinCode"
   ]
 }
