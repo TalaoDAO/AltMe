@@ -154,20 +154,18 @@ class _SplashViewState extends State<SplashView> {
           if (oidc4vcType.isEnabled &&
               uri.toString().startsWith(oidc4vcType.offerPrefix)) {
             currentOIIDC4VCType = oidc4vcType;
+            break;
           }
         }
 
         if (currentOIIDC4VCType != null) {
           // ignore: require_trailing_commas
-          await initiateOIDC4VCCredentialIssuance(
-            scannedResponse: uri.toString(),
-            credentialsCubit: context.read<CredentialsCubit>(),
-            oidc4vcType: currentOIIDC4VCType,
-            didKitProvider: DIDKitProvider(),
-            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-            secureStorageProvider: secure_storage.getSecureStorage,
-            dioClient: DioClient('', Dio()),
-          );
+          await context.read<QRCodeScanCubit>().startOIDC4VCCredentialIssuance(
+                scannedResponse: uri.toString(),
+                currentOIIDC4VCType: currentOIIDC4VCType,
+                qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                dioClient: DioClient('', Dio()),
+              );
         }
       }
     });

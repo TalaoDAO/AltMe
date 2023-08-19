@@ -197,6 +197,7 @@ class OIDC4VC {
     String? preAuthorizedCode,
     String? mnemonic,
     String? privateKey,
+    String? userPin,
   }) async {
     final kIssuer = getIssuer(
       preAuthorizedCode: preAuthorizedCode,
@@ -204,7 +205,11 @@ class OIDC4VC {
       credentialRequestUri: credentialRequestUri,
     );
 
-    final tokenData = buildTokenData(preAuthorizedCode, credentialRequestUri);
+    final tokenData = buildTokenData(
+      preAuthorizedCode: preAuthorizedCode,
+      credentialRequestUri: credentialRequestUri,
+      userPin: userPin,
+    );
 
     final openidConfigurationUrl = '$kIssuer/.well-known/openid-configuration';
 
@@ -268,10 +273,11 @@ class OIDC4VC {
     accessToken = null;
   }
 
-  Map<String, dynamic> buildTokenData(
+  Map<String, dynamic> buildTokenData({
+    required Uri credentialRequestUri,
     String? preAuthorizedCode,
-    Uri credentialRequestUri,
-  ) {
+    String? userPin,
+  }) {
     late Map<String, dynamic> tokenData;
 
     if (preAuthorizedCode != null) {
@@ -288,6 +294,11 @@ class OIDC4VC {
         'grant_type': 'authorization_code',
       };
     }
+
+    if (userPin != null) {
+      tokenData['user_pin'] = userPin;
+    }
+
     return tokenData;
   }
 

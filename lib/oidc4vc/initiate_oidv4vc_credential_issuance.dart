@@ -17,6 +17,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required CredentialsCubit credentialsCubit,
   required SecureStorageProvider secureStorageProvider,
   required DioClient dioClient,
+  required String? userPin,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -44,7 +45,10 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   }
 
   if (credentialType is List<dynamic>) {
-    qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(credentialType);
+    qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
+      credentials: credentialType,
+      userPin: userPin,
+    );
   } else {
     final OIDC4VC oidc4vc = oidc4vcType.getOIDC4VC;
     await getAndAddCredential(
@@ -57,6 +61,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       secureStorageProvider: secureStorageProvider,
       isLastCall: true,
       dioClient: dioClient,
+      userPin: userPin,
     );
     oidc4vc.resetNonceAndAccessToken();
     qrCodeScanCubit.goBack();
@@ -73,6 +78,7 @@ Future<void> getAndAddCredential({
   required SecureStorageProvider secureStorageProvider,
   required bool isLastCall,
   required DioClient dioClient,
+  required String? userPin,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -130,6 +136,7 @@ Future<void> getAndAddCredential({
       privateKey: privateKey,
       credentialSupportedTypes: oidc4vcType.credentialSupported,
       indexValue: oidc4vcType.indexValue,
+      userPin: userPin,
     );
 
     await addOIDC4VCCredential(

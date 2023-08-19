@@ -8,16 +8,20 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
   const Oidc4vcCredentialPickPage({
     super.key,
     required this.credentials,
+    required this.userPin,
   });
 
   final List<dynamic> credentials;
+  final String? userPin;
 
   static Route<dynamic> route({
     required List<dynamic> credentials,
+    required String? userPin,
   }) =>
       MaterialPageRoute<void>(
         builder: (context) => Oidc4vcCredentialPickPage(
           credentials: credentials,
+          userPin: userPin,
         ),
         settings: const RouteSettings(name: '/Oidc4vcCredentialPickPage'),
       );
@@ -26,7 +30,10 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => Oidc4vcCredentialPickCubit(),
-      child: Oidc4vcCredentialPickView(credentials: credentials),
+      child: Oidc4vcCredentialPickView(
+        credentials: credentials,
+        userPin: userPin,
+      ),
     );
   }
 }
@@ -35,9 +42,11 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
   const Oidc4vcCredentialPickView({
     super.key,
     required this.credentials,
+    required this.userPin,
   });
 
   final List<dynamic> credentials;
+  final String? userPin;
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +82,10 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                             creds.add(credentials[i]);
                           }
 
-                          context
-                              .read<QRCodeScanCubit>()
-                              .addCredentialsInLoop(creds);
+                          context.read<QRCodeScanCubit>().addCredentialsInLoop(
+                                credentials: creds,
+                                userPin: userPin,
+                              );
                         },
                   text: l10n.proceed,
                 ),

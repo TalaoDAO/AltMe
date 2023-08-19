@@ -14,4 +14,5 @@ export 'search/search.dart';
 export 'select_network_fee_bottom_sheet/select_network_fee_bottom_sheet.dart';
 export 'self_issued_credential_button/self_issued_credential_button.dart';
 export 'src/src.dart';
+export 'user_pin/user_pin.dart';
 export 'wert/wert.dart';
