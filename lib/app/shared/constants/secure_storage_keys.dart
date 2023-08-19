@@ -20,7 +20,13 @@ class SecureStorageKeys {
   static const String isHumanityProofEnabled = 'isHumanityProofEnabled';
   static const String isWalletIntegrityEnabled = 'isWalletIntegrityEnabled';
   static const String isBiometricEnabled = 'fingerprintEnabled';
+
   static const String alertEnabled = 'alertEnabled';
+  static const String userConsentForIssuerAccess = 'userConsentForIssuerAccess';
+  static const String userConsentForVerifierAccess =
+      'userConsentForVerifierAccess';
+  static const String userPINCodeForAuthentication =
+      'userPINCodeForAuthentication';
 
   static const String pinCode = 'pinCode';
   static const String data = 'data';

@@ -148,21 +148,14 @@ class _SplashViewState extends State<SplashView> {
         beaconData = value;
       }
       if (uri.scheme == 'openid' && uri.authority == 'initiate_issuance') {
-        OIDC4VCType? currentOIIDC4VCType;
+        final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
+            getOIDC4VCTypeForIssuance(uri.toString());
 
-        for (final oidc4vcType in OIDC4VCType.values) {
-          if (oidc4vcType.isEnabled &&
-              uri.toString().startsWith(oidc4vcType.offerPrefix)) {
-            currentOIIDC4VCType = oidc4vcType;
-            break;
-          }
-        }
-
-        if (currentOIIDC4VCType != null) {
+        if (currentOIIDC4VCTypeForIssuance != null) {
           // ignore: require_trailing_commas
           await context.read<QRCodeScanCubit>().startOIDC4VCCredentialIssuance(
                 scannedResponse: uri.toString(),
-                currentOIIDC4VCType: currentOIIDC4VCType,
+                currentOIIDC4VCType: currentOIIDC4VCTypeForIssuance,
                 qrCodeScanCubit: context.read<QRCodeScanCubit>(),
                 dioClient: DioClient('', Dio()),
               );

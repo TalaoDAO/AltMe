@@ -90,9 +90,27 @@ class ProfileCubit extends Cubit<ProfileState> {
               .get(SecureStorageKeys.isBiometricEnabled)) ==
           'true';
 
-      final isAlertEnabled =
-          (await secureStorageProvider.get(SecureStorageKeys.alertEnabled)) ==
-              'true';
+      final alertValue =
+          await secureStorageProvider.get(SecureStorageKeys.alertEnabled);
+      final isAlertEnabled = alertValue == null || alertValue == 'true';
+
+      final userConsentForIssuerAccessValue = await secureStorageProvider
+          .get(SecureStorageKeys.userConsentForIssuerAccess);
+      final userConsentForIssuerAccess =
+          userConsentForIssuerAccessValue == null ||
+              userConsentForIssuerAccessValue == 'true';
+
+      final userConsentForVerifierAccessValue = await secureStorageProvider
+          .get(SecureStorageKeys.userConsentForVerifierAccess);
+      final userConsentForVerifierAccess =
+          userConsentForVerifierAccessValue == null ||
+              userConsentForVerifierAccessValue == 'true';
+
+      final userPINCodeForAuthenticationValue = await secureStorageProvider
+          .get(SecureStorageKeys.userPINCodeForAuthentication);
+      final userPINCodeForAuthentication =
+          userPINCodeForAuthenticationValue == null ||
+              userPINCodeForAuthenticationValue == 'true';
 
       var oidc4vcType = OIDC4VCType.EBSIV2;
 
@@ -121,6 +139,9 @@ class ProfileCubit extends Cubit<ProfileState> {
         isEnterprise: isEnterprise,
         isBiometricEnabled: isBiometricEnabled,
         isAlertEnabled: isAlertEnabled,
+        userConsentForIssuerAccess: userConsentForIssuerAccess,
+        userConsentForVerifierAccess: userConsentForVerifierAccess,
+        userPINCodeForAuthentication: userPINCodeForAuthentication,
         oidc4vcType: oidc4vcType,
       );
 
@@ -204,6 +225,21 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
+        SecureStorageKeys.userConsentForIssuerAccess,
+        profileModel.userConsentForIssuerAccess.toString(),
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.userConsentForVerifierAccess,
+        profileModel.userConsentForVerifierAccess.toString(),
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.userPINCodeForAuthentication,
+        profileModel.userPINCodeForAuthentication.toString(),
+      );
+
+      await secureStorageProvider.set(
         SecureStorageKeys.oidc4vcType,
         profileModel.oidc4vcType.name,
       );
@@ -238,6 +274,24 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> setAlertEnabled({bool enabled = false}) async {
     final profileModel = state.model.copyWith(isAlertEnabled: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> setUserConsentForIssuerAccess({bool enabled = false}) async {
+    final profileModel =
+        state.model.copyWith(userConsentForIssuerAccess: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> setUserConsentForVerifierAccess({bool enabled = false}) async {
+    final profileModel =
+        state.model.copyWith(userConsentForVerifierAccess: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> setUserPINCodeForAuthentication({bool enabled = false}) async {
+    final profileModel =
+        state.model.copyWith(userPINCodeForAuthentication: enabled);
     await update(profileModel);
   }
 

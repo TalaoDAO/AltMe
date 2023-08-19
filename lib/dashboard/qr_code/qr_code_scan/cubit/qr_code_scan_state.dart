@@ -33,7 +33,7 @@ class QRCodeScanState extends Equatable {
     );
   }
 
-  QRCodeScanState acceptHost({required bool isRequestVerified}) {
+  QRCodeScanState acceptHost({bool isRequestVerified = true}) {
     return QRCodeScanState(
       status: QrScanStatus.acceptHost,
       isScan: isScan,
@@ -64,7 +64,7 @@ class QRCodeScanState extends Equatable {
       message: message,
       isScan: isScan ?? this.isScan,
       uri: uri ?? this.uri,
-      route: route ?? this.route,
+      route: route, // route should be cleared when one route is done
       isRequestVerified: isRequestVerified,
     );
   }

@@ -17,6 +17,9 @@ class ProfileModel extends Equatable {
     required this.isEnterprise,
     required this.isBiometricEnabled,
     required this.isAlertEnabled,
+    required this.userConsentForIssuerAccess,
+    required this.userConsentForVerifierAccess,
+    required this.userPINCodeForAuthentication,
     this.companyName = '',
     this.companyWebsite = '',
     this.jobTitle = '',
@@ -39,6 +42,9 @@ class ProfileModel extends Equatable {
         isEnterprise: false,
         isBiometricEnabled: false,
         isAlertEnabled: false,
+        userConsentForIssuerAccess: true,
+        userConsentForVerifierAccess: true,
+        userPINCodeForAuthentication: true,
         tezosNetwork: TezosNetwork.mainNet(),
         oidc4vcType: OIDC4VCType.EBSIV2,
       );
@@ -56,6 +62,9 @@ class ProfileModel extends Equatable {
   final bool isEnterprise;
   final bool isBiometricEnabled;
   final bool isAlertEnabled;
+  final bool userConsentForIssuerAccess;
+  final bool userConsentForVerifierAccess;
+  final bool userPINCodeForAuthentication;
   final OIDC4VCType oidc4vcType;
 
   @override
@@ -73,6 +82,9 @@ class ProfileModel extends Equatable {
         isEnterprise,
         isBiometricEnabled,
         isAlertEnabled,
+        userConsentForIssuerAccess,
+        userConsentForVerifierAccess,
+        userPINCodeForAuthentication,
         oidc4vcType,
       ];
 
@@ -92,6 +104,9 @@ class ProfileModel extends Equatable {
     bool? isEnterprise,
     bool? isBiometricEnabled,
     bool? isAlertEnabled,
+    bool? userConsentForIssuerAccess,
+    bool? userConsentForVerifierAccess,
+    bool? userPINCodeForAuthentication,
     OIDC4VCType? oidc4vcType,
   }) {
     return ProfileModel(
@@ -108,6 +123,12 @@ class ProfileModel extends Equatable {
       isEnterprise: isEnterprise ?? this.isEnterprise,
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
       isAlertEnabled: isAlertEnabled ?? this.isAlertEnabled,
+      userConsentForIssuerAccess:
+          userConsentForIssuerAccess ?? this.userConsentForIssuerAccess,
+      userConsentForVerifierAccess:
+          userConsentForVerifierAccess ?? this.userConsentForVerifierAccess,
+      userPINCodeForAuthentication:
+          userPINCodeForAuthentication ?? this.userPINCodeForAuthentication,
       oidc4vcType: oidc4vcType ?? this.oidc4vcType,
     );
   }

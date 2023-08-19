@@ -9,6 +9,7 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/oidc4vc/initiate_oidv4vc_credential_issuance.dart';
 import 'package:altme/oidc4vc/verify_encoded_data.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
@@ -96,13 +97,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         /// wallet connect
         await walletConnectCubit.connect(scannedResponse);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-      } else if (scannedResponse.startsWith('{"id":') ||
-          scannedResponse.startsWith('{"body":{"') ||
-          scannedResponse.startsWith('{"from": "did:polygonid:') ||
-          scannedResponse.startsWith('{"to": "did:polygonid:') ||
-          scannedResponse.startsWith('{"thid":') ||
-          scannedResponse.startsWith('{"typ":') ||
-          scannedResponse.startsWith('{"type":')) {
+      } else if (isPolygonIdUrl(scannedResponse)) {
         /// polygon id
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
         await polygonIdCubit.polygonIdFunction(scannedResponse);
@@ -181,11 +176,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     try {
       final isOID4VCUrl = state.uri.toString().startsWith('openid');
 
-      if (!isOID4VCUrl) {
-        emit(state.acceptHost(isRequestVerified: true));
-        return;
-      }
-
       /// SIOPV2 : wallet returns an id_token which is a simple jwt
 
       /// OIDC4VP : wallet returns one or several VP according to the request :
@@ -193,9 +183,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       /// presentation_definition as the verifier can request with AND / OR as :
       /// i want to see your Passport OR your ID card AND your email pass...
 
-      if (uri.toString().startsWith('openid://?') ||
-          uri.toString().startsWith('openid-vc://?') ||
-          uri.toString().startsWith('openid-hedera://?')) {
+      if (isOID4VCUrl &&
+          (uri.toString().startsWith('openid://?') ||
+              uri.toString().startsWith('openid-vc://?') ||
+              uri.toString().startsWith('openid-hedera://?'))) {
+        /// verfier case
         final OIDC4VCType currentOIIDC4VCType =
             profileCubit.state.model.oidc4vcType;
 
@@ -225,25 +217,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           /// verifier side (oidc4vp) or (siopv2 oidc4vc) with request_uri
           /// verify the encoded data first
           await verifyJWTBeforeLaunchingOIDC4VCANDSIOPV2Flow();
+          return;
         } else {
-          final responseType =
-              state.uri?.queryParameters['response_type'] ?? '';
-
-          log.i('responseType - $responseType');
-          if (responseType == 'id_token') {
-            /// verifier side (siopv2) with request uri as value
-            await completeSiopV2Flow();
-            return;
-          } else if (responseType == 'vp_token' ||
-              responseType == 'id_token vp_token') {
-            /// verifier side (oidc4vp) or (oidc4vp and siopv2) with request
-            /// uri as value
-            await launchOIDC4VPAndSIOPV2Flow();
-            return;
-          }
+          emit(state.acceptHost());
         }
       } else {
-        emit(state.acceptHost(isRequestVerified: true));
+        emit(state.acceptHost());
       }
     } catch (e) {
       log.e(e);
@@ -277,22 +256,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     late final dynamic data;
 
     try {
-      OIDC4VCType? currentOIIDC4VCType;
+      final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
+          getOIDC4VCTypeForIssuance(state.uri.toString());
 
-      for (final oidc4vcType in OIDC4VCType.values) {
-        if (oidc4vcType.isEnabled &&
-            state.uri.toString().startsWith(oidc4vcType.offerPrefix)) {
-          currentOIIDC4VCType = oidc4vcType;
-          break;
-        }
-      }
-
-      if (currentOIIDC4VCType != null) {
+      if (currentOIIDC4VCTypeForIssuance != null) {
         /// issuer side (oidc4VCI)
 
         await startOIDC4VCCredentialIssuance(
           scannedResponse: state.uri.toString(),
-          currentOIIDC4VCType: currentOIIDC4VCType,
+          currentOIIDC4VCType: currentOIIDC4VCTypeForIssuance,
           qrCodeScanCubit: qrCodeScanCubit,
           dioClient: dioClient,
         );
@@ -302,54 +274,110 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       if (state.uri.toString().startsWith('openid://?') ||
           state.uri.toString().startsWith('openid-vc://?') ||
           state.uri.toString().startsWith('openid-hedera://?')) {
-        final Map<String, dynamic> response =
-            decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
-        encodedData = null;
+        final String? requestUri = state.uri?.queryParameters['request_uri'];
+        dynamic responseType;
 
-        final responseType = response['response_type'];
-        final redirectUri = response['redirect_uri'];
-        final nonce = response['nonce'];
-        final clientId = response['client_id'];
-        final claims = response['claims'];
-        final presentationDefinition = response['presentation_definition'];
+        /// check if request uri is provided or not
+        if (requestUri != null) {
+          /// verifier side (oidc4vp) or (siopv2 oidc4vc) with request_uri
+          /// afer verification process
+          final Map<String, dynamic> response =
+              decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
+          encodedData = null;
 
-        final queryJson = <String, dynamic>{};
-        if (redirectUri != null) {
-          queryJson['redirect_uri'] = redirectUri;
-        }
-        if (nonce != null) {
-          queryJson['nonce'] = nonce;
-        }
-        if (clientId != null) {
-          queryJson['client_id'] = clientId;
-        }
-        if (responseType != null) {
-          queryJson['response_type'] = responseType;
-        }
-        if (claims != null) {
-          queryJson['claims'] = jsonEncode(claims).replaceAll('"', "'");
-        }
-        if (presentationDefinition != null) {
-          queryJson['presentation_definition'] =
-              jsonEncode(presentationDefinition).replaceAll('"', "'");
-        }
+          responseType = response['response_type'];
+          final redirectUri = response['redirect_uri'];
+          final nonce = response['nonce'];
+          final clientId = response['client_id'];
+          final claims = response['claims'];
+          final presentationDefinition = response['presentation_definition'];
 
-        final String queryString = Uri(queryParameters: queryJson).query;
+          final queryJson = <String, dynamic>{};
+          if (redirectUri != null) {
+            queryJson['redirect_uri'] = redirectUri;
+          }
+          if (nonce != null) {
+            queryJson['nonce'] = nonce;
+          }
+          if (clientId != null) {
+            queryJson['client_id'] = clientId;
+          }
+          if (responseType != null) {
+            queryJson['response_type'] = responseType;
+          }
+          if (claims != null) {
+            queryJson['claims'] = jsonEncode(claims).replaceAll('"', "'");
+          }
+          if (presentationDefinition != null) {
+            queryJson['presentation_definition'] =
+                jsonEncode(presentationDefinition).replaceAll('"', "'");
+          }
 
-        final String newUrl = '${state.uri!}&$queryString';
+          final String queryString = Uri(queryParameters: queryJson).query;
 
-        emit(state.copyWith(uri: Uri.parse(newUrl)));
-        log.i('uri - $newUrl');
+          final String newUrl = '${state.uri!}&$queryString';
+
+          emit(state.copyWith(uri: Uri.parse(newUrl)));
+          log.i('uri - $newUrl');
+        } else {
+          responseType = state.uri?.queryParameters['response_type'] ?? '';
+        }
 
         log.i('responseType - $responseType');
         if (responseType == 'id_token') {
           /// verifier side (siopv2)
-          await completeSiopV2Flow();
-        } else if (responseType == 'vp_token' ||
-            responseType == 'id_token vp_token') {
-          /// verifier side (oidc4vp) or (oidc4vp and siopv2)
+
+          ///here we need to add pincode verification
+          final bool userPINCodeForAuthentication =
+              profileCubit.state.model.userPINCodeForAuthentication;
+
+          if (userPINCodeForAuthentication) {
+            emit(
+              state.copyWith(
+                qrScanStatus: QrScanStatus.success,
+                route: PinCodePage.route(
+                  isValidCallback: () async {
+                    await completeSiopV2Flow();
+                    return;
+                  },
+                  restrictToBack: false,
+                ),
+              ),
+            );
+            return;
+          } else {
+            await completeSiopV2Flow();
+            return;
+          }
+        } else if (responseType == 'vp_token') {
+          /// verifier side (oidc4vp)
           await launchOIDC4VPAndSIOPV2Flow();
           return;
+        } else if (responseType == 'id_token vp_token') {
+          /// verifier side (oidc4vp) or (oidc4vp and siopv2)
+
+          ///here we need to add pincode verification
+          final bool userPINCodeForAuthentication =
+              profileCubit.state.model.userPINCodeForAuthentication;
+
+          if (userPINCodeForAuthentication) {
+            emit(
+              state.copyWith(
+                qrScanStatus: QrScanStatus.success,
+                route: PinCodePage.route(
+                  isValidCallback: () async {
+                    await launchOIDC4VPAndSIOPV2Flow();
+                    return;
+                  },
+                  restrictToBack: false,
+                ),
+              ),
+            );
+            return;
+          } else {
+            await launchOIDC4VPAndSIOPV2Flow();
+            return;
+          }
         }
       }
 
@@ -731,12 +759,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
 
       if (isVerified == VerificationType.verified) {
-        emit(state.acceptHost(isRequestVerified: true));
+        emit(state.acceptHost());
       } else {
         emit(state.acceptHost(isRequestVerified: false));
       }
     } catch (e) {
-      emit(state.acceptHost(isRequestVerified: false));
+      emit(state.acceptHost());
     }
   }
 
@@ -809,17 +837,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? userPin,
   }) async {
     try {
-      OIDC4VCType? currentOIIDC4VCType;
-      for (final oidc4vcType in OIDC4VCType.values) {
-        if (oidc4vcType.isEnabled &&
-            state.uri.toString().startsWith(oidc4vcType.offerPrefix)) {
-          currentOIIDC4VCType = oidc4vcType;
-          break;
-        }
-      }
+      final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
+          getOIDC4VCTypeForIssuance(state.uri.toString());
 
-      if (currentOIIDC4VCType != null) {
-        final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
+      if (currentOIIDC4VCTypeForIssuance != null) {
+        final OIDC4VC oidc4vc = currentOIIDC4VCTypeForIssuance.getOIDC4VC;
 
         for (int i = 0; i < credentials.length; i++) {
           emit(state.loading());
@@ -828,7 +850,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             scannedResponse: state.uri.toString(),
             credentialsCubit: credentialsCubit,
             oidc4vc: oidc4vc,
-            oidc4vcType: currentOIIDC4VCType,
+            oidc4vcType: currentOIIDC4VCTypeForIssuance,
             didKitProvider: didKitProvider,
             secureStorageProvider: getSecureStorage,
             credentialType: credentialType.toString(),
@@ -860,6 +882,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   void goBack() {
     emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+  }
+
+  void clearRoute() {
+    emit(
+      state.copyWith(
+        qrScanStatus: QrScanStatus.idle,
+        route: null,
+      ),
+    );
   }
 
   Future<dynamic> fetchRequestUriPayload({required String url}) async {

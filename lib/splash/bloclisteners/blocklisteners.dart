@@ -5,6 +5,7 @@ import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
@@ -18,6 +19,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:polygonid/polygonid.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
@@ -210,91 +212,104 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
     if (state.status == QrScanStatus.acceptHost) {
       log.i('accept host');
+      LoadingView().show(context: context);
       if (state.uri != null) {
         final profileCubit = context.read<ProfileCubit>();
 
         var acceptHost = true;
-        var approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
+        final approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
 
         final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
+        final bool userConsentForIssuerAccess =
+            profileCubit.state.model.userConsentForIssuerAccess;
+        final bool userConsentForVerifierAccess =
+            profileCubit.state.model.userConsentForVerifierAccess;
 
-        if (isAlertEnable) {
-          bool isIssuerVerificationSettingTrue = true;
+        bool showPrompt = isAlertEnable ||
+            userConsentForIssuerAccess ||
+            userConsentForVerifierAccess;
 
-          String issuerVerificationUrl = '';
+        final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
+            getOIDC4VCTypeForIssuance(state.uri.toString());
 
-          /// issuer side (oidc4VCI)
-          if (state.uri!.toString().startsWith('openid://initiate_issuance?')) {
-            isIssuerVerificationSettingTrue = true;
-            issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
-          }
+        final bool isOpenIDUrl = state.uri.toString().startsWith('openid');
 
-          /// verifier side (siopv2) without request_uri
-          if (state.uri?.queryParameters['scope'] == 'openid') {
-            // isIssuerVerificationSettingTrue =
-            //     state.uri!.queryParameters['request_uri'] != null;
-            issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
-          }
+        if (showPrompt) {
+          if (isOpenIDUrl) {
+            /// OIDC4VCI Case
 
-          /// polygon id
-          if (state.uri.toString().startsWith('{"id":')) {
-            isIssuerVerificationSettingTrue = false;
-          }
-
-          log.i('checking issuer - $isIssuerVerificationSettingTrue');
-
-          if (isIssuerVerificationSettingTrue) {
-            try {
-              approvedIssuer = await CheckIssuer(
-                DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-                issuerVerificationUrl,
-                state.uri!,
-              ).isIssuerInApprovedList();
-            } catch (e) {
-              log.e(e);
-              if (e is MessageHandler) {
-                context.read<QRCodeScanCubit>().emitError(e);
-              } else {
-                context.read<QRCodeScanCubit>().emitError(
-                      ResponseMessage(
-                        ResponseString
-                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                      ),
-                    );
-              }
-              return;
+            if (currentOIIDC4VCTypeForIssuance != null) {
+              /// issuance case
+              if (!userConsentForIssuerAccess) showPrompt = false;
+            } else {
+              /// verification case
+              if (!userConsentForVerifierAccess) showPrompt = false;
             }
+          } else {
+            /// normal Case
+            if (!isAlertEnable) showPrompt = false;
           }
 
-          if (approvedIssuer.did.isEmpty && isIssuerVerificationSettingTrue) {
-            String subtitle = (approvedIssuer.did.isEmpty)
-                ? state.uri!.host
-                : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
-
-            /// issuer side (oidc4VCI)
-            if (state.uri!
-                .toString()
-                .startsWith('openid://initiate_issuance?')) {
-              subtitle = state.uri!.queryParameters['issuer'].toString();
-            }
-
-            /// verifier side (siopv2) without request_uri
-            // if (state.uri?.queryParameters['scope'] == 'openid') {
-            //  subtitle = state.uri!.queryParameters['request_uri'].toString();
-            // }
-
-            /// verifier side (siopv2) with request_uri
-            if (state.uri.toString().startsWith('openid://?client_id')) {
-              subtitle = state.uri!.queryParameters['request_uri'].toString();
-            }
-
+          if (showPrompt) {
             String title = l10n.scanPromptHost;
-
             if (!state.isRequestVerified) {
               title = '${l10n.service_not_registered_message} '
                   '${l10n.scanPromptHost}';
             }
 
+            String subtitle = (approvedIssuer.did.isEmpty)
+                ? state.uri!.host
+                : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
+
+            if (isOpenIDUrl) {
+              /// OIDC4VCI Case
+              if (currentOIIDC4VCTypeForIssuance != null) {
+                /// issuance case
+                switch (currentOIIDC4VCTypeForIssuance) {
+                  case OIDC4VCType.DEFAULT:
+                  case OIDC4VCType.HEDERA:
+                    final dynamic credentialOfferJson =
+                        await getCredentialOfferJson(
+                      scannedResponse: state.uri!.toString(),
+                      dioClient: DioClient('', Dio()),
+                    );
+                    if (credentialOfferJson == null) throw Exception();
+
+                    subtitle =
+                        credentialOfferJson['credential_issuer'].toString();
+
+                  case OIDC4VCType.GAIAX:
+                  case OIDC4VCType.EBSIV2:
+                    subtitle = state.uri!.queryParameters['issuer'].toString();
+
+                  case OIDC4VCType.EBSIV3:
+                  case OIDC4VCType.JWTVC:
+                    throw Exception();
+                }
+              } else {
+                /// verification case
+
+                final String? requestUri =
+                    state.uri?.queryParameters['request_uri'];
+
+                /// check if request uri is provided or not
+                if (requestUri != null) {
+                  final requestUri =
+                      state.uri!.queryParameters['request_uri'].toString();
+                  final dynamic response =
+                      await DioClient('', Dio()).get(requestUri);
+                  final Map<String, dynamic> decodedResponse = decodePayload(
+                    jwtDecode: JWTDecode(),
+                    token: response as String,
+                  );
+                  subtitle = decodedResponse['redirect_uri'].toString();
+                } else {
+                  subtitle = state.uri?.queryParameters['redirect_uri'] ?? '';
+                }
+              }
+            }
+
+            LoadingView().hide();
             acceptHost = await showDialog<bool>(
                   context: context,
                   builder: (BuildContext context) {
@@ -310,7 +325,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                 false;
           }
         }
-
+        LoadingView().hide();
         if (acceptHost) {
           await context.read<QRCodeScanCubit>().accept(
                 issuer: approvedIssuer,
@@ -330,11 +345,12 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
     if (state.status == QrScanStatus.success) {
       if (state.route != null) {
-        if (state.isScan) {
+        if (context.read<RouteCubit>().state == QRCODE_SCAN_PAGE) {
           await Navigator.of(context).pushReplacement<void, void>(state.route!);
         } else {
           await Navigator.of(context).push<void>(state.route!);
         }
+        context.read<QRCodeScanCubit>().clearRoute();
       }
     }
 

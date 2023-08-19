@@ -843,7 +843,10 @@
     "pleaseSwitchToCorrectOIDC4VCProfile",
     "authenticationSuccess",
     "format",
-    "pleaseInsertThePinCode"
+    "pleaseInsertThePinCode",
+    "userConsentForIssuerAccess",
+    "userConsentForVerifierAccess",
+    "userPINCodeForAuthentication"
   ],
 
   "es": [
@@ -1690,7 +1693,10 @@
     "pleaseSwitchToCorrectOIDC4VCProfile",
     "authenticationSuccess",
     "format",
-    "pleaseInsertThePinCode"
+    "pleaseInsertThePinCode",
+    "userConsentForIssuerAccess",
+    "userConsentForVerifierAccess",
+    "userPINCodeForAuthentication"
   ],
 
   "fr": [
@@ -1840,7 +1846,10 @@
     "pleaseSwitchToCorrectOIDC4VCProfile",
     "authenticationSuccess",
     "format",
-    "pleaseInsertThePinCode"
+    "pleaseInsertThePinCode",
+    "userConsentForIssuerAccess",
+    "userConsentForVerifierAccess",
+    "userPINCodeForAuthentication"
   ],
 
   "it": [
@@ -2687,6 +2696,9 @@
     "pleaseSwitchToCorrectOIDC4VCProfile",
     "authenticationSuccess",
     "format",
-    "pleaseInsertThePinCode"
+    "pleaseInsertThePinCode",
+    "userConsentForIssuerAccess",
+    "userConsentForVerifierAccess",
+    "userPINCodeForAuthentication"
   ]
 }

@@ -439,3 +439,21 @@ bool isUriAsValueValid(List<String> keys) =>
     keys.contains('client_id') &&
     keys.contains('redirect_uri') &&
     keys.contains('nonce');
+
+bool isPolygonIdUrl(String url) =>
+    url.startsWith('{"id":') ||
+    url.startsWith('{"body":{"') ||
+    url.startsWith('{"from": "did:polygonid:') ||
+    url.startsWith('{"to": "did:polygonid:') ||
+    url.startsWith('{"thid":') ||
+    url.startsWith('{"typ":') ||
+    url.startsWith('{"type":');
+
+OIDC4VCType? getOIDC4VCTypeForIssuance(String url) {
+  for (final oidc4vcType in OIDC4VCType.values) {
+    if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
+      return oidc4vcType;
+    }
+  }
+  return null;
+}
