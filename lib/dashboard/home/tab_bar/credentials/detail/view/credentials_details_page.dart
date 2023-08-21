@@ -153,7 +153,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         }
 
         final String format =
-            widget.credentialModel.jwt != null ? 'JWT Proof' : 'LDP Proof';
+            widget.credentialModel.jwt != null ? ' jwt_vc_json-ld' : 'ldp_vc';
 
         return BasePage(
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
