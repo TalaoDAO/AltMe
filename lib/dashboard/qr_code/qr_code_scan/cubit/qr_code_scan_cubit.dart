@@ -327,28 +327,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         if (responseType == 'id_token') {
           /// verifier side (siopv2)
 
-          ///here we need to add pincode verification
-          final bool userPINCodeForAuthentication =
-              profileCubit.state.model.userPINCodeForAuthentication;
-
-          if (userPINCodeForAuthentication) {
-            emit(
-              state.copyWith(
-                qrScanStatus: QrScanStatus.success,
-                route: PinCodePage.route(
-                  isValidCallback: () async {
-                    await completeSiopV2Flow();
-                    return;
-                  },
-                  restrictToBack: false,
-                ),
-              ),
-            );
-            return;
-          } else {
-            await completeSiopV2Flow();
-            return;
-          }
+          await completeSiopV2Flow();
+          return;
         } else if (responseType == 'vp_token') {
           /// verifier side (oidc4vp)
           await launchOIDC4VPAndSIOPV2Flow();
@@ -356,28 +336,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         } else if (responseType == 'id_token vp_token') {
           /// verifier side (oidc4vp) or (oidc4vp and siopv2)
 
-          ///here we need to add pincode verification
-          final bool userPINCodeForAuthentication =
-              profileCubit.state.model.userPINCodeForAuthentication;
-
-          if (userPINCodeForAuthentication) {
-            emit(
-              state.copyWith(
-                qrScanStatus: QrScanStatus.success,
-                route: PinCodePage.route(
-                  isValidCallback: () async {
-                    await launchOIDC4VPAndSIOPV2Flow();
-                    return;
-                  },
-                  restrictToBack: false,
-                ),
-              ),
-            );
-            return;
-          } else {
-            await launchOIDC4VPAndSIOPV2Flow();
-            return;
-          }
+          await launchOIDC4VPAndSIOPV2Flow();
+          return;
         }
       }
 
