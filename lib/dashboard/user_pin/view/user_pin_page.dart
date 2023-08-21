@@ -1,12 +1,10 @@
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserPinPage extends StatelessWidget {
   const UserPinPage({
@@ -63,17 +61,22 @@ class _UserPinViewState extends State<UserPinView> {
 
   Future<void> _onPaste(TextSelectionDelegate value) async {
     final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-    final text = data?.text ?? '';
+    var text = data?.text ?? '';
     if (text.isEmpty) {
       return;
     } else {
+      if (text.length > 6) {
+        text = text.substring(0, 6);
+      }
       _setPinControllerText(text);
     }
   }
 
   void _insertKey(String key) {
     final text = pinController.text;
-    _setPinControllerText(text + key);
+    final addedText = text + key;
+    if (text.length >= 6) return;
+    _setPinControllerText(addedText);
   }
 
   void _setPinControllerText(String text) {
@@ -109,13 +112,13 @@ class _UserPinViewState extends State<UserPinView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              const SizedBox(height: Sizes.space2XLarge),
+              const SizedBox(height: Sizes.spaceXLarge),
               Text(
-                l10n.pleaseInsertThePinCode,
+                l10n.pleaseInsertTheSecredCodeReceived,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(height: Sizes.space2XLarge),
+              const SizedBox(height: Sizes.spaceXLarge),
               Form(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: TextFormField(
@@ -133,23 +136,18 @@ class _UserPinViewState extends State<UserPinView> {
                     FilteringTextInputFormatter.digitsOnly,
                   ],
                   cursorRadius: const Radius.circular(4),
-                  textAlign: TextAlign.start,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(
+                  textAlign: TextAlign.center,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(Sizes.smallRadius),
                       ),
                     ),
                     hintText: '000000',
-                    contentPadding: const EdgeInsets.symmetric(
+                    contentPadding: EdgeInsets.symmetric(
                       vertical: 5,
                       horizontal: 10,
                     ),
-                    suffixStyle:
-                        Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                            ),
                   ),
                 ),
               ),
@@ -219,7 +217,10 @@ class _UserPinViewState extends State<UserPinView> {
             child: MyElevatedButton(
               borderRadius: Sizes.normalRadius,
               text: l10n.next,
-              onPressed: () => widget.onProceed.call(pinController.text),
+              onPressed: () {
+                Navigator.pop(context);
+                widget.onProceed.call(pinController.text);
+              },
             ),
           ),
         ),

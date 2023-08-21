@@ -931,7 +931,7 @@
   "pleaseSwitchToCorrectOIDC4VCProfile": "Please switch to correct OIDC4VC profile.",
   "authenticationSuccess": "Authentication Success",
   "format": "Format",
-  "pleaseInsertThePinCode": "Please insert the pincode.",
+  "pleaseInsertTheSecredCodeReceived": "Please insert the secret code received.",
   "userConsentForIssuerAccess": "User consent for issuer access",
   "userConsentForVerifierAccess": "User consent for verifier access",
   "userPINCodeForAuthentication": "User PIN code for authentication"

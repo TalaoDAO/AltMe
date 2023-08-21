@@ -843,7 +843,7 @@
     "pleaseSwitchToCorrectOIDC4VCProfile",
     "authenticationSuccess",
     "format",
-    "pleaseInsertThePinCode",
+    "pleaseInsertTheSecredCodeReceived",
     "userConsentForIssuerAccess",
     "userConsentForVerifierAccess",
     "userPINCodeForAuthentication"
@@ -1693,7 +1693,7 @@
     "pleaseSwitchToCorrectOIDC4VCProfile",
     "authenticationSuccess",
     "format",
-    "pleaseInsertThePinCode",
+    "pleaseInsertTheSecredCodeReceived",
     "userConsentForIssuerAccess",
     "userConsentForVerifierAccess",
     "userPINCodeForAuthentication"
@@ -1846,7 +1846,7 @@
     "pleaseSwitchToCorrectOIDC4VCProfile",
     "authenticationSuccess",
     "format",
-    "pleaseInsertThePinCode",
+    "pleaseInsertTheSecredCodeReceived",
     "userConsentForIssuerAccess",
     "userConsentForVerifierAccess",
     "userPINCodeForAuthentication"
@@ -2696,7 +2696,7 @@
     "pleaseSwitchToCorrectOIDC4VCProfile",
     "authenticationSuccess",
     "format",
-    "pleaseInsertThePinCode",
+    "pleaseInsertTheSecredCodeReceived",
     "userConsentForIssuerAccess",
     "userConsentForVerifierAccess",
     "userPINCodeForAuthentication"
