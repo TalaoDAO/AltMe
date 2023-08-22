@@ -193,6 +193,7 @@ class OIDC4VC {
     required String kid,
     required Uri credentialRequestUri,
     required List<String> credentialSupportedTypes,
+    required String format,
     required int indexValue,
     String? preAuthorizedCode,
     String? mnemonic,
@@ -246,6 +247,7 @@ class OIDC4VC {
       openidConfigurationResponse: openidConfigurationResponse,
       credentialType: credentialType,
       credentialSupportedTypes: credentialSupportedTypes,
+      format: format,
     );
 
     /// sign proof
@@ -420,6 +422,7 @@ class OIDC4VC {
     required Response<Map<String, dynamic>> openidConfigurationResponse,
     required String credentialType,
     required List<String> credentialSupportedTypes,
+    required String format,
   }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
 
@@ -438,7 +441,7 @@ class OIDC4VC {
     final credentialData = <String, dynamic>{
       'type': credentialType,
       'types': credentialSupportedTypes,
-      'format': oidc4vcModel.issuerVcType,
+      'format': format,
       'proof': {
         'proof_type': 'jwt',
         'jwt': vcJwt,

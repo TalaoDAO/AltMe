@@ -76,14 +76,8 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                       : () {
                           if (state.isEmpty) return;
 
-                          final creds = <dynamic>[];
-
-                          for (final i in state) {
-                            creds.add(credentials[i]);
-                          }
-
                           context.read<QRCodeScanCubit>().addCredentialsInLoop(
-                                credentials: creds,
+                                credentials: credentials,
                                 userPin: userPin,
                               );
                         },
@@ -96,8 +90,12 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                 ...List.generate(
                   credentials.length,
                   (index) {
+                    final (credential, _, _) = getCredentialData(
+                      credentials: credentials,
+                    );
+
                     final CredentialSubjectType credentialSubjectType =
-                        getCredTypeFromName(credentials[index].toString()) ??
+                        getCredTypeFromName(credential) ??
                             CredentialSubjectType.defaultCredential;
 
                     final DiscoverDummyCredential discoverDummyCredential =
@@ -122,7 +120,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                 credentialPreview: Credential(
                                   'dummy1',
                                   ['dummy2'],
-                                  [credentials[index].toString()],
+                                  [credential],
                                   'dummy4',
                                   'dummy5',
                                   '',

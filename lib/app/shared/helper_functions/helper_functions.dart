@@ -457,3 +457,31 @@ OIDC4VCType? getOIDC4VCTypeForIssuance(String url) {
   }
   return null;
 }
+
+(String, List<String>?, String?) getCredentialData({
+  required List<dynamic> credentials,
+  OIDC4VCType? oidc4vcType,
+}) {
+  late String credential;
+  late List<String> credentialSupported;
+  late String format;
+
+  for (final cred in credentials) {
+    if (cred is String) {
+      credential = cred;
+      if (oidc4vcType != null) {
+        credentialSupported = oidc4vcType.credentialSupported;
+        format = oidc4vcType.issuerVcType;
+      }
+    } else if (cred is Map<String, dynamic>) {
+      credentialSupported =
+          (cred['types'] as List<dynamic>).map((e) => e.toString()).toList();
+      credential = credentialSupported.last;
+      format = cred['format'].toString();
+    } else {
+      throw Exception();
+    }
+  }
+
+  return (credential, credentialSupported, format);
+}

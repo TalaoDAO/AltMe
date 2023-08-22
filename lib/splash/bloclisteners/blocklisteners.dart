@@ -268,6 +268,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                 switch (currentOIIDC4VCTypeForIssuance) {
                   case OIDC4VCType.DEFAULT:
                   case OIDC4VCType.HEDERA:
+                  case OIDC4VCType.EBSIV3:
                     final dynamic credentialOfferJson =
                         await getCredentialOfferJson(
                       scannedResponse: state.uri!.toString(),
@@ -282,7 +283,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   case OIDC4VCType.EBSIV2:
                     subtitle = state.uri!.queryParameters['issuer'].toString();
 
-                  case OIDC4VCType.EBSIV3:
                   case OIDC4VCType.JWTVC:
                     throw Exception();
                 }

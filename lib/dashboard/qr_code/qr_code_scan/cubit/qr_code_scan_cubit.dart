@@ -539,9 +539,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       case OIDC4VCType.GAIAX:
       case OIDC4VCType.EBSIV2:
+      case OIDC4VCType.EBSIV3:
         break;
 
-      case OIDC4VCType.EBSIV3:
       case OIDC4VCType.JWTVC:
         throw Exception();
     }
@@ -805,7 +805,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         for (int i = 0; i < credentials.length; i++) {
           emit(state.loading());
-          final credentialType = credentials[i];
+
+          final (credential, credentialSupported, format) = getCredentialData(
+            credentials: credentials,
+            oidc4vcType: currentOIIDC4VCTypeForIssuance,
+          );
+
           await getAndAddCredential(
             scannedResponse: state.uri.toString(),
             credentialsCubit: credentialsCubit,
@@ -813,10 +818,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             oidc4vcType: currentOIIDC4VCTypeForIssuance,
             didKitProvider: didKitProvider,
             secureStorageProvider: getSecureStorage,
-            credentialType: credentialType.toString(),
+            credentialType: credential,
             isLastCall: i + 1 == credentials.length,
             dioClient: DioClient('', Dio()),
             userPin: userPin,
+            credentialSupported: credentialSupported!,
+            format: format!,
           );
         }
         oidc4vc.resetNonceAndAccessToken();
