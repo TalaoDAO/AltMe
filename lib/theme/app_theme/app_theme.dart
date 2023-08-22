@@ -804,18 +804,18 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff86809D),
       );
 
-  TextStyle get identitiyBaseLightText => GoogleFonts.roboto(
+  TextStyle get credentialBaseLightText => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w300,
         color: const Color(0xffFFFFFF),
       );
-  TextStyle get identitiyBaseBoldText => GoogleFonts.roboto(
+  TextStyle get credentialBaseBoldText => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get identitiyBaseTitleText => GoogleFonts.roboto(
+  TextStyle get credentialBaseTitleText => GoogleFonts.roboto(
         fontSize: 36,
         fontWeight: FontWeight.w600,
         color: const Color(0xffFFFFFF),

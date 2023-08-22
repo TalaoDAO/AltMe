@@ -119,7 +119,7 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                 } else {
                   widget = CredentialBaseWidget(
                     title: title,
-                    cardBackgroundImagePath: ImageStrings.defaultPolygonCard,
+                    cardBackgroundImagePath: ImageStrings.defaultCard,
                     issuerName: polygonIdCubitState
                         .credentialManifests?[i].issuedBy?.name,
                     value: subTitle,

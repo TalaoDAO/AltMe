@@ -1,6 +1,5 @@
-import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
+
 import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';

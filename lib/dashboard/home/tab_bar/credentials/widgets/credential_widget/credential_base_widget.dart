@@ -44,7 +44,8 @@ class CredentialBaseWidget extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: MyText(
                       title!,
-                      style: Theme.of(context).textTheme.identitiyBaseTitleText,
+                      style:
+                          Theme.of(context).textTheme.credentialBaseTitleText,
                     ),
                   ),
                 ),
@@ -62,12 +63,13 @@ class CredentialBaseWidget extends StatelessWidget {
                           text: '${l10n.providedBy} ',
                           style: Theme.of(context)
                               .textTheme
-                              .identitiyBaseLightText,
+                              .credentialBaseLightText,
                         ),
                         TextSpan(
                           text: issuerName,
-                          style:
-                              Theme.of(context).textTheme.identitiyBaseBoldText,
+                          style: Theme.of(context)
+                              .textTheme
+                              .credentialBaseBoldText,
                         ),
                       ],
                     ),
@@ -84,7 +86,7 @@ class CredentialBaseWidget extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: MyText(
                       value!,
-                      style: Theme.of(context).textTheme.identitiyBaseBoldText,
+                      style: Theme.of(context).textTheme.credentialBaseBoldText,
                     ),
                   ),
                 ),
@@ -97,7 +99,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.issuedOn,
-                    style: Theme.of(context).textTheme.identitiyBaseBoldText,
+                    style: Theme.of(context).textTheme.credentialBaseBoldText,
                   ),
                 ),
               ),
@@ -109,7 +111,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     issuanceDate!,
-                    style: Theme.of(context).textTheme.identitiyBaseLightText,
+                    style: Theme.of(context).textTheme.credentialBaseLightText,
                   ),
                 ),
               ),
@@ -121,7 +123,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.expirationDate,
-                    style: Theme.of(context).textTheme.identitiyBaseBoldText,
+                    style: Theme.of(context).textTheme.credentialBaseBoldText,
                   ),
                 ),
               ),
@@ -133,7 +135,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     expirationDate!,
-                    style: Theme.of(context).textTheme.identitiyBaseLightText,
+                    style: Theme.of(context).textTheme.credentialBaseLightText,
                   ),
                 ),
               ),

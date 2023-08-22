@@ -52,7 +52,7 @@ class DefaultPolygonIdCardWidget extends StatelessWidget {
 
     return CredentialBaseWidget(
       title: title,
-      cardBackgroundImagePath: ImageStrings.defaultPolygonCard,
+      cardBackgroundImagePath: ImageStrings.defaultCard,
       issuerName: credentialModel.credentialManifest?.issuedBy?.name,
       value: subTitle,
       issuanceDate: UiDate.formatDateForCredentialCard(

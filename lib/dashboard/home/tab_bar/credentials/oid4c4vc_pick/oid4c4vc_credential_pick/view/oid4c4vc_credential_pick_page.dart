@@ -116,37 +116,34 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                               discoverDummyCredential: discoverDummyCredential,
                             ),
                           ] else ...[
-                            AspectRatio(
-                              aspectRatio: Sizes.credentialAspectRatio,
-                              child: DefaultCredentialListWidget(
-                                credentialModel: CredentialModel(
-                                  id: '',
-                                  credentialPreview: Credential(
-                                    'dummy1',
-                                    ['dummy2'],
-                                    [credentials[index].toString()],
-                                    'dummy4',
-                                    'dummy5',
-                                    'dummy6',
-                                    [Proof.dummy()],
-                                    DefaultCredentialSubjectModel(
-                                      'dummy7',
-                                      'dummy8',
-                                      const Author(''),
-                                    ),
-                                    [Translation('en', '')],
-                                    [Translation('en', '')],
-                                    CredentialStatusField
-                                        .emptyCredentialStatusField(),
-                                    [Evidence.emptyEvidence()],
+                            DefaultCredentialWidget(
+                              credentialModel: CredentialModel(
+                                id: '',
+                                credentialPreview: Credential(
+                                  'dummy1',
+                                  ['dummy2'],
+                                  [credentials[index].toString()],
+                                  'dummy4',
+                                  'dummy5',
+                                  '',
+                                  [Proof.dummy()],
+                                  DefaultCredentialSubjectModel(
+                                    'dummy7',
+                                    'dummy8',
+                                    const Author(''),
                                   ),
-                                  data: const {},
-                                  display: Display.emptyDisplay(),
-                                  image: '',
-                                  shareLink: '',
+                                  [Translation('en', '')],
+                                  [Translation('en', '')],
+                                  CredentialStatusField
+                                      .emptyCredentialStatusField(),
+                                  [Evidence.emptyEvidence()],
                                 ),
-                                showBgDecoration: false,
+                                data: const {},
+                                display: Display.emptyDisplay(),
+                                image: '',
+                                shareLink: '',
                               ),
+                              showBgDecoration: false,
                             ),
                           ],
                           Align(
