@@ -13,7 +13,7 @@ class EmployeeCredentialModel extends CredentialSubjectModel {
     super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.employeeCredential,
-          credentialCategory: CredentialCategory.identityCards,
+          credentialCategory: CredentialCategory.professionalCards,
         );
 
   factory EmployeeCredentialModel.fromJson(Map<String, dynamic> json) =>

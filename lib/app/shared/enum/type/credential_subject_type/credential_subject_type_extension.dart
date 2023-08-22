@@ -86,6 +86,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.proofOfTwitterStats:
       case CredentialSubjectType.civicPassCredential:
       case CredentialSubjectType.employeeCredential:
+      case CredentialSubjectType.legalPersonalCredential:
         return Colors.white;
     }
   }
@@ -185,6 +186,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'ResidentCard';
       case CredentialSubjectType.employeeCredential:
         return 'EmployeeCredential';
+      case CredentialSubjectType.legalPersonalCredential:
+        return 'LegalPersonCredential';
       case CredentialSubjectType.selfIssued:
         return 'SelfIssued';
       case CredentialSubjectType.studentCard:
@@ -348,6 +351,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return CivicPassCredentialModel.fromJson(json);
       case CredentialSubjectType.employeeCredential:
         return EmployeeCredentialModel.fromJson(json);
+      case CredentialSubjectType.legalPersonalCredential:
+        return LegalPersonCredentialModel.fromJson(json);
     }
   }
 
@@ -552,6 +557,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Civic Pass Credential';
       case CredentialSubjectType.employeeCredential:
         return 'Employee Credential';
+      case CredentialSubjectType.legalPersonalCredential:
+        return 'Legal Person Credential';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -561,119 +568,66 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
       case CredentialSubjectType.bloometaPass:
-        return true;
-      case CredentialSubjectType.troopezPass:
-        return false;
-      case CredentialSubjectType.pigsPass:
-        return false;
-      case CredentialSubjectType.matterlightPass:
-        return false;
-      case CredentialSubjectType.dogamiPass:
-        return false;
-      case CredentialSubjectType.bunnyPass:
-        return false;
       case CredentialSubjectType.tezotopiaMembership:
-        return true;
       case CredentialSubjectType.chainbornMembership:
-        return true;
       case CredentialSubjectType.ageRange:
-        return true;
       case CredentialSubjectType.nationality:
-        return true;
       case CredentialSubjectType.gender:
-        return true;
-      case CredentialSubjectType.walletCredential:
-        return false;
-      case CredentialSubjectType.tezosAssociatedWallet:
-        return false;
-      case CredentialSubjectType.ethereumAssociatedWallet:
-        return false;
-      case CredentialSubjectType.fantomAssociatedWallet:
-        return false;
-      case CredentialSubjectType.polygonAssociatedWallet:
-        return false;
-      case CredentialSubjectType.binanceAssociatedWallet:
-        return false;
-      case CredentialSubjectType.tezosPooAddress:
-        return false;
-      case CredentialSubjectType.ethereumPooAddress:
-        return false;
-      case CredentialSubjectType.fantomPooAddress:
-        return false;
-      case CredentialSubjectType.polygonPooAddress:
-        return false;
-      case CredentialSubjectType.binancePooAddress:
-        return false;
-      case CredentialSubjectType.certificateOfEmployment:
-        return false;
-      case CredentialSubjectType.defaultCredential:
-        return false;
-      case CredentialSubjectType.ecole42LearningAchievement:
-        return false;
-      case CredentialSubjectType.emailPass:
-        return false;
       case CredentialSubjectType.identityPass:
-        return true;
       case CredentialSubjectType.verifiableIdCard:
-        return true;
-      case CredentialSubjectType.linkedInCard:
-        return false;
-      case CredentialSubjectType.learningAchievement:
-        return false;
       case CredentialSubjectType.over18:
-        return true;
       case CredentialSubjectType.over13:
-        return true;
       case CredentialSubjectType.over15:
-        return true;
       case CredentialSubjectType.passportFootprint:
-        return true;
-      case CredentialSubjectType.phonePass:
-        return false;
-      case CredentialSubjectType.professionalExperienceAssessment:
-        return false;
-      case CredentialSubjectType.professionalSkillAssessment:
-        return false;
-      case CredentialSubjectType.professionalStudentCard:
-        return false;
       case CredentialSubjectType.residentCard:
-        return true;
-      case CredentialSubjectType.selfIssued:
-        return false;
-      case CredentialSubjectType.studentCard:
-        return false;
       case CredentialSubjectType.voucher:
-        return true;
       case CredentialSubjectType.tezVoucher:
-        return true;
-      case CredentialSubjectType.talaoCommunityCard:
-        return false;
       case CredentialSubjectType.diplomaCard:
-        return true;
-      case CredentialSubjectType.aragoPass:
-        return false;
-      case CredentialSubjectType.aragoEmailPass:
-        return false;
-      case CredentialSubjectType.aragoIdentityCard:
-        return false;
-      case CredentialSubjectType.aragoLearningAchievement:
-        return false;
-      case CredentialSubjectType.aragoOver18:
-        return false;
-      case CredentialSubjectType.pcdsAgentCertificate:
-        return false;
       case CredentialSubjectType.twitterCard:
         return true;
+      case CredentialSubjectType.walletCredential:
+      case CredentialSubjectType.tezosAssociatedWallet:
+      case CredentialSubjectType.ethereumAssociatedWallet:
+      case CredentialSubjectType.fantomAssociatedWallet:
+      case CredentialSubjectType.polygonAssociatedWallet:
+      case CredentialSubjectType.binanceAssociatedWallet:
+      case CredentialSubjectType.tezosPooAddress:
+      case CredentialSubjectType.ethereumPooAddress:
+      case CredentialSubjectType.fantomPooAddress:
+      case CredentialSubjectType.polygonPooAddress:
+      case CredentialSubjectType.binancePooAddress:
+      case CredentialSubjectType.certificateOfEmployment:
+      case CredentialSubjectType.defaultCredential:
+      case CredentialSubjectType.ecole42LearningAchievement:
+      case CredentialSubjectType.emailPass:
+      case CredentialSubjectType.troopezPass:
+      case CredentialSubjectType.pigsPass:
+      case CredentialSubjectType.matterlightPass:
+      case CredentialSubjectType.dogamiPass:
+      case CredentialSubjectType.bunnyPass:
+      case CredentialSubjectType.linkedInCard:
+      case CredentialSubjectType.learningAchievement:
+      case CredentialSubjectType.phonePass:
+      case CredentialSubjectType.professionalExperienceAssessment:
+      case CredentialSubjectType.professionalSkillAssessment:
+      case CredentialSubjectType.professionalStudentCard:
+      case CredentialSubjectType.selfIssued:
+      case CredentialSubjectType.studentCard:
+      case CredentialSubjectType.talaoCommunityCard:
+      case CredentialSubjectType.aragoPass:
+      case CredentialSubjectType.aragoEmailPass:
+      case CredentialSubjectType.aragoIdentityCard:
+      case CredentialSubjectType.aragoLearningAchievement:
+      case CredentialSubjectType.aragoOver18:
+      case CredentialSubjectType.pcdsAgentCertificate:
       case CredentialSubjectType.euDiplomaCard:
-        return false;
       case CredentialSubjectType.euVerifiableId:
-        return false;
       case CredentialSubjectType.kycAgeCredential:
-        return false;
       case CredentialSubjectType.kycCountryOfResidence:
       case CredentialSubjectType.proofOfTwitterStats:
       case CredentialSubjectType.civicPassCredential:
       case CredentialSubjectType.employeeCredential:
+      case CredentialSubjectType.legalPersonalCredential:
         return false;
     }
   }
@@ -797,6 +751,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.proofOfTwitterStats:
       case CredentialSubjectType.civicPassCredential:
       case CredentialSubjectType.employeeCredential:
+      case CredentialSubjectType.legalPersonalCredential:
         return 0;
     }
   }

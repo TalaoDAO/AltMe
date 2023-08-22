@@ -9,6 +9,7 @@ class Parameters {
       AdvanceSettingsState(
     isGamingEnabled: true,
     isIdentityEnabled: true,
+    isProfessionalEnabled: true,
     isBlockchainAccountsEnabled: true,
     isEducationEnabled: true,
     isSocialMediaEnabled: true,

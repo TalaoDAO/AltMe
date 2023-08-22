@@ -271,6 +271,11 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           advanceSettingsCubit.toggleIdentityRadio();
         }
 
+      case CredentialCategory.professionalCards:
+        if (!advanceSettingsCubit.state.isProfessionalEnabled) {
+          advanceSettingsCubit.toggleProfessionalRadio();
+        }
+
       case CredentialCategory.blockchainAccountsCards:
         if (!advanceSettingsCubit.state.isBlockchainAccountsEnabled) {
           advanceSettingsCubit.toggleBlockchainAccountsRadio();

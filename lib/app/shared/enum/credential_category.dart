@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 enum CredentialCategory {
   advantagesCards,
   identityCards,
+  professionalCards,
   contactInfoCredentials,
   educationCards,
   financeCards,
@@ -34,6 +35,8 @@ extension CredentialCategoryX on CredentialCategory {
         return 150;
       case CredentialCategory.identityCards:
         return 140;
+      case CredentialCategory.professionalCards:
+        return 135;
       case CredentialCategory.contactInfoCredentials:
         return 130;
       case CredentialCategory.blockchainAccountsCards:
@@ -84,6 +87,8 @@ extension CredentialCategoryX on CredentialCategory {
           CredentialSubjectType.emailPass,
           CredentialSubjectType.phonePass,
         ];
+      case CredentialCategory.professionalCards:
+        return [];
       case CredentialCategory.blockchainAccountsCards:
         return [];
       case CredentialCategory.educationCards:
@@ -110,25 +115,17 @@ extension CredentialCategoryX on CredentialCategory {
   bool get showInHomeIfListEmpty {
     switch (this) {
       case CredentialCategory.advantagesCards:
-        return true;
       case CredentialCategory.identityCards:
         return true;
+      case CredentialCategory.professionalCards:
       case CredentialCategory.contactInfoCredentials:
-        return false;
       case CredentialCategory.blockchainAccountsCards:
-        return false;
       case CredentialCategory.educationCards:
-        return false;
       case CredentialCategory.othersCards:
-        return false;
       case CredentialCategory.financeCards:
-        return false;
       case CredentialCategory.humanityProofCards:
-        return false;
       case CredentialCategory.socialMediaCards:
-        return false;
       case CredentialCategory.walletIntegrity:
-        return false;
       case CredentialCategory.polygonidCards:
         return false;
     }
@@ -150,6 +147,13 @@ extension CredentialCategoryX on CredentialCategory {
           homeSubTitle: l10n.identityCredentialHomeSubtitle,
           discoverTitle: l10n.identityDiscoverCards,
           discoverSubTitle: l10n.identityCredentialDiscoverSubtitle,
+        );
+      case CredentialCategory.professionalCards:
+        return CredentialCategoryConfig(
+          homeTitle: '${l10n.my} ${l10n.myProfessionalCards.toLowerCase()}',
+          homeSubTitle: l10n.myProfessionalrCardsSubtitle,
+          discoverTitle: l10n.myProfessionalCredentialDiscoverSubtitle,
+          discoverSubTitle: l10n.myProfessionalCredentialDiscoverSubtitle,
         );
       case CredentialCategory.contactInfoCredentials:
         return CredentialCategoryConfig(

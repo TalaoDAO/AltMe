@@ -280,6 +280,7 @@ class DiscoverDummyCredential extends Equatable {
       case CredentialSubjectType.kycCountryOfResidence:
       case CredentialSubjectType.proofOfTwitterStats:
       case CredentialSubjectType.civicPassCredential:
+      case CredentialSubjectType.legalPersonalCredential:
         break;
     }
 

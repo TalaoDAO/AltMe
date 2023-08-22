@@ -5,6 +5,7 @@ class AdvanceSettingsState extends Equatable {
   const AdvanceSettingsState({
     required this.isGamingEnabled,
     required this.isIdentityEnabled,
+    required this.isProfessionalEnabled,
     required this.isBlockchainAccountsEnabled,
     required this.isEducationEnabled,
     required this.isPassEnabled,
@@ -21,6 +22,7 @@ class AdvanceSettingsState extends Equatable {
 
   final bool isGamingEnabled;
   final bool isIdentityEnabled;
+  final bool isProfessionalEnabled;
   final bool isBlockchainAccountsEnabled;
   final bool isEducationEnabled;
   final bool isPassEnabled;
@@ -37,6 +39,7 @@ class AdvanceSettingsState extends Equatable {
     return {
       CredentialCategory.advantagesCards: isGamingEnabled,
       CredentialCategory.identityCards: isIdentityEnabled,
+      CredentialCategory.professionalCards: isProfessionalEnabled,
       CredentialCategory.blockchainAccountsCards: isBlockchainAccountsEnabled,
       CredentialCategory.educationCards: isEducationEnabled,
       CredentialCategory.contactInfoCredentials: isCommunityEnabled,
@@ -51,6 +54,7 @@ class AdvanceSettingsState extends Equatable {
   AdvanceSettingsState copyWith({
     bool? isGamingEnabled,
     bool? isIdentityEnabled,
+    bool? isProfessionalEnabled,
     bool? isBlockchainAccountsEnabled,
     bool? isEducationEnabled,
     bool? isPassEnabled,
@@ -64,6 +68,8 @@ class AdvanceSettingsState extends Equatable {
     return AdvanceSettingsState(
       isGamingEnabled: isGamingEnabled ?? this.isGamingEnabled,
       isIdentityEnabled: isIdentityEnabled ?? this.isIdentityEnabled,
+      isProfessionalEnabled:
+          isProfessionalEnabled ?? this.isProfessionalEnabled,
       isBlockchainAccountsEnabled:
           isBlockchainAccountsEnabled ?? this.isBlockchainAccountsEnabled,
       isEducationEnabled: isEducationEnabled ?? this.isEducationEnabled,
@@ -83,6 +89,7 @@ class AdvanceSettingsState extends Equatable {
   List<Object?> get props => [
         isGamingEnabled,
         isIdentityEnabled,
+        isProfessionalEnabled,
         isBlockchainAccountsEnabled,
         isEducationEnabled,
         isPassEnabled,

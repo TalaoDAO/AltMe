@@ -8,6 +8,7 @@ class SecureStorageKeys {
   static const String lastNotifiedUNORewardId = 'lastNotifiedUNORewardId';
   static const String lastNotifiedXTZRewardId = 'lastNotifiedXTZRewardId';
   static const String isIdentityEnabled = 'isIdentityEnabled';
+  static const String isProfessionalEnabled = 'isProfessionalEnabled';
   static const String isCommunityEnabled = 'isCommunityEnabled';
   static const String isOtherEnabled = 'isOtherEnabled';
   static const String isGamingEnabled = 'isGamingEnabled';
