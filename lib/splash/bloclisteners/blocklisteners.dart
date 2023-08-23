@@ -276,13 +276,15 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     );
                     if (credentialOfferJson == null) throw Exception();
 
-                    subtitle =
-                        credentialOfferJson['credential_issuer'].toString();
+                    subtitle = Uri.parse(
+                      credentialOfferJson['credential_issuer'].toString(),
+                    ).host;
 
                   case OIDC4VCType.GAIAX:
                   case OIDC4VCType.EBSIV2:
-                    subtitle = state.uri!.queryParameters['issuer'].toString();
-
+                    subtitle = Uri.parse(
+                      state.uri!.queryParameters['issuer'].toString(),
+                    ).host;
                   case OIDC4VCType.JWTVC:
                     throw Exception();
                 }
@@ -302,9 +304,14 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     jwtDecode: JWTDecode(),
                     token: response as String,
                   );
-                  subtitle = decodedResponse['redirect_uri'].toString();
+
+                  subtitle =
+                      Uri.parse(decodedResponse['redirect_uri'].toString())
+                          .host;
                 } else {
-                  subtitle = state.uri?.queryParameters['redirect_uri'] ?? '';
+                  subtitle = Uri.parse(
+                    state.uri!.queryParameters['redirect_uri'] ?? '',
+                  ).host;
                 }
               }
             }
