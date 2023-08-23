@@ -12,13 +12,14 @@ Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
   required Uri uri,
   required CredentialsCubit credentialsCubit,
-  required OIDC4VCType oidc4vcType,
   required String issuer,
+  required OIDC4VCType oidc4vcType,
   required String credentialType,
   required bool isLastCall,
+  required String format,
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
-  if (oidc4vcType.issuerVcType == 'jwt_vc') {
+  if (format == 'jwt_vc') {
     //jwt_vc_json
     final jws = JsonWebSignature.fromCompactSerialization(
       encodedCredentialFromOIDC4VC['credential'] as String,
@@ -26,7 +27,7 @@ Future<void> addOIDC4VCCredential({
 
     credentialFromOIDC4VC =
         jws.unverifiedPayload.jsonContent['vc'] as Map<String, dynamic>;
-  } else if (oidc4vcType.issuerVcType == 'ldp_vc') {
+  } else if (format == 'ldp_vc') {
     //ldp_vc
 
     final data = encodedCredentialFromOIDC4VC['credential'];
@@ -42,7 +43,7 @@ Future<void> addOIDC4VCCredential({
   final Map<String, dynamic> newCredential =
       Map<String, dynamic>.from(credentialFromOIDC4VC);
 
-  if (oidc4vcType.issuerVcType == 'jwt_vc') {
+  if (format == 'jwt_vc') {
     //jwt_vc_json
     newCredential['jwt'] = encodedCredentialFromOIDC4VC['credential'];
   }

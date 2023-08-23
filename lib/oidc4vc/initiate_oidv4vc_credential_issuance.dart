@@ -151,6 +151,7 @@ Future<void> getAndAddCredential({
       issuer: issuer,
       credentialType: credentialType,
       isLastCall: isLastCall,
+      format: format,
     );
   } else {
     final Uri ebsiAuthenticationUri =
