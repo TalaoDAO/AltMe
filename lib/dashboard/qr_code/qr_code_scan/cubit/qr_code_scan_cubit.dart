@@ -807,7 +807,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           emit(state.loading());
 
           final (credential, credentialSupported, format) = getCredentialData(
-            credentials: credentials,
+            credential: credentials[i],
             oidc4vcType: currentOIIDC4VCTypeForIssuance,
           );
 
