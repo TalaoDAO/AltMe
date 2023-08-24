@@ -94,17 +94,13 @@ class ProfileCubit extends Cubit<ProfileState> {
           await secureStorageProvider.get(SecureStorageKeys.alertEnabled);
       final isAlertEnabled = alertValue == null || alertValue == 'true';
 
-      final userConsentForIssuerAccessValue = await secureStorageProvider
-          .get(SecureStorageKeys.userConsentForIssuerAccess);
-      final userConsentForIssuerAccess =
-          userConsentForIssuerAccessValue == null ||
-              userConsentForIssuerAccessValue == 'true';
+      final userConsentForIssuerAccess = (await secureStorageProvider
+              .get(SecureStorageKeys.userConsentForIssuerAccess)) ==
+          'true';
 
-      final userConsentForVerifierAccessValue = await secureStorageProvider
-          .get(SecureStorageKeys.userConsentForVerifierAccess);
-      final userConsentForVerifierAccess =
-          userConsentForVerifierAccessValue == null ||
-              userConsentForVerifierAccessValue == 'true';
+      final userConsentForVerifierAccess = (await secureStorageProvider
+              .get(SecureStorageKeys.userConsentForVerifierAccess)) ==
+          'true';
 
       final userPINCodeForAuthenticationValue = await secureStorageProvider
           .get(SecureStorageKeys.userPINCodeForAuthentication);
