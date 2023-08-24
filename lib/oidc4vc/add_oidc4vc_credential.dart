@@ -58,10 +58,10 @@ Future<void> addOIDC4VCCredential({
   }
 
   final CredentialManifest? credentialManifest = await getCredentialManifest(
-    Dio(),
-    issuer,
-    credentialType,
-    oidc4vcType.schemaForType,
+    client: Dio(),
+    baseUrl: issuer,
+    credentialType: credentialType,
+    schemaForType: oidc4vcType.schemaForType,
   );
 
   if (credentialManifest?.outputDescriptors?.isNotEmpty ?? false) {

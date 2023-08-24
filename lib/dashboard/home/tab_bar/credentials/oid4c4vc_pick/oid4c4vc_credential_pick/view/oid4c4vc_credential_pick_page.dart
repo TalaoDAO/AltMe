@@ -90,8 +90,8 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                 ...List.generate(
                   credentials.length,
                   (index) {
-                    final (credential, _, _) = getCredentialData(
-                      credential: credentials[index],
+                    final credential = getCredentialData(
+                      credentials[index],
                     );
 
                     final CredentialSubjectType credentialSubjectType =

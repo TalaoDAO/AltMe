@@ -56,13 +56,11 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       oidc4vc: oidc4vc,
       didKitProvider: didKitProvider,
       credentialsCubit: credentialsCubit,
-      credentialType: credentials.toString(),
+      credential: credentials,
       secureStorageProvider: secureStorageProvider,
       isLastCall: true,
       dioClient: dioClient,
       userPin: userPin,
-      credentialSupported: oidc4vcType.credentialSupported,
-      format: oidc4vcType.issuerVcType,
     );
     oidc4vc.resetNonceAndAccessToken();
     qrCodeScanCubit.goBack();
@@ -75,13 +73,11 @@ Future<void> getAndAddCredential({
   required OIDC4VCType oidc4vcType,
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
-  required String credentialType,
+  required dynamic credential,
   required SecureStorageProvider secureStorageProvider,
   required bool isLastCall,
   required DioClient dioClient,
   required String? userPin,
-  required List<String> credentialSupported,
-  required String format,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -129,19 +125,20 @@ Future<void> getAndAddCredential({
   );
 
   if (preAuthorizedCode != null) {
-    final dynamic encodedCredentialFromOIDC4VC = await oidc4vc.getCredential(
+    final (dynamic encodedCredentialFromOIDC4VC, String format) =
+        await oidc4vc.getCredential(
       preAuthorizedCode: preAuthorizedCode,
       issuer: issuer,
-      credentialType: credentialType,
+      credential: credential,
       did: did,
       kid: kid,
       credentialRequestUri: uriFromScannedResponse,
       privateKey: privateKey,
-      credentialSupportedTypes: credentialSupported,
       indexValue: oidc4vcType.indexValue,
       userPin: userPin,
-      format: format,
     );
+
+    final String credentialType = getCredentialData(credential);
 
     await addOIDC4VCCredential(
       encodedCredentialFromOIDC4VC: encodedCredentialFromOIDC4VC,

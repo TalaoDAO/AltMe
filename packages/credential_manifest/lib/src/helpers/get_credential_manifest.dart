@@ -4,12 +4,12 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dio/dio.dart';
 import 'package:json_path/json_path.dart';
 
-Future<CredentialManifest?> getCredentialManifest(
-  Dio client,
-  String baseUrl,
-  String credentialTypeOrId,
-  bool schemaForType,
-) async {
+Future<CredentialManifest?> getCredentialManifest({
+  required Dio client,
+  required String baseUrl,
+  required String credentialType,
+  required bool schemaForType,
+}) async {
   try {
     final dynamic wellKnown = await client.get<String>(
       '$baseUrl/.well-known/openid-configuration',
@@ -31,7 +31,7 @@ Future<CredentialManifest?> getCredentialManifest(
         if (credentialManifest.outputDescriptors != null) {
           for (final outputDescriptor
               in credentialManifest.outputDescriptors!) {
-            if (outputDescriptor.schema == credentialTypeOrId) {
+            if (outputDescriptor.schema == credentialType) {
               return credentialManifest;
             }
           }
@@ -42,7 +42,7 @@ Future<CredentialManifest?> getCredentialManifest(
     } else {
       final JsonPath credentialManifestPath = JsonPath(
         // ignore: prefer_interpolation_to_compose_strings
-        r'$..credential_manifests[?(@.id=="' + credentialTypeOrId + '")]',
+        r'$..credential_manifests[?(@.id=="' + credentialType + '")]',
       );
 
       /// select first credential manifest

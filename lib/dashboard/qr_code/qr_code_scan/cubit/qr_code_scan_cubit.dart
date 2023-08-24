@@ -174,8 +174,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
 
     try {
-      final isOID4VCUrl = state.uri.toString().startsWith('openid');
-
       /// SIOPV2 : wallet returns an id_token which is a simple jwt
 
       /// OIDC4VP : wallet returns one or several VP according to the request :
@@ -183,15 +181,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       /// presentation_definition as the verifier can request with AND / OR as :
       /// i want to see your Passport OR your ID card AND your email pass...
 
-      if (isOID4VCUrl &&
-          (uri.toString().startsWith('openid://?') ||
-              uri.toString().startsWith('openid-vc://?') ||
-              uri.toString().startsWith('openid-hedera://?'))) {
+      if (isSIOPV2OROIDC4VPUrl(uri)) {
         /// verfier case
         final OIDC4VCType currentOIIDC4VCType =
             profileCubit.state.model.oidc4vcType;
 
-        /// checking if presentation prefix match for current OIDC4VC profile
+        // checking if presentation prefix match for current OIDC4VC profile
         if (!state.uri
             .toString()
             .startsWith(currentOIIDC4VCType.presentationPrefix)) {
@@ -256,24 +251,24 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     late final dynamic data;
 
     try {
-      final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-          getOIDC4VCTypeForIssuance(state.uri.toString());
+      if (isOIDC4VCIUrl(state.uri!)) {
+        final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
+            getOIDC4VCTypeForIssuance(state.uri.toString());
 
-      if (currentOIIDC4VCTypeForIssuance != null) {
-        /// issuer side (oidc4VCI)
+        if (currentOIIDC4VCTypeForIssuance != null) {
+          /// issuer side (oidc4VCI)
 
-        await startOIDC4VCCredentialIssuance(
-          scannedResponse: state.uri.toString(),
-          currentOIIDC4VCType: currentOIIDC4VCTypeForIssuance,
-          qrCodeScanCubit: qrCodeScanCubit,
-          dioClient: dioClient,
-        );
-        return;
+          await startOIDC4VCCredentialIssuance(
+            scannedResponse: state.uri.toString(),
+            currentOIIDC4VCType: currentOIIDC4VCTypeForIssuance,
+            qrCodeScanCubit: qrCodeScanCubit,
+            dioClient: dioClient,
+          );
+          return;
+        }
       }
 
-      if (state.uri.toString().startsWith('openid://?') ||
-          state.uri.toString().startsWith('openid-vc://?') ||
-          state.uri.toString().startsWith('openid-hedera://?')) {
+      if (isSIOPV2OROIDC4VPUrl(state.uri!)) {
         final String? requestUri = state.uri?.queryParameters['request_uri'];
         dynamic responseType;
 
@@ -669,7 +664,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
 
       final isJwtVpInJwtVCRequired =
-          currentOIIDC4VCType.isJwtVpInJwtVCRequired(presentationDefinition);
+          presentationDefinition.format?.jwtVp != null;
 
       emit(
         state.copyWith(
@@ -809,11 +804,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         for (int i = 0; i < credentials.length; i++) {
           emit(state.loading());
 
-          final (credential, credentialSupported, format) = getCredentialData(
-            credential: credentials[i],
-            oidc4vcType: currentOIIDC4VCTypeForIssuance,
-          );
-
           await getAndAddCredential(
             scannedResponse: state.uri.toString(),
             credentialsCubit: credentialsCubit,
@@ -821,12 +811,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             oidc4vcType: currentOIIDC4VCTypeForIssuance,
             didKitProvider: didKitProvider,
             secureStorageProvider: getSecureStorage,
-            credentialType: credential,
+            credential: credentials[i],
             isLastCall: i + 1 == credentials.length,
             dioClient: DioClient('', Dio()),
             userPin: userPin,
-            credentialSupported: credentialSupported!,
-            format: format!,
           );
         }
         oidc4vc.resetNonceAndAccessToken();

@@ -186,14 +186,12 @@ class OIDC4VC {
   String? accessToken;
 
   /// Retreive credential_type from url
-  Future<dynamic> getCredential({
+  Future<(dynamic, String)> getCredential({
     required String issuer,
-    required String credentialType,
+    required dynamic credential,
     required String did,
     required String kid,
     required Uri credentialRequestUri,
-    required List<String> credentialSupportedTypes,
-    required String format,
     required int indexValue,
     String? preAuthorizedCode,
     String? mnemonic,
@@ -240,14 +238,12 @@ class OIDC4VC {
 
     if (nonce == null) throw Exception();
 
-    final credentialData = await buildCredentialData(
+    final (credentialData, format) = await buildCredentialData(
       nonce: nonce!,
       issuerTokenParameters: issuerTokenParameters,
       credentialRequestUri: credentialRequestUri,
       openidConfigurationResponse: openidConfigurationResponse,
-      credentialType: credentialType,
-      credentialSupportedTypes: credentialSupportedTypes,
-      format: format,
+      credential: credential,
     );
 
     /// sign proof
@@ -267,7 +263,7 @@ class OIDC4VC {
 
     nonce = credentialResponse.data['c_nonce'].toString();
 
-    return credentialResponse.data;
+    return (credentialResponse.data, format);
   }
 
   void resetNonceAndAccessToken() {
@@ -415,14 +411,12 @@ class OIDC4VC {
     return private;
   }
 
-  Future<Map<String, dynamic>> buildCredentialData({
+  Future<(Map<String, dynamic>, String)> buildCredentialData({
     required String nonce,
     required IssuerTokenParameters issuerTokenParameters,
     required Uri credentialRequestUri,
     required Response<Map<String, dynamic>> openidConfigurationResponse,
-    required String credentialType,
-    required List<String> credentialSupportedTypes,
-    required String format,
+    required dynamic credential,
   }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
 
@@ -438,16 +432,52 @@ class OIDC4VC {
     //   throw Exception('VERIFICATION_ISSUE');
     // }
 
+    String? credentialType;
+    List<String>? types;
+    String? format;
+
+    if (credential is String) {
+      credentialType = credential;
+
+      if (credentialType.startsWith('https://api.preprod.ebsi.eu')) {
+        format = 'jwt_vc';
+        types = [];
+      } else {
+        final jsonPath = JsonPath(r'$..credential_supported');
+
+        final credentialSupported = (jsonPath
+                .read(openidConfigurationResponse.data)
+                .first
+                .value as List)
+            .where(
+              (dynamic e) => e['id'].toString() == credential,
+            )
+            .first as Map<String, dynamic>;
+        types = (credentialSupported['types'] as List<dynamic>)
+            .map((e) => e.toString())
+            .toList();
+        format = credentialSupported['format'].toString();
+      }
+    } else if (credential is Map<String, dynamic>) {
+      types = (credential['types'] as List<dynamic>)
+          .map((e) => e.toString())
+          .toList();
+      credentialType = types.last;
+      format = credential['format'].toString();
+    } else {
+      throw Exception();
+    }
+
     final credentialData = <String, dynamic>{
       'type': credentialType,
-      'types': credentialSupportedTypes,
+      'types': types,
       'format': format,
       'proof': {
         'proof_type': 'jwt',
         'jwt': vcJwt,
       },
     };
-    return credentialData;
+    return (credentialData, format);
   }
 
   Future<VerificationType> verifyEncodedData({

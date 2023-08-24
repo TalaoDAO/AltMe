@@ -449,6 +449,19 @@ bool isPolygonIdUrl(String url) =>
     url.startsWith('{"typ":') ||
     url.startsWith('{"type":');
 
+bool isOIDC4VCIUrl(Uri uri) {
+  return uri.toString().startsWith('openid');
+}
+
+bool isSIOPV2OROIDC4VPUrl(Uri uri) {
+  final isOID4VCUrl = uri.toString().startsWith('openid');
+
+  return isOID4VCUrl &&
+      (uri.toString().startsWith('openid://?') ||
+          uri.toString().startsWith('openid-vc://?') ||
+          uri.toString().startsWith('openid-hedera://?'));
+}
+
 OIDC4VCType? getOIDC4VCTypeForIssuance(String url) {
   for (final oidc4vcType in OIDC4VCType.values) {
     if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
@@ -458,29 +471,19 @@ OIDC4VCType? getOIDC4VCTypeForIssuance(String url) {
   return null;
 }
 
-(String, List<String>?, String?) getCredentialData({
-  required dynamic credential,
-  OIDC4VCType? oidc4vcType,
-}) {
+String getCredentialData(dynamic credential) {
   late String cred;
-  List<String>? credentialSupported;
-  String? format;
 
   if (credential is String) {
     cred = credential;
-    if (oidc4vcType != null) {
-      credentialSupported = oidc4vcType.credentialSupported;
-      format = oidc4vcType.issuerVcType;
-    }
   } else if (credential is Map<String, dynamic>) {
-    credentialSupported = (credential['types'] as List<dynamic>)
+    final credentialSupported = (credential['types'] as List<dynamic>)
         .map((e) => e.toString())
         .toList();
     cred = credentialSupported.last;
-    format = credential['format'].toString();
   } else {
     throw Exception();
   }
 
-  return (cred, credentialSupported, format);
+  return cred;
 }
