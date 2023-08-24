@@ -5,7 +5,12 @@ part 'input_descriptor.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class InputDescriptor {
-  InputDescriptor(this.id, this.constraints, this.purpose);
+  InputDescriptor({
+    this.id,
+    this.constraints,
+    this.purpose,
+    this.name,
+  });
 
   factory InputDescriptor.fromJson(Map<String, dynamic> json) =>
       _$InputDescriptorFromJson(json);
@@ -13,6 +18,7 @@ class InputDescriptor {
   final Constraints? constraints;
   final String? purpose;
   final String? id;
+  final String? name;
 
   Map<String, dynamic> toJson() => _$InputDescriptorToJson(this);
 }

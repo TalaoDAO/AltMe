@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/credential.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
@@ -69,6 +68,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
         issuer: issuer,
         inputDescriptorIndex: inputDescriptorIndex,
         credentialsToBePresented: credentialsToBePresented,
+        isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
       ),
     );
   }
@@ -82,6 +82,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
     required this.issuer,
     required this.inputDescriptorIndex,
     required this.credentialsToBePresented,
+    required this.isJwtVpInJwtVCRequired,
   });
 
   final Uri uri;
@@ -89,6 +90,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
   final Issuer issuer;
   final int inputDescriptorIndex;
   final List<CredentialModel> credentialsToBePresented;
+  final bool? isJwtVpInJwtVCRequired;
 
   @override
   Widget build(BuildContext context) {
@@ -150,9 +152,11 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                             credentialManifestState
                                 .filteredCredentialList.length,
                             (index) {
+                              final credentialModel = credentialManifestState
+                                  .filteredCredentialList[index];
+
                               return CredentialsListPageItem(
-                                credentialModel: credentialManifestState
-                                    .filteredCredentialList[index],
+                                credentialModel: credentialModel,
                                 selected: credentialManifestState.selected
                                     .contains(index),
                                 onTap: () => context
@@ -275,6 +279,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
           issuer: issuer,
           inputDescriptorIndex: inputDescriptorIndex + 1,
           credentialsToBePresented: updatedCredentials,
+          isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
         ),
       );
     } else {

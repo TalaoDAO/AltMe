@@ -1,3 +1,4 @@
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dio/dio.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
@@ -326,6 +327,11 @@ extension OIDC4VCTypeX on OIDC4VCType {
     }
   }
 
-  bool get isJwtVpInJwtVCRequired =>
-      issuerVcType == 'jwt_vc' && verifierVpType == 'jwt_vp';
+  bool isJwtVpInJwtVCRequired(PresentationDefinition presentationDefinition) {
+    if (presentationDefinition.format != null) {
+      return presentationDefinition.format!.jwtVp != null;
+    }
+
+    return verifierVpType == 'jwt_vp';
+  }
 }

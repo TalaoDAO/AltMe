@@ -668,6 +668,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         credentialManifest: credentialManifest,
       );
 
+      final isJwtVpInJwtVCRequired =
+          currentOIIDC4VCType.isJwtVpInJwtVCRequired(presentationDefinition);
+
       emit(
         state.copyWith(
           qrScanStatus: QrScanStatus.success,
@@ -677,7 +680,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             issuer: Issuer.emptyIssuer('domain'),
             inputDescriptorIndex: 0,
             credentialsToBePresented: [],
-            isJwtVpInJwtVCRequired: currentOIIDC4VCType.isJwtVpInJwtVCRequired,
+            isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
           ),
         ),
       );
