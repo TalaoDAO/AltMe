@@ -597,8 +597,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> launchOIDC4VPAndSIOPV2Flow() async {
-    final OIDC4VCType currentOIIDC4VCType =
-        profileCubit.state.model.oidc4vcType;
     final keys = <String>[];
     state.uri?.queryParameters.forEach((key, value) => keys.add(key));
     if (isUriAsValueValid(keys)) {

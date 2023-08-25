@@ -7,6 +7,7 @@ part 'input_descriptor.g.dart';
 class InputDescriptor {
   InputDescriptor({
     this.id,
+    this.group,
     this.constraints,
     this.purpose,
     this.name,
@@ -16,6 +17,7 @@ class InputDescriptor {
       _$InputDescriptorFromJson(json);
 
   final Constraints? constraints;
+  final List<String>? group;
   final String? purpose;
   final String? id;
   final String? name;

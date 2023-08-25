@@ -418,14 +418,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     // need to update code
     final filteredCredentialList = getCredentialsFromFilterList(
-      [
+      filterList: [
         Field(path: [r'$..type'], filter: blockchainType.filter),
         Field(
           path: [r'$..associatedAddress'],
           filter: Filter('String', cryptoAccountData.walletAddress),
         ),
       ],
-      oldCredentialList,
+      credentialList: oldCredentialList,
+      isJwtVpInJwtVCRequired: null,
     );
 
     /// update or create AssociatedAddres credential with new name

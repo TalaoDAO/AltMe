@@ -34,7 +34,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     required Issuer issuer,
     required int inputDescriptorIndex,
     required List<CredentialModel> credentialsToBePresented,
-    bool? isJwtVpInJwtVCRequired,
+    required bool? isJwtVpInJwtVCRequired,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => CredentialManifestOfferPickPage(
@@ -56,7 +56,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
         final presentationDefinition =
             credential.credentialManifest!.presentationDefinition!;
         return CredentialManifestPickCubit(
-          presentationDefinition: presentationDefinition.toJson(),
+          presentationDefinition: presentationDefinition,
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
           isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
@@ -104,8 +104,17 @@ class CredentialManifestOfferPickView extends StatelessWidget {
         return BlocBuilder<CredentialManifestPickCubit,
             CredentialManifestPickState>(
           builder: (context, credentialManifestState) {
-            final purpose = presentationDefinition
-                .inputDescriptors[inputDescriptorIndex].purpose;
+            final allInputDescriptorConsidered =
+                presentationDefinition.submissionRequirements != null;
+
+            final purpose = allInputDescriptorConsidered
+                ? presentationDefinition.purpose
+                : presentationDefinition
+                    .inputDescriptors[inputDescriptorIndex].purpose;
+
+            final status = allInputDescriptorConsidered
+                ? '1/1'
+                : '${inputDescriptorIndex + 1}/${presentationDefinition.inputDescriptors.length}';
 
             return BlocListener<ScanCubit, ScanState>(
               listener: (context, scanState) {
@@ -134,7 +143,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                       body: Column(
                         children: <Widget>[
                           Text(
-                            '${inputDescriptorIndex + 1}/${presentationDefinition.inputDescriptors.length}',
+                            status,
                             style: Theme.of(context).textTheme.credentialSteps,
                           ),
                           const SizedBox(height: 10),
@@ -154,6 +163,20 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                             (index) {
                               final credentialModel = credentialManifestState
                                   .filteredCredentialList[index];
+
+                              if (allInputDescriptorConsidered) {
+                                final atMost = presentationDefinition
+                                    .submissionRequirements![0].count;
+                                final atLeast = presentationDefinition
+                                    .submissionRequirements![0].min;
+                                if (atMost != null) {
+                                  //
+                                } else if (atLeast != null) {
+                                  //
+                                } else {
+                                  throw Exception();
+                                }
+                              }
 
                               return CredentialsListPageItem(
                                 credentialModel: credentialModel,
@@ -181,17 +204,22 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                                   .inputDescriptors[
                                               inputDescriptorIndex];
 
-                                      final isOptional = inputDescriptor
+                                      bool isOptional = inputDescriptor
                                               .constraints
                                               ?.fields
                                               ?.first
                                               .optional ??
                                           false;
 
-                                      final bool isOngoingStep =
+                                      bool isOngoingStep =
                                           inputDescriptorIndex + 1 !=
                                               presentationDefinition
                                                   .inputDescriptors.length;
+
+                                      if (allInputDescriptorConsidered) {
+                                        isOptional = false;
+                                        isOngoingStep = false;
+                                      }
 
                                       if (isOptional) {
                                         return MyGradientButton(
@@ -270,8 +298,12 @@ class CredentialManifestOfferPickView extends StatelessWidget {
     getLogger('present')
         .i('credential to presented - ${updatedCredentials.length}');
 
-    if (inputDescriptorIndex + 1 !=
-        presentationDefinition.inputDescriptors.length) {
+    final allInputDescriptorConsidered =
+        presentationDefinition.submissionRequirements != null;
+
+    if (!allInputDescriptorConsidered &&
+        inputDescriptorIndex + 1 !=
+            presentationDefinition.inputDescriptors.length) {
       await Navigator.of(context).pushReplacement<void, void>(
         CredentialManifestOfferPickPage.route(
           uri: uri,
