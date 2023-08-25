@@ -507,4 +507,13 @@ class WalletCubit extends Cubit<WalletState> {
     );
     emit(state.copyWith(status: WalletStatus.init));
   }
+
+  CryptoAccountData? getCryptoAccountData(String publicKey) {
+    final CryptoAccountData? currentAccount =
+        state.cryptoAccount.data.firstWhereOrNull(
+      (element) =>
+          element.walletAddress.toUpperCase() == publicKey.toUpperCase(),
+    );
+    return currentAccount;
+  }
 }

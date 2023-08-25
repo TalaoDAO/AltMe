@@ -83,9 +83,7 @@ class OperationCubit extends Cubit<OperationState> {
           final publicKey = walletConnectState.parameters[0]['from'].toString();
 
           final CryptoAccountData? currentAccount =
-              walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-            (element) => element.walletAddress == publicKey,
-          );
+              walletCubit.getCryptoAccountData(publicKey);
 
           log.i('currentAccount -$currentAccount');
           if (currentAccount == null) {
@@ -467,11 +465,8 @@ class OperationCubit extends Cubit<OperationState> {
 
       final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
 
-      final CryptoAccountData? currentAccount =
-          walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-        (element) =>
-            element.walletAddress == beaconRequest.request!.sourceAddress!,
-      );
+      final CryptoAccountData? currentAccount = walletCubit
+          .getCryptoAccountData(beaconRequest.request!.sourceAddress!);
 
       if (currentAccount == null) {
         throw ResponseMessage(
