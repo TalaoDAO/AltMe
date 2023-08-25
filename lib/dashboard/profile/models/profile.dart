@@ -46,7 +46,7 @@ class ProfileModel extends Equatable {
         userConsentForVerifierAccess: true,
         userPINCodeForAuthentication: true,
         tezosNetwork: TezosNetwork.mainNet(),
-        oidc4vcType: OIDC4VCType.EBSIV2,
+        oidc4vcType: OIDC4VCType.EBSIV3,
       );
 
   final String firstName;
