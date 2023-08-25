@@ -344,11 +344,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           ),
         );
       }
-
-      if (connectionBridgeType == ConnectionBridgeType.walletconnect) {
-        walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
-            .complete('Failed');
-      }
     }
   }
 
