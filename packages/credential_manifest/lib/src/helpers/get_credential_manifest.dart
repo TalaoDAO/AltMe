@@ -11,8 +11,9 @@ Future<CredentialManifest?> getCredentialManifest({
   required bool schemaForType,
 }) async {
   try {
-    final dynamic wellKnown = await client.get<String>(
-      '$baseUrl/.well-known/openid-configuration',
+    final dynamic wellKnown = await getOpenIdConfig(
+      baseUrl: 'https://issuer.talao.co',
+      client: client,
     );
 
     if (schemaForType) {
@@ -60,5 +61,47 @@ Future<CredentialManifest?> getCredentialManifest({
     }
   } catch (e) {
     return null;
+  }
+}
+
+Future<Map<String, dynamic>> getOpenIdConfig({
+  required String baseUrl,
+  required Dio client,
+}) async {
+  final url = '$baseUrl/.well-known/openid-configuration';
+
+  try {
+    final dynamic response = await client.get<dynamic>(url);
+    final data = response.data is String
+        ? jsonDecode(response.data.toString()) as Map<String, dynamic>
+        : response.data as Map<String, dynamic>;
+    return data;
+  } catch (e) {
+    if (e.toString().startsWith('Exception: Second_Attempt_Fail')) {
+      throw Exception();
+    } else {
+      final data = await getOpenIdConfigSecondAttempt(
+        baseUrl: baseUrl,
+        client: client,
+      );
+      return data;
+    }
+  }
+}
+
+Future<Map<String, dynamic>> getOpenIdConfigSecondAttempt({
+  required String baseUrl,
+  required Dio client,
+}) async {
+  final url = '$baseUrl/.well-known/openid-credential-issuer';
+
+  try {
+    final response = await client.get<dynamic>(url);
+    final data = response.data is String
+        ? jsonDecode(response.data.toString()) as Map<String, dynamic>
+        : response.data as Map<String, dynamic>;
+    return data;
+  } catch (e) {
+    throw Exception();
   }
 }

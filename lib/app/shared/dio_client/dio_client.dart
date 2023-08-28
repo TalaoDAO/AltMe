@@ -9,8 +9,8 @@ const _defaultConnectTimeout = Duration.millisecondsPerMinute;
 const _defaultReceiveTimeout = Duration.millisecondsPerMinute;
 
 class DioClient {
-  DioClient(this.baseUrl, this._dio) {
-    _dio
+  DioClient(this.baseUrl, this.dio) {
+    dio
       ..options.baseUrl = baseUrl
       ..options.connectTimeout = _defaultConnectTimeout
       ..options.receiveTimeout = _defaultReceiveTimeout
@@ -32,7 +32,7 @@ class DioClient {
   final log = getLogger('DioClient');
 
   final String baseUrl;
-  final Dio _dio;
+  final Dio dio;
 
   Future<dynamic> get(
     String uri, {
@@ -54,7 +54,7 @@ class DioClient {
 
       final stopwatch = Stopwatch()..start();
       await getSpecificHeader(uri, headers);
-      final response = await _dio.get<dynamic>(
+      final response = await dio.get<dynamic>(
         uri,
         queryParameters: queryParameters,
         options: options,
@@ -87,13 +87,13 @@ class DioClient {
       await dotenv.load();
       final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');
 
-      _dio.options.headers = <String, dynamic>{
+      dio.options.headers = <String, dynamic>{
         'Content-Type': 'application/json; charset=UTF-8',
         'accept': 'application/json',
         'X-API-KEY': YOTI_AI_API_KEY,
       };
     } else {
-      _dio.options.headers = headers;
+      dio.options.headers = headers;
     }
   }
 
@@ -119,7 +119,7 @@ class DioClient {
 
       final stopwatch = Stopwatch()..start();
       await getSpecificHeader(uri, headers);
-      final response = await _dio.post<dynamic>(
+      final response = await dio.post<dynamic>(
         uri,
         data: data,
         queryParameters: queryParameters,

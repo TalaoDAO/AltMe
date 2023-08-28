@@ -9,6 +9,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:did_kit/did_kit.dart';
+
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';

@@ -97,14 +97,13 @@ class OIDC4VC {
     if (openIdRequest.startsWith(oidc4vcModel.offerPrefix)) {
       try {
         final jsonPath = JsonPath(r'$..authorization_endpoint');
-        final openidConfigurationUrl =
-            '${getIssuerFromOpenidRequest(openIdRequest)}/.well-known/openid-configuration';
 
-        final openidConfigurationResponse =
-            await client.get<String>(openidConfigurationUrl);
-        final authorizationEndpoint = jsonPath
-            .readValues(jsonDecode(openidConfigurationResponse.data!))
-            .first as String;
+        final baseUrl = getIssuerFromOpenidRequest(openIdRequest);
+
+        final openidConfigurationResponse = await getOpenIdConfig(baseUrl);
+
+        final authorizationEndpoint =
+            jsonPath.readValues(openidConfigurationResponse).first as String;
         final authorizationRequestParemeters =
             getAuthorizationRequestParemeters(openIdRequest, redirectUrl);
 
@@ -210,10 +209,7 @@ class OIDC4VC {
       userPin: userPin,
     );
 
-    final openidConfigurationUrl = '$kIssuer/.well-known/openid-configuration';
-
-    final openidConfigurationResponse =
-        await client.get<Map<String, dynamic>>(openidConfigurationUrl);
+    final openidConfigurationResponse = await getOpenIdConfig(kIssuer);
 
     final tokenEndPoint = readTokenEndPoint(openidConfigurationResponse);
 
@@ -355,12 +351,12 @@ class OIDC4VC {
   }
 
   String readTokenEndPoint(
-    Response<Map<String, dynamic>> openidConfigurationResponse,
+    Map<String, dynamic> openidConfigurationResponse,
   ) {
     final jsonPath = JsonPath(r'$..token_endpoint');
 
     final tokenEndPoint =
-        jsonPath.readValues(openidConfigurationResponse.data).first as String;
+        jsonPath.readValues(openidConfigurationResponse).first as String;
     return tokenEndPoint;
   }
 
@@ -415,7 +411,7 @@ class OIDC4VC {
     required String nonce,
     required IssuerTokenParameters issuerTokenParameters,
     required Uri credentialRequestUri,
-    required Response<Map<String, dynamic>> openidConfigurationResponse,
+    required Map<String, dynamic> openidConfigurationResponse,
     required dynamic credential,
   }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
@@ -445,14 +441,12 @@ class OIDC4VC {
       } else {
         final jsonPath = JsonPath(r'$..credential_supported');
 
-        final credentialSupported = (jsonPath
-                .read(openidConfigurationResponse.data)
-                .first
-                .value as List)
-            .where(
-              (dynamic e) => e['id'].toString() == credential,
-            )
-            .first as Map<String, dynamic>;
+        final credentialSupported =
+            (jsonPath.read(openidConfigurationResponse).first.value as List)
+                .where(
+                  (dynamic e) => e['id'].toString() == credential,
+                )
+                .first as Map<String, dynamic>;
         types = (credentialSupported['types'] as List<dynamic>)
             .map((e) => e.toString())
             .toList();
@@ -559,12 +553,12 @@ class OIDC4VC {
   }
 
   String readCredentialEndpoint(
-    Response<Map<String, dynamic>> openidConfigurationResponse,
+    Map<String, dynamic> openidConfigurationResponse,
   ) {
     final jsonPathCredential = JsonPath(r'$..credential_endpoint');
 
     final credentialEndpoint = jsonPathCredential
-        .readValues(openidConfigurationResponse.data)
+        .readValues(openidConfigurationResponse)
         .first as String;
     return credentialEndpoint;
   }
@@ -942,5 +936,40 @@ class OIDC4VC {
       kid,
     );
     return tokenParameters.kid;
+  }
+
+  Future<Map<String, dynamic>> getOpenIdConfig(String baseUrl) async {
+    final url = '$baseUrl/.well-known/openid-configuration';
+
+    try {
+      final response = await client.get<dynamic>(url);
+      final data = response.data is String
+          ? jsonDecode(response.data.toString()) as Map<String, dynamic>
+          : response.data as Map<String, dynamic>;
+      return data;
+    } catch (e) {
+      if (e.toString().startsWith('Exception: Second_Attempt_Fail')) {
+        throw Exception();
+      } else {
+        final data = await getOpenIdConfigSecondAttempt(baseUrl);
+        return data;
+      }
+    }
+  }
+
+  Future<Map<String, dynamic>> getOpenIdConfigSecondAttempt(
+    String baseUrl,
+  ) async {
+    final url = '$baseUrl/.well-known/openid-credential-issuer';
+
+    try {
+      final response = await client.get<dynamic>(url);
+      final data = response.data is String
+          ? jsonDecode(response.data.toString()) as Map<String, dynamic>
+          : response.data as Map<String, dynamic>;
+      return data;
+    } catch (e) {
+      throw Exception();
+    }
   }
 }
