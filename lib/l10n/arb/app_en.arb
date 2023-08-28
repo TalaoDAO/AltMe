@@ -934,5 +934,12 @@
   "pleaseInsertTheSecredCodeReceived": "Please insert the secret code received.",
   "userConsentForIssuerAccess": "User consent for issuer access",
   "userConsentForVerifierAccess": "User consent for verifier access",
-  "userPINCodeForAuthentication": "User PIN code for authentication"
+  "userPINCodeForAuthentication": "User PIN code for authentication",
+  "youcanSelectOnlyXCredential": "You can select only {count} credential(s).",
+  "@youcanSelectOnlyXCredential": {
+    "description": "",
+    "placeholders": {
+      "count": {}
+    }
+  }
 }

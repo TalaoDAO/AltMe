@@ -699,6 +699,13 @@ class ResponseMessage with MessageHandler {
           return ResponseString.RESPONSE_STRING_authenticationSuccess.localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_youcanSelectOnlyXCredential:
+          return ResponseString.RESPONSE_STRING_youcanSelectOnlyXCredential
+              .localise(
+            context,
+            injectedMessage: injectedMessage,
+          );
       }
     }
     return '';

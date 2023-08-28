@@ -34,7 +34,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     required Issuer issuer,
     required int inputDescriptorIndex,
     required List<CredentialModel> credentialsToBePresented,
-    bool? isJwtVpInJwtVCRequired,
+    required bool? isJwtVpInJwtVCRequired,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => CredentialManifestOfferPickPage(
@@ -56,7 +56,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
         final presentationDefinition =
             credential.credentialManifest!.presentationDefinition!;
         return CredentialManifestPickCubit(
-          presentationDefinition: presentationDefinition.toJson(),
+          presentationDefinition: presentationDefinition,
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
           isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
@@ -96,148 +96,162 @@ class CredentialManifestOfferPickView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final PresentationDefinition presentationDefinition =
-        credential.credentialManifest!.presentationDefinition!;
+    return BlocConsumer<CredentialManifestPickCubit,
+        CredentialManifestPickState>(
+      listener: (context, state) {
+        if (state.message != null) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: state.message!,
+          );
+        }
+      },
+      builder: (context, credentialManifestState) {
+        final PresentationDefinition? presentationDefinition =
+            credentialManifestState.presentationDefinition;
 
-    return BlocBuilder<WalletCubit, WalletState>(
-      builder: (context, walletState) {
-        return BlocBuilder<CredentialManifestPickCubit,
-            CredentialManifestPickState>(
-          builder: (context, credentialManifestState) {
-            final purpose = presentationDefinition
-                .inputDescriptors[inputDescriptorIndex].purpose;
-
-            return BlocListener<ScanCubit, ScanState>(
-              listener: (context, scanState) {
-                if (scanState.status == ScanStatus.loading) {
-                  LoadingView().show(context: context);
-                } else {
-                  LoadingView().hide();
-                }
-                if (scanState.message != null) {
-                  AlertMessage.showStateMessage(
-                    context: context,
-                    stateMessage: scanState.message!,
-                  );
-                }
-              },
-              child: credentialManifestState.filteredCredentialList.isEmpty
-                  ? const RequiredCredentialNotFound()
-                  : BasePage(
-                      title: l10n.credentialPickTitle,
-                      titleAlignment: Alignment.topCenter,
-                      titleTrailing: const WhiteCloseButton(),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 24,
-                        horizontal: 16,
-                      ),
-                      body: Column(
-                        children: <Widget>[
-                          Text(
-                            '${inputDescriptorIndex + 1}/${presentationDefinition.inputDescriptors.length}',
-                            style: Theme.of(context).textTheme.credentialSteps,
-                          ),
-                          const SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Text(
-                              purpose ?? l10n.credentialPickSelect,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .credentialSubtitle,
+        return BlocListener<ScanCubit, ScanState>(
+          listener: (context, scanState) {
+            if (scanState.status == ScanStatus.loading) {
+              LoadingView().show(context: context);
+            } else {
+              LoadingView().hide();
+            }
+            if (scanState.message != null) {
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: scanState.message!,
+              );
+            }
+          },
+          child: credentialManifestState.filteredCredentialList.isEmpty
+              ? const RequiredCredentialNotFound()
+              : BasePage(
+                  title: l10n.credentialPickTitle,
+                  titleAlignment: Alignment.topCenter,
+                  titleTrailing: const WhiteCloseButton(),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 24,
+                    horizontal: 16,
+                  ),
+                  body: presentationDefinition == null
+                      ? Container()
+                      : Column(
+                          children: <Widget>[
+                            Text(
+                              '${inputDescriptorIndex + 1}/${presentationDefinition.inputDescriptors.length}',
+                              style:
+                                  Theme.of(context).textTheme.credentialSteps,
                             ),
-                          ),
-                          const SizedBox(height: 12),
-                          ...List.generate(
-                            credentialManifestState
-                                .filteredCredentialList.length,
-                            (index) {
-                              final credentialModel = credentialManifestState
-                                  .filteredCredentialList[index];
+                            const SizedBox(height: 10),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                presentationDefinition
+                                        .inputDescriptors[inputDescriptorIndex]
+                                        .purpose ??
+                                    l10n.credentialPickSelect,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .credentialSubtitle,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            ...List.generate(
+                              credentialManifestState
+                                  .filteredCredentialList.length,
+                              (index) {
+                                final credentialModel = credentialManifestState
+                                    .filteredCredentialList[index];
 
-                              return CredentialsListPageItem(
-                                credentialModel: credentialModel,
-                                selected: credentialManifestState.selected
-                                    .contains(index),
-                                onTap: () => context
-                                    .read<CredentialManifestPickCubit>()
-                                    .toggle(index),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      navigation: credentialManifestState
-                              .filteredCredentialList.isNotEmpty
-                          ? SafeArea(
-                              child: Container(
-                                padding: const EdgeInsets.all(16),
-                                child: Tooltip(
-                                  message: l10n.credentialPickPresent,
-                                  child: Builder(
-                                    builder: (context) {
-                                      final inputDescriptor =
-                                          presentationDefinition
-                                                  .inputDescriptors[
-                                              inputDescriptorIndex];
-
-                                      final isOptional = inputDescriptor
-                                              .constraints
-                                              ?.fields
-                                              ?.first
-                                              .optional ??
-                                          false;
-
-                                      final bool isOngoingStep =
-                                          inputDescriptorIndex + 1 !=
+                                return CredentialsListPageItem(
+                                  credentialModel: credentialModel,
+                                  selected: credentialManifestState.selected
+                                      .contains(index),
+                                  onTap: () {
+                                    context
+                                        .read<CredentialManifestPickCubit>()
+                                        .toggle(
+                                          index: index,
+                                          inputDescriptor:
                                               presentationDefinition
-                                                  .inputDescriptors.length;
-
-                                      if (isOptional) {
-                                        return MyGradientButton(
-                                          onPressed: () => present(
-                                            context: context,
-                                            credentialManifestState:
-                                                credentialManifestState,
-                                            presentationDefinition:
-                                                presentationDefinition,
-                                            skip: credentialManifestState
-                                                .selected.isEmpty,
-                                          ),
-                                          text: credentialManifestState
-                                                  .selected.isEmpty
-                                              ? l10n.skip
-                                              : isOngoingStep
-                                                  ? l10n.next
-                                                  : l10n.credentialPickPresent,
+                                                      .inputDescriptors[
+                                                  inputDescriptorIndex],
                                         );
-                                      } else {
-                                        return MyGradientButton(
-                                          onPressed: credentialManifestState
-                                                  .selected.isEmpty
-                                              ? null
-                                              : () => present(
-                                                    context: context,
-                                                    credentialManifestState:
-                                                        credentialManifestState,
-                                                    presentationDefinition:
-                                                        presentationDefinition,
-                                                    skip: false,
-                                                  ),
-                                          text: isOngoingStep
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                  navigation: credentialManifestState
+                          .filteredCredentialList.isNotEmpty
+                      ? SafeArea(
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            child: Tooltip(
+                              message: l10n.credentialPickPresent,
+                              child: Builder(
+                                builder: (context) {
+                                  final inputDescriptor =
+                                      presentationDefinition!.inputDescriptors[
+                                          inputDescriptorIndex];
+
+                                  final bool isOptional = inputDescriptor
+                                          .constraints
+                                          ?.fields
+                                          ?.first
+                                          .optional ??
+                                      false;
+
+                                  final bool isOngoingStep =
+                                      inputDescriptorIndex + 1 !=
+                                          presentationDefinition
+                                              .inputDescriptors.length;
+
+                                  if (isOptional) {
+                                    return MyGradientButton(
+                                      onPressed: () => present(
+                                        context: context,
+                                        credentialManifestState:
+                                            credentialManifestState,
+                                        presentationDefinition:
+                                            presentationDefinition,
+                                        skip: credentialManifestState
+                                            .selected.isEmpty,
+                                      ),
+                                      text: credentialManifestState
+                                              .selected.isEmpty
+                                          ? l10n.skip
+                                          : isOngoingStep
                                               ? l10n.next
                                               : l10n.credentialPickPresent,
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
+                                    );
+                                  } else {
+                                    return MyGradientButton(
+                                      onPressed: !credentialManifestState
+                                              .isButtonEnabled
+                                          ? null
+                                          : () => present(
+                                                context: context,
+                                                credentialManifestState:
+                                                    credentialManifestState,
+                                                presentationDefinition:
+                                                    presentationDefinition,
+                                                skip: false,
+                                              ),
+                                      text: isOngoingStep
+                                          ? l10n.next
+                                          : l10n.credentialPickPresent,
+                                    );
+                                  }
+                                },
                               ),
-                            )
-                          : const SizedBox.shrink(),
-                    ),
-            );
-          },
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ),
         );
       },
     );
@@ -270,8 +284,12 @@ class CredentialManifestOfferPickView extends StatelessWidget {
     getLogger('present')
         .i('credential to presented - ${updatedCredentials.length}');
 
-    if (inputDescriptorIndex + 1 !=
-        presentationDefinition.inputDescriptors.length) {
+    final allInputDescriptorConsidered =
+        presentationDefinition.submissionRequirements != null;
+
+    if (!allInputDescriptorConsidered &&
+        inputDescriptorIndex + 1 !=
+            presentationDefinition.inputDescriptors.length) {
       await Navigator.of(context).pushReplacement<void, void>(
         CredentialManifestOfferPickPage.route(
           uri: uri,
