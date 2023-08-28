@@ -472,6 +472,11 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_authenticationSuccess:
         return globalMessage.RESPONSE_STRING_authenticationSuccess;
+
+      case ResponseString.RESPONSE_STRING_youcanSelectOnlyXCredential:
+        return globalMessage.RESPONSE_STRING_youcanSelectOnlyXCredential(
+          injectedMessage ?? '',
+        );
     }
   }
 }

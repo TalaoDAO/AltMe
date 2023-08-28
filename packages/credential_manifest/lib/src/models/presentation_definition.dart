@@ -21,7 +21,7 @@ class PresentationDefinition {
 
   final String? id;
   @JsonKey(name: 'input_descriptors')
-  final List<InputDescriptor> inputDescriptors;
+  List<InputDescriptor> inputDescriptors;
   @JsonKey(name: 'submission_requirements')
   List<SubmissionRequirement>? submissionRequirements;
   String? name;

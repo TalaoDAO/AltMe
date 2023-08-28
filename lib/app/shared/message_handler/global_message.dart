@@ -376,4 +376,7 @@ class GlobalMessage {
       l10n.pleaseSwitchToCorrectOIDC4VCProfile;
   String get RESPONSE_STRING_authenticationSuccess =>
       l10n.authenticationSuccess;
+
+  String RESPONSE_STRING_youcanSelectOnlyXCredential(String value) =>
+      l10n.youcanSelectOnlyXCredential(value);
 }
