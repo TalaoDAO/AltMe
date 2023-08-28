@@ -846,7 +846,8 @@
     "pleaseInsertTheSecredCodeReceived",
     "userConsentForIssuerAccess",
     "userConsentForVerifierAccess",
-    "userPINCodeForAuthentication"
+    "userPINCodeForAuthentication",
+    "youcanSelectOnlyXCredential"
   ],
 
   "es": [
@@ -1696,7 +1697,8 @@
     "pleaseInsertTheSecredCodeReceived",
     "userConsentForIssuerAccess",
     "userConsentForVerifierAccess",
-    "userPINCodeForAuthentication"
+    "userPINCodeForAuthentication",
+    "youcanSelectOnlyXCredential"
   ],
 
   "fr": [
@@ -1849,7 +1851,8 @@
     "pleaseInsertTheSecredCodeReceived",
     "userConsentForIssuerAccess",
     "userConsentForVerifierAccess",
-    "userPINCodeForAuthentication"
+    "userPINCodeForAuthentication",
+    "youcanSelectOnlyXCredential"
   ],
 
   "it": [
@@ -2699,6 +2702,7 @@
     "pleaseInsertTheSecredCodeReceived",
     "userConsentForIssuerAccess",
     "userConsentForVerifierAccess",
-    "userPINCodeForAuthentication"
+    "userPINCodeForAuthentication",
+    "youcanSelectOnlyXCredential"
   ]
 }

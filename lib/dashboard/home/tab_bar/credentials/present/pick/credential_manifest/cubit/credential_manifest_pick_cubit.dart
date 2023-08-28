@@ -34,6 +34,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
     required bool? isJwtVpInJwtVCRequired,
   }) {
     if (presentationDefinition.submissionRequirements != null) {
+      /// https://identity.foundation/presentation-exchange/#presentation-definition-extensions
       final inputDescriptors = List.of(presentationDefinition.inputDescriptors);
 
       final newInputDescriptor = <InputDescriptor>[];
