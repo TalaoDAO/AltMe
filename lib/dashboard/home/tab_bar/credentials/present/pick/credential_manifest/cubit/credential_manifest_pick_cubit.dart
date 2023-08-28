@@ -51,20 +51,25 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
         if (descriptorsWithSameGroup.isNotEmpty) {
           final mergedDescriptor = InputDescriptor(
             id: '${currentFirst.id},${descriptorsWithSameGroup.map((e) => e.id).join(",")}', // ignore: lines_longer_than_80_chars
-            name:
-                '${currentFirst.name},${descriptorsWithSameGroup.map((e) => e.name).join(",")}', // ignore: lines_longer_than_80_chars
+            name: [
+              currentFirst.name,
+              ...descriptorsWithSameGroup.map((e) => e.name)
+            ].where((e) => e != null).join(','),
             constraints: Constraints([
               ...?currentFirst.constraints?.fields,
               for (final descriptor in descriptorsWithSameGroup)
                 ...?descriptor.constraints?.fields,
             ]),
             group: currentFirst.group,
-            purpose:
-                '${currentFirst.purpose},${descriptorsWithSameGroup.map((e) => e.purpose).join(",")}', // ignore: lines_longer_than_80_chars
+            purpose: [
+              currentFirst.purpose,
+              ...descriptorsWithSameGroup.map((e) => e.purpose)
+            ].where((e) => e != null).join(','),
           );
           newInputDescriptor.add(mergedDescriptor);
           inputDescriptors.removeWhere(
-              (descriptor) => descriptor.group.toString() == group);
+            (descriptor) => descriptor.group.toString() == group,
+          );
         } else {
           newInputDescriptor.add(currentFirst);
         }
@@ -142,7 +147,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
 
           isButtonEnabled = selected.length == count;
         } else if (atLeast != null) {
-          isButtonEnabled = selected.length < atLeast;
+          isButtonEnabled = selected.length >= atLeast;
         } else {
           throw Exception();
         }

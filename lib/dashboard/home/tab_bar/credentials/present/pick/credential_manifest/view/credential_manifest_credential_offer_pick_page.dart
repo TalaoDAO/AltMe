@@ -284,12 +284,8 @@ class CredentialManifestOfferPickView extends StatelessWidget {
     getLogger('present')
         .i('credential to presented - ${updatedCredentials.length}');
 
-    final allInputDescriptorConsidered =
-        presentationDefinition.submissionRequirements != null;
-
-    if (!allInputDescriptorConsidered &&
-        inputDescriptorIndex + 1 !=
-            presentationDefinition.inputDescriptors.length) {
+    if (inputDescriptorIndex + 1 !=
+        presentationDefinition.inputDescriptors.length) {
       await Navigator.of(context).pushReplacement<void, void>(
         CredentialManifestOfferPickPage.route(
           uri: uri,
