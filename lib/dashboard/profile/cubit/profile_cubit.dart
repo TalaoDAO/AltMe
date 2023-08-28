@@ -108,7 +108,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           userPINCodeForAuthenticationValue == null ||
               userPINCodeForAuthenticationValue == 'true';
 
-      var oidc4vcType = OIDC4VCType.EBSIV2;
+      var oidc4vcType = OIDC4VCType.EBSIV3;
 
       for (final type in OIDC4VCType.values) {
         final oidc4vcTypeName =
