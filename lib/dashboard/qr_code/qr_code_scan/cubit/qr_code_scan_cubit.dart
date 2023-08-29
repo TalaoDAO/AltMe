@@ -318,7 +318,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
           final String newUrl = '${state.uri!}&$queryString';
 
-          emit(state.copyWith(uri: Uri.parse(newUrl)));
+          emit(
+            state.copyWith(
+              uri: Uri.parse(newUrl),
+              qrScanStatus: QrScanStatus.loading,
+            ),
+          );
           log.i('uri - $newUrl');
         } else {
           responseType = state.uri?.queryParameters['response_type'] ?? '';
