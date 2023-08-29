@@ -7,25 +7,9 @@ List<CredentialModel> getCredentialsFromPresentationDefinition({
   required int inputDescriptorIndex,
   required bool? isJwtVpInJwtVCRequired,
 }) {
-  final allInputDescriptorConsidered =
-      presentationDefinition.submissionRequirements != null;
-
-  var filterList = <Field>[];
-
-  if (allInputDescriptorConsidered) {
-    for (final descriptor in presentationDefinition.inputDescriptors) {
-      if (descriptor.constraints != null &&
-          descriptor.constraints!.fields != null) {
-        for (final field in descriptor.constraints!.fields!) {
-          filterList.add(field);
-        }
-      }
-    }
-  } else {
-    filterList = presentationDefinition
-            .inputDescriptors[inputDescriptorIndex].constraints?.fields ??
-        <Field>[];
-  }
+  final filterList = presentationDefinition
+          .inputDescriptors[inputDescriptorIndex].constraints?.fields ??
+      <Field>[];
 
   /// If we have some instructions we filter the wallet's
   /// crendential list whith it
