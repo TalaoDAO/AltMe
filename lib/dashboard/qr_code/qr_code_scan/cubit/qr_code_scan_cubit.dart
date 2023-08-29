@@ -9,7 +9,6 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/oidc4vc/initiate_oidv4vc_credential_issuance.dart';
 import 'package:altme/oidc4vc/verify_encoded_data.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
@@ -664,13 +663,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final isJwtVpInJwtVCRequired =
           presentationDefinition.format?.jwtVp != null;
 
+      final host = await getHost(uri: state.uri!, client: client);
+
       emit(
         state.copyWith(
           qrScanStatus: QrScanStatus.success,
           route: CredentialManifestOfferPickPage.route(
             uri: state.uri!,
             credential: credentialPreview,
-            issuer: Issuer.emptyIssuer('domain'),
+            issuer: Issuer.emptyIssuer(host),
             inputDescriptorIndex: 0,
             credentialsToBePresented: [],
             isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,

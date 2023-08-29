@@ -262,58 +262,8 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                 : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
 
             if (isOpenIDUrl) {
-              /// OIDC4VCI Case
-              if (currentOIIDC4VCTypeForIssuance != null) {
-                /// issuance case
-                switch (currentOIIDC4VCTypeForIssuance) {
-                  case OIDC4VCType.DEFAULT:
-                  case OIDC4VCType.HEDERA:
-                  case OIDC4VCType.EBSIV3:
-                    final dynamic credentialOfferJson =
-                        await getCredentialOfferJson(
-                      scannedResponse: state.uri!.toString(),
-                      dioClient: DioClient('', Dio()),
-                    );
-                    if (credentialOfferJson == null) throw Exception();
-
-                    subtitle = Uri.parse(
-                      credentialOfferJson['credential_issuer'].toString(),
-                    ).host;
-
-                  case OIDC4VCType.GAIAX:
-                  case OIDC4VCType.EBSIV2:
-                    subtitle = Uri.parse(
-                      state.uri!.queryParameters['issuer'].toString(),
-                    ).host;
-                  case OIDC4VCType.JWTVC:
-                    throw Exception();
-                }
-              } else {
-                /// verification case
-
-                final String? requestUri =
-                    state.uri?.queryParameters['request_uri'];
-
-                /// check if request uri is provided or not
-                if (requestUri != null) {
-                  final requestUri =
-                      state.uri!.queryParameters['request_uri'].toString();
-                  final dynamic response =
-                      await DioClient('', Dio()).get(requestUri);
-                  final Map<String, dynamic> decodedResponse = decodePayload(
-                    jwtDecode: JWTDecode(),
-                    token: response as String,
-                  );
-
-                  subtitle =
-                      Uri.parse(decodedResponse['redirect_uri'].toString())
-                          .host;
-                } else {
-                  subtitle = Uri.parse(
-                    state.uri!.queryParameters['redirect_uri'] ?? '',
-                  ).host;
-                }
-              }
+              subtitle =
+                  await getHost(uri: state.uri!, client: DioClient('', Dio()));
             }
 
             LoadingView().hide();

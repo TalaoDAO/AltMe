@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
+import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
@@ -487,4 +488,60 @@ String getCredentialData(dynamic credential) {
   }
 
   return cred;
+}
+
+Future<String> getHost({
+  required Uri uri,
+  required DioClient client,
+}) async {
+  final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
+      getOIDC4VCTypeForIssuance(uri.toString());
+
+  /// OIDC4VCI Case
+  if (currentOIIDC4VCTypeForIssuance != null) {
+    /// issuance case
+
+    switch (currentOIIDC4VCTypeForIssuance) {
+      case OIDC4VCType.DEFAULT:
+      case OIDC4VCType.HEDERA:
+      case OIDC4VCType.EBSIV3:
+        final dynamic credentialOfferJson = await getCredentialOfferJson(
+          scannedResponse: uri.toString(),
+          dioClient: client,
+        );
+        if (credentialOfferJson == null) throw Exception();
+
+        return Uri.parse(
+          credentialOfferJson['credential_issuer'].toString(),
+        ).host;
+
+      case OIDC4VCType.GAIAX:
+      case OIDC4VCType.EBSIV2:
+        return Uri.parse(
+          uri.queryParameters['issuer'].toString(),
+        ).host;
+      case OIDC4VCType.JWTVC:
+        throw Exception();
+    }
+  } else {
+    /// verification case
+
+    final String? requestUri = uri.queryParameters['request_uri'];
+
+    /// check if request uri is provided or not
+    if (requestUri != null) {
+      final requestUri = uri.queryParameters['request_uri'].toString();
+      final dynamic response = await client.get(requestUri);
+      final Map<String, dynamic> decodedResponse = decodePayload(
+        jwtDecode: JWTDecode(),
+        token: response as String,
+      );
+
+      return Uri.parse(decodedResponse['redirect_uri'].toString()).host;
+    } else {
+      return Uri.parse(
+        uri.queryParameters['redirect_uri'] ?? '',
+      ).host;
+    }
+  }
 }
