@@ -285,6 +285,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           final clientId = response['client_id'];
           final claims = response['claims'];
           final presentationDefinition = response['presentation_definition'];
+          final presentationDefinitionUri =
+              response['presentation_definition_uri'];
 
           final queryJson = <String, dynamic>{};
           if (redirectUri != null) {
@@ -305,6 +307,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           if (presentationDefinition != null) {
             queryJson['presentation_definition'] =
                 jsonEncode(presentationDefinition).replaceAll('"', "'");
+          }
+
+          if (presentationDefinitionUri != null) {
+            queryJson['presentation_definition_uri'] =
+                presentationDefinitionUri;
           }
 
           final String queryString = Uri(queryParameters: queryJson).query;
@@ -625,6 +632,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 as Map<String, dynamic>;
 
         presentationDefinition = PresentationDefinition.fromJson(json);
+      } else if (keys.contains('presentation_definition_uri')) {
+        final presentationDefinitionUri = state
+            .uri!.queryParameters['presentation_definition_uri']
+            .toString();
+        final dynamic response = await client.get(presentationDefinitionUri);
+
+        final Map<String, dynamic> data = response == String
+            ? jsonDecode(response.toString()) as Map<String, dynamic>
+            : response as Map<String, dynamic>;
+
+        presentationDefinition = PresentationDefinition.fromJson(data);
       } else {
         throw Exception();
       }
