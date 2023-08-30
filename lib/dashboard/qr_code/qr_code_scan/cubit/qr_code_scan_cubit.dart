@@ -509,13 +509,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
         if (credentialOfferJson == null) break;
 
-        final dynamic userPinRequired = credentialOfferJson['grants']
-                ['urn:ietf:params:oauth:grant-type:pre-authorized_code']
-            ['user_pin_required'];
+        final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
+            ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+
+        bool? userPinRequired;
+
+        if (preAuthorizedCodeGrant != null &&
+            preAuthorizedCodeGrant is Map &&
+            preAuthorizedCodeGrant.containsKey('user_pin_required')) {
+          userPinRequired = preAuthorizedCodeGrant['user_pin_required'] as bool;
+        }
 
         if (userPinRequired == null) break;
 
-        if (userPinRequired is bool && userPinRequired) {
+        if (userPinRequired) {
           emit(
             state.copyWith(
               qrScanStatus: QrScanStatus.success,

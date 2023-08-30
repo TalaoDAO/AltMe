@@ -836,7 +836,7 @@ class OIDC4VC {
     final vpBuilder = JsonWebSignatureBuilder()
       // set the content
       ..jsonContent = vpVerifierClaims.toJson()
-      ..setProtectedHeader('typ', 'JWT')
+      ..setProtectedHeader('typ', 'openid4vci-proof+jwt')
       ..setProtectedHeader('alg', tokenParameters.alg);
 
     if (oidc4vcModel.publicJWKNeeded) {

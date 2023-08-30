@@ -178,12 +178,9 @@ Future<dynamic> getCredentialOfferJson({
   } else if (keys.contains('credential_offer_uri')) {
     final url = uriFromScannedResponse.queryParameters['credential_offer_uri']
         .toString();
-    final responseUrl = await dioClient.get(url);
-    final Uri uriFromResponseUrl = Uri.parse(responseUrl as String);
+    final response = await dioClient.get(url);
 
-    credentialOfferJson = jsonDecode(
-      uriFromResponseUrl.queryParameters['credential_offer'].toString(),
-    );
+    credentialOfferJson = response;
   }
 
   return credentialOfferJson;
