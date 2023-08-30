@@ -96,16 +96,27 @@ class OIDC4VC {
   ) async {
     if (openIdRequest.startsWith(oidc4vcModel.offerPrefix)) {
       try {
-        final jsonPath = JsonPath(r'$..authorization_endpoint');
+        final authorizationRequestParemeters =
+            getAuthorizationRequestParemeters(openIdRequest, redirectUrl);
 
         final baseUrl = getIssuerFromOpenidRequest(openIdRequest);
 
         final openidConfigurationResponse = await getOpenIdConfig(baseUrl);
 
-        final authorizationEndpoint =
-            jsonPath.readValues(openidConfigurationResponse).first as String;
-        final authorizationRequestParemeters =
-            getAuthorizationRequestParemeters(openIdRequest, redirectUrl);
+        late String authorizationEndpoint;
+
+        final authorizationServer =
+            openidConfigurationResponse['authorization_server'];
+        if (authorizationServer != null) {
+          final url = '$authorizationServer/.well-known/openid-configuration';
+          final response = await client.get<dynamic>(url);
+
+          authorizationEndpoint =
+              response.data['authorization_endpoint'] as String;
+        } else {
+          authorizationEndpoint =
+              openidConfigurationResponse['authorization_endpoint'] as String;
+        }
 
         final url = Uri.parse(authorizationEndpoint);
         final authorizationUri =
@@ -211,7 +222,7 @@ class OIDC4VC {
 
     final openidConfigurationResponse = await getOpenIdConfig(kIssuer);
 
-    final tokenEndPoint = readTokenEndPoint(openidConfigurationResponse);
+    final tokenEndPoint = await readTokenEndPoint(openidConfigurationResponse);
 
     if (nonce == null || accessToken == null) {
       final response = await getToken(tokenEndPoint, tokenData);
@@ -350,13 +361,20 @@ class OIDC4VC {
     }
   }
 
-  String readTokenEndPoint(
-    Map<String, dynamic> openidConfigurationResponse,
-  ) {
-    final jsonPath = JsonPath(r'$..token_endpoint');
+  Future<String> readTokenEndPoint(
+      Map<String, dynamic> openidConfigurationResponse) async {
+    late String tokenEndPoint;
 
-    final tokenEndPoint =
-        jsonPath.readValues(openidConfigurationResponse).first as String;
+    final authorizationServer =
+        openidConfigurationResponse['authorization_server'];
+    if (authorizationServer != null) {
+      final url = '$authorizationServer/.well-known/openid-configuration';
+      final response = await client.get<dynamic>(url);
+
+      tokenEndPoint = response.data['token_endpoint'] as String;
+    } else {
+      tokenEndPoint = openidConfigurationResponse['token_endpoint'] as String;
+    }
     return tokenEndPoint;
   }
 

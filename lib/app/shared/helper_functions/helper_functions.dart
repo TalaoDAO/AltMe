@@ -398,7 +398,7 @@ Future<(String, String)> getDidAndKid({
       final encodedAddress = Base58Encode([...prefix, ...encodedData]);
 
       did = 'did:key:z$encodedAddress';
-      final lastPart = Base58Encode(encodedData);
+      final String lastPart = did.split(':')[2];
       kid = '$did#$lastPart';
 
     case OIDC4VCType.JWTVC:
@@ -467,6 +467,10 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
 OIDC4VCType? getOIDC4VCTypeForIssuance(String url) {
   for (final oidc4vcType in OIDC4VCType.values) {
     if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
+      if (oidc4vcType == OIDC4VCType.DEFAULT &&
+          url.contains('api-conformance.ebsi.eu')) {
+        return OIDC4VCType.EBSIV3;
+      }
       return oidc4vcType;
     }
   }
