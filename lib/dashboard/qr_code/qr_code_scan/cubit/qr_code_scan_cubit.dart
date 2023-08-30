@@ -205,9 +205,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         }
 
         final String? requestUri = state.uri?.queryParameters['request_uri'];
+        final String? request = state.uri?.queryParameters['request'];
 
         /// check if request uri is provided or not
-        if (requestUri != null) {
+        if (requestUri != null || request != null) {
           /// verifier side (oidc4vp) or (siopv2 oidc4vc) with request_uri
           /// verify the encoded data first
           await verifyJWTBeforeLaunchingOIDC4VCANDSIOPV2Flow();
@@ -717,9 +718,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   /// verify jwt
   Future<void> verifyJWTBeforeLaunchingOIDC4VCANDSIOPV2Flow() async {
-    final requestUri = state.uri!.queryParameters['request_uri'].toString();
+    final String? requestUri = state.uri?.queryParameters['request_uri'];
+    final String? request = state.uri?.queryParameters['request'];
 
-    encodedData = await fetchRequestUriPayload(url: requestUri);
+    if (requestUri != null) {
+      encodedData = await fetchRequestUriPayload(url: requestUri);
+    } else {
+      encodedData = request;
+    }
 
     final Map<String, dynamic> payload =
         decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
