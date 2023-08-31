@@ -30,6 +30,13 @@ class AltMeStrings {
   // static const int clientIdForID360 = 200;
 
   //minter
-  static const String minterAddress =
-      '0x240863E65b2ace78eda93334be396FF220f14354';
+  static const List<String> minterBurnAddress = [
+    '0x240863E65b2ace78eda93334be396FF220f14354',
+  ];
+
+  //Don't send address
+  static const List<String> contractDontSendAddress = [
+    'KT1VuCBGQW4WakHj1PXhFC1G848dKyNy34kB',
+    'KT1Wv4dPiswWYj2H9UrSrVNmcMd9w5NtzczG'
+  ];
 }
