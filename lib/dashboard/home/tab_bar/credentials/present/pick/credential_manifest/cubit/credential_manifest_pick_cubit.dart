@@ -51,7 +51,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
             id: '${currentFirst.id},${descriptorsWithSameGroup.map((e) => e.id).join(",")}', // ignore: lines_longer_than_80_chars
             name: [
               currentFirst.name,
-              ...descriptorsWithSameGroup.map((e) => e.name)
+              ...descriptorsWithSameGroup.map((e) => e.name),
             ].where((e) => e != null).join(','),
             constraints: Constraints([
               ...?currentFirst.constraints?.fields,
@@ -61,7 +61,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
             group: currentFirst.group,
             purpose: [
               currentFirst.purpose,
-              ...descriptorsWithSameGroup.map((e) => e.purpose)
+              ...descriptorsWithSameGroup.map((e) => e.purpose),
             ].where((e) => e != null).join(','),
           );
           newInputDescriptor.add(mergedDescriptor);
@@ -108,7 +108,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
       /// selecting the credential
       selected = [
         ...state.selected,
-        ...[index]
+        ...[index],
       ];
     }
 

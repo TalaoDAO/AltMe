@@ -167,6 +167,14 @@ class MatrixChatImpl extends MatrixChatInterface {
   @override
   Message mapEventToMessage(Event event) {
     late final Message message;
+    num size = 0;
+    if (event.content['info'] != null) {
+      final info = event.content['info']! as Map;
+      if (info['size'] != null) {
+        size = info['size'] as num;
+      }
+    }
+
     if (event.messageType == 'm.text') {
       message = TextMessage(
         id: event.unsigned?['transaction_id'] as String? ?? const Uuid().v4(),
@@ -183,7 +191,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         id: const Uuid().v4(),
         remoteId: event.eventId,
         name: event.plaintextBody,
-        size: event.content['info']['size'] as num? ?? 0,
+        size: size,
         uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
@@ -196,7 +204,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         id: const Uuid().v4(),
         remoteId: event.eventId,
         name: event.plaintextBody,
-        size: event.content['info']['size'] as num? ?? 0,
+        size: size,
         uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
@@ -205,14 +213,25 @@ class MatrixChatImpl extends MatrixChatInterface {
         ),
       );
     } else if (event.messageType == 'm.audio') {
+      var duration = 0;
+      var size = 0;
+      if (event.content['info'] != null) {
+        final info = event.content['info']! as Map;
+        if (info['duration'] != null) {
+          duration = info['duration'] as int;
+        }
+        if (info['size'] != null) {
+          size = info['size'] as int;
+        }
+      }
       message = AudioMessage(
         id: const Uuid().v4(),
         remoteId: event.eventId,
         duration: Duration(
-          milliseconds: event.content['info']['duration'] as int? ?? 0,
+          milliseconds: duration,
         ),
         name: event.plaintextBody,
-        size: event.content['info']['size'] as num? ?? 0,
+        size: size,
         uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,

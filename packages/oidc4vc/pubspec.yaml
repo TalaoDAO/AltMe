@@ -14,19 +14,19 @@ dependencies:
   dart_bip32_bip44: ^0.2.0
   dart_jsonwebtoken: ^2.8.0
   dart_web3: ^0.0.3
-  dio: ^4.0.0 #tezart from git depends on dio ^4.0.0
+  dio: ^5.3.2
   fast_base58: ^0.2.1
   flutter:
     sdk: flutter
   hex: ^0.2.0
-  http_mock_adapter: ^0.3.3 #http_mock_adapter 0.4.4 depends on dio ^5.0.0
+  http_mock_adapter: ^0.6.0
   jose: ^0.3.3
   json_path: ^0.4.4 #latest version creates test issue
   secp256k1: ^0.3.0
   tezart:
     git:
       url: https://github.com/autonomy-system/tezart.git
-      ref: 0cd68a902c8d2554227738594c62046571e57b4c
+      ref: e53e4ab9eaabea53cbf70e814efd2245b4659f48
   uuid: ^3.0.7
 
 dependency_overrides:

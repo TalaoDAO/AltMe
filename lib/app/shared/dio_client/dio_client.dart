@@ -5,8 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 part 'logging.dart';
 
-const _defaultConnectTimeout = Duration.millisecondsPerMinute;
-const _defaultReceiveTimeout = Duration.millisecondsPerMinute;
+const _defaultConnectTimeout = Duration(minutes: 1);
+const _defaultReceiveTimeout = Duration(minutes: 1);
 
 class DioClient {
   DioClient(this.baseUrl, this.dio) {
@@ -68,7 +68,7 @@ class DioClient {
         ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA,
       );
     } catch (e) {
-      if (e is DioError) {
+      if (e is DioException) {
         throw NetworkException.getDioException(error: e);
       } else {
         rethrow;
@@ -135,7 +135,7 @@ class DioClient {
         ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA,
       );
     } catch (e) {
-      if (e is DioError) {
+      if (e is DioException) {
         throw NetworkException.getDioException(error: e);
       } else {
         rethrow;

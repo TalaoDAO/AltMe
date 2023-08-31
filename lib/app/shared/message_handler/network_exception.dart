@@ -10,7 +10,7 @@ class NetworkException with MessageHandler {
   final NetworkError message;
   final dynamic data;
 
-  static NetworkException handleResponse(int? statusCode, DioError? error) {
+  static NetworkException handleResponse(int? statusCode, DioException? error) {
     switch (statusCode) {
       // case 200: //No Error
       // case 201: //No Error
@@ -87,41 +87,46 @@ class NetworkException with MessageHandler {
   }) {
     if (error is Exception) {
       NetworkException networkException;
-      if (error is DioError) {
+      if (error is DioException) {
         switch (error.type) {
-          case DioErrorType.cancel:
+          case DioExceptionType.cancel:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_REQUEST_CANCELLED,
               data: error.response?.data,
             );
-
-          case DioErrorType.connectTimeout:
+          case DioExceptionType.connectionTimeout:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT,
               data: error.response?.data,
             );
-
-          case DioErrorType.other:
+          case DioExceptionType.unknown:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
               data: error.response?.data,
             );
-
-          case DioErrorType.receiveTimeout:
+          case DioExceptionType.receiveTimeout:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_SEND_TIMEOUT,
               data: error.response?.data,
             );
-
-          case DioErrorType.response:
+          case DioExceptionType.badResponse:
             networkException = handleResponse(
               error.response?.statusCode,
               error,
             );
-
-          case DioErrorType.sendTimeout:
+          case DioExceptionType.sendTimeout:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_SEND_TIMEOUT,
+              data: error.response?.data,
+            );
+          case DioExceptionType.badCertificate:
+            networkException = NetworkException(
+              message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR,
+              data: error.response?.data,
+            );
+          case DioExceptionType.connectionError:
+            networkException = NetworkException(
+              message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR,
               data: error.response?.data,
             );
         }
