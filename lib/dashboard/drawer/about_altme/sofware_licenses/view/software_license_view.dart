@@ -89,7 +89,7 @@ class _SoftwareLicenseViewState extends State<SoftwareLicenseView> {
                               Expanded(
                                 child: Text(
                                   '${state.licenses[index].title} '
-                                  '(${state.licenses[index].description.length})',
+                                  '${state.licenses[index].description.length}',
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                               ),

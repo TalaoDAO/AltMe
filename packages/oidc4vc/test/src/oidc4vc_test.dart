@@ -1,3 +1,4 @@
+// ignore_for_file: lines_longer_than_80_chars
 // // Copyright (c) 2022, Very Good Ventures
 // // https://verygood.ventures
 // //

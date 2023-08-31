@@ -156,8 +156,8 @@ class ActivateBiometricsView extends StatelessWidget {
                           context: context,
                           builder: (context) => ConfirmDialog(
                             title: l10n.biometricsNotSupported,
-                            subtitle: l10n
-                                .yourDeviceDoseNotSupportBiometricsAuthentication,
+                            subtitle:
+                                l10n.deviceDoNotSupportBiometricsAuthentication,
                             yes: l10n.ok,
                           ),
                         );

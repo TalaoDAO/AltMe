@@ -3,7 +3,6 @@ class Urls {
   static const String checkIssuerTalaoUrl =
       'https://talao.co/trusted-issuers-registry/v1/issuers';
 
-  // TODO(all): update the issuer url for polygon
   static const String checkIssuerPolygonTestnetUrl =
       'https://issuer-demo.polygonid.me/';
   static const String checkIssuerPolygonUrl = 'checkIssuerPolygonUrl';
@@ -91,7 +90,6 @@ class Urls {
   static const objktUrl = 'https://objkt.com/';
   static const raribleUrl = 'https://rarible.com/';
 
-  // TODO(all): remember to update all below urls.
   static const String bunnyPassCardUrl = 'https://issuer.tezotopia.altme.io';
   static const String dogamiPassCardUrl = 'https://issuer.tezotopia.altme.io';
   static const String matterlightPassCardUrl =
@@ -99,7 +97,6 @@ class Urls {
   static const String pigsPassCardUrl = 'https://issuer.tezotopia.altme.io';
   static const String trooperzPassCardUrl = 'https://issuer.tezotopia.altme.io';
 
-  //
   static const over13AIValidationUrl = 'https://issuer.talao.co/ai/over13';
   static const over15AIValidationUrl = 'https://issuer.talao.co/ai/over15';
   static const over18AIValidationUrl = 'https://issuer.talao.co/ai/over18';

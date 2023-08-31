@@ -194,7 +194,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               message: StateMessage.error(
                 messageHandler: ResponseMessage(
                   ResponseString
-                      .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile,
+                      .RESPONSE_STRING_pleaseSwitchToRightOIDC4VCProfile,
                 ),
                 showDialog: false,
                 duration: const Duration(seconds: 20),

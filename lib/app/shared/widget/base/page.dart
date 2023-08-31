@@ -86,9 +86,10 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
           secureApplicationController.lock();
         }
 
+      case AppLifecycleState.hidden:
       case AppLifecycleState.detached:
         break;
-      // TODO: Handle this case.
+      // TODO(all): Handle this case.
     }
   }
 

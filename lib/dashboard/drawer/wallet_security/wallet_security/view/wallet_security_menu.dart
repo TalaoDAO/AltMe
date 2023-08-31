@@ -125,7 +125,7 @@ class WalletSecurityView extends StatelessWidget {
                                 builder: (context) => ConfirmDialog(
                                   title: l10n.biometricsNotSupported,
                                   subtitle: l10n
-                                      .yourDeviceDoseNotSupportBiometricsAuthentication, // ignore: lines_longer_than_80_chars
+                                      .deviceDoNotSupportBiometricsAuthentication, // ignore: lines_longer_than_80_chars
                                   yes: l10n.ok,
                                 ),
                               );
@@ -175,7 +175,8 @@ class WalletSecurityView extends StatelessWidget {
                             await context
                                 .read<ProfileCubit>()
                                 .setUserConsentForVerifierAccess(
-                                    enabled: value);
+                                  enabled: value,
+                                );
                           },
                           value: state.model.userConsentForVerifierAccess,
                           activeColor: Theme.of(context).colorScheme.primary,
@@ -191,7 +192,8 @@ class WalletSecurityView extends StatelessWidget {
                             await context
                                 .read<ProfileCubit>()
                                 .setUserPINCodeForAuthentication(
-                                    enabled: value);
+                                  enabled: value,
+                                );
                           },
                           value: state.model.userPINCodeForAuthentication,
                           activeColor: Theme.of(context).colorScheme.primary,

@@ -221,7 +221,6 @@ Future<bool> getStoragePermission() async {
   if (await Permission.storage.request().isGranted) {
     return true;
   } else if (await Permission.storage.request().isPermanentlyDenied) {
-    // TODO(all): show dialog to choose this option
     await openAppSettings();
   } else if (await Permission.storage.request().isDenied) {
     return false;
@@ -330,7 +329,7 @@ String getSignatureType(String circuitId) {
   return '';
 }
 
-String separateUppercaseWords(String input) {
+String splitUppercase(String input) {
   final regex = RegExp('(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])');
   return input.split(regex).join(' ');
 }

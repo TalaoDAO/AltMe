@@ -347,7 +347,7 @@
   "termsOfUse": "Conditions d'utilisation et confidentialité",
   "scanFingerprintToAuthenticate": "Scanner l'empreinte digitale pour s'authentifier",
   "biometricsNotSupported": "La biométrie n'est pas prise en charge",
-  "yourDeviceDoseNotSupportBiometricsAuthentication": "Votre appareil ne prend pas en charge l'authentification biométrique",
+  "deviceDoNotSupportBiometricsAuthentication": "Votre appareil ne prend pas en charge l'authentification biométrique",
   "biometricsEnabledMessage": "Vous pouvez maintenant déverrouiller l'application avec vos données biométriques.",
   "biometricsDisabledMessage": "Votre biométrie a été désactivée.",
   "exportSecretKey": "Exporter la clé secrète",

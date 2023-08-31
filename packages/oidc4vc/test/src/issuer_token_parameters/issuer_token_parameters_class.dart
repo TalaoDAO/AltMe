@@ -38,15 +38,4 @@ class IssuerTokenParameterTest extends TokenParameterTest {
     final tokenParameters = IssuerTokenParameters(keyWithAlg, '', '', '');
     expect(tokenParameters.alg, HS256Alg);
   }
-
-  // @override
-  // void thumprintOfKey() {
-  //   expect(tokenParameters.thumbprint, thumbprint);
-  // }
-
-  // @override
-  // void thumprintOfKeyForrfc7638() {
-  //   final tokenParameters2 = IssuerTokenParameters(rfc7638Jwk, '', '', '', '');
-  //   expect(tokenParameters2.thumbprint, expectedThumbprintForrfc7638Jwk);
-  // }
 }

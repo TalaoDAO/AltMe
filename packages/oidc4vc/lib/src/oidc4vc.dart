@@ -362,7 +362,8 @@ class OIDC4VC {
   }
 
   Future<String> readTokenEndPoint(
-      Map<String, dynamic> openidConfigurationResponse) async {
+    Map<String, dynamic> openidConfigurationResponse,
+  ) async {
     late String tokenEndPoint;
 
     final authorizationServer =

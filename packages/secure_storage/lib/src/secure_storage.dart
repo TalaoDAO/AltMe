@@ -45,6 +45,7 @@ Future<void> get initSecureStorage async {
 /// proper phone secure storage.
 Future<void> testStorage(FlutterSecureStorage storage) async {
   final secureStorage = SecureStorageProvider(storage: storage);
+  // ignore: unused_local_variable
   final testCompatibility = await secureStorage.getAllValues();
 }
 
@@ -59,7 +60,8 @@ class SecureStorageProvider {
       return _instance;
     } else {
       if (_instance._storage == null) {
-        //TODO: Explain user and give him possibility to send issue report?
+        // TODO(all): Explain user and give him
+        // possibility to send issue report?
         throw Exception('Secure Storage issue with this device');
       }
       return _instance;

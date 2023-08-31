@@ -466,7 +466,7 @@ extension ResponseStringX on ResponseString {
           injectedMessage ?? '',
         );
 
-      case ResponseString.RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile:
+      case ResponseString.RESPONSE_STRING_pleaseSwitchToRightOIDC4VCProfile:
         return globalMessage
             .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile;
 
