@@ -11,12 +11,13 @@ import '../../../helpers/helpers.dart';
 
 void main() {
   group('NetworkException Test', () {
-    group('DioError', () {
-      test('return requestCancelled response message is DioErrorType.cancel',
+    group('DioException', () {
+      test(
+          'return requestCancelled response message is DioExceptionType.cancel',
           () {
-        final error = DioError(
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.cancel,
+          type: DioExceptionType.cancel,
         );
         final message = NetworkException.getDioException(error: error);
         expect(message.message, NetworkError.NETWORK_ERROR_REQUEST_CANCELLED);
@@ -24,10 +25,10 @@ void main() {
 
       test(
           'return requestTimeout response when message is '
-          'DioErrorType.connectTimeout', () {
-        final error = DioError(
+          'DioExceptionType.connectTimeout', () {
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.connectTimeout,
+          type: DioExceptionType.connectionTimeout,
         );
         final message = NetworkException.getDioException(error: error);
         expect(message.message, NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT);
@@ -35,8 +36,8 @@ void main() {
 
       test(
           'return noInternetConnection response when message is '
-          'DioErrorType.other', () {
-        final error = DioError(
+          'DioExceptionType.other', () {
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
         );
         final message = NetworkException.getDioException(error: error);
@@ -48,10 +49,10 @@ void main() {
 
       test(
           'return receiveTimeout response when message is '
-          'DioErrorType.receiveTimeout', () {
-        final error = DioError(
+          'DioExceptionType.receiveTimeout', () {
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.receiveTimeout,
+          type: DioExceptionType.receiveTimeout,
         );
         final message = NetworkException.getDioException(error: error);
         expect(message.message, NetworkError.NETWORK_ERROR_SEND_TIMEOUT);
@@ -59,23 +60,23 @@ void main() {
 
       test(
           'return receiveTimeout response when message is '
-          'DioErrorType.sendTimeout', () {
-        final error = DioError(
+          'DioExceptionType.sendTimeout', () {
+        final error = DioException(
           requestOptions: RequestOptions(
             path: '',
           ),
-          type: DioErrorType.sendTimeout,
+          type: DioExceptionType.sendTimeout,
         );
         final message = NetworkException.getDioException(error: error);
         expect(message.message, NetworkError.NETWORK_ERROR_SEND_TIMEOUT);
       });
 
       test(
-          '''return badRequest response when message is DioErrorType.receiveTimeout''',
+          '''return badRequest response when message is DioExceptionType.receiveTimeout''',
           () {
-        final error = DioError(
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.response,
+          type: DioExceptionType.badResponse,
           response: Response<dynamic>(
             requestOptions: RequestOptions(
               path: '',
@@ -90,9 +91,9 @@ void main() {
 
     group('StatusCode', () {
       test('return badRequest response when statusCode is 404', () {
-        final error = DioError(
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.response,
+          type: DioExceptionType.unknown,
           response: Response<dynamic>(
             requestOptions: RequestOptions(
               path: '',
@@ -105,9 +106,9 @@ void main() {
       });
 
       test('return internalServerError response when statusCode is 500', () {
-        final error = DioError(
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.response,
+          type: DioExceptionType.connectionError,
           response: Response<dynamic>(
             requestOptions: RequestOptions(
               path: '',
@@ -123,9 +124,9 @@ void main() {
       });
 
       test('return unauthenticated response when statusCode is 401', () {
-        final error = DioError(
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.response,
+          type: DioExceptionType.badResponse,
           response: Response<dynamic>(
             requestOptions: RequestOptions(
               path: '',
@@ -138,9 +139,9 @@ void main() {
       });
 
       test('return unauthorizedRequest response when statusCode is 403', () {
-        final error = DioError(
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.response,
+          type: DioExceptionType.badResponse,
           response: Response<dynamic>(
             requestOptions: RequestOptions(
               path: '',
@@ -156,9 +157,9 @@ void main() {
       });
 
       test('return requestTimeout response when statusCode is 408', () {
-        final error = DioError(
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.response,
+          type: DioExceptionType.badResponse,
           response: Response<dynamic>(
             requestOptions: RequestOptions(
               path: '',
@@ -171,9 +172,9 @@ void main() {
       });
 
       test('return getDioException response when statusCode is 409', () {
-        final error = DioError(
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.response,
+          type: DioExceptionType.badResponse,
           response: Response<dynamic>(
             requestOptions: RequestOptions(
               path: '',
@@ -186,9 +187,9 @@ void main() {
       });
 
       test('return tooManyRequests response when statusCode is 429', () {
-        final error = DioError(
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.response,
+          type: DioExceptionType.badResponse,
           response: Response<dynamic>(
             requestOptions: RequestOptions(
               path: '',
@@ -201,9 +202,9 @@ void main() {
       });
 
       test('return notImplemented response when statusCode is 501', () {
-        final error = DioError(
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.response,
+          type: DioExceptionType.badResponse,
           response: Response<dynamic>(
             requestOptions: RequestOptions(
               path: '',
@@ -216,9 +217,9 @@ void main() {
       });
 
       test('return serviceUnavailable response when statusCode is 503', () {
-        final error = DioError(
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.response,
+          type: DioExceptionType.badResponse,
           response: Response<dynamic>(
             requestOptions: RequestOptions(
               path: '',
@@ -231,9 +232,9 @@ void main() {
       });
 
       test('return gatewayTimeout response when statusCode is 504', () {
-        final error = DioError(
+        final error = DioException(
           requestOptions: RequestOptions(path: ''),
-          type: DioErrorType.response,
+          type: DioExceptionType.badResponse,
           response: Response<dynamic>(
             requestOptions: RequestOptions(
               path: '',

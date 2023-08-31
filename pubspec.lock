@@ -624,13 +624,13 @@ packages:
     source: hosted
     version: "3.0.0"
   dio:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       name: dio
-      sha256: "7d328c4d898a61efc3cd93655a0955858e29a0aa647f0f9e02d59b3bb275e2e8"
+      sha256: ce75a1b40947fea0a0e16ce73337122a86762e38b982e1ccb909daa3b9bc4197
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.6"
+    version: "5.3.2"
   dio_cache_interceptor:
     dependency: transitive
     description:
@@ -1191,10 +1191,10 @@ packages:
     dependency: "direct dev"
     description:
       name: http_mock_adapter
-      sha256: "6fa1a00932a5758750f54c5594f8bf37393fe5ae86e49325281b5a9d99114f33"
+      sha256: "07e78a5b64410ff8404aee2f8889ebff08def0c752b85a3945dec2029a6e1110"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.3"
+    version: "0.6.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -1469,10 +1469,10 @@ packages:
     dependency: "direct main"
     description:
       name: matrix
-      sha256: ecee8d687224f0fe668a5b9a034e8c2a7b241f578c93a236e0e93a8c2382a458
+      sha256: "10389562a4562db6150291b538e025a9a1b7a79998a71d38cb5c78a34ca6b007"
       url: "https://pub.dev"
     source: hosted
-    version: "0.20.5"
+    version: "0.22.3"
   matrix_api_lite:
     dependency: transitive
     description:
@@ -2296,8 +2296,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0cd68a902c8d2554227738594c62046571e57b4c"
-      resolved-ref: "0cd68a902c8d2554227738594c62046571e57b4c"
+      ref: e53e4ab9eaabea53cbf70e814efd2245b4659f48
+      resolved-ref: e53e4ab9eaabea53cbf70e814efd2245b4659f48
       url: "https://github.com/autonomy-system/tezart.git"
     source: git
     version: "2.0.4"

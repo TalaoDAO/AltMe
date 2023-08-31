@@ -566,7 +566,7 @@
 //             tokenUrl,
 //             (request) => request.throws(
 //               401,
-//               DioError(requestOptions: RequestOptions(path: tokenUrl)),
+//               DioException(requestOptions: RequestOptions(path: tokenUrl)),
 //             ),
 //           );
 //           final oidc4vc = OIDC4VC(client);
@@ -656,7 +656,7 @@
 //               url,
 //               (request) => request.throws(
 //                 401,
-//                 DioError(requestOptions: RequestOptions(path: tokenUrl)),
+//                 DioException(requestOptions: RequestOptions(path: tokenUrl)),
 //               ),
 //             );
 //             final oidc4vc = OIDC4VC(client);

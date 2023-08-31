@@ -37,6 +37,7 @@ dependencies:
   devicelocale: ^0.6.0
   did_kit:
     path: packages/did_kit
+  dio: ^5.3.2
   dotted_border: ^2.0.0+3
   ed25519_hd_key: ^2.2.0
   equatable: ^2.0.5
@@ -73,7 +74,7 @@ dependencies:
     path: packages/key_generator
   local_auth: ^2.1.6
   markdown: ^4.0.0 #matrix 0.20.2 depends on markdown ^4.0.0
-  matrix: ^0.20.2
+  matrix: ^0.22.3
   mime: ^1.0.4
   mobile_scanner: ^3.2.0
   model_viewer_plus: ^1.7.0
@@ -102,7 +103,7 @@ dependencies:
   tezart:
     git:
       url: https://github.com/autonomy-system/tezart.git
-      ref: 0cd68a902c8d2554227738594c62046571e57b4c
+      ref: e53e4ab9eaabea53cbf70e814efd2245b4659f48
   timezone: ^0.9.2
   uni_links: ^0.5.1
   url_launcher: ^6.1.11
@@ -114,7 +115,6 @@ dependencies:
   webview_flutter_wkwebview: ^3.4.4
 
 dependency_overrides:
-  dio: ^4.0.0 #tezart from git depends on dio ^4.0.0 , polygonid_flutter_sdk from git which depends on dio ^5.1.1
   ffi: ^2.0.2 #didkit from path which depends on ffi ^1.0.0
   http: ^1.0.0 #web3dart ^2.6.1 requires http ^0.13.5
   intl: ^0.18.1 #flutter_localizations from sdk which depends on intl 0.18.0
@@ -128,7 +128,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
-  http_mock_adapter: ^0.3.3 #http_mock_adapter 0.4.4 depends on dio ^5.0.0
+  http_mock_adapter: ^0.6.0
   json_serializable: ^6.7.0
   mockingjay: ^0.3.0
   mockito: ^5.4.1
