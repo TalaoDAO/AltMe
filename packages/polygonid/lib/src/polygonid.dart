@@ -499,7 +499,9 @@ class PolygonId {
     final String to = body.transactionData.contractAddress;
     final Iden3commProofEntity proof = response.first;
 
+    // ignore: lines_longer_than_80_chars
     const ABI =
+        // ignore: lines_longer_than_80_chars
         '[ { "inputs": [ { "internalType": "uint64", "name": "requestId", "type": "uint64" }, { "internalType": "uint256[]", "name": "inputs", "type": "uint256[]" }, { "internalType": "uint256[2]", "name": "a", "type": "uint256[2]" }, { "internalType": "uint256[2][2]", "name": "b", "type": "uint256[2][2]" }, { "internalType": "uint256[2]", "name": "c", "type": "uint256[2]" } ], "name": "submitZKPResponse", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" } ]';
 
     final ContractAbi cAbi = ContractAbi.fromJson(ABI, to);

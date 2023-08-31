@@ -125,7 +125,7 @@ class WalletSecurityView extends StatelessWidget {
                                 builder: (context) => ConfirmDialog(
                                   title: l10n.biometricsNotSupported,
                                   subtitle: l10n
-                                      .yourDeviceDoseNotSupportBiometricsAuthentication, // ignore: lines_longer_than_80_chars
+                                      .deviceDoNotSupportBiometricsAuthentication, // ignore: lines_longer_than_80_chars
                                   yes: l10n.ok,
                                 ),
                               );

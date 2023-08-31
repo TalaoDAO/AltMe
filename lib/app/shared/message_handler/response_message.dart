@@ -689,9 +689,9 @@ class ResponseMessage with MessageHandler {
             injectedMessage: injectedMessage,
           );
 
-        case ResponseString.RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile:
+        case ResponseString.RESPONSE_STRING_pleaseSwitchToRightOIDC4VCProfile:
           return ResponseString
-              .RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile.localise(
+              .RESPONSE_STRING_pleaseSwitchToRightOIDC4VCProfile.localise(
             context,
           );
 

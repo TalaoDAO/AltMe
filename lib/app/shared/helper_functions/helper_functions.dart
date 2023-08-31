@@ -221,7 +221,6 @@ Future<bool> getStoragePermission() async {
   if (await Permission.storage.request().isGranted) {
     return true;
   } else if (await Permission.storage.request().isPermanentlyDenied) {
-    // TODO(all): show dialog to choose this option
     await openAppSettings();
   } else if (await Permission.storage.request().isDenied) {
     return false;
