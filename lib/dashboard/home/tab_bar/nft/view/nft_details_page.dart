@@ -6,7 +6,6 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:matrix/matrix.dart';
 
 class NftDetailsPage extends StatelessWidget {
   const NftDetailsPage({
@@ -91,7 +90,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                   child: CachedImageFromNetwork(
                     widget.nftModel.displayUrl ??
                         (widget.nftModel.thumbnailUrl ?? ''),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.contain,
                     errorMessage: l10n.nftTooBigToLoad,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(Sizes.largeRadius),
@@ -132,62 +131,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
           ),
         ),
-        navigation: (widget.nftModel.isTransferable == false ||
-                widget.nftModel.contractAddress
-                    .equals(AltMeStrings.minterAddress))
-            ? widget.nftModel.contractAddress.equals(AltMeStrings.minterAddress)
-                ? SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(Sizes.spaceSmall),
-                      child: MyGradientButton(
-                        text: l10n.burn,
-                        onPressed: () async {
-                          final confirmed = await showDialog<bool>(
-                            context: context,
-                            builder: (context) => ConfirmDialog(
-                              title: l10n
-                                  .wouldYouLikeToConfirmThatYouIntendToBurnThisNFT,
-                              yes: l10n.yes,
-                              no: l10n.no,
-                              showNoButton: true,
-                            ),
-                          );
-                          if (confirmed ?? false) {
-                            await context
-                                .read<NftDetailsCubit>()
-                                .burnDefiComplianceToken(
-                                  nftModel: widget.nftModel,
-                                )
-                                .timeout(
-                                  const Duration(minutes: 1),
-                                );
-                          }
-                        },
-                      ),
-                    ),
-                  )
-                : null
-            : SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(Sizes.spaceSmall),
-                  child: MyGradientButton(
-                    text: l10n.send,
-                    onPressed: () {
-                      Navigator.of(context).push<void>(
-                        ConfirmTokenTransactionPage.route(
-                          selectedToken: isTezos
-                              ? (widget.nftModel as TezosNftModel).getToken()
-                              : (widget.nftModel as EthereumNftModel)
-                                  .getToken(),
-                          withdrawalAddress: '',
-                          amount: 1,
-                          isNFT: true,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
+        navigation: PickButton(l10n: l10n, isTezos: isTezos, widget: widget),
       ),
     );
   }
@@ -411,5 +355,117 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         ),
       ],
     ];
+  }
+}
+
+class SendButton extends StatelessWidget {
+  const SendButton({
+    super.key,
+    required this.l10n,
+    required this.isTezos,
+    required this.widget,
+  });
+
+  final AppLocalizations l10n;
+  final bool isTezos;
+  final NftDetailsView widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(Sizes.spaceSmall),
+        child: MyGradientButton(
+          text: l10n.send,
+          onPressed: () {
+            Navigator.of(context).push<void>(
+              ConfirmTokenTransactionPage.route(
+                selectedToken: isTezos
+                    ? (widget.nftModel as TezosNftModel).getToken()
+                    : (widget.nftModel as EthereumNftModel).getToken(),
+                withdrawalAddress: '',
+                amount: 1,
+                isNFT: true,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class BurnButton extends StatelessWidget {
+  const BurnButton({
+    super.key,
+    required this.l10n,
+    required this.widget,
+  });
+
+  final AppLocalizations l10n;
+  final NftDetailsView widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(Sizes.spaceSmall),
+        child: MyGradientButton(
+          text: l10n.burn,
+          onPressed: () async {
+            final confirmed = await showDialog<bool>(
+              context: context,
+              builder: (context) => ConfirmDialog(
+                title: l10n.wouldYouLikeToConfirmThatYouIntendToBurnThisNFT,
+                yes: l10n.yes,
+                no: l10n.no,
+                showNoButton: true,
+              ),
+            );
+            if (confirmed ?? false) {
+              await context
+                  .read<NftDetailsCubit>()
+                  .burnDefiComplianceToken(
+                    nftModel: widget.nftModel,
+                  )
+                  .timeout(
+                    const Duration(minutes: 1),
+                  );
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class PickButton extends StatelessWidget {
+  const PickButton({
+    super.key,
+    required this.l10n,
+    required this.isTezos,
+    required this.widget,
+  });
+
+  final AppLocalizations l10n;
+  final bool isTezos;
+  final NftDetailsView widget;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.nftModel.isTransferable == false ||
+        AltMeStrings.contractDontSendAddress
+            .contains(widget.nftModel.contractAddress)) {
+      return const SizedBox.shrink();
+    }
+    if (AltMeStrings.minterBurnAddress
+        .contains(widget.nftModel.contractAddress)) {
+      return BurnButton(l10n: l10n, widget: widget);
+    }
+    return SendButton(
+      l10n: l10n,
+      isTezos: isTezos,
+      widget: widget,
+    );
   }
 }
