@@ -142,7 +142,7 @@ class MatrixChatImpl extends MatrixChatInterface {
     try {
       for (final eventId in eventIds) {
         if (eventId != null) {
-          await room.postReceipt(eventId);
+          await room.setReadMarker(eventId);
         }
       }
     } catch (e, s) {

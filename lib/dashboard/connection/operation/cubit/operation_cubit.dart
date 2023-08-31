@@ -580,7 +580,7 @@ class OperationCubit extends Cubit<OperationState> {
       final String? gasLimit = operationDetail.gasLimit;
       final String? fee = operationDetail.fee;
 
-      if (operationDetail.kind == Kinds.origination) {
+      if (operationDetail.kind == OperationKind.origination) {
         final String balance = operationDetail.amount ?? '0';
         final List<Map<String, dynamic>> code = operationDetail.code!;
         final dynamic storage = operationDetail.storage;

@@ -304,7 +304,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         // TODO(all): Handle this case.
         break;
       case CredentialCategory.polygonidCards:
-        // TODO: Handle this case.
+        // TODO(all): Handle this case.
         break;
     }
   }

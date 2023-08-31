@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:credential_manifest/credential_manifest.dart';

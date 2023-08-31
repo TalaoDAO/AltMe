@@ -88,7 +88,7 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
 
       case AppLifecycleState.detached:
         break;
-      // TODO: Handle this case.
+      // TODO(all): Handle this case.
     }
   }
 

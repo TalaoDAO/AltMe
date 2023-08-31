@@ -175,7 +175,8 @@ class WalletSecurityView extends StatelessWidget {
                             await context
                                 .read<ProfileCubit>()
                                 .setUserConsentForVerifierAccess(
-                                    enabled: value);
+                                  enabled: value,
+                                );
                           },
                           value: state.model.userConsentForVerifierAccess,
                           activeColor: Theme.of(context).colorScheme.primary,
@@ -191,7 +192,8 @@ class WalletSecurityView extends StatelessWidget {
                             await context
                                 .read<ProfileCubit>()
                                 .setUserPINCodeForAuthentication(
-                                    enabled: value);
+                                  enabled: value,
+                                );
                           },
                           value: state.model.userPINCodeForAuthentication,
                           activeColor: Theme.of(context).colorScheme.primary,
