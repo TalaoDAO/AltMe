@@ -457,7 +457,7 @@ class OIDC4VC {
         format = 'jwt_vc';
         types = [];
       } else {
-        final jsonPath = JsonPath(r'$..credential_supported');
+        final jsonPath = JsonPath(r'$..credentials_supported');
 
         final credentialSupported =
             (jsonPath.read(openidConfigurationResponse).first.value as List)
