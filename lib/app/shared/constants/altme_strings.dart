@@ -37,6 +37,6 @@ class AltMeStrings {
   //Don't send address
   static const List<String> contractDontSendAddress = [
     'KT1VuCBGQW4WakHj1PXhFC1G848dKyNy34kB',
-    'KT1Wv4dPiswWYj2H9UrSrVNmcMd9w5NtzczG'
+    'KT1Wv4dPiswWYj2H9UrSrVNmcMd9w5NtzczG',
   ];
 }
