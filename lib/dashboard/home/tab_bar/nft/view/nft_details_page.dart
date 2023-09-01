@@ -6,6 +6,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 class NftDetailsPage extends StatelessWidget {
   const NftDetailsPage({
@@ -87,15 +88,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               children: [
                 AspectRatio(
                   aspectRatio: 1.1,
-                  child: CachedImageFromNetwork(
-                    widget.nftModel.displayUrl ??
-                        (widget.nftModel.thumbnailUrl ?? ''),
-                    fit: BoxFit.contain,
-                    errorMessage: l10n.nftTooBigToLoad,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(Sizes.largeRadius),
-                    ),
-                  ),
+                  child: NftPicture(widget: widget, l10n: l10n),
                 ),
                 const SizedBox(
                   height: Sizes.spaceSmall,
@@ -355,6 +348,40 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         ),
       ],
     ];
+  }
+}
+
+class NftPicture extends StatelessWidget {
+  const NftPicture({
+    super.key,
+    required this.widget,
+    required this.l10n,
+  });
+
+  final NftDetailsView widget;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context) {
+    if (AltMeStrings.contractDontSendAddress
+        .contains(widget.nftModel.contractAddress)) {
+      return ModelViewer(
+        src: widget.nftModel.artifactUrl!,
+        poster: widget.nftModel.thumbnailUrl,
+        alt: '',
+        ar: false,
+        autoRotate: false,
+        disableZoom: true,
+      );
+    }
+    return CachedImageFromNetwork(
+      widget.nftModel.displayUrl ?? (widget.nftModel.thumbnailUrl ?? ''),
+      fit: BoxFit.contain,
+      errorMessage: l10n.nftTooBigToLoad,
+      borderRadius: const BorderRadius.all(
+        Radius.circular(Sizes.largeRadius),
+      ),
+    );
   }
 }
 
