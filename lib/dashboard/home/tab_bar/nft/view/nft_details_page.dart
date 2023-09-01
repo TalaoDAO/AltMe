@@ -363,27 +363,23 @@ class NftPicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.nftModel.artifactUri == '') {
-      return CachedImageFromNetwork(
-        widget.nftModel.displayUrl ?? (widget.nftModel.thumbnailUrl ?? ''),
-        fit: BoxFit.contain,
-        errorMessage: l10n.nftTooBigToLoad,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(Sizes.largeRadius),
-        ),
-      );
-    }
-    return const ClipRRect(
-      borderRadius: BorderRadius.all(
-        Radius.circular(Sizes.largeRadius),
-      ),
-      child: ModelViewer(
-        backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
-        src: 'assets/testFile.glb',
+    if (AltMeStrings.contractDontSendAddress
+        .contains(widget.nftModel.contractAddress)) {
+      return ModelViewer(
+        src: widget.nftModel.artifactUrl!,
+        poster: widget.nftModel.thumbnailUrl,
         alt: '',
         ar: false,
         autoRotate: false,
         disableZoom: true,
+      );
+    }
+    return CachedImageFromNetwork(
+      widget.nftModel.displayUrl ?? (widget.nftModel.thumbnailUrl ?? ''),
+      fit: BoxFit.contain,
+      errorMessage: l10n.nftTooBigToLoad,
+      borderRadius: const BorderRadius.all(
+        Radius.circular(Sizes.largeRadius),
       ),
     );
   }
