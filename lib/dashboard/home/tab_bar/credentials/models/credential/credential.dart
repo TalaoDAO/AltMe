@@ -44,7 +44,11 @@ class Credential {
       [
         Proof.dummy(),
       ],
-      DefaultCredentialSubjectModel('dummy', 'dummy', const Author('')),
+      DefaultCredentialSubjectModel(
+        id: 'dummy7',
+        type: 'dummy8',
+        issuedBy: const Author(''),
+      ),
       [Translation('en', '')],
       [Translation('en', '')],
       CredentialStatusField.emptyCredentialStatusField(),

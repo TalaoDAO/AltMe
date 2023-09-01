@@ -706,6 +706,18 @@ class ResponseMessage with MessageHandler {
             context,
             injectedMessage: injectedMessage,
           );
+
+        case ResponseString.RESPONSE_STRING_theCredentialIsNotReady:
+          return ResponseString.RESPONSE_STRING_theCredentialIsNotReady
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady:
+          return ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady
+              .localise(
+            context,
+          );
       }
     }
     return '';

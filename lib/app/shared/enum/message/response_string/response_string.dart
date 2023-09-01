@@ -151,4 +151,6 @@ enum ResponseString {
   RESPONSE_STRING_pleaseSwitchToRightOIDC4VCProfile,
   RESPONSE_STRING_authenticationSuccess,
   RESPONSE_STRING_youcanSelectOnlyXCredential,
+  RESPONSE_STRING_theCredentialIsNotReady,
+  RESPONSE_STRING_theCredentialIsNoMoreReady,
 }

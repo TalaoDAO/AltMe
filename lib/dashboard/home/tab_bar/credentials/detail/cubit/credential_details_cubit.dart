@@ -158,6 +158,14 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   }
 
   Future<void> verifyProofOfPurpose(CredentialModel item) async {
+    if (item.data.isEmpty) {
+      return emit(
+        state.copyWith(
+          credentialStatus: CredentialStatus.pending,
+          status: AppStatus.idle,
+        ),
+      );
+    }
     final vcStr = jsonEncode(item.data);
     final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
     final result = await didKitProvider.verifyCredential(vcStr, optStr);

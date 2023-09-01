@@ -8,6 +8,7 @@ import 'package:altme/oidc4vc/add_oidc4vc_credential.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:uuid/uuid.dart';
 
 Future<void> initiateOIDC4VCCredentialIssuance({
   required String scannedResponse,
@@ -81,34 +82,11 @@ Future<void> getAndAddCredential({
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
-  String? preAuthorizedCode;
-  late String issuer;
-
-  switch (oidc4vcType) {
-    case OIDC4VCType.DEFAULT:
-    case OIDC4VCType.HEDERA:
-    case OIDC4VCType.EBSIV3:
-      final dynamic credentialOfferJson = await getCredentialOfferJson(
-        scannedResponse: scannedResponse,
-        dioClient: dioClient,
-      );
-      if (credentialOfferJson == null) throw Exception();
-
-      preAuthorizedCode = credentialOfferJson['grants']
-                  ['urn:ietf:params:oauth:grant-type:pre-authorized_code']
-              ['pre-authorized_code']
-          .toString();
-      issuer = credentialOfferJson['credential_issuer'].toString();
-
-    case OIDC4VCType.GAIAX:
-    case OIDC4VCType.EBSIV2:
-      issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
-      preAuthorizedCode =
-          uriFromScannedResponse.queryParameters['pre-authorized_code'];
-
-    case OIDC4VCType.JWTVC:
-      throw Exception();
-  }
+  final (preAuthorizedCode, issuer) = await getIssuerAndPreAuthorizedCode(
+    oidc4vcType: oidc4vcType,
+    scannedResponse: scannedResponse,
+    dioClient: dioClient,
+  );
 
   final mnemonic =
       await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
@@ -125,8 +103,11 @@ Future<void> getAndAddCredential({
   );
 
   if (preAuthorizedCode != null) {
-    final (dynamic encodedCredentialFromOIDC4VC, String format) =
-        await oidc4vc.getCredential(
+    final (
+      dynamic encodedCredentialOrFutureToken,
+      String? deferredCredentialEndpoint,
+      String format
+    ) = await oidc4vc.getCredential(
       preAuthorizedCode: preAuthorizedCode,
       issuer: issuer,
       credential: credential,
@@ -137,19 +118,61 @@ Future<void> getAndAddCredential({
       indexValue: oidc4vcType.indexValue,
       userPin: userPin,
     );
-
     final String credentialType = getCredentialData(credential);
+    final acceptanceToken = encodedCredentialOrFutureToken['acceptance_token'];
 
-    await addOIDC4VCCredential(
-      encodedCredentialFromOIDC4VC: encodedCredentialFromOIDC4VC,
-      uri: uriFromScannedResponse,
-      credentialsCubit: credentialsCubit,
-      oidc4vcType: oidc4vcType,
-      issuer: issuer,
-      credentialType: credentialType,
-      isLastCall: isLastCall,
-      format: format,
-    );
+    if (acceptanceToken != null && deferredCredentialEndpoint != null) {
+      /// add deferred card
+      final id = const Uuid().v4();
+
+      final credentialModel = CredentialModel(
+        id: id,
+        credentialPreview: Credential(
+          'dummy1',
+          ['dummy2'],
+          [credentialType],
+          'dummy4',
+          'dummy5',
+          '',
+          [Proof.dummy()],
+          DefaultCredentialSubjectModel(
+            id: 'dummy7',
+            type: 'dummy8',
+            issuedBy: const Author(''),
+          ),
+          [Translation('en', '')],
+          [Translation('en', '')],
+          CredentialStatusField.emptyCredentialStatusField(),
+          [Evidence.emptyEvidence()],
+        ),
+        data: const {},
+        display: Display.emptyDisplay(),
+        image: '',
+        shareLink: '',
+        pendingInfo: PendingInfo(
+          acceptanceToken: acceptanceToken.toString(),
+          deferredCredentialEndpoint: deferredCredentialEndpoint,
+          format: format,
+          url: scannedResponse,
+        ),
+      );
+      // insert the credential in the wallet
+      await credentialsCubit.insertCredential(
+        credential: credentialModel,
+        showStatus: false,
+        showMessage: isLastCall,
+      );
+    } else {
+      await addOIDC4VCCredential(
+        encodedCredentialFromOIDC4VC: encodedCredentialOrFutureToken,
+        credentialsCubit: credentialsCubit,
+        oidc4vcType: oidc4vcType,
+        issuer: issuer,
+        credentialType: credentialType,
+        isLastCall: isLastCall,
+        format: format,
+      );
+    }
   } else {
     final Uri ebsiAuthenticationUri =
         await oidc4vc.getAuthorizationUriForIssuer(

@@ -7,8 +7,7 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/oidc4vc/initiate_oidv4vc_credential_issuance.dart';
-import 'package:altme/oidc4vc/verify_encoded_data.dart';
+import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
@@ -262,7 +261,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             scannedResponse: state.uri.toString(),
             currentOIIDC4VCType: currentOIIDC4VCTypeForIssuance,
             qrCodeScanCubit: qrCodeScanCubit,
-            dioClient: dioClient,
           );
           return;
         }
@@ -498,7 +496,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String scannedResponse,
     required OIDC4VCType currentOIIDC4VCType,
     required QRCodeScanCubit qrCodeScanCubit,
-    required DioClient dioClient,
   }) async {
     switch (currentOIIDC4VCType) {
       case OIDC4VCType.DEFAULT:
@@ -506,7 +503,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       case OIDC4VCType.EBSIV3:
         final dynamic credentialOfferJson = await getCredentialOfferJson(
           scannedResponse: scannedResponse,
-          dioClient: dioClient,
+          dioClient: client,
         );
         if (credentialOfferJson == null) break;
 
@@ -539,7 +536,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                     didKitProvider: didKitProvider,
                     qrCodeScanCubit: qrCodeScanCubit,
                     secureStorageProvider: getSecureStorage,
-                    dioClient: dioClient,
+                    dioClient: client,
                     userPin: userPin,
                   );
                 },
@@ -567,9 +564,69 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       didKitProvider: didKitProvider,
       qrCodeScanCubit: qrCodeScanCubit,
       secureStorageProvider: getSecureStorage,
-      dioClient: dioClient,
+      dioClient: client,
       userPin: null,
     );
+  }
+
+  Future<void> startOIDC4VCDeferedCredentialIssuance({
+    required CredentialModel credentialModel,
+  }) async {
+    try {
+      emit(state.loading());
+      final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
+          getOIDC4VCTypeForIssuance(credentialModel.pendingInfo!.url);
+
+      if (currentOIIDC4VCTypeForIssuance != null) {
+        await getAndAddDefferedCredential(
+          credentialModel: credentialModel,
+          credentialsCubit: credentialsCubit,
+          oidc4vcType: currentOIIDC4VCTypeForIssuance,
+          dioClient: client,
+        );
+      } else {
+        emitError(
+          ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        );
+      }
+    } catch (e) {
+      if (e is DioException) {
+        final error = NetworkException.getDioException(error: e);
+        if (error.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
+          /// the VC is not yet ready
+
+          emitError(
+            ResponseMessage(
+              ResponseString.RESPONSE_STRING_theCredentialIsNotReady,
+            ),
+          );
+        } else if (error.message == NetworkError.NETWORK_ERROR_NOT_READY) {
+          /// the VC is no more ready.....
+          /// teh user call back teh issuer after 2 months
+
+          emitError(
+            ResponseMessage(
+              ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady,
+            ),
+          );
+        } else {
+          emitError(
+            ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          );
+        }
+      } else {
+        emitError(
+          ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        );
+      }
+    }
   }
 
   Future<bool> isVCPresentable(

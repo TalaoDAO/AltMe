@@ -10,13 +10,13 @@ import 'package:jose/jose.dart';
 
 Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
-  required Uri uri,
   required CredentialsCubit credentialsCubit,
   required String issuer,
   required OIDC4VCType oidc4vcType,
   required String credentialType,
   required bool isLastCall,
   required String format,
+  String? credentialIdToBeDeleted,
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
   if (format == 'jwt_vc') {
@@ -80,6 +80,14 @@ Future<void> addOIDC4VCCredential({
     newData: credentialFromOIDC4VC,
     activities: [Activity(acquisitionAt: DateTime.now())],
   );
+
+  if (credentialIdToBeDeleted != null) {
+    ///delete pending dummy credential
+    await credentialsCubit.deleteById(
+      id: credentialIdToBeDeleted,
+      showMessage: false,
+    );
+  }
 
   // insert the credential in the wallet
   await credentialsCubit.insertCredential(

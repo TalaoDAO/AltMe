@@ -126,9 +126,9 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                   '',
                                   [Proof.dummy()],
                                   DefaultCredentialSubjectModel(
-                                    'dummy7',
-                                    'dummy8',
-                                    const Author(''),
+                                    id: 'dummy7',
+                                    type: 'dummy8',
+                                    issuedBy: const Author(''),
                                   ),
                                   [Translation('en', '')],
                                   [Translation('en', '')],

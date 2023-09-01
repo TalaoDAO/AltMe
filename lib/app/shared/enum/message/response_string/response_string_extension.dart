@@ -477,6 +477,12 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_youcanSelectOnlyXCredential(
           injectedMessage ?? '',
         );
+
+      case ResponseString.RESPONSE_STRING_theCredentialIsNotReady:
+        return globalMessage.RESPONSE_STRING_theCredentialIsNotReady;
+
+      case ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady:
+        return globalMessage.RESPONSE_STRING_theCredentialIsNoMoreReady;
     }
   }
 }

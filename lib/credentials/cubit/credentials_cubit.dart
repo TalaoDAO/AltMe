@@ -131,13 +131,13 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   }
 
   Future<void> deleteById({
-    required CredentialModel credential,
+    required String id,
     bool showMessage = true,
   }) async {
     emit(state.loading());
-    await credentialsRepository.deleteById(credential.id);
+    await credentialsRepository.deleteById(id);
     final credentials = List.of(state.credentials)
-      ..removeWhere((element) => element.id == credential.id);
+      ..removeWhere((element) => element.id == id);
     final dummies = _getAvalaibleDummyCredentials(credentials);
     emit(
       state.copyWith(
@@ -335,7 +335,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             if (email ==
                 (iteratedCredentialSubjectModel as EmailPassModel).email) {
               await deleteById(
-                credential: storedCredential,
+                id: storedCredential.id,
                 showMessage: false,
               );
               break;
@@ -363,7 +363,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               storedCredential.credentialPreview.credentialSubjectModel;
           if (credentialSubjectModel.credentialSubjectType == card) {
             await deleteById(
-              credential: storedCredential,
+              id: storedCredential.id,
               showMessage: false,
             );
             break;

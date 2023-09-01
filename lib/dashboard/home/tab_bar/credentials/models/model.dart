@@ -50,6 +50,7 @@ export 'over15/over15_model.dart';
 export 'over18/over18_model.dart';
 export 'passport_footprint/passport_footprint_model.dart';
 export 'pcds_agent_certificate/pcds_agent_certificate_model.dart';
+export 'pending_info/pending_info.dart';
 export 'phone_pass/phone_pass_model.dart';
 export 'pigs_pass/pigs_pass_model.dart';
 export 'polygon_associated_address/polygon_associated_address_credential.dart';

@@ -941,5 +941,7 @@
     "placeholders": {
       "count": {}
     }
-  }
+  },
+  "theCredentialIsNotReady": "The credential is not ready.",
+  "theCredentialIsNoMoreReady": "The ceredential is no more available."
 }

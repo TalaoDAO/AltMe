@@ -847,7 +847,9 @@
     "userConsentForIssuerAccess",
     "userConsentForVerifierAccess",
     "userPINCodeForAuthentication",
-    "youcanSelectOnlyXCredential"
+    "youcanSelectOnlyXCredential",
+    "theCredentialIsNotReady",
+    "theCredentialIsNoMoreReady"
   ],
 
   "es": [
@@ -1698,7 +1700,9 @@
     "userConsentForIssuerAccess",
     "userConsentForVerifierAccess",
     "userPINCodeForAuthentication",
-    "youcanSelectOnlyXCredential"
+    "youcanSelectOnlyXCredential",
+    "theCredentialIsNotReady",
+    "theCredentialIsNoMoreReady"
   ],
 
   "fr": [
@@ -1852,7 +1856,9 @@
     "userConsentForIssuerAccess",
     "userConsentForVerifierAccess",
     "userPINCodeForAuthentication",
-    "youcanSelectOnlyXCredential"
+    "youcanSelectOnlyXCredential",
+    "theCredentialIsNotReady",
+    "theCredentialIsNoMoreReady"
   ],
 
   "it": [
@@ -2703,6 +2709,8 @@
     "userConsentForIssuerAccess",
     "userConsentForVerifierAccess",
     "userPINCodeForAuthentication",
-    "youcanSelectOnlyXCredential"
+    "youcanSelectOnlyXCredential",
+    "theCredentialIsNotReady",
+    "theCredentialIsNoMoreReady"
   ]
 }

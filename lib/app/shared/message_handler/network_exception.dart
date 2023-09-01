@@ -44,6 +44,11 @@ class NetworkException with MessageHandler {
           message: NetworkError.NETWORK_ERROR_CONFLICT,
           data: error?.response?.data,
         );
+      case 410:
+        return NetworkException(
+          message: NetworkError.NETWORK_ERROR_NOT_READY,
+          data: error?.response?.data,
+        );
       case 412:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_PRECONDITION_FAILED,
@@ -205,6 +210,8 @@ class NetworkException with MessageHandler {
         case NetworkError.NETWORK_ERROR_PRECONDITION_FAILED:
           return NetworkError.NETWORK_ERROR_PRECONDITION_FAILED
               .localise(context);
+        case NetworkError.NETWORK_ERROR_NOT_READY:
+          return NetworkError.NETWORK_ERROR_NOT_READY.localise(context);
       }
     }
     return '';

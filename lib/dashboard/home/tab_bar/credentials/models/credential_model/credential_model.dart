@@ -28,6 +28,7 @@ class CredentialModel extends Equatable {
     this.domain,
     this.activities = const [],
     this.jwt,
+    this.pendingInfo,
   });
 
   factory CredentialModel.fromJson(Map<String, dynamic> json) {
@@ -91,6 +92,7 @@ class CredentialModel extends Equatable {
   final String? domain;
   final List<Activity> activities;
   final String? jwt;
+  final PendingInfo? pendingInfo;
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
@@ -108,6 +110,7 @@ class CredentialModel extends Equatable {
     String? domain,
     List<Activity>? activities,
     String? jwt,
+    PendingInfo? pendingInfo,
   }) {
     return CredentialModel(
       id: id ?? this.id,
@@ -123,10 +126,11 @@ class CredentialModel extends Equatable {
       domain: domain ?? this.domain,
       activities: activities ?? this.activities,
       jwt: jwt ?? this.jwt,
+      pendingInfo: pendingInfo ?? this.pendingInfo,
     );
   }
 
-  String get issuer => data['issuer'] as String;
+  String get issuer => data['issuer'] == null ? '' : data['issuer'] as String;
 
   static String fromJsonId(dynamic json) {
     if (json == null || json == '') {
@@ -154,6 +158,9 @@ class CredentialModel extends Equatable {
   }
 
   Future<RevocationStatus> getRevocationStatus() async {
+    if (data.isEmpty) {
+      return RevocationStatus.revoked;
+    }
     final String vcStr = jsonEncode(data);
     final String optStr = jsonEncode({
       'checks': ['credentialStatus'],
@@ -230,6 +237,11 @@ class CredentialModel extends Equatable {
         display,
         expirationDate,
         credentialManifest,
+        receivedId,
+        challenge,
+        domain,
         activities,
+        jwt,
+        pendingInfo,
       ];
 }

@@ -548,3 +548,42 @@ Future<String> getHost({
     }
   }
 }
+
+Future<(String?, String)> getIssuerAndPreAuthorizedCode({
+  required OIDC4VCType oidc4vcType,
+  required String scannedResponse,
+  required DioClient dioClient,
+}) async {
+  String? preAuthorizedCode;
+  late String issuer;
+
+  final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
+
+  switch (oidc4vcType) {
+    case OIDC4VCType.DEFAULT:
+    case OIDC4VCType.HEDERA:
+    case OIDC4VCType.EBSIV3:
+      final dynamic credentialOfferJson = await getCredentialOfferJson(
+        scannedResponse: scannedResponse,
+        dioClient: dioClient,
+      );
+      if (credentialOfferJson == null) throw Exception();
+
+      preAuthorizedCode = credentialOfferJson['grants']
+                  ['urn:ietf:params:oauth:grant-type:pre-authorized_code']
+              ['pre-authorized_code']
+          .toString();
+      issuer = credentialOfferJson['credential_issuer'].toString();
+
+    case OIDC4VCType.GAIAX:
+    case OIDC4VCType.EBSIV2:
+      issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
+      preAuthorizedCode =
+          uriFromScannedResponse.queryParameters['pre-authorized_code'];
+
+    case OIDC4VCType.JWTVC:
+      throw Exception();
+  }
+
+  return (preAuthorizedCode, issuer);
+}

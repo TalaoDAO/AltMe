@@ -196,7 +196,7 @@ class OIDC4VC {
   String? accessToken;
 
   /// Retreive credential_type from url
-  Future<(dynamic, String)> getCredential({
+  Future<(dynamic, String?, String)> getCredential({
     required String issuer,
     required dynamic credential,
     required String did,
@@ -270,7 +270,30 @@ class OIDC4VC {
 
     nonce = credentialResponse.data['c_nonce'].toString();
 
-    return (credentialResponse.data, format);
+    String? deferredCredentialEndpoint;
+
+    if (openidConfigurationResponse['deferred_credential_endpoint'] != null) {
+      deferredCredentialEndpoint =
+          openidConfigurationResponse['deferred_credential_endpoint']
+              .toString();
+    }
+
+    return (credentialResponse.data, deferredCredentialEndpoint, format);
+  }
+
+  /// get Deferred credential from url
+  Future<dynamic> getDeferredCredential({
+    required String acceptanceToken,
+    required String deferredCredentialEndpoint,
+  }) async {
+    final credentialHeaders = buildCredentialHeaders(acceptanceToken);
+
+    final dynamic credentialResponse = await client.post<dynamic>(
+      deferredCredentialEndpoint,
+      options: Options(headers: credentialHeaders),
+    );
+
+    return credentialResponse.data;
   }
 
   void resetNonceAndAccessToken() {
