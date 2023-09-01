@@ -346,41 +346,12 @@ class OIDC4VC {
 
   Future<Response<Map<String, dynamic>>> getDidDocument(String didKey) async {
     try {
-      if (didKey.startsWith('did:ebsi')) {
-        final didDocument = await client.get<Map<String, dynamic>>(
-          'https://api-pilot.ebsi.eu/did-registry/v3/identifiers/$didKey',
-        );
-        return didDocument;
-      } else if (didKey.startsWith('did:web')) {
-        final url = didWebToUrl(didKey);
-        final didDocument = await client.get<Map<String, dynamic>>(url);
-        return didDocument;
-      } else {
-        throw Exception();
-      }
+      final didDocument = await client.get<Map<String, dynamic>>(
+        'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
+      );
+      return didDocument;
     } catch (e) {
       throw Exception(e);
-    }
-  }
-
-  String didWebToUrl(String didKey) {
-    if (!didKey.startsWith('did:web:')) {
-      throw const FormatException('Invalid DID format');
-    }
-
-    // Extract the path after 'did:web:'
-    final didPath = didKey.substring('did:web:'.length);
-
-    if (didPath.contains(':')) {
-      final parts = didPath.split(':');
-      final domain = parts[0];
-      final issuer = parts[1];
-
-      final url = 'https://$domain/$issuer/did.json';
-      return url;
-    } else {
-      final url = 'https://$didPath/.well-known/did.json';
-      return url;
     }
   }
 
