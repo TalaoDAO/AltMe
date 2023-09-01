@@ -26,6 +26,7 @@ class TezosNftModel extends NftModel {
     this.mPublishers,
     this.date,
     this.firstTime,
+    super.artifactUri,
   });
 
   factory TezosNftModel.fromJson(Map<String, dynamic> json) =>
@@ -105,5 +106,6 @@ class TezosNftModel extends NftModel {
         date,
         isTransferable,
         firstTime,
+        artifactUri,
       ];
 }
