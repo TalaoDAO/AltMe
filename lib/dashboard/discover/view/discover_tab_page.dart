@@ -128,7 +128,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                           if (!request.url.startsWith(
                             Urls.discoverNftsWebView,
                           )) {
-                            await LaunchUrl.launch(request.url);
+                            // await LaunchUrl.launch(request.url);
                             return NavigationDecision.prevent;
                           } else {
                             return NavigationDecision.navigate;
@@ -138,11 +138,8 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                       MWebViewPage(
                         url: Urls.discoverCoinsWebView,
                         onNavigationRequest: (request) async {
-                          if ((!request.url
-                                  .startsWith(Urls.discoverCoinsWebView)) ||
-                              request.url.startsWith(
-                                'https://discover-coins-part.webflow.io/prod-nota-available/nft-noir',
-                              )) {
+                          if (!request.url
+                              .startsWith(Urls.discoverCoinsWebView)) {
                             /// if a link has a different base URL than the
                             /// current webpage, it should be opened in an
                             /// external browser because of dynamic links
