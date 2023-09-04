@@ -200,6 +200,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required CredentialModel credential,
     bool showMessage = true,
     bool showStatus = true,
+    bool isPendingCredential = false,
   }) async {
     late final List<CredentialModel> credentials;
 
@@ -212,7 +213,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           ),
         ),
       );
-      await replaceCredential(credential: updatedCredential);
+      if (!isPendingCredential)
+        await modifyCredential(credential: updatedCredential);
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
     } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
@@ -224,11 +226,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           ),
         ),
       );
-      await replaceCredential(credential: updatedCredential);
+      if (!isPendingCredential)
+        await modifyCredential(credential: updatedCredential);
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
     } else {
-      await replaceCredential(credential: credential);
+      if (!isPendingCredential) await modifyCredential(credential: credential);
       await credentialsRepository.insert(credential);
       credentials = List.of(state.credentials)..add(credential);
     }
@@ -292,24 +295,16 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         }
 
       case CredentialCategory.financeCards:
-        // TODO(all): Handle this case.
-        break;
       case CredentialCategory.humanityProofCards:
-        // TODO(all): Handle this case.
-        break;
       case CredentialCategory.socialMediaCards:
-        // TODO(all): Handle this case.
-        break;
       case CredentialCategory.walletIntegrity:
-        // TODO(all): Handle this case.
-        break;
       case CredentialCategory.polygonidCards:
-        // TODO(all): Handle this case.
+      case CredentialCategory.pendingCards:
         break;
     }
   }
 
-  Future<void> replaceCredential({
+  Future<void> modifyCredential({
     required CredentialModel credential,
     bool showMessage = true,
   }) async {

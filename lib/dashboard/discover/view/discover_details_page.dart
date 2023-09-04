@@ -72,7 +72,9 @@ class DiscoverDetailsView extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: DummyCredentialImage(
-                        discoverDummyCredential: dummyCredential,
+                        credentialSubjectType:
+                            dummyCredential.credentialSubjectType,
+                        image: dummyCredential.image,
                       ),
                     ),
                     DetailFields(dummyCredential: dummyCredential),

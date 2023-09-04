@@ -106,7 +106,8 @@ class MissingCredentialsView extends StatelessWidget {
                       child: credentialType.isBlockchainAccount
                           ? credentialType.blockchainWidget
                           : DummyCredentialImage(
-                              discoverDummyCredential: discoverDummyCredential,
+                              credentialSubjectType: credentialType,
+                              image: discoverDummyCredential.image,
                             ),
                     );
                   },

@@ -875,6 +875,8 @@
   "polygonCredentialsHomeSubtitle": "Prove your access rights in the Polygon ecosystem",
   "polygonCredentialsDiscoverTitle": "Get PolygonID credentials",
   "polygonCredentialsDiscoverSubtitle": "Prove your access rights in the Polygon ecosystem",
+  "pendingCredentialsHomeTitle": "My Pending credentials",
+  "pendingCredentialsHomeSubtitle": "Prove your access rights.",
   "restore": "Restore",
   "backup": "Backup",
   "takePicture": "Take a picture",

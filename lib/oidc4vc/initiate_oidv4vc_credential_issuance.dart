@@ -118,7 +118,7 @@ Future<void> getAndAddCredential({
       indexValue: oidc4vcType.indexValue,
       userPin: userPin,
     );
-    final String credentialType = getCredentialData(credential);
+    final String credentialName = getCredentialData(credential);
     final acceptanceToken = encodedCredentialOrFutureToken['acceptance_token'];
 
     if (acceptanceToken != null && deferredCredentialEndpoint != null) {
@@ -130,15 +130,17 @@ Future<void> getAndAddCredential({
         credentialPreview: Credential(
           'dummy1',
           ['dummy2'],
-          [credentialType],
+          [credentialName],
           'dummy4',
           'dummy5',
           '',
           [Proof.dummy()],
-          DefaultCredentialSubjectModel(
+          CredentialSubjectModel(
             id: 'dummy7',
             type: 'dummy8',
             issuedBy: const Author(''),
+            credentialCategory: CredentialCategory.pendingCards,
+            credentialSubjectType: CredentialSubjectType.defaultCredential,
           ),
           [Translation('en', '')],
           [Translation('en', '')],
@@ -161,6 +163,7 @@ Future<void> getAndAddCredential({
         credential: credentialModel,
         showStatus: false,
         showMessage: isLastCall,
+        isPendingCredential: true,
       );
     } else {
       await addOIDC4VCCredential(
@@ -168,7 +171,7 @@ Future<void> getAndAddCredential({
         credentialsCubit: credentialsCubit,
         oidc4vcType: oidc4vcType,
         issuer: issuer,
-        credentialType: credentialType,
+        credentialType: credentialName,
         isLastCall: isLastCall,
         format: format,
       );

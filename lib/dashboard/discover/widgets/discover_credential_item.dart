@@ -42,7 +42,10 @@ class DiscoverCredentialItem extends StatelessWidget {
           ),
         );
       },
-      child: DummyCredentialImage(discoverDummyCredential: dummyCredential),
+      child: DummyCredentialImage(
+        credentialSubjectType: dummyCredential.credentialSubjectType,
+        image: dummyCredential.image,
+      ),
     );
   }
 }

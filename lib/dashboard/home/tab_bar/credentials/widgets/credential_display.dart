@@ -72,6 +72,22 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.defaultCredential:
         if (credentialModel.isPolygonIdCard) {
           return DefaultPolygonIdCardWidget(credentialModel: credentialModel);
+        } else if (credentialModel.pendingInfo != null) {
+          final CredentialSubjectType credentialSubjectType =
+              getCredTypeFromName(credentialModel.credentialPreview.type[0]) ??
+                  CredentialSubjectType.defaultCredential;
+
+          final DiscoverDummyCredential discoverDummyCredential =
+              DiscoverDummyCredential.fromSubjectType(credentialSubjectType);
+
+          return Opacity(
+            opacity: 0.5,
+            child: DummyCredentialImage(
+              credentialSubjectType:
+                  discoverDummyCredential.credentialSubjectType,
+              image: discoverDummyCredential.image,
+            ),
+          );
         } else {
           switch (credDisplayType) {
             case CredDisplayType.List:

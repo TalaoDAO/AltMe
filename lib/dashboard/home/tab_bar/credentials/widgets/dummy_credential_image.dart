@@ -5,31 +5,32 @@ import 'package:flutter/material.dart';
 
 class DummyCredentialImage extends StatelessWidget {
   const DummyCredentialImage({
-    required this.discoverDummyCredential,
+    required this.credentialSubjectType,
+    required this.image,
     this.aspectRatio = Sizes.credentialAspectRatio,
     super.key,
   });
 
-  final DiscoverDummyCredential discoverDummyCredential;
   final double aspectRatio;
+  final CredentialSubjectType credentialSubjectType;
+  final String? image;
 
   @override
   Widget build(BuildContext context) {
     String? title;
 
-    if (discoverDummyCredential.credentialSubjectType ==
-        CredentialSubjectType.employeeCredential) {
-      title = discoverDummyCredential.credentialSubjectType.title;
+    if (credentialSubjectType == CredentialSubjectType.employeeCredential) {
+      title = credentialSubjectType.title;
     }
 
-    return discoverDummyCredential.image == null
+    return image == null
         ? DefaultCredentialWidget(
             credentialModel: CredentialModel(
               id: '',
               credentialPreview: Credential(
                 'dummy1',
                 ['dummy2'],
-                [discoverDummyCredential.credentialSubjectType.title],
+                [credentialSubjectType.title],
                 'dummy4',
                 'dummy5',
                 '',
@@ -56,7 +57,7 @@ class DummyCredentialImage extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: AssetImage(discoverDummyCredential.image!),
+                  image: AssetImage(image!),
                 ),
               ),
               child: AspectRatio(
