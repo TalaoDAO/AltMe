@@ -109,11 +109,42 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                           .updateList(index),
                       child: Column(
                         children: [
-                          DummyCredentialImage(
-                            credentialSubjectType:
-                                discoverDummyCredential.credentialSubjectType,
-                            image: discoverDummyCredential.image,
-                          ),
+                          if (discoverDummyCredential.image != null) ...[
+                            DummyCredentialImage(
+                              credentialSubjectType: credentialSubjectType,
+                              image: discoverDummyCredential.image,
+                            ),
+                          ] else ...[
+                            DefaultCredentialWidget(
+                              credentialModel: CredentialModel(
+                                id: '',
+                                credentialPreview: Credential(
+                                  'dummy1',
+                                  ['dummy2'],
+                                  [credential],
+                                  'dummy4',
+                                  'dummy5',
+                                  '',
+                                  [Proof.dummy()],
+                                  DefaultCredentialSubjectModel(
+                                    id: 'dummy7',
+                                    type: 'dummy8',
+                                    issuedBy: const Author(''),
+                                  ),
+                                  [Translation('en', '')],
+                                  [Translation('en', '')],
+                                  CredentialStatusField
+                                      .emptyCredentialStatusField(),
+                                  [Evidence.emptyEvidence()],
+                                ),
+                                data: const {},
+                                display: Display.emptyDisplay(),
+                                image: '',
+                                shareLink: '',
+                              ),
+                              showBgDecoration: false,
+                            ),
+                          ],
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
