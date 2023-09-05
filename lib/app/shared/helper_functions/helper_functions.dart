@@ -371,7 +371,7 @@ Future<(String, String)> getDidAndKid({
 
   switch (oidc4vcType) {
     case OIDC4VCType.DEFAULT:
-    case OIDC4VCType.HEDERA:
+    case OIDC4VCType.GREENCYPHER:
     case OIDC4VCType.GAIAX:
       const didMethod = AltMeStrings.defaultDIDMethod;
       did = didKitProvider!.keyToDID(didMethod, privateKey);
@@ -506,7 +506,7 @@ Future<String> getHost({
 
     switch (currentOIIDC4VCTypeForIssuance) {
       case OIDC4VCType.DEFAULT:
-      case OIDC4VCType.HEDERA:
+      case OIDC4VCType.GREENCYPHER:
       case OIDC4VCType.EBSIV3:
         final dynamic credentialOfferJson = await getCredentialOfferJson(
           scannedResponse: uri.toString(),
@@ -561,7 +561,7 @@ Future<(String?, String)> getIssuerAndPreAuthorizedCode({
 
   switch (oidc4vcType) {
     case OIDC4VCType.DEFAULT:
-    case OIDC4VCType.HEDERA:
+    case OIDC4VCType.GREENCYPHER:
     case OIDC4VCType.EBSIV3:
       final dynamic credentialOfferJson = await getCredentialOfferJson(
         scannedResponse: scannedResponse,

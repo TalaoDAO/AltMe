@@ -26,7 +26,7 @@ enum OIDC4VCType {
     publicJWKNeeded: false,
   ),
 
-  HEDERA(
+  GREENCYPHER(
     issuerVcType: 'jwt_vc',
     verifierVpType: 'jwt_vp',
     offerPrefix: 'openid-credential-offer-hedera://',
@@ -87,8 +87,8 @@ extension OIDC4VCTypeX on OIDC4VCType {
         return 'EBSI-V2';
       case OIDC4VCType.EBSIV3:
         return 'EBSI-V3';
-      case OIDC4VCType.HEDERA:
-        return 'HEDERA';
+      case OIDC4VCType.GREENCYPHER:
+        return 'GREENCYPHER';
       case OIDC4VCType.JWTVC:
         return 'JWT-VC';
     }
@@ -98,7 +98,7 @@ extension OIDC4VCTypeX on OIDC4VCType {
     switch (this) {
       case OIDC4VCType.DEFAULT:
       case OIDC4VCType.GAIAX:
-      case OIDC4VCType.HEDERA:
+      case OIDC4VCType.GREENCYPHER:
       case OIDC4VCType.JWTVC:
         return 1;
       case OIDC4VCType.EBSIV2:
@@ -113,7 +113,7 @@ extension OIDC4VCTypeX on OIDC4VCType {
       case OIDC4VCType.DEFAULT:
       case OIDC4VCType.EBSIV2:
       case OIDC4VCType.GAIAX:
-      case OIDC4VCType.HEDERA:
+      case OIDC4VCType.GREENCYPHER:
       case OIDC4VCType.EBSIV3:
         return true;
       case OIDC4VCType.JWTVC:

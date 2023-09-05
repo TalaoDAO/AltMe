@@ -26,7 +26,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
 
   switch (oidc4vcType) {
     case OIDC4VCType.DEFAULT:
-    case OIDC4VCType.HEDERA:
+    case OIDC4VCType.GREENCYPHER:
     case OIDC4VCType.EBSIV3:
       final dynamic credentialOfferJson = await getCredentialOfferJson(
         scannedResponse: scannedResponse,

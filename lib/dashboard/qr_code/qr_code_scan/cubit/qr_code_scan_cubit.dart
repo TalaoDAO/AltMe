@@ -499,7 +499,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }) async {
     switch (currentOIIDC4VCType) {
       case OIDC4VCType.DEFAULT:
-      case OIDC4VCType.HEDERA:
+      case OIDC4VCType.GREENCYPHER:
       case OIDC4VCType.EBSIV3:
         final dynamic credentialOfferJson = await getCredentialOfferJson(
           scannedResponse: scannedResponse,
