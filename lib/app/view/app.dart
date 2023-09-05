@@ -58,6 +58,7 @@ class App extends StatelessWidget {
             secureStorageProvider: secure_storage.getSecureStorage,
             connectedDappRepository:
                 ConnectedDappRepository(secure_storage.getSecureStorage),
+            routeCubit: context.read<RouteCubit>(),
           ),
         ),
         BlocProvider<DeepLinkCubit>(create: (context) => DeepLinkCubit()),

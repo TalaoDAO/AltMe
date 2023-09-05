@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/route/route.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -17,15 +18,17 @@ part 'wallet_connect_cubit.g.dart';
 part 'wallet_connect_state.dart';
 
 class WalletConnectCubit extends Cubit<WalletConnectState> {
-  WalletConnectCubit({
-    required this.connectedDappRepository,
-    required this.secureStorageProvider,
-  }) : super(const WalletConnectState()) {
+  WalletConnectCubit(
+      {required this.connectedDappRepository,
+      required this.secureStorageProvider,
+      required this.routeCubit})
+      : super(const WalletConnectState()) {
     initialise();
   }
 
   final ConnectedDappRepository connectedDappRepository;
   final SecureStorageProvider secureStorageProvider;
+  final RouteCubit routeCubit;
 
   final log = getLogger('WalletConnectCubit');
 
@@ -323,6 +326,23 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   List<Completer<String>?> completer = <Completer<String>?>[];
 
   Future<String> personalSign(String topic, dynamic parameters) async {
+    final completer = Completer<String>();
+    double counter = 0;
+    Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+      counter = counter + 0.5;
+      log.i('counter: $counter');
+      final String currenRouteName = routeCubit.state ?? '';
+
+      if (currenRouteName != CONFIRM_CONNECTION_PAGE) {
+        timer.cancel();
+        final result = await personalSignAction(topic, parameters);
+        completer.complete(result);
+      }
+    });
+    return completer.future;
+  }
+
+  Future<String> personalSignAction(String topic, dynamic parameters) async {
     log.i('received personal sign request: $parameters');
     log.i('topic: $topic');
 

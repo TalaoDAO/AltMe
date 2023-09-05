@@ -425,11 +425,12 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
 
 final walletConnectBlocListener =
     BlocListener<WalletConnectCubit, WalletConnectState>(
-  listener: (BuildContext context, WalletConnectState state) {
+  listener: (BuildContext context, WalletConnectState state) async {
     final log = getLogger('walletConnectStateBlocListener');
+
     try {
       if (state.status == WalletConnectStatus.permission) {
-        Navigator.of(context).push<void>(
+        await Navigator.of(context).push<void>(
           ConfirmConnectionPage.route(
             connectionBridgeType: ConnectionBridgeType.walletconnect,
           ),
@@ -437,7 +438,7 @@ final walletConnectBlocListener =
       }
 
       if (state.status == WalletConnectStatus.signPayload) {
-        Navigator.of(context).push<void>(
+        await Navigator.of(context).push<void>(
           SignPayloadPage.route(
             connectionBridgeType: ConnectionBridgeType.walletconnect,
           ),
@@ -445,7 +446,7 @@ final walletConnectBlocListener =
       }
 
       if (state.status == WalletConnectStatus.operation) {
-        Navigator.of(context).push<void>(
+        await Navigator.of(context).push<void>(
           OperationPage.route(
             connectionBridgeType: ConnectionBridgeType.walletconnect,
           ),
