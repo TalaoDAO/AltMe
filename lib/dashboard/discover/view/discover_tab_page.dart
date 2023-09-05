@@ -126,9 +126,9 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                         url: Urls.discoverNftsWebView,
                         onNavigationRequest: (request) async {
                           if (!request.url.startsWith(
-                            Urls.discoverNftsWebView,
+                            Urls.discoverCoinsWebView,
                           )) {
-                            // await LaunchUrl.launch(request.url);
+                            await LaunchUrl.launch(request.url);
                             return NavigationDecision.prevent;
                           } else {
                             return NavigationDecision.navigate;
