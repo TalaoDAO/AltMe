@@ -34,18 +34,17 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await LocalNotification().init();
-  await initSecureStorage;
-
-  /// Disable Http google font
-  GoogleFonts.config.allowRuntimeFetching = false;
-
-  await Dartez().init();
-
   await runZonedGuarded(
     () async {
+      WidgetsFlutterBinding.ensureInitialized();
+
+      await LocalNotification().init();
+      await initSecureStorage;
+
+      /// Disable Http google font
+      GoogleFonts.config.allowRuntimeFetching = false;
+
+      await Dartez().init();
       Bloc.observer = AppBlocObserver();
       runApp(await builder());
     },
