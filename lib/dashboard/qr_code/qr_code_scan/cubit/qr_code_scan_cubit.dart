@@ -497,6 +497,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required OIDC4VCType currentOIIDC4VCType,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
+    emit(state.copyWith(uri: Uri.parse(scannedResponse)));
     switch (currentOIIDC4VCType) {
       case OIDC4VCType.DEFAULT:
       case OIDC4VCType.GREENCYPHER:

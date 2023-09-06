@@ -90,106 +90,93 @@ class OIDC4VC {
   /// Received JWT keys are already sorted in lexicographic order
 
   /// getAuthorizationUriForIssuer
-  Future<Uri> getAuthorizationUriForIssuer(
-    String openIdRequest,
-    String redirectUrl,
-  ) async {
-    if (openIdRequest.startsWith(oidc4vcModel.offerPrefix)) {
-      try {
-        final authorizationRequestParemeters =
-            getAuthorizationRequestParemeters(openIdRequest, redirectUrl);
+  Future<Uri> getAuthorizationUriForIssuer({
+    required dynamic credentialOfferJson,
+    required String clientId,
+    required String redirectUrl,
+  }) async {
+    try {
+      final issuer = credentialOfferJson['credential_issuer'] as String;
+      final openidConfigurationResponse = await getOpenIdConfig(issuer);
 
-        final baseUrl = getIssuerFromOpenidRequest(openIdRequest);
+      final authorizationEndpoint =
+          await readAuthorizationEndPoint(openidConfigurationResponse);
 
-        final openidConfigurationResponse = await getOpenIdConfig(baseUrl);
+      final authorizationRequestParemeters = getAuthorizationRequestParemeters(
+        credentialOfferJson: credentialOfferJson,
+        clientId: clientId,
+        redirectUrl: redirectUrl,
+      );
 
-        late String authorizationEndpoint;
-
-        final authorizationServer =
-            openidConfigurationResponse['authorization_server'];
-        if (authorizationServer != null) {
-          final url = '$authorizationServer/.well-known/openid-configuration';
-          final response = await client.get<dynamic>(url);
-
-          authorizationEndpoint =
-              response.data['authorization_endpoint'] as String;
-        } else {
-          authorizationEndpoint =
-              openidConfigurationResponse['authorization_endpoint'] as String;
-        }
-
-        final url = Uri.parse(authorizationEndpoint);
-        final authorizationUri =
-            Uri.https(url.authority, url.path, authorizationRequestParemeters);
-        return authorizationUri;
-      } catch (e) {
-        throw Exception(e);
-      }
+      final url = Uri.parse(authorizationEndpoint);
+      final authorizationUri =
+          Uri.https(url.authority, url.path, authorizationRequestParemeters);
+      return authorizationUri;
+    } catch (e) {
+      throw Exception(e);
     }
-    throw Exception('Not a valid openid url to initiate issuance');
   }
 
   @visibleForTesting
-  Map<String, dynamic> getAuthorizationRequestParemeters(
-    String openIdRequest,
-    String redirectUrl,
-  ) {
-    final openIdRequestUri = Uri.parse(openIdRequest);
-    final credentialType = openIdRequestUri.queryParameters['credential_type'];
-    final opState = openIdRequestUri.queryParameters['op_state'];
-    final issuer = openIdRequestUri.queryParameters['issuer'];
+  Map<String, dynamic> getAuthorizationRequestParemeters({
+    required dynamic credentialOfferJson,
+    required String clientId,
+    required String redirectUrl,
+  }) {
+    //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
+    final issuer = credentialOfferJson['credential_issuer'] as String;
+
+    final credentials = credentialOfferJson['credentials'] as List<dynamic>;
+
+    final issuerState = credentialOfferJson['grants']['authorization_code']
+        ['issuer_state'] as String;
+
+    final authorizationDetails = <dynamic>[];
+
+    for (final credential in credentials) {
+      final data = {
+        'type': 'openid_credential',
+        'locations': [issuer],
+        'format': credential['format'],
+        'types': credential['types'],
+      };
+      authorizationDetails.add(data);
+    }
+
     final myRequest = <String, dynamic>{
-      'scope': 'openid',
-      'client_id': redirectUrl,
       'response_type': 'code',
-      'authorization_details': jsonEncode([
-        {
-          'type': 'openid_credential',
-          'credential_type': credentialType,
-          'format': 'jwt_vc',
-        }
-      ]),
-      'redirect_uri':
-          '$redirectUrl?credential_type=$credentialType&issuer=$issuer',
-      'state': opState,
-      'op_state': opState,
+      'client_id': clientId,
+      'redirect_uri': redirectUrl,
+      'scope': 'openid',
+      'issuer_state': issuerState,
+      'state': '',
+      'nonce': const Uuid().v4(),
+      'code_challenge': 'lf3q5-NObcyp41iDSIL51qI7pBLmeYNeyWnNcY2FlW4',
+      'code_challenge_method': 'S256',
+      'authorization_details': jsonEncode(authorizationDetails),
+      'client_metadata': jsonEncode({
+        'authorization_endpoint': 'openid:',
+        'scopes_supported': ['openid'],
+        'response_types_supported': ['vp_token', 'id_token'],
+        'subject_types_supported': ['public'],
+        'id_token_signing_alg_values_supported': ['ES256'],
+        'request_object_signing_alg_values_supported': ['ES256'],
+        'vp_formats_supported': {
+          'jwt_vp': {
+            'alg_values_supported': ['ES256'],
+          },
+          'jwt_vc': {
+            'alg_values_supported': ['ES256'],
+          },
+        },
+        'subject_syntax_types_supported': [
+          'urn:ietf:params:oauth:jwk-thumbprint',
+          'did🔑jwk_jcs-pub',
+        ],
+        'id_token_types_supported': ['subject_signed_id_token'],
+      }),
     };
     return myRequest;
-  }
-
-  @visibleForTesting
-  String getIssuerFromOpenidRequest(String openIdRequest) {
-    final openIdRequestUri = Uri.parse(openIdRequest);
-    final issuer = openIdRequestUri.queryParameters['issuer'] ?? '';
-    return issuer;
-  }
-
-  /// Extract credential_type's Url from openid request
-  String getCredentialRequest(String openidRequest) {
-    var credentialType = '';
-    try {
-      final uri = Uri.parse(openidRequest);
-      if (uri.scheme == 'openid') {
-        credentialType = uri.queryParameters['credential_type'] ?? '';
-      }
-    } catch (e) {
-      credentialType = '';
-    }
-    return credentialType;
-  }
-
-  /// extract issuer from initial openid request
-  String getIssuerRequest(String openidRequest) {
-    var issuer = '';
-    try {
-      final uri = Uri.parse(openidRequest);
-      if (uri.scheme == 'openid') {
-        issuer = uri.queryParameters['issuer'] ?? '';
-      }
-    } catch (e) {
-      issuer = '';
-    }
-    return issuer;
   }
 
   String? nonce;
@@ -201,26 +188,20 @@ class OIDC4VC {
     required dynamic credential,
     required String did,
     required String kid,
-    required Uri credentialRequestUri,
     required int indexValue,
     String? preAuthorizedCode,
     String? mnemonic,
     String? privateKey,
     String? userPin,
+    String? code,
   }) async {
-    final kIssuer = getIssuer(
-      preAuthorizedCode: preAuthorizedCode,
-      issuer: issuer,
-      credentialRequestUri: credentialRequestUri,
-    );
-
     final tokenData = buildTokenData(
       preAuthorizedCode: preAuthorizedCode,
-      credentialRequestUri: credentialRequestUri,
       userPin: userPin,
+      code: code,
     );
 
-    final openidConfigurationResponse = await getOpenIdConfig(kIssuer);
+    final openidConfigurationResponse = await getOpenIdConfig(issuer);
 
     final tokenEndPoint = await readTokenEndPoint(openidConfigurationResponse);
 
@@ -240,7 +221,7 @@ class OIDC4VC {
       private,
       did,
       kid,
-      kIssuer,
+      issuer,
     );
 
     if (nonce == null) throw Exception();
@@ -248,7 +229,6 @@ class OIDC4VC {
     final (credentialData, format) = await buildCredentialData(
       nonce: nonce!,
       issuerTokenParameters: issuerTokenParameters,
-      credentialRequestUri: credentialRequestUri,
       openidConfigurationResponse: openidConfigurationResponse,
       credential: credential,
     );
@@ -302,9 +282,9 @@ class OIDC4VC {
   }
 
   Map<String, dynamic> buildTokenData({
-    required Uri credentialRequestUri,
     String? preAuthorizedCode,
     String? userPin,
+    String? code,
   }) {
     late Map<String, dynamic> tokenData;
 
@@ -313,14 +293,13 @@ class OIDC4VC {
         'pre-authorized_code': preAuthorizedCode,
         'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
       };
-    } else {
-      final issuerAndCode = credentialRequestUri.queryParameters['issuer'];
-      final issuerAndCodeUri = Uri.parse(issuerAndCode!);
-      final code = issuerAndCodeUri.queryParameters['code'];
+    } else if (code != null) {
       tokenData = <String, dynamic>{
         'code': code,
         'grant_type': 'authorization_code',
       };
+    } else {
+      throw Exception();
     }
 
     if (userPin != null) {
@@ -328,20 +307,6 @@ class OIDC4VC {
     }
 
     return tokenData;
-  }
-
-  String getIssuer({
-    required Uri credentialRequestUri,
-    String? preAuthorizedCode,
-    String? issuer,
-  }) {
-    if (preAuthorizedCode != null) {
-      return issuer!;
-    } else {
-      final issuerAndCode = credentialRequestUri.queryParameters['issuer'];
-      final issuerAndCodeUri = Uri.parse(issuerAndCode!);
-      return '${issuerAndCodeUri.scheme}://${issuerAndCodeUri.authority}${issuerAndCodeUri.path}';
-    }
   }
 
   Future<Response<Map<String, dynamic>>> getDidDocument(String didKey) async {
@@ -371,6 +336,25 @@ class OIDC4VC {
       tokenEndPoint = openidConfigurationResponse['token_endpoint'] as String;
     }
     return tokenEndPoint;
+  }
+
+  Future<String> readAuthorizationEndPoint(
+    Map<String, dynamic> openidConfigurationResponse,
+  ) async {
+    late String authorizationEndpoint;
+
+    final authorizationServer =
+        openidConfigurationResponse['authorization_server'];
+    if (authorizationServer != null) {
+      final url = '$authorizationServer/.well-known/openid-configuration';
+      final response = await client.get<dynamic>(url);
+
+      authorizationEndpoint = response.data['authorization_endpoint'] as String;
+    } else {
+      authorizationEndpoint =
+          openidConfigurationResponse['authorization_endpoint'] as String;
+    }
+    return authorizationEndpoint;
   }
 
   String readIssuerDid(
@@ -423,7 +407,6 @@ class OIDC4VC {
   Future<(Map<String, dynamic>, String)> buildCredentialData({
     required String nonce,
     required IssuerTokenParameters issuerTokenParameters,
-    required Uri credentialRequestUri,
     required Map<String, dynamic> openidConfigurationResponse,
     required dynamic credential,
   }) async {

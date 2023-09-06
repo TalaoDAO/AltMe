@@ -21,7 +21,8 @@ class Parameters {
     isWalletIntegrityEnabled: true,
   );
 
-  static const ebsiUniversalLink = 'https://app.altme.io/app/download/ebsi';
+  static const oidc4vcUniversalLink =
+      'https://app.altme.io/app/download/oidc4vc/';
 
   static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 

@@ -76,8 +76,11 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                       : () {
                           if (state.isEmpty) return;
 
+                          final selectedCredentials =
+                              state.map((index) => credentials[index]).toList();
+
                           context.read<QRCodeScanCubit>().addCredentialsInLoop(
-                                credentials: credentials,
+                                credentials: selectedCredentials,
                                 userPin: userPin,
                               );
                         },

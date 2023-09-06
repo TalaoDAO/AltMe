@@ -80,8 +80,6 @@ Future<void> getAndAddCredential({
   required DioClient dioClient,
   required String? userPin,
 }) async {
-  final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
-
   final (preAuthorizedCode, issuer) = await getIssuerAndPreAuthorizedCode(
     oidc4vcType: oidc4vcType,
     scannedResponse: scannedResponse,
@@ -102,7 +100,10 @@ Future<void> getAndAddCredential({
     didKitProvider: didKitProvider,
   );
 
-  if (preAuthorizedCode != null) {
+  final codeForAuthorisedFlow =
+      Uri.parse(scannedResponse).queryParameters['code'];
+
+  if (preAuthorizedCode != null || codeForAuthorisedFlow != null) {
     final (
       dynamic encodedCredentialOrFutureToken,
       String? deferredCredentialEndpoint,
@@ -113,10 +114,10 @@ Future<void> getAndAddCredential({
       credential: credential,
       did: did,
       kid: kid,
-      credentialRequestUri: uriFromScannedResponse,
       privateKey: privateKey,
       indexValue: oidc4vcType.indexValue,
       userPin: userPin,
+      code: codeForAuthorisedFlow,
     );
     final String credentialName = getCredentialData(credential);
     final acceptanceToken = encodedCredentialOrFutureToken['acceptance_token'];
@@ -177,10 +178,16 @@ Future<void> getAndAddCredential({
       );
     }
   } else {
+    final dynamic credentialOfferJson = await getCredentialOfferJson(
+      scannedResponse: scannedResponse,
+      dioClient: dioClient,
+    );
+
     final Uri ebsiAuthenticationUri =
         await oidc4vc.getAuthorizationUriForIssuer(
-      scannedResponse,
-      Parameters.ebsiUniversalLink,
+      credentialOfferJson: credentialOfferJson,
+      clientId: did,
+      redirectUrl: '${Parameters.oidc4vcUniversalLink}$scannedResponse',
     );
     await LaunchUrl.launchUri(ebsiAuthenticationUri);
   }

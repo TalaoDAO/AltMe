@@ -569,10 +569,15 @@ Future<(String?, String)> getIssuerAndPreAuthorizedCode({
       );
       if (credentialOfferJson == null) throw Exception();
 
-      preAuthorizedCode = credentialOfferJson['grants']
-                  ['urn:ietf:params:oauth:grant-type:pre-authorized_code']
-              ['pre-authorized_code']
-          .toString();
+      final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
+          ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+
+      if (preAuthorizedCodeGrant != null &&
+          preAuthorizedCodeGrant is Map &&
+          preAuthorizedCodeGrant.containsKey('authorized_code')) {
+        preAuthorizedCode = preAuthorizedCodeGrant['authorized_code'] as String;
+      }
+
       issuer = credentialOfferJson['credential_issuer'].toString();
 
     case OIDC4VCType.GAIAX:

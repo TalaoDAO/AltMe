@@ -90,6 +90,30 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
+    if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
+      final url = uri.toString().split(Parameters.oidc4vcUniversalLink)[1];
+
+      final List<String> parts = url.split('?');
+
+      final String modifiedUrl = '${parts[0]}?${parts.sublist(1).join('&')}';
+
+      final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
+          getOIDC4VCTypeForIssuance(modifiedUrl);
+
+      if (currentOIIDC4VCTypeForIssuance != null) {
+        /// issuer side (oidc4VCI)
+
+        await context.read<QRCodeScanCubit>().startOIDC4VCCredentialIssuance(
+              scannedResponse: modifiedUrl,
+              currentOIIDC4VCType: currentOIIDC4VCTypeForIssuance,
+              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            );
+        return;
+      }
+
+      return;
+    }
+
     if (uri.toString().startsWith('iden3comm://')) {
       /// if wallet has not been created then alert user
       final ssiKey =
