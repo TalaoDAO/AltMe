@@ -9,19 +9,31 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     super.key,
     required this.credentials,
     required this.userPin,
+    required this.preAuthorizedCode,
+    required this.issuer,
+    required this.oidc4vcType,
   });
 
   final List<dynamic> credentials;
   final String? userPin;
+  final String? preAuthorizedCode;
+  final String issuer;
+  final OIDC4VCType oidc4vcType;
 
   static Route<dynamic> route({
     required List<dynamic> credentials,
     required String? userPin,
+    required String? preAuthorizedCode,
+    required String issuer,
+    required OIDC4VCType oidc4vcType,
   }) =>
       MaterialPageRoute<void>(
         builder: (context) => Oidc4vcCredentialPickPage(
           credentials: credentials,
           userPin: userPin,
+          issuer: issuer,
+          preAuthorizedCode: preAuthorizedCode,
+          oidc4vcType: oidc4vcType,
         ),
         settings: const RouteSettings(name: '/Oidc4vcCredentialPickPage'),
       );
@@ -33,6 +45,9 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
       child: Oidc4vcCredentialPickView(
         credentials: credentials,
         userPin: userPin,
+        issuer: issuer,
+        preAuthorizedCode: preAuthorizedCode,
+        oidc4vcType: oidc4vcType,
       ),
     );
   }
@@ -43,10 +58,16 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
     super.key,
     required this.credentials,
     required this.userPin,
+    required this.preAuthorizedCode,
+    required this.issuer,
+    required this.oidc4vcType,
   });
 
   final List<dynamic> credentials;
   final String? userPin;
+  final String? preAuthorizedCode;
+  final String issuer;
+  final OIDC4VCType oidc4vcType;
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +100,15 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                           final selectedCredentials =
                               state.map((index) => credentials[index]).toList();
 
-                          context.read<QRCodeScanCubit>().addCredentialsInLoop(
-                                credentials: selectedCredentials,
+                          context
+                              .read<QRCodeScanCubit>()
+                              .processSelectedCredentials(
+                                selectedCredentials: selectedCredentials,
                                 userPin: userPin,
+                                issuer: issuer,
+                                preAuthorizedCode: preAuthorizedCode,
+                                oidc4vcType: oidc4vcType,
+                                selectedCredentialsIndex: state,
                               );
                         },
                   text: l10n.proceed,

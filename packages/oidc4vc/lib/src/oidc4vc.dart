@@ -91,21 +91,28 @@ class OIDC4VC {
 
   /// getAuthorizationUriForIssuer
   Future<Uri> getAuthorizationUriForIssuer({
-    required dynamic credentialOfferJson,
+    required List<dynamic> selectedCredentials,
     required String clientId,
     required String redirectUrl,
+    required String issuer,
+    required String issuerState,
+    required String nonce,
+    String? state,
   }) async {
     try {
-      final issuer = credentialOfferJson['credential_issuer'] as String;
       final openidConfigurationResponse = await getOpenIdConfig(issuer);
 
       final authorizationEndpoint =
           await readAuthorizationEndPoint(openidConfigurationResponse);
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
-        credentialOfferJson: credentialOfferJson,
+        selectedCredentials: selectedCredentials,
         clientId: clientId,
         redirectUrl: redirectUrl,
+        issuer: issuer,
+        issuerState: issuerState,
+        nonce: nonce,
+        state: state,
       );
 
       final url = Uri.parse(authorizationEndpoint);
@@ -119,21 +126,19 @@ class OIDC4VC {
 
   @visibleForTesting
   Map<String, dynamic> getAuthorizationRequestParemeters({
-    required dynamic credentialOfferJson,
+    required List<dynamic> selectedCredentials,
     required String clientId,
     required String redirectUrl,
+    required String issuer,
+    required String issuerState,
+    required String nonce,
+    String? state,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
-    final issuer = credentialOfferJson['credential_issuer'] as String;
-
-    final credentials = credentialOfferJson['credentials'] as List<dynamic>;
-
-    final issuerState = credentialOfferJson['grants']['authorization_code']
-        ['issuer_state'] as String;
 
     final authorizationDetails = <dynamic>[];
 
-    for (final credential in credentials) {
+    for (final credential in selectedCredentials) {
       final data = {
         'type': 'openid_credential',
         'locations': [issuer],
@@ -149,8 +154,8 @@ class OIDC4VC {
       'redirect_uri': redirectUrl,
       'scope': 'openid',
       'issuer_state': issuerState,
-      'state': '',
-      'nonce': const Uuid().v4(),
+      'state': state,
+      'nonce': nonce,
       'code_challenge': 'lf3q5-NObcyp41iDSIL51qI7pBLmeYNeyWnNcY2FlW4',
       'code_challenge_method': 'S256',
       'authorization_details': jsonEncode(authorizationDetails),

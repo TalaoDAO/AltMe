@@ -497,7 +497,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required OIDC4VCType currentOIIDC4VCType,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
-    emit(state.copyWith(uri: Uri.parse(scannedResponse)));
+    emit(
+      state.copyWith(
+        uri: Uri.parse(scannedResponse),
+        qrScanStatus: QrScanStatus.loading,
+      ),
+    );
     switch (currentOIIDC4VCType) {
       case OIDC4VCType.DEFAULT:
       case OIDC4VCType.GREENCYPHER:
@@ -661,6 +666,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   void navigateToOidc4vcCredentialPickPage({
     required List<dynamic> credentials,
     required String? userPin,
+    required String? preAuthorizedCode,
+    required String issuer,
+    required OIDC4VCType oidc4vcType,
   }) {
     emit(
       state.copyWith(
@@ -668,6 +676,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         route: Oidc4vcCredentialPickPage.route(
           credentials: credentials,
           userPin: userPin,
+          issuer: issuer,
+          preAuthorizedCode: preAuthorizedCode,
+          oidc4vcType: oidc4vcType,
         ),
       ),
     );
@@ -883,36 +894,85 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> addCredentialsInLoop({
-    required List<dynamic> credentials,
+  Future<void> processSelectedCredentials({
+    required List<dynamic> selectedCredentials,
+    required List<int> selectedCredentialsIndex,
+    required OIDC4VCType oidc4vcType,
     required String? userPin,
+    required String? preAuthorizedCode,
+    required String issuer,
   }) async {
     try {
-      final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-          getOIDC4VCTypeForIssuance(state.uri.toString());
+      final OIDC4VC oidc4vc = oidc4vcType.getOIDC4VC;
 
-      if (currentOIIDC4VCTypeForIssuance != null) {
-        final OIDC4VC oidc4vc = currentOIIDC4VCTypeForIssuance.getOIDC4VC;
-
-        for (int i = 0; i < credentials.length; i++) {
-          emit(state.loading());
-
-          await getAndAddCredential(
-            scannedResponse: state.uri.toString(),
-            credentialsCubit: credentialsCubit,
-            oidc4vc: oidc4vc,
-            oidc4vcType: currentOIIDC4VCTypeForIssuance,
-            didKitProvider: didKitProvider,
-            secureStorageProvider: getSecureStorage,
-            credential: credentials[i],
-            isLastCall: i + 1 == credentials.length,
-            dioClient: DioClient('', Dio()),
-            userPin: userPin,
-          );
-        }
-        oidc4vc.resetNonceAndAccessToken();
+      if (preAuthorizedCode != null) {
+        await addCredentialsInLoop(
+          selectedCredentials: selectedCredentials,
+          oidc4vcType: oidc4vcType,
+          userPin: userPin,
+          preAuthorizedCode: preAuthorizedCode,
+          issuer: issuer,
+        );
+      } else {
+        emit(state.loading());
+        await getAuthorizationUriForIssuer(
+          scannedResponse: state.uri.toString(),
+          oidc4vc: oidc4vc,
+          oidc4vcType: oidc4vcType,
+          didKitProvider: didKitProvider,
+          selectedCredentials: selectedCredentials,
+          secureStorageProvider: secureStorageProvider,
+          dioClient: DioClient('', Dio()),
+          issuer: issuer,
+          selectedCredentialsIndex: selectedCredentialsIndex,
+        );
         goBack();
       }
+    } catch (e) {
+      emit(
+        state.copyWith(
+          message: StateMessage.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> addCredentialsInLoop({
+    required List<dynamic> selectedCredentials,
+    required OIDC4VCType oidc4vcType,
+    required String? userPin,
+    required String? preAuthorizedCode,
+    required String issuer,
+  }) async {
+    try {
+      final OIDC4VC oidc4vc = oidc4vcType.getOIDC4VC;
+
+      for (int i = 0; i < selectedCredentials.length; i++) {
+        emit(state.loading());
+
+        await getAndAddCredential(
+          scannedResponse: state.uri.toString(),
+          credentialsCubit: credentialsCubit,
+          oidc4vc: oidc4vc,
+          oidc4vcType: oidc4vcType,
+          didKitProvider: didKitProvider,
+          secureStorageProvider: getSecureStorage,
+          credential: selectedCredentials[i],
+          isLastCall: i + 1 == selectedCredentials.length,
+          dioClient: DioClient('', Dio()),
+          userPin: userPin,
+          issuer: issuer,
+          preAuthorizedCode: preAuthorizedCode,
+        );
+      }
+
+      oidc4vc.resetNonceAndAccessToken();
+      goBack();
     } catch (e) {
       if (e is MessageHandler) {
         emit(state.copyWith(message: StateMessage.error(messageHandler: e)));
