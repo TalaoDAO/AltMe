@@ -1,10 +1,12 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class UserPinPage extends StatelessWidget {
   const UserPinPage({
@@ -31,9 +33,13 @@ class UserPinPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UserPinView(
-      onCancel: onCancel,
-      onProceed: onProceed,
+    return BlocProvider(
+      create: (context) =>
+          PinCodeViewCubit(profileCubit: context.read<ProfileCubit>()),
+      child: UserPinView(
+        onCancel: onCancel,
+        onProceed: onProceed,
+      ),
     );
   }
 }
@@ -53,178 +59,55 @@ class UserPinView extends StatefulWidget {
 }
 
 class _UserPinViewState extends State<UserPinView> {
-  final TextEditingController pinController = TextEditingController();
+  final StreamController<bool> _verificationNotifier =
+      StreamController<bool>.broadcast();
 
-  late final _selectionControls = Platform.isIOS
-      ? AppCupertinoTextSelectionControls(onPaste: _onPaste)
-      : AppMaterialTextSelectionControls(onPaste: _onPaste);
-
-  Future<void> _onPaste(TextSelectionDelegate value) async {
-    final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-    var text = data?.text ?? '';
-    if (text.isEmpty) {
-      return;
-    } else {
-      if (text.length > 6) {
-        text = text.substring(0, 6);
-      }
-      _setPinControllerText(text);
-    }
+  @override
+  void dispose() {
+    _verificationNotifier.close();
+    super.dispose();
   }
 
-  void _insertKey(String key) {
-    final text = pinController.text;
-    final addedText = text + key;
-    if (text.length >= 6) return;
-    _setPinControllerText(addedText);
-  }
-
-  void _setPinControllerText(String text) {
-    pinController.text = text;
-    pinController.selection = TextSelection.fromPosition(
-      TextPosition(offset: pinController.text.length),
-    );
-  }
+  String? pinCodeValue;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return WillPopScope(
-      onWillPop: () async {
-        Navigator.of(context).pop();
-        widget.onCancel.call();
-        return true;
-      },
+      onWillPop: () async => false,
       child: BasePage(
+        backgroundColor: Theme.of(context).colorScheme.background,
         scrollView: false,
-        titleLeading: BackLeadingButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            widget.onCancel.call();
+        body: PinCodeWidget(
+          title: l10n.pleaseInsertTheSecredCodeReceived,
+          passwordEnteredCallback: _onPasscodeEntered,
+          passwordDigits: 6,
+          deleteButton: Text(
+            l10n.delete,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          cancelButton: Text(
+            l10n.cancel,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          cancelCallback: _onPasscodeCancelled,
+          isValidCallback: () {
+            Navigator.pop(context);
+            widget.onProceed.call(pinCodeValue!);
           },
-        ),
-        body: BackgroundCard(
-          height: double.infinity,
-          width: double.infinity,
-          padding: const EdgeInsets.all(Sizes.spaceSmall),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const SizedBox(height: Sizes.spaceXLarge),
-              Text(
-                l10n.pleaseInsertTheSecredCodeReceived,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: Sizes.spaceXLarge),
-              Form(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: TextFormField(
-                  selectionControls: _selectionControls,
-                  controller: pinController,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                  maxLines: 1,
-                  cursorWidth: 4,
-                  autofocus: false,
-                  keyboardType: TextInputType.none,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                  cursorRadius: const Radius.circular(4),
-                  textAlign: TextAlign.center,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(Sizes.smallRadius),
-                      ),
-                    ),
-                    hintText: '000000',
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 5,
-                      horizontal: 10,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  child: SingleChildScrollView(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      height: MediaQuery.of(context).size.width * 0.7,
-                      child: LayoutBuilder(
-                        builder: (_, constraint) {
-                          return NumericKeyboard(
-                            allowAction: true,
-                            keyboardUIConfig: KeyboardUIConfig(
-                              digitShape: BoxShape.rectangle,
-                              spacing: 40,
-                              digitInnerMargin: EdgeInsets.zero,
-                              keyboardRowMargin: EdgeInsets.zero,
-                              digitBorderWidth: 0,
-                              digitTextStyle: Theme.of(context)
-                                  .textTheme
-                                  .calculatorKeyboardDigitTextStyle,
-                              keyboardSize: constraint.biggest,
-                            ),
-                            trailingButton: KeyboardButton(
-                              digitShape: BoxShape.rectangle,
-                              digitBorderWidth: 0,
-                              semanticsLabel: 'delete',
-                              icon: Image.asset(
-                                IconStrings.keyboardDelete,
-                                width: Sizes.icon2x,
-                                color: Colors.white,
-                              ),
-                              allowAction: true,
-                              onLongPress: (_) {},
-                              onTap: (_) {
-                                final text = pinController.text;
-                                if (text.isNotEmpty) {
-                                  String pincode = '';
-                                  if (text.length > 1) {
-                                    pincode =
-                                        text.substring(0, text.length - 1);
-                                  }
-                                  _setPinControllerText(pincode);
-                                }
-                              },
-                            ),
-                            onKeyboardTap: _insertKey,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        navigation: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: Sizes.spaceSmall,
-              right: Sizes.spaceSmall,
-              bottom: Sizes.spaceSmall,
-            ),
-            child: MyElevatedButton(
-              borderRadius: Sizes.normalRadius,
-              text: l10n.next,
-              onPressed: () {
-                Navigator.pop(context);
-                widget.onProceed.call(pinController.text);
-              },
-            ),
-          ),
+          shouldTriggerVerification: _verificationNotifier.stream,
         ),
       ),
     );
+  }
+
+  Future<void> _onPasscodeEntered(String enteredPasscode) async {
+    pinCodeValue = enteredPasscode;
+    _verificationNotifier.add(true);
+  }
+
+  void _onPasscodeCancelled() {
+    Navigator.of(context).pop();
+    widget.onCancel.call();
   }
 }

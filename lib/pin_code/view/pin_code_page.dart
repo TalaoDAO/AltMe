@@ -42,7 +42,7 @@ class PinCodePage extends StatelessWidget {
       child: PinCodeView(
         isValidCallback: isValidCallback,
         restrictToBack: restrictToBack,
-        localAuthApi: LocalAuthApi(),
+        localAuthApi: localAuthApi,
       ),
     );
   }

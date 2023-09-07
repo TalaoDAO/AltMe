@@ -8,6 +8,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
