@@ -107,6 +107,7 @@ class OIDC4VC {
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
         selectedCredentials: selectedCredentials,
+        openidConfigurationResponse: openidConfigurationResponse,
         clientId: clientId,
         redirectUrl: redirectUrl,
         issuer: issuer,
@@ -132,6 +133,7 @@ class OIDC4VC {
     required String issuer,
     required String issuerState,
     required String nonce,
+    required Map<String, dynamic> openidConfigurationResponse,
     String? state,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
@@ -139,12 +141,44 @@ class OIDC4VC {
     final authorizationDetails = <dynamic>[];
 
     for (final credential in selectedCredentials) {
-      final data = {
-        'type': 'openid_credential',
-        'locations': [issuer],
-        'format': credential['format'],
-        'types': credential['types'],
-      };
+      late Map<String, dynamic> data;
+      if (credential is String) {
+        //
+        final credentialsSupported =
+            openidConfigurationResponse['credentials_supported']
+                as List<dynamic>;
+
+        dynamic credentailData;
+
+        for (final dynamic credSupported in credentialsSupported) {
+          if ((credSupported as Map<String, dynamic>)['id'].toString() ==
+              credential) {
+            credentailData = credSupported;
+            break;
+          }
+        }
+
+        if (credentailData == null) {
+          throw Exception();
+        }
+
+        data = {
+          'type': 'openid_credential',
+          'locations': [issuer],
+          'format': credentailData['format'],
+          'types': credentailData['types'],
+        };
+      } else if (credential is Map<String, dynamic>) {
+        data = {
+          'type': 'openid_credential',
+          'locations': [issuer],
+          'format': credential['format'],
+          'types': credential['types'],
+        };
+      } else {
+        throw Exception();
+      }
+
       authorizationDetails.add(data);
     }
 
