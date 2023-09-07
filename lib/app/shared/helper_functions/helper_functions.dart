@@ -574,8 +574,9 @@ Future<(String?, String)> getIssuerAndPreAuthorizedCode({
 
       if (preAuthorizedCodeGrant != null &&
           preAuthorizedCodeGrant is Map &&
-          preAuthorizedCodeGrant.containsKey('authorized_code')) {
-        preAuthorizedCode = preAuthorizedCodeGrant['authorized_code'] as String;
+          preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
+        preAuthorizedCode =
+            preAuthorizedCodeGrant['pre-authorized_code'] as String;
       }
 
       issuer = credentialOfferJson['credential_issuer'].toString();
