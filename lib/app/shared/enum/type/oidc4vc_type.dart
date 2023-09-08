@@ -37,7 +37,7 @@ enum OIDC4VCType {
   EBSIV3(
     issuerVcType: 'jwt_vc',
     verifierVpType: 'jwt_vp',
-    offerPrefix: 'openid://initiate_issuance',
+    offerPrefix: 'openid-credential-offer://',
     presentationPrefix: 'openid-vc://',
     publicJWKNeeded: false,
   ),

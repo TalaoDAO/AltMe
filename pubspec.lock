@@ -1776,6 +1776,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.4"
+  pkce:
+    dependency: transitive
+    description:
+      name: pkce
+      sha256: "5af8f4598aeaf033da4c87cb28bc9046262ddcbc0ba8d185d34d07e1aeb8c504"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0+1"
   platform:
     dependency: transitive
     description:

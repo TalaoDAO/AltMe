@@ -9,6 +9,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
+import 'package:dio/dio.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -91,14 +92,18 @@ class _SplashViewState extends State<SplashView> {
     }
 
     if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
-      final url = uri.toString().split(Parameters.oidc4vcUniversalLink)[1];
+      final url =
+          uri.toString().split('${Parameters.oidc4vcUniversalLink}?uri=')[1];
 
       final List<String> parts = url.split('?');
 
       final String modifiedUrl = '${parts[0]}?${parts.sublist(1).join('&')}';
 
       final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-          getOIDC4VCTypeForIssuance(modifiedUrl);
+          await getOIDC4VCTypeForIssuance(
+        url: modifiedUrl,
+        client: DioClient('', Dio()),
+      );
 
       if (currentOIIDC4VCTypeForIssuance != null) {
         /// issuer side (oidc4VCI)
@@ -170,7 +175,10 @@ class _SplashViewState extends State<SplashView> {
       }
       if (uri.scheme == 'openid' && uri.authority == 'initiate_issuance') {
         final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-            getOIDC4VCTypeForIssuance(uri.toString());
+            await getOIDC4VCTypeForIssuance(
+          url: uri.toString(),
+          client: DioClient('', Dio()),
+        );
 
         if (currentOIIDC4VCTypeForIssuance != null) {
           // ignore: require_trailing_commas

@@ -51,7 +51,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
     final codeForAuthorisedFlow =
         Uri.parse(scannedResponse).queryParameters['code'];
     final stateOfCredentialsSelected =
-        Uri.parse(scannedResponse).queryParameters['state'];
+        Uri.parse(scannedResponse).queryParameters['options'];
 
     if (preAuthorizedCode != null) {
       /// full phase flow of preAuthorized

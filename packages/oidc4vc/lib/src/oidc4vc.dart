@@ -15,6 +15,7 @@ import 'package:oidc4vc/src/issuer_token_parameters.dart';
 import 'package:oidc4vc/src/token_parameters.dart';
 import 'package:oidc4vc/src/verification_type.dart';
 import 'package:oidc4vc/src/verifier_token_parameters.dart';
+import 'package:pkce/pkce.dart';
 import 'package:secp256k1/secp256k1.dart';
 import 'package:uuid/uuid.dart';
 
@@ -23,10 +24,7 @@ import 'package:uuid/uuid.dart';
 /// {@endtemplate}
 class OIDC4VC {
   /// {@macro ebsi}
-  OIDC4VC({
-    required this.client,
-    required this.oidc4vcModel,
-  });
+  OIDC4VC({required this.client, required this.oidc4vcModel});
 
   ///
   final Dio client;
@@ -93,11 +91,12 @@ class OIDC4VC {
   Future<Uri> getAuthorizationUriForIssuer({
     required List<dynamic> selectedCredentials,
     required String clientId,
-    required String redirectUrl,
+    required String webLink,
+    required String schema,
     required String issuer,
     required String issuerState,
     required String nonce,
-    String? state,
+    String? options,
   }) async {
     try {
       final openidConfigurationResponse = await getOpenIdConfig(issuer);
@@ -107,13 +106,16 @@ class OIDC4VC {
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
         selectedCredentials: selectedCredentials,
+        authorizationEndpoint:
+            'https://app.altme.io/app/download/authorization',
         openidConfigurationResponse: openidConfigurationResponse,
         clientId: clientId,
-        redirectUrl: redirectUrl,
         issuer: issuer,
+        schema: schema,
+        webLink: webLink,
         issuerState: issuerState,
         nonce: nonce,
-        state: state,
+        options: options,
       );
 
       final url = Uri.parse(authorizationEndpoint);
@@ -128,13 +130,15 @@ class OIDC4VC {
   @visibleForTesting
   Map<String, dynamic> getAuthorizationRequestParemeters({
     required List<dynamic> selectedCredentials,
+    required String authorizationEndpoint,
     required String clientId,
-    required String redirectUrl,
     required String issuer,
     required String issuerState,
     required String nonce,
     required Map<String, dynamic> openidConfigurationResponse,
-    String? state,
+    required String webLink,
+    required String schema,
+    String? options,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -182,19 +186,24 @@ class OIDC4VC {
       authorizationDetails.add(data);
     }
 
+    final pkcePair = PkcePair.generate();
+    final codeChallenge = pkcePair.codeChallenge;
+    final codeVerifier = pkcePair.codeVerifier;
+
     final myRequest = <String, dynamic>{
       'response_type': 'code',
       'client_id': clientId,
-      'redirect_uri': redirectUrl,
+      'redirect_uri':
+          '$webLink?uri=$schema&code_verifier=$codeVerifier&options=$options',
       'scope': 'openid',
       'issuer_state': issuerState,
-      'state': state,
+      'state': const Uuid().v4(),
       'nonce': nonce,
-      'code_challenge': 'lf3q5-NObcyp41iDSIL51qI7pBLmeYNeyWnNcY2FlW4',
+      'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
       'authorization_details': jsonEncode(authorizationDetails),
       'client_metadata': jsonEncode({
-        'authorization_endpoint': 'openid:',
+        'authorization_endpoint': authorizationEndpoint,
         'scopes_supported': ['openid'],
         'response_types_supported': ['vp_token', 'id_token'],
         'subject_types_supported': ['public'],
@@ -233,11 +242,13 @@ class OIDC4VC {
     String? privateKey,
     String? userPin,
     String? code,
+    String? codeVerifier,
   }) async {
     final tokenData = buildTokenData(
       preAuthorizedCode: preAuthorizedCode,
       userPin: userPin,
       code: code,
+      codeVerifier: codeVerifier,
     );
 
     final openidConfigurationResponse = await getOpenIdConfig(issuer);
@@ -324,6 +335,7 @@ class OIDC4VC {
     String? preAuthorizedCode,
     String? userPin,
     String? code,
+    String? codeVerifier,
   }) {
     late Map<String, dynamic> tokenData;
 
@@ -332,10 +344,11 @@ class OIDC4VC {
         'pre-authorized_code': preAuthorizedCode,
         'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
       };
-    } else if (code != null) {
+    } else if (code != null && codeVerifier != null) {
       tokenData = <String, dynamic>{
         'code': code,
         'grant_type': 'authorization_code',
+        'code_verifier': codeVerifier,
       };
     } else {
       throw Exception();

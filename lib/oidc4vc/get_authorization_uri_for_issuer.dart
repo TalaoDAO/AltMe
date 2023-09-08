@@ -45,11 +45,12 @@ Future<void> getAuthorizationUriForIssuer({
   final Uri ebsiAuthenticationUri = await oidc4vc.getAuthorizationUriForIssuer(
     selectedCredentials: selectedCredentials,
     clientId: did,
-    redirectUrl: '${Parameters.oidc4vcUniversalLink}$scannedResponse',
+    webLink: Parameters.oidc4vcUniversalLink,
+    schema: scannedResponse,
     issuer: issuer,
     issuerState: issuerState,
     nonce: nonce,
-    state: selectedCredentialsIndex.toString(),
+    options: selectedCredentialsIndex.toString(),
   );
   await LaunchUrl.launchUri(ebsiAuthenticationUri);
 }

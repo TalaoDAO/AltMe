@@ -8,7 +8,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
@@ -253,7 +252,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     try {
       if (isOIDC4VCIUrl(state.uri!)) {
         final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-            getOIDC4VCTypeForIssuance(state.uri.toString());
+            await getOIDC4VCTypeForIssuance(
+          url: state.uri.toString(),
+          client: dioClient,
+        );
 
         if (currentOIIDC4VCTypeForIssuance != null) {
           /// issuer side (oidc4VCI)
@@ -581,8 +583,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }) async {
     try {
       emit(state.loading());
+
       final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-          getOIDC4VCTypeForIssuance(credentialModel.pendingInfo!.url);
+          await getOIDC4VCTypeForIssuance(
+        url: credentialModel.pendingInfo!.url,
+        client: client,
+      );
 
       if (currentOIIDC4VCTypeForIssuance != null) {
         await getAndAddDefferedCredential(

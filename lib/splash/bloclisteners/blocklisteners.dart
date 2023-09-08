@@ -228,7 +228,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             userConsentForVerifierAccess;
 
         final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-            getOIDC4VCTypeForIssuance(state.uri.toString());
+            await getOIDC4VCTypeForIssuance(
+          url: state.uri.toString(),
+          client: DioClient('', Dio()),
+        );
 
         final bool isOpenIDUrl = state.uri.toString().startsWith('openid');
 

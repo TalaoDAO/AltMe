@@ -6,6 +6,7 @@ import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -463,12 +464,43 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
           uri.toString().startsWith('openid-hedera://?'));
 }
 
-OIDC4VCType? getOIDC4VCTypeForIssuance(String url) {
+Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
+  required String url,
+  required DioClient client,
+}) async {
   for (final oidc4vcType in OIDC4VCType.values) {
     if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
-      if (oidc4vcType == OIDC4VCType.DEFAULT &&
-          url.contains('api-conformance.ebsi.eu')) {
-        return OIDC4VCType.EBSIV3;
+      if (oidc4vcType == OIDC4VCType.DEFAULT ||
+          oidc4vcType == OIDC4VCType.EBSIV3) {
+        final dynamic credentialOfferJson = await getCredentialOfferJson(
+          scannedResponse: url,
+          dioClient: client,
+        );
+
+        final issuer = credentialOfferJson['credential_issuer'].toString();
+        if (credentialOfferJson == null) throw Exception();
+        final openidConfigurationResponse = await getOpenIdConfig(
+          baseUrl: issuer,
+          client: client.dio,
+        );
+
+        final credentialsSupported =
+            openidConfigurationResponse['credentials_supported']
+                as List<dynamic>;
+
+        if (credentialsSupported.isEmpty) throw Exception();
+
+        final credSupported = credentialsSupported[0] as Map<String, dynamic>;
+
+        if (credSupported['trust_framework'] == null) {
+          return OIDC4VCType.DEFAULT;
+        }
+
+        if (credSupported['trust_framework']['name'] == 'ebsi') {
+          return OIDC4VCType.EBSIV3;
+        } else {
+          throw Exception();
+        }
       }
       return oidc4vcType;
     }
@@ -498,7 +530,10 @@ Future<String> getHost({
   required DioClient client,
 }) async {
   final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-      getOIDC4VCTypeForIssuance(uri.toString());
+      await getOIDC4VCTypeForIssuance(
+    url: uri.toString(),
+    client: client,
+  );
 
   /// OIDC4VCI Case
   if (currentOIIDC4VCTypeForIssuance != null) {

@@ -38,8 +38,11 @@ Future<void> getAndAddCredential({
 
   final codeForAuthorisedFlow =
       Uri.parse(scannedResponse).queryParameters['code'];
+  final codeVerifier =
+      Uri.parse(scannedResponse).queryParameters['code_verifier'];
 
-  if (preAuthorizedCode != null || codeForAuthorisedFlow != null) {
+  if (preAuthorizedCode != null ||
+      (codeForAuthorisedFlow != null && codeVerifier != null)) {
     /// codeForAuthorisedFlow != null
     /// this is second phase flow for authorization_code
     /// first phase is need for the authentication
@@ -60,6 +63,7 @@ Future<void> getAndAddCredential({
       indexValue: oidc4vcType.indexValue,
       userPin: userPin,
       code: codeForAuthorisedFlow,
+      codeVerifier: codeVerifier,
     );
     final String credentialName = getCredentialData(credential);
     final acceptanceToken = encodedCredentialOrFutureToken['acceptance_token'];
