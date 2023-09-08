@@ -50,7 +50,11 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
             continue;
           }
 
-          final credentialName = credentialField['filter']['pattern'] as String;
+          final Filter filter = Filter.fromJson(
+              credentialField['filter'] as Map<String, dynamic>);
+
+          final credentialName =
+              filter.pattern ?? filter.contains!.containsConst;
 
           final isPresentable = await isCredentialPresentable(credentialName);
 

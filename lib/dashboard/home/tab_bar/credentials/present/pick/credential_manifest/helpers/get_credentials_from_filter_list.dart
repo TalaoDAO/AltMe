@@ -19,10 +19,14 @@ List<CredentialModel> getCredentialsFromFilterList({
             /// remove unmatched credential
             searchList.removeWhere(
               (element) {
-                if (element == field.filter?.pattern ||
-                    field.filter?.pattern == null) {
+                if (field.filter?.pattern != null &&
+                    element == field.filter?.pattern) {
+                  return false;
+                } else if (field.filter?.contains != null &&
+                    element == field.filter?.contains?.containsConst) {
                   return false;
                 }
+
                 return true;
               },
             );

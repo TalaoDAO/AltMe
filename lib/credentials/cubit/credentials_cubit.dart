@@ -417,7 +417,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         Field(path: [r'$..type'], filter: blockchainType.filter),
         Field(
           path: [r'$..associatedAddress'],
-          filter: Filter('String', cryptoAccountData.walletAddress),
+          filter: Filter(
+            type: 'String',
+            pattern: cryptoAccountData.walletAddress,
+          ),
         ),
       ],
       credentialList: oldCredentialList,
