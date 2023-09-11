@@ -50,7 +50,7 @@ Future<void> getAndAddCredential({
     /// preAuthorizedCode != null
     /// this is full phase flow for preAuthorizedCode
     final (
-      dynamic encodedCredentialOrFutureToken,
+      List<dynamic> encodedCredentialOrFutureTokens,
       String? deferredCredentialEndpoint,
       String format
     ) = await oidc4vc.getCredential(
@@ -65,63 +65,69 @@ Future<void> getAndAddCredential({
       code: codeForAuthorisedFlow,
       codeVerifier: codeVerifier,
     );
-    final String credentialName = getCredentialData(credential);
-    final acceptanceToken = encodedCredentialOrFutureToken['acceptance_token'];
 
-    if (acceptanceToken != null && deferredCredentialEndpoint != null) {
-      /// add deferred card
-      final id = const Uuid().v4();
+    for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {
+      final data = encodedCredentialOrFutureTokens[i];
+      final String credentialName = getCredentialData(credential);
+      final acceptanceToken = data['acceptance_token'];
 
-      final credentialModel = CredentialModel(
-        id: id,
-        credentialPreview: Credential(
-          'dummy1',
-          ['dummy2'],
-          [credentialName],
-          'dummy4',
-          'dummy5',
-          '',
-          [Proof.dummy()],
-          CredentialSubjectModel(
-            id: 'dummy7',
-            type: 'dummy8',
-            issuedBy: const Author(''),
-            credentialCategory: CredentialCategory.pendingCards,
-            credentialSubjectType: CredentialSubjectType.defaultCredential,
+      if (acceptanceToken != null && deferredCredentialEndpoint != null) {
+        /// add deferred card
+        final id = const Uuid().v4();
+
+        final credentialModel = CredentialModel(
+          id: id,
+          credentialPreview: Credential(
+            'dummy1',
+            ['dummy2'],
+            [credentialName],
+            'dummy4',
+            'dummy5',
+            '',
+            [Proof.dummy()],
+            CredentialSubjectModel(
+              id: 'dummy7',
+              type: 'dummy8',
+              issuedBy: const Author(''),
+              credentialCategory: CredentialCategory.pendingCards,
+              credentialSubjectType: CredentialSubjectType.defaultCredential,
+            ),
+            [Translation('en', '')],
+            [Translation('en', '')],
+            CredentialStatusField.emptyCredentialStatusField(),
+            [Evidence.emptyEvidence()],
           ),
-          [Translation('en', '')],
-          [Translation('en', '')],
-          CredentialStatusField.emptyCredentialStatusField(),
-          [Evidence.emptyEvidence()],
-        ),
-        data: const {},
-        display: Display.emptyDisplay(),
-        image: '',
-        shareLink: '',
-        pendingInfo: PendingInfo(
-          acceptanceToken: acceptanceToken.toString(),
-          deferredCredentialEndpoint: deferredCredentialEndpoint,
+          data: const {},
+          display: Display.emptyDisplay(),
+          image: '',
+          shareLink: '',
+          pendingInfo: PendingInfo(
+            acceptanceToken: acceptanceToken.toString(),
+            deferredCredentialEndpoint: deferredCredentialEndpoint,
+            format: format,
+            url: scannedResponse,
+          ),
+        );
+        // insert the credential in the wallet
+        await credentialsCubit.insertCredential(
+          credential: credentialModel,
+          showStatus: false,
+          showMessage:
+              isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
+          isPendingCredential: true,
+        );
+      } else {
+        await addOIDC4VCCredential(
+          encodedCredentialFromOIDC4VC: data,
+          credentialsCubit: credentialsCubit,
+          oidc4vcType: oidc4vcType,
+          issuer: issuer,
+          credentialType: credentialName,
+          isLastCall:
+              isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
           format: format,
-          url: scannedResponse,
-        ),
-      );
-      // insert the credential in the wallet
-      await credentialsCubit.insertCredential(
-        credential: credentialModel,
-        showStatus: false,
-        showMessage: isLastCall,
-        isPendingCredential: true,
-      );
-    } else {
-      await addOIDC4VCCredential(
-        encodedCredentialFromOIDC4VC: encodedCredentialOrFutureToken,
-        credentialsCubit: credentialsCubit,
-        oidc4vcType: oidc4vcType,
-        issuer: issuer,
-        credentialType: credentialName,
-        isLastCall: isLastCall,
-        format: format,
-      );
+        );
+      }
     }
   } else {
     throw Exception();

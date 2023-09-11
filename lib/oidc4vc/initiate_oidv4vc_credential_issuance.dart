@@ -113,7 +113,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       issuer: issuer,
       preAuthorizedCode: preAuthorizedCode,
     );
-    oidc4vc.resetNonceAndAccessToken();
+    oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
     qrCodeScanCubit.goBack();
   }
 }

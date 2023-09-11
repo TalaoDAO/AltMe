@@ -229,9 +229,10 @@ class OIDC4VC {
 
   String? nonce;
   String? accessToken;
+  List<dynamic>? authorizationDetails;
 
   /// Retreive credential_type from url
-  Future<(dynamic, String?, String)> getCredential({
+  Future<(List<dynamic>, String?, String)> getCredential({
     required String issuer,
     required dynamic credential,
     required String did,
@@ -259,6 +260,8 @@ class OIDC4VC {
       final response = await getToken(tokenEndPoint, tokenData);
       nonce = response['c_nonce'] as String;
       accessToken = response['access_token'] as String;
+      authorizationDetails =
+          response['authorization_details'] as List<dynamic>?;
     }
 
     final private = await getPrivateKey(
@@ -276,11 +279,80 @@ class OIDC4VC {
 
     if (nonce == null) throw Exception();
 
-    final (credentialData, format) = await buildCredentialData(
+    String? deferredCredentialEndpoint;
+
+    if (openidConfigurationResponse['deferred_credential_endpoint'] != null) {
+      deferredCredentialEndpoint =
+          openidConfigurationResponse['deferred_credential_endpoint']
+              .toString();
+    }
+
+    final (credentialType, types, format) = await getCredentialData(
+      openidConfigurationResponse: openidConfigurationResponse,
+      credential: credential,
+    );
+
+    final credentialResponseData = <dynamic>[];
+
+    if (authorizationDetails != null) {
+      final dynamic authDetailForCredential = authorizationDetails!
+          .where(
+            (dynamic element) =>
+                (element['types'] as List).contains(credentialType),
+          )
+          .firstOrNull;
+
+      if (authDetailForCredential == null) throw Exception();
+
+      final identifiers =
+          (authDetailForCredential['identifiers'] as List<dynamic>)
+              .map((dynamic element) => element.toString())
+              .toList();
+
+      for (final identifier in identifiers) {
+        final credentialResponseDataValue = await getSingleCredential(
+          issuerTokenParameters: issuerTokenParameters,
+          openidConfigurationResponse: openidConfigurationResponse,
+          credentialType: credentialType,
+          types: types,
+          format: format,
+          identifier: identifier,
+        );
+
+        credentialResponseData.add(credentialResponseDataValue);
+      }
+//
+    } else {
+      final credentialResponseDataValue = await getSingleCredential(
+        issuerTokenParameters: issuerTokenParameters,
+        openidConfigurationResponse: openidConfigurationResponse,
+        credentialType: credentialType,
+        types: types,
+        format: format,
+      );
+
+      credentialResponseData.add(credentialResponseDataValue);
+    }
+
+    return (credentialResponseData, deferredCredentialEndpoint, format);
+  }
+
+  Future<dynamic> getSingleCredential({
+    required IssuerTokenParameters issuerTokenParameters,
+    required Map<String, dynamic> openidConfigurationResponse,
+    required String credentialType,
+    required List<String> types,
+    required String format,
+    String? identifier,
+  }) async {
+    final credentialData = await buildCredentialData(
       nonce: nonce!,
       issuerTokenParameters: issuerTokenParameters,
       openidConfigurationResponse: openidConfigurationResponse,
-      credential: credential,
+      credentialType: credentialType,
+      types: types,
+      format: format,
+      identifier: identifier,
     );
 
     /// sign proof
@@ -300,15 +372,7 @@ class OIDC4VC {
 
     nonce = credentialResponse.data['c_nonce'].toString();
 
-    String? deferredCredentialEndpoint;
-
-    if (openidConfigurationResponse['deferred_credential_endpoint'] != null) {
-      deferredCredentialEndpoint =
-          openidConfigurationResponse['deferred_credential_endpoint']
-              .toString();
-    }
-
-    return (credentialResponse.data, deferredCredentialEndpoint, format);
+    return credentialResponse.data;
   }
 
   /// get Deferred credential from url
@@ -326,9 +390,10 @@ class OIDC4VC {
     return credentialResponse.data;
   }
 
-  void resetNonceAndAccessToken() {
+  void resetNonceAndAccessTokenAndAuthorizationDetails() {
     nonce = null;
     accessToken = null;
+    authorizationDetails = null;
   }
 
   Map<String, dynamic> buildTokenData({
@@ -456,26 +521,38 @@ class OIDC4VC {
     return private;
   }
 
-  Future<(Map<String, dynamic>, String)> buildCredentialData({
+  Future<Map<String, dynamic>> buildCredentialData({
     required String nonce,
     required IssuerTokenParameters issuerTokenParameters,
     required Map<String, dynamic> openidConfigurationResponse,
-    required dynamic credential,
+    required String credentialType,
+    required List<String> types,
+    required String format,
+    String? identifier,
   }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
 
-    //final issuerDid = readIssuerDid(openidConfigurationResponse);
+    final credentialData = <String, dynamic>{
+      'type': credentialType,
+      'types': types,
+      'format': format,
+      'proof': {
+        'proof_type': 'jwt',
+        'jwt': vcJwt,
+      },
+    };
 
-    // final isVerified = await verifyEncodedData(
-    //   issuerDid: issuerDid,
-    //   jwt: vcJwt,
-    //   holderKid: issuerTokenParameters.kid,
-    // );
+    if (identifier != null) {
+      credentialData['identifier'] = identifier;
+    }
 
-    // if (isVerified == VerificationType.notVerified) {
-    //   throw Exception('VERIFICATION_ISSUE');
-    // }
+    return credentialData;
+  }
 
+  Future<(String, List<String>, String)> getCredentialData({
+    required Map<String, dynamic> openidConfigurationResponse,
+    required dynamic credential,
+  }) async {
     String? credentialType;
     List<String>? types;
     String? format;
@@ -510,16 +587,7 @@ class OIDC4VC {
       throw Exception();
     }
 
-    final credentialData = <String, dynamic>{
-      'type': credentialType,
-      'types': types,
-      'format': format,
-      'proof': {
-        'proof_type': 'jwt',
-        'jwt': vcJwt,
-      },
-    };
-    return (credentialData, format);
+    return (credentialType, types, format);
   }
 
   Future<VerificationType> verifyEncodedData({

@@ -213,8 +213,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           ),
         ),
       );
-      if (!isPendingCredential)
+      if (!isPendingCredential) {
         await modifyCredential(credential: updatedCredential);
+      }
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
     } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
@@ -226,8 +227,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           ),
         ),
       );
-      if (!isPendingCredential)
+      if (!isPendingCredential) {
         await modifyCredential(credential: updatedCredential);
+      }
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
     } else {

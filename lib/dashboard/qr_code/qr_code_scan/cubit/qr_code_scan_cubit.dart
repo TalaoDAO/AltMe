@@ -981,7 +981,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
 
-      oidc4vc.resetNonceAndAccessToken();
+      oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
       goBack();
     } catch (e) {
       if (e is MessageHandler) {
