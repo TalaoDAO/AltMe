@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "prefabPath": "/home/rbarbe/.gradle/caches/modules-2/files-2.1/com.google.prefab/cli/2.0.0/f2702b5ca13df54e3ca92f29d6b403fb6285d8df/cli-2.0.0-all.jar",
+  "packages": [
+    "/home/rbarbe/.gradle/caches/transforms-3/dfad2c80377f483721e6c10edd671277/transformed/jetified-openssl-1.1.1q-beta-1/prefab"
+  ]
+}

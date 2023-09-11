@@ -1,0 +1,4 @@
+# ninja log v5
+0	11	1694253955	CMakeFiles/flutter_openssl_crypto.dir/empty.c.o	8daf5e4a630b9d6b
+11	30	1694253955	/home/rbarbe/Documents/flutter/spruce_0.4/spruceid/AltMe/build/flutter_openssl_crypto/intermediates/cxx/RelWithDebInfo/1a3j4t51/obj/arm64-v8a/libflutter_openssl_crypto.so	42f5e80ca776caa3
+0	37	1694254427	/home/rbarbe/Documents/flutter/spruce_0.4/spruceid/AltMe/build/flutter_openssl_crypto/intermediates/cxx/RelWithDebInfo/1a3j4t51/obj/arm64-v8a/libflutter_openssl_crypto.so	42f5e80ca776caa3

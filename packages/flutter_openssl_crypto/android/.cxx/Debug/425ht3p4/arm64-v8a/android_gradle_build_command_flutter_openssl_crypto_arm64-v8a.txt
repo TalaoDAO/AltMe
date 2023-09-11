@@ -1,0 +1,7 @@
+Executable : /home/rbarbe/Android/Sdk/cmake/3.18.1/bin/ninja
+arguments : 
+-C
+/home/rbarbe/Documents/flutter/spruce_0.4/spruceid/AltMe/packages/flutter_openssl_crypto/android/.cxx/Debug/425ht3p4/arm64-v8a
+flutter_openssl_crypto
+jvmArgs : 
+
