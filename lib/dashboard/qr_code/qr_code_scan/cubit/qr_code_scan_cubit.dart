@@ -286,6 +286,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           final nonce = response['nonce'];
           final clientId = response['client_id'];
           final claims = response['claims'];
+          final stateValue = response['state'];
           final presentationDefinition = response['presentation_definition'];
           final presentationDefinitionUri =
               response['presentation_definition_uri'];
@@ -296,6 +297,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           }
           if (nonce != null) {
             queryJson['nonce'] = nonce;
+          }
+          if (stateValue != null) {
+            queryJson['state'] = stateValue;
           }
           if (clientId != null) {
             queryJson['client_id'] = clientId;
@@ -846,6 +850,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final redirectUri = state.uri?.queryParameters['redirect_uri'] ?? '';
       final nonce = state.uri?.queryParameters['nonce'] ?? '';
       final clientId = state.uri?.queryParameters['client_id'] ?? '';
+      final stateValue = state.uri?.queryParameters['state'];
 
       final keys = <String>[];
       state.uri?.queryParameters.forEach((key, value) => keys.add(key));
@@ -879,6 +884,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         nonce: nonce,
         isEBSIV2: currentOIIDC4VCType == OIDC4VCType.EBSIV2,
         indexValue: currentOIIDC4VCType.indexValue,
+        stateValue: stateValue,
       );
       emit(
         state.copyWith(

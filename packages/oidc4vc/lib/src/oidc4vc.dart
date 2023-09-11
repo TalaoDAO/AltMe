@@ -735,6 +735,7 @@ class OIDC4VC {
     required String nonce,
     required bool isEBSIV2,
     required int indexValue,
+    required String? stateValue,
     String? mnemonic,
     String? privateKey,
   }) async {
@@ -772,6 +773,10 @@ class OIDC4VC {
         'id_token': verifierIdToken,
         'vp_token': vpToken,
       };
+
+      if (stateValue != null) {
+        responseData['state'] = stateValue;
+      }
 
       await client.post<dynamic>(
         redirectUrl,
@@ -863,6 +868,7 @@ class OIDC4VC {
     required String nonce,
     required bool isEBSIV2,
     required int indexValue,
+    required String? stateValue,
     String? mnemonic,
     String? privateKey,
   }) async {
@@ -895,6 +901,10 @@ class OIDC4VC {
       final responseData = <String, dynamic>{
         'id_token': verifierIdToken,
       };
+
+      if (stateValue != null) {
+        responseData['state'] = stateValue;
+      }
 
       await client.post<dynamic>(
         redirectUri,

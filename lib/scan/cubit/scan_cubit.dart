@@ -79,6 +79,7 @@ class ScanCubit extends Cubit<ScanState> {
         );
 
         final responseType = uri.queryParameters['response_type'] ?? '';
+        final stateValue = uri.queryParameters['state'];
 
         if (uri.toString().startsWith('openid://') ||
             uri.toString().startsWith('openid-vc://?') ||
@@ -101,6 +102,7 @@ class ScanCubit extends Cubit<ScanState> {
               kid: kid,
               privateKey: privateKey,
               indexValue: currentOIIDC4VCType.indexValue,
+              stateValue: stateValue,
             );
             return;
           } else if (responseType == 'id_token vp_token') {
@@ -152,6 +154,7 @@ class ScanCubit extends Cubit<ScanState> {
                 kid: kid,
                 privateKey: privateKey,
                 indexValue: currentOIIDC4VCType.indexValue,
+                stateValue: stateValue,
               );
             }
 
@@ -534,6 +537,7 @@ class ScanCubit extends Cubit<ScanState> {
     final nonce = uri.queryParameters['nonce'] ?? '';
     final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
     final clientId = uri.queryParameters['client_id'] ?? '';
+    final stateValue = uri.queryParameters['state'];
 
     final credentialList =
         credentialsToBePresented!.map((e) => jsonEncode(e.toJson())).toList();
@@ -549,6 +553,7 @@ class ScanCubit extends Cubit<ScanState> {
         nonce: nonce,
         isEBSIV2: isEBSIV2,
         indexValue: indexValue,
+        stateValue: stateValue,
       );
 
       await presentationActivity(
@@ -598,6 +603,7 @@ class ScanCubit extends Cubit<ScanState> {
     required String kid,
     required Uri uri,
     required int indexValue,
+    required String? stateValue,
   }) async {
     final log = getLogger('ScanCubit - presentCredentialToOID4VPRequest');
     emit(state.loading());
@@ -622,10 +628,16 @@ class ScanCubit extends Cubit<ScanState> {
         presentationDefinition: presentationDefinition,
       );
 
-      final formData = FormData.fromMap(<String, dynamic>{
+      final responseData = <String, dynamic>{
         'vp_token': vpToken,
         'presentation_submission': presentationSubmissionString,
-      });
+      };
+
+      if (stateValue != null) {
+        responseData['state'] = stateValue;
+      }
+
+      final formData = FormData.fromMap(responseData);
 
       final result = await client.post(
         redirectUri,
@@ -687,6 +699,7 @@ class ScanCubit extends Cubit<ScanState> {
     required String kid,
     required Uri uri,
     required int indexValue,
+    required String? stateValue,
   }) async {
     final log =
         getLogger('ScanCubit - presentCredentialToOIDC4VPAndSIOPV2Request');
@@ -723,11 +736,17 @@ class ScanCubit extends Cubit<ScanState> {
         presentationDefinition: presentationDefinition,
       );
 
-      final formData = FormData.fromMap(<String, dynamic>{
+      final responseData = <String, dynamic>{
         'id_token': idToken,
         'vp_token': vpToken,
         'presentation_submission': presentationSubmissionString,
-      });
+      };
+
+      if (stateValue != null) {
+        responseData['state'] = stateValue;
+      }
+
+      final formData = FormData.fromMap(responseData);
 
       final result = await client.post(
         redirectUri,
