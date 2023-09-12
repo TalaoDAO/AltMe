@@ -12,7 +12,7 @@ Future<CredentialManifest?> getCredentialManifest({
 }) async {
   try {
     final dynamic wellKnown = await getOpenIdConfig(
-      baseUrl: 'https://issuer.talao.co',
+      baseUrl: baseUrl,
       client: client,
     );
 
@@ -48,7 +48,7 @@ Future<CredentialManifest?> getCredentialManifest({
 
       /// select first credential manifest
       final credentialManifestMap = credentialManifestPath
-          .read(jsonDecode(wellKnown.data as String))
+          .read(wellKnown)
           .first
           .value as Map<String, dynamic>;
 
