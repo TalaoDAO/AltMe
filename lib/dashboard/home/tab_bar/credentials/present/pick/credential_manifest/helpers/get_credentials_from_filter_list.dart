@@ -11,6 +11,13 @@ List<CredentialModel> getCredentialsFromFilterList({
   if (filterList.isNotEmpty) {
     final selectedCredential = <CredentialModel>[];
 
+    /// remove ldp_vp if jwt_vp is required
+    if (isJwtVpInJwtVCRequired != null && isJwtVpInJwtVCRequired) {
+      credentialList.removeWhere(
+        (CredentialModel credentialModel) => credentialModel.jwt == null,
+      );
+    }
+
     for (final field in filterList) {
       for (final credential in credentialList) {
         for (final path in field.path) {
