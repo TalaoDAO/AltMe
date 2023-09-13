@@ -5,6 +5,8 @@ List<CredentialModel> getCredentialsFromFilterList({
   required List<Field> filterList,
   required List<CredentialModel> credentialList,
   required bool? isJwtVpInJwtVCRequired,
+  required bool? presentLdpVc,
+  required bool? presentJwtVc,
 }) {
   /// If we have some instructions we filter the wallet's
   /// crendential list whith it
@@ -15,6 +17,20 @@ List<CredentialModel> getCredentialsFromFilterList({
     if (isJwtVpInJwtVCRequired != null && isJwtVpInJwtVCRequired) {
       credentialList.removeWhere(
         (CredentialModel credentialModel) => credentialModel.jwt == null,
+      );
+    }
+
+    /// remove ldp_vc
+    if (presentJwtVc != null && presentJwtVc) {
+      credentialList.removeWhere(
+        (CredentialModel credentialModel) => credentialModel.jwt == null,
+      );
+    }
+
+    /// remove jwt_vc
+    if (presentLdpVc != null && presentLdpVc) {
+      credentialList.removeWhere(
+        (CredentialModel credentialModel) => credentialModel.jwt != null,
       );
     }
 

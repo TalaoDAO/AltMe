@@ -15,13 +15,11 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
     required List<CredentialModel> credentialList,
     required PresentationDefinition presentationDefinition,
     required int inputDescriptorIndex,
-    required bool? isJwtVpInJwtVCRequired,
   }) : super(const CredentialManifestPickState(filteredCredentialList: [])) {
     filterList(
       credentialList: credentialList,
       presentationDefinition: presentationDefinition,
       inputDescriptorIndex: inputDescriptorIndex,
-      isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
     );
   }
 
@@ -29,7 +27,6 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
     required List<CredentialModel> credentialList,
     required PresentationDefinition presentationDefinition,
     required int inputDescriptorIndex,
-    required bool? isJwtVpInJwtVCRequired,
   }) {
     if (presentationDefinition.submissionRequirements != null) {
       /// https://identity.foundation/presentation-exchange/#presentation-definition-extensions
@@ -81,7 +78,6 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
       presentationDefinition: presentationDefinition,
       credentialList: List.from(credentialList),
       inputDescriptorIndex: inputDescriptorIndex,
-      isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
     );
 
     emit(

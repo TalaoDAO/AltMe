@@ -135,7 +135,6 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                           issuer: widget.issuer,
                           inputDescriptorIndex: 0,
                           credentialsToBePresented: [],
-                          isJwtVpInJwtVCRequired: null,
                         ),
                       );
                     } else {

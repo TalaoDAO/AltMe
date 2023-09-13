@@ -774,9 +774,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         credentialManifest: credentialManifest,
       );
 
-      final isJwtVpInJwtVCRequired =
-          presentationDefinition.format?.jwtVp != null;
-
       final host = await getHost(uri: state.uri!, client: client);
 
       emit(
@@ -788,7 +785,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             issuer: Issuer.emptyIssuer(host),
             inputDescriptorIndex: 0,
             credentialsToBePresented: [],
-            isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
           ),
         ),
       );

@@ -617,15 +617,14 @@ class ScanCubit extends Cubit<ScanState> {
         did: did,
         kid: kid,
         oidc4vc: oidc4vc,
-        oidc4vcType: oidc4vcType,
+        presentationDefinition: presentationDefinition,
         privateKey: privateKey,
         uri: uri,
         indexValue: indexValue,
       );
 
       final presentationSubmissionString = getPresentationSubmission(
-        oidc4vcType: oidc4vcType,
-        presentationDefinition: presentationDefinition,
+        presentationDefinition,
       );
 
       final responseData = <String, dynamic>{
@@ -725,15 +724,14 @@ class ScanCubit extends Cubit<ScanState> {
         did: did,
         kid: kid,
         oidc4vc: oidc4vc,
-        oidc4vcType: oidc4vcType,
+        presentationDefinition: presentationDefinition,
         privateKey: privateKey,
         uri: uri,
         indexValue: indexValue,
       );
 
       final presentationSubmissionString = getPresentationSubmission(
-        oidc4vcType: oidc4vcType,
-        presentationDefinition: presentationDefinition,
+        presentationDefinition,
       );
 
       final responseData = <String, dynamic>{
@@ -797,10 +795,9 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  String getPresentationSubmission({
-    required PresentationDefinition presentationDefinition,
-    required OIDC4VCType oidc4vcType,
-  }) {
+  String getPresentationSubmission(
+    PresentationDefinition presentationDefinition,
+  ) {
     final uuid1 = const Uuid().v4();
 
     final Map<String, dynamic> presentationSubmission = {
@@ -810,17 +807,30 @@ class ScanCubit extends Cubit<ScanState> {
 
     final inputDescriptors = <Map<String, dynamic>>[];
 
+    final presentLdpVc = presentationDefinition.format?.ldpVc != null;
+    final presentJwtVc = presentationDefinition.format?.jwtVc != null;
+
+    String? format;
+
+    if (presentLdpVc) {
+      format = 'ldp_vc';
+    } else if (presentJwtVc) {
+      format = 'jwt_vc';
+    } else {
+      throw Exception();
+    }
+
     if (presentationDefinition.inputDescriptors.length == 1) {
       inputDescriptors.add({
         'id': presentationDefinition.inputDescriptors[0].id,
-        'format': oidc4vcType.issuerVcType,
+        'format': format,
         'path': r'$.verifiableCredential',
       });
     } else {
       for (int i = 0; i < presentationDefinition.inputDescriptors.length; i++) {
         inputDescriptors.add({
           'id': presentationDefinition.inputDescriptors[i].id,
-          'format': oidc4vcType.issuerVcType,
+          'format': format,
           // ignore: prefer_interpolation_to_compose_strings
           'path': r'$.verifiableCredential[' + i.toString() + ']',
         });
@@ -854,8 +864,8 @@ class ScanCubit extends Cubit<ScanState> {
 
   Future<String> createVpToken({
     required List<CredentialModel> credentialsToBePresented,
+    required PresentationDefinition presentationDefinition,
     required OIDC4VC oidc4vc,
-    required OIDC4VCType oidc4vcType,
     required String privateKey,
     required String did,
     required String kid,
@@ -865,7 +875,13 @@ class ScanCubit extends Cubit<ScanState> {
     final nonce = uri.queryParameters['nonce'] ?? '';
     final clientId = uri.queryParameters['client_id'] ?? '';
 
-    if (oidc4vcType.issuerVcType == 'ldp_vc') {
+    /// ldp_vc
+    final presentLdpVc = presentationDefinition.format?.ldpVc != null;
+
+    /// jwt_vc
+    final presentJwtVc = presentationDefinition.format?.jwtVc != null;
+
+    if (presentLdpVc) {
       final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
       final did = await secureStorageProvider.get(SecureStorageKeys.did);
       final options = jsonEncode({
@@ -890,7 +906,7 @@ class ScanCubit extends Cubit<ScanState> {
         ssiKey!,
       );
       return vpToken;
-    } else if (oidc4vcType.issuerVcType == 'jwt_vc') {
+    } else if (presentJwtVc) {
       final credentialList =
           credentialsToBePresented.map((e) => jsonEncode(e.toJson())).toList();
 
