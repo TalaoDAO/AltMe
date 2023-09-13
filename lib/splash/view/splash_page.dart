@@ -95,7 +95,8 @@ class _SplashViewState extends State<SplashView> {
       final url =
           uri.toString().split('${Parameters.oidc4vcUniversalLink}?uri=')[1];
 
-      final List<String> parts = url.split('?');
+      final String formattedUrl = Uri.decodeFull(url);
+      final List<String> parts = formattedUrl.split('?');
 
       final String modifiedUrl = '${parts[0]}?${parts.sublist(1).join('&')}';
 
