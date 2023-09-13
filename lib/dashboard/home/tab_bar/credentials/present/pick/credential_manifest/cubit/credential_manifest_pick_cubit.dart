@@ -13,21 +13,24 @@ part 'credential_manifest_pick_cubit.g.dart';
 class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
   CredentialManifestPickCubit({
     required List<CredentialModel> credentialList,
-    required PresentationDefinition presentationDefinition,
+    required CredentialModel credential,
     required int inputDescriptorIndex,
   }) : super(const CredentialManifestPickState(filteredCredentialList: [])) {
     filterList(
       credentialList: credentialList,
-      presentationDefinition: presentationDefinition,
+      credential: credential,
       inputDescriptorIndex: inputDescriptorIndex,
     );
   }
 
   void filterList({
     required List<CredentialModel> credentialList,
-    required PresentationDefinition presentationDefinition,
+    required CredentialModel credential,
     required int inputDescriptorIndex,
   }) {
+    var presentationDefinition =
+        credential.credentialManifest!.presentationDefinition!;
+
     if (presentationDefinition.submissionRequirements != null) {
       /// https://identity.foundation/presentation-exchange/#presentation-definition-extensions
       final inputDescriptors = List.of(presentationDefinition.inputDescriptors);
@@ -70,7 +73,10 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
         }
       }
 
-      presentationDefinition.inputDescriptors = newInputDescriptor;
+      presentationDefinition = PresentationDefinition.copyWithData(
+        oldPresentationDefinition: presentationDefinition,
+        inputDescriptors: newInputDescriptor,
+      );
     }
 
     /// Get instruction to filter credentials of the wallet

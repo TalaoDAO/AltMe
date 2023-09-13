@@ -48,10 +48,8 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        final presentationDefinition =
-            credential.credentialManifest!.presentationDefinition!;
         return CredentialManifestPickCubit(
-          presentationDefinition: presentationDefinition,
+          credential: credential,
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
         );

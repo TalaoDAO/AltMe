@@ -19,6 +19,19 @@ class PresentationDefinition {
   factory PresentationDefinition.fromJson(Map<String, dynamic> json) =>
       _$PresentationDefinitionFromJson(json);
 
+  factory PresentationDefinition.copyWithData({
+    required PresentationDefinition oldPresentationDefinition,
+    required List<InputDescriptor> inputDescriptors,
+  }) {
+    return PresentationDefinition(
+      inputDescriptors: inputDescriptors,
+      id: oldPresentationDefinition.id,
+      name: oldPresentationDefinition.name,
+      purpose: oldPresentationDefinition.purpose,
+      submissionRequirements: oldPresentationDefinition.submissionRequirements,
+    );
+  }
+
   final String? id;
   @JsonKey(name: 'input_descriptors')
   List<InputDescriptor> inputDescriptors;
