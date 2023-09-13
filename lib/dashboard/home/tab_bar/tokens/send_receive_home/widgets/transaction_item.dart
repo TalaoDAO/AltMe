@@ -130,7 +130,7 @@ class TransactionItem extends StatelessWidget {
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

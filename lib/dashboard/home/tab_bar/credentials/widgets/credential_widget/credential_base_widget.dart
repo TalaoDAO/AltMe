@@ -9,6 +9,7 @@ class CredentialBaseWidget extends StatelessWidget {
     super.key,
     required this.cardBackgroundImagePath,
     this.aspectRatio = Sizes.credentialAspectRatio,
+    this.title,
     this.issuerName,
     this.value,
     this.issuanceDate,
@@ -17,6 +18,7 @@ class CredentialBaseWidget extends StatelessWidget {
 
   final String cardBackgroundImagePath;
   final double aspectRatio;
+  final String? title;
   final String? issuerName;
   final String? value;
   final String? issuanceDate;
@@ -32,6 +34,22 @@ class CredentialBaseWidget extends StatelessWidget {
         child: CustomMultiChildLayout(
           delegate: CredentialBaseWidgetDelegate(position: Offset.zero),
           children: [
+            if (title != null)
+              LayoutId(
+                id: 'title',
+                child: FractionallySizedBox(
+                  widthFactor: 0.7,
+                  heightFactor: 0.19,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: MyText(
+                      title!,
+                      style:
+                          Theme.of(context).textTheme.credentialBaseTitleText,
+                    ),
+                  ),
+                ),
+              ),
             if (issuerName != null && issuerName!.isNotEmpty)
               LayoutId(
                 id: 'provided-by',
@@ -45,12 +63,13 @@ class CredentialBaseWidget extends StatelessWidget {
                           text: '${l10n.providedBy} ',
                           style: Theme.of(context)
                               .textTheme
-                              .identitiyBaseLightText,
+                              .credentialBaseLightText,
                         ),
                         TextSpan(
                           text: issuerName,
-                          style:
-                              Theme.of(context).textTheme.identitiyBaseBoldText,
+                          style: Theme.of(context)
+                              .textTheme
+                              .credentialBaseBoldText,
                         ),
                       ],
                     ),
@@ -67,7 +86,7 @@ class CredentialBaseWidget extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: MyText(
                       value!,
-                      style: Theme.of(context).textTheme.identitiyBaseBoldText,
+                      style: Theme.of(context).textTheme.credentialBaseBoldText,
                     ),
                   ),
                 ),
@@ -80,7 +99,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.issuedOn,
-                    style: Theme.of(context).textTheme.identitiyBaseBoldText,
+                    style: Theme.of(context).textTheme.credentialBaseBoldText,
                   ),
                 ),
               ),
@@ -92,7 +111,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     issuanceDate!,
-                    style: Theme.of(context).textTheme.identitiyBaseLightText,
+                    style: Theme.of(context).textTheme.credentialBaseLightText,
                   ),
                 ),
               ),
@@ -104,7 +123,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.expirationDate,
-                    style: Theme.of(context).textTheme.identitiyBaseBoldText,
+                    style: Theme.of(context).textTheme.credentialBaseBoldText,
                   ),
                 ),
               ),
@@ -116,7 +135,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     expirationDate!,
-                    style: Theme.of(context).textTheme.identitiyBaseLightText,
+                    style: Theme.of(context).textTheme.credentialBaseLightText,
                   ),
                 ),
               ),
@@ -134,6 +153,14 @@ class CredentialBaseWidgetDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
+    if (hasChild('title')) {
+      layoutChild('title', BoxConstraints.loose(size));
+      positionChild(
+        'title',
+        Offset(size.width * 0.06, size.height * 0.08),
+      );
+    }
+
     if (hasChild('provided-by')) {
       layoutChild('provided-by', BoxConstraints.loose(size));
       positionChild(

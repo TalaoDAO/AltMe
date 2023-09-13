@@ -251,7 +251,7 @@ class _DashboardViewState extends State<DashboardView> {
                                   isSelected: state.selectedIndex == 3,
                                 );
                               },
-                            )
+                            ),
                           ],
                         ),
                       ),

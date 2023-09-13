@@ -190,7 +190,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                                     const Icon(
                                       Icons.check_circle,
                                       color: Colors.green,
-                                    )
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: 10),
@@ -203,16 +203,6 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                                       .copyWith(color: const Color(0xffD1CCE3)),
                                 ),
                                 const SizedBox(height: 10),
-                                // Text(
-                                //   'Allowed issuers: ${proofScopeRequest.query.allowedIssuers}',
-                                //   textAlign: TextAlign.center,
-                                // ),
-                                // const SizedBox(height: 10),
-                                // Text(
-                                //   'Proof type: $proofTypeMsg',
-                                //   textAlign: TextAlign.start,
-                                // ),
-                                // const SizedBox(height: 10),
                                 Divider(color: Colors.grey.withOpacity(0.25)),
                                 if (state.claimEntities!.isNotEmpty &&
                                     state.claimEntities![index] == null) ...[
@@ -246,7 +236,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              '${l10n.from} ${separateUppercaseWords(
+                                              '${l10n.from} ${splitUppercase(
                                                 proofScopeRequest.query.type!,
                                               )}',
                                               textAlign: TextAlign.start,

@@ -66,6 +66,16 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
 final credentialsBlocListener =
     BlocListener<CredentialsCubit, CredentialsState>(
   listener: (BuildContext context, CredentialsState state) async {
+    if (state.status == CredentialsStatus.idle) {
+      if (state.message != null) {
+        AlertMessage.showStateMessage(
+          context: context,
+          stateMessage: state.message!,
+        );
+      }
+      return;
+    }
+
     if (state.status == CredentialsStatus.loading) {
       LoadingView().show(context: context);
     } else {
@@ -161,6 +171,14 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
         Navigator.of(context).pop();
       }
     }
+
+    if (state.message != null) {
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: state.message!,
+      );
+    }
+
     if (state.status == ScanStatus.success) {
       /// should pop until dashboard. Doing such we don't have to consider
       /// different scanCubit scenarii (DIDAuth, scan or deeplink,
@@ -171,15 +189,9 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
         (Route<dynamic> route) => route.isFirst,
       );
     }
+
     if (state.status == ScanStatus.error) {
       Navigator.of(context).pop();
-    }
-
-    if (state.message != null) {
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: state.message!,
-      );
     }
   },
 );
@@ -198,91 +210,64 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
     if (state.status == QrScanStatus.acceptHost) {
       log.i('accept host');
+      LoadingView().show(context: context);
       if (state.uri != null) {
         final profileCubit = context.read<ProfileCubit>();
 
         var acceptHost = true;
-        var approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
+        final approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
 
         final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
+        final bool userConsentForIssuerAccess =
+            profileCubit.state.model.userConsentForIssuerAccess;
+        final bool userConsentForVerifierAccess =
+            profileCubit.state.model.userConsentForVerifierAccess;
 
-        if (isAlertEnable) {
-          bool isIssuerVerificationSettingTrue = true;
+        bool showPrompt = isAlertEnable ||
+            userConsentForIssuerAccess ||
+            userConsentForVerifierAccess;
 
-          String issuerVerificationUrl = '';
+        final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
+            await getOIDC4VCTypeForIssuance(
+          url: state.uri.toString(),
+          client: DioClient('', Dio()),
+        );
 
-          /// issuer side (oidc4VCI)
-          if (state.uri!.toString().startsWith('openid://initiate_issuance?')) {
-            isIssuerVerificationSettingTrue = true;
-            issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
-          }
+        final bool isOpenIDUrl = state.uri.toString().startsWith('openid');
 
-          /// verifier side (siopv2) without request_uri
-          if (state.uri?.queryParameters['scope'] == 'openid') {
-            // isIssuerVerificationSettingTrue =
-            //     state.uri!.queryParameters['request_uri'] != null;
-            issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
-          }
+        if (showPrompt) {
+          if (isOpenIDUrl) {
+            /// OIDC4VCI Case
 
-          /// polygon id
-          if (state.uri.toString().startsWith('{"id":')) {
-            isIssuerVerificationSettingTrue = false;
-          }
-
-          log.i('checking issuer - $isIssuerVerificationSettingTrue');
-
-          if (isIssuerVerificationSettingTrue) {
-            try {
-              approvedIssuer = await CheckIssuer(
-                DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-                issuerVerificationUrl,
-                state.uri!,
-              ).isIssuerInApprovedList();
-            } catch (e) {
-              log.e(e);
-              if (e is MessageHandler) {
-                await context.read<QRCodeScanCubit>().emitError(e);
-              } else {
-                await context.read<QRCodeScanCubit>().emitError(
-                      ResponseMessage(
-                        ResponseString
-                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                      ),
-                    );
-              }
-              return;
+            if (currentOIIDC4VCTypeForIssuance != null) {
+              /// issuance case
+              if (!userConsentForIssuerAccess) showPrompt = false;
+            } else {
+              /// verification case
+              if (!userConsentForVerifierAccess) showPrompt = false;
             }
+          } else {
+            /// normal Case
+            if (!isAlertEnable) showPrompt = false;
           }
 
-          if (approvedIssuer.did.isEmpty && isIssuerVerificationSettingTrue) {
-            String subtitle = (approvedIssuer.did.isEmpty)
-                ? state.uri!.host
-                : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
-
-            /// issuer side (oidc4VCI)
-            if (state.uri!
-                .toString()
-                .startsWith('openid://initiate_issuance?')) {
-              subtitle = state.uri!.queryParameters['issuer'].toString();
-            }
-
-            /// verifier side (siopv2) without request_uri
-            // if (state.uri?.queryParameters['scope'] == 'openid') {
-            //  subtitle = state.uri!.queryParameters['request_uri'].toString();
-            // }
-
-            /// verifier side (siopv2) with request_uri
-            if (state.uri.toString().startsWith('openid://?client_id')) {
-              subtitle = state.uri!.queryParameters['request_uri'].toString();
-            }
-
+          if (showPrompt) {
             String title = l10n.scanPromptHost;
-
             if (!state.isRequestVerified) {
               title = '${l10n.service_not_registered_message} '
                   '${l10n.scanPromptHost}';
             }
 
+            String subtitle = (approvedIssuer.did.isEmpty)
+                ? state.uri!.host
+                : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
+
+            if (isOpenIDUrl) {
+              subtitle =
+                  await getHost(uri: state.uri!, client: DioClient('', Dio()));
+            }
+
+            LoadingView().hide();
             acceptHost = await showDialog<bool>(
                   context: context,
                   builder: (BuildContext context) {
@@ -298,11 +283,15 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                 false;
           }
         }
-
+        LoadingView().hide();
         if (acceptHost) {
-          await context.read<QRCodeScanCubit>().accept(issuer: approvedIssuer);
+          await context.read<QRCodeScanCubit>().accept(
+                issuer: approvedIssuer,
+                qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                dioClient: DioClient('', Dio()),
+              );
         } else {
-          await context.read<QRCodeScanCubit>().emitError(
+          context.read<QRCodeScanCubit>().emitError(
                 ResponseMessage(
                   ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
                 ),
@@ -314,11 +303,12 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
     if (state.status == QrScanStatus.success) {
       if (state.route != null) {
-        if (state.isScan) {
+        if (context.read<RouteCubit>().state == QRCODE_SCAN_PAGE) {
           await Navigator.of(context).pushReplacement<void, void>(state.route!);
         } else {
           await Navigator.of(context).push<void>(state.route!);
         }
+        context.read<QRCodeScanCubit>().clearRoute();
       }
     }
 
@@ -438,11 +428,12 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
 
 final walletConnectBlocListener =
     BlocListener<WalletConnectCubit, WalletConnectState>(
-  listener: (BuildContext context, WalletConnectState state) {
+  listener: (BuildContext context, WalletConnectState state) async {
     final log = getLogger('walletConnectStateBlocListener');
+
     try {
       if (state.status == WalletConnectStatus.permission) {
-        Navigator.of(context).push<void>(
+        await Navigator.of(context).push<void>(
           ConfirmConnectionPage.route(
             connectionBridgeType: ConnectionBridgeType.walletconnect,
           ),
@@ -450,7 +441,7 @@ final walletConnectBlocListener =
       }
 
       if (state.status == WalletConnectStatus.signPayload) {
-        Navigator.of(context).push<void>(
+        await Navigator.of(context).push<void>(
           SignPayloadPage.route(
             connectionBridgeType: ConnectionBridgeType.walletconnect,
           ),
@@ -458,10 +449,17 @@ final walletConnectBlocListener =
       }
 
       if (state.status == WalletConnectStatus.operation) {
-        Navigator.of(context).push<void>(
+        await Navigator.of(context).push<void>(
           OperationPage.route(
             connectionBridgeType: ConnectionBridgeType.walletconnect,
           ),
+        );
+      }
+
+      if (state.message != null) {
+        AlertMessage.showStateMessage(
+          context: context,
+          stateMessage: state.message!,
         );
       }
     } catch (e) {
@@ -497,14 +495,9 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
 
     if (state.polygonAction == PolygonIdAction.offer) {
       try {
-        final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
-            .getIden3Message(message: state.scannedResponse!);
-        final List<ClaimEntity> claims = await polygonIdCubit.getClaims(
-          iden3MessageEntity: iden3MessageEntity,
-        );
         LoadingView().hide();
         await Navigator.of(context)
-            .push<void>(PolygonIdCredentialOfferPage.route(claims: claims));
+            .push<void>(PolygonIdCredentialOfferPage.route());
       } catch (e) {
         final l10n = context.l10n;
         LoadingView().hide();

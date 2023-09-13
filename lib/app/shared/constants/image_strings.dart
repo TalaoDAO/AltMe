@@ -69,7 +69,11 @@ class ImageStrings {
       '$imagePath/kyc_age_credential_card.png';
   static const String kycCountryOfResidenceCard =
       '$imagePath/kyc_country_of_residence_card.png';
+  static const String civicPassCard = '$imagePath/civic_pass_card.png';
+  static const String defaultCard = '$imagePath/default_card.png';
   static const String euDiplomaCard = '$imagePath/eu_diploma_card.png';
+  static const String employeeCard = '$imagePath/employee_credential.png';
+  static const String employeeCardDummy = '$imagePath/employee_credential.png';
   static const String defiComplianceCard =
       '$imagePath/defi-compliance-card.png';
   static const String euVerifiableId = '$imagePath/eu_verifiable_id.png';
@@ -137,6 +141,8 @@ class ImageStrings {
       '$imagePath/dummy_arago_identity_card.png';
   static const String dummyAragoEmailPassCard =
       '$imagePath/dummy_arago_email_pass_card.png';
+  static const String dummyEmployeeCard =
+      '$imagePath/dummy_employee_credential.png';
 
   static const String onBoardingFirstImage =
       '$imagePath/onBoardingFirstImage.png';

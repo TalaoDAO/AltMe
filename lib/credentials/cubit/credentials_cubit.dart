@@ -55,10 +55,42 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     emit(state.copyWith(status: CredentialsStatus.loading));
     final savedCredentials = await credentialsRepository.findAll(/* filters */);
     final dummies = _getAvalaibleDummyCredentials(savedCredentials);
+
+    final List<CredentialModel> updatedCredentials = <CredentialModel>[];
+
+    /// manually categorizing default credential
+    for (final credential in savedCredentials) {
+      if (credential.isDefaultCredential &&
+          credential.isVerifiableDiplomaType) {
+        final updatedCredential = credential.copyWith(
+          credentialPreview: credential.credentialPreview.copyWith(
+            credentialSubjectModel:
+                credential.credentialPreview.credentialSubjectModel.copyWith(
+              credentialCategory: CredentialCategory.educationCards,
+            ),
+          ),
+        );
+        updatedCredentials.add(updatedCredential);
+      } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
+        final updatedCredential = credential.copyWith(
+          credentialPreview: credential.credentialPreview.copyWith(
+            credentialSubjectModel:
+                credential.credentialPreview.credentialSubjectModel.copyWith(
+              credentialCategory: CredentialCategory.polygonidCards,
+            ),
+          ),
+        );
+
+        updatedCredentials.add(updatedCredential);
+      } else {
+        updatedCredentials.add(credential);
+      }
+    }
+
     emit(
       state.copyWith(
         status: CredentialsStatus.populate,
-        credentials: savedCredentials,
+        credentials: updatedCredentials,
         dummyCredentials: dummies,
       ),
     );
@@ -99,13 +131,13 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   }
 
   Future<void> deleteById({
-    required CredentialModel credential,
+    required String id,
     bool showMessage = true,
   }) async {
     emit(state.loading());
-    await credentialsRepository.deleteById(credential.id);
+    await credentialsRepository.deleteById(id);
     final credentials = List.of(state.credentials)
-      ..removeWhere((element) => element.id == credential.id);
+      ..removeWhere((element) => element.id == id);
     final dummies = _getAvalaibleDummyCredentials(credentials);
     emit(
       state.copyWith(
@@ -167,10 +199,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> insertCredential({
     required CredentialModel credential,
     bool showMessage = true,
+    bool showStatus = true,
+    bool isPendingCredential = false,
   }) async {
     late final List<CredentialModel> credentials;
 
-    if (isVerifiableDiplomaType(credential)) {
+    if (credential.isDefaultCredential && credential.isVerifiableDiplomaType) {
       final updatedCredential = credential.copyWith(
         credentialPreview: credential.credentialPreview.copyWith(
           credentialSubjectModel:
@@ -179,11 +213,27 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           ),
         ),
       );
-      await replaceCredential(credential: updatedCredential);
+      if (!isPendingCredential) {
+        await modifyCredential(credential: updatedCredential);
+      }
+      await credentialsRepository.insert(updatedCredential);
+      credentials = List.of(state.credentials)..add(updatedCredential);
+    } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
+      final updatedCredential = credential.copyWith(
+        credentialPreview: credential.credentialPreview.copyWith(
+          credentialSubjectModel:
+              credential.credentialPreview.credentialSubjectModel.copyWith(
+            credentialCategory: CredentialCategory.polygonidCards,
+          ),
+        ),
+      );
+      if (!isPendingCredential) {
+        await modifyCredential(credential: updatedCredential);
+      }
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
     } else {
-      await replaceCredential(credential: credential);
+      if (!isPendingCredential) await modifyCredential(credential: credential);
       await credentialsRepository.insert(credential);
       credentials = List.of(state.credentials)..add(credential);
     }
@@ -197,7 +247,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     emit(
       state.copyWith(
-        status: CredentialsStatus.insert,
+        status: showStatus ? CredentialsStatus.insert : CredentialsStatus.idle,
         credentials: credentials,
         dummyCredentials: dummies,
         messageHandler: showMessage
@@ -215,55 +265,48 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         if (!advanceSettingsCubit.state.isGamingEnabled) {
           advanceSettingsCubit.toggleGamingRadio();
         }
-        break;
+
       case CredentialCategory.contactInfoCredentials:
         if (!advanceSettingsCubit.state.isCommunityEnabled) {
           advanceSettingsCubit.toggleCommunityRadio();
         }
-        break;
 
       case CredentialCategory.identityCards:
         if (!advanceSettingsCubit.state.isIdentityEnabled) {
           advanceSettingsCubit.toggleIdentityRadio();
         }
-        break;
+
+      case CredentialCategory.professionalCards:
+        if (!advanceSettingsCubit.state.isProfessionalEnabled) {
+          advanceSettingsCubit.toggleProfessionalRadio();
+        }
 
       case CredentialCategory.blockchainAccountsCards:
         if (!advanceSettingsCubit.state.isBlockchainAccountsEnabled) {
           advanceSettingsCubit.toggleBlockchainAccountsRadio();
         }
-        break;
 
       case CredentialCategory.educationCards:
         if (!advanceSettingsCubit.state.isEducationEnabled) {
           advanceSettingsCubit.toggleEducationRadio();
         }
-        break;
 
       case CredentialCategory.othersCards:
         if (!advanceSettingsCubit.state.isOtherEnabled) {
           advanceSettingsCubit.toggleOtherRadio();
         }
-        break;
+
       case CredentialCategory.financeCards:
-        // TODO(all): Handle this case.
-        break;
       case CredentialCategory.humanityProofCards:
-        // TODO(all): Handle this case.
-        break;
       case CredentialCategory.socialMediaCards:
-        // TODO(all): Handle this case.
-        break;
       case CredentialCategory.walletIntegrity:
-        // TODO(all): Handle this case.
-        break;
       case CredentialCategory.polygonidCards:
-        // TODO: Handle this case.
+      case CredentialCategory.pendingCards:
         break;
     }
   }
 
-  Future<void> replaceCredential({
+  Future<void> modifyCredential({
     required CredentialModel credential,
     bool showMessage = true,
   }) async {
@@ -286,13 +329,18 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
           if (iteratedCredentialSubjectModel.credentialSubjectType ==
               CredentialSubjectType.emailPass) {
+            /// check if email is same
             if (email ==
                 (iteratedCredentialSubjectModel as EmailPassModel).email) {
-              await deleteById(
-                credential: storedCredential,
-                showMessage: false,
-              );
-              break;
+              /// format should be same ldp_vc or jwt_vc
+              if ((credential.jwt == null && storedCredential.jwt == null) ||
+                  (credential.jwt != null && storedCredential.jwt != null)) {
+                await deleteById(
+                  id: storedCredential.id,
+                  showMessage: false,
+                );
+                break;
+              }
             }
           }
         }
@@ -317,7 +365,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               storedCredential.credentialPreview.credentialSubjectModel;
           if (credentialSubjectModel.credentialSubjectType == card) {
             await deleteById(
-              credential: storedCredential,
+              id: storedCredential.id,
               showMessage: false,
             );
             break;
@@ -372,14 +420,20 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     // need to update code
     final filteredCredentialList = getCredentialsFromFilterList(
-      [
+      filterList: [
         Field(path: [r'$..type'], filter: blockchainType.filter),
         Field(
           path: [r'$..associatedAddress'],
-          filter: Filter('String', cryptoAccountData.walletAddress),
+          filter: Filter(
+            type: 'String',
+            pattern: cryptoAccountData.walletAddress,
+          ),
         ),
       ],
-      oldCredentialList,
+      credentialList: oldCredentialList,
+      isJwtVpInJwtVCRequired: null,
+      presentJwtVc: null,
+      presentLdpVc: null,
     );
 
     /// update or create AssociatedAddres credential with new name

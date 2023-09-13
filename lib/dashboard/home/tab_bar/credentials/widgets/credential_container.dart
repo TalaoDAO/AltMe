@@ -18,7 +18,7 @@ class CredentialContainer extends StatelessWidget {
               blurRadius: 15,
               spreadRadius: 1,
               offset: const Offset(0, 4),
-            )
+            ),
           ],
         ),
         child: child,

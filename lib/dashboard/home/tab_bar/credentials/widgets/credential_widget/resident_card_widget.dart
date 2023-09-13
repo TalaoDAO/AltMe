@@ -97,11 +97,9 @@ class GenderDisplay extends StatelessWidget {
       case 'male':
         genderIcon =
             Icon(Icons.male, color: Theme.of(context).colorScheme.genderIcon);
-        break;
       case 'female':
         genderIcon =
             Icon(Icons.female, color: Theme.of(context).colorScheme.genderIcon);
-        break;
       default:
         genderIcon = Icon(
           Icons.transgender,

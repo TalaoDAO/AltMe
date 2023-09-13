@@ -133,7 +133,7 @@ class SuccessWidget extends StatelessWidget {
               (Route<dynamic> route) => route.isFirst,
             );
           },
-        )
+        ),
       ],
     );
   }

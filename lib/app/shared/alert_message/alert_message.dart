@@ -9,10 +9,19 @@ class AlertMessage {
   }) {
     final MessageHandler? messageHandler = stateMessage.messageHandler;
     final String? stringMessage = stateMessage.stringMessage;
+    final String? injectedMessage = stateMessage.injectedMessage;
     String message = '';
 
     if (messageHandler != null) {
-      message = messageHandler.getMessage(context, messageHandler);
+      if (messageHandler is NetworkException && messageHandler.data is String) {
+        message = messageHandler.data as String;
+      } else {
+        message = messageHandler.getMessage(
+          context,
+          messageHandler,
+          injectedMessage: injectedMessage,
+        );
+      }
     }
 
     if (stringMessage != null) {
@@ -36,7 +45,7 @@ class AlertMessage {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          duration: const Duration(milliseconds: 2 * 800),
+          duration: stateMessage.duration,
           content: SnackBarContent(
             message: message,
             iconPath: stateMessage.type.iconPath,
@@ -108,7 +117,7 @@ class SnackBarContent extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-          )
+          ),
         ],
       ),
     );

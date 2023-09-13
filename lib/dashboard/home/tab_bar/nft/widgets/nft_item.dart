@@ -37,7 +37,7 @@ class NftItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
                 child: CachedImageFromNetwork(
                   assetUrl,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.contain,
                   errorMessage: l10n.nftTooBigToLoad,
                 ),
               ),

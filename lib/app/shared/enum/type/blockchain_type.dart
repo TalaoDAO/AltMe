@@ -62,6 +62,28 @@ extension BlockchainTypeX on BlockchainType {
     }
   }
 
+  String get chain {
+    String name = '';
+    switch (this) {
+      case BlockchainType.tezos:
+        throw Exception();
+
+      case BlockchainType.ethereum:
+        name = '1';
+
+      case BlockchainType.fantom:
+        name = '250';
+
+      case BlockchainType.polygon:
+        name = '137';
+
+      case BlockchainType.binance:
+        name = '56';
+    }
+
+    return '${Parameters.NAMESPACE}:$name';
+  }
+
   int get chainId {
     switch (this) {
       case BlockchainType.tezos:
@@ -128,19 +150,19 @@ extension BlockchainTypeX on BlockchainType {
   Filter get filter {
     switch (this) {
       case BlockchainType.tezos:
-        return Filter('String', 'TezosAssociatedAddress');
+        return Filter(type: 'String', pattern: 'TezosAssociatedAddress');
 
       case BlockchainType.ethereum:
-        return Filter('String', 'EthereumAssociatedAddress');
+        return Filter(type: 'String', pattern: 'EthereumAssociatedAddress');
 
       case BlockchainType.fantom:
-        return Filter('String', 'FantomAssociatedAddress');
+        return Filter(type: 'String', pattern: 'FantomAssociatedAddress');
 
       case BlockchainType.polygon:
-        return Filter('String', 'PolygonAssociatedAddress');
+        return Filter(type: 'String', pattern: 'PolygonAssociatedAddress');
 
       case BlockchainType.binance:
-        return Filter('String', 'BinanceAssociatedAddress');
+        return Filter(type: 'String', pattern: 'BinanceAssociatedAddress');
     }
   }
 

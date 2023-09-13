@@ -1,14 +1,18 @@
 import 'package:bip39/bip39.dart' as bip393;
 import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
-import 'package:polygonid/polygonid.dart';
+import 'package:polygonid/src/user_identity.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
 import 'package:polygonid_flutter_sdk/common/utils/hex_utils.dart';
-import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/jwz_proof_entity.dart';
-import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/request/onchain/contract_function_call_body_request.dart';
+import 'package:polygonid_flutter_sdk/credential/domain/entities/claim_entity.dart';
+import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/common/iden3_message_entity.dart';
+import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/proof/request/contract_function_call_body_request.dart';
+import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/proof/response/iden3comm_proof_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
+import 'package:polygonid_flutter_sdk/identity/domain/entities/private_identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/exceptions/identity_exceptions.dart';
 import 'package:polygonid_flutter_sdk/identity/libs/bjj/bjj_wallet.dart';
+import 'package:polygonid_flutter_sdk/proof/domain/entities/download_info_entity.dart';
 import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -43,6 +47,7 @@ class PolygonId {
     required String idStateContract,
     required String pushUrl,
     required String network,
+    required String ipfsUrl,
   }) async {
     if (isInitialized) return;
     await PolygonIdSdk.init(
@@ -54,6 +59,7 @@ class PolygonId {
         web3ApiKey: web3ApiKey,
         idStateContract: idStateContract,
         pushUrl: pushUrl,
+        ipfsUrl: ipfsUrl,
       ),
     );
     isInitialized = true;
@@ -67,6 +73,7 @@ class PolygonId {
     required String idStateContract,
     required String pushUrl,
     required String network,
+    required String ipfsUrl,
   }) {
     return PolygonIdSdk.I.setEnv(
       env: EnvEntity(
@@ -77,6 +84,7 @@ class PolygonId {
         web3ApiKey: web3ApiKey,
         idStateContract: idStateContract,
         pushUrl: pushUrl,
+        ipfsUrl: ipfsUrl,
       ),
     );
   }
@@ -119,7 +127,7 @@ class PolygonId {
       return identity;
     } catch (e) {
       if (e is IdentityAlreadyExistsException) {
-        final identity = getIdentity(
+        final identity = await getIdentity(
           mnemonic: mnemonic,
           network: network,
         );
@@ -477,7 +485,7 @@ class PolygonId {
       network: network,
     );
 
-    final List<JWZProofEntity> response = await sdk.iden3comm.getProofs(
+    final List<Iden3commProofEntity> response = await sdk.iden3comm.getProofs(
       message: contractIden3messageEntity,
       genesisDid: userIdentity.did,
       privateKey: userIdentity.privateKey,
@@ -489,9 +497,11 @@ class PolygonId {
 
     // after the creation of the proof we send the transaction
     final String to = body.transactionData.contractAddress;
-    final JWZProofEntity proof = response.first;
+    final Iden3commProofEntity proof = response.first;
 
+    // ignore: lines_longer_than_80_chars
     const ABI =
+        // ignore: lines_longer_than_80_chars
         '[ { "inputs": [ { "internalType": "uint64", "name": "requestId", "type": "uint64" }, { "internalType": "uint256[]", "name": "inputs", "type": "uint256[]" }, { "internalType": "uint256[2]", "name": "a", "type": "uint256[2]" }, { "internalType": "uint256[2][2]", "name": "b", "type": "uint256[2][2]" }, { "internalType": "uint256[2]", "name": "c", "type": "uint256[2]" } ], "name": "submitZKPResponse", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" } ]';
 
     final ContractAbi cAbi = ContractAbi.fromJson(ABI, to);
@@ -509,14 +519,14 @@ class PolygonId {
       [
         [
           BigInt.parse(proof.proof.piB[0][1]),
-          BigInt.parse(proof.proof.piB[0][0])
+          BigInt.parse(proof.proof.piB[0][0]),
         ],
         [
           BigInt.parse(proof.proof.piB[1][1]),
-          BigInt.parse(proof.proof.piB[1][0])
+          BigInt.parse(proof.proof.piB[1][0]),
         ]
       ],
-      [BigInt.parse(proof.proof.piC[0]), BigInt.parse(proof.proof.piC[1])]
+      [BigInt.parse(proof.proof.piC[0]), BigInt.parse(proof.proof.piC[1])],
     ]);
 
     final hexData = HexUtils.bytesToHex(funcData.toList());

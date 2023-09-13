@@ -51,7 +51,7 @@ class BeaconCubit extends Cubit<BeaconState> {
                   beaconRequest: beaconRequest,
                 ),
               );
-              break;
+
             case RequestType.signPayload:
               emit(
                 state.copyWith(
@@ -60,7 +60,6 @@ class BeaconCubit extends Cubit<BeaconState> {
                 ),
               );
 
-              break;
             case RequestType.operation:
               emit(
                 state.copyWith(
@@ -69,7 +68,6 @@ class BeaconCubit extends Cubit<BeaconState> {
                 ),
               );
 
-              break;
             case RequestType.broadcast:
               emit(
                 state.copyWith(
@@ -78,7 +76,6 @@ class BeaconCubit extends Cubit<BeaconState> {
                 ),
               );
 
-              break;
             // ignore: no_default_cases
             default:
           }

@@ -30,6 +30,7 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
       mnemonicOrKey: ssiMnemonic!,
       blockchainType: blockChaintype,
       isFromOnboarding: false,
+      showStatus: false,
       onComplete: ({
         required CryptoAccount cryptoAccount,
         required MessageHandler messageHandler,

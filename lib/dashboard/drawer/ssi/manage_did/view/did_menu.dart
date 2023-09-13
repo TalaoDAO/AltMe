@@ -48,15 +48,31 @@ class DidView extends StatelessWidget {
                   height: Sizes.spaceSmall,
                 ),
                 DrawerItem(
-                  title: l10n.manageKeyDecentralizedId,
+                  title: l10n.manageKeyDecentralizedIdEdSA,
                   onTap: () {
-                    Navigator.of(context).push<void>(ManageDIDPage.route());
+                    Navigator.of(context)
+                        .push<void>(ManageDIDEdDSAPage.route());
                   },
                 ),
                 DrawerItem(
-                  title: l10n.manageEbsiDecentralizedId,
+                  title: l10n.manageKeyDecentralizedIDSecp256k1,
                   onTap: () {
-                    Navigator.of(context).push<void>(ManageDidEbsiPage.route());
+                    Navigator.of(context)
+                        .push<void>(ManageDidSecp256k1Page.route());
+                  },
+                ),
+                DrawerItem(
+                  title: l10n.manageEbsiV2DecentralizedId,
+                  onTap: () {
+                    Navigator.of(context)
+                        .push<void>(ManageDidEbsiV2Page.route());
+                  },
+                ),
+                DrawerItem(
+                  title: l10n.manageEbsiV3DecentralizedId,
+                  onTap: () {
+                    Navigator.of(context)
+                        .push<void>(ManageDidEbsiV3Page.route());
                   },
                 ),
                 DrawerItem(

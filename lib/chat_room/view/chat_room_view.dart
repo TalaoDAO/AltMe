@@ -137,7 +137,7 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                                 ),
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),

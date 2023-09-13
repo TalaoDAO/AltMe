@@ -23,7 +23,7 @@ class HomeCredentialItem extends StatelessWidget {
         secureStorageProvider: getSecureStorage,
         matrixChat: MatrixChatImpl(),
         invites: [
-          credentialModel.data['credentialSubject']?['chatSupport'] as String
+          credentialModel.data['credentialSubject']?['chatSupport'] as String,
         ],
         storageKey: '$cardName-${SecureStorageKeys.cardChatSupportRoomId}',
         roomNamePrefix: cardName,

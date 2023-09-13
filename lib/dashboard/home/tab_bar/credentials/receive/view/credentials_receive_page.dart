@@ -48,6 +48,12 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
         } else {
           LoadingView().hide();
         }
+        if (state.message != null) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: state.message!,
+          );
+        }
       },
       builder: (context, state) {
         final credentialModel = CredentialModel.fromJson(widget.preview);
@@ -81,7 +87,6 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
               CredentialDisplay(
                 credentialModel: credentialModel,
                 credDisplayType: CredDisplayType.Detail,
-                fromCredentialOffer: true,
               ),
               if (outputDescriptors != null) ...[
                 const SizedBox(height: 30),
@@ -133,12 +138,13 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                         ),
                       );
                     } else {
-                      context.read<ScanCubit>().credentialOffer(
-                            uri: widget.uri,
-                            credentialModel: credentialModel,
-                            keyId: SecureStorageKeys.ssiKey,
-                            issuer: widget.issuer,
-                          );
+                      context.read<ScanCubit>().credentialOfferOrPresent(
+                        uri: widget.uri,
+                        credentialModel: credentialModel,
+                        keyId: SecureStorageKeys.ssiKey,
+                        issuer: widget.issuer,
+                        credentialsToBePresented: [],
+                      );
                     }
                   },
                 ),

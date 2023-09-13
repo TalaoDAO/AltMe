@@ -48,7 +48,7 @@ class MarkdownPage extends StatelessWidget {
             if (snapshot.error != null) {
               log.e(
                 'something went wrong when loading $file',
-                snapshot.error,
+                error: snapshot.error,
               );
               return Container();
             }

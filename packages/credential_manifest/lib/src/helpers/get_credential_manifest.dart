@@ -4,45 +4,104 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dio/dio.dart';
 import 'package:json_path/json_path.dart';
 
-Future<CredentialManifest> getCredentialManifest(
-  Dio client,
-  String baseUrl,
-  String type,
-) async {
-  final dynamic wellKnown = await client.get<String>(
-    '$baseUrl/.well-known/openid-configuration',
-  );
-  final JsonPath credentialManifestPath = JsonPath(
-    r'$..credential_manifests[?(@.id)]',
-  );
+Future<CredentialManifest?> getCredentialManifest({
+  required Dio client,
+  required String baseUrl,
+  required String credentialType,
+  required bool schemaForType,
+}) async {
+  try {
+    final dynamic wellKnown = await getOpenIdConfig(
+      baseUrl: baseUrl,
+      client: client,
+    );
 
-  /// select first credential manifest
-  final credentialManifestMap = credentialManifestPath
-      .read(jsonDecode(wellKnown.data as String))
-      .first
-      .value as Map<String, dynamic>;
+    if (schemaForType) {
+      final JsonPath credentialManifestPath =
+          JsonPath(r'$..credential_manifests');
 
-  /// create credentialManisfest object
-  final credentialManifest = CredentialManifest.fromJson(
-    credentialManifestMap,
-  );
+      final credentialManifestsMap = credentialManifestPath
+          .read(jsonDecode(wellKnown.data as String))
+          .first
+          .value as List;
 
-  /// select wanted output desciptor
-  final JsonPath outputDescriptorPath = JsonPath(
-    // ignore: prefer_interpolation_to_compose_strings
-    r'$..output_descriptors[?(@.schema=="' + type + '")]',
-  );
+      for (final map in credentialManifestsMap) {
+        final credentialManifest = CredentialManifest.fromJson(
+          map as Map<String, dynamic>,
+        );
+        if (credentialManifest.outputDescriptors != null) {
+          for (final outputDescriptor
+              in credentialManifest.outputDescriptors!) {
+            if (outputDescriptor.schema == credentialType) {
+              return credentialManifest;
+            }
+          }
+        }
+      }
 
-  /// There are some possible issues with this way of filtering :-/
-  final Map<String, dynamic> outputDescriptorMap = outputDescriptorPath
-      .read(jsonDecode(wellKnown.data as String))
-      .first
-      .value as Map<String, dynamic>;
-  final OutputDescriptor outputDescriptor =
-      OutputDescriptor.fromJson(outputDescriptorMap);
+      return null;
+    } else {
+      final JsonPath credentialManifestPath = JsonPath(
+        // ignore: prefer_interpolation_to_compose_strings
+        r'$..credential_manifests[?(@.id=="' + credentialType + '")]',
+      );
 
-  final CredentialManifest sanitizedCredentialManifest =
-      credentialManifest.copyWith(outputDescriptors: [outputDescriptor]);
+      /// select first credential manifest
+      final credentialManifestMap = credentialManifestPath
+          .read(wellKnown)
+          .first
+          .value as Map<String, dynamic>;
 
-  return sanitizedCredentialManifest;
+      /// create credentialManisfest object
+      final credentialManifest = CredentialManifest.fromJson(
+        credentialManifestMap,
+      );
+
+      return credentialManifest;
+    }
+  } catch (e) {
+    return null;
+  }
+}
+
+Future<Map<String, dynamic>> getOpenIdConfig({
+  required String baseUrl,
+  required Dio client,
+}) async {
+  final url = '$baseUrl/.well-known/openid-configuration';
+
+  try {
+    final dynamic response = await client.get<dynamic>(url);
+    final data = response.data is String
+        ? jsonDecode(response.data.toString()) as Map<String, dynamic>
+        : response.data as Map<String, dynamic>;
+    return data;
+  } catch (e) {
+    if (e.toString().startsWith('Exception: Second_Attempt_Fail')) {
+      throw Exception();
+    } else {
+      final data = await getOpenIdConfigSecondAttempt(
+        baseUrl: baseUrl,
+        client: client,
+      );
+      return data;
+    }
+  }
+}
+
+Future<Map<String, dynamic>> getOpenIdConfigSecondAttempt({
+  required String baseUrl,
+  required Dio client,
+}) async {
+  final url = '$baseUrl/.well-known/openid-credential-issuer';
+
+  try {
+    final response = await client.get<dynamic>(url);
+    final data = response.data is String
+        ? jsonDecode(response.data.toString()) as Map<String, dynamic>
+        : response.data as Map<String, dynamic>;
+    return data;
+  } catch (e) {
+    throw Exception();
+  }
 }

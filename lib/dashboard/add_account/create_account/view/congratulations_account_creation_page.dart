@@ -73,19 +73,18 @@ class _CongratulationsAccountCreationViewState
         throw Exception();
       case AccountType.tezos:
         message = l10n.tezosAccountCreationCongratulations;
-        break;
+
       case AccountType.ethereum:
         message = l10n.ethereumAccountCreationCongratulations;
-        break;
+
       case AccountType.fantom:
         message = l10n.fantomAccountCreationCongratulations;
-        break;
+
       case AccountType.polygon:
         message = l10n.polygonAccountCreationCongratulations;
-        break;
+
       case AccountType.binance:
         message = l10n.binanceAccountCreationCongratulations;
-        break;
     }
 
     return Stack(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/wallet_connect/cubit/wallet_connect_cubit.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -22,12 +23,14 @@ class WalletCubit extends Cubit<WalletState> {
     required this.homeCubit,
     required this.keyGenerator,
     required this.credentialsCubit,
+    required this.walletConnectCubit,
   }) : super(const WalletState());
 
   final SecureStorageProvider secureStorageProvider;
   final HomeCubit homeCubit;
   final KeyGenerator keyGenerator;
   final CredentialsCubit credentialsCubit;
+  WalletConnectCubit walletConnectCubit;
 
   final log = getLogger('WalletCubit');
 
@@ -51,11 +54,11 @@ class WalletCubit extends Cubit<WalletState> {
     required bool isImported,
     required bool isFromOnboarding,
     BlockchainType? blockchainType,
+    bool showStatus = true,
     void Function({
       required CryptoAccount cryptoAccount,
       required MessageHandler messageHandler,
-    })?
-        onComplete,
+    })? onComplete,
   }) async {
     if (isFromOnboarding) {
       final String? ssiKey =
@@ -113,6 +116,7 @@ class WalletCubit extends Cubit<WalletState> {
           isSecretKey: isSecretKey,
           blockchainType: blockchainType,
           totalAccountsYet: accountsCount,
+          showStatus: showStatus,
         ),
       );
     } else {
@@ -135,6 +139,7 @@ class WalletCubit extends Cubit<WalletState> {
               isSecretKey: isSecretKey,
               blockchainType: BlockchainType.tezos,
               totalAccountsYet: accountsCount,
+              showStatus: showStatus,
             ),
           );
         } else {
@@ -147,6 +152,7 @@ class WalletCubit extends Cubit<WalletState> {
               isSecretKey: isSecretKey,
               blockchainType: BlockchainType.fantom,
               totalAccountsYet: accountsCount,
+              showStatus: showStatus,
             ),
           );
           cryptoAccountDataList.add(
@@ -157,6 +163,7 @@ class WalletCubit extends Cubit<WalletState> {
               isSecretKey: isSecretKey,
               blockchainType: BlockchainType.polygon,
               totalAccountsYet: accountsCount + 1,
+              showStatus: showStatus,
             ),
           );
           cryptoAccountDataList.add(
@@ -167,6 +174,7 @@ class WalletCubit extends Cubit<WalletState> {
               isSecretKey: isSecretKey,
               blockchainType: BlockchainType.binance,
               totalAccountsYet: accountsCount + 2,
+              showStatus: showStatus,
             ),
           );
           cryptoAccountDataList.add(
@@ -177,6 +185,7 @@ class WalletCubit extends Cubit<WalletState> {
               isSecretKey: isSecretKey,
               blockchainType: BlockchainType.ethereum,
               totalAccountsYet: accountsCount + 3,
+              showStatus: showStatus,
             ),
           );
         }
@@ -190,6 +199,7 @@ class WalletCubit extends Cubit<WalletState> {
             isSecretKey: isSecretKey,
             blockchainType: BlockchainType.polygon,
             totalAccountsYet: accountsCount,
+            showStatus: showStatus,
           ),
         );
 
@@ -202,6 +212,7 @@ class WalletCubit extends Cubit<WalletState> {
             isSecretKey: isSecretKey,
             blockchainType: BlockchainType.binance,
             totalAccountsYet: accountsCount + 1,
+            showStatus: showStatus,
           ),
         );
 
@@ -214,15 +225,32 @@ class WalletCubit extends Cubit<WalletState> {
             isSecretKey: isSecretKey,
             blockchainType: BlockchainType.tezos,
             totalAccountsYet: accountsCount + 2,
+            showStatus: showStatus,
+          ),
+        );
+
+        /// Ethereum at start
+        cryptoAccountDataList.add(
+          await _createBlockchainAccount(
+            accountName: accountName,
+            mnemonicOrKey: mnemonicOrKey,
+            isImported: isImported,
+            isSecretKey: isSecretKey,
+            blockchainType: BlockchainType.ethereum,
+            totalAccountsYet: accountsCount + 3,
+            showStatus: showStatus,
           ),
         );
       }
     }
+
     final updatedCryptoAccount = CryptoAccount(data: cryptoAccountDataList);
     await _saveCryptoAccountDataInStorage(updatedCryptoAccount);
 
-    /// set new account as current
-    await setCurrentWalletAccount(cryptoAccountDataList.length - 1);
+    if (blockchainType != BlockchainType.tezos) {
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+      await walletConnectCubit.initialise();
+    }
 
     emitCryptoAccount(updatedCryptoAccount);
 
@@ -232,6 +260,9 @@ class WalletCubit extends Cubit<WalletState> {
         ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
       ),
     );
+
+    /// set new account as current
+    await setCurrentWalletAccount(cryptoAccountDataList.length - 1);
   }
 
   Future<CryptoAccountData> _createBlockchainAccount({
@@ -241,6 +272,7 @@ class WalletCubit extends Cubit<WalletState> {
     required bool isSecretKey,
     required BlockchainType blockchainType,
     required int totalAccountsYet,
+    required bool showStatus,
   }) async {
     final AccountType accountType = blockchainType.accountType;
 
@@ -327,6 +359,7 @@ class WalletCubit extends Cubit<WalletState> {
       await credentialsCubit.insertCredential(
         credential: credential,
         showMessage: false,
+        showStatus: showStatus,
       );
     }
 
@@ -473,5 +506,14 @@ class WalletCubit extends Cubit<WalletState> {
       ),
     );
     emit(state.copyWith(status: WalletStatus.init));
+  }
+
+  CryptoAccountData? getCryptoAccountData(String publicKey) {
+    final CryptoAccountData? currentAccount =
+        state.cryptoAccount.data.firstWhereOrNull(
+      (element) =>
+          element.walletAddress.toUpperCase() == publicKey.toUpperCase(),
+    );
+    return currentAccount;
   }
 }

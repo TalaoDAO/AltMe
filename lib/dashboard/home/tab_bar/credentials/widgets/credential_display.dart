@@ -7,11 +7,10 @@ class CredentialDisplay extends StatelessWidget {
     super.key,
     required this.credentialModel,
     required this.credDisplayType,
-    this.fromCredentialOffer,
   });
 
   final CredentialModel credentialModel;
-  final bool? fromCredentialOffer;
+
   final CredDisplayType credDisplayType;
 
   @override
@@ -71,24 +70,44 @@ class CredentialDisplay extends StatelessWidget {
         }
 
       case CredentialSubjectType.defaultCredential:
-        switch (credDisplayType) {
-          case CredDisplayType.List:
-            return DefaultCredentialListWidget(
-              credentialModel: credentialModel,
-              showBgDecoration: false,
-            );
-          case CredDisplayType.Detail:
-            return DefaultCredentialDetailWidget(
-              credentialModel: credentialModel,
-              showBgDecoration: false,
-              fromCredentialOffer: fromCredentialOffer!,
-            );
+        if (credentialModel.isPolygonIdCard) {
+          return DefaultPolygonIdCardWidget(credentialModel: credentialModel);
+        } else if (credentialModel.pendingInfo != null) {
+          final CredentialSubjectType credentialSubjectType =
+              getCredTypeFromName(credentialModel.credentialPreview.type[0]) ??
+                  CredentialSubjectType.defaultCredential;
+
+          final DiscoverDummyCredential discoverDummyCredential =
+              DiscoverDummyCredential.fromSubjectType(credentialSubjectType);
+
+          return Opacity(
+            opacity: 0.5,
+            child: DummyCredentialImage(
+              credentialSubjectType:
+                  discoverDummyCredential.credentialSubjectType,
+              image: discoverDummyCredential.image,
+            ),
+          );
+        } else {
+          switch (credDisplayType) {
+            case CredDisplayType.List:
+              return DefaultCredentialWidget(
+                credentialModel: credentialModel,
+                showBgDecoration: false,
+              );
+            case CredDisplayType.Detail:
+              return DefaultCredentialWidget(
+                credentialModel: credentialModel,
+                showBgDecoration: false,
+                descriptionMaxLine: 5,
+              );
+          }
         }
 
       case CredentialSubjectType.ecole42LearningAchievement:
         switch (credDisplayType) {
           case CredDisplayType.List:
-            return DefaultCredentialListWidget(
+            return DefaultCredentialWidget(
               credentialModel: credentialModel,
             );
           case CredDisplayType.Detail:
@@ -103,7 +122,7 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.identityPass:
         switch (credDisplayType) {
           case CredDisplayType.List:
-            return DefaultCredentialListWidget(
+            return DefaultCredentialWidget(
               credentialModel: credentialModel,
               descriptionMaxLine: 4,
             );
@@ -151,7 +170,7 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.professionalExperienceAssessment:
         switch (credDisplayType) {
           case CredDisplayType.List:
-            return DefaultCredentialListWidget(
+            return DefaultCredentialWidget(
               credentialModel: credentialModel,
               descriptionMaxLine: 3,
             );
@@ -164,7 +183,7 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.professionalSkillAssessment:
         switch (credDisplayType) {
           case CredDisplayType.List:
-            return DefaultCredentialListWidget(
+            return DefaultCredentialWidget(
               credentialModel: credentialModel,
               descriptionMaxLine: 5,
             );
@@ -177,7 +196,7 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.professionalStudentCard:
         switch (credDisplayType) {
           case CredDisplayType.List:
-            return DefaultCredentialListWidget(
+            return DefaultCredentialWidget(
               credentialModel: credentialModel,
             );
           case CredDisplayType.Detail:
@@ -189,7 +208,7 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.residentCard:
         switch (credDisplayType) {
           case CredDisplayType.List:
-            return DefaultCredentialListWidget(
+            return DefaultCredentialWidget(
               credentialModel: credentialModel,
               descriptionMaxLine: 3,
             );
@@ -197,10 +216,16 @@ class CredentialDisplay extends StatelessWidget {
             return ResidentCardWidget(credentialModel: credentialModel);
         }
 
+      case CredentialSubjectType.employeeCredential:
+        return EmployeeCredentialWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.legalPersonalCredential:
+        return DefaultCredentialWidget(credentialModel: credentialModel);
+
       case CredentialSubjectType.selfIssued:
         switch (credDisplayType) {
           case CredDisplayType.List:
-            return DefaultCredentialListWidget(
+            return DefaultCredentialWidget(
               credentialModel: credentialModel,
             );
           case CredDisplayType.Detail:
@@ -299,6 +324,9 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.proofOfTwitterStats:
         return ProofOfTwitterStatsWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.civicPassCredential:
+        return CivicPassCredentialWidget(credentialModel: credentialModel);
     }
   }
 }

@@ -34,7 +34,7 @@ class PolygonAssociatedAddressCredential {
 
   static const List<String> _type = [
     'VerifiableCredential',
-    'PolygonAssociatedAddress'
+    'PolygonAssociatedAddress',
   ];
 
   static const List<dynamic> _context = <dynamic>[
@@ -58,11 +58,11 @@ class PolygonAssociatedAddressCredential {
               '@version': 1.1,
               '@protected': true,
               'schema': 'https://schema.org/',
-              'name': 'schema:legalName'
-            }
-          }
-        }
-      }
+              'name': 'schema:legalName',
+            },
+          },
+        },
+      },
     }
   ];
 }

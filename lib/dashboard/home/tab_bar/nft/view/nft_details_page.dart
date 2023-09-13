@@ -6,7 +6,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:matrix/matrix.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 class NftDetailsPage extends StatelessWidget {
   const NftDetailsPage({
@@ -88,15 +88,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               children: [
                 AspectRatio(
                   aspectRatio: 1.1,
-                  child: CachedImageFromNetwork(
-                    widget.nftModel.displayUrl ??
-                        (widget.nftModel.thumbnailUrl ?? ''),
-                    fit: BoxFit.fill,
-                    errorMessage: l10n.nftTooBigToLoad,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(Sizes.largeRadius),
-                    ),
-                  ),
+                  child: NftPicture(widget: widget, l10n: l10n),
                 ),
                 const SizedBox(
                   height: Sizes.spaceSmall,
@@ -132,62 +124,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
           ),
         ),
-        navigation: (widget.nftModel.isTransferable == false ||
-                widget.nftModel.contractAddress
-                    .equals(AltMeStrings.minterAddress))
-            ? widget.nftModel.contractAddress.equals(AltMeStrings.minterAddress)
-                ? SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(Sizes.spaceSmall),
-                      child: MyGradientButton(
-                        text: l10n.burn,
-                        onPressed: () async {
-                          final confirmed = await showDialog<bool>(
-                            context: context,
-                            builder: (context) => ConfirmDialog(
-                              title: l10n
-                                  .wouldYouLikeToConfirmThatYouIntendToBurnThisNFT,
-                              yes: l10n.yes,
-                              no: l10n.no,
-                              showNoButton: true,
-                            ),
-                          );
-                          if (confirmed ?? false) {
-                            await context
-                                .read<NftDetailsCubit>()
-                                .burnDefiComplianceToken(
-                                  nftModel: widget.nftModel,
-                                )
-                                .timeout(
-                                  const Duration(minutes: 1),
-                                );
-                          }
-                        },
-                      ),
-                    ),
-                  )
-                : null
-            : SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(Sizes.spaceSmall),
-                  child: MyGradientButton(
-                    text: l10n.send,
-                    onPressed: () {
-                      Navigator.of(context).push<void>(
-                        ConfirmTokenTransactionPage.route(
-                          selectedToken: isTezos
-                              ? (widget.nftModel as TezosNftModel).getToken()
-                              : (widget.nftModel as EthereumNftModel)
-                                  .getToken(),
-                          withdrawalAddress: '',
-                          amount: 1,
-                          isNFT: true,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
+        navigation: PickButton(l10n: l10n, isTezos: isTezos, widget: widget),
       ),
     );
   }
@@ -217,10 +154,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                   size: Sizes.icon,
                 ),
                 onPressed: () {
-                  openAddressBlockchainExplorer(
-                    context.read<ManageNetworkCubit>().state.network,
-                    nftModel.contractAddress,
-                  );
+                  context
+                      .read<ManageNetworkCubit>()
+                      .state
+                      .network
+                      .openAddressBlockchainExplorer(nftModel.contractAddress);
                 },
               ),
             ],
@@ -239,7 +177,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             Text(
               nftModel.identifier ?? '?',
               style: Theme.of(context).textTheme.bodySmall3,
-            )
+            ),
           ],
         ),
       ],
@@ -265,10 +203,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 size: Sizes.icon,
               ),
               onPressed: () {
-                openAddressBlockchainExplorer(
-                  context.read<ManageNetworkCubit>().state.network,
-                  nftModel.creators!.first,
-                );
+                context
+                    .read<ManageNetworkCubit>()
+                    .state
+                    .network
+                    .openAddressBlockchainExplorer(nftModel.creators!.first);
               },
             ),
           ],
@@ -296,10 +235,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 size: Sizes.icon,
               ),
               onPressed: () {
-                openAddressBlockchainExplorer(
-                  context.read<ManageNetworkCubit>().state.network,
-                  nftModel.publishers!.first,
-                );
+                context
+                    .read<ManageNetworkCubit>()
+                    .state
+                    .network
+                    .openAddressBlockchainExplorer(nftModel.publishers!.first);
               },
             ),
           ],
@@ -322,7 +262,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
           ],
         ),
-      ]
+      ],
     ];
   }
 
@@ -348,10 +288,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               size: Sizes.icon,
             ),
             onPressed: () {
-              openAddressBlockchainExplorer(
-                context.read<ManageNetworkCubit>().state.network,
-                nftModel.contractAddress,
-              );
+              context
+                  .read<ManageNetworkCubit>()
+                  .state
+                  .network
+                  .openAddressBlockchainExplorer(nftModel.contractAddress);
             },
           ),
         ],
@@ -378,10 +319,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 size: Sizes.icon,
               ),
               onPressed: () {
-                openAddressBlockchainExplorer(
-                  context.read<ManageNetworkCubit>().state.network,
-                  nftModel.minterAddress!,
-                );
+                context
+                    .read<ManageNetworkCubit>()
+                    .state
+                    .network
+                    .openAddressBlockchainExplorer(nftModel.minterAddress!);
               },
             ),
           ],
@@ -404,7 +346,153 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
           ],
         ),
-      ]
+      ],
     ];
+  }
+}
+
+class NftPicture extends StatelessWidget {
+  const NftPicture({
+    super.key,
+    required this.widget,
+    required this.l10n,
+  });
+
+  final NftDetailsView widget;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context) {
+    if (AltMeStrings.contractDontSendAddress
+        .contains(widget.nftModel.contractAddress)) {
+      return ModelViewer(
+        src: widget.nftModel.artifactUrl!,
+        poster: widget.nftModel.thumbnailUrl,
+        alt: '',
+        ar: false,
+        autoRotate: false,
+        disableZoom: true,
+      );
+    }
+    return CachedImageFromNetwork(
+      widget.nftModel.displayUrl ?? (widget.nftModel.thumbnailUrl ?? ''),
+      fit: BoxFit.contain,
+      errorMessage: l10n.nftTooBigToLoad,
+      borderRadius: const BorderRadius.all(
+        Radius.circular(Sizes.largeRadius),
+      ),
+    );
+  }
+}
+
+class SendButton extends StatelessWidget {
+  const SendButton({
+    super.key,
+    required this.l10n,
+    required this.isTezos,
+    required this.widget,
+  });
+
+  final AppLocalizations l10n;
+  final bool isTezos;
+  final NftDetailsView widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(Sizes.spaceSmall),
+        child: MyGradientButton(
+          text: l10n.send,
+          onPressed: () {
+            Navigator.of(context).push<void>(
+              ConfirmTokenTransactionPage.route(
+                selectedToken: isTezos
+                    ? (widget.nftModel as TezosNftModel).getToken()
+                    : (widget.nftModel as EthereumNftModel).getToken(),
+                withdrawalAddress: '',
+                amount: 1,
+                isNFT: true,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class BurnButton extends StatelessWidget {
+  const BurnButton({
+    super.key,
+    required this.l10n,
+    required this.widget,
+  });
+
+  final AppLocalizations l10n;
+  final NftDetailsView widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(Sizes.spaceSmall),
+        child: MyGradientButton(
+          text: l10n.burn,
+          onPressed: () async {
+            final confirmed = await showDialog<bool>(
+              context: context,
+              builder: (context) => ConfirmDialog(
+                title: l10n.wouldYouLikeToConfirmThatYouIntendToBurnThisNFT,
+                yes: l10n.yes,
+                no: l10n.no,
+                showNoButton: true,
+              ),
+            );
+            if (confirmed ?? false) {
+              await context
+                  .read<NftDetailsCubit>()
+                  .burnDefiComplianceToken(
+                    nftModel: widget.nftModel,
+                  )
+                  .timeout(
+                    const Duration(minutes: 1),
+                  );
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class PickButton extends StatelessWidget {
+  const PickButton({
+    super.key,
+    required this.l10n,
+    required this.isTezos,
+    required this.widget,
+  });
+
+  final AppLocalizations l10n;
+  final bool isTezos;
+  final NftDetailsView widget;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.nftModel.isTransferable == false ||
+        AltMeStrings.contractDontSendAddress
+            .contains(widget.nftModel.contractAddress)) {
+      return const SizedBox.shrink();
+    }
+    if (AltMeStrings.minterBurnAddress
+        .contains(widget.nftModel.contractAddress)) {
+      return BurnButton(l10n: l10n, widget: widget);
+    }
+    return SendButton(
+      l10n: l10n,
+      isTezos: isTezos,
+      widget: widget,
+    );
   }
 }

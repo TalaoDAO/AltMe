@@ -50,6 +50,16 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>openid-initiate-issuance</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>openid-initiate-issuance</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>iden3comm</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
@@ -64,6 +74,16 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>openid</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>wc-altme</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wc-altme</string>
 			</array>
 		</dict>
 		<dict>

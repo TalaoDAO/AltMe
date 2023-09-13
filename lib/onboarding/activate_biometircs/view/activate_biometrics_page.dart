@@ -70,10 +70,13 @@ class ActivateBiometricsView extends StatelessWidget {
         return false;
       },
       child: BlocListener<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state.status == AppStatus.loading) {
             LoadingView().show(context: context);
           } else {
+            if (state.status == AppStatus.success) {
+              await context.read<AltmeChatSupportCubit>().init();
+            }
             LoadingView().hide();
           }
 
@@ -85,8 +88,7 @@ class ActivateBiometricsView extends StatelessWidget {
           }
 
           if (state.status == AppStatus.success) {
-            context.read<AltmeChatSupportCubit>().init();
-            Navigator.pushAndRemoveUntil<void>(
+            await Navigator.pushAndRemoveUntil<void>(
               context,
               WalletReadyPage.route(),
               (Route<dynamic> route) => route.isFirst,
@@ -154,8 +156,8 @@ class ActivateBiometricsView extends StatelessWidget {
                           context: context,
                           builder: (context) => ConfirmDialog(
                             title: l10n.biometricsNotSupported,
-                            subtitle: l10n
-                                .yourDeviceDoseNotSupportBiometricsAuthentication,
+                            subtitle:
+                                l10n.deviceDoNotSupportBiometricsAuthentication,
                             yes: l10n.ok,
                           ),
                         );
@@ -195,7 +197,7 @@ class ActivateBiometricsView extends StatelessWidget {
               ),
               const SizedBox(
                 height: Sizes.spaceXSmall,
-              )
+              ),
             ],
           ),
         ),

@@ -20,7 +20,7 @@ void main() {
     test('toJson constructor work correctly', () {
       final json = <String, dynamic>{
         '@language': 'fr',
-        '@value': 'Translation'
+        '@value': 'Translation',
       };
       final translation = Translation.fromJson(json);
 

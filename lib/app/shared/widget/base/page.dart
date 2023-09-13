@@ -78,7 +78,6 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
         } else {
           noScreenShot.screenshotOn();
         }
-        break;
 
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
@@ -86,8 +85,8 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
           noScreenShot.screenshotOff();
           secureApplicationController.lock();
         }
-        break;
 
+      case AppLifecycleState.hidden:
       case AppLifecycleState.detached:
         break;
     }

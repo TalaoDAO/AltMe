@@ -139,7 +139,7 @@ class _ImportTalaoCommunityCardViewState
                                   size: Sizes.icon,
                                   color: Colors.white,
                                 ),
-                              )
+                              ),
                           ],
                         ),
                         const SizedBox(height: 24),

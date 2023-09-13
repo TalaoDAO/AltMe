@@ -50,7 +50,11 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
         baseUrl: baseUrl,
       );
     } catch (e, s) {
-      getLogger(runtimeType.toString()).e('error in init() e: $e, $s', e, s);
+      getLogger(runtimeType.toString()).e(
+        'error in init() e: $e, $s',
+        error: e,
+        stackTrace: s,
+      );
       if (isClosed) return;
       emit(
         state.error(
@@ -89,8 +93,11 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
 
       emit(state.success(operations: operations));
     } catch (e, s) {
-      getLogger(runtimeType.toString())
-          .e('error in getOperations() e: $e, $s', e, s);
+      getLogger(runtimeType.toString()).e(
+        'error in getOperations() e: $e, $s',
+        error: e,
+        stackTrace: s,
+      );
       emit(
         state.error(
           messageHandler: ResponseMessage(
@@ -142,7 +149,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
       params = <String, dynamic>{
         'anyof.sender.target': walletAddress,
         'amount.gt': 0,
-        'limit': 1000
+        'limit': 1000,
       };
     } else {
       params = <String, dynamic>{
@@ -151,7 +158,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
         'limit': 1000,
         'parameter.in': jsonEncode([
           {'to': walletAddress},
-          {'from': walletAddress}
+          {'from': walletAddress},
         ]),
       };
     }
@@ -182,7 +189,6 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     required String contractAddress,
     required EthereumNetwork ehtereumNetwork,
   }) async {
-
     await dotenv.load();
     final moralisApiKey = dotenv.get('MORALIS_API_KEY');
 

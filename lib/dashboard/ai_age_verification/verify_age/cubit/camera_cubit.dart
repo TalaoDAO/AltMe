@@ -44,7 +44,11 @@ class CameraCubit extends Cubit<CameraState> {
       }
     } catch (e, s) {
       emit(state.copyWith(status: CameraStatus.initializeFailed));
-      logger.e('error: $e, stack: $s', e, s);
+      logger.e(
+        'error: $e, stack: $s',
+        error: e,
+        stackTrace: s,
+      );
     }
     cameraController = CameraController(
       selectedCamera ?? cameras[0],
@@ -105,7 +109,7 @@ class CameraCubit extends Cubit<CameraState> {
       );
     } catch (e, s) {
       await cameraController!.resumePreview();
-      emit(state.copyWith(status: CameraStatus.error,data: null));
+      emit(state.copyWith(status: CameraStatus.error, data: null));
       logger.e('error : $e, stack: $s');
     }
   }

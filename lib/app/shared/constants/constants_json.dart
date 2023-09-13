@@ -12,61 +12,61 @@ abstract class ConstantsJson {
           'title': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'Device information'
+            'fallback': 'Device information',
           },
           'subtitle': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'Mobile device data'
+            'fallback': 'Mobile device data',
           },
           'description': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
             'fallback':
-                'You can transfer this credential when you need to give assurance about your mobile device and wallet to a third party. It helps protect your apps from potentially risky and fraudulent interactions, allowing you to respond with appropriate actions to reduce attacks and abuse such as fraud, cheating, and unauthorized access. '
+                'You can transfer this credential when you need to give assurance about your mobile device and wallet to a third party. It helps protect your apps from potentially risky and fraudulent interactions, allowing you to respond with appropriate actions to reduce attacks and abuse such as fraud, cheating, and unauthorized access. ',
           },
           'properties': [
             {
               'path': [r'$.credentialSubject.issuedBy.name'],
               'schema': {'type': 'string'},
               'fallback': 'My wallet',
-              'label': 'Verified by'
+              'label': 'Verified by',
             },
             {
               'path': [r'$.issuanceDate'],
               'schema': {'type': 'string', 'format': 'date'},
               'fallback': 'None',
-              'label': 'Issue data'
+              'label': 'Issue data',
             },
             {
               'path': [r'$.credentialSubject.systemName'],
               'schema': {'type': 'string'},
               'fallback': 'Unknown',
-              'label': 'Operating System'
+              'label': 'Operating System',
             },
             {
               'path': [r'$.credentialSubject.deviceName'],
               'schema': {'type': 'string'},
               'fallback': 'Unknown',
-              'label': 'Device'
+              'label': 'Device',
             },
             {
               'path': [r'$.credentialSubject.systemVersion'],
               'schema': {'type': 'string'},
               'fallback': 'Unknown',
-              'label': 'System version'
+              'label': 'System version',
             },
             {
               'path': [r'$.credentialSubject.walletBuild'],
               'schema': {'type': 'string'},
               'fallback': 'Unknown',
-              'label': 'Wallet build'
+              'label': 'Wallet build',
             }
-          ]
-        }
+          ],
+        },
       }
     ],
-    'presentation_definition': <String, dynamic>{}
+    'presentation_definition': <String, dynamic>{},
   };
 
   static const tezosAssociatedAddressCredentialManifestJson = <String, dynamic>{
@@ -80,42 +80,42 @@ abstract class ConstantsJson {
           'title': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'Tezos address'
+            'fallback': 'Tezos address',
           },
           'subtitle': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': ''
+            'fallback': '',
           },
           'description': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'This is the proof that you own this crypto address'
+            'fallback': 'This is the proof that you own this crypto address',
           },
           'properties': [
             {
               'path': [r'$.expirationDate'],
               'schema': {'type': 'string', 'format': 'date'},
               'fallback': 'None',
-              'label': 'Expires'
+              'label': 'Expires',
             },
             {
               'path': [r'$.credentialSubject.associatedAddress'],
               'schema': {'type': 'string'},
               'fallback': 'Unknown',
-              'label': 'Address'
+              'label': 'Address',
             },
             {
               'path': [r'$.credentialSubject.issuedBy.name'],
               'schema': {'type': 'string'},
               'fallback': 'My Wallet',
-              'label': 'Verified by'
+              'label': 'Verified by',
             }
-          ]
-        }
+          ],
+        },
       }
     ],
-    'presentation_definition': <String, dynamic>{}
+    'presentation_definition': <String, dynamic>{},
   };
 
   static const ethereumAssociatedAddressCredentialManifestJson =
@@ -130,42 +130,42 @@ abstract class ConstantsJson {
           'title': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'Ethereum address'
+            'fallback': 'Ethereum address',
           },
           'subtitle': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': ''
+            'fallback': '',
           },
           'description': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'This is the proof that you own this crypto address'
+            'fallback': 'This is the proof that you own this crypto address',
           },
           'properties': [
             {
               'path': [r'$.expirationDate'],
               'schema': {'type': 'string', 'format': 'date'},
               'fallback': 'None',
-              'label': 'Expires'
+              'label': 'Expires',
             },
             {
               'path': [r'$.credentialSubject.associatedAddress'],
               'schema': {'type': 'string'},
               'fallback': 'Unknown',
-              'label': 'Address'
+              'label': 'Address',
             },
             {
               'path': [r'$.credentialSubject.issuedBy.name'],
               'schema': {'type': 'string'},
               'fallback': 'My Wallet',
-              'label': 'Verified by'
+              'label': 'Verified by',
             }
-          ]
-        }
+          ],
+        },
       }
     ],
-    'presentation_definition': <String, dynamic>{}
+    'presentation_definition': <String, dynamic>{},
   };
 
   static const fantomAssociatedAddressCredentialManifestJson =
@@ -180,42 +180,42 @@ abstract class ConstantsJson {
           'title': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'Fantom address'
+            'fallback': 'Fantom address',
           },
           'subtitle': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': ''
+            'fallback': '',
           },
           'description': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'This is the proof that you own this crypto address'
+            'fallback': 'This is the proof that you own this crypto address',
           },
           'properties': [
             {
               'path': [r'$.expirationDate'],
               'schema': {'type': 'string', 'format': 'date'},
               'fallback': 'None',
-              'label': 'Expires'
+              'label': 'Expires',
             },
             {
               'path': [r'$.credentialSubject.associatedAddress'],
               'schema': {'type': 'string'},
               'fallback': 'Unknown',
-              'label': 'Address'
+              'label': 'Address',
             },
             {
               'path': [r'$.credentialSubject.issuedBy.name'],
               'schema': {'type': 'string'},
               'fallback': 'My Wallet',
-              'label': 'Verified by'
+              'label': 'Verified by',
             }
-          ]
-        }
+          ],
+        },
       }
     ],
-    'presentation_definition': <String, dynamic>{}
+    'presentation_definition': <String, dynamic>{},
   };
 
   static const polygonAssociatedAddressCredentialManifestJson =
@@ -230,42 +230,42 @@ abstract class ConstantsJson {
           'title': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'Polygon address'
+            'fallback': 'Polygon address',
           },
           'subtitle': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': ''
+            'fallback': '',
           },
           'description': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'This is the proof that you own this crypto address'
+            'fallback': 'This is the proof that you own this crypto address',
           },
           'properties': [
             {
               'path': [r'$.expirationDate'],
               'schema': {'type': 'string', 'format': 'date'},
               'fallback': 'None',
-              'label': 'Expires'
+              'label': 'Expires',
             },
             {
               'path': [r'$.credentialSubject.associatedAddress'],
               'schema': {'type': 'string'},
               'fallback': 'Unknown',
-              'label': 'Address'
+              'label': 'Address',
             },
             {
               'path': [r'$.credentialSubject.issuedBy.name'],
               'schema': {'type': 'string'},
               'fallback': 'My Wallet',
-              'label': 'Verified by'
+              'label': 'Verified by',
             }
-          ]
-        }
+          ],
+        },
       }
     ],
-    'presentation_definition': <String, dynamic>{}
+    'presentation_definition': <String, dynamic>{},
   };
 
   static const binanceAssociatedAddressCredentialManifestJson =
@@ -280,41 +280,41 @@ abstract class ConstantsJson {
           'title': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'BNB Chain address'
+            'fallback': 'BNB Chain address',
           },
           'subtitle': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': ''
+            'fallback': '',
           },
           'description': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'This is the proof that you own this crypto address'
+            'fallback': 'This is the proof that you own this crypto address',
           },
           'properties': [
             {
               'path': [r'$.expirationDate'],
               'schema': {'type': 'string', 'format': 'date'},
               'fallback': 'None',
-              'label': 'Expires'
+              'label': 'Expires',
             },
             {
               'path': [r'$.credentialSubject.associatedAddress'],
               'schema': {'type': 'string'},
               'fallback': 'Unknown',
-              'label': 'Address'
+              'label': 'Address',
             },
             {
               'path': [r'$.credentialSubject.issuedBy.name'],
               'schema': {'type': 'string'},
               'fallback': 'My Wallet',
-              'label': 'Verified by'
+              'label': 'Verified by',
             }
-          ]
-        }
+          ],
+        },
       }
     ],
-    'presentation_definition': <String, dynamic>{}
+    'presentation_definition': <String, dynamic>{},
   };
 }

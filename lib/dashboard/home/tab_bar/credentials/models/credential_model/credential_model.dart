@@ -28,6 +28,7 @@ class CredentialModel extends Equatable {
     this.domain,
     this.activities = const [],
     this.jwt,
+    this.pendingInfo,
   });
 
   factory CredentialModel.fromJson(Map<String, dynamic> json) {
@@ -91,6 +92,7 @@ class CredentialModel extends Equatable {
   final String? domain;
   final List<Activity> activities;
   final String? jwt;
+  final PendingInfo? pendingInfo;
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
@@ -108,6 +110,7 @@ class CredentialModel extends Equatable {
     String? domain,
     List<Activity>? activities,
     String? jwt,
+    PendingInfo? pendingInfo,
   }) {
     return CredentialModel(
       id: id ?? this.id,
@@ -123,10 +126,11 @@ class CredentialModel extends Equatable {
       domain: domain ?? this.domain,
       activities: activities ?? this.activities,
       jwt: jwt ?? this.jwt,
+      pendingInfo: pendingInfo ?? this.pendingInfo,
     );
   }
 
-  String get issuer => data['issuer'] as String;
+  String get issuer => data['issuer'] == null ? '' : data['issuer'] as String;
 
   static String fromJsonId(dynamic json) {
     if (json == null || json == '') {
@@ -138,12 +142,7 @@ class CredentialModel extends Equatable {
 
   static Display fromJsonDisplay(dynamic json) {
     if (json == null || json == '') {
-      return const Display(
-        '',
-        '',
-        '',
-        '',
-      );
+      return const Display('', '', '', '');
     }
     return Display.fromJson(json as Map<String, dynamic>);
   }
@@ -159,14 +158,17 @@ class CredentialModel extends Equatable {
   }
 
   Future<RevocationStatus> getRevocationStatus() async {
+    if (data.isEmpty) {
+      return RevocationStatus.revoked;
+    }
     final String vcStr = jsonEncode(data);
     final String optStr = jsonEncode({
-      'checks': ['credentialStatus']
+      'checks': ['credentialStatus'],
     });
 
     final String? result = await Future.any([
       DIDKitProvider().verifyCredential(vcStr, optStr),
-      Future.delayed(const Duration(seconds: 4))
+      Future.delayed(const Duration(seconds: 4)),
     ]);
     if (result == null) return RevocationStatus.active;
     final jsonResult = jsonDecode(result) as Map<String, dynamic>;
@@ -198,6 +200,35 @@ class CredentialModel extends Equatable {
     return map['id'] as String?;
   }
 
+  bool get isPolygonssuer => issuer.contains('did:polygonid');
+
+  bool get isVerifiableDiplomaType =>
+      credentialPreview.type.contains('VerifiableDiploma');
+
+  bool get isPolygonIdCard =>
+      credentialPreview.credentialSubjectModel.id
+          ?.contains('did:polygonid:polygon:') ??
+      false;
+
+  bool get isDefaultCredential =>
+      credentialPreview.credentialSubjectModel.credentialSubjectType ==
+      CredentialSubjectType.defaultCredential;
+
+  bool get isLinkeInCard =>
+      credentialPreview.credentialSubjectModel.credentialSubjectType ==
+      CredentialSubjectType.linkedInCard;
+
+  bool get isEbsiCard =>
+      credentialPreview.credentialSubjectModel.credentialSubjectType.isEbsiCard;
+
+  bool get disAllowDelete =>
+      credentialPreview.credentialSubjectModel.credentialSubjectType ==
+          CredentialSubjectType.walletCredential ||
+      (credentialPreview.credentialSubjectModel.credentialCategory ==
+              CredentialCategory.blockchainAccountsCards &&
+          credentialPreview.credentialSubjectModel.issuedBy?.name ==
+              'My wallet');
+
   @override
   List<Object?> get props => [
         id,
@@ -208,6 +239,11 @@ class CredentialModel extends Equatable {
         display,
         expirationDate,
         credentialManifest,
+        receivedId,
+        challenge,
+        domain,
         activities,
+        jwt,
+        pendingInfo,
       ];
 }

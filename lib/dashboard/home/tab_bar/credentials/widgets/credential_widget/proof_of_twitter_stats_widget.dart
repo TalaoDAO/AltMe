@@ -12,9 +12,6 @@ class ProofOfTwitterStatsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final proofOfTwitterStatsModel = credentialModel
-    //     .credentialPreview.credentialSubjectModel as ProofOfTwitterStatsModel;
-
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.twitterStatsCard,
       issuerName: credentialModel

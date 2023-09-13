@@ -18,6 +18,7 @@ class NftModel extends Equatable {
     this.displayUri,
     this.thumbnailUri,
     this.isTransferable = true,
+    this.artifactUri = '',
   });
 
   factory NftModel.fromJson(Map<String, dynamic> json) =>
@@ -35,6 +36,8 @@ class NftModel extends Equatable {
   final String balance;
   @JsonKey(defaultValue: true)
   final bool isTransferable;
+  @JsonKey(defaultValue: '')
+  final String artifactUri;
 
   String? get displayUrl {
     if (displayUri?.isEmpty ?? true) {
@@ -51,6 +54,16 @@ class NftModel extends Equatable {
       return null;
     }
     return thumbnailUri?.replaceAll(
+      'ipfs://',
+      Urls.talaoIpfsGateway,
+    );
+  }
+
+  String? get artifactUrl {
+    if (artifactUri == '') {
+      return null;
+    }
+    return artifactUri.replaceAll(
       'ipfs://',
       Urls.talaoIpfsGateway,
     );

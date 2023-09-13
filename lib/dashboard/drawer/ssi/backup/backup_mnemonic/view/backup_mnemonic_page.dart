@@ -92,7 +92,7 @@ class BackupMnemonicView extends StatelessWidget {
                   return const SizedBox();
               }
             },
-          )
+          ),
         ],
       ),
       navigation: Padding(

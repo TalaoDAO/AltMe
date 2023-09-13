@@ -137,7 +137,7 @@ class ReceivePage extends StatelessWidget {
                       },
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),

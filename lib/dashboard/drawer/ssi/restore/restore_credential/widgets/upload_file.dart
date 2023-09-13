@@ -58,7 +58,7 @@ class UploadFile extends StatelessWidget {
                 filePath == null ? l10n.uploadFile : filePath!.split('/').last,
                 minFontSize: 12,
                 style: Theme.of(context).textTheme.uploadFileTitle,
-              )
+              ),
             ],
           ),
         ),

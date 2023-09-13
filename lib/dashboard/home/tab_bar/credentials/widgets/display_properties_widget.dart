@@ -29,6 +29,7 @@ class DisplayPropertiesWidget extends StatelessWidget {
         ),
       );
     });
+
     if (widgets.isNotEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,

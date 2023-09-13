@@ -7,5 +7,5 @@ const testData = {'data': 'sample data'};
 const header = {
   'Content-Type': 'application/json',
   'charset': 'UTF-8',
-  'content-length': 22
+  'content-length': 22,
 };

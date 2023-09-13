@@ -3,10 +3,16 @@ import 'dart:io';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
+import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
+import 'package:credential_manifest/credential_manifest.dart';
+import 'package:crypto/crypto.dart';
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:did_kit/did_kit.dart';
+
+import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:jose/jose.dart';
@@ -15,64 +21,6 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
-
-Future<void> openBlockchainExplorer(
-  BlockchainNetwork network,
-  String txHash,
-) async {
-  if (network is TezosNetwork) {
-    await LaunchUrl.launch(
-      'https://tzkt.io/$txHash',
-    );
-  } else if (network is PolygonNetwork) {
-    await LaunchUrl.launch(
-      'https://polygonscan.com/tx/$txHash',
-    );
-  } else if (network is BinanceNetwork) {
-    await LaunchUrl.launch(
-      'https://www.bscscan.com/tx/$txHash',
-    );
-  } else if (network is FantomNetwork) {
-    await LaunchUrl.launch(
-      'https://ftmscan.com/tx/$txHash',
-    );
-  } else if (network is EthereumNetwork) {
-    await LaunchUrl.launch(
-      'https://etherscan.io/tx/$txHash',
-    );
-  } else {
-    UnimplementedError();
-  }
-}
-
-Future<void> openAddressBlockchainExplorer(
-  BlockchainNetwork network,
-  String address,
-) async {
-  if (network is TezosNetwork) {
-    await LaunchUrl.launch(
-      'https://tzkt.io/$address/operations',
-    );
-  } else if (network is PolygonNetwork) {
-    await LaunchUrl.launch(
-      'https://polygonscan.com/address/$address',
-    );
-  } else if (network is BinanceNetwork) {
-    await LaunchUrl.launch(
-      'https://www.bscscan.com/address/$address',
-    );
-  } else if (network is FantomNetwork) {
-    await LaunchUrl.launch(
-      'https://ftmscan.com/address/$address',
-    );
-  } else if (network is EthereumNetwork) {
-    await LaunchUrl.launch(
-      'https://etherscan.io/address/$address',
-    );
-  } else {
-    UnimplementedError();
-  }
-}
 
 String generateDefaultAccountName(
   int accountIndex,
@@ -99,16 +47,6 @@ String getIssuerDid({required Uri uriToCheck}) {
     }
   });
   return did;
-}
-
-bool isEbsiIssuer(CredentialModel credentialModel) {
-  return credentialModel.issuer.startsWith('did:ebsi');
-}
-
-bool isPolygonssuer(CredentialModel credentialModel) {
-  return credentialModel.id.startsWith(
-    'https://self-hosted-platform.polygonid.me/v1/did:polygonid:polygon:',
-  );
 }
 
 bool isValidPrivateKey(String value) {
@@ -284,7 +222,6 @@ Future<bool> getStoragePermission() async {
   if (await Permission.storage.request().isGranted) {
     return true;
   } else if (await Permission.storage.request().isPermanentlyDenied) {
-    // TODO(all): show dialog to choose this option
     await openAppSettings();
   } else if (await Permission.storage.request().isDenied) {
     return false;
@@ -334,10 +271,6 @@ Future<String> getRandomP256PrivateKey(
   }
 }
 
-bool isVerifiableDiplomaType(CredentialModel credentialModel) {
-  return credentialModel.credentialPreview.type.contains('VerifiableDiploma');
-}
-
 Map<String, dynamic> decodePayload({
   required JWTDecode jwtDecode,
   required String token,
@@ -348,8 +281,8 @@ Map<String, dynamic> decodePayload({
   try {
     final payload = jwtDecode.parseJwt(token);
     data = payload;
-  } catch (e) {
-    log.e('An error occurred while decoding.', e);
+  } catch (e, s) {
+    log.e('An error occurred while decoding.', error: e, stackTrace: s);
   }
   return data;
 }
@@ -364,8 +297,8 @@ Map<String, dynamic> decodeHeader({
   try {
     final header = jwtDecode.parseJwtHeader(token);
     data = header;
-  } catch (e) {
-    log.e('An error occurred while decoding.', e);
+  } catch (e, s) {
+    log.e('An error occurred while decoding.', error: e, stackTrace: s);
   }
   return data;
 }
@@ -397,7 +330,7 @@ String getSignatureType(String circuitId) {
   return '';
 }
 
-String separateUppercaseWords(String input) {
+String splitUppercase(String input) {
   final regex = RegExp('(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])');
   return input.split(regex).join(' ');
 }
@@ -416,4 +349,282 @@ List<String> generateUriList(String url) {
   }
 
   return uriList ?? [];
+}
+
+String getUtf8Message(String maybeHex) {
+  if (maybeHex.startsWith('0x')) {
+    final List<int> decoded = hex.decode(
+      maybeHex.substring(2),
+    );
+    return utf8.decode(decoded);
+  }
+
+  return maybeHex;
+}
+
+Future<(String, String)> getDidAndKid({
+  required OIDC4VCType oidc4vcType,
+  required String privateKey,
+  DIDKitProvider? didKitProvider,
+}) async {
+  late String did;
+  late String kid;
+
+  switch (oidc4vcType) {
+    case OIDC4VCType.DEFAULT:
+    case OIDC4VCType.GREENCYPHER:
+    case OIDC4VCType.GAIAX:
+      const didMethod = AltMeStrings.defaultDIDMethod;
+      did = didKitProvider!.keyToDID(didMethod, privateKey);
+      kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
+
+    case OIDC4VCType.EBSIV2:
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
+      final thumbprint = getThumbprintForEBSIV2(private);
+      final encodedAddress = Base58Encode([2, ...thumbprint]);
+      did = 'did:ebsi:z$encodedAddress';
+      final lastPart = Base58Encode(thumbprint);
+      kid = '$did#$lastPart';
+
+    case OIDC4VCType.EBSIV3:
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
+      //b'\xd1\xd6\x03' in python
+      final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
+      final List<int> prefix = prefixByteList.map((byte) => byte).toList();
+
+      final encodedData = sortedPublcJwk(private);
+      final encodedAddress = Base58Encode([...prefix, ...encodedData]);
+
+      did = 'did:key:z$encodedAddress';
+      final String lastPart = did.split(':')[2];
+      kid = '$did#$lastPart';
+
+    case OIDC4VCType.JWTVC:
+      throw Exception();
+  }
+  return (did, kid);
+}
+
+List<int> getThumbprintForEBSIV2(Map<String, dynamic> privateKey) {
+  final bytesToHash = sortedPublcJwk(privateKey);
+  final sha256Digest = sha256.convert(bytesToHash);
+
+  return sha256Digest.bytes;
+}
+
+List<int> sortedPublcJwk(Map<String, dynamic> privateKey) {
+  final publicJWK = Map.of(privateKey)..removeWhere((key, value) => key == 'd');
+
+  /// we use crv P-256K in the rest of the package to ensure compatibility
+  /// with jose dart package. In fact our crv is secp256k1 wich change the
+  /// fingerprint
+
+  final sortedJwk = Map.fromEntries(
+    publicJWK.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
+  )
+    ..removeWhere((key, value) => key == 'use')
+    ..removeWhere((key, value) => key == 'alg');
+
+  /// this test is to be crv agnostic and respect https://www.rfc-editor.org/rfc/rfc7638
+  if (sortedJwk['crv'] == 'P-256K') {
+    sortedJwk['crv'] = 'secp256k1';
+  }
+
+  final jsonString = jsonEncode(sortedJwk).replaceAll(' ', '');
+  return utf8.encode(jsonString);
+}
+
+bool isUriAsValueValid(List<String> keys) =>
+    keys.contains('response_type') &&
+    keys.contains('client_id') &&
+    keys.contains('redirect_uri') &&
+    keys.contains('nonce');
+
+bool isPolygonIdUrl(String url) =>
+    url.startsWith('{"id":') ||
+    url.startsWith('{"body":{"') ||
+    url.startsWith('{"from": "did:polygonid:') ||
+    url.startsWith('{"to": "did:polygonid:') ||
+    url.startsWith('{"thid":') ||
+    url.startsWith('{"typ":') ||
+    url.startsWith('{"type":');
+
+bool isOIDC4VCIUrl(Uri uri) {
+  return uri.toString().startsWith('openid');
+}
+
+bool isSIOPV2OROIDC4VPUrl(Uri uri) {
+  final isOID4VCUrl = uri.toString().startsWith('openid');
+
+  return isOID4VCUrl &&
+      (uri.toString().startsWith('openid://?') ||
+          uri.toString().startsWith('openid-vc://?') ||
+          uri.toString().startsWith('openid-hedera://?'));
+}
+
+Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
+  required String url,
+  required DioClient client,
+}) async {
+  for (final oidc4vcType in OIDC4VCType.values) {
+    if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
+      if (oidc4vcType == OIDC4VCType.DEFAULT ||
+          oidc4vcType == OIDC4VCType.EBSIV3) {
+        final dynamic credentialOfferJson = await getCredentialOfferJson(
+          scannedResponse: url,
+          dioClient: client,
+        );
+
+        final issuer = credentialOfferJson['credential_issuer'].toString();
+        if (credentialOfferJson == null) throw Exception();
+        final openidConfigurationResponse = await getOpenIdConfig(
+          baseUrl: issuer,
+          client: client.dio,
+        );
+
+        final credentialsSupported =
+            openidConfigurationResponse['credentials_supported']
+                as List<dynamic>;
+
+        if (credentialsSupported.isEmpty) throw Exception();
+
+        final credSupported = credentialsSupported[0] as Map<String, dynamic>;
+
+        if (credSupported['trust_framework'] == null) {
+          return OIDC4VCType.DEFAULT;
+        }
+
+        if (credSupported['trust_framework']['name'] == 'ebsi') {
+          return OIDC4VCType.EBSIV3;
+        } else {
+          throw Exception();
+        }
+      }
+      return oidc4vcType;
+    }
+  }
+  return null;
+}
+
+String getCredentialData(dynamic credential) {
+  late String cred;
+
+  if (credential is String) {
+    cred = credential;
+  } else if (credential is Map<String, dynamic>) {
+    final credentialSupported = (credential['types'] as List<dynamic>)
+        .map((e) => e.toString())
+        .toList();
+    cred = credentialSupported.last;
+  } else {
+    throw Exception();
+  }
+
+  return cred;
+}
+
+Future<String> getHost({
+  required Uri uri,
+  required DioClient client,
+}) async {
+  final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
+      await getOIDC4VCTypeForIssuance(
+    url: uri.toString(),
+    client: client,
+  );
+
+  /// OIDC4VCI Case
+  if (currentOIIDC4VCTypeForIssuance != null) {
+    /// issuance case
+
+    switch (currentOIIDC4VCTypeForIssuance) {
+      case OIDC4VCType.DEFAULT:
+      case OIDC4VCType.GREENCYPHER:
+      case OIDC4VCType.EBSIV3:
+        final dynamic credentialOfferJson = await getCredentialOfferJson(
+          scannedResponse: uri.toString(),
+          dioClient: client,
+        );
+        if (credentialOfferJson == null) throw Exception();
+
+        return Uri.parse(
+          credentialOfferJson['credential_issuer'].toString(),
+        ).host;
+
+      case OIDC4VCType.GAIAX:
+      case OIDC4VCType.EBSIV2:
+        return Uri.parse(
+          uri.queryParameters['issuer'].toString(),
+        ).host;
+      case OIDC4VCType.JWTVC:
+        throw Exception();
+    }
+  } else {
+    /// verification case
+
+    final String? requestUri = uri.queryParameters['request_uri'];
+
+    /// check if request uri is provided or not
+    if (requestUri != null) {
+      final requestUri = uri.queryParameters['request_uri'].toString();
+      final dynamic response = await client.get(requestUri);
+      final Map<String, dynamic> decodedResponse = decodePayload(
+        jwtDecode: JWTDecode(),
+        token: response as String,
+      );
+
+      return Uri.parse(decodedResponse['redirect_uri'].toString()).host;
+    } else {
+      return Uri.parse(
+        uri.queryParameters['redirect_uri'] ?? '',
+      ).host;
+    }
+  }
+}
+
+Future<(String?, String)> getIssuerAndPreAuthorizedCode({
+  required OIDC4VCType oidc4vcType,
+  required String scannedResponse,
+  required DioClient dioClient,
+}) async {
+  String? preAuthorizedCode;
+  late String issuer;
+
+  final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
+
+  switch (oidc4vcType) {
+    case OIDC4VCType.DEFAULT:
+    case OIDC4VCType.GREENCYPHER:
+    case OIDC4VCType.EBSIV3:
+      final dynamic credentialOfferJson = await getCredentialOfferJson(
+        scannedResponse: scannedResponse,
+        dioClient: dioClient,
+      );
+      if (credentialOfferJson == null) throw Exception();
+
+      final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
+          ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+
+      if (preAuthorizedCodeGrant != null &&
+          preAuthorizedCodeGrant is Map &&
+          preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
+        preAuthorizedCode =
+            preAuthorizedCodeGrant['pre-authorized_code'] as String;
+      }
+
+      issuer = credentialOfferJson['credential_issuer'].toString();
+
+    case OIDC4VCType.GAIAX:
+    case OIDC4VCType.EBSIV2:
+      issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
+      preAuthorizedCode =
+          uriFromScannedResponse.queryParameters['pre-authorized_code'];
+
+    case OIDC4VCType.JWTVC:
+      throw Exception();
+  }
+
+  return (preAuthorizedCode, issuer);
 }

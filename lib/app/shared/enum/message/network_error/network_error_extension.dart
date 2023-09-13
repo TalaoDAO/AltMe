@@ -42,6 +42,8 @@ extension NetworkErrorX on NetworkError {
         return globalMessage.NETWORK_ERROR_NOT_FOUND;
       case NetworkError.NETWORK_ERROR_PRECONDITION_FAILED:
         return globalMessage.NETWORK_ERROR_PRECONDITION_FAILED;
+      case NetworkError.NETWORK_ERROR_NOT_READY:
+        return globalMessage.NETWORK_ERROR_NOT_READY;
     }
   }
 }

@@ -1,12 +1,13 @@
-import 'package:altme/app/shared/dio_client/dio_client.dart';
+import 'package:altme/app/app.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:json_path/json_path.dart';
 
 Future<CredentialManifest> getCredentialManifestFromAltMe(
   DioClient client,
 ) async {
-  final dynamic wellKnown = await client.get(
-    'https://issuer.talao.co/.well-known/openid-configuration',
+  final Map<String, dynamic> wellKnown = await getOpenIdConfig(
+    baseUrl: 'https://issuer.talao.co',
+    client: client.dio,
   );
   final JsonPath credentialManifetPath = JsonPath(r'$..credential_manifest');
   final credentialManifest = CredentialManifest.fromJson(

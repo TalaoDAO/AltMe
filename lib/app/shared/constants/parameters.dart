@@ -9,6 +9,7 @@ class Parameters {
       AdvanceSettingsState(
     isGamingEnabled: false,
     isIdentityEnabled: true,
+    isProfessionalEnabled: true,
     isBlockchainAccountsEnabled: false,
     isEducationEnabled: true,
     isSocialMediaEnabled: true,
@@ -20,7 +21,8 @@ class Parameters {
     isWalletIntegrityEnabled: true,
   );
 
-  static const ebsiUniversalLink = 'https://app.talao.co/app/download/ebsi';
+  static const oidc4vcUniversalLink =
+      'https://app.talao.co/app/download/oidc4vc';
 
   static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 
@@ -37,4 +39,24 @@ class Parameters {
   static const MUMBAI_ID_STATE_CONTRACT_ADDR =
       '0x134B1BE34911E39A8397ec6289782989729807a4';
   static const MUMBAI_PUSH_URL = 'https://push-staging.polygonid.com/api/v1';
+
+  static const NAMESPACE = 'eip155';
+  static const PERSONAL_SIGN = 'personal_sign';
+  static const ETH_SIGN = 'eth_sign';
+  static const ETH_SIGN_TRANSACTION = 'eth_signTransaction';
+  static const ETH_SIGN_TYPE_DATA = 'eth_signTypedData';
+  static const ETH_SEND_TRANSACTION = 'eth_sendTransaction';
+  static const ETH_SIGN_TYPE_DATA_V4 = 'eth_signTypedData_v4';
+
+  static const walletConnectMethods = [
+    PERSONAL_SIGN,
+    ETH_SIGN,
+    ETH_SIGN,
+    ETH_SIGN_TRANSACTION,
+    ETH_SIGN_TYPE_DATA,
+    ETH_SEND_TRANSACTION,
+    ETH_SIGN_TYPE_DATA_V4,
+  ];
+
+  static const walletConnectEvents = ['chainChanged', 'accountsChanged'];
 }

@@ -84,6 +84,8 @@ class GlobalMessage {
 
   String get NETWORK_ERROR_NOT_FOUND => l10n.networkErrorNotFound;
 
+  String get NETWORK_ERROR_NOT_READY => '';
+
   String get RESPONSE_STRING_FAILED_TO_LOAD_PROFILE => l10n.failedToLoadProfile;
 
   String get RESPONSE_STRING_FAILED_TO_DO_OPERATION => l10n.failedToDoOperation;
@@ -367,4 +369,20 @@ class GlobalMessage {
   String get RESPONSE_STRING_errorGeneratingProof => l10n.errorGeneratingProof;
   String get RESPONSE_STRING_successfullyGeneratingProof =>
       l10n.successfullyGeneratingProof;
+  String RESPONSE_STRING_pleaseAddXtoConnectToTheDapp(String value) =>
+      l10n.pleaseAddXtoConnectToTheDapp(value);
+  String RESPONSE_STRING_pleaseSwitchPolygonNetwork(String value) =>
+      l10n.pleaseSwitchPolygonNetwork(value);
+
+  String get RESPONSE_STRING_pleaseSwitchToCorrectOIDC4VCProfile =>
+      l10n.pleaseSwitchToCorrectOIDC4VCProfile;
+  String get RESPONSE_STRING_authenticationSuccess =>
+      l10n.authenticationSuccess;
+
+  String RESPONSE_STRING_youcanSelectOnlyXCredential(String value) =>
+      l10n.youcanSelectOnlyXCredential(value);
+  String get RESPONSE_STRING_theCredentialIsNotReady =>
+      l10n.theCredentialIsNotReady;
+  String get RESPONSE_STRING_theCredentialIsNoMoreReady =>
+      l10n.theCredentialIsNoMoreReady;
 }

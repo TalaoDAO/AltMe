@@ -1,4 +1,5 @@
 import 'package:altme/dashboard/dashboard.dart';
+
 import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class CredentialManifestDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final titleColor = Theme.of(context).colorScheme.titleColor;
     final valueColor = Theme.of(context).colorScheme.valueColor;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

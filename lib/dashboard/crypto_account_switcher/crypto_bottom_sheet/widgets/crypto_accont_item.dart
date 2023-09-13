@@ -70,7 +70,7 @@ class CryptoAccountItem extends StatelessWidget {
             ),
           ),
           const SizedBox(width: Sizes.spaceXSmall),
-          if (cryptoAccountData.isImported) const ImportedTag()
+          if (cryptoAccountData.isImported) const ImportedTag(),
         ],
       ),
       subtitle: Padding(

@@ -18,13 +18,12 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     switch (blockchainType) {
       case BlockchainType.tezos:
         didMethod = AltMeStrings.cryptoTezosDIDMethod;
-        break;
+
       case BlockchainType.ethereum:
       case BlockchainType.fantom:
       case BlockchainType.polygon:
       case BlockchainType.binance:
         didMethod = AltMeStrings.cryptoEVMDIDMethod;
-        break;
     }
 
     final String jwkKey = await keyGenerator.jwkFromSecretKey(
@@ -47,13 +46,12 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     switch (blockchainType) {
       case BlockchainType.tezos:
         verificationMethod = '$issuer#blockchainAccountId';
-        break;
+
       case BlockchainType.ethereum:
       case BlockchainType.fantom:
       case BlockchainType.polygon:
       case BlockchainType.binance:
         verificationMethod = '$issuer#Recovery2020';
-        break;
     }
     log.i('hardcoded verificationMethod - $verificationMethod');
 
@@ -61,7 +59,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
 
     final options = {
       'proofPurpose': 'assertionMethod',
-      'verificationMethod': verificationMethod
+      'verificationMethod': verificationMethod,
     };
 
     final verifyOptions = {'proofPurpose': 'assertionMethod'};
@@ -85,7 +83,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             issuedBy: const Author('My wallet'),
           ),
         );
-        break;
+
       case BlockchainType.ethereum:
         associatedAddressCredential = EthereumAssociatedAddressCredential(
           id: id,
@@ -99,7 +97,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             issuedBy: const Author('My wallet'),
           ),
         );
-        break;
+
       case BlockchainType.fantom:
         associatedAddressCredential = FantomAssociatedAddressCredential(
           id: id,
@@ -113,7 +111,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             issuedBy: const Author('My wallet'),
           ),
         );
-        break;
+
       case BlockchainType.polygon:
         associatedAddressCredential = PolygonAssociatedAddressCredential(
           id: id,
@@ -127,7 +125,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             issuedBy: const Author('My wallet'),
           ),
         );
-        break;
+
       case BlockchainType.binance:
         associatedAddressCredential = BinanceAssociatedAddressCredential(
           id: id,
@@ -141,7 +139,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             issuedBy: const Author('My wallet'),
           ),
         );
-        break;
     }
 
     log.i(jsonEncode(associatedAddressCredential.toJson()));
@@ -161,7 +158,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
       log.w(
         'credential verification return warnings',
-        jsonVerification['warnings'],
+        error: jsonVerification['warnings'],
       );
     }
 
@@ -181,7 +178,11 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       return _createCredential(vc, oldId, credentialManifest);
     }
   } catch (e, s) {
-    log.e('something went wrong e: $e, stackTrace: $s', e, s);
+    log.e(
+      'something went wrong e: $e, stackTrace: $s',
+      error: e,
+      stackTrace: s,
+    );
     return null;
   }
 }
@@ -223,7 +224,7 @@ Future<CredentialModel?> generateWalletCredential({
 
     final options = {
       'proofPurpose': 'assertionMethod',
-      'verificationMethod': verificationMethod
+      'verificationMethod': verificationMethod,
     };
     final verifyOptions = {'proofPurpose': 'assertionMethod'};
     final id = 'urn:uuid:${const Uuid().v4()}';
@@ -289,7 +290,7 @@ Future<CredentialModel?> generateWalletCredential({
     if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
       log.w(
         'credential verification return warnings',
-        jsonVerification['warnings'],
+        error: jsonVerification['warnings'],
       );
     }
 
@@ -307,7 +308,11 @@ Future<CredentialModel?> generateWalletCredential({
       return _createCredential(vc, oldId, credentialManifest);
     }
   } catch (e, s) {
-    log.e('something went wrong e: $e, stackTrace: $s', e, s);
+    log.e(
+      'something went wrong e: $e, stackTrace: $s',
+      error: e,
+      stackTrace: s,
+    );
     return null;
   }
 }

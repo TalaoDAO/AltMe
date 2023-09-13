@@ -125,7 +125,7 @@ class WalletSecurityView extends StatelessWidget {
                                 builder: (context) => ConfirmDialog(
                                   title: l10n.biometricsNotSupported,
                                   subtitle: l10n
-                                      .yourDeviceDoseNotSupportBiometricsAuthentication, // ignore: lines_longer_than_80_chars
+                                      .deviceDoNotSupportBiometricsAuthentication, // ignore: lines_longer_than_80_chars
                                   yes: l10n.ok,
                                 ),
                               );
@@ -147,6 +147,55 @@ class WalletSecurityView extends StatelessWidget {
                                 .setAlertEnabled(enabled: value);
                           },
                           value: state.model.isAlertEnabled,
+                          activeColor: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    DrawerItem(
+                      title: l10n.userConsentForIssuerAccess,
+                      trailing: SizedBox(
+                        height: 25,
+                        child: Switch(
+                          onChanged: (value) async {
+                            await context
+                                .read<ProfileCubit>()
+                                .setUserConsentForIssuerAccess(enabled: value);
+                          },
+                          value: state.model.userConsentForIssuerAccess,
+                          activeColor: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    DrawerItem(
+                      title: l10n.userConsentForVerifierAccess,
+                      trailing: SizedBox(
+                        height: 25,
+                        child: Switch(
+                          onChanged: (value) async {
+                            await context
+                                .read<ProfileCubit>()
+                                .setUserConsentForVerifierAccess(
+                                  enabled: value,
+                                );
+                          },
+                          value: state.model.userConsentForVerifierAccess,
+                          activeColor: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    DrawerItem(
+                      title: l10n.userPINCodeForAuthentication,
+                      trailing: SizedBox(
+                        height: 25,
+                        child: Switch(
+                          onChanged: (value) async {
+                            await context
+                                .read<ProfileCubit>()
+                                .setUserPINCodeForAuthentication(
+                                  enabled: value,
+                                );
+                          },
+                          value: state.model.userPINCodeForAuthentication,
                           activeColor: Theme.of(context).colorScheme.primary,
                         ),
                       ),

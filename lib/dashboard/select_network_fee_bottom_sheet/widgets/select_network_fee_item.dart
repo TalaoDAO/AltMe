@@ -54,7 +54,7 @@ class SelectNetworkFeeItem extends StatelessWidget {
           MyText(
             '''\$${networkFeeModel.feeInUSD == 0.0 ? '--.--' : networkFeeModel.feeInUSD.toStringAsFixed(4).formatNumber()}''',
             style: Theme.of(context).textTheme.bodySmall2,
-          )
+          ),
         ],
       ),
     );

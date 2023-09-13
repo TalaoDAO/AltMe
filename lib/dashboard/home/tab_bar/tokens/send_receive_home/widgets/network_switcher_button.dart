@@ -41,7 +41,7 @@ class NetworkSwitcherButton extends StatelessWidget {
             Icons.keyboard_arrow_down_rounded,
             size: Sizes.icon,
             color: Theme.of(context).colorScheme.inversePrimary,
-          )
+          ),
         ],
       ),
     );

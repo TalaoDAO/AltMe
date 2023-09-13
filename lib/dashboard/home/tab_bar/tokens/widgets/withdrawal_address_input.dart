@@ -147,7 +147,9 @@ class _WithdrawalAddressInputPageState
                               width: Sizes.icon2x,
                             ),
                           ),
-                          const SizedBox(width: Sizes.spaceSmall,),
+                          const SizedBox(
+                            width: Sizes.spaceSmall,
+                          ),
                           InkWell(
                             onTap: _openWhiteList,
                             child: Image.asset(
@@ -166,7 +168,7 @@ class _WithdrawalAddressInputPageState
                       ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

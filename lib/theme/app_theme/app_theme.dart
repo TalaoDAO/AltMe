@@ -874,15 +874,21 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff86809D),
       );
 
-  TextStyle get identitiyBaseLightText => GoogleFonts.poppins(
+  TextStyle get credentialBaseLightText => GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w300,
         color: onPrimary,
       );
-  TextStyle get identitiyBaseBoldText => GoogleFonts.poppins(
+  TextStyle get credentialBaseBoldText => GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: onPrimary,
+      );
+
+  TextStyle get credentialBaseTitleText => GoogleFonts.poppins(
+        fontSize: 36,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xffFFFFFF),
       );
 
   TextStyle get copyToClipBoard => GoogleFonts.poppins(

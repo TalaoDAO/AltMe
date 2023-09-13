@@ -48,7 +48,7 @@ class PolygonIdProofPage extends StatelessWidget {
         value: '',
       );
     } else {
-      widget = DefaultCredentialListWidget(
+      widget = DefaultCredentialWidget(
         credentialModel: CredentialModel(
           id: credentialPreview.id,
           image: 'image',

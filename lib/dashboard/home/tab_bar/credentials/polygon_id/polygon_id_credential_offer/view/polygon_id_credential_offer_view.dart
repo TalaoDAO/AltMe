@@ -4,31 +4,25 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:polygonid/polygonid.dart';
 
 class PolygonIdCredentialOfferPage extends StatelessWidget {
   const PolygonIdCredentialOfferPage({
     super.key,
-    required this.claims,
   });
 
-  final List<ClaimEntity> claims;
-
-  static Route<dynamic> route({
-    required List<ClaimEntity> claims,
-  }) =>
-      MaterialPageRoute<void>(
-        builder: (context) => PolygonIdCredentialOfferPage(
-          claims: claims,
-        ),
+  static Route<dynamic> route() => MaterialPageRoute<void>(
+        builder: (context) => const PolygonIdCredentialOfferPage(),
         settings: const RouteSettings(name: '/PolygonIdCredentialOffer'),
       );
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    final polygonIdCubitState = context.read<PolygonIdCubit>().state;
 
     return BasePage(
       title: l10n.credentialReceiveTitle,
@@ -47,13 +41,44 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             ListView.builder(
-              itemCount: claims.length,
+              itemCount: polygonIdCubitState.claims!.length,
               padding: EdgeInsets.zero,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int i) {
-                final jsonCredential = claims[i].info;
+                final jsonCredential = polygonIdCubitState.claims![i].info;
                 final credentialPreview = Credential.fromJson(jsonCredential);
+
+                final DisplayMapping? titleDisplayMapping = polygonIdCubitState
+                    .credentialManifests![i]
+                    .outputDescriptors
+                    ?.first
+                    .display
+                    ?.title;
+
+                var title = '';
+
+                if (titleDisplayMapping is DisplayMappingText) {
+                  title = titleDisplayMapping.text;
+                }
+
+                if (titleDisplayMapping is DisplayMappingPath) {
+                  title = titleDisplayMapping.fallback ?? '';
+                }
+
+                final DisplayMapping? subTitleDisplayMapping =
+                    polygonIdCubitState.credentialManifests?[i]
+                        .outputDescriptors?.first.display?.subtitle;
+
+                var subTitle = '';
+
+                if (subTitleDisplayMapping is DisplayMappingText) {
+                  subTitle = subTitleDisplayMapping.text;
+                }
+
+                if (subTitleDisplayMapping is DisplayMappingPath) {
+                  subTitle = subTitleDisplayMapping.fallback ?? '';
+                }
 
                 Widget widget;
 
@@ -82,21 +107,22 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                     issuerName: '',
                     value: '',
                   );
+                } else if (credentialSubjectType ==
+                    CredentialSubjectType.civicPassCredential) {
+                  widget = CredentialBaseWidget(
+                    title: title,
+                    cardBackgroundImagePath: ImageStrings.civicPassCard,
+                    issuerName: polygonIdCubitState
+                        .credentialManifests?[i].issuedBy?.name,
+                    value: subTitle,
+                  );
                 } else {
-                  widget = DefaultCredentialListWidget(
-                    credentialModel: CredentialModel(
-                      id: credentialPreview.id,
-                      image: 'image',
-                      credentialPreview: credentialPreview,
-                      shareLink: '',
-                      display: const Display(
-                        '',
-                        '',
-                        '',
-                        '',
-                      ),
-                      data: const <String, dynamic>{},
-                    ),
+                  widget = CredentialBaseWidget(
+                    title: title,
+                    cardBackgroundImagePath: ImageStrings.defaultCard,
+                    issuerName: polygonIdCubitState
+                        .credentialManifests?[i].issuedBy?.name,
+                    value: subTitle,
                   );
                 }
 
@@ -120,9 +146,7 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                 Navigator.of(context).push<void>(
                   PinCodePage.route(
                     isValidCallback: () {
-                      context.read<PolygonIdCubit>().addPolygonIdCredentials(
-                            claims: claims,
-                          );
+                      context.read<PolygonIdCubit>().addPolygonIdCredentials();
                     },
                     restrictToBack: false,
                   ),

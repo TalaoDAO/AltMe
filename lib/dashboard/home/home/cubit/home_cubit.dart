@@ -311,7 +311,7 @@ class HomeCubit extends Cubit<HomeState> {
         'from': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
         'to': walletAddress,
         'token.contract.eq': 'KT1ErKVqEhG9jxXgUG2KGLW3bNM7zXHX8SDF', // UNO
-        'sort.desc': 'timestamp'
+        'sort.desc': 'timestamp',
       },
     ) as List<dynamic>;
 

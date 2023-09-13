@@ -32,7 +32,6 @@ class LocalNotification {
           case NotificationResponseType.selectedNotification:
           case NotificationResponseType.selectedNotificationAction:
             _onSelectNotification(notificationResponse.payload);
-            break;
         }
       },
     );

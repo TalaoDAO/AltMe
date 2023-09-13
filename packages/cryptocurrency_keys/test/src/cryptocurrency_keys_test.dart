@@ -10,7 +10,7 @@ void main() {
   const authenticationTag = 'äU~ÇÍÞ¦BÌuDÅ';
   const encryptionModelJson = {
     'cipherText': cipherText,
-    'authenticationTag': authenticationTag
+    'authenticationTag': authenticationTag,
   };
 
   late CryptocurrencyKeys cryptocurrencyKeys;

@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/route/route_name.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,7 @@ class QrCodeScanPage extends StatefulWidget {
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (context) => const QrCodeScanPage(),
-        settings: const RouteSettings(name: '/qrCodeScanPage'),
+        settings: const RouteSettings(name: QRCODE_SCAN_PAGE),
       );
 
   @override
@@ -57,6 +58,12 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
               LoadingView().show(context: context);
             } else {
               LoadingView().hide();
+            }
+            if (state.status == ScanStatus.success && state.message != null) {
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: state.message!,
+              );
             }
           },
         ),

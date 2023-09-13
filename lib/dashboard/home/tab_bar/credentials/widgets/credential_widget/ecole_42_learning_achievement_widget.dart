@@ -115,7 +115,7 @@ class Ecole42LearningAchievementWidget extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
       ],
     );
   }

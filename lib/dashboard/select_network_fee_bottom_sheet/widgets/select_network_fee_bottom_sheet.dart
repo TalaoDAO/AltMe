@@ -68,7 +68,7 @@ class _SelectNetworkFeeBottomSheetViewState
             color: Theme.of(context).colorScheme.inversePrimary,
             blurRadius: 5,
             spreadRadius: -3,
-          )
+          ),
         ],
         borderRadius: const BorderRadius.only(
           topRight: Radius.circular(Sizes.largeRadius),

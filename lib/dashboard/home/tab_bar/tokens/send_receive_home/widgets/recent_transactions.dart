@@ -55,10 +55,8 @@ class RecentTransactions extends StatelessWidget {
                                 .read<ManageNetworkCubit>()
                                 .state
                                 .network;
-                            openBlockchainExplorer(
-                              network,
-                              operations[index].hash,
-                            );
+                            network
+                                .openBlockchainExplorer(operations[index].hash);
                           },
                         ),
                         separatorBuilder: (_, __) {

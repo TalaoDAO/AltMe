@@ -25,7 +25,7 @@ void main() {
           'id': 'id',
           'type': 'type',
           'revocationListIndex': 'revocationListIndex',
-          'revocationListCredential': 'revocationListCredential'
+          'revocationListCredential': 'revocationListCredential',
         },
       );
       expect(credentialStatusField.id, 'id');
@@ -42,7 +42,7 @@ void main() {
         'id': 'id',
         'type': 'type',
         'revocationListIndex': 'revocationListIndex',
-        'revocationListCredential': 'revocationListCredential'
+        'revocationListCredential': 'revocationListCredential',
       };
       final credentialStatusField = CredentialStatusField.fromJson(json);
 

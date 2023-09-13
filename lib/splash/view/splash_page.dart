@@ -3,15 +3,14 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
-import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
-import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:dio/dio.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
@@ -92,6 +91,35 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
+    if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
+      final url =
+          uri.toString().split('${Parameters.oidc4vcUniversalLink}?uri=')[1];
+
+      final String formattedUrl = Uri.decodeFull(url);
+      final List<String> parts = formattedUrl.split('?');
+
+      final String modifiedUrl = '${parts[0]}?${parts.sublist(1).join('&')}';
+
+      final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
+          await getOIDC4VCTypeForIssuance(
+        url: modifiedUrl,
+        client: DioClient('', Dio()),
+      );
+
+      if (currentOIIDC4VCTypeForIssuance != null) {
+        /// issuer side (oidc4VCI)
+
+        await context.read<QRCodeScanCubit>().startOIDC4VCCredentialIssuance(
+              scannedResponse: modifiedUrl,
+              currentOIIDC4VCType: currentOIIDC4VCTypeForIssuance,
+              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            );
+        return;
+      }
+
+      return;
+    }
+
     if (uri.toString().startsWith('iden3comm://')) {
       /// if wallet has not been created then alert user
       final ssiKey =
@@ -147,13 +175,20 @@ class _SplashViewState extends State<SplashView> {
         beaconData = value;
       }
       if (uri.scheme == 'openid' && uri.authority == 'initiate_issuance') {
-        final DioClient client = DioClient('', Dio());
-        await initiateEbsiCredentialIssuance(
-          uri.toString(),
-          client,
-          context.read<CredentialsCubit>(),
-          secure_storage.getSecureStorage,
+        final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
+            await getOIDC4VCTypeForIssuance(
+          url: uri.toString(),
+          client: DioClient('', Dio()),
         );
+
+        if (currentOIIDC4VCTypeForIssuance != null) {
+          // ignore: require_trailing_commas
+          await context.read<QRCodeScanCubit>().startOIDC4VCCredentialIssuance(
+                scannedResponse: uri.toString(),
+                currentOIIDC4VCType: currentOIIDC4VCTypeForIssuance,
+                qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+              );
+        }
       }
     });
     if (isBeaconRequest && beaconData != '') {

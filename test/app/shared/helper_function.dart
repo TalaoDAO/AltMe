@@ -11,7 +11,7 @@ void main() {
 
       final output = [
         'https://issuer.talao.co/my_route_to_wallet_endpoint/1111111111',
-        'https://issuer.talao.co/my_route_to_wallet_endpoint/2222222222'
+        'https://issuer.talao.co/my_route_to_wallet_endpoint/2222222222',
       ];
 
       expect(uriList, output);

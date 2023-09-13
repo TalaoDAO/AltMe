@@ -90,9 +90,36 @@ class ProfileCubit extends Cubit<ProfileState> {
               .get(SecureStorageKeys.isBiometricEnabled)) ==
           'true';
 
-      final isAlertEnabled =
-          (await secureStorageProvider.get(SecureStorageKeys.alertEnabled)) ==
-              'true';
+      final alertValue =
+          await secureStorageProvider.get(SecureStorageKeys.alertEnabled);
+      final isAlertEnabled = alertValue == null || alertValue == 'true';
+
+      final userConsentForIssuerAccess = (await secureStorageProvider
+              .get(SecureStorageKeys.userConsentForIssuerAccess)) ==
+          'true';
+
+      final userConsentForVerifierAccess = (await secureStorageProvider
+              .get(SecureStorageKeys.userConsentForVerifierAccess)) ==
+          'true';
+
+      final userPINCodeForAuthenticationValue = await secureStorageProvider
+          .get(SecureStorageKeys.userPINCodeForAuthentication);
+      final userPINCodeForAuthentication =
+          userPINCodeForAuthenticationValue == null ||
+              userPINCodeForAuthenticationValue == 'true';
+
+      var oidc4vcType = OIDC4VCType.EBSIV3;
+
+      for (final type in OIDC4VCType.values) {
+        final oidc4vcTypeName =
+            await secureStorageProvider.get(SecureStorageKeys.oidc4vcType);
+
+        if (oidc4vcTypeName != null) {
+          if (type.name == oidc4vcTypeName) {
+            oidc4vcType = type;
+          }
+        }
+      }
 
       final profileModel = ProfileModel(
         firstName: firstName,
@@ -108,6 +135,10 @@ class ProfileCubit extends Cubit<ProfileState> {
         isEnterprise: isEnterprise,
         isBiometricEnabled: isBiometricEnabled,
         isAlertEnabled: isAlertEnabled,
+        userConsentForIssuerAccess: userConsentForIssuerAccess,
+        userConsentForVerifierAccess: userConsentForVerifierAccess,
+        userPINCodeForAuthentication: userPINCodeForAuthentication,
+        oidc4vcType: oidc4vcType,
       );
 
       emit(
@@ -116,8 +147,12 @@ class ProfileCubit extends Cubit<ProfileState> {
           status: AppStatus.success,
         ),
       );
-    } catch (e) {
-      log.e('something went wrong', e);
+    } catch (e, s) {
+      log.e(
+        'something went wrong',
+        error: e,
+        stackTrace: s,
+      );
       emit(
         state.error(
           messageHandler: ResponseMessage(
@@ -185,14 +220,38 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.isAlertEnabled.toString(),
       );
 
+      await secureStorageProvider.set(
+        SecureStorageKeys.userConsentForIssuerAccess,
+        profileModel.userConsentForIssuerAccess.toString(),
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.userConsentForVerifierAccess,
+        profileModel.userConsentForVerifierAccess.toString(),
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.userPINCodeForAuthentication,
+        profileModel.userPINCodeForAuthentication.toString(),
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.oidc4vcType,
+        profileModel.oidc4vcType.name,
+      );
+
       emit(
         state.copyWith(
           model: profileModel,
           status: AppStatus.success,
         ),
       );
-    } catch (e) {
-      log.e('something went wrong', e);
+    } catch (e, s) {
+      log.e(
+        'something went wrong',
+        error: e,
+        stackTrace: s,
+      );
 
       emit(
         state.error(
@@ -214,6 +273,24 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
+  Future<void> setUserConsentForIssuerAccess({bool enabled = false}) async {
+    final profileModel =
+        state.model.copyWith(userConsentForIssuerAccess: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> setUserConsentForVerifierAccess({bool enabled = false}) async {
+    final profileModel =
+        state.model.copyWith(userConsentForVerifierAccess: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> setUserPINCodeForAuthentication({bool enabled = false}) async {
+    final profileModel =
+        state.model.copyWith(userPINCodeForAuthentication: enabled);
+    await update(profileModel);
+  }
+
   Future<void> updatePolygonIdNetwork({
     required PolygonIdNetwork polygonIdNetwork,
     required PolygonIdCubit polygonIdCubit,
@@ -224,6 +301,12 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     await polygonIdCubit.setEnv(polygonIdNetwork);
 
+    await update(profileModel);
+  }
+
+  Future<void> updateOIDC4VCType(OIDC4VCType oidc4vcTye) async {
+    emit(state.copyWith(status: AppStatus.loading));
+    final profileModel = state.model.copyWith(oidc4vcType: oidc4vcTye);
     await update(profileModel);
   }
 

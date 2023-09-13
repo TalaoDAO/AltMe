@@ -28,7 +28,6 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
-import 'package:ebsi/ebsi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -56,8 +55,10 @@ class App extends StatelessWidget {
         ),
         BlocProvider<WalletConnectCubit>(
           create: (context) => WalletConnectCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
             connectedDappRepository:
                 ConnectedDappRepository(secure_storage.getSecureStorage),
+            routeCubit: context.read<RouteCubit>(),
           ),
         ),
         BlocProvider<DeepLinkCubit>(create: (context) => DeepLinkCubit()),
@@ -125,6 +126,7 @@ class App extends StatelessWidget {
             homeCubit: context.read<HomeCubit>(),
             keyGenerator: KeyGenerator(),
             credentialsCubit: context.read<CredentialsCubit>(),
+            walletConnectCubit: context.read<WalletConnectCubit>(),
           ),
         ),
         BlocProvider<PolygonIdCubit>(
@@ -142,7 +144,8 @@ class App extends StatelessWidget {
             credentialsCubit: context.read<CredentialsCubit>(),
             didKitProvider: DIDKitProvider(),
             secureStorageProvider: secure_storage.getSecureStorage,
-            ebsi: Ebsi(Dio()),
+            profileCubit: context.read<ProfileCubit>(),
+            didCubit: context.read<DIDCubit>(),
           ),
         ),
         BlocProvider<QRCodeScanCubit>(
@@ -159,6 +162,8 @@ class App extends StatelessWidget {
             walletConnectCubit: context.read<WalletConnectCubit>(),
             secureStorageProvider: secure_storage.getSecureStorage,
             polygonIdCubit: context.read<PolygonIdCubit>(),
+            didCubit: context.read<DIDCubit>(),
+            didKitProvider: DIDKitProvider(),
           ),
         ),
         BlocProvider(
@@ -253,7 +258,7 @@ class MaterialAppDefinition extends StatelessWidget {
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate
+              GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             home: const SplashPage(),

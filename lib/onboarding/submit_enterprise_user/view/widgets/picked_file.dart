@@ -35,7 +35,7 @@ class PickedFile extends StatelessWidget {
                 Icons.delete,
                 color: Colors.red,
               ),
-            )
+            ),
           ],
         ),
       ),

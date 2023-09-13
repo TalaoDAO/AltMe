@@ -353,7 +353,7 @@
   "termsOfUse": "Terms of Use & Confidentiality",
   "scanFingerprintToAuthenticate": "Scan Fingerprint to Authenticate",
   "biometricsNotSupported": "Biometrics not supported",
-  "yourDeviceDoseNotSupportBiometricsAuthentication": "Your device dose not supports biometrics authentication",
+  "deviceDoNotSupportBiometricsAuthentication": "Your device dose not supports biometrics authentication",
   "biometricsEnabledMessage": "You can now unlock app with your biometrics.",
   "biometricsDisabledMessage": "Your biometrics has been disabled.",
   "exportSecretKey": "Export secret key",
@@ -803,9 +803,11 @@
   "transactionDoneDialogDescription": "It can take a few minutes for the transfer to complete",
   "withdrawalFailedMessage": "The withdrawal from the account was unsuccessful",
   "credentialRequiredMessage": "You need to get those credentials in your wallet to acquire this card:",
-  "manageKeyDecentralizedId": "Key Decentralized ID",
-  "manageEbsiDecentralizedId": "EBSI Decentralized ID",
+  "manageKeyDecentralizedIdEdSA": "Key Decentralized ID EdDSA",
+  "manageEbsiV2DecentralizedId": "EBSI V2 Decentralized ID",
+  "manageKeyDecentralizedIDSecp256k1": "Key Decentralized ID Secp256k1",
   "managePolygonIdDecentralizedId": "Polygon Decentralized ID",
+  "manageEbsiV3DecentralizedId": "EBSI V3 Decentralized ID",
   "requiredCredentialNotFoundTitle": "We are unable to find the credential\nyou need in Talao.",
   "requiredCredentialNotFoundSubTitle": "The required credential is not in your wallet",
   "requiredCredentialNotFoundDescription": "Please ask Tezotopia to reach us on :",
@@ -873,6 +875,8 @@
   "polygonCredentialsHomeSubtitle": "Prove your access rights in the Polygon ecosystem",
   "polygonCredentialsDiscoverTitle": "Get PolygonID credentials",
   "polygonCredentialsDiscoverSubtitle": "Prove your access rights in the Polygon ecosystem",
+  "pendingCredentialsHomeTitle": "My Pending credentials",
+  "pendingCredentialsHomeSubtitle": "Prove your access rights.",
   "restore": "Restore",
   "backup": "Backup",
   "takePicture": "Take a picture",
@@ -910,5 +914,36 @@
   "approve": "Approve",
   "noInformationWillBeSharedFromThisCredentialMessage": "No information will be shared from this credential (Zero Knowledge Proof).",
   "burn": "Burn",
-  "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT": "Do you really want to burn this NFT ?"
+  "wouldYouLikeToConfirmThatYouIntendToBurnThisNFT": "Do you really want to burn this NFT ?",
+  "pleaseAddXtoConnectToTheDapp": "Please add {chain} account to connect to the dapp.",
+  "@pleaseAddXtoConnectToTheDapp": {
+    "description": "",
+    "placeholders": {
+      "chain": {}
+    }
+  },
+  "pleaseSwitchPolygonNetwork": "Please switch to polygon {networkType} to perform this action.",
+  "@pleaseSwitchPolygonNetwork": {
+    "description": "",
+    "placeholders": {
+      "networkType": {}
+    }
+  },
+  "oidc4vcProfile": "OIDC4VC Profile",
+  "pleaseSwitchToCorrectOIDC4VCProfile": "Please switch to correct OIDC4VC profile.",
+  "authenticationSuccess": "Authentication Success",
+  "format": "Format",
+  "pleaseInsertTheSecredCodeReceived": "Please insert the secret code received.",
+  "userConsentForIssuerAccess": "User consent for issuer access",
+  "userConsentForVerifierAccess": "User consent for verifier access",
+  "userPINCodeForAuthentication": "User PIN code for authentication",
+  "youcanSelectOnlyXCredential": "You can select only {count} credential(s).",
+  "@youcanSelectOnlyXCredential": {
+    "description": "",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "theCredentialIsNotReady": "The credential is not ready.",
+  "theCredentialIsNoMoreReady": "The ceredential is no more available."
 }

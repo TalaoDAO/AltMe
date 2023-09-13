@@ -49,12 +49,10 @@ class BackupPolygonIdIdentityCubit extends Cubit<BackupPolygonIdIdentityState> {
 
       await polygonIdCubit.initialise();
 
-      final polygonIdNetwork =
-          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
-
       String network = Parameters.POLYGON_MAIN_NETWORK;
 
-      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+      if (polygonIdCubit.state.currentNetwork ==
+          PolygonIdNetwork.PolygonMainnet) {
         network = Parameters.POLYGON_MAIN_NETWORK;
       } else {
         network = Parameters.POLYGON_TEST_NETWORK;

@@ -16,6 +16,7 @@ class ErrorView extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
+      // ignore: require_trailing_commas
       children: [
         Center(
           child: Text(
@@ -33,7 +34,7 @@ class ErrorView extends StatelessWidget {
             fontSize: 14,
             verticalSpacing: 10,
           ),
-        )
+        ),
       ],
     );
   }

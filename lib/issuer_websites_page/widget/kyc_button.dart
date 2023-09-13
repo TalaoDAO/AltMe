@@ -47,7 +47,7 @@ class KYCButton extends StatelessWidget {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),

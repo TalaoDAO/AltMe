@@ -60,7 +60,14 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       var polygonIdNetwork =
           await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
 
+      final String ipfsApiKey = dotenv.get('IPFS_API_KEY');
+      final String ipfsApiKeySecret = dotenv.get('IPFS_API_KEY_SECRET');
+
+      final String ipfsUrl =
+          'https://$ipfsApiKey:$ipfsApiKeySecret@ipfs.infura.io:5001';
+
       String network = Parameters.POLYGON_MAIN_NETWORK;
+      PolygonIdNetwork currentNetwork = PolygonIdNetwork.PolygonMainnet;
 
       // set polygon main network a first
       if (polygonIdNetwork == null) {
@@ -74,6 +81,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
 
       if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
         network = Parameters.POLYGON_MAIN_NETWORK;
+        currentNetwork = PolygonIdNetwork.PolygonMainnet;
         await polygonId.init(
           network: network,
           web3Url: Parameters.INFURA_URL,
@@ -81,9 +89,11 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.ID_STATE_CONTRACT_ADDR,
           pushUrl: Parameters.PUSH_URL,
+          ipfsUrl: ipfsUrl,
         );
       } else {
         network = Parameters.POLYGON_TEST_NETWORK;
+        currentNetwork = PolygonIdNetwork.PolygonMumbai;
         await polygonId.init(
           network: network,
           web3Url: Parameters.INFURA_MUMBAI_URL,
@@ -91,6 +101,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.MUMBAI_ID_STATE_CONTRACT_ADDR,
           pushUrl: Parameters.MUMBAI_PUSH_URL,
+          ipfsUrl: ipfsUrl,
         );
       }
 
@@ -100,7 +111,13 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       //addIdentity
       await polygonId.addIdentity(mnemonic: mnemonic!, network: network);
       log.i('$network - get Identity');
-      emit(state.copyWith(status: AppStatus.init, isInitialised: true));
+      emit(
+        state.copyWith(
+          status: AppStatus.init,
+          isInitialised: true,
+          currentNetwork: currentNetwork,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AppStatus.error, isInitialised: false));
       throw Exception('INIT_ISSUE - $e');
@@ -114,6 +131,12 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       /// PolygonId SDK update
       await dotenv.load();
 
+      final String ipfsApiKey = dotenv.get('IPFS_API_KEY');
+      final String ipfsApiKeySecret = dotenv.get('IPFS_API_KEY_SECRET');
+
+      final String ipfsUrl =
+          'https://$ipfsApiKey:$ipfsApiKeySecret@ipfs.infura.io:5001';
+
       String network = Parameters.POLYGON_MAIN_NETWORK;
       if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet) {
         network = Parameters.POLYGON_MAIN_NETWORK;
@@ -124,6 +147,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.ID_STATE_CONTRACT_ADDR,
           pushUrl: Parameters.PUSH_URL,
+          ipfsUrl: ipfsUrl,
         );
       } else {
         network = Parameters.POLYGON_TEST_NETWORK;
@@ -134,6 +158,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.MUMBAI_ID_STATE_CONTRACT_ADDR,
           pushUrl: Parameters.MUMBAI_PUSH_URL,
+          ipfsUrl: ipfsUrl,
         );
       }
 
@@ -143,7 +168,12 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       //addIdentity
       await polygonId.addIdentity(mnemonic: mnemonic!, network: network);
       log.i('$network - get Identity');
-      emit(state.copyWith(status: AppStatus.idle));
+      emit(
+        state.copyWith(
+          status: AppStatus.idle,
+          currentNetwork: polygonIdNetwork,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AppStatus.error));
       throw Exception('UPDATE_ISSUE - $e');
@@ -229,7 +259,34 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     final Iden3MessageEntity iden3MessageEntity =
         await getIden3Message(message: state.scannedResponse!);
 
-    if (iden3MessageEntity.messageType == Iden3MessageType.auth) {
+    bool checkNetwork = true;
+
+    if (iden3MessageEntity.messageType == Iden3MessageType.authRequest) {
+      final body = iden3MessageEntity.body as AuthBodyRequest;
+
+      if (body.scope!.isNotEmpty) {
+        log.i('do not consider network for verifier');
+        checkNetwork = false;
+      }
+    }
+
+    if (checkNetwork &&
+        !iden3MessageEntity.from.contains(state.currentNetwork.tester)) {
+      emit(
+        state.copyWith(
+          status: AppStatus.error,
+          message: StateMessage.error(
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_pleaseSwitchPolygonNetwork,
+            ),
+            injectedMessage: state.currentNetwork.oppositeNetwork,
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (iden3MessageEntity.messageType == Iden3MessageType.authRequest) {
       final body = iden3MessageEntity.body as AuthBodyRequest;
 
       if (body.scope!.isEmpty) {
@@ -249,16 +306,63 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           ),
         );
       }
-    } else if (iden3MessageEntity.messageType == Iden3MessageType.offer) {
-      log.i('get claims');
-      emit(
-        state.copyWith(
-          status: AppStatus.loading,
-          polygonAction: PolygonIdAction.offer,
-        ),
-      );
     } else if (iden3MessageEntity.messageType ==
-        Iden3MessageType.contractFunctionCall) {
+        Iden3MessageType.credentialOffer) {
+      try {
+        final List<ClaimEntity> claims = await getClaims(
+          iden3MessageEntity: iden3MessageEntity,
+        );
+
+        final List<CredentialManifest> credentialManifests =
+            <CredentialManifest>[];
+
+        for (final claimEntity in claims) {
+          dynamic response;
+
+          // Try to get Credential manifest for kycAgeCredential
+          // and kycCountryOfResidence and proofOfTwitterStatsUrl
+          if (claimEntity.type == CredentialSubjectType.kycAgeCredential.name) {
+            response = await client.get(Urls.kycAgeCredentialUrl);
+          } else if (claimEntity.type ==
+              CredentialSubjectType.kycCountryOfResidence.name) {
+            response = await client.get(Urls.kycCountryOfResidenceUrl);
+          } else if (claimEntity.type ==
+              CredentialSubjectType.proofOfTwitterStats.name) {
+            response = await client.get(Urls.proofOfTwitterStatsUrl);
+          } else if (claimEntity.type ==
+              CredentialSubjectType.civicPassCredential.name) {
+            response = await client.get(Urls.civicPassCredentialUrl);
+          } else {
+            response = await client.get(Urls.defaultPolygonIdCardUrl);
+          }
+
+          final CredentialManifest credentialManifest =
+              CredentialManifest.fromJson(response as Map<String, dynamic>);
+
+          credentialManifests.add(credentialManifest);
+        }
+
+        if (claims.length != credentialManifests.length) {
+          throw Exception();
+        }
+
+        log.i('get claims');
+        emit(
+          state.copyWith(
+            status: AppStatus.loading,
+            polygonAction: PolygonIdAction.offer,
+            claims: claims,
+            credentialManifests: credentialManifests,
+          ),
+        );
+      } catch (e) {
+        log.e('can not get the credntials manifest for polygon error: $e');
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
+    } else if (iden3MessageEntity.messageType ==
+        Iden3MessageType.proofContractInvokeRequest) {
       log.i('contractFunctionCall');
       emit(
         state.copyWith(
@@ -282,12 +386,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       final mnemonic =
           await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
-      final polygonIdNetwork =
-          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
-
       String network = Parameters.POLYGON_MAIN_NETWORK;
 
-      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+      if (state.currentNetwork == PolygonIdNetwork.PolygonMainnet) {
         network = Parameters.POLYGON_MAIN_NETWORK;
       } else {
         network = Parameters.POLYGON_TEST_NETWORK;
@@ -359,12 +460,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   }) async {
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
 
-    final polygonIdNetwork =
-        await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
-
     String network = Parameters.POLYGON_MAIN_NETWORK;
 
-    if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+    if (state.currentNetwork == PolygonIdNetwork.PolygonMainnet) {
       network = Parameters.POLYGON_MAIN_NETWORK;
     } else {
       network = Parameters.POLYGON_TEST_NETWORK;
@@ -378,14 +476,15 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     return claims;
   }
 
-  Future<void> addPolygonIdCredentials({
-    required List<ClaimEntity> claims,
-  }) async {
+  Future<void> addPolygonIdCredentials() async {
     try {
       log.i('add Claims');
       emit(state.copyWith(status: AppStatus.loading));
-      for (final claim in claims) {
-        await addToList(claim);
+      for (int i = 0; i < state.claims!.length; i++) {
+        await addToList(
+          claimEntity: state.claims![i],
+          credentialManifest: state.credentialManifests![i],
+        );
       }
       emit(state.copyWith(status: AppStatus.goBack));
     } catch (e) {
@@ -407,33 +506,12 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     }
   }
 
-  Future<void> addToList(ClaimEntity claimEntity) async {
+  Future<void> addToList({
+    required ClaimEntity claimEntity,
+    required CredentialManifest credentialManifest,
+  }) async {
     final jsonCredential = claimEntity.info;
     final credentialPreview = Credential.fromJson(jsonCredential);
-
-    CredentialManifest? credentialManifest;
-
-    try {
-      // Try to get Credential manifest for kycAgeCredential
-      // and kycCountryOfResidence and proofOfTwitterStatsUrl
-      if (claimEntity.type == CredentialSubjectType.kycAgeCredential.name) {
-        final response = await client.get(Urls.kycAgeCredentialUrl);
-        credentialManifest =
-            CredentialManifest.fromJson(response as Map<String, dynamic>);
-      } else if (claimEntity.type ==
-          CredentialSubjectType.kycCountryOfResidence.name) {
-        final response = await client.get(Urls.kycCountryOfResidenceUrl);
-        credentialManifest =
-            CredentialManifest.fromJson(response as Map<String, dynamic>);
-      } else if (claimEntity.type ==
-          CredentialSubjectType.proofOfTwitterStats.name) {
-        final response = await client.get(Urls.proofOfTwitterStatsUrl);
-        credentialManifest =
-            CredentialManifest.fromJson(response as Map<String, dynamic>);
-      }
-    } catch (e) {
-      log.e('can not get the credntials manifest for polygon error: $e');
-    }
 
     final credentialModel = CredentialModel(
       id: claimEntity.id,
@@ -462,12 +540,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     required Iden3MessageEntity iden3MessageEntity,
     required String mnemonic,
   }) async {
-    final polygonIdNetwork =
-        await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
-
     String network = Parameters.POLYGON_MAIN_NETWORK;
 
-    if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+    if (state.currentNetwork == PolygonIdNetwork.PolygonMainnet) {
       network = Parameters.POLYGON_MAIN_NETWORK;
     } else {
       network = Parameters.POLYGON_TEST_NETWORK;

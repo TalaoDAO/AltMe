@@ -146,4 +146,11 @@ enum ResponseString {
   RESPONSE_STRING_downloadingCircuitLoadingMessage,
   RESPONSE_STRING_errorGeneratingProof,
   RESPONSE_STRING_successfullyGeneratingProof,
+  RESPONSE_STRING_pleaseAddXtoConnectToTheDapp,
+  RESPONSE_STRING_pleaseSwitchPolygonNetwork,
+  RESPONSE_STRING_pleaseSwitchToRightOIDC4VCProfile,
+  RESPONSE_STRING_authenticationSuccess,
+  RESPONSE_STRING_youcanSelectOnlyXCredential,
+  RESPONSE_STRING_theCredentialIsNotReady,
+  RESPONSE_STRING_theCredentialIsNoMoreReady,
 }

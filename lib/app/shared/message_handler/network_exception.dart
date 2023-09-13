@@ -10,7 +10,7 @@ class NetworkException with MessageHandler {
   final NetworkError message;
   final dynamic data;
 
-  static NetworkException handleResponse(int? statusCode, DioError? error) {
+  static NetworkException handleResponse(int? statusCode, DioException? error) {
     switch (statusCode) {
       // case 200: //No Error
       // case 201: //No Error
@@ -42,6 +42,11 @@ class NetworkException with MessageHandler {
       case 409:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_CONFLICT,
+          data: error?.response?.data,
+        );
+      case 410:
+        return NetworkException(
+          message: NetworkError.NETWORK_ERROR_NOT_READY,
           data: error?.response?.data,
         );
       case 412:
@@ -87,44 +92,48 @@ class NetworkException with MessageHandler {
   }) {
     if (error is Exception) {
       NetworkException networkException;
-      if (error is DioError) {
+      if (error is DioException) {
         switch (error.type) {
-          case DioErrorType.cancel:
+          case DioExceptionType.cancel:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_REQUEST_CANCELLED,
               data: error.response?.data,
             );
-            break;
-          case DioErrorType.connectTimeout:
+          case DioExceptionType.connectionTimeout:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT,
               data: error.response?.data,
             );
-            break;
-          case DioErrorType.other:
+          case DioExceptionType.unknown:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
               data: error.response?.data,
             );
-            break;
-          case DioErrorType.receiveTimeout:
+          case DioExceptionType.receiveTimeout:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_SEND_TIMEOUT,
               data: error.response?.data,
             );
-            break;
-          case DioErrorType.response:
+          case DioExceptionType.badResponse:
             networkException = handleResponse(
               error.response?.statusCode,
               error,
             );
-            break;
-          case DioErrorType.sendTimeout:
+          case DioExceptionType.sendTimeout:
             networkException = NetworkException(
               message: NetworkError.NETWORK_ERROR_SEND_TIMEOUT,
               data: error.response?.data,
             );
-            break;
+          case DioExceptionType.badCertificate:
+            networkException = NetworkException(
+              message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR,
+              data: error.response?.data,
+            );
+          case DioExceptionType.connectionError:
+            networkException = NetworkException(
+              message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR,
+              data: error.response?.data,
+            );
         }
       } else if (error is SocketException) {
         networkException = NetworkException(
@@ -150,7 +159,11 @@ class NetworkException with MessageHandler {
   }
 
   @override
-  String getMessage(BuildContext context, MessageHandler messageHandler) {
+  String getMessage(
+    BuildContext context,
+    MessageHandler messageHandler, {
+    String? injectedMessage,
+  }) {
     if (messageHandler is NetworkException) {
       switch (messageHandler.message) {
         case NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED:
@@ -197,6 +210,8 @@ class NetworkException with MessageHandler {
         case NetworkError.NETWORK_ERROR_PRECONDITION_FAILED:
           return NetworkError.NETWORK_ERROR_PRECONDITION_FAILED
               .localise(context);
+        case NetworkError.NETWORK_ERROR_NOT_READY:
+          return NetworkError.NETWORK_ERROR_NOT_READY.localise(context);
       }
     }
     return '';

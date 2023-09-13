@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/ebsi/verify_encoded_data.dart';
+import 'package:altme/oidc4vc/verify_encoded_data.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:did_kit/did_kit.dart';
-import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -23,7 +23,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     required this.secureStorageProvider,
     required this.client,
     required this.jwtDecode,
-    required this.polygonId,
+    required this.profileCubit,
     required this.polygonIdCubit,
   }) : super(const CredentialDetailsState());
 
@@ -31,7 +31,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   final SecureStorageProvider secureStorageProvider;
   final DioClient client;
   final JWTDecode jwtDecode;
-  final PolygonId polygonId;
+  final ProfileCubit profileCubit;
   final PolygonIdCubit polygonIdCubit;
 
   void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {
@@ -56,20 +56,26 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       }
     }
 
-    if (isEbsiIssuer(item)) {
-      final issuerDid = item.data['issuer']! as String;
+    if (item.jwt != null) {
+      /// issuer did
+      final issuerDid = item.issuer;
 
-      final encodedData = item.jwt!;
+      late final String issuerKid;
+      late final String encodedData;
+      if (item.jwt == null) {
+        issuerKid = item.data['proof']['verificationMethod'] as String;
+      } else {
+        encodedData = item.jwt!;
 
-      final Map<String, dynamic> header =
-          decodeHeader(jwtDecode: jwtDecode, token: encodedData);
-
-      final String issuerKid = jsonEncode(header['kid']);
+        final Map<String, dynamic> header =
+            decodeHeader(jwtDecode: jwtDecode, token: encodedData);
+        issuerKid = header['kid'].toString();
+      }
 
       final VerificationType isVerified = await verifyEncodedData(
         issuerDid,
         issuerKid,
-        item.jwt!,
+        encodedData,
       );
 
       late CredentialStatus credentialStatus;
@@ -77,11 +83,9 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       switch (isVerified) {
         case VerificationType.verified:
           credentialStatus = CredentialStatus.active;
-          break;
         case VerificationType.notVerified:
         case VerificationType.unKnown:
           credentialStatus = CredentialStatus.suspended;
-          break;
       }
 
       emit(
@@ -90,23 +94,21 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           status: AppStatus.idle,
         ),
       );
-    } else if (isPolygonssuer(item)) {
+    } else if (item.isPolygonssuer) {
       final mnemonic =
           await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
       await polygonIdCubit.initialise();
 
-      final polygonIdNetwork =
-          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
-
       String network = Parameters.POLYGON_MAIN_NETWORK;
 
-      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+      if (item.issuer.contains('polygon:main')) {
         network = Parameters.POLYGON_MAIN_NETWORK;
       } else {
         network = Parameters.POLYGON_TEST_NETWORK;
       }
 
-      final List<ClaimEntity> claim = await polygonId.getClaimById(
+      final List<ClaimEntity> claim =
+          await polygonIdCubit.polygonId.getClaimById(
         claimId: item.id,
         mnemonic: mnemonic!,
         network: network,
@@ -120,16 +122,12 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         switch (claim[0].state) {
           case ClaimState.active:
             credentialStatus = CredentialStatus.active;
-            break;
           case ClaimState.expired:
             credentialStatus = CredentialStatus.suspended;
-            break;
           case ClaimState.pending:
             credentialStatus = CredentialStatus.pending;
-            break;
           case ClaimState.revoked:
             credentialStatus = CredentialStatus.suspended;
-            break;
         }
       }
 
@@ -160,6 +158,14 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   }
 
   Future<void> verifyProofOfPurpose(CredentialModel item) async {
+    if (item.data.isEmpty) {
+      return emit(
+        state.copyWith(
+          credentialStatus: CredentialStatus.pending,
+          status: AppStatus.idle,
+        ),
+      );
+    }
     final vcStr = jsonEncode(item.data);
     final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
     final result = await didKitProvider.verifyCredential(vcStr, optStr);

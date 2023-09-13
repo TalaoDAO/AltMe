@@ -8,6 +8,7 @@ class SecureStorageKeys {
   static const String lastNotifiedUNORewardId = 'lastNotifiedUNORewardId';
   static const String lastNotifiedXTZRewardId = 'lastNotifiedXTZRewardId';
   static const String isIdentityEnabled = 'isIdentityEnabled';
+  static const String isProfessionalEnabled = 'isProfessionalEnabled';
   static const String isCommunityEnabled = 'isCommunityEnabled';
   static const String isOtherEnabled = 'isOtherEnabled';
   static const String isGamingEnabled = 'isGamingEnabled';
@@ -20,7 +21,13 @@ class SecureStorageKeys {
   static const String isHumanityProofEnabled = 'isHumanityProofEnabled';
   static const String isWalletIntegrityEnabled = 'isWalletIntegrityEnabled';
   static const String isBiometricEnabled = 'fingerprintEnabled';
+
   static const String alertEnabled = 'alertEnabled';
+  static const String userConsentForIssuerAccess = 'userConsentForIssuerAccess';
+  static const String userConsentForVerifierAccess =
+      'userConsentForVerifierAccess';
+  static const String userPINCodeForAuthentication =
+      'userPINCodeForAuthentication';
 
   static const String pinCode = 'pinCode';
   static const String data = 'data';
@@ -75,4 +82,6 @@ class SecureStorageKeys {
   static const String buildNumber = 'buildNumber';
 
   static const String hasVerifiedMnemonics = 'hasVerifiedMnemonics';
+
+  static const String oidc4vcType = 'oidc4vcType';
 }

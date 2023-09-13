@@ -8,10 +8,13 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
+import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
+import 'package:eth_sig_util/eth_sig_util.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallet_connect/wallet_connect.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -40,14 +43,16 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   late String encodedPayload;
   SigningType signingType = SigningType.micheline;
 
-  void decodeMessage({
+  Future<void> init({
     required ConnectionBridgeType connectionBridgeType,
-  }) {
+  }) async {
     if (isClosed) return;
     try {
       emit(state.loading());
 
       final log = getLogger('SignPayloadCubit');
+
+      String payloadMessage = '';
 
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
@@ -66,22 +71,67 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             encodedPayload = stringToHexPrefixedWith05(payload: payload);
             signingType = SigningType.raw;
           }
+          final bytes = hexToBytes(encodedPayload);
+          payloadMessage = utf8.decode(bytes, allowMalformed: true);
 
-          break;
         case ConnectionBridgeType.walletconnect:
-          encodedPayload = walletConnectCubit.state.signMessage!.data!;
+          if (walletConnectCubit.state.signType == Parameters.PERSONAL_SIGN) {
+            payloadMessage = getUtf8Message(
+              walletConnectCubit.state.parameters[0] as String,
+            );
+          } else if (walletConnectCubit.state.signType == Parameters.ETH_SIGN) {
+            payloadMessage = getUtf8Message(
+              walletConnectCubit.state.parameters[1] as String,
+            );
+          } else if (walletConnectCubit.state.signType ==
+                  Parameters.ETH_SIGN_TYPE_DATA ||
+              walletConnectCubit.state.signType ==
+                  Parameters.ETH_SIGN_TYPE_DATA_V4) {
+            payloadMessage = walletConnectCubit.state.parameters[1] as String;
+          } else if (walletConnectCubit.state.signType ==
+              Parameters.ETH_SIGN_TRANSACTION) {
+            payloadMessage = jsonEncode(walletConnectCubit.state.parameters[0]);
+          } else if (walletConnectCubit.state.signType ==
+              Parameters.ETH_SIGN_TRANSACTION) {
+            payloadMessage = jsonEncode(walletConnectCubit.state.parameters[0]);
+          } else {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
           signingType = SigningType.raw;
-          break;
       }
 
-      final bytes = hexToBytes(encodedPayload);
-      final String payloadMessage = utf8.decode(bytes, allowMalformed: true);
       log.i('payloadMessage - $payloadMessage');
+
+      String dAppName = '';
+      switch (connectionBridgeType) {
+        case ConnectionBridgeType.beacon:
+          dAppName =
+              beaconCubit.state.beaconRequest?.request?.appMetadata?.name ?? '';
+        case ConnectionBridgeType.walletconnect:
+          final List<SavedDappData> savedDapps =
+              await connectedDappRepository.findAll();
+
+          final SavedDappData? savedDappData =
+              savedDapps.firstWhereOrNull((SavedDappData element) {
+            return walletConnectCubit.state.sessionTopic ==
+                element.sessionData!.topic;
+          });
+
+          if (savedDappData != null) {
+            dAppName = savedDappData.sessionData!.peer.metadata.name;
+          }
+      }
+
+      log.i('dAppName - $dAppName');
 
       emit(
         state.copyWith(
-          appStatus: AppStatus.idle,
+          status: AppStatus.idle,
           payloadMessage: payloadMessage,
+          dAppName: dAppName,
         ),
       );
     } catch (e) {
@@ -117,11 +167,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         case ConnectionBridgeType.beacon:
           final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
 
-          final CryptoAccountData? currentAccount =
-              walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-            (element) =>
-                element.walletAddress == beaconRequest.request!.sourceAddress!,
-          );
+          final CryptoAccountData? currentAccount = walletCubit
+              .getCryptoAccountData(beaconRequest.request!.sourceAddress!);
 
           if (currentAccount == null) {
             throw ResponseMessage(
@@ -148,36 +195,25 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
           success = json.decode(response['success'].toString()) as bool;
 
-          break;
         case ConnectionBridgeType.walletconnect:
           final walletConnectState = walletConnectCubit.state;
-          final wcClient = walletConnectState.wcClients.firstWhereOrNull(
-            (element) =>
-                element.remotePeerId ==
-                walletConnectCubit.state.currentDappPeerId,
-          );
 
-          log.i('wcClient -$wcClient');
-          if (wcClient == null) {
-            throw ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            );
-          }
+          final String publicKey;
 
-          final List<SavedDappData> savedDapps =
-              await connectedDappRepository.findAll();
-
-          final SavedDappData? dappData = savedDapps.firstWhereOrNull(
-            (element) {
-              return element.wcSessionStore != null &&
-                  element.wcSessionStore!.session.key ==
-                      wcClient.sessionStore.session.key;
-            },
-          );
-
-          log.i('dappData -$dappData');
-          if (dappData == null) {
+          /// Extracting secret key
+          if (walletConnectCubit.state.signType ==
+                  Parameters.ETH_SIGN_TYPE_DATA ||
+              walletConnectCubit.state.signType ==
+                  Parameters.ETH_SIGN_TYPE_DATA_V4 ||
+              walletConnectCubit.state.signType == Parameters.ETH_SIGN) {
+            publicKey = walletConnectState.parameters[0].toString();
+          } else if (walletConnectCubit.state.signType ==
+              Parameters.PERSONAL_SIGN) {
+            publicKey = walletConnectState.parameters[1].toString();
+          } else if (walletConnectCubit.state.signType ==
+              Parameters.ETH_SIGN_TRANSACTION) {
+            publicKey = walletConnectState.parameters[0]['from'].toString();
+          } else {
             throw ResponseMessage(
               ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
@@ -185,14 +221,9 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           }
 
           final CryptoAccountData? currentAccount =
-              walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-            (element) =>
-                element.walletAddress == dappData.walletAddress &&
-                element.blockchainType == dappData.blockchainType,
-          );
+              walletCubit.getCryptoAccountData(publicKey);
 
           log.i('currentAccount -$currentAccount');
-          // ignore: invariant_booleans
           if (currentAccount == null) {
             throw ResponseMessage(
               ResponseString
@@ -200,57 +231,65 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             );
           }
 
-          log.i('type -${walletConnectCubit.state.signMessage!.type}}');
+          final Credentials credentials =
+              EthPrivateKey.fromHex(currentAccount.secretKey);
 
-          switch (walletConnectCubit.state.signMessage!.type) {
-            /// rejected in wallet_connect_cubit
-            case WCSignType.MESSAGE:
-              break;
+          /// sign
+          if (walletConnectCubit.state.signType == Parameters.PERSONAL_SIGN ||
+              walletConnectCubit.state.signType == Parameters.ETH_SIGN) {
+            final String signature = hex.encode(
+              credentials.signPersonalMessageToUint8List(
+                Uint8List.fromList(
+                  utf8.encode(state.payloadMessage!),
+                ),
+              ),
+            );
+            walletConnectCubit
+                .completer[walletConnectCubit.completer.length - 1]!
+                .complete('0x$signature');
+            success = true;
+          } else if (walletConnectCubit.state.signType ==
+                  Parameters.ETH_SIGN_TYPE_DATA ||
+              walletConnectCubit.state.signType ==
+                  Parameters.ETH_SIGN_TYPE_DATA_V4) {
+            final signTypedData = EthSigUtil.signTypedData(
+              privateKey: currentAccount.secretKey,
+              jsonData: state.payloadMessage!,
+              version: TypedDataVersion.V4,
+            );
+            walletConnectCubit
+                .completer[walletConnectCubit.completer.length - 1]!
+                .complete(signTypedData);
+            success = true;
+          } else if (walletConnectCubit.state.signType ==
+              Parameters.ETH_SIGN_TRANSACTION) {
+            await dotenv.load();
+            final infuraApiKey = dotenv.get('INFURA_API_KEY');
+            final ethRpcUrl = Urls.infuraBaseUrl + infuraApiKey;
+            final httpClient = Client();
 
-            /// rejected in wallet_connect_cubit
-            case WCSignType.TYPED_MESSAGE:
-              break;
+            final Web3Client ethClient = Web3Client(ethRpcUrl, httpClient);
 
-            case WCSignType.PERSONAL_MESSAGE:
-              const messagePrefix = '\u0019Ethereum Signed Message:\n';
+            final Uint8List sig = await ethClient.signTransaction(
+              credentials,
+              walletConnectCubit.state.transaction!,
+            );
 
-              final payloadBytes = hexToBytes(encodedPayload);
+            // Sign the transaction
+            final String signedTx = hex.encode(sig);
 
-              final prefix = messagePrefix + payloadBytes.length.toString();
-              final prefixBytes = ascii.encode(prefix);
+            // Return the signed transaction as a hexadecimal string
 
-              final concatPayload =
-                  Uint8List.fromList(prefixBytes + payloadBytes);
-
-              final Credentials credentials =
-                  EthPrivateKey.fromHex(currentAccount.secretKey);
-
-              final MsgSignature signature =
-                  credentials.signToEcSignature(concatPayload);
-
-              final r = signature.r;
-              final s = signature.s;
-              final v = signature.v;
-
-              final rHex = r.toRadixString(16).padLeft(64, '0');
-              final sHex = s.toRadixString(16).padLeft(64, '0');
-              final vHex = v.toRadixString(16);
-
-              log.i('rHex -$rHex');
-              log.i('sHex -$sHex');
-              log.i('vHex -$vHex');
-
-              final signedDataHex = '0x$rHex$sHex$vHex';
-              log.i('signedDataAsHex -$signedDataHex');
-
-              wcClient.approveRequest<String>(
-                id: walletConnectState.signId!,
-                result: signedDataHex,
-              );
-              success = true;
-              break;
+            walletConnectCubit
+                .completer[walletConnectCubit.completer.length - 1]!
+                .complete('0x$signedTx');
+            success = true;
+          } else {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
           }
-          break;
       }
 
       if (success) {
@@ -260,9 +299,11 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           final uri = Uri.parse(url);
           emit(
             state.copyWith(
-              appStatus: AppStatus.success,
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+              status: AppStatus.success,
+              message: StateMessage.success(
+                messageHandler: ResponseMessage(
+                  ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+                ),
               ),
             ),
           );
@@ -270,9 +311,11 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         } else {
           emit(
             state.copyWith(
-              appStatus: AppStatus.success,
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+              status: AppStatus.success,
+              message: StateMessage.success(
+                messageHandler: ResponseMessage(
+                  ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+                ),
               ),
             ),
           );
@@ -310,22 +353,12 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           id: beaconCubit.state.beaconRequest!.request!.id!,
           signature: null,
         );
-        break;
       case ConnectionBridgeType.walletconnect:
         log.i('walletconnect Signing rejected');
-        final walletConnectState = walletConnectCubit.state;
 
-        final wcClient = walletConnectState.wcClients.firstWhereOrNull(
-          (element) =>
-              element.remotePeerId ==
-              walletConnectCubit.state.currentDappPeerId,
-        );
-
-        if (wcClient != null) {
-          wcClient.rejectRequest(id: walletConnectState.signId!);
-        }
-        break;
+        walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
+            .complete('Failed');
     }
-    emit(state.copyWith(appStatus: AppStatus.goBack));
+    emit(state.copyWith(status: AppStatus.goBack));
   }
 }

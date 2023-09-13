@@ -1,55 +1,70 @@
 import 'package:altme/dashboard/home/tab_bar/credentials/credential.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 
-List<CredentialModel> getCredentialsFromFilterList(
-  List<Field> filterList,
-  List<CredentialModel> credentialList,
-) {
+List<CredentialModel> getCredentialsFromFilterList({
+  required List<Field> filterList,
+  required List<CredentialModel> credentialList,
+  required bool? isJwtVpInJwtVCRequired,
+  required bool? presentLdpVc,
+  required bool? presentJwtVc,
+}) {
   /// If we have some instructions we filter the wallet's
   /// crendential list whith it
   if (filterList.isNotEmpty) {
-    /// Filter the list of credentials
-    credentialList.removeWhere((credential) {
-      /// A credential must satisfy each field to be candidate for presentation
-      var isPresentationCandidate = true;
-      for (final field in filterList) {
-        /// A credential must statisfy at least one path and
-        /// match pattern to be selected
-        var isFieldCandidate = false;
+    final selectedCredential = <CredentialModel>[];
+
+    /// remove ldp_vp if jwt_vp is required
+    if (isJwtVpInJwtVCRequired != null && isJwtVpInJwtVCRequired) {
+      credentialList.removeWhere(
+        (CredentialModel credentialModel) => credentialModel.jwt == null,
+      );
+    }
+
+    /// remove ldp_vc
+    if (presentJwtVc != null && presentJwtVc) {
+      credentialList.removeWhere(
+        (CredentialModel credentialModel) => credentialModel.jwt == null,
+      );
+    }
+
+    /// remove jwt_vc
+    if (presentLdpVc != null && presentLdpVc) {
+      credentialList.removeWhere(
+        (CredentialModel credentialModel) => credentialModel.jwt != null,
+      );
+    }
+
+    for (final field in filterList) {
+      for (final credential in credentialList) {
         for (final path in field.path) {
           final searchList = getTextsFromCredential(path, credential.data);
           if (searchList.isNotEmpty) {
-            /// I remove credential not
+            /// remove unmatched credential
             searchList.removeWhere(
               (element) {
-                if (element == field.filter?.pattern ||
-                    field.filter?.pattern == null) {
+                if (field.filter?.pattern != null &&
+                    element == field.filter?.pattern) {
+                  return false;
+                } else if (field.filter?.contains != null &&
+                    element == field.filter?.contains?.containsConst) {
                   return false;
                 }
+
                 return true;
               },
             );
+          }
 
-            /// if [searchList] is not empty we mark this credential as
-            /// a valid candidate
-            if (searchList.isNotEmpty) {
-              isFieldCandidate = true;
-            }
+          /// if [searchList] is not empty we mark this credential as
+          /// a valid candidate
+          if (searchList.isNotEmpty) {
+            selectedCredential.add(credential);
           }
         }
-
-        /// A credential must satisfy each field to be candidate
-        /// for presentation
-        /// So, if one field condition is not satisfied
-        /// the current credential is not a candidate for presentation
-        if (isFieldCandidate == false) {
-          isPresentationCandidate = false;
-        }
       }
+    }
 
-      /// Remove non candidate credential from the list
-      return !isPresentationCandidate;
-    });
+    return selectedCredential;
   }
   return credentialList;
 }

@@ -55,6 +55,9 @@ class ConfirmConnectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    final walletConnectCubit = context.read<WalletConnectCubit>();
+
     return BlocListener<ConfirmConnectionCubit, ConfirmConnectionState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -115,21 +118,25 @@ class ConfirmConnectionView extends StatelessWidget {
                               .request!
                               .appMetadata!
                               .name!
-                          : context
-                              .read<WalletConnectCubit>()
-                              .state
-                              .currentDAppPeerMeta!
-                              .name,
+                          : walletConnectCubit.state.sessionProposalEvent!
+                              .params.proposer.metadata.name,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: Sizes.spaceXLarge),
                     const Permissions(),
-                    const SizedBox(height: Sizes.spaceXLarge),
+                    const SizedBox(height: Sizes.spaceNormal),
+                    if (connectionBridgeType ==
+                        ConnectionBridgeType.walletconnect) ...[
+                      Text(
+                        walletConnectCubit.state.sessionProposalEvent!.params
+                            .proposer.metadata.url,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: Sizes.spaceNormal),
+                    ],
                     SelectAccount(connectionBridgeType: connectionBridgeType),
-                    const SizedBox(
-                      height: Sizes.spaceNormal,
-                    ),
+                    const SizedBox(height: Sizes.spaceNormal),
                   ],
                 ),
               ),
@@ -147,20 +154,22 @@ class ConfirmConnectionView extends StatelessWidget {
                 children: [
                   BlocBuilder<WalletCubit, WalletState>(
                     builder: (context, walletState) {
+                      if (connectionBridgeType == ConnectionBridgeType.beacon &&
+                          walletState.currentAccount!.blockchainType
+                                  .connectionBridge !=
+                              connectionBridgeType) {
+                        return Container();
+                      }
+
                       return MyGradientButton(
                         verticalSpacing: 15,
                         borderRadius: Sizes.normalRadius,
                         text: l10n.connect,
-                        onPressed: walletState.currentAccount!.blockchainType
-                                    .connectionBridge !=
-                                connectionBridgeType
-                            ? null
-                            : () {
-                                context.read<ConfirmConnectionCubit>().connect(
-                                      connectionBridgeType:
-                                          connectionBridgeType,
-                                    );
-                              },
+                        onPressed: () {
+                          context.read<ConfirmConnectionCubit>().connect(
+                                connectionBridgeType: connectionBridgeType,
+                              );
+                        },
                       );
                     },
                   ),
