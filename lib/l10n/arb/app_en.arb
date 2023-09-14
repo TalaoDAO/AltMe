@@ -826,8 +826,7 @@
   "welDone": "Well done!",
   "mnemonicsVerifiedMessage": "Your revovery phrase is saved correctly.",
   "chatWith": "Chat with",
-  "sendAnEmail": "Send an email",
-  "service_not_registered_message": "This service is not registered.",
+  "sendAnEmail": "Send an email", 
   "bloometaPassHowToGetIt": "You need to present an Email proof and an Over 18 proof. If you don’t have those credentials already, claim them directly in Altme “Discover” section.",
   "bloometaPassExpirationDate": "This card will remain active and reusable for 1 YEAR.",
   "bloometaPassWhyGetThisCard": "Be among the few to get access to limited edition mints, gaming highlights and future airdrops. Claim your card today and enter the Bloometaverse !",
@@ -945,5 +944,8 @@
     }
   },
   "theCredentialIsNotReady": "The credential is not ready.",
-  "theCredentialIsNoMoreReady": "The ceredential is no more available."
+  "theCredentialIsNoMoreReady": "The ceredential is no more available.",
+  "lowSecurity": "Low Security",
+  "highSecurity": "High Security",
+  "theRequestIsRejected": "The request is rejected."
 }

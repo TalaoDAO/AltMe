@@ -718,6 +718,11 @@ class ResponseMessage with MessageHandler {
               .localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_theRequestIsRejected:
+          return ResponseString.RESPONSE_STRING_theRequestIsRejected.localise(
+            context,
+          );
       }
     }
     return '';

@@ -816,39 +816,53 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   /// verify jwt
   Future<void> verifyJWTBeforeLaunchingOIDC4VCANDSIOPV2Flow() async {
-    final String? requestUri = state.uri?.queryParameters['request_uri'];
-    final String? request = state.uri?.queryParameters['request'];
+    final isSecurityLow = profileCubit.state.model.isSecurityLow;
 
-    if (requestUri != null) {
-      encodedData = await fetchRequestUriPayload(url: requestUri);
-    } else {
-      encodedData = request;
-    }
-
-    final Map<String, dynamic> payload =
-        decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
-
-    final Map<String, dynamic> header =
-        decodeHeader(jwtDecode: jwtDecode, token: encodedData as String);
-
-    final String issuerDid = jsonEncode(payload['client_id']);
-    final String issuerKid = jsonEncode(header['kid']);
-
-    //check Signature
-    try {
-      final VerificationType isVerified = await verifyEncodedData(
-        issuerDid,
-        issuerKid,
-        encodedData.toString(),
-      );
-
-      if (isVerified == VerificationType.verified) {
-        emit(state.acceptHost());
-      } else {
-        emit(state.acceptHost(isRequestVerified: false));
-      }
-    } catch (e) {
+    if (isSecurityLow) {
       emit(state.acceptHost());
+    } else {
+      final String? requestUri = state.uri?.queryParameters['request_uri'];
+      final String? request = state.uri?.queryParameters['request'];
+
+      if (requestUri != null) {
+        encodedData = await fetchRequestUriPayload(url: requestUri);
+      } else {
+        encodedData = request;
+      }
+
+      final Map<String, dynamic> payload =
+          decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
+
+      final Map<String, dynamic> header =
+          decodeHeader(jwtDecode: jwtDecode, token: encodedData as String);
+
+      final String issuerDid = jsonEncode(payload['client_id']);
+      final String issuerKid = jsonEncode(header['kid']);
+
+      //check Signature
+      try {
+        final VerificationType isVerified = await verifyEncodedData(
+          issuerDid,
+          issuerKid,
+          encodedData.toString(),
+        );
+
+        if (isVerified == VerificationType.verified) {
+          emit(state.acceptHost());
+        } else {
+          emitError(
+            ResponseMessage(
+              ResponseString.RESPONSE_STRING_theRequestIsRejected,
+            ),
+          );
+        }
+      } catch (e) {
+        emitError(
+          ResponseMessage(
+            ResponseString.RESPONSE_STRING_theRequestIsRejected,
+          ),
+        );
+      }
     }
   }
 

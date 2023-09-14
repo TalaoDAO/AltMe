@@ -102,6 +102,12 @@ class ProfileCubit extends Cubit<ProfileState> {
               .get(SecureStorageKeys.userConsentForVerifierAccess)) ==
           'true';
 
+      final isSecurityLowValue =
+          await secureStorageProvider.get(SecureStorageKeys.isSecurityLow);
+
+      final isSecurityLow =
+          isSecurityLowValue == null || isSecurityLowValue == 'true';
+
       final userPINCodeForAuthenticationValue = await secureStorageProvider
           .get(SecureStorageKeys.userPINCodeForAuthentication);
       final userPINCodeForAuthentication =
@@ -139,6 +145,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         userConsentForVerifierAccess: userConsentForVerifierAccess,
         userPINCodeForAuthentication: userPINCodeForAuthentication,
         oidc4vcType: oidc4vcType,
+        isSecurityLow: isSecurityLow,
       );
 
       emit(
@@ -240,6 +247,11 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.oidc4vcType.name,
       );
 
+      await secureStorageProvider.set(
+        SecureStorageKeys.isSecurityLow,
+        profileModel.isSecurityLow.toString(),
+      );
+
       emit(
         state.copyWith(
           model: profileModel,
@@ -307,6 +319,11 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateOIDC4VCType(OIDC4VCType oidc4vcTye) async {
     emit(state.copyWith(status: AppStatus.loading));
     final profileModel = state.model.copyWith(oidc4vcType: oidc4vcTye);
+    await update(profileModel);
+  }
+
+  Future<void> setSecurityLevel({bool isSecurityLow = true}) async {
+    final profileModel = state.model.copyWith(isSecurityLow: isSecurityLow);
     await update(profileModel);
   }
 

@@ -763,7 +763,6 @@
     "mnemonicsVerifiedMessage",
     "chatWith",
     "sendAnEmail",
-    "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
@@ -851,7 +850,10 @@
     "userPINCodeForAuthentication",
     "youcanSelectOnlyXCredential",
     "theCredentialIsNotReady",
-    "theCredentialIsNoMoreReady"
+    "theCredentialIsNoMoreReady",
+    "lowSecurity",
+    "highSecurity",
+    "theRequestIsRejected"
   ],
 
   "es": [
@@ -1618,7 +1620,6 @@
     "mnemonicsVerifiedMessage",
     "chatWith",
     "sendAnEmail",
-    "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
@@ -1706,7 +1707,10 @@
     "userPINCodeForAuthentication",
     "youcanSelectOnlyXCredential",
     "theCredentialIsNotReady",
-    "theCredentialIsNoMoreReady"
+    "theCredentialIsNoMoreReady",
+    "lowSecurity",
+    "highSecurity",
+    "theRequestIsRejected"
   ],
 
   "fr": [
@@ -1776,7 +1780,6 @@
     "mnemonicsVerifiedMessage",
     "chatWith",
     "sendAnEmail",
-    "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
@@ -1864,7 +1867,10 @@
     "userPINCodeForAuthentication",
     "youcanSelectOnlyXCredential",
     "theCredentialIsNotReady",
-    "theCredentialIsNoMoreReady"
+    "theCredentialIsNoMoreReady",
+    "lowSecurity",
+    "highSecurity",
+    "theRequestIsRejected"
   ],
 
   "it": [
@@ -2631,7 +2637,6 @@
     "mnemonicsVerifiedMessage",
     "chatWith",
     "sendAnEmail",
-    "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
@@ -2719,6 +2724,9 @@
     "userPINCodeForAuthentication",
     "youcanSelectOnlyXCredential",
     "theCredentialIsNotReady",
-    "theCredentialIsNoMoreReady"
+    "theCredentialIsNoMoreReady",
+    "lowSecurity",
+    "highSecurity",
+    "theRequestIsRejected"
   ]
 }
