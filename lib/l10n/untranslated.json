@@ -763,7 +763,6 @@
     "mnemonicsVerifiedMessage",
     "chatWith",
     "sendAnEmail",
-    "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
@@ -851,7 +850,11 @@
     "userPINCodeForAuthentication",
     "youcanSelectOnlyXCredential",
     "theCredentialIsNotReady",
-    "theCredentialIsNoMoreReady"
+    "theCredentialIsNoMoreReady",
+    "lowSecurity",
+    "highSecurity",
+    "theRequestIsRejected",
+    "userPinIsIncorrect"
   ],
 
   "es": [
@@ -1618,7 +1621,6 @@
     "mnemonicsVerifiedMessage",
     "chatWith",
     "sendAnEmail",
-    "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
@@ -1706,7 +1708,11 @@
     "userPINCodeForAuthentication",
     "youcanSelectOnlyXCredential",
     "theCredentialIsNotReady",
-    "theCredentialIsNoMoreReady"
+    "theCredentialIsNoMoreReady",
+    "lowSecurity",
+    "highSecurity",
+    "theRequestIsRejected",
+    "userPinIsIncorrect"
   ],
 
   "fr": [
@@ -1776,7 +1782,6 @@
     "mnemonicsVerifiedMessage",
     "chatWith",
     "sendAnEmail",
-    "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
@@ -1864,7 +1869,11 @@
     "userPINCodeForAuthentication",
     "youcanSelectOnlyXCredential",
     "theCredentialIsNotReady",
-    "theCredentialIsNoMoreReady"
+    "theCredentialIsNoMoreReady",
+    "lowSecurity",
+    "highSecurity",
+    "theRequestIsRejected",
+    "userPinIsIncorrect"
   ],
 
   "it": [
@@ -2631,7 +2640,6 @@
     "mnemonicsVerifiedMessage",
     "chatWith",
     "sendAnEmail",
-    "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
@@ -2719,6 +2727,10 @@
     "userPINCodeForAuthentication",
     "youcanSelectOnlyXCredential",
     "theCredentialIsNotReady",
-    "theCredentialIsNoMoreReady"
+    "theCredentialIsNoMoreReady",
+    "lowSecurity",
+    "highSecurity",
+    "theRequestIsRejected",
+    "userPinIsIncorrect"
   ]
 }

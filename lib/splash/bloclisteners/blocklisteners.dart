@@ -252,11 +252,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           }
 
           if (showPrompt) {
-            String title = l10n.scanPromptHost;
-            if (!state.isRequestVerified) {
-              title = '${l10n.service_not_registered_message} '
-                  '${l10n.scanPromptHost}';
-            }
+            final String title = l10n.scanPromptHost;
 
             String subtitle = (approvedIssuer.did.isEmpty)
                 ? state.uri!.host

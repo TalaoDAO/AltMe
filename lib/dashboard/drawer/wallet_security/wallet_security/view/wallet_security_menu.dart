@@ -231,6 +231,12 @@ class WalletSecurityView extends StatelessWidget {
                         }
                       },
                     ),
+                    DrawerItem(
+                      title: l10n.security,
+                      onTap: () {
+                        Navigator.of(context).push<void>(SecurityPage.route());
+                      },
+                    ),
                   ],
                 ),
               ),

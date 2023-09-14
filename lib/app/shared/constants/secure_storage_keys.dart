@@ -29,6 +29,8 @@ class SecureStorageKeys {
   static const String userPINCodeForAuthentication =
       'userPINCodeForAuthentication';
 
+  static const String isSecurityLow = 'isSecurityLow';
+
   static const String pinCode = 'pinCode';
   static const String data = 'data';
   static const String rsaKeyJson = 'RSAKeyJson';

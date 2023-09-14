@@ -329,13 +329,18 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
           if (iteratedCredentialSubjectModel.credentialSubjectType ==
               CredentialSubjectType.emailPass) {
+            /// check if email is same
             if (email ==
                 (iteratedCredentialSubjectModel as EmailPassModel).email) {
-              await deleteById(
-                id: storedCredential.id,
-                showMessage: false,
-              );
-              break;
+              /// format should be same ldp_vc or jwt_vc
+              if ((credential.jwt == null && storedCredential.jwt == null) ||
+                  (credential.jwt != null && storedCredential.jwt != null)) {
+                await deleteById(
+                  id: storedCredential.id,
+                  showMessage: false,
+                );
+                break;
+              }
             }
           }
         }

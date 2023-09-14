@@ -292,17 +292,29 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               response['presentation_definition_uri'];
 
           final queryJson = <String, dynamic>{};
-          if (redirectUri != null) {
+          if (clientId != null) {
+            queryJson['client_id'] = clientId;
+          }
+
+          /// if redirectUri is not provided and client_id is url then
+          /// redirectUri = client_id
+          if (redirectUri == null) {
+            if (clientId == null) throw Exception();
+            final isUrl = isURL(clientId.toString());
+            if (isUrl) {
+              queryJson['redirect_uri'] = clientId;
+            } else {
+              throw Exception();
+            }
+          } else {
             queryJson['redirect_uri'] = redirectUri;
           }
+
           if (nonce != null) {
             queryJson['nonce'] = nonce;
           }
           if (stateValue != null) {
             queryJson['state'] = stateValue;
-          }
-          if (clientId != null) {
-            queryJson['client_id'] = clientId;
           }
           if (responseType != null) {
             queryJson['response_type'] = responseType;
@@ -804,48 +816,65 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   /// verify jwt
   Future<void> verifyJWTBeforeLaunchingOIDC4VCANDSIOPV2Flow() async {
-    final String? requestUri = state.uri?.queryParameters['request_uri'];
-    final String? request = state.uri?.queryParameters['request'];
+    final isSecurityLow = profileCubit.state.model.isSecurityLow;
 
-    if (requestUri != null) {
-      encodedData = await fetchRequestUriPayload(url: requestUri);
-    } else {
-      encodedData = request;
-    }
-
-    final Map<String, dynamic> payload =
-        decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
-
-    final Map<String, dynamic> header =
-        decodeHeader(jwtDecode: jwtDecode, token: encodedData as String);
-
-    final String issuerDid = jsonEncode(payload['client_id']);
-    final String issuerKid = jsonEncode(header['kid']);
-
-    //check Signature
-    try {
-      final VerificationType isVerified = await verifyEncodedData(
-        issuerDid,
-        issuerKid,
-        encodedData.toString(),
-      );
-
-      if (isVerified == VerificationType.verified) {
-        emit(state.acceptHost());
-      } else {
-        emit(state.acceptHost(isRequestVerified: false));
-      }
-    } catch (e) {
+    if (isSecurityLow) {
       emit(state.acceptHost());
+    } else {
+      final String? requestUri = state.uri?.queryParameters['request_uri'];
+      final String? request = state.uri?.queryParameters['request'];
+
+      if (requestUri != null) {
+        encodedData = await fetchRequestUriPayload(url: requestUri);
+      } else {
+        encodedData = request;
+      }
+
+      final Map<String, dynamic> payload =
+          decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
+
+      final Map<String, dynamic> header =
+          decodeHeader(jwtDecode: jwtDecode, token: encodedData as String);
+
+      final String issuerDid = jsonEncode(payload['client_id']);
+      final String issuerKid = jsonEncode(header['kid']);
+
+      //check Signature
+      try {
+        final VerificationType isVerified = await verifyEncodedData(
+          issuerDid,
+          issuerKid,
+          encodedData.toString(),
+        );
+
+        if (isVerified == VerificationType.verified) {
+          emit(state.acceptHost());
+        } else {
+          emitError(
+            ResponseMessage(
+              ResponseString.RESPONSE_STRING_theRequestIsRejected,
+            ),
+          );
+        }
+      } catch (e) {
+        emitError(
+          ResponseMessage(
+            ResponseString.RESPONSE_STRING_theRequestIsRejected,
+          ),
+        );
+      }
     }
   }
 
   /// complete SIOPV2 Flow
   Future<void> completeSiopV2Flow() async {
     try {
-      final redirectUri = state.uri?.queryParameters['redirect_uri'] ?? '';
+      final clientId = state.uri!.queryParameters['client_id'] ?? '';
+      final String? redirectUri = getRedirectUri(state.uri!);
+
+      if (redirectUri == null) throw Exception();
+
       final nonce = state.uri?.queryParameters['nonce'] ?? '';
-      final clientId = state.uri?.queryParameters['client_id'] ?? '';
       final stateValue = state.uri?.queryParameters['state'];
 
       final keys = <String>[];
@@ -986,17 +1015,43 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
       goBack();
     } catch (e) {
-      if (e is MessageHandler) {
-        emit(state.copyWith(message: StateMessage.error(messageHandler: e)));
-      } else {
-        emit(
-          state.copyWith(
-            message: StateMessage.error(
-              messageHandler: ResponseMessage(
+      if (e is DioException) {
+        final error = NetworkException.getDioException(error: e);
+
+        if (error.message == NetworkError.NETWORK_ERROR_BAD_REQUEST) {
+          final data = error.data;
+
+          if (data != null &&
+              data is Map &&
+              data.containsKey('error') &&
+              data['error'] == 'invalid_grant') {
+            emitError(
+              ResponseMessage(
+                ResponseString.RESPONSE_STRING_userPinIsIncorrect,
+              ),
+            );
+          } else {
+            emitError(
+              ResponseMessage(
                 ResponseString
                     .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
               ),
+            );
+          }
+        } else {
+          emitError(
+            ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
+          );
+        }
+      } else if (e is MessageHandler) {
+        emit(state.copyWith(message: StateMessage.error(messageHandler: e)));
+      } else {
+        emitError(
+          ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           ),
         );
       }

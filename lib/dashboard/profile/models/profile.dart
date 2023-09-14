@@ -24,6 +24,7 @@ class ProfileModel extends Equatable {
     this.companyWebsite = '',
     this.jobTitle = '',
     required this.oidc4vcType,
+    required this.isSecurityLow,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
@@ -47,6 +48,7 @@ class ProfileModel extends Equatable {
         userPINCodeForAuthentication: true,
         tezosNetwork: TezosNetwork.mainNet(),
         oidc4vcType: OIDC4VCType.EBSIV3,
+        isSecurityLow: true,
       );
 
   final String firstName;
@@ -66,6 +68,7 @@ class ProfileModel extends Equatable {
   final bool userConsentForVerifierAccess;
   final bool userPINCodeForAuthentication;
   final OIDC4VCType oidc4vcType;
+  final bool isSecurityLow;
 
   @override
   List<Object> get props => [
@@ -86,6 +89,7 @@ class ProfileModel extends Equatable {
         userConsentForVerifierAccess,
         userPINCodeForAuthentication,
         oidc4vcType,
+        isSecurityLow,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
@@ -108,6 +112,7 @@ class ProfileModel extends Equatable {
     bool? userConsentForVerifierAccess,
     bool? userPINCodeForAuthentication,
     OIDC4VCType? oidc4vcType,
+    bool? isSecurityLow,
   }) {
     return ProfileModel(
       firstName: firstName ?? this.firstName,
@@ -130,6 +135,7 @@ class ProfileModel extends Equatable {
       userPINCodeForAuthentication:
           userPINCodeForAuthentication ?? this.userPINCodeForAuthentication,
       oidc4vcType: oidc4vcType ?? this.oidc4vcType,
+      isSecurityLow: isSecurityLow ?? this.isSecurityLow,
     );
   }
 }

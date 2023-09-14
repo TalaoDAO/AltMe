@@ -483,6 +483,12 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady:
         return globalMessage.RESPONSE_STRING_theCredentialIsNoMoreReady;
+
+      case ResponseString.RESPONSE_STRING_theRequestIsRejected:
+        return globalMessage.RESPONSE_STRING_theRequestIsRejected;
+
+      case ResponseString.RESPONSE_STRING_userPinIsIncorrect:
+        return globalMessage.RESPONSE_STRING_userPinIsIncorrect;
     }
   }
 }

@@ -709,21 +709,17 @@ class OIDC4VC {
     String tokenEndPoint,
     Map<String, dynamic> tokenData,
   ) async {
-    try {
-      /// getting token
-      final tokenHeaders = <String, dynamic>{
-        'Content-Type': 'application/x-www-form-urlencoded',
-      };
+    /// getting token
+    final tokenHeaders = <String, dynamic>{
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
 
-      final dynamic tokenResponse = await client.post<Map<String, dynamic>>(
-        tokenEndPoint,
-        options: Options(headers: tokenHeaders),
-        data: tokenData,
-      );
-      return tokenResponse.data;
-    } catch (e) {
-      throw Exception(e);
-    }
+    final dynamic tokenResponse = await client.post<Map<String, dynamic>>(
+      tokenEndPoint,
+      options: Options(headers: tokenHeaders),
+      data: tokenData,
+    );
+    return tokenResponse.data;
   }
 
   Future<void> sendPresentation({

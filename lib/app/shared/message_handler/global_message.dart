@@ -385,4 +385,6 @@ class GlobalMessage {
       l10n.theCredentialIsNotReady;
   String get RESPONSE_STRING_theCredentialIsNoMoreReady =>
       l10n.theCredentialIsNoMoreReady;
+  String get RESPONSE_STRING_theRequestIsRejected => l10n.theRequestIsRejected;
+  String get RESPONSE_STRING_userPinIsIncorrect => l10n.userPinIsIncorrect;
 }
