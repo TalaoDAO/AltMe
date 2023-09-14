@@ -439,7 +439,6 @@ List<int> sortedPublcJwk(Map<String, dynamic> privateKey) {
 bool isUriAsValueValid(List<String> keys) =>
     keys.contains('response_type') &&
     keys.contains('client_id') &&
-    keys.contains('redirect_uri') &&
     keys.contains('nonce');
 
 bool isPolygonIdUrl(String url) =>
@@ -577,9 +576,9 @@ Future<String> getHost({
 
       return Uri.parse(decodedResponse['redirect_uri'].toString()).host;
     } else {
-      return Uri.parse(
-        uri.queryParameters['redirect_uri'] ?? '',
-      ).host;
+      final String? redirectUri = getRedirectUri(uri);
+      if (redirectUri == null) return '';
+      return Uri.parse(redirectUri).host;
     }
   }
 }
@@ -627,4 +626,27 @@ Future<(String?, String)> getIssuerAndPreAuthorizedCode({
   }
 
   return (preAuthorizedCode, issuer);
+}
+
+bool isURL(String input) {
+  final Uri? uri = Uri.tryParse(input);
+  return uri != null && uri.hasScheme;
+}
+
+String? getRedirectUri(Uri uri) {
+  final clientId = uri.queryParameters['client_id'] ?? '';
+  final redirectUri = uri.queryParameters['redirect_uri'];
+
+  /// if redirectUri is not provided and client_id is url then
+  /// redirectUri = client_id
+  if (redirectUri == null) {
+    final isUrl = isURL(clientId);
+    if (isUrl) {
+      return clientId;
+    } else {
+      return null;
+    }
+  } else {
+    return redirectUri;
+  }
 }

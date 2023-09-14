@@ -535,8 +535,12 @@ class ScanCubit extends Cubit<ScanState> {
         getLogger('ScanCubit - presentCredentialToOIDC4VPAndSiopV2Request');
 
     final nonce = uri.queryParameters['nonce'] ?? '';
-    final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
     final clientId = uri.queryParameters['client_id'] ?? '';
+
+    final String? redirectUri = getRedirectUri(uri);
+
+    if (redirectUri == null) throw Exception();
+
     final stateValue = uri.queryParameters['state'];
 
     final credentialList =
@@ -610,7 +614,8 @@ class ScanCubit extends Cubit<ScanState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
-      final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
+      final String? redirectUri = getRedirectUri(uri);
+      if (redirectUri == null) throw Exception();
 
       final String vpToken = await createVpToken(
         credentialsToBePresented: credentialsToBePresented!,
@@ -706,7 +711,8 @@ class ScanCubit extends Cubit<ScanState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
-      final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
+      final String? redirectUri = getRedirectUri(uri);
+      if (redirectUri == null) throw Exception();
 
       final String idToken = await createIdToken(
         credentialsToBePresented: credentialsToBePresented!,

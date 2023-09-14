@@ -292,17 +292,29 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               response['presentation_definition_uri'];
 
           final queryJson = <String, dynamic>{};
-          if (redirectUri != null) {
+          if (clientId != null) {
+            queryJson['client_id'] = clientId;
+          }
+
+          /// if redirectUri is not provided and client_id is url then
+          /// redirectUri = client_id
+          if (redirectUri == null) {
+            if (clientId == null) throw Exception();
+            final isUrl = isURL(clientId.toString());
+            if (isUrl) {
+              queryJson['redirect_uri'] = clientId;
+            } else {
+              throw Exception();
+            }
+          } else {
             queryJson['redirect_uri'] = redirectUri;
           }
+
           if (nonce != null) {
             queryJson['nonce'] = nonce;
           }
           if (stateValue != null) {
             queryJson['state'] = stateValue;
-          }
-          if (clientId != null) {
-            queryJson['client_id'] = clientId;
           }
           if (responseType != null) {
             queryJson['response_type'] = responseType;
@@ -843,9 +855,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   /// complete SIOPV2 Flow
   Future<void> completeSiopV2Flow() async {
     try {
-      final redirectUri = state.uri?.queryParameters['redirect_uri'] ?? '';
+      final clientId = state.uri!.queryParameters['client_id'] ?? '';
+      final String? redirectUri = getRedirectUri(state.uri!);
+
+      if (redirectUri == null) throw Exception();
+
       final nonce = state.uri?.queryParameters['nonce'] ?? '';
-      final clientId = state.uri?.queryParameters['client_id'] ?? '';
       final stateValue = state.uri?.queryParameters['state'];
 
       final keys = <String>[];
