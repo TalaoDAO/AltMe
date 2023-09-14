@@ -947,5 +947,6 @@
   "theCredentialIsNoMoreReady": "The ceredential is no more available.",
   "lowSecurity": "Low Security",
   "highSecurity": "High Security",
-  "theRequestIsRejected": "The request is rejected."
+  "theRequestIsRejected": "The request is rejected.",
+  "userPinIsIncorrect": "User pin is incorrect"
 }

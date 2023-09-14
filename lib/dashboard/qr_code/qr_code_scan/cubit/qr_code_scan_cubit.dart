@@ -1015,17 +1015,43 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
       goBack();
     } catch (e) {
-      if (e is MessageHandler) {
-        emit(state.copyWith(message: StateMessage.error(messageHandler: e)));
-      } else {
-        emit(
-          state.copyWith(
-            message: StateMessage.error(
-              messageHandler: ResponseMessage(
+      if (e is DioException) {
+        final error = NetworkException.getDioException(error: e);
+
+        if (error.message == NetworkError.NETWORK_ERROR_BAD_REQUEST) {
+          final data = error.data;
+
+          if (data != null &&
+              data is Map &&
+              data.containsKey('error') &&
+              data['error'] == 'invalid_grant') {
+            emitError(
+              ResponseMessage(
+                ResponseString.RESPONSE_STRING_userPinIsIncorrect,
+              ),
+            );
+          } else {
+            emitError(
+              ResponseMessage(
                 ResponseString
                     .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
               ),
+            );
+          }
+        } else {
+          emitError(
+            ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
+          );
+        }
+      } else if (e is MessageHandler) {
+        emit(state.copyWith(message: StateMessage.error(messageHandler: e)));
+      } else {
+        emitError(
+          ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           ),
         );
       }

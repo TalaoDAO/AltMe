@@ -853,7 +853,8 @@
     "theCredentialIsNoMoreReady",
     "lowSecurity",
     "highSecurity",
-    "theRequestIsRejected"
+    "theRequestIsRejected",
+    "userPinIsIncorrect"
   ],
 
   "es": [
@@ -1710,7 +1711,8 @@
     "theCredentialIsNoMoreReady",
     "lowSecurity",
     "highSecurity",
-    "theRequestIsRejected"
+    "theRequestIsRejected",
+    "userPinIsIncorrect"
   ],
 
   "fr": [
@@ -1870,7 +1872,8 @@
     "theCredentialIsNoMoreReady",
     "lowSecurity",
     "highSecurity",
-    "theRequestIsRejected"
+    "theRequestIsRejected",
+    "userPinIsIncorrect"
   ],
 
   "it": [
@@ -2727,6 +2730,7 @@
     "theCredentialIsNoMoreReady",
     "lowSecurity",
     "highSecurity",
-    "theRequestIsRejected"
+    "theRequestIsRejected",
+    "userPinIsIncorrect"
   ]
 }
