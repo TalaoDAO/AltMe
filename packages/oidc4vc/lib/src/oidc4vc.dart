@@ -106,8 +106,7 @@ class OIDC4VC {
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
         selectedCredentials: selectedCredentials,
-        authorizationEndpoint:
-            'https://app.altme.io/app/download/authorization',
+        authorizationEndpoint: authorizationEndpoint,
         openidConfigurationResponse: openidConfigurationResponse,
         clientId: clientId,
         issuer: issuer,
