@@ -16,6 +16,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required SecureStorageProvider secureStorageProvider,
   required DioClient dioClient,
   required String? userPin,
+  required dynamic credentialOfferJson,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -25,10 +26,6 @@ Future<void> initiateOIDC4VCCredentialIssuance({
     case OIDC4VCType.DEFAULT:
     case OIDC4VCType.GREENCYPHER:
     case OIDC4VCType.EBSIV3:
-      final dynamic credentialOfferJson = await getCredentialOfferJson(
-        scannedResponse: scannedResponse,
-        dioClient: dioClient,
-      );
       if (credentialOfferJson == null) throw Exception();
 
       credentials = credentialOfferJson['credentials'];
@@ -61,6 +58,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         issuer: issuer,
         preAuthorizedCode: preAuthorizedCode,
         oidc4vcType: oidc4vcType,
+        credentialOfferJson: credentialOfferJson,
       );
     } else {
       if (codeForAuthorisedFlow == null || stateOfCredentialsSelected == null) {
@@ -71,6 +69,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           issuer: issuer,
           preAuthorizedCode: preAuthorizedCode,
           oidc4vcType: oidc4vcType,
+          credentialOfferJson: credentialOfferJson,
         );
       } else {
         /// second phase flow of authorised
@@ -92,7 +91,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           selectedCredentials: selectedCredentials,
           userPin: userPin,
           issuer: issuer,
-          preAuthorizedCode: preAuthorizedCode,
+          preAuthorizedCode: null,
           oidc4vcType: oidc4vcType,
         );
       }

@@ -284,7 +284,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           await context.read<QRCodeScanCubit>().accept(
                 issuer: approvedIssuer,
                 qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-                dioClient: DioClient('', Dio()),
+                oidc4vcType: currentOIIDC4VCTypeForIssuance,
               );
         } else {
           context.read<QRCodeScanCubit>().emitError(

@@ -14,8 +14,8 @@ Future<void> getAuthorizationUriForIssuer({
   required List<dynamic> selectedCredentials,
   required List<int> selectedCredentialsIndex,
   required SecureStorageProvider secureStorageProvider,
-  required DioClient dioClient,
   required String issuer,
+  required dynamic credentialOfferJson,
 }) async {
   final mnemonic =
       await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
@@ -32,10 +32,6 @@ Future<void> getAuthorizationUriForIssuer({
   );
 
   /// this is first phase flow for authorization_code
-  final dynamic credentialOfferJson = await getCredentialOfferJson(
-    scannedResponse: scannedResponse,
-    dioClient: dioClient,
-  );
 
   final issuerState = credentialOfferJson['grants']['authorization_code']
       ['issuer_state'] as String;

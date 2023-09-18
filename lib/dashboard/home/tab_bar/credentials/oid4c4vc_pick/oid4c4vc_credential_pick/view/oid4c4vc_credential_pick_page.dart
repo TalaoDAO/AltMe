@@ -12,6 +12,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     required this.preAuthorizedCode,
     required this.issuer,
     required this.oidc4vcType,
+    required this.credentialOfferJson,
   });
 
   final List<dynamic> credentials;
@@ -19,6 +20,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
   final String? preAuthorizedCode;
   final String issuer;
   final OIDC4VCType oidc4vcType;
+  final dynamic credentialOfferJson;
 
   static Route<dynamic> route({
     required List<dynamic> credentials,
@@ -26,6 +28,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     required String? preAuthorizedCode,
     required String issuer,
     required OIDC4VCType oidc4vcType,
+    required dynamic credentialOfferJson,
   }) =>
       MaterialPageRoute<void>(
         builder: (context) => Oidc4vcCredentialPickPage(
@@ -34,6 +37,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
           issuer: issuer,
           preAuthorizedCode: preAuthorizedCode,
           oidc4vcType: oidc4vcType,
+          credentialOfferJson: credentialOfferJson,
         ),
         settings: const RouteSettings(name: '/Oidc4vcCredentialPickPage'),
       );
@@ -48,6 +52,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
         issuer: issuer,
         preAuthorizedCode: preAuthorizedCode,
         oidc4vcType: oidc4vcType,
+        credentialOfferJson: credentialOfferJson,
       ),
     );
   }
@@ -61,6 +66,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
     required this.preAuthorizedCode,
     required this.issuer,
     required this.oidc4vcType,
+    required this.credentialOfferJson,
   });
 
   final List<dynamic> credentials;
@@ -68,6 +74,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
   final String? preAuthorizedCode;
   final String issuer;
   final OIDC4VCType oidc4vcType;
+  final dynamic credentialOfferJson;
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +196,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                 preAuthorizedCode: preAuthorizedCode,
                                 oidc4vcType: oidc4vcType,
                                 selectedCredentialsIndex: state,
+                                credentialOfferJson: credentialOfferJson,
                               );
                         },
                   text: l10n.proceed,
