@@ -46,6 +46,9 @@ class OIDC4VCProfilePage extends StatelessWidget {
                   physics: const ScrollPhysics(),
                   itemBuilder: (context, index) {
                     final OIDC4VCType currentType = OIDC4VCType.values[index];
+
+                    if (currentType.isDeprecated) return Container();
+
                     return Column(
                       children: [
                         ListTile(

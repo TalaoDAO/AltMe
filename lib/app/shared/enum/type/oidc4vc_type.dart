@@ -105,5 +105,7 @@ extension OIDC4VCTypeX on OIDC4VCType {
     }
   }
 
+  bool get isDeprecated => this == OIDC4VCType.EBSIV2;
+
   bool get schemaForType => this == OIDC4VCType.EBSIV2;
 }
