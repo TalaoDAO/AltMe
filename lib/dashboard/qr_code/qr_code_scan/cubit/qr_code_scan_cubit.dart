@@ -816,20 +816,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   /// verify jwt
   Future<void> verifyJWTBeforeLaunchingOIDC4VCANDSIOPV2Flow() async {
+    final String? requestUri = state.uri?.queryParameters['request_uri'];
+    final String? request = state.uri?.queryParameters['request'];
+
+    if (requestUri != null) {
+      encodedData = await fetchRequestUriPayload(url: requestUri);
+    } else {
+      encodedData = request;
+    }
+
     final isSecurityLow = profileCubit.state.model.isSecurityLow;
 
     if (isSecurityLow) {
       emit(state.acceptHost());
     } else {
-      final String? requestUri = state.uri?.queryParameters['request_uri'];
-      final String? request = state.uri?.queryParameters['request'];
-
-      if (requestUri != null) {
-        encodedData = await fetchRequestUriPayload(url: requestUri);
-      } else {
-        encodedData = request;
-      }
-
       final Map<String, dynamic> payload =
           decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
 
@@ -1025,6 +1025,26 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               data is Map &&
               data.containsKey('error') &&
               data['error'] == 'invalid_grant') {
+            emitError(
+              ResponseMessage(
+                ResponseString.RESPONSE_STRING_userPinIsIncorrect,
+              ),
+            );
+          } else {
+            emitError(
+              ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            );
+          }
+        } else if (error.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
+          final data = error.data;
+
+          if (data != null &&
+              data is Map &&
+              data.containsKey('error_description') &&
+              data['error_description'] == 'User pin is incorrect') {
             emitError(
               ResponseMessage(
                 ResponseString.RESPONSE_STRING_userPinIsIncorrect,

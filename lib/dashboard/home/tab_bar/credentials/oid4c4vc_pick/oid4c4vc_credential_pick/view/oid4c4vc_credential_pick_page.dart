@@ -88,33 +88,6 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
               vertical: 24,
               horizontal: 16,
             ),
-            navigation: SafeArea(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: MyGradientButton(
-                  onPressed: state.isEmpty
-                      ? null
-                      : () {
-                          if (state.isEmpty) return;
-
-                          final selectedCredentials =
-                              state.map((index) => credentials[index]).toList();
-
-                          context
-                              .read<QRCodeScanCubit>()
-                              .processSelectedCredentials(
-                                selectedCredentials: selectedCredentials,
-                                userPin: userPin,
-                                issuer: issuer,
-                                preAuthorizedCode: preAuthorizedCode,
-                                oidc4vcType: oidc4vcType,
-                                selectedCredentialsIndex: state,
-                              );
-                        },
-                  text: l10n.proceed,
-                ),
-              ),
-            ),
             body: Column(
               children: <Widget>[
                 ...List.generate(
@@ -194,6 +167,33 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                   },
                 ),
               ],
+            ),
+            navigation: SafeArea(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: MyGradientButton(
+                  onPressed: state.isEmpty
+                      ? null
+                      : () {
+                          if (state.isEmpty) return;
+
+                          final selectedCredentials =
+                              state.map((index) => credentials[index]).toList();
+
+                          context
+                              .read<QRCodeScanCubit>()
+                              .processSelectedCredentials(
+                                selectedCredentials: selectedCredentials,
+                                userPin: userPin,
+                                issuer: issuer,
+                                preAuthorizedCode: preAuthorizedCode,
+                                oidc4vcType: oidc4vcType,
+                                selectedCredentialsIndex: state,
+                              );
+                        },
+                  text: l10n.proceed,
+                ),
+              ),
             ),
           );
         },
