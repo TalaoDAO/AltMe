@@ -191,18 +191,30 @@ class OIDC4VC {
 
     final myRequest = <String, dynamic>{
       'response_type': 'code',
-      'client_id': clientId,
-      'redirect_uri':
-          '$webLink?uri=$schema&code_verifier=$codeVerifier&options=$options',
+      // 'state': const Uuid().v4(),
       'scope': 'openid',
+      'client_id': clientId,
+      'authorization_details': jsonEncode(authorizationDetails),
+      // 'authorization_details': [
+      //   {
+      //     'type': 'openid_credential',
+      //     'format': 'jwt_vc',
+      //     'types': [
+      //       'VerifiableCredential',
+      //       'VerifiableAttestation',
+      //       'CTWalletInTime'
+      //     ]
+      //   }
+      // ],
+      'redirect_uri':
+          // '$webLink?uri=$schema&code_verifier=$codeVerifier&options=$options',
+          webLink,
       'issuer_state': issuerState,
-      'state': const Uuid().v4(),
       'nonce': nonce,
       'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
-      'authorization_details': jsonEncode(authorizationDetails),
       'client_metadata': jsonEncode({
-        'authorization_endpoint': authorizationEndpoint,
+        'authorization_endpoint': webLink,
         'scopes_supported': ['openid'],
         'response_types_supported': ['vp_token', 'id_token'],
         'subject_types_supported': ['public'],
@@ -222,6 +234,7 @@ class OIDC4VC {
         ],
         'id_token_types_supported': ['subject_signed_id_token'],
       }),
+      'state': '934f1aa2-dba3-451e-81b1-d2bdc3c2e0a5',
     };
     return myRequest;
   }

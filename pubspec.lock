@@ -294,18 +294,18 @@ packages:
     dependency: transitive
     description:
       name: camera_android
-      sha256: ed4f645848074166fc3b8e20350f83ca07e09a2becc1e185040ee561f955d4df
+      sha256: "647af159e244b8bc0fb80abc11e5b86e692bdfc9e4a77c656ef2c1cd52d68e44"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.8+8"
+    version: "0.10.8+9"
   camera_avfoundation:
     dependency: transitive
     description:
       name: camera_avfoundation
-      sha256: "718b60ed2e22b4067fe6e2c0e9ebe2856c2de5c8b1289ba95d10db85b0b00bc2"
+      sha256: dde42d19ad4cdf79287f9e410599db72beaec7e505787dc6abfd0ce5b526e9c0
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.13+4"
+    version: "0.9.13+5"
   camera_platform_interface:
     dependency: transitive
     description:
@@ -683,10 +683,10 @@ packages:
     dependency: transitive
     description:
       name: encrypt
-      sha256: c1f224c9a65df6f2cd111baaf31edd2f31d3f094abdb22a3b0bbcc64698ef80d
+      sha256: "62d9aa4670cc2a8798bab89b39fc71b6dfbacf615de6cf5001fb39f7e4a996a2"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.2"
+    version: "5.0.3"
   enhanced_enum:
     dependency: transitive
     description:
@@ -787,10 +787,10 @@ packages:
     dependency: transitive
     description:
       name: file_selector_macos
-      sha256: "182c3f8350cee659f7b115e956047ee3dc672a96665883a545e81581b9a82c72"
+      sha256: b15c3da8bd4908b9918111fa486903f5808e388b8d1c559949f584725a6594d6
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.3+2"
+    version: "0.9.3+3"
   file_selector_platform_interface:
     dependency: transitive
     description:
@@ -2577,10 +2577,10 @@ packages:
     dependency: "direct main"
     description:
       name: webview_flutter_android
-      sha256: "9427774649fd3c8b7ff53523051395d13aed2ca355822b822e6493d79f5fc05a"
+      sha256: ddc167c6676f57c8b367d19fcbee267d6dc6adf81bd6c3cb87981d30746e0a6d
       url: "https://pub.dev"
     source: hosted
-    version: "3.10.0"
+    version: "3.10.1"
   webview_flutter_platform_interface:
     dependency: transitive
     description:
@@ -2609,10 +2609,10 @@ packages:
     dependency: transitive
     description:
       name: win32_registry
-      sha256: e4506d60b7244251bc59df15656a3093501c37fb5af02105a944d73eb95be4c9
+      sha256: "41fd8a189940d8696b1b810efb9abcf60827b6cbfab90b0c43e8439e3a39d85a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   x25519:
     dependency: transitive
     description:

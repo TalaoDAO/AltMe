@@ -263,10 +263,6 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<void> launchUrl({String? link}) async {
-    await LaunchUrl.launch(link ?? state.link!);
-  }
-
   Future<void> periodicCheckRewardOnTezosBlockchain() async {
     Timer.periodic(const Duration(minutes: 1), (timer) async {
       List<String> walletAddresses = [];
@@ -297,10 +293,10 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> checkRewards(List<String> walletAddresses) async {
-    for (int i = 0; i < walletAddresses.length; i++) {
-      await checkUNOReward(walletAddresses[i]);
-      await checkXTZReward(walletAddresses[i]);
-    }
+    // for (int i = 0; i < walletAddresses.length; i++) {
+    //   await checkUNOReward(walletAddresses[i]);
+    //   await checkXTZReward(walletAddresses[i]);
+    // }
   }
 
   Future<void> checkUNOReward(String walletAddress) async {

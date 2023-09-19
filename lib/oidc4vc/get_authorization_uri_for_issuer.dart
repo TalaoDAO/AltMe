@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:flutter/material.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -52,5 +53,7 @@ Future<void> getAuthorizationUriForIssuer({
     nonce: nonce,
     options: selectedCredentialsIndex.toString(),
   );
+
+  debugPrint(ebsiAuthenticationUri.toString());
   await LaunchUrl.launchUri(ebsiAuthenticationUri);
 }
