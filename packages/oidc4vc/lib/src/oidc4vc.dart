@@ -191,7 +191,7 @@ class OIDC4VC {
 
     final myRequest = <String, dynamic>{
       'response_type': 'code',
-      // 'state': const Uuid().v4(),
+      'state': const Uuid().v4(),
       'scope': 'openid',
       'client_id': clientId,
       'authorization_details': jsonEncode(authorizationDetails),
@@ -207,14 +207,13 @@ class OIDC4VC {
       //   }
       // ],
       'redirect_uri':
-          // '$webLink?uri=$schema&code_verifier=$codeVerifier&options=$options',
-          webLink,
+          '$webLink?uri=$schema&code_verifier=$codeVerifier&options=$options',
       'issuer_state': issuerState,
       'nonce': nonce,
       'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
       'client_metadata': jsonEncode({
-        'authorization_endpoint': webLink,
+        'authorization_endpoint': 'https://app.altme.io/app/download/autorize',
         'scopes_supported': ['openid'],
         'response_types_supported': ['vp_token', 'id_token'],
         'subject_types_supported': ['public'],
@@ -234,7 +233,6 @@ class OIDC4VC {
         ],
         'id_token_types_supported': ['subject_signed_id_token'],
       }),
-      'state': '934f1aa2-dba3-451e-81b1-d2bdc3c2e0a5',
     };
     return myRequest;
   }
