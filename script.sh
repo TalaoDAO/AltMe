@@ -7,6 +7,7 @@ function pub {
       cd "packages/$d"
       fvm flutter clean
       fvm flutter pub get
+      fvm flutter pub upgrade
     )
   done 
   fvm flutter pub get
