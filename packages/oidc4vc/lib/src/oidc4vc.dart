@@ -194,7 +194,8 @@ class OIDC4VC {
       'code_challenge_method': 'S256',
       'authorization_details': jsonEncode(authorizationDetails),
       'client_metadata': jsonEncode({
-        'authorization_endpoint': 'https://app.altme.io/app/download/authorize',
+        'authorization_endpoint':
+            'https://app.altme.io/app/download/ebsi?uri=openid-vc://',
         'scopes_supported': ['openid'],
         'response_types_supported': ['vp_token', 'id_token'],
         'subject_types_supported': ['public'],
