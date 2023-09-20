@@ -10,12 +10,11 @@ import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
 import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
-import 'package:oidc4vc/src/iodc4vc_model.dart';
 import 'package:oidc4vc/src/issuer_token_parameters.dart';
+import 'package:oidc4vc/src/pkce_dart.dart';
 import 'package:oidc4vc/src/token_parameters.dart';
 import 'package:oidc4vc/src/verification_type.dart';
 import 'package:oidc4vc/src/verifier_token_parameters.dart';
-import 'package:pkce/pkce.dart';
 import 'package:secp256k1/secp256k1.dart';
 import 'package:uuid/uuid.dart';
 
@@ -24,11 +23,9 @@ import 'package:uuid/uuid.dart';
 /// {@endtemplate}
 class OIDC4VC {
   /// {@macro ebsi}
-  OIDC4VC({required this.client, required this.oidc4vcModel});
+  OIDC4VC();
 
-  ///
-  final Dio client;
-  final OIDC4VCModel oidc4vcModel;
+  final Dio client = Dio();
 
   /// create JWK from mnemonic
   Future<String> privateKeyFromMnemonic({
@@ -96,6 +93,8 @@ class OIDC4VC {
     required String issuer,
     required String issuerState,
     required String nonce,
+    required String state,
+    required PkcePair pkcePair,
     String? options,
   }) async {
     try {
@@ -106,7 +105,6 @@ class OIDC4VC {
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
         selectedCredentials: selectedCredentials,
-        authorizationEndpoint: authorizationEndpoint,
         openidConfigurationResponse: openidConfigurationResponse,
         clientId: clientId,
         issuer: issuer,
@@ -115,6 +113,8 @@ class OIDC4VC {
         issuerState: issuerState,
         nonce: nonce,
         options: options,
+        pkcePair: pkcePair,
+        state: state,
       );
 
       final url = Uri.parse(authorizationEndpoint);
@@ -122,14 +122,13 @@ class OIDC4VC {
           Uri.https(url.authority, url.path, authorizationRequestParemeters);
       return authorizationUri;
     } catch (e) {
-      throw Exception(e);
+      throw Exception('Not a valid openid url to initiate issuance');
     }
   }
 
   @visibleForTesting
   Map<String, dynamic> getAuthorizationRequestParemeters({
     required List<dynamic> selectedCredentials,
-    required String authorizationEndpoint,
     required String clientId,
     required String issuer,
     required String issuerState,
@@ -137,6 +136,8 @@ class OIDC4VC {
     required Map<String, dynamic> openidConfigurationResponse,
     required String webLink,
     required String schema,
+    required String state,
+    required PkcePair pkcePair,
     String? options,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
@@ -185,7 +186,6 @@ class OIDC4VC {
       authorizationDetails.add(data);
     }
 
-    final pkcePair = PkcePair.generate();
     final codeChallenge = pkcePair.codeChallenge;
     final codeVerifier = pkcePair.codeVerifier;
 
@@ -196,13 +196,14 @@ class OIDC4VC {
           '$webLink?uri=$schema&code_verifier=$codeVerifier&options=$options',
       'scope': 'openid',
       'issuer_state': issuerState,
-      'state': const Uuid().v4(),
+      'state': state,
       'nonce': nonce,
       'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
       'authorization_details': jsonEncode(authorizationDetails),
       'client_metadata': jsonEncode({
-        'authorization_endpoint': authorizationEndpoint,
+        'authorization_endpoint':
+            'https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/authorize',
         'scopes_supported': ['openid'],
         'response_types_supported': ['vp_token', 'id_token'],
         'subject_types_supported': ['public'],
@@ -237,6 +238,7 @@ class OIDC4VC {
     required String did,
     required String kid,
     required int indexValue,
+    required bool isEBSIV2,
     String? preAuthorizedCode,
     String? mnemonic,
     String? privateKey,
@@ -270,10 +272,11 @@ class OIDC4VC {
     );
 
     final issuerTokenParameters = IssuerTokenParameters(
-      private,
-      did,
-      kid,
-      issuer,
+      privateKey: private,
+      did: did,
+      kid: kid,
+      issuer: issuer,
+      isEBSIV2: isEBSIV2,
     );
 
     if (nonce == null) throw Exception();
@@ -699,7 +702,10 @@ class OIDC4VC {
       'aud': tokenParameters.issuer,
     };
 
-    final jwt = generateToken(payload, tokenParameters);
+    final jwt = generateToken(
+      vpTokenPayload: payload,
+      tokenParameters: tokenParameters,
+    );
     return jwt;
   }
 
@@ -742,19 +748,17 @@ class OIDC4VC {
       );
 
       final tokenParameters = VerifierTokenParameters(
-        private,
-        did,
-        kid,
-        clientId,
-        credentialsToBePresented,
-        nonce,
+        privateKey: private,
+        did: did,
+        kid: kid,
+        audience: clientId,
+        credentials: credentialsToBePresented,
+        nonce: nonce,
+        isEBSIV2: isEBSIV2,
       );
 
       // structures
-      final verifierIdToken = await getIdToken(
-        tokenParameters: tokenParameters,
-        isEBSIV2: isEBSIV2,
-      );
+      final verifierIdToken = await getIdToken(tokenParameters);
 
       /// build vp token
 
@@ -790,6 +794,7 @@ class OIDC4VC {
     required String did,
     required String kid,
     required int indexValue,
+    required bool isEBSIV2,
     String? mnemonic,
     String? privateKey,
   }) async {
@@ -801,12 +806,13 @@ class OIDC4VC {
       );
 
       final tokenParameters = VerifierTokenParameters(
-        private,
-        did,
-        kid,
-        clientId,
-        credentialsToBePresented,
-        nonce,
+        privateKey: private,
+        did: did,
+        kid: kid,
+        audience: clientId,
+        credentials: credentialsToBePresented,
+        nonce: nonce,
+        isEBSIV2: isEBSIV2,
       );
 
       final vpToken = await getVpToken(tokenParameters);
@@ -836,18 +842,16 @@ class OIDC4VC {
       );
 
       final tokenParameters = VerifierTokenParameters(
-        private,
-        did,
-        kid,
-        clientId,
-        credentialsToBePresented,
-        nonce,
-      );
-
-      final verifierIdToken = await getIdToken(
-        tokenParameters: tokenParameters,
+        privateKey: private,
+        did: did,
+        kid: kid,
+        audience: clientId,
+        credentials: credentialsToBePresented,
+        nonce: nonce,
         isEBSIV2: isEBSIV2,
       );
+
+      final verifierIdToken = await getIdToken(tokenParameters);
 
       return verifierIdToken;
     } catch (e) {
@@ -875,19 +879,17 @@ class OIDC4VC {
       );
 
       final tokenParameters = VerifierTokenParameters(
-        private,
-        did,
-        kid,
-        clientId,
-        [],
-        nonce,
+        privateKey: private,
+        did: did,
+        kid: kid,
+        audience: clientId,
+        credentials: [],
+        nonce: nonce,
+        isEBSIV2: isEBSIV2,
       );
 
       // structures
-      final verifierIdToken = await getIdToken(
-        tokenParameters: tokenParameters,
-        isEBSIV2: isEBSIV2,
-      );
+      final verifierIdToken = await getIdToken(tokenParameters);
 
       final responseHeaders = {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -934,15 +936,18 @@ class OIDC4VC {
       'nonce': tokenParameters.nonce,
     };
 
-    final verifierVpJwt = generateToken(vpTokenPayload, tokenParameters);
+    final verifierVpJwt = generateToken(
+      vpTokenPayload: vpTokenPayload,
+      tokenParameters: tokenParameters,
+    );
 
     return verifierVpJwt;
   }
 
-  String generateToken(
-    Map<String, Object> vpTokenPayload,
-    TokenParameters tokenParameters,
-  ) {
+  String generateToken({
+    required Map<String, Object> vpTokenPayload,
+    required TokenParameters tokenParameters,
+  }) {
     final vpVerifierClaims = JsonWebTokenClaims.fromJson(vpTokenPayload);
     // create a builder, decoding the JWT in a JWS, so using a
     // JsonWebSignatureBuilder
@@ -960,7 +965,7 @@ class OIDC4VC {
       ..setProtectedHeader('typ', 'openid4vci-proof+jwt')
       ..setProtectedHeader('alg', tokenParameters.alg);
 
-    if (oidc4vcModel.publicJWKNeeded) {
+    if (tokenParameters.isEBSIV2) {
       // ignore: avoid_single_cascade_in_expression_statements
       vpBuilder..setProtectedHeader('jwk', tokenParameters.publicJWK);
     }
@@ -980,10 +985,7 @@ class OIDC4VC {
   }
 
   @visibleForTesting
-  Future<String> getIdToken({
-    required VerifierTokenParameters tokenParameters,
-    required bool isEBSIV2,
-  }) async {
+  Future<String> getIdToken(VerifierTokenParameters tokenParameters) async {
     final uuid1 = const Uuid().v4();
     final uuid2 = const Uuid().v4();
 
@@ -997,7 +999,7 @@ class OIDC4VC {
       'nonce': tokenParameters.nonce,
     };
 
-    if (isEBSIV2) {
+    if (tokenParameters.isEBSIV2) {
       payload['_vp_token'] = {
         'presentation_submission': {
           'definition_id': 'Altme defintion for EBSI project',
@@ -1013,7 +1015,10 @@ class OIDC4VC {
       };
     }
 
-    final verifierIdJwt = generateToken(payload, tokenParameters);
+    final verifierIdJwt = generateToken(
+      vpTokenPayload: payload,
+      tokenParameters: tokenParameters,
+    );
     return verifierIdJwt;
   }
 
@@ -1021,6 +1026,7 @@ class OIDC4VC {
     required String did,
     required String kid,
     required int indexValue,
+    required bool isEBSIV2,
     String? mnemonic,
     String? privateKey,
   }) async {
@@ -1031,9 +1037,10 @@ class OIDC4VC {
     );
 
     final tokenParameters = TokenParameters(
-      private,
-      did,
-      kid,
+      privateKey: private,
+      did: did,
+      kid: kid,
+      isEBSIV2: isEBSIV2,
     );
     return tokenParameters.did;
   }
@@ -1042,6 +1049,7 @@ class OIDC4VC {
     required String did,
     required String kid,
     required int indexValue,
+    required bool isEBSIV2,
     String? mnemonic,
     String? privateKey,
   }) async {
@@ -1052,9 +1060,10 @@ class OIDC4VC {
     );
 
     final tokenParameters = TokenParameters(
-      private,
-      did,
-      kid,
+      privateKey: private,
+      did: did,
+      kid: kid,
+      isEBSIV2: isEBSIV2,
     );
     return tokenParameters.kid;
   }

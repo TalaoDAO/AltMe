@@ -626,6 +626,7 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey: privateKey,
         uri: uri,
         indexValue: indexValue,
+        oidc4vcType: oidc4vcType,
       );
 
       final presentationSubmissionString = getPresentationSubmission(
@@ -734,6 +735,7 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey: privateKey,
         uri: uri,
         indexValue: indexValue,
+        oidc4vcType: oidc4vcType,
       );
 
       final presentationSubmissionString = getPresentationSubmission(
@@ -872,6 +874,7 @@ class ScanCubit extends Cubit<ScanState> {
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
     required OIDC4VC oidc4vc,
+    required OIDC4VCType oidc4vcType,
     required String privateKey,
     required String did,
     required String kid,
@@ -924,6 +927,7 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey: privateKey,
         indexValue: indexValue,
         nonce: nonce,
+        isEBSIV2: oidc4vcType.isEBSIV2,
       );
 
       return vpToken;

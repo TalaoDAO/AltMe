@@ -1,64 +1,48 @@
-import 'package:dio/dio.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 enum OIDC4VCType {
   DEFAULT(
     offerPrefix: 'openid-credential-offer://',
     presentationPrefix: 'openid-vc://',
-    publicJWKNeeded: false,
   ),
 
   EBSIV2(
     offerPrefix: 'openid://initiate_issuance',
     presentationPrefix: 'openid://',
-    publicJWKNeeded: true,
   ),
 
   GAIAX(
     offerPrefix: 'openid-initiate-issuance://',
     presentationPrefix: 'openid://',
-    publicJWKNeeded: false,
   ),
 
   GREENCYPHER(
     offerPrefix: 'openid-credential-offer-hedera://',
     presentationPrefix: 'openid-hedera://',
-    publicJWKNeeded: false,
   ),
 
   EBSIV3(
     offerPrefix: 'openid-credential-offer://',
     presentationPrefix: 'openid-vc://',
-    publicJWKNeeded: false,
   ),
 
   JWTVC(
     offerPrefix: '',
     presentationPrefix: 'openid-vc://',
-    publicJWKNeeded: false,
   );
 
   const OIDC4VCType({
     required this.offerPrefix,
     required this.presentationPrefix,
-    required this.publicJWKNeeded,
   });
 
   final String offerPrefix;
   final String presentationPrefix;
-  final bool publicJWKNeeded;
 }
 
 extension OIDC4VCTypeX on OIDC4VCType {
   OIDC4VC get getOIDC4VC {
-    return OIDC4VC(
-      client: Dio(),
-      oidc4vcModel: OIDC4VCModel(
-        offerPrefix: offerPrefix,
-        presentationPrefix: presentationPrefix,
-        publicJWKNeeded: publicJWKNeeded,
-      ),
-    );
+    return OIDC4VC();
   }
 
   String get rename {
@@ -105,7 +89,5 @@ extension OIDC4VCTypeX on OIDC4VCType {
     }
   }
 
-  bool get isDeprecated => this == OIDC4VCType.EBSIV2;
-
-  bool get schemaForType => this == OIDC4VCType.EBSIV2;
+  bool get isEBSIV2 => this == OIDC4VCType.EBSIV2;
 }

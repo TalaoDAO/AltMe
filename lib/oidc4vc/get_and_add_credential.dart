@@ -64,6 +64,7 @@ Future<void> getAndAddCredential({
       userPin: userPin,
       code: codeForAuthorisedFlow,
       codeVerifier: codeVerifier,
+      isEBSIV2: oidc4vcType.isEBSIV2,
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {

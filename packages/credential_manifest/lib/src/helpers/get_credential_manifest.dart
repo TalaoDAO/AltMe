@@ -8,7 +8,7 @@ Future<CredentialManifest?> getCredentialManifest({
   required Dio client,
   required String baseUrl,
   required String credentialType,
-  required bool schemaForType,
+  required bool isEBSIV2,
 }) async {
   try {
     final dynamic wellKnown = await getOpenIdConfig(
@@ -16,7 +16,7 @@ Future<CredentialManifest?> getCredentialManifest({
       client: client,
     );
 
-    if (schemaForType) {
+    if (isEBSIV2) {
       final JsonPath credentialManifestPath =
           JsonPath(r'$..credential_manifests');
 

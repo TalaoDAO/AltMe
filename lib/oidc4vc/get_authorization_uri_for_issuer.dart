@@ -47,6 +47,8 @@ Future<void> getAuthorizationUriForIssuer({
     issuerState: issuerState,
     nonce: nonce,
     options: selectedCredentialsIndex.toString(),
+    state: const Uuid().v4(),
+    pkcePair: PkcePair.generate(),
   );
   await LaunchUrl.launchUri(ebsiAuthenticationUri);
 }

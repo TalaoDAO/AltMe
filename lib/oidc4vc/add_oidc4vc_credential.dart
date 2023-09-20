@@ -61,7 +61,7 @@ Future<void> addOIDC4VCCredential({
     client: Dio(),
     baseUrl: issuer,
     credentialType: credentialType,
-    schemaForType: oidc4vcType.schemaForType,
+    isEBSIV2: oidc4vcType.isEBSIV2,
   );
 
   if (credentialManifest?.outputDescriptors?.isNotEmpty ?? false) {
