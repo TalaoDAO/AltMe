@@ -195,7 +195,6 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                 issuer: issuer,
                                 preAuthorizedCode: preAuthorizedCode,
                                 oidc4vcType: oidc4vcType,
-                                selectedCredentialsIndex: state,
                                 credentialOfferJson: credentialOfferJson,
                               );
                         },

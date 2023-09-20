@@ -497,7 +497,7 @@ packages:
     source: hosted
     version: "0.2.0"
   dart_jsonwebtoken:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: dart_jsonwebtoken
       sha256: "1c36cca992d210230d2a4221adeb2c3131d897da1a92278f3bbd58a5e649e00a"
@@ -1792,14 +1792,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.4"
-  pkce:
-    dependency: transitive
-    description:
-      name: pkce
-      sha256: "5af8f4598aeaf033da4c87cb28bc9046262ddcbc0ba8d185d34d07e1aeb8c504"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0+1"
   platform:
     dependency: transitive
     description:

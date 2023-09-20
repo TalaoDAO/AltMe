@@ -4,6 +4,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 
 import 'package:did_kit/did_kit.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -47,8 +48,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   if (credentials is List<dynamic>) {
     final codeForAuthorisedFlow =
         Uri.parse(scannedResponse).queryParameters['code'];
-    final stateOfCredentialsSelected =
-        Uri.parse(scannedResponse).queryParameters['options'];
+    final state = Uri.parse(scannedResponse).queryParameters['state'];
 
     if (preAuthorizedCode != null) {
       /// full phase flow of preAuthorized
@@ -61,7 +61,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         credentialOfferJson: credentialOfferJson,
       );
     } else {
-      if (codeForAuthorisedFlow == null || stateOfCredentialsSelected == null) {
+      if (codeForAuthorisedFlow == null || state == null) {
         /// first phase flow of authorised
         qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
           credentials: credentials,
@@ -74,25 +74,26 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       } else {
         /// second phase flow of authorised
 
-        /// remove empty fields
-        stateOfCredentialsSelected.replaceAll(' ', '');
+        final jwt = decodePayload(
+          jwtDecode: JWTDecode(),
+          token: state,
+        );
 
-        /// Remove the brackets and split the string into a list of substrings
-        final List<String> stringList = stateOfCredentialsSelected
-            .substring(1, stateOfCredentialsSelected.length - 1)
-            .split(',');
+        final stateOfCredentialsSelected = jwt['options'] as List<dynamic>;
+        final String codeVerifier = jwt['codeVerifier'].toString();
 
-        // Convert the list of strings to a list of integers
-        final List<int> intList = stringList.map(int.parse).toList();
+        final selectedCredentials = stateOfCredentialsSelected
+            .map((index) => credentials[index])
+            .toList();
 
-        final selectedCredentials =
-            intList.map((index) => credentials[index]).toList();
         await qrCodeScanCubit.addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
           userPin: userPin,
           issuer: issuer,
           preAuthorizedCode: null,
           oidc4vcType: oidc4vcType,
+          codeForAuthorisedFlow: codeForAuthorisedFlow,
+          codeVerifier: codeVerifier,
         );
       }
     }
@@ -111,6 +112,8 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       userPin: userPin,
       issuer: issuer,
       preAuthorizedCode: preAuthorizedCode,
+      codeForAuthorisedFlow: null,
+      codeVerifier: null,
     );
     oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
     qrCodeScanCubit.goBack();

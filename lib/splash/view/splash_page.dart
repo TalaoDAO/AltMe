@@ -92,30 +92,52 @@ class _SplashViewState extends State<SplashView> {
     }
 
     if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
-      final url =
-          uri.toString().split('${Parameters.oidc4vcUniversalLink}?uri=')[1];
+      final codeForAuthorisedFlow = uri!.queryParameters['code'];
+      final state = uri.queryParameters['state'];
 
-      final String formattedUrl = Uri.decodeFull(url);
-      final List<String> parts = formattedUrl.split('?');
-
-      final String modifiedUrl = '${parts[0]}?${parts.sublist(1).join('&')}';
-
-      final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-          await getOIDC4VCTypeForIssuance(
-        url: modifiedUrl,
-        client: DioClient('', Dio()),
-      );
-
-      if (currentOIIDC4VCTypeForIssuance != null) {
-        /// issuer side (oidc4VCI)
-
-        await context.read<QRCodeScanCubit>().startOIDC4VCCredentialIssuance(
-              scannedResponse: modifiedUrl,
-              currentOIIDC4VCType: currentOIIDC4VCTypeForIssuance,
-              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-            );
+      if (codeForAuthorisedFlow == null || state == null) {
         return;
       }
+
+      final jwt = decodePayload(
+        jwtDecode: JWTDecode(),
+        token: state,
+      );
+
+      if (!(jwt.containsKey('credentials') &&
+          jwt.containsKey('codeVerifier') &&
+          jwt.containsKey('issuer') &&
+          jwt.containsKey('type'))) {
+        return;
+      }
+
+      final selectedCredentials = jwt['credentials'] as List<dynamic>;
+      final String codeVerifier = jwt['codeVerifier'].toString();
+      final String issuer = jwt['issuer'].toString();
+      final String type = jwt['type'].toString();
+
+      OIDC4VCType? oidc4vcType;
+
+      for (final value in OIDC4VCType.values) {
+        if (value.name == type) {
+          oidc4vcType = value;
+          break;
+        }
+      }
+
+      if (oidc4vcType == null) {
+        return;
+      }
+
+      await context.read<QRCodeScanCubit>().addCredentialsInLoop(
+            selectedCredentials: selectedCredentials,
+            userPin: null,
+            issuer: issuer,
+            preAuthorizedCode: null,
+            oidc4vcType: oidc4vcType,
+            codeForAuthorisedFlow: codeForAuthorisedFlow,
+            codeVerifier: codeVerifier,
+          );
 
       return;
     }

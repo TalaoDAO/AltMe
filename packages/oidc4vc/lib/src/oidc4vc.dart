@@ -88,14 +88,12 @@ class OIDC4VC {
   Future<Uri> getAuthorizationUriForIssuer({
     required List<dynamic> selectedCredentials,
     required String clientId,
-    required String webLink,
-    required String schema,
+    required String redirectUri,
     required String issuer,
     required String issuerState,
     required String nonce,
-    required String state,
     required PkcePair pkcePair,
-    String? options,
+    required String state,
   }) async {
     try {
       final openidConfigurationResponse = await getOpenIdConfig(issuer);
@@ -108,11 +106,9 @@ class OIDC4VC {
         openidConfigurationResponse: openidConfigurationResponse,
         clientId: clientId,
         issuer: issuer,
-        schema: schema,
-        webLink: webLink,
+        redirectUri: redirectUri,
         issuerState: issuerState,
         nonce: nonce,
-        options: options,
         pkcePair: pkcePair,
         state: state,
       );
@@ -134,11 +130,9 @@ class OIDC4VC {
     required String issuerState,
     required String nonce,
     required Map<String, dynamic> openidConfigurationResponse,
-    required String webLink,
-    required String schema,
-    required String state,
+    required String redirectUri,
     required PkcePair pkcePair,
-    String? options,
+    required String state,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -187,13 +181,11 @@ class OIDC4VC {
     }
 
     final codeChallenge = pkcePair.codeChallenge;
-    final codeVerifier = pkcePair.codeVerifier;
 
     final myRequest = <String, dynamic>{
       'response_type': 'code',
       'client_id': clientId,
-      'redirect_uri':
-          '$webLink?uri=$schema&code_verifier=$codeVerifier&options=$options',
+      'redirect_uri': redirectUri,
       'scope': 'openid',
       'issuer_state': issuerState,
       'state': state,
@@ -202,8 +194,7 @@ class OIDC4VC {
       'code_challenge_method': 'S256',
       'authorization_details': jsonEncode(authorizationDetails),
       'client_metadata': jsonEncode({
-        'authorization_endpoint':
-            'https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/authorize',
+        'authorization_endpoint': 'https://app.altme.io/app/download/authorize',
         'scopes_supported': ['openid'],
         'response_types_supported': ['vp_token', 'id_token'],
         'subject_types_supported': ['public'],

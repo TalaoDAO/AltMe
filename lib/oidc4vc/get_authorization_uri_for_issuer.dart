@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
-import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -12,7 +12,6 @@ Future<void> getAuthorizationUriForIssuer({
   required OIDC4VCType oidc4vcType,
   required DIDKitProvider didKitProvider,
   required List<dynamic> selectedCredentials,
-  required List<int> selectedCredentialsIndex,
   required SecureStorageProvider secureStorageProvider,
   required String issuer,
   required dynamic credentialOfferJson,
@@ -37,18 +36,26 @@ Future<void> getAuthorizationUriForIssuer({
       ['issuer_state'] as String;
 
   final String nonce = const Uuid().v4();
+  final PkcePair pkcePair = PkcePair.generate();
+
+  final jwt = JWT({
+    'codeVerifier': pkcePair.codeVerifier,
+    'credentials': selectedCredentials,
+    'issuer': issuer,
+    'type': oidc4vcType.name,
+  });
+
+  final jwtToken = jwt.sign(SecretKey('0123456789'));
 
   final Uri ebsiAuthenticationUri = await oidc4vc.getAuthorizationUriForIssuer(
     selectedCredentials: selectedCredentials,
     clientId: did,
-    webLink: Parameters.oidc4vcUniversalLink,
-    schema: scannedResponse,
+    redirectUri: Parameters.oidc4vcUniversalLink,
     issuer: issuer,
     issuerState: issuerState,
     nonce: nonce,
-    options: selectedCredentialsIndex.toString(),
-    state: const Uuid().v4(),
     pkcePair: PkcePair.generate(),
+    state: jwtToken,
   );
   await LaunchUrl.launchUri(ebsiAuthenticationUri);
 }

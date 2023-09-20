@@ -21,6 +21,8 @@ Future<void> getAndAddCredential({
   required String? userPin,
   required String? preAuthorizedCode,
   required String issuer,
+  required String? codeForAuthorisedFlow,
+  required String? codeVerifier,
 }) async {
   final mnemonic =
       await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
@@ -35,11 +37,6 @@ Future<void> getAndAddCredential({
     privateKey: privateKey,
     didKitProvider: didKitProvider,
   );
-
-  final codeForAuthorisedFlow =
-      Uri.parse(scannedResponse).queryParameters['code'];
-  final codeVerifier =
-      Uri.parse(scannedResponse).queryParameters['code_verifier'];
 
   if (preAuthorizedCode != null ||
       (codeForAuthorisedFlow != null && codeVerifier != null)) {

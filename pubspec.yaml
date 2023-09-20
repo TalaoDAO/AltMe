@@ -28,6 +28,7 @@ dependencies:
   crypto: ^3.0.3
   cryptocurrency_keys:
     path: packages/cryptocurrency_keys
+  dart_jsonwebtoken: ^2.11.0
   dartez:
     git:
       url: https://github.com/TalebRafiepour/Dartez.git
