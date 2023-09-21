@@ -9,7 +9,6 @@ class TokenParameters {
     required this.privateKey,
     required this.did,
     required this.kid,
-    required this.isEBSIV2,
   });
 
   /// [privateKey] is JWK (Json Web Key) of user private key
@@ -26,9 +25,6 @@ class TokenParameters {
   Map<String, dynamic> get publicJWK {
     return Map.of(privateKey)..removeWhere((key, value) => key == 'd');
   }
-
-  /// [isEBSIV2] whether the value is EBSIV2 or not
-  bool isEBSIV2;
 
   /// [alg] is computed from crv of [privateKey]'s fingerprint
   String get alg {

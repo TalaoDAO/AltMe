@@ -108,8 +108,6 @@ class _SplashViewState extends State<SplashView> {
 
       final payload = jwt.payload as Map<String, dynamic>;
 
-      print('Payload: ${jwt.payload}');
-
       final containsAllRequiredKey = payload.containsKey('credentials') &&
           payload.containsKey('codeVerifier') &&
           payload.containsKey('issuer') &&

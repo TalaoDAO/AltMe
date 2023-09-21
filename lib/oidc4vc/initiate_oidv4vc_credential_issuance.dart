@@ -32,7 +32,6 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       credentials = credentialOfferJson['credentials'];
 
     case OIDC4VCType.GAIAX:
-    case OIDC4VCType.EBSIV2:
       credentials = uriFromScannedResponse.queryParameters['credential_type'];
 
     case OIDC4VCType.JWTVC:

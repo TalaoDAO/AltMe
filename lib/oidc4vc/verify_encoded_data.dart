@@ -7,7 +7,7 @@ Future<VerificationType> verifyEncodedData(
   String jwt,
 ) async {
   final VerificationType verificationType =
-      await OIDC4VCType.EBSIV2.getOIDC4VC.verifyEncodedData(
+      await OIDC4VCType.EBSIV3.getOIDC4VC.verifyEncodedData(
     issuerDid: issuerDid,
     jwt: jwt,
     issuerKid: issuerKid,

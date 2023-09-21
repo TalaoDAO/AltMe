@@ -108,55 +108,20 @@ class ScanCubit extends Cubit<ScanState> {
           } else if (responseType == 'id_token vp_token') {
             /// verifier side (oidc4vp and siopv2) with request uri as value
 
-            /// EBSI V2 contains claimns
-            /// EBSI V2 and GAIAX has same starting uri
-            final String? claims = uri.queryParameters['claims'];
-
-            if (claims != null) {
-              if (currentOIIDC4VCType == OIDC4VCType.EBSIV2) {
-                await presentCredentialToOIDC4VPAndSiopV2RequestForEBSIV2(
-                  credentialsToBePresented: credentialsToBePresented,
-                  issuer: issuer,
-                  uri: uri,
-                  oidc4vc: oidc4vc,
-                  did: did,
-                  kid: kid,
-                  privateKey: privateKey,
-                  isEBSIV2: currentOIIDC4VCType == OIDC4VCType.EBSIV2,
-                  indexValue: currentOIIDC4VCType.indexValue,
-                );
-              } else {
-                emit(
-                  state.copyWith(
-                    status: ScanStatus.error,
-                    message: StateMessage.error(
-                      messageHandler: ResponseMessage(
-                        ResponseString
-                            .RESPONSE_STRING_pleaseSwitchToRightOIDC4VCProfile,
-                      ),
-                      showDialog: false,
-                      duration: const Duration(seconds: 20),
-                    ),
-                  ),
-                );
-                return;
-              }
-            } else {
-              await presentCredentialToOIDC4VPAndSIOPV2RequestForOthers(
-                uri: uri,
-                issuer: issuer,
-                credentialsToBePresented: credentialsToBePresented,
-                presentationDefinition:
-                    credentialModel.credentialManifest!.presentationDefinition!,
-                oidc4vcType: currentOIIDC4VCType,
-                oidc4vc: oidc4vc,
-                did: did,
-                kid: kid,
-                privateKey: privateKey,
-                indexValue: currentOIIDC4VCType.indexValue,
-                stateValue: stateValue,
-              );
-            }
+            await presentCredentialToOIDC4VPAndSIOPV2RequestForOthers(
+              uri: uri,
+              issuer: issuer,
+              credentialsToBePresented: credentialsToBePresented,
+              presentationDefinition:
+                  credentialModel.credentialManifest!.presentationDefinition!,
+              oidc4vcType: currentOIIDC4VCType,
+              oidc4vc: oidc4vc,
+              did: did,
+              kid: kid,
+              privateKey: privateKey,
+              indexValue: currentOIIDC4VCType.indexValue,
+              stateValue: stateValue,
+            );
 
             return;
           } else {
@@ -520,82 +485,6 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  Future<dynamic> presentCredentialToOIDC4VPAndSiopV2RequestForEBSIV2({
-    required List<CredentialModel>? credentialsToBePresented,
-    required Issuer issuer,
-    required Uri uri,
-    required OIDC4VC oidc4vc,
-    required String privateKey,
-    required String did,
-    required String kid,
-    required bool isEBSIV2,
-    required int indexValue,
-  }) async {
-    final log =
-        getLogger('ScanCubit - presentCredentialToOIDC4VPAndSiopV2Request');
-
-    final nonce = uri.queryParameters['nonce'] ?? '';
-    final clientId = uri.queryParameters['client_id'] ?? '';
-
-    final String? redirectUri = getRedirectUri(uri);
-
-    if (redirectUri == null) throw Exception();
-
-    final stateValue = uri.queryParameters['state'];
-
-    final credentialList =
-        credentialsToBePresented!.map((e) => jsonEncode(e.toJson())).toList();
-
-    try {
-      await oidc4vc.sendPresentation(
-        clientId: clientId,
-        redirectUrl: redirectUri,
-        credentialsToBePresented: credentialList,
-        privateKey: privateKey,
-        did: did,
-        kid: kid,
-        nonce: nonce,
-        isEBSIV2: isEBSIV2,
-        indexValue: indexValue,
-        stateValue: stateValue,
-      );
-
-      await presentationActivity(
-        credentialModels: credentialsToBePresented,
-        issuer: issuer,
-      );
-
-      emit(
-        state.copyWith(
-          status: ScanStatus.success,
-          message: StateMessage.success(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
-            ),
-          ),
-        ),
-      );
-    } catch (e, s) {
-      log.e('something went wrong', error: e, stackTrace: s);
-      if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
-      } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-            ),
-          ),
-        );
-      }
-      return;
-    }
-  }
-
   Future<dynamic> presentCredentialToOID4VPRequest({
     required List<CredentialModel>? credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
@@ -722,7 +611,6 @@ class ScanCubit extends Cubit<ScanState> {
         oidc4vc: oidc4vc,
         privateKey: privateKey,
         uri: uri,
-        isEBSIV2: oidc4vcType == OIDC4VCType.EBSIV2,
         indexValue: indexValue,
       );
 
@@ -927,7 +815,6 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey: privateKey,
         indexValue: indexValue,
         nonce: nonce,
-        isEBSIV2: oidc4vcType.isEBSIV2,
       );
 
       return vpToken;
@@ -943,7 +830,6 @@ class ScanCubit extends Cubit<ScanState> {
     required String did,
     required String kid,
     required Uri uri,
-    required bool isEBSIV2,
     required int indexValue,
   }) async {
     final credentialList =
@@ -959,7 +845,6 @@ class ScanCubit extends Cubit<ScanState> {
       kid: kid,
       privateKey: privateKey,
       nonce: nonce,
-      isEBSIV2: isEBSIV2,
       indexValue: indexValue,
     );
 

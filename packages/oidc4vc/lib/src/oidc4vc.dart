@@ -16,7 +16,6 @@ import 'package:oidc4vc/src/token_parameters.dart';
 import 'package:oidc4vc/src/verification_type.dart';
 import 'package:oidc4vc/src/verifier_token_parameters.dart';
 import 'package:secp256k1/secp256k1.dart';
-import 'package:uuid/uuid.dart';
 
 /// {@template ebsi}
 /// EBSI wallet compliance
@@ -230,7 +229,6 @@ class OIDC4VC {
     required String did,
     required String kid,
     required int indexValue,
-    required bool isEBSIV2,
     String? preAuthorizedCode,
     String? mnemonic,
     String? privateKey,
@@ -268,7 +266,6 @@ class OIDC4VC {
       did: did,
       kid: kid,
       issuer: issuer,
-      isEBSIV2: isEBSIV2,
     );
 
     if (nonce == null) throw Exception();
@@ -726,7 +723,6 @@ class OIDC4VC {
     required String kid,
     required List<String> credentialsToBePresented,
     required String nonce,
-    required bool isEBSIV2,
     required int indexValue,
     required String? stateValue,
     String? mnemonic,
@@ -746,7 +742,6 @@ class OIDC4VC {
         audience: clientId,
         credentials: credentialsToBePresented,
         nonce: nonce,
-        isEBSIV2: isEBSIV2,
       );
 
       // structures
@@ -786,7 +781,6 @@ class OIDC4VC {
     required String did,
     required String kid,
     required int indexValue,
-    required bool isEBSIV2,
     String? mnemonic,
     String? privateKey,
   }) async {
@@ -804,7 +798,6 @@ class OIDC4VC {
         audience: clientId,
         credentials: credentialsToBePresented,
         nonce: nonce,
-        isEBSIV2: isEBSIV2,
       );
 
       final vpToken = await getVpToken(tokenParameters);
@@ -821,7 +814,6 @@ class OIDC4VC {
     required String did,
     required String kid,
     required String nonce,
-    required bool isEBSIV2,
     required int indexValue,
     String? mnemonic,
     String? privateKey,
@@ -840,7 +832,6 @@ class OIDC4VC {
         audience: clientId,
         credentials: credentialsToBePresented,
         nonce: nonce,
-        isEBSIV2: isEBSIV2,
       );
 
       final verifierIdToken = await getIdToken(tokenParameters);
@@ -857,7 +848,6 @@ class OIDC4VC {
     required String kid,
     required String redirectUri,
     required String nonce,
-    required bool isEBSIV2,
     required int indexValue,
     required String? stateValue,
     String? mnemonic,
@@ -877,7 +867,6 @@ class OIDC4VC {
         audience: clientId,
         credentials: [],
         nonce: nonce,
-        isEBSIV2: isEBSIV2,
       );
 
       // structures
@@ -955,14 +944,7 @@ class OIDC4VC {
       // set the content
       ..jsonContent = vpVerifierClaims.toJson()
       ..setProtectedHeader('typ', 'openid4vci-proof+jwt')
-      ..setProtectedHeader('alg', tokenParameters.alg);
-
-    if (tokenParameters.isEBSIV2) {
-      // ignore: avoid_single_cascade_in_expression_statements
-      vpBuilder..setProtectedHeader('jwk', tokenParameters.publicJWK);
-    }
-
-    vpBuilder
+      ..setProtectedHeader('alg', tokenParameters.alg)
       ..setProtectedHeader('kid', tokenParameters.kid)
 
       // add a key to sign, can only add one for JWT
@@ -978,9 +960,6 @@ class OIDC4VC {
 
   @visibleForTesting
   Future<String> getIdToken(VerifierTokenParameters tokenParameters) async {
-    final uuid1 = const Uuid().v4();
-    final uuid2 = const Uuid().v4();
-
     /// build id token
     final payload = {
       'iat': DateTime.now().microsecondsSinceEpoch,
@@ -990,22 +969,6 @@ class OIDC4VC {
       'iss': tokenParameters.did, //'https://self-issued.me/v2',
       'nonce': tokenParameters.nonce,
     };
-
-    if (tokenParameters.isEBSIV2) {
-      payload['_vp_token'] = {
-        'presentation_submission': {
-          'definition_id': 'Altme defintion for EBSI project',
-          'id': uuid1,
-          'descriptor_map': [
-            {
-              'id': uuid2,
-              'format': 'jwt_vp',
-              'path': r'$',
-            }
-          ],
-        },
-      };
-    }
 
     final verifierIdJwt = generateToken(
       vpTokenPayload: payload,
@@ -1018,7 +981,6 @@ class OIDC4VC {
     required String did,
     required String kid,
     required int indexValue,
-    required bool isEBSIV2,
     String? mnemonic,
     String? privateKey,
   }) async {
@@ -1032,7 +994,6 @@ class OIDC4VC {
       privateKey: private,
       did: did,
       kid: kid,
-      isEBSIV2: isEBSIV2,
     );
     return tokenParameters.did;
   }
@@ -1041,7 +1002,6 @@ class OIDC4VC {
     required String did,
     required String kid,
     required int indexValue,
-    required bool isEBSIV2,
     String? mnemonic,
     String? privateKey,
   }) async {
@@ -1055,7 +1015,6 @@ class OIDC4VC {
       privateKey: private,
       did: did,
       kid: kid,
-      isEBSIV2: isEBSIV2,
     );
     return tokenParameters.kid;
   }

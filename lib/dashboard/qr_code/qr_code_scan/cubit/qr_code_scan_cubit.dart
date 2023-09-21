@@ -265,10 +265,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       if (isSIOPV2OROIDC4VPUrl(state.uri!)) {
         final String? requestUri = state.uri?.queryParameters['request_uri'];
+        final String? request = state.uri?.queryParameters['request'];
         dynamic responseType;
 
         /// check if request uri is provided or not
-        if (requestUri != null) {
+        if (requestUri != null || request != null) {
           /// verifier side (oidc4vp) or (siopv2 oidc4vc) with request_uri
           /// afer verification process
           final Map<String, dynamic> response =
@@ -574,7 +575,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           return;
 
         case OIDC4VCType.GAIAX:
-        case OIDC4VCType.EBSIV2:
           break;
 
         case OIDC4VCType.JWTVC:
@@ -720,23 +720,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     state.uri?.queryParameters.forEach((key, value) => keys.add(key));
     if (isUriAsValueValid(keys)) {
       late PresentationDefinition presentationDefinition;
-      if (keys.contains('claims')) {
-        // EBSIV2 normally
-        var claims = state.uri?.queryParameters['claims'] ?? '';
-        // TODO(hawkbee): change when correction is done on verifier
-        claims = claims
-            .replaceAll("'email': None", "'email': 'None'")
-            .replaceAll("'", '"');
-        final jsonPath = JsonPath(r'$..input_descriptors');
-        final outputDescriptors =
-            jsonPath.readValues(jsonDecode(claims)).first as List;
-        final inputDescriptorList = outputDescriptors
-            .map((e) => InputDescriptor.fromJson(e as Map<String, dynamic>))
-            .toList();
-
-        presentationDefinition =
-            PresentationDefinition(inputDescriptors: inputDescriptorList);
-      } else if (keys.contains('presentation_definition')) {
+      if (keys.contains('presentation_definition')) {
         final String presentationDefinitionValue =
             state.uri?.queryParameters['presentation_definition'] ?? '';
 
@@ -912,7 +896,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         kid: kid,
         redirectUri: redirectUri,
         nonce: nonce,
-        isEBSIV2: currentOIIDC4VCType == OIDC4VCType.EBSIV2,
         indexValue: currentOIIDC4VCType.indexValue,
         stateValue: stateValue,
       );

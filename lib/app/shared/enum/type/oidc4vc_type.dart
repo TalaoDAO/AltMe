@@ -6,11 +6,6 @@ enum OIDC4VCType {
     presentationPrefix: 'openid-vc://',
   ),
 
-  EBSIV2(
-    offerPrefix: 'openid://initiate_issuance',
-    presentationPrefix: 'openid://',
-  ),
-
   GAIAX(
     offerPrefix: 'openid-initiate-issuance://',
     presentationPrefix: 'openid://',
@@ -51,8 +46,6 @@ extension OIDC4VCTypeX on OIDC4VCType {
         return 'DEFAULT';
       case OIDC4VCType.GAIAX:
         return 'GAIA-X';
-      case OIDC4VCType.EBSIV2:
-        return 'EBSI-V2';
       case OIDC4VCType.EBSIV3:
         return 'EBSI-V3';
       case OIDC4VCType.GREENCYPHER:
@@ -69,8 +62,6 @@ extension OIDC4VCTypeX on OIDC4VCType {
       case OIDC4VCType.GREENCYPHER:
       case OIDC4VCType.JWTVC:
         return 1;
-      case OIDC4VCType.EBSIV2:
-        return 2;
       case OIDC4VCType.EBSIV3:
         return 3;
     }
@@ -79,7 +70,6 @@ extension OIDC4VCTypeX on OIDC4VCType {
   bool get isEnabled {
     switch (this) {
       case OIDC4VCType.DEFAULT:
-      case OIDC4VCType.EBSIV2:
       case OIDC4VCType.GAIAX:
       case OIDC4VCType.GREENCYPHER:
       case OIDC4VCType.EBSIV3:
@@ -88,6 +78,4 @@ extension OIDC4VCTypeX on OIDC4VCType {
         return false;
     }
   }
-
-  bool get isEBSIV2 => this == OIDC4VCType.EBSIV2;
 }

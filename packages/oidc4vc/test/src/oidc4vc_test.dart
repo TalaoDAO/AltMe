@@ -135,7 +135,6 @@ void main() {
         ],
       }
     ];
-
     const clientId =
         'did:key:zBhBLmYmyihtomRdJJNEKzbPj51o4a3GYFeZoRHSABKUwqdjiQPY2fjSoTWRD2nvVmaLnLHU8GXeGFmL1ed8ZAoPGoDeBMwcp4XFchNeTw917v2evpUjyst2gxZuRrVDSxDCb6G2Z1Tbz8kWHbjfUKgLVQd7CexS5GvPHfSQGdsLdjj4cNZvvZa';
     const webLink = 'https://app.altme.io/app/download/oidc4vc';

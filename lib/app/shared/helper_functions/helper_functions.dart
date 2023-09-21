@@ -378,15 +378,6 @@ Future<(String, String)> getDidAndKid({
       did = didKitProvider!.keyToDID(didMethod, privateKey);
       kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
 
-    case OIDC4VCType.EBSIV2:
-      final private = jsonDecode(privateKey) as Map<String, dynamic>;
-
-      final thumbprint = getThumbprintForEBSIV2(private);
-      final encodedAddress = Base58Encode([2, ...thumbprint]);
-      did = 'did:ebsi:z$encodedAddress';
-      final lastPart = Base58Encode(thumbprint);
-      kid = '$did#$lastPart';
-
     case OIDC4VCType.EBSIV3:
       final private = jsonDecode(privateKey) as Map<String, dynamic>;
 
@@ -407,12 +398,7 @@ Future<(String, String)> getDidAndKid({
   return (did, kid);
 }
 
-List<int> getThumbprintForEBSIV2(Map<String, dynamic> privateKey) {
-  final bytesToHash = sortedPublcJwk(privateKey);
-  final sha256Digest = sha256.convert(bytesToHash);
-
-  return sha256Digest.bytes;
-}
+ 
 
 List<int> sortedPublcJwk(Map<String, dynamic> privateKey) {
   final publicJWK = Map.of(privateKey)..removeWhere((key, value) => key == 'd');
@@ -553,7 +539,6 @@ Future<String> getHost({
         ).host;
 
       case OIDC4VCType.GAIAX:
-      case OIDC4VCType.EBSIV2:
         return Uri.parse(
           uri.queryParameters['issuer'].toString(),
         ).host;
@@ -616,7 +601,6 @@ Future<(String?, String)> getIssuerAndPreAuthorizedCode({
       issuer = credentialOfferJson['credential_issuer'].toString();
 
     case OIDC4VCType.GAIAX:
-    case OIDC4VCType.EBSIV2:
       issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
       preAuthorizedCode =
           uriFromScannedResponse.queryParameters['pre-authorized_code'];

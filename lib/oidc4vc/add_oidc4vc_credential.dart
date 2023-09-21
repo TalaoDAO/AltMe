@@ -50,7 +50,7 @@ Future<void> addOIDC4VCCredential({
 
   newCredential['credentialPreview'] = credentialFromOIDC4VC;
 
-  if (oidc4vcType == OIDC4VCType.EBSIV2) {
+  if (newCredential['credentialPreview']['credentialSubject']['type'] == null) {
     /// added id as type to recognise the card
     /// for ebsiv2 only
     newCredential['credentialPreview']['credentialSubject']['type'] =
@@ -61,7 +61,6 @@ Future<void> addOIDC4VCCredential({
     client: Dio(),
     baseUrl: issuer,
     credentialType: credentialType,
-    isEBSIV2: oidc4vcType.isEBSIV2,
   );
 
   if (credentialManifest?.outputDescriptors?.isNotEmpty ?? false) {

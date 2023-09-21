@@ -47,8 +47,6 @@ class OIDC4VCProfilePage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final OIDC4VCType currentType = OIDC4VCType.values[index];
 
-                    if (currentType.isEBSIV2) return Container();
-
                     return Column(
                       children: [
                         ListTile(
