@@ -11,7 +11,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     required this.userPin,
     required this.preAuthorizedCode,
     required this.issuer,
-    required this.oidc4vcType,
+    required this.isEBSIV3,
     required this.credentialOfferJson,
   });
 
@@ -19,7 +19,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
   final String? userPin;
   final String? preAuthorizedCode;
   final String issuer;
-  final OIDC4VCType oidc4vcType;
+  final bool isEBSIV3;
   final dynamic credentialOfferJson;
 
   static Route<dynamic> route({
@@ -27,7 +27,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     required String? userPin,
     required String? preAuthorizedCode,
     required String issuer,
-    required OIDC4VCType oidc4vcType,
+    required bool isEBSIV3,
     required dynamic credentialOfferJson,
   }) =>
       MaterialPageRoute<void>(
@@ -36,7 +36,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
           userPin: userPin,
           issuer: issuer,
           preAuthorizedCode: preAuthorizedCode,
-          oidc4vcType: oidc4vcType,
+          isEBSIV3: isEBSIV3,
           credentialOfferJson: credentialOfferJson,
         ),
         settings: const RouteSettings(name: '/Oidc4vcCredentialPickPage'),
@@ -51,7 +51,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
         userPin: userPin,
         issuer: issuer,
         preAuthorizedCode: preAuthorizedCode,
-        oidc4vcType: oidc4vcType,
+        isEBSIV3: isEBSIV3,
         credentialOfferJson: credentialOfferJson,
       ),
     );
@@ -65,7 +65,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
     required this.userPin,
     required this.preAuthorizedCode,
     required this.issuer,
-    required this.oidc4vcType,
+    required this.isEBSIV3,
     required this.credentialOfferJson,
   });
 
@@ -73,7 +73,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
   final String? userPin;
   final String? preAuthorizedCode;
   final String issuer;
-  final OIDC4VCType oidc4vcType;
+  final bool isEBSIV3;
   final dynamic credentialOfferJson;
 
   @override
@@ -194,7 +194,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                 userPin: userPin,
                                 issuer: issuer,
                                 preAuthorizedCode: preAuthorizedCode,
-                                oidc4vcType: oidc4vcType,
+                                isEBSIV3: isEBSIV3,
                                 credentialOfferJson: credentialOfferJson,
                               );
                         },

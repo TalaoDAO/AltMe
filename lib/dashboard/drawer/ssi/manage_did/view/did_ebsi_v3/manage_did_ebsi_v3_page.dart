@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ManageDidEbsiV3Page extends StatefulWidget {
@@ -20,18 +21,16 @@ class ManageDidEbsiV3Page extends StatefulWidget {
 
 class _ManageDidEbsiPageState extends State<ManageDidEbsiV3Page> {
   Future<String> getDid() async {
-    const oidc4vcType = OIDC4VCType.EBSIV3;
-
-    final oidc4vc = oidc4vcType.getOIDC4VC;
+    final OIDC4VC oidc4vc = OIDC4VC();
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
 
     final privateKey = await oidc4vc.privateKeyFromMnemonic(
       mnemonic: mnemonic!,
-      indexValue: oidc4vcType.indexValue,
+      indexValue: getIndexValue(isEBSIV3: true),
     );
 
     final (did, _) = await getDidAndKid(
-      oidc4vcType: oidc4vcType,
+      isEBSIV3: true,
       privateKey: privateKey,
     );
 

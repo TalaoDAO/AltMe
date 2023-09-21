@@ -10,8 +10,6 @@ import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
-import 'package:dio/dio.dart';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
@@ -111,7 +109,7 @@ class _SplashViewState extends State<SplashView> {
       final containsAllRequiredKey = payload.containsKey('credentials') &&
           payload.containsKey('codeVerifier') &&
           payload.containsKey('issuer') &&
-          payload.containsKey('type');
+          payload.containsKey('isEBSIV3');
 
       if (!containsAllRequiredKey) {
         return;
@@ -120,31 +118,26 @@ class _SplashViewState extends State<SplashView> {
       final selectedCredentials = payload['credentials'] as List<dynamic>;
       final String codeVerifier = payload['codeVerifier'].toString();
       final String issuer = payload['issuer'].toString();
-      final String type = payload['type'].toString();
-
-      OIDC4VCType? oidc4vcType;
-
-      for (final value in OIDC4VCType.values) {
-        if (value.name == type) {
-          oidc4vcType = value;
-          break;
-        }
-      }
-
-      if (oidc4vcType == null) {
-        return;
-      }
+      final bool isEBSIV3 = payload['isEBSIV3'] as bool;
 
       await context.read<QRCodeScanCubit>().addCredentialsInLoop(
             selectedCredentials: selectedCredentials,
             userPin: null,
             issuer: issuer,
             preAuthorizedCode: null,
-            oidc4vcType: oidc4vcType,
+            isEBSIV3: isEBSIV3,
             codeForAuthorisedFlow: codeForAuthorisedFlow,
             codeVerifier: codeVerifier,
           );
 
+      return;
+    }
+
+    if (uri
+        .toString()
+        .startsWith('https://app.altme.io/app/download/authorize')) {
+      context.read<DeepLinkCubit>().addDeepLink(uri!.toString());
+      await context.read<QRCodeScanCubit>().deepLink();
       return;
     }
 
@@ -201,22 +194,6 @@ class _SplashViewState extends State<SplashView> {
       }
       if (key == 'data') {
         beaconData = value;
-      }
-      if (uri.scheme == 'openid' && uri.authority == 'initiate_issuance') {
-        final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-            await getOIDC4VCTypeForIssuance(
-          url: uri.toString(),
-          client: DioClient('', Dio()),
-        );
-
-        if (currentOIIDC4VCTypeForIssuance != null) {
-          // ignore: require_trailing_commas
-          await context.read<QRCodeScanCubit>().startOIDC4VCCredentialIssuance(
-                scannedResponse: uri.toString(),
-                currentOIIDC4VCType: currentOIIDC4VCTypeForIssuance,
-                qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-              );
-        }
       }
     });
     if (isBeaconRequest && beaconData != '') {

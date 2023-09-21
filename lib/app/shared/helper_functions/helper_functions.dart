@@ -363,42 +363,34 @@ String getUtf8Message(String maybeHex) {
 }
 
 Future<(String, String)> getDidAndKid({
-  required OIDC4VCType oidc4vcType,
   required String privateKey,
+  required bool isEBSIV3,
   DIDKitProvider? didKitProvider,
 }) async {
   late String did;
   late String kid;
 
-  switch (oidc4vcType) {
-    case OIDC4VCType.DEFAULT:
-    case OIDC4VCType.GREENCYPHER:
-    case OIDC4VCType.GAIAX:
-      const didMethod = AltMeStrings.defaultDIDMethod;
-      did = didKitProvider!.keyToDID(didMethod, privateKey);
-      kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
+  if (isEBSIV3) {
+    final private = jsonDecode(privateKey) as Map<String, dynamic>;
 
-    case OIDC4VCType.EBSIV3:
-      final private = jsonDecode(privateKey) as Map<String, dynamic>;
+    //b'\xd1\xd6\x03' in python
+    final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
+    final List<int> prefix = prefixByteList.map((byte) => byte).toList();
 
-      //b'\xd1\xd6\x03' in python
-      final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
-      final List<int> prefix = prefixByteList.map((byte) => byte).toList();
+    final encodedData = sortedPublcJwk(private);
+    final encodedAddress = Base58Encode([...prefix, ...encodedData]);
 
-      final encodedData = sortedPublcJwk(private);
-      final encodedAddress = Base58Encode([...prefix, ...encodedData]);
-
-      did = 'did:key:z$encodedAddress';
-      final String lastPart = did.split(':')[2];
-      kid = '$did#$lastPart';
-
-    case OIDC4VCType.JWTVC:
-      throw Exception();
+    did = 'did:key:z$encodedAddress';
+    final String lastPart = did.split(':')[2];
+    kid = '$did#$lastPart';
+  } else {
+    const didMethod = AltMeStrings.defaultDIDMethod;
+    did = didKitProvider!.keyToDID(didMethod, privateKey);
+    kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
   }
+
   return (did, kid);
 }
-
- 
 
 List<int> sortedPublcJwk(Map<String, dynamic> privateKey) {
   final publicJWK = Map.of(privateKey)..removeWhere((key, value) => key == 'd');
@@ -443,10 +435,11 @@ bool isOIDC4VCIUrl(Uri uri) {
 bool isSIOPV2OROIDC4VPUrl(Uri uri) {
   final isOID4VCUrl = uri.toString().startsWith('openid');
 
-  return isOID4VCUrl &&
-      (uri.toString().startsWith('openid://?') ||
-          uri.toString().startsWith('openid-vc://?') ||
-          uri.toString().startsWith('openid-hedera://?'));
+  return (isOID4VCUrl &&
+          (uri.toString().startsWith('openid://?') ||
+              uri.toString().startsWith('openid-vc://?') ||
+              uri.toString().startsWith('openid-hedera://?'))) ||
+      uri.toString().startsWith('https://app.altme.io/app/download/authorize');
 }
 
 Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
@@ -493,6 +486,42 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
   return null;
 }
 
+Future<bool> isEBSIV3ForVerifier({
+  required Uri uri,
+  required DioClient client,
+}) async {
+  try {
+    final String? clientId = uri.queryParameters['client_id'];
+
+    if (clientId == null) return false;
+
+    final isUrl = isURL(clientId);
+    if (!isUrl) return false;
+
+    final openidConfigurationResponse = await getOpenIdConfig(
+      baseUrl: clientId,
+      client: client.dio,
+    );
+
+    final credentialsSupported =
+        openidConfigurationResponse['credentials_supported'] as List<dynamic>;
+
+    if (credentialsSupported.isEmpty) throw Exception();
+
+    final credSupported = credentialsSupported[0] as Map<String, dynamic>;
+
+    if (credSupported['trust_framework'] == null) return false;
+
+    if (credSupported['trust_framework']['name'] == 'ebsi') {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    return false;
+  }
+}
+
 String getCredentialData(dynamic credential) {
   late String cred;
 
@@ -514,37 +543,26 @@ Future<String> getHost({
   required Uri uri,
   required DioClient client,
 }) async {
-  final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-      await getOIDC4VCTypeForIssuance(
-    url: uri.toString(),
-    client: client,
-  );
+  final keys = <String>[];
+  uri.queryParameters.forEach((key, value) => keys.add(key));
 
-  /// OIDC4VCI Case
-  if (currentOIIDC4VCTypeForIssuance != null) {
-    /// issuance case
+  if (keys.contains('issuer')) {
+    /// issuance case 1
+    return Uri.parse(
+      uri.queryParameters['issuer'].toString(),
+    ).host;
+  } else if (keys.contains('credential_offer') ||
+      keys.contains('credential_offer_uri')) {
+    ///  issuance case 2
+    final dynamic credentialOfferJson = await getCredentialOfferJson(
+      scannedResponse: uri.toString(),
+      dioClient: client,
+    );
+    if (credentialOfferJson == null) throw Exception();
 
-    switch (currentOIIDC4VCTypeForIssuance) {
-      case OIDC4VCType.DEFAULT:
-      case OIDC4VCType.GREENCYPHER:
-      case OIDC4VCType.EBSIV3:
-        final dynamic credentialOfferJson = await getCredentialOfferJson(
-          scannedResponse: uri.toString(),
-          dioClient: client,
-        );
-        if (credentialOfferJson == null) throw Exception();
-
-        return Uri.parse(
-          credentialOfferJson['credential_issuer'].toString(),
-        ).host;
-
-      case OIDC4VCType.GAIAX:
-        return Uri.parse(
-          uri.queryParameters['issuer'].toString(),
-        ).host;
-      case OIDC4VCType.JWTVC:
-        throw Exception();
-    }
+    return Uri.parse(
+      credentialOfferJson['credential_issuer'].toString(),
+    ).host;
   } else {
     /// verification case
 
@@ -569,7 +587,6 @@ Future<String> getHost({
 }
 
 Future<(String?, String)> getIssuerAndPreAuthorizedCode({
-  required OIDC4VCType oidc4vcType,
   required String scannedResponse,
   required DioClient dioClient,
 }) async {
@@ -578,35 +595,35 @@ Future<(String?, String)> getIssuerAndPreAuthorizedCode({
 
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
-  switch (oidc4vcType) {
-    case OIDC4VCType.DEFAULT:
-    case OIDC4VCType.GREENCYPHER:
-    case OIDC4VCType.EBSIV3:
-      final dynamic credentialOfferJson = await getCredentialOfferJson(
-        scannedResponse: scannedResponse,
-        dioClient: dioClient,
-      );
-      if (credentialOfferJson == null) throw Exception();
+  final keys = <String>[];
+  uriFromScannedResponse.queryParameters.forEach((key, value) => keys.add(key));
 
-      final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
-          ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+  if (keys.contains('issuer')) {
+    issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
+    //preAuthorizedCode can be null
+    preAuthorizedCode =
+        uriFromScannedResponse.queryParameters['pre-authorized_code'];
+  } else if (keys.contains('credential_offer') ||
+      keys.contains('credential_offer_uri')) {
+    final dynamic credentialOfferJson = await getCredentialOfferJson(
+      scannedResponse: scannedResponse,
+      dioClient: dioClient,
+    );
+    if (credentialOfferJson == null) throw Exception();
 
-      if (preAuthorizedCodeGrant != null &&
-          preAuthorizedCodeGrant is Map &&
-          preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
-        preAuthorizedCode =
-            preAuthorizedCodeGrant['pre-authorized_code'] as String;
-      }
+    final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
+        ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
 
-      issuer = credentialOfferJson['credential_issuer'].toString();
-
-    case OIDC4VCType.GAIAX:
-      issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
+    if (preAuthorizedCodeGrant != null &&
+        preAuthorizedCodeGrant is Map &&
+        preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
       preAuthorizedCode =
-          uriFromScannedResponse.queryParameters['pre-authorized_code'];
+          preAuthorizedCodeGrant['pre-authorized_code'] as String;
+    }
 
-    case OIDC4VCType.JWTVC:
-      throw Exception();
+    issuer = credentialOfferJson['credential_issuer'].toString();
+  } else {
+    throw Exception();
   }
 
   return (preAuthorizedCode, issuer);
@@ -632,5 +649,13 @@ String? getRedirectUri(Uri uri) {
     }
   } else {
     return redirectUri;
+  }
+}
+
+int getIndexValue({required bool isEBSIV3}) {
+  if (isEBSIV3) {
+    return 3;
+  } else {
+    return 1;
   }
 }

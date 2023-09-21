@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
@@ -12,7 +11,6 @@ Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
   required CredentialsCubit credentialsCubit,
   required String issuer,
-  required OIDC4VCType oidc4vcType,
   required String credentialType,
   required bool isLastCall,
   required String format,

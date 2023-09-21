@@ -23,7 +23,6 @@ class ProfileModel extends Equatable {
     this.companyName = '',
     this.companyWebsite = '',
     this.jobTitle = '',
-    required this.oidc4vcType,
     required this.isSecurityLow,
   });
 
@@ -47,7 +46,6 @@ class ProfileModel extends Equatable {
         userConsentForVerifierAccess: true,
         userPINCodeForAuthentication: true,
         tezosNetwork: TezosNetwork.mainNet(),
-        oidc4vcType: OIDC4VCType.EBSIV3,
         isSecurityLow: true,
       );
 
@@ -67,7 +65,7 @@ class ProfileModel extends Equatable {
   final bool userConsentForIssuerAccess;
   final bool userConsentForVerifierAccess;
   final bool userPINCodeForAuthentication;
-  final OIDC4VCType oidc4vcType;
+
   final bool isSecurityLow;
 
   @override
@@ -88,7 +86,6 @@ class ProfileModel extends Equatable {
         userConsentForIssuerAccess,
         userConsentForVerifierAccess,
         userPINCodeForAuthentication,
-        oidc4vcType,
         isSecurityLow,
       ];
 
@@ -111,7 +108,6 @@ class ProfileModel extends Equatable {
     bool? userConsentForIssuerAccess,
     bool? userConsentForVerifierAccess,
     bool? userPINCodeForAuthentication,
-    OIDC4VCType? oidc4vcType,
     bool? isSecurityLow,
   }) {
     return ProfileModel(
@@ -134,7 +130,6 @@ class ProfileModel extends Equatable {
           userConsentForVerifierAccess ?? this.userConsentForVerifierAccess,
       userPINCodeForAuthentication:
           userPINCodeForAuthentication ?? this.userPINCodeForAuthentication,
-      oidc4vcType: oidc4vcType ?? this.oidc4vcType,
       isSecurityLow: isSecurityLow ?? this.isSecurityLow,
     );
   }

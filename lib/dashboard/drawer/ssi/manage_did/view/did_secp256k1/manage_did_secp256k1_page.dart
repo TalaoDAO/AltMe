@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ManageDidSecp256k1Page extends StatefulWidget {
@@ -21,12 +22,12 @@ class ManageDidSecp256k1Page extends StatefulWidget {
 
 class _ManageDidEbsiPageState extends State<ManageDidSecp256k1Page> {
   Future<String> getDid() async {
-    final oidc4vc = OIDC4VCType.DEFAULT.getOIDC4VC;
+    final OIDC4VC oidc4vc = OIDC4VC();
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
 
     final privateKey = await oidc4vc.privateKeyFromMnemonic(
       mnemonic: mnemonic!,
-      indexValue: OIDC4VCType.DEFAULT.indexValue,
+      indexValue: getIndexValue(isEBSIV3: false),
     );
 
     const didMethod = AltMeStrings.defaultDIDMethod;

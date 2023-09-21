@@ -114,19 +114,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           userPINCodeForAuthenticationValue == null ||
               userPINCodeForAuthenticationValue == 'true';
 
-      var oidc4vcType = OIDC4VCType.EBSIV3;
-
-      for (final type in OIDC4VCType.values) {
-        final oidc4vcTypeName =
-            await secureStorageProvider.get(SecureStorageKeys.oidc4vcType);
-
-        if (oidc4vcTypeName != null) {
-          if (type.name == oidc4vcTypeName) {
-            oidc4vcType = type;
-          }
-        }
-      }
-
       final profileModel = ProfileModel(
         firstName: firstName,
         lastName: lastName,
@@ -144,7 +131,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         userConsentForIssuerAccess: userConsentForIssuerAccess,
         userConsentForVerifierAccess: userConsentForVerifierAccess,
         userPINCodeForAuthentication: userPINCodeForAuthentication,
-        oidc4vcType: oidc4vcType,
         isSecurityLow: isSecurityLow,
       );
 
@@ -243,11 +229,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.oidc4vcType,
-        profileModel.oidc4vcType.name,
-      );
-
-      await secureStorageProvider.set(
         SecureStorageKeys.isSecurityLow,
         profileModel.isSecurityLow.toString(),
       );
@@ -313,12 +294,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     await polygonIdCubit.setEnv(polygonIdNetwork);
 
-    await update(profileModel);
-  }
-
-  Future<void> updateOIDC4VCType(OIDC4VCType oidc4vcTye) async {
-    emit(state.copyWith(status: AppStatus.loading));
-    final profileModel = state.model.copyWith(oidc4vcType: oidc4vcTye);
     await update(profileModel);
   }
 

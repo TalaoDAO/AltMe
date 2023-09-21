@@ -3,6 +3,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class DidEbsiV3PrivateKeyPage extends StatefulWidget {
@@ -26,11 +27,11 @@ class _DidEbsiV3PrivateKeyPageState extends State<DidEbsiV3PrivateKeyPage>
   late AnimationController animationController;
 
   Future<String> getPrivateKey() async {
-    final oidc4vc = OIDC4VCType.EBSIV3.getOIDC4VC;
+    final OIDC4VC oidc4vc = OIDC4VC();
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
     final privateKey = await oidc4vc.privateKeyFromMnemonic(
       mnemonic: mnemonic!,
-      indexValue: OIDC4VCType.EBSIV3.indexValue,
+      indexValue: getIndexValue(isEBSIV3: true),
     );
     return privateKey;
   }

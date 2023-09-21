@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 Future<void> getAndAddCredential({
   required String scannedResponse,
   required OIDC4VC oidc4vc,
-  required OIDC4VCType oidc4vcType,
+  required bool isEBSIV3,
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
   required dynamic credential,
@@ -29,11 +29,11 @@ Future<void> getAndAddCredential({
 
   final privateKey = await oidc4vc.privateKeyFromMnemonic(
     mnemonic: mnemonic!,
-    indexValue: oidc4vcType.indexValue,
+    indexValue: getIndexValue(isEBSIV3: isEBSIV3),
   );
 
   final (did, kid) = await getDidAndKid(
-    oidc4vcType: oidc4vcType,
+    isEBSIV3: isEBSIV3,
     privateKey: privateKey,
     didKitProvider: didKitProvider,
   );
@@ -57,7 +57,7 @@ Future<void> getAndAddCredential({
       did: did,
       kid: kid,
       privateKey: privateKey,
-      indexValue: oidc4vcType.indexValue,
+      indexValue: getIndexValue(isEBSIV3: isEBSIV3),
       userPin: userPin,
       code: codeForAuthorisedFlow,
       codeVerifier: codeVerifier,
@@ -117,7 +117,6 @@ Future<void> getAndAddCredential({
         await addOIDC4VCCredential(
           encodedCredentialFromOIDC4VC: data,
           credentialsCubit: credentialsCubit,
-          oidc4vcType: oidc4vcType,
           issuer: issuer,
           credentialType: credentialName,
           isLastCall:

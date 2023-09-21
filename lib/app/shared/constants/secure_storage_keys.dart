@@ -84,6 +84,4 @@ class SecureStorageKeys {
   static const String buildNumber = 'buildNumber';
 
   static const String hasVerifiedMnemonics = 'hasVerifiedMnemonics';
-
-  static const String oidc4vcType = 'oidc4vcType';
 }

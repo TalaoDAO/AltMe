@@ -38,6 +38,7 @@ class ScanCubit extends Cubit<ScanState> {
     required this.secureStorageProvider,
     required this.profileCubit,
     required this.didCubit,
+    required this.oidc4vc,
   }) : super(const ScanState());
 
   final DioClient client;
@@ -46,6 +47,7 @@ class ScanCubit extends Cubit<ScanState> {
   final SecureStorageProvider secureStorageProvider;
   final ProfileCubit profileCubit;
   final DIDCubit didCubit;
+  final OIDC4VC oidc4vc;
 
   Future<void> credentialOfferOrPresent({
     required Uri uri,
@@ -60,20 +62,20 @@ class ScanCubit extends Cubit<ScanState> {
 
     try {
       if (uri.toString().startsWith('openid')) {
-        final OIDC4VCType currentOIIDC4VCType =
-            profileCubit.state.model.oidc4vcType;
+        final bool isEBSIV3 =
+            await isEBSIV3ForVerifier(client: client, uri: uri);
 
-        final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
+        final int indexValue = getIndexValue(isEBSIV3: isEBSIV3);
 
         final mnemonic =
             await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
         final privateKey = await oidc4vc.privateKeyFromMnemonic(
           mnemonic: mnemonic!,
-          indexValue: currentOIIDC4VCType.indexValue,
+          indexValue: indexValue,
         );
 
         final (did, kid) = await getDidAndKid(
-          oidc4vcType: currentOIIDC4VCType,
+          isEBSIV3: isEBSIV3,
           privateKey: privateKey,
           didKitProvider: didKitProvider,
         );
@@ -96,12 +98,11 @@ class ScanCubit extends Cubit<ScanState> {
               credentialsToBePresented: credentialsToBePresented,
               presentationDefinition:
                   credentialModel.credentialManifest!.presentationDefinition!,
-              oidc4vcType: currentOIIDC4VCType,
               oidc4vc: oidc4vc,
               did: did,
               kid: kid,
               privateKey: privateKey,
-              indexValue: currentOIIDC4VCType.indexValue,
+              indexValue: indexValue,
               stateValue: stateValue,
             );
             return;
@@ -114,12 +115,11 @@ class ScanCubit extends Cubit<ScanState> {
               credentialsToBePresented: credentialsToBePresented,
               presentationDefinition:
                   credentialModel.credentialManifest!.presentationDefinition!,
-              oidc4vcType: currentOIIDC4VCType,
               oidc4vc: oidc4vc,
               did: did,
               kid: kid,
               privateKey: privateKey,
-              indexValue: currentOIIDC4VCType.indexValue,
+              indexValue: indexValue,
               stateValue: stateValue,
             );
 
@@ -490,7 +490,6 @@ class ScanCubit extends Cubit<ScanState> {
     required PresentationDefinition presentationDefinition,
     required Issuer issuer,
     required OIDC4VC oidc4vc,
-    required OIDC4VCType oidc4vcType,
     required String privateKey,
     required String did,
     required String kid,
@@ -515,7 +514,6 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey: privateKey,
         uri: uri,
         indexValue: indexValue,
-        oidc4vcType: oidc4vcType,
       );
 
       final presentationSubmissionString = getPresentationSubmission(
@@ -587,7 +585,6 @@ class ScanCubit extends Cubit<ScanState> {
     required PresentationDefinition presentationDefinition,
     required Issuer issuer,
     required OIDC4VC oidc4vc,
-    required OIDC4VCType oidc4vcType,
     required String privateKey,
     required String did,
     required String kid,
@@ -623,7 +620,6 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey: privateKey,
         uri: uri,
         indexValue: indexValue,
-        oidc4vcType: oidc4vcType,
       );
 
       final presentationSubmissionString = getPresentationSubmission(
@@ -762,7 +758,6 @@ class ScanCubit extends Cubit<ScanState> {
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
     required OIDC4VC oidc4vc,
-    required OIDC4VCType oidc4vcType,
     required String privateKey,
     required String did,
     required String kid,

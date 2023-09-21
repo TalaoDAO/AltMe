@@ -6,11 +6,13 @@ import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+
 import 'package:secure_storage/secure_storage.dart';
 
 Future<void> initiateOIDC4VCCredentialIssuance({
   required String scannedResponse,
-  required OIDC4VCType oidc4vcType,
+  required OIDC4VC oidc4vc,
+  required bool isEBSIV3,
   required QRCodeScanCubit qrCodeScanCubit,
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
@@ -21,25 +23,20 @@ Future<void> initiateOIDC4VCCredentialIssuance({
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
+  final keys = <String>[];
+  uriFromScannedResponse.queryParameters.forEach((key, value) => keys.add(key));
+
   late dynamic credentials;
 
-  switch (oidc4vcType) {
-    case OIDC4VCType.DEFAULT:
-    case OIDC4VCType.GREENCYPHER:
-    case OIDC4VCType.EBSIV3:
-      if (credentialOfferJson == null) throw Exception();
+  if (keys.contains('credential_type')) {
+    credentials = uriFromScannedResponse.queryParameters['credential_type'];
+  } else {
+    if (credentialOfferJson == null) throw Exception();
 
-      credentials = credentialOfferJson['credentials'];
-
-    case OIDC4VCType.GAIAX:
-      credentials = uriFromScannedResponse.queryParameters['credential_type'];
-
-    case OIDC4VCType.JWTVC:
-      break;
+    credentials = credentialOfferJson['credentials'];
   }
 
   final (preAuthorizedCode, issuer) = await getIssuerAndPreAuthorizedCode(
-    oidc4vcType: oidc4vcType,
     scannedResponse: scannedResponse,
     dioClient: dioClient,
   );
@@ -56,7 +53,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         userPin: userPin,
         issuer: issuer,
         preAuthorizedCode: preAuthorizedCode,
-        oidc4vcType: oidc4vcType,
+        isEBSIV3: isEBSIV3,
         credentialOfferJson: credentialOfferJson,
       );
     } else {
@@ -67,7 +64,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           userPin: userPin,
           issuer: issuer,
           preAuthorizedCode: preAuthorizedCode,
-          oidc4vcType: oidc4vcType,
+          isEBSIV3: isEBSIV3,
           credentialOfferJson: credentialOfferJson,
         );
       } else {
@@ -90,17 +87,16 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           userPin: userPin,
           issuer: issuer,
           preAuthorizedCode: null,
-          oidc4vcType: oidc4vcType,
+          isEBSIV3: isEBSIV3,
           codeForAuthorisedFlow: codeForAuthorisedFlow,
           codeVerifier: codeVerifier,
         );
       }
     }
   } else {
-    final OIDC4VC oidc4vc = oidc4vcType.getOIDC4VC;
     await getAndAddCredential(
       scannedResponse: scannedResponse,
-      oidc4vcType: oidc4vcType,
+      isEBSIV3: isEBSIV3,
       oidc4vc: oidc4vc,
       didKitProvider: didKitProvider,
       credentialsCubit: credentialsCubit,

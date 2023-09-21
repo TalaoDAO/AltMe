@@ -43,6 +43,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.polygonIdCubit,
     required this.didCubit,
     required this.didKitProvider,
+    required this.oidc4vc,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -59,6 +60,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final PolygonIdCubit polygonIdCubit;
   final DIDCubit didCubit;
   final DIDKitProvider didKitProvider;
+  final OIDC4VC oidc4vc;
 
   final log = getLogger('QRCodeScanCubit');
 
@@ -181,27 +183,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       if (isSIOPV2OROIDC4VPUrl(uri)) {
         /// verfier case
-        final OIDC4VCType currentOIIDC4VCType =
-            profileCubit.state.model.oidc4vcType;
-
-        // checking if presentation prefix match for current OIDC4VC profile
-        if (!state.uri
-            .toString()
-            .startsWith(currentOIIDC4VCType.presentationPrefix)) {
-          emit(
-            state.error(
-              message: StateMessage.error(
-                messageHandler: ResponseMessage(
-                  ResponseString
-                      .RESPONSE_STRING_pleaseSwitchToRightOIDC4VCProfile,
-                ),
-                showDialog: false,
-                duration: const Duration(seconds: 20),
-              ),
-            ),
-          );
-          return;
-        }
 
         final String? requestUri = state.uri?.queryParameters['request_uri'];
         final String? request = state.uri?.queryParameters['request'];
@@ -242,7 +223,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> accept({
     required Issuer issuer,
     required QRCodeScanCubit qrCodeScanCubit,
-    required OIDC4VCType? oidc4vcType,
+    required OIDC4VCType? oidcType,
   }) async {
     emit(state.loading());
     final log = getLogger('QRCodeScanCubit - accept');
@@ -251,12 +232,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     try {
       if (isOIDC4VCIUrl(state.uri!)) {
-        if (oidc4vcType != null) {
-          /// issuer side (oidc4VCI)
+        /// issuer side (oidc4VCI)
 
+        if (oidcType != null) {
           await startOIDC4VCCredentialIssuance(
             scannedResponse: state.uri.toString(),
-            currentOIIDC4VCType: oidc4vcType,
+            isEBSIV3: oidcType == OIDC4VCType.EBSIV3,
             qrCodeScanCubit: qrCodeScanCubit,
           );
           return;
@@ -264,100 +245,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
 
       if (isSIOPV2OROIDC4VPUrl(state.uri!)) {
-        final String? requestUri = state.uri?.queryParameters['request_uri'];
-        final String? request = state.uri?.queryParameters['request'];
-        dynamic responseType;
-
-        /// check if request uri is provided or not
-        if (requestUri != null || request != null) {
-          /// verifier side (oidc4vp) or (siopv2 oidc4vc) with request_uri
-          /// afer verification process
-          final Map<String, dynamic> response =
-              decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
-          encodedData = null;
-
-          responseType = response['response_type'];
-          final redirectUri = response['redirect_uri'];
-          final nonce = response['nonce'];
-          final clientId = response['client_id'];
-          final claims = response['claims'];
-          final stateValue = response['state'];
-          final presentationDefinition = response['presentation_definition'];
-          final presentationDefinitionUri =
-              response['presentation_definition_uri'];
-
-          final queryJson = <String, dynamic>{};
-          if (clientId != null) {
-            queryJson['client_id'] = clientId;
-          }
-
-          /// if redirectUri is not provided and client_id is url then
-          /// redirectUri = client_id
-          if (redirectUri == null) {
-            if (clientId == null) throw Exception();
-            final isUrl = isURL(clientId.toString());
-            if (isUrl) {
-              queryJson['redirect_uri'] = clientId;
-            } else {
-              throw Exception();
-            }
-          } else {
-            queryJson['redirect_uri'] = redirectUri;
-          }
-
-          if (nonce != null) {
-            queryJson['nonce'] = nonce;
-          }
-          if (stateValue != null) {
-            queryJson['state'] = stateValue;
-          }
-          if (responseType != null) {
-            queryJson['response_type'] = responseType;
-          }
-          if (claims != null) {
-            queryJson['claims'] = jsonEncode(claims).replaceAll('"', "'");
-          }
-          if (presentationDefinition != null) {
-            queryJson['presentation_definition'] =
-                jsonEncode(presentationDefinition).replaceAll('"', "'");
-          }
-
-          if (presentationDefinitionUri != null) {
-            queryJson['presentation_definition_uri'] =
-                presentationDefinitionUri;
-          }
-
-          final String queryString = Uri(queryParameters: queryJson).query;
-
-          final String newUrl = '${state.uri!}&$queryString';
-
-          emit(
-            state.copyWith(
-              uri: Uri.parse(newUrl),
-              qrScanStatus: QrScanStatus.loading,
-            ),
-          );
-          log.i('uri - $newUrl');
-        } else {
-          responseType = state.uri?.queryParameters['response_type'] ?? '';
-        }
-
-        log.i('responseType - $responseType');
-        if (responseType == 'id_token') {
-          /// verifier side (siopv2)
-
-          await completeSiopV2Flow();
-          return;
-        } else if (responseType == 'vp_token') {
-          /// verifier side (oidc4vp)
-          await launchOIDC4VPAndSIOPV2Flow();
-          return;
-        } else if (responseType == 'id_token vp_token') {
-          /// verifier side (oidc4vp) or (oidc4vp and siopv2)
-
-          await launchOIDC4VPAndSIOPV2Flow();
-          return;
-        }
+        await startSIOPV2OIDC4VPProcess(state.uri!);
+        return;
       }
 
       /// did credential addition and presentation
@@ -508,7 +397,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> startOIDC4VCCredentialIssuance({
     required String scannedResponse,
-    required OIDC4VCType currentOIIDC4VCType,
+    required bool isEBSIV3,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     try {
@@ -518,18 +407,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           qrScanStatus: QrScanStatus.loading,
         ),
       );
+      final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
+      final keys = <String>[];
+      uriFromScannedResponse.queryParameters
+          .forEach((key, value) => keys.add(key));
 
       dynamic credentialOfferJson;
-      switch (currentOIIDC4VCType) {
-        case OIDC4VCType.DEFAULT:
-        case OIDC4VCType.GREENCYPHER:
-        case OIDC4VCType.EBSIV3:
-          credentialOfferJson = await getCredentialOfferJson(
-            scannedResponse: scannedResponse,
-            dioClient: client,
-          );
-          if (credentialOfferJson == null) break;
 
+      if (keys.contains('credential_offer') ||
+          keys.contains('credential_offer_uri')) {
+        credentialOfferJson = await getCredentialOfferJson(
+          scannedResponse: scannedResponse,
+          dioClient: client,
+        );
+        if (credentialOfferJson != null) {
           final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
               ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
 
@@ -542,9 +433,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 preAuthorizedCodeGrant['user_pin_required'] as bool;
           }
 
-          if (userPinRequired == null) break;
-
-          if (userPinRequired) {
+          if (userPinRequired != null && userPinRequired) {
             emit(
               state.copyWith(
                 qrScanStatus: QrScanStatus.success,
@@ -556,44 +445,132 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                     await initiateOIDC4VCCredentialIssuance(
                       scannedResponse: scannedResponse,
                       credentialsCubit: credentialsCubit,
-                      oidc4vcType: currentOIIDC4VCType,
                       didKitProvider: didKitProvider,
                       qrCodeScanCubit: qrCodeScanCubit,
                       secureStorageProvider: getSecureStorage,
                       dioClient: client,
                       userPin: userPin,
+                      oidc4vc: oidc4vc,
+                      isEBSIV3: isEBSIV3,
                       credentialOfferJson: credentialOfferJson,
                     );
                   },
                 ),
               ),
             );
-          } else {
-            break;
+            return;
           }
-
-          return;
-
-        case OIDC4VCType.GAIAX:
-          break;
-
-        case OIDC4VCType.JWTVC:
-          throw Exception();
+        }
       }
 
       await initiateOIDC4VCCredentialIssuance(
         scannedResponse: scannedResponse,
         credentialsCubit: credentialsCubit,
-        oidc4vcType: currentOIIDC4VCType,
+        oidc4vc: oidc4vc,
         didKitProvider: didKitProvider,
         qrCodeScanCubit: qrCodeScanCubit,
         secureStorageProvider: getSecureStorage,
         dioClient: client,
         userPin: null,
         credentialOfferJson: credentialOfferJson,
+        isEBSIV3: isEBSIV3,
       );
     } catch (e) {
       log.e(e);
+    }
+  }
+
+  Future<void> startSIOPV2OIDC4VPProcess(Uri uri) async {
+    final String? requestUri = uri.queryParameters['request_uri'];
+    final String? request = uri.queryParameters['request'];
+    dynamic responseType;
+
+    /// check if request uri is provided or not
+    if (requestUri != null || request != null) {
+      /// verifier side (oidc4vp) or (siopv2 oidc4vc) with request_uri
+      /// afer verification process
+      final Map<String, dynamic> response =
+          decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
+      encodedData = null;
+
+      responseType = response['response_type'];
+      final redirectUri = response['redirect_uri'];
+      final nonce = response['nonce'];
+      final clientId = response['client_id'];
+      final claims = response['claims'];
+      final stateValue = response['state'];
+      final presentationDefinition = response['presentation_definition'];
+      final presentationDefinitionUri = response['presentation_definition_uri'];
+
+      final queryJson = <String, dynamic>{};
+      if (clientId != null) {
+        queryJson['client_id'] = clientId;
+      }
+
+      /// if redirectUri is not provided and client_id is url then
+      /// redirectUri = client_id
+      if (redirectUri == null) {
+        if (clientId == null) throw Exception();
+        final isUrl = isURL(clientId.toString());
+        if (isUrl) {
+          queryJson['redirect_uri'] = clientId;
+        } else {
+          throw Exception();
+        }
+      } else {
+        queryJson['redirect_uri'] = redirectUri;
+      }
+
+      if (nonce != null) {
+        queryJson['nonce'] = nonce;
+      }
+      if (stateValue != null) {
+        queryJson['state'] = stateValue;
+      }
+      if (responseType != null) {
+        queryJson['response_type'] = responseType;
+      }
+      if (claims != null) {
+        queryJson['claims'] = jsonEncode(claims).replaceAll('"', "'");
+      }
+      if (presentationDefinition != null) {
+        queryJson['presentation_definition'] =
+            jsonEncode(presentationDefinition).replaceAll('"', "'");
+      }
+
+      if (presentationDefinitionUri != null) {
+        queryJson['presentation_definition_uri'] = presentationDefinitionUri;
+      }
+
+      final String queryString = Uri(queryParameters: queryJson).query;
+
+      final String newUrl = '$uri&$queryString';
+
+      emit(
+        state.copyWith(
+          uri: Uri.parse(newUrl),
+          qrScanStatus: QrScanStatus.loading,
+        ),
+      );
+      log.i('uri - $newUrl');
+    } else {
+      responseType = uri.queryParameters['response_type'] ?? '';
+    }
+
+    log.i('responseType - $responseType');
+    if (responseType == 'id_token') {
+      /// verifier side (siopv2)
+
+      await completeSiopV2Flow();
+    } else if (responseType == 'vp_token') {
+      /// verifier side (oidc4vp)
+      await launchOIDC4VPAndSIOPV2Flow();
+    } else if (responseType == 'id_token vp_token') {
+      /// verifier side (oidc4vp) or (oidc4vp and siopv2)
+
+      await launchOIDC4VPAndSIOPV2Flow();
+    } else {
+      throw Exception();
     }
   }
 
@@ -613,8 +590,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         await getAndAddDefferedCredential(
           credentialModel: credentialModel,
           credentialsCubit: credentialsCubit,
-          oidc4vcType: currentOIIDC4VCTypeForIssuance,
           dioClient: client,
+          oidc4vc: oidc4vc,
         );
       } else {
         emitError(
@@ -697,7 +674,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? userPin,
     required String? preAuthorizedCode,
     required String issuer,
-    required OIDC4VCType oidc4vcType,
+    required bool isEBSIV3,
     required dynamic credentialOfferJson,
   }) {
     emit(
@@ -708,7 +685,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           userPin: userPin,
           issuer: issuer,
           preAuthorizedCode: preAuthorizedCode,
-          oidc4vcType: oidc4vcType,
+          isEBSIV3: isEBSIV3,
           credentialOfferJson: credentialOfferJson,
         ),
       ),
@@ -873,15 +850,16 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         throw Exception();
       }
 
-      final OIDC4VCType currentOIIDC4VCType =
-          profileCubit.state.model.oidc4vcType;
+      final bool isEBSIV3 =
+          await isEBSIV3ForVerifier(client: client, uri: state.uri!);
 
-      final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
+      final int indexValue = getIndexValue(isEBSIV3: isEBSIV3);
+
       final mnemonic =
           await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
       final privateKey = await oidc4vc.privateKeyFromMnemonic(
         mnemonic: mnemonic!,
-        indexValue: currentOIIDC4VCType.indexValue,
+        indexValue: indexValue,
       );
 
       const didMethod = AltMeStrings.defaultDIDMethod;
@@ -896,7 +874,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         kid: kid,
         redirectUri: redirectUri,
         nonce: nonce,
-        indexValue: currentOIIDC4VCType.indexValue,
+        indexValue: indexValue,
         stateValue: stateValue,
       );
       emit(
@@ -925,19 +903,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> processSelectedCredentials({
     required List<dynamic> selectedCredentials,
-    required OIDC4VCType oidc4vcType,
+    required bool isEBSIV3,
     required String? userPin,
     required String? preAuthorizedCode,
     required String issuer,
     required dynamic credentialOfferJson,
   }) async {
     try {
-      final OIDC4VC oidc4vc = oidc4vcType.getOIDC4VC;
-
       if (preAuthorizedCode != null) {
         await addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
-          oidc4vcType: oidc4vcType,
+          isEBSIV3: isEBSIV3,
           userPin: userPin,
           preAuthorizedCode: preAuthorizedCode,
           issuer: issuer,
@@ -949,7 +925,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         await getAuthorizationUriForIssuer(
           scannedResponse: state.uri.toString(),
           oidc4vc: oidc4vc,
-          oidc4vcType: oidc4vcType,
+          isEBSIV3: isEBSIV3,
           didKitProvider: didKitProvider,
           selectedCredentials: selectedCredentials,
           secureStorageProvider: secureStorageProvider,
@@ -974,7 +950,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> addCredentialsInLoop({
     required List<dynamic> selectedCredentials,
-    required OIDC4VCType oidc4vcType,
+    required bool isEBSIV3,
     required String? userPin,
     required String? preAuthorizedCode,
     required String issuer,
@@ -982,8 +958,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? codeVerifier,
   }) async {
     try {
-      final OIDC4VC oidc4vc = oidc4vcType.getOIDC4VC;
-
       for (int i = 0; i < selectedCredentials.length; i++) {
         emit(state.loading());
 
@@ -991,7 +965,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           scannedResponse: state.uri.toString(),
           credentialsCubit: credentialsCubit,
           oidc4vc: oidc4vc,
-          oidc4vcType: oidc4vcType,
+          isEBSIV3: isEBSIV3,
           didKitProvider: didKitProvider,
           secureStorageProvider: getSecureStorage,
           credential: selectedCredentials[i],

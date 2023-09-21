@@ -1,5 +1,3 @@
-import 'package:oidc4vc/oidc4vc.dart';
-
 enum OIDC4VCType {
   DEFAULT(
     offerPrefix: 'openid-credential-offer://',
@@ -36,10 +34,6 @@ enum OIDC4VCType {
 }
 
 extension OIDC4VCTypeX on OIDC4VCType {
-  OIDC4VC get getOIDC4VC {
-    return OIDC4VC();
-  }
-
   String get rename {
     switch (this) {
       case OIDC4VCType.DEFAULT:
@@ -52,18 +46,6 @@ extension OIDC4VCTypeX on OIDC4VCType {
         return 'GREENCYPHER';
       case OIDC4VCType.JWTVC:
         return 'JWT-VC';
-    }
-  }
-
-  int get indexValue {
-    switch (this) {
-      case OIDC4VCType.DEFAULT:
-      case OIDC4VCType.GAIAX:
-      case OIDC4VCType.GREENCYPHER:
-      case OIDC4VCType.JWTVC:
-        return 1;
-      case OIDC4VCType.EBSIV3:
-        return 3;
     }
   }
 

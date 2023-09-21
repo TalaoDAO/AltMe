@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 Future<void> getAuthorizationUriForIssuer({
   required String scannedResponse,
   required OIDC4VC oidc4vc,
-  required OIDC4VCType oidc4vcType,
+  required bool isEBSIV3,
   required DIDKitProvider didKitProvider,
   required List<dynamic> selectedCredentials,
   required SecureStorageProvider secureStorageProvider,
@@ -22,11 +22,11 @@ Future<void> getAuthorizationUriForIssuer({
 
   final privateKey = await oidc4vc.privateKeyFromMnemonic(
     mnemonic: mnemonic!,
-    indexValue: oidc4vcType.indexValue,
+    indexValue: getIndexValue(isEBSIV3: isEBSIV3),
   );
 
   final (did, _) = await getDidAndKid(
-    oidc4vcType: oidc4vcType,
+    isEBSIV3: isEBSIV3,
     privateKey: privateKey,
     didKitProvider: didKitProvider,
   );
@@ -43,7 +43,7 @@ Future<void> getAuthorizationUriForIssuer({
     'codeVerifier': pkcePair.codeVerifier,
     'credentials': selectedCredentials,
     'issuer': issuer,
-    'type': oidc4vcType.name,
+    'isEBSIV3': isEBSIV3,
   });
 
   await dotenv.load();
