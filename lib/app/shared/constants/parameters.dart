@@ -22,7 +22,7 @@ class Parameters {
   );
 
   static const oidc4vcUniversalLink =
-      'https://app.altme.io/app/download/oidc4vc';
+      'https://app.altme.io/app/download/callback';
 
   static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 

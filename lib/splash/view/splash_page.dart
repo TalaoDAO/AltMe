@@ -9,12 +9,14 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:uni_links/uni_links.dart';
@@ -98,23 +100,29 @@ class _SplashViewState extends State<SplashView> {
       if (codeForAuthorisedFlow == null || state == null) {
         return;
       }
+      await dotenv.load();
+      final String authorizationUriSecretKey =
+          dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
 
-      final jwt = decodePayload(
-        jwtDecode: JWTDecode(),
-        token: state,
-      );
+      final jwt = JWT.verify(state, SecretKey(authorizationUriSecretKey));
 
-      if (!(jwt.containsKey('credentials') &&
-          jwt.containsKey('codeVerifier') &&
-          jwt.containsKey('issuer') &&
-          jwt.containsKey('type'))) {
+      final payload = jwt.payload as Map<String, dynamic>;
+
+      print('Payload: ${jwt.payload}');
+
+      final containsAllRequiredKey = payload.containsKey('credentials') &&
+          payload.containsKey('codeVerifier') &&
+          payload.containsKey('issuer') &&
+          payload.containsKey('type');
+
+      if (!containsAllRequiredKey) {
         return;
       }
 
-      final selectedCredentials = jwt['credentials'] as List<dynamic>;
-      final String codeVerifier = jwt['codeVerifier'].toString();
-      final String issuer = jwt['issuer'].toString();
-      final String type = jwt['type'].toString();
+      final selectedCredentials = payload['credentials'] as List<dynamic>;
+      final String codeVerifier = payload['codeVerifier'].toString();
+      final String issuer = payload['issuer'].toString();
+      final String type = payload['type'].toString();
 
       OIDC4VCType? oidc4vcType;
 

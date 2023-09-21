@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 import 'package:did_kit/did_kit.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -45,7 +46,11 @@ Future<void> getAuthorizationUriForIssuer({
     'type': oidc4vcType.name,
   });
 
-  final jwtToken = jwt.sign(SecretKey('0123456789'));
+  await dotenv.load();
+  final String authorizationUriSecretKey =
+      dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
+
+  final jwtToken = jwt.sign(SecretKey(authorizationUriSecretKey));
 
   final Uri ebsiAuthenticationUri = await oidc4vc.getAuthorizationUriForIssuer(
     selectedCredentials: selectedCredentials,

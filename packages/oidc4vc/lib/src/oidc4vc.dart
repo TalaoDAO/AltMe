@@ -195,7 +195,7 @@ class OIDC4VC {
       'authorization_details': jsonEncode(authorizationDetails),
       'client_metadata': jsonEncode({
         'authorization_endpoint':
-            'https://app.altme.io/app/download/ebsi?uri=openid-vc://',
+            'https://app.altme.io/app/download/authorize/',
         'scopes_supported': ['openid'],
         'response_types_supported': ['vp_token', 'id_token'],
         'subject_types_supported': ['public'],
