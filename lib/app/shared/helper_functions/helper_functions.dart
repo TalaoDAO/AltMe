@@ -503,18 +503,29 @@ Future<bool> isEBSIV3ForVerifier({
       client: client.dio,
     );
 
-    final credentialsSupported =
-        openidConfigurationResponse['credentials_supported'] as List<dynamic>;
+    final bool hasKey = openidConfigurationResponse
+        .containsKey('subject_trust_frameworks_supported');
 
-    if (credentialsSupported.isEmpty) throw Exception();
+    /// if subject_trust_frameworks_supported is not present => non-ebsi
+    if (!hasKey) {
+      return false;
+    }
 
-    final credSupported = credentialsSupported[0] as Map<String, dynamic>;
+    final subjectTrustFrameworksSupported =
+        openidConfigurationResponse['subject_trust_frameworks_supported'];
 
-    if (credSupported['trust_framework'] == null) return false;
+    /// if subject_trust_frameworks_supported is empty => non-ebsi
+    if ((subjectTrustFrameworksSupported as List<dynamic>).isEmpty) {
+      return false;
+    }
 
-    if (credSupported['trust_framework']['name'] == 'ebsi') {
+    final profileType = subjectTrustFrameworksSupported[0].toString();
+
+    if (profileType == 'ebsi') {
+      /// if ebsi is available => ebsi
       return true;
     } else {
+      /// if ebsi is not-available => non-ebsi
       return false;
     }
   } catch (e) {
