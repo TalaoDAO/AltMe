@@ -61,7 +61,7 @@ class ScanCubit extends Cubit<ScanState> {
     final log = getLogger('ScanCubit - credentialOffer');
 
     try {
-      if (uri.toString().startsWith('openid')) {
+      if (isSIOPV2OROIDC4VPUrl(uri)) {
         final bool isEBSIV3 =
             await isEBSIV3ForVerifier(client: client, uri: uri);
 
@@ -83,50 +83,46 @@ class ScanCubit extends Cubit<ScanState> {
         final responseType = uri.queryParameters['response_type'] ?? '';
         final stateValue = uri.queryParameters['state'];
 
-        if (uri.toString().startsWith('openid://') ||
-            uri.toString().startsWith('openid-vc://?') ||
-            uri.toString().startsWith('openid-hedera://?')) {
-          if (responseType == 'id_token') {
-            /// verifier side (siopv2) with request uri as value
-            throw Exception();
-          } else if (responseType == 'vp_token') {
-            /// verifier side (oidc4vp) with request uri as value
+        if (responseType == 'id_token') {
+          /// verifier side (siopv2) with request uri as value
+          throw Exception();
+        } else if (responseType == 'vp_token') {
+          /// verifier side (oidc4vp) with request uri as value
 
-            await presentCredentialToOID4VPRequest(
-              uri: uri,
-              issuer: issuer,
-              credentialsToBePresented: credentialsToBePresented,
-              presentationDefinition:
-                  credentialModel.credentialManifest!.presentationDefinition!,
-              oidc4vc: oidc4vc,
-              did: did,
-              kid: kid,
-              privateKey: privateKey,
-              indexValue: indexValue,
-              stateValue: stateValue,
-            );
-            return;
-          } else if (responseType == 'id_token vp_token') {
-            /// verifier side (oidc4vp and siopv2) with request uri as value
+          await presentCredentialToOID4VPRequest(
+            uri: uri,
+            issuer: issuer,
+            credentialsToBePresented: credentialsToBePresented,
+            presentationDefinition:
+                credentialModel.credentialManifest!.presentationDefinition!,
+            oidc4vc: oidc4vc,
+            did: did,
+            kid: kid,
+            privateKey: privateKey,
+            indexValue: indexValue,
+            stateValue: stateValue,
+          );
+          return;
+        } else if (responseType == 'id_token vp_token') {
+          /// verifier side (oidc4vp and siopv2) with request uri as value
 
-            await presentCredentialToOIDC4VPAndSIOPV2RequestForOthers(
-              uri: uri,
-              issuer: issuer,
-              credentialsToBePresented: credentialsToBePresented,
-              presentationDefinition:
-                  credentialModel.credentialManifest!.presentationDefinition!,
-              oidc4vc: oidc4vc,
-              did: did,
-              kid: kid,
-              privateKey: privateKey,
-              indexValue: indexValue,
-              stateValue: stateValue,
-            );
+          await presentCredentialToOIDC4VPAndSIOPV2RequestForOthers(
+            uri: uri,
+            issuer: issuer,
+            credentialsToBePresented: credentialsToBePresented,
+            presentationDefinition:
+                credentialModel.credentialManifest!.presentationDefinition!,
+            oidc4vc: oidc4vc,
+            did: did,
+            kid: kid,
+            privateKey: privateKey,
+            indexValue: indexValue,
+            stateValue: stateValue,
+          );
 
-            return;
-          } else {
-            throw Exception();
-          }
+          return;
+        } else {
+          throw Exception();
         }
       } else {
         final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
