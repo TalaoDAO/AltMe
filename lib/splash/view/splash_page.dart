@@ -133,9 +133,7 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
-    if (uri
-        .toString()
-        .startsWith('https://app.altme.io/app/download/authorize')) {
+    if (uri.toString().startsWith(Parameters.authorizeEndPoint)) {
       context.read<DeepLinkCubit>().addDeepLink(uri!.toString());
       await context.read<QRCodeScanCubit>().deepLink();
       return;

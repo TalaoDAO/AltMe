@@ -439,7 +439,7 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
           (uri.toString().startsWith('openid://?') ||
               uri.toString().startsWith('openid-vc://?') ||
               uri.toString().startsWith('openid-hedera://?'))) ||
-      uri.toString().startsWith('https://app.altme.io/app/download/authorize');
+      uri.toString().startsWith(Parameters.authorizeEndPoint);
 }
 
 Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({

@@ -93,6 +93,7 @@ class OIDC4VC {
     required String nonce,
     required PkcePair pkcePair,
     required String state,
+    required String authorizationEndPoint,
   }) async {
     try {
       final openidConfigurationResponse = await getOpenIdConfig(issuer);
@@ -110,6 +111,7 @@ class OIDC4VC {
         nonce: nonce,
         pkcePair: pkcePair,
         state: state,
+        authorizationEndPoint: authorizationEndPoint,
       );
 
       final url = Uri.parse(authorizationEndpoint);
@@ -130,6 +132,7 @@ class OIDC4VC {
     required String nonce,
     required Map<String, dynamic> openidConfigurationResponse,
     required String redirectUri,
+    required String authorizationEndPoint,
     required PkcePair pkcePair,
     required String state,
   }) {
@@ -193,8 +196,7 @@ class OIDC4VC {
       'code_challenge_method': 'S256',
       'authorization_details': jsonEncode(authorizationDetails),
       'client_metadata': jsonEncode({
-        'authorization_endpoint':
-            'https://app.altme.io/app/download/authorize/',
+        'authorization_endpoint': authorizationEndPoint,
         'scopes_supported': ['openid'],
         'response_types_supported': ['vp_token', 'id_token'],
         'subject_types_supported': ['public'],

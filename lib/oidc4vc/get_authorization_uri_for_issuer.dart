@@ -61,6 +61,7 @@ Future<void> getAuthorizationUriForIssuer({
     nonce: nonce,
     pkcePair: PkcePair.generate(),
     state: jwtToken,
+    authorizationEndPoint: Parameters.authorizeEndPoint,
   );
   await LaunchUrl.launchUri(ebsiAuthenticationUri);
 }
