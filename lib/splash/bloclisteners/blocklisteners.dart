@@ -233,10 +233,13 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           client: DioClient('', Dio()),
         );
 
-        final bool isOpenIDUrl = state.uri.toString().startsWith('openid');
-
         if (showPrompt) {
-          if (isOpenIDUrl) {
+          final bool isOpenIDUrl = isOIDC4VCIUrl(state.uri!);
+          final bool isFromDeeplink = state.uri
+                  .toString()
+                  .startsWith(Parameters.authorizeEndPoint) ||
+              state.uri.toString().startsWith(Parameters.oidc4vcUniversalLink);
+          if (isOpenIDUrl || isFromDeeplink) {
             /// OIDC4VCI Case
 
             if (currentOIIDC4VCTypeForIssuance != null) {
