@@ -65,13 +65,13 @@ class SSIView extends StatelessWidget {
                     await Navigator.of(context).push<void>(RestoreMenu.route());
                   },
                 ),
-                DrawerItem(
-                  title: l10n.oidc4vcProfile,
-                  onTap: () async {
-                    await Navigator.of(context)
-                        .push<void>(OIDC4VCProfilePage.route());
-                  },
-                ),
+                // DrawerItem(
+                //   title: l10n.oidc4vcProfile,
+                //   onTap: () async {
+                //     await Navigator.of(context)
+                //         .push<void>(OIDC4VCProfilePage.route());
+                //   },
+                // ),
                 DrawerItem(
                   title: l10n.verifiableDataRegistry,
                   onTap: () async {
