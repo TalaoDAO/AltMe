@@ -433,13 +433,15 @@ bool isOIDC4VCIUrl(Uri uri) {
 }
 
 bool isSIOPV2OROIDC4VPUrl(Uri uri) {
-  final isOID4VCUrl = uri.toString().startsWith('openid');
+  final isOpenIdUrl = uri.toString().startsWith('openid://?') ||
+      uri.toString().startsWith('openid-vc://?') ||
+      uri.toString().startsWith('openid-hedera://?');
 
-  return (isOID4VCUrl &&
-          (uri.toString().startsWith('openid://?') ||
-              uri.toString().startsWith('openid-vc://?') ||
-              uri.toString().startsWith('openid-hedera://?'))) ||
+  final isSiopv2Url = uri.toString().startsWith('siopv2://?');
+  final isAuthorizeEndPoint =
       uri.toString().startsWith(Parameters.authorizeEndPoint);
+
+  return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
 }
 
 Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
