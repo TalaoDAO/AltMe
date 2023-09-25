@@ -862,10 +862,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         indexValue: indexValue,
       );
 
-      const didMethod = AltMeStrings.defaultDIDMethod;
-      final did = didKitProvider.keyToDID(didMethod, privateKey);
-      final kid =
-          await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
+      final (did, kid) = await getDidAndKid(
+        isEBSIV3: isEBSIV3,
+        privateKey: privateKey,
+        didKitProvider: didKitProvider,
+      );
 
       await oidc4vc.proveOwnershipOfDid(
         clientId: clientId,
