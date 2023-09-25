@@ -185,6 +185,7 @@ class _SplashViewState extends State<SplashView> {
             await secure_storage.getSecureStorage.get(SecureStorageKeys.ssiKey);
         if (ssiKey != null) {
           await context.read<QRCodeScanCubit>().deepLink();
+          return;
         }
       }
       if (key == 'type' && value == 'tzip10') {
@@ -194,6 +195,13 @@ class _SplashViewState extends State<SplashView> {
         beaconData = value;
       }
     });
+
+    if (isOIDC4VCIUrl(uri)) {
+      context.read<DeepLinkCubit>().addDeepLink(uri.toString());
+      await context.read<QRCodeScanCubit>().deepLink();
+      return;
+    }
+
     if (isBeaconRequest && beaconData != '') {
       unawaited(
         context.read<BeaconCubit>().peerFromDeepLink(beaconData),
