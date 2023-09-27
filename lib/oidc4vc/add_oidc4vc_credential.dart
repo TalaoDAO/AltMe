@@ -10,7 +10,7 @@ import 'package:jose/jose.dart';
 Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
   required CredentialsCubit credentialsCubit,
-  required String issuer,
+  String? issuer,
   required String credentialType,
   required bool isLastCall,
   required String format,
@@ -55,21 +55,22 @@ Future<void> addOIDC4VCCredential({
         credentialFromOIDC4VC['credentialSchema']['id'];
   }
 
-  final CredentialManifest? credentialManifest = await getCredentialManifest(
-    client: Dio(),
-    baseUrl: issuer,
-    credentialType: credentialType,
-  );
+  if (issuer != null) {
+    final CredentialManifest? credentialManifest = await getCredentialManifest(
+      client: Dio(),
+      baseUrl: issuer,
+      credentialType: credentialType,
+    );
 
-  if (credentialManifest?.outputDescriptors?.isNotEmpty ?? false) {
-    newCredential['credential_manifest'] = CredentialManifest(
-      credentialManifest!.id,
-      credentialManifest.issuedBy,
-      credentialManifest.outputDescriptors,
-      credentialManifest.presentationDefinition,
-    ).toJson();
+    if (credentialManifest?.outputDescriptors?.isNotEmpty ?? false) {
+      newCredential['credential_manifest'] = CredentialManifest(
+        credentialManifest!.id,
+        credentialManifest.issuedBy,
+        credentialManifest.outputDescriptors,
+        credentialManifest.presentationDefinition,
+      ).toJson();
+    }
   }
-
   final newCredentialModel = CredentialModel.fromJson(newCredential);
 
   final credentialModel = CredentialModel.copyWithData(

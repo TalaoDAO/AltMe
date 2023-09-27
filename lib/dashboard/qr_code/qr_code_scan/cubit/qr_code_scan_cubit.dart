@@ -595,6 +595,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           dioClient: client,
           oidc4vc: oidc4vc,
         );
+      } else if (credentialModel.pendingInfo!.url
+          .startsWith(Parameters.authorizeEndPoint)) {
+        await getAndAddDefferedCredential(
+          credentialModel: credentialModel,
+          credentialsCubit: credentialsCubit,
+          dioClient: client,
+          oidc4vc: oidc4vc,
+        );
       } else {
         emitError(
           ResponseMessage(

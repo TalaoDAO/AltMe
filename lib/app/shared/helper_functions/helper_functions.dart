@@ -622,12 +622,12 @@ Future<String> getHost({
   }
 }
 
-Future<(String?, String)> getIssuerAndPreAuthorizedCode({
+Future<(String?, String?)> getIssuerAndPreAuthorizedCode({
   required String scannedResponse,
   required DioClient dioClient,
 }) async {
   String? preAuthorizedCode;
-  late String issuer;
+  String? issuer;
 
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -658,8 +658,6 @@ Future<(String?, String)> getIssuerAndPreAuthorizedCode({
     }
 
     issuer = credentialOfferJson['credential_issuer'].toString();
-  } else {
-    throw Exception();
   }
 
   return (preAuthorizedCode, issuer);

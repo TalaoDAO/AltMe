@@ -357,7 +357,10 @@ class OIDC4VC {
 
     if (accessToken == null) throw Exception();
 
-    final credentialHeaders = buildCredentialHeaders(accessToken!);
+    final credentialHeaders = <String, dynamic>{
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
 
     final dynamic credentialResponse = await client.post<dynamic>(
       credentialEndpoint,
@@ -375,7 +378,10 @@ class OIDC4VC {
     required String acceptanceToken,
     required String deferredCredentialEndpoint,
   }) async {
-    final credentialHeaders = buildCredentialHeaders(acceptanceToken);
+    final credentialHeaders = <String, dynamic>{
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Bearer $acceptanceToken',
+    };
 
     final dynamic credentialResponse = await client.post<dynamic>(
       deferredCredentialEndpoint,
@@ -674,15 +680,6 @@ class OIDC4VC {
         .readValues(openidConfigurationResponse)
         .first as String;
     return credentialEndpoint;
-  }
-
-  Map<String, dynamic> buildCredentialHeaders(String accessToken) {
-    final credentialHeaders = <String, dynamic>{
-      // 'Conformance': conformance,
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-    return credentialHeaders;
   }
 
   @visibleForTesting

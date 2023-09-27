@@ -51,7 +51,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
         credentials: credentials,
         userPin: userPin,
-        issuer: issuer,
+        issuer: issuer!,
         preAuthorizedCode: preAuthorizedCode,
         isEBSIV3: isEBSIV3,
         credentialOfferJson: credentialOfferJson,
@@ -62,7 +62,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
           credentials: credentials,
           userPin: userPin,
-          issuer: issuer,
+          issuer: issuer!,
           preAuthorizedCode: preAuthorizedCode,
           isEBSIV3: isEBSIV3,
           credentialOfferJson: credentialOfferJson,
@@ -85,7 +85,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         await qrCodeScanCubit.addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
           userPin: userPin,
-          issuer: issuer,
+          issuer: issuer!,
           preAuthorizedCode: null,
           isEBSIV3: isEBSIV3,
           codeForAuthorisedFlow: codeForAuthorisedFlow,
@@ -105,7 +105,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       isLastCall: true,
       dioClient: dioClient,
       userPin: userPin,
-      issuer: issuer,
+      issuer: issuer!,
       preAuthorizedCode: preAuthorizedCode,
       codeForAuthorisedFlow: null,
       codeVerifier: null,
