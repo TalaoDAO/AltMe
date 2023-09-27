@@ -22,12 +22,10 @@ class ManageDidSecp256k1Page extends StatefulWidget {
 
 class _ManageDidEbsiPageState extends State<ManageDidSecp256k1Page> {
   Future<String> getDid() async {
-    final OIDC4VC oidc4vc = OIDC4VC();
-    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-
-    final privateKey = await oidc4vc.privateKeyFromMnemonic(
-      mnemonic: mnemonic!,
-      indexValue: getIndexValue(isEBSIV3: false),
+    final privateKey = await fetchPrivateKey(
+      isEBSIV3: false,
+      oidc4vc: OIDC4VC(),
+      secureStorage: getSecureStorage,
     );
 
     const didMethod = AltMeStrings.defaultDIDMethod;

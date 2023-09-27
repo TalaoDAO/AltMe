@@ -9,6 +9,7 @@ class TokenParameters {
     required this.privateKey,
     required this.did,
     required this.kid,
+    required this.isIdToken,
   });
 
   /// [privateKey] is JWK (Json Web Key) of user private key
@@ -19,6 +20,9 @@ class TokenParameters {
 
   /// [kid] kid
   String kid;
+
+  /// [isIdToken] isIdToken
+  bool isIdToken;
 
   /// [publicJWK] is JWK (Json Web Key) of user public key
   /// computed from [privateKey]

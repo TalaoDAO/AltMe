@@ -14,10 +14,12 @@ import 'package:altme/scan/scan.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -853,13 +855,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final bool isEBSIV3 =
           await isEBSIV3ForVerifier(client: client, uri: state.uri!);
 
-      final int indexValue = getIndexValue(isEBSIV3: isEBSIV3);
-
-      final mnemonic =
-          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-      final privateKey = await oidc4vc.privateKeyFromMnemonic(
-        mnemonic: mnemonic!,
-        indexValue: indexValue,
+      final privateKey = await fetchPrivateKey(
+        isEBSIV3: isEBSIV3,
+        oidc4vc: oidc4vc,
+        secureStorage: getSecureStorage,
       );
 
       final (did, kid) = await getDidAndKid(
@@ -868,16 +867,33 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         didKitProvider: didKitProvider,
       );
 
-      await oidc4vc.proveOwnershipOfDid(
+      final response = await oidc4vc.proveOwnershipOfKey(
         clientId: clientId,
         privateKey: privateKey,
         did: did,
         kid: kid,
         redirectUri: redirectUri,
         nonce: nonce,
-        indexValue: indexValue,
         stateValue: stateValue,
       );
+
+      String? url;
+
+      if (response.headers.map.containsKey('location') &&
+          response.headers.map['location'] != null &&
+          response.headers.map['location'] is List<dynamic> &&
+          (response.headers.map['location']!).isNotEmpty) {
+        url = response.headers.map['location']![0];
+      }
+
+      if (url != null) {
+        final uri = Uri.parse(url);
+        if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
+          await authorizedFlowCompletion(uri);
+          return;
+        }
+      }
+
       emit(
         state.copyWith(
           qrScanStatus: QrScanStatus.success,
@@ -1074,5 +1090,47 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
     }
     return data;
+  }
+
+  Future<void> authorizedFlowCompletion(Uri uri) async {
+    final codeForAuthorisedFlow = uri.queryParameters['code'];
+    final state = uri.queryParameters['state'];
+
+    if (codeForAuthorisedFlow == null || state == null) {
+      return;
+    }
+    await dotenv.load();
+    final String authorizationUriSecretKey =
+        dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
+
+    final jwt = JWT.verify(state, SecretKey(authorizationUriSecretKey));
+
+    final payload = jwt.payload as Map<String, dynamic>;
+
+    final containsAllRequiredKey = payload.containsKey('credentials') &&
+        payload.containsKey('codeVerifier') &&
+        payload.containsKey('issuer') &&
+        payload.containsKey('isEBSIV3');
+
+    if (!containsAllRequiredKey) {
+      return;
+    }
+
+    final selectedCredentials = payload['credentials'] as List<dynamic>;
+    final String codeVerifier = payload['codeVerifier'].toString();
+    final String issuer = payload['issuer'].toString();
+    final bool isEBSIV3 = payload['isEBSIV3'] as bool;
+
+    await addCredentialsInLoop(
+      selectedCredentials: selectedCredentials,
+      userPin: null,
+      issuer: issuer,
+      preAuthorizedCode: null,
+      isEBSIV3: isEBSIV3,
+      codeForAuthorisedFlow: codeForAuthorisedFlow,
+      codeVerifier: codeVerifier,
+    );
+
+    return;
   }
 }

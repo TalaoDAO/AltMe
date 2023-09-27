@@ -10,6 +10,7 @@ class VerifierTokenParameters extends TokenParameters {
     required super.privateKey,
     required super.did,
     required super.kid,
+    required super.isIdToken,
     required this.audience,
     required this.credentials,
     required this.nonce,

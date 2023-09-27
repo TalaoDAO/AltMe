@@ -82,6 +82,7 @@ class _SplashViewState extends State<SplashView> {
     final l10n = context.l10n;
     String beaconData = '';
     bool isBeaconRequest = false;
+
     if (uri.toString().startsWith('${Urls.appDeepLink}/dashboard')) {
       await Navigator.pushAndRemoveUntil<void>(
         context,
@@ -92,44 +93,7 @@ class _SplashViewState extends State<SplashView> {
     }
 
     if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
-      final codeForAuthorisedFlow = uri!.queryParameters['code'];
-      final state = uri.queryParameters['state'];
-
-      if (codeForAuthorisedFlow == null || state == null) {
-        return;
-      }
-      await dotenv.load();
-      final String authorizationUriSecretKey =
-          dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
-
-      final jwt = JWT.verify(state, SecretKey(authorizationUriSecretKey));
-
-      final payload = jwt.payload as Map<String, dynamic>;
-
-      final containsAllRequiredKey = payload.containsKey('credentials') &&
-          payload.containsKey('codeVerifier') &&
-          payload.containsKey('issuer') &&
-          payload.containsKey('isEBSIV3');
-
-      if (!containsAllRequiredKey) {
-        return;
-      }
-
-      final selectedCredentials = payload['credentials'] as List<dynamic>;
-      final String codeVerifier = payload['codeVerifier'].toString();
-      final String issuer = payload['issuer'].toString();
-      final bool isEBSIV3 = payload['isEBSIV3'] as bool;
-
-      await context.read<QRCodeScanCubit>().addCredentialsInLoop(
-            selectedCredentials: selectedCredentials,
-            userPin: null,
-            issuer: issuer,
-            preAuthorizedCode: null,
-            isEBSIV3: isEBSIV3,
-            codeForAuthorisedFlow: codeForAuthorisedFlow,
-            codeVerifier: codeVerifier,
-          );
-
+      await context.read<QRCodeScanCubit>().authorizedFlowCompletion(uri!);
       return;
     }
 

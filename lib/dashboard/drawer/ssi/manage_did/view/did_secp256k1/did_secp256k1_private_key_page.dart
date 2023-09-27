@@ -27,11 +27,10 @@ class _DidSecp256k1PrivateKeyPageState extends State<DidSecp256k1PrivateKeyPage>
   late AnimationController animationController;
 
   Future<String> getPrivateKey() async {
-    final OIDC4VC oidc4vc = OIDC4VC();
-    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-    final privateKey = await oidc4vc.privateKeyFromMnemonic(
-      mnemonic: mnemonic!,
-      indexValue: getIndexValue(isEBSIV3: false),
+    final privateKey = await fetchPrivateKey(
+      isEBSIV3: false,
+      oidc4vc: OIDC4VC(),
+      secureStorage: getSecureStorage,
     );
     return privateKey;
   }

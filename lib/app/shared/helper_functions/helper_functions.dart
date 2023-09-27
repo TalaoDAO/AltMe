@@ -19,6 +19,7 @@ import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -269,6 +270,28 @@ Future<String> getRandomP256PrivateKey(
   } else {
     return p256PrivateKey;
   }
+}
+
+Future<String> fetchPrivateKey({
+  required OIDC4VC oidc4vc,
+  required SecureStorageProvider secureStorage,
+  required bool isEBSIV3,
+}) async {
+  late String privateKey;
+
+  final index = getIndexValue(isEBSIV3: true);
+
+  if (isEBSIV3) {
+    privateKey = await getRandomP256PrivateKey(getSecureStorage);
+  } else {
+    final OIDC4VC oidc4vc = OIDC4VC();
+    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+    privateKey = await oidc4vc.privateKeyFromMnemonic(
+      mnemonic: mnemonic!,
+      indexValue: index,
+    );
+  }
+  return privateKey;
 }
 
 Map<String, dynamic> decodePayload({

@@ -17,12 +17,10 @@ Future<void> getAuthorizationUriForIssuer({
   required String issuer,
   required dynamic credentialOfferJson,
 }) async {
-  final mnemonic =
-      await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
-
-  final privateKey = await oidc4vc.privateKeyFromMnemonic(
-    mnemonic: mnemonic!,
-    indexValue: getIndexValue(isEBSIV3: isEBSIV3),
+  final privateKey = await fetchPrivateKey(
+    isEBSIV3: isEBSIV3,
+    oidc4vc: oidc4vc,
+    secureStorage: getSecureStorage,
   );
 
   final (did, _) = await getDidAndKid(
@@ -59,7 +57,7 @@ Future<void> getAuthorizationUriForIssuer({
     issuer: issuer,
     issuerState: issuerState,
     nonce: nonce,
-    pkcePair: PkcePair.generate(),
+    pkcePair: pkcePair,
     state: jwtToken,
     authorizationEndPoint: Parameters.authorizeEndPoint,
   );

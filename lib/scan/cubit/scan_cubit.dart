@@ -67,11 +67,10 @@ class ScanCubit extends Cubit<ScanState> {
 
         final int indexValue = getIndexValue(isEBSIV3: isEBSIV3);
 
-        final mnemonic =
-            await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-        final privateKey = await oidc4vc.privateKeyFromMnemonic(
-          mnemonic: mnemonic!,
-          indexValue: indexValue,
+        final privateKey = await fetchPrivateKey(
+          isEBSIV3: isEBSIV3,
+          oidc4vc: oidc4vc,
+          secureStorage: getSecureStorage,
         );
 
         final (did, kid) = await getDidAndKid(

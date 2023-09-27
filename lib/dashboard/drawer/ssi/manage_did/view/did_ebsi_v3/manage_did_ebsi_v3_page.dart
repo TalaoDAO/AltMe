@@ -21,12 +21,10 @@ class ManageDidEbsiV3Page extends StatefulWidget {
 
 class _ManageDidEbsiPageState extends State<ManageDidEbsiV3Page> {
   Future<String> getDid() async {
-    final OIDC4VC oidc4vc = OIDC4VC();
-    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-
-    final privateKey = await oidc4vc.privateKeyFromMnemonic(
-      mnemonic: mnemonic!,
-      indexValue: getIndexValue(isEBSIV3: true),
+    final privateKey = await fetchPrivateKey(
+      isEBSIV3: true,
+      oidc4vc: OIDC4VC(),
+      secureStorage: getSecureStorage,
     );
 
     final (did, _) = await getDidAndKid(

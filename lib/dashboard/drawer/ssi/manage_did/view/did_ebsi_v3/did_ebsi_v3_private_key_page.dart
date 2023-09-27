@@ -26,12 +26,11 @@ class _DidEbsiV3PrivateKeyPageState extends State<DidEbsiV3PrivateKeyPage>
   late Animation<double> animation;
   late AnimationController animationController;
 
-  Future<String> getPrivateKey() async {
-    final OIDC4VC oidc4vc = OIDC4VC();
-    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-    final privateKey = await oidc4vc.privateKeyFromMnemonic(
-      mnemonic: mnemonic!,
-      indexValue: getIndexValue(isEBSIV3: true),
+  Future<String> getKey() async {
+    final privateKey = await fetchPrivateKey(
+      isEBSIV3: true,
+      oidc4vc: OIDC4VC(),
+      secureStorage: getSecureStorage,
     );
     return privateKey;
   }
@@ -85,7 +84,7 @@ class _DidEbsiV3PrivateKeyPageState extends State<DidEbsiV3PrivateKeyPage>
               height: Sizes.spaceNormal,
             ),
             FutureBuilder<String>(
-              future: getPrivateKey(),
+              future: getKey(),
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.done:

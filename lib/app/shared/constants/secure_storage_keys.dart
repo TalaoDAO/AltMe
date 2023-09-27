@@ -59,7 +59,7 @@ class SecureStorageKeys {
   static const String ssiMnemonic = 'ssi/mnemonic';
   static const String ssiKey = 'ssi/key';
 
-  static const String p256PrivateKey = 'ssi/p256PrivateKey';
+  static const String p256PrivateKey = 'p256PrivateKey';
 
   static const String cryptoAccount = 'cryptoAccount';
   static const String cryptoAccounTrackingIndex = 'cryptoAccounTrackingIndex';

@@ -24,12 +24,10 @@ Future<void> getAndAddCredential({
   required String? codeForAuthorisedFlow,
   required String? codeVerifier,
 }) async {
-  final mnemonic =
-      await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
-
-  final privateKey = await oidc4vc.privateKeyFromMnemonic(
-    mnemonic: mnemonic!,
-    indexValue: getIndexValue(isEBSIV3: isEBSIV3),
+  final privateKey = await fetchPrivateKey(
+    isEBSIV3: isEBSIV3,
+    oidc4vc: oidc4vc,
+    secureStorage: getSecureStorage,
   );
 
   final (did, kid) = await getDidAndKid(

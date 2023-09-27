@@ -243,6 +243,7 @@ class OIDC4VC {
       userPin: userPin,
       code: code,
       codeVerifier: codeVerifier,
+      did: did,
     );
 
     final openidConfigurationResponse = await getOpenIdConfig(issuer);
@@ -268,6 +269,7 @@ class OIDC4VC {
       did: did,
       kid: kid,
       issuer: issuer,
+      isIdToken: false,
     );
 
     if (nonce == null) throw Exception();
@@ -394,6 +396,7 @@ class OIDC4VC {
     String? userPin,
     String? code,
     String? codeVerifier,
+    String? did,
   }) {
     late Map<String, dynamic> tokenData;
 
@@ -402,11 +405,12 @@ class OIDC4VC {
         'pre-authorized_code': preAuthorizedCode,
         'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
       };
-    } else if (code != null && codeVerifier != null) {
+    } else if (code != null && codeVerifier != null && did != null) {
       tokenData = <String, dynamic>{
         'code': code,
         'grant_type': 'authorization_code',
         'code_verifier': codeVerifier,
+        'client_id': did,
       };
     } else {
       throw Exception();
@@ -718,63 +722,63 @@ class OIDC4VC {
     return tokenResponse.data;
   }
 
-  Future<void> sendPresentation({
-    required String clientId,
-    required String redirectUrl,
-    required String did,
-    required String kid,
-    required List<String> credentialsToBePresented,
-    required String nonce,
-    required int indexValue,
-    required String? stateValue,
-    String? mnemonic,
-    String? privateKey,
-  }) async {
-    try {
-      final private = await getPrivateKey(
-        mnemonic: mnemonic,
-        privateKey: privateKey,
-        indexValue: indexValue,
-      );
+  // Future<void> sendPresentation({
+  //   required String clientId,
+  //   required String redirectUrl,
+  //   required String did,
+  //   required String kid,
+  //   required List<String> credentialsToBePresented,
+  //   required String nonce,
+  //   required int indexValue,
+  //   required String? stateValue,
+  //   String? mnemonic,
+  //   String? privateKey,
+  // }) async {
+  //   try {
+  //     final private = await getPrivateKey(
+  //       mnemonic: mnemonic,
+  //       privateKey: privateKey,
+  //       indexValue: indexValue,
+  //     );
 
-      final tokenParameters = VerifierTokenParameters(
-        privateKey: private,
-        did: did,
-        kid: kid,
-        audience: clientId,
-        credentials: credentialsToBePresented,
-        nonce: nonce,
-      );
+  //     final tokenParameters = VerifierTokenParameters(
+  //       privateKey: private,
+  //       did: did,
+  //       kid: kid,
+  //       audience: clientId,
+  //       credentials: credentialsToBePresented,
+  //       nonce: nonce,
+  //     );
 
-      // structures
-      final verifierIdToken = await getIdToken(tokenParameters);
+  //     // structures
+  //     final verifierIdToken = await getIdToken(tokenParameters);
 
-      /// build vp token
+  //     /// build vp token
 
-      final vpToken = await getVpToken(tokenParameters);
+  //     final vpToken = await getVpToken(tokenParameters);
 
-      final responseHeaders = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      };
+  //     final responseHeaders = {
+  //       'Content-Type': 'application/x-www-form-urlencoded',
+  //     };
 
-      final responseData = <String, dynamic>{
-        'id_token': verifierIdToken,
-        'vp_token': vpToken,
-      };
+  //     final responseData = <String, dynamic>{
+  //       'id_token': verifierIdToken,
+  //       'vp_token': vpToken,
+  //     };
 
-      if (stateValue != null) {
-        responseData['state'] = stateValue;
-      }
+  //     if (stateValue != null) {
+  //       responseData['state'] = stateValue;
+  //     }
 
-      await client.post<dynamic>(
-        redirectUrl,
-        options: Options(headers: responseHeaders),
-        data: responseData,
-      );
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
+  //     await client.post<dynamic>(
+  //       redirectUrl,
+  //       options: Options(headers: responseHeaders),
+  //       data: responseData,
+  //     );
+  //   } catch (e) {
+  //     throw Exception(e);
+  //   }
+  // }
 
   Future<String> extractVpToken({
     required String clientId,
@@ -800,6 +804,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: credentialsToBePresented,
         nonce: nonce,
+        isIdToken: false,
       );
 
       final vpToken = await getVpToken(tokenParameters);
@@ -834,6 +839,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: credentialsToBePresented,
         nonce: nonce,
+        isIdToken: false,
       );
 
       final verifierIdToken = await getIdToken(tokenParameters);
@@ -844,23 +850,17 @@ class OIDC4VC {
     }
   }
 
-  Future<void> proveOwnershipOfDid({
+  Future<Response<dynamic>> proveOwnershipOfKey({
     required String clientId,
     required String did,
     required String kid,
     required String redirectUri,
     required String nonce,
-    required int indexValue,
+    required String privateKey,
     required String? stateValue,
-    String? mnemonic,
-    String? privateKey,
   }) async {
     try {
-      final private = await getPrivateKey(
-        mnemonic: mnemonic,
-        privateKey: privateKey,
-        indexValue: indexValue,
-      );
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
 
       final tokenParameters = VerifierTokenParameters(
         privateKey: private,
@@ -869,6 +869,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: [],
         nonce: nonce,
+        isIdToken: true,
       );
 
       // structures
@@ -886,11 +887,72 @@ class OIDC4VC {
         responseData['state'] = stateValue;
       }
 
-      await client.post<dynamic>(
+      final response = await client.post<dynamic>(
         redirectUri,
-        options: Options(headers: responseHeaders),
+        options: Options(
+          headers: responseHeaders,
+          followRedirects: false,
+          validateStatus: (status) {
+            return status != null && status < 400;
+          },
+        ),
         data: responseData,
       );
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<Response<dynamic>> signIdToken({
+    required String clientId,
+    required String did,
+    required String kid,
+    required String redirectUri,
+    required String nonce,
+    required String privateKey,
+    required String? stateValue,
+  }) async {
+    try {
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
+      final tokenParameters = VerifierTokenParameters(
+        privateKey: private,
+        did: did,
+        kid: kid,
+        audience: clientId,
+        credentials: [],
+        nonce: nonce,
+        isIdToken: true,
+      );
+
+      // structures
+      final verifierIdToken = await getIdToken(tokenParameters);
+
+      final responseHeaders = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      };
+
+      final responseData = <String, dynamic>{
+        'id_token': verifierIdToken,
+      };
+
+      if (stateValue != null) {
+        responseData['state'] = stateValue;
+      }
+
+      final response = await client.post<dynamic>(
+        redirectUri,
+        options: Options(
+          headers: responseHeaders,
+          followRedirects: false,
+          validateStatus: (status) {
+            return status != null && status < 400;
+          },
+        ),
+        data: responseData,
+      );
+      return response;
     } catch (e) {
       throw Exception(e);
     }
@@ -942,10 +1004,18 @@ class OIDC4VC {
 
     final key = JsonWebKey.fromJson(privateKey);
 
+    late String typ;
+
+    if (tokenParameters.isIdToken) {
+      typ = 'JWT';
+    } else {
+      typ = 'openid4vci-proof+jwt';
+    }
+
     final vpBuilder = JsonWebSignatureBuilder()
       // set the content
       ..jsonContent = vpVerifierClaims.toJson()
-      ..setProtectedHeader('typ', 'openid4vci-proof+jwt')
+      ..setProtectedHeader('typ', typ)
       ..setProtectedHeader('alg', tokenParameters.alg)
       ..setProtectedHeader('kid', tokenParameters.kid)
 
@@ -979,47 +1049,47 @@ class OIDC4VC {
     return verifierIdJwt;
   }
 
-  Future<String> getDidFromMnemonic({
-    required String did,
-    required String kid,
-    required int indexValue,
-    String? mnemonic,
-    String? privateKey,
-  }) async {
-    final private = await getPrivateKey(
-      mnemonic: mnemonic,
-      privateKey: privateKey,
-      indexValue: indexValue,
-    );
+  // Future<String> getDidFromMnemonic({
+  //   required String did,
+  //   required String kid,
+  //   required int indexValue,
+  //   String? mnemonic,
+  //   String? privateKey,
+  // }) async {
+  //   final private = await getPrivateKey(
+  //     mnemonic: mnemonic,
+  //     privateKey: privateKey,
+  //     indexValue: indexValue,
+  //   );
 
-    final tokenParameters = TokenParameters(
-      privateKey: private,
-      did: did,
-      kid: kid,
-    );
-    return tokenParameters.did;
-  }
+  //   final tokenParameters = TokenParameters(
+  //     privateKey: private,
+  //     did: did,
+  //     kid: kid,
+  //   );
+  //   return tokenParameters.did;
+  // }
 
-  Future<String?> getKid({
-    required String did,
-    required String kid,
-    required int indexValue,
-    String? mnemonic,
-    String? privateKey,
-  }) async {
-    final private = await getPrivateKey(
-      mnemonic: mnemonic,
-      privateKey: privateKey,
-      indexValue: indexValue,
-    );
+  // Future<String?> getKid({
+  //   required String did,
+  //   required String kid,
+  //   required int indexValue,
+  //   String? mnemonic,
+  //   String? privateKey,
+  // }) async {
+  //   final private = await getPrivateKey(
+  //     mnemonic: mnemonic,
+  //     privateKey: privateKey,
+  //     indexValue: indexValue,
+  //   );
 
-    final tokenParameters = TokenParameters(
-      privateKey: private,
-      did: did,
-      kid: kid,
-    );
-    return tokenParameters.kid;
-  }
+  //   final tokenParameters = TokenParameters(
+  //     privateKey: private,
+  //     did: did,
+  //     kid: kid,
+  //   );
+  //   return tokenParameters.kid;
+  // }
 
   Future<Map<String, dynamic>> getOpenIdConfig(String baseUrl) async {
     final url = '$baseUrl/.well-known/openid-configuration';
