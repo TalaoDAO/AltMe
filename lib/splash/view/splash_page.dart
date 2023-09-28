@@ -9,12 +9,10 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:uni_links/uni_links.dart';
@@ -225,48 +223,37 @@ class _SplashViewState extends State<SplashView> {
         walletConnectBlocListener,
         polygonIdBlocListener,
       ],
-      child: Scaffold(
-        body: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).colorScheme.darkGradientStartColor,
-                Theme.of(context).colorScheme.darkGradientEndColor,
+      child: BasePage(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        scrollView: false,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                const Spacer(flex: 15),
+                const SplashImage(),
+                const Spacer(flex: 5),
+                const TitleText(),
+                const Spacer(flex: 1),
+                const SubTitle(),
+                const Spacer(flex: 5),
+                const LoadingText(),
+                const SizedBox(height: 10),
+                BlocBuilder<SplashCubit, SplashState>(
+                  builder: (context, state) {
+                    return TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0, end: state.loadedValue),
+                      duration: const Duration(milliseconds: 500),
+                      builder: (context, value, child) {
+                        return LoadingProgress(value: value);
+                      },
+                    );
+                  },
+                ),
+                const Spacer(flex: 6),
               ],
-              end: Alignment.topCenter,
-              begin: Alignment.bottomCenter,
-            ),
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const Spacer(flex: 3),
-                  const TitleText(),
-                  const Spacer(flex: 1),
-                  const SubTitle(),
-                  const Spacer(flex: 2),
-                  const SplashImage(),
-                  const Spacer(flex: 3),
-                  const LoadingText(),
-                  const SizedBox(height: 10),
-                  BlocBuilder<SplashCubit, SplashState>(
-                    builder: (context, state) {
-                      return TweenAnimationBuilder(
-                        tween: Tween<double>(begin: 0, end: state.loadedValue),
-                        duration: const Duration(milliseconds: 500),
-                        builder: (context, value, child) {
-                          return LoadingProgress(value: value);
-                        },
-                      );
-                    },
-                  ),
-                  const Spacer(flex: 2),
-                ],
-              ),
             ),
           ),
         ),
