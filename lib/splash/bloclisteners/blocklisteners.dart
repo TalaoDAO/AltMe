@@ -522,11 +522,12 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       var accept = true;
       final profileCubit = context.read<ProfileCubit>();
 
-      final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
+      final bool userConsentForIssuerAccess =
+          profileCubit.state.model.userConsentForIssuerAccess;
 
       final l10n = context.l10n;
 
-      if (isAlertEnable) {
+      if (userConsentForIssuerAccess) {
         /// checking if it is issuer side
 
         LoadingView().hide();

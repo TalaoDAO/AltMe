@@ -5,13 +5,13 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SecurityPage extends StatelessWidget {
-  const SecurityPage({super.key});
+class SixOrForUserPinPage extends StatelessWidget {
+  const SixOrForUserPinPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => const SecurityPage(),
-      settings: const RouteSettings(name: '/SecurityPage'),
+      builder: (_) => const SixOrForUserPinPage(),
+      settings: const RouteSettings(name: '/SixOrForUserPinPage'),
     );
   }
 
@@ -19,7 +19,7 @@ class SecurityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.security,
+      title: l10n.six_or_four_digits_user_pin,
       useSafeArea: true,
       scrollView: false,
       titleAlignment: Alignment.topCenter,
@@ -42,11 +42,28 @@ class SecurityPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        children: [
+                          Text(
+                            l10n.six_or_four_digits_user_pin_title,
+                            style: Theme.of(context).textTheme.drawerItemTitle,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            l10n.six_or_four_digits_user_pin_subTitle,
+                            style:
+                                Theme.of(context).textTheme.drawerItemSubtitle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 10),
                     ListTile(
                       onTap: () {
-                        context
-                            .read<ProfileCubit>()
-                            .setSecurityLevel(isSecurityLow: true);
+                        context.read<ProfileCubit>().setUserPinDigitLength(4);
                       },
                       shape: const RoundedRectangleBorder(
                         side: BorderSide(
@@ -55,13 +72,13 @@ class SecurityPage extends StatelessWidget {
                         ),
                       ),
                       title: Text(
-                        l10n.lowSecurity,
+                        l10n.four_digits_user_pin,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                             ),
                       ),
                       trailing: Icon(
-                        state.model.isSecurityLow
+                        state.model.userPinDigitsLength == 4
                             ? Icons.radio_button_checked
                             : Icons.radio_button_unchecked,
                         size: Sizes.icon2x,
@@ -80,9 +97,7 @@ class SecurityPage extends StatelessWidget {
                     ),
                     ListTile(
                       onTap: () {
-                        context
-                            .read<ProfileCubit>()
-                            .setSecurityLevel(isSecurityLow: false);
+                        context.read<ProfileCubit>().setUserPinDigitLength(6);
                       },
                       shape: const RoundedRectangleBorder(
                         side: BorderSide(
@@ -91,13 +106,13 @@ class SecurityPage extends StatelessWidget {
                         ),
                       ),
                       title: Text(
-                        l10n.highSecurity,
+                        l10n.six_digits_user_pin,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                             ),
                       ),
                       trailing: Icon(
-                        !state.model.isSecurityLow
+                        state.model.userPinDigitsLength == 6
                             ? Icons.radio_button_checked
                             : Icons.radio_button_unchecked,
                         size: Sizes.icon2x,

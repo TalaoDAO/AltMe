@@ -717,6 +717,7 @@
   "resetWallet": "Reset Wallet",
   "resetWalletDescription": "Erase all data stored on your phone and reset Altme wallet.",
   "showWalletRecoveryPhrase": "Show wallet recovery phrase",
+  "showWalletRecoveryPhraseSubtitle": "The recovery phrase is a series of words that allow you to recover your stolen keys associated with your certificates and crypto assets.",
   "blockchainNetwork": "Blockchain network (by default)",
   "contactUs": "Contact us",
   "officialWebsite": "Official website",
@@ -933,8 +934,11 @@
   "format": "Format",
   "pleaseInsertTheSecredCodeReceived": "Please insert the secret code received.",
   "userConsentForIssuerAccess": "User consent for issuer access",
-  "userConsentForVerifierAccess": "User consent for verifier access",
+  "userConsentForIssuerAccessSubtitle": "Default “off”. Set to ”on” if you want the wallet to inform you of the identity of the site issuing the certificate (or its domain name) and ask you for confirmation before accessing it.",
+  "userConsentForVerifierAccess": "User consent for verifier access",  
+  "userConsentForVerifierAccessSubtitle": "Default ”on”. Set to “off” if you do not want the wallet to ask you for confirmation to access the site which asks you to present your certificates.",
   "userPINCodeForAuthentication": "User PIN code for authentication",
+  "userPINCodeForAuthenticationSubtitle": "Default ”on”. Set to “off” to avoid having to validate your PIN code to authenticate with a site. This behavior is not recommended.",
   "youcanSelectOnlyXCredential": "You can select only {count} credential(s).",
   "@youcanSelectOnlyXCredential": {
     "description": "",
@@ -947,5 +951,14 @@
   "lowSecurity": "Low Security",
   "highSecurity": "High Security",
   "theRequestIsRejected": "The request is rejected.",
-  "userPinIsIncorrect": "User pin is incorrect"
+  "userPinIsIncorrect": "User pin is incorrect",
+  "security_level": "Security Level",
+  "oidc4vc_settings": "OIDC4VC Settings",
+  "six_or_four_digits_user_pin": "6 or 4 digits User Pin",
+  "six_digits_user_pin": "6 digits User Pin",
+  "four_digits_user_pin": "4 digits User Pin",
+  "six_or_four_digits_user_pin_title": "User PIN digits for pre-authorized code flow",
+  "six_or_four_digits_user_pin_subTitle": "By default 6 digits. Position on 4 digits in the case where the issuer offers 4 digit codes.",
+  "security_level_title": "Security level",
+  "security_level_subTitle": "By default Low: This parameter defines the level of verification carried out by the wallet on the request data provided by issuers and verifiers (signature of jwts, access to trust registers, etc.)."
 }

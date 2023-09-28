@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/drawer/ssi/manage_did/view/did_menu.dart';
-import 'package:altme/dashboard/drawer/ssi/oidc4vc_profile/oidc4vc_profile.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +82,13 @@ class SSIView extends StatelessWidget {
                   title: l10n.searchCredentials,
                   onTap: () {
                     Navigator.of(context).push<void>(SearchPage.route());
+                  },
+                ),
+                DrawerItem(
+                  title: l10n.oidc4vc_settings,
+                  onTap: () {
+                    Navigator.of(context)
+                        .push<void>(Oidc4vcSettingMenu.route());
                   },
                 ),
               ],

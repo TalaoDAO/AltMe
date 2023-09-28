@@ -72,31 +72,35 @@ class _UserPinViewState extends State<UserPinView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: BasePage(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        scrollView: false,
-        body: PinCodeWidget(
-          title: l10n.pleaseInsertTheSecredCodeReceived,
-          passwordEnteredCallback: _onPasscodeEntered,
-          passwordDigits: 6,
-          deleteButton: Text(
-            l10n.delete,
-            style: Theme.of(context).textTheme.labelLarge,
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: BasePage(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            scrollView: false,
+            body: PinCodeWidget(
+              title: l10n.pleaseInsertTheSecredCodeReceived,
+              passwordEnteredCallback: _onPasscodeEntered,
+              passwordDigits: state.model.userPinDigitsLength,
+              deleteButton: Text(
+                l10n.delete,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              cancelButton: Text(
+                l10n.cancel,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              cancelCallback: _onPasscodeCancelled,
+              isValidCallback: () {
+                Navigator.pop(context);
+                widget.onProceed.call(pinCodeValue!);
+              },
+              shouldTriggerVerification: _verificationNotifier.stream,
+            ),
           ),
-          cancelButton: Text(
-            l10n.cancel,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-          cancelCallback: _onPasscodeCancelled,
-          isValidCallback: () {
-            Navigator.pop(context);
-            widget.onProceed.call(pinCodeValue!);
-          },
-          shouldTriggerVerification: _verificationNotifier.stream,
-        ),
-      ),
+        );
+      },
     );
   }
 

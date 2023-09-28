@@ -136,23 +136,9 @@ class WalletSecurityView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    DrawerItem(
-                      title: l10n.alert,
-                      trailing: SizedBox(
-                        height: 25,
-                        child: Switch(
-                          onChanged: (value) async {
-                            await context
-                                .read<ProfileCubit>()
-                                .setAlertEnabled(enabled: value);
-                          },
-                          value: state.model.isAlertEnabled,
-                          activeColor: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                    DrawerItem(
+                    DrawerItem2(
                       title: l10n.userConsentForIssuerAccess,
+                      subtitle: l10n.userConsentForIssuerAccessSubtitle,
                       trailing: SizedBox(
                         height: 25,
                         child: Switch(
@@ -166,8 +152,9 @@ class WalletSecurityView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    DrawerItem(
+                    DrawerItem2(
                       title: l10n.userConsentForVerifierAccess,
+                      subtitle: l10n.userConsentForVerifierAccessSubtitle,
                       trailing: SizedBox(
                         height: 25,
                         child: Switch(
@@ -183,8 +170,9 @@ class WalletSecurityView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    DrawerItem(
+                    DrawerItem2(
                       title: l10n.userPINCodeForAuthentication,
+                      subtitle: l10n.userPINCodeForAuthenticationSubtitle,
                       trailing: SizedBox(
                         height: 25,
                         child: Switch(
@@ -202,6 +190,7 @@ class WalletSecurityView extends StatelessWidget {
                     ),
                     DrawerItem(
                       title: l10n.showWalletRecoveryPhrase,
+                      subtitle: l10n.showWalletRecoveryPhraseSubtitle,
                       onTap: () async {
                         final confirm = await showDialog<bool>(
                               context: context,
@@ -229,12 +218,6 @@ class WalletSecurityView extends StatelessWidget {
                             );
                           }
                         }
-                      },
-                    ),
-                    DrawerItem(
-                      title: l10n.security,
-                      onTap: () {
-                        Navigator.of(context).push<void>(SecurityPage.route());
                       },
                     ),
                   ],
