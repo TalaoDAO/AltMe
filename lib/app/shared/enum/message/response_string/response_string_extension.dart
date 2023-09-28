@@ -13,6 +13,15 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard:
         return globalMessage.RESPONSE_STRING_bloometaPassWhyGetThisCard;
 
+      case ResponseString.RESPONSE_STRING_livenessCardHowToGetIt:
+        return globalMessage.RESPONSE_STRING_livenessCardHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_livenessCardExpirationDate:
+        return globalMessage.RESPONSE_STRING_livenessCardExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_livenessCardWhyGetThisCard;
+
       case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
         return globalMessage.RESPONSE_STRING_BALANCE_TOO_LOW;
 
@@ -430,6 +439,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_bloometaPassLongDescription:
         return globalMessage.RESPONSE_STRING_bloometaPassLongDescription;
+
+      case ResponseString.RESPONSE_STRING_livenessCardLongDescription:
+        return globalMessage.RESPONSE_STRING_livenessCardLongDescription;
 
       case ResponseString.RESPONSE_STRING_succesfullyAuthenticated:
         return globalMessage.RESPONSE_STRING_succesfullyAuthenticated;

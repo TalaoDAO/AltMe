@@ -2,19 +2,19 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
-class BloometaPassWidget extends StatelessWidget {
-  const BloometaPassWidget({super.key, required this.credentialModel});
+class LivenessCardWidget extends StatelessWidget {
+  const LivenessCardWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
   @override
   Widget build(BuildContext context) {
-    // final bloometaPassModel = credentialModel
-    //     .credentialPreview.credentialSubjectModel as BloometaPassModel;
+    // final LivenessCardModel = credentialModel
+    //     .credentialPreview.credentialSubjectModel as LivenessCardModel;
     // final l10n = context.l10n;
 
     return const CredentialImage(
-      image: ImageStrings.bloometaPass,
+      image: ImageStrings.livenessCard,
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
       ),

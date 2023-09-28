@@ -27,6 +27,9 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.bloometaPass:
         return BloometaPassWidget(credentialModel: credentialModel);
 
+      case CredentialSubjectType.livenessCard:
+        return LivenessCardWidget(credentialModel: credentialModel);
+
       case CredentialSubjectType.tezotopiaMembership:
         return TezotopiaMemberShipWidget(credentialModel: credentialModel);
 

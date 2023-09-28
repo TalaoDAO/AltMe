@@ -14,6 +14,15 @@ class GlobalMessage {
   String get RESPONSE_STRING_bloometaPassWhyGetThisCard =>
       l10n.bloometaPassWhyGetThisCard;
 
+  String get RESPONSE_STRING_livenessCardHowToGetIt =>
+      l10n.livenessCardHowToGetIt;
+
+  String get RESPONSE_STRING_livenessCardExpirationDate =>
+      l10n.livenessCardExpirationDate;
+
+  String get RESPONSE_STRING_livenessCardWhyGetThisCard =>
+      l10n.livenessCardWhyGetThisCard;
+
   String get RESPONSE_STRING_BALANCE_TOO_LOW =>
       l10n.transactionErrorBalanceTooLow;
 
@@ -355,6 +364,8 @@ class GlobalMessage {
       l10n.chainbornMembershipLongDescription;
   String get RESPONSE_STRING_bloometaPassLongDescription =>
       l10n.bloometaPassLongDescription;
+  String get RESPONSE_STRING_livenessCardLongDescription =>
+      l10n.livenessCardLongDescription;
   String get RESPONSE_STRING_succesfullyAuthenticated =>
       l10n.succesfullyAuthenticated;
   String get RESPONSE_STRING_authenticationFailed => l10n.authenticationFailed;

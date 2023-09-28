@@ -21,6 +21,7 @@ class ImageStrings {
   static const String walletCertificateAndroid =
       '$imagePath/wallet-certificate-android.png';
   static const String bloometaPass = '$imagePath/bloometa-pass.png';
+  static const String livenessCard = '$imagePath/liveness-card.png';
   static const String tezotopiaMemberShip =
       '$imagePath/tezotopia-membership.png';
   static const String chainbornMemberShip =
@@ -114,6 +115,7 @@ class ImageStrings {
   static const String tezotopiaMemberShipDummy =
       '$imagePath/tezotopia-membership-dummy.png';
   static const String bloometaDummy = '$imagePath/bloometa-dummy.png';
+  static const String livenessDummy = '$imagePath/liveness-dummy.png';
   static const String chainbornMemberShipDummy =
       '$imagePath/chainborn-membership-dummy.png';
   static const String twitterCardDummy = '$imagePath/twitter-card-dummy.png';

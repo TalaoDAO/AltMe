@@ -27,6 +27,19 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
+        case ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_livenessCardExpirationDate:
+          return ResponseString.RESPONSE_STRING_livenessCardExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_livenessCardHowToGetIt:
+          return ResponseString.RESPONSE_STRING_livenessCardHowToGetIt.localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
           return ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW
               .localise(context);
@@ -623,6 +636,12 @@ class ResponseMessage with MessageHandler {
 
         case ResponseString.RESPONSE_STRING_bloometaPassLongDescription:
           return ResponseString.RESPONSE_STRING_bloometaPassLongDescription
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_livenessCardLongDescription:
+          return ResponseString.RESPONSE_STRING_livenessCardLongDescription
               .localise(
             context,
           );
