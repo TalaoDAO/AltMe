@@ -67,7 +67,7 @@ extension CredentialCategoryX on CredentialCategory {
         return [
           CredentialSubjectType.tezotopiaMembership,
           CredentialSubjectType.chainbornMembership,
-          CredentialSubjectType.bloometaPass,
+          //CredentialSubjectType.bloometaPass,
           // CredentialSubjectType.troopezPass,
           // CredentialSubjectType.pigsPass,
           // CredentialSubjectType.matterlightPass,
