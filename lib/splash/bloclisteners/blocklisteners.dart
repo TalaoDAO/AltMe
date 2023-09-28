@@ -217,15 +217,13 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         var acceptHost = true;
         final approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
 
-        final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
         final bool userConsentForIssuerAccess =
             profileCubit.state.model.userConsentForIssuerAccess;
         final bool userConsentForVerifierAccess =
             profileCubit.state.model.userConsentForVerifierAccess;
 
-        bool showPrompt = isAlertEnable ||
-            userConsentForIssuerAccess ||
-            userConsentForVerifierAccess;
+        bool showPrompt =
+            userConsentForIssuerAccess || userConsentForVerifierAccess;
 
         final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
             await getOIDC4VCTypeForIssuance(
@@ -251,7 +249,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             }
           } else {
             /// normal Case
-            if (!isAlertEnable) showPrompt = false;
+            if (!userConsentForIssuerAccess) showPrompt = false;
           }
 
           if (showPrompt) {

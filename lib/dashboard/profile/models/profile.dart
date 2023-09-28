@@ -16,7 +16,6 @@ class ProfileModel extends Equatable {
     required this.tezosNetwork,
     required this.isEnterprise,
     required this.isBiometricEnabled,
-    required this.isAlertEnabled,
     required this.userConsentForIssuerAccess,
     required this.userConsentForVerifierAccess,
     required this.userPINCodeForAuthentication,
@@ -42,7 +41,6 @@ class ProfileModel extends Equatable {
         polygonIdNetwork: PolygonIdNetwork.PolygonMainnet.toString(),
         isEnterprise: false,
         isBiometricEnabled: false,
-        isAlertEnabled: false,
         userConsentForIssuerAccess: true,
         userConsentForVerifierAccess: true,
         userPINCodeForAuthentication: true,
@@ -63,7 +61,6 @@ class ProfileModel extends Equatable {
   final TezosNetwork tezosNetwork;
   final bool isEnterprise;
   final bool isBiometricEnabled;
-  final bool isAlertEnabled;
   final bool userConsentForIssuerAccess;
   final bool userConsentForVerifierAccess;
   final bool userPINCodeForAuthentication;
@@ -85,7 +82,6 @@ class ProfileModel extends Equatable {
         jobTitle,
         isEnterprise,
         isBiometricEnabled,
-        isAlertEnabled,
         userConsentForIssuerAccess,
         userConsentForVerifierAccess,
         userPINCodeForAuthentication,
@@ -108,7 +104,6 @@ class ProfileModel extends Equatable {
     TezosNetwork? tezosNetwork,
     bool? isEnterprise,
     bool? isBiometricEnabled,
-    bool? isAlertEnabled,
     bool? userConsentForIssuerAccess,
     bool? userConsentForVerifierAccess,
     bool? userPINCodeForAuthentication,
@@ -128,7 +123,6 @@ class ProfileModel extends Equatable {
       tezosNetwork: tezosNetwork ?? this.tezosNetwork,
       isEnterprise: isEnterprise ?? this.isEnterprise,
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
-      isAlertEnabled: isAlertEnabled ?? this.isAlertEnabled,
       userConsentForIssuerAccess:
           userConsentForIssuerAccess ?? this.userConsentForIssuerAccess,
       userConsentForVerifierAccess:

@@ -90,10 +90,6 @@ class ProfileCubit extends Cubit<ProfileState> {
               .get(SecureStorageKeys.isBiometricEnabled)) ==
           'true';
 
-      final alertValue =
-          await secureStorageProvider.get(SecureStorageKeys.alertEnabled);
-      final isAlertEnabled = alertValue == null || alertValue == 'true';
-
       final userConsentForIssuerAccess = (await secureStorageProvider
               .get(SecureStorageKeys.userConsentForIssuerAccess)) ==
           'true';
@@ -134,7 +130,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         jobTitle: jobTitle,
         isEnterprise: isEnterprise,
         isBiometricEnabled: isBiometricEnabled,
-        isAlertEnabled: isAlertEnabled,
         userConsentForIssuerAccess: userConsentForIssuerAccess,
         userConsentForVerifierAccess: userConsentForVerifierAccess,
         userPINCodeForAuthentication: userPINCodeForAuthentication,
@@ -217,11 +212,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.alertEnabled,
-        profileModel.isAlertEnabled.toString(),
-      );
-
-      await secureStorageProvider.set(
         SecureStorageKeys.userConsentForIssuerAccess,
         profileModel.userConsentForIssuerAccess.toString(),
       );
@@ -271,11 +261,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> setFingerprintEnabled({bool enabled = false}) async {
     final profileModel = state.model.copyWith(isBiometricEnabled: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> setAlertEnabled({bool enabled = false}) async {
-    final profileModel = state.model.copyWith(isAlertEnabled: enabled);
     await update(profileModel);
   }
 
