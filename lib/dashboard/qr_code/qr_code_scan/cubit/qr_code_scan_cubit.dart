@@ -225,7 +225,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> accept({
     required Issuer issuer,
     required QRCodeScanCubit qrCodeScanCubit,
-    required OIDC4VCType? oidcType,
+    OIDC4VCType? oidcType,
   }) async {
     emit(state.loading());
     final log = getLogger('QRCodeScanCubit - accept');
@@ -504,6 +504,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final stateValue = response['state'];
       final presentationDefinition = response['presentation_definition'];
       final presentationDefinitionUri = response['presentation_definition_uri'];
+      final registration = response['registration'];
 
       final queryJson = <String, dynamic>{};
 
@@ -511,11 +512,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         queryJson['client_id'] = clientId;
       }
 
-      if (redirectUri == null) {
+      if (redirectUri != null) {
         queryJson['redirect_uri'] = redirectUri;
       }
 
-      if (responseMode == null) {
+      if (responseMode != null) {
         queryJson['response_mode'] = responseMode;
       }
 
@@ -539,6 +540,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       if (presentationDefinitionUri != null) {
         queryJson['presentation_definition_uri'] = presentationDefinitionUri;
+      }
+
+      if (registration != null) {
+        queryJson['registration'] = registration;
       }
 
       final String queryString = Uri(queryParameters: queryJson).query;
@@ -567,7 +572,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
     }
 
-    final String? responseMode = uri.queryParameters['response_mode'];
+    final String? responseMode = state.uri!.queryParameters['response_mode'];
 
     final bool correctResponeMode = responseMode != null &&
         (responseMode == 'post' || responseMode == 'direct_post');
@@ -578,6 +583,32 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         ResponseMessage(
             ResponseString.RESPONSE_STRING_responseTypeNotSupported),
       );
+    }
+
+    final registration = state.uri!.queryParameters['registration'];
+    final bool isSecurityLow = profileCubit.state.model.isSecurityLow;
+
+    if (registration == null) {
+      if (isSecurityLow) {
+        return emitError(
+          ResponseMessage(
+            ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported,
+          ),
+        );
+      }
+    } else {
+      final registrationMap = jsonDecode(registration) as Map<String, dynamic>;
+      final data =
+          registrationMap['subject_syntax_types_supported'] as List<dynamic>;
+      if (!data.contains('did:key')) {
+        if (isSecurityLow) {
+          return emitError(
+            ResponseMessage(
+              ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported,
+            ),
+          );
+        }
+      }
     }
 
     log.i('responseType - $responseType');

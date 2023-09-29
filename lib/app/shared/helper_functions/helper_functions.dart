@@ -471,30 +471,51 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
   required String url,
   required DioClient client,
 }) async {
+  final uri = Uri.parse(url);
+
+  final keys = <String>[];
+  uri.queryParameters.forEach((key, value) => keys.add(key));
+
+  late String issuer;
+
+  if (keys.contains('issuer')) {
+    /// issuance case 1
+    issuer = uri.queryParameters['issuer'].toString();
+  } else if (keys.contains('credential_offer') ||
+      keys.contains('credential_offer_uri')) {
+    ///  issuance case 2
+    final dynamic credentialOfferJson = await getCredentialOfferJson(
+      scannedResponse: uri.toString(),
+      dioClient: client,
+    );
+    if (credentialOfferJson == null) throw Exception();
+
+    issuer = credentialOfferJson['credential_issuer'].toString();
+  } else {
+    throw Exception();
+  }
+
+  final openidConfigurationResponse = await getOpenIdConfig(
+    baseUrl: issuer,
+    client: client.dio,
+  );
+
+  final subjectSyntaxTypesSupported =
+      openidConfigurationResponse['subject_syntax_types_supported']
+          as List<dynamic>;
+
+  if (!subjectSyntaxTypesSupported.contains('did:key')) {
+    throw Exception('Subject_Syntax_Type_Not_Supported');
+  }
+
+  final credentialsSupported =
+      openidConfigurationResponse['credentials_supported'] as List<dynamic>;
+
+  final credSupported = credentialsSupported[0] as Map<String, dynamic>;
   for (final oidc4vcType in OIDC4VCType.values) {
     if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
       if (oidc4vcType == OIDC4VCType.DEFAULT ||
           oidc4vcType == OIDC4VCType.EBSIV3) {
-        final dynamic credentialOfferJson = await getCredentialOfferJson(
-          scannedResponse: url,
-          dioClient: client,
-        );
-
-        final issuer = credentialOfferJson['credential_issuer'].toString();
-        if (credentialOfferJson == null) throw Exception();
-        final openidConfigurationResponse = await getOpenIdConfig(
-          baseUrl: issuer,
-          client: client.dio,
-        );
-
-        final credentialsSupported =
-            openidConfigurationResponse['credentials_supported']
-                as List<dynamic>;
-
-        if (credentialsSupported.isEmpty) throw Exception();
-
-        final credSupported = credentialsSupported[0] as Map<String, dynamic>;
-
         if (credSupported['trust_framework'] == null) {
           return OIDC4VCType.DEFAULT;
         }
@@ -502,7 +523,7 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
         if (credSupported['trust_framework']['name'] == 'ebsi') {
           return OIDC4VCType.EBSIV3;
         } else {
-          throw Exception();
+          return OIDC4VCType.DEFAULT;
         }
       }
       return oidc4vcType;
