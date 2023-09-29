@@ -137,8 +137,8 @@ class WalletSecurityView extends StatelessWidget {
                       ),
                     ),
                     DrawerItem2(
-                      title: l10n.userConsentForIssuerAccess,
-                      subtitle: l10n.userConsentForIssuerAccessSubtitle,
+                      title: l10n.verifyIssuerWebsiteIdentity,
+                      subtitle: l10n.verifyIssuerWebsiteIdentitySubtitle,
                       trailing: SizedBox(
                         height: 25,
                         child: Switch(
@@ -153,8 +153,8 @@ class WalletSecurityView extends StatelessWidget {
                       ),
                     ),
                     DrawerItem2(
-                      title: l10n.userConsentForVerifierAccess,
-                      subtitle: l10n.userConsentForVerifierAccessSubtitle,
+                      title: l10n.confirmVerifierAccess,
+                      subtitle: l10n.confirmVerifierAccessSubtitle,
                       trailing: SizedBox(
                         height: 25,
                         child: Switch(
@@ -171,8 +171,8 @@ class WalletSecurityView extends StatelessWidget {
                       ),
                     ),
                     DrawerItem2(
-                      title: l10n.userPINCodeForAuthentication,
-                      subtitle: l10n.userPINCodeForAuthenticationSubtitle,
+                      title: l10n.secureAuthenticationWithPINCode,
+                      subtitle: l10n.secureAuthenticationWithPINCodeSubtitle,
                       trailing: SizedBox(
                         height: 25,
                         child: Switch(
