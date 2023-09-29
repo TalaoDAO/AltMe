@@ -669,12 +669,13 @@ bool isURL(String input) {
 }
 
 String? getRedirectUri(Uri uri) {
-  final clientId = uri.queryParameters['client_id'] ?? '';
+  final clientId = uri.queryParameters['client_id'];
   final redirectUri = uri.queryParameters['redirect_uri'];
 
   /// if redirectUri is not provided and client_id is url then
   /// redirectUri = client_id
   if (redirectUri == null) {
+    if (clientId == null) return null;
     final isUrl = isURL(clientId);
     if (isUrl) {
       return clientId;

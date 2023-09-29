@@ -497,6 +497,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       responseType = response['response_type'];
       final redirectUri = response['redirect_uri'];
+      final responseMode = response['response_mode'];
       final nonce = response['nonce'];
       final clientId = response['client_id'];
       final claims = response['claims'];
@@ -505,27 +506,23 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final presentationDefinitionUri = response['presentation_definition_uri'];
 
       final queryJson = <String, dynamic>{};
+
       if (clientId != null) {
         queryJson['client_id'] = clientId;
       }
 
-      /// if redirectUri is not provided and client_id is url then
-      /// redirectUri = client_id
       if (redirectUri == null) {
-        if (clientId == null) throw Exception();
-        final isUrl = isURL(clientId.toString());
-        if (isUrl) {
-          queryJson['redirect_uri'] = clientId;
-        } else {
-          throw Exception();
-        }
-      } else {
         queryJson['redirect_uri'] = redirectUri;
+      }
+
+      if (responseMode == null) {
+        queryJson['response_mode'] = responseMode;
       }
 
       if (nonce != null) {
         queryJson['nonce'] = nonce;
       }
+
       if (stateValue != null) {
         queryJson['state'] = stateValue;
       }
@@ -559,20 +556,47 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       responseType = uri.queryParameters['response_type'] ?? '';
     }
 
+    /// check required keys available or not
+    final keys = <String>[];
+    state.uri?.queryParameters.forEach((key, value) => keys.add(key));
+    if (!isUriAsValueValid(keys)) {
+      return emitError(
+        ResponseMessage(
+          ResponseString.RESPONSE_STRING_invalidRequest,
+        ),
+      );
+    }
+
+    final String? responseMode = uri.queryParameters['response_mode'];
+
+    final bool correctResponeMode = responseMode != null &&
+        (responseMode == 'post' || responseMode == 'direct_post');
+
+    /// check response mode value
+    if (!correctResponeMode) {
+      return emitError(
+        ResponseMessage(
+            ResponseString.RESPONSE_STRING_responseTypeNotSupported),
+      );
+    }
+
     log.i('responseType - $responseType');
     if (responseType == 'id_token') {
       /// verifier side (siopv2)
-
       await completeSiopV2Flow();
-    } else if (responseType == 'vp_token') {
-      /// verifier side (oidc4vp)
-      await launchOIDC4VPAndSIOPV2Flow();
-    } else if (responseType == 'id_token vp_token') {
-      /// verifier side (oidc4vp) or (oidc4vp and siopv2)
-
-      await launchOIDC4VPAndSIOPV2Flow();
+    } else if (responseType == 'vp_token' ||
+        responseType == 'id_token vp_token') {
+      /// responseType == 'vp_token' => verifier side (oidc4vp)
+      ///
+      /// responseType == 'id_token vp_token' => verifier side (oidc4vp)
+      /// or (oidc4vp and siopv2)
+      await launchOIDC4VPAndSIOPV2Flow(keys);
     } else {
-      throw Exception();
+      return emitError(
+        ResponseMessage(
+          ResponseString.RESPONSE_STRING_invalidRequest,
+        ),
+      );
     }
   }
 
@@ -702,92 +726,75 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
   }
 
-  Future<void> launchOIDC4VPAndSIOPV2Flow() async {
-    final keys = <String>[];
-    state.uri?.queryParameters.forEach((key, value) => keys.add(key));
-    if (isUriAsValueValid(keys)) {
-      late PresentationDefinition presentationDefinition;
-      if (keys.contains('presentation_definition')) {
-        final String presentationDefinitionValue =
-            state.uri?.queryParameters['presentation_definition'] ?? '';
+  Future<void> launchOIDC4VPAndSIOPV2Flow(List<String> keys) async {
+    late PresentationDefinition presentationDefinition;
+    if (keys.contains('presentation_definition')) {
+      final String presentationDefinitionValue =
+          state.uri?.queryParameters['presentation_definition'] ?? '';
 
-        final json =
-            jsonDecode(presentationDefinitionValue.replaceAll("'", '"'))
-                as Map<String, dynamic>;
+      final json = jsonDecode(presentationDefinitionValue.replaceAll("'", '"'))
+          as Map<String, dynamic>;
 
-        presentationDefinition = PresentationDefinition.fromJson(json);
-      } else if (keys.contains('presentation_definition_uri')) {
-        final presentationDefinitionUri = state
-            .uri!.queryParameters['presentation_definition_uri']
-            .toString();
-        final dynamic response = await client.get(presentationDefinitionUri);
+      presentationDefinition = PresentationDefinition.fromJson(json);
+    } else if (keys.contains('presentation_definition_uri')) {
+      final presentationDefinitionUri =
+          state.uri!.queryParameters['presentation_definition_uri'].toString();
+      final dynamic response = await client.get(presentationDefinitionUri);
 
-        final Map<String, dynamic> data = response == String
-            ? jsonDecode(response.toString()) as Map<String, dynamic>
-            : response as Map<String, dynamic>;
+      final Map<String, dynamic> data = response == String
+          ? jsonDecode(response.toString()) as Map<String, dynamic>
+          : response as Map<String, dynamic>;
 
-        presentationDefinition = PresentationDefinition.fromJson(data);
-      } else {
-        throw Exception();
-      }
+      presentationDefinition = PresentationDefinition.fromJson(data);
+    } else {
+      throw Exception();
+    }
 
-      final CredentialManifest credentialManifest = CredentialManifest(
-        'id',
-        IssuedBy('', ''),
-        null,
-        presentationDefinition,
-      );
+    final CredentialManifest credentialManifest = CredentialManifest(
+      'id',
+      IssuedBy('', ''),
+      null,
+      presentationDefinition,
+    );
 
-      final isPresentable = await isVCPresentable(presentationDefinition);
+    final isPresentable = await isVCPresentable(presentationDefinition);
 
-      if (!isPresentable) {
-        emit(
-          state.copyWith(
-            qrScanStatus: QrScanStatus.success,
-            route: MissingCredentialsPage.route(
-              credentialManifest: credentialManifest,
-            ),
-          ),
-        );
-        return;
-      }
-
-      final CredentialModel credentialPreview = CredentialModel(
-        id: 'id',
-        image: 'image',
-        credentialPreview: Credential.dummy(),
-        shareLink: 'shareLink',
-        display: Display.emptyDisplay(),
-        data: const {},
-        credentialManifest: credentialManifest,
-      );
-
-      final host = await getHost(uri: state.uri!, client: client);
-
+    if (!isPresentable) {
       emit(
         state.copyWith(
           qrScanStatus: QrScanStatus.success,
-          route: CredentialManifestOfferPickPage.route(
-            uri: state.uri!,
-            credential: credentialPreview,
-            issuer: Issuer.emptyIssuer(host),
-            inputDescriptorIndex: 0,
-            credentialsToBePresented: [],
+          route: MissingCredentialsPage.route(
+            credentialManifest: credentialManifest,
           ),
         ),
       );
-    } else {
-      emit(
-        state.error(
-          message: StateMessage.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            ),
-          ),
-        ),
-      );
+      return;
     }
+
+    final CredentialModel credentialPreview = CredentialModel(
+      id: 'id',
+      image: 'image',
+      credentialPreview: Credential.dummy(),
+      shareLink: 'shareLink',
+      display: Display.emptyDisplay(),
+      data: const {},
+      credentialManifest: credentialManifest,
+    );
+
+    final host = await getHost(uri: state.uri!, client: client);
+
+    emit(
+      state.copyWith(
+        qrScanStatus: QrScanStatus.success,
+        route: CredentialManifestOfferPickPage.route(
+          uri: state.uri!,
+          credential: credentialPreview,
+          issuer: Issuer.emptyIssuer(host),
+          inputDescriptorIndex: 0,
+          credentialsToBePresented: [],
+        ),
+      ),
+    );
   }
 
   /// verify jwt
@@ -848,17 +855,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final clientId = state.uri!.queryParameters['client_id'] ?? '';
       final String? redirectUri = getRedirectUri(state.uri!);
 
-      if (redirectUri == null) throw Exception();
-
-      final nonce = state.uri?.queryParameters['nonce'] ?? '';
-      final stateValue = state.uri?.queryParameters['state'];
-
-      final keys = <String>[];
-      state.uri?.queryParameters.forEach((key, value) => keys.add(key));
-
-      if (!isUriAsValueValid(keys)) {
-        throw Exception();
+      if (redirectUri == null) {
+        emitError(
+          ResponseMessage(
+            ResponseString.RESPONSE_STRING_invalidRequest,
+          ),
+        );
+        return;
       }
+
+      final nonce = state.uri?.queryParameters['nonce'];
+      final stateValue = state.uri?.queryParameters['state'];
 
       final bool isEBSIV3 =
           await isEBSIV3ForVerifier(client: client, uri: state.uri!);
@@ -881,7 +888,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         did: did,
         kid: kid,
         redirectUri: redirectUri,
-        nonce: nonce,
+        nonce: nonce!,
         stateValue: stateValue,
       );
 

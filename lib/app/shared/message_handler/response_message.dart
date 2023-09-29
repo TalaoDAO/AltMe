@@ -747,6 +747,23 @@ class ResponseMessage with MessageHandler {
           return ResponseString.RESPONSE_STRING_userPinIsIncorrect.localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_responseTypeNotSupported:
+          return ResponseString.RESPONSE_STRING_responseTypeNotSupported
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_invalidRequest:
+          return ResponseString.RESPONSE_STRING_invalidRequest.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported:
+          return ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported
+              .localise(
+            context,
+          );
       }
     }
     return '';

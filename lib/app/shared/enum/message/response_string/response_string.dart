@@ -159,4 +159,7 @@ enum ResponseString {
   RESPONSE_STRING_theCredentialIsNoMoreReady,
   RESPONSE_STRING_theRequestIsRejected,
   RESPONSE_STRING_userPinIsIncorrect,
+  RESPONSE_STRING_responseTypeNotSupported,
+  RESPONSE_STRING_invalidRequest,
+  RESPONSE_STRING_subjectSyntaxTypeNotSupported,
 }

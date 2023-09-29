@@ -501,6 +501,15 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_userPinIsIncorrect:
         return globalMessage.RESPONSE_STRING_userPinIsIncorrect;
+
+      case ResponseString.RESPONSE_STRING_responseTypeNotSupported:
+        return globalMessage.RESPONSE_STRING_responseTypeNotSupported;
+
+      case ResponseString.RESPONSE_STRING_invalidRequest:
+        return globalMessage.RESPONSE_STRING_invalidRequest;
+
+      case ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported:
+        return globalMessage.RESPONSE_STRING_subjectSyntaxTypeNotSupported;
     }
   }
 }

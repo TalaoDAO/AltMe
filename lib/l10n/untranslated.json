@@ -869,7 +869,10 @@
     "six_or_four_digits_user_pin_title",
     "six_or_four_digits_user_pin_subTitle",
     "security_level_title",
-    "security_level_subTitle"
+    "security_level_subTitle",
+    "responseTypeNotSupported",
+    "invalidRequest",
+    "subjectSyntaxTypeNotSupported"
   ],
 
   "es": [
@@ -1742,7 +1745,10 @@
     "six_or_four_digits_user_pin_title",
     "six_or_four_digits_user_pin_subTitle",
     "security_level_title",
-    "security_level_subTitle"
+    "security_level_subTitle",
+    "responseTypeNotSupported",
+    "invalidRequest",
+    "subjectSyntaxTypeNotSupported"
   ],
 
   "fr": [
@@ -1918,7 +1924,10 @@
     "six_or_four_digits_user_pin_title",
     "six_or_four_digits_user_pin_subTitle",
     "security_level_title",
-    "security_level_subTitle"
+    "security_level_subTitle",
+    "responseTypeNotSupported",
+    "invalidRequest",
+    "subjectSyntaxTypeNotSupported"
   ],
 
   "it": [
@@ -2791,6 +2800,9 @@
     "six_or_four_digits_user_pin_title",
     "six_or_four_digits_user_pin_subTitle",
     "security_level_title",
-    "security_level_subTitle"
+    "security_level_subTitle",
+    "responseTypeNotSupported",
+    "invalidRequest",
+    "subjectSyntaxTypeNotSupported"
   ]
 }
