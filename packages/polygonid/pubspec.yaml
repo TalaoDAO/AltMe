@@ -14,7 +14,7 @@ dependencies:
   polygonid_flutter_sdk:
     git:
       url: https://github.com/iden3/polygonid-flutter-sdk.git
-      ref: 556b6e60cbc81ec9c7c784d43a00aba993fd8392
+      ref: d7122980df36436a0b9cce11038687b6beb159bf
   web3dart: ^2.3.5
 
 dev_dependencies:
