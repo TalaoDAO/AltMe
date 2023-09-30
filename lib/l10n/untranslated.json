@@ -876,7 +876,8 @@
     "accessDenied",
     "thisRequestIsNotSupported",
     "unsupportedCredential",
-    "credentialIssuanceNotAllowedToTheWallet"
+    "credentialIssuanceNotAllowedToTheWallet",
+    "moreDetails"
   ],
 
   "es": [
@@ -1756,7 +1757,8 @@
     "accessDenied",
     "thisRequestIsNotSupported",
     "unsupportedCredential",
-    "credentialIssuanceNotAllowedToTheWallet"
+    "credentialIssuanceNotAllowedToTheWallet",
+    "moreDetails"
   ],
 
   "fr": [
@@ -1939,7 +1941,8 @@
     "accessDenied",
     "thisRequestIsNotSupported",
     "unsupportedCredential",
-    "credentialIssuanceNotAllowedToTheWallet"
+    "credentialIssuanceNotAllowedToTheWallet",
+    "moreDetails"
   ],
 
   "it": [
@@ -2819,6 +2822,7 @@
     "accessDenied",
     "thisRequestIsNotSupported",
     "unsupportedCredential",
-    "credentialIssuanceNotAllowedToTheWallet"
+    "credentialIssuanceNotAllowedToTheWallet",
+    "moreDetails"
   ]
 }

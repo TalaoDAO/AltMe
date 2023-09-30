@@ -35,12 +35,10 @@ class AlertMessage {
     if (stateMessage.showDialog) {
       showDialog<bool>(
         context: context,
-        builder: (context) => ConfirmDialog(
+        builder: (context) => ErrorDialog(
           title: message,
-          yes: context.l10n.ok,
-          showNoButton: false,
-          subtitle: stateMessage.erroDescription,
-          url: stateMessage.erroUrl,
+          erroDescription: stateMessage.erroDescription,
+          erroUrl: stateMessage.erroUrl,
         ),
       );
     } else {

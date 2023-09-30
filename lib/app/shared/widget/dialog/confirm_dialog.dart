@@ -8,7 +8,6 @@ class ConfirmDialog extends StatelessWidget {
     super.key,
     required this.title,
     this.subtitle,
-    this.url,
     this.yes,
     this.no,
     this.icon = IconStrings.cardReceive,
@@ -20,7 +19,6 @@ class ConfirmDialog extends StatelessWidget {
 
   final String title;
   final String? subtitle;
-  final String? url;
   final String? yes;
   final String? no;
   final Color? dialogColor;
@@ -71,22 +69,6 @@ class ConfirmDialog extends StatelessWidget {
                   .defaultDialogSubtitle
                   .copyWith(color: textColor),
               textAlign: TextAlign.center,
-            ),
-          ],
-          if (url != null) ...[
-            TransparentInkWell(
-              onTap: () async {
-                await LaunchUrl.launch(url!);
-              },
-              child: Text(
-                url!,
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.markDownA,
-                      decoration: TextDecoration.underline,
-                      decorationColor: Theme.of(context).colorScheme.markDownA,
-                    ),
-                textAlign: TextAlign.center,
-              ),
             ),
           ],
           const SizedBox(height: 24),
