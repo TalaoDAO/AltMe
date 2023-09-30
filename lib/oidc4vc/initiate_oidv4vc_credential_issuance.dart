@@ -4,45 +4,39 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 
 import 'package:did_kit/did_kit.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+
 import 'package:secure_storage/secure_storage.dart';
 
 Future<void> initiateOIDC4VCCredentialIssuance({
   required String scannedResponse,
-  required OIDC4VCType oidc4vcType,
+  required OIDC4VC oidc4vc,
+  required bool isEBSIV3,
   required QRCodeScanCubit qrCodeScanCubit,
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
   required SecureStorageProvider secureStorageProvider,
   required DioClient dioClient,
   required String? userPin,
+  required dynamic credentialOfferJson,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
+  final keys = <String>[];
+  uriFromScannedResponse.queryParameters.forEach((key, value) => keys.add(key));
+
   late dynamic credentials;
 
-  switch (oidc4vcType) {
-    case OIDC4VCType.DEFAULT:
-    case OIDC4VCType.GREENCYPHER:
-    case OIDC4VCType.EBSIV3:
-      final dynamic credentialOfferJson = await getCredentialOfferJson(
-        scannedResponse: scannedResponse,
-        dioClient: dioClient,
-      );
-      if (credentialOfferJson == null) throw Exception();
+  if (keys.contains('credential_type')) {
+    credentials = uriFromScannedResponse.queryParameters['credential_type'];
+  } else {
+    if (credentialOfferJson == null) throw Exception();
 
-      credentials = credentialOfferJson['credentials'];
-
-    case OIDC4VCType.GAIAX:
-    case OIDC4VCType.EBSIV2:
-      credentials = uriFromScannedResponse.queryParameters['credential_type'];
-
-    case OIDC4VCType.JWTVC:
-      break;
+    credentials = credentialOfferJson['credentials'];
   }
 
   final (preAuthorizedCode, issuer) = await getIssuerAndPreAuthorizedCode(
-    oidc4vcType: oidc4vcType,
     scannedResponse: scannedResponse,
     dioClient: dioClient,
   );
@@ -50,58 +44,59 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   if (credentials is List<dynamic>) {
     final codeForAuthorisedFlow =
         Uri.parse(scannedResponse).queryParameters['code'];
-    final stateOfCredentialsSelected =
-        Uri.parse(scannedResponse).queryParameters['options'];
+    final state = Uri.parse(scannedResponse).queryParameters['state'];
 
     if (preAuthorizedCode != null) {
       /// full phase flow of preAuthorized
       qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
         credentials: credentials,
         userPin: userPin,
-        issuer: issuer,
+        issuer: issuer!,
         preAuthorizedCode: preAuthorizedCode,
-        oidc4vcType: oidc4vcType,
+        isEBSIV3: isEBSIV3,
+        credentialOfferJson: credentialOfferJson,
       );
     } else {
-      if (codeForAuthorisedFlow == null || stateOfCredentialsSelected == null) {
+      if (codeForAuthorisedFlow == null || state == null) {
         /// first phase flow of authorised
         qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
           credentials: credentials,
           userPin: userPin,
-          issuer: issuer,
+          issuer: issuer!,
           preAuthorizedCode: preAuthorizedCode,
-          oidc4vcType: oidc4vcType,
+          isEBSIV3: isEBSIV3,
+          credentialOfferJson: credentialOfferJson,
         );
       } else {
         /// second phase flow of authorised
 
-        /// remove empty fields
-        stateOfCredentialsSelected.replaceAll(' ', '');
+        final jwt = decodePayload(
+          jwtDecode: JWTDecode(),
+          token: state,
+        );
 
-        /// Remove the brackets and split the string into a list of substrings
-        final List<String> stringList = stateOfCredentialsSelected
-            .substring(1, stateOfCredentialsSelected.length - 1)
-            .split(',');
+        final stateOfCredentialsSelected = jwt['options'] as List<dynamic>;
+        final String codeVerifier = jwt['codeVerifier'].toString();
 
-        // Convert the list of strings to a list of integers
-        final List<int> intList = stringList.map(int.parse).toList();
+        final selectedCredentials = stateOfCredentialsSelected
+            .map((index) => credentials[index])
+            .toList();
 
-        final selectedCredentials =
-            intList.map((index) => credentials[index]).toList();
         await qrCodeScanCubit.addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
           userPin: userPin,
-          issuer: issuer,
-          preAuthorizedCode: preAuthorizedCode,
-          oidc4vcType: oidc4vcType,
+          issuer: issuer!,
+          preAuthorizedCode: null,
+          isEBSIV3: isEBSIV3,
+          codeForAuthorisedFlow: codeForAuthorisedFlow,
+          codeVerifier: codeVerifier,
         );
       }
     }
   } else {
-    final OIDC4VC oidc4vc = oidc4vcType.getOIDC4VC;
     await getAndAddCredential(
       scannedResponse: scannedResponse,
-      oidc4vcType: oidc4vcType,
+      isEBSIV3: isEBSIV3,
       oidc4vc: oidc4vc,
       didKitProvider: didKitProvider,
       credentialsCubit: credentialsCubit,
@@ -110,8 +105,10 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       isLastCall: true,
       dioClient: dioClient,
       userPin: userPin,
-      issuer: issuer,
+      issuer: issuer!,
       preAuthorizedCode: preAuthorizedCode,
+      codeForAuthorisedFlow: null,
+      codeVerifier: null,
     );
     oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
     qrCodeScanCubit.goBack();

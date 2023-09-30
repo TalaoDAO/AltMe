@@ -10,25 +10,21 @@ import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
 import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
-import 'package:oidc4vc/src/iodc4vc_model.dart';
 import 'package:oidc4vc/src/issuer_token_parameters.dart';
+import 'package:oidc4vc/src/pkce_dart.dart';
 import 'package:oidc4vc/src/token_parameters.dart';
 import 'package:oidc4vc/src/verification_type.dart';
 import 'package:oidc4vc/src/verifier_token_parameters.dart';
-import 'package:pkce/pkce.dart';
 import 'package:secp256k1/secp256k1.dart';
-import 'package:uuid/uuid.dart';
 
 /// {@template ebsi}
 /// EBSI wallet compliance
 /// {@endtemplate}
 class OIDC4VC {
   /// {@macro ebsi}
-  OIDC4VC({required this.client, required this.oidc4vcModel});
+  OIDC4VC();
 
-  ///
-  final Dio client;
-  final OIDC4VCModel oidc4vcModel;
+  final Dio client = Dio();
 
   /// create JWK from mnemonic
   Future<String> privateKeyFromMnemonic({
@@ -91,12 +87,13 @@ class OIDC4VC {
   Future<Uri> getAuthorizationUriForIssuer({
     required List<dynamic> selectedCredentials,
     required String clientId,
-    required String webLink,
-    required String schema,
+    required String redirectUri,
     required String issuer,
     required String issuerState,
     required String nonce,
-    String? options,
+    required PkcePair pkcePair,
+    required String state,
+    required String authorizationEndPoint,
   }) async {
     try {
       final openidConfigurationResponse = await getOpenIdConfig(issuer);
@@ -106,15 +103,15 @@ class OIDC4VC {
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
         selectedCredentials: selectedCredentials,
-        authorizationEndpoint: authorizationEndpoint,
         openidConfigurationResponse: openidConfigurationResponse,
         clientId: clientId,
         issuer: issuer,
-        schema: schema,
-        webLink: webLink,
+        redirectUri: redirectUri,
         issuerState: issuerState,
         nonce: nonce,
-        options: options,
+        pkcePair: pkcePair,
+        state: state,
+        authorizationEndPoint: authorizationEndPoint,
       );
 
       final url = Uri.parse(authorizationEndpoint);
@@ -122,22 +119,22 @@ class OIDC4VC {
           Uri.https(url.authority, url.path, authorizationRequestParemeters);
       return authorizationUri;
     } catch (e) {
-      throw Exception(e);
+      throw Exception('Not a valid openid url to initiate issuance');
     }
   }
 
   @visibleForTesting
   Map<String, dynamic> getAuthorizationRequestParemeters({
     required List<dynamic> selectedCredentials,
-    required String authorizationEndpoint,
     required String clientId,
     required String issuer,
     required String issuerState,
     required String nonce,
     required Map<String, dynamic> openidConfigurationResponse,
-    required String webLink,
-    required String schema,
-    String? options,
+    required String redirectUri,
+    required String authorizationEndPoint,
+    required PkcePair pkcePair,
+    required String state,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -185,24 +182,21 @@ class OIDC4VC {
       authorizationDetails.add(data);
     }
 
-    final pkcePair = PkcePair.generate();
     final codeChallenge = pkcePair.codeChallenge;
-    final codeVerifier = pkcePair.codeVerifier;
 
     final myRequest = <String, dynamic>{
       'response_type': 'code',
       'client_id': clientId,
-      'redirect_uri':
-          '$webLink?uri=$schema&code_verifier=$codeVerifier&options=$options',
+      'redirect_uri': redirectUri,
       'scope': 'openid',
       'issuer_state': issuerState,
-      'state': const Uuid().v4(),
+      'state': state,
       'nonce': nonce,
       'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
       'authorization_details': jsonEncode(authorizationDetails),
       'client_metadata': jsonEncode({
-        'authorization_endpoint': authorizationEndpoint,
+        'authorization_endpoint': authorizationEndPoint,
         'scopes_supported': ['openid'],
         'response_types_supported': ['vp_token', 'id_token'],
         'subject_types_supported': ['public'],
@@ -249,6 +243,7 @@ class OIDC4VC {
       userPin: userPin,
       code: code,
       codeVerifier: codeVerifier,
+      did: did,
     );
 
     final openidConfigurationResponse = await getOpenIdConfig(issuer);
@@ -270,10 +265,11 @@ class OIDC4VC {
     );
 
     final issuerTokenParameters = IssuerTokenParameters(
-      private,
-      did,
-      kid,
-      issuer,
+      privateKey: private,
+      did: did,
+      kid: kid,
+      issuer: issuer,
+      isIdToken: false,
     );
 
     if (nonce == null) throw Exception();
@@ -361,7 +357,10 @@ class OIDC4VC {
 
     if (accessToken == null) throw Exception();
 
-    final credentialHeaders = buildCredentialHeaders(accessToken!);
+    final credentialHeaders = <String, dynamic>{
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
 
     final dynamic credentialResponse = await client.post<dynamic>(
       credentialEndpoint,
@@ -379,7 +378,10 @@ class OIDC4VC {
     required String acceptanceToken,
     required String deferredCredentialEndpoint,
   }) async {
-    final credentialHeaders = buildCredentialHeaders(acceptanceToken);
+    final credentialHeaders = <String, dynamic>{
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Bearer $acceptanceToken',
+    };
 
     final dynamic credentialResponse = await client.post<dynamic>(
       deferredCredentialEndpoint,
@@ -400,6 +402,7 @@ class OIDC4VC {
     String? userPin,
     String? code,
     String? codeVerifier,
+    String? did,
   }) {
     late Map<String, dynamic> tokenData;
 
@@ -408,11 +411,12 @@ class OIDC4VC {
         'pre-authorized_code': preAuthorizedCode,
         'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
       };
-    } else if (code != null && codeVerifier != null) {
+    } else if (code != null && codeVerifier != null && did != null) {
       tokenData = <String, dynamic>{
         'code': code,
         'grant_type': 'authorization_code',
         'code_verifier': codeVerifier,
+        'client_id': did,
       };
     } else {
       throw Exception();
@@ -678,15 +682,6 @@ class OIDC4VC {
     return credentialEndpoint;
   }
 
-  Map<String, dynamic> buildCredentialHeaders(String accessToken) {
-    final credentialHeaders = <String, dynamic>{
-      // 'Conformance': conformance,
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-    return credentialHeaders;
-  }
-
   @visibleForTesting
   Future<String> getIssuerJwt(
     IssuerTokenParameters tokenParameters,
@@ -699,7 +694,10 @@ class OIDC4VC {
       'aud': tokenParameters.issuer,
     };
 
-    final jwt = generateToken(payload, tokenParameters);
+    final jwt = generateToken(
+      vpTokenPayload: payload,
+      tokenParameters: tokenParameters,
+    );
     return jwt;
   }
 
@@ -721,67 +719,63 @@ class OIDC4VC {
     return tokenResponse.data;
   }
 
-  Future<void> sendPresentation({
-    required String clientId,
-    required String redirectUrl,
-    required String did,
-    required String kid,
-    required List<String> credentialsToBePresented,
-    required String nonce,
-    required bool isEBSIV2,
-    required int indexValue,
-    required String? stateValue,
-    String? mnemonic,
-    String? privateKey,
-  }) async {
-    try {
-      final private = await getPrivateKey(
-        mnemonic: mnemonic,
-        privateKey: privateKey,
-        indexValue: indexValue,
-      );
+  // Future<void> sendPresentation({
+  //   required String clientId,
+  //   required String redirectUrl,
+  //   required String did,
+  //   required String kid,
+  //   required List<String> credentialsToBePresented,
+  //   required String nonce,
+  //   required int indexValue,
+  //   required String? stateValue,
+  //   String? mnemonic,
+  //   String? privateKey,
+  // }) async {
+  //   try {
+  //     final private = await getPrivateKey(
+  //       mnemonic: mnemonic,
+  //       privateKey: privateKey,
+  //       indexValue: indexValue,
+  //     );
 
-      final tokenParameters = VerifierTokenParameters(
-        private,
-        did,
-        kid,
-        clientId,
-        credentialsToBePresented,
-        nonce,
-      );
+  //     final tokenParameters = VerifierTokenParameters(
+  //       privateKey: private,
+  //       did: did,
+  //       kid: kid,
+  //       audience: clientId,
+  //       credentials: credentialsToBePresented,
+  //       nonce: nonce,
+  //     );
 
-      // structures
-      final verifierIdToken = await getIdToken(
-        tokenParameters: tokenParameters,
-        isEBSIV2: isEBSIV2,
-      );
+  //     // structures
+  //     final verifierIdToken = await getIdToken(tokenParameters);
 
-      /// build vp token
+  //     /// build vp token
 
-      final vpToken = await getVpToken(tokenParameters);
+  //     final vpToken = await getVpToken(tokenParameters);
 
-      final responseHeaders = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      };
+  //     final responseHeaders = {
+  //       'Content-Type': 'application/x-www-form-urlencoded',
+  //     };
 
-      final responseData = <String, dynamic>{
-        'id_token': verifierIdToken,
-        'vp_token': vpToken,
-      };
+  //     final responseData = <String, dynamic>{
+  //       'id_token': verifierIdToken,
+  //       'vp_token': vpToken,
+  //     };
 
-      if (stateValue != null) {
-        responseData['state'] = stateValue;
-      }
+  //     if (stateValue != null) {
+  //       responseData['state'] = stateValue;
+  //     }
 
-      await client.post<dynamic>(
-        redirectUrl,
-        options: Options(headers: responseHeaders),
-        data: responseData,
-      );
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
+  //     await client.post<dynamic>(
+  //       redirectUrl,
+  //       options: Options(headers: responseHeaders),
+  //       data: responseData,
+  //     );
+  //   } catch (e) {
+  //     throw Exception(e);
+  //   }
+  // }
 
   Future<String> extractVpToken({
     required String clientId,
@@ -801,12 +795,13 @@ class OIDC4VC {
       );
 
       final tokenParameters = VerifierTokenParameters(
-        private,
-        did,
-        kid,
-        clientId,
-        credentialsToBePresented,
-        nonce,
+        privateKey: private,
+        did: did,
+        kid: kid,
+        audience: clientId,
+        credentials: credentialsToBePresented,
+        nonce: nonce,
+        isIdToken: false,
       );
 
       final vpToken = await getVpToken(tokenParameters);
@@ -823,7 +818,6 @@ class OIDC4VC {
     required String did,
     required String kid,
     required String nonce,
-    required bool isEBSIV2,
     required int indexValue,
     String? mnemonic,
     String? privateKey,
@@ -836,18 +830,16 @@ class OIDC4VC {
       );
 
       final tokenParameters = VerifierTokenParameters(
-        private,
-        did,
-        kid,
-        clientId,
-        credentialsToBePresented,
-        nonce,
+        privateKey: private,
+        did: did,
+        kid: kid,
+        audience: clientId,
+        credentials: credentialsToBePresented,
+        nonce: nonce,
+        isIdToken: false,
       );
 
-      final verifierIdToken = await getIdToken(
-        tokenParameters: tokenParameters,
-        isEBSIV2: isEBSIV2,
-      );
+      final verifierIdToken = await getIdToken(tokenParameters);
 
       return verifierIdToken;
     } catch (e) {
@@ -855,39 +847,30 @@ class OIDC4VC {
     }
   }
 
-  Future<void> proveOwnershipOfDid({
+  Future<Response<dynamic>> proveOwnershipOfKey({
     required String clientId,
     required String did,
     required String kid,
     required String redirectUri,
     required String nonce,
-    required bool isEBSIV2,
-    required int indexValue,
+    required String privateKey,
     required String? stateValue,
-    String? mnemonic,
-    String? privateKey,
   }) async {
     try {
-      final private = await getPrivateKey(
-        mnemonic: mnemonic,
-        privateKey: privateKey,
-        indexValue: indexValue,
-      );
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
 
       final tokenParameters = VerifierTokenParameters(
-        private,
-        did,
-        kid,
-        clientId,
-        [],
-        nonce,
+        privateKey: private,
+        did: did,
+        kid: kid,
+        audience: clientId,
+        credentials: [],
+        nonce: nonce,
+        isIdToken: true,
       );
 
       // structures
-      final verifierIdToken = await getIdToken(
-        tokenParameters: tokenParameters,
-        isEBSIV2: isEBSIV2,
-      );
+      final verifierIdToken = await getIdToken(tokenParameters);
 
       final responseHeaders = {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -901,11 +884,72 @@ class OIDC4VC {
         responseData['state'] = stateValue;
       }
 
-      await client.post<dynamic>(
+      final response = await client.post<dynamic>(
         redirectUri,
-        options: Options(headers: responseHeaders),
+        options: Options(
+          headers: responseHeaders,
+          followRedirects: false,
+          validateStatus: (status) {
+            return status != null && status < 400;
+          },
+        ),
         data: responseData,
       );
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<Response<dynamic>> signIdToken({
+    required String clientId,
+    required String did,
+    required String kid,
+    required String redirectUri,
+    required String nonce,
+    required String privateKey,
+    required String? stateValue,
+  }) async {
+    try {
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
+      final tokenParameters = VerifierTokenParameters(
+        privateKey: private,
+        did: did,
+        kid: kid,
+        audience: clientId,
+        credentials: [],
+        nonce: nonce,
+        isIdToken: true,
+      );
+
+      // structures
+      final verifierIdToken = await getIdToken(tokenParameters);
+
+      final responseHeaders = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      };
+
+      final responseData = <String, dynamic>{
+        'id_token': verifierIdToken,
+      };
+
+      if (stateValue != null) {
+        responseData['state'] = stateValue;
+      }
+
+      final response = await client.post<dynamic>(
+        redirectUri,
+        options: Options(
+          headers: responseHeaders,
+          followRedirects: false,
+          validateStatus: (status) {
+            return status != null && status < 400;
+          },
+        ),
+        data: responseData,
+      );
+      return response;
     } catch (e) {
       throw Exception(e);
     }
@@ -934,15 +978,18 @@ class OIDC4VC {
       'nonce': tokenParameters.nonce,
     };
 
-    final verifierVpJwt = generateToken(vpTokenPayload, tokenParameters);
+    final verifierVpJwt = generateToken(
+      vpTokenPayload: vpTokenPayload,
+      tokenParameters: tokenParameters,
+    );
 
     return verifierVpJwt;
   }
 
-  String generateToken(
-    Map<String, Object> vpTokenPayload,
-    TokenParameters tokenParameters,
-  ) {
+  String generateToken({
+    required Map<String, Object> vpTokenPayload,
+    required TokenParameters tokenParameters,
+  }) {
     final vpVerifierClaims = JsonWebTokenClaims.fromJson(vpTokenPayload);
     // create a builder, decoding the JWT in a JWS, so using a
     // JsonWebSignatureBuilder
@@ -954,18 +1001,19 @@ class OIDC4VC {
 
     final key = JsonWebKey.fromJson(privateKey);
 
+    late String typ;
+
+    if (tokenParameters.isIdToken) {
+      typ = 'JWT';
+    } else {
+      typ = 'openid4vci-proof+jwt';
+    }
+
     final vpBuilder = JsonWebSignatureBuilder()
       // set the content
       ..jsonContent = vpVerifierClaims.toJson()
-      ..setProtectedHeader('typ', 'openid4vci-proof+jwt')
-      ..setProtectedHeader('alg', tokenParameters.alg);
-
-    if (oidc4vcModel.publicJWKNeeded) {
-      // ignore: avoid_single_cascade_in_expression_statements
-      vpBuilder..setProtectedHeader('jwk', tokenParameters.publicJWK);
-    }
-
-    vpBuilder
+      ..setProtectedHeader('typ', typ)
+      ..setProtectedHeader('alg', tokenParameters.alg)
       ..setProtectedHeader('kid', tokenParameters.kid)
 
       // add a key to sign, can only add one for JWT
@@ -980,13 +1028,7 @@ class OIDC4VC {
   }
 
   @visibleForTesting
-  Future<String> getIdToken({
-    required VerifierTokenParameters tokenParameters,
-    required bool isEBSIV2,
-  }) async {
-    final uuid1 = const Uuid().v4();
-    final uuid2 = const Uuid().v4();
-
+  Future<String> getIdToken(VerifierTokenParameters tokenParameters) async {
     /// build id token
     final payload = {
       'iat': DateTime.now().microsecondsSinceEpoch,
@@ -997,67 +1039,54 @@ class OIDC4VC {
       'nonce': tokenParameters.nonce,
     };
 
-    if (isEBSIV2) {
-      payload['_vp_token'] = {
-        'presentation_submission': {
-          'definition_id': 'Altme defintion for EBSI project',
-          'id': uuid1,
-          'descriptor_map': [
-            {
-              'id': uuid2,
-              'format': 'jwt_vp',
-              'path': r'$',
-            }
-          ],
-        },
-      };
-    }
-
-    final verifierIdJwt = generateToken(payload, tokenParameters);
+    final verifierIdJwt = generateToken(
+      vpTokenPayload: payload,
+      tokenParameters: tokenParameters,
+    );
     return verifierIdJwt;
   }
 
-  Future<String> getDidFromMnemonic({
-    required String did,
-    required String kid,
-    required int indexValue,
-    String? mnemonic,
-    String? privateKey,
-  }) async {
-    final private = await getPrivateKey(
-      mnemonic: mnemonic,
-      privateKey: privateKey,
-      indexValue: indexValue,
-    );
+  // Future<String> getDidFromMnemonic({
+  //   required String did,
+  //   required String kid,
+  //   required int indexValue,
+  //   String? mnemonic,
+  //   String? privateKey,
+  // }) async {
+  //   final private = await getPrivateKey(
+  //     mnemonic: mnemonic,
+  //     privateKey: privateKey,
+  //     indexValue: indexValue,
+  //   );
 
-    final tokenParameters = TokenParameters(
-      private,
-      did,
-      kid,
-    );
-    return tokenParameters.did;
-  }
+  //   final tokenParameters = TokenParameters(
+  //     privateKey: private,
+  //     did: did,
+  //     kid: kid,
+  //   );
+  //   return tokenParameters.did;
+  // }
 
-  Future<String?> getKid({
-    required String did,
-    required String kid,
-    required int indexValue,
-    String? mnemonic,
-    String? privateKey,
-  }) async {
-    final private = await getPrivateKey(
-      mnemonic: mnemonic,
-      privateKey: privateKey,
-      indexValue: indexValue,
-    );
+  // Future<String?> getKid({
+  //   required String did,
+  //   required String kid,
+  //   required int indexValue,
+  //   String? mnemonic,
+  //   String? privateKey,
+  // }) async {
+  //   final private = await getPrivateKey(
+  //     mnemonic: mnemonic,
+  //     privateKey: privateKey,
+  //     indexValue: indexValue,
+  //   );
 
-    final tokenParameters = TokenParameters(
-      private,
-      did,
-      kid,
-    );
-    return tokenParameters.kid;
-  }
+  //   final tokenParameters = TokenParameters(
+  //     privateKey: private,
+  //     did: did,
+  //     kid: kid,
+  //   );
+  //   return tokenParameters.kid;
+  // }
 
   Future<Map<String, dynamic>> getOpenIdConfig(String baseUrl) async {
     final url = '$baseUrl/.well-known/openid-configuration';

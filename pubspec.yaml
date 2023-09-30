@@ -1,10 +1,10 @@
 name: altme
 description: AltMe Flutter App
-version: 1.20.21+270
+version: 1.20.29+278
 publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <3.7.0"
+  sdk: ">=3.1.0 <4.0.0"
 
 dependencies:
   async: ^2.11.0
@@ -28,6 +28,7 @@ dependencies:
   crypto: ^3.0.3
   cryptocurrency_keys:
     path: packages/cryptocurrency_keys
+  dart_jsonwebtoken: ^2.11.0
   dartez:
     git:
       url: https://github.com/TalebRafiepour/Dartez.git

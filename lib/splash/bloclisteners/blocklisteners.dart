@@ -198,121 +198,145 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
 
 final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
   listener: (BuildContext context, QRCodeScanState state) async {
-    final log = getLogger('qrCodeBlocListener');
+    try {
+      final log = getLogger('qrCodeBlocListener');
 
-    final l10n = context.l10n;
+      final l10n = context.l10n;
 
-    if (state.status == QrScanStatus.loading) {
-      LoadingView().show(context: context);
-    } else {
-      LoadingView().hide();
-    }
+      if (state.status == QrScanStatus.loading) {
+        LoadingView().show(context: context);
+      } else {
+        LoadingView().hide();
+      }
 
-    if (state.status == QrScanStatus.acceptHost) {
-      log.i('accept host');
-      LoadingView().show(context: context);
-      if (state.uri != null) {
-        final profileCubit = context.read<ProfileCubit>();
+      if (state.status == QrScanStatus.acceptHost) {
+        log.i('accept host');
+        LoadingView().show(context: context);
+        if (state.uri != null) {
+          final profileCubit = context.read<ProfileCubit>();
 
-        var acceptHost = true;
-        final approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
+          var acceptHost = true;
+          final approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
 
-        final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
-        final bool userConsentForIssuerAccess =
-            profileCubit.state.model.userConsentForIssuerAccess;
-        final bool userConsentForVerifierAccess =
-            profileCubit.state.model.userConsentForVerifierAccess;
+          final bool userConsentForIssuerAccess =
+              profileCubit.state.model.userConsentForIssuerAccess;
+          final bool userConsentForVerifierAccess =
+              profileCubit.state.model.userConsentForVerifierAccess;
 
-        bool showPrompt = isAlertEnable ||
-            userConsentForIssuerAccess ||
-            userConsentForVerifierAccess;
+          bool showPrompt =
+              userConsentForIssuerAccess || userConsentForVerifierAccess;
 
-        final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-            await getOIDC4VCTypeForIssuance(
-          url: state.uri.toString(),
-          client: DioClient('', Dio()),
-        );
+          final bool isOpenIDUrl = isOIDC4VCIUrl(state.uri!);
+          final bool isFromDeeplink = state.uri
+                  .toString()
+                  .startsWith(Parameters.authorizeEndPoint) ||
+              state.uri.toString().startsWith(Parameters.oidc4vcUniversalLink);
 
-        final bool isOpenIDUrl = state.uri.toString().startsWith('openid');
-
-        if (showPrompt) {
-          if (isOpenIDUrl) {
-            /// OIDC4VCI Case
-
-            if (currentOIIDC4VCTypeForIssuance != null) {
-              /// issuance case
-              if (!userConsentForIssuerAccess) showPrompt = false;
-            } else {
-              /// verification case
-              if (!userConsentForVerifierAccess) showPrompt = false;
-            }
-          } else {
-            /// normal Case
-            if (!isAlertEnable) showPrompt = false;
-          }
+          OIDC4VCType? oidc4vcTypeForIssuance;
 
           if (showPrompt) {
-            final String title = l10n.scanPromptHost;
+            if (isOpenIDUrl || isFromDeeplink) {
+              /// OIDC4VCI Case
+              final OIDC4VCType? oidc4vcType = await getOIDC4VCTypeForIssuance(
+                url: state.uri.toString(),
+                client: DioClient('', Dio()),
+              );
 
-            String subtitle = (approvedIssuer.did.isEmpty)
-                ? state.uri!.host
-                : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
+              oidc4vcTypeForIssuance = oidc4vcType;
 
-            if (isOpenIDUrl) {
-              subtitle =
-                  await getHost(uri: state.uri!, client: DioClient('', Dio()));
+              if (oidc4vcType != null) {
+                /// issuance case
+                if (!userConsentForIssuerAccess) showPrompt = false;
+              } else {
+                /// verification case
+                if (!userConsentForVerifierAccess) showPrompt = false;
+              }
+            } else {
+              /// normal Case
+              if (!userConsentForIssuerAccess) showPrompt = false;
             }
 
-            LoadingView().hide();
-            acceptHost = await showDialog<bool>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return ConfirmDialog(
-                      title: title,
-                      subtitle: subtitle,
-                      yes: l10n.communicationHostAllow,
-                      no: l10n.communicationHostDeny,
-                      //lock: state.uri!.scheme == 'http',
-                    );
-                  },
-                ) ??
-                false;
+            if (showPrompt) {
+              final String title = l10n.scanPromptHost;
+
+              String subtitle = (approvedIssuer.did.isEmpty)
+                  ? state.uri!.host
+                  : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
+
+              if (isOpenIDUrl) {
+                subtitle = await getHost(
+                    uri: state.uri!, client: DioClient('', Dio()));
+              }
+
+              LoadingView().hide();
+              acceptHost = await showDialog<bool>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ConfirmDialog(
+                        title: title,
+                        subtitle: subtitle,
+                        yes: l10n.communicationHostAllow,
+                        no: l10n.communicationHostDeny,
+                        //lock: state.uri!.scheme == 'http',
+                      );
+                    },
+                  ) ??
+                  false;
+            }
+          }
+          LoadingView().hide();
+          if (acceptHost) {
+            await context.read<QRCodeScanCubit>().accept(
+                  issuer: approvedIssuer,
+                  qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                  oidcType: oidc4vcTypeForIssuance,
+                );
+          } else {
+            context.read<QRCodeScanCubit>().emitError(
+                  ResponseMessage(
+                    ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+                  ),
+                );
+            return;
           }
         }
-        LoadingView().hide();
-        if (acceptHost) {
-          await context.read<QRCodeScanCubit>().accept(
-                issuer: approvedIssuer,
-                qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-                dioClient: DioClient('', Dio()),
-              );
-        } else {
-          context.read<QRCodeScanCubit>().emitError(
-                ResponseMessage(
-                  ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
-                ),
-              );
-          return;
+      }
+
+      if (state.status == QrScanStatus.success) {
+        if (state.route != null) {
+          if (context.read<RouteCubit>().state == QRCODE_SCAN_PAGE) {
+            await Navigator.of(context)
+                .pushReplacement<void, void>(state.route!);
+          } else {
+            await Navigator.of(context).push<void>(state.route!);
+          }
+          context.read<QRCodeScanCubit>().clearRoute();
         }
       }
-    }
 
-    if (state.status == QrScanStatus.success) {
-      if (state.route != null) {
-        if (context.read<RouteCubit>().state == QRCODE_SCAN_PAGE) {
-          await Navigator.of(context).pushReplacement<void, void>(state.route!);
-        } else {
-          await Navigator.of(context).push<void>(state.route!);
-        }
-        context.read<QRCodeScanCubit>().clearRoute();
+      if (state.message != null) {
+        AlertMessage.showStateMessage(
+          context: context,
+          stateMessage: state.message!,
+        );
       }
-    }
-
-    if (state.message != null) {
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: state.message!,
-      );
+    } catch (e) {
+      if (e
+          .toString()
+          .startsWith('Exception: Subject_Syntax_Type_Not_Supported')) {
+        context.read<QRCodeScanCubit>().emitError(
+              ResponseMessage(
+                ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported,
+              ),
+            );
+      } else {
+        context.read<QRCodeScanCubit>().emitError(
+              ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            );
+      }
     }
   },
 );
@@ -519,11 +543,12 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       var accept = true;
       final profileCubit = context.read<ProfileCubit>();
 
-      final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
+      final bool userConsentForIssuerAccess =
+          profileCubit.state.model.userConsentForIssuerAccess;
 
       final l10n = context.l10n;
 
-      if (isAlertEnable) {
+      if (userConsentForIssuerAccess) {
         /// checking if it is issuer side
 
         LoadingView().hide();

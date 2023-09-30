@@ -90,10 +90,6 @@ class ProfileCubit extends Cubit<ProfileState> {
               .get(SecureStorageKeys.isBiometricEnabled)) ==
           'true';
 
-      final alertValue =
-          await secureStorageProvider.get(SecureStorageKeys.alertEnabled);
-      final isAlertEnabled = alertValue == null || alertValue == 'true';
-
       final userConsentForIssuerAccess = (await secureStorageProvider
               .get(SecureStorageKeys.userConsentForIssuerAccess)) ==
           'true';
@@ -114,18 +110,12 @@ class ProfileCubit extends Cubit<ProfileState> {
           userPINCodeForAuthenticationValue == null ||
               userPINCodeForAuthenticationValue == 'true';
 
-      var oidc4vcType = OIDC4VCType.EBSIV3;
+      final userPinDigitsLengthString =
+          await secureStorageProvider.get(SecureStorageKeys.isSecurityLow);
 
-      for (final type in OIDC4VCType.values) {
-        final oidc4vcTypeName =
-            await secureStorageProvider.get(SecureStorageKeys.oidc4vcType);
-
-        if (oidc4vcTypeName != null) {
-          if (type.name == oidc4vcTypeName) {
-            oidc4vcType = type;
-          }
-        }
-      }
+      final int userPinDigitsLength = userPinDigitsLengthString != null
+          ? int.parse(userPinDigitsLengthString)
+          : 6;
 
       final profileModel = ProfileModel(
         firstName: firstName,
@@ -140,12 +130,11 @@ class ProfileCubit extends Cubit<ProfileState> {
         jobTitle: jobTitle,
         isEnterprise: isEnterprise,
         isBiometricEnabled: isBiometricEnabled,
-        isAlertEnabled: isAlertEnabled,
         userConsentForIssuerAccess: userConsentForIssuerAccess,
         userConsentForVerifierAccess: userConsentForVerifierAccess,
         userPINCodeForAuthentication: userPINCodeForAuthentication,
-        oidc4vcType: oidc4vcType,
         isSecurityLow: isSecurityLow,
+        userPinDigitsLength: userPinDigitsLength,
       );
 
       emit(
@@ -223,11 +212,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.alertEnabled,
-        profileModel.isAlertEnabled.toString(),
-      );
-
-      await secureStorageProvider.set(
         SecureStorageKeys.userConsentForIssuerAccess,
         profileModel.userConsentForIssuerAccess.toString(),
       );
@@ -243,13 +227,13 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.oidc4vcType,
-        profileModel.oidc4vcType.name,
+        SecureStorageKeys.isSecurityLow,
+        profileModel.isSecurityLow.toString(),
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.isSecurityLow,
-        profileModel.isSecurityLow.toString(),
+        SecureStorageKeys.userPinDigitsLength,
+        profileModel.userPinDigitsLength.toString(),
       );
 
       emit(
@@ -277,11 +261,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> setFingerprintEnabled({bool enabled = false}) async {
     final profileModel = state.model.copyWith(isBiometricEnabled: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> setAlertEnabled({bool enabled = false}) async {
-    final profileModel = state.model.copyWith(isAlertEnabled: enabled);
     await update(profileModel);
   }
 
@@ -316,14 +295,13 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
-  Future<void> updateOIDC4VCType(OIDC4VCType oidc4vcTye) async {
-    emit(state.copyWith(status: AppStatus.loading));
-    final profileModel = state.model.copyWith(oidc4vcType: oidc4vcTye);
+  Future<void> setSecurityLevel({bool isSecurityLow = true}) async {
+    final profileModel = state.model.copyWith(isSecurityLow: isSecurityLow);
     await update(profileModel);
   }
 
-  Future<void> setSecurityLevel({bool isSecurityLow = true}) async {
-    final profileModel = state.model.copyWith(isSecurityLow: isSecurityLow);
+  Future<void> setUserPinDigitLength(int value) async {
+    final profileModel = state.model.copyWith(userPinDigitsLength: value);
     await update(profileModel);
   }
 

@@ -22,7 +22,6 @@ class SecureStorageKeys {
   static const String isWalletIntegrityEnabled = 'isWalletIntegrityEnabled';
   static const String isBiometricEnabled = 'fingerprintEnabled';
 
-  static const String alertEnabled = 'alertEnabled';
   static const String userConsentForIssuerAccess = 'userConsentForIssuerAccess';
   static const String userConsentForVerifierAccess =
       'userConsentForVerifierAccess';
@@ -30,6 +29,7 @@ class SecureStorageKeys {
       'userPINCodeForAuthentication';
 
   static const String isSecurityLow = 'isSecurityLow';
+  static const String userPinDigitsLength = 'userPinDigitsLength';
 
   static const String pinCode = 'pinCode';
   static const String data = 'data';
@@ -59,7 +59,7 @@ class SecureStorageKeys {
   static const String ssiMnemonic = 'ssi/mnemonic';
   static const String ssiKey = 'ssi/key';
 
-  static const String p256PrivateKey = 'ssi/p256PrivateKey';
+  static const String p256PrivateKey = 'p256PrivateKey';
 
   static const String cryptoAccount = 'cryptoAccount';
   static const String cryptoAccounTrackingIndex = 'cryptoAccounTrackingIndex';
@@ -84,6 +84,4 @@ class SecureStorageKeys {
   static const String buildNumber = 'buildNumber';
 
   static const String hasVerifiedMnemonics = 'hasVerifiedMnemonics';
-
-  static const String oidc4vcType = 'oidc4vcType';
 }

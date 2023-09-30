@@ -3,21 +3,21 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 
 import 'package:altme/oidc4vc/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 Future<void> getAndAddDefferedCredential({
   required CredentialModel credentialModel,
-  required OIDC4VCType oidc4vcType,
   required CredentialsCubit credentialsCubit,
   required DioClient dioClient,
+  required OIDC4VC oidc4vc,
 }) async {
   final (_, issuer) = await getIssuerAndPreAuthorizedCode(
-    oidc4vcType: oidc4vcType,
     scannedResponse: credentialModel.pendingInfo!.url,
     dioClient: dioClient,
   );
 
   final dynamic encodedCredentialOrFutureToken =
-      await oidc4vcType.getOIDC4VC.getDeferredCredential(
+      await oidc4vc.getDeferredCredential(
     acceptanceToken: credentialModel.pendingInfo!.acceptanceToken,
     deferredCredentialEndpoint:
         credentialModel.pendingInfo!.deferredCredentialEndpoint,
@@ -26,7 +26,6 @@ Future<void> getAndAddDefferedCredential({
   await addOIDC4VCCredential(
     encodedCredentialFromOIDC4VC: encodedCredentialOrFutureToken,
     credentialsCubit: credentialsCubit,
-    oidc4vcType: oidc4vcType,
     issuer: issuer,
     credentialType: credentialModel.credentialPreview.type[0],
     isLastCall: true,

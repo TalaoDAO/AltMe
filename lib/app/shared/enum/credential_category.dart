@@ -67,7 +67,7 @@ extension CredentialCategoryX on CredentialCategory {
         return [
           CredentialSubjectType.tezotopiaMembership,
           CredentialSubjectType.chainbornMembership,
-          CredentialSubjectType.bloometaPass,
+          //CredentialSubjectType.bloometaPass,
           // CredentialSubjectType.troopezPass,
           // CredentialSubjectType.pigsPass,
           // CredentialSubjectType.matterlightPass,
@@ -84,6 +84,7 @@ extension CredentialCategoryX on CredentialCategory {
           CredentialSubjectType.over13,
           // CredentialSubjectType.passportFootprint,
           CredentialSubjectType.verifiableIdCard,
+          CredentialSubjectType.livenessCard,
         ];
       case CredentialCategory.contactInfoCredentials:
         return [

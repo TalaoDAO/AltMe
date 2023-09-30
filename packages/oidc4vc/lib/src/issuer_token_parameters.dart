@@ -4,12 +4,13 @@ import 'package:oidc4vc/src/token_parameters.dart';
 /// for issuer interactions.
 class IssuerTokenParameters extends TokenParameters {
   ///
-  IssuerTokenParameters(
-    super.privateKey,
-    super.did,
-    super.kid,
-    this.issuer,
-  );
+  IssuerTokenParameters({
+    required super.privateKey,
+    required super.did,
+    required super.kid,
+    required super.isIdToken,
+    required this.issuer,
+  });
 
   /// [issuer] is id of credential we are aquiring.
   final String issuer;
