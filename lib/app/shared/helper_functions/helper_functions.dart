@@ -11,6 +11,7 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -714,4 +715,69 @@ int getIndexValue({required bool isEBSIV3}) {
   } else {
     return 1;
   }
+}
+
+(MessageHandler messageHandler, String? erroDescription, String? errorUrl)
+    getOIDC4VCError(dynamic e) {
+  MessageHandler messageHandler = ResponseMessage(
+    ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+  );
+
+  String? erroDescription;
+  String? errorUrl;
+
+  if (e is DioException) {
+    final error = NetworkException.getDioException(error: e);
+
+    final data = error.data;
+
+    if (data != null && data is Map) {
+      ///error
+      if (data.containsKey('error')) {
+        if (data['error'] == 'invalid_grant') {
+          messageHandler =
+              ResponseMessage(ResponseString.RESPONSE_STRING_invalidRequest);
+        } else if (data['error'] == 'unauthorized_client') {
+          messageHandler =
+              ResponseMessage(ResponseString.RESPONSE_STRING_accessDenied);
+        } else if (data['error'] == 'access_denied') {
+          messageHandler =
+              ResponseMessage(ResponseString.RESPONSE_STRING_accessDenied);
+        } else if (data['error'] == 'unsupported_response_type') {
+          messageHandler = ResponseMessage(
+            ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
+          );
+        } else if (data['error'] == 'invalid_scope') {
+          messageHandler = ResponseMessage(
+            ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
+          );
+        } else if (data['error'] == 'invalid_token') {
+          messageHandler =
+              ResponseMessage(ResponseString.RESPONSE_STRING_accessDenied);
+        } else if (data['error'] == 'unsupported_credential_type') {
+          messageHandler = ResponseMessage(
+              ResponseString.RESPONSE_STRING_unsupportedCredential);
+        } else if (data['error'] == 'invalid_or_missing_proof') {
+          messageHandler = ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet,
+          );
+        }
+      }
+
+      ///error_description
+      if (data.containsKey('error_description')) {
+        erroDescription = data['error_description'].toString();
+      }
+
+      ///error_uri
+      if (data.containsKey('error_uri')) {
+        errorUrl = data['error_uri'].toString();
+      }
+    }
+  } else if (e is MessageHandler) {
+    messageHandler = e;
+  }
+
+  return (messageHandler, erroDescription, errorUrl);
 }

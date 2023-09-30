@@ -277,7 +277,7 @@ class ScanCubit extends Cubit<ScanState> {
     } catch (e) {
       log.e('something went wrong - $e');
       if (e is ResponseMessage) {
-        emit(state.error(messageHandler: e));
+        emitError(e);
       } else if (e is NetworkException) {
         log.e('NetworkException - $e');
         if (e.message == NetworkError.NETWORK_ERROR_PRECONDITION_FAILED) {
@@ -296,11 +296,15 @@ class ScanCubit extends Cubit<ScanState> {
             ),
           );
         } else {
+          final (messageHandler, erroDescription, errorUrl) =
+              getOIDC4VCError(e);
           emit(
             state.error(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              message: StateMessage.error(
+                messageHandler: messageHandler,
+                erroDescription: erroDescription,
+                showDialog: true,
+                erroUrl: errorUrl,
               ),
             ),
           );
@@ -308,9 +312,11 @@ class ScanCubit extends Cubit<ScanState> {
       } else {
         emit(
           state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+              ),
             ),
           ),
         );
@@ -389,20 +395,22 @@ class ScanCubit extends Cubit<ScanState> {
       );
     } catch (e) {
       if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
+        emitError(e);
       } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-            ),
+        emitError(
+          ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
           ),
         );
       }
     }
+  }
+
+  void emitError(MessageHandler messageHandler) {
+    emit(
+      state.error(message: StateMessage.error(messageHandler: messageHandler)),
+    );
   }
 
   Future<void> getDIDAuthCHAPI({
@@ -464,16 +472,12 @@ class ScanCubit extends Cubit<ScanState> {
     } catch (e, s) {
       log.e('something went wrong', error: e, stackTrace: s);
       if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
+        emitError(e);
       } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-            ),
+        emitError(
+          ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
           ),
         );
       }
@@ -558,16 +562,12 @@ class ScanCubit extends Cubit<ScanState> {
     } catch (e, s) {
       log.e('something went wrong', error: e, stackTrace: s);
       if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
+        emitError(e);
       } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-            ),
+        emitError(
+          ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
           ),
         );
       }
@@ -665,16 +665,12 @@ class ScanCubit extends Cubit<ScanState> {
     } catch (e, s) {
       log.e('something went wrong', error: e, stackTrace: s);
       if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
+        emitError(e);
       } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-            ),
+        emitError(
+          ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
           ),
         );
       }

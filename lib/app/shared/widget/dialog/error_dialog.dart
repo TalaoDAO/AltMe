@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 
 class ErrorDialog extends StatelessWidget {
   const ErrorDialog({

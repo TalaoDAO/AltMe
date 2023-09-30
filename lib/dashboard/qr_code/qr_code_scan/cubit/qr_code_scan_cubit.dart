@@ -666,63 +666,16 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
     } catch (e) {
-      oidc4vciErrorHandling(e);
+      oidc4vcErrorHandling(e);
     }
   }
 
-  void oidc4vciErrorHandling(dynamic e) {
-    ResponseString responseString =
-        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER;
-
-    String? erroDescription;
-    String? errorUrl;
-
-    if (e is DioException) {
-      final error = NetworkException.getDioException(error: e);
-
-      final data = error.data;
-
-      if (data != null && data is Map) {
-        ///error
-        if (data.containsKey('error')) {
-          if (data['error'] == 'invalid_grant') {
-            responseString = ResponseString.RESPONSE_STRING_invalidRequest;
-          } else if (data['error'] == 'unauthorized_client') {
-            responseString = ResponseString.RESPONSE_STRING_accessDenied;
-          } else if (data['error'] == 'access_denied') {
-            responseString = ResponseString.RESPONSE_STRING_accessDenied;
-          } else if (data['error'] == 'unsupported_response_type') {
-            responseString =
-                ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
-          } else if (data['error'] == 'invalid_scope') {
-            responseString =
-                ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
-          } else if (data['error'] == 'invalid_token') {
-            responseString = ResponseString.RESPONSE_STRING_accessDenied;
-          } else if (data['error'] == 'unsupported_credential_type') {
-            responseString =
-                ResponseString.RESPONSE_STRING_unsupportedCredential;
-          } else if (data['error'] == 'invalid_or_missing_proof') {
-            responseString = ResponseString
-                .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet;
-          }
-        }
-
-        ///error_description
-        if (data.containsKey('error_description')) {
-          erroDescription = data['error_description'].toString();
-        }
-
-        ///error_uri
-        if (data.containsKey('error_uri')) {
-          errorUrl = data['error_uri'].toString();
-        }
-      }
-    }
+  void oidc4vcErrorHandling(dynamic e) {
+    final (messageHandler, erroDescription, errorUrl) = getOIDC4VCError(e);
     emit(
       state.error(
         message: StateMessage.error(
-          messageHandler: ResponseMessage(responseString),
+          messageHandler: messageHandler,
           erroDescription: erroDescription,
           showDialog: true,
           erroUrl: errorUrl,
@@ -980,15 +933,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
       goBack();
     } catch (e) {
-      if (e is MessageHandler) {
-        emitError(e);
-      } else {
-        emitError(
-          ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          ),
-        );
-      }
+      oidc4vcErrorHandling(e);
     }
   }
 
@@ -1073,7 +1018,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
       goBack();
     } catch (e) {
-      oidc4vciErrorHandling(e);
+      oidc4vcErrorHandling(e);
     }
   }
 
