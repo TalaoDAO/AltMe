@@ -686,7 +686,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get defaultDialogSubtitle => GoogleFonts.nunito(
-        fontSize: 18,
+        fontSize: 16,
         color: const Color(0xff86809D),
       );
 

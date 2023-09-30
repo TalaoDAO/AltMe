@@ -403,4 +403,11 @@ class GlobalMessage {
       l10n.responseTypeNotSupported;
   String get RESPONSE_STRING_subjectSyntaxTypeNotSupported =>
       l10n.subjectSyntaxTypeNotSupported;
+  String get RESPONSE_STRING_accessDenied => l10n.accessDenied;
+  String get RESPONSE_STRING_thisRequestIsNotSupported =>
+      l10n.thisRequestIsNotSupported;
+  String get RESPONSE_STRING_unsupportedCredential =>
+      l10n.unsupportedCredential;
+  String get RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet =>
+      l10n.credentialIssuanceNotAllowedToTheWallet;
 }

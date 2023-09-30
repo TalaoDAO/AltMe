@@ -666,41 +666,69 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
     } catch (e) {
-      if (e is DioException) {
-        final error = NetworkException.getDioException(error: e);
-        if (error.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
-          /// the VC is not yet ready
+      oidc4vciErrorHandling(e);
+    }
+  }
 
-          emitError(
-            ResponseMessage(
-              ResponseString.RESPONSE_STRING_theCredentialIsNotReady,
-            ),
-          );
-        } else if (error.message == NetworkError.NETWORK_ERROR_NOT_READY) {
-          /// the VC is no more ready.....
-          /// teh user call back teh issuer after 2 months
+  void oidc4vciErrorHandling(dynamic e) {
+    ResponseString responseString =
+        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER;
 
-          emitError(
-            ResponseMessage(
-              ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady,
-            ),
-          );
-        } else {
-          emitError(
-            ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            ),
-          );
+    String? erroDescription;
+    String? errorUrl;
+
+    if (e is DioException) {
+      final error = NetworkException.getDioException(error: e);
+
+      final data = error.data;
+
+      if (data != null && data is Map) {
+        ///error
+        if (data.containsKey('error')) {
+          if (data['error'] == 'invalid_grant') {
+            responseString = ResponseString.RESPONSE_STRING_invalidRequest;
+          } else if (data['error'] == 'unauthorized_client') {
+            responseString = ResponseString.RESPONSE_STRING_accessDenied;
+          } else if (data['error'] == 'access_denied') {
+            responseString = ResponseString.RESPONSE_STRING_accessDenied;
+          } else if (data['error'] == 'unsupported_response_type') {
+            responseString =
+                ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
+          } else if (data['error'] == 'invalid_scope') {
+            responseString =
+                ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
+          } else if (data['error'] == 'invalid_token') {
+            responseString = ResponseString.RESPONSE_STRING_accessDenied;
+          } else if (data['error'] == 'unsupported_credential_type') {
+            responseString =
+                ResponseString.RESPONSE_STRING_unsupportedCredential;
+          } else if (data['error'] == 'invalid_or_missing_proof') {
+            responseString = ResponseString
+                .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet;
+          }
         }
-      } else {
-        emitError(
-          ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          ),
-        );
+
+        ///error_description
+        if (data.containsKey('error_description')) {
+          erroDescription = data['error_description'].toString();
+        }
+
+        ///error_uri
+        if (data.containsKey('error_uri')) {
+          errorUrl = data['error_uri'].toString();
+        }
       }
     }
+    emit(
+      state.error(
+        message: StateMessage.error(
+          messageHandler: ResponseMessage(responseString),
+          erroDescription: erroDescription,
+          showDialog: true,
+          erroUrl: errorUrl,
+        ),
+      ),
+    );
   }
 
   Future<bool> isVCPresentable(
@@ -1045,66 +1073,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
       goBack();
     } catch (e) {
-      if (e is DioException) {
-        final error = NetworkException.getDioException(error: e);
-
-        if (error.message == NetworkError.NETWORK_ERROR_BAD_REQUEST) {
-          final data = error.data;
-
-          if (data != null &&
-              data is Map &&
-              data.containsKey('error') &&
-              data['error'] == 'invalid_grant') {
-            emitError(
-              ResponseMessage(
-                ResponseString.RESPONSE_STRING_userPinIsIncorrect,
-              ),
-            );
-          } else {
-            emitError(
-              ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-              ),
-            );
-          }
-        } else if (error.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
-          final data = error.data;
-
-          if (data != null &&
-              data is Map &&
-              data.containsKey('error_description') &&
-              data['error_description'] == 'User pin is incorrect') {
-            emitError(
-              ResponseMessage(
-                ResponseString.RESPONSE_STRING_userPinIsIncorrect,
-              ),
-            );
-          } else {
-            emitError(
-              ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-              ),
-            );
-          }
-        } else {
-          emitError(
-            ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            ),
-          );
-        }
-      } else if (e is MessageHandler) {
-        emit(state.copyWith(message: StateMessage.error(messageHandler: e)));
-      } else {
-        emitError(
-          ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          ),
-        );
-      }
+      oidc4vciErrorHandling(e);
     }
   }
 

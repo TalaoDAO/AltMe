@@ -764,6 +764,29 @@ class ResponseMessage with MessageHandler {
               .localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_accessDenied:
+          return ResponseString.RESPONSE_STRING_accessDenied.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_thisRequestIsNotSupported:
+          return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_unsupportedCredential:
+          return ResponseString.RESPONSE_STRING_unsupportedCredential.localise(
+            context,
+          );
+
+        case ResponseString
+              .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet:
+          return ResponseString
+              .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet.localise(
+            context,
+          );
       }
     }
     return '';

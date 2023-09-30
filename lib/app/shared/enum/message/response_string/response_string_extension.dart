@@ -510,6 +510,20 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported:
         return globalMessage.RESPONSE_STRING_subjectSyntaxTypeNotSupported;
+
+      case ResponseString.RESPONSE_STRING_accessDenied:
+        return globalMessage.RESPONSE_STRING_accessDenied;
+
+      case ResponseString.RESPONSE_STRING_thisRequestIsNotSupported:
+        return globalMessage.RESPONSE_STRING_thisRequestIsNotSupported;
+
+      case ResponseString.RESPONSE_STRING_unsupportedCredential:
+        return globalMessage.RESPONSE_STRING_unsupportedCredential;
+
+      case ResponseString
+            .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet:
+        return globalMessage
+            .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet;
     }
   }
 }

@@ -39,7 +39,8 @@ class AlertMessage {
           title: message,
           yes: context.l10n.ok,
           showNoButton: false,
-          //icon: stateMessage.type.iconPath,
+          subtitle: stateMessage.erroDescription,
+          url: stateMessage.erroUrl,
         ),
       );
     } else {

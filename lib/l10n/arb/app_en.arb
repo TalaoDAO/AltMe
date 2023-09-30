@@ -964,7 +964,12 @@
   "six_or_four_digits_user_pin_subTitle": "By default 6 digits. Position on 4 digits in the case where the issuer offers 4 digit codes.",
   "security_level_title": "Security level",
   "security_level_subTitle": "By default Low: This parameter defines the level of verification carried out by the wallet on the request data provided by issuers and verifiers (signature of jwts, access to trust registers, etc.).",
-  "responseTypeNotSupported": "Response type not supported",
-  "invalidRequest": "Invalid request",
-  "subjectSyntaxTypeNotSupported": "subject syntax type not supported"
+  "responseTypeNotSupported": "The response type is not supported",
+  "invalidRequest": "The request is invalid.",
+  "subjectSyntaxTypeNotSupported": "The subject syntax type is not supported.", 
+  "accessDenied": "Access denied.",
+  "thisRequestIsNotSupported": "This request is not supported.",
+  "unsupportedCredential": "Unsupported credential.",
+  "credentialIssuanceNotAllowedToTheWallet": "Credential issuance not allowed to the wallet."
 }
+

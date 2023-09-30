@@ -872,7 +872,11 @@
     "security_level_subTitle",
     "responseTypeNotSupported",
     "invalidRequest",
-    "subjectSyntaxTypeNotSupported"
+    "subjectSyntaxTypeNotSupported",
+    "accessDenied",
+    "thisRequestIsNotSupported",
+    "unsupportedCredential",
+    "credentialIssuanceNotAllowedToTheWallet"
   ],
 
   "es": [
@@ -1748,7 +1752,11 @@
     "security_level_subTitle",
     "responseTypeNotSupported",
     "invalidRequest",
-    "subjectSyntaxTypeNotSupported"
+    "subjectSyntaxTypeNotSupported",
+    "accessDenied",
+    "thisRequestIsNotSupported",
+    "unsupportedCredential",
+    "credentialIssuanceNotAllowedToTheWallet"
   ],
 
   "fr": [
@@ -1927,7 +1935,11 @@
     "security_level_subTitle",
     "responseTypeNotSupported",
     "invalidRequest",
-    "subjectSyntaxTypeNotSupported"
+    "subjectSyntaxTypeNotSupported",
+    "accessDenied",
+    "thisRequestIsNotSupported",
+    "unsupportedCredential",
+    "credentialIssuanceNotAllowedToTheWallet"
   ],
 
   "it": [
@@ -2803,6 +2815,10 @@
     "security_level_subTitle",
     "responseTypeNotSupported",
     "invalidRequest",
-    "subjectSyntaxTypeNotSupported"
+    "subjectSyntaxTypeNotSupported",
+    "accessDenied",
+    "thisRequestIsNotSupported",
+    "unsupportedCredential",
+    "credentialIssuanceNotAllowedToTheWallet"
   ]
 }

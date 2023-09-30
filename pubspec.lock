@@ -230,10 +230,10 @@ packages:
     dependency: transitive
     description:
       name: build_resolvers
-      sha256: "0713a05b0386bd97f9e63e78108805a4feca5898a4b821d6610857f10c91e975"
+      sha256: "64e12b0521812d1684b1917bc80945625391cb9bdd4312536b1d69dcb6133ed8"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.4.1"
   build_runner:
     dependency: "direct dev"
     description:
@@ -294,10 +294,10 @@ packages:
     dependency: "direct main"
     description:
       name: camera
-      sha256: f63f2687fb1795c36f7c57b18a03071880eabb0fd8b5291b0fcd3fb979cb0fb1
+      sha256: "1f9010f0689774380fbcd7d6b7820a5157e8e97685fa66d619e1d1f58b3fdf93"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.5+4"
+    version: "0.10.5+5"
   camera_android:
     dependency: transitive
     description:
@@ -310,10 +310,10 @@ packages:
     dependency: transitive
     description:
       name: camera_avfoundation
-      sha256: dde42d19ad4cdf79287f9e410599db72beaec7e505787dc6abfd0ce5b526e9c0
+      sha256: "9495e633cda700717bbe299b0979e6c4a08cee45f298945973dc9cf3e4c1cba5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.13+5"
+    version: "0.9.13+6"
   camera_platform_interface:
     dependency: transitive
     description:
@@ -2569,18 +2569,18 @@ packages:
     dependency: "direct main"
     description:
       name: webview_flutter
-      sha256: "82f6787d5df55907aa01e49bd9644f4ed1cc82af7a8257dd9947815959d2e755"
+      sha256: "053d454c9475546b4382e9498601fb46293cdac9b3ca93f1a738375bc9a1eee4"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.4"
+    version: "4.3.0"
   webview_flutter_android:
     dependency: "direct main"
     description:
       name: webview_flutter_android
-      sha256: ddc167c6676f57c8b367d19fcbee267d6dc6adf81bd6c3cb87981d30746e0a6d
+      sha256: b0cd33dd7d3dd8e5f664e11a19e17ba12c352647269921a3b568406b001f1dff
       url: "https://pub.dev"
     source: hosted
-    version: "3.10.1"
+    version: "3.12.0"
   webview_flutter_platform_interface:
     dependency: transitive
     description:
@@ -2593,10 +2593,10 @@ packages:
     dependency: "direct main"
     description:
       name: webview_flutter_wkwebview
-      sha256: "485af05f2c5f83c7f78c20e236b170ad02df7153b299ae9917345be43871d29f"
+      sha256: "3c7d56ca4b82654ad1f58aeefb8d593a59224f26d6b2bf8feed074361eb34c86"
       url: "https://pub.dev"
     source: hosted
-    version: "3.8.0"
+    version: "3.9.0"
   win32:
     dependency: transitive
     description:
