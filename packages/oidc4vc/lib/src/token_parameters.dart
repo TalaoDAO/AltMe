@@ -5,11 +5,12 @@ import 'dart:core';
 /// [TokenParameters] regroup those computed parameters`
 class TokenParameters {
   ///
-  TokenParameters(
-    this.privateKey,
-    this.did,
-    this.kid,
-  );
+  TokenParameters({
+    required this.privateKey,
+    required this.did,
+    required this.kid,
+    required this.isIdToken,
+  });
 
   /// [privateKey] is JWK (Json Web Key) of user private key
   final Map<String, dynamic> privateKey;
@@ -19,6 +20,9 @@ class TokenParameters {
 
   /// [kid] kid
   String kid;
+
+  /// [isIdToken] isIdToken
+  bool isIdToken;
 
   /// [publicJWK] is JWK (Json Web Key) of user public key
   /// computed from [privateKey]

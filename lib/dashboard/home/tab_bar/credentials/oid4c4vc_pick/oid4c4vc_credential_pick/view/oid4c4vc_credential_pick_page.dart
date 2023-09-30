@@ -11,21 +11,24 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     required this.userPin,
     required this.preAuthorizedCode,
     required this.issuer,
-    required this.oidc4vcType,
+    required this.isEBSIV3,
+    required this.credentialOfferJson,
   });
 
   final List<dynamic> credentials;
   final String? userPin;
   final String? preAuthorizedCode;
   final String issuer;
-  final OIDC4VCType oidc4vcType;
+  final bool isEBSIV3;
+  final dynamic credentialOfferJson;
 
   static Route<dynamic> route({
     required List<dynamic> credentials,
     required String? userPin,
     required String? preAuthorizedCode,
     required String issuer,
-    required OIDC4VCType oidc4vcType,
+    required bool isEBSIV3,
+    required dynamic credentialOfferJson,
   }) =>
       MaterialPageRoute<void>(
         builder: (context) => Oidc4vcCredentialPickPage(
@@ -33,7 +36,8 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
           userPin: userPin,
           issuer: issuer,
           preAuthorizedCode: preAuthorizedCode,
-          oidc4vcType: oidc4vcType,
+          isEBSIV3: isEBSIV3,
+          credentialOfferJson: credentialOfferJson,
         ),
         settings: const RouteSettings(name: '/Oidc4vcCredentialPickPage'),
       );
@@ -47,7 +51,8 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
         userPin: userPin,
         issuer: issuer,
         preAuthorizedCode: preAuthorizedCode,
-        oidc4vcType: oidc4vcType,
+        isEBSIV3: isEBSIV3,
+        credentialOfferJson: credentialOfferJson,
       ),
     );
   }
@@ -60,14 +65,16 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
     required this.userPin,
     required this.preAuthorizedCode,
     required this.issuer,
-    required this.oidc4vcType,
+    required this.isEBSIV3,
+    required this.credentialOfferJson,
   });
 
   final List<dynamic> credentials;
   final String? userPin;
   final String? preAuthorizedCode;
   final String issuer;
-  final OIDC4VCType oidc4vcType;
+  final bool isEBSIV3;
+  final dynamic credentialOfferJson;
 
   @override
   Widget build(BuildContext context) {
@@ -87,33 +94,6 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
               vertical: 24,
               horizontal: 16,
-            ),
-            navigation: SafeArea(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: MyGradientButton(
-                  onPressed: state.isEmpty
-                      ? null
-                      : () {
-                          if (state.isEmpty) return;
-
-                          final selectedCredentials =
-                              state.map((index) => credentials[index]).toList();
-
-                          context
-                              .read<QRCodeScanCubit>()
-                              .processSelectedCredentials(
-                                selectedCredentials: selectedCredentials,
-                                userPin: userPin,
-                                issuer: issuer,
-                                preAuthorizedCode: preAuthorizedCode,
-                                oidc4vcType: oidc4vcType,
-                                selectedCredentialsIndex: state,
-                              );
-                        },
-                  text: l10n.proceed,
-                ),
-              ),
             ),
             body: Column(
               children: <Widget>[
@@ -139,42 +119,11 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                           .updateList(index),
                       child: Column(
                         children: [
-                          if (discoverDummyCredential.image != null) ...[
-                            DummyCredentialImage(
-                              credentialSubjectType: credentialSubjectType,
-                              image: discoverDummyCredential.image,
-                            ),
-                          ] else ...[
-                            DefaultCredentialWidget(
-                              credentialModel: CredentialModel(
-                                id: '',
-                                credentialPreview: Credential(
-                                  'dummy1',
-                                  ['dummy2'],
-                                  [credential],
-                                  'dummy4',
-                                  'dummy5',
-                                  '',
-                                  [Proof.dummy()],
-                                  DefaultCredentialSubjectModel(
-                                    id: 'dummy7',
-                                    type: 'dummy8',
-                                    issuedBy: const Author(''),
-                                  ),
-                                  [Translation('en', '')],
-                                  [Translation('en', '')],
-                                  CredentialStatusField
-                                      .emptyCredentialStatusField(),
-                                  [Evidence.emptyEvidence()],
-                                ),
-                                data: const {},
-                                display: Display.emptyDisplay(),
-                                image: '',
-                                shareLink: '',
-                              ),
-                              showBgDecoration: false,
-                            ),
-                          ],
+                          DummyCredentialImage(
+                            credentialSubjectType: credentialSubjectType,
+                            image: discoverDummyCredential.image,
+                            credentialName: credential,
+                          ),
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
@@ -194,6 +143,33 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                   },
                 ),
               ],
+            ),
+            navigation: SafeArea(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: MyGradientButton(
+                  onPressed: state.isEmpty
+                      ? null
+                      : () {
+                          if (state.isEmpty) return;
+
+                          final selectedCredentials =
+                              state.map((index) => credentials[index]).toList();
+
+                          context
+                              .read<QRCodeScanCubit>()
+                              .processSelectedCredentials(
+                                selectedCredentials: selectedCredentials,
+                                userPin: userPin,
+                                issuer: issuer,
+                                preAuthorizedCode: preAuthorizedCode,
+                                isEBSIV3: isEBSIV3,
+                                credentialOfferJson: credentialOfferJson,
+                              );
+                        },
+                  text: l10n.proceed,
+                ),
+              ),
             ),
           );
         },

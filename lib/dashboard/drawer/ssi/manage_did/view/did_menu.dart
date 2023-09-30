@@ -62,13 +62,6 @@ class DidView extends StatelessWidget {
                   },
                 ),
                 DrawerItem(
-                  title: l10n.manageEbsiV2DecentralizedId,
-                  onTap: () {
-                    Navigator.of(context)
-                        .push<void>(ManageDidEbsiV2Page.route());
-                  },
-                ),
-                DrawerItem(
                   title: l10n.manageEbsiV3DecentralizedId,
                   onTap: () {
                     Navigator.of(context)

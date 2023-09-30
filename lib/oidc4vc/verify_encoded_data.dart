@@ -1,4 +1,3 @@
-import 'package:altme/app/app.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 Future<VerificationType> verifyEncodedData(
@@ -6,8 +5,8 @@ Future<VerificationType> verifyEncodedData(
   String issuerKid,
   String jwt,
 ) async {
-  final VerificationType verificationType =
-      await OIDC4VCType.EBSIV2.getOIDC4VC.verifyEncodedData(
+  final OIDC4VC oidc4vc = OIDC4VC();
+  final VerificationType verificationType = await oidc4vc.verifyEncodedData(
     issuerDid: issuerDid,
     jwt: jwt,
     issuerKid: issuerKid,

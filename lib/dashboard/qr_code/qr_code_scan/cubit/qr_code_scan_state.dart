@@ -7,7 +7,6 @@ class QRCodeScanState extends Equatable {
     this.uri,
     this.route,
     this.isScan = false,
-    this.isRequestVerified = true,
     this.message,
   });
 
@@ -19,7 +18,7 @@ class QRCodeScanState extends Equatable {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final Route<dynamic>? route;
   final bool isScan;
-  final bool isRequestVerified;
+
   final StateMessage? message;
 
   Map<String, dynamic> toJson() => _$QRCodeScanStateToJson(this);
@@ -29,16 +28,14 @@ class QRCodeScanState extends Equatable {
       status: QrScanStatus.loading,
       isScan: isScan ?? this.isScan,
       uri: uri,
-      isRequestVerified: isRequestVerified,
     );
   }
 
-  QRCodeScanState acceptHost({bool isRequestVerified = true}) {
+  QRCodeScanState acceptHost() {
     return QRCodeScanState(
       status: QrScanStatus.acceptHost,
       isScan: isScan,
       uri: uri,
-      isRequestVerified: isRequestVerified,
     );
   }
 
@@ -48,7 +45,6 @@ class QRCodeScanState extends Equatable {
       message: message,
       isScan: isScan,
       uri: uri,
-      isRequestVerified: isRequestVerified,
     );
   }
 
@@ -65,11 +61,9 @@ class QRCodeScanState extends Equatable {
       isScan: isScan ?? this.isScan,
       uri: uri ?? this.uri,
       route: route, // route should be cleared when one route is done
-      isRequestVerified: isRequestVerified,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [status, uri, route, isScan, message, isRequestVerified];
+  List<Object?> get props => [status, uri, route, isScan, message];
 }

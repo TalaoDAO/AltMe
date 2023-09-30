@@ -1,7 +1,5 @@
 export 'cubit/did_private_key_cubit.dart';
 export 'cubit/did_private_key_dialog_cubit.dart';
-export 'view/did_ebsi_v2/did_ebsi_v2_private_key_page.dart';
-export 'view/did_ebsi_v2/manage_did_ebsi_v2_page.dart';
 export 'view/did_ebsi_v3/did_ebsi_v3_private_key_page.dart';
 export 'view/did_ebsi_v3/manage_did_ebsi_v3_page.dart';
 export 'view/did_edDSA/did_ed_dsa_private_key_page.dart';

@@ -12,6 +12,8 @@ class StateMessage extends Equatable {
     this.stringMessage,
     this.injectedMessage,
     this.showDialog = false,
+    this.erroUrl,
+    this.erroDescription,
     this.duration = const Duration(milliseconds: 2 * 800),
   });
 
@@ -23,6 +25,8 @@ class StateMessage extends Equatable {
     this.stringMessage,
     this.injectedMessage,
     this.showDialog = false,
+    this.erroUrl,
+    this.erroDescription,
     this.duration = const Duration(milliseconds: 2 * 800),
   }) : type = MessageType.error;
 
@@ -31,6 +35,8 @@ class StateMessage extends Equatable {
     this.stringMessage,
     this.injectedMessage,
     this.showDialog = false,
+    this.erroUrl,
+    this.erroDescription,
     this.duration = const Duration(milliseconds: 2 * 800),
   }) : type = MessageType.warning;
 
@@ -39,6 +45,8 @@ class StateMessage extends Equatable {
     this.stringMessage,
     this.injectedMessage,
     this.showDialog = false,
+    this.erroUrl,
+    this.erroDescription,
     this.duration = const Duration(milliseconds: 2 * 800),
   }) : type = MessageType.info;
 
@@ -47,6 +55,8 @@ class StateMessage extends Equatable {
     this.stringMessage,
     this.injectedMessage,
     this.showDialog = false,
+    this.erroUrl,
+    this.erroDescription,
     this.duration = const Duration(milliseconds: 2 * 800),
   }) : type = MessageType.success;
 
@@ -56,6 +66,8 @@ class StateMessage extends Equatable {
   final String? stringMessage;
   final String? injectedMessage;
   final bool showDialog;
+  final String? erroUrl;
+  final String? erroDescription;
   final Duration duration;
 
   Map<String, dynamic> toJson() => _$StateMessageToJson(this);
@@ -68,5 +80,7 @@ class StateMessage extends Equatable {
         injectedMessage,
         showDialog,
         duration,
+        erroUrl,
+        erroDescription,
       ];
 }

@@ -39,6 +39,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xff8247E5);
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.bloometaPass:
+      case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.nationality:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
@@ -108,6 +109,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'DefiCompliance';
       case CredentialSubjectType.bloometaPass:
         return 'BloometaPass';
+      case CredentialSubjectType.livenessCard:
+        return 'Liveness';
       case CredentialSubjectType.troopezPass:
         return 'TroopezPass';
       case CredentialSubjectType.pigsPass:
@@ -235,6 +238,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return DefiComplianceModel.fromJson(json);
       case CredentialSubjectType.bloometaPass:
         return BloometaPassModel.fromJson(json);
+      case CredentialSubjectType.livenessCard:
+        return LivenessCardModel.fromJson(json);
       case CredentialSubjectType.troopezPass:
         return TroopezPassModel.fromJson(json);
       case CredentialSubjectType.pigsPass:
@@ -361,7 +366,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.over13 ||
         this == CredentialSubjectType.over15 ||
         this == CredentialSubjectType.ageRange ||
-        this == CredentialSubjectType.defiCompliance) {
+        this == CredentialSubjectType.defiCompliance ||
+        this == CredentialSubjectType.livenessCard) {
       return true;
     }
     return false;
@@ -443,6 +449,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Defi Compliance';
       case CredentialSubjectType.bloometaPass:
         return 'Bloometa';
+      case CredentialSubjectType.livenessCard:
+        return 'Liveness';
       case CredentialSubjectType.troopezPass:
         return 'Troopez Pass';
       case CredentialSubjectType.pigsPass:
@@ -568,6 +576,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
       case CredentialSubjectType.bloometaPass:
+      case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
       case CredentialSubjectType.ageRange:
@@ -639,6 +648,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 0;
       case CredentialSubjectType.bloometaPass:
         return 76;
+      case CredentialSubjectType.livenessCard:
+        return 75;
       case CredentialSubjectType.troopezPass:
         return 73;
       case CredentialSubjectType.pigsPass:

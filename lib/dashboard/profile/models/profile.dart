@@ -16,14 +16,14 @@ class ProfileModel extends Equatable {
     required this.tezosNetwork,
     required this.isEnterprise,
     required this.isBiometricEnabled,
-    required this.isAlertEnabled,
     required this.userConsentForIssuerAccess,
     required this.userConsentForVerifierAccess,
     required this.userPINCodeForAuthentication,
     this.companyName = '',
     this.companyWebsite = '',
     this.jobTitle = '',
-    required this.oidc4vcType,
+    required this.isSecurityLow,
+    required this.userPinDigitsLength,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
@@ -41,12 +41,12 @@ class ProfileModel extends Equatable {
         polygonIdNetwork: PolygonIdNetwork.PolygonMainnet.toString(),
         isEnterprise: false,
         isBiometricEnabled: false,
-        isAlertEnabled: false,
         userConsentForIssuerAccess: true,
         userConsentForVerifierAccess: true,
         userPINCodeForAuthentication: true,
         tezosNetwork: TezosNetwork.mainNet(),
-        oidc4vcType: OIDC4VCType.EBSIV3,
+        isSecurityLow: true,
+        userPinDigitsLength: 6,
       );
 
   final String firstName;
@@ -61,11 +61,12 @@ class ProfileModel extends Equatable {
   final TezosNetwork tezosNetwork;
   final bool isEnterprise;
   final bool isBiometricEnabled;
-  final bool isAlertEnabled;
   final bool userConsentForIssuerAccess;
   final bool userConsentForVerifierAccess;
   final bool userPINCodeForAuthentication;
-  final OIDC4VCType oidc4vcType;
+
+  final bool isSecurityLow;
+  final int userPinDigitsLength;
 
   @override
   List<Object> get props => [
@@ -81,11 +82,11 @@ class ProfileModel extends Equatable {
         jobTitle,
         isEnterprise,
         isBiometricEnabled,
-        isAlertEnabled,
         userConsentForIssuerAccess,
         userConsentForVerifierAccess,
         userPINCodeForAuthentication,
-        oidc4vcType,
+        isSecurityLow,
+        userPinDigitsLength,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
@@ -103,11 +104,11 @@ class ProfileModel extends Equatable {
     TezosNetwork? tezosNetwork,
     bool? isEnterprise,
     bool? isBiometricEnabled,
-    bool? isAlertEnabled,
     bool? userConsentForIssuerAccess,
     bool? userConsentForVerifierAccess,
     bool? userPINCodeForAuthentication,
-    OIDC4VCType? oidc4vcType,
+    bool? isSecurityLow,
+    int? userPinDigitsLength,
   }) {
     return ProfileModel(
       firstName: firstName ?? this.firstName,
@@ -122,14 +123,14 @@ class ProfileModel extends Equatable {
       tezosNetwork: tezosNetwork ?? this.tezosNetwork,
       isEnterprise: isEnterprise ?? this.isEnterprise,
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
-      isAlertEnabled: isAlertEnabled ?? this.isAlertEnabled,
       userConsentForIssuerAccess:
           userConsentForIssuerAccess ?? this.userConsentForIssuerAccess,
       userConsentForVerifierAccess:
           userConsentForVerifierAccess ?? this.userConsentForVerifierAccess,
       userPINCodeForAuthentication:
           userPINCodeForAuthentication ?? this.userPINCodeForAuthentication,
-      oidc4vcType: oidc4vcType ?? this.oidc4vcType,
+      isSecurityLow: isSecurityLow ?? this.isSecurityLow,
+      userPinDigitsLength: userPinDigitsLength ?? this.userPinDigitsLength,
     );
   }
 }

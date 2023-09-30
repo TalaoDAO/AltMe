@@ -46,6 +46,7 @@ class OIDC4VCProfilePage extends StatelessWidget {
                   physics: const ScrollPhysics(),
                   itemBuilder: (context, index) {
                     final OIDC4VCType currentType = OIDC4VCType.values[index];
+
                     return Column(
                       children: [
                         ListTile(
@@ -53,9 +54,6 @@ class OIDC4VCProfilePage extends StatelessWidget {
                             if (!currentType.isEnabled) {
                               return;
                             }
-                            context
-                                .read<ProfileCubit>()
-                                .updateOIDC4VCType(currentType);
                           },
                           shape: const RoundedRectangleBorder(
                             side: BorderSide(
@@ -73,15 +71,6 @@ class OIDC4VCProfilePage extends StatelessWidget {
                                       ? Theme.of(context).colorScheme.onPrimary
                                       : Theme.of(context).colorScheme.lightGrey,
                                 ),
-                          ),
-                          trailing: Icon(
-                            state.model.oidc4vcType == currentType
-                                ? Icons.radio_button_checked
-                                : Icons.radio_button_unchecked,
-                            size: Sizes.icon2x,
-                            color: currentType.isEnabled
-                                ? Theme.of(context).colorScheme.onPrimary
-                                : Theme.of(context).colorScheme.lightGrey,
                           ),
                         ),
                         if (index < OIDC4VCType.values.length - 1)

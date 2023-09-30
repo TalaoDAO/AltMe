@@ -6,14 +6,15 @@ import 'package:oidc4vc/src/token_parameters.dart';
 /// for verifier interactions.
 class VerifierTokenParameters extends TokenParameters {
   ///
-  VerifierTokenParameters(
-    super.privateKey,
-    super.did,
-    super.kid,
-    this.audience,
-    this.credentials,
-    this.nonce,
-  );
+  VerifierTokenParameters({
+    required super.privateKey,
+    required super.did,
+    required super.kid,
+    required super.isIdToken,
+    required this.audience,
+    required this.credentials,
+    required this.nonce,
+  });
 
   /// [audience] is is client id of the request
   final String audience;

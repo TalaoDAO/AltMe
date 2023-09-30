@@ -31,7 +31,9 @@ Future<void> discoverCredential({
       /// For DefiCompliance, it is not necessary to use Yoti. Instead,
       /// we can directly proceed with Id360.
       if (dummyCredential.credentialSubjectType ==
-          CredentialSubjectType.defiCompliance) {
+              CredentialSubjectType.defiCompliance ||
+          dummyCredential.credentialSubjectType ==
+              CredentialSubjectType.livenessCard) {
         await context.read<KycVerificationCubit>().getVcByKycVerification(
               vcType: dummyCredential.credentialSubjectType.getKycVcType,
               link: dummyCredential.link!,

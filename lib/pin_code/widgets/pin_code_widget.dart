@@ -21,7 +21,6 @@ class PinCodeWidget extends StatefulWidget {
     KeyboardUIConfig? keyboardUIConfig,
     this.bottomWidget,
     this.backgroundColor,
-    this.doneButton,
     this.cancelCallback,
     this.subTitle,
     this.header,
@@ -30,7 +29,6 @@ class PinCodeWidget extends StatefulWidget {
         keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
 
   final Widget? header;
-  final Widget? doneButton;
   final String title;
   final String? subTitle;
   final int passwordDigits;
@@ -163,12 +161,6 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                 keyboardUIConfig: widget.keyboardUIConfig,
                               ),
                             ),
-                            if (widget.doneButton != null)
-                              Positioned(
-                                bottom: 0,
-                                left: 0,
-                                child: widget.doneButton!,
-                              ),
                           ],
                         ),
                       ],

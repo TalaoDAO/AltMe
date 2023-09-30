@@ -51,6 +51,7 @@ class ConfirmDialog extends StatelessWidget {
             height: 50,
             color: textColor,
           ),
+          const SizedBox(height: 15),
           Text(
             title,
             style: Theme.of(context)
@@ -59,8 +60,8 @@ class ConfirmDialog extends StatelessWidget {
                 .copyWith(color: textColor),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: Sizes.spaceXSmall),
-          if (subtitle != null)
+          const SizedBox(height: Sizes.spaceSmall),
+          if (subtitle != null) ...[
             Text(
               subtitle!,
               style: Theme.of(context)
@@ -69,6 +70,7 @@ class ConfirmDialog extends StatelessWidget {
                   .copyWith(color: textColor),
               textAlign: TextAlign.center,
             ),
+          ],
           const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

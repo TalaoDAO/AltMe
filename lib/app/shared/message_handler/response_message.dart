@@ -27,6 +27,19 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
+        case ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_livenessCardExpirationDate:
+          return ResponseString.RESPONSE_STRING_livenessCardExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_livenessCardHowToGetIt:
+          return ResponseString.RESPONSE_STRING_livenessCardHowToGetIt.localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
           return ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW
               .localise(context);
@@ -627,6 +640,12 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
+        case ResponseString.RESPONSE_STRING_livenessCardLongDescription:
+          return ResponseString.RESPONSE_STRING_livenessCardLongDescription
+              .localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_succesfullyAuthenticated:
           return ResponseString.RESPONSE_STRING_succesfullyAuthenticated
               .localise(
@@ -716,6 +735,56 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady:
           return ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady
               .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_theRequestIsRejected:
+          return ResponseString.RESPONSE_STRING_theRequestIsRejected.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_userPinIsIncorrect:
+          return ResponseString.RESPONSE_STRING_userPinIsIncorrect.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_responseTypeNotSupported:
+          return ResponseString.RESPONSE_STRING_responseTypeNotSupported
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_invalidRequest:
+          return ResponseString.RESPONSE_STRING_invalidRequest.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported:
+          return ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_accessDenied:
+          return ResponseString.RESPONSE_STRING_accessDenied.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_thisRequestIsNotSupported:
+          return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_unsupportedCredential:
+          return ResponseString.RESPONSE_STRING_unsupportedCredential.localise(
+            context,
+          );
+
+        case ResponseString
+              .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet:
+          return ResponseString
+              .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet.localise(
             context,
           );
       }

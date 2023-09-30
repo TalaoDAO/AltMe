@@ -60,6 +60,16 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>openid-credential-offer</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>openid-credential-offer</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>iden3comm</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
@@ -74,6 +84,26 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>openid</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>openid</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>siopv2</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>openid</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>openid-vc</string>
 			</array>
 		</dict>
 		<dict>

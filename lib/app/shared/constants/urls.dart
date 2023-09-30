@@ -42,6 +42,9 @@ class Urls {
 
   static const String bloometaCardUrl = 'https://issuer.talao.co/bloometa';
 
+  static const String livenessCardUrl =
+      'https://issuer.talao.co/passbase/endpoint/liveness';
+
   static const String defaultPolygonIdCardUrl =
       'https://issuer.talao.co/credential-manifest/polygonid/default';
 
