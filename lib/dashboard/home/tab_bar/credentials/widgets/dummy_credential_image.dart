@@ -7,6 +7,7 @@ class DummyCredentialImage extends StatelessWidget {
   const DummyCredentialImage({
     required this.credentialSubjectType,
     required this.image,
+    this.credentialName,
     this.aspectRatio = Sizes.credentialAspectRatio,
     super.key,
   });
@@ -14,6 +15,7 @@ class DummyCredentialImage extends StatelessWidget {
   final double aspectRatio;
   final CredentialSubjectType credentialSubjectType;
   final String? image;
+  final String? credentialName;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,12 @@ class DummyCredentialImage extends StatelessWidget {
       title = credentialSubjectType.title;
     }
 
+    var credential = credentialSubjectType.title;
+
+    if (credential == '' && credentialName != null) {
+      credential = credentialName!;
+    }
+
     return image == null
         ? DefaultCredentialWidget(
             credentialModel: CredentialModel(
@@ -30,7 +38,7 @@ class DummyCredentialImage extends StatelessWidget {
               credentialPreview: Credential(
                 'dummy1',
                 ['dummy2'],
-                [credentialSubjectType.title],
+                [credential],
                 'dummy4',
                 'dummy5',
                 '',

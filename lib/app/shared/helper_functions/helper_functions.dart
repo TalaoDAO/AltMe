@@ -7,10 +7,11 @@ import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:crypto/crypto.dart';
+
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -19,6 +20,7 @@ import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -271,6 +273,28 @@ Future<String> getRandomP256PrivateKey(
   }
 }
 
+Future<String> fetchPrivateKey({
+  required OIDC4VC oidc4vc,
+  required SecureStorageProvider secureStorage,
+  required bool isEBSIV3,
+}) async {
+  late String privateKey;
+
+  final index = getIndexValue(isEBSIV3: true);
+
+  if (isEBSIV3) {
+    privateKey = await getRandomP256PrivateKey(getSecureStorage);
+  } else {
+    final OIDC4VC oidc4vc = OIDC4VC();
+    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+    privateKey = await oidc4vc.privateKeyFromMnemonic(
+      mnemonic: mnemonic!,
+      indexValue: index,
+    );
+  }
+  return privateKey;
+}
+
 Map<String, dynamic> decodePayload({
   required JWTDecode jwtDecode,
   required String token,
@@ -363,55 +387,33 @@ String getUtf8Message(String maybeHex) {
 }
 
 Future<(String, String)> getDidAndKid({
-  required OIDC4VCType oidc4vcType,
   required String privateKey,
+  required bool isEBSIV3,
   DIDKitProvider? didKitProvider,
 }) async {
   late String did;
   late String kid;
 
-  switch (oidc4vcType) {
-    case OIDC4VCType.DEFAULT:
-    case OIDC4VCType.GREENCYPHER:
-    case OIDC4VCType.GAIAX:
-      const didMethod = AltMeStrings.defaultDIDMethod;
-      did = didKitProvider!.keyToDID(didMethod, privateKey);
-      kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
+  if (isEBSIV3) {
+    final private = jsonDecode(privateKey) as Map<String, dynamic>;
 
-    case OIDC4VCType.EBSIV2:
-      final private = jsonDecode(privateKey) as Map<String, dynamic>;
+    //b'\xd1\xd6\x03' in python
+    final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
+    final List<int> prefix = prefixByteList.map((byte) => byte).toList();
 
-      final thumbprint = getThumbprintForEBSIV2(private);
-      final encodedAddress = Base58Encode([2, ...thumbprint]);
-      did = 'did:ebsi:z$encodedAddress';
-      final lastPart = Base58Encode(thumbprint);
-      kid = '$did#$lastPart';
+    final encodedData = sortedPublcJwk(private);
+    final encodedAddress = Base58Encode([...prefix, ...encodedData]);
 
-    case OIDC4VCType.EBSIV3:
-      final private = jsonDecode(privateKey) as Map<String, dynamic>;
-
-      //b'\xd1\xd6\x03' in python
-      final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
-      final List<int> prefix = prefixByteList.map((byte) => byte).toList();
-
-      final encodedData = sortedPublcJwk(private);
-      final encodedAddress = Base58Encode([...prefix, ...encodedData]);
-
-      did = 'did:key:z$encodedAddress';
-      final String lastPart = did.split(':')[2];
-      kid = '$did#$lastPart';
-
-    case OIDC4VCType.JWTVC:
-      throw Exception();
+    did = 'did:key:z$encodedAddress';
+    final String lastPart = did.split(':')[2];
+    kid = '$did#$lastPart';
+  } else {
+    const didMethod = AltMeStrings.defaultDIDMethod;
+    did = didKitProvider!.keyToDID(didMethod, privateKey);
+    kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
   }
+
   return (did, kid);
-}
-
-List<int> getThumbprintForEBSIV2(Map<String, dynamic> privateKey) {
-  final bytesToHash = sortedPublcJwk(privateKey);
-  final sha256Digest = sha256.convert(bytesToHash);
-
-  return sha256Digest.bytes;
 }
 
 List<int> sortedPublcJwk(Map<String, dynamic> privateKey) {
@@ -439,7 +441,6 @@ List<int> sortedPublcJwk(Map<String, dynamic> privateKey) {
 bool isUriAsValueValid(List<String> keys) =>
     keys.contains('response_type') &&
     keys.contains('client_id') &&
-    keys.contains('redirect_uri') &&
     keys.contains('nonce');
 
 bool isPolygonIdUrl(String url) =>
@@ -456,42 +457,66 @@ bool isOIDC4VCIUrl(Uri uri) {
 }
 
 bool isSIOPV2OROIDC4VPUrl(Uri uri) {
-  final isOID4VCUrl = uri.toString().startsWith('openid');
+  final isOpenIdUrl = uri.toString().startsWith('openid://?') ||
+      uri.toString().startsWith('openid-vc://?') ||
+      uri.toString().startsWith('openid-hedera://?');
 
-  return isOID4VCUrl &&
-      (uri.toString().startsWith('openid://?') ||
-          uri.toString().startsWith('openid-vc://?') ||
-          uri.toString().startsWith('openid-hedera://?'));
+  final isSiopv2Url = uri.toString().startsWith('siopv2://?');
+  final isAuthorizeEndPoint =
+      uri.toString().startsWith(Parameters.authorizeEndPoint);
+
+  return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
 }
 
 Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
   required String url,
   required DioClient client,
 }) async {
+  final uri = Uri.parse(url);
+
+  final keys = <String>[];
+  uri.queryParameters.forEach((key, value) => keys.add(key));
+
+  late String issuer;
+
+  if (keys.contains('issuer')) {
+    /// issuance case 1
+    issuer = uri.queryParameters['issuer'].toString();
+  } else if (keys.contains('credential_offer') ||
+      keys.contains('credential_offer_uri')) {
+    ///  issuance case 2
+    final dynamic credentialOfferJson = await getCredentialOfferJson(
+      scannedResponse: uri.toString(),
+      dioClient: client,
+    );
+    if (credentialOfferJson == null) throw Exception();
+
+    issuer = credentialOfferJson['credential_issuer'].toString();
+  } else {
+    throw Exception();
+  }
+
+  final openidConfigurationResponse = await getOpenIdConfig(
+    baseUrl: issuer,
+    client: client.dio,
+  );
+
+  final subjectSyntaxTypesSupported =
+      openidConfigurationResponse['subject_syntax_types_supported']
+          as List<dynamic>;
+
+  if (!subjectSyntaxTypesSupported.contains('did:key')) {
+    throw Exception('Subject_Syntax_Type_Not_Supported');
+  }
+
+  final credentialsSupported =
+      openidConfigurationResponse['credentials_supported'] as List<dynamic>;
+
+  final credSupported = credentialsSupported[0] as Map<String, dynamic>;
   for (final oidc4vcType in OIDC4VCType.values) {
     if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
       if (oidc4vcType == OIDC4VCType.DEFAULT ||
           oidc4vcType == OIDC4VCType.EBSIV3) {
-        final dynamic credentialOfferJson = await getCredentialOfferJson(
-          scannedResponse: url,
-          dioClient: client,
-        );
-
-        final issuer = credentialOfferJson['credential_issuer'].toString();
-        if (credentialOfferJson == null) throw Exception();
-        final openidConfigurationResponse = await getOpenIdConfig(
-          baseUrl: issuer,
-          client: client.dio,
-        );
-
-        final credentialsSupported =
-            openidConfigurationResponse['credentials_supported']
-                as List<dynamic>;
-
-        if (credentialsSupported.isEmpty) throw Exception();
-
-        final credSupported = credentialsSupported[0] as Map<String, dynamic>;
-
         if (credSupported['trust_framework'] == null) {
           return OIDC4VCType.DEFAULT;
         }
@@ -499,13 +524,60 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
         if (credSupported['trust_framework']['name'] == 'ebsi') {
           return OIDC4VCType.EBSIV3;
         } else {
-          throw Exception();
+          return OIDC4VCType.DEFAULT;
         }
       }
       return oidc4vcType;
     }
   }
   return null;
+}
+
+Future<bool> isEBSIV3ForVerifier({
+  required Uri uri,
+  required DioClient client,
+}) async {
+  try {
+    final String? clientId = uri.queryParameters['client_id'];
+
+    if (clientId == null) return false;
+
+    final isUrl = isURL(clientId);
+    if (!isUrl) return false;
+
+    final openidConfigurationResponse = await getOpenIdConfig(
+      baseUrl: clientId,
+      client: client.dio,
+    );
+
+    final bool hasKey = openidConfigurationResponse
+        .containsKey('subject_trust_frameworks_supported');
+
+    /// if subject_trust_frameworks_supported is not present => non-ebsi
+    if (!hasKey) {
+      return false;
+    }
+
+    final subjectTrustFrameworksSupported =
+        openidConfigurationResponse['subject_trust_frameworks_supported'];
+
+    /// if subject_trust_frameworks_supported is empty => non-ebsi
+    if ((subjectTrustFrameworksSupported as List<dynamic>).isEmpty) {
+      return false;
+    }
+
+    final profileType = subjectTrustFrameworksSupported[0].toString();
+
+    if (profileType == 'ebsi') {
+      /// if ebsi is available => ebsi
+      return true;
+    } else {
+      /// if ebsi is not-available => non-ebsi
+      return false;
+    }
+  } catch (e) {
+    return false;
+  }
 }
 
 String getCredentialData(dynamic credential) {
@@ -529,38 +601,26 @@ Future<String> getHost({
   required Uri uri,
   required DioClient client,
 }) async {
-  final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-      await getOIDC4VCTypeForIssuance(
-    url: uri.toString(),
-    client: client,
-  );
+  final keys = <String>[];
+  uri.queryParameters.forEach((key, value) => keys.add(key));
 
-  /// OIDC4VCI Case
-  if (currentOIIDC4VCTypeForIssuance != null) {
-    /// issuance case
+  if (keys.contains('issuer')) {
+    /// issuance case 1
+    return Uri.parse(
+      uri.queryParameters['issuer'].toString(),
+    ).host;
+  } else if (keys.contains('credential_offer') ||
+      keys.contains('credential_offer_uri')) {
+    ///  issuance case 2
+    final dynamic credentialOfferJson = await getCredentialOfferJson(
+      scannedResponse: uri.toString(),
+      dioClient: client,
+    );
+    if (credentialOfferJson == null) throw Exception();
 
-    switch (currentOIIDC4VCTypeForIssuance) {
-      case OIDC4VCType.DEFAULT:
-      case OIDC4VCType.GREENCYPHER:
-      case OIDC4VCType.EBSIV3:
-        final dynamic credentialOfferJson = await getCredentialOfferJson(
-          scannedResponse: uri.toString(),
-          dioClient: client,
-        );
-        if (credentialOfferJson == null) throw Exception();
-
-        return Uri.parse(
-          credentialOfferJson['credential_issuer'].toString(),
-        ).host;
-
-      case OIDC4VCType.GAIAX:
-      case OIDC4VCType.EBSIV2:
-        return Uri.parse(
-          uri.queryParameters['issuer'].toString(),
-        ).host;
-      case OIDC4VCType.JWTVC:
-        throw Exception();
-    }
+    return Uri.parse(
+      credentialOfferJson['credential_issuer'].toString(),
+    ).host;
   } else {
     /// verification case
 
@@ -577,54 +637,147 @@ Future<String> getHost({
 
       return Uri.parse(decodedResponse['redirect_uri'].toString()).host;
     } else {
-      return Uri.parse(
-        uri.queryParameters['redirect_uri'] ?? '',
-      ).host;
+      final String? redirectUri = getRedirectUri(uri);
+      if (redirectUri == null) return '';
+      return Uri.parse(redirectUri).host;
     }
   }
 }
 
-Future<(String?, String)> getIssuerAndPreAuthorizedCode({
-  required OIDC4VCType oidc4vcType,
+Future<(String?, String?)> getIssuerAndPreAuthorizedCode({
   required String scannedResponse,
   required DioClient dioClient,
 }) async {
   String? preAuthorizedCode;
-  late String issuer;
+  String? issuer;
 
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
-  switch (oidc4vcType) {
-    case OIDC4VCType.DEFAULT:
-    case OIDC4VCType.GREENCYPHER:
-    case OIDC4VCType.EBSIV3:
-      final dynamic credentialOfferJson = await getCredentialOfferJson(
-        scannedResponse: scannedResponse,
-        dioClient: dioClient,
-      );
-      if (credentialOfferJson == null) throw Exception();
+  final keys = <String>[];
+  uriFromScannedResponse.queryParameters.forEach((key, value) => keys.add(key));
 
-      final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
-          ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+  if (keys.contains('issuer')) {
+    issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
+    //preAuthorizedCode can be null
+    preAuthorizedCode =
+        uriFromScannedResponse.queryParameters['pre-authorized_code'];
+  } else if (keys.contains('credential_offer') ||
+      keys.contains('credential_offer_uri')) {
+    final dynamic credentialOfferJson = await getCredentialOfferJson(
+      scannedResponse: scannedResponse,
+      dioClient: dioClient,
+    );
+    if (credentialOfferJson == null) throw Exception();
 
-      if (preAuthorizedCodeGrant != null &&
-          preAuthorizedCodeGrant is Map &&
-          preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
-        preAuthorizedCode =
-            preAuthorizedCodeGrant['pre-authorized_code'] as String;
-      }
+    final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
+        ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
 
-      issuer = credentialOfferJson['credential_issuer'].toString();
-
-    case OIDC4VCType.GAIAX:
-    case OIDC4VCType.EBSIV2:
-      issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
+    if (preAuthorizedCodeGrant != null &&
+        preAuthorizedCodeGrant is Map &&
+        preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
       preAuthorizedCode =
-          uriFromScannedResponse.queryParameters['pre-authorized_code'];
+          preAuthorizedCodeGrant['pre-authorized_code'] as String;
+    }
 
-    case OIDC4VCType.JWTVC:
-      throw Exception();
+    issuer = credentialOfferJson['credential_issuer'].toString();
   }
 
   return (preAuthorizedCode, issuer);
+}
+
+bool isURL(String input) {
+  final Uri? uri = Uri.tryParse(input);
+  return uri != null && uri.hasScheme;
+}
+
+String? getRedirectUri(Uri uri) {
+  final clientId = uri.queryParameters['client_id'];
+  final redirectUri = uri.queryParameters['redirect_uri'];
+
+  /// if redirectUri is not provided and client_id is url then
+  /// redirectUri = client_id
+  if (redirectUri == null) {
+    if (clientId == null) return null;
+    final isUrl = isURL(clientId);
+    if (isUrl) {
+      return clientId;
+    } else {
+      return null;
+    }
+  } else {
+    return redirectUri;
+  }
+}
+
+int getIndexValue({required bool isEBSIV3}) {
+  if (isEBSIV3) {
+    return 3;
+  } else {
+    return 1;
+  }
+}
+
+(MessageHandler messageHandler, String? erroDescription, String? errorUrl)
+    getOIDC4VCError(dynamic e) {
+  MessageHandler messageHandler = ResponseMessage(
+    ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+  );
+
+  String? erroDescription;
+  String? errorUrl;
+
+  if (e is DioException) {
+    final error = NetworkException.getDioException(error: e);
+
+    final data = error.data;
+
+    if (data != null && data is Map) {
+      ///error
+      if (data.containsKey('error')) {
+        if (data['error'] == 'invalid_grant') {
+          messageHandler =
+              ResponseMessage(ResponseString.RESPONSE_STRING_invalidRequest);
+        } else if (data['error'] == 'unauthorized_client') {
+          messageHandler =
+              ResponseMessage(ResponseString.RESPONSE_STRING_accessDenied);
+        } else if (data['error'] == 'access_denied') {
+          messageHandler =
+              ResponseMessage(ResponseString.RESPONSE_STRING_accessDenied);
+        } else if (data['error'] == 'unsupported_response_type') {
+          messageHandler = ResponseMessage(
+            ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
+          );
+        } else if (data['error'] == 'invalid_scope') {
+          messageHandler = ResponseMessage(
+            ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
+          );
+        } else if (data['error'] == 'invalid_token') {
+          messageHandler =
+              ResponseMessage(ResponseString.RESPONSE_STRING_accessDenied);
+        } else if (data['error'] == 'unsupported_credential_type') {
+          messageHandler = ResponseMessage(
+              ResponseString.RESPONSE_STRING_unsupportedCredential);
+        } else if (data['error'] == 'invalid_or_missing_proof') {
+          messageHandler = ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet,
+          );
+        }
+      }
+
+      ///error_description
+      if (data.containsKey('error_description')) {
+        erroDescription = data['error_description'].toString();
+      }
+
+      ///error_uri
+      if (data.containsKey('error_uri')) {
+        errorUrl = data['error_uri'].toString();
+      }
+    }
+  } else if (e is MessageHandler) {
+    messageHandler = e;
+  }
+
+  return (messageHandler, erroDescription, errorUrl);
 }

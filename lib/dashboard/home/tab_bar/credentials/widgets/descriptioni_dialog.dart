@@ -27,12 +27,6 @@ class DescriptionDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // ImageIcon(
-          //   AssetImage(icon),
-          //   size: 50,
-          //   color: color,
-          // ),
-          // const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

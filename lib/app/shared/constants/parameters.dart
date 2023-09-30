@@ -22,7 +22,10 @@ class Parameters {
   );
 
   static const oidc4vcUniversalLink =
-      'https://app.talao.co/app/download/oidc4vc';
+      'https://app.talao.co/app/download/callback';
+
+  static const authorizeEndPoint =
+      'https://app.talao.co/app/download/authorize';
 
   static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 

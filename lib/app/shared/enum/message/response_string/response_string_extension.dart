@@ -13,6 +13,15 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard:
         return globalMessage.RESPONSE_STRING_bloometaPassWhyGetThisCard;
 
+      case ResponseString.RESPONSE_STRING_livenessCardHowToGetIt:
+        return globalMessage.RESPONSE_STRING_livenessCardHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_livenessCardExpirationDate:
+        return globalMessage.RESPONSE_STRING_livenessCardExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_livenessCardWhyGetThisCard;
+
       case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
         return globalMessage.RESPONSE_STRING_BALANCE_TOO_LOW;
 
@@ -431,6 +440,9 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_bloometaPassLongDescription:
         return globalMessage.RESPONSE_STRING_bloometaPassLongDescription;
 
+      case ResponseString.RESPONSE_STRING_livenessCardLongDescription:
+        return globalMessage.RESPONSE_STRING_livenessCardLongDescription;
+
       case ResponseString.RESPONSE_STRING_succesfullyAuthenticated:
         return globalMessage.RESPONSE_STRING_succesfullyAuthenticated;
 
@@ -483,6 +495,35 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady:
         return globalMessage.RESPONSE_STRING_theCredentialIsNoMoreReady;
+
+      case ResponseString.RESPONSE_STRING_theRequestIsRejected:
+        return globalMessage.RESPONSE_STRING_theRequestIsRejected;
+
+      case ResponseString.RESPONSE_STRING_userPinIsIncorrect:
+        return globalMessage.RESPONSE_STRING_userPinIsIncorrect;
+
+      case ResponseString.RESPONSE_STRING_responseTypeNotSupported:
+        return globalMessage.RESPONSE_STRING_responseTypeNotSupported;
+
+      case ResponseString.RESPONSE_STRING_invalidRequest:
+        return globalMessage.RESPONSE_STRING_invalidRequest;
+
+      case ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported:
+        return globalMessage.RESPONSE_STRING_subjectSyntaxTypeNotSupported;
+
+      case ResponseString.RESPONSE_STRING_accessDenied:
+        return globalMessage.RESPONSE_STRING_accessDenied;
+
+      case ResponseString.RESPONSE_STRING_thisRequestIsNotSupported:
+        return globalMessage.RESPONSE_STRING_thisRequestIsNotSupported;
+
+      case ResponseString.RESPONSE_STRING_unsupportedCredential:
+        return globalMessage.RESPONSE_STRING_unsupportedCredential;
+
+      case ResponseString
+            .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet:
+        return globalMessage
+            .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet;
     }
   }
 }

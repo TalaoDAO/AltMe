@@ -27,6 +27,9 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.bloometaPass:
         return BloometaPassWidget(credentialModel: credentialModel);
 
+      case CredentialSubjectType.livenessCard:
+        return LivenessCardWidget(credentialModel: credentialModel);
+
       case CredentialSubjectType.tezotopiaMembership:
         return TezotopiaMemberShipWidget(credentialModel: credentialModel);
 
@@ -73,8 +76,9 @@ class CredentialDisplay extends StatelessWidget {
         if (credentialModel.isPolygonIdCard) {
           return DefaultPolygonIdCardWidget(credentialModel: credentialModel);
         } else if (credentialModel.pendingInfo != null) {
+          final credentialName = credentialModel.credentialPreview.type[0];
           final CredentialSubjectType credentialSubjectType =
-              getCredTypeFromName(credentialModel.credentialPreview.type[0]) ??
+              getCredTypeFromName(credentialName) ??
                   CredentialSubjectType.defaultCredential;
 
           final DiscoverDummyCredential discoverDummyCredential =
@@ -86,6 +90,7 @@ class CredentialDisplay extends StatelessWidget {
               credentialSubjectType:
                   discoverDummyCredential.credentialSubjectType,
               image: discoverDummyCredential.image,
+              credentialName: credentialName,
             ),
           );
         } else {

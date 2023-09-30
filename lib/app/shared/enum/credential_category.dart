@@ -84,6 +84,7 @@ extension CredentialCategoryX on CredentialCategory {
           CredentialSubjectType.over13,
           // CredentialSubjectType.passportFootprint,
           CredentialSubjectType.verifiableIdCard,
+          CredentialSubjectType.livenessCard,
         ];
       case CredentialCategory.contactInfoCredentials:
         return [

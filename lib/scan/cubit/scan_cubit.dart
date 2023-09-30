@@ -38,6 +38,7 @@ class ScanCubit extends Cubit<ScanState> {
     required this.secureStorageProvider,
     required this.profileCubit,
     required this.didCubit,
+    required this.oidc4vc,
   }) : super(const ScanState());
 
   final DioClient client;
@@ -46,6 +47,7 @@ class ScanCubit extends Cubit<ScanState> {
   final SecureStorageProvider secureStorageProvider;
   final ProfileCubit profileCubit;
   final DIDCubit didCubit;
+  final OIDC4VC oidc4vc;
 
   Future<void> credentialOfferOrPresent({
     required Uri uri,
@@ -59,21 +61,20 @@ class ScanCubit extends Cubit<ScanState> {
     final log = getLogger('ScanCubit - credentialOffer');
 
     try {
-      if (uri.toString().startsWith('openid')) {
-        final OIDC4VCType currentOIIDC4VCType =
-            profileCubit.state.model.oidc4vcType;
+      if (isSIOPV2OROIDC4VPUrl(uri)) {
+        final bool isEBSIV3 =
+            await isEBSIV3ForVerifier(client: client, uri: uri);
 
-        final OIDC4VC oidc4vc = currentOIIDC4VCType.getOIDC4VC;
+        final int indexValue = getIndexValue(isEBSIV3: isEBSIV3);
 
-        final mnemonic =
-            await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-        final privateKey = await oidc4vc.privateKeyFromMnemonic(
-          mnemonic: mnemonic!,
-          indexValue: currentOIIDC4VCType.indexValue,
+        final privateKey = await fetchPrivateKey(
+          isEBSIV3: isEBSIV3,
+          oidc4vc: oidc4vc,
+          secureStorage: getSecureStorage,
         );
 
         final (did, kid) = await getDidAndKid(
-          oidc4vcType: currentOIIDC4VCType,
+          isEBSIV3: isEBSIV3,
           privateKey: privateKey,
           didKitProvider: didKitProvider,
         );
@@ -81,87 +82,46 @@ class ScanCubit extends Cubit<ScanState> {
         final responseType = uri.queryParameters['response_type'] ?? '';
         final stateValue = uri.queryParameters['state'];
 
-        if (uri.toString().startsWith('openid://') ||
-            uri.toString().startsWith('openid-vc://?') ||
-            uri.toString().startsWith('openid-hedera://?')) {
-          if (responseType == 'id_token') {
-            /// verifier side (siopv2) with request uri as value
-            throw Exception();
-          } else if (responseType == 'vp_token') {
-            /// verifier side (oidc4vp) with request uri as value
+        if (responseType == 'id_token') {
+          /// verifier side (siopv2) with request uri as value
+          throw Exception();
+        } else if (responseType == 'vp_token') {
+          /// verifier side (oidc4vp) with request uri as value
 
-            await presentCredentialToOID4VPRequest(
-              uri: uri,
-              issuer: issuer,
-              credentialsToBePresented: credentialsToBePresented,
-              presentationDefinition:
-                  credentialModel.credentialManifest!.presentationDefinition!,
-              oidc4vcType: currentOIIDC4VCType,
-              oidc4vc: oidc4vc,
-              did: did,
-              kid: kid,
-              privateKey: privateKey,
-              indexValue: currentOIIDC4VCType.indexValue,
-              stateValue: stateValue,
-            );
-            return;
-          } else if (responseType == 'id_token vp_token') {
-            /// verifier side (oidc4vp and siopv2) with request uri as value
+          await presentCredentialToOID4VPRequest(
+            uri: uri,
+            issuer: issuer,
+            credentialsToBePresented: credentialsToBePresented,
+            presentationDefinition:
+                credentialModel.credentialManifest!.presentationDefinition!,
+            oidc4vc: oidc4vc,
+            did: did,
+            kid: kid,
+            privateKey: privateKey,
+            indexValue: indexValue,
+            stateValue: stateValue,
+          );
+          return;
+        } else if (responseType == 'id_token vp_token') {
+          /// verifier side (oidc4vp and siopv2) with request uri as value
 
-            /// EBSI V2 contains claimns
-            /// EBSI V2 and GAIAX has same starting uri
-            final String? claims = uri.queryParameters['claims'];
+          await presentCredentialToOIDC4VPAndSIOPV2RequestForOthers(
+            uri: uri,
+            issuer: issuer,
+            credentialsToBePresented: credentialsToBePresented,
+            presentationDefinition:
+                credentialModel.credentialManifest!.presentationDefinition!,
+            oidc4vc: oidc4vc,
+            did: did,
+            kid: kid,
+            privateKey: privateKey,
+            indexValue: indexValue,
+            stateValue: stateValue,
+          );
 
-            if (claims != null) {
-              if (currentOIIDC4VCType == OIDC4VCType.EBSIV2) {
-                await presentCredentialToOIDC4VPAndSiopV2RequestForEBSIV2(
-                  credentialsToBePresented: credentialsToBePresented,
-                  issuer: issuer,
-                  uri: uri,
-                  oidc4vc: oidc4vc,
-                  did: did,
-                  kid: kid,
-                  privateKey: privateKey,
-                  isEBSIV2: currentOIIDC4VCType == OIDC4VCType.EBSIV2,
-                  indexValue: currentOIIDC4VCType.indexValue,
-                );
-              } else {
-                emit(
-                  state.copyWith(
-                    status: ScanStatus.error,
-                    message: StateMessage.error(
-                      messageHandler: ResponseMessage(
-                        ResponseString
-                            .RESPONSE_STRING_pleaseSwitchToRightOIDC4VCProfile,
-                      ),
-                      showDialog: false,
-                      duration: const Duration(seconds: 20),
-                    ),
-                  ),
-                );
-                return;
-              }
-            } else {
-              await presentCredentialToOIDC4VPAndSIOPV2RequestForOthers(
-                uri: uri,
-                issuer: issuer,
-                credentialsToBePresented: credentialsToBePresented,
-                presentationDefinition:
-                    credentialModel.credentialManifest!.presentationDefinition!,
-                oidc4vcType: currentOIIDC4VCType,
-                oidc4vc: oidc4vc,
-                did: did,
-                kid: kid,
-                privateKey: privateKey,
-                indexValue: currentOIIDC4VCType.indexValue,
-                stateValue: stateValue,
-              );
-            }
-
-            return;
-          } else {
-            throw Exception();
-          }
+          return;
+        } else {
+          throw Exception();
         }
       } else {
         final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
@@ -317,7 +277,7 @@ class ScanCubit extends Cubit<ScanState> {
     } catch (e) {
       log.e('something went wrong - $e');
       if (e is ResponseMessage) {
-        emit(state.error(messageHandler: e));
+        emitError(e);
       } else if (e is NetworkException) {
         log.e('NetworkException - $e');
         if (e.message == NetworkError.NETWORK_ERROR_PRECONDITION_FAILED) {
@@ -336,11 +296,15 @@ class ScanCubit extends Cubit<ScanState> {
             ),
           );
         } else {
+          final (messageHandler, erroDescription, errorUrl) =
+              getOIDC4VCError(e);
           emit(
             state.error(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              message: StateMessage.error(
+                messageHandler: messageHandler,
+                erroDescription: erroDescription,
+                showDialog: true,
+                erroUrl: errorUrl,
               ),
             ),
           );
@@ -348,9 +312,11 @@ class ScanCubit extends Cubit<ScanState> {
       } else {
         emit(
           state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+              ),
             ),
           ),
         );
@@ -429,20 +395,22 @@ class ScanCubit extends Cubit<ScanState> {
       );
     } catch (e) {
       if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
+        emitError(e);
       } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-            ),
+        emitError(
+          ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
           ),
         );
       }
     }
+  }
+
+  void emitError(MessageHandler messageHandler) {
+    emit(
+      state.error(message: StateMessage.error(messageHandler: messageHandler)),
+    );
   }
 
   Future<void> getDIDAuthCHAPI({
@@ -504,91 +472,15 @@ class ScanCubit extends Cubit<ScanState> {
     } catch (e, s) {
       log.e('something went wrong', error: e, stackTrace: s);
       if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
+        emitError(e);
       } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-            ),
+        emitError(
+          ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
           ),
         );
       }
-    }
-  }
-
-  Future<dynamic> presentCredentialToOIDC4VPAndSiopV2RequestForEBSIV2({
-    required List<CredentialModel>? credentialsToBePresented,
-    required Issuer issuer,
-    required Uri uri,
-    required OIDC4VC oidc4vc,
-    required String privateKey,
-    required String did,
-    required String kid,
-    required bool isEBSIV2,
-    required int indexValue,
-  }) async {
-    final log =
-        getLogger('ScanCubit - presentCredentialToOIDC4VPAndSiopV2Request');
-
-    final nonce = uri.queryParameters['nonce'] ?? '';
-    final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
-    final clientId = uri.queryParameters['client_id'] ?? '';
-    final stateValue = uri.queryParameters['state'];
-
-    final credentialList =
-        credentialsToBePresented!.map((e) => jsonEncode(e.toJson())).toList();
-
-    try {
-      await oidc4vc.sendPresentation(
-        clientId: clientId,
-        redirectUrl: redirectUri,
-        credentialsToBePresented: credentialList,
-        privateKey: privateKey,
-        did: did,
-        kid: kid,
-        nonce: nonce,
-        isEBSIV2: isEBSIV2,
-        indexValue: indexValue,
-        stateValue: stateValue,
-      );
-
-      await presentationActivity(
-        credentialModels: credentialsToBePresented,
-        issuer: issuer,
-      );
-
-      emit(
-        state.copyWith(
-          status: ScanStatus.success,
-          message: StateMessage.success(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
-            ),
-          ),
-        ),
-      );
-    } catch (e, s) {
-      log.e('something went wrong', error: e, stackTrace: s);
-      if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
-      } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-            ),
-          ),
-        );
-      }
-      return;
     }
   }
 
@@ -597,7 +489,6 @@ class ScanCubit extends Cubit<ScanState> {
     required PresentationDefinition presentationDefinition,
     required Issuer issuer,
     required OIDC4VC oidc4vc,
-    required OIDC4VCType oidc4vcType,
     required String privateKey,
     required String did,
     required String kid,
@@ -610,7 +501,8 @@ class ScanCubit extends Cubit<ScanState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
-      final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
+      final String? redirectUri = getRedirectUri(uri);
+      if (redirectUri == null) throw Exception();
 
       final String vpToken = await createVpToken(
         credentialsToBePresented: credentialsToBePresented!,
@@ -670,16 +562,12 @@ class ScanCubit extends Cubit<ScanState> {
     } catch (e, s) {
       log.e('something went wrong', error: e, stackTrace: s);
       if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
+        emitError(e);
       } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-            ),
+        emitError(
+          ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
           ),
         );
       }
@@ -692,7 +580,6 @@ class ScanCubit extends Cubit<ScanState> {
     required PresentationDefinition presentationDefinition,
     required Issuer issuer,
     required OIDC4VC oidc4vc,
-    required OIDC4VCType oidc4vcType,
     required String privateKey,
     required String did,
     required String kid,
@@ -706,7 +593,8 @@ class ScanCubit extends Cubit<ScanState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
-      final redirectUri = uri.queryParameters['redirect_uri'] ?? '';
+      final String? redirectUri = getRedirectUri(uri);
+      if (redirectUri == null) throw Exception();
 
       final String idToken = await createIdToken(
         credentialsToBePresented: credentialsToBePresented!,
@@ -715,7 +603,6 @@ class ScanCubit extends Cubit<ScanState> {
         oidc4vc: oidc4vc,
         privateKey: privateKey,
         uri: uri,
-        isEBSIV2: oidc4vcType == OIDC4VCType.EBSIV2,
         indexValue: indexValue,
       );
 
@@ -778,16 +665,12 @@ class ScanCubit extends Cubit<ScanState> {
     } catch (e, s) {
       log.e('something went wrong', error: e, stackTrace: s);
       if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
+        emitError(e);
       } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-            ),
+        emitError(
+          ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
           ),
         );
       }
@@ -933,7 +816,6 @@ class ScanCubit extends Cubit<ScanState> {
     required String did,
     required String kid,
     required Uri uri,
-    required bool isEBSIV2,
     required int indexValue,
   }) async {
     final credentialList =
@@ -949,7 +831,6 @@ class ScanCubit extends Cubit<ScanState> {
       kid: kid,
       privateKey: privateKey,
       nonce: nonce,
-      isEBSIV2: isEBSIV2,
       indexValue: indexValue,
     );
 

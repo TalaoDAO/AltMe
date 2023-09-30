@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
@@ -11,8 +10,7 @@ import 'package:jose/jose.dart';
 Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
   required CredentialsCubit credentialsCubit,
-  required String issuer,
-  required OIDC4VCType oidc4vcType,
+  String? issuer,
   required String credentialType,
   required bool isLastCall,
   required String format,
@@ -50,29 +48,29 @@ Future<void> addOIDC4VCCredential({
 
   newCredential['credentialPreview'] = credentialFromOIDC4VC;
 
-  if (oidc4vcType == OIDC4VCType.EBSIV2) {
+  if (newCredential['credentialPreview']['credentialSubject']['type'] == null) {
     /// added id as type to recognise the card
     /// for ebsiv2 only
     newCredential['credentialPreview']['credentialSubject']['type'] =
         credentialFromOIDC4VC['credentialSchema']['id'];
   }
 
-  final CredentialManifest? credentialManifest = await getCredentialManifest(
-    client: Dio(),
-    baseUrl: issuer,
-    credentialType: credentialType,
-    schemaForType: oidc4vcType.schemaForType,
-  );
+  if (issuer != null) {
+    final CredentialManifest? credentialManifest = await getCredentialManifest(
+      client: Dio(),
+      baseUrl: issuer,
+      credentialType: credentialType,
+    );
 
-  if (credentialManifest?.outputDescriptors?.isNotEmpty ?? false) {
-    newCredential['credential_manifest'] = CredentialManifest(
-      credentialManifest!.id,
-      credentialManifest.issuedBy,
-      credentialManifest.outputDescriptors,
-      credentialManifest.presentationDefinition,
-    ).toJson();
+    if (credentialManifest?.outputDescriptors?.isNotEmpty ?? false) {
+      newCredential['credential_manifest'] = CredentialManifest(
+        credentialManifest!.id,
+        credentialManifest.issuedBy,
+        credentialManifest.outputDescriptors,
+        credentialManifest.presentationDefinition,
+      ).toJson();
+    }
   }
-
   final newCredentialModel = CredentialModel.fromJson(newCredential);
 
   final credentialModel = CredentialModel.copyWithData(

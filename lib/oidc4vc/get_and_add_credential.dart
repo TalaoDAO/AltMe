@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 Future<void> getAndAddCredential({
   required String scannedResponse,
   required OIDC4VC oidc4vc,
-  required OIDC4VCType oidc4vcType,
+  required bool isEBSIV3,
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
   required dynamic credential,
@@ -21,25 +21,20 @@ Future<void> getAndAddCredential({
   required String? userPin,
   required String? preAuthorizedCode,
   required String issuer,
+  required String? codeForAuthorisedFlow,
+  required String? codeVerifier,
 }) async {
-  final mnemonic =
-      await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
-
-  final privateKey = await oidc4vc.privateKeyFromMnemonic(
-    mnemonic: mnemonic!,
-    indexValue: oidc4vcType.indexValue,
+  final privateKey = await fetchPrivateKey(
+    isEBSIV3: isEBSIV3,
+    oidc4vc: oidc4vc,
+    secureStorage: getSecureStorage,
   );
 
   final (did, kid) = await getDidAndKid(
-    oidc4vcType: oidc4vcType,
+    isEBSIV3: isEBSIV3,
     privateKey: privateKey,
     didKitProvider: didKitProvider,
   );
-
-  final codeForAuthorisedFlow =
-      Uri.parse(scannedResponse).queryParameters['code'];
-  final codeVerifier =
-      Uri.parse(scannedResponse).queryParameters['code_verifier'];
 
   if (preAuthorizedCode != null ||
       (codeForAuthorisedFlow != null && codeVerifier != null)) {
@@ -60,10 +55,10 @@ Future<void> getAndAddCredential({
       did: did,
       kid: kid,
       privateKey: privateKey,
-      indexValue: oidc4vcType.indexValue,
+      indexValue: getIndexValue(isEBSIV3: isEBSIV3),
       userPin: userPin,
       code: codeForAuthorisedFlow,
-      codeVerifier: codeVerifier,
+      codeVerifier: 'codeVerifier',
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {
@@ -120,7 +115,6 @@ Future<void> getAndAddCredential({
         await addOIDC4VCCredential(
           encodedCredentialFromOIDC4VC: data,
           credentialsCubit: credentialsCubit,
-          oidc4vcType: oidc4vcType,
           issuer: issuer,
           credentialType: credentialName,
           isLastCall:

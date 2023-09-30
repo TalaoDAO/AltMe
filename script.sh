@@ -11,6 +11,7 @@ function pub {
     )
   done 
   fvm flutter pub get
+  fvm flutter pub upgrade
 }
 
 function buildRunner {

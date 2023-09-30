@@ -14,6 +14,7 @@ enum CredentialSubjectType {
   binanceAssociatedWallet,
   binancePooAddress,
   bloometaPass,
+  livenessCard,
   bunnyPass,
   certificateOfEmployment,
   chainbornMembership,

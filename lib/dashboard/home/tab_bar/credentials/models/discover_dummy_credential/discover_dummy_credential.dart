@@ -236,6 +236,17 @@ class DiscoverDummyCredential extends Equatable {
         longDescription =
             ResponseString.RESPONSE_STRING_bloometaPassLongDescription;
 
+      case CredentialSubjectType.livenessCard:
+        image = ImageStrings.livenessDummy;
+        link = Urls.livenessCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_livenessCardExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_livenessCardHowToGetIt;
+        longDescription =
+            ResponseString.RESPONSE_STRING_livenessCardLongDescription;
+
       case CredentialSubjectType.ethereumAssociatedWallet:
         image = ImageStrings.ethereumOwnershipCard;
       case CredentialSubjectType.fantomAssociatedWallet:

@@ -454,10 +454,16 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get drawerItem => GoogleFonts.poppins(
+  TextStyle get drawerItemTitle => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w700,
+      );
+
+  TextStyle get drawerItemSubtitle => GoogleFonts.poppins(
+        color: onPrimary,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
       );
 
   TextStyle get drawerCategoryTitle => GoogleFonts.poppins(
