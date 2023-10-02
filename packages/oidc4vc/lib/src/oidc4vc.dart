@@ -410,6 +410,7 @@ class OIDC4VC {
       tokenData = <String, dynamic>{
         'pre-authorized_code': preAuthorizedCode,
         'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
+        'client_id': did,
       };
     } else if (code != null && codeVerifier != null && did != null) {
       tokenData = <String, dynamic>{
