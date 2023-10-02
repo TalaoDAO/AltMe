@@ -501,9 +501,6 @@ class ScanCubit extends Cubit<ScanState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
-      final String? redirectUri = getRedirectUri(uri);
-      if (redirectUri == null) throw Exception();
-
       final String vpToken = await createVpToken(
         credentialsToBePresented: credentialsToBePresented!,
         did: did,
@@ -528,10 +525,23 @@ class ScanCubit extends Cubit<ScanState> {
         responseData['state'] = stateValue;
       }
 
+      final redirectUri = uri.queryParameters['redirect_uri'];
+      final responseUri = uri.queryParameters['response_uri'];
+
+      late String url;
+
+      if (responseUri != null) {
+        url = responseUri;
+      } else if (redirectUri != null) {
+        url = redirectUri;
+      } else {
+        throw Exception();
+      }
+
       final formData = FormData.fromMap(responseData);
 
       final result = await client.post(
-        redirectUri,
+        url,
         data: formData,
         headers: <String, dynamic>{
           'Content-Type': 'application/x-www-form-urlencoded',

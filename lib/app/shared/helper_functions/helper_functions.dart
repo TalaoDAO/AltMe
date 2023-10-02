@@ -493,7 +493,7 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
 
     issuer = credentialOfferJson['credential_issuer'].toString();
   } else {
-    throw Exception();
+    return null;
   }
 
   final openidConfigurationResponse = await getOpenIdConfig(
@@ -628,14 +628,22 @@ Future<String> getHost({
 
     /// check if request uri is provided or not
     if (requestUri != null) {
-      final requestUri = uri.queryParameters['request_uri'].toString();
       final dynamic response = await client.get(requestUri);
       final Map<String, dynamic> decodedResponse = decodePayload(
         jwtDecode: JWTDecode(),
         token: response as String,
       );
 
-      return Uri.parse(decodedResponse['redirect_uri'].toString()).host;
+      final redirectUri = decodedResponse['redirect_uri'];
+      final responseUri = decodedResponse['response_uri'];
+
+      if (redirectUri != null) {
+        return Uri.parse(redirectUri.toString()).host;
+      } else if (responseUri != null) {
+        return Uri.parse(responseUri.toString()).host;
+      }
+
+      return '';
     } else {
       final String? redirectUri = getRedirectUri(uri);
       if (redirectUri == null) return '';
