@@ -534,6 +534,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_thisCredentialFormatIsNotSupported:
         return globalMessage.RESPONSE_STRING_thisCredentialFormatIsNotSupported;
+
+      case ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid:
+        return globalMessage.RESPONSE_STRING_theCredentialOfferIsInvalid;
     }
   }
 }

@@ -417,4 +417,6 @@ class GlobalMessage {
       l10n.credentialIssuanceDenied;
   String get RESPONSE_STRING_thisCredentialFormatIsNotSupported =>
       l10n.thisCredentialFormatIsNotSupported;
+  String get RESPONSE_STRING_theCredentialOfferIsInvalid =>
+      l10n.theCredentialOfferIsInvalid;
 }

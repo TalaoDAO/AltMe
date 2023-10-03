@@ -808,6 +808,12 @@ class ResponseMessage with MessageHandler {
               .RESPONSE_STRING_thisCredentialFormatIsNotSupported.localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid:
+          return ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid
+              .localise(
+            context,
+          );
       }
     }
     return '';

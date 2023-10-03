@@ -975,6 +975,7 @@
   "theWalletIsNotRegistered": "The wallet is not registered.",
   "credentialIssuanceDenied": "Credential issuance denied.", 
   "thisCredentialFormatIsNotSupported": "This credential format is not supported",
-  "moreDetails": "More Details"
+  "moreDetails": "More Details",
+  "theCredentialOfferIsInvalid": "The credential offer is invalid"
 }
 

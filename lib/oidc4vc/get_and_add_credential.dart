@@ -58,7 +58,7 @@ Future<void> getAndAddCredential({
       indexValue: getIndexValue(isEBSIV3: isEBSIV3),
       userPin: userPin,
       code: codeForAuthorisedFlow,
-      codeVerifier: 'codeVerifier',
+      codeVerifier: codeVerifier,
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {

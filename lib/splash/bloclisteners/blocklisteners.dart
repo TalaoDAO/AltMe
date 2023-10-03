@@ -316,22 +316,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         );
       }
     } catch (e) {
-      if (e
-          .toString()
-          .startsWith('Exception: Subject_Syntax_Type_Not_Supported')) {
-        context.read<QRCodeScanCubit>().emitError(
-              ResponseMessage(
-                ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported,
-              ),
-            );
-      } else {
-        context.read<QRCodeScanCubit>().emitError(
-              ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-              ),
-            );
-      }
+      context.read<QRCodeScanCubit>().oidc4vcErrorHandling(e);
     }
   },
 );

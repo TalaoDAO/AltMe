@@ -496,7 +496,7 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
     return null;
   }
 
-  final openidConfigurationResponse = await getOpenIdConfig(
+  var openidConfigurationResponse = await getOpenIdConfig(
     baseUrl: issuer,
     client: client.dio,
   );
@@ -514,7 +514,7 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
               as List<dynamic>;
     }
   } else {
-    final openidConfigurationResponse = await getOpenIdConfig(
+    openidConfigurationResponse = await getOpenIdConfig(
       baseUrl: authorizationServer.toString(),
       client: client.dio,
     );
@@ -527,9 +527,13 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
     }
   }
 
+  if (!openidConfigurationResponse.containsKey('token_endpoint')) {
+    throw Exception('invalid_issuer_metadata');
+  }
+
   if (subjectSyntaxTypesSupported != null &&
       !subjectSyntaxTypesSupported.contains('did:key')) {
-    throw Exception('Subject_Syntax_Type_Not_Supported');
+    throw Exception('subject_syntax_type_not_supported');
   }
 
   final credentialsSupported =
@@ -758,6 +762,24 @@ int getIndexValue({required bool isEBSIV3}) {
 
   String? erroDescription;
   String? errorUrl;
+
+  if (e.toString().startsWith('Exception: subject_syntax_type_not_supported')) {
+    return (
+      ResponseMessage(
+        ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported,
+      ),
+      null,
+      null,
+    );
+  } else if (e.toString().startsWith('Exception: invalid_issuer_metadata')) {
+    return (
+      ResponseMessage(
+        ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid,
+      ),
+      'The issuer configuration is invalid',
+      null,
+    );
+  }
 
   if (e is DioException) {
     final error = NetworkException.getDioException(error: e);
