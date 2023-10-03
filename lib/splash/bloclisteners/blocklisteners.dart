@@ -304,12 +304,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
       if (state.status == QrScanStatus.success) {
         if (state.route != null) {
-          if (context.read<RouteCubit>().state == QRCODE_SCAN_PAGE) {
-            await Navigator.of(context)
-                .pushReplacement<void, void>(state.route!);
-          } else {
-            await Navigator.of(context).push<void>(state.route!);
-          }
+          await Navigator.of(context).push<void>(state.route!);
           context.read<QRCodeScanCubit>().clearRoute();
         }
       }

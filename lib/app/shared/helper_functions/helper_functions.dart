@@ -742,8 +742,10 @@ int getIndexValue({required bool isEBSIV3}) {
 
 (MessageHandler messageHandler, String? erroDescription, String? errorUrl)
     getOIDC4VCError(dynamic e) {
+  ResponseString responseString =
+      ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
   MessageHandler messageHandler = ResponseMessage(
-    ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+    responseString,
   );
 
   String? erroDescription;
@@ -755,38 +757,59 @@ int getIndexValue({required bool isEBSIV3}) {
     final data = error.data;
 
     if (data != null && data is Map) {
-      ///error
       if (data.containsKey('error')) {
-        if (data['error'] == 'invalid_grant') {
-          messageHandler =
-              ResponseMessage(ResponseString.RESPONSE_STRING_invalidRequest);
-        } else if (data['error'] == 'unauthorized_client') {
-          messageHandler =
-              ResponseMessage(ResponseString.RESPONSE_STRING_accessDenied);
-        } else if (data['error'] == 'access_denied') {
-          messageHandler =
-              ResponseMessage(ResponseString.RESPONSE_STRING_accessDenied);
-        } else if (data['error'] == 'unsupported_response_type') {
-          messageHandler = ResponseMessage(
-            ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
-          );
-        } else if (data['error'] == 'invalid_scope') {
-          messageHandler = ResponseMessage(
-            ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
-          );
-        } else if (data['error'] == 'invalid_token') {
-          messageHandler =
-              ResponseMessage(ResponseString.RESPONSE_STRING_accessDenied);
-        } else if (data['error'] == 'unsupported_credential_type') {
-          messageHandler = ResponseMessage(
-              ResponseString.RESPONSE_STRING_unsupportedCredential);
-        } else if (data['error'] == 'invalid_or_missing_proof') {
-          messageHandler = ResponseMessage(
-            ResponseString
-                .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet,
-          );
+        switch (data['error']) {
+          case 'invalid_request':
+          case 'invalid_request_uri':
+          case 'invalid_request_object':
+            responseString = ResponseString.RESPONSE_STRING_invalidRequest;
+
+          case 'unauthorized_client':
+          case 'access_denied':
+          case 'invalid_or_missing_proof':
+          case 'interaction_required':
+            responseString = ResponseString.RESPONSE_STRING_accessDenied;
+
+          case 'unsupported_response_type':
+          case 'invalid_scope':
+          case 'request_not_supported':
+          case 'request_uri_not_supported':
+            responseString =
+                ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
+
+          case 'unsupported_credential_type':
+            responseString =
+                ResponseString.RESPONSE_STRING_unsupportedCredential;
+          case 'login_required':
+          case 'account_selection_required':
+            responseString = ResponseString.RESPONSE_STRING_aloginIsRequired;
+
+          case 'consent_required':
+            responseString =
+                ResponseString.RESPONSE_STRING_userConsentIsRequired;
+
+          case 'registration_not_supported':
+            responseString =
+                ResponseString.RESPONSE_STRING_theWalletIsNotRegistered;
+
+          case 'invalid_grant':
+          case 'invalid_client':
+          case 'invalid_token':
+            responseString =
+                ResponseString.RESPONSE_STRING_credentialIssuanceDenied;
+
+          case 'unsupported_credential_format':
+            responseString = ResponseString
+                .RESPONSE_STRING_thisCredentialFormatIsNotSupported;
+
+          default:
+            responseString =
+                ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
         }
       }
+
+      ///error
+      messageHandler = ResponseMessage(responseString);
 
       ///error_description
       if (data.containsKey('error_description')) {

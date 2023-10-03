@@ -165,5 +165,9 @@ enum ResponseString {
   RESPONSE_STRING_accessDenied,
   RESPONSE_STRING_thisRequestIsNotSupported,
   RESPONSE_STRING_unsupportedCredential,
-  RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet,
+  RESPONSE_STRING_aloginIsRequired,
+  RESPONSE_STRING_userConsentIsRequired,
+  RESPONSE_STRING_theWalletIsNotRegistered,
+  RESPONSE_STRING_credentialIssuanceDenied,
+  RESPONSE_STRING_thisCredentialFormatIsNotSupported,
 }

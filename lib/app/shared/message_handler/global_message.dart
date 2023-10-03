@@ -408,6 +408,13 @@ class GlobalMessage {
       l10n.thisRequestIsNotSupported;
   String get RESPONSE_STRING_unsupportedCredential =>
       l10n.unsupportedCredential;
-  String get RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet =>
-      l10n.credentialIssuanceNotAllowedToTheWallet;
+  String get RESPONSE_STRING_aloginIsRequired => l10n.aloginIsRequired;
+  String get RESPONSE_STRING_userConsentIsRequired =>
+      l10n.userConsentIsRequired;
+  String get RESPONSE_STRING_theWalletIsNotRegistered =>
+      l10n.theWalletIsNotRegistered;
+  String get RESPONSE_STRING_credentialIssuanceDenied =>
+      l10n.credentialIssuanceDenied;
+  String get RESPONSE_STRING_thisCredentialFormatIsNotSupported =>
+      l10n.thisCredentialFormatIsNotSupported;
 }

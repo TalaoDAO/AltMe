@@ -970,7 +970,11 @@
   "accessDenied": "Access denied.",
   "thisRequestIsNotSupported": "This request is not supported.",
   "unsupportedCredential": "Unsupported credential.",
-  "credentialIssuanceNotAllowedToTheWallet": "Credential issuance not allowed to the wallet.",
+  "aloginIsRequired": "A login is required.",
+  "userConsentIsRequired": "User consent is required.",
+  "theWalletIsNotRegistered": "The wallet is not registered.",
+  "credentialIssuanceDenied": "Credential issuance denied.", 
+  "thisCredentialFormatIsNotSupported": "This credential format is not supported",
   "moreDetails": "More Details"
 }
 

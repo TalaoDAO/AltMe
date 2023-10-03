@@ -73,6 +73,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> process({required String? scannedResponse}) async {
     log.i('processing scanned qr code - $scannedResponse');
+    goBack();
     emit(state.loading(isScan: true));
     try {
       final isInternetAvailable = await isConnected();
@@ -477,7 +478,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         isEBSIV3: isEBSIV3,
       );
     } catch (e) {
-      log.e(e);
+      oidc4vcErrorHandling(e);
     }
   }
 

@@ -876,7 +876,11 @@
     "accessDenied",
     "thisRequestIsNotSupported",
     "unsupportedCredential",
-    "credentialIssuanceNotAllowedToTheWallet",
+    "aloginIsRequired",
+    "userConsentIsRequired",
+    "theWalletIsNotRegistered",
+    "credentialIssuanceDenied",
+    "thisCredentialFormatIsNotSupported",
     "moreDetails"
   ],
 
@@ -1757,7 +1761,11 @@
     "accessDenied",
     "thisRequestIsNotSupported",
     "unsupportedCredential",
-    "credentialIssuanceNotAllowedToTheWallet",
+    "aloginIsRequired",
+    "userConsentIsRequired",
+    "theWalletIsNotRegistered",
+    "credentialIssuanceDenied",
+    "thisCredentialFormatIsNotSupported",
     "moreDetails"
   ],
 
@@ -1941,7 +1949,11 @@
     "accessDenied",
     "thisRequestIsNotSupported",
     "unsupportedCredential",
-    "credentialIssuanceNotAllowedToTheWallet",
+    "aloginIsRequired",
+    "userConsentIsRequired",
+    "theWalletIsNotRegistered",
+    "credentialIssuanceDenied",
+    "thisCredentialFormatIsNotSupported",
     "moreDetails"
   ],
 
@@ -2822,7 +2834,11 @@
     "accessDenied",
     "thisRequestIsNotSupported",
     "unsupportedCredential",
-    "credentialIssuanceNotAllowedToTheWallet",
+    "aloginIsRequired",
+    "userConsentIsRequired",
+    "theWalletIsNotRegistered",
+    "credentialIssuanceDenied",
+    "thisCredentialFormatIsNotSupported",
     "moreDetails"
   ]
 }
