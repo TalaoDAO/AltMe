@@ -504,23 +504,31 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
   final authorizationServer =
       openidConfigurationResponse['authorization_server'];
 
-  List<dynamic> subjectSyntaxTypesSupported;
+  List<dynamic>? subjectSyntaxTypesSupported;
 
   if (authorizationServer == null) {
-    subjectSyntaxTypesSupported =
-        openidConfigurationResponse['subject_syntax_types_supported']
-            as List<dynamic>;
+    if (openidConfigurationResponse
+        .containsKey('subject_syntax_types_supported')) {
+      subjectSyntaxTypesSupported =
+          openidConfigurationResponse['subject_syntax_types_supported']
+              as List<dynamic>;
+    }
   } else {
     final openidConfigurationResponse = await getOpenIdConfig(
       baseUrl: authorizationServer.toString(),
       client: client.dio,
     );
-    subjectSyntaxTypesSupported =
-        openidConfigurationResponse['subject_syntax_types_supported']
-            as List<dynamic>;
+
+    if (openidConfigurationResponse
+        .containsKey('subject_syntax_types_supported')) {
+      subjectSyntaxTypesSupported =
+          openidConfigurationResponse['subject_syntax_types_supported']
+              as List<dynamic>;
+    }
   }
 
-  if (!subjectSyntaxTypesSupported.contains('did:key')) {
+  if (subjectSyntaxTypesSupported != null &&
+      !subjectSyntaxTypesSupported.contains('did:key')) {
     throw Exception('Subject_Syntax_Type_Not_Supported');
   }
 
