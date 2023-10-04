@@ -231,7 +231,7 @@ class ScanCubit extends Cubit<ScanState> {
             emit(
               state.warning(
                 messageHandler: ResponseMessage(
-                  ResponseString
+                  message: ResponseString
                       .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING,
                 ),
               ),
@@ -245,7 +245,8 @@ class ScanCubit extends Cubit<ScanState> {
             );
             if (jsonVerification['errors'][0] != 'No applicable proof') {
               throw ResponseMessage(
-                ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
+                message:
+                    ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
               );
             }
           }
@@ -276,50 +277,16 @@ class ScanCubit extends Cubit<ScanState> {
       }
     } catch (e) {
       log.e('something went wrong - $e');
-      if (e is ResponseMessage) {
-        emitError(e);
-      } else if (e is NetworkException) {
-        log.e('NetworkException - $e');
-        if (e.message == NetworkError.NETWORK_ERROR_PRECONDITION_FAILED) {
-          emit(
-            state.copyWith(
-              status: ScanStatus.error,
-              message: StateMessage.error(
-                messageHandler: e.data != null
-                    ? null
-                    : ResponseMessage(
-                        ResponseString.RESPONSE_STRING_userNotFitErrorMessage,
-                      ),
-                stringMessage: e.data?.toString(),
-                showDialog: true,
-              ),
-            ),
-          );
-        } else {
-          final (messageHandler, erroDescription, errorUrl) =
-              getOIDC4VCError(e);
-          emit(
-            state.error(
-              message: StateMessage.error(
-                messageHandler: messageHandler,
-                erroDescription: erroDescription,
-                showDialog: true,
-                erroUrl: errorUrl,
-              ),
-            ),
-          );
-        }
-      } else {
-        emit(
-          state.error(
-            message: StateMessage.error(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-              ),
-            ),
+      if (e is NetworkException &&
+          e.message == NetworkError.NETWORK_ERROR_PRECONDITION_FAILED) {
+        emitError(
+          ResponseMessage(
+            message: ResponseString.RESPONSE_STRING_userNotFitErrorMessage,
+            data: e.data?.toString(),
           ),
         );
+      } else {
+        emitError(e);
       }
     }
   }
@@ -387,29 +354,27 @@ class ScanCubit extends Cubit<ScanState> {
             messageHandler: responseMessage != null
                 ? null
                 : ResponseMessage(
-                    ResponseString
+                    message: ResponseString
                         .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
                   ),
           ),
         ),
       );
     } catch (e) {
-      if (e is MessageHandler) {
-        emitError(e);
-      } else {
-        emitError(
-          ResponseMessage(
-            ResponseString
-                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-          ),
-        );
-      }
+      emitError(e);
     }
   }
 
-  void emitError(MessageHandler messageHandler) {
+  void emitError(dynamic e) {
+    final messageHandler = getMessageHandler(e);
+
     emit(
-      state.error(message: StateMessage.error(messageHandler: messageHandler)),
+      state.error(
+        message: StateMessage.error(
+          messageHandler: messageHandler,
+          showDialog: true,
+        ),
+      ),
     );
   }
 
@@ -455,7 +420,7 @@ class ScanCubit extends Cubit<ScanState> {
               status: ScanStatus.success,
               message: StateMessage.success(
                 messageHandler: ResponseMessage(
-                  ResponseString
+                  message: ResponseString
                       .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
                 ),
               ),
@@ -463,7 +428,8 @@ class ScanCubit extends Cubit<ScanState> {
           );
         } else {
           throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            message: ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           );
         }
       } else {
@@ -471,16 +437,7 @@ class ScanCubit extends Cubit<ScanState> {
       }
     } catch (e, s) {
       log.e('something went wrong', error: e, stackTrace: s);
-      if (e is MessageHandler) {
-        emitError(e);
-      } else {
-        emitError(
-          ResponseMessage(
-            ResponseString
-                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-          ),
-        );
-      }
+      emitError(e);
     }
   }
 
@@ -556,7 +513,7 @@ class ScanCubit extends Cubit<ScanState> {
           status: ScanStatus.success,
           message: StateMessage.success(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
             ),
           ),
@@ -564,7 +521,8 @@ class ScanCubit extends Cubit<ScanState> {
       );
     } else {
       throw ResponseMessage(
-        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        message:
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
       );
     }
   }
@@ -645,7 +603,7 @@ class ScanCubit extends Cubit<ScanState> {
             status: ScanStatus.success,
             message: StateMessage.success(
               messageHandler: ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
               ),
             ),
@@ -653,22 +611,13 @@ class ScanCubit extends Cubit<ScanState> {
         );
       } else {
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          message: ResponseString
+              .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
         );
       }
     } catch (e, s) {
       log.e('something went wrong', error: e, stackTrace: s);
-      if (e is MessageHandler) {
-        emitError(e);
-      } else {
-        emitError(
-          ResponseMessage(
-            ResponseString
-                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-          ),
-        );
-      }
-      return;
+      emitError(e);
     }
   }
 

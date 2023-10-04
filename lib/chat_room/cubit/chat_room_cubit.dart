@@ -177,19 +177,23 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
           ),
         );
       } else {
-        emit(
-          state.copyWith(
-            status: AppStatus.error,
-            message: StateMessage(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-              ),
-            ),
-          ),
-        );
+        emitError(e);
       }
     }
+  }
+
+  void emitError(dynamic e) {
+    final messageHandler = getMessageHandler(e);
+
+    emit(
+      state.copyWith(
+        status: AppStatus.error,
+        message: StateMessage.error(
+          messageHandler: messageHandler,
+          showDialog: true,
+        ),
+      ),
+    );
   }
 
   Future<void> _subscribeToEventsOfRoom() async {

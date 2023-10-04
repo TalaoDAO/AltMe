@@ -152,7 +152,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE,
+            message: ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE,
           ),
         ),
       );
@@ -252,7 +252,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_FAILED_TO_SAVE_PROFILE,
+            message: ResponseString.RESPONSE_STRING_FAILED_TO_SAVE_PROFILE,
           ),
         ),
       );

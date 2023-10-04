@@ -2,9 +2,13 @@ import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class ResponseMessage with MessageHandler {
-  ResponseMessage(this.message);
+  ResponseMessage({
+    this.message,
+    this.data,
+  });
 
-  final ResponseString message;
+  final ResponseString? message;
+  final dynamic data;
 
   @override
   String getMessage(
@@ -12,8 +16,8 @@ class ResponseMessage with MessageHandler {
     MessageHandler messageHandler, {
     String? injectedMessage,
   }) {
-    if (messageHandler is ResponseMessage) {
-      switch (messageHandler.message) {
+    if (messageHandler is ResponseMessage && messageHandler.message != null) {
+      switch (messageHandler.message!) {
         case ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard
               .localise(context);

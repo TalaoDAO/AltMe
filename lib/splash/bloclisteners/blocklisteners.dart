@@ -294,7 +294,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           } else {
             context.read<QRCodeScanCubit>().emitError(
                   ResponseMessage(
-                    ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+                    message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
                   ),
                 );
             return;
@@ -316,7 +316,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         );
       }
     } catch (e) {
-      context.read<QRCodeScanCubit>().oidc4vcErrorHandling(e);
+      context.read<QRCodeScanCubit>().emitError(e);
     }
   },
 );
@@ -348,7 +348,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
             stateMessage: StateMessage.error(
               stringMessage: '$incomingNetworkType.',
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE,
+                message: ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE,
               ),
             ),
           );
@@ -406,7 +406,8 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
             context: context,
             stateMessage: StateMessage.info(
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
+                message: ResponseString
+                    .RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
               ),
             ),
           );

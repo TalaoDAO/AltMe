@@ -134,7 +134,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
                 state.copyWith(
                   message: StateMessage.info(
                     messageHandler: ResponseMessage(
-                      ResponseString
+                      message: ResponseString
                           .RESPONSE_STRING_youcanSelectOnlyXCredential,
                     ),
                     injectedMessage: count.toString(),

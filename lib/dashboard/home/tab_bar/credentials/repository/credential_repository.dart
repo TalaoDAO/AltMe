@@ -16,7 +16,8 @@ class CredentialsRepository {
       data = await _secureStorageProvider.getAllValues();
     } catch (e) {
       throw ResponseMessage(
-        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        message:
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
       );
     }
     data.removeWhere(

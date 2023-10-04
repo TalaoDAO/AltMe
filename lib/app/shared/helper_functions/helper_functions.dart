@@ -438,11 +438,6 @@ List<int> sortedPublcJwk(Map<String, dynamic> privateKey) {
   return utf8.encode(jsonString);
 }
 
-bool isUriAsValueValid(List<String> keys) =>
-    keys.contains('response_type') &&
-    keys.contains('client_id') &&
-    keys.contains('nonce');
-
 bool isPolygonIdUrl(String url) =>
     url.startsWith('{"id":') ||
     url.startsWith('{"body":{"') ||
@@ -528,12 +523,53 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
   }
 
   if (!openidConfigurationResponse.containsKey('token_endpoint')) {
-    throw Exception('invalid_issuer_metadata');
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_issuer_metadata',
+        'error_description': 'The issuer configuration is invalid. '
+            'The token_endpoint is missing.',
+      },
+    );
+  }
+
+  if (!openidConfigurationResponse.containsKey('credential_endpoint')) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_issuer_metadata',
+        'error_description': 'The issuer configuration is invalid. '
+            'The credential_endpoint is missing.',
+      },
+    );
+  }
+
+  if (!openidConfigurationResponse.containsKey('credential_issuer')) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_issuer_metadata',
+        'error_description': 'The issuer configuration is invalid. '
+            'The credential_issuer is missing.',
+      },
+    );
+  }
+
+  if (!openidConfigurationResponse.containsKey('credentials_supported')) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_issuer_metadata',
+        'error_description': 'The issuer configuration is invalid. '
+            'The credentials_supported is missing.',
+      },
+    );
   }
 
   if (subjectSyntaxTypesSupported != null &&
       !subjectSyntaxTypesSupported.contains('did:key')) {
-    throw Exception('subject_syntax_type_not_supported');
+    throw ResponseMessage(
+      data: {
+        'error': 'subject_syntax_type_not_supported',
+        'error_description': 'The subject syntax type is not supported.',
+      },
+    );
   }
 
   final credentialsSupported =
@@ -752,108 +788,63 @@ int getIndexValue({required bool isEBSIV3}) {
   }
 }
 
-(MessageHandler messageHandler, String? erroDescription, String? errorUrl)
-    getOIDC4VCError(dynamic e) {
-  ResponseString responseString =
-      ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
-  MessageHandler messageHandler = ResponseMessage(
-    responseString,
-  );
-
-  String? erroDescription;
-  String? errorUrl;
-
-  if (e.toString().startsWith('Exception: subject_syntax_type_not_supported')) {
-    return (
-      ResponseMessage(
-        ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported,
-      ),
-      null,
-      null,
-    );
-  } else if (e.toString().startsWith('Exception: invalid_issuer_metadata')) {
-    return (
-      ResponseMessage(
-        ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid,
-      ),
-      'The issuer configuration is invalid',
-      null,
-    );
-  }
-
+MessageHandler getMessageHandler(dynamic e) {
   if (e is DioException) {
     final error = NetworkException.getDioException(error: e);
 
-    final data = error.data;
-
-    if (data != null && data is Map) {
-      if (data.containsKey('error')) {
-        switch (data['error']) {
-          case 'invalid_request':
-          case 'invalid_request_uri':
-          case 'invalid_request_object':
-            responseString = ResponseString.RESPONSE_STRING_invalidRequest;
-
-          case 'unauthorized_client':
-          case 'access_denied':
-          case 'invalid_or_missing_proof':
-          case 'interaction_required':
-            responseString = ResponseString.RESPONSE_STRING_accessDenied;
-
-          case 'unsupported_response_type':
-          case 'invalid_scope':
-          case 'request_not_supported':
-          case 'request_uri_not_supported':
-            responseString =
-                ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
-
-          case 'unsupported_credential_type':
-            responseString =
-                ResponseString.RESPONSE_STRING_unsupportedCredential;
-          case 'login_required':
-          case 'account_selection_required':
-            responseString = ResponseString.RESPONSE_STRING_aloginIsRequired;
-
-          case 'consent_required':
-            responseString =
-                ResponseString.RESPONSE_STRING_userConsentIsRequired;
-
-          case 'registration_not_supported':
-            responseString =
-                ResponseString.RESPONSE_STRING_theWalletIsNotRegistered;
-
-          case 'invalid_grant':
-          case 'invalid_client':
-          case 'invalid_token':
-            responseString =
-                ResponseString.RESPONSE_STRING_credentialIssuanceDenied;
-
-          case 'unsupported_credential_format':
-            responseString = ResponseString
-                .RESPONSE_STRING_thisCredentialFormatIsNotSupported;
-
-          default:
-            responseString =
-                ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
-        }
-      }
-
-      ///error
-      messageHandler = ResponseMessage(responseString);
-
-      ///error_description
-      if (data.containsKey('error_description')) {
-        erroDescription = data['error_description'].toString();
-      }
-
-      ///error_uri
-      if (data.containsKey('error_uri')) {
-        errorUrl = data['error_uri'].toString();
-      }
-    }
+    return NetworkException(data: error.data);
   } else if (e is MessageHandler) {
-    messageHandler = e;
+    return e;
+  } else {
+    return ResponseMessage(
+      message:
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+    );
   }
+}
 
-  return (messageHandler, erroDescription, errorUrl);
+ResponseString getErrorResponseString(String errorString) {
+  switch (errorString) {
+    case 'invalid_request':
+    case 'invalid_request_uri':
+    case 'invalid_request_object':
+      return ResponseString.RESPONSE_STRING_invalidRequest;
+
+    case 'unauthorized_client':
+    case 'access_denied':
+    case 'invalid_or_missing_proof':
+    case 'interaction_required':
+      return ResponseString.RESPONSE_STRING_accessDenied;
+
+    case 'unsupported_response_type':
+    case 'invalid_scope':
+    case 'request_not_supported':
+    case 'request_uri_not_supported':
+      return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
+
+    case 'unsupported_credential_type':
+      return ResponseString.RESPONSE_STRING_unsupportedCredential;
+    case 'login_required':
+    case 'account_selection_required':
+      return ResponseString.RESPONSE_STRING_aloginIsRequired;
+
+    case 'consent_required':
+      return ResponseString.RESPONSE_STRING_userConsentIsRequired;
+
+    case 'registration_not_supported':
+      return ResponseString.RESPONSE_STRING_theWalletIsNotRegistered;
+
+    case 'invalid_grant':
+    case 'invalid_client':
+    case 'invalid_token':
+      return ResponseString.RESPONSE_STRING_credentialIssuanceDenied;
+
+    case 'unsupported_credential_format':
+      return ResponseString.RESPONSE_STRING_thisCredentialFormatIsNotSupported;
+
+    case 'invalid_issuer_metadata':
+      return ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid;
+    default:
+      return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
+  }
 }

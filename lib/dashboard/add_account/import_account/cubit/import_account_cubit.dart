@@ -97,7 +97,7 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_ERROR_GENERATING_KEY,
+            message: ResponseString.RESPONSE_STRING_ERROR_GENERATING_KEY,
           ),
         ),
       );

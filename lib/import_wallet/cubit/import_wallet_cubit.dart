@@ -71,7 +71,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         if (isSecretKey) {
           if (!Parameters.walletHandlesCrypto) {
             throw ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             );
           }
@@ -143,7 +143,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_ERROR_GENERATING_KEY,
+            message: ResponseString.RESPONSE_STRING_ERROR_GENERATING_KEY,
           ),
         ),
       );
