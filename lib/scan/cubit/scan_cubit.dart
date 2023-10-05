@@ -545,8 +545,9 @@ class ScanCubit extends Cubit<ScanState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
-      final String? redirectUri = getRedirectUri(uri);
-      if (redirectUri == null) throw Exception();
+      final String responseOrRedirectUri =
+          uri.queryParameters['redirect_uri'] ??
+              uri.queryParameters['response_uri']!;
 
       final String idToken = await createIdToken(
         credentialsToBePresented: credentialsToBePresented!,
@@ -586,7 +587,7 @@ class ScanCubit extends Cubit<ScanState> {
       final formData = FormData.fromMap(responseData);
 
       final result = await client.post(
-        redirectUri,
+        responseOrRedirectUri,
         data: formData,
         headers: <String, dynamic>{
           'Content-Type': 'application/x-www-form-urlencoded',

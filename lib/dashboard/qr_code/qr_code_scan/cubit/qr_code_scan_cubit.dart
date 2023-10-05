@@ -605,7 +605,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
     }
 
-    final scope = uri.queryParameters['scope'];
+    final scope = state.uri!.queryParameters['scope'];
     if (scope == null || scope != 'openid') {
       throw ResponseMessage(
         data: {
@@ -615,23 +615,24 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
     }
 
+    final redirectUri = state.uri!.queryParameters['redirect_uri'];
+    final clientId = state.uri!.queryParameters['client_id'];
+    final isUrl = isURL(clientId.toString());
+
     log.i('responseType - $responseType');
     if (responseType == 'id_token') {
       /// verifier side (siopv2)
 
-      final String? redirectUri = getRedirectUri(state.uri!);
-
       if (redirectUri == null) {
         throw ResponseMessage(
           data: {
-            'error': 'unsupported_response_type',
+            'error': 'invalid_request',
             'error_description': 'The redirect_uri is missing.',
           },
         );
       }
 
-      final clientId = uri.queryParameters['client_id'];
-      if (redirectUri != clientId) {
+      if (isUrl && redirectUri != clientId) {
         throw ResponseMessage(
           data: {
             'error': 'invalid_request',
@@ -668,7 +669,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
       if (responseMode == 'direct_post') {
-        final redirectUri = state.uri!.queryParameters['redirect_uri'];
         final responseUri = state.uri!.queryParameters['response_uri'];
         final bothPresent = redirectUri != null && responseUri != null;
         final bothAbsent = redirectUri == null && responseUri == null;
@@ -683,6 +683,16 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           );
         }
       }
+
+      if (redirectUri != null && isUrl && redirectUri != clientId) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The client_id must be equal to redirect_uri.',
+          },
+        );
+      }
+
       await launchOIDC4VPAndSIOPV2Flow(keys);
     } else {
       throw ResponseMessage(
