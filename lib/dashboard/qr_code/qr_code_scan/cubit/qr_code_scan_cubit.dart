@@ -674,12 +674,22 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final bothPresent = redirectUri != null && responseUri != null;
         final bothAbsent = redirectUri == null && responseUri == null;
 
-        if (bothPresent || bothAbsent) {
+        if (bothAbsent) {
           throw ResponseMessage(
             data: {
               'error': 'invalid_request',
-              'error_description': 'One cannot engage the flow if we dont have '
-                  'the url to POST !',
+              'error_description':
+                  'The response_uri and redirect_uri are missing.',
+            },
+          );
+        }
+
+        if (bothPresent) {
+          throw ResponseMessage(
+            data: {
+              'error': 'invalid_request',
+              'error_description':
+                  'Only response_uri or redirect_uri is required.',
             },
           );
         }
