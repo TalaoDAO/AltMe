@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Oidc4vcSettingMenu extends StatelessWidget {
   const Oidc4vcSettingMenu({super.key});
@@ -28,15 +29,35 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
     return BasePage(
       title: l10n.oidc4vc_settings,
       useSafeArea: true,
-      scrollView: false,
+      scrollView: true,
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
       titleLeading: const BackLeadingButton(),
-      body: const Column(
+      body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SecurityLevelWidget(),
-          SixOrForUserPinWidget(),
+          const SecurityLevelWidget(),
+          const SixOrForUserPinWidget(),
+          DrawerItem2(
+            title: l10n.developerMode,
+            subtitle: l10n.developerModeSubtitle,
+            trailing: SizedBox(
+              height: 25,
+              child: BlocBuilder<ProfileCubit, ProfileState>(
+                builder: (context, state) {
+                  return Switch(
+                    onChanged: (value) async {
+                      await context
+                          .read<ProfileCubit>()
+                          .setDeveloperModeStatus(enabled: value);
+                    },
+                    value: state.model.isDeveloperMode,
+                    activeColor: Theme.of(context).colorScheme.primary,
+                  );
+                },
+              ),
+            ),
+          )
         ],
       ),
     );

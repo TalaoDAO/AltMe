@@ -1,6 +1,8 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AlertMessage {
   static void showStateMessage({
@@ -46,14 +48,16 @@ class AlertMessage {
         );
       }
 
-      ///error_description
-      if (data.containsKey('error_description')) {
-        erroDescription = data['error_description'].toString();
-      }
+      if (context.read<ProfileCubit>().state.model.isDeveloperMode) {
+        ///error_description
+        if (data.containsKey('error_description')) {
+          erroDescription = data['error_description'].toString();
+        }
 
-      ///error_uri
-      if (data.containsKey('error_uri')) {
-        errorUrl = data['error_uri'].toString();
+        ///error_uri
+        if (data.containsKey('error_uri')) {
+          errorUrl = data['error_uri'].toString();
+        }
       }
     }
 
