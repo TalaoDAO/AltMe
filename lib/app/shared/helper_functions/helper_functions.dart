@@ -491,7 +491,7 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
     return null;
   }
 
-  var openidConfigurationResponse = await getOpenIdConfig(
+  final openidConfigurationResponse = await getOpenIdConfig(
     baseUrl: issuer,
     client: client.dio,
   );
@@ -500,29 +500,41 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
       openidConfigurationResponse['authorization_server'];
 
   List<dynamic>? subjectSyntaxTypesSupported;
+  String? tokenEndpoint;
 
-  if (authorizationServer == null) {
-    if (openidConfigurationResponse
-        .containsKey('subject_syntax_types_supported')) {
-      subjectSyntaxTypesSupported =
-          openidConfigurationResponse['subject_syntax_types_supported']
-              as List<dynamic>;
-    }
-  } else {
-    openidConfigurationResponse = await getOpenIdConfig(
+  if (openidConfigurationResponse
+      .containsKey('subject_syntax_types_supported')) {
+    subjectSyntaxTypesSupported =
+        openidConfigurationResponse['subject_syntax_types_supported']
+            as List<dynamic>;
+  }
+
+  if (openidConfigurationResponse.containsKey('token_endpoint')) {
+    tokenEndpoint = openidConfigurationResponse['token_endpoint'].toString();
+  }
+
+  if (authorizationServer != null) {
+    final openidConfigurationResponseSecond = await getOpenIdConfig(
       baseUrl: authorizationServer.toString(),
       client: client.dio,
     );
 
-    if (openidConfigurationResponse
-        .containsKey('subject_syntax_types_supported')) {
+    if (subjectSyntaxTypesSupported == null &&
+        openidConfigurationResponseSecond
+            .containsKey('subject_syntax_types_supported')) {
       subjectSyntaxTypesSupported =
-          openidConfigurationResponse['subject_syntax_types_supported']
+          openidConfigurationResponseSecond['subject_syntax_types_supported']
               as List<dynamic>;
+    }
+
+    if (tokenEndpoint == null &&
+        openidConfigurationResponseSecond.containsKey('token_endpoint')) {
+      tokenEndpoint =
+          openidConfigurationResponseSecond['token_endpoint'].toString();
     }
   }
 
-  if (!openidConfigurationResponse.containsKey('token_endpoint')) {
+  if (tokenEndpoint == null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
