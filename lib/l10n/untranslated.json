@@ -851,6 +851,8 @@
     "pleaseInsertTheSecredCodeReceived",
     "verifyIssuerWebsiteIdentity",
     "verifyIssuerWebsiteIdentitySubtitle",
+    "developerMode",
+    "developerModeSubtitle",
     "confirmVerifierAccess",
     "confirmVerifierAccessSubtitle",
     "secureAuthenticationWithPINCode",
@@ -877,8 +879,13 @@
     "accessDenied",
     "thisRequestIsNotSupported",
     "unsupportedCredential",
-    "credentialIssuanceNotAllowedToTheWallet",
-    "moreDetails"
+    "aloginIsRequired",
+    "userConsentIsRequired",
+    "theWalletIsNotRegistered",
+    "credentialIssuanceDenied",
+    "thisCredentialFormatIsNotSupported",
+    "moreDetails",
+    "theCredentialOfferIsInvalid"
   ],
 
   "es": [
@@ -1733,6 +1740,8 @@
     "pleaseInsertTheSecredCodeReceived",
     "verifyIssuerWebsiteIdentity",
     "verifyIssuerWebsiteIdentitySubtitle",
+    "developerMode",
+    "developerModeSubtitle",
     "confirmVerifierAccess",
     "confirmVerifierAccessSubtitle",
     "secureAuthenticationWithPINCode",
@@ -1759,8 +1768,13 @@
     "accessDenied",
     "thisRequestIsNotSupported",
     "unsupportedCredential",
-    "credentialIssuanceNotAllowedToTheWallet",
-    "moreDetails"
+    "aloginIsRequired",
+    "userConsentIsRequired",
+    "theWalletIsNotRegistered",
+    "credentialIssuanceDenied",
+    "thisCredentialFormatIsNotSupported",
+    "moreDetails",
+    "theCredentialOfferIsInvalid"
   ],
 
   "fr": [
@@ -1918,6 +1932,8 @@
     "pleaseInsertTheSecredCodeReceived",
     "verifyIssuerWebsiteIdentity",
     "verifyIssuerWebsiteIdentitySubtitle",
+    "developerMode",
+    "developerModeSubtitle",
     "confirmVerifierAccess",
     "confirmVerifierAccessSubtitle",
     "secureAuthenticationWithPINCode",
@@ -1944,8 +1960,13 @@
     "accessDenied",
     "thisRequestIsNotSupported",
     "unsupportedCredential",
-    "credentialIssuanceNotAllowedToTheWallet",
-    "moreDetails"
+    "aloginIsRequired",
+    "userConsentIsRequired",
+    "theWalletIsNotRegistered",
+    "credentialIssuanceDenied",
+    "thisCredentialFormatIsNotSupported",
+    "moreDetails",
+    "theCredentialOfferIsInvalid"
   ],
 
   "it": [
@@ -2800,6 +2821,8 @@
     "pleaseInsertTheSecredCodeReceived",
     "verifyIssuerWebsiteIdentity",
     "verifyIssuerWebsiteIdentitySubtitle",
+    "developerMode",
+    "developerModeSubtitle",
     "confirmVerifierAccess",
     "confirmVerifierAccessSubtitle",
     "secureAuthenticationWithPINCode",
@@ -2826,7 +2849,12 @@
     "accessDenied",
     "thisRequestIsNotSupported",
     "unsupportedCredential",
-    "credentialIssuanceNotAllowedToTheWallet",
-    "moreDetails"
+    "aloginIsRequired",
+    "userConsentIsRequired",
+    "theWalletIsNotRegistered",
+    "credentialIssuanceDenied",
+    "thisCredentialFormatIsNotSupported",
+    "moreDetails",
+    "theCredentialOfferIsInvalid"
   ]
 }

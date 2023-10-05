@@ -1,6 +1,8 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AlertMessage {
   static void showStateMessage({
@@ -10,17 +12,52 @@ class AlertMessage {
     final MessageHandler? messageHandler = stateMessage.messageHandler;
     final String? stringMessage = stateMessage.stringMessage;
     final String? injectedMessage = stateMessage.injectedMessage;
+
+    String? erroDescription;
+    String? errorUrl;
     String message = '';
 
+    dynamic data;
+
     if (messageHandler != null) {
-      if (messageHandler is NetworkException && messageHandler.data is String) {
-        message = messageHandler.data as String;
-      } else {
-        message = messageHandler.getMessage(
+      if (messageHandler is NetworkException) {
+        data = messageHandler.data;
+        if (data != null && data is String) {
+          message = messageHandler.data as String;
+        }
+      } else if (messageHandler is ResponseMessage) {
+        data = messageHandler.data;
+        if (messageHandler.message != null) {
+          message = messageHandler.getMessage(
+            context,
+            messageHandler,
+            injectedMessage: injectedMessage,
+          );
+        }
+      }
+    }
+
+    if (data != null && data is Map) {
+      if (data.containsKey('error')) {
+        final ResponseString responseString =
+            getErrorResponseString(data['error'].toString());
+        message =
+            ResponseMessage(message: responseString, data: data).getMessage(
           context,
-          messageHandler,
-          injectedMessage: injectedMessage,
+          ResponseMessage(message: responseString),
         );
+      }
+
+      if (context.read<ProfileCubit>().state.model.isDeveloperMode) {
+        ///error_description
+        if (data.containsKey('error_description')) {
+          erroDescription = data['error_description'].toString();
+        }
+
+        ///error_uri
+        if (data.containsKey('error_uri')) {
+          errorUrl = data['error_uri'].toString();
+        }
       }
     }
 
@@ -37,8 +74,8 @@ class AlertMessage {
         context: context,
         builder: (context) => ErrorDialog(
           title: message,
-          erroDescription: stateMessage.erroDescription,
-          erroUrl: stateMessage.erroUrl,
+          erroDescription: erroDescription,
+          erroUrl: errorUrl,
         ),
       );
     } else {

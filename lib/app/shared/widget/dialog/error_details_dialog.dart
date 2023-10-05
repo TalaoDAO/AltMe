@@ -2,13 +2,13 @@ import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ErrorDetailsDialog extends StatelessWidget {
   const ErrorDetailsDialog({
     super.key,
     this.erroDescription,
     this.erroUrl,
-    this.icon = IconStrings.alert,
     this.dialogColor,
     this.bgColor,
     this.textColor,
@@ -19,7 +19,6 @@ class ErrorDetailsDialog extends StatelessWidget {
   final Color? dialogColor;
   final Color? bgColor;
   final Color? textColor;
-  final String icon;
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +38,6 @@ class ErrorDetailsDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(
-            icon,
-            width: 50,
-            height: 50,
-          ),
           const SizedBox(height: 25),
           if (erroDescription != null) ...[
             Text(
@@ -59,7 +53,10 @@ class ErrorDetailsDialog extends StatelessWidget {
             const SizedBox(height: Sizes.spaceXSmall),
             TransparentInkWell(
               onTap: () async {
-                await LaunchUrl.launch(erroUrl!);
+                await LaunchUrl.launch(
+                  erroUrl!,
+                  launchMode: LaunchMode.inAppWebView,
+                );
               },
               child: Text(
                 l10n.moreDetails,
@@ -83,7 +80,8 @@ class ErrorDetailsDialog extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop(true);
             },
-          )
+          ),
+          const SizedBox(height: 15),
         ],
       ),
     );

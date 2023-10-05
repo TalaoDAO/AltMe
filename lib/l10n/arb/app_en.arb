@@ -939,6 +939,8 @@
   "pleaseInsertTheSecredCodeReceived": "Please insert the secret code received.",
   "verifyIssuerWebsiteIdentity": "Verify issuer website identity",
   "verifyIssuerWebsiteIdentitySubtitle": "Default: Off\nEnable to verify website identity before access.",
+  "developerMode": "Developer mode",
+  "developerModeSubtitle": "Default: Off\nEnable to access error description and error links.",
   "confirmVerifierAccess": "Confirm verifier access",
   "confirmVerifierAccessSubtitle": "Default: On\nDisable to skip confirmation when you share your verifiable credentials.",
   "secureAuthenticationWithPINCode": "Secure Authentication with PIN Code",

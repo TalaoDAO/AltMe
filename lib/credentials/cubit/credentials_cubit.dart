@@ -146,7 +146,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         dummyCredentials: dummies,
         messageHandler: showMessage
             ? ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE,
               )
             : null,
@@ -171,7 +171,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         credentials: credentials,
         messageHandler: showMessage
             ? ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE,
               )
             : null,
@@ -252,7 +252,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         dummyCredentials: dummies,
         messageHandler: showMessage
             ? ResponseMessage(
-                ResponseString.RESPONSE_STRING_CREDENTIAL_ADDED_MESSAGE,
+                message:
+                    ResponseString.RESPONSE_STRING_CREDENTIAL_ADDED_MESSAGE,
               )
             : null,
       ),

@@ -40,7 +40,7 @@ class BackupPolygonIdIdentityCubit extends Cubit<BackupPolygonIdIdentityState> {
     try {
       if (!isPermissionStatusGranted) {
         throw ResponseMessage(
-          ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE,
+          message: ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE,
         );
       }
 
@@ -65,7 +65,8 @@ class BackupPolygonIdIdentityCubit extends Cubit<BackupPolygonIdIdentityState> {
 
       if (polygonCredentials == null) {
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          message: ResponseString
+              .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
         );
       }
 
@@ -88,7 +89,8 @@ class BackupPolygonIdIdentityCubit extends Cubit<BackupPolygonIdIdentityState> {
             status: AppStatus.success,
             filePath: filePath,
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
+              message: ResponseString
+                  .RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
             ),
           ),
         );
@@ -100,7 +102,7 @@ class BackupPolygonIdIdentityCubit extends Cubit<BackupPolygonIdIdentityState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR,
+              message: ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR,
             ),
           ),
         );
