@@ -610,7 +610,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       throw ResponseMessage(
         data: {
           'error': 'invalid_request',
-          'error_description': 'The openid is requered in teh scope list.',
+          'error_description':
+              'The openid scope is required in the scope list.',
         },
       );
     }
