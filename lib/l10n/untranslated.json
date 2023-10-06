@@ -884,7 +884,8 @@
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
     "moreDetails",
-    "theCredentialOfferIsInvalid"
+    "theCredentialOfferIsInvalid",
+    "dateOfRequest"
   ],
 
   "es": [
@@ -1772,7 +1773,8 @@
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
     "moreDetails",
-    "theCredentialOfferIsInvalid"
+    "theCredentialOfferIsInvalid",
+    "dateOfRequest"
   ],
 
   "fr": [
@@ -1963,7 +1965,8 @@
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
     "moreDetails",
-    "theCredentialOfferIsInvalid"
+    "theCredentialOfferIsInvalid",
+    "dateOfRequest"
   ],
 
   "it": [
@@ -2851,6 +2854,7 @@
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
     "moreDetails",
-    "theCredentialOfferIsInvalid"
+    "theCredentialOfferIsInvalid",
+    "dateOfRequest"
   ]
 }
