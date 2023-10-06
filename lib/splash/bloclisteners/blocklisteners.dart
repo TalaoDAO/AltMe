@@ -232,19 +232,17 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   .startsWith(Parameters.authorizeEndPoint) ||
               state.uri.toString().startsWith(Parameters.oidc4vcUniversalLink);
 
-          OIDC4VCType? oidc4vcTypeForIssuance;
+          final OIDC4VCType? oidc4vcTypeForIssuance =
+              await getOIDC4VCTypeForIssuance(
+            url: state.uri.toString(),
+            client: DioClient('', Dio()),
+          );
 
           if (showPrompt) {
             if (isOpenIDUrl || isFromDeeplink) {
               /// OIDC4VCI Case
-              final OIDC4VCType? oidc4vcType = await getOIDC4VCTypeForIssuance(
-                url: state.uri.toString(),
-                client: DioClient('', Dio()),
-              );
 
-              oidc4vcTypeForIssuance = oidc4vcType;
-
-              if (oidc4vcType != null) {
+              if (oidc4vcTypeForIssuance != null) {
                 /// issuance case
                 if (!userConsentForIssuerAccess) showPrompt = false;
               } else {
