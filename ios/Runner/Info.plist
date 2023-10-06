@@ -70,6 +70,16 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>openid-credential-offer-hedera</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>openid-credential-offer-hedera</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>iden3comm</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
