@@ -938,6 +938,8 @@
   "pleaseInsertTheSecredCodeReceived": "Please insert the secret code received.",
   "verifyIssuerWebsiteIdentity": "Verify issuer website identity",
   "verifyIssuerWebsiteIdentitySubtitle": "Default: Off\nEnable to verify website identity before access.",
+  "developerMode": "Developer mode",
+  "developerModeSubtitle": "Default: Off\nEnable to access error description and error links.",
   "confirmVerifierAccess": "Confirm verifier access",  
   "confirmVerifierAccessSubtitle": "Default: On\nDisable to skip confirmation when you share your verifiable credentials.",
   "secureAuthenticationWithPINCode": "Secure Authentication with PIN Code",
@@ -965,12 +967,17 @@
   "security_level_title": "Security level",
   "security_level_subTitle": "By default Low: This parameter defines the level of verification carried out by the wallet on the request data provided by issuers and verifiers (signature of jwts, access to trust registers, etc.).",
   "responseTypeNotSupported": "The response type is not supported",
-  "invalidRequest": "The request is invalid.",
+  "invalidRequest": "The request is invalid",
   "subjectSyntaxTypeNotSupported": "The subject syntax type is not supported.", 
-  "accessDenied": "Access denied.",
-  "thisRequestIsNotSupported": "This request is not supported.",
-  "unsupportedCredential": "Unsupported credential.",
-  "credentialIssuanceNotAllowedToTheWallet": "Credential issuance not allowed to the wallet.",
-  "moreDetails": "More Details"
+  "accessDenied": "Access denied",
+  "thisRequestIsNotSupported": "This request is not supported",
+  "unsupportedCredential": "Unsupported credential",
+  "aloginIsRequired": "A login is required",
+  "userConsentIsRequired": "User consent is required",
+  "theWalletIsNotRegistered": "The wallet is not registered",
+  "credentialIssuanceDenied": "Credential issuance denied", 
+  "thisCredentialFormatIsNotSupported": "This credential format is not supported",
+  "moreDetails": "More Details",
+  "theCredentialOfferIsInvalid": "The credential offer is invalid"
 }
 

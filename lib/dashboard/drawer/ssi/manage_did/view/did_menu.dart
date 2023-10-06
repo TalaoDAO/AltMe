@@ -86,7 +86,7 @@ class DidView extends StatelessWidget {
                           showDialog: true,
                           //stringMessage: e.toString(),
                           messageHandler: ResponseMessage(
-                            ResponseString
+                            message: ResponseString
                                 .RESPONSE_STRING_deviceIncompatibilityMessage,
                           ),
                         ),

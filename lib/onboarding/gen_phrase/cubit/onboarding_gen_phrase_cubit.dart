@@ -63,7 +63,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_ERROR_GENERATING_KEY,
+            message: ResponseString.RESPONSE_STRING_ERROR_GENERATING_KEY,
           ),
         ),
       );
