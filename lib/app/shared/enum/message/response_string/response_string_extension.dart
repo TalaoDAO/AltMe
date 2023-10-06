@@ -520,10 +520,23 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_unsupportedCredential:
         return globalMessage.RESPONSE_STRING_unsupportedCredential;
 
-      case ResponseString
-            .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet:
-        return globalMessage
-            .RESPONSE_STRING_credentialIssuanceNotAllowedToTheWallet;
+      case ResponseString.RESPONSE_STRING_aloginIsRequired:
+        return globalMessage.RESPONSE_STRING_aloginIsRequired;
+
+      case ResponseString.RESPONSE_STRING_userConsentIsRequired:
+        return globalMessage.RESPONSE_STRING_userConsentIsRequired;
+
+      case ResponseString.RESPONSE_STRING_theWalletIsNotRegistered:
+        return globalMessage.RESPONSE_STRING_theWalletIsNotRegistered;
+
+      case ResponseString.RESPONSE_STRING_credentialIssuanceDenied:
+        return globalMessage.RESPONSE_STRING_credentialIssuanceDenied;
+
+      case ResponseString.RESPONSE_STRING_thisCredentialFormatIsNotSupported:
+        return globalMessage.RESPONSE_STRING_thisCredentialFormatIsNotSupported;
+
+      case ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid:
+        return globalMessage.RESPONSE_STRING_theCredentialOfferIsInvalid;
     }
   }
 }

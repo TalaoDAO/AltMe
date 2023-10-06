@@ -98,7 +98,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
         log.e('failed to verify credential', error: jsonVerification['errors']);
         if (jsonVerification['errors'][0] != 'No applicable proof') {
           throw ResponseMessage(
-            ResponseString
+            message: ResponseString
                 .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
           );
         } else {
@@ -116,7 +116,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_FAILED_TO_CREATE_SELF_ISSUED_CREDENTIAL,
             ),
           ),
@@ -143,7 +143,8 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
     emit(
       state.success(
         messageHandler: ResponseMessage(
-          ResponseString.RESPONSE_STRING_SELF_ISSUED_CREATED_SUCCESSFULLY,
+          message:
+              ResponseString.RESPONSE_STRING_SELF_ISSUED_CREATED_SUCCESSFULLY,
         ),
       ),
     );

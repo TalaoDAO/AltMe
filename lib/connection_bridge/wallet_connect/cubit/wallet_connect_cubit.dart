@@ -219,7 +219,8 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           status: WalletConnectStatus.error,
           message: StateMessage.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp,
+              message:
+                  ResponseString.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp,
             ),
             injectedMessage: value,
           ),
@@ -231,7 +232,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           status: WalletConnectStatus.error,
           message: StateMessage.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),

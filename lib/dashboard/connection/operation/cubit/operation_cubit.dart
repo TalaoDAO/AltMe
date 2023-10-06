@@ -88,7 +88,7 @@ class OperationCubit extends Cubit<OperationState> {
           log.i('currentAccount -$currentAccount');
           if (currentAccount == null) {
             throw ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             );
           } else {
@@ -105,7 +105,7 @@ class OperationCubit extends Cubit<OperationState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
@@ -149,7 +149,7 @@ class OperationCubit extends Cubit<OperationState> {
             status: AppStatus.errorWhileFetching,
             message: StateMessage.error(
               messageHandler: ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
               ),
             ),
@@ -276,7 +276,7 @@ class OperationCubit extends Cubit<OperationState> {
             state.copyWith(
               status: AppStatus.errorWhileFetching,
               message: StateMessage.error(
-                messageHandler: ResponseMessage(responseString),
+                messageHandler: ResponseMessage(message: responseString),
               ),
             ),
           );
@@ -286,7 +286,7 @@ class OperationCubit extends Cubit<OperationState> {
               status: AppStatus.errorWhileFetching,
               message: StateMessage.error(
                 messageHandler: ResponseMessage(
-                  ResponseString.RESPONSE_STRING_OPERATION_FAILED,
+                  message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
                 ),
               ),
             ),
@@ -298,7 +298,7 @@ class OperationCubit extends Cubit<OperationState> {
             status: AppStatus.errorWhileFetching,
             message: StateMessage.error(
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_OPERATION_COMPLETED,
+                message: ResponseString.RESPONSE_STRING_OPERATION_COMPLETED,
               ),
             ),
           ),
@@ -387,7 +387,7 @@ class OperationCubit extends Cubit<OperationState> {
             status: AppStatus.success,
             message: StateMessage.success(
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_OPERATION_COMPLETED,
+                message: ResponseString.RESPONSE_STRING_OPERATION_COMPLETED,
               ),
             ),
           ),
@@ -396,7 +396,7 @@ class OperationCubit extends Cubit<OperationState> {
         unawaited(tokensCubit.fetchFromZero());
       } else {
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_OPERATION_FAILED,
+          message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
         );
       }
     } catch (e) {
@@ -409,7 +409,7 @@ class OperationCubit extends Cubit<OperationState> {
           emit(
             state.error(
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
+                message: ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
               ),
             ),
           );
@@ -417,7 +417,7 @@ class OperationCubit extends Cubit<OperationState> {
           emit(
             state.error(
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_OPERATION_FAILED,
+                message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
               ),
             ),
           );
@@ -426,7 +426,7 @@ class OperationCubit extends Cubit<OperationState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_OPERATION_FAILED,
+              message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
             ),
           ),
         );
@@ -470,7 +470,8 @@ class OperationCubit extends Cubit<OperationState> {
 
       if (currentAccount == null) {
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          message: ResponseString
+              .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
         );
       }
 
@@ -495,7 +496,8 @@ class OperationCubit extends Cubit<OperationState> {
         case NetworkType.kathmandunet:
         case NetworkType.custom:
           throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            message: ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           );
       }
 
@@ -519,7 +521,8 @@ class OperationCubit extends Cubit<OperationState> {
             state.copyWith(
               message: StateMessage.error(
                 messageHandler: ResponseMessage(
-                  ResponseString.RESPONSE_STRING_transactionIsLikelyToFail,
+                  message:
+                      ResponseString.RESPONSE_STRING_transactionIsLikelyToFail,
                 ),
               ),
             ),
@@ -564,7 +567,7 @@ class OperationCubit extends Cubit<OperationState> {
         rethrow;
       } else {
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_OPERATION_FAILED,
+          message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
         );
       }
     }

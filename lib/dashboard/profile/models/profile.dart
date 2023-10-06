@@ -23,6 +23,7 @@ class ProfileModel extends Equatable {
     this.companyWebsite = '',
     this.jobTitle = '',
     required this.isSecurityLow,
+    required this.isDeveloperMode,
     required this.userPinDigitsLength,
   });
 
@@ -46,6 +47,7 @@ class ProfileModel extends Equatable {
         userPINCodeForAuthentication: true,
         tezosNetwork: TezosNetwork.mainNet(),
         isSecurityLow: true,
+        isDeveloperMode: false,
         userPinDigitsLength: 6,
       );
 
@@ -66,6 +68,7 @@ class ProfileModel extends Equatable {
   final bool userPINCodeForAuthentication;
 
   final bool isSecurityLow;
+  final bool isDeveloperMode;
   final int userPinDigitsLength;
 
   @override
@@ -86,6 +89,7 @@ class ProfileModel extends Equatable {
         userConsentForVerifierAccess,
         userPINCodeForAuthentication,
         isSecurityLow,
+        isDeveloperMode,
         userPinDigitsLength,
       ];
 
@@ -108,6 +112,7 @@ class ProfileModel extends Equatable {
     bool? userConsentForVerifierAccess,
     bool? userPINCodeForAuthentication,
     bool? isSecurityLow,
+    bool? isDeveloperMode,
     int? userPinDigitsLength,
   }) {
     return ProfileModel(
@@ -130,6 +135,7 @@ class ProfileModel extends Equatable {
       userPINCodeForAuthentication:
           userPINCodeForAuthentication ?? this.userPINCodeForAuthentication,
       isSecurityLow: isSecurityLow ?? this.isSecurityLow,
+      isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
       userPinDigitsLength: userPinDigitsLength ?? this.userPinDigitsLength,
     );
   }

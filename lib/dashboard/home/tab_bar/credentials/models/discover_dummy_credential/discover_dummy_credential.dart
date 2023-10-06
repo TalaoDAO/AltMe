@@ -299,15 +299,18 @@ class DiscoverDummyCredential extends Equatable {
       image: image,
       link: link,
       credentialSubjectType: credentialSubjectType,
-      whyGetThisCard:
-          whyGetThisCard == null ? null : ResponseMessage(whyGetThisCard),
+      whyGetThisCard: whyGetThisCard == null
+          ? null
+          : ResponseMessage(message: whyGetThisCard),
       expirationDateDetails: expirationDateDetails == null
           ? null
-          : ResponseMessage(expirationDateDetails),
-      howToGetIt: howToGetIt == null ? null : ResponseMessage(howToGetIt),
+          : ResponseMessage(message: expirationDateDetails),
+      howToGetIt:
+          howToGetIt == null ? null : ResponseMessage(message: howToGetIt),
       websiteLink: websiteLink,
-      longDescription:
-          longDescription == null ? null : ResponseMessage(longDescription),
+      longDescription: longDescription == null
+          ? null
+          : ResponseMessage(message: longDescription),
     );
   }
 

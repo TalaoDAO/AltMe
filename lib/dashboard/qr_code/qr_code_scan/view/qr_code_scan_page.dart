@@ -40,12 +40,6 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
       listeners: [
         BlocListener<QRCodeScanCubit, QRCodeScanState>(
           listener: (context, state) async {
-            if (state.status == QrScanStatus.error) {
-              if (state.message != null) {
-                Navigator.of(context).pop();
-              }
-            }
-
             if (state.status == QrScanStatus.goBack) {
               Navigator.of(context).pop();
             }

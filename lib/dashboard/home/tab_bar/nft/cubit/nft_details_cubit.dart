@@ -59,7 +59,7 @@ class NftDetailsCubit extends Cubit<NftDetailsState> {
             status: AppStatus.error,
             message: StateMessage.error(
               messageHandler: ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
               ),
               showDialog: true,

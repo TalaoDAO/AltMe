@@ -101,7 +101,8 @@ class WalletCubit extends Cubit<WalletState> {
         onComplete?.call(
           cryptoAccount: CryptoAccount(data: cryptoAccountDataList),
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST,
+            message:
+                ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST,
           ),
         );
         return;
@@ -257,7 +258,7 @@ class WalletCubit extends Cubit<WalletState> {
     onComplete?.call(
       cryptoAccount: updatedCryptoAccount,
       messageHandler: ResponseMessage(
-        ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+        message: ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
       ),
     );
 

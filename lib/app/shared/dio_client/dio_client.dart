@@ -65,7 +65,7 @@ class DioClient {
       return response.data;
     } on FormatException catch (_) {
       throw ResponseMessage(
-        ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA,
+        message: ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA,
       );
     } catch (e) {
       if (e is DioException) {
@@ -132,7 +132,7 @@ class DioClient {
       return response.data;
     } on FormatException catch (_) {
       throw ResponseMessage(
-        ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA,
+        message: ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA,
       );
     } catch (e) {
       if (e is DioException) {

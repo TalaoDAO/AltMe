@@ -232,19 +232,17 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   .startsWith(Parameters.authorizeEndPoint) ||
               state.uri.toString().startsWith(Parameters.oidc4vcUniversalLink);
 
-          OIDC4VCType? oidc4vcTypeForIssuance;
+          final OIDC4VCType? oidc4vcTypeForIssuance =
+              await getOIDC4VCTypeForIssuance(
+            url: state.uri.toString(),
+            client: DioClient('', Dio()),
+          );
 
           if (showPrompt) {
             if (isOpenIDUrl || isFromDeeplink) {
               /// OIDC4VCI Case
-              final OIDC4VCType? oidc4vcType = await getOIDC4VCTypeForIssuance(
-                url: state.uri.toString(),
-                client: DioClient('', Dio()),
-              );
 
-              oidc4vcTypeForIssuance = oidc4vcType;
-
-              if (oidc4vcType != null) {
+              if (oidc4vcTypeForIssuance != null) {
                 /// issuance case
                 if (!userConsentForIssuerAccess) showPrompt = false;
               } else {
@@ -294,7 +292,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           } else {
             context.read<QRCodeScanCubit>().emitError(
                   ResponseMessage(
-                    ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+                    message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
                   ),
                 );
             return;
@@ -304,12 +302,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
       if (state.status == QrScanStatus.success) {
         if (state.route != null) {
-          if (context.read<RouteCubit>().state == QRCODE_SCAN_PAGE) {
-            await Navigator.of(context)
-                .pushReplacement<void, void>(state.route!);
-          } else {
-            await Navigator.of(context).push<void>(state.route!);
-          }
+          await Navigator.of(context).push<void>(state.route!);
           context.read<QRCodeScanCubit>().clearRoute();
         }
       }
@@ -321,22 +314,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         );
       }
     } catch (e) {
-      if (e
-          .toString()
-          .startsWith('Exception: Subject_Syntax_Type_Not_Supported')) {
-        context.read<QRCodeScanCubit>().emitError(
-              ResponseMessage(
-                ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported,
-              ),
-            );
-      } else {
-        context.read<QRCodeScanCubit>().emitError(
-              ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-              ),
-            );
-      }
+      context.read<QRCodeScanCubit>().emitError(e);
     }
   },
 );
@@ -368,7 +346,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
             stateMessage: StateMessage.error(
               stringMessage: '$incomingNetworkType.',
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE,
+                message: ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE,
               ),
             ),
           );
@@ -426,7 +404,8 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
             context: context,
             stateMessage: StateMessage.info(
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
+                message: ResponseString
+                    .RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
               ),
             ),
           );

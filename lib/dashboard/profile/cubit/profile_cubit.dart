@@ -104,14 +104,20 @@ class ProfileCubit extends Cubit<ProfileState> {
       final isSecurityLow =
           isSecurityLowValue == null || isSecurityLowValue == 'true';
 
+      final isDeveloperModeValue =
+          await secureStorageProvider.get(SecureStorageKeys.isDeveloperMode);
+
+      final isDeveloperMode =
+          isDeveloperModeValue != null && isDeveloperModeValue == 'true';
+
       final userPINCodeForAuthenticationValue = await secureStorageProvider
           .get(SecureStorageKeys.userPINCodeForAuthentication);
       final userPINCodeForAuthentication =
           userPINCodeForAuthenticationValue == null ||
               userPINCodeForAuthenticationValue == 'true';
 
-      final userPinDigitsLengthString =
-          await secureStorageProvider.get(SecureStorageKeys.isSecurityLow);
+      final userPinDigitsLengthString = await secureStorageProvider
+          .get(SecureStorageKeys.userPinDigitsLength);
 
       final int userPinDigitsLength = userPinDigitsLengthString != null
           ? int.parse(userPinDigitsLengthString)
@@ -134,6 +140,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         userConsentForVerifierAccess: userConsentForVerifierAccess,
         userPINCodeForAuthentication: userPINCodeForAuthentication,
         isSecurityLow: isSecurityLow,
+        isDeveloperMode: isDeveloperMode,
         userPinDigitsLength: userPinDigitsLength,
       );
 
@@ -152,7 +159,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE,
+            message: ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE,
           ),
         ),
       );
@@ -232,6 +239,11 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
+        SecureStorageKeys.isDeveloperMode,
+        profileModel.isDeveloperMode.toString(),
+      );
+
+      await secureStorageProvider.set(
         SecureStorageKeys.userPinDigitsLength,
         profileModel.userPinDigitsLength.toString(),
       );
@@ -252,7 +264,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_FAILED_TO_SAVE_PROFILE,
+            message: ResponseString.RESPONSE_STRING_FAILED_TO_SAVE_PROFILE,
           ),
         ),
       );
@@ -297,6 +309,11 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> setSecurityLevel({bool isSecurityLow = true}) async {
     final profileModel = state.model.copyWith(isSecurityLow: isSecurityLow);
+    await update(profileModel);
+  }
+
+  Future<void> setDeveloperModeStatus({bool enabled = false}) async {
+    final profileModel = state.model.copyWith(isDeveloperMode: enabled);
     await update(profileModel);
   }
 

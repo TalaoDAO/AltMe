@@ -168,7 +168,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       log.e('failed to verify credential, ${jsonVerification['errors']}');
       if (jsonVerification['errors'][0] != 'No applicable proof') {
         throw ResponseMessage(
-          ResponseString
+          message: ResponseString
               .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
         );
       } else {
@@ -298,7 +298,7 @@ Future<CredentialModel?> generateWalletCredential({
       log.e('failed to verify credential, ${jsonVerification['errors']}');
       if (jsonVerification['errors'][0] != 'No applicable proof') {
         throw ResponseMessage(
-          ResponseString
+          message: ResponseString
               .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
         );
       } else {

@@ -283,7 +283,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            message: ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           ),
         ),
       );
@@ -354,7 +355,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
@@ -401,7 +402,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            message: ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           ),
         ),
       );
@@ -488,7 +490,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION,
+              message: ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION,
             ),
           ),
         );
@@ -499,7 +501,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            message: ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           ),
         ),
       );
@@ -526,7 +529,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
+              message: ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
             ),
           ),
         );
@@ -569,7 +572,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
@@ -590,7 +593,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),

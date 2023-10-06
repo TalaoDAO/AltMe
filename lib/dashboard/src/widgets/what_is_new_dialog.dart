@@ -76,6 +76,14 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'Developper mode',
+                                'New splash screen',
+                                'extended OIDC4VC options',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.20.18',
+                              features: [
                                 'Wallet connect V2 integration',
                                 'Bug fixes',
                               ],

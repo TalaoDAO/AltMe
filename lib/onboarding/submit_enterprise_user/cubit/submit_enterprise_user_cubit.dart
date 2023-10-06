@@ -37,12 +37,12 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
     try {
       if (did.isEmpty) {
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_PLEASE_ENTER_YOUR_DID_KEY,
+          message: ResponseString.RESPONSE_STRING_PLEASE_ENTER_YOUR_DID_KEY,
         );
       }
       if (state.rsaFile == null) {
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_PLEASE_IMPORT_YOUR_RSA_KEY,
+          message: ResponseString.RESPONSE_STRING_PLEASE_IMPORT_YOUR_RSA_KEY,
         );
       }
       final resolvedDID = await didKitProvider.resolveDID(did, '{}');
@@ -54,12 +54,12 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
         //read RSA json file
         if (state.rsaFile!.path == null) {
           throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_PLEASE_IMPORT_YOUR_RSA_KEY,
+            message: ResponseString.RESPONSE_STRING_PLEASE_IMPORT_YOUR_RSA_KEY,
           );
         }
         if (did.trim().isEmpty) {
           throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_PLEASE_ENTER_YOUR_DID_KEY,
+            message: ResponseString.RESPONSE_STRING_PLEASE_ENTER_YOUR_DID_KEY,
           );
         }
         final rsaJsonFile = File(state.rsaFile!.path!);
@@ -86,19 +86,20 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
           emit(
             state.success(
               messageHandler: ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY,
               ),
             ),
           );
         } else {
           throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_RSA_NOT_MATCHED_WITH_DID_KEY,
+            message:
+                ResponseString.RESPONSE_STRING_RSA_NOT_MATCHED_WITH_DID_KEY,
           );
         }
       } else {
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_DID_KEY_NOT_RESOLVED,
+          message: ResponseString.RESPONSE_STRING_DID_KEY_NOT_RESOLVED,
         );
       }
       emit(state.success());
@@ -110,7 +111,7 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_AN_UNKNOWN_ERROR_HAPPENED,
+              message: ResponseString.RESPONSE_STRING_AN_UNKNOWN_ERROR_HAPPENED,
             ),
           ),
         );

@@ -52,13 +52,14 @@ class RightsCubit extends Cubit<RightsState> {
             state.copyWith(
               appStatus: AppStatus.success,
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP,
+                message: ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP,
               ),
             ),
           );
         } else {
           throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            message: ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           );
         }
       } else {
@@ -70,7 +71,7 @@ class RightsCubit extends Cubit<RightsState> {
           state.copyWith(
             appStatus: AppStatus.success,
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP,
+              message: ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP,
             ),
           ),
         );
@@ -83,7 +84,7 @@ class RightsCubit extends Cubit<RightsState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),

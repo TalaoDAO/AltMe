@@ -763,6 +763,7 @@
     "mnemonicsVerifiedMessage",
     "chatWith",
     "sendAnEmail",
+    "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
@@ -850,6 +851,8 @@
     "pleaseInsertTheSecredCodeReceived",
     "verifyIssuerWebsiteIdentity",
     "verifyIssuerWebsiteIdentitySubtitle",
+    "developerMode",
+    "developerModeSubtitle",
     "confirmVerifierAccess",
     "confirmVerifierAccessSubtitle",
     "secureAuthenticationWithPINCode",
@@ -877,7 +880,13 @@
     "thisRequestIsNotSupported",
     "unsupportedCredential",
     "credentialIssuanceNotAllowedToTheWallet",
-    "moreDetails"
+    "aloginIsRequired",
+    "userConsentIsRequired",
+    "theWalletIsNotRegistered",
+    "credentialIssuanceDenied",
+    "thisCredentialFormatIsNotSupported",
+    "moreDetails",
+    "theCredentialOfferIsInvalid"
   ],
 
   "es": [
@@ -1644,6 +1653,7 @@
     "mnemonicsVerifiedMessage",
     "chatWith",
     "sendAnEmail",
+    "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
@@ -1731,6 +1741,8 @@
     "pleaseInsertTheSecredCodeReceived",
     "verifyIssuerWebsiteIdentity",
     "verifyIssuerWebsiteIdentitySubtitle",
+    "developerMode",
+    "developerModeSubtitle",
     "confirmVerifierAccess",
     "confirmVerifierAccessSubtitle",
     "secureAuthenticationWithPINCode",
@@ -1758,7 +1770,13 @@
     "thisRequestIsNotSupported",
     "unsupportedCredential",
     "credentialIssuanceNotAllowedToTheWallet",
-    "moreDetails"
+    "aloginIsRequired",
+    "userConsentIsRequired",
+    "theWalletIsNotRegistered",
+    "credentialIssuanceDenied",
+    "thisCredentialFormatIsNotSupported",
+    "moreDetails",
+    "theCredentialOfferIsInvalid"
   ],
 
   "fr": [
@@ -1828,6 +1846,7 @@
     "mnemonicsVerifiedMessage",
     "chatWith",
     "sendAnEmail",
+    "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
@@ -1915,6 +1934,8 @@
     "pleaseInsertTheSecredCodeReceived",
     "verifyIssuerWebsiteIdentity",
     "verifyIssuerWebsiteIdentitySubtitle",
+    "developerMode",
+    "developerModeSubtitle",
     "confirmVerifierAccess",
     "confirmVerifierAccessSubtitle",
     "secureAuthenticationWithPINCode",
@@ -1942,7 +1963,13 @@
     "thisRequestIsNotSupported",
     "unsupportedCredential",
     "credentialIssuanceNotAllowedToTheWallet",
-    "moreDetails"
+    "aloginIsRequired",
+    "userConsentIsRequired",
+    "theWalletIsNotRegistered",
+    "credentialIssuanceDenied",
+    "thisCredentialFormatIsNotSupported",
+    "moreDetails",
+    "theCredentialOfferIsInvalid"
   ],
 
   "it": [
@@ -2709,6 +2736,7 @@
     "mnemonicsVerifiedMessage",
     "chatWith",
     "sendAnEmail",
+    "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
@@ -2796,6 +2824,8 @@
     "pleaseInsertTheSecredCodeReceived",
     "verifyIssuerWebsiteIdentity",
     "verifyIssuerWebsiteIdentitySubtitle",
+    "developerMode",
+    "developerModeSubtitle",
     "confirmVerifierAccess",
     "confirmVerifierAccessSubtitle",
     "secureAuthenticationWithPINCode",
@@ -2823,6 +2853,12 @@
     "thisRequestIsNotSupported",
     "unsupportedCredential",
     "credentialIssuanceNotAllowedToTheWallet",
-    "moreDetails"
+    "aloginIsRequired",
+    "userConsentIsRequired",
+    "theWalletIsNotRegistered",
+    "credentialIssuanceDenied",
+    "thisCredentialFormatIsNotSupported",
+    "moreDetails",
+    "theCredentialOfferIsInvalid"
   ]
 }

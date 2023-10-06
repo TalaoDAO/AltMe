@@ -9,7 +9,6 @@ class ErrorDialog extends StatelessWidget {
     required this.title,
     this.erroDescription,
     this.erroUrl,
-    this.icon = IconStrings.alert,
     this.dialogColor,
     this.bgColor,
     this.textColor,
@@ -21,7 +20,6 @@ class ErrorDialog extends StatelessWidget {
   final Color? dialogColor;
   final Color? bgColor;
   final Color? textColor;
-  final String icon;
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +39,12 @@ class ErrorDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(
-            icon,
-            width: 50,
-            height: 50,
-          ),
-          const SizedBox(height: 15),
+          // Image.asset(
+          //   icon,
+          //   width: 50,
+          //   height: 50,
+          // ),
+          const SizedBox(height: 25),
           Text(
             title,
             style: Theme.of(context)
@@ -90,7 +88,8 @@ class ErrorDialog extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop(true);
             },
-          )
+          ),
+          const SizedBox(height: 10),
         ],
       ),
     );

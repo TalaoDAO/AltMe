@@ -74,7 +74,8 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
             await connectedDappRepository.insert(savedPeerData);
           } else {
             throw ResponseMessage(
-              ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON,
+              message:
+                  ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON,
             );
           }
 
@@ -124,7 +125,8 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
         state.copyWith(
           appStatus: AppStatus.success,
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON,
+            message:
+                ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON,
           ),
         ),
       );
@@ -136,7 +138,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),

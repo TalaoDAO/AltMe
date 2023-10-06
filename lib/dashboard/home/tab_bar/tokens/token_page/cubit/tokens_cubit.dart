@@ -108,7 +108,8 @@ class TokensCubit extends Cubit<TokensState> {
       emit(
         state.errorWhileFetching(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            message: ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           ),
         ),
       );

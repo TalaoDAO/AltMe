@@ -45,7 +45,8 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
 
     if (recoveryMnemonic == null) {
       throw ResponseMessage(
-        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        message:
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
       );
     }
 
@@ -103,7 +104,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
             json['cipherText'] is! String ||
             json['authenticationTag'] is! String) {
           throw ResponseMessage(
-            ResponseString
+            message: ResponseString
                 .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
           );
         }
@@ -118,7 +119,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
             !decryptedJson.containsKey('credentials') ||
             decryptedJson['date'] is! String) {
           throw ResponseMessage(
-            ResponseString
+            message: ResponseString
                 .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
           );
         }
@@ -145,7 +146,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_RECOVERY_CREDENTIAL_AUTH_ERROR_MESSAGE,
             ),
           ),
@@ -154,7 +155,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_RECOVERY_CREDENTIAL_DEFAULT_ERROR_MESSAGE,
             ),
           ),
