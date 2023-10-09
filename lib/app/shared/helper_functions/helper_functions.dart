@@ -793,8 +793,8 @@ Future<(String?, String?)> getIssuerAndPreAuthorizedCode({
 }
 
 bool isURL(String input) {
-  final Uri? uri = Uri.tryParse(input);
-  return uri != null && uri.hasScheme;
+  final bool uri = Uri.tryParse(input)?.hasAbsolutePath ?? false;
+  return uri;
 }
 
 int getIndexValue({required bool isEBSIV3}) {
