@@ -865,3 +865,25 @@ ResponseString getErrorResponseString(String errorString) {
       return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
   }
 }
+
+bool isIDTokenOnly(String responseType) {
+  return responseType.contains('id_token') &&
+      !responseType.contains('vp_token');
+}
+
+bool isVPTokenOnly(String responseType) {
+  return responseType.contains('vp_token') &&
+      !responseType.contains('id_token');
+}
+
+bool isIDAndVPToken(String responseType) {
+  return responseType.contains('id_token') && responseType.contains('vp_token');
+}
+
+bool hasIDToken(String responseType) {
+  return responseType.contains('id_token');
+}
+
+bool hasVPToken(String responseType) {
+  return responseType.contains('vp_token');
+}
