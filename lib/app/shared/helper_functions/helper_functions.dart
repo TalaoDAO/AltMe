@@ -245,7 +245,7 @@ Future<String> web3RpcMainnetInfuraURL() async {
   return '$prefixUrl$infuraApiKey';
 }
 
-Future<String> getRandomP256PrivateKey(
+Future<String> getEBSIV3P256PrivateKey(
   SecureStorageProvider secureStorage,
 ) async {
   final String? p256PrivateKey = await secureStorage.get(
@@ -273,6 +273,32 @@ Future<String> getRandomP256PrivateKey(
   }
 }
 
+Future<String> getP256PrivateKey(SecureStorageProvider secureStorage) async {
+  final String? p256PrivateKey = await secureStorage.get(
+    SecureStorageKeys.p256PrivateKey2,
+  );
+
+  if (p256PrivateKey == null) {
+    final jwk = JsonWebKey.generate('ES256');
+
+    final json = jwk.toJson();
+
+    // Sort the keys in ascending order and remove alg
+    final sortedJwk = Map.fromEntries(
+      json.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
+    )..remove('keyOperations');
+
+    await secureStorage.set(
+      SecureStorageKeys.p256PrivateKey2,
+      jsonEncode(sortedJwk),
+    );
+
+    return jsonEncode(sortedJwk);
+  } else {
+    return p256PrivateKey;
+  }
+}
+
 Future<String> fetchPrivateKey({
   required OIDC4VC oidc4vc,
   required SecureStorageProvider secureStorage,
@@ -283,7 +309,7 @@ Future<String> fetchPrivateKey({
   final index = getIndexValue(isEBSIV3: true);
 
   if (isEBSIV3) {
-    privateKey = await getRandomP256PrivateKey(getSecureStorage);
+    privateKey = await getEBSIV3P256PrivateKey(getSecureStorage);
   } else {
     final OIDC4VC oidc4vc = OIDC4VC();
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);

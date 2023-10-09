@@ -885,7 +885,8 @@
     "thisCredentialFormatIsNotSupported",
     "moreDetails",
     "theCredentialOfferIsInvalid",
-    "dateOfRequest"
+    "dateOfRequest",
+    "keyDecentralizedIDP256"
   ],
 
   "es": [
@@ -1774,7 +1775,8 @@
     "thisCredentialFormatIsNotSupported",
     "moreDetails",
     "theCredentialOfferIsInvalid",
-    "dateOfRequest"
+    "dateOfRequest",
+    "keyDecentralizedIDP256"
   ],
 
   "fr": [
@@ -1966,7 +1968,8 @@
     "thisCredentialFormatIsNotSupported",
     "moreDetails",
     "theCredentialOfferIsInvalid",
-    "dateOfRequest"
+    "dateOfRequest",
+    "keyDecentralizedIDP256"
   ],
 
   "it": [
@@ -2855,6 +2858,7 @@
     "thisCredentialFormatIsNotSupported",
     "moreDetails",
     "theCredentialOfferIsInvalid",
-    "dateOfRequest"
+    "dateOfRequest",
+    "keyDecentralizedIDP256"
   ]
 }
