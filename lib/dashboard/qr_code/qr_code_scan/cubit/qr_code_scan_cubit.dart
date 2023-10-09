@@ -958,17 +958,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final nonce = state.uri?.queryParameters['nonce'];
       final stateValue = state.uri?.queryParameters['state'];
 
-      final bool isEBSIV3 =
-          await isEBSIV3ForVerifier(client: client, uri: state.uri!);
-
       final privateKey = await fetchPrivateKey(
-        isEBSIV3: isEBSIV3,
+        isEBSIV3: false,
         oidc4vc: oidc4vc,
         secureStorage: getSecureStorage,
       );
 
       final (did, kid) = await getDidAndKid(
-        isEBSIV3: isEBSIV3,
+        isEBSIV3: false,
         privateKey: privateKey,
         didKitProvider: didKitProvider,
       );
@@ -979,7 +976,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         did: did,
         kid: kid,
         redirectUri: redirectUri,
-        nonce: nonce!,
+        nonce: nonce,
         stateValue: stateValue,
       );
 
