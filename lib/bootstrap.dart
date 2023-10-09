@@ -14,6 +14,7 @@ import 'package:dartez/dartez.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
@@ -34,20 +35,23 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
-  await runZonedGuarded(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
-      await LocalNotification().init();
-      await initSecureStorage;
+  await LocalNotification().init();
+  await initSecureStorage;
 
-      /// Disable Http google font
-      GoogleFonts.config.allowRuntimeFetching = false;
+  /// Disable Http google font
+  GoogleFonts.config.allowRuntimeFetching = false;
 
-      await Dartez().init();
-      Bloc.observer = AppBlocObserver();
-      runApp(await builder());
+  await Dartez().init();
+  Bloc.observer = AppBlocObserver();
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://b1e6ffd0c1224d64bcaaadd46ea4f24e@o586691.ingest.sentry.io/4504605041688576';
+      options.debug = true;
     },
-    (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
+    // Init your App.
+    appRunner: () async => runApp(await builder()),
   );
 }
