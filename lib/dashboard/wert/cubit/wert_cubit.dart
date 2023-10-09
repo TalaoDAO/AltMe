@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class WertCubit extends Cubit<String> {
   WertCubit({
@@ -55,7 +56,7 @@ class WertCubit extends Cubit<String> {
       }
     }
 
-    log.i('link: $link');
+    Sentry.captureMessage('link: $link');
 
     emit(link);
   }

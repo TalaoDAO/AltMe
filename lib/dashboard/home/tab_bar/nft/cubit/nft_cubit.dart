@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'nft_cubit.g.dart';
 
@@ -41,7 +42,7 @@ class NftCubit extends Cubit<NftState> {
     _offsetOfLoadedData = state.offset;
     if (data.length < state.offset) return;
     try {
-      log.i('starting funtion getTezosNftList()');
+      Sentry.captureMessage('starting funtion getTezosNftList()');
 
       //final activeIndex = walletCubit.state.currentCryptoIndex;
       final walletAddress = walletCubit.state.currentAccount!.walletAddress;
@@ -80,11 +81,11 @@ class NftCubit extends Cubit<NftState> {
       } else {
         data.addAll(newData);
       }
-      log.i('nfts - $data');
+      Sentry.captureMessage('nfts - $data');
       emit(state.populate(data: data));
     } catch (e, s) {
       if (isClosed) return;
-      log.e('failed to fetch nfts, e: $e, s: $s');
+      Sentry.captureMessage('failed to fetch nfts, e: $e, s: $s');
       emit(
         state.copyWith(
           status: state.offset == 0
@@ -103,14 +104,14 @@ class NftCubit extends Cubit<NftState> {
   }
 
   Future<void> fetchFromZero() async {
-    log.i('refreshing nft page');
+    Sentry.captureMessage('refreshing nft page');
     _offsetOfLoadedData = -1;
     emit(state.copyWith(offset: 0));
     await getNftList();
   }
 
   Future<void> fetchMoreTezosNfts() async {
-    log.i('fetching more nfts');
+    Sentry.captureMessage('fetching more nfts');
     final offset = state.offset + _limit;
     emit(state.copyWith(offset: offset));
     await getNftList();

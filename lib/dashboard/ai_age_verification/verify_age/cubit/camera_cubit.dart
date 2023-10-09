@@ -46,8 +46,6 @@ class CameraCubit extends Cubit<CameraState> {
       emit(state.copyWith(status: CameraStatus.initializeFailed));
       logger.e(
         'error: $e, stack: $s',
-        error: e,
-        stackTrace: s,
       );
     }
     cameraController = CameraController(

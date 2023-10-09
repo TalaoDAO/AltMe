@@ -15,6 +15,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 part 'scan_cubit.g.dart';
@@ -176,7 +177,7 @@ class ScanCubit extends Cubit<ScanState> {
           }
         }
 
-        log.i('presentations - $presentations');
+        Sentry.captureMessage('presentations - $presentations');
 
         FormData data;
         if (credentialModel.receivedId == null) {
@@ -206,7 +207,7 @@ class ScanCubit extends Cubit<ScanState> {
 
         if (credentialModel.jwt == null) {
           /// not verifying credential for did:ebsi and did:web issuer
-          log.i('verifying Credential');
+          Sentry.captureMessage('verifying Credential');
 
           final vcStr = jsonEncode(jsonCredential);
           final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
@@ -215,9 +216,11 @@ class ScanCubit extends Cubit<ScanState> {
           final verification =
               await didKitProvider.verifyCredential(vcStr, optStr);
 
-          log.i('[wallet/credential-offer/verify/vc] $vcStr');
-          log.i('[wallet/credential-offer/verify/options] $optStr');
-          log.i('[wallet/credential-offer/verify/result] $verification');
+          Sentry.captureMessage('[wallet/credential-offer/verify/vc] $vcStr');
+          Sentry.captureMessage(
+              '[wallet/credential-offer/verify/options] $optStr');
+          Sentry.captureMessage(
+              '[wallet/credential-offer/verify/result] $verification');
 
           final jsonVerification =
               jsonDecode(verification) as Map<String, dynamic>;
@@ -276,7 +279,7 @@ class ScanCubit extends Cubit<ScanState> {
         emit(state.copyWith(status: ScanStatus.success));
       }
     } catch (e) {
-      log.e('something went wrong - $e');
+      Sentry.captureMessage('something went wrong - $e');
       if (e is NetworkException &&
           e.message == NetworkError.NETWORK_ERROR_PRECONDITION_FAILED) {
         emitError(
@@ -329,7 +332,7 @@ class ScanCubit extends Cubit<ScanState> {
         key,
       );
 
-      log.i('presentation $presentation');
+      Sentry.captureMessage('presentation $presentation');
 
       final FormData formData = FormData.fromMap(<String, dynamic>{
         'presentation': presentation,
@@ -436,7 +439,9 @@ class ScanCubit extends Cubit<ScanState> {
         throw Exception('DID is not set. It is required to present DIDAuth');
       }
     } catch (e, s) {
-      log.e('something went wrong', error: e, stackTrace: s);
+      Sentry.captureMessage(
+        'something went wrong',
+      );
       emitError(e);
     }
   }
@@ -617,7 +622,9 @@ class ScanCubit extends Cubit<ScanState> {
         );
       }
     } catch (e, s) {
-      log.e('something went wrong', error: e, stackTrace: s);
+      Sentry.captureMessage(
+        'something went wrong',
+      );
       emitError(e);
     }
   }
@@ -786,7 +793,7 @@ class ScanCubit extends Cubit<ScanState> {
     required Issuer issuer,
   }) async {
     final log = getLogger('ScanCubit');
-    log.i('adding presentation Activity');
+    Sentry.captureMessage('adding presentation Activity');
     for (final credentialModel in credentialModels) {
       final Activity activity = Activity(
         presentation: Presentation(
@@ -796,7 +803,7 @@ class ScanCubit extends Cubit<ScanState> {
       );
       credentialModel.activities.add(activity);
 
-      log.i('presentation activity added to the credential');
+      Sentry.captureMessage('presentation activity added to the credential');
       await credentialsCubit.updateCredential(
         credential: credentialModel,
         showMessage: false,

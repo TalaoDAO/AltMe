@@ -52,8 +52,6 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     } catch (e, s) {
       getLogger(runtimeType.toString()).e(
         'error in init() e: $e, $s',
-        error: e,
-        stackTrace: s,
       );
       if (isClosed) return;
       emit(
@@ -96,8 +94,6 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     } catch (e, s) {
       getLogger(runtimeType.toString()).e(
         'error in getOperations() e: $e, $s',
-        error: e,
-        stackTrace: s,
       );
       emit(
         state.error(

@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/json_rpc.dart';
 import 'package:web3dart/web3dart.dart';
@@ -21,7 +22,7 @@ class MWeb3Client {
 
     final balance = await ethClient.getBalance(credentials.address);
     final balanceInUnit = balance.getValueInUnit(EtherUnit.ether);
-    log.i('ETH balance in unit: $balanceInUnit');
+    Sentry.captureMessage('ETH balance in unit: $balanceInUnit');
     return balanceInUnit;
   }
 
@@ -63,7 +64,7 @@ class MWeb3Client {
       transaction,
       chainId: chainId,
     );
-    log.i('Transaction sent: $result');
+    Sentry.captureMessage('Transaction sent: $result');
   }
 
   static double formatEthAmount({
@@ -178,7 +179,7 @@ class MWeb3Client {
           BigInt.from(amountInWei), //amount
           bytes, //bytes
         ];
-        log.i('ERC1155 bytes : $bytes');
+        Sentry.captureMessage('ERC1155 bytes : $bytes');
       }
 
       // // listen for the Transfer event when it's emitted by the contract above
@@ -195,8 +196,8 @@ class MWeb3Client {
       //   final to = decoded[1] as EthereumAddress;
       //   final value = decoded[2] as BigInt;
 
-      //   log.i('decoded response: $decoded');
-      //   log.i('$from sent $value ${token.name} to $to');
+      //   Sentry.captureMessage('decoded response: $decoded');
+      //   Sentry.captureMessage('$from sent $value ${token.name} to $to');
       // });
 
       try {
@@ -206,9 +207,9 @@ class MWeb3Client {
           function: balanceFunction,
           params: balanceFunctionParams,
         );
-        log.i('We have ${balance.first} ${token.name}');
+        Sentry.captureMessage('We have ${balance.first} ${token.name}');
       } catch (e, s) {
-        log.e('error in the token balance e: $e, s: $s');
+        Sentry.captureMessage('error in the token balance e: $e, s: $s');
       }
 
       final txId = await client.sendTransaction(
@@ -228,7 +229,7 @@ class MWeb3Client {
       await client.dispose();
       return txId;
     } catch (e, s) {
-      log.e('sendToken() error: $e , stack: $s');
+      Sentry.captureMessage('sendToken() error: $e , stack: $s');
       if (e is RPCError) rethrow;
       return null;
     }
@@ -241,17 +242,17 @@ class MWeb3Client {
     required EtherAmount amount,
     String? data,
   }) async {
-    log.i('estimateEthereumFee');
+    Sentry.captureMessage('estimateEthereumFee');
     late EtherAmount gasPrice = EtherAmount.inWei(BigInt.one);
     try {
       final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
       gasPrice = await web3Client.getGasPrice();
 
-      log.i('from: ${sender.hex}');
-      log.i('to: ${reciever.hex}');
-      log.i('gasPrice: ${gasPrice.getInWei}');
-      log.i('value: ${amount.getInWei}');
-      log.i('data: $data');
+      Sentry.captureMessage('from: ${sender.hex}');
+      Sentry.captureMessage('to: ${reciever.hex}');
+      Sentry.captureMessage('gasPrice: ${gasPrice.getInWei}');
+      Sentry.captureMessage('value: ${amount.getInWei}');
+      Sentry.captureMessage('data: $data');
 
       final BigInt maxGas = await web3Client.estimateGas(
         sender: sender,
@@ -260,15 +261,15 @@ class MWeb3Client {
         gasPrice: gasPrice,
         data: data != null ? hexToBytes(data) : null,
       );
-      log.i('maxGas - $maxGas');
+      Sentry.captureMessage('maxGas - $maxGas');
 
       final fee = maxGas * gasPrice.getInWei;
-      log.i('maxGas * gasPrice.getInWei = $fee');
+      Sentry.captureMessage('maxGas * gasPrice.getInWei = $fee');
       return fee;
     } catch (e, s) {
-      log.e('e: $e, s: $s');
+      Sentry.captureMessage('e: $e, s: $s');
       final fee = BigInt.from(21000) * gasPrice.getInWei;
-      log.i('2100 * gasPrice.getInWei = $fee');
+      Sentry.captureMessage('2100 * gasPrice.getInWei = $fee');
       return fee;
     }
   }
@@ -283,7 +284,7 @@ class MWeb3Client {
     BigInt? gas,
     String? data,
   }) async {
-    log.i('sendEthereumTransaction');
+    Sentry.captureMessage('sendEthereumTransaction');
     final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
     final int nonce = await web3Client.getTransactionCount(sender);
     final EtherAmount gasPrice = await web3Client.getGasPrice();
@@ -308,9 +309,9 @@ class MWeb3Client {
       maxGas: maxGas.toInt(),
     );
 
-    log.i('nonce: $nonce');
-    log.i('maxGas: ${maxGas.toInt()}');
-    log.i('chainId: $chainId');
+    Sentry.captureMessage('nonce: $nonce');
+    Sentry.captureMessage('maxGas: ${maxGas.toInt()}');
+    Sentry.captureMessage('chainId: $chainId');
 
     final transactionHash = await web3Client.sendTransaction(
       credentials,
@@ -318,7 +319,7 @@ class MWeb3Client {
       chainId: chainId,
     );
 
-    log.i('transactionHash - $transactionHash');
+    Sentry.captureMessage('transactionHash - $transactionHash');
     return transactionHash;
   }
 }

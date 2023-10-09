@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class LocalAuthApi {
   factory LocalAuthApi() {
@@ -45,7 +46,7 @@ class LocalAuthApi {
         ),
       );
     } on PlatformException catch (e, s) {
-      log.e('${e.message} stack: $s');
+      Sentry.captureMessage('${e.message} stack: $s');
       return false;
     }
   }

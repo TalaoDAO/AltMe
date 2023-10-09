@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -83,21 +84,21 @@ class _MWebViewState extends State<MWebView>
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
-            log.i('WebView is loading (progress : $progress%)');
+            Sentry.captureMessage('WebView is loading (progress : $progress%)');
             if (progress == 100) {
               mWebViewCubit.setLoading(isLoading: false);
             }
           },
           onPageStarted: (String url) {
-            log.i('Page started loading: $url');
+            Sentry.captureMessage('Page started loading: $url');
             mWebViewCubit.setLoading(isLoading: true);
           },
           onPageFinished: (String url) {
-            log.i('Page finished loading: $url');
+            Sentry.captureMessage('Page finished loading: $url');
           },
           onWebResourceError: (WebResourceError error) {
             mWebViewCubit.setLoading(isLoading: false);
-            log.i('''
+            Sentry.captureMessage('''
                 Page resource error:
                 code: ${error.errorCode}
                 description: ${error.description}
@@ -106,7 +107,7 @@ class _MWebViewState extends State<MWebView>
           ''');
           },
           onNavigationRequest: (NavigationRequest request) {
-            log.i('navigate - ${request.url}');
+            Sentry.captureMessage('navigate - ${request.url}');
             if (widget.onNavigationRequest != null) {
               return widget.onNavigationRequest!.call(request);
             } else {

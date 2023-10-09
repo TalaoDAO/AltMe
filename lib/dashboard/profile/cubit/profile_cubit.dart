@@ -9,6 +9,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'profile_cubit.g.dart';
 
@@ -151,10 +152,8 @@ class ProfileCubit extends Cubit<ProfileState> {
         ),
       );
     } catch (e, s) {
-      log.e(
+      Sentry.captureMessage(
         'something went wrong',
-        error: e,
-        stackTrace: s,
       );
       emit(
         state.error(
@@ -255,10 +254,8 @@ class ProfileCubit extends Cubit<ProfileState> {
         ),
       );
     } catch (e, s) {
-      log.e(
+      Sentry.captureMessage(
         'something went wrong',
-        error: e,
-        stackTrace: s,
       );
 
       emit(

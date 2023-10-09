@@ -11,7 +11,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
 }) async {
   final log =
       getLogger('CredentialsCubit - generateAssociatedWalletCredential');
-  log.i(blockchainType);
+  Sentry.captureMessage(blockchainType.toString());
   try {
     late String didMethod;
 
@@ -32,14 +32,14 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     );
 
     final issuer = didKitProvider.keyToDID(didMethod, jwkKey);
-    log.i('didMethod - $didMethod');
-    log.i('jwkKey - $jwkKey');
-    log.i('didKitProvider.keyToDID - $issuer');
+    Sentry.captureMessage('didMethod - $didMethod');
+    Sentry.captureMessage('jwkKey - $jwkKey');
+    Sentry.captureMessage('didKitProvider.keyToDID - $issuer');
 
     //Issue: https://github.com/spruceid/didkit/issues/329
     // final verificationMethod =
     //     await didKitProvider.keyToVerificationMethod(didMethod, jwkKey);
-    //log.i('didKitProvider.keyToVerificationMethod - $verificationMethod');
+    //Sentry.captureMessage('didKitProvider.keyToVerificationMethod - $verificationMethod');
 
     late String verificationMethod;
 
@@ -53,7 +53,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       case BlockchainType.binance:
         verificationMethod = '$issuer#Recovery2020';
     }
-    log.i('hardcoded verificationMethod - $verificationMethod');
+    Sentry.captureMessage('hardcoded verificationMethod - $verificationMethod');
 
     final didSsi = didCubit.state.did!;
 
@@ -141,18 +141,18 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         );
     }
 
-    log.i(jsonEncode(associatedAddressCredential.toJson()));
+    Sentry.captureMessage(jsonEncode(associatedAddressCredential.toJson()));
     final String vc = await didKitProvider.issueCredential(
       jsonEncode(associatedAddressCredential.toJson()),
       jsonEncode(options),
       jwkKey,
     );
 
-    log.i('didKitProvider.issueCredential - $vc');
+    Sentry.captureMessage('didKitProvider.issueCredential - $vc');
 
     final result =
         await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions));
-    log.i('didKitProvider.verifyCredential - $result');
+    Sentry.captureMessage('didKitProvider.verifyCredential - $result');
     final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
 
     if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
@@ -165,7 +165,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     final credentialManifest = blockchainType.credentialManifest;
 
     if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
-      log.e('failed to verify credential, ${jsonVerification['errors']}');
+      Sentry.captureMessage(
+          'failed to verify credential, ${jsonVerification['errors']}');
       if (jsonVerification['errors'][0] != 'No applicable proof') {
         throw ResponseMessage(
           message: ResponseString
@@ -178,10 +179,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       return _createCredential(vc, oldId, credentialManifest);
     }
   } catch (e, s) {
-    log.e(
+    Sentry.captureMessage(
       'something went wrong e: $e, stackTrace: $s',
-      error: e,
-      stackTrace: s,
     );
     return null;
   }
@@ -275,7 +274,7 @@ Future<CredentialModel?> generateWalletCredential({
       credentialSubjectModel: walletCredentialModel,
     );
 
-    log.i('walletCredential: ${walletCredential.toJson()}');
+    Sentry.captureMessage('walletCredential: ${walletCredential.toJson()}');
 
     final vc = await didKitProvider.issueCredential(
       jsonEncode(walletCredential.toJson()),
@@ -295,7 +294,8 @@ Future<CredentialModel?> generateWalletCredential({
     }
 
     if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
-      log.e('failed to verify credential, ${jsonVerification['errors']}');
+      Sentry.captureMessage(
+          'failed to verify credential, ${jsonVerification['errors']}');
       if (jsonVerification['errors'][0] != 'No applicable proof') {
         throw ResponseMessage(
           message: ResponseString
@@ -308,10 +308,8 @@ Future<CredentialModel?> generateWalletCredential({
       return _createCredential(vc, oldId, credentialManifest);
     }
   } catch (e, s) {
-    log.e(
+    Sentry.captureMessage(
       'something went wrong e: $e, stackTrace: $s',
-      error: e,
-      stackTrace: s,
     );
     return null;
   }

@@ -5,6 +5,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
 // #docregion platform_imports
@@ -63,21 +64,21 @@ class _WertViewState extends State<WertView> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
-            log.i('WebView is loading (progress : $progress%)');
+            Sentry.captureMessage('WebView is loading (progress : $progress%)');
             if (progress == 100) {
               LoadingView().hide();
             }
           },
           onPageStarted: (String url) {
-            log.i('Page started loading: $url');
+            Sentry.captureMessage('Page started loading: $url');
             LoadingView().show(context: context);
           },
           onPageFinished: (String url) {
-            log.i('Page finished loading: $url');
+            Sentry.captureMessage('Page finished loading: $url');
           },
           onWebResourceError: (WebResourceError error) {
             LoadingView().hide();
-            log.i('''
+            Sentry.captureMessage('''
                 Page resource error:
                 code: ${error.errorCode}
                 description: ${error.description}
@@ -86,12 +87,12 @@ class _WertViewState extends State<WertView> {
           ''');
           },
           onNavigationRequest: (NavigationRequest request) {
-            log.i('navigate - ${request.url}');
+            Sentry.captureMessage('navigate - ${request.url}');
             // if (request.url.startsWith('https://www.youtube.com/')) {
-            //   log.i('blocking navigation to ${request.url}');
+            //   Sentry.captureMessage('blocking navigation to ${request.url}');
             //   return NavigationDecision.prevent;
             // }
-            // log.i('allowing navigation to ${request.url}');
+            // Sentry.captureMessage('allowing navigation to ${request.url}');
             return NavigationDecision.navigate;
           },
         ),

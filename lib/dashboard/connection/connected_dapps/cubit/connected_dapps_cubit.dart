@@ -6,6 +6,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'connected_dapps_cubit.g.dart';
 part 'connected_dapps_state.dart';
@@ -33,18 +34,18 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
   Future<void> getXtzData(String walletAddress) async {
     if (isClosed) return;
     try {
-      log.i('fetching xtzData');
+      Sentry.captureMessage('fetching xtzData');
       emit(state.loading());
 
       final baseUrl = networkCubit.state.network.apiUrl;
 
-      log.i('fetching balance');
+      Sentry.captureMessage('fetching balance');
       final int balance = await client
           .get('$baseUrl/v1/accounts/$walletAddress/balance') as int;
 
       final formattedBalance = balance / 1e6;
 
-      log.i('fetching xtz USD price');
+      Sentry.captureMessage('fetching xtz USD price');
       final xtzUSDPrice = await _getTezosCurrentPriceInUSD() ?? 0;
 
       final token = TokenModel(
@@ -64,7 +65,7 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
         state.copyWith(status: AppStatus.idle, xtzModel: token),
       );
     } catch (e) {
-      log.e('xtzData fetching failure , e: $e');
+      Sentry.captureMessage('xtzData fetching failure , e: $e');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
@@ -102,11 +103,11 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
     try {
       emit(state.loading());
 
-      log.i('fetching saved peers');
+      Sentry.captureMessage('fetching saved peers');
       final List<SavedDappData> savedDapps =
           await connectedDappRepository.findAll();
 
-      log.i('savedPeerDatas - $savedDapps');
+      Sentry.captureMessage('savedPeerDatas - $savedDapps');
 
       final peersListToShow = <SavedDappData>[];
 
@@ -122,7 +123,7 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
 
       emit(state.copyWith(status: AppStatus.idle, savedDapps: peersListToShow));
     } catch (e) {
-      log.e('getPeers failure , e: $e');
+      Sentry.captureMessage('getPeers failure , e: $e');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {

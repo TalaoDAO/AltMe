@@ -15,6 +15,7 @@ import 'package:eth_sig_util/eth_sig_util.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -56,11 +57,11 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
-          log.i('decoding payload');
+          Sentry.captureMessage('decoding payload');
           final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
 
           final String payload = beaconRequest.request!.payload!;
-          log.i('payload - $payload');
+          Sentry.captureMessage('payload - $payload');
           if (payload.startsWith('05')) {
             encodedPayload = beaconRequest.request!.payload!;
             signingType = SigningType.micheline;
@@ -103,7 +104,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           signingType = SigningType.raw;
       }
 
-      log.i('payloadMessage - $payloadMessage');
+      Sentry.captureMessage('payloadMessage - $payloadMessage');
 
       String dAppName = '';
       switch (connectionBridgeType) {
@@ -125,7 +126,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           }
       }
 
-      log.i('dAppName - $dAppName');
+      Sentry.captureMessage('dAppName - $dAppName');
 
       emit(
         state.copyWith(
@@ -135,7 +136,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         ),
       );
     } catch (e) {
-      log.e('decoding failure , e: $e');
+      Sentry.captureMessage('decoding failure , e: $e');
       emit(
         state.error(
           messageHandler: ResponseMessage(
@@ -151,7 +152,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   }) async {
     if (isClosed) return;
     try {
-      log.i('Started signing');
+      Sentry.captureMessage('Started signing');
       emit(state.loading());
 
       final isInternetAvailable = await isConnected();
@@ -223,7 +224,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           final CryptoAccountData? currentAccount =
               walletCubit.getCryptoAccountData(publicKey);
 
-          log.i('currentAccount -$currentAccount');
+          Sentry.captureMessage('currentAccount -$currentAccount');
           if (currentAccount == null) {
             throw ResponseMessage(
               message: ResponseString
@@ -328,7 +329,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         );
       }
     } catch (e) {
-      log.e('Signing failure , e: $e');
+      Sentry.captureMessage('Signing failure , e: $e');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
@@ -350,13 +351,13 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
     if (isClosed) return;
     switch (connectionBridgeType) {
       case ConnectionBridgeType.beacon:
-        log.i('beacon Signing rejected');
+        Sentry.captureMessage('beacon Signing rejected');
         beacon.signPayloadResponse(
           id: beaconCubit.state.beaconRequest!.request!.id!,
           signature: null,
         );
       case ConnectionBridgeType.walletconnect:
-        log.i('walletconnect Signing rejected');
+        Sentry.captureMessage('walletconnect Signing rejected');
 
         walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
             .complete('Failed');

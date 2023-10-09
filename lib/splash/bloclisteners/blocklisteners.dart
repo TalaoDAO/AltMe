@@ -19,6 +19,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
@@ -210,7 +211,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
       }
 
       if (state.status == QrScanStatus.acceptHost) {
-        log.i('accept host');
+        Sentry.captureMessage('accept host');
         LoadingView().show(context: context);
         if (state.uri != null) {
           final profileCubit = context.read<ProfileCubit>();
@@ -420,7 +421,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
         );
       }
     } catch (e) {
-      log.e(e);
+      Sentry.captureMessage(e.toString());
     }
   },
 );
@@ -462,7 +463,7 @@ final walletConnectBlocListener =
         );
       }
     } catch (e) {
-      log.e(e);
+      Sentry.captureMessage(e.toString());
     }
   },
 );

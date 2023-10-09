@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class GenerateLinkedinQrPage extends StatelessWidget {
   const GenerateLinkedinQrPage({
@@ -163,7 +164,7 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
                   .read<GenerateLinkedInQrCubit>()
                   .saveScreenshot(capturedImage!);
             }).catchError((dynamic onError) {
-              log.e(onError);
+              Sentry.captureMessage(onError.toString());
               AlertMessage.showStateMessage(
                 context: context,
                 stateMessage: StateMessage.error(

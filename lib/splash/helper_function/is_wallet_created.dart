@@ -7,6 +7,7 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<bool> isWalletCreated({
   required SecureStorageProvider secureStorageProvider,
@@ -16,7 +17,7 @@ Future<bool> isWalletCreated({
 }) async {
   final log = getLogger('IsWalletCreated');
 
-  log.i('did initialisation');
+  Sentry.captureMessage('did initialisation');
   final String? ssiMnemonic =
       await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
   if (ssiMnemonic == null || ssiMnemonic.isEmpty) {
@@ -73,10 +74,10 @@ Future<bool> isWalletCreated({
     verificationMethod: verificationMethod,
   );
 
-  log.i('wallet initialisation');
+  Sentry.captureMessage('wallet initialisation');
   await credentialsCubit.loadAllCredentials();
 
-  log.i('blockchain initialisation');
+  Sentry.captureMessage('blockchain initialisation');
   await blockchainInitialize(
     walletCubit: walletCubit,
     ssiMnemonic: ssiMnemonic,

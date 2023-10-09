@@ -14,6 +14,7 @@ import 'package:flutter/services.dart' as services;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:uni_links/uni_links.dart';
 
 bool _initialUriIsHandled = false;
@@ -62,12 +63,12 @@ class _SplashViewState extends State<SplashView> {
       _sub = uriLinkStream.listen(
         (Uri? uri) async {
           if (!mounted) return;
-          log.i('got uri: $uri');
+          Sentry.captureMessage('got uri: $uri');
           await processIncomingUri(uri, context);
         },
         onError: (Object err) {
           if (!mounted) return;
-          log.e('got err: $err');
+          Sentry.captureMessage('got err: $err');
         },
       );
     }
@@ -189,19 +190,19 @@ class _SplashViewState extends State<SplashView> {
       try {
         final uri = await getInitialUri();
         if (uri == null) {
-          log.i('no initial uri');
+          Sentry.captureMessage('no initial uri');
         } else {
-          log.i('got initial uri: $uri');
+          Sentry.captureMessage('got initial uri: $uri');
           if (!mounted) return;
-          log.i('got uri: $uri');
+          Sentry.captureMessage('got uri: $uri');
           await processIncomingUri(uri, context);
         }
       } on services.PlatformException {
         // Platform messages may fail but we ignore the exception
-        log.e('falied to get initial uri');
+        Sentry.captureMessage('falied to get initial uri');
       } on FormatException catch (err) {
         if (!mounted) return;
-        log.e('malformed initial uri: $err');
+        Sentry.captureMessage('malformed initial uri: $err');
       }
     }
   }

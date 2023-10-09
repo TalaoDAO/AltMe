@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:bloc/bloc.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class RouteCubit extends Cubit<String?> {
   RouteCubit() : super('');
@@ -8,7 +9,7 @@ class RouteCubit extends Cubit<String?> {
 
   void setCurrentScreen(String? screenName) {
     /// track screen of user
-    log.i('Screen -> $screenName');
+    Sentry.captureMessage('Screen -> $screenName');
     emit(screenName);
   }
 }

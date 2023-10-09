@@ -17,6 +17,7 @@ import 'package:key_generator/key_generator.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 part 'credentials_helper_function.dart';
@@ -49,7 +50,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final String? ssiKey =
         await secureStorageProvider.get(SecureStorageKeys.ssiKey);
     if (ssiKey == null || ssiKey.isEmpty) {
-      log.i('can not load all credentials beacuse there is no ssi key');
+      Sentry.captureMessage(
+          'can not load all credentials beacuse there is no ssi key');
       return;
     }
     emit(state.copyWith(status: CredentialsStatus.loading));
@@ -94,7 +96,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         dummyCredentials: dummies,
       ),
     );
-    log.i('credentials loaded from repository - ${savedCredentials.length}');
+    Sentry.captureMessage(
+        'credentials loaded from repository - ${savedCredentials.length}');
     await addRequiredCredentials(ssiKey: ssiKey);
   }
 
@@ -112,7 +115,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         didCubit: didCubit,
       );
       if (walletCredential != null) {
-        log.i('CredentialSubjectType.walletCredential added');
+        Sentry.captureMessage('CredentialSubjectType.walletCredential added');
         await insertCredential(
           credential: walletCredential,
           showMessage: false,

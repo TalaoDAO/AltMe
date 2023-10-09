@@ -11,6 +11,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'submit_enterprise_user_cubit.g.dart';
 
@@ -104,7 +105,9 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
       }
       emit(state.success());
     } catch (e, s) {
-      log.e('error in verifying RSA key :$e}, s: $s', error: e, stackTrace: s);
+      Sentry.captureMessage(
+        'error in verifying RSA key :$e}, s: $s',
+      );
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {

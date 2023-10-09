@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'did_cubit.g.dart';
 
@@ -47,7 +48,7 @@ class DIDCubit extends Cubit<DIDState> {
         verificationMethod: verificationMethod,
       ),
     );
-    log.i('successfully Set');
+    Sentry.captureMessage('successfully Set');
   }
 
   Future<void> load({
@@ -66,6 +67,6 @@ class DIDCubit extends Cubit<DIDState> {
         verificationMethod: verificationMethod,
       ),
     );
-    log.i('successfully Loaded');
+    Sentry.captureMessage('successfully Loaded');
   }
 }

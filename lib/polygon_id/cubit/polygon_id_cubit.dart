@@ -13,6 +13,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:polygonid/polygonid.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'polygon_id_cubit.g.dart';
 part 'polygon_id_state.dart';
@@ -110,7 +111,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
 
       //addIdentity
       await polygonId.addIdentity(mnemonic: mnemonic!, network: network);
-      log.i('$network - get Identity');
+      Sentry.captureMessage('$network - get Identity');
       emit(
         state.copyWith(
           status: AppStatus.init,
@@ -167,7 +168,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
 
       //addIdentity
       await polygonId.addIdentity(mnemonic: mnemonic!, network: network);
-      log.i('$network - get Identity');
+      Sentry.captureMessage('$network - get Identity');
       emit(
         state.copyWith(
           status: AppStatus.idle,
@@ -191,11 +192,11 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         ),
       );
 
-      log.i('download circuit');
+      Sentry.captureMessage('download circuit');
       //download circuit
       final isCircuitAlreadyDownloaded = await polygonId.isCircuitsDownloaded();
       if (isCircuitAlreadyDownloaded) {
-        log.i('circuit already downloaded');
+        Sentry.captureMessage('circuit already downloaded');
         await polygonActions();
       } else {
         // show loading with authentication message
@@ -215,14 +216,14 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         _subscription = stream.listen((DownloadInfo downloadInfo) async {
           if (downloadInfo is DownloadInfoOnDone) {
             unawaited(_subscription?.cancel());
-            log.i('download circuit complete');
+            Sentry.captureMessage('download circuit complete');
             await polygonActions();
           } else if (downloadInfo is DownloadInfoOnProgress) {
             // loading value update
             final double loadedValue =
                 downloadInfo.downloaded / downloadInfo.contentLength;
             final roundedValue = double.parse(loadedValue.toStringAsFixed(1));
-            log.i(roundedValue);
+            Sentry.captureMessage(roundedValue.toString());
           } else {
             throw ResponseMessage(
               message: ResponseString
@@ -232,7 +233,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         });
       }
     } catch (e) {
-      log.e(e);
+      Sentry.captureMessage(e.toString());
       if (e is MessageHandler) {
         emit(state.error(message: StateMessage.error(messageHandler: e)));
       } else {
@@ -266,7 +267,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       final body = iden3MessageEntity.body as AuthBodyRequest;
 
       if (body.scope!.isNotEmpty) {
-        log.i('do not consider network for verifier');
+        Sentry.captureMessage('do not consider network for verifier');
         checkNetwork = false;
       }
     }
@@ -292,7 +293,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       final body = iden3MessageEntity.body as AuthBodyRequest;
 
       if (body.scope!.isEmpty) {
-        log.i('issuer');
+        Sentry.captureMessage('issuer');
         emit(
           state.copyWith(
             status: AppStatus.loading,
@@ -300,7 +301,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           ),
         );
       } else {
-        log.i('verifier');
+        Sentry.captureMessage('verifier');
         emit(
           state.copyWith(
             status: AppStatus.loading,
@@ -348,7 +349,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           throw Exception();
         }
 
-        log.i('get claims');
+        Sentry.captureMessage('get claims');
         emit(
           state.copyWith(
             status: AppStatus.loading,
@@ -358,7 +359,8 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           ),
         );
       } catch (e) {
-        log.e('can not get the credntials manifest for polygon error: $e');
+        Sentry.captureMessage(
+            'can not get the credntials manifest for polygon error: $e');
         throw ResponseMessage(
           message: ResponseString
               .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
@@ -366,7 +368,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       }
     } else if (iden3MessageEntity.messageType ==
         Iden3MessageType.proofContractInvokeRequest) {
-      log.i('contractFunctionCall');
+      Sentry.captureMessage('contractFunctionCall');
       emit(
         state.copyWith(
           status: AppStatus.loading,
@@ -398,15 +400,15 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         network = Parameters.POLYGON_TEST_NETWORK;
       }
 
-      log.i('iden3MessageEntity - $iden3MessageEntity');
+      Sentry.captureMessage('iden3MessageEntity - $iden3MessageEntity');
 
-      log.i('polygonId authentication - $network');
+      Sentry.captureMessage('polygonId authentication - $network');
       final isAuthenticated = await polygonId.authenticate(
         iden3MessageEntity: iden3MessageEntity,
         mnemonic: mnemonic!,
         network: network,
       );
-      log.i('isAuthenticated - $isAuthenticated');
+      Sentry.captureMessage('isAuthenticated - $isAuthenticated');
 
       if (isAuthenticated) {
         emit(
@@ -429,7 +431,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         );
       }
     } catch (e) {
-      log.e(e);
+      Sentry.captureMessage(e.toString());
       if (e is MessageHandler) {
         emit(state.error(message: StateMessage.error(messageHandler: e)));
       } else {
@@ -482,7 +484,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
 
   Future<void> addPolygonIdCredentials() async {
     try {
-      log.i('add Claims');
+      Sentry.captureMessage('add Claims');
       emit(state.copyWith(status: AppStatus.loading));
       for (int i = 0; i < state.claims!.length; i++) {
         await addToList(
@@ -492,7 +494,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       }
       emit(state.copyWith(status: AppStatus.goBack));
     } catch (e) {
-      log.e(e);
+      Sentry.captureMessage(e.toString());
       if (e is MessageHandler) {
         emit(state.error(message: StateMessage.error(messageHandler: e)));
       } else {

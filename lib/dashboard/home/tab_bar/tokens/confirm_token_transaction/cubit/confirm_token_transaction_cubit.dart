@@ -277,8 +277,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     } catch (e, s) {
       logger.e(
         'error after withdrawal execute: e: $e, stack: $s',
-        error: e,
-        stackTrace: s,
       );
       emit(
         state.error(
@@ -337,8 +335,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     } catch (e, s) {
       logger.e(
         'error after withdrawal execute: e: $e, stack: $s',
-        error: e,
-        stackTrace: s,
       );
       if (e is RPCError) {
         logger.i('rpc error=> e.message: ${e.message} , e.data: ${e.data}');

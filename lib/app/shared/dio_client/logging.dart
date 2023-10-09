@@ -5,7 +5,7 @@ class Logging extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    log.i('REQUEST[${options.method}] => PATH: ${options.uri}');
+    Sentry.captureMessage('REQUEST[${options.method}] => PATH: ${options.uri}');
     return super.onRequest(options, handler);
   }
 
@@ -14,7 +14,7 @@ class Logging extends Interceptor {
     Response<dynamic> response,
     ResponseInterceptorHandler handler,
   ) {
-    log.i(
+    Sentry.captureMessage(
       '''RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path} => data: ${jsonEncode(response.data)}''',
     );
     return super.onResponse(response, handler);
@@ -22,7 +22,7 @@ class Logging extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    log.e(
+    Sentry.captureMessage(
       'ERROR[${err.response?.statusCode}] TYPE[${err.type}],=> PATH:'
       ' ${err.requestOptions.path} data: ${err.response?.data}',
     );

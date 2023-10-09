@@ -11,6 +11,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -43,7 +44,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       final String? savedCryptoAccount =
           await secureStorageProvider.get(SecureStorageKeys.cryptoAccount);
 
-      log.i('Create the web3wallet');
+      Sentry.captureMessage('Create the web3wallet');
       await dotenv.load();
       final projectId = dotenv.get('WALLET_CONNECT_PROJECT_ID');
       _web3Wallet = await Web3Wallet.createInstance(
@@ -58,7 +59,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         ),
       );
 
-      log.i('Setup our accounts');
+      Sentry.captureMessage('Setup our accounts');
 
       if (savedCryptoAccount != null && savedCryptoAccount.isNotEmpty) {
         //load all the content of walletAddress
@@ -71,7 +72,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
             .where((e) => e.blockchainType != BlockchainType.tezos)
             .toList();
 
-        log.i('registering acconts');
+        Sentry.captureMessage('registering acconts');
         for (final evm in eVMAccounts) {
           _web3Wallet!.registerAccount(
             chainId: evm.blockchainType.chain,
@@ -80,7 +81,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         }
       }
 
-      log.i('Setup our listeners');
+      Sentry.captureMessage('Setup our listeners');
       _web3Wallet!.core.pairing.onPairingInvalid.subscribe(_onPairingInvalid);
       _web3Wallet!.core.pairing.onPairingCreate.subscribe(_onPairingCreate);
       _web3Wallet!.pairings.onSync.subscribe(_onPairingsSync);
@@ -95,27 +96,27 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         if (blockchainType == BlockchainType.tezos) {
           continue;
         }
-        log.i(blockchainType);
-        log.i('registerEventEmitter');
+        Sentry.captureMessage(blockchainType.toString());
+        Sentry.captureMessage('registerEventEmitter');
         registerEventEmitter(blockchainType.chain);
 
-        log.i('registerRequestHandler');
+        Sentry.captureMessage('registerRequestHandler');
         registerRequestHandler(blockchainType.chain);
       }
 
-      log.i('web3wallet init');
+      Sentry.captureMessage('web3wallet init');
       await _web3Wallet!.init();
-      log.i('metadata');
-      log.i(_web3Wallet!.metadata);
+      Sentry.captureMessage('metadata');
+      Sentry.captureMessage(_web3Wallet!.metadata.toString());
 
-      log.i('pairings');
-      log.i(_web3Wallet!.pairings.getAll());
-      log.i('sessions');
-      log.i(_web3Wallet!.sessions.getAll());
-      log.i('completeRequests');
-      log.i(_web3Wallet!.completeRequests.getAll());
+      Sentry.captureMessage('pairings');
+      Sentry.captureMessage(_web3Wallet!.pairings.getAll().toString());
+      Sentry.captureMessage('sessions');
+      Sentry.captureMessage(_web3Wallet!.sessions.getAll().toString());
+      Sentry.captureMessage('completeRequests');
+      Sentry.captureMessage(_web3Wallet!.completeRequests.getAll().toString());
     } catch (e) {
-      log.e(e);
+      Sentry.captureMessage(e.toString());
     }
   }
 
@@ -162,31 +163,31 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   }
 
   Future<void> connect(String walletConnectUri) async {
-    log.i('walletConnectUri - $walletConnectUri');
+    Sentry.captureMessage('walletConnectUri - $walletConnectUri');
 
     final Uri uriData = Uri.parse(walletConnectUri);
     final PairingInfo pairingInfo = await _web3Wallet!.pair(
       uri: uriData,
     );
-    log.i(pairingInfo);
+    Sentry.captureMessage(pairingInfo.toString());
   }
 
   void _onPairingInvalid(PairingInvalidEvent? args) {
-    log.i('Pairing Invalid Event: $args');
+    Sentry.captureMessage('Pairing Invalid Event: $args');
   }
 
   void _onPairingsSync(StoreSyncEvent? args) {
     if (args != null) {
       //pairings.value = _web3Wallet!.pairings.getAll();
-      log.i('onPairingsSync');
-      log.i(_web3Wallet!.pairings.getAll());
+      Sentry.captureMessage('onPairingsSync');
+      Sentry.captureMessage(_web3Wallet!.pairings.getAll().toString());
     }
   }
 
   void _onSessionProposal(SessionProposalEvent? args) {
-    log.i('onSessionProposal');
+    Sentry.captureMessage('onSessionProposal');
     if (args != null) {
-      log.i('sessionProposalEvent - $args');
+      Sentry.captureMessage('sessionProposalEvent - $args');
       emit(
         state.copyWith(
           status: WalletConnectStatus.permission,
@@ -197,8 +198,8 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   }
 
   void _onSessionProposalError(SessionProposalErrorEvent? args) {
-    log.i('onSessionProposalError');
-    log.i(args);
+    Sentry.captureMessage('onSessionProposalError');
+    Sentry.captureMessage(args.toString());
     final requiredChains = args?.requiredNamespaces['eip155']?.chains;
 
     if (requiredChains != null && requiredChains.isNotEmpty) {
@@ -243,25 +244,25 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
   void _onSessionConnect(SessionConnect? args) {
     if (args != null) {
-      log.i(args);
+      Sentry.captureMessage(args.toString());
       //sessions.value.add(args.session);
 
       final savedDappData = SavedDappData(
         sessionData: args.session,
       );
 
-      log.i(savedDappData.toJson());
+      Sentry.captureMessage(savedDappData.toString());
       connectedDappRepository.insert(savedDappData);
     }
   }
 
   void _onPairingCreate(PairingEvent? args) {
-    log.i('Pairing Create Event: $args');
+    Sentry.captureMessage('Pairing Create Event: $args');
   }
 
   Future<void> _onAuthRequest(AuthRequest? args) async {
     if (args != null) {
-      log.i(args);
+      Sentry.captureMessage(args.toString());
       // List<ChainKey> chainKeys = GetIt.I<IKeyService>().getKeysForChain(
       //   'eip155:1',
       // );
@@ -331,7 +332,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     double counter = 0;
     Timer.periodic(const Duration(milliseconds: 500), (timer) async {
       counter = counter + 0.5;
-      log.i('counter: $counter');
+      Sentry.captureMessage('counter: $counter');
       final String currenRouteName = routeCubit.state ?? '';
 
       if (currenRouteName != CONFIRM_CONNECTION_PAGE) {
@@ -344,10 +345,10 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   }
 
   Future<String> personalSignAction(String topic, dynamic parameters) async {
-    log.i('received personal sign request: $parameters');
-    log.i('topic: $topic');
+    Sentry.captureMessage('received personal sign request: $parameters');
+    Sentry.captureMessage('topic: $topic');
 
-    log.i('completer initialise');
+    Sentry.captureMessage('completer initialise');
     completer.add(Completer<String>());
 
     emit(
@@ -360,15 +361,15 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     );
 
     final String result = await completer[completer.length - 1]!.future;
-    log.i('complete - $result');
+    Sentry.captureMessage('complete - $result');
     completer.removeLast();
     return result;
   }
 
   Future<String> ethSign(String topic, dynamic parameters) async {
-    log.i('received eth sign request: $parameters');
+    Sentry.captureMessage('received eth sign request: $parameters');
 
-    log.i('completer initialise');
+    Sentry.captureMessage('completer initialise');
     completer.add(Completer<String>());
 
     emit(
@@ -381,15 +382,15 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     );
 
     final String result = await completer[completer.length - 1]!.future;
-    log.i('complete - $result');
+    Sentry.captureMessage('complete - $result');
     completer.removeLast();
     return result;
   }
 
   Future<String> ethSignTransaction(String topic, dynamic parameters) async {
-    log.i('received eth sign transaction request: $parameters');
+    Sentry.captureMessage('received eth sign transaction request: $parameters');
 
-    log.i('completer initialise');
+    Sentry.captureMessage('completer initialise');
     completer.add(Completer<String>());
 
     final transaction = getTransaction(parameters);
@@ -405,15 +406,15 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     );
 
     final String result = await completer[completer.length - 1]!.future;
-    log.i('complete - $result');
+    Sentry.captureMessage('complete - $result');
     completer.removeLast();
     return result;
   }
 
   Future<String> ethSendTransaction(String topic, dynamic parameters) async {
-    log.i('received eth send transaction request: $parameters');
+    Sentry.captureMessage('received eth send transaction request: $parameters');
 
-    log.i('completer initialise');
+    Sentry.captureMessage('completer initialise');
     completer.add(Completer<String>());
 
     final Transaction transaction = getTransaction(parameters);
@@ -429,15 +430,15 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     );
 
     final String result = await completer[completer.length - 1]!.future;
-    log.i('complete - $result');
+    Sentry.captureMessage('complete - $result');
     completer.removeLast();
     return result;
   }
 
   Future<String> ethSignTypedData(String topic, dynamic parameters) async {
-    log.i('received eth sign typed data request: $parameters');
+    Sentry.captureMessage('received eth sign typed data request: $parameters');
 
-    log.i('completer initialise');
+    Sentry.captureMessage('completer initialise');
     completer.add(Completer<String>());
 
     emit(
@@ -450,15 +451,15 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     );
 
     final String result = await completer[completer.length - 1]!.future;
-    log.i('complete - $result');
+    Sentry.captureMessage('complete - $result');
     completer.removeLast();
     return result;
   }
 
   Future<String> ethSignTypedDataV4(String topic, dynamic parameters) async {
-    log.i('received eth sign typed data request: $parameters');
+    Sentry.captureMessage('received eth sign typed data request: $parameters');
 
-    log.i('completer initialise');
+    Sentry.captureMessage('completer initialise');
     completer.add(Completer<String>());
 
     emit(
@@ -471,7 +472,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     );
 
     final String result = await completer[completer.length - 1]!.future;
-    log.i('complete - $result');
+    Sentry.captureMessage('complete - $result');
     completer.removeLast();
     return result;
   }
@@ -531,7 +532,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   }
 
   Future<void> disconnectSession(String topic) async {
-    log.i('disconnectSession: $topic');
+    Sentry.captureMessage('disconnectSession: $topic');
     await _web3Wallet!.disconnectSession(
       topic: topic,
       reason: Errors.getSdkError(Errors.USER_DISCONNECTED),
@@ -539,7 +540,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   }
 
   Future<void> dispose() async {
-    log.i('web3wallet dispose');
+    Sentry.captureMessage('web3wallet dispose');
     _web3Wallet!.core.pairing.onPairingInvalid.unsubscribe(_onPairingInvalid);
     _web3Wallet!.pairings.onSync.unsubscribe(_onPairingsSync);
     _web3Wallet!.onSessionProposal.unsubscribe(_onSessionProposal);

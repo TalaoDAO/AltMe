@@ -12,6 +12,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'wallet_cubit.g.dart';
 
@@ -108,7 +109,7 @@ class WalletCubit extends Cubit<WalletState> {
         return;
       }
 
-      log.i('creating both $blockchainType accounts');
+      Sentry.captureMessage('creating both $blockchainType accounts');
       cryptoAccountDataList.add(
         await _createBlockchainAccount(
           accountName: accountName,
@@ -126,7 +127,7 @@ class WalletCubit extends Cubit<WalletState> {
             mnemonicOrKey.startsWith('spsk') ||
             mnemonicOrKey.startsWith('p2sk');
 
-        log.i(
+        Sentry.captureMessage(
           'creating ${isTezosSecretKey ? 'tezos' : 'ethereum based'} account',
         );
 
@@ -280,7 +281,7 @@ class WalletCubit extends Cubit<WalletState> {
     int derivePathIndex = 0;
     final bool isCreated = !isImported;
 
-    log.i('isImported - $isImported');
+    Sentry.captureMessage('isImported - $isImported');
     if (isCreated) {
       /// Note: while adding derivePathIndex is always increased
       final String? savedDerivePathIndex =
@@ -296,7 +297,7 @@ class WalletCubit extends Cubit<WalletState> {
       );
     }
 
-    log.i('derivePathIndex - $derivePathIndex');
+    Sentry.captureMessage('derivePathIndex - $derivePathIndex');
 
     /// Note: while importing derivePathIndex is always 0
 
@@ -345,7 +346,7 @@ class WalletCubit extends Cubit<WalletState> {
       blockchainType: blockchainType,
     );
 
-    log.i('$blockchainType created');
+    Sentry.captureMessage('$blockchainType created');
 
     /// If we are not using crypto in the wallet we are not generating
     /// AssociatedAddress credentials.
@@ -392,7 +393,7 @@ class WalletCubit extends Cubit<WalletState> {
     int derivePathIndex = 0;
     final bool isCreated = !isImported;
 
-    log.i('isImported - $isImported');
+    Sentry.captureMessage('isImported - $isImported');
     if (isCreated) {
       /// Note: while adding derivePathIndex is always increased
       final String? savedDerivePathIndex =
@@ -403,7 +404,7 @@ class WalletCubit extends Cubit<WalletState> {
       }
     }
 
-    log.i('derivePathIndex - $derivePathIndex');
+    Sentry.captureMessage('derivePathIndex - $derivePathIndex');
 
     /// Note: while importing derivePathIndex is always 0
 

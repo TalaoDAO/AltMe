@@ -6,6 +6,7 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'rights_cubit.g.dart';
 part 'rights_state.dart';
@@ -26,7 +27,7 @@ class RightsCubit extends Cubit<RightsState> {
   Future<void> disconnect({required SavedDappData savedDappData}) async {
     if (isClosed) return;
     try {
-      log.i('Started disconnecting');
+      Sentry.captureMessage('Started disconnecting');
       emit(state.loading());
 
       final isInternetAvailable = await isConnected();
@@ -46,7 +47,7 @@ class RightsCubit extends Cubit<RightsState> {
             json.decode(response['success'].toString()) as bool;
 
         if (success) {
-          log.i('Disconnect success');
+          Sentry.captureMessage('Disconnect success');
           await connectedDappRepository.delete(savedDappData);
           emit(
             state.copyWith(
@@ -77,7 +78,7 @@ class RightsCubit extends Cubit<RightsState> {
         );
       }
     } catch (e, s) {
-      log.e('disconnect failure , e: $e, s: $s');
+      Sentry.captureMessage('disconnect failure , e: $e, s: $s');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {

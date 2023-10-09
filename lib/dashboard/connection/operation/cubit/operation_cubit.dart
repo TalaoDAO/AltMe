@@ -11,6 +11,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:tezart/tezart.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -70,7 +71,7 @@ class OperationCubit extends Cubit<OperationState> {
           }
       }
 
-      log.i('dAppName - $dAppName');
+      Sentry.captureMessage('dAppName - $dAppName');
 
       emit(state.copyWith(dAppName: dAppName));
 
@@ -85,7 +86,7 @@ class OperationCubit extends Cubit<OperationState> {
           final CryptoAccountData? currentAccount =
               walletCubit.getCryptoAccountData(publicKey);
 
-          log.i('currentAccount -$currentAccount');
+          Sentry.captureMessage('currentAccount -$currentAccount');
           if (currentAccount == null) {
             throw ResponseMessage(
               message: ResponseString
@@ -98,7 +99,7 @@ class OperationCubit extends Cubit<OperationState> {
           }
       }
     } catch (e) {
-      log.e('intialisation , e: $e');
+      Sentry.captureMessage('intialisation , e: $e');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
@@ -119,23 +120,23 @@ class OperationCubit extends Cubit<OperationState> {
     try {
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
-          log.i('fetching xtz USDprice');
+          Sentry.captureMessage('fetching xtz USDprice');
           final xtzUsdPrice = await _getTezosCurrentPriceInUSD();
           emit(state.copyWith(usdRate: xtzUsdPrice));
         case ConnectionBridgeType.walletconnect:
-          log.i('fetching evm USDprice');
+          Sentry.captureMessage('fetching evm USDprice');
 
           final symbol = state.cryptoAccountData!.blockchainType.symbol;
 
           final response = await dioClient.get(Urls.ethPrice(symbol))
               as Map<String, dynamic>;
-          log.i('response - $response');
+          Sentry.captureMessage('response - $response');
           final double usdRate = response['USD'] as double;
           emit(state.copyWith(usdRate: usdRate));
       }
       await getOtherPrices(connectionBridgeType);
     } catch (e) {
-      log.e('getUsdPrice failure , e: $e');
+      Sentry.captureMessage('getUsdPrice failure , e: $e');
       if (e is MessageHandler) {
         emit(
           state.copyWith(
@@ -180,7 +181,7 @@ class OperationCubit extends Cubit<OperationState> {
     if (isClosed) return;
     try {
       emit(state.loading());
-      log.i('estimateOperationFee');
+      Sentry.captureMessage('estimateOperationFee');
 
       late double amount;
       late double fee;
@@ -190,7 +191,7 @@ class OperationCubit extends Cubit<OperationState> {
           final operationList =
               await getBeaonOperationList(preCheckBalance: true);
           await operationList.estimate();
-          log.i('after operationList.estimate()');
+          Sentry.captureMessage('after operationList.estimate()');
           amount = int.parse(
                 beaconCubit
                     .state.beaconRequest!.operationDetails!.first.amount!,
@@ -206,7 +207,7 @@ class OperationCubit extends Cubit<OperationState> {
           amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
 
           final String web3RpcURL = await web3RpcMainnetInfuraURL();
-          log.i('web3RpcURL - $web3RpcURL');
+          Sentry.captureMessage('web3RpcURL - $web3RpcURL');
 
           final feeData = await MWeb3Client.estimateEthereumFee(
             web3RpcURL: web3RpcURL,
@@ -221,8 +222,8 @@ class OperationCubit extends Cubit<OperationState> {
           fee = MWeb3Client.formatEthAmount(amount: feeData);
       }
 
-      log.i('amount - $amount');
-      log.i('fee - $fee');
+      Sentry.captureMessage('amount - $amount');
+      Sentry.captureMessage('fee - $fee');
 
       emit(
         state.copyWith(
@@ -232,7 +233,7 @@ class OperationCubit extends Cubit<OperationState> {
         ),
       );
     } catch (e) {
-      log.e('cost estimation failure , e: $e');
+      Sentry.captureMessage('cost estimation failure , e: $e');
       if (e is MessageHandler) {
         emit(
           state.copyWith(
@@ -242,7 +243,7 @@ class OperationCubit extends Cubit<OperationState> {
         );
       } else if (e is TezartNodeError) {
         final Map<String, String> json = e.metadata;
-        log.e('metadata json: $json');
+        Sentry.captureMessage('metadata json: $json');
         if (json['reason'] != null) {
           final reason = json['reason']!;
           late ResponseString responseString;
@@ -311,7 +312,7 @@ class OperationCubit extends Cubit<OperationState> {
     if (isClosed) return;
     try {
       emit(state.loading());
-      log.i('sendOperataion');
+      Sentry.captureMessage('sendOperataion');
 
       final isInternetAvailable = await isConnected();
       if (!isInternetAvailable) {
@@ -327,10 +328,10 @@ class OperationCubit extends Cubit<OperationState> {
           final operationList =
               await getBeaonOperationList(preCheckBalance: false);
           await operationList.executeAndMonitor(null);
-          log.i('after operationList.executeAndMonitor()');
+          Sentry.captureMessage('after operationList.executeAndMonitor()');
 
           final transactionHash = operationList.result.id;
-          log.i('transactionHash - $transactionHash');
+          Sentry.captureMessage('transactionHash - $transactionHash');
 
           final Map<dynamic, dynamic> response = await beacon.operationResponse(
             id: beaconCubit.state.beaconRequest!.request!.id!,
@@ -360,7 +361,7 @@ class OperationCubit extends Cubit<OperationState> {
               rpcUrl = BinanceNetwork.mainNet().rpcNodeUrl;
           }
 
-          log.i('rpcUrl - $rpcUrl');
+          Sentry.captureMessage('rpcUrl - $rpcUrl');
 
           final String transactionHash =
               await MWeb3Client.sendEthereumTransaction(
@@ -381,7 +382,7 @@ class OperationCubit extends Cubit<OperationState> {
       }
 
       if (success) {
-        log.i('operation success');
+        Sentry.captureMessage('operation success');
         emit(
           state.copyWith(
             status: AppStatus.success,
@@ -400,7 +401,7 @@ class OperationCubit extends Cubit<OperationState> {
         );
       }
     } catch (e) {
-      log.e('sendOperataion , e: $e');
+      Sentry.captureMessage('sendOperataion , e: $e');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else if (e is TezartNodeError) {
@@ -443,13 +444,13 @@ class OperationCubit extends Cubit<OperationState> {
     if (isClosed) return;
     switch (connectionBridgeType) {
       case ConnectionBridgeType.beacon:
-        log.i('beacon connection rejected');
+        Sentry.captureMessage('beacon connection rejected');
         beacon.operationResponse(
           id: beaconCubit.state.beaconRequest!.request!.id!,
           transactionHash: null,
         );
       case ConnectionBridgeType.walletconnect:
-        log.i('walletconnect  connection rejected');
+        Sentry.captureMessage('walletconnect  connection rejected');
         walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
             .complete('Failed');
     }
@@ -461,7 +462,7 @@ class OperationCubit extends Cubit<OperationState> {
     required bool preCheckBalance,
   }) async {
     try {
-      log.i('getOperationList');
+      Sentry.captureMessage('getOperationList');
 
       final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
 
@@ -505,11 +506,11 @@ class OperationCubit extends Cubit<OperationState> {
 
       if (preCheckBalance) {
         /// check xtz balance
-        log.i('checking xtz');
+        Sentry.captureMessage('checking xtz');
         final int balance = await dioClient.get(
           '$baseUrl/v1/accounts/${beaconRequest.request!.sourceAddress!}/balance',
         ) as int;
-        log.i('total xtz - $balance');
+        Sentry.captureMessage('total xtz - $balance');
         final formattedBalance = int.parse(
           balance.toStringAsFixed(6).replaceAll('.', '').replaceAll(',', ''),
         );
@@ -549,7 +550,7 @@ class OperationCubit extends Cubit<OperationState> {
       if (!isReveal) {
         operationList.prependOperation(RevealOperation());
       }
-      log.i(
+      Sentry.captureMessage(
         'publicKey: ${keystore.publicKey} '
         'amount: ${state.amount} '
         'networkFee: ${state.fee} '
@@ -559,11 +560,11 @@ class OperationCubit extends Cubit<OperationState> {
 
       return operationList;
     } catch (e, s) {
-      log.e('error : $e, s: $s');
+      Sentry.captureMessage('error : $e, s: $s');
       if (e is MessageHandler) {
         rethrow;
       } else if (e is TezartNodeError) {
-        log.e('e: $e , metadata: ${e.metadata} , s: $s');
+        Sentry.captureMessage('e: $e , metadata: ${e.metadata} , s: $s');
         rethrow;
       } else {
         throw ResponseMessage(
@@ -622,7 +623,7 @@ class OperationCubit extends Cubit<OperationState> {
       }
     }
 
-    log.i('operations - $operations');
+    Sentry.captureMessage('operations - $operations');
     return operations;
   }
 }

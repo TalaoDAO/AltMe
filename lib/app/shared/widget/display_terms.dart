@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class DisplayTermsOfUseCubit extends Cubit<bool> {
   DisplayTermsOfUseCubit() : super(false);
@@ -115,9 +116,8 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
             }
 
             if (snapshot.error != null) {
-              log.e(
-                'something went wrong when loading privacy file',
-                error: snapshot.error,
+              Sentry.captureMessage(
+                snapshot.error.toString(),
               );
               return const SizedBox.shrink();
             }

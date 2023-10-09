@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/issuer/models/organization_info.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CheckIssuer {
   CheckIssuer(
@@ -18,7 +19,7 @@ class CheckIssuer {
     didToTest = getIssuerDid(uriToCheck: uriToCheck);
     if (checkIssuerServerUrl == Urls.checkIssuerEbsiUrl &&
         !didToTest.startsWith('did:ebsi')) {
-      log.i('did:ebsi issuer');
+      Sentry.captureMessage('did:ebsi issuer');
       return Issuer.emptyIssuer(uriToCheck.host);
     }
 
@@ -27,7 +28,7 @@ class CheckIssuer {
     }
 
     try {
-      log.i('fetching issuer data');
+      Sentry.captureMessage('fetching issuer data');
       final dynamic response =
           await client.get('$checkIssuerServerUrl/$didToTest');
       if (checkIssuerServerUrl == Urls.checkIssuerEbsiUrl) {
@@ -53,7 +54,7 @@ class CheckIssuer {
 
       return Issuer.emptyIssuer(uriToCheck.host);
     } catch (e) {
-      log.e('error $e');
+      Sentry.captureMessage('error $e');
       if (e is NetworkException) {
         if (e.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
           return Issuer.emptyIssuer(uriToCheck.toString());

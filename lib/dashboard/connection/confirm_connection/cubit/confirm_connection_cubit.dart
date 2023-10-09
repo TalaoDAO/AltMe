@@ -8,6 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 part 'confirm_connection_cubit.g.dart';
@@ -54,7 +55,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           final KeyStoreModel sourceKeystore =
               getKeysFromSecretKey(secretKey: currentAccount.secretKey);
 
-          log.i('Start connecting to beacon');
+          Sentry.captureMessage('Start connecting to beacon');
           final Map<dynamic, dynamic> response =
               await beacon.permissionResponse(
             id: beaconCubit.state.beaconRequest!.request!.id!,
@@ -66,7 +67,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
               json.decode(response['success'].toString()) as bool;
 
           if (success) {
-            log.i('Connected to beacon');
+            Sentry.captureMessage('Connected to beacon');
             final savedPeerData = SavedDappData(
               peer: beaconCubit.state.beaconRequest!.peer,
               walletAddress: currentAccount.walletAddress,
@@ -98,7 +99,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
                 .params.requiredNamespaces['eip155']!.chains!,
           ];
 
-          log.i(allowedNamespaces);
+          Sentry.captureMessage(allowedNamespaces.toString());
 
           for (final evm in eVMAccounts) {
             if (allowedNamespaces.contains(evm.blockchainType.chain)) {
@@ -131,7 +132,8 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
         ),
       );
     } catch (e, s) {
-      log.e('error connecting to $connectionBridgeType , e: $e , s: $s');
+      Sentry.captureMessage(
+          'error connecting to $connectionBridgeType , e: $e , s: $s');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
@@ -153,7 +155,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
     if (isClosed) return;
     switch (connectionBridgeType) {
       case ConnectionBridgeType.beacon:
-        log.i('beacon connection rejected');
+        Sentry.captureMessage('beacon connection rejected');
         beacon.permissionResponse(
           id: beaconCubit.state.beaconRequest!.request!.id!,
           publicKey: null,
@@ -161,7 +163,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
         );
 
       case ConnectionBridgeType.walletconnect:
-        log.i('walletconnect  connection rejected');
+        Sentry.captureMessage('walletconnect  connection rejected');
         final walletConnectState = walletConnectCubit.state;
 
         final SessionProposalEvent? sessionProposalEvent =

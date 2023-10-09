@@ -24,6 +24,7 @@ import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -72,7 +73,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> process({required String? scannedResponse}) async {
-    log.i('processing scanned qr code - $scannedResponse');
+    Sentry.captureMessage('processing scanned qr code - $scannedResponse');
     goBack();
     await Future<void>.delayed(const Duration(milliseconds: 500));
     emit(state.loading(isScan: true));
@@ -114,14 +115,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         await verify(uri: uri);
       }
     } on FormatException {
-      log.i('Format Exception');
+      Sentry.captureMessage('Format Exception');
       emitError(
         ResponseMessage(
           message: ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
         ),
       );
     } catch (e, s) {
-      log.e('Error -$e, stack: $s');
+      Sentry.captureMessage('Error -$e, stack: $s');
       if (e is MessageHandler) {
         emitError(e);
       } else {
@@ -208,7 +209,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(state.acceptHost());
       }
     } catch (e) {
-      log.e(e);
+      Sentry.captureMessage(e.toString());
       emitError(e);
     }
   }
@@ -248,9 +249,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final dynamic response = await client.get(state.uri!.toString());
       data = response is String ? jsonDecode(response) : response;
 
-      log.i('data - $data');
+      Sentry.captureMessage('data - $data');
       if (data['credential_manifest'] != null) {
-        log.i('credential_manifest is not null');
+        Sentry.captureMessage('credential_manifest is not null');
         final CredentialManifest credentialManifest =
             CredentialManifest.fromJson(
           data['credential_manifest'] as Map<String, dynamic>,
@@ -274,7 +275,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       switch (data['type']) {
         case 'CredentialOffer':
-          log.i('Credential Offer');
+          Sentry.captureMessage('Credential Offer');
           emit(
             state.copyWith(
               qrScanStatus: QrScanStatus.success,
@@ -314,13 +315,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
             queryByExampleCubit.setQueryByExampleCubit(query);
 
-            log.i(data['query']);
+            Sentry.captureMessage(data['query'].toString());
             if (data['query'].first['type'] == 'DIDAuth') {
-              log.i('DIDAuth');
+              Sentry.captureMessage('DIDAuth');
               await scanCubit.askPermissionDIDAuthCHAPI(
                 keyId: SecureStorageKeys.ssiKey,
                 done: (done) {
-                  log.i('done');
+                  Sentry.captureMessage('done');
                 },
                 uri: state.uri!,
                 challenge: data['challenge'] as String,
@@ -328,7 +329,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               );
               emit(state.copyWith(qrScanStatus: QrScanStatus.idle));
             } else if (data['query'].first['type'] == 'QueryByExample') {
-              log.i('QueryByExample');
+              Sentry.captureMessage('QueryByExample');
               emit(
                 state.copyWith(
                   qrScanStatus: QrScanStatus.success,
@@ -358,7 +359,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             );
           }
         case 'object':
-          log.i('object');
+          Sentry.captureMessage('object');
           emit(
             state.copyWith(
               qrScanStatus: QrScanStatus.success,
@@ -376,7 +377,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           );
       }
     } catch (e) {
-      log.e(
+      Sentry.captureMessage(
         'An error occurred while connecting to the server. $e',
       );
       emitError(e);
@@ -547,7 +548,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           qrScanStatus: QrScanStatus.loading,
         ),
       );
-      log.i('uri - $newUrl');
+      Sentry.captureMessage('uri - $newUrl');
     } else {
       responseType = uri.queryParameters['response_type'] ?? '';
     }
@@ -699,7 +700,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
     }
 
-    log.i('responseType - $responseType');
+    Sentry.captureMessage('responseType - $responseType');
     if (isIDTokenOnly(responseType.toString())) {
       /// verifier side (siopv2)
 
@@ -1117,10 +1118,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final dynamic response = await requestClient.get(url);
       data = response.toString();
     } catch (e, s) {
-      log.e(
+      Sentry.captureMessage(
         'An error occurred while connecting to the server.',
-        error: e,
-        stackTrace: s,
       );
     }
     return data;

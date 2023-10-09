@@ -23,6 +23,7 @@ import 'package:key_generator/key_generator.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 String generateDefaultAccountName(
   int accountIndex,
@@ -112,7 +113,7 @@ Future<bool> isConnected() async {
       connectivityResult == ConnectivityResult.wifi) {
     return true;
   }
-  log.e('No Internet Connection');
+  Sentry.captureMessage('No Internet Connection');
   return false;
 }
 
@@ -332,7 +333,9 @@ Map<String, dynamic> decodePayload({
     final payload = jwtDecode.parseJwt(token);
     data = payload;
   } catch (e, s) {
-    log.e('An error occurred while decoding.', error: e, stackTrace: s);
+    Sentry.captureMessage(
+      'An error occurred while decoding.',
+    );
   }
   return data;
 }
@@ -348,7 +351,9 @@ Map<String, dynamic> decodeHeader({
     final header = jwtDecode.parseJwtHeader(token);
     data = header;
   } catch (e, s) {
-    log.e('An error occurred while decoding.', error: e, stackTrace: s);
+    Sentry.captureMessage(
+      'An error occurred while decoding.',
+    );
   }
   return data;
 }

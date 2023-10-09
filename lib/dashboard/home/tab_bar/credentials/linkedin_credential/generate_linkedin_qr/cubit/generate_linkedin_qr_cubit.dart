@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 part 'generate_linkedin_qr_cubit.g.dart';
@@ -61,7 +62,7 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
 
       emit(state.copyWith(status: AppStatus.idle, qrValue: presentation));
     } catch (e) {
-      log.e('something went wrong - $e');
+      Sentry.captureMessage('something went wrong - $e');
       if (e is ResponseMessage) {
         emit(state.error(messageHandler: e));
       } else {

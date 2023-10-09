@@ -3,6 +3,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class MarkdownPage extends StatelessWidget {
   MarkdownPage({super.key, required this.title, required this.file});
@@ -46,9 +47,8 @@ class MarkdownPage extends StatelessWidget {
             }
 
             if (snapshot.error != null) {
-              log.e(
+              Sentry.captureMessage(
                 'something went wrong when loading $file',
-                error: snapshot.error,
               );
               return Container();
             }

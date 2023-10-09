@@ -11,6 +11,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'import_wallet_cubit.g.dart';
 part 'import_wallet_state.dart';
@@ -58,7 +59,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
-      log.i('isFromOnboarding: $isFromOnboarding');
+      Sentry.captureMessage('isFromOnboarding: $isFromOnboarding');
       if (isFromOnboarding) {
         /// ssi creation
 
@@ -135,10 +136,8 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
       await homeCubit.emitHasWallet();
       emit(state.success());
     } catch (e, s) {
-      log.e(
+      Sentry.captureMessage(
         'something went wrong when generating a key',
-        error: e,
-        stackTrace: s,
       );
       emit(
         state.error(

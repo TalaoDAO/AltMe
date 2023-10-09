@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 part 'logging.dart';
 
 const _defaultConnectTimeout = Duration(minutes: 1);
@@ -61,7 +62,7 @@ class DioClient {
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
-      log.i('Time - ${stopwatch.elapsed}');
+      Sentry.captureMessage('Time - ${stopwatch.elapsed}');
       return response.data;
     } on FormatException catch (_) {
       throw ResponseMessage(
@@ -128,7 +129,7 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      log.i('Time - ${stopwatch.elapsed}');
+      Sentry.captureMessage('Time - ${stopwatch.elapsed}');
       return response.data;
     } on FormatException catch (_) {
       throw ResponseMessage(

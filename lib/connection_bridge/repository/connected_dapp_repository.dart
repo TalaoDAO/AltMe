@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ConnectedDappRepository {
   ConnectedDappRepository(SecureStorageProvider secureStorageProvider)
@@ -14,7 +15,7 @@ class ConnectedDappRepository {
   final log = getLogger('ConnectedDappRepository');
 
   Future<List<SavedDappData>> findAll(/* dynamic filters */) async {
-    log.i('fetching all ');
+    Sentry.captureMessage('fetching all ');
     try {
       final data = await _secureStorageProvider.getAllValues();
       data.removeWhere(
@@ -38,7 +39,7 @@ class ConnectedDappRepository {
   }
 
   Future<BeaconRequest?> findBeaconDappsByPublicKey(String publicKey) async {
-    log.i('findByPublicKey');
+    Sentry.captureMessage('findByPublicKey');
     final String? data = await _secureStorageProvider
         .get('${SecureStorageKeys.savedDaaps}/$publicKey');
     if (data == null) {
@@ -50,7 +51,7 @@ class ConnectedDappRepository {
   }
 
   Future<int> deleteAll() async {
-    log.i('deleting all connected dapps');
+    Sentry.captureMessage('deleting all connected dapps');
     final data = await _secureStorageProvider.getAllValues();
     data.removeWhere(
       (key, value) => !key.startsWith('${SecureStorageKeys.savedDaaps}/'),
@@ -72,7 +73,8 @@ class ConnectedDappRepository {
       id = savedDappData.sessionData!.pairingTopic;
     }
 
-    log.i('deleteing dapp data - ${SecureStorageKeys.savedDaaps}/$id');
+    Sentry.captureMessage(
+        'deleteing dapp data - ${SecureStorageKeys.savedDaaps}/$id');
     await _secureStorageProvider.delete('${SecureStorageKeys.savedDaaps}/$id');
     return true;
   }
@@ -93,7 +95,7 @@ class ConnectedDappRepository {
       }
     }
 
-    log.i('saving dapp Data');
+    Sentry.captureMessage('saving dapp Data');
     late String id;
 
     if (savedDappData.walletAddress != null) {
@@ -110,7 +112,7 @@ class ConnectedDappRepository {
   }
 
   // Future<int> update(SavedDappData savedPeerData) async {
-  //   log.i('updating data');
+  //   Sentry.captureMessage('updating data');
   //   await _secureStorageProvider.set(
   //     '${SecureStorageKeys.savedDaaps}/${savedPeerData.peer!.publicKey}',
   //     json.encode(savedPeerData.toJson()),

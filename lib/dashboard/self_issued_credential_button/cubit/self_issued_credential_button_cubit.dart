@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 part 'self_issued_credential_button_cubit.g.dart';
@@ -84,8 +85,8 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
           await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions));
       final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
 
-      log.i('vc: $vc');
-      log.i('verifyResult: $jsonVerification');
+      Sentry.captureMessage('vc: $vc');
+      Sentry.captureMessage('verifyResult: $jsonVerification');
 
       if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
         log.w(
@@ -95,7 +96,9 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       }
 
       if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
-        log.e('failed to verify credential', error: jsonVerification['errors']);
+        Sentry.captureMessage(
+          'failed to verify credential',
+        );
         if (jsonVerification['errors'][0] != 'No applicable proof') {
           throw ResponseMessage(
             message: ResponseString
@@ -109,7 +112,9 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       }
       emit(state.success());
     } catch (e, s) {
-      log.e('something went wrong', error: e, stackTrace: s);
+      Sentry.captureMessage(
+        'something went wrong',
+      );
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
