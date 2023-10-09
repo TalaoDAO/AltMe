@@ -61,6 +61,7 @@ dependencies:
   flutter_native_timezone: ^2.0.0
   flutter_olm: ^1.2.0
   flutter_openssl_crypto: ^0.1.0
+  sentry_flutter: ^7.10.1
   flutter_svg: ^2.0.6
   google_fonts: ^4.0.5
   #google_mlkit_face_detection: ^0.5.0
