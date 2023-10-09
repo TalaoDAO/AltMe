@@ -272,6 +272,31 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                   Theme.of(context).colorScheme.valueColor,
                             ),
                           ],
+                          if (widget.credentialModel.pendingInfo != null) ...[
+                            CredentialField(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 0,
+                                vertical: 8,
+                              ),
+                              title: l10n.issuer,
+                              value: widget.credentialModel.pendingInfo!.issuer,
+                              titleColor:
+                                  Theme.of(context).colorScheme.titleColor,
+                              valueColor:
+                                  Theme.of(context).colorScheme.valueColor,
+                            ),
+                            CredentialField(
+                              padding: EdgeInsets.zero,
+                              title: l10n.dateOfRequest,
+                              value: UiDate.formatDate(
+                                widget.credentialModel.pendingInfo!.requestedAt,
+                              ),
+                              titleColor:
+                                  Theme.of(context).colorScheme.titleColor,
+                              valueColor:
+                                  Theme.of(context).colorScheme.valueColor,
+                            ),
+                          ],
                         ],
                         if (state.credentialDetailTabStatus ==
                             CredentialDetailTabStatus.activity) ...[

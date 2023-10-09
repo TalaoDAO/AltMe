@@ -884,7 +884,9 @@
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
     "moreDetails",
-    "theCredentialOfferIsInvalid"
+    "theCredentialOfferIsInvalid",
+    "dateOfRequest",
+    "keyDecentralizedIDP256"
   ],
 
   "es": [
@@ -1772,7 +1774,9 @@
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
     "moreDetails",
-    "theCredentialOfferIsInvalid"
+    "theCredentialOfferIsInvalid",
+    "dateOfRequest",
+    "keyDecentralizedIDP256"
   ],
 
   "fr": [
@@ -1963,7 +1967,9 @@
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
     "moreDetails",
-    "theCredentialOfferIsInvalid"
+    "theCredentialOfferIsInvalid",
+    "dateOfRequest",
+    "keyDecentralizedIDP256"
   ],
 
   "it": [
@@ -2851,6 +2857,8 @@
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
     "moreDetails",
-    "theCredentialOfferIsInvalid"
+    "theCredentialOfferIsInvalid",
+    "dateOfRequest",
+    "keyDecentralizedIDP256"
   ]
 }
