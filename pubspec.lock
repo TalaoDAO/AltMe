@@ -25,14 +25,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.0"
-  android_intent_plus:
-    dependency: transitive
-    description:
-      name: android_intent_plus
-      sha256: f72ae20bb37108694f442e7ae6acbd28b453ca62ce86842f6787b784355abfe6
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.2"
   ansicolor:
     dependency: transitive
     description:
@@ -1545,14 +1537,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
-  model_viewer_plus:
-    dependency: "direct main"
-    description:
-      name: model_viewer_plus
-      sha256: daeee3c498ece539125933e233252aebdc0b6d842538efb7061f7eaf3b97939e
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.7.0"
   nested:
     dependency: transitive
     description:
