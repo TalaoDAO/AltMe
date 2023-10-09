@@ -605,17 +605,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
     }
 
-    final scope = state.uri!.queryParameters['scope'];
-    if (scope == null || scope != 'openid') {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description':
-              'The openid scope is required in the scope list.',
-        },
-      );
-    }
-
     final redirectUri = state.uri!.queryParameters['redirect_uri'];
     final clientId = state.uri!.queryParameters['client_id'];
     final isUrl = isURL(clientId.toString());
@@ -623,6 +612,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     log.i('responseType - $responseType');
     if (responseType == 'id_token') {
       /// verifier side (siopv2)
+
+      final scope = state.uri!.queryParameters['scope'];
+      if (scope == null || scope != 'openid') {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description':
+                'The openid scope is required in the scope list.',
+          },
+        );
+      }
 
       if (redirectUri == null) {
         throw ResponseMessage(
