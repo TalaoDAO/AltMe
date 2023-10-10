@@ -13,7 +13,7 @@ class VerifierTokenParameters extends TokenParameters {
     required super.isIdToken,
     required this.audience,
     required this.credentials,
-    required this.nonce,
+    this.nonce,
   });
 
   /// [audience] is is client id of the request
@@ -23,7 +23,7 @@ class VerifierTokenParameters extends TokenParameters {
   final List<String> credentials;
 
   /// [nonce] is a number given by verifier to handle request authentication
-  final String nonce;
+  final String? nonce;
 
   /// [jsonIdOrJwtList] is list of jwt or jsonIds from the credentials
   ///  wich contains other credential's metadata
