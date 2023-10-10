@@ -279,7 +279,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                 vertical: 8,
                               ),
                               title: l10n.issuer,
-                              value: widget.credentialModel.pendingInfo!.issuer,
+                              value:
+                                  widget.credentialModel.pendingInfo!.issuer ??
+                                      '',
                               titleColor:
                                   Theme.of(context).colorScheme.titleColor,
                               valueColor:
