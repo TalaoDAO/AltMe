@@ -75,6 +75,10 @@ class ProfileCubit extends Cubit<ProfileState> {
               .get(SecureStorageKeys.polygonIdNetwork)) ??
           PolygonIdNetwork.PolygonMainnet.toString();
 
+      final didKeyType =
+          (await secureStorageProvider.get(SecureStorageKeys.didKeyType)) ??
+              DidKeyType.p256.toString();
+
       final tezosNetworkJson = await secureStorageProvider
           .get(SecureStorageKeys.blockchainNetworkKey);
       final tezosNetwork = tezosNetworkJson != null
@@ -130,6 +134,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         location: location,
         email: email,
         polygonIdNetwork: polygonIdNetwork,
+        didKeyType: didKeyType,
         tezosNetwork: tezosNetwork,
         companyName: companyName,
         companyWebsite: companyWebsite,
@@ -206,6 +211,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       await secureStorageProvider.set(
         SecureStorageKeys.polygonIdNetwork,
         profileModel.polygonIdNetwork,
+      );
+      await secureStorageProvider.set(
+        SecureStorageKeys.didKeyType,
+        profileModel.didKeyType,
       );
 
       await secureStorageProvider.set(
@@ -304,6 +313,12 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     await polygonIdCubit.setEnv(polygonIdNetwork);
 
+    await update(profileModel);
+  }
+
+  Future<void> updateDidKeyType(DidKeyType didKeyType) async {
+    final profileModel =
+        state.model.copyWith(didKeyType: didKeyType.toString());
     await update(profileModel);
   }
 

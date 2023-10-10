@@ -38,6 +38,7 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
         children: <Widget>[
           const SecurityLevelWidget(),
           const SixOrForUserPinWidget(),
+          const DidKeyTypeWidget(),
           DrawerItem2(
             title: l10n.developerMode,
             subtitle: l10n.developerModeSubtitle,
@@ -57,7 +58,7 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
                 },
               ),
             ),
-          )
+          ),
         ],
       ),
     );

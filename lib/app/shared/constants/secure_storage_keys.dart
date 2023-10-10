@@ -53,6 +53,7 @@ class SecureStorageKeys {
   static const String emailKey = 'profile/email';
 
   static const String polygonIdNetwork = 'profile/polygonIdNetwork';
+  static const String didKeyType = 'profile/didKeyType';
 
   static const String blockchainNetworkKey = 'profile/blockchainNetwork';
   static const String credentialKey = 'credential';

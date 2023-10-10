@@ -231,9 +231,8 @@ class OIDC4VC {
     required String did,
     required String kid,
     required int indexValue,
+    required String privateKey,
     String? preAuthorizedCode,
-    String? mnemonic,
-    String? privateKey,
     String? userPin,
     String? code,
     String? codeVerifier,
@@ -258,14 +257,8 @@ class OIDC4VC {
           response['authorization_details'] as List<dynamic>?;
     }
 
-    final private = await getPrivateKey(
-      mnemonic: mnemonic,
-      privateKey: privateKey,
-      indexValue: indexValue,
-    );
-
     final issuerTokenParameters = IssuerTokenParameters(
-      privateKey: private,
+      privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
       did: did,
       kid: kid,
       issuer: issuer,

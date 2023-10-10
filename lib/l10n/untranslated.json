@@ -886,7 +886,9 @@
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
-    "keyDecentralizedIDP256"
+    "keyDecentralizedIDP256",
+    "defaultDid",
+    "selectOneOfTheDid"
   ],
 
   "es": [
@@ -1776,7 +1778,9 @@
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
-    "keyDecentralizedIDP256"
+    "keyDecentralizedIDP256",
+    "defaultDid",
+    "selectOneOfTheDid"
   ],
 
   "fr": [
@@ -1969,7 +1973,9 @@
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
-    "keyDecentralizedIDP256"
+    "keyDecentralizedIDP256",
+    "defaultDid",
+    "selectOneOfTheDid"
   ],
 
   "it": [
@@ -2859,6 +2865,8 @@
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
-    "keyDecentralizedIDP256"
+    "keyDecentralizedIDP256",
+    "defaultDid",
+    "selectOneOfTheDid"
   ]
 }
