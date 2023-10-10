@@ -77,7 +77,7 @@ extension CredentialCategoryX on CredentialCategory {
       case CredentialCategory.identityCards:
         return [
           //CredentialSubjectType.gender,
-          CredentialSubjectType.ageRange,
+          //CredentialSubjectType.ageRange,
           // CredentialSubjectType.nationality,
           CredentialSubjectType.over18,
           CredentialSubjectType.over15,

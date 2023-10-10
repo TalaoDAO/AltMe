@@ -69,6 +69,12 @@ class DidView extends StatelessWidget {
                   },
                 ),
                 DrawerItem(
+                  title: l10n.keyDecentralizedIDP256,
+                  onTap: () {
+                    Navigator.of(context).push<void>(ManageDidP256Page.route());
+                  },
+                ),
+                DrawerItem(
                   title: l10n.polygonDecentralizedID,
                   onTap: () async {
                     LoadingView().show(context: context);

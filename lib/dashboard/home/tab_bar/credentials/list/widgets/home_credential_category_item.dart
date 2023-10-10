@@ -64,6 +64,9 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             itemCount: sortedCredentials.length + 1,
             itemBuilder: (_, index) {
               if (index == sortedCredentials.length) {
+                if (credentialCategory == CredentialCategory.pendingCards) {
+                  return Container();
+                }
                 return AddCredentialButton(
                   credentialCategory: credentialCategory,
                 );

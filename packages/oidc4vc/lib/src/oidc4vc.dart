@@ -853,7 +853,7 @@ class OIDC4VC {
     required String did,
     required String kid,
     required String redirectUri,
-    required String nonce,
+    required String? nonce,
     required String privateKey,
     required String? stateValue,
   }) async {
@@ -976,7 +976,7 @@ class OIDC4VC {
         'holder': tokenParameters.did,
         'verifiableCredential': tokenParameters.jsonIdOrJwtList,
       },
-      'nonce': tokenParameters.nonce,
+      'nonce': tokenParameters.nonce!,
     };
 
     final verifierVpJwt = generateToken(
@@ -1037,8 +1037,11 @@ class OIDC4VC {
       'exp': DateTime.now().microsecondsSinceEpoch + 1000,
       'sub': tokenParameters.did,
       'iss': tokenParameters.did, //'https://self-issued.me/v2',
-      'nonce': tokenParameters.nonce,
     };
+
+    if (tokenParameters.nonce != null) {
+      payload['nonce'] = tokenParameters.nonce!;
+    }
 
     final verifierIdJwt = generateToken(
       vpTokenPayload: payload,

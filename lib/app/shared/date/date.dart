@@ -37,7 +37,8 @@ class UiDate {
     }
   }
 
-  static String formatDate(DateTime dateTime) {
+  static String formatDate(DateTime? dateTime) {
+    if (dateTime == null) return '';
     return outputFormat.format(dateTime);
   }
 
