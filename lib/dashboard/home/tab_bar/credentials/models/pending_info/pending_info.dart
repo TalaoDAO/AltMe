@@ -21,8 +21,8 @@ class PendingInfo extends Equatable {
   final String deferredCredentialEndpoint;
   final String format;
   final String url;
-  final String issuer;
-  final DateTime requestedAt;
+  final String? issuer;
+  final DateTime? requestedAt;
 
   Map<String, dynamic> toJson() => _$PendingInfoToJson(this);
 
