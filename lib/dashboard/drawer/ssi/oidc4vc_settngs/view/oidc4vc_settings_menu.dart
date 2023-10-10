@@ -39,6 +39,7 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           const SecurityLevelWidget(),
           const SixOrForUserPinWidget(),
           const DidKeyTypeWidget(),
+          const SubjectSyntaxTypeWidget(),
           DrawerItem2(
             title: l10n.developerMode,
             subtitle: l10n.developerModeSubtitle,

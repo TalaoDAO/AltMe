@@ -888,7 +888,9 @@
     "dateOfRequest",
     "keyDecentralizedIDP256",
     "defaultDid",
-    "selectOneOfTheDid"
+    "selectOneOfTheDid",
+    "subjectSyntaxType",
+    "enableToUseTheJWKThumprintOfTheKey"
   ],
 
   "es": [
@@ -1780,7 +1782,9 @@
     "dateOfRequest",
     "keyDecentralizedIDP256",
     "defaultDid",
-    "selectOneOfTheDid"
+    "selectOneOfTheDid",
+    "subjectSyntaxType",
+    "enableToUseTheJWKThumprintOfTheKey"
   ],
 
   "fr": [
@@ -1975,7 +1979,9 @@
     "dateOfRequest",
     "keyDecentralizedIDP256",
     "defaultDid",
-    "selectOneOfTheDid"
+    "selectOneOfTheDid",
+    "subjectSyntaxType",
+    "enableToUseTheJWKThumprintOfTheKey"
   ],
 
   "it": [
@@ -2867,6 +2873,8 @@
     "dateOfRequest",
     "keyDecentralizedIDP256",
     "defaultDid",
-    "selectOneOfTheDid"
+    "selectOneOfTheDid",
+    "subjectSyntaxType",
+    "enableToUseTheJWKThumprintOfTheKey"
   ]
 }
