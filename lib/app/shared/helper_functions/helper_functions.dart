@@ -300,7 +300,7 @@ Future<String> getP256PrivateKey(SecureStorageProvider secureStorage) async {
 }
 
 Future<String> fetchPrivateKey({
-  required OIDC4VC oidc4vc,
+  OIDC4VC? oidc4vc,
   required SecureStorageProvider secureStorage,
   required bool isEBSIV3,
 }) async {
@@ -309,14 +309,19 @@ Future<String> fetchPrivateKey({
   final index = getIndexValue(isEBSIV3: true);
 
   if (isEBSIV3) {
-    privateKey = await getEBSIV3P256PrivateKey(getSecureStorage);
+    privateKey = await getEBSIV3P256PrivateKey(secureStorage);
   } else {
-    final OIDC4VC oidc4vc = OIDC4VC();
-    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-    privateKey = await oidc4vc.privateKeyFromMnemonic(
-      mnemonic: mnemonic!,
-      indexValue: index,
-    );
+    final didKeyType = await secureStorage.get(SecureStorageKeys.didKeyType);
+    if (didKeyType == DidKeyType.secp256k1.toString()) {
+      if (oidc4vc == null) throw Exception();
+      final mnemonic = await secureStorage.get(SecureStorageKeys.ssiMnemonic);
+      privateKey = await oidc4vc.privateKeyFromMnemonic(
+        mnemonic: mnemonic!,
+        indexValue: index,
+      );
+    } else {
+      privateKey = await getP256PrivateKey(secureStorage);
+    }
   }
   return privateKey;
 }
@@ -434,8 +439,9 @@ Future<(String, String)> getDidAndKid({
     final String lastPart = did.split(':')[2];
     kid = '$did#$lastPart';
   } else {
+    if (didKitProvider == null) throw Exception();
     const didMethod = AltMeStrings.defaultDIDMethod;
-    did = didKitProvider!.keyToDID(didMethod, privateKey);
+    did = didKitProvider.keyToDID(didMethod, privateKey);
     kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
   }
 

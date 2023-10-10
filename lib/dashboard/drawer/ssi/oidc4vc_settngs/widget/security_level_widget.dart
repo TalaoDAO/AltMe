@@ -86,7 +86,6 @@ class SecurityLevelWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: Sizes.spaceSmall,
-                      vertical: Sizes.spaceXSmall,
                     ),
                     child: Divider(
                       height: 0,

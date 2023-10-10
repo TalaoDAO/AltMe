@@ -985,6 +985,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         redirectUri: redirectUri,
         nonce: nonce,
         stateValue: stateValue,
+        useJWKThumbPrint: profileCubit.state.model.enableJWKThumbprint,
       );
 
       String? url;
