@@ -101,6 +101,8 @@ Future<void> getAndAddCredential({
             deferredCredentialEndpoint: deferredCredentialEndpoint,
             format: format,
             url: scannedResponse,
+            issuer: issuer,
+            requestedAt: DateTime.now(),
           ),
         );
         // insert the credential in the wallet

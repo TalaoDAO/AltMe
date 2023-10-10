@@ -82,10 +82,10 @@ class ScanCubit extends Cubit<ScanState> {
         final responseType = uri.queryParameters['response_type'] ?? '';
         final stateValue = uri.queryParameters['state'];
 
-        if (responseType == 'id_token') {
+        if (isIDTokenOnly(responseType)) {
           /// verifier side (siopv2) with request uri as value
           throw Exception();
-        } else if (responseType == 'vp_token') {
+        } else if (isVPTokenOnly(responseType)) {
           /// verifier side (oidc4vp) with request uri as value
 
           await presentCredentialToOID4VPRequest(
@@ -102,7 +102,7 @@ class ScanCubit extends Cubit<ScanState> {
             stateValue: stateValue,
           );
           return;
-        } else if (responseType == 'id_token vp_token') {
+        } else if (isIDAndVPToken(responseType)) {
           /// verifier side (oidc4vp and siopv2) with request uri as value
 
           await presentCredentialToOIDC4VPAndSIOPV2RequestForOthers(
