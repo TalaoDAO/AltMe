@@ -609,10 +609,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     final clientId = state.uri!.queryParameters['client_id'];
     final isUrl = isURL(clientId.toString());
 
-    log.i('responseType - $responseType');
-    if (responseType == 'id_token') {
-      /// verifier side (siopv2)
-
+    if (hasIDToken(responseType.toString())) {
       final scope = state.uri!.queryParameters['scope'];
       if (scope == null || scope != 'openid') {
         throw ResponseMessage(
@@ -624,43 +621,39 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
 
-      if (redirectUri == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'The redirect_uri is missing.',
-          },
-        );
-      }
-
-      // if (isUrl && redirectUri != clientId) {
-      //   throw ResponseMessage(
-      //     data: {
-      //       'error': 'invalid_request',
-      //       'error_description': 'The client_id must be equal to redirect_uri.',
-      //     },
-      //   );
-      // }
-
-      if (isSecurityHigh) {
-        if (!keys.contains('nonce')) {
+      if (isIDTokenOnly(responseType.toString())) {
+        if (redirectUri == null) {
           throw ResponseMessage(
             data: {
               'error': 'invalid_request',
-              'error_description': 'The nonce is missing.',
+              'error_description': 'The redirect_uri is missing.',
             },
           );
         }
+
+        // if (isUrl && redirectUri != clientId) {
+        //   throw ResponseMessage(
+        //     data: {
+        //       'error': 'invalid_request',
+        //       'error_description': 'The client_id must be equal to redirect_uri.',
+        //     },
+        //   );
+        // }
+
+        if (isSecurityHigh) {
+          if (!keys.contains('nonce')) {
+            throw ResponseMessage(
+              data: {
+                'error': 'invalid_request',
+                'error_description': 'The nonce is missing.',
+              },
+            );
+          }
+        }
       }
+    }
 
-      await completeSiopV2Flow(redirectUri: redirectUri);
-    } else if (responseType == 'vp_token' ||
-        responseType == 'id_token vp_token') {
-      /// responseType == 'vp_token' => verifier side (oidc4vp)
-      ///
-      /// responseType == 'id_token vp_token' => verifier side (oidc4vp)
-      /// or (oidc4vp and siopv2)
-
+    if (hasVPToken(responseType.toString())) {
       if (!keys.contains('nonce')) {
         throw ResponseMessage(
           data: {
@@ -669,6 +662,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           },
         );
       }
+
       if (responseMode == 'direct_post') {
         final responseUri = state.uri!.queryParameters['response_uri'];
         final bothPresent = redirectUri != null && responseUri != null;
@@ -703,6 +697,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           },
         );
       }
+    }
+
+    log.i('responseType - $responseType');
+    if (isIDTokenOnly(responseType.toString())) {
+      /// verifier side (siopv2)
+
+      await completeSiopV2Flow(redirectUri: redirectUri!);
+    } else if (isVPTokenOnly(responseType.toString()) ||
+        isIDAndVPToken(responseType.toString())) {
+      /// responseType == 'vp_token' => verifier side (oidc4vp)
+      ///
+      /// responseType == 'id_token vp_token' => verifier side (oidc4vp)
+      /// or (oidc4vp and siopv2)
 
       await launchOIDC4VPAndSIOPV2Flow(keys);
     } else {
@@ -958,17 +965,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final nonce = state.uri?.queryParameters['nonce'];
       final stateValue = state.uri?.queryParameters['state'];
 
-      final bool isEBSIV3 =
-          await isEBSIV3ForVerifier(client: client, uri: state.uri!);
-
       final privateKey = await fetchPrivateKey(
-        isEBSIV3: isEBSIV3,
+        isEBSIV3: false,
         oidc4vc: oidc4vc,
         secureStorage: getSecureStorage,
       );
 
       final (did, kid) = await getDidAndKid(
-        isEBSIV3: isEBSIV3,
+        isEBSIV3: false,
         privateKey: privateKey,
         didKitProvider: didKitProvider,
       );
@@ -979,7 +983,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         did: did,
         kid: kid,
         redirectUri: redirectUri,
-        nonce: nonce!,
+        nonce: nonce,
         stateValue: stateValue,
       );
 

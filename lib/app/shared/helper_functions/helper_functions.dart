@@ -793,8 +793,8 @@ Future<(String?, String?)> getIssuerAndPreAuthorizedCode({
 }
 
 bool isURL(String input) {
-  final Uri? uri = Uri.tryParse(input);
-  return uri != null && uri.hasScheme;
+  final bool uri = Uri.tryParse(input)?.hasAbsolutePath ?? false;
+  return uri;
 }
 
 int getIndexValue({required bool isEBSIV3}) {
@@ -864,4 +864,26 @@ ResponseString getErrorResponseString(String errorString) {
     default:
       return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
   }
+}
+
+bool isIDTokenOnly(String responseType) {
+  return responseType.contains('id_token') &&
+      !responseType.contains('vp_token');
+}
+
+bool isVPTokenOnly(String responseType) {
+  return responseType.contains('vp_token') &&
+      !responseType.contains('id_token');
+}
+
+bool isIDAndVPToken(String responseType) {
+  return responseType.contains('id_token') && responseType.contains('vp_token');
+}
+
+bool hasIDToken(String responseType) {
+  return responseType.contains('id_token');
+}
+
+bool hasVPToken(String responseType) {
+  return responseType.contains('vp_token');
 }
