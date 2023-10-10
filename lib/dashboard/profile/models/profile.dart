@@ -14,11 +14,13 @@ class ProfileModel extends Equatable {
     required this.email,
     required this.polygonIdNetwork,
     required this.tezosNetwork,
+    required this.didKeyType,
     required this.isEnterprise,
     required this.isBiometricEnabled,
     required this.userConsentForIssuerAccess,
     required this.userConsentForVerifierAccess,
     required this.userPINCodeForAuthentication,
+    required this.enableJWKThumbprint,
     this.companyName = '',
     this.companyWebsite = '',
     this.jobTitle = '',
@@ -46,9 +48,11 @@ class ProfileModel extends Equatable {
         userConsentForVerifierAccess: true,
         userPINCodeForAuthentication: true,
         tezosNetwork: TezosNetwork.mainNet(),
+        didKeyType: DidKeyType.p256.toString(),
         isSecurityLow: true,
         isDeveloperMode: false,
         userPinDigitsLength: 6,
+        enableJWKThumbprint: false,
       );
 
   final String firstName;
@@ -61,6 +65,7 @@ class ProfileModel extends Equatable {
   final String jobTitle;
   final String polygonIdNetwork;
   final TezosNetwork tezosNetwork;
+  final String didKeyType;
   final bool isEnterprise;
   final bool isBiometricEnabled;
   final bool userConsentForIssuerAccess;
@@ -70,6 +75,7 @@ class ProfileModel extends Equatable {
   final bool isSecurityLow;
   final bool isDeveloperMode;
   final int userPinDigitsLength;
+  final bool enableJWKThumbprint;
 
   @override
   List<Object> get props => [
@@ -80,6 +86,7 @@ class ProfileModel extends Equatable {
         email,
         polygonIdNetwork,
         tezosNetwork,
+        didKeyType,
         companyName,
         companyWebsite,
         jobTitle,
@@ -91,6 +98,7 @@ class ProfileModel extends Equatable {
         isSecurityLow,
         isDeveloperMode,
         userPinDigitsLength,
+        enableJWKThumbprint,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
@@ -106,6 +114,7 @@ class ProfileModel extends Equatable {
     String? jobTitle,
     String? polygonIdNetwork,
     TezosNetwork? tezosNetwork,
+    String? didKeyType,
     bool? isEnterprise,
     bool? isBiometricEnabled,
     bool? userConsentForIssuerAccess,
@@ -114,6 +123,7 @@ class ProfileModel extends Equatable {
     bool? isSecurityLow,
     bool? isDeveloperMode,
     int? userPinDigitsLength,
+    bool? enableJWKThumbprint,
   }) {
     return ProfileModel(
       firstName: firstName ?? this.firstName,
@@ -126,8 +136,10 @@ class ProfileModel extends Equatable {
       jobTitle: jobTitle ?? this.jobTitle,
       polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
       tezosNetwork: tezosNetwork ?? this.tezosNetwork,
+      didKeyType: didKeyType ?? this.didKeyType,
       isEnterprise: isEnterprise ?? this.isEnterprise,
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
+      enableJWKThumbprint: enableJWKThumbprint ?? this.enableJWKThumbprint,
       userConsentForIssuerAccess:
           userConsentForIssuerAccess ?? this.userConsentForIssuerAccess,
       userConsentForVerifierAccess:

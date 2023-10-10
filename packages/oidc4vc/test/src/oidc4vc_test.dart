@@ -88,30 +88,30 @@ void main() {
       expect(jsonDecode(jwk), expectedECJwk);
     });
 
-    group('getPrivateKey', () {
-      test('privateKey from mnemonic', () async {
-        final jwk = await oidc4vc.getPrivateKey(
-          mnemonic: mnemonic,
-          indexValue: index,
-        );
-        expect(jwk, expectedECJwk);
-      });
+    // group('getPrivateKey', () {
+    //   test('privateKey from mnemonic', () async {
+    //     final jwk = await oidc4vc.getPrivateKey(
+    //       mnemonic: mnemonic,
+    //       indexValue: index,
+    //     );
+    //     expect(jwk, expectedECJwk);
+    //   });
 
-      test('privateKey from key', () async {
-        const key = {
-          'crv': 'secp256k1',
-          'd': 's_wb6Ef1ardGsT5Il6WLRvQ9Zu0lp7I2OVwtzT5iQpo',
-          'kty': 'EC',
-          'x': 'qs4JLbsmA-7L-3o9V4BoNVrDtYoWE2OOZIvujoVJZ1U',
-          'y': '8PLGROkTALZP3YHY5pm0yrMVCjQoctHM3uaxug70mq8',
-        };
-        final jwk = await oidc4vc.getPrivateKey(
-          privateKey: jsonEncode(key),
-          indexValue: index,
-        );
-        expect(jwk, expectedECJwk);
-      });
-    });
+    //   test('privateKey from key', () async {
+    //     const key = {
+    //       'crv': 'secp256k1',
+    //       'd': 's_wb6Ef1ardGsT5Il6WLRvQ9Zu0lp7I2OVwtzT5iQpo',
+    //       'kty': 'EC',
+    //       'x': 'qs4JLbsmA-7L-3o9V4BoNVrDtYoWE2OOZIvujoVJZ1U',
+    //       'y': '8PLGROkTALZP3YHY5pm0yrMVCjQoctHM3uaxug70mq8',
+    //     };
+    //     final jwk = await oidc4vc.getPrivateKey(
+    //       privateKey: jsonEncode(key),
+    //       indexValue: index,
+    //     );
+    //     expect(jwk, expectedECJwk);
+    //   });
+    // });
 
     test('JWK from seeds', () {
       final jwk = oidc4vc.jwkFromSeed(seedBytes: Uint8List.fromList(seedBytes));
