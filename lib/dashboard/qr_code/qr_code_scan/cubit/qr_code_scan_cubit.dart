@@ -606,8 +606,39 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     final redirectUri = state.uri!.queryParameters['redirect_uri'];
     final clientId = state.uri!.queryParameters['client_id'];
-    final isUrl = isURL(clientId.toString());
+    final isClientIdUrl = isURL(clientId.toString());
 
+    /// id_token only
+    if (isIDTokenOnly(responseType.toString())) {
+      if (redirectUri == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The redirect_uri is missing.',
+          },
+        );
+      }
+
+      // if (isUrl && redirectUri != clientId) {
+      //   throw ResponseMessage(
+      //     data: {
+      //       'error': 'invalid_request',
+      //  'error_description': 'The client_id must be equal to redirect_uri.',
+      //     },
+      //   );
+      // }
+
+      if (isSecurityHigh && !keys.contains('nonce')) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The nonce is missing.',
+          },
+        );
+      }
+    }
+
+    /// contain id_token but may or may not contain vp_token
     if (hasIDToken(responseType.toString())) {
       final scope = state.uri!.queryParameters['scope'];
       if (scope == null || scope != 'openid') {
@@ -619,39 +650,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           },
         );
       }
-
-      if (isIDTokenOnly(responseType.toString())) {
-        if (redirectUri == null) {
-          throw ResponseMessage(
-            data: {
-              'error': 'invalid_request',
-              'error_description': 'The redirect_uri is missing.',
-            },
-          );
-        }
-
-        // if (isUrl && redirectUri != clientId) {
-        //   throw ResponseMessage(
-        //     data: {
-        //       'error': 'invalid_request',
-        //  'error_description': 'The client_id must be equal to redirect_uri.',
-        //     },
-        //   );
-        // }
-
-        if (isSecurityHigh) {
-          if (!keys.contains('nonce')) {
-            throw ResponseMessage(
-              data: {
-                'error': 'invalid_request',
-                'error_description': 'The nonce is missing.',
-              },
-            );
-          }
-        }
-      }
     }
 
+    /// contain vp_token but may or may not contain id_token
     if (hasVPToken(responseType.toString())) {
       if (!keys.contains('nonce')) {
         throw ResponseMessage(
@@ -662,8 +663,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
 
+      final responseUri = state.uri!.queryParameters['response_uri'];
+
       if (responseMode == 'direct_post') {
-        final responseUri = state.uri!.queryParameters['response_uri'];
         final bothPresent = redirectUri != null && responseUri != null;
         final bothAbsent = redirectUri == null && responseUri == null;
 
@@ -688,7 +690,25 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         }
       }
 
-      if (redirectUri != null && isUrl && redirectUri != clientId) {
+      if (isSecurityHigh &&
+          responseUri != null &&
+          isClientIdUrl &&
+          responseUri != clientId) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The client_id must be equal to response_uri.',
+          },
+        );
+      }
+    }
+
+    /// contain vp_token or id_token
+    if (hasIDTokenOrVPToken(responseType.toString())) {
+      if (isSecurityHigh &&
+          redirectUri != null &&
+          isClientIdUrl &&
+          redirectUri != clientId) {
         throw ResponseMessage(
           data: {
             'error': 'invalid_request',
@@ -704,7 +724,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       await completeSiopV2Flow(redirectUri: redirectUri!);
     } else if (isVPTokenOnly(responseType.toString()) ||
-        isIDAndVPToken(responseType.toString())) {
+        isIDTokenAndVPToken(responseType.toString())) {
       /// responseType == 'vp_token' => verifier side (oidc4vp)
       ///
       /// responseType == 'id_token vp_token' => verifier side (oidc4vp)
@@ -851,7 +871,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         data: {
           'error': 'invalid_request',
           'error_description':
-              'The nput_descriptors is required in the presentation_definition '
+              'The input_descriptors is required in the presentation_definition '
                   'object',
         },
       );
@@ -964,14 +984,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final nonce = state.uri?.queryParameters['nonce'];
       final stateValue = state.uri?.queryParameters['state'];
 
+      final bool isEBSIV3 =
+          await isEBSIV3ForVerifier(client: client, uri: state.uri!);
+
       final privateKey = await fetchPrivateKey(
-        isEBSIV3: false,
+        isEBSIV3: isEBSIV3,
         oidc4vc: oidc4vc,
         secureStorage: getSecureStorage,
       );
 
       final (did, kid) = await getDidAndKid(
-        isEBSIV3: false,
+        isEBSIV3: isEBSIV3,
         privateKey: privateKey,
         didKitProvider: didKitProvider,
       );
@@ -1127,11 +1150,36 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> authorizedFlowCompletion(Uri uri) async {
+    final error = uri.queryParameters['error'];
+    final errorDescription = uri.queryParameters['error_description'];
+
+    if (error != null) {
+      throw ResponseMessage(
+        data: {
+          'error': error,
+          'error_description': errorDescription,
+        },
+      );
+    }
+
     final codeForAuthorisedFlow = uri.queryParameters['code'];
     final state = uri.queryParameters['state'];
 
-    if (codeForAuthorisedFlow == null || state == null) {
-      return;
+    if (codeForAuthorisedFlow == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'The code is missing.',
+        },
+      );
+    }
+    if (state == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'The state is missing.',
+        },
+      );
     }
     await dotenv.load();
     final String authorizationUriSecretKey =
@@ -1147,7 +1195,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         payload.containsKey('isEBSIV3');
 
     if (!containsAllRequiredKey) {
-      return;
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'The state value is incorrect.',
+        },
+      );
     }
 
     final selectedCredentials = payload['credentials'] as List<dynamic>;

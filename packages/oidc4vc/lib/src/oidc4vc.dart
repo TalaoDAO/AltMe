@@ -262,7 +262,7 @@ class OIDC4VC {
       did: did,
       kid: kid,
       issuer: issuer,
-      isIdToken: false,
+      isProofOfOwnership: false,
       useJWKThumbPrint: false,
     );
 
@@ -771,7 +771,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: credentialsToBePresented,
         nonce: nonce,
-        isIdToken: false,
+        isProofOfOwnership: false,
         useJWKThumbPrint: false,
       );
 
@@ -802,7 +802,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: credentialsToBePresented,
         nonce: nonce,
-        isIdToken: false,
+        isProofOfOwnership: false,
         useJWKThumbPrint: useJWKThumbPrint,
       );
 
@@ -834,7 +834,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: [],
         nonce: nonce,
-        isIdToken: true,
+        isProofOfOwnership: true,
         useJWKThumbPrint: useJWKThumbPrint,
       );
 
@@ -890,7 +890,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: [],
         nonce: nonce,
-        isIdToken: true,
+        isProofOfOwnership: false,
         useJWKThumbPrint: useJWKThumbPrint,
       );
 
@@ -974,10 +974,10 @@ class OIDC4VC {
 
     late String typ;
 
-    if (tokenParameters.isIdToken) {
-      typ = 'JWT';
-    } else {
+    if (tokenParameters.isProofOfOwnership) {
       typ = 'openid4vci-proof+jwt';
+    } else {
+      typ = 'JWT';
     }
 
     final vpBuilder = JsonWebSignatureBuilder()

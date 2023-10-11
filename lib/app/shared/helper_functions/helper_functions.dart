@@ -883,7 +883,7 @@ bool isVPTokenOnly(String responseType) {
       !responseType.contains('id_token');
 }
 
-bool isIDAndVPToken(String responseType) {
+bool isIDTokenAndVPToken(String responseType) {
   return responseType.contains('id_token') && responseType.contains('vp_token');
 }
 
@@ -893,4 +893,8 @@ bool hasIDToken(String responseType) {
 
 bool hasVPToken(String responseType) {
   return responseType.contains('vp_token');
+}
+
+bool hasIDTokenOrVPToken(String responseType) {
+  return responseType.contains('id_token') || responseType.contains('vp_token');
 }

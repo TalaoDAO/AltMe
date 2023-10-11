@@ -102,7 +102,7 @@ class ScanCubit extends Cubit<ScanState> {
             stateValue: stateValue,
           );
           return;
-        } else if (isIDAndVPToken(responseType)) {
+        } else if (isIDTokenAndVPToken(responseType)) {
           /// verifier side (oidc4vp and siopv2) with request uri as value
 
           await presentCredentialToOIDC4VPAndSIOPV2RequestForOthers(
