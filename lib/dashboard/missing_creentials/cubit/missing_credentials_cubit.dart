@@ -51,7 +51,8 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
           }
 
           final Filter filter = Filter.fromJson(
-              credentialField['filter'] as Map<String, dynamic>);
+            credentialField['filter'] as Map<String, dynamic>,
+          );
 
           final credentialName =
               filter.pattern ?? filter.contains!.containsConst;

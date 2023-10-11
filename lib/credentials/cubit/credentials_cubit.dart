@@ -352,7 +352,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       CredentialSubjectType.over13,
       CredentialSubjectType.over15,
       CredentialSubjectType.over18,
-      CredentialSubjectType.ageRange
+      CredentialSubjectType.ageRange,
     ];
 
     ///remove old card added by YOTI

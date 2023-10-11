@@ -634,7 +634,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         //   throw ResponseMessage(
         //     data: {
         //       'error': 'invalid_request',
-        //       'error_description': 'The client_id must be equal to redirect_uri.',
+        //  'error_description': 'The client_id must be equal to redirect_uri.',
         //     },
         //   );
         // }
