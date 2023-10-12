@@ -64,6 +64,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final OIDC4VC oidc4vc;
 
   final log = getLogger('QRCodeScanCubit');
+  late dynamic encodedData;
 
   @override
   Future<void> close() async {
@@ -212,8 +213,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       emitError(e);
     }
   }
-
-  late dynamic encodedData;
 
   Future<void> accept({
     required Issuer issuer,
@@ -985,6 +984,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         redirectUri: redirectUri,
         nonce: nonce,
         stateValue: stateValue,
+        useJWKThumbPrint: profileCubit.state.model.enableJWKThumbprint,
       );
 
       String? url;

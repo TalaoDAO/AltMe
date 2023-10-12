@@ -13,6 +13,7 @@ class VerifierTokenParameters extends TokenParameters {
     required super.isIdToken,
     required this.audience,
     required this.credentials,
+    required super.useJWKThumbPrint,
     this.nonce,
   });
 

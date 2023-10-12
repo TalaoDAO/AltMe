@@ -776,6 +776,7 @@ class ScanCubit extends Cubit<ScanState> {
       privateKey: privateKey,
       nonce: nonce,
       indexValue: indexValue,
+      useJWKThumbPrint: profileCubit.state.model.enableJWKThumbprint,
     );
 
     return idToken;

@@ -5,8 +5,8 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SixOrForUserPinWidget extends StatelessWidget {
-  const SixOrForUserPinWidget({super.key});
+class DidKeyTypeWidget extends StatelessWidget {
+  const DidKeyTypeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,19 +27,21 @@ class SixOrForUserPinWidget extends StatelessWidget {
                 ),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          l10n.six_or_four_digits_user_pin_title,
+                          l10n.defaultDid,
                           style: Theme.of(context).textTheme.drawerItemTitle,
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          l10n.six_or_four_digits_user_pin_subTitle,
+                          l10n.selectOneOfTheDid,
                           style: Theme.of(context).textTheme.drawerItemSubtitle,
                         ),
                       ],
@@ -48,7 +50,9 @@ class SixOrForUserPinWidget extends StatelessWidget {
                   const SizedBox(height: 10),
                   ListTile(
                     onTap: () {
-                      context.read<ProfileCubit>().setUserPinDigitLength(4);
+                      context
+                          .read<ProfileCubit>()
+                          .updateDidKeyType(DidKeyType.secp256k1);
                     },
                     shape: const RoundedRectangleBorder(
                       side: BorderSide(
@@ -57,13 +61,13 @@ class SixOrForUserPinWidget extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                      l10n.four_digits_user_pin,
+                      'did:key secp256k1',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
                     ),
                     trailing: Icon(
-                      state.model.userPinDigitsLength == 4
+                      state.model.didKeyType == DidKeyType.secp256k1.toString()
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,
                       size: Sizes.icon2x,
@@ -81,7 +85,9 @@ class SixOrForUserPinWidget extends StatelessWidget {
                   ),
                   ListTile(
                     onTap: () {
-                      context.read<ProfileCubit>().setUserPinDigitLength(6);
+                      context
+                          .read<ProfileCubit>()
+                          .updateDidKeyType(DidKeyType.p256);
                     },
                     shape: const RoundedRectangleBorder(
                       side: BorderSide(
@@ -90,13 +96,13 @@ class SixOrForUserPinWidget extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                      l10n.six_digits_user_pin,
+                      'did:key P-256',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
                     ),
                     trailing: Icon(
-                      state.model.userPinDigitsLength == 6
+                      state.model.didKeyType == DidKeyType.p256.toString()
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,
                       size: Sizes.icon2x,

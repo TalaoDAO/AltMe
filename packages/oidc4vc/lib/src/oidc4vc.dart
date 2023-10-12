@@ -231,9 +231,8 @@ class OIDC4VC {
     required String did,
     required String kid,
     required int indexValue,
+    required String privateKey,
     String? preAuthorizedCode,
-    String? mnemonic,
-    String? privateKey,
     String? userPin,
     String? code,
     String? codeVerifier,
@@ -258,18 +257,13 @@ class OIDC4VC {
           response['authorization_details'] as List<dynamic>?;
     }
 
-    final private = await getPrivateKey(
-      mnemonic: mnemonic,
-      privateKey: privateKey,
-      indexValue: indexValue,
-    );
-
     final issuerTokenParameters = IssuerTokenParameters(
-      privateKey: private,
+      privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
       did: did,
       kid: kid,
       issuer: issuer,
       isIdToken: false,
+      useJWKThumbPrint: false,
     );
 
     if (nonce == null) throw Exception();
@@ -503,26 +497,6 @@ class OIDC4VC {
     final value = data.first['publicKeyJwk'];
 
     return jsonDecode(jsonEncode(value)) as Map<String, dynamic>;
-  }
-
-  Future<Map<String, dynamic>> getPrivateKey({
-    required int indexValue,
-    String? mnemonic,
-    String? privateKey,
-  }) async {
-    late Map<String, dynamic> private;
-
-    if (mnemonic != null) {
-      private = jsonDecode(
-        await privateKeyFromMnemonic(
-          mnemonic: mnemonic,
-          indexValue: indexValue,
-        ),
-      ) as Map<String, dynamic>;
-    } else {
-      private = jsonDecode(privateKey!) as Map<String, dynamic>;
-    }
-    return private;
   }
 
   Future<Map<String, dynamic>> buildCredentialData({
@@ -785,15 +759,10 @@ class OIDC4VC {
     required String did,
     required String kid,
     required int indexValue,
-    String? mnemonic,
-    String? privateKey,
+    required String privateKey,
   }) async {
     try {
-      final private = await getPrivateKey(
-        mnemonic: mnemonic,
-        privateKey: privateKey,
-        indexValue: indexValue,
-      );
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
 
       final tokenParameters = VerifierTokenParameters(
         privateKey: private,
@@ -803,6 +772,7 @@ class OIDC4VC {
         credentials: credentialsToBePresented,
         nonce: nonce,
         isIdToken: false,
+        useJWKThumbPrint: false,
       );
 
       final vpToken = await getVpToken(tokenParameters);
@@ -820,16 +790,11 @@ class OIDC4VC {
     required String kid,
     required String nonce,
     required int indexValue,
-    String? mnemonic,
-    String? privateKey,
+    required bool useJWKThumbPrint,
+    required String privateKey,
   }) async {
     try {
-      final private = await getPrivateKey(
-        mnemonic: mnemonic,
-        privateKey: privateKey,
-        indexValue: indexValue,
-      );
-
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
       final tokenParameters = VerifierTokenParameters(
         privateKey: private,
         did: did,
@@ -838,6 +803,7 @@ class OIDC4VC {
         credentials: credentialsToBePresented,
         nonce: nonce,
         isIdToken: false,
+        useJWKThumbPrint: useJWKThumbPrint,
       );
 
       final verifierIdToken = await getIdToken(tokenParameters);
@@ -856,6 +822,7 @@ class OIDC4VC {
     required String? nonce,
     required String privateKey,
     required String? stateValue,
+    required bool useJWKThumbPrint,
   }) async {
     try {
       final private = jsonDecode(privateKey) as Map<String, dynamic>;
@@ -868,6 +835,7 @@ class OIDC4VC {
         credentials: [],
         nonce: nonce,
         isIdToken: true,
+        useJWKThumbPrint: useJWKThumbPrint,
       );
 
       // structures
@@ -910,6 +878,7 @@ class OIDC4VC {
     required String nonce,
     required String privateKey,
     required String? stateValue,
+    required bool useJWKThumbPrint,
   }) async {
     try {
       final private = jsonDecode(privateKey) as Map<String, dynamic>;
@@ -922,6 +891,7 @@ class OIDC4VC {
         credentials: [],
         nonce: nonce,
         isIdToken: true,
+        useJWKThumbPrint: useJWKThumbPrint,
       );
 
       // structures
@@ -1015,10 +985,13 @@ class OIDC4VC {
       ..jsonContent = vpVerifierClaims.toJson()
       ..setProtectedHeader('typ', typ)
       ..setProtectedHeader('alg', tokenParameters.alg)
-      ..setProtectedHeader('kid', tokenParameters.kid)
 
       // add a key to sign, can only add one for JWT
       ..addRecipient(key, algorithm: tokenParameters.alg);
+
+    if (!tokenParameters.useJWKThumbPrint) {
+      vpBuilder.setProtectedHeader('kid', tokenParameters.kid);
+    }
 
     // build the jws
     final vpJws = vpBuilder.build();
@@ -1031,18 +1004,26 @@ class OIDC4VC {
   @visibleForTesting
   Future<String> getIdToken(VerifierTokenParameters tokenParameters) async {
     /// build id token
+    final issAndSub = tokenParameters.useJWKThumbPrint
+        ? tokenParameters.thumbprint
+        : tokenParameters.did;
     final payload = {
       'iat': DateTime.now().microsecondsSinceEpoch,
       'aud': tokenParameters.audience, // devrait être verifier
       'exp': DateTime.now().microsecondsSinceEpoch + 1000,
-      'sub': tokenParameters.did,
-      'iss': tokenParameters.did, //'https://self-issued.me/v2',
+      'sub': issAndSub,
+      'iss': issAndSub,
     };
 
     if (tokenParameters.nonce != null) {
       payload['nonce'] = tokenParameters.nonce!;
     }
 
+    if (tokenParameters.useJWKThumbPrint) {
+      payload['sub_jwk'] = tokenParameters.publicJWK;
+    }
+
+    //tokenParameters.thumbprint;
     final verifierIdJwt = generateToken(
       vpTokenPayload: payload,
       tokenParameters: tokenParameters,
