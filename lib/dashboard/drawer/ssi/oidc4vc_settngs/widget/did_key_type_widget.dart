@@ -109,6 +109,41 @@ class DidKeyTypeWidget extends StatelessWidget {
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.spaceSmall,
+                    ),
+                    child: Divider(
+                      height: 0,
+                      color: Theme.of(context).colorScheme.borderColor,
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      context
+                          .read<ProfileCubit>()
+                          .updateDidKeyType(DidKeyType.ebsiv3);
+                    },
+                    shape: const RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: Color(0xFFDDDDEE),
+                        width: 0.5,
+                      ),
+                    ),
+                    title: Text(
+                      'did:key EBSI-V3',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                    ),
+                    trailing: Icon(
+                      state.model.didKeyType == DidKeyType.ebsiv3.toString()
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_unchecked,
+                      size: Sizes.icon2x,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
                 ],
               ),
             ),

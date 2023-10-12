@@ -62,21 +62,20 @@ class ScanCubit extends Cubit<ScanState> {
 
     try {
       if (isSIOPV2OROIDC4VPUrl(uri)) {
-        final bool isEBSIV3 =
-            await isEBSIV3ForVerifier(client: client, uri: uri);
-
-        final int indexValue = getIndexValue(isEBSIV3: isEBSIV3);
+        // final bool isEBSIV3 =
+        //     await isEBSIV3ForVerifier(client: client, uri: uri) ?? false;
 
         final privateKey = await fetchPrivateKey(
-          isEBSIV3: isEBSIV3,
+          isEBSIV3: null, //isEBSIV3 ?? false,
           oidc4vc: oidc4vc,
-          secureStorage: getSecureStorage,
+          secureStorage: secureStorageProvider,
         );
 
         final (did, kid) = await getDidAndKid(
-          isEBSIV3: isEBSIV3,
+          isEBSIV3: null, //isEBSIV3 ?? false,
           privateKey: privateKey,
           didKitProvider: didKitProvider,
+          secureStorage: secureStorageProvider,
         );
 
         final responseType = uri.queryParameters['response_type'] ?? '';
@@ -98,7 +97,6 @@ class ScanCubit extends Cubit<ScanState> {
             did: did,
             kid: kid,
             privateKey: privateKey,
-            indexValue: indexValue,
             stateValue: stateValue,
           );
           return;
@@ -115,7 +113,6 @@ class ScanCubit extends Cubit<ScanState> {
             did: did,
             kid: kid,
             privateKey: privateKey,
-            indexValue: indexValue,
             stateValue: stateValue,
           );
 
@@ -450,7 +447,6 @@ class ScanCubit extends Cubit<ScanState> {
     required String did,
     required String kid,
     required Uri uri,
-    required int indexValue,
     required String? stateValue,
   }) async {
     emit(state.loading());
@@ -464,7 +460,6 @@ class ScanCubit extends Cubit<ScanState> {
       presentationDefinition: presentationDefinition,
       privateKey: privateKey,
       uri: uri,
-      indexValue: indexValue,
     );
 
     final presentationSubmissionString = getPresentationSubmission(
@@ -536,7 +531,6 @@ class ScanCubit extends Cubit<ScanState> {
     required String did,
     required String kid,
     required Uri uri,
-    required int indexValue,
     required String? stateValue,
   }) async {
     final log =
@@ -556,7 +550,6 @@ class ScanCubit extends Cubit<ScanState> {
         oidc4vc: oidc4vc,
         privateKey: privateKey,
         uri: uri,
-        indexValue: indexValue,
       );
 
       final String vpToken = await createVpToken(
@@ -567,7 +560,6 @@ class ScanCubit extends Cubit<ScanState> {
         presentationDefinition: presentationDefinition,
         privateKey: privateKey,
         uri: uri,
-        indexValue: indexValue,
       );
 
       final presentationSubmissionString = getPresentationSubmission(
@@ -658,8 +650,11 @@ class ScanCubit extends Cubit<ScanState> {
         inputDescriptors.add({
           'id': presentationDefinition.inputDescriptors[i].id,
           'format': format,
-          // ignore: prefer_interpolation_to_compose_strings
-          'path': r'$.verifiableCredential[' + i.toString() + ']',
+          'path_nested': {
+            'format': format,
+            // ignore: prefer_interpolation_to_compose_strings
+            'path': r'$.verifiableCredential[' + i.toString() + ']',
+          },
         });
       }
     }
@@ -697,7 +692,6 @@ class ScanCubit extends Cubit<ScanState> {
     required String did,
     required String kid,
     required Uri uri,
-    required int indexValue,
   }) async {
     final nonce = uri.queryParameters['nonce'] ?? '';
     final clientId = uri.queryParameters['client_id'] ?? '';
@@ -743,7 +737,6 @@ class ScanCubit extends Cubit<ScanState> {
         did: did,
         kid: kid,
         privateKey: privateKey,
-        indexValue: indexValue,
         nonce: nonce,
       );
 
@@ -760,7 +753,6 @@ class ScanCubit extends Cubit<ScanState> {
     required String did,
     required String kid,
     required Uri uri,
-    required int indexValue,
   }) async {
     final credentialList =
         credentialsToBePresented.map((e) => jsonEncode(e.toJson())).toList();
@@ -775,7 +767,6 @@ class ScanCubit extends Cubit<ScanState> {
       kid: kid,
       privateKey: privateKey,
       nonce: nonce,
-      indexValue: indexValue,
       useJWKThumbPrint: profileCubit.state.model.enableJWKThumbprint,
     );
 

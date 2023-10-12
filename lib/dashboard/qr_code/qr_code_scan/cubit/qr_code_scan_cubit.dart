@@ -16,6 +16,7 @@ import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -984,22 +985,23 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final nonce = state.uri?.queryParameters['nonce'];
       final stateValue = state.uri?.queryParameters['state'];
 
-      final bool isEBSIV3 =
-          await isEBSIV3ForVerifier(client: client, uri: state.uri!);
+      // final bool? isEBSIV3 =
+      //     await isEBSIV3ForVerifier(client: client, uri: state.uri!);
 
       final privateKey = await fetchPrivateKey(
-        isEBSIV3: isEBSIV3,
+        isEBSIV3: null, //isEBSIV3 ?? false,
         oidc4vc: oidc4vc,
-        secureStorage: getSecureStorage,
+        secureStorage: secureStorageProvider,
       );
 
       final (did, kid) = await getDidAndKid(
-        isEBSIV3: isEBSIV3,
+        isEBSIV3: null, //isEBSIV3 ?? false,
         privateKey: privateKey,
         didKitProvider: didKitProvider,
+        secureStorage: secureStorageProvider,
       );
 
-      final response = await oidc4vc.proveOwnershipOfKey(
+      final Response<dynamic> response = await oidc4vc.siopv2Flow(
         clientId: clientId,
         privateKey: privateKey,
         did: did,

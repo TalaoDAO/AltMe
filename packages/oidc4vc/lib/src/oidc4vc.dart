@@ -262,7 +262,7 @@ class OIDC4VC {
       did: did,
       kid: kid,
       issuer: issuer,
-      isProofOfOwnership: false,
+      isProofOfOwnership: true,
       useJWKThumbPrint: false,
     );
 
@@ -758,7 +758,6 @@ class OIDC4VC {
     required List<String> credentialsToBePresented,
     required String did,
     required String kid,
-    required int indexValue,
     required String privateKey,
   }) async {
     try {
@@ -789,7 +788,6 @@ class OIDC4VC {
     required String did,
     required String kid,
     required String nonce,
-    required int indexValue,
     required bool useJWKThumbPrint,
     required String privateKey,
   }) async {
@@ -814,68 +812,12 @@ class OIDC4VC {
     }
   }
 
-  Future<Response<dynamic>> proveOwnershipOfKey({
+  Future<Response<dynamic>> siopv2Flow({
     required String clientId,
     required String did,
     required String kid,
     required String redirectUri,
     required String? nonce,
-    required String privateKey,
-    required String? stateValue,
-    required bool useJWKThumbPrint,
-  }) async {
-    try {
-      final private = jsonDecode(privateKey) as Map<String, dynamic>;
-
-      final tokenParameters = VerifierTokenParameters(
-        privateKey: private,
-        did: did,
-        kid: kid,
-        audience: clientId,
-        credentials: [],
-        nonce: nonce,
-        isProofOfOwnership: true,
-        useJWKThumbPrint: useJWKThumbPrint,
-      );
-
-      // structures
-      final verifierIdToken = await getIdToken(tokenParameters);
-
-      final responseHeaders = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      };
-
-      final responseData = <String, dynamic>{
-        'id_token': verifierIdToken,
-      };
-
-      if (stateValue != null) {
-        responseData['state'] = stateValue;
-      }
-
-      final response = await client.post<dynamic>(
-        redirectUri,
-        options: Options(
-          headers: responseHeaders,
-          followRedirects: false,
-          validateStatus: (status) {
-            return status != null && status < 400;
-          },
-        ),
-        data: responseData,
-      );
-      return response;
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<Response<dynamic>> signIdToken({
-    required String clientId,
-    required String did,
-    required String kid,
-    required String redirectUri,
-    required String nonce,
     required String privateKey,
     required String? stateValue,
     required bool useJWKThumbPrint,

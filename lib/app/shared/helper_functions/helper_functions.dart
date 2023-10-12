@@ -300,21 +300,22 @@ Future<String> getP256PrivateKey(SecureStorageProvider secureStorage) async {
 }
 
 Future<String> fetchPrivateKey({
-  OIDC4VC? oidc4vc,
   required SecureStorageProvider secureStorage,
-  required bool isEBSIV3,
+  required bool? isEBSIV3,
+  OIDC4VC? oidc4vc,
 }) async {
   late String privateKey;
 
-  final index = getIndexValue(isEBSIV3: true);
+  final didKeyType = await secureStorage.get(SecureStorageKeys.didKeyType);
 
-  if (isEBSIV3) {
+  if ((isEBSIV3 != null && isEBSIV3) ||
+      didKeyType == DidKeyType.ebsiv3.toString()) {
     privateKey = await getEBSIV3P256PrivateKey(secureStorage);
   } else {
-    final didKeyType = await secureStorage.get(SecureStorageKeys.didKeyType);
     if (didKeyType == DidKeyType.secp256k1.toString()) {
       if (oidc4vc == null) throw Exception();
       final mnemonic = await secureStorage.get(SecureStorageKeys.ssiMnemonic);
+      final index = getIndexValue(isEBSIV3: true);
       privateKey = await oidc4vc.privateKeyFromMnemonic(
         mnemonic: mnemonic!,
         indexValue: index,
@@ -419,13 +420,17 @@ String getUtf8Message(String maybeHex) {
 
 Future<(String, String)> getDidAndKid({
   required String privateKey,
-  required bool isEBSIV3,
+  required SecureStorageProvider secureStorage,
+  required bool? isEBSIV3,
   DIDKitProvider? didKitProvider,
 }) async {
   late String did;
   late String kid;
 
-  if (isEBSIV3) {
+  final didKeyType = await secureStorage.get(SecureStorageKeys.didKeyType);
+
+  if ((isEBSIV3 != null && isEBSIV3) ||
+      didKeyType == DidKeyType.ebsiv3.toString()) {
     final private = jsonDecode(privateKey) as Map<String, dynamic>;
 
     //b'\xd1\xd6\x03' in python
@@ -641,7 +646,7 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
   return null;
 }
 
-Future<bool> isEBSIV3ForVerifier({
+Future<bool?> isEBSIV3ForVerifiers({
   required Uri uri,
   required DioClient client,
 }) async {
@@ -684,7 +689,7 @@ Future<bool> isEBSIV3ForVerifier({
       return false;
     }
   } catch (e) {
-    return false;
+    return null;
   }
 }
 

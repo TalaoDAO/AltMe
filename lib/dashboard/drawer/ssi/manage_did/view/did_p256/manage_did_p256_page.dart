@@ -27,6 +27,7 @@ class _ManageDidP256PageState extends State<ManageDidP256Page> {
       isEBSIV3: false,
       privateKey: privateKey,
       didKitProvider: DIDKitProvider(),
+      secureStorage: getSecureStorage,
     );
 
     return did;
