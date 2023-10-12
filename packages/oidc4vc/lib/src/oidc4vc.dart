@@ -16,6 +16,7 @@ import 'package:oidc4vc/src/token_parameters.dart';
 import 'package:oidc4vc/src/verification_type.dart';
 import 'package:oidc4vc/src/verifier_token_parameters.dart';
 import 'package:secp256k1/secp256k1.dart';
+import 'package:uuid/uuid.dart';
 
 /// {@template ebsi}
 /// EBSI wallet compliance
@@ -873,9 +874,10 @@ class OIDC4VC {
     VerifierTokenParameters tokenParameters,
   ) async {
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+    final presentationId = 'urn:uuid:${const Uuid().v4()}';
     final vpTokenPayload = {
       'iat': iat,
-      'jti': 'http://example.org/presentations/talao/01',
+      'jti': presentationId,
       'nbf': iat - 10,
       'aud': tokenParameters.audience,
       'exp': iat + 1000,
@@ -883,7 +885,7 @@ class OIDC4VC {
       'iss': tokenParameters.did,
       'vp': {
         '@context': ['https://www.w3.org/2018/credentials/v1'],
-        'id': 'http://example.org/presentations/talao/01',
+        'id': presentationId,
         'type': ['VerifiablePresentation'],
         'holder': tokenParameters.did,
         'verifiableCredential': tokenParameters.jsonIdOrJwtList,

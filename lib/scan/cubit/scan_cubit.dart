@@ -642,14 +642,19 @@ class ScanCubit extends Cubit<ScanState> {
     if (presentationDefinition.inputDescriptors.length == 1) {
       inputDescriptors.add({
         'id': presentationDefinition.inputDescriptors[0].id,
-        'format': format,
-        'path': r'$.verifiableCredential',
+        'format': 'jwt_vp',
+        'path': r'$',
+        'path_nested': {
+          'format': format,
+          'path': r'$.verifiableCredential',
+        },
       });
     } else {
       for (int i = 0; i < presentationDefinition.inputDescriptors.length; i++) {
         inputDescriptors.add({
           'id': presentationDefinition.inputDescriptors[i].id,
-          'format': format,
+          'format': 'jwt_vp',
+          'path': r'$',
           'path_nested': {
             'format': format,
             // ignore: prefer_interpolation_to_compose_strings
@@ -717,8 +722,8 @@ class ScanCubit extends Cubit<ScanState> {
         jsonEncode({
           '@context': ['https://www.w3.org/2018/credentials/v1'],
           'type': ['VerifiablePresentation'],
-          'id': presentationId,
           'holder': did,
+          'id': presentationId,
           'verifiableCredential': credentialsToBePresented.length == 1
               ? credentialsToBePresented.first.data
               : credentialsToBePresented.map((c) => c.data).toList(),
