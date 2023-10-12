@@ -75,6 +75,10 @@ class ProfileCubit extends Cubit<ProfileState> {
               .get(SecureStorageKeys.polygonIdNetwork)) ??
           PolygonIdNetwork.PolygonMainnet.toString();
 
+      final didKeyType =
+          (await secureStorageProvider.get(SecureStorageKeys.didKeyType)) ??
+              DidKeyType.p256.toString();
+
       final tezosNetworkJson = await secureStorageProvider
           .get(SecureStorageKeys.blockchainNetworkKey);
       final tezosNetwork = tezosNetworkJson != null
@@ -110,6 +114,12 @@ class ProfileCubit extends Cubit<ProfileState> {
       final isDeveloperMode =
           isDeveloperModeValue != null && isDeveloperModeValue == 'true';
 
+      final enableJWKThumbprintValue = await secureStorageProvider
+          .get(SecureStorageKeys.enableJWKThumbprint);
+
+      final enableJWKThumbprint = enableJWKThumbprintValue != null &&
+          enableJWKThumbprintValue == 'true';
+
       final userPINCodeForAuthenticationValue = await secureStorageProvider
           .get(SecureStorageKeys.userPINCodeForAuthentication);
       final userPINCodeForAuthentication =
@@ -130,6 +140,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         location: location,
         email: email,
         polygonIdNetwork: polygonIdNetwork,
+        didKeyType: didKeyType,
         tezosNetwork: tezosNetwork,
         companyName: companyName,
         companyWebsite: companyWebsite,
@@ -142,6 +153,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         isSecurityLow: isSecurityLow,
         isDeveloperMode: isDeveloperMode,
         userPinDigitsLength: userPinDigitsLength,
+        enableJWKThumbprint: enableJWKThumbprint,
       );
 
       emit(
@@ -207,6 +219,10 @@ class ProfileCubit extends Cubit<ProfileState> {
         SecureStorageKeys.polygonIdNetwork,
         profileModel.polygonIdNetwork,
       );
+      await secureStorageProvider.set(
+        SecureStorageKeys.didKeyType,
+        profileModel.didKeyType,
+      );
 
       await secureStorageProvider.set(
         SecureStorageKeys.isEnterpriseUser,
@@ -246,6 +262,11 @@ class ProfileCubit extends Cubit<ProfileState> {
       await secureStorageProvider.set(
         SecureStorageKeys.userPinDigitsLength,
         profileModel.userPinDigitsLength.toString(),
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.enableJWKThumbprint,
+        profileModel.enableJWKThumbprint.toString(),
       );
 
       emit(
@@ -307,6 +328,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
+  Future<void> updateDidKeyType(DidKeyType didKeyType) async {
+    final profileModel =
+        state.model.copyWith(didKeyType: didKeyType.toString());
+    await update(profileModel);
+  }
+
   Future<void> setSecurityLevel({bool isSecurityLow = true}) async {
     final profileModel = state.model.copyWith(isSecurityLow: isSecurityLow);
     await update(profileModel);
@@ -314,6 +341,11 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> setDeveloperModeStatus({bool enabled = false}) async {
     final profileModel = state.model.copyWith(isDeveloperMode: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> updateJWKThumbprintStatus({bool enabled = false}) async {
+    final profileModel = state.model.copyWith(enableJWKThumbprint: enabled);
     await update(profileModel);
   }
 

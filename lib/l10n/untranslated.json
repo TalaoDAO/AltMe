@@ -888,7 +888,11 @@
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
-    "keyDecentralizedIDP256"
+    "keyDecentralizedIDP256",
+    "defaultDid",
+    "selectOneOfTheDid",
+    "subjectSyntaxType",
+    "enableToUseTheJWKThumprintOfTheKey"
   ],
 
   "es": [
@@ -1780,7 +1784,11 @@
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
-    "keyDecentralizedIDP256"
+    "keyDecentralizedIDP256",
+    "defaultDid",
+    "selectOneOfTheDid",
+    "subjectSyntaxType",
+    "enableToUseTheJWKThumprintOfTheKey"
   ],
 
   "fr": [
@@ -1975,7 +1983,11 @@
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
-    "keyDecentralizedIDP256"
+    "keyDecentralizedIDP256",
+    "defaultDid",
+    "selectOneOfTheDid",
+    "subjectSyntaxType",
+    "enableToUseTheJWKThumprintOfTheKey"
   ],
 
   "it": [
@@ -2867,6 +2879,10 @@
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
-    "keyDecentralizedIDP256"
+    "keyDecentralizedIDP256",
+    "defaultDid",
+    "selectOneOfTheDid",
+    "subjectSyntaxType",
+    "enableToUseTheJWKThumprintOfTheKey"
   ]
 }

@@ -31,6 +31,7 @@ class SecureStorageKeys {
   static const String isSecurityLow = 'isSecurityLow';
   static const String userPinDigitsLength = 'userPinDigitsLength';
   static const String isDeveloperMode = 'isDeveloperMode';
+  static const String enableJWKThumbprint = 'enableJWKThumbprint';
 
   static const String pinCode = 'pinCode';
   static const String data = 'data';
@@ -53,6 +54,7 @@ class SecureStorageKeys {
   static const String emailKey = 'profile/email';
 
   static const String polygonIdNetwork = 'profile/polygonIdNetwork';
+  static const String didKeyType = 'profile/didKeyType';
 
   static const String blockchainNetworkKey = 'profile/blockchainNetwork';
   static const String credentialKey = 'credential';
