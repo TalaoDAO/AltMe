@@ -48,7 +48,7 @@ class ProfileModel extends Equatable {
         userConsentForVerifierAccess: true,
         userPINCodeForAuthentication: true,
         tezosNetwork: TezosNetwork.mainNet(),
-        didKeyType: DidKeyType.p256.toString(),
+        didKeyType: DidKeyType.ebsiv3.toString(),
         isSecurityLow: true,
         isDeveloperMode: false,
         userPinDigitsLength: 6,

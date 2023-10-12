@@ -77,7 +77,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       final didKeyType =
           (await secureStorageProvider.get(SecureStorageKeys.didKeyType)) ??
-              DidKeyType.p256.toString();
+              DidKeyType.ebsiv3.toString();
 
       final tezosNetworkJson = await secureStorageProvider
           .get(SecureStorageKeys.blockchainNetworkKey);
