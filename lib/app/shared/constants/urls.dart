@@ -111,7 +111,7 @@ class Urls {
   static const registerToMatrix = 'https://talao.co/matrix/register';
 
   //deeplink
-  static const appDeepLink = 'https://app.altme.io/app/download';
+  static const appDeepLink = 'https://app.talao.co/app/download';
 
   //ID360
   static const getCodeForId360 = 'https://talao.co/id360/get_code';
