@@ -890,7 +890,8 @@
     "defaultDid",
     "selectOneOfTheDid",
     "subjectSyntaxType",
-    "enableToUseTheJWKThumprintOfTheKey"
+    "enableToUseTheJWKThumprintOfTheKey",
+    "theServiceIsNotAvailable"
   ],
 
   "es": [
@@ -1784,7 +1785,8 @@
     "defaultDid",
     "selectOneOfTheDid",
     "subjectSyntaxType",
-    "enableToUseTheJWKThumprintOfTheKey"
+    "enableToUseTheJWKThumprintOfTheKey",
+    "theServiceIsNotAvailable"
   ],
 
   "fr": [
@@ -1981,7 +1983,8 @@
     "defaultDid",
     "selectOneOfTheDid",
     "subjectSyntaxType",
-    "enableToUseTheJWKThumprintOfTheKey"
+    "enableToUseTheJWKThumprintOfTheKey",
+    "theServiceIsNotAvailable"
   ],
 
   "it": [
@@ -2875,6 +2878,7 @@
     "defaultDid",
     "selectOneOfTheDid",
     "subjectSyntaxType",
-    "enableToUseTheJWKThumprintOfTheKey"
+    "enableToUseTheJWKThumprintOfTheKey",
+    "theServiceIsNotAvailable"
   ]
 }

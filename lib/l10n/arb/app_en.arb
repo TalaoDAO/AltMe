@@ -984,6 +984,7 @@
   "defaultDid": "Default DID",
   "selectOneOfTheDid": "Select one of the DIDs",
   "subjectSyntaxType": "Subject syntax type",
-  "enableToUseTheJWKThumprintOfTheKey": "Default: DID\nEnable to use the JWK thumprint of the key"
+  "enableToUseTheJWKThumprintOfTheKey": "Default: DID\nEnable to use the JWK thumprint of the key",
+  "theServiceIsNotAvailable": "The service is not available"
 }
 

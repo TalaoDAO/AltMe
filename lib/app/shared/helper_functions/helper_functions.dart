@@ -873,6 +873,10 @@ ResponseString getErrorResponseString(String errorString) {
 
     case 'invalid_issuer_metadata':
       return ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid;
+
+    case 'server_error':
+      return ResponseString.RESPONSE_STRING_theServiceIsNotAvailable;
+
     default:
       return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
   }

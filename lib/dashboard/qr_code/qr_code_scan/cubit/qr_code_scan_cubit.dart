@@ -1152,74 +1152,76 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> authorizedFlowCompletion(Uri uri) async {
-    final error = uri.queryParameters['error'];
-    final errorDescription = uri.queryParameters['error_description'];
+    try {
+      final error = uri.queryParameters['error'];
+      final errorDescription = uri.queryParameters['error_description'];
 
-    if (error != null) {
-      throw ResponseMessage(
-        data: {
-          'error': error,
-          'error_description': errorDescription,
-        },
+      if (error != null) {
+        throw ResponseMessage(
+          data: {
+            'error': error,
+            'error_description': errorDescription,
+          },
+        );
+      }
+
+      final codeForAuthorisedFlow = uri.queryParameters['code'];
+      final state = uri.queryParameters['state'];
+
+      if (codeForAuthorisedFlow == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The code is missing.',
+          },
+        );
+      }
+      if (state == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The state is missing.',
+          },
+        );
+      }
+      await dotenv.load();
+      final String authorizationUriSecretKey =
+          dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
+
+      final jwt = JWT.verify(state, SecretKey(authorizationUriSecretKey));
+
+      final payload = jwt.payload as Map<String, dynamic>;
+
+      final containsAllRequiredKey = payload.containsKey('credentials') &&
+          payload.containsKey('codeVerifier') &&
+          payload.containsKey('issuer') &&
+          payload.containsKey('isEBSIV3');
+
+      if (!containsAllRequiredKey) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The state value is incorrect.',
+          },
+        );
+      }
+
+      final selectedCredentials = payload['credentials'] as List<dynamic>;
+      final String codeVerifier = payload['codeVerifier'].toString();
+      final String issuer = payload['issuer'].toString();
+      final bool isEBSIV3 = payload['isEBSIV3'] as bool;
+
+      await addCredentialsInLoop(
+        selectedCredentials: selectedCredentials,
+        userPin: null,
+        issuer: issuer,
+        preAuthorizedCode: null,
+        isEBSIV3: isEBSIV3,
+        codeForAuthorisedFlow: codeForAuthorisedFlow,
+        codeVerifier: codeVerifier,
       );
+    } catch (e) {
+      emitError(e);
     }
-
-    final codeForAuthorisedFlow = uri.queryParameters['code'];
-    final state = uri.queryParameters['state'];
-
-    if (codeForAuthorisedFlow == null) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'The code is missing.',
-        },
-      );
-    }
-    if (state == null) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'The state is missing.',
-        },
-      );
-    }
-    await dotenv.load();
-    final String authorizationUriSecretKey =
-        dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
-
-    final jwt = JWT.verify(state, SecretKey(authorizationUriSecretKey));
-
-    final payload = jwt.payload as Map<String, dynamic>;
-
-    final containsAllRequiredKey = payload.containsKey('credentials') &&
-        payload.containsKey('codeVerifier') &&
-        payload.containsKey('issuer') &&
-        payload.containsKey('isEBSIV3');
-
-    if (!containsAllRequiredKey) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'The state value is incorrect.',
-        },
-      );
-    }
-
-    final selectedCredentials = payload['credentials'] as List<dynamic>;
-    final String codeVerifier = payload['codeVerifier'].toString();
-    final String issuer = payload['issuer'].toString();
-    final bool isEBSIV3 = payload['isEBSIV3'] as bool;
-
-    await addCredentialsInLoop(
-      selectedCredentials: selectedCredentials,
-      userPin: null,
-      issuer: issuer,
-      preAuthorizedCode: null,
-      isEBSIV3: isEBSIV3,
-      codeForAuthorisedFlow: codeForAuthorisedFlow,
-      codeVerifier: codeVerifier,
-    );
-
-    return;
   }
 }
