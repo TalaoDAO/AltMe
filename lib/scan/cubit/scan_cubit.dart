@@ -55,6 +55,7 @@ class ScanCubit extends Cubit<ScanState> {
     required String keyId,
     required List<CredentialModel>? credentialsToBePresented,
     required Issuer issuer,
+    QRCodeScanCubit? qrCodeScanCubit,
   }) async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -99,6 +100,7 @@ class ScanCubit extends Cubit<ScanState> {
             privateKey: privateKey,
             stateValue: stateValue,
             idTokenNeeded: false,
+            qrCodeScanCubit: qrCodeScanCubit!,
           );
           return;
         } else if (isIDTokenAndVPToken(responseType)) {
@@ -116,6 +118,7 @@ class ScanCubit extends Cubit<ScanState> {
             privateKey: privateKey,
             stateValue: stateValue,
             idTokenNeeded: true,
+            qrCodeScanCubit: qrCodeScanCubit!,
           );
 
           return;
@@ -451,6 +454,7 @@ class ScanCubit extends Cubit<ScanState> {
     required Uri uri,
     required String? stateValue,
     required bool idTokenNeeded,
+    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     final log =
         getLogger('ScanCubit - presentCredentialToOIDC4VPAndSIOPV2Request');
@@ -503,17 +507,21 @@ class ScanCubit extends Cubit<ScanState> {
         responseData['state'] = stateValue;
       }
 
-      final formData = FormData.fromMap(responseData);
-
-      final result = await client.post(
+      final response = await client.dio.post<dynamic>(
         responseOrRedirectUri,
-        data: formData,
-        headers: <String, dynamic>{
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+        data: responseData,
+        options: Options(
+          headers: <String, dynamic>{
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          followRedirects: false,
+          validateStatus: (status) {
+            return status != null && status < 400;
+          },
+        ),
       );
 
-      if (result['status_code'] == 200) {
+      if (response.statusCode == 200) {
         await presentationActivity(
           credentialModels: credentialsToBePresented,
           issuer: issuer,
@@ -529,6 +537,33 @@ class ScanCubit extends Cubit<ScanState> {
             ),
           ),
         );
+      } else if (response.statusCode == 302) {
+        await presentationActivity(
+          credentialModels: credentialsToBePresented,
+          issuer: issuer,
+        );
+
+        String? url;
+
+        if (response.headers.map.containsKey('location') &&
+            response.headers.map['location'] != null &&
+            response.headers.map['location'] is List<dynamic> &&
+            (response.headers.map['location']!).isNotEmpty) {
+          url = response.headers.map['location']![0];
+        }
+
+        if (url != null) {
+          final uri = Uri.parse(url);
+          if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
+            emit(state.copyWith(status: ScanStatus.goBack));
+            await qrCodeScanCubit.authorizedFlowCompletion(uri);
+            return;
+          }
+        } else {
+          throw ResponseMessage(
+            message: ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
+          );
+        }
       } else {
         throw ResponseMessage(
           message: ResponseString
@@ -536,7 +571,7 @@ class ScanCubit extends Cubit<ScanState> {
         );
       }
     } catch (e, s) {
-      log.e('something went wrong', error: e, stackTrace: s);
+      log.e('something went wrong - $e', error: e, stackTrace: s);
       emitError(e);
     }
   }
@@ -587,6 +622,7 @@ class ScanCubit extends Cubit<ScanState> {
         'format': 'jwt_vp',
         'path': r'$',
         'path_nested': {
+          'id': descriptor.id,
           'format': format,
           'path': r'$.verifiableCredential',
         },
@@ -598,10 +634,12 @@ class ScanCubit extends Cubit<ScanState> {
         for (final InputDescriptor inputDescriptor
             in presentationDefinition.inputDescriptors) {
           for (final Field field in inputDescriptor.constraints!.fields!) {
+            final credentialName =
+                field.filter!.pattern ?? field.filter!.contains!.containsConst;
             if (credentialsToBePresented[i]
                 .credentialPreview
                 .type
-                .contains(field.filter!.pattern)) {
+                .contains(credentialName)) {
               descriptor = inputDescriptor;
             }
           }
@@ -612,6 +650,7 @@ class ScanCubit extends Cubit<ScanState> {
           'format': 'jwt_vp',
           'path': r'$',
           'path_nested': {
+            'id': descriptor.id,
             'format': format,
             // ignore: prefer_interpolation_to_compose_strings
             'path': r'$.verifiableCredential[' + i.toString() + ']',
