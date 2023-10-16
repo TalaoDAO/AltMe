@@ -985,6 +985,14 @@
   "selectOneOfTheDid": "Select one of the DIDs",
   "subjectSyntaxType": "Subject syntax type",
   "enableToUseTheJWKThumprintOfTheKey": "Default: DID\nEnable to use the JWK thumprint of the key",
-  "theServiceIsNotAvailable": "The service is not available"
+  "theServiceIsNotAvailable": "The service is not available",
+  "download": "Download",
+  "issuerDID": "Issuer DID",
+  "subjectDID": "Subject DID",
+  "type": "Type",
+  "credentialExpired": "Credential Expired",
+  "incorrectSignature": "Incorrect Signature",
+  "revokedOrSuspendedCredential": "Revoked or Suspended Credential"
+
 }
 

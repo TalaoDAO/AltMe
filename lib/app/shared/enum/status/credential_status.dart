@@ -1,6 +1,9 @@
 enum CredentialStatus {
-  active,
-  suspended,
   pending,
+  active,
+  notVerified,
+  suspended,
   unknown,
+  expired,
+  revoked
 }

@@ -891,7 +891,14 @@
     "selectOneOfTheDid",
     "subjectSyntaxType",
     "enableToUseTheJWKThumprintOfTheKey",
-    "theServiceIsNotAvailable"
+    "theServiceIsNotAvailable",
+    "download",
+    "issuerDID",
+    "subjectDID",
+    "type",
+    "credentialExpired",
+    "incorrectSignature",
+    "revokedOrSuspendedCredential"
   ],
 
   "es": [
@@ -1786,7 +1793,14 @@
     "selectOneOfTheDid",
     "subjectSyntaxType",
     "enableToUseTheJWKThumprintOfTheKey",
-    "theServiceIsNotAvailable"
+    "theServiceIsNotAvailable",
+    "download",
+    "issuerDID",
+    "subjectDID",
+    "type",
+    "credentialExpired",
+    "incorrectSignature",
+    "revokedOrSuspendedCredential"
   ],
 
   "fr": [
@@ -1984,7 +1998,14 @@
     "selectOneOfTheDid",
     "subjectSyntaxType",
     "enableToUseTheJWKThumprintOfTheKey",
-    "theServiceIsNotAvailable"
+    "theServiceIsNotAvailable",
+    "download",
+    "issuerDID",
+    "subjectDID",
+    "type",
+    "credentialExpired",
+    "incorrectSignature",
+    "revokedOrSuspendedCredential"
   ],
 
   "it": [
@@ -2879,6 +2900,13 @@
     "selectOneOfTheDid",
     "subjectSyntaxType",
     "enableToUseTheJWKThumprintOfTheKey",
-    "theServiceIsNotAvailable"
+    "theServiceIsNotAvailable",
+    "download",
+    "issuerDID",
+    "subjectDID",
+    "type",
+    "credentialExpired",
+    "incorrectSignature",
+    "revokedOrSuspendedCredential"
   ]
 }
