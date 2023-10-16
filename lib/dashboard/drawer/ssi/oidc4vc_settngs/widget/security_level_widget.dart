@@ -36,22 +36,12 @@ class SecurityLevelWidget extends StatelessWidget {
                       children: [
                         Text(
                           l10n.security_level_title,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
+                          style: Theme.of(context).textTheme.drawerItemTitle,
                         ),
                         const SizedBox(height: 10),
                         Text(
                           l10n.security_level_subTitle,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
+                          style: Theme.of(context).textTheme.drawerItemSubtitle,
                         ),
                       ],
                     ),
