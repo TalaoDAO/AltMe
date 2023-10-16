@@ -90,7 +90,7 @@ class ScanCubit extends Cubit<ScanState> {
           await presentCredentialToOIDC4VPAndSIOPV2Request(
             uri: uri,
             issuer: issuer,
-            credentialsToBePresented: credentialsToBePresented,
+            credentialsToBePresented: credentialsToBePresented!,
             presentationDefinition:
                 credentialModel.credentialManifest!.presentationDefinition!,
             oidc4vc: oidc4vc,
@@ -107,7 +107,7 @@ class ScanCubit extends Cubit<ScanState> {
           await presentCredentialToOIDC4VPAndSIOPV2Request(
             uri: uri,
             issuer: issuer,
-            credentialsToBePresented: credentialsToBePresented,
+            credentialsToBePresented: credentialsToBePresented!,
             presentationDefinition:
                 credentialModel.credentialManifest!.presentationDefinition!,
             oidc4vc: oidc4vc,
@@ -441,7 +441,7 @@ class ScanCubit extends Cubit<ScanState> {
   }
 
   Future<dynamic> presentCredentialToOIDC4VPAndSIOPV2Request({
-    required List<CredentialModel>? credentialsToBePresented,
+    required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
     required Issuer issuer,
     required OIDC4VC oidc4vc,
@@ -466,7 +466,7 @@ class ScanCubit extends Cubit<ScanState> {
 
       if (idTokenNeeded) {
         idToken = await createIdToken(
-          credentialsToBePresented: credentialsToBePresented!,
+          credentialsToBePresented: credentialsToBePresented,
           did: did,
           kid: kid,
           oidc4vc: oidc4vc,
@@ -476,7 +476,7 @@ class ScanCubit extends Cubit<ScanState> {
       }
 
       final String vpToken = await createVpToken(
-        credentialsToBePresented: credentialsToBePresented!,
+        credentialsToBePresented: credentialsToBePresented,
         did: did,
         kid: kid,
         oidc4vc: oidc4vc,
@@ -486,7 +486,8 @@ class ScanCubit extends Cubit<ScanState> {
       );
 
       final presentationSubmissionString = getPresentationSubmission(
-        presentationDefinition,
+        credentialsToBePresented: credentialsToBePresented,
+        presentationDefinition: presentationDefinition,
       );
 
       final responseData = <String, dynamic>{
@@ -540,9 +541,10 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  String getPresentationSubmission(
-    PresentationDefinition presentationDefinition,
-  ) {
+  String getPresentationSubmission({
+    required List<CredentialModel> credentialsToBePresented,
+    required PresentationDefinition presentationDefinition,
+  }) {
     final uuid1 = const Uuid().v4();
 
     final Map<String, dynamic> presentationSubmission = {
@@ -565,9 +567,23 @@ class ScanCubit extends Cubit<ScanState> {
       throw Exception();
     }
 
-    if (presentationDefinition.inputDescriptors.length == 1) {
+    if (credentialsToBePresented.length == 1) {
+      late InputDescriptor descriptor;
+
+      for (final InputDescriptor inputDescriptor
+          in presentationDefinition.inputDescriptors) {
+        for (final Field field in inputDescriptor.constraints!.fields!) {
+          if (credentialsToBePresented[0]
+              .credentialPreview
+              .type
+              .contains(field.filter!.pattern)) {
+            descriptor = inputDescriptor;
+          }
+        }
+      }
+
       inputDescriptors.add({
-        'id': presentationDefinition.inputDescriptors[0].id,
+        'id': descriptor.id,
         'format': 'jwt_vp',
         'path': r'$',
         'path_nested': {
@@ -576,9 +592,23 @@ class ScanCubit extends Cubit<ScanState> {
         },
       });
     } else {
-      for (int i = 0; i < presentationDefinition.inputDescriptors.length; i++) {
+      for (int i = 0; i < credentialsToBePresented.length; i++) {
+        late InputDescriptor descriptor;
+
+        for (final InputDescriptor inputDescriptor
+            in presentationDefinition.inputDescriptors) {
+          for (final Field field in inputDescriptor.constraints!.fields!) {
+            if (credentialsToBePresented[i]
+                .credentialPreview
+                .type
+                .contains(field.filter!.pattern)) {
+              descriptor = inputDescriptor;
+            }
+          }
+        }
+
         inputDescriptors.add({
-          'id': presentationDefinition.inputDescriptors[i].id,
+          'id': descriptor.id,
           'format': 'jwt_vp',
           'path': r'$',
           'path_nested': {
