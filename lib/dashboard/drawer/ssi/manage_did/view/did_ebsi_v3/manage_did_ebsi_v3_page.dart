@@ -30,6 +30,7 @@ class _ManageDidEbsiPageState extends State<ManageDidEbsiV3Page> {
     final (did, _) = await getDidAndKid(
       isEBSIV3: true,
       privateKey: privateKey,
+      secureStorage: getSecureStorage,
     );
 
     return did;

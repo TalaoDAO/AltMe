@@ -62,7 +62,7 @@ class ActivityWidget extends StatelessWidget {
         if (activity.acquisitionAt != null) ...[
           CredentialField(
             title: l10n.credentialDetailsInWalletSince,
-            value: UiDate.formatDate(activity.acquisitionAt!),
+            value: UiDate.formatDate(activity.acquisitionAt),
             titleColor: titleColor,
             valueColor: valueColor,
             padding: EdgeInsets.zero,
