@@ -3,7 +3,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ManageDidP256Page extends StatefulWidget {
@@ -28,6 +27,7 @@ class _ManageDidP256PageState extends State<ManageDidP256Page> {
       isEBSIV3: false,
       privateKey: privateKey,
       didKitProvider: DIDKitProvider(),
+      secureStorage: getSecureStorage,
     );
 
     return did;

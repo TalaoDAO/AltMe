@@ -16,6 +16,7 @@ import 'package:oidc4vc/src/token_parameters.dart';
 import 'package:oidc4vc/src/verification_type.dart';
 import 'package:oidc4vc/src/verifier_token_parameters.dart';
 import 'package:secp256k1/secp256k1.dart';
+import 'package:uuid/uuid.dart';
 
 /// {@template ebsi}
 /// EBSI wallet compliance
@@ -262,7 +263,7 @@ class OIDC4VC {
       did: did,
       kid: kid,
       issuer: issuer,
-      isIdToken: false,
+      isProofOfOwnership: true,
       useJWKThumbPrint: false,
     );
 
@@ -431,7 +432,7 @@ class OIDC4VC {
       );
       return didDocument;
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 
@@ -758,7 +759,6 @@ class OIDC4VC {
     required List<String> credentialsToBePresented,
     required String did,
     required String kid,
-    required int indexValue,
     required String privateKey,
   }) async {
     try {
@@ -771,7 +771,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: credentialsToBePresented,
         nonce: nonce,
-        isIdToken: false,
+        isProofOfOwnership: false,
         useJWKThumbPrint: false,
       );
 
@@ -779,7 +779,7 @@ class OIDC4VC {
 
       return vpToken;
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 
@@ -789,7 +789,6 @@ class OIDC4VC {
     required String did,
     required String kid,
     required String nonce,
-    required int indexValue,
     required bool useJWKThumbPrint,
     required String privateKey,
   }) async {
@@ -802,7 +801,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: credentialsToBePresented,
         nonce: nonce,
-        isIdToken: false,
+        isProofOfOwnership: false,
         useJWKThumbPrint: useJWKThumbPrint,
       );
 
@@ -810,11 +809,11 @@ class OIDC4VC {
 
       return verifierIdToken;
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 
-  Future<Response<dynamic>> proveOwnershipOfKey({
+  Future<Response<dynamic>> siopv2Flow({
     required String clientId,
     required String did,
     required String kid,
@@ -834,7 +833,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: [],
         nonce: nonce,
-        isIdToken: true,
+        isProofOfOwnership: false,
         useJWKThumbPrint: useJWKThumbPrint,
       );
 
@@ -866,63 +865,7 @@ class OIDC4VC {
       );
       return response;
     } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<Response<dynamic>> signIdToken({
-    required String clientId,
-    required String did,
-    required String kid,
-    required String redirectUri,
-    required String nonce,
-    required String privateKey,
-    required String? stateValue,
-    required bool useJWKThumbPrint,
-  }) async {
-    try {
-      final private = jsonDecode(privateKey) as Map<String, dynamic>;
-
-      final tokenParameters = VerifierTokenParameters(
-        privateKey: private,
-        did: did,
-        kid: kid,
-        audience: clientId,
-        credentials: [],
-        nonce: nonce,
-        isIdToken: true,
-        useJWKThumbPrint: useJWKThumbPrint,
-      );
-
-      // structures
-      final verifierIdToken = await getIdToken(tokenParameters);
-
-      final responseHeaders = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      };
-
-      final responseData = <String, dynamic>{
-        'id_token': verifierIdToken,
-      };
-
-      if (stateValue != null) {
-        responseData['state'] = stateValue;
-      }
-
-      final response = await client.post<dynamic>(
-        redirectUri,
-        options: Options(
-          headers: responseHeaders,
-          followRedirects: false,
-          validateStatus: (status) {
-            return status != null && status < 400;
-          },
-        ),
-        data: responseData,
-      );
-      return response;
-    } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 
@@ -931,9 +874,10 @@ class OIDC4VC {
     VerifierTokenParameters tokenParameters,
   ) async {
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+    final presentationId = 'urn:uuid:${const Uuid().v4()}';
     final vpTokenPayload = {
       'iat': iat,
-      'jti': 'http://example.org/presentations/talao/01',
+      'jti': presentationId,
       'nbf': iat - 10,
       'aud': tokenParameters.audience,
       'exp': iat + 1000,
@@ -941,7 +885,7 @@ class OIDC4VC {
       'iss': tokenParameters.did,
       'vp': {
         '@context': ['https://www.w3.org/2018/credentials/v1'],
-        'id': 'http://example.org/presentations/talao/01',
+        'id': presentationId,
         'type': ['VerifiablePresentation'],
         'holder': tokenParameters.did,
         'verifiableCredential': tokenParameters.jsonIdOrJwtList,
@@ -974,10 +918,10 @@ class OIDC4VC {
 
     late String typ;
 
-    if (tokenParameters.isIdToken) {
-      typ = 'JWT';
-    } else {
+    if (tokenParameters.isProofOfOwnership) {
       typ = 'openid4vci-proof+jwt';
+    } else {
+      typ = 'JWT';
     }
 
     final vpBuilder = JsonWebSignatureBuilder()
@@ -1084,7 +1028,7 @@ class OIDC4VC {
       return data;
     } catch (e) {
       if (e.toString().startsWith('Exception: Second_Attempt_Fail')) {
-        throw Exception();
+        rethrow;
       } else {
         final data = await getOpenIdConfigSecondAttempt(baseUrl);
         return data;
@@ -1104,7 +1048,7 @@ class OIDC4VC {
           : response.data as Map<String, dynamic>;
       return data;
     } catch (e) {
-      throw Exception();
+      throw Exception('Second_Attempt_Fail');
     }
   }
 }
