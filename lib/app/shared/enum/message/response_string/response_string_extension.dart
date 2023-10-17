@@ -537,6 +537,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid:
         return globalMessage.RESPONSE_STRING_theCredentialOfferIsInvalid;
+
+      case ResponseString.RESPONSE_STRING_theServiceIsNotAvailable:
+        return globalMessage.RESPONSE_STRING_theServiceIsNotAvailable;
     }
   }
 }

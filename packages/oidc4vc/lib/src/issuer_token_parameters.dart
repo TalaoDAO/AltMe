@@ -8,7 +8,7 @@ class IssuerTokenParameters extends TokenParameters {
     required super.privateKey,
     required super.did,
     required super.kid,
-    required super.isIdToken,
+    required super.isProofOfOwnership,
     required super.useJWKThumbPrint,
     required this.issuer,
   });

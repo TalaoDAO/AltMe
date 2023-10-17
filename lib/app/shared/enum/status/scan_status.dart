@@ -5,4 +5,5 @@ enum ScanStatus {
   error,
   warning,
   success,
+  goBack,
 }

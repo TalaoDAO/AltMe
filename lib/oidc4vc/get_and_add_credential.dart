@@ -34,6 +34,7 @@ Future<void> getAndAddCredential({
     isEBSIV3: isEBSIV3,
     privateKey: privateKey,
     didKitProvider: didKitProvider,
+    secureStorage: getSecureStorage,
   );
 
   if (preAuthorizedCode != null ||

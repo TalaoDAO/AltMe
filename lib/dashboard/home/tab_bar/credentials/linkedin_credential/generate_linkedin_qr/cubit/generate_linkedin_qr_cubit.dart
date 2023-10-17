@@ -84,7 +84,8 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
     try {
       if (!isPermissionStatusGranted) {
         throw ResponseMessage(
-            message: ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE);
+          message: ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE,
+        );
       }
       final dateTime = getDateTimeWithoutSpace();
       final fileName = 'linkedin-banner-$dateTime';

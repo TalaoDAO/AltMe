@@ -12,7 +12,7 @@ class TokenParameters {
     required this.privateKey,
     required this.did,
     required this.kid,
-    required this.isIdToken,
+    required this.isProofOfOwnership,
     required this.useJWKThumbPrint,
   });
 
@@ -25,8 +25,8 @@ class TokenParameters {
   /// [kid] kid
   String kid;
 
-  /// [isIdToken] isIdToken
-  bool isIdToken;
+  /// [isProofOfOwnership] isIdToken
+  bool isProofOfOwnership;
 
   /// [publicJWK] is JWK (Json Web Key) of user public key
   /// computed from [privateKey]

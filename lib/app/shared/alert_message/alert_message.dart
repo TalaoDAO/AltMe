@@ -54,6 +54,12 @@ class AlertMessage {
           erroDescription = data['error_description'].toString();
         }
 
+        if (erroDescription == null) {
+          if (data.containsKey('detail')) {
+            erroDescription = data['detail'].toString();
+          }
+        }
+
         ///error_uri
         if (data.containsKey('error_uri')) {
           errorUrl = data['error_uri'].toString();
@@ -67,6 +73,10 @@ class AlertMessage {
       } else {
         message = stringMessage;
       }
+    }
+
+    if (message.isEmpty) {
+      message = context.l10n.thisRequestIsNotSupported;
     }
 
     if (stateMessage.showDialog) {

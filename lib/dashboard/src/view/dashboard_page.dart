@@ -88,18 +88,18 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
-  void _startKycVerification() {
-    Navigator.of(context).push<void>(
-      PinCodePage.route(
-        isValidCallback: () {
-          context.read<KycVerificationCubit>().startKycVerifcation(
-                vcType: KycVcType.verifiableId,
-              );
-        },
-        restrictToBack: false,
-      ),
-    );
-  }
+  // void _startKycVerification() {
+  //   Navigator.of(context).push<void>(
+  //     PinCodePage.route(
+  //       isValidCallback: () {
+  //         context.read<KycVerificationCubit>().startKycVerifcation(
+  //               vcType: KycVcType.verifiableId,
+  //             );
+  //       },
+  //       restrictToBack: false,
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

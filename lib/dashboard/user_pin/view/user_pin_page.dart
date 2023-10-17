@@ -82,7 +82,7 @@ class _UserPinViewState extends State<UserPinView> {
             body: PinCodeWidget(
               title: l10n.pleaseInsertTheSecredCodeReceived,
               passwordEnteredCallback: _onPasscodeEntered,
-              passwordDigits: state.model.userPinDigitsLength,
+              passwordDigits: state.model.enable4DigitPINCode ? 4 : 6,
               deleteButton: Text(
                 l10n.delete,
                 style: Theme.of(context).textTheme.labelLarge,

@@ -193,6 +193,10 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
     if (state.status == ScanStatus.error) {
       Navigator.of(context).pop();
     }
+
+    if (state.status == ScanStatus.goBack) {
+      Navigator.of(context).pop();
+    }
   },
 );
 

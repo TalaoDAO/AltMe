@@ -18,11 +18,11 @@ part 'wallet_connect_cubit.g.dart';
 part 'wallet_connect_state.dart';
 
 class WalletConnectCubit extends Cubit<WalletConnectState> {
-  WalletConnectCubit(
-      {required this.connectedDappRepository,
-      required this.secureStorageProvider,
-      required this.routeCubit})
-      : super(const WalletConnectState()) {
+  WalletConnectCubit({
+    required this.connectedDappRepository,
+    required this.secureStorageProvider,
+    required this.routeCubit,
+  }) : super(const WalletConnectState()) {
     initialise();
   }
 

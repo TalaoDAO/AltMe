@@ -75,6 +75,6 @@ Future<Map<String, dynamic>> getOpenIdConfigSecondAttempt({
         : response.data as Map<String, dynamic>;
     return data;
   } catch (e) {
-    throw Exception();
+    throw Exception('Second_Attempt_Fail');
   }
 }

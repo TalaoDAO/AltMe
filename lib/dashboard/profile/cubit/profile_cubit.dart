@@ -77,7 +77,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       final didKeyType =
           (await secureStorageProvider.get(SecureStorageKeys.didKeyType)) ??
-              DidKeyType.p256.toString();
+              DidKeyType.ebsiv3.toString();
 
       final tezosNetworkJson = await secureStorageProvider
           .get(SecureStorageKeys.blockchainNetworkKey);
@@ -102,11 +102,11 @@ class ProfileCubit extends Cubit<ProfileState> {
               .get(SecureStorageKeys.userConsentForVerifierAccess)) ==
           'true';
 
-      final isSecurityLowValue =
-          await secureStorageProvider.get(SecureStorageKeys.isSecurityLow);
+      final enableSecurityValue =
+          await secureStorageProvider.get(SecureStorageKeys.enableSecurity);
 
-      final isSecurityLow =
-          isSecurityLowValue == null || isSecurityLowValue == 'true';
+      final enableSecurity =
+          enableSecurityValue != null && enableSecurityValue == 'true';
 
       final isDeveloperModeValue =
           await secureStorageProvider.get(SecureStorageKeys.isDeveloperMode);
@@ -126,12 +126,11 @@ class ProfileCubit extends Cubit<ProfileState> {
           userPINCodeForAuthenticationValue == null ||
               userPINCodeForAuthenticationValue == 'true';
 
-      final userPinDigitsLengthString = await secureStorageProvider
-          .get(SecureStorageKeys.userPinDigitsLength);
+      final enable4DigitPINCodeValue = await secureStorageProvider
+          .get(SecureStorageKeys.enable4DigitPINCode);
 
-      final int userPinDigitsLength = userPinDigitsLengthString != null
-          ? int.parse(userPinDigitsLengthString)
-          : 6;
+      final enable4DigitPINCode = enable4DigitPINCodeValue != null &&
+          enable4DigitPINCodeValue == 'true';
 
       final profileModel = ProfileModel(
         firstName: firstName,
@@ -150,9 +149,9 @@ class ProfileCubit extends Cubit<ProfileState> {
         userConsentForIssuerAccess: userConsentForIssuerAccess,
         userConsentForVerifierAccess: userConsentForVerifierAccess,
         userPINCodeForAuthentication: userPINCodeForAuthentication,
-        isSecurityLow: isSecurityLow,
+        enableSecurity: enableSecurity,
         isDeveloperMode: isDeveloperMode,
-        userPinDigitsLength: userPinDigitsLength,
+        enable4DigitPINCode: enable4DigitPINCode,
         enableJWKThumbprint: enableJWKThumbprint,
       );
 
@@ -250,8 +249,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.isSecurityLow,
-        profileModel.isSecurityLow.toString(),
+        SecureStorageKeys.enableSecurity,
+        profileModel.enableSecurity.toString(),
       );
 
       await secureStorageProvider.set(
@@ -260,8 +259,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.userPinDigitsLength,
-        profileModel.userPinDigitsLength.toString(),
+        SecureStorageKeys.enable4DigitPINCode,
+        profileModel.enable4DigitPINCode.toString(),
       );
 
       await secureStorageProvider.set(
@@ -334,8 +333,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
-  Future<void> setSecurityLevel({bool isSecurityLow = true}) async {
-    final profileModel = state.model.copyWith(isSecurityLow: isSecurityLow);
+  Future<void> enableSecurity({bool enabled = false}) async {
+    final profileModel = state.model.copyWith(enableSecurity: enabled);
     await update(profileModel);
   }
 
@@ -349,8 +348,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
-  Future<void> setUserPinDigitLength(int value) async {
-    final profileModel = state.model.copyWith(userPinDigitsLength: value);
+  Future<void> enable4DigitPINCode({bool enabled = false}) async {
+    final profileModel = state.model.copyWith(enable4DigitPINCode: enabled);
     await update(profileModel);
   }
 

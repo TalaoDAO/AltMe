@@ -27,6 +27,7 @@ Future<void> getAuthorizationUriForIssuer({
     isEBSIV3: isEBSIV3,
     privateKey: privateKey,
     didKitProvider: didKitProvider,
+    secureStorage: getSecureStorage,
   );
 
   /// this is first phase flow for authorization_code

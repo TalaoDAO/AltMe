@@ -28,8 +28,8 @@ class SecureStorageKeys {
   static const String userPINCodeForAuthentication =
       'userPINCodeForAuthentication';
 
-  static const String isSecurityLow = 'isSecurityLow';
-  static const String userPinDigitsLength = 'userPinDigitsLength';
+  static const String enableSecurity = 'enableSecurity';
+  static const String enable4DigitPINCode = 'enable4DigitPINCode';
   static const String isDeveloperMode = 'isDeveloperMode';
   static const String enableJWKThumbprint = 'enableJWKThumbprint';
 

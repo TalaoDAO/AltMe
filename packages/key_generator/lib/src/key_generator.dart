@@ -46,7 +46,6 @@ class KeyGenerator {
         final child =
             await ED25519_HD_KEY.derivePath("m/44'/5467'/0'/0'", seed);
         seedBytes = Uint8List.fromList(child.key);
-        break;
 
       case AccountType.tezos:
         final child = await ED25519_HD_KEY.derivePath(
@@ -54,7 +53,6 @@ class KeyGenerator {
           seed,
         );
         seedBytes = Uint8List.fromList(child.key);
-        break;
 
       case AccountType.ethereum:
       case AccountType.fantom:
@@ -253,7 +251,7 @@ class KeyGenerator {
         seedBytes = Uint8List.fromList(
           crypto.decodeWithoutPrefix(secretKey).take(32).toList(),
         );
-        break;
+
       case AccountType.ethereum:
       case AccountType.fantom:
       case AccountType.polygon:

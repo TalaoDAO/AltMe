@@ -23,64 +23,64 @@ class DrawerItem extends StatelessWidget {
     return TransparentInkWell(
       onTap: onTap,
       child: Container(
-          padding: const EdgeInsets.all(Sizes.spaceNormal),
-          margin: const EdgeInsets.all(Sizes.spaceXSmall),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.drawerSurface,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(
-                Sizes.normalRadius,
-              ),
+        padding: const EdgeInsets.all(Sizes.spaceNormal),
+        margin: const EdgeInsets.all(Sizes.spaceXSmall),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.drawerSurface,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(
+              Sizes.normalRadius,
             ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.drawerItemTitle.copyWith(
+                          color: isDisabled
+                              ? Theme.of(context).colorScheme.lightGrey
+                              : null,
+                        ),
+                  ),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 10),
                     Text(
-                      title,
-                      style:
-                          Theme.of(context).textTheme.drawerItemTitle.copyWith(
-                                color: isDisabled
-                                    ? Theme.of(context).colorScheme.lightGrey
-                                    : null,
-                              ),
+                      subtitle!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .drawerItemSubtitle
+                          .copyWith(
+                            color: isDisabled
+                                ? Theme.of(context).colorScheme.lightGrey
+                                : null,
+                          ),
                     ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: 10),
-                      Text(
-                        subtitle!,
-                        style: Theme.of(context)
-                            .textTheme
-                            .drawerItemSubtitle
-                            .copyWith(
-                              color: isDisabled
-                                  ? Theme.of(context).colorScheme.lightGrey
-                                  : null,
-                            ),
-                      ),
-                      const SizedBox(height: 20),
-                    ],
+                    const SizedBox(height: 20),
                   ],
-                ),
+                ],
               ),
-              if (trailing != null)
-                trailing!
-              else ...[
-                const SizedBox(width: 16),
-                Icon(
-                  Icons.chevron_right,
-                  size: 26,
-                  color: isDisabled
-                      ? Theme.of(context).colorScheme.lightGrey
-                      : Theme.of(context).colorScheme.unSelectedLabel,
-                ),
-              ],
+            ),
+            if (trailing != null)
+              trailing!
+            else ...[
+              const SizedBox(width: 16),
+              Icon(
+                Icons.chevron_right,
+                size: 26,
+                color: isDisabled
+                    ? Theme.of(context).colorScheme.lightGrey
+                    : Theme.of(context).colorScheme.unSelectedLabel,
+              ),
             ],
-          )),
+          ],
+        ),
+      ),
     );
   }
 }
