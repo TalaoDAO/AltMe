@@ -257,8 +257,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         ),
                         const SizedBox(height: 10),
                         if (state.credentialDetailTabStatus ==
-                                CredentialDetailTabStatus.informations &&
-                            isDeveloperMode) ...[
+                            CredentialDetailTabStatus.informations) ...[
                           const SizedBox(height: 10),
                           CredentialActiveStatus(
                             credentialStatus: state.credentialStatus,
@@ -270,7 +269,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               credentialModel: widget.credentialModel,
                             ),
                           ],
-                          if (widget.credentialModel.pendingInfo == null) ...[
+                          if (widget.credentialModel.pendingInfo == null &&
+                              isDeveloperMode) ...[
                             CredentialField(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 0,
