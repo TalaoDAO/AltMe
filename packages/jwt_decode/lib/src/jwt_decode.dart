@@ -54,10 +54,9 @@ class JWTDecode {
         break;
       case 2:
         output += '==';
-        break;
+
       case 3:
         output += '=';
-        break;
     }
 
     return utf8.decode(base64Url.decode(output));

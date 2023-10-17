@@ -125,6 +125,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     final outputDescriptors =
         widget.credentialModel.credentialManifest?.outputDescriptors;
 
+    final isDeveloperMode =
+        context.read<ProfileCubit>().state.model.isDeveloperMode;
+
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -154,6 +157,14 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
         final String format =
             widget.credentialModel.jwt != null ? ' jwt_vc_json-ld' : 'ldp_vc';
+
+        final String issuerDid =
+            widget.credentialModel.credentialPreview.issuer;
+        final String subjectDid = widget
+                .credentialModel.credentialPreview.credentialSubjectModel.id ??
+            '';
+        final String type =
+            widget.credentialModel.credentialPreview.type.toString();
 
         return BasePage(
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
@@ -258,7 +269,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               credentialModel: widget.credentialModel,
                             ),
                           ],
-                          if (widget.credentialModel.pendingInfo == null) ...[
+                          if (widget.credentialModel.pendingInfo == null &&
+                              isDeveloperMode) ...[
                             CredentialField(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 0,
@@ -266,6 +278,42 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               ),
                               title: l10n.format,
                               value: format,
+                              titleColor:
+                                  Theme.of(context).colorScheme.titleColor,
+                              valueColor:
+                                  Theme.of(context).colorScheme.valueColor,
+                            ),
+                            CredentialField(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 0,
+                                vertical: 8,
+                              ),
+                              title: l10n.issuerDID,
+                              value: issuerDid,
+                              titleColor:
+                                  Theme.of(context).colorScheme.titleColor,
+                              valueColor:
+                                  Theme.of(context).colorScheme.valueColor,
+                            ),
+                            CredentialField(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 0,
+                                vertical: 8,
+                              ),
+                              title: l10n.subjectDID,
+                              value: subjectDid,
+                              titleColor:
+                                  Theme.of(context).colorScheme.titleColor,
+                              valueColor:
+                                  Theme.of(context).colorScheme.valueColor,
+                            ),
+                            CredentialField(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 0,
+                                vertical: 8,
+                              ),
+                              title: l10n.type,
+                              value: type,
                               titleColor:
                                   Theme.of(context).colorScheme.titleColor,
                               valueColor:
@@ -339,51 +387,54 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         ),
                         const SizedBox(height: 8),
                         if (widget.credentialModel.pendingInfo == null) ...[
-                          MyOutlinedButton(
-                            text: widget.credentialModel.isLinkeInCard
-                                ? l10n.exportToLinkedIn
-                                : l10n.share,
-                            onPressed: () {
-                              if (widget.credentialModel.isLinkeInCard) {
-                                Navigator.of(context).push<void>(
-                                  GetLinkedinInfoPage.route(
-                                    credentialModel: widget.credentialModel,
-                                  ),
-                                );
-                              } else {
-                                if (widget.credentialModel.isEbsiCard) {
-                                  /// removing type that was added in add_ebsi_credential.dart
-                                  widget
-                                      .credentialModel.data['credentialSubject']
-                                      .remove('type');
-                                }
-
-                                late String data;
-                                final String? jwt = widget.credentialModel.jwt;
-                                if (jwt != null) {
-                                  data = jwt;
+                          if (isDeveloperMode)
+                            MyOutlinedButton(
+                              text: widget.credentialModel.isLinkeInCard
+                                  ? l10n.exportToLinkedIn
+                                  : l10n.download,
+                              onPressed: () {
+                                if (widget.credentialModel.isLinkeInCard) {
+                                  Navigator.of(context).push<void>(
+                                    GetLinkedinInfoPage.route(
+                                      credentialModel: widget.credentialModel,
+                                    ),
+                                  );
                                 } else {
-                                  data =
-                                      jsonEncode(widget.credentialModel.data);
+                                  if (widget.credentialModel.isEbsiCard) {
+                                    /// removing type that was added in add_ebsi_credential.dart
+                                    widget.credentialModel
+                                        .data['credentialSubject']
+                                        .remove('type');
+                                  }
+
+                                  late String data;
+                                  final String? jwt =
+                                      widget.credentialModel.jwt;
+                                  if (jwt != null) {
+                                    data = jwt;
+                                  } else {
+                                    data =
+                                        jsonEncode(widget.credentialModel.data);
+                                  }
+
+                                  getLogger(
+                                          'CredentialDetailsPage - shared date')
+                                      .i(data);
+
+                                  final box =
+                                      context.findRenderObject() as RenderBox?;
+                                  final subject = l10n.shareWith;
+
+                                  Share.share(
+                                    data,
+                                    subject: subject,
+                                    sharePositionOrigin:
+                                        box!.localToGlobal(Offset.zero) &
+                                            box.size,
+                                  );
                                 }
-
-                                getLogger('CredentialDetailsPage - shared date')
-                                    .i(data);
-
-                                final box =
-                                    context.findRenderObject() as RenderBox?;
-                                final subject = l10n.shareWith;
-
-                                Share.share(
-                                  data,
-                                  subject: subject,
-                                  sharePositionOrigin:
-                                      box!.localToGlobal(Offset.zero) &
-                                          box.size,
-                                );
-                              }
-                            },
-                          ),
+                              },
+                            ),
                         ] else ...[
                           MyOutlinedButton(
                             text: l10n.getItNow,

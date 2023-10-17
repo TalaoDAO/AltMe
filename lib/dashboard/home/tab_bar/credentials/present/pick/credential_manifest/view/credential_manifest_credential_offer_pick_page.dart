@@ -310,6 +310,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
             keyId: SecureStorageKeys.ssiKey,
             credentialsToBePresented: updatedCredentials,
             issuer: issuer,
+            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
           );
     }
   }

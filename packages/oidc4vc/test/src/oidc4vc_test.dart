@@ -26,7 +26,7 @@ void main() {
   client.httpClientAdapter = dioAdapter;
 
   const mnemonic =
-      'position taste mention august skin taste best air sure acoustic poet ritual'; // ignore: lines_longer_than_80_chars
+      'position taste mention august skin taste best air sure acoustic poet ritual';
 
   test('OIDC4VC class can be instantiated', () {
     final oidc4vc = OIDC4VC();

@@ -818,6 +818,12 @@ class ResponseMessage with MessageHandler {
               .localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_theServiceIsNotAvailable:
+          return ResponseString.RESPONSE_STRING_theServiceIsNotAvailable
+              .localise(
+            context,
+          );
       }
     }
     return '';
