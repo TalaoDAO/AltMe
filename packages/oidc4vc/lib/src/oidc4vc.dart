@@ -432,7 +432,7 @@ class OIDC4VC {
       );
       return didDocument;
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 
@@ -779,7 +779,7 @@ class OIDC4VC {
 
       return vpToken;
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 
@@ -809,7 +809,7 @@ class OIDC4VC {
 
       return verifierIdToken;
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 
@@ -865,7 +865,7 @@ class OIDC4VC {
       );
       return response;
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 
@@ -1028,7 +1028,7 @@ class OIDC4VC {
       return data;
     } catch (e) {
       if (e.toString().startsWith('Exception: Second_Attempt_Fail')) {
-        throw Exception();
+        rethrow;
       } else {
         final data = await getOpenIdConfigSecondAttempt(baseUrl);
         return data;
@@ -1048,7 +1048,7 @@ class OIDC4VC {
           : response.data as Map<String, dynamic>;
       return data;
     } catch (e) {
-      throw Exception();
+      throw Exception('Second_Attempt_Fail');
     }
   }
 }
