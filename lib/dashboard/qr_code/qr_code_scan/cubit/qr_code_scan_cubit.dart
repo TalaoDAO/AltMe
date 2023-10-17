@@ -587,7 +587,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
 
     final registration = state.uri!.queryParameters['registration'];
-    final bool isSecurityHigh = !profileCubit.state.model.isSecurityLow;
+    final bool isSecurityHigh = profileCubit.state.model.enableSecurity;
 
     if (registration != null) {
       final registrationMap = jsonDecode(registration) as Map<String, dynamic>;
@@ -936,9 +936,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       encodedData = request;
     }
 
-    final isSecurityLow = profileCubit.state.model.isSecurityLow;
+    final isSecurityEnabled = profileCubit.state.model.enableSecurity;
 
-    if (isSecurityLow) {
+    if (!isSecurityEnabled) {
       emit(state.acceptHost());
     } else {
       final Map<String, dynamic> payload =

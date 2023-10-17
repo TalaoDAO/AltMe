@@ -24,9 +24,9 @@ class ProfileModel extends Equatable {
     this.companyName = '',
     this.companyWebsite = '',
     this.jobTitle = '',
-    required this.isSecurityLow,
+    required this.enableSecurity,
     required this.isDeveloperMode,
-    required this.userPinDigitsLength,
+    required this.enable4DigitPINCode,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
@@ -49,9 +49,9 @@ class ProfileModel extends Equatable {
         userPINCodeForAuthentication: true,
         tezosNetwork: TezosNetwork.mainNet(),
         didKeyType: DidKeyType.ebsiv3.toString(),
-        isSecurityLow: true,
+        enableSecurity: false,
         isDeveloperMode: false,
-        userPinDigitsLength: 6,
+        enable4DigitPINCode: false,
         enableJWKThumbprint: false,
       );
 
@@ -72,9 +72,9 @@ class ProfileModel extends Equatable {
   final bool userConsentForVerifierAccess;
   final bool userPINCodeForAuthentication;
 
-  final bool isSecurityLow;
+  final bool enableSecurity;
   final bool isDeveloperMode;
-  final int userPinDigitsLength;
+  final bool enable4DigitPINCode;
   final bool enableJWKThumbprint;
 
   @override
@@ -95,9 +95,9 @@ class ProfileModel extends Equatable {
         userConsentForIssuerAccess,
         userConsentForVerifierAccess,
         userPINCodeForAuthentication,
-        isSecurityLow,
+        enableSecurity,
         isDeveloperMode,
-        userPinDigitsLength,
+        enable4DigitPINCode,
         enableJWKThumbprint,
       ];
 
@@ -120,9 +120,9 @@ class ProfileModel extends Equatable {
     bool? userConsentForIssuerAccess,
     bool? userConsentForVerifierAccess,
     bool? userPINCodeForAuthentication,
-    bool? isSecurityLow,
+    bool? enableSecurity,
     bool? isDeveloperMode,
-    int? userPinDigitsLength,
+    bool? enable4DigitPINCode,
     bool? enableJWKThumbprint,
   }) {
     return ProfileModel(
@@ -146,9 +146,9 @@ class ProfileModel extends Equatable {
           userConsentForVerifierAccess ?? this.userConsentForVerifierAccess,
       userPINCodeForAuthentication:
           userPINCodeForAuthentication ?? this.userPINCodeForAuthentication,
-      isSecurityLow: isSecurityLow ?? this.isSecurityLow,
+      enableSecurity: enableSecurity ?? this.enableSecurity,
       isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
-      userPinDigitsLength: userPinDigitsLength ?? this.userPinDigitsLength,
+      enable4DigitPINCode: enable4DigitPINCode ?? this.enable4DigitPINCode,
     );
   }
 }
