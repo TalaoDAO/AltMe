@@ -509,12 +509,8 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
   final keys = <String>[];
   uri.queryParameters.forEach((key, value) => keys.add(key));
 
-  late String issuer;
+  String? issuer;
 
-  if (keys.contains('issuer')) {
-    /// issuance case 1
-    issuer = uri.queryParameters['issuer'].toString();
-  }
   if (keys.contains('credential_offer') ||
       keys.contains('credential_offer_uri')) {
     ///  issuance case 2
@@ -525,7 +521,14 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
     if (credentialOfferJson == null) throw Exception();
 
     issuer = credentialOfferJson['credential_issuer'].toString();
-  } else {
+  }
+
+  if (keys.contains('issuer')) {
+    /// issuance case 1
+    issuer = uri.queryParameters['issuer'].toString();
+  }
+
+  if (issuer == null) {
     return null;
   }
 
