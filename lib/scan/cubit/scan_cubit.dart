@@ -15,6 +15,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
 part 'scan_cubit.g.dart';
@@ -537,6 +538,22 @@ class ScanCubit extends Cubit<ScanState> {
             ),
           ),
         );
+        final data = response.data;
+        if (data is Map) {
+          String url = '';
+          if (data.containsKey('redirect_uri')) {
+            url = data['redirect_uri'].toString();
+          }
+          if (url.isNotEmpty && data.containsKey('response_code')) {
+            url = '$url?response_code=${data['response_code']}';
+          }
+          if (url.isNotEmpty) {
+            await LaunchUrl.launch(
+              url,
+              launchMode: LaunchMode.inAppWebView,
+            );
+          }
+        }
       } else if (response.statusCode == 302) {
         await presentationActivity(
           credentialModels: credentialsToBePresented,
@@ -608,10 +625,12 @@ class ScanCubit extends Cubit<ScanState> {
       for (final InputDescriptor inputDescriptor
           in presentationDefinition.inputDescriptors) {
         for (final Field field in inputDescriptor.constraints!.fields!) {
+          final credentialName =
+              field.filter!.pattern ?? field.filter!.contains!.containsConst;
           if (credentialsToBePresented[0]
               .credentialPreview
               .type
-              .contains(field.filter!.pattern)) {
+              .contains(credentialName)) {
             descriptor = inputDescriptor;
           }
         }
