@@ -989,7 +989,9 @@
   "type": "Type",
   "credentialExpired": "Credential Expired",
   "incorrectSignature": "Incorrect Signature",
-  "revokedOrSuspendedCredential": "Revoked or Suspended Credential"
-
+  "revokedOrSuspendedCredential": "Revoked or Suspended Credential",
+  "displayConfiguration": "Display configuration",
+  "downloadConfiguration": "Download configuration",
+  "successfullyDownloaded": "Successfully Downloaded"
 }
 

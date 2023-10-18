@@ -226,17 +226,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     late final dynamic data;
 
     try {
-      if (isOIDC4VCIUrl(state.uri!)) {
+      if (isOIDC4VCIUrl(state.uri!) && oidcType != null) {
         /// issuer side (oidc4VCI)
-
-        if (oidcType != null) {
-          await startOIDC4VCCredentialIssuance(
-            scannedResponse: state.uri.toString(),
-            isEBSIV3: oidcType == OIDC4VCType.EBSIV3,
-            qrCodeScanCubit: qrCodeScanCubit,
-          );
-          return;
-        }
+        await startOIDC4VCCredentialIssuance(
+          scannedResponse: state.uri.toString(),
+          isEBSIV3: oidcType == OIDC4VCType.EBSIV3,
+          qrCodeScanCubit: qrCodeScanCubit,
+        );
+        return;
       }
 
       if (isSIOPV2OROIDC4VPUrl(state.uri!)) {
@@ -749,8 +746,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     try {
       emit(state.loading());
 
-      final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-          await getOIDC4VCTypeForIssuance(
+      final (OIDC4VCType? currentOIIDC4VCTypeForIssuance, _, _, _, _) =
+          await getIssuanceData(
         url: credentialModel.pendingInfo!.url,
         client: client,
       );
