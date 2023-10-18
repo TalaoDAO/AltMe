@@ -895,7 +895,10 @@
     "type",
     "credentialExpired",
     "incorrectSignature",
-    "revokedOrSuspendedCredential"
+    "revokedOrSuspendedCredential",
+    "displayConfiguration",
+    "downloadConfiguration",
+    "successfullyDownloaded"
   ],
 
   "es": [
@@ -1794,7 +1797,10 @@
     "type",
     "credentialExpired",
     "incorrectSignature",
-    "revokedOrSuspendedCredential"
+    "revokedOrSuspendedCredential",
+    "displayConfiguration",
+    "downloadConfiguration",
+    "successfullyDownloaded"
   ],
 
   "fr": [
@@ -1996,7 +2002,10 @@
     "type",
     "credentialExpired",
     "incorrectSignature",
-    "revokedOrSuspendedCredential"
+    "revokedOrSuspendedCredential",
+    "displayConfiguration",
+    "downloadConfiguration",
+    "successfullyDownloaded"
   ],
 
   "it": [
@@ -2895,6 +2904,9 @@
     "type",
     "credentialExpired",
     "incorrectSignature",
-    "revokedOrSuspendedCredential"
+    "revokedOrSuspendedCredential",
+    "displayConfiguration",
+    "downloadConfiguration",
+    "successfullyDownloaded"
   ]
 }

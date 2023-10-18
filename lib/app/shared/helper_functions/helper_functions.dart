@@ -500,7 +500,14 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
   return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
 }
 
-Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
+Future<
+    (
+      OIDC4VCType?,
+      Map<String, dynamic>?,
+      Map<String, dynamic>?,
+      dynamic,
+      String?,
+    )> getIssuanceData({
   required String url,
   required DioClient client,
 }) async {
@@ -509,12 +516,13 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
   final keys = <String>[];
   uri.queryParameters.forEach((key, value) => keys.add(key));
 
+  dynamic credentialOfferJson;
   String? issuer;
 
   if (keys.contains('credential_offer') ||
       keys.contains('credential_offer_uri')) {
     ///  issuance case 2
-    final dynamic credentialOfferJson = await getCredentialOfferJson(
+    credentialOfferJson = await getCredentialOfferJson(
       scannedResponse: uri.toString(),
       dioClient: client,
     );
@@ -529,7 +537,7 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
   }
 
   if (issuer == null) {
-    return null;
+    return (null, null, null, null, null);
   }
 
   final openidConfigurationResponse = await getOpenIdConfig(
@@ -542,6 +550,7 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
 
   List<dynamic>? subjectSyntaxTypesSupported;
   String? tokenEndpoint;
+  Map<String, dynamic>? authorizationServerConfiguration;
 
   if (openidConfigurationResponse
       .containsKey('subject_syntax_types_supported')) {
@@ -555,23 +564,23 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
   }
 
   if (authorizationServer != null) {
-    final openidConfigurationResponseSecond = await getOpenIdConfig(
+    authorizationServerConfiguration = await getOpenIdConfig(
       baseUrl: authorizationServer.toString(),
       client: client.dio,
     );
 
     if (subjectSyntaxTypesSupported == null &&
-        openidConfigurationResponseSecond
+        authorizationServerConfiguration
             .containsKey('subject_syntax_types_supported')) {
       subjectSyntaxTypesSupported =
-          openidConfigurationResponseSecond['subject_syntax_types_supported']
+          authorizationServerConfiguration['subject_syntax_types_supported']
               as List<dynamic>;
     }
 
     if (tokenEndpoint == null &&
-        openidConfigurationResponseSecond.containsKey('token_endpoint')) {
+        authorizationServerConfiguration.containsKey('token_endpoint')) {
       tokenEndpoint =
-          openidConfigurationResponseSecond['token_endpoint'].toString();
+          authorizationServerConfiguration['token_endpoint'].toString();
     }
   }
 
@@ -634,19 +643,51 @@ Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
       if (oidc4vcType == OIDC4VCType.DEFAULT ||
           oidc4vcType == OIDC4VCType.EBSIV3) {
         if (credSupported['trust_framework'] == null) {
-          return OIDC4VCType.DEFAULT;
+          return (
+            OIDC4VCType.DEFAULT,
+            openidConfigurationResponse,
+            authorizationServerConfiguration,
+            credentialOfferJson,
+            issuer
+          );
         }
 
         if (credSupported['trust_framework']['name'] == 'ebsi') {
-          return OIDC4VCType.EBSIV3;
+          return (
+            OIDC4VCType.EBSIV3,
+            openidConfigurationResponse,
+            authorizationServerConfiguration,
+            credentialOfferJson,
+            issuer
+          );
         } else {
-          return OIDC4VCType.DEFAULT;
+          return (
+            OIDC4VCType.DEFAULT,
+            openidConfigurationResponse,
+            authorizationServerConfiguration,
+            credentialOfferJson,
+            issuer
+          );
         }
       }
-      return oidc4vcType;
+
+      return (
+        oidc4vcType,
+        openidConfigurationResponse,
+        authorizationServerConfiguration,
+        credentialOfferJson,
+        issuer
+      );
     }
   }
-  return null;
+
+  return (
+    null,
+    openidConfigurationResponse,
+    authorizationServerConfiguration,
+    credentialOfferJson,
+    issuer
+  );
 }
 
 Future<bool?> isEBSIV3ForVerifiers({
@@ -909,4 +950,34 @@ bool hasVPToken(String responseType) {
 
 bool hasIDTokenOrVPToken(String responseType) {
   return responseType.contains('id_token') || responseType.contains('vp_token');
+}
+
+String getFormattedStringOIDC4VCI({
+  OIDC4VCType? oidc4vcType,
+  Map<String, dynamic>? openidConfigurationResponse,
+  Map<String, dynamic>? authorizationServerConfiguration,
+  dynamic credentialOfferJson,
+}) {
+  return '''
+SCHEME : ${oidc4vcType!.offerPrefix}
+\n
+CREDENTIAL OFFER  : 
+${credentialOfferJson != null ? const JsonEncoder.withIndent('  ').convert(credentialOfferJson) : 'None'}
+\n
+ENDPOINTS :
+    authorization server endpoint : ${openidConfigurationResponse?['authorization_server'] ?? 'None'}
+    token endpoint : ${openidConfigurationResponse?['token_endpoint'] ?? authorizationServerConfiguration?['token_endpoint'] ?? 'None'}
+    credential endpoint : ${openidConfigurationResponse?['credential_endpoint'] ?? 'None'}
+    deferred endpoint : ${openidConfigurationResponse?['deferred_endpoint'] ?? 'None'}
+    batch endpoint : ${openidConfigurationResponse?['batch_endpoint'] ?? 'None'}
+\n
+CREDENTIAL SUPPORTED : 
+${openidConfigurationResponse?['credentials_supported'] != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse?['credentials_supported']) : 'None'}
+\n
+AUTHORIZATION SERVER CONFIGURATION :
+${authorizationServerConfiguration != null ? const JsonEncoder.withIndent('  ').convert(authorizationServerConfiguration) : 'None'}
+\n
+CRDENTIAL ISSUER CONFIGURATION : 
+${openidConfigurationResponse != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse) : 'None'}
+''';
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -15,6 +16,7 @@ import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dio/dio.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -236,11 +238,95 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   .startsWith(Parameters.authorizeEndPoint) ||
               state.uri.toString().startsWith(Parameters.oidc4vcUniversalLink);
 
-          final OIDC4VCType? oidc4vcTypeForIssuance =
-              await getOIDC4VCTypeForIssuance(
-            url: state.uri.toString(),
-            client: DioClient('', Dio()),
-          );
+          OIDC4VCType? oidc4vcTypeForIssuance;
+
+          if (isOpenIDUrl || isFromDeeplink) {
+            final (
+              OIDC4VCType? oidc4vcType,
+              Map<String, dynamic>? openidConfigurationResponse,
+              Map<String, dynamic>? authorizationServerConfiguration,
+              dynamic credentialOfferJson,
+              String? issuer,
+            ) = await getIssuanceData(
+              url: state.uri.toString(),
+              client: DioClient('', Dio()),
+            );
+
+            oidc4vcTypeForIssuance = oidc4vcType;
+
+            /// if dev mode is ON show some dialog to show data
+            if (profileCubit.state.model.isDeveloperMode &&
+                oidc4vcTypeForIssuance != null) {
+              final formattedData = getFormattedStringOIDC4VCI(
+                oidc4vcType: oidc4vcTypeForIssuance,
+                authorizationServerConfiguration:
+                    authorizationServerConfiguration,
+                credentialOfferJson: credentialOfferJson,
+                openidConfigurationResponse: openidConfigurationResponse,
+              );
+              LoadingView().hide();
+              final bool moveAhead = await showDialog<bool>(
+                    context: context,
+                    builder: (_) {
+                      return DeveloperModeDialog(
+                        onDisplay: () async {
+                          Navigator.of(context).pop(false);
+                          await Navigator.of(context).push<void>(
+                            JsonViewerPage.route(
+                              title: l10n.displayConfiguration,
+                              data: formattedData,
+                            ),
+                          );
+                          return;
+                        },
+                        onDownload: () async {
+                          Navigator.of(context).pop(false);
+                          final isPermissionStatusGranted =
+                              await getStoragePermission();
+                          if (!isPermissionStatusGranted) {
+                            throw ResponseMessage(
+                              message: ResponseString
+                                  .STORAGE_PERMISSION_DENIED_MESSAGE,
+                            );
+                          }
+
+                          final dateTime = getDateTimeWithoutSpace();
+                          final fileName = 'oidc4vci-data-$dateTime';
+
+                          final fileSaver = FileSaver.instance;
+
+                          final fileBytes =
+                              Uint8List.fromList(utf8.encode(formattedData));
+
+                          final filePath = await fileSaver.saveAs(
+                            name: fileName,
+                            bytes: fileBytes,
+                            ext: 'txt',
+                            mimeType: MimeType.text,
+                          );
+                          if (filePath != null && filePath.isEmpty) {
+                            //
+                          } else {
+                            AlertMessage.showStateMessage(
+                              context: context,
+                              stateMessage: StateMessage.success(
+                                showDialog: false,
+                                stringMessage: l10n.successfullyDownloaded,
+                              ),
+                            );
+                          }
+                        },
+                        onSkip: () {
+                          Navigator.of(context).pop(true);
+                        },
+                      );
+                    },
+                  ) ??
+                  true;
+
+              if (!moveAhead) return;
+            }
+          }
 
           if (showPrompt) {
             if (isOpenIDUrl || isFromDeeplink) {
