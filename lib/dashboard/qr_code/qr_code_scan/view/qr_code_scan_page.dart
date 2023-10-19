@@ -71,6 +71,9 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
             if (barcodes.isEmpty) {
               return;
             }
+
+            /// We are skiping the first image because android device get
+            /// last image from previous camera usage
             if (isFirstImage) {
               isFirstImage = false;
               return;
@@ -90,6 +93,5 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
     );
   }
 }
-
 
 //qr is scanning twice
