@@ -8,11 +8,13 @@ class DrawerCategoryItem extends StatelessWidget {
     required this.title,
     required this.subTitle,
     this.onClick,
+    this.trailing,
   });
 
   final String title;
   final String subTitle;
   final VoidCallback? onClick;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -49,15 +51,16 @@ class DrawerCategoryItem extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              width: Sizes.icon3x,
-              alignment: Alignment.center,
-              child: Icon(
+            if (trailing != null)
+              trailing!
+            else ...[
+              const SizedBox(width: 16),
+              Icon(
                 Icons.chevron_right,
                 size: Sizes.icon2x,
                 color: Theme.of(context).colorScheme.unSelectedLabel,
               ),
-            ),
+            ],
           ],
         ),
       ),

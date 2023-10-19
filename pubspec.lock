@@ -771,10 +771,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_saver
-      sha256: "591d25e750e3a4b654f7b0293abc2ed857242f82ca7334051b2a8ceeb369dac8"
+      sha256: "8ffd91ae9f543c5ebbfec71a814ee5aa9e21176d31335133308abf63f4c42e8a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.8"
+    version: "0.2.9"
   file_selector_linux:
     dependency: transitive
     description:
@@ -973,10 +973,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_olm
-      sha256: fef0c9476d02c0df25ef0a66680bc23ac529a36b4911505910bcd8711b449c81
+      sha256: ff50839d83066495f79f2abdb9769984f9c2040bc9c55c65e2b5c724cbe732a4
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "1.3.0"
   flutter_openssl_crypto:
     dependency: "direct main"
     description:
@@ -2497,10 +2497,10 @@ packages:
     dependency: "direct main"
     description:
       name: walletconnect_flutter_v2
-      sha256: "7429c8edfcf830e931ecd9112656a52c5f9c83cb0fcc00a1afb4f10d2be1b6e7"
+      sha256: "7619022ecea01adc771aaaefb4cace48bc3e8645d5e5962d4859347c6a0ea777"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   watcher:
     dependency: transitive
     description:

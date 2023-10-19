@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Oidc4vcSettingMenu extends StatelessWidget {
   const Oidc4vcSettingMenu({super.key});
@@ -33,33 +32,13 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
       titleLeading: const BackLeadingButton(),
-      body: Column(
+      body: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const SecurityLevelWidget(),
-          const SixOrForUserPinWidget(),
-          const DidKeyTypeWidget(),
-          const SubjectSyntaxTypeWidget(),
-          DrawerItem2(
-            title: l10n.developerMode,
-            subtitle: l10n.developerModeSubtitle,
-            trailing: SizedBox(
-              height: 25,
-              child: BlocBuilder<ProfileCubit, ProfileState>(
-                builder: (context, state) {
-                  return Switch(
-                    onChanged: (value) async {
-                      await context
-                          .read<ProfileCubit>()
-                          .setDeveloperModeStatus(enabled: value);
-                    },
-                    value: state.model.isDeveloperMode,
-                    activeColor: Theme.of(context).colorScheme.primary,
-                  );
-                },
-              ),
-            ),
-          ),
+          SecurityLevelWidget(),
+          SixOrForUserPinWidget(),
+          DidKeyTypeWidget(),
+          SubjectSyntaxTypeWidget(),
         ],
       ),
     );

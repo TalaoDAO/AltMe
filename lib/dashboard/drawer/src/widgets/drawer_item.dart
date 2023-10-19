@@ -38,6 +38,7 @@ class DrawerItem extends StatelessWidget {
           children: [
             Expanded(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -61,7 +62,7 @@ class DrawerItem extends StatelessWidget {
                                 : null,
                           ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                   ],
                 ],
               ),
@@ -72,7 +73,7 @@ class DrawerItem extends StatelessWidget {
               const SizedBox(width: 16),
               Icon(
                 Icons.chevron_right,
-                size: 26,
+                size: Sizes.icon2x,
                 color: isDisabled
                     ? Theme.of(context).colorScheme.lightGrey
                     : Theme.of(context).colorScheme.unSelectedLabel,
