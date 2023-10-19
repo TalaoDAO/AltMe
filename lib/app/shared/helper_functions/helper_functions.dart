@@ -500,14 +500,8 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
   return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
 }
 
-Future<
-    (
-      OIDC4VCType?,
-      Map<String, dynamic>?,
-      Map<String, dynamic>?,
-      dynamic,
-      String?,
-    )> getIssuanceData({
+Future<(OIDC4VCType?, Map<String, dynamic>?, Map<String, dynamic>?, dynamic)>
+    getIssuanceData({
   required String url,
   required DioClient client,
 }) async {
@@ -537,7 +531,7 @@ Future<
   }
 
   if (issuer == null) {
-    return (null, null, null, null, null);
+    return (null, null, null, null);
   }
 
   final openidConfigurationResponse = await getOpenIdConfig(
@@ -548,9 +542,75 @@ Future<
   final authorizationServer =
       openidConfigurationResponse['authorization_server'];
 
+  Map<String, dynamic>? authorizationServerConfiguration;
+
+  if (authorizationServer != null) {
+    authorizationServerConfiguration = await getOpenIdConfig(
+      baseUrl: authorizationServer.toString(),
+      client: client.dio,
+    );
+  }
+
+  final credentialsSupported =
+      openidConfigurationResponse['credentials_supported'] as List<dynamic>;
+
+  final credSupported = credentialsSupported[0] as Map<String, dynamic>;
+  for (final oidc4vcType in OIDC4VCType.values) {
+    if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
+      if (oidc4vcType == OIDC4VCType.DEFAULT ||
+          oidc4vcType == OIDC4VCType.EBSIV3) {
+        if (credSupported['trust_framework'] == null) {
+          return (
+            OIDC4VCType.DEFAULT,
+            openidConfigurationResponse,
+            authorizationServerConfiguration,
+            credentialOfferJson,
+          );
+        }
+
+        if (credSupported['trust_framework']['name'] == 'ebsi') {
+          return (
+            OIDC4VCType.EBSIV3,
+            openidConfigurationResponse,
+            authorizationServerConfiguration,
+            credentialOfferJson,
+          );
+        } else {
+          return (
+            OIDC4VCType.DEFAULT,
+            openidConfigurationResponse,
+            authorizationServerConfiguration,
+            credentialOfferJson,
+          );
+        }
+      }
+      return (
+        oidc4vcType,
+        openidConfigurationResponse,
+        authorizationServerConfiguration,
+        credentialOfferJson,
+      );
+    }
+  }
+
+  return (
+    null,
+    openidConfigurationResponse,
+    authorizationServerConfiguration,
+    credentialOfferJson,
+  );
+}
+
+Future<void> handleErrorForOID4VCI({
+  required String url,
+  required Map<String, dynamic> openidConfigurationResponse,
+  required Map<String, dynamic>? authorizationServerConfiguration,
+}) async {
+  final authorizationServer =
+      openidConfigurationResponse['authorization_server'];
+
   List<dynamic>? subjectSyntaxTypesSupported;
   String? tokenEndpoint;
-  Map<String, dynamic>? authorizationServerConfiguration;
 
   if (openidConfigurationResponse
       .containsKey('subject_syntax_types_supported')) {
@@ -563,12 +623,7 @@ Future<
     tokenEndpoint = openidConfigurationResponse['token_endpoint'].toString();
   }
 
-  if (authorizationServer != null) {
-    authorizationServerConfiguration = await getOpenIdConfig(
-      baseUrl: authorizationServer.toString(),
-      client: client.dio,
-    );
-
+  if (authorizationServer != null && authorizationServerConfiguration != null) {
     if (subjectSyntaxTypesSupported == null &&
         authorizationServerConfiguration
             .containsKey('subject_syntax_types_supported')) {
@@ -633,61 +688,40 @@ Future<
       },
     );
   }
+}
 
-  final credentialsSupported =
-      openidConfigurationResponse['credentials_supported'] as List<dynamic>;
+Future<Map<String, dynamic>?> getPresentationDefinition({
+  required Uri uri,
+  required DioClient client,
+}) async {
+  try {
+    final keys = <String>[];
+    uri.queryParameters.forEach((key, value) => keys.add(key));
 
-  final credSupported = credentialsSupported[0] as Map<String, dynamic>;
-  for (final oidc4vcType in OIDC4VCType.values) {
-    if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
-      if (oidc4vcType == OIDC4VCType.DEFAULT ||
-          oidc4vcType == OIDC4VCType.EBSIV3) {
-        if (credSupported['trust_framework'] == null) {
-          return (
-            OIDC4VCType.DEFAULT,
-            openidConfigurationResponse,
-            authorizationServerConfiguration,
-            credentialOfferJson,
-            issuer
-          );
-        }
+    if (keys.contains('presentation_definition')) {
+      final String presentationDefinitionValue =
+          uri.queryParameters['presentation_definition'] ?? '';
 
-        if (credSupported['trust_framework']['name'] == 'ebsi') {
-          return (
-            OIDC4VCType.EBSIV3,
-            openidConfigurationResponse,
-            authorizationServerConfiguration,
-            credentialOfferJson,
-            issuer
-          );
-        } else {
-          return (
-            OIDC4VCType.DEFAULT,
-            openidConfigurationResponse,
-            authorizationServerConfiguration,
-            credentialOfferJson,
-            issuer
-          );
-        }
-      }
+      final json = jsonDecode(presentationDefinitionValue.replaceAll("'", '"'))
+          as Map<String, dynamic>;
 
-      return (
-        oidc4vcType,
-        openidConfigurationResponse,
-        authorizationServerConfiguration,
-        credentialOfferJson,
-        issuer
-      );
+      return json;
+    } else if (keys.contains('presentation_definition_uri')) {
+      final presentationDefinitionUri =
+          uri.queryParameters['presentation_definition_uri'].toString();
+      final dynamic response = await client.get(presentationDefinitionUri);
+
+      final Map<String, dynamic> data = response == String
+          ? jsonDecode(response.toString()) as Map<String, dynamic>
+          : response as Map<String, dynamic>;
+
+      return data;
+    } else {
+      return null;
     }
+  } catch (e) {
+    return null;
   }
-
-  return (
-    null,
-    openidConfigurationResponse,
-    authorizationServerConfiguration,
-    credentialOfferJson,
-    issuer
-  );
 }
 
 Future<bool?> isEBSIV3ForVerifiers({
@@ -953,13 +987,13 @@ bool hasIDTokenOrVPToken(String responseType) {
 }
 
 String getFormattedStringOIDC4VCI({
-  OIDC4VCType? oidc4vcType,
+  required String url,
   Map<String, dynamic>? openidConfigurationResponse,
   Map<String, dynamic>? authorizationServerConfiguration,
   dynamic credentialOfferJson,
 }) {
   return '''
-SCHEME : ${oidc4vcType!.offerPrefix}
+SCHEME : ${getSchemeFromUrl(url)}
 \n
 CREDENTIAL OFFER  : 
 ${credentialOfferJson != null ? const JsonEncoder.withIndent('  ').convert(credentialOfferJson) : 'None'}
@@ -972,7 +1006,7 @@ ENDPOINTS :
     batch endpoint : ${openidConfigurationResponse?['batch_endpoint'] ?? 'None'}
 \n
 CREDENTIAL SUPPORTED : 
-${openidConfigurationResponse?['credentials_supported'] != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse?['credentials_supported']) : 'None'}
+${openidConfigurationResponse?['credentials_supported'] != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse!['credentials_supported']) : 'None'}
 \n
 AUTHORIZATION SERVER CONFIGURATION :
 ${authorizationServerConfiguration != null ? const JsonEncoder.withIndent('  ').convert(authorizationServerConfiguration) : 'None'}
@@ -980,4 +1014,41 @@ ${authorizationServerConfiguration != null ? const JsonEncoder.withIndent('  ').
 CRDENTIAL ISSUER CONFIGURATION : 
 ${openidConfigurationResponse != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse) : 'None'}
 ''';
+}
+
+String getFormattedStringOIDC4VPSIOPV2({
+  required String url,
+  required Map<String, dynamic>? presentationDefinition,
+}) {
+  return '''
+SCHEME : ${getSchemeFromUrl(url)}
+\n
+PRESENTATION DEFINITION  : 
+${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}
+''';
+}
+
+String getSchemeFromUrl(String url) {
+  final parts = url.split(':');
+  return parts.length > 1 ? '${parts[0]}://' : '';
+}
+
+Future<dynamic> fetchRequestUriPayload({
+  required String url,
+  required DioClient client,
+}) async {
+  final log = getLogger('QRCodeScanCubit - fetchRequestUriPayload');
+  late final dynamic data;
+
+  try {
+    final dynamic response = await client.get(url);
+    data = response.toString();
+  } catch (e, s) {
+    log.e(
+      'An error occurred while connecting to the server.',
+      error: e,
+      stackTrace: s,
+    );
+  }
+  return data;
 }

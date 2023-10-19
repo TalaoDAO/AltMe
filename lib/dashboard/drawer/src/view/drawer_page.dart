@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DrawerPage extends StatelessWidget {
   const DrawerPage({super.key});
@@ -71,6 +72,27 @@ class DrawerView extends StatelessWidget {
                   onClick: () {
                     Navigator.of(context).push<void>(SSIMenu.route());
                   },
+                ),
+                const SizedBox(height: Sizes.spaceSmall),
+                DrawerCategoryItem(
+                  title: l10n.developerMode,
+                  subTitle: l10n.developerModeSubtitle,
+                  trailing: SizedBox(
+                    height: 25,
+                    child: BlocBuilder<ProfileCubit, ProfileState>(
+                      builder: (context, state) {
+                        return Switch(
+                          onChanged: (value) async {
+                            await context
+                                .read<ProfileCubit>()
+                                .setDeveloperModeStatus(enabled: value);
+                          },
+                          value: state.model.isDeveloperMode,
+                          activeColor: Theme.of(context).colorScheme.primary,
+                        );
+                      },
+                    ),
+                  ),
                 ),
                 // const SizedBox(height: Sizes.spaceSmall),
                 // DrawerCategoryItem(
