@@ -154,13 +154,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         enable4DigitPINCode: enable4DigitPINCode,
         enableJWKThumbprint: enableJWKThumbprint,
       );
-
-      emit(
-        state.copyWith(
-          model: profileModel,
-          status: AppStatus.success,
-        ),
-      );
+      await update(profileModel);
     } catch (e, s) {
       log.e(
         'something went wrong',
