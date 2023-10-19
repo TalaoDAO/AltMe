@@ -31,6 +31,7 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
   }
 
   bool isScanned = false;
+  bool isFirstImage = true;
   var _cameraLensDirection = CameraLensDirection.back;
 
   @override
@@ -68,6 +69,10 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
             final barcodes =
                 await _barcodeScannerController.processImage(inputImage);
             if (barcodes.isEmpty) {
+              return;
+            }
+            if (isFirstImage) {
+              isFirstImage = false;
               return;
             }
 
