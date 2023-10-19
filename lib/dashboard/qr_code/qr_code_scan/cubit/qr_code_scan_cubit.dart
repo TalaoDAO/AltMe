@@ -531,7 +531,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
 
       if (registration != null) {
-        queryJson['registration'] = registration;
+        queryJson['registration'] =
+            registration is Map ? jsonEncode(registration) : registration;
       }
 
       final String queryString = Uri(queryParameters: queryJson).query;
@@ -552,6 +553,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     /// check required keys available or not
     final keys = <String>[];
     state.uri?.queryParameters.forEach((key, value) => keys.add(key));
+
+    if (keys.contains('claims')) {
+      /// claims is old standard
+      throw ResponseMessage(
+        message: ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
+      );
+    }
 
     if (!keys.contains('response_type')) {
       throw ResponseMessage(
