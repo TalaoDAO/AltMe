@@ -875,6 +875,37 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
     }
 
+    if (presentationDefinition.inputDescriptors.isEmpty) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description':
+              'The input_descriptors is required in the presentation_definition'
+                  ' object',
+        },
+      );
+    }
+
+    if (presentationDefinition.format == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Presentation definition is invalid',
+        },
+      );
+    }
+
+    for (final descriptor in presentationDefinition.inputDescriptors) {
+      if (descriptor.constraints == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Presentation definition is invalid',
+          },
+        );
+      }
+    }
+
     final CredentialManifest credentialManifest = CredentialManifest(
       'id',
       IssuedBy('', ''),
