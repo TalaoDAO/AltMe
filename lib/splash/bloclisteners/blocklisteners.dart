@@ -242,23 +242,18 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
           if (isOpenIDUrl || isFromDeeplink) {
             final (
-              OIDC4VCType? oidc4vcType,
               Map<String, dynamic>? openidConfigurationResponse,
               Map<String, dynamic>? authorizationServerConfiguration,
               dynamic credentialOfferJson,
-              String? issuer,
             ) = await getIssuanceData(
               url: state.uri.toString(),
               client: DioClient('', Dio()),
             );
 
-            oidc4vcTypeForIssuance = oidc4vcType;
-
             /// if dev mode is ON show some dialog to show data
-            if (profileCubit.state.model.isDeveloperMode &&
-                oidc4vcTypeForIssuance != null) {
+            if (profileCubit.state.model.isDeveloperMode) {
               final formattedData = getFormattedStringOIDC4VCI(
-                oidc4vcType: oidc4vcTypeForIssuance,
+                url: state.uri.toString(),
                 authorizationServerConfiguration:
                     authorizationServerConfiguration,
                 credentialOfferJson: credentialOfferJson,
@@ -325,6 +320,15 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   true;
 
               if (!moveAhead) return;
+            }
+
+            if (openidConfigurationResponse != null) {
+              oidc4vcTypeForIssuance = await getOIDC4VCTypeForIssuance(
+                url: state.uri.toString(),
+                openidConfigurationResponse: openidConfigurationResponse,
+                authorizationServerConfiguration:
+                    authorizationServerConfiguration,
+              );
             }
           }
 

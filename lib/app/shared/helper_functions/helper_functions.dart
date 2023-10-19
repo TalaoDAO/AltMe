@@ -500,14 +500,8 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
   return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
 }
 
-Future<
-    (
-      OIDC4VCType?,
-      Map<String, dynamic>?,
-      Map<String, dynamic>?,
-      dynamic,
-      String?,
-    )> getIssuanceData({
+Future<(Map<String, dynamic>?, Map<String, dynamic>?, dynamic)>
+    getIssuanceData({
   required String url,
   required DioClient client,
 }) async {
@@ -537,7 +531,7 @@ Future<
   }
 
   if (issuer == null) {
-    return (null, null, null, null, null);
+    return (null, null, null);
   }
 
   final openidConfigurationResponse = await getOpenIdConfig(
@@ -548,9 +542,32 @@ Future<
   final authorizationServer =
       openidConfigurationResponse['authorization_server'];
 
+  Map<String, dynamic>? authorizationServerConfiguration;
+
+  if (authorizationServer != null) {
+    authorizationServerConfiguration = await getOpenIdConfig(
+      baseUrl: authorizationServer.toString(),
+      client: client.dio,
+    );
+  }
+
+  return (
+    openidConfigurationResponse,
+    authorizationServerConfiguration,
+    credentialOfferJson,
+  );
+}
+
+Future<OIDC4VCType?> getOIDC4VCTypeForIssuance({
+  required String url,
+  required Map<String, dynamic> openidConfigurationResponse,
+  required Map<String, dynamic>? authorizationServerConfiguration,
+}) async {
+  final authorizationServer =
+      openidConfigurationResponse['authorization_server'];
+
   List<dynamic>? subjectSyntaxTypesSupported;
   String? tokenEndpoint;
-  Map<String, dynamic>? authorizationServerConfiguration;
 
   if (openidConfigurationResponse
       .containsKey('subject_syntax_types_supported')) {
@@ -563,12 +580,7 @@ Future<
     tokenEndpoint = openidConfigurationResponse['token_endpoint'].toString();
   }
 
-  if (authorizationServer != null) {
-    authorizationServerConfiguration = await getOpenIdConfig(
-      baseUrl: authorizationServer.toString(),
-      client: client.dio,
-    );
-
+  if (authorizationServer != null && authorizationServerConfiguration != null) {
     if (subjectSyntaxTypesSupported == null &&
         authorizationServerConfiguration
             .containsKey('subject_syntax_types_supported')) {
@@ -643,51 +655,21 @@ Future<
       if (oidc4vcType == OIDC4VCType.DEFAULT ||
           oidc4vcType == OIDC4VCType.EBSIV3) {
         if (credSupported['trust_framework'] == null) {
-          return (
-            OIDC4VCType.DEFAULT,
-            openidConfigurationResponse,
-            authorizationServerConfiguration,
-            credentialOfferJson,
-            issuer
-          );
+          return OIDC4VCType.DEFAULT;
         }
 
         if (credSupported['trust_framework']['name'] == 'ebsi') {
-          return (
-            OIDC4VCType.EBSIV3,
-            openidConfigurationResponse,
-            authorizationServerConfiguration,
-            credentialOfferJson,
-            issuer
-          );
+          return OIDC4VCType.EBSIV3;
         } else {
-          return (
-            OIDC4VCType.DEFAULT,
-            openidConfigurationResponse,
-            authorizationServerConfiguration,
-            credentialOfferJson,
-            issuer
-          );
+          return OIDC4VCType.DEFAULT;
         }
       }
 
-      return (
-        oidc4vcType,
-        openidConfigurationResponse,
-        authorizationServerConfiguration,
-        credentialOfferJson,
-        issuer
-      );
+      return oidc4vcType;
     }
   }
 
-  return (
-    null,
-    openidConfigurationResponse,
-    authorizationServerConfiguration,
-    credentialOfferJson,
-    issuer
-  );
+  return null;
 }
 
 Future<bool?> isEBSIV3ForVerifiers({
@@ -953,13 +935,13 @@ bool hasIDTokenOrVPToken(String responseType) {
 }
 
 String getFormattedStringOIDC4VCI({
-  OIDC4VCType? oidc4vcType,
+  required String url,
   Map<String, dynamic>? openidConfigurationResponse,
   Map<String, dynamic>? authorizationServerConfiguration,
   dynamic credentialOfferJson,
 }) {
   return '''
-SCHEME : ${oidc4vcType!.offerPrefix}
+SCHEME : ${getSchemeFromUrl(url)}
 \n
 CREDENTIAL OFFER  : 
 ${credentialOfferJson != null ? const JsonEncoder.withIndent('  ').convert(credentialOfferJson) : 'None'}
@@ -972,7 +954,7 @@ ENDPOINTS :
     batch endpoint : ${openidConfigurationResponse?['batch_endpoint'] ?? 'None'}
 \n
 CREDENTIAL SUPPORTED : 
-${openidConfigurationResponse?['credentials_supported'] != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse?['credentials_supported']) : 'None'}
+${openidConfigurationResponse?['credentials_supported'] != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse!['credentials_supported']) : 'None'}
 \n
 AUTHORIZATION SERVER CONFIGURATION :
 ${authorizationServerConfiguration != null ? const JsonEncoder.withIndent('  ').convert(authorizationServerConfiguration) : 'None'}
@@ -980,4 +962,9 @@ ${authorizationServerConfiguration != null ? const JsonEncoder.withIndent('  ').
 CRDENTIAL ISSUER CONFIGURATION : 
 ${openidConfigurationResponse != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse) : 'None'}
 ''';
+}
+
+String getSchemeFromUrl(String url) {
+  final parts = url.split(':');
+  return parts.length > 1 ? '${parts[0]}://' : '';
 }

@@ -754,11 +754,26 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     try {
       emit(state.loading());
 
-      final (OIDC4VCType? currentOIIDC4VCTypeForIssuance, _, _, _, _) =
-          await getIssuanceData(
-        url: credentialModel.pendingInfo!.url,
+      final url = credentialModel.pendingInfo!.url;
+
+      final (
+        Map<String, dynamic>? openidConfigurationResponse,
+        Map<String, dynamic>? authorizationServerConfiguration,
+        _,
+      ) = await getIssuanceData(
+        url: url,
         client: client,
       );
+
+      OIDC4VCType? currentOIIDC4VCTypeForIssuance;
+
+      if (openidConfigurationResponse != null) {
+        currentOIIDC4VCTypeForIssuance = await getOIDC4VCTypeForIssuance(
+          url: url,
+          openidConfigurationResponse: openidConfigurationResponse,
+          authorizationServerConfiguration: authorizationServerConfiguration,
+        );
+      }
 
       if (currentOIIDC4VCTypeForIssuance != null) {
         await getAndAddDefferedCredential(
