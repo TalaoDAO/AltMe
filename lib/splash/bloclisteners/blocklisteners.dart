@@ -20,6 +20,7 @@ import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:polygonid/polygonid.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
@@ -208,6 +209,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
       final log = getLogger('qrCodeBlocListener');
 
       final l10n = context.l10n;
+      final client = DioClient('', Dio());
 
       if (state.status == QrScanStatus.loading) {
         LoadingView().show(context: context);
@@ -242,23 +244,86 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
           if (isOpenIDUrl || isFromDeeplink) {
             final (
+              OIDC4VCType? oidc4vcType,
               Map<String, dynamic>? openidConfigurationResponse,
               Map<String, dynamic>? authorizationServerConfiguration,
               dynamic credentialOfferJson,
             ) = await getIssuanceData(
               url: state.uri.toString(),
-              client: DioClient('', Dio()),
+              client: client,
             );
+
+            oidc4vcTypeForIssuance = oidc4vcType;
 
             /// if dev mode is ON show some dialog to show data
             if (profileCubit.state.model.isDeveloperMode) {
-              final formattedData = getFormattedStringOIDC4VCI(
-                url: state.uri.toString(),
-                authorizationServerConfiguration:
-                    authorizationServerConfiguration,
-                credentialOfferJson: credentialOfferJson,
-                openidConfigurationResponse: openidConfigurationResponse,
-              );
+              late String formattedData;
+              if (oidc4vcTypeForIssuance != null) {
+                /// issuance case
+                formattedData = getFormattedStringOIDC4VCI(
+                  url: state.uri.toString(),
+                  authorizationServerConfiguration:
+                      authorizationServerConfiguration,
+                  credentialOfferJson: credentialOfferJson,
+                  openidConfigurationResponse: openidConfigurationResponse,
+                );
+              } else {
+                var url = state.uri!.toString();
+
+                /// verification case
+                final String? requestUri =
+                    state.uri!.queryParameters['request_uri'];
+                final String? request = state.uri!.queryParameters['request'];
+
+                if (requestUri != null || request != null) {
+                  late dynamic encodedData;
+                  if (requestUri != null) {
+                    encodedData = await fetchRequestUriPayload(
+                      url: requestUri,
+                      client: client,
+                    );
+                  } else {
+                    encodedData = request;
+                  }
+                  final Map<String, dynamic> response = decodePayload(
+                    jwtDecode: JWTDecode(),
+                    token: encodedData as String,
+                  );
+
+                  final presentationDefinition =
+                      response['presentation_definition'];
+                  final presentationDefinitionUri =
+                      response['presentation_definition_uri'];
+
+                  final queryJson = <String, dynamic>{};
+
+                  if (presentationDefinition != null) {
+                    queryJson['presentation_definition'] =
+                        jsonEncode(presentationDefinition).replaceAll('"', "'");
+                  }
+
+                  if (presentationDefinitionUri != null) {
+                    queryJson['presentation_definition_uri'] =
+                        presentationDefinitionUri;
+                  }
+
+                  final String queryString =
+                      Uri(queryParameters: queryJson).query;
+
+                  url = '${state.uri}}&$queryString';
+                }
+
+                final Map<String, dynamic>? presentationDefinitionData =
+                    await getPresentationDefinition(
+                  client: client,
+                  uri: Uri.parse(url),
+                );
+                formattedData = getFormattedStringOIDC4VPSIOPV2(
+                  url: state.uri.toString(),
+                  presentationDefinition: presentationDefinitionData,
+                );
+              }
+
               LoadingView().hide();
               final bool moveAhead = await showDialog<bool>(
                     context: context,
@@ -318,12 +383,11 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     },
                   ) ??
                   true;
-
               if (!moveAhead) return;
             }
 
             if (openidConfigurationResponse != null) {
-              oidc4vcTypeForIssuance = await getOIDC4VCTypeForIssuance(
+              await handleErrorForOID4VCI(
                 url: state.uri.toString(),
                 openidConfigurationResponse: openidConfigurationResponse,
                 authorizationServerConfiguration:
@@ -357,7 +421,9 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
               if (isOpenIDUrl) {
                 subtitle = await getHost(
-                    uri: state.uri!, client: DioClient('', Dio()));
+                  uri: state.uri!,
+                  client: client,
+                );
               }
 
               LoadingView().hide();

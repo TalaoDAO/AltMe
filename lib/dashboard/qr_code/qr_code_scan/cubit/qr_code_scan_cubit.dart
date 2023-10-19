@@ -756,7 +756,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       final url = credentialModel.pendingInfo!.url;
 
+      OIDC4VCType? currentOIIDC4VCTypeForIssuance;
+
       final (
+        OIDC4VCType? oidc4vcType,
         Map<String, dynamic>? openidConfigurationResponse,
         Map<String, dynamic>? authorizationServerConfiguration,
         _,
@@ -765,10 +768,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         client: client,
       );
 
-      OIDC4VCType? currentOIIDC4VCTypeForIssuance;
+      currentOIIDC4VCTypeForIssuance = oidc4vcType;
 
       if (openidConfigurationResponse != null) {
-        currentOIIDC4VCTypeForIssuance = await getOIDC4VCTypeForIssuance(
+        await handleErrorForOID4VCI(
           url: url,
           openidConfigurationResponse: openidConfigurationResponse,
           authorizationServerConfiguration: authorizationServerConfiguration,
@@ -857,26 +860,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> launchOIDC4VPAndSIOPV2Flow(List<String> keys) async {
-    late PresentationDefinition presentationDefinition;
-    if (keys.contains('presentation_definition')) {
-      final String presentationDefinitionValue =
-          state.uri?.queryParameters['presentation_definition'] ?? '';
-
-      final json = jsonDecode(presentationDefinitionValue.replaceAll("'", '"'))
-          as Map<String, dynamic>;
-
-      presentationDefinition = PresentationDefinition.fromJson(json);
-    } else if (keys.contains('presentation_definition_uri')) {
-      final presentationDefinitionUri =
-          state.uri!.queryParameters['presentation_definition_uri'].toString();
-      final dynamic response = await client.get(presentationDefinitionUri);
-
-      final Map<String, dynamic> data = response == String
-          ? jsonDecode(response.toString()) as Map<String, dynamic>
-          : response as Map<String, dynamic>;
-
-      presentationDefinition = PresentationDefinition.fromJson(data);
-    } else {
+    if (!keys.contains('presentation_definition') &&
+        !keys.contains('presentation_definition_uri')) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_request',
@@ -886,6 +871,24 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         },
       );
     }
+
+    final Map<String, dynamic>? presentationDefinitionData =
+        await getPresentationDefinition(
+      client: client,
+      uri: state.uri!,
+    );
+
+    if (presentationDefinitionData == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Presentation definition is invalid',
+        },
+      );
+    }
+
+    final PresentationDefinition presentationDefinition =
+        PresentationDefinition.fromJson(presentationDefinitionData);
 
     if (presentationDefinition.inputDescriptors.isEmpty) {
       throw ResponseMessage(
@@ -982,7 +985,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     final String? request = state.uri?.queryParameters['request'];
 
     if (requestUri != null) {
-      encodedData = await fetchRequestUriPayload(url: requestUri);
+      encodedData = await fetchRequestUriPayload(
+        url: requestUri,
+        client: requestClient,
+      );
     } else {
       encodedData = request;
     }
@@ -1183,23 +1189,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         route: null,
       ),
     );
-  }
-
-  Future<dynamic> fetchRequestUriPayload({required String url}) async {
-    final log = getLogger('QRCodeScanCubit - fetchRequestUriPayload');
-    late final dynamic data;
-
-    try {
-      final dynamic response = await requestClient.get(url);
-      data = response.toString();
-    } catch (e, s) {
-      log.e(
-        'An error occurred while connecting to the server.',
-        error: e,
-        stackTrace: s,
-      );
-    }
-    return data;
   }
 
   Future<void> authorizedFlowCompletion(Uri uri) async {
