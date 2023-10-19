@@ -32,7 +32,8 @@ class CredentialActiveStatus extends StatelessWidget {
                         .textTheme
                         .credentialFieldTitle
                         .copyWith(
-                            color: Theme.of(context).colorScheme.titleColor),
+                          color: Theme.of(context).colorScheme.titleColor,
+                        ),
                   ),
                   TextSpan(
                     text: credentialStatus?.message(context) ?? '',
@@ -40,7 +41,8 @@ class CredentialActiveStatus extends StatelessWidget {
                         .textTheme
                         .credentialFieldDescription
                         .copyWith(
-                            color: Theme.of(context).colorScheme.valueColor),
+                          color: Theme.of(context).colorScheme.valueColor,
+                        ),
                   ),
                 ],
               ),
