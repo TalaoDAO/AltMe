@@ -76,7 +76,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> process({required String? scannedResponse}) async {
     log.i('processing scanned qr code - $scannedResponse');
     goBack();
-    await Future<void>.delayed(const Duration(milliseconds: 500));
+    await Future<void>.delayed(const Duration(milliseconds: 1000));
     emit(state.loading(isScan: true));
     try {
       final isInternetAvailable = await isConnected();
