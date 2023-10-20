@@ -31,6 +31,7 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
   }
 
   bool isScanned = false;
+  bool isFirstImage = true;
   var _cameraLensDirection = CameraLensDirection.back;
 
   @override
@@ -71,6 +72,13 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
               return;
             }
 
+            /// We are skiping the first image because android device get
+            /// last image from previous camera usage
+            if (isFirstImage) {
+              isFirstImage = false;
+              return;
+            }
+
             if (isScanned) return;
             isScanned = true;
 
@@ -85,6 +93,5 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
     );
   }
 }
-
 
 //qr is scanning twice

@@ -939,9 +939,9 @@
   "pleaseInsertTheSecredCodeReceived": "Please insert the secret code received.",
   "verifyIssuerWebsiteIdentity": "Verify issuer website identity",
   "verifyIssuerWebsiteIdentitySubtitle": "Default: Off\nEnable to verify website identity before access.",
-  "developerMode": "Developer mode",
-  "developerModeSubtitle": "Default: Off\nEnable to access error description and error links.",
-  "confirmVerifierAccess": "Confirm verifier access",
+  "developerMode": "Developer Mode",
+  "developerModeSubtitle": "Enable developer mode to access advanced debugging tools",
+  "confirmVerifierAccess": "Confirm verifier access",  
   "confirmVerifierAccessSubtitle": "Default: On\nDisable to skip confirmation when you share your verifiable credentials.",
   "secureAuthenticationWithPINCode": "Secure Authentication with PIN Code",
   "secureAuthenticationWithPINCodeSubtitle": "Default: On\nTurn off to skip PIN code for website authentication (not recommended).",
@@ -984,6 +984,8 @@
   "selectOneOfTheDid": "Select one of the DIDs",
   "subjectSyntaxType": "Subject syntax type",
   "enableToUseTheJWKThumprintOfTheKey": "Default: DID\nEnable to use the JWK thumprint of the key",
+  "cryptographicHolderBinding": "Cryptographic holder binding",
+  "cryptographicHolderBindingSubtitle": "Default : On\nDisable to accept Bearer credentials as tickets with low assurance.",
   "theServiceIsNotAvailable": "The service is not available",
   "download": "Download",
   "issuerDID": "Issuer DID",
@@ -991,5 +993,9 @@
   "type": "Type",
   "credentialExpired": "Credential Expired",
   "incorrectSignature": "Incorrect Signature",
-  "revokedOrSuspendedCredential": "Revoked or Suspended Credential"
+  "revokedOrSuspendedCredential": "Revoked or Suspended Credential",
+  "displayConfiguration": "Display configuration",
+  "downloadConfiguration": "Download configuration",
+  "successfullyDownloaded": "Successfully Downloaded",
+  "advancedSecuritySettings": "Advanced Security Settings"
 }

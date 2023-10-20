@@ -890,6 +890,8 @@
     "selectOneOfTheDid",
     "subjectSyntaxType",
     "enableToUseTheJWKThumprintOfTheKey",
+    "cryptographicHolderBinding",
+    "cryptographicHolderBindingSubtitle",
     "theServiceIsNotAvailable",
     "download",
     "issuerDID",
@@ -897,7 +899,11 @@
     "type",
     "credentialExpired",
     "incorrectSignature",
-    "revokedOrSuspendedCredential"
+    "revokedOrSuspendedCredential",
+    "displayConfiguration",
+    "downloadConfiguration",
+    "successfullyDownloaded",
+    "advancedSecuritySettings"
   ],
 
   "es": [
@@ -1791,6 +1797,8 @@
     "selectOneOfTheDid",
     "subjectSyntaxType",
     "enableToUseTheJWKThumprintOfTheKey",
+    "cryptographicHolderBinding",
+    "cryptographicHolderBindingSubtitle",
     "theServiceIsNotAvailable",
     "download",
     "issuerDID",
@@ -1798,7 +1806,11 @@
     "type",
     "credentialExpired",
     "incorrectSignature",
-    "revokedOrSuspendedCredential"
+    "revokedOrSuspendedCredential",
+    "displayConfiguration",
+    "downloadConfiguration",
+    "successfullyDownloaded",
+    "advancedSecuritySettings"
   ],
 
   "fr": [
@@ -1995,6 +2007,8 @@
     "selectOneOfTheDid",
     "subjectSyntaxType",
     "enableToUseTheJWKThumprintOfTheKey",
+    "cryptographicHolderBinding",
+    "cryptographicHolderBindingSubtitle",
     "theServiceIsNotAvailable",
     "download",
     "issuerDID",
@@ -2002,7 +2016,11 @@
     "type",
     "credentialExpired",
     "incorrectSignature",
-    "revokedOrSuspendedCredential"
+    "revokedOrSuspendedCredential",
+    "displayConfiguration",
+    "downloadConfiguration",
+    "successfullyDownloaded",
+    "advancedSecuritySettings"
   ],
 
   "it": [
@@ -2896,6 +2914,8 @@
     "selectOneOfTheDid",
     "subjectSyntaxType",
     "enableToUseTheJWKThumprintOfTheKey",
+    "cryptographicHolderBinding",
+    "cryptographicHolderBindingSubtitle",
     "theServiceIsNotAvailable",
     "download",
     "issuerDID",
@@ -2903,6 +2923,10 @@
     "type",
     "credentialExpired",
     "incorrectSignature",
-    "revokedOrSuspendedCredential"
+    "revokedOrSuspendedCredential",
+    "displayConfiguration",
+    "downloadConfiguration",
+    "successfullyDownloaded",
+    "advancedSecuritySettings"
   ]
 }
