@@ -1027,20 +1027,20 @@ String getFormattedStringOIDC4VCI({
   dynamic credentialOfferJson,
 }) {
   return '''
-SCHEME : ${getSchemeFromUrl(url)}\n
-CREDENTIAL OFFER  : 
+<b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
+<b>CREDENTIAL OFFER  :</b> 
 ${credentialOfferJson != null ? const JsonEncoder.withIndent('  ').convert(credentialOfferJson) : 'None'}\n
-ENDPOINTS :
+<b>ENDPOINTS :</b>
     authorization server endpoint : ${openidConfigurationResponse?['authorization_server'] ?? 'None'}
     token endpoint : ${openidConfigurationResponse?['token_endpoint'] ?? authorizationServerConfiguration?['token_endpoint'] ?? 'None'}
     credential endpoint : ${openidConfigurationResponse?['credential_endpoint'] ?? 'None'}
     deferred endpoint : ${openidConfigurationResponse?['deferred_endpoint'] ?? 'None'}
     batch endpoint : ${openidConfigurationResponse?['batch_endpoint'] ?? 'None'}\n
-CREDENTIAL SUPPORTED : 
+<b>CREDENTIAL SUPPORTED :</b> 
 ${openidConfigurationResponse?['credentials_supported'] != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse!['credentials_supported']) : 'None'}\n
-AUTHORIZATION SERVER CONFIGURATION :
+<b>AUTHORIZATION SERVER CONFIGURATION :</b>
 ${authorizationServerConfiguration != null ? const JsonEncoder.withIndent('  ').convert(authorizationServerConfiguration) : 'None'}\n
-CRDENTIAL ISSUER CONFIGURATION : 
+<b>CRDENTIAL ISSUER CONFIGURATION :</b> 
 ${openidConfigurationResponse != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse) : 'None'}
 ''';
 }
@@ -1068,14 +1068,14 @@ Future<String> getFormattedStringOIDC4VPSIOPV2({
       : null;
 
   final data = '''
-SCHEME : ${getSchemeFromUrl(url)}\n
-AUTHORIZATION REQUEST :
+<b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
+<b>AUTHORIZATION REQUEST :</b>
 ${response != null ? const JsonEncoder.withIndent('  ').convert(response) : 'None'}\n
-CLIENT METADATA  :  
+<b>CLIENT METADATA  :</b>  
 ${clientMetaData != null ? const JsonEncoder.withIndent('  ').convert(clientMetaData) : 'None'}\n
-PRESENTATION DEFINITION  : 
+PRESENTATION DEFINITION  :</b> 
 ${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}\n
-REGISTRATION  : 
+<b>REGISTRATION  :</b> 
 ${registrationMap != null ? const JsonEncoder.withIndent('  ').convert(registrationMap) : 'None'}
 ''';
 
