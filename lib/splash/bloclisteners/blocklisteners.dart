@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -16,7 +15,6 @@ import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dio/dio.dart';
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

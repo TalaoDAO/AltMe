@@ -491,7 +491,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       log.i('uri - $newUrl');
     }
 
-    final responseType = uri.queryParameters['response_type'] ?? '';
+    final responseType = state.uri?.queryParameters['response_type'] ?? '';
 
     /// check required keys available or not
     final keys = <String>[];
