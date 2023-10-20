@@ -436,6 +436,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                     oidc4vc: oidc4vc,
                     isEBSIV3: isEBSIV3,
                     credentialOfferJson: credentialOfferJson,
+                    sendProof: profileCubit
+                        .state.model.enableCryptographicHolderBinding,
                   );
                 },
               ),
@@ -457,6 +459,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       userPin: null,
       credentialOfferJson: credentialOfferJson,
       isEBSIV3: isEBSIV3,
+      sendProof: profileCubit.state.model.enableCryptographicHolderBinding,
     );
   }
 
@@ -1108,6 +1111,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           preAuthorizedCode: preAuthorizedCode,
           codeForAuthorisedFlow: codeForAuthorisedFlow,
           codeVerifier: codeVerifier,
+          sendProof: profileCubit.state.model.enableCryptographicHolderBinding,
         );
       }
 

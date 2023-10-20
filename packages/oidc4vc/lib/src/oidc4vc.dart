@@ -262,6 +262,7 @@ class OIDC4VC {
     required String kid,
     required int indexValue,
     required String privateKey,
+    required bool sendProof,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -336,6 +337,7 @@ class OIDC4VC {
           types: types,
           format: format,
           identifier: identifier,
+          sendProof: sendProof,
         );
 
         credentialResponseData.add(credentialResponseDataValue);
@@ -348,6 +350,7 @@ class OIDC4VC {
         credentialType: credentialType,
         types: types,
         format: format,
+        sendProof: sendProof,
       );
 
       credentialResponseData.add(credentialResponseDataValue);
@@ -362,6 +365,7 @@ class OIDC4VC {
     required String credentialType,
     required List<String> types,
     required String format,
+    required bool sendProof,
     String? identifier,
   }) async {
     final credentialData = await buildCredentialData(
@@ -372,6 +376,7 @@ class OIDC4VC {
       types: types,
       format: format,
       identifier: identifier,
+      sendProof: sendProof,
     );
 
     /// sign proof
@@ -536,6 +541,7 @@ class OIDC4VC {
     required String credentialType,
     required List<String> types,
     required String format,
+    required bool sendProof,
     String? identifier,
   }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
@@ -544,11 +550,14 @@ class OIDC4VC {
       'type': credentialType,
       'types': types,
       'format': format,
-      'proof': {
+    };
+
+    if (sendProof) {
+      credentialData['proof'] = {
         'proof_type': 'jwt',
         'jwt': vcJwt,
-      },
-    };
+      };
+    }
 
     if (identifier != null) {
       credentialData['identifier'] = identifier;

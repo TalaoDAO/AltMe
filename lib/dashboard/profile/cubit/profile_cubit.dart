@@ -120,6 +120,13 @@ class ProfileCubit extends Cubit<ProfileState> {
       final enableJWKThumbprint = enableJWKThumbprintValue != null &&
           enableJWKThumbprintValue == 'true';
 
+      final enableCryptographicHolderBindingValue = await secureStorageProvider
+          .get(SecureStorageKeys.enableCryptographicHolderBinding);
+
+      final enableCryptographicHolderBinding =
+          enableCryptographicHolderBindingValue == null ||
+              enableCryptographicHolderBindingValue == 'true';
+
       final userPINCodeForAuthenticationValue = await secureStorageProvider
           .get(SecureStorageKeys.userPINCodeForAuthentication);
       final userPINCodeForAuthentication =
@@ -153,6 +160,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         isDeveloperMode: isDeveloperMode,
         enable4DigitPINCode: enable4DigitPINCode,
         enableJWKThumbprint: enableJWKThumbprint,
+        enableCryptographicHolderBinding: enableCryptographicHolderBinding,
       );
       await update(profileModel);
     } catch (e, s) {
@@ -262,6 +270,11 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.enableJWKThumbprint.toString(),
       );
 
+      await secureStorageProvider.set(
+        SecureStorageKeys.enableCryptographicHolderBinding,
+        profileModel.enableCryptographicHolderBinding.toString(),
+      );
+
       emit(
         state.copyWith(
           model: profileModel,
@@ -339,6 +352,14 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> updateJWKThumbprintStatus({bool enabled = false}) async {
     final profileModel = state.model.copyWith(enableJWKThumbprint: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> updateCryptographicHolderBindingStatus({
+    bool enabled = false,
+  }) async {
+    final profileModel =
+        state.model.copyWith(enableCryptographicHolderBinding: enabled);
     await update(profileModel);
   }
 
