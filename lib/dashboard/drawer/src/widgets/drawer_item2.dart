@@ -35,30 +35,40 @@ class DrawerItem2 extends StatelessWidget {
         ),
         child: SizedBox(
           width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.drawerItemTitle.copyWith(
-                      color: isDisabled
-                          ? Theme.of(context).colorScheme.lightGrey
-                          : null,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style:
+                          Theme.of(context).textTheme.drawerItemTitle.copyWith(
+                                color: isDisabled
+                                    ? Theme.of(context).colorScheme.lightGrey
+                                    : null,
+                              ),
                     ),
-              ),
-              if (subtitle != null) ...[
-                const SizedBox(height: 10),
-                Text(
-                  subtitle!,
-                  style:
-                      Theme.of(context).textTheme.drawerItemSubtitle.copyWith(
-                            color: isDisabled
-                                ? Theme.of(context).colorScheme.lightGrey
-                                : null,
-                          ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 10),
+                      Text(
+                        subtitle!,
+                        style: Theme.of(context)
+                            .textTheme
+                            .drawerItemSubtitle
+                            .copyWith(
+                              color: isDisabled
+                                  ? Theme.of(context).colorScheme.lightGrey
+                                  : null,
+                            ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ],
                 ),
-                const SizedBox(height: 20),
-              ],
+              ),
               if (trailing != null)
                 trailing!
               else ...[

@@ -136,58 +136,6 @@ class WalletSecurityView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    DrawerItem2(
-                      title: l10n.verifyIssuerWebsiteIdentity,
-                      subtitle: l10n.verifyIssuerWebsiteIdentitySubtitle,
-                      trailing: SizedBox(
-                        height: 25,
-                        child: Switch(
-                          onChanged: (value) async {
-                            await context
-                                .read<ProfileCubit>()
-                                .setUserConsentForIssuerAccess(enabled: value);
-                          },
-                          value: state.model.userConsentForIssuerAccess,
-                          activeColor: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                    DrawerItem2(
-                      title: l10n.confirmVerifierAccess,
-                      subtitle: l10n.confirmVerifierAccessSubtitle,
-                      trailing: SizedBox(
-                        height: 25,
-                        child: Switch(
-                          onChanged: (value) async {
-                            await context
-                                .read<ProfileCubit>()
-                                .setUserConsentForVerifierAccess(
-                                  enabled: value,
-                                );
-                          },
-                          value: state.model.userConsentForVerifierAccess,
-                          activeColor: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                    DrawerItem2(
-                      title: l10n.secureAuthenticationWithPINCode,
-                      subtitle: l10n.secureAuthenticationWithPINCodeSubtitle,
-                      trailing: SizedBox(
-                        height: 25,
-                        child: Switch(
-                          onChanged: (value) async {
-                            await context
-                                .read<ProfileCubit>()
-                                .setUserPINCodeForAuthentication(
-                                  enabled: value,
-                                );
-                          },
-                          value: state.model.userPINCodeForAuthentication,
-                          activeColor: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ),
                     DrawerItem(
                       title: l10n.showWalletRecoveryPhrase,
                       subtitle: l10n.showWalletRecoveryPhraseSubtitle,
@@ -218,6 +166,14 @@ class WalletSecurityView extends StatelessWidget {
                             );
                           }
                         }
+                      },
+                    ),
+                    DrawerItem(
+                      title: l10n.advancedSecuritySettings,
+                      onTap: () {
+                        Navigator.of(context).push<void>(
+                          AdvancedSecuritySettingsMenu.route(),
+                        );
                       },
                     ),
                   ],

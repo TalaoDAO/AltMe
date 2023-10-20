@@ -992,6 +992,7 @@
   "revokedOrSuspendedCredential": "Revoked or Suspended Credential",
   "displayConfiguration": "Display configuration",
   "downloadConfiguration": "Download configuration",
-  "successfullyDownloaded": "Successfully Downloaded"
+  "successfullyDownloaded": "Successfully Downloaded",
+  "advancedSecuritySettings": "Advanced Security Settings"
 }
 

@@ -1027,24 +1027,19 @@ String getFormattedStringOIDC4VCI({
   dynamic credentialOfferJson,
 }) {
   return '''
-SCHEME : ${getSchemeFromUrl(url)}
-\n
+SCHEME : ${getSchemeFromUrl(url)}\n
 CREDENTIAL OFFER  : 
-${credentialOfferJson != null ? const JsonEncoder.withIndent('  ').convert(credentialOfferJson) : 'None'}
-\n
+${credentialOfferJson != null ? const JsonEncoder.withIndent('  ').convert(credentialOfferJson) : 'None'}\n
 ENDPOINTS :
     authorization server endpoint : ${openidConfigurationResponse?['authorization_server'] ?? 'None'}
     token endpoint : ${openidConfigurationResponse?['token_endpoint'] ?? authorizationServerConfiguration?['token_endpoint'] ?? 'None'}
     credential endpoint : ${openidConfigurationResponse?['credential_endpoint'] ?? 'None'}
     deferred endpoint : ${openidConfigurationResponse?['deferred_endpoint'] ?? 'None'}
-    batch endpoint : ${openidConfigurationResponse?['batch_endpoint'] ?? 'None'}
-\n
+    batch endpoint : ${openidConfigurationResponse?['batch_endpoint'] ?? 'None'}\n
 CREDENTIAL SUPPORTED : 
-${openidConfigurationResponse?['credentials_supported'] != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse!['credentials_supported']) : 'None'}
-\n
+${openidConfigurationResponse?['credentials_supported'] != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse!['credentials_supported']) : 'None'}\n
 AUTHORIZATION SERVER CONFIGURATION :
-${authorizationServerConfiguration != null ? const JsonEncoder.withIndent('  ').convert(authorizationServerConfiguration) : 'None'}
-\n
+${authorizationServerConfiguration != null ? const JsonEncoder.withIndent('  ').convert(authorizationServerConfiguration) : 'None'}\n
 CRDENTIAL ISSUER CONFIGURATION : 
 ${openidConfigurationResponse != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse) : 'None'}
 ''';
@@ -1073,17 +1068,13 @@ Future<String> getFormattedStringOIDC4VPSIOPV2({
       : null;
 
   final data = '''
-SCHEME : ${getSchemeFromUrl(url)}
-\n
+SCHEME : ${getSchemeFromUrl(url)}\n
 AUTHORIZATION REQUEST :
-${response != null ? const JsonEncoder.withIndent('  ').convert(response) : 'None'}
-\n
+${response != null ? const JsonEncoder.withIndent('  ').convert(response) : 'None'}\n
 CLIENT METADATA  :  
-${clientMetaData != null ? const JsonEncoder.withIndent('  ').convert(clientMetaData) : 'None'}
-\n
+${clientMetaData != null ? const JsonEncoder.withIndent('  ').convert(clientMetaData) : 'None'}\n
 PRESENTATION DEFINITION  : 
-${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}
-\n
+${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}\n
 REGISTRATION  : 
 ${registrationMap != null ? const JsonEncoder.withIndent('  ').convert(registrationMap) : 'None'}
 ''';
