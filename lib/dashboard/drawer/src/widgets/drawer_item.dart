@@ -33,53 +33,57 @@ class DrawerItem extends StatelessWidget {
             ),
           ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.drawerItemTitle.copyWith(
-                          color: isDisabled
-                              ? Theme.of(context).colorScheme.lightGrey
-                              : null,
-                        ),
-                  ),
-                  if (subtitle != null) ...[
-                    const SizedBox(height: 10),
+        child: SizedBox(
+          width: double.infinity,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      subtitle!,
-                      style: Theme.of(context)
-                          .textTheme
-                          .drawerItemSubtitle
-                          .copyWith(
-                            color: isDisabled
-                                ? Theme.of(context).colorScheme.lightGrey
-                                : null,
-                          ),
+                      title,
+                      style:
+                          Theme.of(context).textTheme.drawerItemTitle.copyWith(
+                                color: isDisabled
+                                    ? Theme.of(context).colorScheme.lightGrey
+                                    : null,
+                              ),
                     ),
-                    const SizedBox(height: 10),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 10),
+                      Text(
+                        subtitle!,
+                        style: Theme.of(context)
+                            .textTheme
+                            .drawerItemSubtitle
+                            .copyWith(
+                              color: isDisabled
+                                  ? Theme.of(context).colorScheme.lightGrey
+                                  : null,
+                            ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
-            if (trailing != null)
-              trailing!
-            else ...[
-              const SizedBox(width: 16),
-              Icon(
-                Icons.chevron_right,
-                size: Sizes.icon2x,
-                color: isDisabled
-                    ? Theme.of(context).colorScheme.lightGrey
-                    : Theme.of(context).colorScheme.unSelectedLabel,
-              ),
+              if (trailing != null)
+                trailing!
+              else ...[
+                const SizedBox(width: 16),
+                Icon(
+                  Icons.chevron_right,
+                  size: Sizes.icon2x,
+                  color: isDisabled
+                      ? Theme.of(context).colorScheme.lightGrey
+                      : Theme.of(context).colorScheme.unSelectedLabel,
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

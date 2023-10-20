@@ -20,6 +20,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required DioClient dioClient,
   required String? userPin,
   required dynamic credentialOfferJson,
+  required bool sendProof,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -109,6 +110,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       preAuthorizedCode: preAuthorizedCode,
       codeForAuthorisedFlow: null,
       codeVerifier: null,
+      sendProof: sendProof,
     );
     oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
     qrCodeScanCubit.goBack();

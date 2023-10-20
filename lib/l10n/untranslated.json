@@ -888,6 +888,8 @@
     "selectOneOfTheDid",
     "subjectSyntaxType",
     "enableToUseTheJWKThumprintOfTheKey",
+    "cryptographicHolderBinding",
+    "cryptographicHolderBindingSubtitle",
     "theServiceIsNotAvailable",
     "download",
     "issuerDID",
@@ -898,7 +900,8 @@
     "revokedOrSuspendedCredential",
     "displayConfiguration",
     "downloadConfiguration",
-    "successfullyDownloaded"
+    "successfullyDownloaded",
+    "advancedSecuritySettings"
   ],
 
   "es": [
@@ -1790,6 +1793,8 @@
     "selectOneOfTheDid",
     "subjectSyntaxType",
     "enableToUseTheJWKThumprintOfTheKey",
+    "cryptographicHolderBinding",
+    "cryptographicHolderBindingSubtitle",
     "theServiceIsNotAvailable",
     "download",
     "issuerDID",
@@ -1800,7 +1805,8 @@
     "revokedOrSuspendedCredential",
     "displayConfiguration",
     "downloadConfiguration",
-    "successfullyDownloaded"
+    "successfullyDownloaded",
+    "advancedSecuritySettings"
   ],
 
   "fr": [
@@ -1995,6 +2001,8 @@
     "selectOneOfTheDid",
     "subjectSyntaxType",
     "enableToUseTheJWKThumprintOfTheKey",
+    "cryptographicHolderBinding",
+    "cryptographicHolderBindingSubtitle",
     "theServiceIsNotAvailable",
     "download",
     "issuerDID",
@@ -2005,7 +2013,8 @@
     "revokedOrSuspendedCredential",
     "displayConfiguration",
     "downloadConfiguration",
-    "successfullyDownloaded"
+    "successfullyDownloaded",
+    "advancedSecuritySettings"
   ],
 
   "it": [
@@ -2897,6 +2906,8 @@
     "selectOneOfTheDid",
     "subjectSyntaxType",
     "enableToUseTheJWKThumprintOfTheKey",
+    "cryptographicHolderBinding",
+    "cryptographicHolderBindingSubtitle",
     "theServiceIsNotAvailable",
     "download",
     "issuerDID",
@@ -2907,6 +2918,7 @@
     "revokedOrSuspendedCredential",
     "displayConfiguration",
     "downloadConfiguration",
-    "successfullyDownloaded"
+    "successfullyDownloaded",
+    "advancedSecuritySettings"
   ]
 }

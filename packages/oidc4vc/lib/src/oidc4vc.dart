@@ -200,21 +200,50 @@ class OIDC4VC {
         'authorization_endpoint': authorizationEndPoint,
         'scopes_supported': ['openid'],
         'response_types_supported': ['vp_token', 'id_token'],
+        'client_id_schemes_supported': ['redirect_uri', 'did'],
+        'grant_types_supported': ['authorization_code', 'pre-authorized_code'],
         'subject_types_supported': ['public'],
-        'id_token_signing_alg_values_supported': ['ES256'],
-        'request_object_signing_alg_values_supported': ['ES256'],
+        'id_token_signing_alg_values_supported': ['ES256', 'ES256K'],
+        'request_object_signing_alg_values_supported': [
+          'ES256',
+          'ES256K',
+        ],
+        'request_parameter_supported': true,
+        'request_uri_parameter_supported': true,
+        'request_authentication_methods_supported': {
+          'authorization_endpoint': ['request_object'],
+        },
         'vp_formats_supported': {
           'jwt_vp': {
-            'alg_values_supported': ['ES256'],
+            'alg_values_supported': [
+              'ES256',
+              'ES256K',
+            ],
           },
           'jwt_vc': {
-            'alg_values_supported': ['ES256'],
+            'alg_values_supported': [
+              'ES256',
+              'ES256K',
+            ],
           },
         },
         'subject_syntax_types_supported': [
           'urn:ietf:params:oauth:jwk-thumbprint',
-          'did🔑jwk_jcs-pub',
+          'did:key',
+          'did:ebsi',
+          'did:tz',
+          'did:pkh',
+          'did:hedera',
+          'did:key',
+          'did:polygonid',
+          'did:ethr',
+          'did:web',
         ],
+        'subject_syntax_types_discriminations': [
+          'did🔑jwk_jcs-pub',
+          'did:ebsi:v1',
+        ],
+        'subject_trust_frameworks_supported': ['ebsi'],
         'id_token_types_supported': ['subject_signed_id_token'],
       }),
     };
@@ -233,6 +262,7 @@ class OIDC4VC {
     required String kid,
     required int indexValue,
     required String privateKey,
+    required bool sendProof,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -307,6 +337,7 @@ class OIDC4VC {
           types: types,
           format: format,
           identifier: identifier,
+          sendProof: sendProof,
         );
 
         credentialResponseData.add(credentialResponseDataValue);
@@ -319,6 +350,7 @@ class OIDC4VC {
         credentialType: credentialType,
         types: types,
         format: format,
+        sendProof: sendProof,
       );
 
       credentialResponseData.add(credentialResponseDataValue);
@@ -333,6 +365,7 @@ class OIDC4VC {
     required String credentialType,
     required List<String> types,
     required String format,
+    required bool sendProof,
     String? identifier,
   }) async {
     final credentialData = await buildCredentialData(
@@ -343,6 +376,7 @@ class OIDC4VC {
       types: types,
       format: format,
       identifier: identifier,
+      sendProof: sendProof,
     );
 
     /// sign proof
@@ -507,6 +541,7 @@ class OIDC4VC {
     required String credentialType,
     required List<String> types,
     required String format,
+    required bool sendProof,
     String? identifier,
   }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
@@ -515,11 +550,14 @@ class OIDC4VC {
       'type': credentialType,
       'types': types,
       'format': format,
-      'proof': {
+    };
+
+    if (sendProof) {
+      credentialData['proof'] = {
         'proof_type': 'jwt',
         'jwt': vcJwt,
-      },
-    };
+      };
+    }
 
     if (identifier != null) {
       credentialData['identifier'] = identifier;

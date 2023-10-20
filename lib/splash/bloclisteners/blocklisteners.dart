@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -16,12 +15,12 @@ import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dio/dio.dart';
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:polygonid/polygonid.dart';
+import 'package:share_plus/share_plus.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
@@ -275,6 +274,8 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     state.uri!.queryParameters['request_uri'];
                 final String? request = state.uri!.queryParameters['request'];
 
+                Map<String, dynamic>? response;
+
                 if (requestUri != null || request != null) {
                   late dynamic encodedData;
                   if (requestUri != null) {
@@ -285,42 +286,22 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   } else {
                     encodedData = request;
                   }
-                  final Map<String, dynamic> response = decodePayload(
+
+                  response = decodePayload(
                     jwtDecode: JWTDecode(),
                     token: encodedData as String,
                   );
 
-                  final presentationDefinition =
-                      response['presentation_definition'];
-                  final presentationDefinitionUri =
-                      response['presentation_definition_uri'];
-
-                  final queryJson = <String, dynamic>{};
-
-                  if (presentationDefinition != null) {
-                    queryJson['presentation_definition'] =
-                        jsonEncode(presentationDefinition).replaceAll('"', "'");
-                  }
-
-                  if (presentationDefinitionUri != null) {
-                    queryJson['presentation_definition_uri'] =
-                        presentationDefinitionUri;
-                  }
-
-                  final String queryString =
-                      Uri(queryParameters: queryJson).query;
-
-                  url = '${state.uri}}&$queryString';
+                  url = getUpdatedUrlForSIOPV2OIC4VP(
+                    url: state.uri.toString(),
+                    response: response,
+                  );
                 }
 
-                final Map<String, dynamic>? presentationDefinitionData =
-                    await getPresentationDefinition(
+                formattedData = await getFormattedStringOIDC4VPSIOPV2(
+                  url: url,
                   client: client,
-                  uri: Uri.parse(url),
-                );
-                formattedData = getFormattedStringOIDC4VPSIOPV2(
-                  url: state.uri.toString(),
-                  presentationDefinition: presentationDefinitionData,
+                  response: response,
                 );
               }
 
@@ -339,42 +320,18 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                           );
                           return;
                         },
-                        onDownload: () async {
+                        onDownload: () {
                           Navigator.of(context).pop(false);
-                          final isPermissionStatusGranted =
-                              await getStoragePermission();
-                          if (!isPermissionStatusGranted) {
-                            throw ResponseMessage(
-                              message: ResponseString
-                                  .STORAGE_PERMISSION_DENIED_MESSAGE,
-                            );
-                          }
 
-                          final dateTime = getDateTimeWithoutSpace();
-                          final fileName = 'oidc4vci-data-$dateTime';
+                          final box = context.findRenderObject() as RenderBox?;
+                          final subject = l10n.shareWith;
 
-                          final fileSaver = FileSaver.instance;
-
-                          final fileBytes =
-                              Uint8List.fromList(utf8.encode(formattedData));
-
-                          final filePath = await fileSaver.saveAs(
-                            name: fileName,
-                            bytes: fileBytes,
-                            ext: 'txt',
-                            mimeType: MimeType.text,
+                          Share.share(
+                            formattedData,
+                            subject: subject,
+                            sharePositionOrigin:
+                                box!.localToGlobal(Offset.zero) & box.size,
                           );
-                          if (filePath != null && filePath.isEmpty) {
-                            //
-                          } else {
-                            AlertMessage.showStateMessage(
-                              context: context,
-                              stateMessage: StateMessage.success(
-                                showDialog: false,
-                                stringMessage: l10n.successfullyDownloaded,
-                              ),
-                            );
-                          }
                         },
                         onSkip: () {
                           Navigator.of(context).pop(true);
