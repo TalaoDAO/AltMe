@@ -16,7 +16,7 @@ class GroupedSection extends StatelessWidget {
       padding: const EdgeInsets.all(Sizes.spaceSmall),
       margin: const EdgeInsets.all(Sizes.spaceXSmall),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.cardHighlighted,
+        color: Theme.of(context).colorScheme.drawerSurface,
         borderRadius: const BorderRadius.all(
           Radius.circular(Sizes.largeRadius),
         ),

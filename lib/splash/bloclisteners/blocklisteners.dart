@@ -18,7 +18,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:polygonid/polygonid.dart';
+import 'package:share_plus/share_plus.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
@@ -206,6 +208,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
       final log = getLogger('qrCodeBlocListener');
 
       final l10n = context.l10n;
+      final client = DioClient('', Dio());
 
       if (state.status == QrScanStatus.loading) {
         LoadingView().show(context: context);
@@ -236,11 +239,119 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   .startsWith(Parameters.authorizeEndPoint) ||
               state.uri.toString().startsWith(Parameters.oidc4vcUniversalLink);
 
-          final OIDC4VCType? oidc4vcTypeForIssuance =
-              await getOIDC4VCTypeForIssuance(
-            url: state.uri.toString(),
-            client: DioClient('', Dio()),
-          );
+          OIDC4VCType? oidc4vcTypeForIssuance;
+
+          if (isOpenIDUrl || isFromDeeplink) {
+            final (
+              OIDC4VCType? oidc4vcType,
+              Map<String, dynamic>? openidConfigurationResponse,
+              Map<String, dynamic>? authorizationServerConfiguration,
+              dynamic credentialOfferJson,
+            ) = await getIssuanceData(
+              url: state.uri.toString(),
+              client: client,
+            );
+
+            oidc4vcTypeForIssuance = oidc4vcType;
+
+            /// if dev mode is ON show some dialog to show data
+            if (profileCubit.state.model.isDeveloperMode) {
+              late String formattedData;
+              if (oidc4vcTypeForIssuance != null) {
+                /// issuance case
+                formattedData = getFormattedStringOIDC4VCI(
+                  url: state.uri.toString(),
+                  authorizationServerConfiguration:
+                      authorizationServerConfiguration,
+                  credentialOfferJson: credentialOfferJson,
+                  openidConfigurationResponse: openidConfigurationResponse,
+                );
+              } else {
+                var url = state.uri!.toString();
+
+                /// verification case
+                final String? requestUri =
+                    state.uri!.queryParameters['request_uri'];
+                final String? request = state.uri!.queryParameters['request'];
+
+                Map<String, dynamic>? response;
+
+                if (requestUri != null || request != null) {
+                  late dynamic encodedData;
+                  if (requestUri != null) {
+                    encodedData = await fetchRequestUriPayload(
+                      url: requestUri,
+                      client: client,
+                    );
+                  } else {
+                    encodedData = request;
+                  }
+
+                  response = decodePayload(
+                    jwtDecode: JWTDecode(),
+                    token: encodedData as String,
+                  );
+
+                  url = getUpdatedUrlForSIOPV2OIC4VP(
+                    url: state.uri.toString(),
+                    response: response,
+                  );
+                }
+
+                formattedData = await getFormattedStringOIDC4VPSIOPV2(
+                  url: url,
+                  client: client,
+                  response: response,
+                );
+              }
+
+              LoadingView().hide();
+              final bool moveAhead = await showDialog<bool>(
+                    context: context,
+                    builder: (_) {
+                      return DeveloperModeDialog(
+                        onDisplay: () async {
+                          Navigator.of(context).pop(false);
+                          await Navigator.of(context).push<void>(
+                            JsonViewerPage.route(
+                              title: l10n.displayConfiguration,
+                              data: formattedData,
+                            ),
+                          );
+                          return;
+                        },
+                        onDownload: () {
+                          Navigator.of(context).pop(false);
+
+                          final box = context.findRenderObject() as RenderBox?;
+                          final subject = l10n.shareWith;
+
+                          Share.share(
+                            formattedData,
+                            subject: subject,
+                            sharePositionOrigin:
+                                box!.localToGlobal(Offset.zero) & box.size,
+                          );
+                        },
+                        onSkip: () {
+                          Navigator.of(context).pop(true);
+                        },
+                      );
+                    },
+                  ) ??
+                  true;
+              if (!moveAhead) return;
+            }
+
+            if (openidConfigurationResponse != null) {
+              await handleErrorForOID4VCI(
+                url: state.uri.toString(),
+                openidConfigurationResponse: openidConfigurationResponse,
+                authorizationServerConfiguration:
+                    authorizationServerConfiguration,
+              );
+            }
+          }
 
           if (showPrompt) {
             if (isOpenIDUrl || isFromDeeplink) {
@@ -267,7 +378,9 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
               if (isOpenIDUrl) {
                 subtitle = await getHost(
-                    uri: state.uri!, client: DioClient('', Dio()));
+                  uri: state.uri!,
+                  client: client,
+                );
               }
 
               LoadingView().hide();

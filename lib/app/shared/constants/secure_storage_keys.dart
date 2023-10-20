@@ -32,6 +32,8 @@ class SecureStorageKeys {
   static const String enable4DigitPINCode = 'enable4DigitPINCode';
   static const String isDeveloperMode = 'isDeveloperMode';
   static const String enableJWKThumbprint = 'enableJWKThumbprint';
+  static const String enableCryptographicHolderBinding =
+      'enableCryptographicHolderBinding';
 
   static const String pinCode = 'pinCode';
   static const String data = 'data';

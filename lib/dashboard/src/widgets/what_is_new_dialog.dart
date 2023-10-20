@@ -76,6 +76,7 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'Developer mode improvement',
                                 'Bug correction',
                               ],
                             ),

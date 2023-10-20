@@ -16,7 +16,10 @@ class PkcePair {
   factory PkcePair.generate({int length = 32}) {
     if (length < 32 || length > 96) {
       throw ArgumentError.value(
-          length, 'length', 'The length must be between 32 and 96, inclusive.');
+        length,
+        'length',
+        'The length must be between 32 and 96, inclusive.',
+      );
     }
 
     final random = Random.secure();

@@ -418,8 +418,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                   }
 
                                   getLogger(
-                                          'CredentialDetailsPage - shared date')
-                                      .i(data);
+                                    'CredentialDetailsPage - shared date',
+                                  ).i(data);
 
                                   final box =
                                       context.findRenderObject() as RenderBox?;
