@@ -463,81 +463,21 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> startSIOPV2OIDC4VPProcess(Uri uri) async {
     final String? requestUri = uri.queryParameters['request_uri'];
     final String? request = uri.queryParameters['request'];
-    dynamic responseType;
 
     /// check if request uri is provided or not
     if (requestUri != null || request != null) {
       /// verifier side (oidc4vp) or (siopv2 oidc4vc) with request_uri
       /// afer verification process
-      final Map<String, dynamic> response =
-          decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
+      final Map<String, dynamic> response = decodePayload(
+        jwtDecode: jwtDecode,
+        token: encodedData as String,
+      );
+
+      final String newUrl = getUpdatedUrlForSIOPV2OIC4VP(
+        url: uri.toString(),
+        response: response,
+      );
       encodedData = null;
-
-      responseType = response['response_type'];
-      final redirectUri = response['redirect_uri'];
-      final scope = response['scope'];
-      final responseUri = response['response_uri'];
-      final responseMode = response['response_mode'];
-      final nonce = response['nonce'];
-      final clientId = response['client_id'];
-      final claims = response['claims'];
-      final stateValue = response['state'];
-      final presentationDefinition = response['presentation_definition'];
-      final presentationDefinitionUri = response['presentation_definition_uri'];
-      final registration = response['registration'];
-
-      final queryJson = <String, dynamic>{};
-
-      if (scope != null) {
-        queryJson['scope'] = scope;
-      }
-
-      if (clientId != null) {
-        queryJson['client_id'] = clientId;
-      }
-
-      if (redirectUri != null) {
-        queryJson['redirect_uri'] = redirectUri;
-      }
-
-      if (responseUri != null) {
-        queryJson['response_uri'] = responseUri;
-      }
-
-      if (responseMode != null) {
-        queryJson['response_mode'] = responseMode;
-      }
-
-      if (nonce != null) {
-        queryJson['nonce'] = nonce;
-      }
-
-      if (stateValue != null) {
-        queryJson['state'] = stateValue;
-      }
-      if (responseType != null) {
-        queryJson['response_type'] = responseType;
-      }
-      if (claims != null) {
-        queryJson['claims'] = jsonEncode(claims).replaceAll('"', "'");
-      }
-      if (presentationDefinition != null) {
-        queryJson['presentation_definition'] =
-            jsonEncode(presentationDefinition).replaceAll('"', "'");
-      }
-
-      if (presentationDefinitionUri != null) {
-        queryJson['presentation_definition_uri'] = presentationDefinitionUri;
-      }
-
-      if (registration != null) {
-        queryJson['registration'] =
-            registration is Map ? jsonEncode(registration) : registration;
-      }
-
-      final String queryString = Uri(queryParameters: queryJson).query;
-
-      final String newUrl = '$uri&$queryString';
 
       emit(
         state.copyWith(
@@ -546,9 +486,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         ),
       );
       log.i('uri - $newUrl');
-    } else {
-      responseType = uri.queryParameters['response_type'] ?? '';
     }
+
+    final responseType = uri.queryParameters['response_type'] ?? '';
 
     /// check required keys available or not
     final keys = <String>[];

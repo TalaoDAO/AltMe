@@ -275,6 +275,8 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     state.uri!.queryParameters['request_uri'];
                 final String? request = state.uri!.queryParameters['request'];
 
+                Map<String, dynamic>? response;
+
                 if (requestUri != null || request != null) {
                   late dynamic encodedData;
                   if (requestUri != null) {
@@ -285,42 +287,22 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   } else {
                     encodedData = request;
                   }
-                  final Map<String, dynamic> response = decodePayload(
+
+                  response = decodePayload(
                     jwtDecode: JWTDecode(),
                     token: encodedData as String,
                   );
 
-                  final presentationDefinition =
-                      response['presentation_definition'];
-                  final presentationDefinitionUri =
-                      response['presentation_definition_uri'];
-
-                  final queryJson = <String, dynamic>{};
-
-                  if (presentationDefinition != null) {
-                    queryJson['presentation_definition'] =
-                        jsonEncode(presentationDefinition).replaceAll('"', "'");
-                  }
-
-                  if (presentationDefinitionUri != null) {
-                    queryJson['presentation_definition_uri'] =
-                        presentationDefinitionUri;
-                  }
-
-                  final String queryString =
-                      Uri(queryParameters: queryJson).query;
-
-                  url = '${state.uri}}&$queryString';
+                  url = getUpdatedUrlForSIOPV2OIC4VP(
+                    url: state.uri.toString(),
+                    response: response,
+                  );
                 }
 
-                final Map<String, dynamic>? presentationDefinitionData =
-                    await getPresentationDefinition(
+                formattedData = await getFormattedStringOIDC4VPSIOPV2(
+                  url: url,
                   client: client,
-                  uri: Uri.parse(url),
-                );
-                formattedData = getFormattedStringOIDC4VPSIOPV2(
-                  url: state.uri.toString(),
-                  presentationDefinition: presentationDefinitionData,
+                  response: response,
                 );
               }
 

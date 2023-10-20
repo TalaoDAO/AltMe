@@ -724,6 +724,40 @@ Future<Map<String, dynamic>?> getPresentationDefinition({
   }
 }
 
+Future<Map<String, dynamic>?> getClientMetada({
+  required Uri uri,
+  required DioClient client,
+}) async {
+  try {
+    final keys = <String>[];
+    uri.queryParameters.forEach((key, value) => keys.add(key));
+
+    if (keys.contains('client_metadata')) {
+      final String clientMetaDataValue =
+          uri.queryParameters['client_metadata'] ?? '';
+
+      final json = jsonDecode(clientMetaDataValue.replaceAll("'", '"'))
+          as Map<String, dynamic>;
+
+      return json;
+    } else if (keys.contains('client_metadata_uri')) {
+      final clientMetaDataUri =
+          uri.queryParameters['client_metadata_uri'].toString();
+      final dynamic response = await client.get(clientMetaDataUri);
+
+      final Map<String, dynamic> data = response == String
+          ? jsonDecode(response.toString()) as Map<String, dynamic>
+          : response as Map<String, dynamic>;
+
+      return data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    return null;
+  }
+}
+
 Future<bool?> isEBSIV3ForVerifiers({
   required Uri uri,
   required DioClient client,
@@ -1016,16 +1050,45 @@ ${openidConfigurationResponse != null ? const JsonEncoder.withIndent('  ').conve
 ''';
 }
 
-String getFormattedStringOIDC4VPSIOPV2({
+Future<String> getFormattedStringOIDC4VPSIOPV2({
   required String url,
-  required Map<String, dynamic>? presentationDefinition,
-}) {
-  return '''
+  required DioClient client,
+  required Map<String, dynamic>? response,
+}) async {
+  final Map<String, dynamic>? presentationDefinition =
+      await getPresentationDefinition(
+    client: client,
+    uri: Uri.parse(url),
+  );
+
+  final Map<String, dynamic>? clientMetaData = await getClientMetada(
+    client: client,
+    uri: Uri.parse(url),
+  );
+
+  final registration = Uri.parse(url).queryParameters['registration'];
+
+  final registrationMap = registration != null
+      ? jsonDecode(registration) as Map<String, dynamic>
+      : null;
+
+  final data = '''
 SCHEME : ${getSchemeFromUrl(url)}
+\n
+AUTHORIZATION REQUEST :
+${response != null ? const JsonEncoder.withIndent('  ').convert(response) : 'None'}
+\n
+CLIENT METADATA  :  
+${clientMetaData != null ? const JsonEncoder.withIndent('  ').convert(clientMetaData) : 'None'}
 \n
 PRESENTATION DEFINITION  : 
 ${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}
+\n
+REGISTRATION  : 
+${registrationMap != null ? const JsonEncoder.withIndent('  ').convert(registrationMap) : 'None'}
 ''';
+
+  return data;
 }
 
 String getSchemeFromUrl(String url) {
@@ -1051,4 +1114,90 @@ Future<dynamic> fetchRequestUriPayload({
     );
   }
   return data;
+}
+
+String getUpdatedUrlForSIOPV2OIC4VP({
+  required String url,
+  required Map<String, dynamic> response,
+}) {
+  final responseType = response['response_type'];
+  final redirectUri = response['redirect_uri'];
+  final scope = response['scope'];
+  final responseUri = response['response_uri'];
+  final responseMode = response['response_mode'];
+  final nonce = response['nonce'];
+  final clientId = response['client_id'];
+  final claims = response['claims'];
+  final stateValue = response['state'];
+  final presentationDefinition = response['presentation_definition'];
+  final presentationDefinitionUri = response['presentation_definition_uri'];
+  final registration = response['registration'];
+  final clientMetadata = response['client_metadata'];
+  final clientMetadataUri = response['client_metadata_uri'];
+
+  final queryJson = <String, dynamic>{};
+
+  if (scope != null) {
+    queryJson['scope'] = scope;
+  }
+
+  if (clientId != null) {
+    queryJson['client_id'] = clientId;
+  }
+
+  if (redirectUri != null) {
+    queryJson['redirect_uri'] = redirectUri;
+  }
+
+  if (responseUri != null) {
+    queryJson['response_uri'] = responseUri;
+  }
+
+  if (responseMode != null) {
+    queryJson['response_mode'] = responseMode;
+  }
+
+  if (nonce != null) {
+    queryJson['nonce'] = nonce;
+  }
+
+  if (stateValue != null) {
+    queryJson['state'] = stateValue;
+  }
+
+  if (responseType != null) {
+    queryJson['response_type'] = responseType;
+  }
+
+  if (claims != null) {
+    queryJson['claims'] = jsonEncode(claims).replaceAll('"', "'");
+  }
+
+  if (presentationDefinition != null) {
+    queryJson['presentation_definition'] =
+        jsonEncode(presentationDefinition).replaceAll('"', "'");
+  }
+
+  if (presentationDefinitionUri != null) {
+    queryJson['presentation_definition_uri'] = presentationDefinitionUri;
+  }
+
+  if (registration != null) {
+    queryJson['registration'] =
+        registration is Map ? jsonEncode(registration) : registration;
+  }
+
+  if (clientMetadata != null) {
+    queryJson['client_metadata'] =
+        jsonEncode(clientMetadata).replaceAll('"', "'");
+  }
+
+  if (clientMetadataUri != null) {
+    queryJson['client_metadata_uri'] = clientMetadataUri;
+  }
+
+  final String queryString = Uri(queryParameters: queryJson).query;
+
+  final String newUrl = '$url&$queryString';
+  return newUrl;
 }
