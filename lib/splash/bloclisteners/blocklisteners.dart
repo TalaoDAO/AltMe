@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:polygonid/polygonid.dart';
+import 'package:share_plus/share_plus.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
@@ -321,42 +322,18 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                           );
                           return;
                         },
-                        onDownload: () async {
+                        onDownload: () {
                           Navigator.of(context).pop(false);
-                          final isPermissionStatusGranted =
-                              await getStoragePermission();
-                          if (!isPermissionStatusGranted) {
-                            throw ResponseMessage(
-                              message: ResponseString
-                                  .STORAGE_PERMISSION_DENIED_MESSAGE,
-                            );
-                          }
 
-                          final dateTime = getDateTimeWithoutSpace();
-                          final fileName = 'oidc4vci-data-$dateTime';
+                          final box = context.findRenderObject() as RenderBox?;
+                          final subject = l10n.shareWith;
 
-                          final fileSaver = FileSaver.instance;
-
-                          final fileBytes =
-                              Uint8List.fromList(utf8.encode(formattedData));
-
-                          final filePath = await fileSaver.saveAs(
-                            name: fileName,
-                            bytes: fileBytes,
-                            ext: 'txt',
-                            mimeType: MimeType.text,
+                          Share.share(
+                            formattedData,
+                            subject: subject,
+                            sharePositionOrigin:
+                                box!.localToGlobal(Offset.zero) & box.size,
                           );
-                          if (filePath != null && filePath.isEmpty) {
-                            //
-                          } else {
-                            AlertMessage.showStateMessage(
-                              context: context,
-                              stateMessage: StateMessage.success(
-                                showDialog: false,
-                                stringMessage: l10n.successfullyDownloaded,
-                              ),
-                            );
-                          }
                         },
                         onSkip: () {
                           Navigator.of(context).pop(true);
