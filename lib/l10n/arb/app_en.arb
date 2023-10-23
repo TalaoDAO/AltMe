@@ -995,6 +995,7 @@
   "displayConfiguration": "Display configuration",
   "downloadConfiguration": "Download configuration",
   "successfullyDownloaded": "Successfully Downloaded",
-  "advancedSecuritySettings": "Advanced Security Settings"
+  "advancedSecuritySettings": "Advanced Security Settings",
+  "clientMetadata": "Client Metadata"
 }
 
