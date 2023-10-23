@@ -1024,7 +1024,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       if (url != null) {
         final uri = Uri.parse(url);
         if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
-          await authorizedFlowCompletion(uri);
+          await authorizedFlowStart(uri);
           return;
         }
       }
@@ -1135,51 +1135,24 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
   }
 
-  Future<void> authorizedFlowCompletion(Uri uri) async {
+  Future<void> authorizedFlowStart(Uri uri) async {
+    emit(
+      state.copyWith(
+        uri: uri,
+        qrScanStatus: QrScanStatus.authorizationFlow,
+      ),
+    );
+  }
+
+  Future<void> authorizedFlowCompletion({
+    required Map<String, dynamic> statePayload,
+    required String codeForAuthorisedFlow,
+  }) async {
     try {
-      final error = uri.queryParameters['error'];
-      final errorDescription = uri.queryParameters['error_description'];
-
-      if (error != null) {
-        throw ResponseMessage(
-          data: {
-            'error': error,
-            'error_description': errorDescription,
-          },
-        );
-      }
-
-      final codeForAuthorisedFlow = uri.queryParameters['code'];
-      final state = uri.queryParameters['state'];
-
-      if (codeForAuthorisedFlow == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'The code is missing.',
-          },
-        );
-      }
-      if (state == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'The state is missing.',
-          },
-        );
-      }
-      await dotenv.load();
-      final String authorizationUriSecretKey =
-          dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
-
-      final jwt = JWT.verify(state, SecretKey(authorizationUriSecretKey));
-
-      final payload = jwt.payload as Map<String, dynamic>;
-
-      final containsAllRequiredKey = payload.containsKey('credentials') &&
-          payload.containsKey('codeVerifier') &&
-          payload.containsKey('issuer') &&
-          payload.containsKey('isEBSIV3');
+      final containsAllRequiredKey = statePayload.containsKey('credentials') &&
+          statePayload.containsKey('codeVerifier') &&
+          statePayload.containsKey('issuer') &&
+          statePayload.containsKey('isEBSIV3');
 
       if (!containsAllRequiredKey) {
         throw ResponseMessage(
@@ -1190,10 +1163,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
 
-      final selectedCredentials = payload['credentials'] as List<dynamic>;
-      final String codeVerifier = payload['codeVerifier'].toString();
-      final String issuer = payload['issuer'].toString();
-      final bool isEBSIV3 = payload['isEBSIV3'] as bool;
+      final selectedCredentials = statePayload['credentials'] as List<dynamic>;
+      final String codeVerifier = statePayload['codeVerifier'].toString();
+      final String issuer = statePayload['issuer'].toString();
+      final bool isEBSIV3 = statePayload['isEBSIV3'] as bool;
 
       await addCredentialsInLoop(
         selectedCredentials: selectedCredentials,

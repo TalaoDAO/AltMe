@@ -1045,6 +1045,20 @@ ${openidConfigurationResponse != null ? const JsonEncoder.withIndent('  ').conve
 ''';
 }
 
+String getFormattedStringOIDC4VCIAuthorizedCodeFlow({
+  required String url,
+  Map<String, dynamic>? statePayload,
+  Map<String, dynamic>? codeForAuthorisedFlowPayload,
+}) {
+  return '''
+<b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
+<b>STATE  :</b> 
+${statePayload != null ? const JsonEncoder.withIndent('  ').convert(statePayload) : 'None'}\n 
+<b>CODE  :</b> 
+${codeForAuthorisedFlowPayload != null ? const JsonEncoder.withIndent('  ').convert(codeForAuthorisedFlowPayload) : 'None'}
+''';
+}
+
 Future<String> getFormattedStringOIDC4VPSIOPV2({
   required String url,
   required DioClient client,
