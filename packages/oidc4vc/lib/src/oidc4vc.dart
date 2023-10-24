@@ -204,47 +204,33 @@ class OIDC4VC {
         'grant_types_supported': ['authorization_code', 'pre-authorized_code'],
         'subject_types_supported': ['public'],
         'id_token_signing_alg_values_supported': ['ES256', 'ES256K'],
-        'request_object_signing_alg_values_supported': [
-          'ES256',
-          'ES256K',
-        ],
+        'request_object_signing_alg_values_supported': ['ES256', 'ES256K'],
         'request_parameter_supported': true,
         'request_uri_parameter_supported': true,
         'request_authentication_methods_supported': {
-          'authorization_endpoint': ['request_object'],
+          'authorization_endpoint': ['request_object']
         },
         'vp_formats_supported': {
           'jwt_vp': {
-            'alg_values_supported': [
-              'ES256',
-              'ES256K',
-            ],
+            'alg_values_supported': ['ES256', 'ES256K']
           },
           'jwt_vc': {
-            'alg_values_supported': [
-              'ES256',
-              'ES256K',
-            ],
-          },
+            'alg_values_supported': ['ES256', 'ES256K']
+          }
         },
         'subject_syntax_types_supported': [
           'urn:ietf:params:oauth:jwk-thumbprint',
           'did:key',
-          'did:ebsi',
-          'did:tz',
           'did:pkh',
-          'did:hedera',
           'did:key',
-          'did:polygonid',
-          'did:ethr',
-          'did:web',
+          'did:polygonid'
         ],
         'subject_syntax_types_discriminations': [
           'did🔑jwk_jcs-pub',
-          'did:ebsi:v1',
+          'did:ebsi:v1'
         ],
         'subject_trust_frameworks_supported': ['ebsi'],
-        'id_token_types_supported': ['subject_signed_id_token'],
+        'id_token_types_supported': ['subject_signed_id_token']
       }),
     };
     return myRequest;
