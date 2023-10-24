@@ -996,5 +996,5 @@
   "downloadConfiguration": "Download configuration",
   "successfullyDownloaded": "Successfully Downloaded",
   "advancedSecuritySettings": "Advanced Security Settings",
-  "clientMetadata": "Client metadata"
+  "clientMetadata": "Wallet metadata"
 }
