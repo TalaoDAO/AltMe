@@ -347,7 +347,10 @@ abstract class ConstantsJson {
       'did:key',
       'did:polygonid'
     ],
-    'subject_syntax_types_discriminations': ['did🔑jwk_jcs-pub', 'did:ebsi:v1'],
+    'subject_syntax_types_discriminations': [
+      'did:key:jwk_jcs-pub',
+      'did:ebsi:v1'
+    ],
     'subject_trust_frameworks_supported': ['ebsi'],
     'id_token_types_supported': ['subject_signed_id_token']
   };
