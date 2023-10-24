@@ -51,7 +51,8 @@ Future<void> getAuthorizationUriForIssuer({
 
   final jwtToken = jwt.sign(SecretKey(authorizationUriSecretKey));
 
-  final Uri ebsiAuthenticationUri = await oidc4vc.getAuthorizationUriForIssuer(
+  final Uri oidc4vcAuthenticationUri =
+      await oidc4vc.getAuthorizationUriForIssuer(
     selectedCredentials: selectedCredentials,
     clientId: did,
     redirectUri: Parameters.oidc4vcUniversalLink,
@@ -62,5 +63,6 @@ Future<void> getAuthorizationUriForIssuer({
     state: jwtToken,
     authorizationEndPoint: Parameters.authorizeEndPoint,
   );
-  await LaunchUrl.launchUri(ebsiAuthenticationUri);
+
+  await LaunchUrl.launchUri(oidc4vcAuthenticationUri);
 }

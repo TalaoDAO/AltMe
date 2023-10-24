@@ -901,7 +901,8 @@
     "displayConfiguration",
     "downloadConfiguration",
     "successfullyDownloaded",
-    "advancedSecuritySettings"
+    "advancedSecuritySettings",
+    "clientMetadata"
   ],
 
   "es": [
@@ -1806,7 +1807,8 @@
     "displayConfiguration",
     "downloadConfiguration",
     "successfullyDownloaded",
-    "advancedSecuritySettings"
+    "advancedSecuritySettings",
+    "clientMetadata"
   ],
 
   "fr": [
@@ -2014,7 +2016,8 @@
     "displayConfiguration",
     "downloadConfiguration",
     "successfullyDownloaded",
-    "advancedSecuritySettings"
+    "advancedSecuritySettings",
+    "clientMetadata"
   ],
 
   "it": [
@@ -2919,6 +2922,7 @@
     "displayConfiguration",
     "downloadConfiguration",
     "successfullyDownloaded",
-    "advancedSecuritySettings"
+    "advancedSecuritySettings",
+    "clientMetadata"
   ]
 }
