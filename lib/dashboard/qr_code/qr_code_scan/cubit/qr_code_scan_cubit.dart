@@ -14,12 +14,10 @@ import 'package:altme/scan/scan.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -753,25 +751,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   ) async {
     if (presentationDefinition != null &&
         presentationDefinition.inputDescriptors.isNotEmpty) {
-      for (final descriptor in presentationDefinition.inputDescriptors) {
-        /// using JsonPath to find credential Name
-        final dynamic json = jsonDecode(jsonEncode(descriptor.constraints));
-        final dynamic credentialField =
-            (JsonPath(r'$..fields').read(json).first.value as List)
-                .toList()
-                .first;
+      final credentialList = credentialsCubit.state.credentials;
+      for (var index = 0;
+          index < presentationDefinition.inputDescriptors.length;
+          index++) {
+        final filteredCredentialList = getCredentialsFromPresentationDefinition(
+          presentationDefinition: presentationDefinition,
+          credentialList: List.from(credentialList),
+          inputDescriptorIndex: index,
+        );
 
-        if (credentialField['filter'] == null) {
-          continue;
-        }
+        index++;
 
-        final Filter filter =
-            Filter.fromJson(credentialField['filter'] as Map<String, dynamic>);
-
-        final credentialName = filter.pattern ?? filter.contains!.containsConst;
-
-        final isPresentable = await isCredentialPresentable(credentialName);
-        if (!isPresentable) {
+        if (filteredCredentialList.isEmpty) {
           return false;
         }
       }
