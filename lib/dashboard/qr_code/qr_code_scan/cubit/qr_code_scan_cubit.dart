@@ -763,9 +763,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           credentialList: List.from(credentialList),
           inputDescriptorIndex: index,
         );
-
-        index++;
-
         if (filteredCredentialList.isEmpty) {
           return false;
         }
