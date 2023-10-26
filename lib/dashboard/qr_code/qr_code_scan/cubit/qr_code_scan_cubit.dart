@@ -5,6 +5,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/credential_manifest/helpers/apply_submission_requirements.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
@@ -19,7 +20,6 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -751,12 +751,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   ) async {
     if (presentationDefinition != null &&
         presentationDefinition.inputDescriptors.isNotEmpty) {
+      final newPresentationDefinition =
+          applySubmissionRequirements(presentationDefinition);
+
       final credentialList = credentialsCubit.state.credentials;
       for (var index = 0;
-          index < presentationDefinition.inputDescriptors.length;
+          index < newPresentationDefinition.inputDescriptors.length;
           index++) {
         final filteredCredentialList = getCredentialsFromPresentationDefinition(
-          presentationDefinition: presentationDefinition,
+          presentationDefinition: newPresentationDefinition,
           credentialList: List.from(credentialList),
           inputDescriptorIndex: index,
         );
