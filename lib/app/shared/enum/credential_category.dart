@@ -107,7 +107,7 @@ extension CredentialCategoryX on CredentialCategory {
         return [];
       case CredentialCategory.socialMediaCards:
         return [
-          CredentialSubjectType.twitterCard,
+          //CredentialSubjectType.twitterCard,
         ];
       case CredentialCategory.walletIntegrity:
         return [];
