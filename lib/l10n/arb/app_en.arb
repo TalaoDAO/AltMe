@@ -996,5 +996,6 @@
   "downloadConfiguration": "Download configuration",
   "successfullyDownloaded": "Successfully Downloaded",
   "advancedSecuritySettings": "Advanced Security Settings",
-  "clientMetadata": "Wallet metadata"
+  "clientMetadata": "Wallet metadata",
+  "theIssuanceOfThisCredentialIsPending": "The issuance of this credential is pending"
 }

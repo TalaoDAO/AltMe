@@ -989,6 +989,10 @@ ResponseString getErrorResponseString(String errorString) {
     case 'server_error':
       return ResponseString.RESPONSE_STRING_theServiceIsNotAvailable;
 
+    case 'issuance_pending':
+      return ResponseString
+          .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending;
+
     default:
       return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
   }
