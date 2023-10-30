@@ -468,13 +468,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
             /// if dev mode is ON show some dialog to show data
             if (profileCubit.state.model.isDeveloperMode) {
-              final codeForAuthorisedFlowPayload =
-                  JWTDecode().parseJwt(codeForAuthorisedFlow);
-
               final String formattedData =
                   getFormattedStringOIDC4VCIAuthorizedCodeFlow(
                 url: state.uri.toString(),
-                codeForAuthorisedFlowPayload: codeForAuthorisedFlowPayload,
+                codeForAuthorisedFlow: codeForAuthorisedFlow,
                 statePayload: statePayload,
               );
 
