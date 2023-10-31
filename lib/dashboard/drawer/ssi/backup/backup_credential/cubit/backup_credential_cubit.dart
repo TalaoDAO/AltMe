@@ -49,15 +49,25 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
 
       final credentialModels = credentialsCubit.state.credentials;
 
-      final String p256Key = await getP256PrivateKey(secureStorageProvider);
-      final String ebsiP256Key =
-          await getEBSIV3P256PrivateKey(secureStorageProvider);
+      final String p256Key = await getPrivateKey(
+        secureStorage: secureStorageProvider,
+        didKeyType: DidKeyType.p256,
+      );
+      final String jwkP256Key = await getPrivateKey(
+        secureStorage: secureStorageProvider,
+        didKeyType: DidKeyType.jwkP256,
+      );
+      final String ebsiP256Key = await getPrivateKey(
+        secureStorage: secureStorageProvider,
+        didKeyType: DidKeyType.ebsiv3,
+      );
 
       final date = UiDate.formatDate(DateTime.now());
       final message = {
         'date': date,
         'p256Key': p256Key,
         'ebsiP256Key': ebsiP256Key,
+        'jwkP256Key': jwkP256Key,
         'credentials': credentialModels,
       };
 

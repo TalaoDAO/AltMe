@@ -68,13 +68,11 @@ class ScanCubit extends Cubit<ScanState> {
         //     await isEBSIV3ForVerifier(client: client, uri: uri) ?? false;
 
         final privateKey = await fetchPrivateKey(
-          isEBSIV3: null, //isEBSIV3 ?? false,
           oidc4vc: oidc4vc,
           secureStorage: secureStorageProvider,
         );
 
-        final (did, kid) = await getDidAndKid(
-          isEBSIV3: null, //isEBSIV3 ?? false,
+        final (did, kid) = await fetchDidAndKid(
           privateKey: privateKey,
           didKitProvider: didKitProvider,
           secureStorage: secureStorageProvider,

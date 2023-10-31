@@ -981,13 +981,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       //     await isEBSIV3ForVerifier(client: client, uri: state.uri!);
 
       final privateKey = await fetchPrivateKey(
-        isEBSIV3: null, //isEBSIV3 ?? false,
         oidc4vc: oidc4vc,
         secureStorage: secureStorageProvider,
       );
 
-      final (did, kid) = await getDidAndKid(
-        isEBSIV3: null, //isEBSIV3 ?? false,
+      final (did, kid) = await fetchDidAndKid(
         privateKey: privateKey,
         didKitProvider: didKitProvider,
         secureStorage: secureStorageProvider,

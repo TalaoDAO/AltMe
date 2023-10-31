@@ -978,6 +978,7 @@
   "theCredentialOfferIsInvalid": "The credential offer is invalid",
   "dateOfRequest": "Date of Request",
   "keyDecentralizedIDP256": "Key Decentralized ID P-256",
+  "jwkDecentralizedIDP256": "JWK Decentralized ID P-256",
   "defaultDid": "Default DID",
   "selectOneOfTheDid": "Select one of the DIDs",
   "subjectSyntaxType": "Subject syntax type",

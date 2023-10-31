@@ -3,29 +3,43 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class DidP256PrivateKeyPage extends StatefulWidget {
-  const DidP256PrivateKeyPage({super.key});
+class OtherDidPrivateKeyPage extends StatefulWidget {
+  const OtherDidPrivateKeyPage({
+    super.key,
+    required this.didKeyType,
+  });
 
-  static Route<dynamic> route() {
+  final DidKeyType didKeyType;
+
+  static Route<dynamic> route({
+    required DidKeyType didKeyType,
+  }) {
     return MaterialPageRoute<void>(
-      builder: (_) => const DidP256PrivateKeyPage(),
-      settings: const RouteSettings(name: '/DidP256PrivateKeyPage'),
+      builder: (_) => OtherDidPrivateKeyPage(
+        didKeyType: didKeyType,
+      ),
+      settings: const RouteSettings(name: '/OtherDidPrivateKeyPage'),
     );
   }
 
   @override
-  State<DidP256PrivateKeyPage> createState() => _DidP256PrivateKeyPageState();
+  State<OtherDidPrivateKeyPage> createState() => _OtherDidPrivateKeyPageState();
 }
 
-class _DidP256PrivateKeyPageState extends State<DidP256PrivateKeyPage>
+class _OtherDidPrivateKeyPageState extends State<OtherDidPrivateKeyPage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
 
   Future<String> getKey() async {
-    final privateKey = await getP256PrivateKey(getSecureStorage);
+    final privateKey = await getPrivateKey(
+      secureStorage: getSecureStorage,
+      didKeyType: DidKeyType.ebsiv3,
+      oidc4vc: OIDC4VC(),
+    );
     return privateKey;
   }
 

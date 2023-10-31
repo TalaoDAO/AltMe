@@ -23,7 +23,7 @@ Future<void> getAuthorizationUriForIssuer({
     secureStorage: getSecureStorage,
   );
 
-  final (did, _) = await getDidAndKid(
+  final (did, _) = await fetchDidAndKid(
     isEBSIV3: isEBSIV3,
     privateKey: privateKey,
     didKitProvider: didKitProvider,

@@ -66,6 +66,7 @@ class SecureStorageKeys {
 
   static const String p256PrivateKey = 'p256PrivateKey';
   static const String p256PrivateKey2 = 'p256PrivateKey2';
+  static const String p256PrivateKey3 = 'p256PrivateKey3';
 
   static const String cryptoAccount = 'cryptoAccount';
   static const String cryptoAccounTrackingIndex = 'cryptoAccounTrackingIndex';
