@@ -19,11 +19,11 @@ extension DidKeyTypeX on DidKeyType {
   String getTitle(AppLocalizations l10n) {
     switch (this) {
       case DidKeyType.secp256k1:
-        return l10n.manageKeyDecentralizedIDSecp256k1;
+        return l10n.keyDecentralizedIDSecp256k1;
       case DidKeyType.p256:
         return l10n.keyDecentralizedIDP256;
       case DidKeyType.ebsiv3:
-        return l10n.manageEbsiV3DecentralizedId;
+        return l10n.ebsiV3DecentralizedId;
       case DidKeyType.jwkP256:
         return l10n.jwkDecentralizedIDP256;
     }

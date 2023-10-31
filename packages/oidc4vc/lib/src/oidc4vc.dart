@@ -72,10 +72,10 @@ class OIDC4VC {
     /// the same as secp256k1, but we are using secp256k1 now
     final jwk = {
       'crv': 'secp256k1',
-      'd': d,
+      'd': d.replaceAll('=', ''),
       'kty': 'EC',
-      'x': x,
-      'y': y,
+      'x': x.replaceAll('=', ''),
+      'y': y.replaceAll('=', ''),
     };
     return jwk;
   }

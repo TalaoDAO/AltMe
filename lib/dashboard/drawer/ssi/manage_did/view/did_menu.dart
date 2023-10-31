@@ -48,7 +48,7 @@ class DidView extends StatelessWidget {
                   height: Sizes.spaceSmall,
                 ),
                 DrawerItem(
-                  title: l10n.manageKeyDecentralizedIdEdSA,
+                  title: l10n.keyDecentralizedIdEdSA,
                   onTap: () {
                     Navigator.of(context)
                         .push<void>(ManageDIDEdDSAPage.route());

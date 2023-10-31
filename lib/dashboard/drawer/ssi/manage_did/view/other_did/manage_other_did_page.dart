@@ -51,7 +51,7 @@ class _ManageDidEbsiPageState extends State<ManageOtherDidPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.manageEbsiV3DecentralizedId,
+      title: l10n.decentralizedIDKey,
       titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),

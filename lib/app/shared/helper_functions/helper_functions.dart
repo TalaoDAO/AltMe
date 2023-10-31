@@ -252,22 +252,16 @@ Future<String> getPrivateKey({
 }) async {
   late String storageKey;
 
-  if (didKeyType == DidKeyType.secp256k1) {
-    if (oidc4vc == null) throw Exception();
-    final mnemonic = await secureStorage.get(SecureStorageKeys.ssiMnemonic);
-    final index = getIndexValue(isEBSIV3: true);
-    final key = await oidc4vc.privateKeyFromMnemonic(
-      mnemonic: mnemonic!,
-      indexValue: index,
-    );
-    return key;
-  }
-
-  /// for other than DidKeyType.secp256k1
-
   switch (didKeyType) {
     case DidKeyType.secp256k1:
-      throw Exception();
+      if (oidc4vc == null) throw Exception();
+      final mnemonic = await secureStorage.get(SecureStorageKeys.ssiMnemonic);
+      final index = getIndexValue(isEBSIV3: true);
+      final key = await oidc4vc.privateKeyFromMnemonic(
+        mnemonic: mnemonic!,
+        indexValue: index,
+      );
+      return key;
 
     case DidKeyType.p256:
       storageKey = SecureStorageKeys.p256PrivateKey;
@@ -277,10 +271,11 @@ Future<String> getPrivateKey({
       storageKey = SecureStorageKeys.p256PrivateKey3;
   }
 
+  /// return key if it is already created
   final String? p256PrivateKey = await secureStorage.get(storageKey);
+  if (p256PrivateKey != null) return p256PrivateKey.replaceAll('=', '');
 
-  if (p256PrivateKey != null) return p256PrivateKey;
-
+  /// create key if it is not created
   final jwk = JsonWebKey.generate('ES256');
 
   final json = jwk.toJson();
@@ -290,9 +285,11 @@ Future<String> getPrivateKey({
     json.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
   )..remove('keyOperations');
 
-  await secureStorage.set(storageKey, jsonEncode(sortedJwk));
+  final newKey = jsonEncode(sortedJwk).replaceAll('=', '');
 
-  return jsonEncode(sortedJwk);
+  await secureStorage.set(storageKey, newKey);
+
+  return newKey;
 }
 
 DidKeyType? getDidKeyFromString(String? didKeyTypeString) {
@@ -444,7 +441,7 @@ Future<(String, String)> getDidAndKid({
       final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
       final List<int> prefix = prefixByteList.map((byte) => byte).toList();
 
-      final encodedData = sortedPublcJwk(private);
+      final encodedData = sortedPublcJwkBytes(private);
       final encodedAddress = Base58Encode([...prefix, ...encodedData]);
 
       did = 'did:key:z$encodedAddress';
@@ -452,13 +449,17 @@ Future<(String, String)> getDidAndKid({
       kid = '$did#$lastPart';
     case DidKeyType.jwkP256:
       final private = jsonDecode(privateKey) as Map<String, dynamic>;
-      final base64EncodedJWK = base64UrlEncode(utf8.encode(private.toString()));
+
+      final encodedData = sortedPublcJwkBytes(private);
+
+      final base64EncodedJWK = base64UrlEncode(encodedData);
       did = 'did:jwk:$base64EncodedJWK';
 
       kid = '$did#0';
     case DidKeyType.p256:
     case DidKeyType.secp256k1:
       if (didKitProvider == null) throw Exception();
+
       const didMethod = AltMeStrings.defaultDIDMethod;
       did = didKitProvider.keyToDID(didMethod, privateKey);
       kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
@@ -502,7 +503,7 @@ Future<(String, String)> fetchDidAndKid({
   return (did, kid);
 }
 
-List<int> sortedPublcJwk(Map<String, dynamic> privateKey) {
+List<int> sortedPublcJwkBytes(Map<String, dynamic> privateKey) {
   final publicJWK = Map.of(privateKey)..removeWhere((key, value) => key == 'd');
 
   /// we use crv P-256K in the rest of the package to ensure compatibility

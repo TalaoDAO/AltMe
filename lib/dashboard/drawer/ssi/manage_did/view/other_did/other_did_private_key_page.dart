@@ -73,7 +73,7 @@ class _OtherDidPrivateKeyPageState extends State<OtherDidPrivateKeyPage>
     final l10n = context.l10n;
     return BasePage(
       scrollView: false,
-      title: l10n.decentralizedIDKey,
+      title: widget.didKeyType.getTitle(l10n),
       titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       secureScreen: true,
