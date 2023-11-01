@@ -306,26 +306,31 @@ class OIDC4VC {
     if (authorizationDetails != null) {
       final dynamic authDetailForCredential = authorizationDetails!
           .where(
-            (dynamic element) =>
-                (element['types'] as List).contains(credentialType),
+            (dynamic ele) =>
+                ele is Map<String, dynamic> &&
+                ((ele.containsKey('types') &&
+                        (ele['types'] as List).contains(credentialType)) ||
+                    (ele.containsKey('credential_definition') &&
+                        (ele['credential_definition']['type'] as List)
+                            .contains(credentialType))),
           )
           .firstOrNull;
 
       if (authDetailForCredential == null) throw Exception();
 
-      final identifiers =
-          (authDetailForCredential['identifiers'] as List<dynamic>)
+      final credentialIdentifiers =
+          (authDetailForCredential['credential_identifiers'] as List<dynamic>)
               .map((dynamic element) => element.toString())
               .toList();
 
-      for (final identifier in identifiers) {
+      for (final credentialIdentifier in credentialIdentifiers) {
         final credentialResponseDataValue = await getSingleCredential(
           issuerTokenParameters: issuerTokenParameters,
           openidConfigurationResponse: openidConfigurationResponse,
           credentialType: credentialType,
           types: types,
           format: format,
-          identifier: identifier,
+          credentialIdentifier: credentialIdentifier,
           sendProof: sendProof,
         );
 
@@ -355,7 +360,7 @@ class OIDC4VC {
     required List<String> types,
     required String format,
     required bool sendProof,
-    String? identifier,
+    String? credentialIdentifier,
   }) async {
     final credentialData = await buildCredentialData(
       nonce: nonce!,
@@ -364,7 +369,7 @@ class OIDC4VC {
       credentialType: credentialType,
       types: types,
       format: format,
-      identifier: identifier,
+      credentialIdentifier: credentialIdentifier,
       sendProof: sendProof,
     );
 
@@ -531,14 +536,13 @@ class OIDC4VC {
     required List<String> types,
     required String format,
     required bool sendProof,
-    String? identifier,
+    String? credentialIdentifier,
   }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
 
     final credentialData = <String, dynamic>{
       'type': credentialType,
       'types': types,
-      'format': format,
     };
 
     if (sendProof) {
@@ -548,8 +552,11 @@ class OIDC4VC {
       };
     }
 
-    if (identifier != null) {
-      credentialData['identifier'] = identifier;
+    if (credentialIdentifier != null) {
+      credentialData['credential_identifier'] = credentialIdentifier;
+    } else {
+      /// add format if credential_identifier is absent
+      credentialData['format'] = format;
     }
 
     return credentialData;
