@@ -316,7 +316,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                           Navigator.of(context).pop(false);
                           await Navigator.of(context).push<void>(
                             JsonViewerPage.route(
-                              title: l10n.displayConfiguration,
+                              title: l10n.display,
                               data: formattedData,
                             ),
                           );
@@ -484,7 +484,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                           Navigator.of(context).pop(false);
                           await Navigator.of(context).push<void>(
                             JsonViewerPage.route(
-                              title: l10n.displayConfiguration,
+                              title: l10n.display,
                               data: formattedData,
                             ),
                           );
