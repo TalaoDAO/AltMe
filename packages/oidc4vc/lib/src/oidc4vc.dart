@@ -151,10 +151,13 @@ class OIDC4VC {
 
         dynamic credentailData;
 
-        for (final dynamic credSupported in credentialsSupported) {
-          if ((credSupported as Map<String, dynamic>)['id'].toString() ==
-              credential) {
-            credentailData = credSupported;
+        for (final dynamic cred in credentialsSupported) {
+          if (cred is Map<String, dynamic> &&
+              ((cred.containsKey('scope') &&
+                      cred['scope'].toString() == credential) ||
+                  (cred.containsKey('id') &&
+                      cred['id'].toString() == credential))) {
+            credentailData = cred;
             break;
           }
         }
