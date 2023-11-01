@@ -604,15 +604,28 @@ class ScanCubit extends Cubit<ScanState> {
 
     final inputDescriptors = <Map<String, dynamic>>[];
 
-    final presentLdpVc = presentationDefinition.format?.ldpVc != null;
-    final presentJwtVc = presentationDefinition.format?.jwtVc != null;
+    final ldpVc = presentationDefinition.format?.ldpVc != null;
+    final jwtVc = presentationDefinition.format?.jwtVc != null;
 
-    String? format;
+    String? vcFormat;
 
-    if (presentLdpVc) {
-      format = 'ldp_vc';
-    } else if (presentJwtVc) {
-      format = 'jwt_vc';
+    if (ldpVc) {
+      vcFormat = 'ldp_vc';
+    } else if (jwtVc) {
+      vcFormat = 'jwt_vc';
+    } else {
+      throw Exception();
+    }
+
+    final ldpVp = presentationDefinition.format?.ldpVp != null;
+    final jwtVp = presentationDefinition.format?.jwtVp != null;
+
+    String? vpFormat;
+
+    if (ldpVp) {
+      vpFormat = 'ldp_vp';
+    } else if (jwtVp) {
+      vpFormat = 'jwt_vp';
     } else {
       throw Exception();
     }
@@ -636,11 +649,11 @@ class ScanCubit extends Cubit<ScanState> {
 
       inputDescriptors.add({
         'id': descriptor.id,
-        'format': 'jwt_vp',
+        'format': vpFormat,
         'path': r'$',
         'path_nested': {
           'id': descriptor.id,
-          'format': format,
+          'format': vcFormat,
           'path': r'$.verifiableCredential',
         },
       });
@@ -664,11 +677,11 @@ class ScanCubit extends Cubit<ScanState> {
 
         inputDescriptors.add({
           'id': descriptor.id,
-          'format': 'jwt_vp',
+          'format': vpFormat,
           'path': r'$',
           'path_nested': {
             'id': descriptor.id,
-            'format': format,
+            'format': vcFormat,
             // ignore: prefer_interpolation_to_compose_strings
             'path': r'$.verifiableCredential[' + i.toString() + ']',
           },

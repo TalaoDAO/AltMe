@@ -586,7 +586,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
 
     /// contain id_token but may or may not contain vp_token
-    if (hasIDToken(responseType.toString())) {
+    if (hasIDToken(responseType)) {
       final scope = state.uri!.queryParameters['scope'];
       if (scope == null || scope != 'openid') {
         throw ResponseMessage(
@@ -600,7 +600,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
 
     /// contain vp_token but may or may not contain id_token
-    if (hasVPToken(responseType.toString())) {
+    if (hasVPToken(responseType)) {
       if (!keys.contains('nonce')) {
         throw ResponseMessage(
           data: {
@@ -651,7 +651,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
 
     /// contain vp_token or id_token
-    if (hasIDTokenOrVPToken(responseType.toString())) {
+    if (hasIDTokenOrVPToken(responseType)) {
       if (isSecurityHigh &&
           redirectUri != null &&
           isClientIdUrl &&
@@ -666,12 +666,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
 
     log.i('responseType - $responseType');
-    if (isIDTokenOnly(responseType.toString())) {
+    if (isIDTokenOnly(responseType)) {
       /// verifier side (siopv2)
 
       await completeSiopV2Flow(redirectUri: redirectUri!);
-    } else if (isVPTokenOnly(responseType.toString()) ||
-        isIDTokenAndVPToken(responseType.toString())) {
+    } else if (isVPTokenOnly(responseType) ||
+        isIDTokenAndVPToken(responseType)) {
       /// responseType == 'vp_token' => verifier side (oidc4vp)
       ///
       /// responseType == 'id_token vp_token' => verifier side (oidc4vp)
