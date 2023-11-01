@@ -572,7 +572,12 @@ class OIDC4VC {
         final credentialSupported =
             (jsonPath.read(openidConfigurationResponse).first.value as List)
                 .where(
-                  (dynamic e) => e['id'].toString() == credential,
+                  (dynamic e) =>
+                      e is Map<String, dynamic> &&
+                      ((e.containsKey('scope') &&
+                              e['scope'].toString() == credential) ||
+                          (e.containsKey('id') &&
+                              e['id'].toString() == credential)),
                 )
                 .first as Map<String, dynamic>;
         types = (credentialSupported['types'] as List<dynamic>)

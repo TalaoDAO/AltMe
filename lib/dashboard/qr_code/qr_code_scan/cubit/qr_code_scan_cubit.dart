@@ -556,7 +556,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     final isClientIdUrl = isURL(clientId.toString());
 
     /// id_token only
-    if (isIDTokenOnly(responseType.toString())) {
+    if (isIDTokenOnly(responseType)) {
       if (redirectUri == null) {
         throw ResponseMessage(
           data: {
