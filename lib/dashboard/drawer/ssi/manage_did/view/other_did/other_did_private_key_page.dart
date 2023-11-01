@@ -37,7 +37,7 @@ class _OtherDidPrivateKeyPageState extends State<OtherDidPrivateKeyPage>
   Future<String> getKey() async {
     final privateKey = await getPrivateKey(
       secureStorage: getSecureStorage,
-      didKeyType: DidKeyType.ebsiv3,
+      didKeyType: widget.didKeyType,
       oidc4vc: OIDC4VC(),
     );
     return privateKey;
