@@ -86,7 +86,7 @@ dependencies:
   open_filex: ^4.3.2
   package_info_plus: ^4.0.2
   path: ^1.8.3
-  permission_handler: ^10.2.0
+  permission_handler: ^11.0.1
   platform_device_id: ^1.0.1
   pointycastle: ^3.7.3
   polygonid:

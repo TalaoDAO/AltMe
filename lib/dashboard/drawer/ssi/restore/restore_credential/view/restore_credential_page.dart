@@ -157,7 +157,7 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
 
   Future<void> _pickRestoreFile() async {
     final l10n = context.l10n;
-    final storagePermission = await Permission.storage.request();
+    final storagePermission = await Permission.photos.request();
     if (storagePermission.isDenied) {
       AlertMessage.showStateMessage(
         context: context,
