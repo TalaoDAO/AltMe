@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
 import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
+import 'package:oidc4vc/src/helper_function.dart';
 import 'package:oidc4vc/src/issuer_token_parameters.dart';
 import 'package:oidc4vc/src/pkce_dart.dart';
 import 'package:oidc4vc/src/token_parameters.dart';
@@ -95,6 +96,7 @@ class OIDC4VC {
     required PkcePair pkcePair,
     required String state,
     required String authorizationEndPoint,
+    required bool credentailsInScopeParameter,
   }) async {
     try {
       final openidConfigurationResponse = await getOpenIdConfig(issuer);
@@ -113,6 +115,7 @@ class OIDC4VC {
         pkcePair: pkcePair,
         state: state,
         authorizationEndPoint: authorizationEndPoint,
+        credentailsInScopeParameter: credentailsInScopeParameter,
       );
 
       final url = Uri.parse(authorizationEndpoint);
@@ -136,10 +139,12 @@ class OIDC4VC {
     required String authorizationEndPoint,
     required PkcePair pkcePair,
     required String state,
+    required bool credentailsInScopeParameter,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
     final authorizationDetails = <dynamic>[];
+    final credentials = <dynamic>[];
 
     for (final credential in selectedCredentials) {
       late Map<String, dynamic> data;
@@ -172,6 +177,8 @@ class OIDC4VC {
           'format': credentailData['format'],
           'types': credentailData['types'],
         };
+
+        credentials.addAll(credentailData['types'] as List<dynamic>);
       } else if (credential is Map<String, dynamic>) {
         data = {
           'type': 'openid_credential',
@@ -179,6 +186,7 @@ class OIDC4VC {
           'format': credential['format'],
           'types': credential['types'],
         };
+        credentials.addAll(credential['types'] as List<dynamic>);
       } else {
         throw Exception();
       }
@@ -192,13 +200,11 @@ class OIDC4VC {
       'response_type': 'code',
       'client_id': clientId,
       'redirect_uri': redirectUri,
-      'scope': 'openid',
       'issuer_state': issuerState,
       'state': state,
       'nonce': nonce,
       'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
-      'authorization_details': jsonEncode(authorizationDetails),
       'client_metadata': jsonEncode({
         'authorization_endpoint': authorizationEndPoint,
         'scopes_supported': ['openid'],
@@ -236,6 +242,13 @@ class OIDC4VC {
         'id_token_types_supported': ['subject_signed_id_token']
       }),
     };
+
+    if (credentailsInScopeParameter) {
+      myRequest['scope'] = listToString(credentials);
+    } else {
+      myRequest['scope'] = 'openid';
+      myRequest['authorization_details'] = jsonEncode(authorizationDetails);
+    }
     return myRequest;
   }
 

@@ -42,6 +42,7 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           const DidKeyTypeWidget(),
           const SubjectSyntaxTypeWidget(),
           const CryptographicHolderBindingWidget(),
+          const ScopeParameterWidget(),
           DrawerItem(
             title: l10n.clientMetadata,
             onTap: () {

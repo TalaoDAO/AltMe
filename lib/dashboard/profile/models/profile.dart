@@ -22,6 +22,7 @@ class ProfileModel extends Equatable {
     required this.userPINCodeForAuthentication,
     required this.enableJWKThumbprint,
     required this.enableCryptographicHolderBinding,
+    required this.enableScopeParameter,
     this.companyName = '',
     this.companyWebsite = '',
     this.jobTitle = '',
@@ -55,6 +56,7 @@ class ProfileModel extends Equatable {
         enable4DigitPINCode: false,
         enableJWKThumbprint: false,
         enableCryptographicHolderBinding: true,
+        enableScopeParameter: false,
       );
 
   final String firstName;
@@ -79,6 +81,7 @@ class ProfileModel extends Equatable {
   final bool enable4DigitPINCode;
   final bool enableJWKThumbprint;
   final bool enableCryptographicHolderBinding;
+  final bool enableScopeParameter;
 
   @override
   List<Object> get props => [
@@ -103,6 +106,7 @@ class ProfileModel extends Equatable {
         enable4DigitPINCode,
         enableJWKThumbprint,
         enableCryptographicHolderBinding,
+        enableScopeParameter,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
@@ -129,6 +133,7 @@ class ProfileModel extends Equatable {
     bool? enable4DigitPINCode,
     bool? enableJWKThumbprint,
     bool? enableCryptographicHolderBinding,
+    bool? enableScopeParameter,
   }) {
     return ProfileModel(
       firstName: firstName ?? this.firstName,
@@ -147,6 +152,7 @@ class ProfileModel extends Equatable {
       enableJWKThumbprint: enableJWKThumbprint ?? this.enableJWKThumbprint,
       enableCryptographicHolderBinding: enableCryptographicHolderBinding ??
           this.enableCryptographicHolderBinding,
+      enableScopeParameter: enableScopeParameter ?? this.enableScopeParameter,
       userConsentForIssuerAccess:
           userConsentForIssuerAccess ?? this.userConsentForIssuerAccess,
       userConsentForVerifierAccess:

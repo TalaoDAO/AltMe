@@ -1044,6 +1044,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required dynamic credentialOfferJson,
   }) async {
     try {
+      final enableScopeParameterValue =
+          profileCubit.state.model.enableScopeParameter;
+      ;
       if (preAuthorizedCode != null) {
         await addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
@@ -1065,6 +1068,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           secureStorageProvider: secureStorageProvider,
           credentialOfferJson: credentialOfferJson,
           issuer: issuer,
+          credentailsInScopeParameter: enableScopeParameterValue,
         );
         goBack();
       }

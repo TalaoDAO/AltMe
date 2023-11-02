@@ -986,6 +986,8 @@
   "enableToUseTheJWKThumprintOfTheKey": "Default: DID\nEnable to use the JWK thumprint of the key",
   "cryptographicHolderBinding": "Cryptographic holder binding",
   "cryptographicHolderBindingSubtitle": "Default : On\nDisable to accept Bearer credentials as tickets with low assurance.",
+  "scopeParameters": "Scope Parameters",
+  "scopeParametersSubtitle": "Default : Off\nEnable to force wallet to use scope instead of authorization_details.",
   "theServiceIsNotAvailable": "The service is not available",
   "download": "Download",
   "issuerDID": "Issuer DID",
