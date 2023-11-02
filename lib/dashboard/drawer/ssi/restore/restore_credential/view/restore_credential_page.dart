@@ -8,6 +8,7 @@ import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -157,7 +158,16 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
 
   Future<void> _pickRestoreFile() async {
     final l10n = context.l10n;
-    final storagePermission = await Permission.photos.request();
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+
+    /// storage permission has changed with android 13
+    late final PermissionStatus storagePermission;
+    if (int.parse(androidInfo.version.release) > 12) {
+      storagePermission = await Permission.photos.request();
+    } else {
+      storagePermission = await Permission.storage.request();
+    }
     if (storagePermission.isDenied) {
       AlertMessage.showStateMessage(
         context: context,
