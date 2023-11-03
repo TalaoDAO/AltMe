@@ -12,6 +12,6 @@ class DIDPrivateKeyCubit extends Cubit<String> {
   Future<void> initialize() async {
     final key =
         await secureStorageProvider.get(SecureStorageKeys.ssiKey) ?? '...';
-    emit(key);
+    emit(key.replaceAll('=', ''));
   }
 }

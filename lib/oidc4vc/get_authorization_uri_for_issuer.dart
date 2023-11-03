@@ -16,6 +16,7 @@ Future<void> getAuthorizationUriForIssuer({
   required SecureStorageProvider secureStorageProvider,
   required String issuer,
   required dynamic credentialOfferJson,
+  required bool credentailsInScopeParameter,
 }) async {
   final privateKey = await fetchPrivateKey(
     isEBSIV3: isEBSIV3,
@@ -23,7 +24,7 @@ Future<void> getAuthorizationUriForIssuer({
     secureStorage: getSecureStorage,
   );
 
-  final (did, _) = await getDidAndKid(
+  final (did, _) = await fetchDidAndKid(
     isEBSIV3: isEBSIV3,
     privateKey: privateKey,
     didKitProvider: didKitProvider,
@@ -62,6 +63,7 @@ Future<void> getAuthorizationUriForIssuer({
     pkcePair: pkcePair,
     state: jwtToken,
     authorizationEndPoint: Parameters.authorizeEndPoint,
+    credentailsInScopeParameter: credentailsInScopeParameter,
   );
 
   await LaunchUrl.launchUri(oidc4vcAuthenticationUri);

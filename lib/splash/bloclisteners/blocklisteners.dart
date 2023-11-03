@@ -316,7 +316,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                           Navigator.of(context).pop(false);
                           await Navigator.of(context).push<void>(
                             JsonViewerPage.route(
-                              title: l10n.displayConfiguration,
+                              title: l10n.display,
                               data: formattedData,
                             ),
                           );
@@ -468,13 +468,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
             /// if dev mode is ON show some dialog to show data
             if (profileCubit.state.model.isDeveloperMode) {
-              final codeForAuthorisedFlowPayload =
-                  JWTDecode().parseJwt(codeForAuthorisedFlow);
-
               final String formattedData =
                   getFormattedStringOIDC4VCIAuthorizedCodeFlow(
                 url: state.uri.toString(),
-                codeForAuthorisedFlowPayload: codeForAuthorisedFlowPayload,
+                codeForAuthorisedFlow: codeForAuthorisedFlow,
                 statePayload: statePayload,
               );
 
@@ -487,7 +484,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                           Navigator.of(context).pop(false);
                           await Navigator.of(context).push<void>(
                             JsonViewerPage.route(
-                              title: l10n.displayConfiguration,
+                              title: l10n.display,
                               data: formattedData,
                             ),
                           );

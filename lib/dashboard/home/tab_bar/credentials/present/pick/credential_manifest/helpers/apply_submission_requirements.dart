@@ -1,7 +1,8 @@
 import 'package:credential_manifest/credential_manifest.dart';
 
 PresentationDefinition applySubmissionRequirements(
-    PresentationDefinition presentationDefinition) {
+  PresentationDefinition presentationDefinition,
+) {
   if (presentationDefinition.submissionRequirements != null) {
     /// https://identity.foundation/presentation-exchange/#presentation-definition-extensions
     final inputDescriptors = List.of(presentationDefinition.inputDescriptors);

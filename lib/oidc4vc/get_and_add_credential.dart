@@ -31,7 +31,7 @@ Future<void> getAndAddCredential({
     secureStorage: getSecureStorage,
   );
 
-  final (did, kid) = await getDidAndKid(
+  final (did, kid) = await fetchDidAndKid(
     isEBSIV3: isEBSIV3,
     privateKey: privateKey,
     didKitProvider: didKitProvider,

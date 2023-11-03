@@ -40,7 +40,7 @@ class DeveloperModeDialog extends StatelessWidget {
           ),
           const SizedBox(height: 15),
           MyElevatedButton(
-            text: l10n.displayConfiguration,
+            text: l10n.display,
             verticalSpacing: 14,
             backgroundColor: color,
             borderRadius: Sizes.smallRadius,
@@ -50,7 +50,7 @@ class DeveloperModeDialog extends StatelessWidget {
           ),
           const SizedBox(height: Sizes.spaceSmall),
           MyElevatedButton(
-            text: l10n.downloadConfiguration,
+            text: l10n.download,
             verticalSpacing: 14,
             backgroundColor: color,
             borderRadius: Sizes.smallRadius,

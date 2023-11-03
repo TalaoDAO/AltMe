@@ -532,8 +532,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
     }
 
-    final registration = state.uri!.queryParameters['registration'];
     final bool isSecurityHigh = profileCubit.state.model.enableSecurity;
+
+    final registration = state.uri!.queryParameters['registration'];
 
     if (registration != null) {
       final registrationMap = jsonDecode(registration) as Map<String, dynamic>;
@@ -551,12 +552,30 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
     }
 
+    final clientMetadata = state.uri!.queryParameters['client_metadata'];
+    if (clientMetadata != null) {
+      final clientMetadataMap =
+          jsonDecode(clientMetadata) as Map<String, dynamic>;
+      final data =
+          clientMetadataMap['subject_syntax_types_supported'] as List<dynamic>;
+      if (!data.contains('did:key')) {
+        if (isSecurityHigh) {
+          throw ResponseMessage(
+            data: {
+              'error': 'unsupported_response_type',
+              'error_description': 'The subject syntax type is not supported.',
+            },
+          );
+        }
+      }
+    }
+
     final redirectUri = state.uri!.queryParameters['redirect_uri'];
     final clientId = state.uri!.queryParameters['client_id'];
     final isClientIdUrl = isURL(clientId.toString());
 
     /// id_token only
-    if (isIDTokenOnly(responseType.toString())) {
+    if (isIDTokenOnly(responseType)) {
       if (redirectUri == null) {
         throw ResponseMessage(
           data: {
@@ -586,7 +605,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
 
     /// contain id_token but may or may not contain vp_token
-    if (hasIDToken(responseType.toString())) {
+    if (hasIDToken(responseType)) {
       final scope = state.uri!.queryParameters['scope'];
       if (scope == null || scope != 'openid') {
         throw ResponseMessage(
@@ -600,7 +619,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
 
     /// contain vp_token but may or may not contain id_token
-    if (hasVPToken(responseType.toString())) {
+    if (hasVPToken(responseType)) {
       if (!keys.contains('nonce')) {
         throw ResponseMessage(
           data: {
@@ -651,7 +670,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
 
     /// contain vp_token or id_token
-    if (hasIDTokenOrVPToken(responseType.toString())) {
+    if (hasIDTokenOrVPToken(responseType)) {
       if (isSecurityHigh &&
           redirectUri != null &&
           isClientIdUrl &&
@@ -666,12 +685,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
 
     log.i('responseType - $responseType');
-    if (isIDTokenOnly(responseType.toString())) {
+    if (isIDTokenOnly(responseType)) {
       /// verifier side (siopv2)
 
       await completeSiopV2Flow(redirectUri: redirectUri!);
-    } else if (isVPTokenOnly(responseType.toString()) ||
-        isIDTokenAndVPToken(responseType.toString())) {
+    } else if (isVPTokenOnly(responseType) ||
+        isIDTokenAndVPToken(responseType)) {
       /// responseType == 'vp_token' => verifier side (oidc4vp)
       ///
       /// responseType == 'id_token vp_token' => verifier side (oidc4vp)
@@ -981,13 +1000,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       //     await isEBSIV3ForVerifier(client: client, uri: state.uri!);
 
       final privateKey = await fetchPrivateKey(
-        isEBSIV3: null, //isEBSIV3 ?? false,
         oidc4vc: oidc4vc,
         secureStorage: secureStorageProvider,
       );
 
-      final (did, kid) = await getDidAndKid(
-        isEBSIV3: null, //isEBSIV3 ?? false,
+      final (did, kid) = await fetchDidAndKid(
         privateKey: privateKey,
         didKitProvider: didKitProvider,
         secureStorage: secureStorageProvider,
@@ -1046,6 +1063,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required dynamic credentialOfferJson,
   }) async {
     try {
+      final enableScopeParameterValue =
+          profileCubit.state.model.enableScopeParameter;
+      ;
       if (preAuthorizedCode != null) {
         await addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
@@ -1067,6 +1087,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           secureStorageProvider: secureStorageProvider,
           credentialOfferJson: credentialOfferJson,
           issuer: issuer,
+          credentailsInScopeParameter: enableScopeParameterValue,
         );
         goBack();
       }
