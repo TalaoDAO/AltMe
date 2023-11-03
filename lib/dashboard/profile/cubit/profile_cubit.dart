@@ -133,6 +133,12 @@ class ProfileCubit extends Cubit<ProfileState> {
       final enableScopeParameter = enableScopeParameterValue != null &&
           enableScopeParameterValue == 'true';
 
+      final isPreRegisteredWalletValue = await secureStorageProvider
+          .get(SecureStorageKeys.isPreRegisteredWallet);
+
+      final isPreRegisteredWallet = isPreRegisteredWalletValue != null &&
+          isPreRegisteredWalletValue == 'true';
+
       final userPINCodeForAuthenticationValue = await secureStorageProvider
           .get(SecureStorageKeys.userPINCodeForAuthentication);
       final userPINCodeForAuthentication =
@@ -168,6 +174,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         enableJWKThumbprint: enableJWKThumbprint,
         enableCryptographicHolderBinding: enableCryptographicHolderBinding,
         enableScopeParameter: enableScopeParameter,
+        isPreRegisteredWallet: isPreRegisteredWallet,
       );
       await update(profileModel);
     } catch (e, s) {
@@ -287,6 +294,11 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.enableScopeParameter.toString(),
       );
 
+      await secureStorageProvider.set(
+        SecureStorageKeys.isPreRegisteredWallet,
+        profileModel.isPreRegisteredWallet.toString(),
+      );
+
       emit(
         state.copyWith(
           model: profileModel,
@@ -377,6 +389,11 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> updateScopeParameterStatus({bool enabled = false}) async {
     final profileModel = state.model.copyWith(enableScopeParameter: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> updatePreRegisteredWalletStatus({bool enabled = false}) async {
+    final profileModel = state.model.copyWith(isPreRegisteredWallet: enabled);
     await update(profileModel);
   }
 
