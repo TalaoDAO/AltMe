@@ -178,7 +178,7 @@ class OIDC4VC {
           'types': credentailData['types'],
         };
 
-        credentials.addAll(credentailData['types'] as List<dynamic>);
+        credentials.add((credentailData['types'] as List<dynamic>).last);
       } else if (credential is Map<String, dynamic>) {
         data = {
           'type': 'openid_credential',
@@ -186,7 +186,7 @@ class OIDC4VC {
           'format': credential['format'],
           'types': credential['types'],
         };
-        credentials.addAll(credential['types'] as List<dynamic>);
+        credentials.add((credential['types'] as List<dynamic>).last);
       } else {
         throw Exception();
       }
