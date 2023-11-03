@@ -1,10 +1,11 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 Future<void> getAuthorizationUriForIssuer({
@@ -13,24 +14,12 @@ Future<void> getAuthorizationUriForIssuer({
   required bool isEBSIV3,
   required DIDKitProvider didKitProvider,
   required List<dynamic> selectedCredentials,
-  required SecureStorageProvider secureStorageProvider,
   required String issuer,
   required dynamic credentialOfferJson,
   required bool credentailsInScopeParameter,
+  required String clientId,
+  required String? clientSecret,
 }) async {
-  final privateKey = await fetchPrivateKey(
-    isEBSIV3: isEBSIV3,
-    oidc4vc: oidc4vc,
-    secureStorage: getSecureStorage,
-  );
-
-  final (did, _) = await fetchDidAndKid(
-    isEBSIV3: isEBSIV3,
-    privateKey: privateKey,
-    didKitProvider: didKitProvider,
-    secureStorage: getSecureStorage,
-  );
-
   /// this is first phase flow for authorization_code
 
   final issuerState = credentialOfferJson['grants']['authorization_code']
@@ -39,12 +28,19 @@ Future<void> getAuthorizationUriForIssuer({
   final String nonce = const Uuid().v4();
   final PkcePair pkcePair = PkcePair.generate();
 
-  final jwt = JWT({
+  final data = {
     'codeVerifier': pkcePair.codeVerifier,
     'credentials': selectedCredentials,
     'issuer': issuer,
     'isEBSIV3': isEBSIV3,
-  });
+  };
+
+  if (clientSecret != null) {
+    data['authorization'] =
+        base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+  }
+
+  final jwt = JWT(data);
 
   await dotenv.load();
   final String authorizationUriSecretKey =
@@ -55,7 +51,7 @@ Future<void> getAuthorizationUriForIssuer({
   final Uri oidc4vcAuthenticationUri =
       await oidc4vc.getAuthorizationUriForIssuer(
     selectedCredentials: selectedCredentials,
-    clientId: did,
+    clientId: clientId,
     redirectUri: Parameters.oidc4vcUniversalLink,
     issuer: issuer,
     issuerState: issuerState,

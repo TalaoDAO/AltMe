@@ -269,6 +269,7 @@ class OIDC4VC {
     String? userPin,
     String? code,
     String? codeVerifier,
+    String? authorization,
   }) async {
     final tokenData = buildTokenData(
       preAuthorizedCode: preAuthorizedCode,
@@ -283,7 +284,11 @@ class OIDC4VC {
     final tokenEndPoint = await readTokenEndPoint(openidConfigurationResponse);
 
     if (nonce == null || accessToken == null) {
-      final response = await getToken(tokenEndPoint, tokenData);
+      final response = await getToken(
+        tokenEndPoint: tokenEndPoint,
+        tokenData: tokenData,
+        authorization: authorization,
+      );
       nonce = response['c_nonce'] as String;
       accessToken = response['access_token'] as String;
       authorizationDetails =
@@ -730,14 +735,19 @@ class OIDC4VC {
   }
 
   @visibleForTesting
-  Future<dynamic> getToken(
-    String tokenEndPoint,
-    Map<String, dynamic> tokenData,
-  ) async {
+  Future<dynamic> getToken({
+    required String tokenEndPoint,
+    required Map<String, dynamic> tokenData,
+    required String? authorization,
+  }) async {
     /// getting token
     final tokenHeaders = <String, dynamic>{
       'Content-Type': 'application/x-www-form-urlencoded',
     };
+
+    if (authorization != null) {
+      tokenHeaders['Authorization'] = 'Basic $authorization';
+    }
 
     final dynamic tokenResponse = await client.post<Map<String, dynamic>>(
       tokenEndPoint,

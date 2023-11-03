@@ -78,6 +78,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
 
         final stateOfCredentialsSelected = jwt['options'] as List<dynamic>;
         final String codeVerifier = jwt['codeVerifier'].toString();
+        final String? authorization = jwt['authorization'] as String?;
 
         final selectedCredentials = stateOfCredentialsSelected
             .map((index) => credentials[index])
@@ -91,6 +92,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           isEBSIV3: isEBSIV3,
           codeForAuthorisedFlow: codeForAuthorisedFlow,
           codeVerifier: codeVerifier,
+          authorization: authorization,
         );
       }
     }
@@ -110,6 +112,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       preAuthorizedCode: preAuthorizedCode,
       codeForAuthorisedFlow: null,
       codeVerifier: null,
+      authorization: null,
       sendProof: sendProof,
     );
     oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();

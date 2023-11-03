@@ -988,6 +988,8 @@
   "cryptographicHolderBindingSubtitle": "Default : On\nDisable to accept Bearer credentials as tickets with low assurance.",
   "scopeParameters": "Scope Parameters",
   "scopeParametersSubtitle": "Default : Off\nEnable to force wallet to use scope instead of authorization_details.",
+  "preRegisteredWallet": "Pre registered wallet",
+  "preRegisteredWalletSubtitle": "Default : Off\nEnable to use client_id and client_secret values.",
   "theServiceIsNotAvailable": "The service is not available",
   "download": "Download",
   "issuerDID": "Issuer DID",
