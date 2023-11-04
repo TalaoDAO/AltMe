@@ -24,6 +24,8 @@ class ProfileModel extends Equatable {
     required this.enableCryptographicHolderBinding,
     required this.enableScopeParameter,
     required this.isPreRegisteredWallet,
+    this.clientId = '',
+    this.clientSecret = '',
     this.companyName = '',
     this.companyWebsite = '',
     this.jobTitle = '',
@@ -59,6 +61,8 @@ class ProfileModel extends Equatable {
         enableCryptographicHolderBinding: true,
         enableScopeParameter: false,
         isPreRegisteredWallet: false,
+        clientId: '',
+        clientSecret: '',
       );
 
   final String firstName;
@@ -85,6 +89,8 @@ class ProfileModel extends Equatable {
   final bool enableCryptographicHolderBinding;
   final bool enableScopeParameter;
   final bool isPreRegisteredWallet;
+  final String clientId;
+  final String clientSecret;
 
   @override
   List<Object> get props => [
@@ -111,6 +117,8 @@ class ProfileModel extends Equatable {
         enableCryptographicHolderBinding,
         enableScopeParameter,
         isPreRegisteredWallet,
+        clientId,
+        clientSecret,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
@@ -139,6 +147,8 @@ class ProfileModel extends Equatable {
     bool? enableCryptographicHolderBinding,
     bool? enableScopeParameter,
     bool? isPreRegisteredWallet,
+    String? clientId,
+    String? clientSecret,
   }) {
     return ProfileModel(
       firstName: firstName ?? this.firstName,
@@ -160,6 +170,8 @@ class ProfileModel extends Equatable {
       enableScopeParameter: enableScopeParameter ?? this.enableScopeParameter,
       isPreRegisteredWallet:
           isPreRegisteredWallet ?? this.isPreRegisteredWallet,
+      clientId: clientId ?? this.clientId,
+      clientSecret: clientSecret ?? this.clientSecret,
       userConsentForIssuerAccess:
           userConsentForIssuerAccess ?? this.userConsentForIssuerAccess,
       userConsentForVerifierAccess:

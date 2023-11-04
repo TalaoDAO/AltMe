@@ -36,6 +36,8 @@ class SecureStorageKeys {
       'enableCryptographicHolderBinding';
   static const String enableScopeParameter = 'enableScopeParameter';
   static const String isPreRegisteredWallet = 'isPreRegisteredWallet';
+  static const String clientSecret = 'clientSecret';
+  static const String clientId = 'clientId';
 
   static const String pinCode = 'pinCode';
   static const String data = 'data';

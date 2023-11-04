@@ -164,135 +164,15 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                               .model
                               .isPreRegisteredWallet;
 
-                          String clientid = '';
-                          String? clientSecret;
+                          String clientid =
+                              context.read<ProfileCubit>().state.model.clientId;
+                          final String clientSecret = context
+                              .read<ProfileCubit>()
+                              .state
+                              .model
+                              .clientSecret;
 
-                          if (useClientIdAndClientRequest) {
-                            final (
-                              String? id,
-                              String? secret
-                            ) = await showDialog<(String?, String?)>(
-                                  context: context,
-                                  builder: (_) {
-                                    final color =
-                                        Theme.of(context).colorScheme.primary;
-                                    final background = Theme.of(context)
-                                        .colorScheme
-                                        .popupBackground;
-                                    final textColor = Theme.of(context)
-                                        .colorScheme
-                                        .dialogText;
-
-                                    final clientIdController =
-                                        TextEditingController();
-                                    final clientSecretController =
-                                        TextEditingController();
-
-                                    return AlertDialog(
-                                      backgroundColor: background,
-                                      surfaceTintColor: Colors.transparent,
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 15),
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(25)),
-                                      ),
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Image.asset(
-                                            IconStrings.cardReceive,
-                                            width: 50,
-                                            height: 50,
-                                            color: textColor,
-                                          ),
-                                          const SizedBox(
-                                            height: Sizes.spaceNormal,
-                                          ),
-                                          TextFormField(
-                                            controller: clientIdController,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelMedium,
-                                            maxLines: 1,
-                                            decoration: const InputDecoration(
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(
-                                                    Sizes.smallRadius,
-                                                  ),
-                                                ),
-                                              ),
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                vertical: 5,
-                                                horizontal: 10,
-                                              ),
-                                              hintText: 'Client Id',
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: Sizes.spaceSmall,
-                                          ),
-                                          TextFormField(
-                                            controller: clientSecretController,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelMedium,
-                                            maxLines: 1,
-                                            decoration: const InputDecoration(
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(
-                                                    Sizes.smallRadius,
-                                                  ),
-                                                ),
-                                              ),
-                                              hintText: 'Client Secret',
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                vertical: 5,
-                                                horizontal: 10,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: Sizes.spaceNormal,
-                                          ),
-                                          MyElevatedButton(
-                                            text: l10n.confirm,
-                                            verticalSpacing: 14,
-                                            backgroundColor: color,
-                                            borderRadius: Sizes.smallRadius,
-                                            fontSize: 15,
-                                            elevation: 0,
-                                            onPressed: () {
-                                              Navigator.of(context).pop(
-                                                (
-                                                  clientIdController.text
-                                                      .trim(),
-                                                  clientSecretController.text
-                                                      .trim(),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                          const SizedBox(height: 15),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ) ??
-                                (null, null);
-
-                            if (id == null || secret == null) {
-                              return;
-                            }
-
-                            clientid = id;
-                            clientSecret = secret;
-                          } else {
+                          if (!useClientIdAndClientRequest) {
                             clientid = const Uuid().v4();
                           }
 

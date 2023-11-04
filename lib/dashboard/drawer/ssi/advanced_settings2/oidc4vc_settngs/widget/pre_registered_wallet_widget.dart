@@ -13,6 +13,9 @@ class PreRegisteredWalletWidget extends StatelessWidget {
     final l10n = context.l10n;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
+        final clientIdController = TextEditingController();
+        final clientSecretController = TextEditingController();
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.max,
@@ -59,6 +62,70 @@ class PreRegisteredWalletWidget extends StatelessWidget {
                     value: state.model.isPreRegisteredWallet,
                     activeColor: Theme.of(context).colorScheme.primary,
                   ),
+                  const SizedBox(
+                    height: Sizes.spaceNormal,
+                  ),
+                  TextFormField(
+                    controller: clientIdController,
+                    style: Theme.of(context).textTheme.labelMedium,
+                    maxLines: 1,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            Sizes.smallRadius,
+                          ),
+                        ),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 10,
+                      ),
+                      hintText: 'Client Id',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: Sizes.spaceSmall,
+                  ),
+                  TextFormField(
+                    controller: clientSecretController,
+                    style: Theme.of(context).textTheme.labelMedium,
+                    maxLines: 1,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            Sizes.smallRadius,
+                          ),
+                        ),
+                      ),
+                      hintText: 'Client Secret',
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 10,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: Sizes.spaceNormal,
+                  ),
+                  MyElevatedButton(
+                    text: l10n.confirm,
+                    verticalSpacing: 14,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    borderRadius: Sizes.smallRadius,
+                    fontSize: 15,
+                    elevation: 0,
+                    onPressed: () async {
+                      await context
+                          .read<ProfileCubit>()
+                          .updatePreRegisteredWalletSettings(
+                            clientId: clientIdController.text.trim(),
+                            clientSecret: clientSecretController.text.trim(),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: 15),
                 ],
               ),
             ),

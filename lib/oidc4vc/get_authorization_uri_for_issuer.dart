@@ -35,7 +35,7 @@ Future<void> getAuthorizationUriForIssuer({
     'isEBSIV3': isEBSIV3,
   };
 
-  if (clientSecret != null) {
+  if (clientSecret != null && clientSecret != '') {
     data['authorization'] =
         base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
   }
