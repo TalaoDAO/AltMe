@@ -1,8 +1,10 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
 
 class Oidc4vcCredentialPickPage extends StatelessWidget {
   const Oidc4vcCredentialPickPage({
@@ -150,13 +152,31 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                 child: MyGradientButton(
                   onPressed: state.isEmpty
                       ? null
-                      : () {
+                      : () async {
                           if (state.isEmpty) return;
 
                           final selectedCredentials =
                               state.map((index) => credentials[index]).toList();
 
-                          context
+                          final useClientIdAndClientRequest = context
+                              .read<ProfileCubit>()
+                              .state
+                              .model
+                              .isPreRegisteredWallet;
+
+                          String clientid =
+                              context.read<ProfileCubit>().state.model.clientId;
+                          final String clientSecret = context
+                              .read<ProfileCubit>()
+                              .state
+                              .model
+                              .clientSecret;
+
+                          if (!useClientIdAndClientRequest) {
+                            clientid = const Uuid().v4();
+                          }
+
+                          await context
                               .read<QRCodeScanCubit>()
                               .processSelectedCredentials(
                                 selectedCredentials: selectedCredentials,
@@ -165,6 +185,8 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                 preAuthorizedCode: preAuthorizedCode,
                                 isEBSIV3: isEBSIV3,
                                 credentialOfferJson: credentialOfferJson,
+                                clientId: clientid,
+                                clientSecret: clientSecret,
                               );
                         },
                   text: l10n.proceed,

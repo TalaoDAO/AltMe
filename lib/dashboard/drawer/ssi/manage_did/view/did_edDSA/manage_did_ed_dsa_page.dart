@@ -20,7 +20,7 @@ class ManageDIDEdDSAPage extends StatelessWidget {
     final l10n = context.l10n;
     final did = context.read<DIDCubit>().state.did ?? '...';
     return BasePage(
-      title: l10n.manageKeyDecentralizedIdEdSA,
+      title: l10n.keyDecentralizedIdEdSA,
       titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),

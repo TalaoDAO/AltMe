@@ -421,4 +421,6 @@ class GlobalMessage {
       l10n.theCredentialOfferIsInvalid;
   String get RESPONSE_STRING_theServiceIsNotAvailable =>
       l10n.theServiceIsNotAvailable;
+  String get RESPONSE_STRING_theIssuanceOfThisCredentialIsPending =>
+      l10n.theIssuanceOfThisCredentialIsPending;
 }

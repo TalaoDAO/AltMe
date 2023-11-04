@@ -127,6 +127,24 @@ class ProfileCubit extends Cubit<ProfileState> {
           enableCryptographicHolderBindingValue == null ||
               enableCryptographicHolderBindingValue == 'true';
 
+      final enableScopeParameterValue = await secureStorageProvider
+          .get(SecureStorageKeys.enableScopeParameter);
+
+      final enableScopeParameter = enableScopeParameterValue != null &&
+          enableScopeParameterValue == 'true';
+
+      final isPreRegisteredWalletValue = await secureStorageProvider
+          .get(SecureStorageKeys.isPreRegisteredWallet);
+
+      final clientSecret =
+          await secureStorageProvider.get(SecureStorageKeys.clientSecret) ?? '';
+
+      final clientId =
+          await secureStorageProvider.get(SecureStorageKeys.clientId) ?? '';
+
+      final isPreRegisteredWallet = isPreRegisteredWalletValue != null &&
+          isPreRegisteredWalletValue == 'true';
+
       final userPINCodeForAuthenticationValue = await secureStorageProvider
           .get(SecureStorageKeys.userPINCodeForAuthentication);
       final userPINCodeForAuthentication =
@@ -161,6 +179,10 @@ class ProfileCubit extends Cubit<ProfileState> {
         enable4DigitPINCode: enable4DigitPINCode,
         enableJWKThumbprint: enableJWKThumbprint,
         enableCryptographicHolderBinding: enableCryptographicHolderBinding,
+        enableScopeParameter: enableScopeParameter,
+        isPreRegisteredWallet: isPreRegisteredWallet,
+        clientSecret: clientSecret,
+        clientId: clientId,
       );
       await update(profileModel);
     } catch (e, s) {
@@ -275,6 +297,16 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.enableCryptographicHolderBinding.toString(),
       );
 
+      await secureStorageProvider.set(
+        SecureStorageKeys.enableScopeParameter,
+        profileModel.enableScopeParameter.toString(),
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.isPreRegisteredWallet,
+        profileModel.isPreRegisteredWallet.toString(),
+      );
+
       emit(
         state.copyWith(
           model: profileModel,
@@ -360,6 +392,27 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     final profileModel =
         state.model.copyWith(enableCryptographicHolderBinding: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> updateScopeParameterStatus({bool enabled = false}) async {
+    final profileModel = state.model.copyWith(enableScopeParameter: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> updatePreRegisteredWalletStatus({bool enabled = false}) async {
+    final profileModel = state.model.copyWith(isPreRegisteredWallet: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> updatePreRegisteredWalletSettings({
+    String clientId = '',
+    String clientSecret = '',
+  }) async {
+    final profileModel = state.model.copyWith(
+      clientId: clientId,
+      clientSecret: clientSecret,
+    );
     await update(profileModel);
   }
 

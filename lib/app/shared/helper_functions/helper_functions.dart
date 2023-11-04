@@ -245,85 +245,91 @@ Future<String> web3RpcMainnetInfuraURL() async {
   return '$prefixUrl$infuraApiKey';
 }
 
-Future<String> getEBSIV3P256PrivateKey(
-  SecureStorageProvider secureStorage,
-) async {
-  final String? p256PrivateKey = await secureStorage.get(
-    SecureStorageKeys.p256PrivateKey,
-  );
+Future<String> getPrivateKey({
+  required SecureStorageProvider secureStorage,
+  required DidKeyType didKeyType,
+  OIDC4VC? oidc4vc,
+}) async {
+  late String storageKey;
 
-  if (p256PrivateKey == null) {
-    final jwk = JsonWebKey.generate('ES256');
+  switch (didKeyType) {
+    case DidKeyType.secp256k1:
+      if (oidc4vc == null) throw Exception();
+      final mnemonic = await secureStorage.get(SecureStorageKeys.ssiMnemonic);
+      final index = getIndexValue(isEBSIV3: true);
+      final key = await oidc4vc.privateKeyFromMnemonic(
+        mnemonic: mnemonic!,
+        indexValue: index,
+      );
+      return key;
 
-    final json = jwk.toJson();
-
-    // Sort the keys in ascending order and remove alg
-    final sortedJwk = Map.fromEntries(
-      json.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
-    )..remove('keyOperations');
-
-    await secureStorage.set(
-      SecureStorageKeys.p256PrivateKey,
-      jsonEncode(sortedJwk),
-    );
-
-    return jsonEncode(sortedJwk);
-  } else {
-    return p256PrivateKey;
+    case DidKeyType.p256:
+      storageKey = SecureStorageKeys.p256PrivateKey;
+    case DidKeyType.ebsiv3:
+      storageKey = SecureStorageKeys.p256PrivateKey2;
+    case DidKeyType.jwkP256:
+      storageKey = SecureStorageKeys.p256PrivateKey3;
   }
+
+  /// return key if it is already created
+  final String? p256PrivateKey = await secureStorage.get(storageKey);
+  if (p256PrivateKey != null) return p256PrivateKey.replaceAll('=', '');
+
+  /// create key if it is not created
+  final jwk = JsonWebKey.generate('ES256');
+
+  final json = jwk.toJson();
+
+  // Sort the keys in ascending order and remove alg
+  final sortedJwk = Map.fromEntries(
+    json.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
+  )..remove('keyOperations');
+
+  final newKey = jsonEncode(sortedJwk).replaceAll('=', '');
+
+  await secureStorage.set(storageKey, newKey);
+
+  return newKey;
 }
 
-Future<String> getP256PrivateKey(SecureStorageProvider secureStorage) async {
-  final String? p256PrivateKey = await secureStorage.get(
-    SecureStorageKeys.p256PrivateKey2,
-  );
-
-  if (p256PrivateKey == null) {
-    final jwk = JsonWebKey.generate('ES256');
-
-    final json = jwk.toJson();
-
-    // Sort the keys in ascending order and remove alg
-    final sortedJwk = Map.fromEntries(
-      json.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
-    )..remove('keyOperations');
-
-    await secureStorage.set(
-      SecureStorageKeys.p256PrivateKey2,
-      jsonEncode(sortedJwk),
-    );
-
-    return jsonEncode(sortedJwk);
-  } else {
-    return p256PrivateKey;
+DidKeyType? getDidKeyFromString(String? didKeyTypeString) {
+  if (didKeyTypeString == null) return null;
+  for (final name in DidKeyType.values) {
+    if (name.toString() == didKeyTypeString) {
+      return name;
+    }
   }
+  return null;
 }
 
 Future<String> fetchPrivateKey({
   required SecureStorageProvider secureStorage,
-  required bool? isEBSIV3,
+  bool? isEBSIV3,
   OIDC4VC? oidc4vc,
 }) async {
-  late String privateKey;
+  if (isEBSIV3 != null && isEBSIV3) {
+    final privateKey = await getPrivateKey(
+      secureStorage: secureStorage,
+      didKeyType: DidKeyType.ebsiv3,
+    );
 
-  final didKeyType = await secureStorage.get(SecureStorageKeys.didKeyType);
-
-  if ((isEBSIV3 != null && isEBSIV3) ||
-      didKeyType == DidKeyType.ebsiv3.toString()) {
-    privateKey = await getEBSIV3P256PrivateKey(secureStorage);
-  } else {
-    if (didKeyType == DidKeyType.secp256k1.toString()) {
-      if (oidc4vc == null) throw Exception();
-      final mnemonic = await secureStorage.get(SecureStorageKeys.ssiMnemonic);
-      final index = getIndexValue(isEBSIV3: true);
-      privateKey = await oidc4vc.privateKeyFromMnemonic(
-        mnemonic: mnemonic!,
-        indexValue: index,
-      );
-    } else {
-      privateKey = await getP256PrivateKey(secureStorage);
-    }
+    return privateKey;
   }
+
+  /// other cases
+  final didKeyTypeString =
+      await secureStorage.get(SecureStorageKeys.didKeyType);
+
+  final didKeyType = getDidKeyFromString(didKeyTypeString);
+
+  if (didKeyType == null) throw Exception();
+
+  final privateKey = await getPrivateKey(
+    secureStorage: secureStorage,
+    didKeyType: didKeyType,
+    oidc4vc: oidc4vc,
+  );
+
   return privateKey;
 }
 
@@ -421,39 +427,83 @@ String getUtf8Message(String maybeHex) {
 Future<(String, String)> getDidAndKid({
   required String privateKey,
   required SecureStorageProvider secureStorage,
-  required bool? isEBSIV3,
+  required DidKeyType didKeyType,
   DIDKitProvider? didKitProvider,
 }) async {
   late String did;
   late String kid;
 
-  final didKeyType = await secureStorage.get(SecureStorageKeys.didKeyType);
+  switch (didKeyType) {
+    case DidKeyType.ebsiv3:
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
 
-  if ((isEBSIV3 != null && isEBSIV3) ||
-      didKeyType == DidKeyType.ebsiv3.toString()) {
-    final private = jsonDecode(privateKey) as Map<String, dynamic>;
+      //b'\xd1\xd6\x03' in python
+      final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
+      final List<int> prefix = prefixByteList.map((byte) => byte).toList();
 
-    //b'\xd1\xd6\x03' in python
-    final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
-    final List<int> prefix = prefixByteList.map((byte) => byte).toList();
+      final encodedData = sortedPublcJwkBytes(private);
+      final encodedAddress = Base58Encode([...prefix, ...encodedData]);
 
-    final encodedData = sortedPublcJwk(private);
-    final encodedAddress = Base58Encode([...prefix, ...encodedData]);
+      did = 'did:key:z$encodedAddress';
+      final String lastPart = did.split(':')[2];
+      kid = '$did#$lastPart';
+    case DidKeyType.jwkP256:
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
 
-    did = 'did:key:z$encodedAddress';
-    final String lastPart = did.split(':')[2];
-    kid = '$did#$lastPart';
-  } else {
-    if (didKitProvider == null) throw Exception();
-    const didMethod = AltMeStrings.defaultDIDMethod;
-    did = didKitProvider.keyToDID(didMethod, privateKey);
-    kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
+      final encodedData = sortedPublcJwkBytes(private);
+
+      final base64EncodedJWK = base64UrlEncode(encodedData);
+      did = 'did:jwk:$base64EncodedJWK';
+
+      kid = '$did#0';
+    case DidKeyType.p256:
+    case DidKeyType.secp256k1:
+      if (didKitProvider == null) throw Exception();
+
+      const didMethod = AltMeStrings.defaultDIDMethod;
+      did = didKitProvider.keyToDID(didMethod, privateKey);
+      kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
   }
 
   return (did, kid);
 }
 
-List<int> sortedPublcJwk(Map<String, dynamic> privateKey) {
+Future<(String, String)> fetchDidAndKid({
+  required String privateKey,
+  bool? isEBSIV3,
+  required SecureStorageProvider secureStorage,
+  DIDKitProvider? didKitProvider,
+}) async {
+  if (isEBSIV3 != null && isEBSIV3) {
+    final (did, kid) = await getDidAndKid(
+      didKeyType: DidKeyType.ebsiv3,
+      privateKey: privateKey,
+      didKitProvider: DIDKitProvider(),
+      secureStorage: getSecureStorage,
+    );
+
+    return (did, kid);
+  }
+
+  /// other cases
+  final didKeyTypeString =
+      await secureStorage.get(SecureStorageKeys.didKeyType);
+
+  final didKeyType = getDidKeyFromString(didKeyTypeString);
+
+  if (didKeyType == null) throw Exception();
+
+  final (did, kid) = await getDidAndKid(
+    didKeyType: didKeyType,
+    privateKey: privateKey,
+    didKitProvider: DIDKitProvider(),
+    secureStorage: getSecureStorage,
+  );
+
+  return (did, kid);
+}
+
+List<int> sortedPublcJwkBytes(Map<String, dynamic> privateKey) {
   final publicJWK = Map.of(privateKey)..removeWhere((key, value) => key == 'd');
 
   /// we use crv P-256K in the rest of the package to ensure compatibility
@@ -989,6 +1039,10 @@ ResponseString getErrorResponseString(String errorString) {
     case 'server_error':
       return ResponseString.RESPONSE_STRING_theServiceIsNotAvailable;
 
+    case 'issuance_pending':
+      return ResponseString
+          .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending;
+
     default:
       return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
   }
@@ -1048,14 +1102,14 @@ ${openidConfigurationResponse != null ? const JsonEncoder.withIndent('  ').conve
 String getFormattedStringOIDC4VCIAuthorizedCodeFlow({
   required String url,
   Map<String, dynamic>? statePayload,
-  Map<String, dynamic>? codeForAuthorisedFlowPayload,
+  dynamic codeForAuthorisedFlow,
 }) {
   return '''
 <b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
 <b>STATE  :</b> 
 ${statePayload != null ? const JsonEncoder.withIndent('  ').convert(statePayload) : 'None'}\n 
 <b>CODE  :</b> 
-${codeForAuthorisedFlowPayload != null ? const JsonEncoder.withIndent('  ').convert(codeForAuthorisedFlowPayload) : 'None'}
+$codeForAuthorisedFlow
 ''';
 }
 

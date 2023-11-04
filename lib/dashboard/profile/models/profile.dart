@@ -22,6 +22,10 @@ class ProfileModel extends Equatable {
     required this.userPINCodeForAuthentication,
     required this.enableJWKThumbprint,
     required this.enableCryptographicHolderBinding,
+    required this.enableScopeParameter,
+    required this.isPreRegisteredWallet,
+    this.clientId = '',
+    this.clientSecret = '',
     this.companyName = '',
     this.companyWebsite = '',
     this.jobTitle = '',
@@ -55,6 +59,10 @@ class ProfileModel extends Equatable {
         enable4DigitPINCode: false,
         enableJWKThumbprint: false,
         enableCryptographicHolderBinding: true,
+        enableScopeParameter: false,
+        isPreRegisteredWallet: false,
+        clientId: '',
+        clientSecret: '',
       );
 
   final String firstName;
@@ -79,6 +87,10 @@ class ProfileModel extends Equatable {
   final bool enable4DigitPINCode;
   final bool enableJWKThumbprint;
   final bool enableCryptographicHolderBinding;
+  final bool enableScopeParameter;
+  final bool isPreRegisteredWallet;
+  final String clientId;
+  final String clientSecret;
 
   @override
   List<Object> get props => [
@@ -103,6 +115,10 @@ class ProfileModel extends Equatable {
         enable4DigitPINCode,
         enableJWKThumbprint,
         enableCryptographicHolderBinding,
+        enableScopeParameter,
+        isPreRegisteredWallet,
+        clientId,
+        clientSecret,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
@@ -129,6 +145,10 @@ class ProfileModel extends Equatable {
     bool? enable4DigitPINCode,
     bool? enableJWKThumbprint,
     bool? enableCryptographicHolderBinding,
+    bool? enableScopeParameter,
+    bool? isPreRegisteredWallet,
+    String? clientId,
+    String? clientSecret,
   }) {
     return ProfileModel(
       firstName: firstName ?? this.firstName,
@@ -147,6 +167,11 @@ class ProfileModel extends Equatable {
       enableJWKThumbprint: enableJWKThumbprint ?? this.enableJWKThumbprint,
       enableCryptographicHolderBinding: enableCryptographicHolderBinding ??
           this.enableCryptographicHolderBinding,
+      enableScopeParameter: enableScopeParameter ?? this.enableScopeParameter,
+      isPreRegisteredWallet:
+          isPreRegisteredWallet ?? this.isPreRegisteredWallet,
+      clientId: clientId ?? this.clientId,
+      clientSecret: clientSecret ?? this.clientSecret,
       userConsentForIssuerAccess:
           userConsentForIssuerAccess ?? this.userConsentForIssuerAccess,
       userConsentForVerifierAccess:

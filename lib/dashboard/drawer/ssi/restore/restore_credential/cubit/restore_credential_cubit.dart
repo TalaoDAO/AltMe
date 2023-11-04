@@ -146,6 +146,13 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
             decryptedJson['ebsiP256Key'] as String,
           );
         }
+
+        if (decryptedJson.containsKey('jwkP256Key')) {
+          await secureStorageProvider.set(
+            SecureStorageKeys.p256PrivateKey3,
+            decryptedJson['jwkP256Key'] as String,
+          );
+        }
       }
 
       await credentialsCubit.recoverWallet(
