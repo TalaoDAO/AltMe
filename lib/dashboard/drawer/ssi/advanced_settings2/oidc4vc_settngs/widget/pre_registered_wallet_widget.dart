@@ -15,6 +15,10 @@ class PreRegisteredWalletWidget extends StatelessWidget {
       builder: (context, state) {
         final clientIdController = TextEditingController();
         final clientSecretController = TextEditingController();
+        clientIdController.text =
+            context.read<ProfileCubit>().state.model.clientId;
+        clientSecretController.text =
+            context.read<ProfileCubit>().state.model.clientSecret;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -120,8 +124,9 @@ class PreRegisteredWalletWidget extends StatelessWidget {
                       await context
                           .read<ProfileCubit>()
                           .updatePreRegisteredWalletSettings(
-                            clientId: clientIdController.text.trim(),
-                            clientSecret: clientSecretController.text.trim(),
+                            clientId: clientIdController.value.text.trim(),
+                            clientSecret:
+                                clientSecretController.value.text.trim(),
                           );
                     },
                   ),
