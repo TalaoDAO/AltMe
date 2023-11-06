@@ -23,6 +23,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:uuid/uuid.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -1061,8 +1062,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? preAuthorizedCode,
     required String issuer,
     required dynamic credentialOfferJson,
-    required String clientId,
-    required String? clientSecret,
   }) async {
     try {
       final enableScopeParameterValue =
@@ -1081,6 +1080,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       } else {
         emit(state.loading());
+
+        String clientId = '';
+        String? clientSecret;
+
+        final useClientIdAndClientRequest =
+            profileCubit.state.model.isPreRegisteredWallet;
+
+        if (useClientIdAndClientRequest) {
+          clientId = profileCubit.state.model.clientId;
+          clientSecret = profileCubit.state.model.clientSecret;
+        } else {
+          clientId = const Uuid().v4();
+        }
 
         await getAuthorizationUriForIssuer(
           scannedResponse: state.uri.toString(),

@@ -1002,5 +1002,7 @@
   "successfullyDownloaded": "Successfully Downloaded",
   "advancedSecuritySettings": "Advanced Security Settings",
   "clientMetadata": "Wallet metadata",
-  "theIssuanceOfThisCredentialIsPending": "The issuance of this credential is pending"
+  "theIssuanceOfThisCredentialIsPending": "The issuance of this credential is pending",
+  "clientId": "Client Id",
+  "clientSecret": "Client Secret"
 }

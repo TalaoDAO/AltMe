@@ -907,7 +907,9 @@
     "successfullyDownloaded",
     "advancedSecuritySettings",
     "clientMetadata",
-    "theIssuanceOfThisCredentialIsPending"
+    "theIssuanceOfThisCredentialIsPending",
+    "clientId",
+    "clientSecret"
   ],
 
   "es": [
@@ -1818,7 +1820,9 @@
     "successfullyDownloaded",
     "advancedSecuritySettings",
     "clientMetadata",
-    "theIssuanceOfThisCredentialIsPending"
+    "theIssuanceOfThisCredentialIsPending",
+    "clientId",
+    "clientSecret"
   ],
 
   "fr": [
@@ -2032,7 +2036,9 @@
     "successfullyDownloaded",
     "advancedSecuritySettings",
     "clientMetadata",
-    "theIssuanceOfThisCredentialIsPending"
+    "theIssuanceOfThisCredentialIsPending",
+    "clientId",
+    "clientSecret"
   ],
 
   "it": [
@@ -2943,6 +2949,8 @@
     "successfullyDownloaded",
     "advancedSecuritySettings",
     "clientMetadata",
-    "theIssuanceOfThisCredentialIsPending"
+    "theIssuanceOfThisCredentialIsPending",
+    "clientId",
+    "clientSecret"
   ]
 }
