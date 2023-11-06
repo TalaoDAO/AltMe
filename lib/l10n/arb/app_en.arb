@@ -991,7 +991,6 @@
   "preRegisteredWallet": "Pre registered wallet",
   "preRegisteredWalletSubtitle": "Default : Off\nEnable to use client_id and client_secret values.",
   "theServiceIsNotAvailable": "The service is not available",
-  "download": "Download",
   "issuerDID": "Issuer DID",
   "subjectDID": "Subject DID",
   "type": "Type",
