@@ -136,14 +136,16 @@ class ProfileCubit extends Cubit<ProfileState> {
       final isPreRegisteredWalletValue = await secureStorageProvider
           .get(SecureStorageKeys.isPreRegisteredWallet);
 
-      final clientSecret =
-          await secureStorageProvider.get(SecureStorageKeys.clientSecret) ?? '';
-
-      final clientId =
-          await secureStorageProvider.get(SecureStorageKeys.clientId) ?? '';
-
       final isPreRegisteredWallet = isPreRegisteredWalletValue != null &&
           isPreRegisteredWalletValue == 'true';
+
+      final clientId =
+          await secureStorageProvider.get(SecureStorageKeys.clientId) ??
+              Parameters.clientId;
+
+      final clientSecret =
+          await secureStorageProvider.get(SecureStorageKeys.clientSecret) ??
+              Parameters.clientSecret;
 
       final userPINCodeForAuthenticationValue = await secureStorageProvider
           .get(SecureStorageKeys.userPINCodeForAuthentication);
@@ -181,8 +183,8 @@ class ProfileCubit extends Cubit<ProfileState> {
         enableCryptographicHolderBinding: enableCryptographicHolderBinding,
         enableScopeParameter: enableScopeParameter,
         isPreRegisteredWallet: isPreRegisteredWallet,
-        clientSecret: clientSecret,
         clientId: clientId,
+        clientSecret: clientSecret,
       );
       await update(profileModel);
     } catch (e, s) {
@@ -405,14 +407,13 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
-  Future<void> updatePreRegisteredWalletSettings({
-    String clientId = '',
-    String clientSecret = '',
-  }) async {
-    final profileModel = state.model.copyWith(
-      clientId: clientId,
-      clientSecret: clientSecret,
-    );
+  Future<void> updateClientId(String value) async {
+    final profileModel = state.model.copyWith(clientId: value);
+    await update(profileModel);
+  }
+
+  Future<void> updateClientSecret(String value) async {
+    final profileModel = state.model.copyWith(clientSecret: value);
     await update(profileModel);
   }
 
