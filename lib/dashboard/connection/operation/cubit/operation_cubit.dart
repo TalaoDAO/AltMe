@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -353,11 +354,11 @@ class OperationCubit extends Cubit<OperationState> {
             case BlockchainType.ethereum:
               rpcUrl = await web3RpcMainnetInfuraURL();
             case BlockchainType.fantom:
-              rpcUrl = FantomNetwork.mainNet().rpcNodeUrl;
+              rpcUrl = FantomNetwork.mainNet().rpcNodeUrl as String;
             case BlockchainType.polygon:
-              rpcUrl = PolygonNetwork.mainNet().rpcNodeUrl;
+              rpcUrl = PolygonNetwork.mainNet().rpcNodeUrl as String;
             case BlockchainType.binance:
-              rpcUrl = BinanceNetwork.mainNet().rpcNodeUrl;
+              rpcUrl = BinanceNetwork.mainNet().rpcNodeUrl as String;
           }
 
           log.i('rpcUrl - $rpcUrl');
@@ -481,10 +482,12 @@ class OperationCubit extends Cubit<OperationState> {
       switch (beaconRequest.request!.network!.type!) {
         case NetworkType.mainnet:
           baseUrl = TezosNetwork.mainNet().apiUrl;
-          rpcNodeUrl = TezosNetwork.mainNet().rpcNodeUrl;
+          final rpcNodeUrlList =
+              TezosNetwork.mainNet().rpcNodeUrl as List<String>;
+          rpcNodeUrl = rpcNodeUrlList[Random().nextInt(rpcNodeUrlList.length)];
         case NetworkType.ghostnet:
           baseUrl = TezosNetwork.ghostnet().apiUrl;
-          rpcNodeUrl = TezosNetwork.ghostnet().rpcNodeUrl;
+          rpcNodeUrl = TezosNetwork.ghostnet().rpcNodeUrl as String;
         case NetworkType.mondaynet:
         case NetworkType.delphinet:
         case NetworkType.edonet:

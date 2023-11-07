@@ -118,6 +118,10 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
           LoadingView().hide();
         }
 
+        if (state.status == AppStatus.goBack) {
+          Navigator.of(context).pop();
+        }
+
         if (state.message != null &&
             (state.status == AppStatus.error ||
                 state.status == AppStatus.errorWhileFetching)) {
@@ -192,12 +196,12 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     withdrawalAddressController: withdrawalAddressController,
                     caption: l10n.to,
                     onValidAddress: (address) {
-                      context
-                          .read<ConfirmTokenTransactionCubit>()
-                          .setWithdrawalAddress(withdrawalAddress: address);
-                      context
-                          .read<ConfirmTokenTransactionCubit>()
-                          .calculateFee();
+                      // context
+                      //     .read<ConfirmTokenTransactionCubit>()
+                      //     .setWithdrawalAddress(withdrawalAddress: address);
+                      // context
+                      //     .read<ConfirmTokenTransactionCubit>()
+                      //     .calculateFee();
                     },
                   ),
                   Padding(
