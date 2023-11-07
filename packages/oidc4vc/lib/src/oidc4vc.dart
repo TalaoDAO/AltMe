@@ -235,7 +235,7 @@ class OIDC4VC {
           'did:polygonid'
         ],
         'subject_syntax_types_discriminations': [
-          'did🔑jwk_jcs-pub',
+          'did:key:jwk_jcs-pub',
           'did:ebsi:v1'
         ],
         'subject_trust_frameworks_supported': ['ebsi'],

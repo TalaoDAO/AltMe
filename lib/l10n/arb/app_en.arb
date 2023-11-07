@@ -991,7 +991,6 @@
   "preRegisteredWallet": "Pre registered wallet",
   "preRegisteredWalletSubtitle": "Default : Off\nEnable to use client_id and client_secret values.",
   "theServiceIsNotAvailable": "The service is not available",
-  "download": "Download",
   "issuerDID": "Issuer DID",
   "subjectDID": "Subject DID",
   "type": "Type",
@@ -1003,5 +1002,7 @@
   "successfullyDownloaded": "Successfully Downloaded",
   "advancedSecuritySettings": "Advanced Security Settings",
   "clientMetadata": "Wallet metadata",
-  "theIssuanceOfThisCredentialIsPending": "The issuance of this credential is pending"
+  "theIssuanceOfThisCredentialIsPending": "The issuance of this credential is pending",
+  "clientId": "Client Id",
+  "clientSecret": "Client Secret"
 }

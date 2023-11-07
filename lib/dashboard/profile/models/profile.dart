@@ -24,14 +24,14 @@ class ProfileModel extends Equatable {
     required this.enableCryptographicHolderBinding,
     required this.enableScopeParameter,
     required this.isPreRegisteredWallet,
-    this.clientId = '',
-    this.clientSecret = '',
     this.companyName = '',
     this.companyWebsite = '',
     this.jobTitle = '',
     required this.enableSecurity,
     required this.isDeveloperMode,
     required this.enable4DigitPINCode,
+    required this.clientId,
+    required this.clientSecret,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
@@ -61,8 +61,8 @@ class ProfileModel extends Equatable {
         enableCryptographicHolderBinding: true,
         enableScopeParameter: false,
         isPreRegisteredWallet: false,
-        clientId: '',
-        clientSecret: '',
+        clientId: Parameters.clientId,
+        clientSecret: Parameters.clientSecret,
       );
 
   final String firstName;
