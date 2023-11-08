@@ -1084,10 +1084,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         String clientId = '';
         String? clientSecret;
 
-        final useClientIdAndClientRequest =
-            profileCubit.state.model.isPreRegisteredWallet;
+        final useBasicClientAuthentication =
+            profileCubit.state.model.useBasicClientAuthentication;
 
-        if (useClientIdAndClientRequest) {
+        if (useBasicClientAuthentication) {
           clientId = profileCubit.state.model.clientId;
           clientSecret = profileCubit.state.model.clientSecret;
         } else {
