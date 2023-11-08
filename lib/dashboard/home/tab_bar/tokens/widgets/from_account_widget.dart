@@ -19,6 +19,7 @@ class FromAccountWidget extends StatelessWidget {
       builder: (context, walletState) {
         return AccountSelectBoxView(
           title: l10n.from,
+          isEnabled: isEnabled,
           accounts: walletState.cryptoAccount.data,
           selectedAccountIndex: walletState.currentCryptoIndex,
           onSelectAccount: (accountData, index) {
