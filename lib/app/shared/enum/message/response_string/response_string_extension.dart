@@ -540,6 +540,10 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_theServiceIsNotAvailable:
         return globalMessage.RESPONSE_STRING_theServiceIsNotAvailable;
+
+      case ResponseString.RESPONSE_STRING_theIssuanceOfThisCredentialIsPending:
+        return globalMessage
+            .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending;
     }
   }
 }

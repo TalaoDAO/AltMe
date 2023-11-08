@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -34,7 +35,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     final apiKey = dotenv.get('COIN_GECKO_API_KEY');
 
     final responseOfXTZUsdPrice = await client.get(
-      '${Urls.coinGeckoBase}/simple/price?ids=tezos&vs_currencies=usd',
+      '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
       queryParameters: {
         'x_cg_pro_api_key': apiKey,
       },
@@ -77,12 +78,14 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     try {
       if (manageNetworkCubit.state.network is TezosNetwork) {
         await _calculateFeeTezos();
+        unawaited(getXtzUSDPrice());
       } else {
         await _calculateFeeEthereum();
       }
     } catch (e, s) {
       logger.i('error: $e , stack: $s');
       emit(state.copyWith(status: AppStatus.error));
+      emit(state.copyWith(status: AppStatus.goBack));
     }
   }
 
@@ -130,49 +133,88 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     );
   }
 
-  Future<void> _calculateFeeTezos() async {
-    final rpcNodeUrl = manageNetworkCubit.state.network.rpcNodeUrl;
-    final client = TezartClient(rpcNodeUrl);
-    final keystore =
-        KeyGenerator().getKeystore(secretKey: state.selectedAccountSecretKey);
-    late OperationsList? finalOperationList;
-    late List<NetworkFeeModel> tezosNetworkFees;
-    late NetworkFeeModel networkFee;
-    if (state.selectedToken.contractAddress.isEmpty) {
-      finalOperationList = await tezosTransfert(keystore, client);
-      final finalFeesSum = finalOperationList.operations
-          .fold(0, (sum, element) => sum + element.totalFee);
-      tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
-        average: finalFeesSum / 1000000,
-      );
-      networkFee = tezosNetworkFees[0];
-    } else {
-      // Need to convert michelson expression into michelson
-      // finalOperationList = await tezosContract(
-      //   client,
-      //   keystore,
-      // );
-      tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
-        slow: 0.002496,
-        average: 0.021900,
-        fast: 0.050000,
-      );
-      finalOperationList = null;
-      networkFee = tezosNetworkFees[1];
-    }
+  late String rpcNodeUrlForTransaction;
 
-    emit(
-      state.copyWith(
-        networkFee: networkFee,
-        networkFees: tezosNetworkFees,
-        status: AppStatus.init,
-        totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
-            ? state.tokenAmount - networkFee.fee
-            : state.tokenAmount,
-        operationsList: finalOperationList,
-      ),
-    );
-    unawaited(getXtzUSDPrice());
+  Future<void> _calculateFeeTezos() async {
+    int retryCount = 0;
+    const maxRetries = Parameters.maxEntries;
+
+    while (retryCount < maxRetries) {
+      try {
+        emit(state.loading());
+
+        final dynamic rpcNodeUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+
+        if (rpcNodeUrl is List<String>) {
+          rpcNodeUrlForTransaction =
+              rpcNodeUrl[Random().nextInt(rpcNodeUrl.length)];
+        } else {
+          rpcNodeUrlForTransaction = rpcNodeUrl.toString();
+        }
+
+        logger.i('rpcNodeUrl: $rpcNodeUrlForTransaction');
+        final client = TezartClient(rpcNodeUrlForTransaction);
+        final keystore = KeyGenerator()
+            .getKeystore(secretKey: state.selectedAccountSecretKey);
+        late OperationsList? finalOperationList;
+        late List<NetworkFeeModel> tezosNetworkFees;
+        late NetworkFeeModel networkFee;
+        if (state.selectedToken.contractAddress.isEmpty) {
+          finalOperationList = await tezosTransfert(keystore, client);
+          final finalFeesSum = finalOperationList.operations
+              .fold(0, (sum, element) => sum + element.totalFee);
+          tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
+            average: finalFeesSum / 1000000,
+          );
+          networkFee = tezosNetworkFees[0];
+        } else {
+          // Need to convert michelson expression into michelson
+          // finalOperationList = await tezosContract(
+          //   client,
+          //   keystore,
+          // );
+          tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
+            slow: 0.002496,
+            average: 0.021900,
+            fast: 0.050000,
+          );
+          finalOperationList = null;
+          networkFee = tezosNetworkFees[1];
+        }
+
+        emit(
+          state.copyWith(
+            networkFee: networkFee,
+            networkFees: tezosNetworkFees,
+            status: AppStatus.init,
+            totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
+                ? state.tokenAmount - networkFee.fee
+                : state.tokenAmount,
+            operationsList: finalOperationList,
+          ),
+        );
+        break;
+      } catch (e, s) {
+        logger.e('error : $e, s: $s');
+
+        if (e is MessageHandler) {
+          rethrow;
+        } else if (e is TezartNodeError) {
+          logger.e('e: $e , metadata: ${e.metadata} , s: $s');
+          retryCount++;
+          logger.i('retryCount: $retryCount');
+          if (retryCount < maxRetries) {
+            await Future<void>.delayed(const Duration(seconds: 1));
+          } else {
+            rethrow;
+          }
+        } else {
+          throw ResponseMessage(
+            message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
+          );
+        }
+      }
+    }
   }
 
   Future<OperationsList> tezosContract(
@@ -280,14 +322,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         error: e,
         stackTrace: s,
       );
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            message: ResponseString
-                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          ),
-        ),
-      );
+      rethrow;
     }
   }
 
@@ -300,7 +335,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       final selectedEthereumNetwork =
           manageNetworkCubit.state.network as EthereumNetwork;
 
-      final rpcNodeUrl = selectedEthereumNetwork.rpcNodeUrl;
+      final rpcNodeUrl = selectedEthereumNetwork.rpcNodeUrl as String;
 
       final amount = int.parse(
         tokenAmount
@@ -366,12 +401,14 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
   Future<void> sendContractInvocationOperation() async {
     try {
-      emit(state.copyWith(status: AppStatus.init));
+      emit(state.loading());
+
       if (manageNetworkCubit.state.network is TezosNetwork) {
         await _sendContractInvocationOperationTezos(
           tokenAmount: state.totalAmount,
           selectedAccountSecretKey: state.selectedAccountSecretKey,
           token: state.selectedToken,
+          rpcNodeUrl: rpcNodeUrlForTransaction,
         );
       } else {
         final selectedEthereumNetwork = manageNetworkCubit.state.network;
@@ -384,7 +421,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         if (selectedEthereumNetwork is PolygonNetwork ||
             selectedEthereumNetwork is BinanceNetwork ||
             selectedEthereumNetwork is FantomNetwork) {
-          chainRpcUrl = selectedEthereumNetwork.rpcNodeUrl;
+          chainRpcUrl = selectedEthereumNetwork.rpcNodeUrl as String;
         } else {
           chainRpcUrl = ethRpcUrl;
         }
@@ -399,14 +436,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       }
     } catch (e, s) {
       logger.e('e: $e s: $s');
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            message: ResponseString
-                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          ),
-        ),
-      );
+      rethrow;
     }
   }
 
@@ -414,6 +444,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     required double tokenAmount,
     required String selectedAccountSecretKey,
     required TokenModel token,
+    required String rpcNodeUrl,
   }) async {
     try {
       if (token.symbol == 'XTZ') {
@@ -423,8 +454,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       if (token.contractAddress.isEmpty) return;
 
       emit(state.loading());
-
-      final server = manageNetworkCubit.state.network.rpcNodeUrl;
 
       final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
 
@@ -469,7 +498,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       );
 
       final dynamic resultInvoke = await Dartez.sendContractInvocationOperation(
-        server,
+        rpcNodeUrl,
         signer as SoftSigner,
         keyStore,
         contractAddress,

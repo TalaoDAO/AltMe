@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -84,16 +85,8 @@ class ConfirmWithdrawalView extends StatefulWidget {
 }
 
 class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
-  late final TextEditingController withdrawalAddressController =
-      TextEditingController(text: widget.withdrawalAddress);
-
   @override
   void initState() {
-    withdrawalAddressController.addListener(() {
-      context.read<ConfirmTokenTransactionCubit>().setWithdrawalAddress(
-            withdrawalAddress: withdrawalAddressController.text,
-          );
-    });
     Future.microtask(context.read<ConfirmTokenTransactionCubit>().calculateFee);
     super.initState();
   }
@@ -116,6 +109,10 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
           LoadingView().show(context: context);
         } else {
           LoadingView().hide();
+        }
+
+        if (state.status == AppStatus.goBack) {
+          Navigator.of(context).pop();
         }
 
         if (state.message != null &&
@@ -188,17 +185,33 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                   const SizedBox(height: Sizes.spaceSmall),
                   const FromAccountWidget(isEnabled: false),
                   const SizedBox(height: Sizes.spaceNormal),
-                  WithdrawalAddressInputView(
-                    withdrawalAddressController: withdrawalAddressController,
-                    caption: l10n.to,
-                    onValidAddress: (address) {
-                      context
-                          .read<ConfirmTokenTransactionCubit>()
-                          .setWithdrawalAddress(withdrawalAddress: address);
-                      context
-                          .read<ConfirmTokenTransactionCubit>()
-                          .calculateFee();
-                    },
+                  BackgroundCard(
+                    color: Theme.of(context).colorScheme.cardBackground,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            l10n.to,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                          ),
+                          const SizedBox(height: Sizes.spaceXSmall),
+                          MyText(
+                            widget.withdrawalAddress,
+                            maxLines: 2,
+                            style: Theme.of(context).textTheme.walletAddress,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(Sizes.spaceSmall),

@@ -33,7 +33,7 @@ extension CredentialCategoryX on CredentialCategory {
   int get order {
     switch (this) {
       case CredentialCategory.advantagesCards:
-        return 150;
+        return 8;
       case CredentialCategory.identityCards:
         return 140;
       case CredentialCategory.professionalCards:
@@ -107,7 +107,7 @@ extension CredentialCategoryX on CredentialCategory {
         return [];
       case CredentialCategory.socialMediaCards:
         return [
-          CredentialSubjectType.twitterCard,
+          //CredentialSubjectType.twitterCard,
         ];
       case CredentialCategory.walletIntegrity:
         return [];

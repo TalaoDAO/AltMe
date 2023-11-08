@@ -71,7 +71,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             encodedPayload = stringToHexPrefixedWith05(payload: payload);
             signingType = SigningType.raw;
           }
-          final bytes = hexToBytes(encodedPayload);
+          final bytes = hexToBytes(encodedPayload).filterPayload;
+
           payloadMessage = utf8.decode(bytes, allowMalformed: true);
 
         case ConnectionBridgeType.walletconnect:

@@ -48,101 +48,58 @@ class DidKeyTypeWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  ListTile(
-                    onTap: () {
-                      context
-                          .read<ProfileCubit>()
-                          .updateDidKeyType(DidKeyType.secp256k1);
-                    },
-                    shape: const RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Color(0xFFDDDDEE),
-                        width: 0.5,
-                      ),
-                    ),
-                    title: Text(
-                      'did:key secp256k1',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
+                  ListView.builder(
+                    itemCount: DidKeyType.values.length,
+                    shrinkWrap: true,
+                    physics: const ScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (context, index) {
+                      final didKeyType = DidKeyType.values[index];
+                      return Column(
+                        children: [
+                          if (index != 0)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: Divider(
+                                height: 0,
+                                color:
+                                    Theme.of(context).colorScheme.borderColor,
+                              ),
+                            ),
+                          ListTile(
+                            onTap: () {
+                              context
+                                  .read<ProfileCubit>()
+                                  .updateDidKeyType(didKeyType);
+                            },
+                            shape: const RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: Color(0xFFDDDDEE),
+                                width: 0.5,
+                              ),
+                            ),
+                            title: Text(
+                              didKeyType.formattedString,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                            ),
+                            trailing: Icon(
+                              state.model.didKeyType == didKeyType.toString()
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_unchecked,
+                              size: Sizes.icon2x,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
                           ),
-                    ),
-                    trailing: Icon(
-                      state.model.didKeyType == DidKeyType.secp256k1.toString()
-                          ? Icons.radio_button_checked
-                          : Icons.radio_button_unchecked,
-                      size: Sizes.icon2x,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.spaceSmall,
-                    ),
-                    child: Divider(
-                      height: 0,
-                      color: Theme.of(context).colorScheme.borderColor,
-                    ),
-                  ),
-                  ListTile(
-                    onTap: () {
-                      context
-                          .read<ProfileCubit>()
-                          .updateDidKeyType(DidKeyType.p256);
+                        ],
+                      );
                     },
-                    shape: const RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Color(0xFFDDDDEE),
-                        width: 0.5,
-                      ),
-                    ),
-                    title: Text(
-                      'did:key P-256',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                    ),
-                    trailing: Icon(
-                      state.model.didKeyType == DidKeyType.p256.toString()
-                          ? Icons.radio_button_checked
-                          : Icons.radio_button_unchecked,
-                      size: Sizes.icon2x,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.spaceSmall,
-                    ),
-                    child: Divider(
-                      height: 0,
-                      color: Theme.of(context).colorScheme.borderColor,
-                    ),
-                  ),
-                  ListTile(
-                    onTap: () {
-                      context
-                          .read<ProfileCubit>()
-                          .updateDidKeyType(DidKeyType.ebsiv3);
-                    },
-                    shape: const RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Color(0xFFDDDDEE),
-                        width: 0.5,
-                      ),
-                    ),
-                    title: Text(
-                      'did:key EBSI-V3',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                    ),
-                    trailing: Icon(
-                      state.model.didKeyType == DidKeyType.ebsiv3.toString()
-                          ? Icons.radio_button_checked
-                          : Icons.radio_button_unchecked,
-                      size: Sizes.icon2x,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
                   ),
                 ],
               ),

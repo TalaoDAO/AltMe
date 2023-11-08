@@ -97,7 +97,9 @@ unlinked_spec.ds
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
 **/ios/Runner.app.dSYM.zip
-**/ios/Runner.ipa
+**/ios/Gemfile
+**/ios/fastlane/Appfile
+**/ios/fastlane/report.xml
 
 # Coverage
 coverage/

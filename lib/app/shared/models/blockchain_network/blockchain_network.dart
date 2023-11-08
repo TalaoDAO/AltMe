@@ -24,7 +24,7 @@ class BlockchainNetwork extends Equatable {
   final String networkname;
   final String apiUrl;
   final String apiKey;
-  final String rpcNodeUrl;
+  final dynamic rpcNodeUrl;
   final String? title;
   final String? subTitle;
   final BlockchainType type;

@@ -71,7 +71,14 @@ class Urls {
   static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
 
   /// main tezos rpc
-  static const mainnetRPC = 'https://rpc.tzstats.com';
+  static const mainnetRPC = [
+    'https://mainnet.ecadinfra.com',
+    'https://mainnet.api.tez.ie',
+    'https://rpc.tzbeta.net',
+    'https://mainnet.tezos.marigold.dev',
+    'https://rpc.tzstats.com',
+  ];
+
   static const ghostnetRPC = 'https://rpc.tzkt.io/ghostnet';
 
   static const coinGeckoBase = 'https://pro-api.coingecko.com/api/v3/';

@@ -36,8 +36,8 @@ class AccountSelectBoxView extends StatelessWidget {
               cryptoAccountData: accounts[selectedAccountIndex],
               isBoxOpen: true,
               onPressed: isEnabled ? null : null,
-            ),
-          if (isEnabled)
+            )
+          else
             Theme(
               data: Theme.of(context).copyWith(
                 unselectedWidgetColor: Theme.of(context).colorScheme.onPrimary,
