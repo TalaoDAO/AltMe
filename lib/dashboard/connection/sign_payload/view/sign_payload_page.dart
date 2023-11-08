@@ -187,7 +187,7 @@ class _SignPayloadViewState extends State<SignPayloadView> {
                         textAlign: TextAlign.left,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      const SizedBox(height: Sizes.spaceXLarge),
+                      const SizedBox(height: Sizes.spaceXSmall),
                       Text(
                         message,
                         textAlign: TextAlign.left,

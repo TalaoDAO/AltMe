@@ -35,7 +35,7 @@ class SecureStorageKeys {
   static const String enableCryptographicHolderBinding =
       'enableCryptographicHolderBinding';
   static const String enableScopeParameter = 'enableScopeParameter';
-  static const String isPreRegisteredWallet = 'isPreRegisteredWallet';
+  static const String useBasicClientAuthentication = 'isPreRegisteredWallet';
   static const String clientId = 'clientId';
   static const String clientSecret = 'clientSecret';
 

@@ -137,15 +137,21 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
   Future<void> _calculateFeeTezos() async {
     int retryCount = 0;
-    const maxRetries = 3;
+    const maxRetries = Parameters.maxEntries;
 
     while (retryCount < maxRetries) {
       try {
         emit(state.loading());
-        final rpcNodeUrlList =
-            manageNetworkCubit.state.network.rpcNodeUrl as List<String>;
-        rpcNodeUrlForTransaction =
-            rpcNodeUrlList[Random().nextInt(rpcNodeUrlList.length)];
+
+        final dynamic rpcNodeUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+
+        if (rpcNodeUrl is List<String>) {
+          rpcNodeUrlForTransaction =
+              rpcNodeUrl[Random().nextInt(rpcNodeUrl.length)];
+        } else {
+          rpcNodeUrlForTransaction = rpcNodeUrl.toString();
+        }
+
         logger.i('rpcNodeUrl: $rpcNodeUrlForTransaction');
         final client = TezartClient(rpcNodeUrlForTransaction);
         final keystore = KeyGenerator()
@@ -189,14 +195,23 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         );
         break;
       } catch (e, s) {
-        logger.e('e: $e s: $s');
-        retryCount++;
-        logger.i('retryCount: $retryCount');
+        logger.e('error : $e, s: $s');
 
-        if (retryCount < maxRetries) {
-          await Future<void>.delayed(const Duration(seconds: 1));
-        } else {
+        if (e is MessageHandler) {
           rethrow;
+        } else if (e is TezartNodeError) {
+          logger.e('e: $e , metadata: ${e.metadata} , s: $s');
+          retryCount++;
+          logger.i('retryCount: $retryCount');
+          if (retryCount < maxRetries) {
+            await Future<void>.delayed(const Duration(seconds: 1));
+          } else {
+            rethrow;
+          }
+        } else {
+          throw ResponseMessage(
+            message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
+          );
         }
       }
     }

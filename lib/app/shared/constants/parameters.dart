@@ -66,4 +66,6 @@ class Parameters {
   static const String clientId = 'urn:altme:0001';
   static const String clientSecret =
       'urn:uuid:f2e1b84a-930b-4250-a6c6-f35cabf698c8';
+
+  static const int maxEntries = 3;
 }
