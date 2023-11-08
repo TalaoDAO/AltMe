@@ -150,13 +150,13 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                 child: MyGradientButton(
                   onPressed: state.isEmpty
                       ? null
-                      : () {
+                      : () async {
                           if (state.isEmpty) return;
 
                           final selectedCredentials =
                               state.map((index) => credentials[index]).toList();
 
-                          context
+                          await context
                               .read<QRCodeScanCubit>()
                               .processSelectedCredentials(
                                 selectedCredentials: selectedCredentials,

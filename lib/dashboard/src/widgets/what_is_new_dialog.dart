@@ -77,6 +77,15 @@ class WhatIsNewDialog extends StatelessWidget {
                               version: versionNumber,
                               features: const [
                                 'Developer mode improvement',
+                                'OIDC4VCI improvement',
+                                'Update code licenses',
+                                'Bug correction',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.23.0',
+                              features: [
+                                'Developer mode improvement',
                                 'Bug correction',
                               ],
                             ),

@@ -14,10 +14,12 @@ import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:share_plus/share_plus.dart';
@@ -314,7 +316,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                           Navigator.of(context).pop(false);
                           await Navigator.of(context).push<void>(
                             JsonViewerPage.route(
-                              title: l10n.displayConfiguration,
+                              title: l10n.display,
                               data: formattedData,
                             ),
                           );
@@ -414,6 +416,109 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                 );
             return;
           }
+        }
+      }
+
+      if (state.status == QrScanStatus.authorizationFlow) {
+        try {
+          if (state.uri != null) {
+            LoadingView().show(context: context);
+            final profileCubit = context.read<ProfileCubit>();
+            final uri = state.uri!;
+            final error = uri.queryParameters['error'];
+            final errorDescription = uri.queryParameters['error_description'];
+
+            if (error != null) {
+              throw ResponseMessage(
+                data: {
+                  'error': error,
+                  'error_description': errorDescription,
+                },
+              );
+            }
+
+            final codeForAuthorisedFlow = uri.queryParameters['code'];
+            final stateValue = uri.queryParameters['state'];
+
+            if (codeForAuthorisedFlow == null) {
+              throw ResponseMessage(
+                data: {
+                  'error': 'invalid_request',
+                  'error_description': 'The code is missing.',
+                },
+              );
+            }
+            if (stateValue == null) {
+              throw ResponseMessage(
+                data: {
+                  'error': 'invalid_request',
+                  'error_description': 'The state is missing.',
+                },
+              );
+            }
+
+            await dotenv.load();
+            final String authorizationUriSecretKey =
+                dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
+
+            final jwt =
+                JWT.verify(stateValue, SecretKey(authorizationUriSecretKey));
+
+            final statePayload = jwt.payload as Map<String, dynamic>;
+
+            /// if dev mode is ON show some dialog to show data
+            if (profileCubit.state.model.isDeveloperMode) {
+              final String formattedData =
+                  getFormattedStringOIDC4VCIAuthorizedCodeFlow(
+                url: state.uri.toString(),
+                codeForAuthorisedFlow: codeForAuthorisedFlow,
+                statePayload: statePayload,
+              );
+
+              LoadingView().hide();
+              final bool moveAhead = await showDialog<bool>(
+                    context: context,
+                    builder: (_) {
+                      return DeveloperModeDialog(
+                        onDisplay: () async {
+                          Navigator.of(context).pop(false);
+                          await Navigator.of(context).push<void>(
+                            JsonViewerPage.route(
+                              title: l10n.display,
+                              data: formattedData,
+                            ),
+                          );
+                          return;
+                        },
+                        onDownload: () {
+                          Navigator.of(context).pop(false);
+
+                          final box = context.findRenderObject() as RenderBox?;
+                          final subject = l10n.shareWith;
+
+                          Share.share(
+                            formattedData,
+                            subject: subject,
+                            sharePositionOrigin:
+                                box!.localToGlobal(Offset.zero) & box.size,
+                          );
+                        },
+                        onSkip: () {
+                          Navigator.of(context).pop(true);
+                        },
+                      );
+                    },
+                  ) ??
+                  true;
+              if (!moveAhead) return;
+            }
+            await context.read<QRCodeScanCubit>().authorizedFlowCompletion(
+                  statePayload: statePayload,
+                  codeForAuthorisedFlow: codeForAuthorisedFlow,
+                );
+          }
+        } catch (e) {
+          context.read<QRCodeScanCubit>().emitError(e);
         }
       }
 

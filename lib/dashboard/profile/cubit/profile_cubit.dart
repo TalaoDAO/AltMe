@@ -127,6 +127,27 @@ class ProfileCubit extends Cubit<ProfileState> {
           enableCryptographicHolderBindingValue == null ||
               enableCryptographicHolderBindingValue == 'true';
 
+      final enableScopeParameterValue = await secureStorageProvider
+          .get(SecureStorageKeys.enableScopeParameter);
+
+      final enableScopeParameter = enableScopeParameterValue != null &&
+          enableScopeParameterValue == 'true';
+
+      final useBasicClientAuthenticationValue = await secureStorageProvider
+          .get(SecureStorageKeys.useBasicClientAuthentication);
+
+      final useBasicClientAuthentication =
+          useBasicClientAuthenticationValue != null &&
+              useBasicClientAuthenticationValue == 'true';
+
+      final clientId =
+          await secureStorageProvider.get(SecureStorageKeys.clientId) ??
+              Parameters.clientId;
+
+      final clientSecret =
+          await secureStorageProvider.get(SecureStorageKeys.clientSecret) ??
+              Parameters.clientSecret;
+
       final userPINCodeForAuthenticationValue = await secureStorageProvider
           .get(SecureStorageKeys.userPINCodeForAuthentication);
       final userPINCodeForAuthentication =
@@ -161,6 +182,10 @@ class ProfileCubit extends Cubit<ProfileState> {
         enable4DigitPINCode: enable4DigitPINCode,
         enableJWKThumbprint: enableJWKThumbprint,
         enableCryptographicHolderBinding: enableCryptographicHolderBinding,
+        enableScopeParameter: enableScopeParameter,
+        useBasicClientAuthentication: useBasicClientAuthentication,
+        clientId: clientId,
+        clientSecret: clientSecret,
       );
       await update(profileModel);
     } catch (e, s) {
@@ -275,6 +300,16 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.enableCryptographicHolderBinding.toString(),
       );
 
+      await secureStorageProvider.set(
+        SecureStorageKeys.enableScopeParameter,
+        profileModel.enableScopeParameter.toString(),
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.useBasicClientAuthentication,
+        profileModel.useBasicClientAuthentication.toString(),
+      );
+
       emit(
         state.copyWith(
           model: profileModel,
@@ -360,6 +395,29 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     final profileModel =
         state.model.copyWith(enableCryptographicHolderBinding: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> updateScopeParameterStatus({bool enabled = false}) async {
+    final profileModel = state.model.copyWith(enableScopeParameter: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> updateBasicClientAuthenticationStatus({
+    bool enabled = false,
+  }) async {
+    final profileModel =
+        state.model.copyWith(useBasicClientAuthentication: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> updateClientId(String value) async {
+    final profileModel = state.model.copyWith(clientId: value);
+    await update(profileModel);
+  }
+
+  Future<void> updateClientSecret(String value) async {
+    final profileModel = state.model.copyWith(clientSecret: value);
     await update(profileModel);
   }
 

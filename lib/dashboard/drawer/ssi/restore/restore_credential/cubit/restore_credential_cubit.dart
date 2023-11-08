@@ -123,6 +123,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
                 .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
           );
         }
+
         final List<dynamic> credentialJson =
             decryptedJson['credentials'] as List<dynamic>;
         final credentials = credentialJson.map(
@@ -131,6 +132,27 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
         );
 
         credentialList = credentials.toList();
+
+        if (decryptedJson.containsKey('p256Key')) {
+          await secureStorageProvider.set(
+            SecureStorageKeys.p256PrivateKey,
+            decryptedJson['p256Key'] as String,
+          );
+        }
+
+        if (decryptedJson.containsKey('ebsiP256Key')) {
+          await secureStorageProvider.set(
+            SecureStorageKeys.p256PrivateKey2,
+            decryptedJson['ebsiP256Key'] as String,
+          );
+        }
+
+        if (decryptedJson.containsKey('jwkP256Key')) {
+          await secureStorageProvider.set(
+            SecureStorageKeys.p256PrivateKey3,
+            decryptedJson['jwkP256Key'] as String,
+          );
+        }
       }
 
       await credentialsCubit.recoverWallet(

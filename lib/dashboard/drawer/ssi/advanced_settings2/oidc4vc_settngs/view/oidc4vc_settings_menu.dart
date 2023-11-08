@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -32,14 +34,29 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
       titleLeading: const BackLeadingButton(),
-      body: const Column(
+      body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SecurityLevelWidget(),
-          SixOrForUserPinWidget(),
-          DidKeyTypeWidget(),
-          SubjectSyntaxTypeWidget(),
-          CryptographicHolderBindingWidget(),
+          const SecurityLevelWidget(),
+          const SixOrForUserPinWidget(),
+          const DidKeyTypeWidget(),
+          const SubjectSyntaxTypeWidget(),
+          const CryptographicHolderBindingWidget(),
+          const ScopeParameterWidget(),
+          const ClientAuthenticationWidget(),
+          DrawerItem(
+            title: l10n.clientMetadata,
+            onTap: () {
+              final value = const JsonEncoder.withIndent('  ')
+                  .convert(ConstantsJson.clientMetadata);
+              Navigator.of(context).push<void>(
+                JsonViewerPage.route(
+                  title: l10n.clientMetadata,
+                  data: value,
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

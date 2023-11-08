@@ -45,15 +45,32 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       }
 
       final dateTime = getDateTimeWithoutSpace();
-      final fileName = 'altme-credential-$dateTime';
+      final fileName = 'altme-data-$dateTime';
 
       final credentialModels = credentialsCubit.state.credentials;
+
+      final String p256Key = await getPrivateKey(
+        secureStorage: secureStorageProvider,
+        didKeyType: DidKeyType.p256,
+      );
+      final String jwkP256Key = await getPrivateKey(
+        secureStorage: secureStorageProvider,
+        didKeyType: DidKeyType.jwkP256,
+      );
+      final String ebsiP256Key = await getPrivateKey(
+        secureStorage: secureStorageProvider,
+        didKeyType: DidKeyType.ebsiv3,
+      );
 
       final date = UiDate.formatDate(DateTime.now());
       final message = {
         'date': date,
+        'p256Key': p256Key,
+        'ebsiP256Key': ebsiP256Key,
+        'jwkP256Key': jwkP256Key,
         'credentials': credentialModels,
       };
+
       final encrypted =
           await cryptoKeys.encrypt(jsonEncode(message), mnemonic!);
       final encryptedString = jsonEncode(encrypted);
