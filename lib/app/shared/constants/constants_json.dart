@@ -319,7 +319,7 @@ abstract class ConstantsJson {
   };
 
   static const clientMetadata = <String, dynamic>{
-    'authorization_endpoint': 'https://app.altme.io/app/download/authorize',
+    'authorization_endpoint': 'https://app.talao.co/app/download/authorize',
     'scopes_supported': ['openid'],
     'response_types_supported': ['vp_token', 'id_token'],
     'client_id_schemes_supported': ['redirect_uri', 'did'],
@@ -362,7 +362,10 @@ abstract class ConstantsJson {
       'did:key',
       'did:jwk'
     ],
-    'subject_syntax_types_discriminations': ['did🔑jwk_jcs-pub', 'did:ebsi:v1'],
+    'subject_syntax_types_discriminations': [
+      'did:key:jwk_jcs-pub',
+      'did:ebsi:v1'
+    ],
     'subject_trust_frameworks_supported': ['ebsi'],
     'id_token_types_supported': ['subject_signed_id_token']
   };
