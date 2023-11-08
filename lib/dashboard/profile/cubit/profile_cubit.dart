@@ -133,11 +133,12 @@ class ProfileCubit extends Cubit<ProfileState> {
       final enableScopeParameter = enableScopeParameterValue != null &&
           enableScopeParameterValue == 'true';
 
-      final isPreRegisteredWalletValue = await secureStorageProvider
-          .get(SecureStorageKeys.isPreRegisteredWallet);
+      final useBasicClientAuthenticationValue = await secureStorageProvider
+          .get(SecureStorageKeys.useBasicClientAuthentication);
 
-      final isPreRegisteredWallet = isPreRegisteredWalletValue != null &&
-          isPreRegisteredWalletValue == 'true';
+      final useBasicClientAuthentication =
+          useBasicClientAuthenticationValue != null &&
+              useBasicClientAuthenticationValue == 'true';
 
       final clientId =
           await secureStorageProvider.get(SecureStorageKeys.clientId) ??
@@ -182,7 +183,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         enableJWKThumbprint: enableJWKThumbprint,
         enableCryptographicHolderBinding: enableCryptographicHolderBinding,
         enableScopeParameter: enableScopeParameter,
-        isPreRegisteredWallet: isPreRegisteredWallet,
+        useBasicClientAuthentication: useBasicClientAuthentication,
         clientId: clientId,
         clientSecret: clientSecret,
       );
@@ -305,8 +306,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.isPreRegisteredWallet,
-        profileModel.isPreRegisteredWallet.toString(),
+        SecureStorageKeys.useBasicClientAuthentication,
+        profileModel.useBasicClientAuthentication.toString(),
       );
 
       emit(
@@ -402,8 +403,11 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
-  Future<void> updatePreRegisteredWalletStatus({bool enabled = false}) async {
-    final profileModel = state.model.copyWith(isPreRegisteredWallet: enabled);
+  Future<void> updateBasicClientAuthenticationStatus({
+    bool enabled = false,
+  }) async {
+    final profileModel =
+        state.model.copyWith(useBasicClientAuthentication: enabled);
     await update(profileModel);
   }
 

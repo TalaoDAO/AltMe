@@ -23,7 +23,7 @@ class ProfileModel extends Equatable {
     required this.enableJWKThumbprint,
     required this.enableCryptographicHolderBinding,
     required this.enableScopeParameter,
-    required this.isPreRegisteredWallet,
+    required this.useBasicClientAuthentication,
     this.companyName = '',
     this.companyWebsite = '',
     this.jobTitle = '',
@@ -60,7 +60,7 @@ class ProfileModel extends Equatable {
         enableJWKThumbprint: false,
         enableCryptographicHolderBinding: true,
         enableScopeParameter: false,
-        isPreRegisteredWallet: false,
+        useBasicClientAuthentication: false,
         clientId: Parameters.clientId,
         clientSecret: Parameters.clientSecret,
       );
@@ -88,7 +88,7 @@ class ProfileModel extends Equatable {
   final bool enableJWKThumbprint;
   final bool enableCryptographicHolderBinding;
   final bool enableScopeParameter;
-  final bool isPreRegisteredWallet;
+  final bool useBasicClientAuthentication;
   final String clientId;
   final String clientSecret;
 
@@ -116,7 +116,7 @@ class ProfileModel extends Equatable {
         enableJWKThumbprint,
         enableCryptographicHolderBinding,
         enableScopeParameter,
-        isPreRegisteredWallet,
+        useBasicClientAuthentication,
         clientId,
         clientSecret,
       ];
@@ -146,7 +146,7 @@ class ProfileModel extends Equatable {
     bool? enableJWKThumbprint,
     bool? enableCryptographicHolderBinding,
     bool? enableScopeParameter,
-    bool? isPreRegisteredWallet,
+    bool? useBasicClientAuthentication,
     String? clientId,
     String? clientSecret,
   }) {
@@ -168,8 +168,8 @@ class ProfileModel extends Equatable {
       enableCryptographicHolderBinding: enableCryptographicHolderBinding ??
           this.enableCryptographicHolderBinding,
       enableScopeParameter: enableScopeParameter ?? this.enableScopeParameter,
-      isPreRegisteredWallet:
-          isPreRegisteredWallet ?? this.isPreRegisteredWallet,
+      useBasicClientAuthentication:
+          useBasicClientAuthentication ?? this.useBasicClientAuthentication,
       clientId: clientId ?? this.clientId,
       clientSecret: clientSecret ?? this.clientSecret,
       userConsentForIssuerAccess:
