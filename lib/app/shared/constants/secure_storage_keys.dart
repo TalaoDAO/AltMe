@@ -62,7 +62,7 @@ class SecureStorageKeys {
   static const String polygonIdNetwork = 'profile/polygonIdNetwork';
   static const String didKeyType = 'profile/didKeyType';
 
-  static const String blockchainNetworkKey = 'profile/blockchainNetwork';
+  static const String blockChainNetworksIndexing = 'blockChainNetworksIndexing';
   static const String credentialKey = 'credential';
 
   static const String ssiMnemonic = 'ssi/mnemonic';
