@@ -608,7 +608,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     /// contain id_token but may or may not contain vp_token
     if (hasIDToken(responseType)) {
       final scope = state.uri!.queryParameters['scope'];
-      if (scope == null || scope != 'openid') {
+      if (scope == null || !scope.contains('openid')) {
         throw ResponseMessage(
           data: {
             'error': 'invalid_request',
@@ -949,10 +949,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
 
     final isSecurityEnabled = profileCubit.state.model.enableSecurity;
+    final enableJWKThumbprint = profileCubit.state.model.enableJWKThumbprint;
 
-    if (!isSecurityEnabled) {
-      emit(state.acceptHost());
-    } else {
+    if (isSecurityEnabled && enableJWKThumbprint) {
       final Map<String, dynamic> payload =
           decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
 
@@ -986,6 +985,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           ),
         );
       }
+    } else {
+      emit(state.acceptHost());
     }
   }
 
@@ -1011,6 +1012,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         secureStorage: secureStorageProvider,
       );
 
+      final enableJWKThumbprint = profileCubit.state.model.enableJWKThumbprint;
+
       final Response<dynamic> response = await oidc4vc.siopv2Flow(
         clientId: clientId,
         privateKey: privateKey,
@@ -1019,7 +1022,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         redirectUri: redirectUri,
         nonce: nonce,
         stateValue: stateValue,
-        useJWKThumbPrint: profileCubit.state.model.enableJWKThumbprint,
+        useJWKThumbPrint: enableJWKThumbprint,
       );
 
       String? url;
