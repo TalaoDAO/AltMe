@@ -474,7 +474,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.gender:
         return 'Gender';
       case CredentialSubjectType.walletCredential:
-        return 'Wallet Credential';
+        return 'Wallet Attestation';
       case CredentialSubjectType.tezosAssociatedWallet:
         return 'Tezos Associated Address';
       case CredentialSubjectType.ethereumAssociatedWallet:
