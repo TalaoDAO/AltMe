@@ -496,12 +496,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     final keys = <String>[];
     state.uri?.queryParameters.forEach((key, value) => keys.add(key));
 
-    if (keys.contains('claims')) {
-      /// claims is old standard
-      throw ResponseMessage(
-        message: ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
-      );
-    }
+    // if (keys.contains('claims')) {
+    //   /// claims is old standard
+    //   throw ResponseMessage(
+    //     message: ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
+    //   );
+    // }
 
     if (!keys.contains('response_type')) {
       throw ResponseMessage(
