@@ -222,10 +222,10 @@ packages:
     dependency: transitive
     description:
       name: build_daemon
-      sha256: "5f02d73eb2ba16483e693f80bee4f088563a820e47d1027d4cdfe62b5bb43e65"
+      sha256: "0343061a33da9c5810b2d6cee51945127d8f4c060b7fbdd9d54917f0a3feaaa1"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
+    version: "4.0.1"
   build_resolvers:
     dependency: transitive
     description:
@@ -856,10 +856,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_chat_ui
-      sha256: d2b7d99fae88d17fdab13f4be3e6ae15c4ceaa5d3e199b61c254a67222d42611
+      sha256: "6a4712026429d3b28547bd3d147ded44f8dd53dacc1ff14113693d7b7dd14382"
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.9"
+    version: "1.6.10"
   flutter_dotenv:
     dependency: "direct main"
     description:
@@ -1908,10 +1908,10 @@ packages:
     dependency: transitive
     description:
       name: provider
-      sha256: cdbe7530b12ecd9eb455bdaa2fcb8d4dad22e80b8afb4798b41479d5ce26847f
+      sha256: "9a96a0a19b594dbc5bf0f1f27d2bc67d5f95957359b461cd9feb44ed6ae75096"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.5"
+    version: "6.1.1"
   pub_semver:
     dependency: transitive
     description:

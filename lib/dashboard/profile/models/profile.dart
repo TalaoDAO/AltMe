@@ -13,7 +13,6 @@ class ProfileModel extends Equatable {
     required this.location,
     required this.email,
     required this.polygonIdNetwork,
-    required this.tezosNetwork,
     required this.didKeyType,
     required this.isEnterprise,
     required this.isBiometricEnabled,
@@ -52,7 +51,6 @@ class ProfileModel extends Equatable {
         userConsentForIssuerAccess: true,
         userConsentForVerifierAccess: true,
         userPINCodeForAuthentication: true,
-        tezosNetwork: TezosNetwork.mainNet(),
         didKeyType: DidKeyType.ebsiv3.toString(),
         enableSecurity: false,
         isDeveloperMode: false,
@@ -74,7 +72,6 @@ class ProfileModel extends Equatable {
   final String companyWebsite;
   final String jobTitle;
   final String polygonIdNetwork;
-  final TezosNetwork tezosNetwork;
   final String didKeyType;
   final bool isEnterprise;
   final bool isBiometricEnabled;
@@ -100,7 +97,6 @@ class ProfileModel extends Equatable {
         location,
         email,
         polygonIdNetwork,
-        tezosNetwork,
         didKeyType,
         companyName,
         companyWebsite,
@@ -160,7 +156,6 @@ class ProfileModel extends Equatable {
       companyWebsite: companyWebsite ?? this.companyWebsite,
       jobTitle: jobTitle ?? this.jobTitle,
       polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
-      tezosNetwork: tezosNetwork ?? this.tezosNetwork,
       didKeyType: didKeyType ?? this.didKeyType,
       isEnterprise: isEnterprise ?? this.isEnterprise,
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,

@@ -11,15 +11,15 @@ class TezosNetwork extends BlockchainNetwork {
     required super.rpcNodeUrl,
     required String super.title,
     required String super.subTitle,
+    required super.type,
     super.apiKey,
-  }) : super(
-          type: BlockchainType.tezos,
-        );
+  });
 
   factory TezosNetwork.fromJson(Map<String, dynamic> json) =>
       _$TezosNetworkFromJson(json);
 
   factory TezosNetwork.mainNet() => const TezosNetwork(
+        type: BlockchainType.tezos,
         networkname: 'Mainnet',
         apiUrl: Urls.tzktMainnetUrl,
         rpcNodeUrl: Urls.mainnetRPC,
@@ -30,6 +30,7 @@ class TezosNetwork extends BlockchainNetwork {
       );
 
   factory TezosNetwork.ghostnet() => const TezosNetwork(
+        type: BlockchainType.tezos,
         networkname: 'Ghostnet',
         apiUrl: Urls.tzktGhostnetUrl,
         rpcNodeUrl: Urls.ghostnetRPC,
