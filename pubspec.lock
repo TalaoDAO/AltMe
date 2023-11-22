@@ -214,10 +214,10 @@ packages:
     dependency: transitive
     description:
       name: build_daemon
-      sha256: "5f02d73eb2ba16483e693f80bee4f088563a820e47d1027d4cdfe62b5bb43e65"
+      sha256: "0343061a33da9c5810b2d6cee51945127d8f4c060b7fbdd9d54917f0a3feaaa1"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
+    version: "4.0.1"
   build_resolvers:
     dependency: transitive
     description:
@@ -848,10 +848,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_chat_ui
-      sha256: d2b7d99fae88d17fdab13f4be3e6ae15c4ceaa5d3e199b61c254a67222d42611
+      sha256: "6a4712026429d3b28547bd3d147ded44f8dd53dacc1ff14113693d7b7dd14382"
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.9"
+    version: "1.6.10"
   flutter_dotenv:
     dependency: "direct main"
     description:
@@ -1859,11 +1859,11 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: d7122980df36436a0b9cce11038687b6beb159bf
-      resolved-ref: d7122980df36436a0b9cce11038687b6beb159bf
+      ref: "v2.2.8+2"
+      resolved-ref: "5a2ae7aa7f538985622adff7ab8969ecd91f4829"
       url: "https://github.com/iden3/polygonid-flutter-sdk.git"
     source: git
-    version: "2.2.8"
+    version: "2.2.8+2"
   pool:
     dependency: transitive
     description:
@@ -1892,10 +1892,10 @@ packages:
     dependency: transitive
     description:
       name: provider
-      sha256: cdbe7530b12ecd9eb455bdaa2fcb8d4dad22e80b8afb4798b41479d5ce26847f
+      sha256: "9a96a0a19b594dbc5bf0f1f27d2bc67d5f95957359b461cd9feb44ed6ae75096"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.5"
+    version: "6.1.1"
   pub_semver:
     dependency: transitive
     description:
@@ -2593,10 +2593,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "350a11abd2d1d97e0cc7a28a81b781c08002aa2864d9e3f192ca0ffa18b06ed3"
+      sha256: "7c99c0e1e2fa190b48d25c81ca5e42036d5cac81430ef249027d97b0935c553f"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.9"
+    version: "5.1.0"
   win32_registry:
     dependency: transitive
     description:

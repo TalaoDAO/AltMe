@@ -79,13 +79,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           (await secureStorageProvider.get(SecureStorageKeys.didKeyType)) ??
               DidKeyType.ebsiv3.toString();
 
-      final tezosNetworkJson = await secureStorageProvider
-          .get(SecureStorageKeys.blockchainNetworkKey);
-      final tezosNetwork = tezosNetworkJson != null
-          ? TezosNetwork.fromJson(
-              json.decode(tezosNetworkJson) as Map<String, dynamic>,
-            )
-          : TezosNetwork.mainNet();
       final isEnterprise = (await secureStorageProvider
               .get(SecureStorageKeys.isEnterpriseUser)) ==
           'true';
@@ -168,7 +161,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         email: email,
         polygonIdNetwork: polygonIdNetwork,
         didKeyType: didKeyType,
-        tezosNetwork: tezosNetwork,
         companyName: companyName,
         companyWebsite: companyWebsite,
         jobTitle: jobTitle,

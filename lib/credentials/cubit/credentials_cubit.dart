@@ -439,15 +439,46 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     /// update or create AssociatedAddres credential with new name
     if (filteredCredentialList.isNotEmpty) {
-      final credential = await createAssociatedWalletCredential(
+      //find old id of the credential
+      final oldCredential = oldCredentialList.where((CredentialModel element) {
+        final credentialSubjectModel =
+            element.credentialPreview.credentialSubjectModel;
+
+        String? walletAddress;
+
+        if (credentialSubjectModel is EthereumAssociatedAddressModel) {
+          walletAddress = credentialSubjectModel.associatedAddress;
+        } else if (credentialSubjectModel is TezosAssociatedAddressModel) {
+          walletAddress = credentialSubjectModel.associatedAddress;
+        } else if (credentialSubjectModel is FantomAssociatedAddressModel) {
+          walletAddress = credentialSubjectModel.associatedAddress;
+        } else if (credentialSubjectModel is BinanceAssociatedAddressModel) {
+          walletAddress = credentialSubjectModel.associatedAddress;
+        } else if (credentialSubjectModel is PolygonAssociatedAddressModel) {
+          walletAddress = credentialSubjectModel.associatedAddress;
+        } else {
+          return false;
+        }
+
+        if (walletAddress != null &&
+            walletAddress == cryptoAccountData.walletAddress) {
+          return true;
+        }
+
+        return false;
+      }).first;
+
+      // final credential = state.credentials.where((element) => element.);
+      final credential = await createOrUpdateAssociatedWalletCredential(
         blockchainType: blockchainType,
         cryptoAccountData: cryptoAccountData,
+        oldId: oldCredential.id,
       );
       if (credential != null) {
         await updateCredential(credential: credential);
       }
     } else {
-      final credential = await createAssociatedWalletCredential(
+      final credential = await createOrUpdateAssociatedWalletCredential(
         blockchainType: blockchainType,
         cryptoAccountData: cryptoAccountData,
       );
@@ -457,9 +488,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     }
   }
 
-  Future<CredentialModel?> createAssociatedWalletCredential({
+  Future<CredentialModel?> createOrUpdateAssociatedWalletCredential({
     required BlockchainType blockchainType,
     required CryptoAccountData cryptoAccountData,
+    String? oldId,
   }) async {
     return generateAssociatedWalletCredential(
       cryptoAccountData: cryptoAccountData,
@@ -467,6 +499,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       didKitProvider: didKitProvider,
       blockchainType: blockchainType,
       keyGenerator: keyGenerator,
+      oldId: oldId,
     );
   }
 

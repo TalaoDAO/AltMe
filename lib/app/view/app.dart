@@ -78,11 +78,6 @@ class App extends StatelessWidget {
             );
           },
         ),
-        BlocProvider<ManageNetworkCubit>(
-          create: (context) => ManageNetworkCubit(
-            secureStorageProvider: secure_storage.getSecureStorage,
-          ),
-        ),
         BlocProvider<DIDCubit>(
           create: (context) => DIDCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
@@ -128,6 +123,12 @@ class App extends StatelessWidget {
             keyGenerator: KeyGenerator(),
             credentialsCubit: context.read<CredentialsCubit>(),
             walletConnectCubit: context.read<WalletConnectCubit>(),
+          ),
+        ),
+        BlocProvider<ManageNetworkCubit>(
+          create: (context) => ManageNetworkCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            walletCubit: context.read<WalletCubit>(),
           ),
         ),
         BlocProvider<PolygonIdCubit>(
