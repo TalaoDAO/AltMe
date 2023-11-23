@@ -97,6 +97,7 @@ class OIDC4VC {
     required String state,
     required String authorizationEndPoint,
     required bool credentailsInScopeParameter,
+    required String tokenEndpointAuthMethod,
   }) async {
     try {
       final openidConfigurationResponse = await getOpenIdConfig(issuer);
@@ -116,6 +117,7 @@ class OIDC4VC {
         state: state,
         authorizationEndPoint: authorizationEndPoint,
         credentailsInScopeParameter: credentailsInScopeParameter,
+        tokenEndpointAuthMethod: tokenEndpointAuthMethod,
       );
 
       final url = Uri.parse(authorizationEndpoint);
@@ -140,6 +142,7 @@ class OIDC4VC {
     required PkcePair pkcePair,
     required String state,
     required bool credentailsInScopeParameter,
+    required String tokenEndpointAuthMethod,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -239,7 +242,8 @@ class OIDC4VC {
           'did:ebsi:v1'
         ],
         'subject_trust_frameworks_supported': ['ebsi'],
-        'id_token_types_supported': ['subject_signed_id_token']
+        'id_token_types_supported': ['subject_signed_id_token'],
+        'token_endpoint_auth_method': tokenEndpointAuthMethod,
       }),
     };
 
