@@ -973,6 +973,7 @@
   "theWalletIsNotRegistered": "The wallet is not registered",
   "credentialIssuanceDenied": "Credential issuance denied",
   "thisCredentialFormatIsNotSupported": "This credential format is not supported",
+  "thisFormatIsNotSupported": "This format is not supported",
   "moreDetails": "More Details",
   "theCredentialOfferIsInvalid": "The credential offer is invalid",
   "dateOfRequest": "Date of Request",
