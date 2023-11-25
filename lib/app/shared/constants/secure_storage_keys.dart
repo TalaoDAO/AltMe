@@ -30,6 +30,7 @@ class SecureStorageKeys {
 
   static const String enableSecurity = 'enableSecurity';
   static const String enable4DigitPINCode = 'enable4DigitPINCode';
+  static const String isEbsiV3Profile = 'isEbsiV3Profile';
   static const String isDeveloperMode = 'isDeveloperMode';
   static const String enableJWKThumbprint = 'enableJWKThumbprint';
   static const String enableCryptographicHolderBinding =
@@ -38,6 +39,7 @@ class SecureStorageKeys {
   static const String useBasicClientAuthentication = 'isPreRegisteredWallet';
   static const String clientId = 'clientId';
   static const String clientSecret = 'clientSecret';
+  static const String customProfileBackup = 'customProfileBackup';
 
   static const String pinCode = 'pinCode';
   static const String data = 'data';

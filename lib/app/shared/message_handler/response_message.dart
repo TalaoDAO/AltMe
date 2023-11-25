@@ -813,6 +813,12 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
+        case ResponseString.RESPONSE_STRING_thisFormatIsNotSupported:
+          return ResponseString.RESPONSE_STRING_thisFormatIsNotSupported
+              .localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid:
           return ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid
               .localise(

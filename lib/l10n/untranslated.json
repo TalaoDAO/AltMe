@@ -879,6 +879,7 @@
     "theWalletIsNotRegistered",
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
+    "thisFormatIsNotSupported",
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
@@ -908,7 +909,11 @@
     "clientMetadata",
     "theIssuanceOfThisCredentialIsPending",
     "clientId",
-    "clientSecret"
+    "clientSecret",
+    "walletProfiles",
+    "walletProfilesDescription",
+    "profileCustom",
+    "profileEbsiV3"
   ],
 
   "es": [
@@ -1791,6 +1796,7 @@
     "theWalletIsNotRegistered",
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
+    "thisFormatIsNotSupported",
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
@@ -1820,7 +1826,11 @@
     "clientMetadata",
     "theIssuanceOfThisCredentialIsPending",
     "clientId",
-    "clientSecret"
+    "clientSecret",
+    "walletProfiles",
+    "walletProfilesDescription",
+    "profileCustom",
+    "profileEbsiV3"
   ],
 
   "fr": [
@@ -2007,6 +2017,7 @@
     "theWalletIsNotRegistered",
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
+    "thisFormatIsNotSupported",
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
@@ -2036,7 +2047,11 @@
     "clientMetadata",
     "theIssuanceOfThisCredentialIsPending",
     "clientId",
-    "clientSecret"
+    "clientSecret",
+    "walletProfiles",
+    "walletProfilesDescription",
+    "profileCustom",
+    "profileEbsiV3"
   ],
 
   "it": [
@@ -2919,6 +2934,7 @@
     "theWalletIsNotRegistered",
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
+    "thisFormatIsNotSupported",
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
@@ -2948,6 +2964,10 @@
     "clientMetadata",
     "theIssuanceOfThisCredentialIsPending",
     "clientId",
-    "clientSecret"
+    "clientSecret",
+    "walletProfiles",
+    "walletProfilesDescription",
+    "profileCustom",
+    "profileEbsiV3"
   ]
 }

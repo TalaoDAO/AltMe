@@ -153,6 +153,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       final enable4DigitPINCode = enable4DigitPINCodeValue != null &&
           enable4DigitPINCodeValue == 'true';
 
+      final isEbsiV3ProfileValue =
+          await secureStorageProvider.get(SecureStorageKeys.isEbsiV3Profile);
+      final isEbsiV3Profile =
+          isEbsiV3ProfileValue != null && isEbsiV3ProfileValue == 'true';
       final profileModel = ProfileModel(
         firstName: firstName,
         lastName: lastName,
@@ -178,6 +182,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         useBasicClientAuthentication: useBasicClientAuthentication,
         clientId: clientId,
         clientSecret: clientSecret,
+        isEbsiV3Profile: isEbsiV3Profile,
       );
       await update(profileModel);
     } catch (e, s) {
@@ -302,6 +307,11 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.useBasicClientAuthentication.toString(),
       );
 
+      await secureStorageProvider.set(
+        SecureStorageKeys.isEbsiV3Profile,
+        profileModel.isEbsiV3Profile.toString(),
+      );
+
       emit(
         state.copyWith(
           model: profileModel,
@@ -422,5 +432,59 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> close() async {
     _timer?.cancel();
     return super.close();
+  }
+
+  Future<void> setEbsiV3Profile({bool enabled = false}) async {
+    if (enabled) {
+      // we save current custom settings
+      // Warning when will get multiple profile this backup won't be automatic
+      final customProfileBackup = jsonEncode(state.model);
+      await secureStorageProvider.set(
+        SecureStorageKeys.customProfileBackup,
+        customProfileBackup,
+      );
+      final ebsiV3Profile = ProfileModel.EbsiV3();
+      final profileModel = state.model.copyWith(
+          isDeveloperMode: ebsiV3Profile.isDeveloperMode,
+          isEbsiV3Profile: enabled,
+          enableSecurity: ebsiV3Profile.enableSecurity,
+          enable4DigitPINCode: ebsiV3Profile.enable4DigitPINCode,
+          enableJWKThumbprint: ebsiV3Profile.enable4DigitPINCode,
+          enableCryptographicHolderBinding:
+              ebsiV3Profile.enableCryptographicHolderBinding,
+          didKeyType: ebsiV3Profile.didKeyType,
+          enableScopeParameter: ebsiV3Profile.enableScopeParameter,
+          useBasicClientAuthentication:
+              ebsiV3Profile.useBasicClientAuthentication);
+      await update(profileModel);
+    } else {
+      final String customProfileBackupValue = await secureStorageProvider.get(
+            SecureStorageKeys.customProfileBackup,
+          ) ??
+          jsonEncode(ProfileModel.empty());
+      final customProfileBackup = ProfileModel.fromJson(
+        json.decode(customProfileBackupValue) as Map<String, dynamic>,
+      );
+      final profileModel = state.model.copyWith(
+          isDeveloperMode: customProfileBackup.isDeveloperMode,
+          isEbsiV3Profile: enabled,
+          enableSecurity: customProfileBackup.enableSecurity,
+          enable4DigitPINCode: customProfileBackup.enable4DigitPINCode,
+          enableJWKThumbprint: customProfileBackup.enable4DigitPINCode,
+          enableCryptographicHolderBinding:
+              customProfileBackup.enableCryptographicHolderBinding,
+          didKeyType: customProfileBackup.didKeyType,
+          enableScopeParameter: customProfileBackup.enableScopeParameter,
+          useBasicClientAuthentication:
+              customProfileBackup.useBasicClientAuthentication,
+          clientId: customProfileBackup.clientId,
+          clientSecret: customProfileBackup.clientSecret);
+      await update(profileModel);
+    }
+  }
+
+  Future<void> resetProfile() async {
+    final profileModel = ProfileModel.empty();
+    await update(profileModel);
   }
 }

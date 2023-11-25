@@ -1108,6 +1108,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           credentailsInScopeParameter: enableScopeParameterValue,
           clientId: clientId,
           clientSecret: clientSecret,
+          useBasicClientAuthentication:
+              profileCubit.state.model.useBasicClientAuthentication,
         );
         goBack();
       }
