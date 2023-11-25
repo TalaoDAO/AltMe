@@ -110,7 +110,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>openid</string>
+			<string>siopv2</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>siopv2</string>
@@ -120,7 +120,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>openid</string>
+			<string>openid-vc</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>openid-vc</string>
