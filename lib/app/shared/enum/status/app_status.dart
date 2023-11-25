@@ -8,5 +8,5 @@ enum AppStatus {
   success,
   idle,
   goBack,
-  gotTokenReward,
+  //gotTokenReward,
 }

@@ -16,8 +16,7 @@ class NetworkSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ManageNetworkCubit, ManageNetworkState>(
-      listener: (context, state) {},
+    return BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
       builder: (context, state) {
         return RadioListTile(
           value: network,

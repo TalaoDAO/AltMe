@@ -51,11 +51,11 @@ class SplashCubit extends Cubit<SplashState> {
         if (hasWallet) {
           await homeCubit.emitHasWallet();
           emit(state.copyWith(status: SplashStatus.routeToPassCode));
-          if (Parameters.walletHandlesCrypto) {
-            unawaited(
-              homeCubit.periodicCheckRewardOnTezosBlockchain(),
-            );
-          }
+          // if (Parameters.walletHandlesCrypto) {
+          //   unawaited(
+          //     homeCubit.periodicCheckRewardOnTezosBlockchain(),
+          //   );
+          // }
         } else {
           homeCubit.emitHasNoWallet();
           emit(state.copyWith(status: SplashStatus.routeToOnboarding));

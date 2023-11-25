@@ -110,12 +110,14 @@ class ResetWalletView extends StatelessWidget {
                       if (pinCode?.isEmpty ?? true) {
                         await context.read<WalletCubit>().resetWallet();
                         await context.read<AltmeChatSupportCubit>().dispose();
+                        await context.read<ProfileCubit>().resetProfile();
                       } else {
                         await Navigator.of(context).push<void>(
                           PinCodePage.route(
                             isValidCallback: () {
                               context.read<WalletCubit>().resetWallet();
                               context.read<AltmeChatSupportCubit>().dispose();
+                              context.read<ProfileCubit>().resetProfile();
                             },
                             restrictToBack: false,
                           ),

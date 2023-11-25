@@ -7,6 +7,8 @@
 `ALTME` – THE UNIVERSAL WALLET THAT WORKS FOR YOU
 The Web 3 revolution is all about redistributing the power to the average consumer.
 This is why we are building Altme, to help you get control over your data back.
+Here is the last security audit done on our solution: [AltMe security audit report for Web3 Digital Wallet.pdf](https://github.com/TalaoDAO/AltMe/files/13362734/AltMe.security.audit.report.for.Web3.Digital.Wallet.pdf)
+
 
 ---
 

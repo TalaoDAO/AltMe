@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -11,28 +12,42 @@ part 'manage_network_cubit.g.dart';
 part 'manage_network_state.dart';
 
 class ManageNetworkCubit extends Cubit<ManageNetworkState> {
-  ManageNetworkCubit({required this.secureStorageProvider})
-      : super(ManageNetworkState(network: TezosNetwork.mainNet())) {
-    _load();
+  ManageNetworkCubit({
+    required this.secureStorageProvider,
+    required this.walletCubit,
+  }) : super(ManageNetworkState(network: TezosNetwork.mainNet())) {
+    loadNetwork();
   }
 
   final SecureStorageProvider secureStorageProvider;
+  final WalletCubit walletCubit;
 
-  Future<void> _load() async {
-    final blockchainNetworkJson =
-        await secureStorageProvider.get(SecureStorageKeys.blockchainNetworkKey);
+  Future<void> loadNetwork() async {
+    final blockchainType = walletCubit.state.currentAccount?.blockchainType;
 
-    late final BlockchainNetwork blockchainNetwork;
+    if (blockchainType == null) return;
+
+    late BlockchainNetwork blockchainNetwork;
+
+    final blockchainNetworkJson = await secureStorageProvider
+        .get(SecureStorageKeys.blockChainNetworksIndexing);
 
     if (blockchainNetworkJson != null) {
-      final mJson = json.decode(blockchainNetworkJson) as Map<String, dynamic>;
-      if (mJson['chain'] != null) {
-        blockchainNetwork = EthereumNetwork.fromJson(mJson);
+      final jsonData =
+          json.decode(blockchainNetworkJson) as Map<String, dynamic>;
+
+      final key = blockchainType.name;
+
+      if (jsonData.containsKey(key)) {
+        final index = jsonData[key] as int;
+        blockchainNetwork = blockchainType.networks[index];
       } else {
-        blockchainNetwork = BlockchainNetwork.fromJson(mJson);
+        // take index 0 of the current account
+        blockchainNetwork = blockchainType.networks[0];
       }
     } else {
-      blockchainNetwork = TezosNetwork.mainNet();
+      // take index 0 of the current account
+      blockchainNetwork = blockchainType.networks[0];
     }
 
     emit(state.copyWith(network: blockchainNetwork));
@@ -40,18 +55,34 @@ class ManageNetworkCubit extends Cubit<ManageNetworkState> {
 
   Future<void> setNetwork(BlockchainNetwork network) async {
     if (network == state.network) return;
-    Map<String, dynamic> networkJson;
-    if (network is EthereumNetwork) {
-      networkJson = network.toJson();
-    } else if (network is TezosNetwork) {
-      networkJson = network.toJson();
+
+    final blockchainNetworkJson = await secureStorageProvider
+        .get(SecureStorageKeys.blockChainNetworksIndexing);
+
+    late Map<String, dynamic> jsonData;
+
+    if (blockchainNetworkJson != null) {
+      jsonData = json.decode(blockchainNetworkJson) as Map<String, dynamic>;
     } else {
-      networkJson = network.toJson();
+      jsonData = <String, dynamic>{};
     }
+
+    final blockchainType = network.type;
+    final supportedNetworks = blockchainType.networks;
+    final key = blockchainType.name;
+
+    final index = supportedNetworks.indexOf(network);
+
+    /// map with index is saved
+    /// {'tezos': 1 , 'ethereum': 1}
+
+    jsonData[key] = index;
+
     await secureStorageProvider.set(
-      SecureStorageKeys.blockchainNetworkKey,
-      jsonEncode(networkJson),
+      SecureStorageKeys.blockChainNetworksIndexing,
+      jsonEncode(jsonData),
     );
+
     emit(state.copyWith(network: network));
   }
 }

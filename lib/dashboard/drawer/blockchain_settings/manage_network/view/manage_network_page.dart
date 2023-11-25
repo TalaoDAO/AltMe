@@ -28,7 +28,7 @@ class ManageNetworkPage extends StatelessWidget {
         builder: (context, state) {
           final blockchainType =
               context.read<WalletCubit>().state.currentAccount!.blockchainType;
-          final allNetworks = blockchainType.networks;
+          final currentNetworkList = blockchainType.networks;
 
           return BackgroundCard(
             child: Column(
@@ -41,27 +41,30 @@ class ManageNetworkPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 15),
-                ...List.generate(allNetworks.length, (index) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      NetworkSelector(
-                        network: allNetworks[index],
-                        groupValue: state.network,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Sizes.spaceSmall,
-                          vertical: Sizes.spaceXSmall,
+                ...List.generate(
+                  currentNetworkList.length,
+                  (index) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        NetworkSelector(
+                          network: currentNetworkList[index],
+                          groupValue: state.network,
                         ),
-                        child: Divider(
-                          height: 0.2,
-                          color: Theme.of(context).colorScheme.borderColor,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Sizes.spaceSmall,
+                            vertical: Sizes.spaceXSmall,
+                          ),
+                          child: Divider(
+                            height: 0.2,
+                            color: Theme.of(context).colorScheme.borderColor,
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                }),
+                      ],
+                    );
+                  },
+                ),
               ],
             ),
           );

@@ -1,8 +1,25 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'profile.g.dart';
+
+enum Profile {
+  custom,
+  ebsiV3,
+}
+
+extension ProfileX on Profile {
+  String getTitle(AppLocalizations l10n) {
+    switch (this) {
+      case Profile.custom:
+        return l10n.profileCustom;
+      case Profile.ebsiV3:
+        return l10n.profileEbsiV3;
+    }
+  }
+}
 
 @JsonSerializable()
 class ProfileModel extends Equatable {
@@ -13,7 +30,6 @@ class ProfileModel extends Equatable {
     required this.location,
     required this.email,
     required this.polygonIdNetwork,
-    required this.tezosNetwork,
     required this.didKeyType,
     required this.isEnterprise,
     required this.isBiometricEnabled,
@@ -32,6 +48,7 @@ class ProfileModel extends Equatable {
     required this.enable4DigitPINCode,
     required this.clientId,
     required this.clientSecret,
+    required this.isEbsiV3Profile,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
@@ -52,8 +69,7 @@ class ProfileModel extends Equatable {
         userConsentForIssuerAccess: true,
         userConsentForVerifierAccess: true,
         userPINCodeForAuthentication: true,
-        tezosNetwork: TezosNetwork.mainNet(),
-        didKeyType: DidKeyType.ebsiv3.toString(),
+        didKeyType: DidKeyType.p256.toString(),
         enableSecurity: false,
         isDeveloperMode: false,
         enable4DigitPINCode: false,
@@ -63,6 +79,35 @@ class ProfileModel extends Equatable {
         useBasicClientAuthentication: false,
         clientId: Parameters.clientId,
         clientSecret: Parameters.clientSecret,
+        isEbsiV3Profile: false,
+      );
+
+  factory ProfileModel.EbsiV3() => ProfileModel(
+        firstName: '',
+        lastName: '',
+        phone: '',
+        location: '',
+        email: '',
+        companyName: '',
+        companyWebsite: '',
+        jobTitle: '',
+        polygonIdNetwork: PolygonIdNetwork.PolygonMainnet.toString(),
+        isEnterprise: false,
+        isBiometricEnabled: false,
+        userConsentForIssuerAccess: true,
+        userConsentForVerifierAccess: true,
+        userPINCodeForAuthentication: true,
+        didKeyType: DidKeyType.ebsiv3.toString(),
+        enableSecurity: false,
+        isDeveloperMode: false,
+        enable4DigitPINCode: true,
+        enableJWKThumbprint: false,
+        enableCryptographicHolderBinding: true,
+        enableScopeParameter: false,
+        useBasicClientAuthentication: false,
+        clientId: Parameters.clientId,
+        clientSecret: Parameters.clientSecret,
+        isEbsiV3Profile: true,
       );
 
   final String firstName;
@@ -74,7 +119,6 @@ class ProfileModel extends Equatable {
   final String companyWebsite;
   final String jobTitle;
   final String polygonIdNetwork;
-  final TezosNetwork tezosNetwork;
   final String didKeyType;
   final bool isEnterprise;
   final bool isBiometricEnabled;
@@ -91,6 +135,7 @@ class ProfileModel extends Equatable {
   final bool useBasicClientAuthentication;
   final String clientId;
   final String clientSecret;
+  final bool isEbsiV3Profile;
 
   @override
   List<Object> get props => [
@@ -100,7 +145,6 @@ class ProfileModel extends Equatable {
         location,
         email,
         polygonIdNetwork,
-        tezosNetwork,
         didKeyType,
         companyName,
         companyWebsite,
@@ -119,6 +163,7 @@ class ProfileModel extends Equatable {
         useBasicClientAuthentication,
         clientId,
         clientSecret,
+        isEbsiV3Profile,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
@@ -149,6 +194,7 @@ class ProfileModel extends Equatable {
     bool? useBasicClientAuthentication,
     String? clientId,
     String? clientSecret,
+    bool? isEbsiV3Profile,
   }) {
     return ProfileModel(
       firstName: firstName ?? this.firstName,
@@ -160,7 +206,6 @@ class ProfileModel extends Equatable {
       companyWebsite: companyWebsite ?? this.companyWebsite,
       jobTitle: jobTitle ?? this.jobTitle,
       polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
-      tezosNetwork: tezosNetwork ?? this.tezosNetwork,
       didKeyType: didKeyType ?? this.didKeyType,
       isEnterprise: isEnterprise ?? this.isEnterprise,
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
@@ -181,6 +226,7 @@ class ProfileModel extends Equatable {
       enableSecurity: enableSecurity ?? this.enableSecurity,
       isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
       enable4DigitPINCode: enable4DigitPINCode ?? this.enable4DigitPINCode,
+      isEbsiV3Profile: isEbsiV3Profile ?? this.isEbsiV3Profile,
     );
   }
 }

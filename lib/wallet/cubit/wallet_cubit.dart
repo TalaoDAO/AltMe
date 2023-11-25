@@ -350,7 +350,7 @@ class WalletCubit extends Cubit<WalletState> {
     /// If we are not using crypto in the wallet we are not generating
     /// AssociatedAddress credentials.
     final credential = Parameters.walletHandlesCrypto
-        ? await credentialsCubit.createAssociatedWalletCredential(
+        ? await credentialsCubit.createOrUpdateAssociatedWalletCredential(
             blockchainType: blockchainType,
             cryptoAccountData: cryptoAccountData,
           )

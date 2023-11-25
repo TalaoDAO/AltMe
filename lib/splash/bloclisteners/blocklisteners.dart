@@ -120,24 +120,8 @@ final walletBlocAccountChangeListener = BlocListener<WalletCubit, WalletState>(
     }
   },
   listener: (context, state) async {
-    final BlockchainType? blockchainType = state.currentAccount?.blockchainType;
-    if (blockchainType == null) return;
-    BlockchainNetwork network;
-    if (blockchainType == BlockchainType.tezos) {
-      network = TezosNetwork.mainNet();
-    } else if (blockchainType == BlockchainType.ethereum) {
-      network = EthereumNetwork.mainNet();
-    } else if (blockchainType == BlockchainType.polygon) {
-      network = PolygonNetwork.mainNet();
-    } else if (blockchainType == BlockchainType.fantom) {
-      network = FantomNetwork.mainNet();
-    } else if (blockchainType == BlockchainType.binance) {
-      network = BinanceNetwork.mainNet();
-    } else {
-      network = TezosNetwork.mainNet();
-    }
     try {
-      await context.read<ManageNetworkCubit>().setNetwork(network);
+      await context.read<ManageNetworkCubit>().loadNetwork();
       unawaited(context.read<TokensCubit>().fetchFromZero());
       unawaited(context.read<NftCubit>().fetchFromZero());
     } catch (e, s) {

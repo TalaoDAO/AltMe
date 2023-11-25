@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/drawer/profile/view/pick_profile_menu.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,14 @@ class DrawerView extends StatelessWidget {
                 const AppVersionDrawer(),
                 const SizedBox(height: Sizes.spaceLarge),
                 // const DidKey(),
+                DrawerCategoryItem(
+                  title: l10n.walletProfiles,
+                  subTitle: l10n.walletProfilesDescription,
+                  onClick: () {
+                    Navigator.of(context).push<void>(PickProfileMenu.route());
+                  },
+                ),
+                const SizedBox(height: Sizes.spaceSmall),
                 DrawerCategoryItem(
                   title: l10n.walletSecurity,
                   subTitle: l10n.walletSecurityDescription,

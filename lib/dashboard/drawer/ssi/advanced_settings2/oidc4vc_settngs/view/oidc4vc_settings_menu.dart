@@ -4,6 +4,8 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class Oidc4vcSettingMenu extends StatelessWidget {
   const Oidc4vcSettingMenu({super.key});
@@ -47,8 +49,22 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           DrawerItem(
             title: l10n.clientMetadata,
             onTap: () {
-              final value = const JsonEncoder.withIndent('  ')
-                  .convert(ConstantsJson.clientMetadata);
+              final tokenEndpointAuthMethod = context
+                      .read<ProfileCubit>()
+                      .state
+                      .model
+                      .useBasicClientAuthentication
+                  ? 'client_secret_basic'
+                  : 'none';
+              const authorizationEndPoint = Parameters.authorizeEndPoint;
+              final value = const JsonEncoder.withIndent('  ').convert(
+                jsonDecode(
+                  OIDC4VC().getWalletClientMetadata(
+                    authorizationEndPoint,
+                    tokenEndpointAuthMethod,
+                  ),
+                ),
+              );
               Navigator.of(context).push<void>(
                 JsonViewerPage.route(
                   title: l10n.clientMetadata,
