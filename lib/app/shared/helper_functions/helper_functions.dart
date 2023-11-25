@@ -984,6 +984,13 @@ MessageHandler getMessageHandler(dynamic e) {
     final error = NetworkException.getDioException(error: e);
 
     return NetworkException(data: error.data);
+  } else if (e is FormatException) {
+    return ResponseMessage(
+      data: {
+        'error': 'unsupported_format',
+        'error_description': '${e.message}\n\n${e.source}',
+      },
+    );
   } else if (e is MessageHandler) {
     return e;
   } else {
@@ -1032,6 +1039,9 @@ ResponseString getErrorResponseString(String errorString) {
 
     case 'unsupported_credential_format':
       return ResponseString.RESPONSE_STRING_thisCredentialFormatIsNotSupported;
+
+    case 'unsupported_format':
+      return ResponseString.RESPONSE_STRING_thisFormatIsNotSupported;
 
     case 'invalid_issuer_metadata':
       return ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid;
@@ -1248,7 +1258,7 @@ String getUpdatedUrlForSIOPV2OIC4VP({
 
   if (clientMetadata != null) {
     queryJson['client_metadata'] =
-        jsonEncode(clientMetadata).replaceAll('"', "'");
+        clientMetadata is Map ? jsonEncode(clientMetadata) : clientMetadata;
   }
 
   if (clientMetadataUri != null) {

@@ -267,157 +267,157 @@ class HomeCubit extends Cubit<HomeState> {
     await LaunchUrl.launch(link ?? state.link!);
   }
 
-  Future<void> periodicCheckRewardOnTezosBlockchain() async {
-    Timer.periodic(const Duration(minutes: 1), (timer) async {
-      List<String> walletAddresses = [];
-      final String? savedCryptoAccount =
-          await secureStorageProvider.get(SecureStorageKeys.cryptoAccount);
+  // Future<void> periodicCheckRewardOnTezosBlockchain() async {
+  //   Timer.periodic(const Duration(minutes: 1), (timer) async {
+  //     List<String> walletAddresses = [];
+  //     final String? savedCryptoAccount =
+  //         await secureStorageProvider.get(SecureStorageKeys.cryptoAccount);
 
-      if (savedCryptoAccount != null && savedCryptoAccount.isNotEmpty) {
-        //load all the content of walletAddress
-        final cryptoAccountJson =
-            jsonDecode(savedCryptoAccount) as Map<String, dynamic>;
-        final CryptoAccount cryptoAccount =
-            CryptoAccount.fromJson(cryptoAccountJson);
+  //     if (savedCryptoAccount != null && savedCryptoAccount.isNotEmpty) {
+  //       //load all the content of walletAddress
+  //       final cryptoAccountJson =
+  //           jsonDecode(savedCryptoAccount) as Map<String, dynamic>;
+  //       final CryptoAccount cryptoAccount =
+  //           CryptoAccount.fromJson(cryptoAccountJson);
 
-        walletAddresses =
-            cryptoAccount.data.map((e) => e.walletAddress).toList();
-      }
-      if (walletAddresses.isEmpty) return;
-      try {
-        final tezosWalletAddresses =
-            walletAddresses.where((e) => e.startsWith('tz')).toList();
-        if (tezosWalletAddresses.isEmpty) return;
-        await checkRewards(tezosWalletAddresses);
-      } catch (e, s) {
-        getLogger('HomeCubit')
-            .e('error in checking for reward , error: $e, stack: $s');
-      }
-    });
-  }
+  //       walletAddresses =
+  //           cryptoAccount.data.map((e) => e.walletAddress).toList();
+  //     }
+  //     if (walletAddresses.isEmpty) return;
+  //     try {
+  //       final tezosWalletAddresses =
+  //           walletAddresses.where((e) => e.startsWith('tz')).toList();
+  //       if (tezosWalletAddresses.isEmpty) return;
+  //       await checkRewards(tezosWalletAddresses);
+  //     } catch (e, s) {
+  //       getLogger('HomeCubit')
+  //           .e('error in checking for reward , error: $e, stack: $s');
+  //     }
+  //   });
+  // }
 
-  Future<void> checkRewards(List<String> walletAddresses) async {
-    for (int i = 0; i < walletAddresses.length; i++) {
-      await checkUNOReward(walletAddresses[i]);
-      await checkXTZReward(walletAddresses[i]);
-    }
-  }
+  // Future<void> checkRewards(List<String> walletAddresses) async {
+  //   for (int i = 0; i < walletAddresses.length; i++) {
+  //     await checkUNOReward(walletAddresses[i]);
+  //     await checkXTZReward(walletAddresses[i]);
+  //   }
+  // }
 
-  Future<void> checkUNOReward(String walletAddress) async {
-    getLogger('HomeCubit').i('check for UNO reward');
-    final response = await client.get(
-      '${Urls.tzktMainnetUrl}/v1/tokens/transfers',
-      queryParameters: <String, dynamic>{
-        'from': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
-        'to': walletAddress,
-        'token.contract.eq': 'KT1ErKVqEhG9jxXgUG2KGLW3bNM7zXHX8SDF', // UNO
-        'sort.desc': 'timestamp',
-      },
-    ) as List<dynamic>;
+  // Future<void> checkUNOReward(String walletAddress) async {
+  //   getLogger('HomeCubit').i('check for UNO reward');
+  //   final response = await client.get(
+  //     '${Urls.tzktMainnetUrl}/v1/tokens/transfers',
+  //     queryParameters: <String, dynamic>{
+  //       'from': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
+  //       'to': walletAddress,
+  //       'token.contract.eq': 'KT1ErKVqEhG9jxXgUG2KGLW3bNM7zXHX8SDF', // UNO
+  //       'sort.desc': 'timestamp',
+  //     },
+  //   ) as List<dynamic>;
 
-    if (response.isEmpty) {
-      return;
-    }
+  //   if (response.isEmpty) {
+  //     return;
+  //   }
 
-    final operations = response
-        .map(
-          (dynamic e) => OperationModel.fromFa2Json(e as Map<String, dynamic>),
-        )
-        .toList();
+  //   final operations = response
+  //       .map(
+  //         (dynamic e) => OperationModel.fromFa2Json(e as Map<String, dynamic>),
+  //       )
+  //       .toList();
 
-    final String? lastNotifiedRewardId = await secureStorageProvider.get(
-      SecureStorageKeys.lastNotifiedUNORewardId + walletAddress,
-    );
+  //   final String? lastNotifiedRewardId = await secureStorageProvider.get(
+  //     SecureStorageKeys.lastNotifiedUNORewardId + walletAddress,
+  //   );
 
-    final lastOperation = operations.first; //operations sorted by time in api
-    if (lastOperation.id.toString() == lastNotifiedRewardId) {
-      return;
-    } else {
-      // save the operation id to storage
-      await secureStorageProvider.set(
-        SecureStorageKeys.lastNotifiedUNORewardId + walletAddress,
-        lastOperation.id.toString(),
-      );
+  //   final lastOperation = operations.first; //operations sorted by time in api
+  //   if (lastOperation.id.toString() == lastNotifiedRewardId) {
+  //     return;
+  //   } else {
+  //     // save the operation id to storage
+  //     await secureStorageProvider.set(
+  //       SecureStorageKeys.lastNotifiedUNORewardId + walletAddress,
+  //       lastOperation.id.toString(),
+  //     );
 
-      emit(
-        state.copyWith(
-          status: AppStatus.gotTokenReward,
-          tokenReward: TokenReward(
-            amount: lastOperation.calcAmount(
-              decimal: 9, //UNO
-              value: lastOperation.amount.toString(),
-            ),
-            txId: lastOperation.hash,
-            counter: lastOperation.counter,
-            account: walletAddress,
-            origin:
-                'Tezotopia Membership Card', // TODO(all): dynamic text later
-            symbol: 'UNO',
-            name: 'Unobtanium',
-          ),
-        ),
-      );
-    }
-  }
+  //     emit(
+  //       state.copyWith(
+  //         status: AppStatus.gotTokenReward,
+  //         tokenReward: TokenReward(
+  //           amount: lastOperation.calcAmount(
+  //             decimal: 9, //UNO
+  //             value: lastOperation.amount.toString(),
+  //           ),
+  //           txId: lastOperation.hash,
+  //           counter: lastOperation.counter,
+  //           account: walletAddress,
+  //           origin:
+  //               'Tezotopia Membership Card', // TODO(all): dynamic text later
+  //           symbol: 'UNO',
+  //           name: 'Unobtanium',
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 
-  Future<void> checkXTZReward(String walletAddress) async {
-    getLogger('HomeCubit').i('check for XTZ reward');
+  // Future<void> checkXTZReward(String walletAddress) async {
+  //   getLogger('HomeCubit').i('check for XTZ reward');
 
-    final result = await client.get(
-      '${Urls.tzktMainnetUrl}/v1/operations/transactions',
-      queryParameters: <String, dynamic>{
-        'sender': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
-        'target': walletAddress,
-        'amount.gt': 0,
-      },
-    ) as List<dynamic>;
+  //   final result = await client.get(
+  //     '${Urls.tzktMainnetUrl}/v1/operations/transactions',
+  //     queryParameters: <String, dynamic>{
+  //       'sender': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
+  //       'target': walletAddress,
+  //       'amount.gt': 0,
+  //     },
+  //   ) as List<dynamic>;
 
-    if (result.isEmpty) {
-      return;
-    }
+  //   if (result.isEmpty) {
+  //     return;
+  //   }
 
-    final operations = result
-        .map(
-          (dynamic e) => OperationModel.fromJson(e as Map<String, dynamic>),
-        )
-        .toList();
-    //sort for last transaction at first
-    operations.sort(
-      (a, b) => b.dateTime.compareTo(a.dateTime),
-    );
+  //   final operations = result
+  //       .map(
+  //         (dynamic e) => OperationModel.fromJson(e as Map<String, dynamic>),
+  //       )
+  //       .toList();
+  //   //sort for last transaction at first
+  //   operations.sort(
+  //     (a, b) => b.dateTime.compareTo(a.dateTime),
+  //   );
 
-    final String? lastNotifiedRewardId = await secureStorageProvider.get(
-      SecureStorageKeys.lastNotifiedXTZRewardId + walletAddress,
-    );
+  //   final String? lastNotifiedRewardId = await secureStorageProvider.get(
+  //     SecureStorageKeys.lastNotifiedXTZRewardId + walletAddress,
+  //   );
 
-    final lastOperation = operations.first; //operations sorted by time in api
-    if (lastOperation.id.toString() == lastNotifiedRewardId) {
-      return;
-    } else {
-      // save the operation id to storage
-      await secureStorageProvider.set(
-        SecureStorageKeys.lastNotifiedXTZRewardId + walletAddress,
-        lastOperation.id.toString(),
-      );
+  //   final lastOperation = operations.first; //operations sorted by time in api
+  //   if (lastOperation.id.toString() == lastNotifiedRewardId) {
+  //     return;
+  //   } else {
+  //     // save the operation id to storage
+  //     await secureStorageProvider.set(
+  //       SecureStorageKeys.lastNotifiedXTZRewardId + walletAddress,
+  //       lastOperation.id.toString(),
+  //     );
 
-      emit(
-        state.copyWith(
-          status: AppStatus.gotTokenReward,
-          tokenReward: TokenReward(
-            amount: lastOperation.calcAmount(
-              decimal: 6, //XTZ
-              value: lastOperation.amount.toString(),
-            ),
-            account: walletAddress,
-            txId: lastOperation.hash,
-            counter: lastOperation.counter,
-            origin:
-                'Tezotopia Membership Card', // TODO(all): dynamic text later
-            symbol: 'XTZ',
-            name: 'Tezos',
-          ),
-        ),
-      );
-    }
-  }
+  //     emit(
+  //       state.copyWith(
+  //         status: AppStatus.gotTokenReward,
+  //         tokenReward: TokenReward(
+  //           amount: lastOperation.calcAmount(
+  //             decimal: 6, //XTZ
+  //             value: lastOperation.amount.toString(),
+  //           ),
+  //           account: walletAddress,
+  //           txId: lastOperation.hash,
+  //           counter: lastOperation.counter,
+  //           origin:
+  //               'Tezotopia Membership Card', // TODO(all): dynamic text later
+  //           symbol: 'XTZ',
+  //           name: 'Tezos',
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 }

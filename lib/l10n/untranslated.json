@@ -639,7 +639,6 @@
     "trooperzPassWhyGetThisCard",
     "trooperzPassExpirationDate",
     "trooperzPassHowToGetIt",
-    "wallet_credential",
     "walletSecurity",
     "walletSecurityDescription",
     "blockchainSettings",
@@ -882,6 +881,7 @@
     "theWalletIsNotRegistered",
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
+    "thisFormatIsNotSupported",
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
@@ -911,7 +911,11 @@
     "clientMetadata",
     "theIssuanceOfThisCredentialIsPending",
     "clientId",
-    "clientSecret"
+    "clientSecret",
+    "walletProfiles",
+    "walletProfilesDescription",
+    "profileCustom",
+    "profileEbsiV3"
   ],
 
   "es": [
@@ -1554,7 +1558,6 @@
     "trooperzPassWhyGetThisCard",
     "trooperzPassExpirationDate",
     "trooperzPassHowToGetIt",
-    "wallet_credential",
     "walletSecurity",
     "walletSecurityDescription",
     "blockchainSettings",
@@ -1797,6 +1800,7 @@
     "theWalletIsNotRegistered",
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
+    "thisFormatIsNotSupported",
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
@@ -1826,7 +1830,11 @@
     "clientMetadata",
     "theIssuanceOfThisCredentialIsPending",
     "clientId",
-    "clientSecret"
+    "clientSecret",
+    "walletProfiles",
+    "walletProfilesDescription",
+    "profileCustom",
+    "profileEbsiV3"
   ],
 
   "fr": [
@@ -2015,6 +2023,7 @@
     "theWalletIsNotRegistered",
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
+    "thisFormatIsNotSupported",
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
@@ -2044,7 +2053,11 @@
     "clientMetadata",
     "theIssuanceOfThisCredentialIsPending",
     "clientId",
-    "clientSecret"
+    "clientSecret",
+    "walletProfiles",
+    "walletProfilesDescription",
+    "profileCustom",
+    "profileEbsiV3"
   ],
 
   "it": [
@@ -2687,7 +2700,6 @@
     "trooperzPassWhyGetThisCard",
     "trooperzPassExpirationDate",
     "trooperzPassHowToGetIt",
-    "wallet_credential",
     "walletSecurity",
     "walletSecurityDescription",
     "blockchainSettings",
@@ -2930,6 +2942,7 @@
     "theWalletIsNotRegistered",
     "credentialIssuanceDenied",
     "thisCredentialFormatIsNotSupported",
+    "thisFormatIsNotSupported",
     "moreDetails",
     "theCredentialOfferIsInvalid",
     "dateOfRequest",
@@ -2959,6 +2972,10 @@
     "clientMetadata",
     "theIssuanceOfThisCredentialIsPending",
     "clientId",
-    "clientSecret"
+    "clientSecret",
+    "walletProfiles",
+    "walletProfilesDescription",
+    "profileCustom",
+    "profileEbsiV3"
   ]
 }

@@ -43,11 +43,13 @@ This type of wallet is very exactly the on-line version of the wallet that we al
 
 User must either import or create a wallet in order to use Talao wallet. When user creates a wallet, he will be assigned a Recovery Phrase. User agrees to immediately notify us of any unauthorized use of user's Recovery Phrase or private keys or any other breach of security of user's wallet. Notwithstanding the foregoing, user acknowledges and agrees that he shall assume all risks related to the use of the services and he shall be solely responsible for maintaining the confidentiality and security of user's Recovery Phrase and private keys. When he creates a wallet, he is strongly advised to take precautions in order to avoid loss of access to and/or control over user's wallet. Suggested measures include, but are not limited to, the following: 
 
-- creating a strong unique password that user does not use for any other purpose (i.e. different to user's phone password or any other passwords he uses for websites, online services, etc.) and leveraging biometric authentication if available;
-- do not store the private key and Recovery Phrase in plain text online or in an unsecured physical location;
-- limiting access to user's devices and user's wallet;
-- taking all necessary precautions against malware on user's devices and networks;
-- promptly notifying us if he discovers or otherwise suspects any security breaches related to user's wallet.
+
+
+* Creating a strong and unique PIN Code, distinct from pin code used for other purposes (e.g., different from your phone PIN Code or pin code used on websites or online services), and utilizing biometric authentication if available.
+* Avoiding the storage of private keys and the Recovery Phrase in plain text online or in insecure physical locations.
+* Restricting access to your devices and wallet.
+* Taking necessary precautions against malware on your devices and networks.
+* Promptly notifying us if you discover or suspect any security breaches related to your wallet.
 
 Notwithstanding anything to the contrary herein, Web3 Digital Wallet shall have no liability whatsoever in connection with activities that occur on user's wallet with or without user's authorization.
 
@@ -75,22 +77,28 @@ If credentila requests have been answered successfully, the user will see a succ
 
 ## Digital asset transactions
 
-In order for all proposed digital asset transactions to be completed, they must be confirmed and recorded in the associated public blockchain. Such networks are decentralized, peer-to-peer networks supported by independent third parties, which we do not own, control, or operate. We have no control over the blockchain networks and, therefore, cannot and do not ensure that any transaction details that user submits via Web3 Digital Wallet services will be confirmed and processed. By using Alltme allet, user acknowledges and agrees that:
+In order for all proposed digital asset transactions to reach their finality, they must undergo confirmation and recording on the associated public blockchain. These blockchains operate as decentralized, peer-to-peer networks supported by independent third parties that are neither owned, controlled, nor operated by Web3 Digital Wallet. It's important to note that Web3 Digital Wallet has no influence or control over these blockchain networks, and therefore, cannot assure that transaction details submitted by users through Web3 Digital Wallet services will always be confirmed and processed promptly. By choosing to use the Altme Wallet, the user explicitly acknowledges and agrees to the following:
 
-- Web3 Digital Walletr does not have the ability to cancel or otherwise modify user's transaction;
-- the transaction details user submits may not be completed, or may be substantially delayed, by the applicable blockchain networks;
-- we do not store, send, or receive Digital Assets;
-- any transfer that occurs in relation to any Digital Asset occurs on the relevant blockchain network and not on a network owned by us and therefore we do not guarantee the transfer of title or right in any aigital asset.
 
-## Buy digital assets with credit or debit cards
+
+* Web3 Digital Wallet lacks the ability to cancel or modify the user's transaction once initiated.
+* Transaction details submitted by the user may encounter delays or, in some cases, may not be completed on the relevant blockchain networks.
+* Web3 Digital Wallet neither stores, sends, nor receives Digital Assets, acting solely as a facilitator.
+* All transfers of Digital Assets are conducted exclusively on the respective blockchain networks and not on any network owned by Web3 Digital Wallet. Consequently, Web3 Digital Wallet does not provide any guarantee regarding the transfer of title or rights to any digital asset.
+
+**Buying Digital Assets with Credit or Debit Cards**
+
+Age Restriction:
 
 This service is limited to users over 18 years old. If he uses Talao Wallet to purchase digital assets with user's credit or debit card, a third party will convert user's chosen amount into the applicable Digital Asset and credit it to user's wallet. he acknowledges and agrees that : 
 
-- Web3 Digital Wallet is not responsible for user's use of such third party service and shall have no liability whatsoever in connection with user's uses of such service;
-- user will be subject to any terms and conditions imposed by the relevant third party service provider;
-- Web3 Digital Wallet has no ability to change, withdraw or cancel any conversion requests user places;
-- Web3 Digital wallet is not responsible for any exchange rates offered by the relevant third party service provider(s);
-- Web3 Digital Wallet is not responsible for any fees charged by the relevant third party service provider(s) or user's bank or credit card issuer(s).
+
+
+* Web3 Digital Wallet is not responsible for the user's use of such third-party services and bears no liability related to the user's usage of these services.
+* The user will be subject to any terms and conditions imposed by the relevant third-party service provider.
+* Web3 Digital Wallet cannot alter, withdraw, or cancel any conversion requests made by the user.
+* Web3 Digital Wallet is not responsible for the exchange rates offered by the relevant third-party service provider(s).
+* Web3 Digital Wallet is not responsible for any fees charged by the relevant third-party service provider(s) or the user's bank or credit card issuer(s).
 
 ## Price
 
@@ -132,9 +140,9 @@ User may be able to store non-fungible tokens (“NFTs”) on Talao wallet. User
 
 User retains all rights to the NFT Content stored except for rights expressly granted herein. By using Talao wallet, user grants Web3 Digital Wallet a license to access, use, host, cache, store, copy, reproduce, transmit, display, publish, distribute, adapt and modify (for technical purposes, e.g., making sure content is viewable on smartphones as well as computers and other devices) the NFT Content in any and all media or distribution methods (now know or later developed) solely as required to be able to operate and provide services of Talao wallet. Web3 Digital Wallet does not monitor the NFTs and NFT Content storedon Talao wallet for any infringement of a third party’s intellectual property rights. 
 
-Accordingly, Web3 Digital wallet assumes no liability for any action regarding any content provided by the user. User further acknowledge and agrees it is user's sole responsibility to carry out all necessary due diligence for all user's activities relating to NFTs, and user represents and warrant that he has not and are not relying on, and shall have no remedies, in respect of any statement or representation made by Web3 Digital Wallet in relation to any transfer or interaction otherwise with any NFTs.
+As such, Web3 Digital Wallet assumes no liability for any action regarding any content provided by the user. The user further acknowledges and agrees that it is their sole responsibility to conduct all necessary due diligence for all their activities related to NFTs. The user represents and warrants that they have not relied on, and shall have no remedies in respect of, any statement or representation made by Web3 Digital Wallet in relation to any transfer or interaction with any NFTs.
 
-If user has a dispute in relation to the NFTs and/or NFT Content, USER RELEASES WEB3 DIGITAL WALLET FROM CLAIMS, DEMANDS, AND DAMAGES OF EVERY KIND AND NATURE, KNOWN AND UNKNOWN, ARISING OUT OF OR IN ANY WAY CONNECTED WITH SUCH DISPUTES. IN ENTERING INTO THIS RELEASE USER EXPRESSLY WAIVES ANY PROTECTIONS (WHETHER STATUTORY OR OTHERWISE) THAT WOULD OTHERWISE LIMIT THE COVERAGE OF THIS RELEASE TO INCLUDE THOSE CLAIMS WHICH USER MAY KNOW OR SUSPECT TO EXIST IN USER FAVOR AT THE TIME OF AGREEING TO THIS RELEASE.
+In the event of a dispute related to the NFTs and/or NFT Content, THE USER RELEASES WEB3 DIGITAL WALLET FROM CLAIMS, DEMANDS, AND DAMAGES OF EVERY KIND AND NATURE, KNOWN AND UNKNOWN, ARISING OUT OF OR IN ANY WAY CONNECTED WITH SUCH DISPUTES. BY ENTERING INTO THIS RELEASE, THE USER EXPRESSLY WAIVES ANY PROTECTIONS (WHETHER STATUTORY OR OTHERWISE) THAT WOULD OTHERWISE LIMIT THE COVERAGE OF THIS RELEASE TO INCLUDE THOSE CLAIMS WHICH THE USER MAY KNOW OR SUSPECT TO EXIST IN THEIR FAVOR AT THE TIME OF AGREEING TO THIS RELEASE.
 
 ## Liability
 

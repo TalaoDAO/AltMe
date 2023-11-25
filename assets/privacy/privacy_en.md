@@ -1,7 +1,9 @@
-# Privacy policy
+**Web3 Digital Wallet - Altme**
 
+** \
+Privacy Policy**
 
-Last Updated: November 11, 2022
+Effective Date: November 23, 2023
 
 
 ## Preamble
