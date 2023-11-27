@@ -445,11 +445,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
       final ebsiV3Profile = ProfileModel.EbsiV3();
       final profileModel = state.model.copyWith(
-          isDeveloperMode: ebsiV3Profile.isDeveloperMode,
           isEbsiV3Profile: enabled,
           enableSecurity: ebsiV3Profile.enableSecurity,
           enable4DigitPINCode: ebsiV3Profile.enable4DigitPINCode,
-          enableJWKThumbprint: ebsiV3Profile.enable4DigitPINCode,
+          enableJWKThumbprint: ebsiV3Profile.enableJWKThumbprint,
           enableCryptographicHolderBinding:
               ebsiV3Profile.enableCryptographicHolderBinding,
           didKeyType: ebsiV3Profile.didKeyType,
@@ -466,11 +465,10 @@ class ProfileCubit extends Cubit<ProfileState> {
         json.decode(customProfileBackupValue) as Map<String, dynamic>,
       );
       final profileModel = state.model.copyWith(
-          isDeveloperMode: customProfileBackup.isDeveloperMode,
           isEbsiV3Profile: enabled,
           enableSecurity: customProfileBackup.enableSecurity,
           enable4DigitPINCode: customProfileBackup.enable4DigitPINCode,
-          enableJWKThumbprint: customProfileBackup.enable4DigitPINCode,
+          enableJWKThumbprint: customProfileBackup.enableJWKThumbprint,
           enableCryptographicHolderBinding:
               customProfileBackup.enableCryptographicHolderBinding,
           didKeyType: customProfileBackup.didKeyType,
