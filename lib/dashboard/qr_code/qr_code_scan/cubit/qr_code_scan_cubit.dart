@@ -738,30 +738,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
 
-      if (currentOIIDC4VCTypeForIssuance != null) {
-        await getAndAddDefferedCredential(
-          credentialModel: credentialModel,
-          credentialsCubit: credentialsCubit,
-          dioClient: client,
-          oidc4vc: oidc4vc,
-        );
-      } else if (credentialModel.pendingInfo!.url
-              .startsWith(Parameters.authorizeEndPoint) ||
-          credentialModel.pendingInfo!.url
-              .startsWith(Parameters.oidc4vcUniversalLink)) {
-        await getAndAddDefferedCredential(
-          credentialModel: credentialModel,
-          credentialsCubit: credentialsCubit,
-          dioClient: client,
-          oidc4vc: oidc4vc,
-        );
-      } else {
-        emitError(
-          ResponseMessage(
-            message: ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
-          ),
-        );
-      }
+      await getAndAddDefferedCredential(
+        credentialModel: credentialModel,
+        credentialsCubit: credentialsCubit,
+        dioClient: client,
+        oidc4vc: oidc4vc,
+      );
     } catch (e) {
       emitError(e);
     }
