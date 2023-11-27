@@ -1094,7 +1094,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           clientId = profileCubit.state.model.clientId;
           clientSecret = profileCubit.state.model.clientSecret;
         } else {
-          clientId = const Uuid().v4();
+          final privateKey = await fetchPrivateKey(
+            oidc4vc: oidc4vc,
+            secureStorage: secureStorageProvider,
+            isEBSIV3: isEBSIV3,
+          );
+
+          final (did, _) = await fetchDidAndKid(
+            privateKey: privateKey,
+            isEBSIV3: isEBSIV3,
+            didKitProvider: didKitProvider,
+            secureStorage: secureStorageProvider,
+          );
+          clientId = did;
+          //clientId = const Uuid().v4();
         }
 
         await getAuthorizationUriForIssuer(
