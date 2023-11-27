@@ -716,10 +716,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       final url = credentialModel.pendingInfo!.url;
 
-      OIDC4VCType? currentOIIDC4VCTypeForIssuance;
-
       final (
-        OIDC4VCType? oidc4vcType,
+        _,
         Map<String, dynamic>? openidConfigurationResponse,
         Map<String, dynamic>? authorizationServerConfiguration,
         _,
@@ -727,8 +725,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         url: url,
         client: client,
       );
-
-      currentOIIDC4VCTypeForIssuance = oidc4vcType;
 
       if (openidConfigurationResponse != null) {
         await handleErrorForOID4VCI(
