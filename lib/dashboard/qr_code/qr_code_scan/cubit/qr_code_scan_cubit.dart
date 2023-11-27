@@ -23,7 +23,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:uuid/uuid.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -717,10 +716,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       final url = credentialModel.pendingInfo!.url;
 
-      OIDC4VCType? currentOIIDC4VCTypeForIssuance;
-
       final (
-        OIDC4VCType? oidc4vcType,
+        _,
         Map<String, dynamic>? openidConfigurationResponse,
         Map<String, dynamic>? authorizationServerConfiguration,
         _,
@@ -728,8 +725,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         url: url,
         client: client,
       );
-
-      currentOIIDC4VCTypeForIssuance = oidc4vcType;
 
       if (openidConfigurationResponse != null) {
         await handleErrorForOID4VCI(
@@ -739,28 +734,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
 
-      if (currentOIIDC4VCTypeForIssuance != null) {
-        await getAndAddDefferedCredential(
-          credentialModel: credentialModel,
-          credentialsCubit: credentialsCubit,
-          dioClient: client,
-          oidc4vc: oidc4vc,
-        );
-      } else if (credentialModel.pendingInfo!.url
-          .startsWith(Parameters.authorizeEndPoint)) {
-        await getAndAddDefferedCredential(
-          credentialModel: credentialModel,
-          credentialsCubit: credentialsCubit,
-          dioClient: client,
-          oidc4vc: oidc4vc,
-        );
-      } else {
-        emitError(
-          ResponseMessage(
-            message: ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
-          ),
-        );
-      }
+      await getAndAddDefferedCredential(
+        credentialModel: credentialModel,
+        credentialsCubit: credentialsCubit,
+        dioClient: client,
+        oidc4vc: oidc4vc,
+      );
     } catch (e) {
       emitError(e);
     }
@@ -1094,7 +1073,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           clientId = profileCubit.state.model.clientId;
           clientSecret = profileCubit.state.model.clientSecret;
         } else {
-          clientId = const Uuid().v4();
+          final privateKey = await fetchPrivateKey(
+            oidc4vc: oidc4vc,
+            secureStorage: secureStorageProvider,
+            isEBSIV3: isEBSIV3,
+          );
+
+          final (did, _) = await fetchDidAndKid(
+            privateKey: privateKey,
+            isEBSIV3: isEBSIV3,
+            didKitProvider: didKitProvider,
+            secureStorage: secureStorageProvider,
+          );
+          clientId = did;
+          //clientId = const Uuid().v4();
         }
 
         await getAuthorizationUriForIssuer(
