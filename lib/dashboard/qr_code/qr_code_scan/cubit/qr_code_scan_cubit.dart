@@ -23,7 +23,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:uuid/uuid.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -747,7 +746,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           oidc4vc: oidc4vc,
         );
       } else if (credentialModel.pendingInfo!.url
-          .startsWith(Parameters.authorizeEndPoint)) {
+              .startsWith(Parameters.authorizeEndPoint) ||
+          credentialModel.pendingInfo!.url
+              .startsWith(Parameters.oidc4vcUniversalLink)) {
         await getAndAddDefferedCredential(
           credentialModel: credentialModel,
           credentialsCubit: credentialsCubit,
