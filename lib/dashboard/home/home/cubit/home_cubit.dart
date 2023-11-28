@@ -6,7 +6,6 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/wallet/model/crypto_account.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';

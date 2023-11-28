@@ -1,6 +1,7 @@
 export 'activate_biometircs/activate_biometrics.dart';
 export 'gen_phrase/onboarding_gen_phrase.dart';
 export 'helper_function/helper_function.dart';
+export 'protect_wallet/protect_wallet.dart';
 export 'starter/starter.dart';
 export 'submit_enterprise_user/submit_enterprise_user.dart';
 export 'third/onboarding_third.dart';

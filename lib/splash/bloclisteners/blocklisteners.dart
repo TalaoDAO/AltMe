@@ -7,7 +7,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
@@ -27,12 +26,12 @@ import 'package:share_plus/share_plus.dart';
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
     if (state.status == SplashStatus.routeToPassCode) {
-      Navigator.of(context).push<void>(
-        PinCodePage.route(
-          isValidCallback: () {
-            Navigator.of(context).push<void>(DashboardPage.route());
-          },
-        ),
+      securityCheck(
+        context: context,
+        localAuthApi: LocalAuthApi(),
+        onSuccess: () {
+          Navigator.of(context).push<void>(DashboardPage.route());
+        },
       );
     }
 
@@ -758,17 +757,17 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
         final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
             .getIden3Message(message: state.scannedResponse!);
 
-        await Navigator.of(context).push<void>(
-          PinCodePage.route(
-            isValidCallback: () {
-              context.read<PolygonIdCubit>().authenticateOrGenerateProof(
-                    iden3MessageEntity: iden3MessageEntity,
-                    isGenerateProof: false,
-                  );
-            },
-            restrictToBack: false,
-          ),
+        await securityCheck(
+          context: context,
+          localAuthApi: LocalAuthApi(),
+          onSuccess: () {
+            context.read<PolygonIdCubit>().authenticateOrGenerateProof(
+                  iden3MessageEntity: iden3MessageEntity,
+                  isGenerateProof: false,
+                );
+          },
         );
+
         return;
       }
     }

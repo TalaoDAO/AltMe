@@ -424,11 +424,11 @@ extension CustomTextTheme on TextTheme {
   TextStyle get drawerItemTitle => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
         fontSize: 16,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w800,
       );
 
   TextStyle get drawerItemSubtitle => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: const Color(0xFFD1CCE3),
         fontSize: 14,
         fontWeight: FontWeight.w500,
       );

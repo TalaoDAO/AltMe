@@ -716,7 +716,7 @@
   "resetWallet": "Reset Wallet",
   "resetWalletDescription": "Erase all data stored on your phone and reset Altme wallet.",
   "showWalletRecoveryPhrase": "Show wallet recovery phrase",
-  "showWalletRecoveryPhraseSubtitle": "The recovery phrase is a series of words that allow you to recover your stolen keys associated with your certificates and crypto assets.",
+  "showWalletRecoveryPhraseSubtitle": "The recovery phrase acts as a backup key to restore access to a your wallet.",
   "blockchainNetwork": "Blockchain network (by default)",
   "contactUs": "Contact us",
   "officialWebsite": "Official website",
@@ -1007,5 +1007,15 @@
   "walletProfiles": "Wallet Profiles",
   "walletProfilesDescription": "Choose your SSI profile or customize your own",
   "profileCustom": "Custom",
-  "profileEbsiV3": "EBSI V3"
+  "profileEbsiV3": "EBSI V3",
+  "protectYourWallet": "Protect your wallet",
+  "protectYourWalletMessage": "Use your fingerprint, face, or device PIN to secure and unlock Altme. Your data is securely encrypted on this device.",
+  "pinUnlock": "PIN unlock",
+  "secureWithDevicePINOnly": "Secure with Device PIN only",
+  "biometricUnlock": "Biometric unlock",
+  "secureWithFingerprint": "Secure with Fingerprint",
+  "pinUnlockAndBiometric2FA": "PIN unlock + Biometric (2FA)",
+  "secureWithFingerprintAndPINBackup": "Secure with Fingerprint + PIN backup",
+  "secureYourWalletWithPINCodeAndBiometrics": "Secure your wallet with PIN code and Biometrics",
+  "twoFactorAuthenticationHasBeenEnabled": "Two factor authentication has been enabled."
 }

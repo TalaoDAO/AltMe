@@ -83,9 +83,9 @@ class ProfileCubit extends Cubit<ProfileState> {
               .get(SecureStorageKeys.isEnterpriseUser)) ==
           'true';
 
-      final isBiometricEnabled = (await secureStorageProvider
-              .get(SecureStorageKeys.isBiometricEnabled)) ==
-          'true';
+      final walletProtectionType = (await secureStorageProvider
+              .get(SecureStorageKeys.walletProtectionType)) ??
+          WalletProtectionType.pinCode.toString();
 
       final userConsentForIssuerAccess = (await secureStorageProvider
               .get(SecureStorageKeys.userConsentForIssuerAccess)) ==
@@ -169,7 +169,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         companyWebsite: companyWebsite,
         jobTitle: jobTitle,
         isEnterprise: isEnterprise,
-        isBiometricEnabled: isBiometricEnabled,
+        walletProtectionType: walletProtectionType,
         userConsentForIssuerAccess: userConsentForIssuerAccess,
         userConsentForVerifierAccess: userConsentForVerifierAccess,
         userPINCodeForAuthentication: userPINCodeForAuthentication,
@@ -253,8 +253,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.isBiometricEnabled,
-        profileModel.isBiometricEnabled.toString(),
+        SecureStorageKeys.walletProtectionType,
+        profileModel.walletProtectionType,
       );
 
       await secureStorageProvider.set(
@@ -335,8 +335,11 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<void> setFingerprintEnabled({bool enabled = false}) async {
-    final profileModel = state.model.copyWith(isBiometricEnabled: enabled);
+  Future<void> setWalletProtectionType({
+    required WalletProtectionType walletProtectionType,
+  }) async {
+    final profileModel = state.model
+        .copyWith(walletProtectionType: walletProtectionType.toString());
     await update(profileModel);
   }
 
@@ -465,18 +468,19 @@ class ProfileCubit extends Cubit<ProfileState> {
         json.decode(customProfileBackupValue) as Map<String, dynamic>,
       );
       final profileModel = state.model.copyWith(
-          isEbsiV3Profile: enabled,
-          enableSecurity: customProfileBackup.enableSecurity,
-          enable4DigitPINCode: customProfileBackup.enable4DigitPINCode,
-          enableJWKThumbprint: customProfileBackup.enableJWKThumbprint,
-          enableCryptographicHolderBinding:
-              customProfileBackup.enableCryptographicHolderBinding,
-          didKeyType: customProfileBackup.didKeyType,
-          enableScopeParameter: customProfileBackup.enableScopeParameter,
-          useBasicClientAuthentication:
-              customProfileBackup.useBasicClientAuthentication,
-          clientId: customProfileBackup.clientId,
-          clientSecret: customProfileBackup.clientSecret);
+        isEbsiV3Profile: enabled,
+        enableSecurity: customProfileBackup.enableSecurity,
+        enable4DigitPINCode: customProfileBackup.enable4DigitPINCode,
+        enableJWKThumbprint: customProfileBackup.enableJWKThumbprint,
+        enableCryptographicHolderBinding:
+            customProfileBackup.enableCryptographicHolderBinding,
+        didKeyType: customProfileBackup.didKeyType,
+        enableScopeParameter: customProfileBackup.enableScopeParameter,
+        useBasicClientAuthentication:
+            customProfileBackup.useBasicClientAuthentication,
+        clientId: customProfileBackup.clientId,
+        clientSecret: customProfileBackup.clientSecret,
+      );
       await update(profileModel);
     }
   }

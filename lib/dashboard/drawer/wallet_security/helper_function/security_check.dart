@@ -1,0 +1,80 @@
+import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+Future<void> securityCheck({
+  required BuildContext context,
+  required VoidCallback onSuccess,
+  required LocalAuthApi localAuthApi,
+}) async {
+  final l10n = context.l10n;
+  final profile = context.read<ProfileCubit>().state.model;
+  final walletProtectionType = profile.walletProtectionType;
+
+  final WalletProtectionType? enumValue =
+      WalletProtectionType.values.firstWhereOrNull(
+    (enumValue) => enumValue.toString() == walletProtectionType,
+  );
+
+  if (enumValue == null) {
+    return AlertMessage.showStateMessage(
+      context: context,
+      stateMessage: StateMessage.error(
+        showDialog: true,
+        stringMessage: l10n.somethingsWentWrongTryAgainLater,
+      ),
+    );
+  }
+
+  switch (enumValue) {
+    case WalletProtectionType.pinCode:
+      await Navigator.of(context).push<void>(
+        PinCodePage.route(
+          isValidCallback: onSuccess.call,
+          restrictToBack: false,
+        ),
+      );
+    case WalletProtectionType.biometrics:
+      final LocalAuthApi localAuthApi = LocalAuthApi();
+      final authenticated = await localAuthApi.authenticate(
+        localizedReason: l10n.scanFingerprintToAuthenticate,
+      );
+      if (authenticated) {
+        onSuccess.call();
+      } else {
+        AlertMessage.showStateMessage(
+          context: context,
+          stateMessage: StateMessage.error(
+            showDialog: true,
+            stringMessage: l10n.authenticationFailed,
+          ),
+        );
+      }
+    case WalletProtectionType.FA2:
+      await Navigator.of(context).push<void>(
+        PinCodePage.route(
+          isValidCallback: () async {
+            final LocalAuthApi localAuthApi = LocalAuthApi();
+            final authenticated = await localAuthApi.authenticate(
+              localizedReason: l10n.scanFingerprintToAuthenticate,
+            );
+            if (authenticated) {
+              onSuccess.call();
+            } else {
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: StateMessage.success(
+                  showDialog: true,
+                  stringMessage: l10n.authenticationFailed,
+                ),
+              );
+            }
+          },
+          restrictToBack: false,
+        ),
+      );
+  }
+}

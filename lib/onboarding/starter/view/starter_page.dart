@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -51,17 +50,10 @@ class StarterPage extends StatelessWidget {
                   const Spacer(flex: 2),
                   InkWell(
                     onTap: () {
-                      Navigator.of(context).push<void>(
-                        EnterNewPinCodePage.route(
+                      Navigator.of(context).push(
+                        ProtectWalletPage.route(
                           isFromOnboarding: true,
-                          isValidCallback: () {
-                            Navigator.of(context).pushReplacement<void, void>(
-                              ActiviateBiometricsPage.route(
-                                routeType: WalletRouteType.recover,
-                              ),
-                            );
-                          },
-                          restrictToBack: false,
+                          routeType: WalletRouteType.import,
                         ),
                       );
                     },
@@ -78,17 +70,10 @@ class StarterPage extends StatelessWidget {
                   MyGradientButton(
                     text: l10n.create_wallet,
                     onPressed: () {
-                      Navigator.of(context).push<void>(
-                        EnterNewPinCodePage.route(
+                      Navigator.of(context).push(
+                        ProtectWalletPage.route(
                           isFromOnboarding: true,
-                          isValidCallback: () {
-                            Navigator.of(context).pushReplacement<void, void>(
-                              ActiviateBiometricsPage.route(
-                                routeType: WalletRouteType.create,
-                              ),
-                            );
-                          },
-                          restrictToBack: false,
+                          routeType: WalletRouteType.create,
                         ),
                       );
                     },

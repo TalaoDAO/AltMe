@@ -69,24 +69,6 @@ class _PinCodeViewState extends State<PinCodeView> {
       StreamController<bool>.broadcast();
 
   @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final isBiometricEnabled =
-          await getSecureStorage.get(SecureStorageKeys.isBiometricEnabled);
-      if (isBiometricEnabled == true.toString()) {
-        final l10n = context.l10n;
-        final authenticated = await widget.localAuthApi
-            .authenticate(localizedReason: l10n.scanFingerprintToAuthenticate);
-        if (authenticated) {
-          Navigator.pop(context);
-          widget.isValidCallback.call();
-        }
-      }
-    });
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _verificationNotifier.close();
     super.dispose();

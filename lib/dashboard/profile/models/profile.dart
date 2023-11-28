@@ -32,7 +32,7 @@ class ProfileModel extends Equatable {
     required this.polygonIdNetwork,
     required this.didKeyType,
     required this.isEnterprise,
-    required this.isBiometricEnabled,
+    required this.walletProtectionType,
     required this.userConsentForIssuerAccess,
     required this.userConsentForVerifierAccess,
     required this.userPINCodeForAuthentication,
@@ -65,7 +65,7 @@ class ProfileModel extends Equatable {
         jobTitle: '',
         polygonIdNetwork: PolygonIdNetwork.PolygonMainnet.toString(),
         isEnterprise: false,
-        isBiometricEnabled: false,
+        walletProtectionType: WalletProtectionType.pinCode.toString(),
         userConsentForIssuerAccess: true,
         userConsentForVerifierAccess: true,
         userPINCodeForAuthentication: true,
@@ -93,7 +93,7 @@ class ProfileModel extends Equatable {
         jobTitle: '',
         polygonIdNetwork: PolygonIdNetwork.PolygonMainnet.toString(),
         isEnterprise: false,
-        isBiometricEnabled: false,
+        walletProtectionType: WalletProtectionType.pinCode.toString(),
         userConsentForIssuerAccess: true,
         userConsentForVerifierAccess: true,
         userPINCodeForAuthentication: true,
@@ -121,7 +121,7 @@ class ProfileModel extends Equatable {
   final String polygonIdNetwork;
   final String didKeyType;
   final bool isEnterprise;
-  final bool isBiometricEnabled;
+  final String walletProtectionType;
   final bool userConsentForIssuerAccess;
   final bool userConsentForVerifierAccess;
   final bool userPINCodeForAuthentication;
@@ -150,7 +150,7 @@ class ProfileModel extends Equatable {
         companyWebsite,
         jobTitle,
         isEnterprise,
-        isBiometricEnabled,
+        walletProtectionType,
         userConsentForIssuerAccess,
         userConsentForVerifierAccess,
         userPINCodeForAuthentication,
@@ -181,7 +181,7 @@ class ProfileModel extends Equatable {
     TezosNetwork? tezosNetwork,
     String? didKeyType,
     bool? isEnterprise,
-    bool? isBiometricEnabled,
+    String? walletProtectionType,
     bool? userConsentForIssuerAccess,
     bool? userConsentForVerifierAccess,
     bool? userPINCodeForAuthentication,
@@ -208,7 +208,7 @@ class ProfileModel extends Equatable {
       polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
       didKeyType: didKeyType ?? this.didKeyType,
       isEnterprise: isEnterprise ?? this.isEnterprise,
-      isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
+      walletProtectionType: walletProtectionType ?? this.walletProtectionType,
       enableJWKThumbprint: enableJWKThumbprint ?? this.enableJWKThumbprint,
       enableCryptographicHolderBinding: enableCryptographicHolderBinding ??
           this.enableCryptographicHolderBinding,

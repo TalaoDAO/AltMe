@@ -62,22 +62,21 @@ class RestoreView extends StatelessWidget {
                         false;
 
                     if (confirm) {
-                      await Navigator.of(context).push<void>(
-                        PinCodePage.route(
-                          restrictToBack: false,
-                          isValidCallback: () {
-                            Navigator.of(context).push<void>(
-                              RestoreCredentialMnemonicPage.route(
-                                title: l10n.restoreCredential,
-                                isValidCallback: () {
-                                  Navigator.of(context).push<void>(
-                                    RestoreCredentialPage.route(),
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        ),
+                      await securityCheck(
+                        context: context,
+                        localAuthApi: LocalAuthApi(),
+                        onSuccess: () {
+                          Navigator.of(context).push<void>(
+                            RestoreCredentialMnemonicPage.route(
+                              title: l10n.restoreCredential,
+                              isValidCallback: () {
+                                Navigator.of(context).push<void>(
+                                  RestoreCredentialPage.route(),
+                                );
+                              },
+                            ),
+                          );
+                        },
                       );
                     }
                   },
@@ -85,22 +84,21 @@ class RestoreView extends StatelessWidget {
                 DrawerItem(
                   title: l10n.restorePolygonIdCredentials,
                   onTap: () {
-                    Navigator.of(context).push<void>(
-                      PinCodePage.route(
-                        restrictToBack: false,
-                        isValidCallback: () {
-                          Navigator.of(context).push<void>(
-                            RestoreCredentialMnemonicPage.route(
-                              title: l10n.restorePolygonIdCredentials,
-                              isValidCallback: () {
-                                Navigator.of(context).push<void>(
-                                  RestorePolygonIdCredentialPage.route(),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      ),
+                    securityCheck(
+                      context: context,
+                      localAuthApi: LocalAuthApi(),
+                      onSuccess: () {
+                        Navigator.of(context).push<void>(
+                          RestoreCredentialMnemonicPage.route(
+                            title: l10n.restorePolygonIdCredentials,
+                            isValidCallback: () {
+                              Navigator.of(context).push<void>(
+                                RestorePolygonIdCredentialPage.route(),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     );
                   },
                 ),

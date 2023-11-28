@@ -86,4 +86,7 @@ class IconStrings {
   static const String document = '$base/document.png';
   static const String cashInHand = '$base/cash-in-hand.png';
   static const String warning = '$base/warning.png';
+  static const String lock = '$base/lock.png';
+  static const String pincode = '$base/pincode.png';
+  static const String right = '$base/right.png';
 }

@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:dio/dio.dart';
@@ -260,16 +259,15 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                 onPressed: context
                         .read<ConfirmTokenTransactionCubit>()
                         .canConfirmTheWithdrawal()
-                    ? () {
-                        Navigator.of(context).push<void>(
-                          PinCodePage.route(
-                            restrictToBack: false,
-                            isValidCallback: () {
-                              context
-                                  .read<ConfirmTokenTransactionCubit>()
-                                  .sendContractInvocationOperation();
-                            },
-                          ),
+                    ? () async {
+                        await securityCheck(
+                          context: context,
+                          localAuthApi: LocalAuthApi(),
+                          onSuccess: () {
+                            context
+                                .read<ConfirmTokenTransactionCubit>()
+                                .sendContractInvocationOperation();
+                          },
                         );
                       }
                     : null,
