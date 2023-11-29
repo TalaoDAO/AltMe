@@ -446,24 +446,13 @@ class ProfileCubit extends Cubit<ProfileState> {
         SecureStorageKeys.customProfileBackup,
         customProfileBackup,
       );
-      final ebsiV3Profile = ProfileModel.EbsiV3();
-      final profileModel = state.model.copyWith(
-          isEbsiV3Profile: enabled,
-          enableSecurity: ebsiV3Profile.enableSecurity,
-          enable4DigitPINCode: ebsiV3Profile.enable4DigitPINCode,
-          enableJWKThumbprint: ebsiV3Profile.enableJWKThumbprint,
-          enableCryptographicHolderBinding:
-              ebsiV3Profile.enableCryptographicHolderBinding,
-          didKeyType: ebsiV3Profile.didKeyType,
-          enableScopeParameter: ebsiV3Profile.enableScopeParameter,
-          useBasicClientAuthentication:
-              ebsiV3Profile.useBasicClientAuthentication);
-      await update(profileModel);
+      final ebsiV3Profile = ProfileModel.EbsiV3(state.model);
+      await update(ebsiV3Profile);
     } else {
       final String customProfileBackupValue = await secureStorageProvider.get(
             SecureStorageKeys.customProfileBackup,
           ) ??
-          jsonEncode(ProfileModel.empty());
+          jsonEncode(state.model);
       final customProfileBackup = ProfileModel.fromJson(
         json.decode(customProfileBackupValue) as Map<String, dynamic>,
       );
