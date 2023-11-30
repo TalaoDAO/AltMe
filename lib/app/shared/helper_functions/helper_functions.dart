@@ -276,6 +276,32 @@ Future<String> getPrivateKey({
   if (p256PrivateKey != null) return p256PrivateKey.replaceAll('=', '');
 
   /// create key if it is not created
+  final newKey = generateP256Key();
+
+  await secureStorage.set(storageKey, newKey);
+
+  return newKey;
+}
+
+Future<String> getWalletP256Key({
+  required SecureStorageProvider secureStorage,
+}) async {
+  const storageKey = SecureStorageKeys.p256PrivateKeyForWallet;
+
+  /// return key if it is already created
+  final String? p256PrivateKey = await secureStorage.get(storageKey);
+  if (p256PrivateKey != null) return p256PrivateKey.replaceAll('=', '');
+
+  /// create key if it is not created
+  final newKey = generateP256Key();
+
+  await secureStorage.set(storageKey, newKey);
+
+  return newKey;
+}
+
+String generateP256Key() {
+  /// create key if it is not created
   final jwk = JsonWebKey.generate('ES256');
 
   final json = jwk.toJson();
@@ -286,8 +312,6 @@ Future<String> getPrivateKey({
   )..remove('keyOperations');
 
   final newKey = jsonEncode(sortedJwk).replaceAll('=', '');
-
-  await secureStorage.set(storageKey, newKey);
 
   return newKey;
 }

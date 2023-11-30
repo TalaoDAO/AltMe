@@ -489,7 +489,10 @@ class WalletCubit extends Cubit<WalletState> {
 
   Future<void> resetWallet() async {
     await secureStorageProvider.deleteAllExceptsSomeKeys(
-      [SecureStorageKeys.version],
+      [
+        SecureStorageKeys.version,
+        SecureStorageKeys.p256PrivateKeyForWallet,
+      ],
     );
 
     // await credentialsRepository.deleteAll();

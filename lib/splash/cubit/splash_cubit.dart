@@ -41,6 +41,11 @@ class SplashCubit extends Cubit<SplashState> {
       emit(state.copyWith(loadedValue: counter / 5));
       if (counter > 5) {
         timer.cancel();
+
+        /// create p256 key for wallet
+        await secureStorageProvider
+            .get(SecureStorageKeys.p256PrivateKeyForWallet);
+
         final bool hasWallet = await isWalletCreated(
           secureStorageProvider: secureStorageProvider,
           didCubit: didCubit,
