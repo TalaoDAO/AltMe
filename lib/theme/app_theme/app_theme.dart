@@ -258,6 +258,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffD1CCE3),
       );
 
+  TextStyle get textFieldTitle => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get keyboardDigitTextStyle =>
       GoogleFonts.roboto(fontSize: 30, color: Colors.white);
 
@@ -278,7 +284,7 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get starterTitleStyle => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
-        fontSize: 34,
+        fontSize: 32,
         fontWeight: FontWeight.w700,
       );
 
@@ -302,7 +308,7 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get starterSubTitleStyle => GoogleFonts.nunito(
         color: const Color(0xFFEEEEEE),
-        fontSize: 26,
+        fontSize: 22,
         fontWeight: FontWeight.w600,
       );
 

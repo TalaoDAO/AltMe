@@ -41,15 +41,16 @@ class StarterPage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const Spacer(flex: 2),
+                  const Spacer(flex: 5),
+                  const SplashImage(),
+                  const Spacer(flex: 3),
                   const TitleText(),
                   const Spacer(flex: 1),
                   const SubTitle(),
-                  const Spacer(flex: 3),
-                  const SplashImage(),
-                  const Spacer(flex: 2),
-                  InkWell(
-                    onTap: () {
+                  const Spacer(flex: 4),
+                  GradientButtonText(
+                    text: l10n.import_wallet,
+                    onPressed: () {
                       Navigator.of(context).push(
                         ProtectWalletPage.route(
                           isFromOnboarding: true,
@@ -57,16 +58,10 @@ class StarterPage extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(Sizes.spaceLarge),
-                      child: GradientButtonText(
-                        text: l10n.import_wallet,
-                        onPressed: () {},
-                        fontSize: 18,
-                        upperCase: true,
-                      ),
-                    ),
+                    fontSize: 18,
+                    upperCase: true,
                   ),
+                  const Spacer(flex: 1),
                   MyGradientButton(
                     text: l10n.create_wallet,
                     onPressed: () {
@@ -78,7 +73,18 @@ class StarterPage extends StatelessWidget {
                       );
                     },
                   ),
-                  const Spacer(),
+                  const Spacer(flex: 1),
+                  MyGradientButton(
+                    text: l10n.createAnEnterPriseWallet,
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        EnterpriseLoginPage.route(),
+                      );
+                    },
+                  ),
+                  const Spacer(flex: 1),
+                  const AppVersionDrawer(isShortForm: true),
+                  const Spacer(flex: 1),
                 ],
               ),
             ),

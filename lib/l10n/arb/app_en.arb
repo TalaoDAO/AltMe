@@ -1017,5 +1017,12 @@
   "pinUnlockAndBiometric2FA": "PIN unlock + Biometric (2FA)",
   "secureWithFingerprintAndPINBackup": "Secure with Fingerprint + PIN backup",
   "secureYourWalletWithPINCodeAndBiometrics": "Secure your wallet with PIN code and Biometrics",
-  "twoFactorAuthenticationHasBeenEnabled": "Two factor authentication has been enabled."
+  "twoFactorAuthenticationHasBeenEnabled": "Two factor authentication has been enabled.",
+  "createAnEnterPriseWallet": "Create An Enterprise Wallet",
+  "login": "Login",
+  "password": "Password",
+  "pleaseEnterYourEmailAndYourCompanyPasswordToCreateYourAccount": "Please enter your email and your company password to create your account",
+  "enterTheSecurityCodeThatWeSentYouByEmail": "Enter the security code that we sent you by email",
+  "enterTheSecurityCode": "Enter the security code",
+  "yourEmail": "Your email"
 }

@@ -923,7 +923,14 @@
     "pinUnlockAndBiometric2FA",
     "secureWithFingerprintAndPINBackup",
     "secureYourWalletWithPINCodeAndBiometrics",
-    "twoFactorAuthenticationHasBeenEnabled"
+    "twoFactorAuthenticationHasBeenEnabled",
+    "createAnEnterPriseWallet",
+    "login",
+    "password",
+    "pleaseEnterYourEmailAndYourCompanyPasswordToCreateYourAccount",
+    "enterTheSecurityCodeThatWeSentYouByEmail",
+    "enterTheSecurityCode",
+    "yourEmail"
   ],
 
   "es": [
@@ -1850,7 +1857,14 @@
     "pinUnlockAndBiometric2FA",
     "secureWithFingerprintAndPINBackup",
     "secureYourWalletWithPINCodeAndBiometrics",
-    "twoFactorAuthenticationHasBeenEnabled"
+    "twoFactorAuthenticationHasBeenEnabled",
+    "createAnEnterPriseWallet",
+    "login",
+    "password",
+    "pleaseEnterYourEmailAndYourCompanyPasswordToCreateYourAccount",
+    "enterTheSecurityCodeThatWeSentYouByEmail",
+    "enterTheSecurityCode",
+    "yourEmail"
   ],
 
   "fr": [
@@ -2081,7 +2095,14 @@
     "pinUnlockAndBiometric2FA",
     "secureWithFingerprintAndPINBackup",
     "secureYourWalletWithPINCodeAndBiometrics",
-    "twoFactorAuthenticationHasBeenEnabled"
+    "twoFactorAuthenticationHasBeenEnabled",
+    "createAnEnterPriseWallet",
+    "login",
+    "password",
+    "pleaseEnterYourEmailAndYourCompanyPasswordToCreateYourAccount",
+    "enterTheSecurityCodeThatWeSentYouByEmail",
+    "enterTheSecurityCode",
+    "yourEmail"
   ],
 
   "it": [
@@ -3008,6 +3029,13 @@
     "pinUnlockAndBiometric2FA",
     "secureWithFingerprintAndPINBackup",
     "secureYourWalletWithPINCodeAndBiometrics",
-    "twoFactorAuthenticationHasBeenEnabled"
+    "twoFactorAuthenticationHasBeenEnabled",
+    "createAnEnterPriseWallet",
+    "login",
+    "password",
+    "pleaseEnterYourEmailAndYourCompanyPasswordToCreateYourAccount",
+    "enterTheSecurityCodeThatWeSentYouByEmail",
+    "enterTheSecurityCode",
+    "yourEmail"
   ]
 }
