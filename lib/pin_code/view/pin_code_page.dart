@@ -15,14 +15,17 @@ class PinCodePage extends StatelessWidget {
     required this.isValidCallback,
     this.restrictToBack = true,
     required this.localAuthApi,
+    required this.walletProtectionType,
   });
 
   final VoidCallback isValidCallback;
   final bool restrictToBack;
   final LocalAuthApi localAuthApi;
+  final WalletProtectionType walletProtectionType;
 
   static Route<dynamic> route({
     required VoidCallback isValidCallback,
+    required WalletProtectionType walletProtectionType,
     bool restrictToBack = true,
   }) =>
       MaterialPageRoute<void>(
@@ -30,6 +33,7 @@ class PinCodePage extends StatelessWidget {
           isValidCallback: isValidCallback,
           restrictToBack: restrictToBack,
           localAuthApi: LocalAuthApi(),
+          walletProtectionType: walletProtectionType,
         ),
         settings: const RouteSettings(name: '/pinCodePage'),
       );
@@ -43,6 +47,7 @@ class PinCodePage extends StatelessWidget {
         isValidCallback: isValidCallback,
         restrictToBack: restrictToBack,
         localAuthApi: localAuthApi,
+        walletProtectionType: walletProtectionType,
       ),
     );
   }
@@ -54,11 +59,13 @@ class PinCodeView extends StatefulWidget {
     required this.isValidCallback,
     this.restrictToBack = true,
     required this.localAuthApi,
+    required this.walletProtectionType,
   });
 
   final VoidCallback isValidCallback;
   final bool restrictToBack;
   final LocalAuthApi localAuthApi;
+  final WalletProtectionType walletProtectionType;
 
   @override
   State<StatefulWidget> createState() => _PinCodeViewState();
@@ -97,9 +104,32 @@ class _PinCodeViewState extends State<PinCodeView> {
                 style: Theme.of(context).textTheme.labelLarge,
               ),
               cancelCallback: _onPasscodeCancelled,
-              isValidCallback: () {
-                Navigator.pop(context);
-                widget.isValidCallback.call();
+              isValidCallback: () async {
+                switch (widget.walletProtectionType) {
+                  case WalletProtectionType.pinCode:
+                    Navigator.pop(context);
+                    widget.isValidCallback.call();
+                  case WalletProtectionType.biometrics:
+                    throw Exception();
+                  case WalletProtectionType.FA2:
+                    final LocalAuthApi localAuthApi = LocalAuthApi();
+                    final authenticated = await localAuthApi.authenticate(
+                      localizedReason: l10n.scanFingerprintToAuthenticate,
+                    );
+                    if (authenticated) {
+                      Navigator.pop(context);
+                      widget.isValidCallback.call();
+                    } else {
+                      Navigator.pop(context);
+                      AlertMessage.showStateMessage(
+                        context: context,
+                        stateMessage: StateMessage.success(
+                          showDialog: false,
+                          stringMessage: l10n.authenticationFailed,
+                        ),
+                      );
+                    }
+                }
               },
               shouldTriggerVerification: _verificationNotifier.stream,
               allowAction: state.allowLogin,

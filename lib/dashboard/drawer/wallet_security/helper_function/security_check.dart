@@ -31,10 +31,12 @@ Future<void> securityCheck({
 
   switch (enumValue) {
     case WalletProtectionType.pinCode:
+    case WalletProtectionType.FA2:
       await Navigator.of(context).push<void>(
         PinCodePage.route(
           isValidCallback: onSuccess.call,
           restrictToBack: false,
+          walletProtectionType: enumValue,
         ),
       );
     case WalletProtectionType.biometrics:
@@ -53,28 +55,5 @@ Future<void> securityCheck({
           ),
         );
       }
-    case WalletProtectionType.FA2:
-      await Navigator.of(context).push<void>(
-        PinCodePage.route(
-          isValidCallback: () async {
-            final LocalAuthApi localAuthApi = LocalAuthApi();
-            final authenticated = await localAuthApi.authenticate(
-              localizedReason: l10n.scanFingerprintToAuthenticate,
-            );
-            if (authenticated) {
-              onSuccess.call();
-            } else {
-              AlertMessage.showStateMessage(
-                context: context,
-                stateMessage: StateMessage.success(
-                  showDialog: true,
-                  stringMessage: l10n.authenticationFailed,
-                ),
-              );
-            }
-          },
-          restrictToBack: false,
-        ),
-      );
   }
 }
