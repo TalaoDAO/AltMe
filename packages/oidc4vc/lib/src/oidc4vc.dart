@@ -12,6 +12,7 @@ import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/src/helper_function.dart';
 import 'package:oidc4vc/src/issuer_token_parameters.dart';
+import 'package:oidc4vc/src/media_type.dart';
 import 'package:oidc4vc/src/pkce_dart.dart';
 import 'package:oidc4vc/src/token_parameters.dart';
 import 'package:oidc4vc/src/verification_type.dart';
@@ -310,7 +311,7 @@ class OIDC4VC {
       did: did,
       kid: kid,
       issuer: issuer,
-      isProofOfOwnership: true,
+      mediaType: MediaType.proofOfOwnership,
       useJWKThumbPrint: false,
     );
 
@@ -738,7 +739,7 @@ class OIDC4VC {
     };
 
     final jwt = generateToken(
-      vpTokenPayload: payload,
+      payload: payload,
       tokenParameters: tokenParameters,
     );
     return jwt;
@@ -843,7 +844,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: credentialsToBePresented,
         nonce: nonce,
-        isProofOfOwnership: false,
+        mediaType: MediaType.basic,
         useJWKThumbPrint: false,
       );
 
@@ -873,7 +874,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: credentialsToBePresented,
         nonce: nonce,
-        isProofOfOwnership: false,
+        mediaType: MediaType.basic,
         useJWKThumbPrint: useJWKThumbPrint,
       );
 
@@ -905,7 +906,7 @@ class OIDC4VC {
         audience: clientId,
         credentials: [],
         nonce: nonce,
-        isProofOfOwnership: false,
+        mediaType: MediaType.basic,
         useJWKThumbPrint: useJWKThumbPrint,
       );
 
@@ -966,7 +967,7 @@ class OIDC4VC {
     };
 
     final verifierVpJwt = generateToken(
-      vpTokenPayload: vpTokenPayload,
+      payload: vpTokenPayload,
       tokenParameters: tokenParameters,
     );
 
@@ -974,10 +975,10 @@ class OIDC4VC {
   }
 
   String generateToken({
-    required Map<String, Object> vpTokenPayload,
+    required Map<String, Object> payload,
     required TokenParameters tokenParameters,
   }) {
-    final vpVerifierClaims = JsonWebTokenClaims.fromJson(vpTokenPayload);
+    final vpVerifierClaims = JsonWebTokenClaims.fromJson(payload);
     // create a builder, decoding the JWT in a JWS, so using a
     // JsonWebSignatureBuilder
     final privateKey = Map<String, dynamic>.from(tokenParameters.privateKey);
@@ -988,25 +989,20 @@ class OIDC4VC {
 
     final key = JsonWebKey.fromJson(privateKey);
 
-    late String typ;
-
-    if (tokenParameters.isProofOfOwnership) {
-      typ = 'openid4vci-proof+jwt';
-    } else {
-      typ = 'JWT';
-    }
-
     final vpBuilder = JsonWebSignatureBuilder()
       // set the content
       ..jsonContent = vpVerifierClaims.toJson()
-      ..setProtectedHeader('typ', typ)
+      ..setProtectedHeader('typ', tokenParameters.mediaType.typ)
       ..setProtectedHeader('alg', tokenParameters.alg)
 
       // add a key to sign, can only add one for JWT
       ..addRecipient(key, algorithm: tokenParameters.alg);
 
     if (!tokenParameters.useJWKThumbPrint) {
-      vpBuilder.setProtectedHeader('kid', tokenParameters.kid);
+      vpBuilder.setProtectedHeader(
+        'kid',
+        tokenParameters.kid ?? tokenParameters.thumbprint,
+      );
     }
 
     // build the jws
@@ -1041,7 +1037,7 @@ class OIDC4VC {
 
     //tokenParameters.thumbprint;
     final verifierIdJwt = generateToken(
-      vpTokenPayload: payload,
+      payload: payload,
       tokenParameters: tokenParameters,
     );
     return verifierIdJwt;

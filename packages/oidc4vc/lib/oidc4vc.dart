@@ -9,6 +9,7 @@
 library ebsi;
 
 export 'src/issuer_token_parameters.dart';
+export 'src/media_type.dart';
 export 'src/oidc4vc.dart';
 export 'src/pkce_dart.dart';
 export 'src/token_parameters.dart';

@@ -283,9 +283,7 @@ Future<String> getPrivateKey({
   return newKey;
 }
 
-Future<String> getWalletP256Key({
-  required SecureStorageProvider secureStorage,
-}) async {
+Future<String> getWalletP256Key(SecureStorageProvider secureStorage) async {
   const storageKey = SecureStorageKeys.p256PrivateKeyForWallet;
 
   /// return key if it is already created
@@ -459,24 +457,21 @@ Future<(String, String)> getDidAndKid({
 
   switch (didKeyType) {
     case DidKeyType.ebsiv3:
-      final private = jsonDecode(privateKey) as Map<String, dynamic>;
 
       //b'\xd1\xd6\x03' in python
       final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
       final List<int> prefix = prefixByteList.map((byte) => byte).toList();
 
-      final encodedData = sortedPublcJwkBytes(private);
+      final encodedData = utf8.encode(sortedPublcJwk(privateKey));
       final encodedAddress = Base58Encode([...prefix, ...encodedData]);
 
       did = 'did:key:z$encodedAddress';
       final String lastPart = did.split(':')[2];
       kid = '$did#$lastPart';
     case DidKeyType.jwkP256:
-      final private = jsonDecode(privateKey) as Map<String, dynamic>;
+      final encodedData = utf8.encode(sortedPublcJwk(privateKey));
 
-      final encodedData = sortedPublcJwkBytes(private);
-
-      final base64EncodedJWK = base64UrlEncode(encodedData);
+      final base64EncodedJWK = base64UrlEncode(encodedData).replaceAll('=', '');
       did = 'did:jwk:$base64EncodedJWK';
 
       kid = '$did#0';
@@ -527,8 +522,9 @@ Future<(String, String)> fetchDidAndKid({
   return (did, kid);
 }
 
-List<int> sortedPublcJwkBytes(Map<String, dynamic> privateKey) {
-  final publicJWK = Map.of(privateKey)..removeWhere((key, value) => key == 'd');
+String sortedPublcJwk(String privateKey) {
+  final private = jsonDecode(privateKey) as Map<String, dynamic>;
+  final publicJWK = Map.of(private)..removeWhere((key, value) => key == 'd');
 
   /// we use crv P-256K in the rest of the package to ensure compatibility
   /// with jose dart package. In fact our crv is secp256k1 wich change the
@@ -546,7 +542,7 @@ List<int> sortedPublcJwkBytes(Map<String, dynamic> privateKey) {
   }
 
   final jsonString = jsonEncode(sortedJwk).replaceAll(' ', '');
-  return utf8.encode(jsonString);
+  return jsonString;
 }
 
 bool isPolygonIdUrl(String url) =>

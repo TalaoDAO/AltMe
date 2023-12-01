@@ -2,8 +2,12 @@ import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:oidc4vc/oidc4vc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class EnterpriseLoginPage extends StatelessWidget {
   const EnterpriseLoginPage({super.key});
@@ -18,7 +22,12 @@ class EnterpriseLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => EnterpriseLoginCubit(),
+      create: (_) => EnterpriseLoginCubit(
+        client: DioClient('', Dio()),
+        secureStorageProvider: getSecureStorage,
+        jwtDecode: JWTDecode(),
+        oidc4vc: OIDC4VC(),
+      ),
       child: const EnterpriseLoginView(),
     );
   }
@@ -51,6 +60,15 @@ class _EnterpriseLoginViewState extends State<EnterpriseLoginView> {
           .read<EnterpriseLoginCubit>()
           .updatePasswordFormat(passwordController.text);
     });
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        await context.read<EnterpriseLoginCubit>().requestTheConfiguration(
+              email: emailController.text.trim(),
+              password: passwordController.text.trim(),
+            );
+      },
+    );
 
     super.initState();
   }
@@ -151,13 +169,17 @@ class _EnterpriseLoginViewState extends State<EnterpriseLoginView> {
             padding: const EdgeInsets.all(Sizes.spaceSmall),
             child: MyElevatedButton(
               text: l10n.next,
-              // onPressed:
-              //     state.isEmailFormatCorrect && state.isPasswordFormatCorrect
-              //         ? () {}
-              //         : null,
-              onPressed: () {
-                Navigator.push(context, EnterpriseOTPPage.route());
-              },
+              onPressed:
+                  state.isEmailFormatCorrect && state.isPasswordFormatCorrect
+                      ? () async {
+                          await context
+                              .read<EnterpriseLoginCubit>()
+                              .requestTheConfiguration(
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim(),
+                              );
+                        }
+                      : null,
             ),
           ),
         );

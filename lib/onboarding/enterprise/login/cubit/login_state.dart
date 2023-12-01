@@ -23,12 +23,10 @@ class EnterpriseLoginState extends Equatable {
     return copyWith(status: AppStatus.loading);
   }
 
-  EnterpriseLoginState error({
-    required MessageHandler messageHandler,
-  }) {
+  EnterpriseLoginState error({required StateMessage message}) {
     return copyWith(
       status: AppStatus.error,
-      message: StateMessage.error(messageHandler: messageHandler),
+      message: message,
     );
   }
 
