@@ -151,10 +151,18 @@ class _EnterpriseLoginViewState extends State<EnterpriseLoginView> {
                   child: Wrap(
                     alignment: WrapAlignment.end,
                     children: [
-                      if (state.obscurePassword)
-                        const Icon(Icons.visibility_off)
-                      else
-                        const Icon(Icons.visibility),
+                      TransparentInkWell(
+                        child: Icon(
+                          state.obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onTap: () {
+                          context
+                              .read<EnterpriseLoginCubit>()
+                              .obscurePassword();
+                        },
+                      ),
                       if (state.isPasswordFormatCorrect) ...[
                         const SizedBox(width: 5),
                         const Icon(Icons.check_circle),

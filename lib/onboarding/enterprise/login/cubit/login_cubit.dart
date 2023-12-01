@@ -73,38 +73,70 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
         }
       }
 
-      /// request the configuration
-      //final encodedData = utf8.encode('thierry@altme.io:talao');
-      final encodedData = utf8.encode('$email:$password');
-      final base64Encoded = base64UrlEncode(encodedData).replaceAll('=', '');
+      /// request the configuration and verify
+      await requestTheConfigurationAndVerify(email: email, password: password);
+    } catch (e) {
+      emitError(e);
+    }
+  }
 
-      final headers = <String, dynamic>{
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic $base64Encoded',
-      };
+  Future<void> requestTheConfigurationAndVerify({
+    required String email,
+    required String password,
+  }) async {
+    /// request the configuration
+    //final encodedData = utf8.encode('thierry@altme.io:talao');
+    final encodedData = utf8.encode('$email:$password');
+    final base64Encoded = base64UrlEncode(encodedData).replaceAll('=', '');
 
-      final data = <String, dynamic>{
-        'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-        'assertion': jwtVc,
-      };
+    final headers = <String, dynamic>{
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Basic $base64Encoded',
+    };
 
-      final response = await client.post(
-        '${Urls.walletProvider}/configuration',
-        headers: headers,
-        data: data,
-      );
+    final data = <String, dynamic>{
+      'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      'assertion': jwtVc,
+    };
 
+    final response = await client.post(
+      '${Urls.walletProvider}/configuration',
+      headers: headers,
+      data: data,
+    );
+
+    /// parse
+    final header = jwtDecode.parseJwtHeader(response as String);
+    final issuerKid = header['kid'].toString();
+    final issuerDid = issuerKid.split('#')[0];
+
+    /// verify
+    final VerificationType isVerified = await verifyEncodedData(
+      issuerDid,
+      issuerKid,
+      response,
+    );
+
+    if (isVerified == VerificationType.verified) {
       emit(
         state.copyWith(
           status: AppStatus.idle,
-          message: StateMessage.info(
+          message: const StateMessage.info(
             showDialog: true,
-            stringMessage: response.toString(),
+            stringMessage: 'Verfied',
           ),
         ),
       );
-    } catch (e) {
-      emitError(e);
+    } else {
+      emit(
+        state.copyWith(
+          status: AppStatus.idle,
+          message: const StateMessage.info(
+            showDialog: true,
+            stringMessage: 'Not Verfied',
+          ),
+        ),
+      );
     }
   }
 
@@ -174,22 +206,6 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
     );
 
     jwtVc = response.toString();
-
-    // /// parse
-    // final header = jwtDecode.parseJwtHeader(jwtVc);
-    // final issuerKid = header['kid'].toString();
-    // final issuerDid = issuerKid.split('#')[0];
-
-    // /// verify
-    // final VerificationType isVerified = await verifyEncodedData(
-    //   issuerDid,
-    //   issuerKid,
-    //   jwtVc,
-    // );
-
-    // print(isVerified);
-
-    ///store
 
     return response as String;
   }
