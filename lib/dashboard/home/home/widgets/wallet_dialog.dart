@@ -55,7 +55,6 @@ class WalletDialog extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   ProtectWalletPage.route(
-                    isFromOnboarding: true,
                     routeType: WalletRouteType.create,
                   ),
                 );
@@ -69,7 +68,6 @@ class WalletDialog extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   ProtectWalletPage.route(
-                    isFromOnboarding: true,
                     routeType: WalletRouteType.import,
                   ),
                 );

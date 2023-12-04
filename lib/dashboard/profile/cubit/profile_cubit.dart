@@ -79,9 +79,9 @@ class ProfileCubit extends Cubit<ProfileState> {
           (await secureStorageProvider.get(SecureStorageKeys.didKeyType)) ??
               DidKeyType.ebsiv3.toString();
 
-      final isEnterprise = (await secureStorageProvider
-              .get(SecureStorageKeys.isEnterpriseUser)) ==
-          'true';
+      final walletType =
+          (await secureStorageProvider.get(SecureStorageKeys.walletType)) ??
+              WalletType.personal.toString();
 
       final walletProtectionType = (await secureStorageProvider
               .get(SecureStorageKeys.walletProtectionType)) ??
@@ -168,7 +168,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         companyName: companyName,
         companyWebsite: companyWebsite,
         jobTitle: jobTitle,
-        isEnterprise: isEnterprise,
+        walletType: walletType,
         walletProtectionType: walletProtectionType,
         userConsentForIssuerAccess: userConsentForIssuerAccess,
         userConsentForVerifierAccess: userConsentForVerifierAccess,
@@ -248,8 +248,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.isEnterpriseUser,
-        profileModel.isEnterprise.toString(),
+        SecureStorageKeys.walletType,
+        profileModel.walletType,
       );
 
       await secureStorageProvider.set(
@@ -340,6 +340,14 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     final profileModel = state.model
         .copyWith(walletProtectionType: walletProtectionType.toString());
+    await update(profileModel);
+  }
+
+  Future<void> setWalletType({
+    required WalletType walletType,
+  }) async {
+    final profileModel =
+        state.model.copyWith(walletType: walletType.toString());
     await update(profileModel);
   }
 

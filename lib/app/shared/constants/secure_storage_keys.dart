@@ -50,7 +50,6 @@ class SecureStorageKeys {
   static const String didMethodName = 'DIDMethodName';
   static const String verificationMethod = 'verificationMethod';
 
-  static const String isEnterpriseUser = 'isEnterpriseUser';
   static const String companyName = 'companyName';
   static const String companyWebsite = 'companyWebsite';
   static const String jobTitle = 'jobTitle';
@@ -98,4 +97,6 @@ class SecureStorageKeys {
   static const String buildNumber = 'buildNumber';
 
   static const String hasVerifiedMnemonics = 'hasVerifiedMnemonics';
+
+  static const String walletType = 'walletType';
 }

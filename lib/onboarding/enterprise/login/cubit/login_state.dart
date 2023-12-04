@@ -20,7 +20,10 @@ class EnterpriseLoginState extends Equatable {
   final bool obscurePassword;
 
   EnterpriseLoginState loading() {
-    return copyWith(status: AppStatus.loading);
+    return copyWith(
+      status: AppStatus.loading,
+      message: null,
+    );
   }
 
   EnterpriseLoginState error({required StateMessage message}) {
@@ -31,15 +34,15 @@ class EnterpriseLoginState extends Equatable {
   }
 
   EnterpriseLoginState copyWith({
+    required StateMessage? message,
     AppStatus? status,
-    StateMessage? message,
     bool? isEmailFormatCorrect,
     bool? isPasswordFormatCorrect,
     bool? obscurePassword,
   }) {
     return EnterpriseLoginState(
       status: status ?? this.status,
-      message: message ?? this.message,
+      message: message,
       isEmailFormatCorrect: isEmailFormatCorrect ?? this.isEmailFormatCorrect,
       isPasswordFormatCorrect:
           isPasswordFormatCorrect ?? this.isPasswordFormatCorrect,

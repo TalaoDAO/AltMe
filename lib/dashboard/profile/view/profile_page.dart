@@ -53,7 +53,8 @@ class _PersonalPageState extends State<ProfileView> {
 
   late final profileCubit = context.read<ProfileCubit>();
 
-  late final isEnterprise = profileCubit.state.model.isEnterprise;
+  late final isEnterprise =
+      profileCubit.state.model.walletType == WalletType.enterprise;
 
   @override
   void initState() {

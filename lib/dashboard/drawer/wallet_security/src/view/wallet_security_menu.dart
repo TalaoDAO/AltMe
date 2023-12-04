@@ -58,9 +58,8 @@ class WalletSecurityView extends StatelessWidget {
                           context: context,
                           localAuthApi: LocalAuthApi(),
                           onSuccess: () {
-                            Navigator.of(context).push<void>(
-                              ProtectWalletPage.route(isFromOnboarding: false),
-                            );
+                            Navigator.of(context)
+                                .push<void>(ProtectWalletPage.route());
                           },
                         );
                       },

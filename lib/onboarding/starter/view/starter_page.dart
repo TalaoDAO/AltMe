@@ -1,9 +1,12 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class StarterPage extends StatelessWidget {
   const StarterPage({super.key});
@@ -18,6 +21,9 @@ class StarterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    final profileCubit = context.read<ProfileCubit>();
+
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -50,10 +56,12 @@ class StarterPage extends StatelessWidget {
                   const Spacer(flex: 4),
                   GradientButtonText(
                     text: l10n.import_wallet,
-                    onPressed: () {
-                      Navigator.of(context).push(
+                    onPressed: () async {
+                      await profileCubit.setWalletType(
+                        walletType: WalletType.personal,
+                      );
+                      await Navigator.of(context).push(
                         ProtectWalletPage.route(
-                          isFromOnboarding: true,
                           routeType: WalletRouteType.import,
                         ),
                       );
@@ -64,10 +72,12 @@ class StarterPage extends StatelessWidget {
                   const Spacer(flex: 1),
                   MyGradientButton(
                     text: l10n.create_wallet,
-                    onPressed: () {
-                      Navigator.of(context).push(
+                    onPressed: () async {
+                      await profileCubit.setWalletType(
+                        walletType: WalletType.personal,
+                      );
+                      await Navigator.of(context).push(
                         ProtectWalletPage.route(
-                          isFromOnboarding: true,
                           routeType: WalletRouteType.create,
                         ),
                       );
@@ -76,8 +86,11 @@ class StarterPage extends StatelessWidget {
                   const Spacer(flex: 1),
                   MyGradientButton(
                     text: l10n.createAnEnterPriseWallet,
-                    onPressed: () {
-                      Navigator.of(context).push(
+                    onPressed: () async {
+                      await profileCubit.setWalletType(
+                        walletType: WalletType.enterprise,
+                      );
+                      await Navigator.of(context).push(
                         EnterpriseLoginPage.route(),
                       );
                     },

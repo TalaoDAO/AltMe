@@ -36,15 +36,30 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
     final regExpEmail = RegExp(emailPattern);
 
     final isValid = regExpEmail.hasMatch(email);
-    emit(state.copyWith(isEmailFormatCorrect: isValid));
+    emit(
+      state.copyWith(
+        isEmailFormatCorrect: isValid,
+        message: null,
+      ),
+    );
   }
 
   void updatePasswordFormat(String password) {
-    emit(state.copyWith(isPasswordFormatCorrect: password.trim().length >= 3));
+    emit(
+      state.copyWith(
+        isPasswordFormatCorrect: password.trim().length >= 3,
+        message: null,
+      ),
+    );
   }
 
   void obscurePassword() {
-    emit(state.copyWith(obscurePassword: !state.obscurePassword));
+    emit(
+      state.copyWith(
+        obscurePassword: !state.obscurePassword,
+        message: null,
+      ),
+    );
   }
 
   String? jwtVc;
@@ -69,7 +84,7 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
         await getJWTVc(data);
 
         if (!isDataEntered) {
-          return emit(state.copyWith(status: AppStatus.idle));
+          return emit(state.copyWith(status: AppStatus.idle, message: null));
         }
       }
 
@@ -117,27 +132,34 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
       response,
     );
 
-    if (isVerified == VerificationType.verified) {
-      emit(
-        state.copyWith(
-          status: AppStatus.idle,
-          message: const StateMessage.info(
-            showDialog: true,
-            stringMessage: 'Verfied',
-          ),
-        ),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          status: AppStatus.idle,
-          message: const StateMessage.info(
-            showDialog: true,
-            stringMessage: 'Not Verfied',
-          ),
-        ),
-      );
-    }
+    // if (isVerified == VerificationType.verified) {
+    //   emit(
+    //     state.copyWith(
+    //       status: AppStatus.idle,
+    //       message: const StateMessage.info(
+    //         showDialog: true,
+    //         stringMessage: 'Verfied',
+    //       ),
+    //     ),
+    //   );
+    // } else {
+    //   emit(
+    //     state.copyWith(
+    //       status: AppStatus.idle,
+    //       message: const StateMessage.info(
+    //         showDialog: true,
+    //         stringMessage: 'Not Verfied',
+    //       ),
+    //     ),
+    //   );
+    // }
+
+    emit(
+      state.copyWith(
+        status: AppStatus.success,
+        message: null,
+      ),
+    );
   }
 
   Future<String> getNonce() async {
@@ -206,6 +228,20 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
     );
 
     jwtVc = response.toString();
+
+    /// parse
+    final header = jwtDecode.parseJwtHeader(response as String);
+    final issuerKid = header['kid'].toString();
+    final issuerDid = issuerKid.split('#')[0];
+
+    /// verify
+    final VerificationType isVerified = await verifyEncodedData(
+      issuerDid,
+      issuerKid,
+      response,
+    );
+
+    print(isVerified);
 
     return response as String;
   }

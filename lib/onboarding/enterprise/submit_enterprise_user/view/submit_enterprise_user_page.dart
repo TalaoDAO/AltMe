@@ -60,8 +60,9 @@ class _SubmitEnterpriseUserViewState extends State<SubmitEnterpriseUserView> {
           );
 
           if (state.status == AppStatus.success) {
-            final model = ProfileModel.empty().copyWith(isEnterprise: true);
-            await context.read<ProfileCubit>().update(model);
+            await context
+                .read<ProfileCubit>()
+                .setWalletType(walletType: WalletType.enterprise);
 
             /// Removes every stack except first route (splashPage)
             await Navigator.pushAndRemoveUntil<void>(

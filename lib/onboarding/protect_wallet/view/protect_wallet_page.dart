@@ -26,7 +26,6 @@ class ProtectWalletPage extends StatelessWidget {
 
   static Route<dynamic> route({
     WalletRouteType? routeType,
-    required bool isFromOnboarding,
   }) {
     return MaterialPageRoute<void>(
       builder: (_) => ProtectWalletPage(

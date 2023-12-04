@@ -31,7 +31,7 @@ class ProfileModel extends Equatable {
     required this.email,
     required this.polygonIdNetwork,
     required this.didKeyType,
-    required this.isEnterprise,
+    required this.walletType,
     required this.walletProtectionType,
     required this.userConsentForIssuerAccess,
     required this.userConsentForVerifierAccess,
@@ -64,7 +64,7 @@ class ProfileModel extends Equatable {
         companyWebsite: '',
         jobTitle: '',
         polygonIdNetwork: PolygonIdNetwork.PolygonMainnet.toString(),
-        isEnterprise: false,
+        walletType: WalletType.personal.toString(),
         walletProtectionType: WalletProtectionType.pinCode.toString(),
         userConsentForIssuerAccess: true,
         userConsentForVerifierAccess: true,
@@ -92,7 +92,7 @@ class ProfileModel extends Equatable {
         companyWebsite: oldModel.companyWebsite,
         jobTitle: oldModel.jobTitle,
         polygonIdNetwork: oldModel.polygonIdNetwork,
-        isEnterprise: oldModel.isEnterprise,
+        walletType: oldModel.walletType,
         walletProtectionType: oldModel.walletProtectionType,
         userConsentForIssuerAccess: oldModel.userConsentForVerifierAccess,
         userConsentForVerifierAccess: oldModel.userConsentForVerifierAccess,
@@ -120,7 +120,7 @@ class ProfileModel extends Equatable {
   final String jobTitle;
   final String polygonIdNetwork;
   final String didKeyType;
-  final bool isEnterprise;
+  final String walletType;
   final String walletProtectionType;
   final bool userConsentForIssuerAccess;
   final bool userConsentForVerifierAccess;
@@ -149,7 +149,7 @@ class ProfileModel extends Equatable {
         companyName,
         companyWebsite,
         jobTitle,
-        isEnterprise,
+        walletType,
         walletProtectionType,
         userConsentForIssuerAccess,
         userConsentForVerifierAccess,
@@ -180,7 +180,7 @@ class ProfileModel extends Equatable {
     String? polygonIdNetwork,
     TezosNetwork? tezosNetwork,
     String? didKeyType,
-    bool? isEnterprise,
+    String? walletType,
     String? walletProtectionType,
     bool? userConsentForIssuerAccess,
     bool? userConsentForVerifierAccess,
@@ -207,7 +207,7 @@ class ProfileModel extends Equatable {
       jobTitle: jobTitle ?? this.jobTitle,
       polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
       didKeyType: didKeyType ?? this.didKeyType,
-      isEnterprise: isEnterprise ?? this.isEnterprise,
+      walletType: walletType ?? this.walletType,
       walletProtectionType: walletProtectionType ?? this.walletProtectionType,
       enableJWKThumbprint: enableJWKThumbprint ?? this.enableJWKThumbprint,
       enableCryptographicHolderBinding: enableCryptographicHolderBinding ??

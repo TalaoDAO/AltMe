@@ -77,11 +77,17 @@ class _EnterpriseLoginViewState extends State<EnterpriseLoginView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BlocConsumer<EnterpriseLoginCubit, EnterpriseLoginState>(
-      listener: (context, state) async {
+      listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
           LoadingView().hide();
+        }
+
+        if (state.status == AppStatus.success) {
+          Navigator.of(context).pushReplacement<void, void>(
+            ProtectWalletPage.route(routeType: WalletRouteType.create),
+          );
         }
 
         if (state.message != null) {
