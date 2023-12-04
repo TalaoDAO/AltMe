@@ -95,10 +95,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       ),
     );
     log.i('credentials loaded from repository - ${savedCredentials.length}');
-    await addRequiredCredentials(ssiKey: ssiKey);
   }
 
-  Future<void> addRequiredCredentials({required String ssiKey}) async {
+  Future<void> addWalletCredential({required String ssiKey}) async {
     final log = getLogger('addRequiredCredentials');
 
     /// device info card

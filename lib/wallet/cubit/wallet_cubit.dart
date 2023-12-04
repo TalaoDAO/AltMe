@@ -61,11 +61,13 @@ class WalletCubit extends Cubit<WalletState> {
     })? onComplete,
   }) async {
     if (isFromOnboarding) {
-      final String? ssiKey =
-          await secureStorageProvider.get(SecureStorageKeys.ssiKey);
-      if (ssiKey != null) {
-        await credentialsCubit.addRequiredCredentials(ssiKey: ssiKey);
-      }
+      // final String? ssiKey =
+      //     await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+
+      // if enterprise and walletAttestation data is available and added
+      // if (ssiKey != null) {
+      //   await credentialsCubit.addWalletCredential(ssiKey: ssiKey);
+      // }
     }
 
     /// tracking added accounts

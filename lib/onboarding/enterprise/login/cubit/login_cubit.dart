@@ -230,7 +230,7 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
     jwtVc = response.toString();
 
     /// parse
-    final header = jwtDecode.parseJwtHeader(response as String);
+    final header = jwtDecode.parseJwtHeader(jwtVc!);
     final issuerKid = header['kid'].toString();
     final issuerDid = issuerKid.split('#')[0];
 
@@ -238,12 +238,15 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
     final VerificationType isVerified = await verifyEncodedData(
       issuerDid,
       issuerKid,
-      response,
+      jwtVc!,
     );
 
-    print(isVerified);
+    await secureStorageProvider.set(
+      SecureStorageKeys.walletAttestationData,
+      jwtVc!,
+    );
 
-    return response as String;
+    return jwtVc!;
   }
 
   void emitError(dynamic e) {
