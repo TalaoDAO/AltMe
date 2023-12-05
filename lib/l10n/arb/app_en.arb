@@ -799,7 +799,7 @@
   "scanAndDisplay": "Scan and Display",
   "whatsNew": "What's new",
   "okGotIt": "OK, GOT IT!",
-  "altmeSupport": "Chat with Altme’s support",
+  "chatWithSupport": "Chat with support",
   "transactionDoneDialogDescription": "It can take a few minutes for the transfer to complete",
   "withdrawalFailedMessage": "The withdrawal from the account was unsuccessful",
   "credentialRequiredMessage": "You need to get those credentials in your wallet to acquire this card:",

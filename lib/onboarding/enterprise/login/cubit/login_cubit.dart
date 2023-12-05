@@ -2,9 +2,6 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
-import 'package:crypto/crypto.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
