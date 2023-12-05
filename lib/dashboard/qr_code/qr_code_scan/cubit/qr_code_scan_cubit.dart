@@ -687,8 +687,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     log.i('responseType - $responseType');
     if (isIDTokenOnly(responseType)) {
       /// verifier side (siopv2)
-
-      await completeSiopV2Flow(redirectUri: redirectUri!);
+      emit(state.copyWith(qrScanStatus: QrScanStatus.siopV2));
     } else if (isVPTokenOnly(responseType) ||
         isIDTokenAndVPToken(responseType)) {
       /// responseType == 'vp_token' => verifier side (oidc4vp)
@@ -970,8 +969,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   /// complete SIOPV2 Flow
-  Future<void> completeSiopV2Flow({required String redirectUri}) async {
+  Future<void> completeSiopV2Flow() async {
     try {
+      emit(state.loading());
+      final redirectUri = state.uri!.queryParameters['redirect_uri'];
+
       final clientId = state.uri!.queryParameters['client_id'] ?? '';
 
       final nonce = state.uri?.queryParameters['nonce'];
@@ -998,7 +1000,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         privateKey: privateKey,
         did: did,
         kid: kid,
-        redirectUri: redirectUri,
+        redirectUri: redirectUri!,
         nonce: nonce,
         stateValue: stateValue,
         useJWKThumbPrint: enableJWKThumbprint,

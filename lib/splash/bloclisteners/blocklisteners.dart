@@ -505,6 +505,33 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         }
       }
 
+      if (state.status == QrScanStatus.siopV2) {
+        LoadingView().hide();
+        final bool userPINCodeForAuthentication = context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .userPINCodeForAuthentication;
+
+        if (userPINCodeForAuthentication) {
+          /// Authenticate
+          bool authenticated = false;
+          await securityCheck(
+            context: context,
+            localAuthApi: LocalAuthApi(),
+            onSuccess: () {
+              authenticated = true;
+            },
+          );
+
+          if (!authenticated) {
+            return;
+          }
+        }
+
+        await context.read<QRCodeScanCubit>().completeSiopV2Flow();
+      }
+
       if (state.status == QrScanStatus.success) {
         if (state.route != null) {
           await Navigator.of(context).push<void>(state.route!);
