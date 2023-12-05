@@ -37,6 +37,17 @@ class UiDate {
     }
   }
 
+  static String fromMillisecondsSinceEpoch(String dateTime) {
+    try {
+      final double doubleValue = double.parse(dateTime);
+      final int intValue = doubleValue.toInt();
+      final DateTime dt = DateTime.fromMillisecondsSinceEpoch(intValue * 1000);
+      return formatDate(dt);
+    } catch (e) {
+      return '';
+    }
+  }
+
   static String formatDate(DateTime? dateTime) {
     if (dateTime == null) return '';
     return outputFormat.format(dateTime);

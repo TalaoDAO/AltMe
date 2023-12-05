@@ -1024,5 +1024,7 @@
   "pleaseEnterYourEmailAndYourCompanyPasswordToCreateYourAccount": "Please enter your email and your company password to create your account",
   "enterTheSecurityCodeThatWeSentYouByEmail": "Enter the security code that we sent you by email",
   "enterTheSecurityCode": "Enter the security code",
-  "yourEmail": "Your email"
+  "yourEmail": "Your email",
+  "publicKeyOfWalletInstance": "Public Key of Wallet Instance",
+  "walletInstanceKey": "Wallet Instance Key"
 }

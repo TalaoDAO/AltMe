@@ -8,13 +8,12 @@ import 'package:altme/did/did.dart';
 import 'package:altme/wallet/model/model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -33,6 +32,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required this.didKitProvider,
     required this.advanceSettingsCubit,
     required this.keyGenerator,
+    required this.jwtDecode,
   }) : super(const CredentialsState());
 
   final CredentialsRepository credentialsRepository;
@@ -41,6 +41,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   final DIDKitProvider didKitProvider;
   final KeyGenerator keyGenerator;
   final AdvanceSettingsCubit advanceSettingsCubit;
+  final JWTDecode jwtDecode;
 
   final log = getLogger('CredentialsCubit');
 
@@ -97,26 +98,74 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     log.i('credentials loaded from repository - ${savedCredentials.length}');
   }
 
-  Future<void> addWalletCredential({required String ssiKey}) async {
+  Future<void> addWalletCredential() async {
     final log = getLogger('addRequiredCredentials');
+
+    final walletType =
+        await secureStorageProvider.get(SecureStorageKeys.walletType);
+
+    final WalletType? walletTypeEnum = WalletType.values.firstWhereOrNull(
+      (enumValue) => enumValue.toString() == walletType,
+    );
+
+    if (walletTypeEnum != WalletType.enterprise) {
+      return;
+    }
+
+    final walletAttestationData = await secureStorageProvider
+        .get(SecureStorageKeys.walletAttestationData);
+
+    if (walletAttestationData == null) {
+      return;
+    }
 
     /// device info card
     final walletCredentialCards = await credentialListFromCredentialSubjectType(
       CredentialSubjectType.walletCredential,
     );
+
+    final payload = jwtDecode.parseJwt(walletAttestationData);
+
     if (walletCredentialCards.isEmpty) {
-      final walletCredential = await generateWalletCredential(
-        ssiKey: ssiKey,
-        didKitProvider: didKitProvider,
-        didCubit: didCubit,
+      final id = 'urn:uuid:${const Uuid().v4()}';
+      final walletCredential = CredentialModel(
+        id: id,
+        image: null,
+        data: const <String, dynamic>{},
+        display: Display.emptyDisplay()..toJson(),
+        shareLink: '',
+        expirationDate: null,
+        credentialPreview: Credential(
+          id,
+          ['dummy2'],
+          ['WalletCredential'],
+          'dummy3',
+          payload['exp'].toString(),
+          payload['iat'].toString(),
+          [
+            Proof.dummy(),
+          ],
+          WalletCredentialModel(
+            id: id,
+            type: 'WalletCredential',
+            issuedBy: const Author(''),
+            publicKey: payload['cnf']['jwk'].toString(),
+            walletInstanceKey: payload['sub'].toString(),
+          ),
+          [Translation('en', '')],
+          [Translation('en', '')],
+          CredentialStatusField.emptyCredentialStatusField(),
+          [Evidence.emptyEvidence()],
+        ),
+        activities: [Activity(acquisitionAt: DateTime.now())],
+        jwt: walletAttestationData,
       );
-      if (walletCredential != null) {
-        log.i('CredentialSubjectType.walletCredential added');
-        await insertCredential(
-          credential: walletCredential,
-          showMessage: false,
-        );
-      }
+
+      log.i('CredentialSubjectType.walletCredential added');
+      await insertCredential(
+        credential: walletCredential,
+        showMessage: false,
+      );
     }
   }
 

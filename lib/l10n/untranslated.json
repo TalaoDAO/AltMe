@@ -930,7 +930,9 @@
     "pleaseEnterYourEmailAndYourCompanyPasswordToCreateYourAccount",
     "enterTheSecurityCodeThatWeSentYouByEmail",
     "enterTheSecurityCode",
-    "yourEmail"
+    "yourEmail",
+    "publicKeyOfWalletInstance",
+    "walletInstanceKey"
   ],
 
   "es": [
@@ -1864,7 +1866,9 @@
     "pleaseEnterYourEmailAndYourCompanyPasswordToCreateYourAccount",
     "enterTheSecurityCodeThatWeSentYouByEmail",
     "enterTheSecurityCode",
-    "yourEmail"
+    "yourEmail",
+    "publicKeyOfWalletInstance",
+    "walletInstanceKey"
   ],
 
   "fr": [
@@ -2102,7 +2106,9 @@
     "pleaseEnterYourEmailAndYourCompanyPasswordToCreateYourAccount",
     "enterTheSecurityCodeThatWeSentYouByEmail",
     "enterTheSecurityCode",
-    "yourEmail"
+    "yourEmail",
+    "publicKeyOfWalletInstance",
+    "walletInstanceKey"
   ],
 
   "it": [
@@ -3036,6 +3042,8 @@
     "pleaseEnterYourEmailAndYourCompanyPasswordToCreateYourAccount",
     "enterTheSecurityCodeThatWeSentYouByEmail",
     "enterTheSecurityCode",
-    "yourEmail"
+    "yourEmail",
+    "publicKeyOfWalletInstance",
+    "walletInstanceKey"
   ]
 }
