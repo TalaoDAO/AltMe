@@ -709,7 +709,7 @@ Future<void> handleErrorForOID4VCI({
     }
   }
 
-  if (tokenEndpoint == null) {
+  if (authorizationServer != null && tokenEndpoint == null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',

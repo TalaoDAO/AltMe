@@ -103,8 +103,10 @@ class OIDC4VC {
     try {
       final openidConfigurationResponse = await getOpenIdConfig(issuer);
 
-      final authorizationEndpoint =
-          await readAuthorizationEndPoint(openidConfigurationResponse);
+      final authorizationEndpoint = await readAuthorizationEndPoint(
+        openidConfigurationResponse: openidConfigurationResponse,
+        issuer: issuer,
+      );
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
         selectedCredentials: selectedCredentials,
@@ -292,7 +294,10 @@ class OIDC4VC {
 
     final openidConfigurationResponse = await getOpenIdConfig(issuer);
 
-    final tokenEndPoint = await readTokenEndPoint(openidConfigurationResponse);
+    final tokenEndPoint = await readTokenEndPoint(
+      openidConfigurationResponse: openidConfigurationResponse,
+      issuer: issuer,
+    );
 
     if (nonce == null || accessToken == null) {
       final response = await getToken(
@@ -493,10 +498,11 @@ class OIDC4VC {
     }
   }
 
-  Future<String> readTokenEndPoint(
-    Map<String, dynamic> openidConfigurationResponse,
-  ) async {
-    late String tokenEndPoint;
+  Future<String> readTokenEndPoint({
+    required Map<String, dynamic> openidConfigurationResponse,
+    required String issuer,
+  }) async {
+    var tokenEndPoint = '$issuer/token';
 
     final authorizationServer =
         openidConfigurationResponse['authorization_server'];
@@ -504,17 +510,25 @@ class OIDC4VC {
       final url = '$authorizationServer/.well-known/openid-configuration';
       final response = await client.get<dynamic>(url);
 
-      tokenEndPoint = response.data['token_endpoint'] as String;
+      final responseData = response.data;
+
+      if (responseData is Map<String, dynamic> &&
+          responseData.containsKey('token_endpoint')) {
+        tokenEndPoint = responseData['token_endpoint'] as String;
+      }
     } else {
-      tokenEndPoint = openidConfigurationResponse['token_endpoint'] as String;
+      if (openidConfigurationResponse.containsKey('token_endpoint')) {
+        tokenEndPoint = openidConfigurationResponse['token_endpoint'] as String;
+      }
     }
     return tokenEndPoint;
   }
 
-  Future<String> readAuthorizationEndPoint(
-    Map<String, dynamic> openidConfigurationResponse,
-  ) async {
-    late String authorizationEndpoint;
+  Future<String> readAuthorizationEndPoint({
+    required Map<String, dynamic> openidConfigurationResponse,
+    required String issuer,
+  }) async {
+    var authorizationEndpoint = '$issuer/authorize';
 
     final authorizationServer =
         openidConfigurationResponse['authorization_server'];
@@ -522,10 +536,18 @@ class OIDC4VC {
       final url = '$authorizationServer/.well-known/openid-configuration';
       final response = await client.get<dynamic>(url);
 
-      authorizationEndpoint = response.data['authorization_endpoint'] as String;
+      final responseData = response.data;
+
+      if (responseData is Map<String, dynamic> &&
+          responseData.containsKey('authorization_endpoint')) {
+        authorizationEndpoint =
+            responseData['authorization_endpoint'] as String;
+      }
     } else {
-      authorizationEndpoint =
-          openidConfigurationResponse['authorization_endpoint'] as String;
+      if (openidConfigurationResponse.containsKey('authorization_endpoint')) {
+        authorizationEndpoint =
+            openidConfigurationResponse['authorization_endpoint'] as String;
+      }
     }
     return authorizationEndpoint;
   }
