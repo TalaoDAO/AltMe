@@ -154,10 +154,9 @@ class ProfileCubit extends Cubit<ProfileState> {
       final enable4DigitPINCode = enable4DigitPINCodeValue != null &&
           enable4DigitPINCodeValue == 'true';
 
-      final isEbsiV3ProfileValue =
-          await secureStorageProvider.get(SecureStorageKeys.isEbsiV3Profile);
-      final isEbsiV3Profile =
-          isEbsiV3ProfileValue != null && isEbsiV3ProfileValue == 'true';
+      final profileType =
+          (await secureStorageProvider.get(SecureStorageKeys.profileType)) ??
+              ProfileType.custom.toString();
 
       final draftType =
           (await secureStorageProvider.get(SecureStorageKeys.draftType)) ??
@@ -188,7 +187,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         useBasicClientAuthentication: useBasicClientAuthentication,
         clientId: clientId,
         clientSecret: clientSecret,
-        isEbsiV3Profile: isEbsiV3Profile,
+        profileType: profileType,
         draftType: draftType,
       );
       await update(profileModel);
@@ -315,8 +314,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.isEbsiV3Profile,
-        profileModel.isEbsiV3Profile.toString(),
+        SecureStorageKeys.profileType,
+        profileModel.profileType,
       );
 
       await secureStorageProvider.set(
@@ -462,8 +461,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     return super.close();
   }
 
-  Future<void> setEbsiV3Profile({bool enabled = false}) async {
-    if (enabled) {
+  Future<void> setProfile(ProfileType profile) async {
+    if (profile != ProfileType.custom) {
       // we save current custom settings
       // Warning when will get multiple profile this backup won't be automatic
       final customProfileBackup = jsonEncode(state.model);
@@ -471,31 +470,36 @@ class ProfileCubit extends Cubit<ProfileState> {
         SecureStorageKeys.customProfileBackup,
         customProfileBackup,
       );
-      final ebsiV3Profile = ProfileModel.EbsiV3(state.model);
-      await update(ebsiV3Profile);
-    } else {
-      final String customProfileBackupValue = await secureStorageProvider.get(
-            SecureStorageKeys.customProfileBackup,
-          ) ??
-          jsonEncode(state.model);
-      final customProfileBackup = ProfileModel.fromJson(
-        json.decode(customProfileBackupValue) as Map<String, dynamic>,
-      );
-      final profileModel = state.model.copyWith(
-        isEbsiV3Profile: enabled,
-        enableSecurity: customProfileBackup.enableSecurity,
-        enable4DigitPINCode: customProfileBackup.enable4DigitPINCode,
-        enableJWKThumbprint: customProfileBackup.enableJWKThumbprint,
-        enableCryptographicHolderBinding:
-            customProfileBackup.enableCryptographicHolderBinding,
-        didKeyType: customProfileBackup.didKeyType,
-        enableScopeParameter: customProfileBackup.enableScopeParameter,
-        useBasicClientAuthentication:
-            customProfileBackup.useBasicClientAuthentication,
-        clientId: customProfileBackup.clientId,
-        clientSecret: customProfileBackup.clientSecret,
-      );
-      await update(profileModel);
+    }
+
+    switch (profile) {
+      case ProfileType.ebsiV3:
+        await update(ProfileModel.ebsiV3(state.model));
+      case ProfileType.dutch:
+        await update(ProfileModel.dutch(state.model));
+      case ProfileType.custom:
+        final String customProfileBackupValue = await secureStorageProvider.get(
+              SecureStorageKeys.customProfileBackup,
+            ) ??
+            jsonEncode(state.model);
+        final customProfileBackup = ProfileModel.fromJson(
+          json.decode(customProfileBackupValue) as Map<String, dynamic>,
+        );
+        final profileModel = state.model.copyWith(
+          profileType: profile.toString(),
+          enableSecurity: customProfileBackup.enableSecurity,
+          enable4DigitPINCode: customProfileBackup.enable4DigitPINCode,
+          enableJWKThumbprint: customProfileBackup.enableJWKThumbprint,
+          enableCryptographicHolderBinding:
+              customProfileBackup.enableCryptographicHolderBinding,
+          didKeyType: customProfileBackup.didKeyType,
+          enableScopeParameter: customProfileBackup.enableScopeParameter,
+          useBasicClientAuthentication:
+              customProfileBackup.useBasicClientAuthentication,
+          clientId: customProfileBackup.clientId,
+          clientSecret: customProfileBackup.clientSecret,
+        );
+        await update(profileModel);
     }
   }
 

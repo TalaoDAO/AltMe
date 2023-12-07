@@ -6,18 +6,21 @@ import 'package:oidc4vc/oidc4vc.dart';
 
 part 'profile.g.dart';
 
-enum Profile {
+enum ProfileType {
   custom,
   ebsiV3,
+  dutch,
 }
 
-extension ProfileX on Profile {
+extension ProfileTypeX on ProfileType {
   String getTitle(AppLocalizations l10n) {
     switch (this) {
-      case Profile.custom:
+      case ProfileType.custom:
         return l10n.profileCustom;
-      case Profile.ebsiV3:
+      case ProfileType.ebsiV3:
         return l10n.profileEbsiV3;
+      case ProfileType.dutch:
+        return l10n.profileDutchBlockchainCoalition;
     }
   }
 }
@@ -49,7 +52,7 @@ class ProfileModel extends Equatable {
     required this.enable4DigitPINCode,
     required this.clientId,
     required this.clientSecret,
-    required this.isEbsiV3Profile,
+    required this.profileType,
     required this.draftType,
   });
 
@@ -81,11 +84,11 @@ class ProfileModel extends Equatable {
         useBasicClientAuthentication: false,
         clientId: Parameters.clientId,
         clientSecret: Parameters.clientSecret,
-        isEbsiV3Profile: false,
+        profileType: ProfileType.custom.toString(),
         draftType: DraftType.draft11.toString(),
       );
 
-  factory ProfileModel.EbsiV3(ProfileModel oldModel) => ProfileModel(
+  factory ProfileModel.ebsiV3(ProfileModel oldModel) => ProfileModel(
         firstName: oldModel.firstName,
         lastName: oldModel.lastName,
         phone: oldModel.phone,
@@ -110,8 +113,37 @@ class ProfileModel extends Equatable {
         useBasicClientAuthentication: false,
         clientId: oldModel.clientId,
         clientSecret: oldModel.clientSecret,
-        isEbsiV3Profile: true,
-        draftType: oldModel.draftType,
+        profileType: ProfileType.ebsiV3.toString(),
+        draftType: DraftType.draft11.toString(),
+      );
+
+  factory ProfileModel.dutch(ProfileModel oldModel) => ProfileModel(
+        firstName: oldModel.firstName,
+        lastName: oldModel.lastName,
+        phone: oldModel.phone,
+        location: oldModel.location,
+        email: oldModel.email,
+        companyName: oldModel.companyName,
+        companyWebsite: oldModel.companyWebsite,
+        jobTitle: oldModel.jobTitle,
+        polygonIdNetwork: oldModel.polygonIdNetwork,
+        walletType: oldModel.walletType,
+        walletProtectionType: oldModel.walletProtectionType,
+        userConsentForIssuerAccess: oldModel.userConsentForVerifierAccess,
+        userConsentForVerifierAccess: oldModel.userConsentForVerifierAccess,
+        userPINCodeForAuthentication: oldModel.userPINCodeForAuthentication,
+        didKeyType: DidKeyType.jwkP256.toString(),
+        enableSecurity: false,
+        isDeveloperMode: oldModel.isDeveloperMode,
+        enable4DigitPINCode: true,
+        enableJWKThumbprint: false,
+        enableCryptographicHolderBinding: true,
+        enableScopeParameter: false,
+        useBasicClientAuthentication: false,
+        clientId: oldModel.clientId,
+        clientSecret: oldModel.clientSecret,
+        profileType: ProfileType.dutch.toString(),
+        draftType: DraftType.draft11.toString(),
       );
 
   final String firstName;
@@ -139,7 +171,7 @@ class ProfileModel extends Equatable {
   final bool useBasicClientAuthentication;
   final String clientId;
   final String clientSecret;
-  final bool isEbsiV3Profile;
+  final String profileType;
   final String draftType;
 
   @override
@@ -168,7 +200,7 @@ class ProfileModel extends Equatable {
         useBasicClientAuthentication,
         clientId,
         clientSecret,
-        isEbsiV3Profile,
+        profileType,
         draftType,
       ];
 
@@ -200,7 +232,7 @@ class ProfileModel extends Equatable {
     bool? useBasicClientAuthentication,
     String? clientId,
     String? clientSecret,
-    bool? isEbsiV3Profile,
+    String? profileType,
     String? draftType,
   }) {
     return ProfileModel(
@@ -233,7 +265,7 @@ class ProfileModel extends Equatable {
       enableSecurity: enableSecurity ?? this.enableSecurity,
       isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
       enable4DigitPINCode: enable4DigitPINCode ?? this.enable4DigitPINCode,
-      isEbsiV3Profile: isEbsiV3Profile ?? this.isEbsiV3Profile,
+      profileType: profileType ?? this.profileType,
       draftType: draftType ?? this.draftType,
     );
   }

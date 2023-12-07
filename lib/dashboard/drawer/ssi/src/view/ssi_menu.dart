@@ -71,9 +71,8 @@ class SSIView extends StatelessWidget {
                     Navigator.of(context).push<void>(SearchPage.route());
                   },
                 ),
-                if (context.read<ProfileCubit>().state.model.isEbsiV3Profile)
-                  const SizedBox.shrink()
-                else
+                if (context.read<ProfileCubit>().state.model.profileType ==
+                    ProfileType.custom.toString())
                   DrawerItem(
                     title: l10n.advanceSettings,
                     onTap: () async {

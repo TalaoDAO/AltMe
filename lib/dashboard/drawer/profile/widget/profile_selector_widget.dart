@@ -43,67 +43,58 @@ class ProfileSelectorWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Column(
-                    children: [
-                      ListTile(
-                        onTap: () {
-                          context
-                              .read<ProfileCubit>()
-                              .setEbsiV3Profile(enabled: true);
-                        },
-                        shape: const RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Color(0xFFDDDDEE),
-                            width: 0.5,
-                          ),
-                        ),
-                        title: Text(
-                          Profile.ebsiV3.getTitle(l10n),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
+                  ListView.builder(
+                    itemCount: ProfileType.values.length,
+                    shrinkWrap: true,
+                    physics: const ScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (context, index) {
+                      final profileType = ProfileType.values[index];
+                      return Column(
+                        children: [
+                          if (index != 0)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: Divider(
+                                height: 0,
+                                color:
+                                    Theme.of(context).colorScheme.borderColor,
                               ),
-                        ),
-                        trailing: Icon(
-                          state.model.isEbsiV3Profile == true
-                              ? Icons.radio_button_checked
-                              : Icons.radio_button_unchecked,
-                          size: Sizes.icon2x,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                      ),
-                      ListTile(
-                        onTap: () {
-                          context
-                              .read<ProfileCubit>()
-                              .setEbsiV3Profile(enabled: false);
-                        },
-                        shape: const RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Color(0xFFDDDDEE),
-                            width: 0.5,
-                          ),
-                        ),
-                        title: Text(
-                          Profile.custom.getTitle(l10n),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ListTile(
+                            onTap: () {
+                              context
+                                  .read<ProfileCubit>()
+                                  .setProfile(profileType);
+                            },
+                            shape: const RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: Color(0xFFDDDDEE),
+                                width: 0.5,
                               ),
-                        ),
-                        trailing: Icon(
-                          state.model.isEbsiV3Profile == false
-                              ? Icons.radio_button_checked
-                              : Icons.radio_button_unchecked,
-                          size: Sizes.icon2x,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                      ),
-                    ],
+                            ),
+                            title: Text(
+                              profileType.getTitle(l10n),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                            ),
+                            trailing: Icon(
+                              state.model.profileType == profileType.toString()
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_unchecked,
+                              size: Sizes.icon2x,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),

@@ -30,7 +30,7 @@ class SecureStorageKeys {
 
   static const String enableSecurity = 'enableSecurity';
   static const String enable4DigitPINCode = 'enable4DigitPINCode';
-  static const String isEbsiV3Profile = 'isEbsiV3Profile';
+  static const String profileType = 'profileType';
   static const String isDeveloperMode = 'isDeveloperMode';
   static const String enableJWKThumbprint = 'enableJWKThumbprint';
   static const String enableCryptographicHolderBinding =
