@@ -25,6 +25,7 @@ Future<void> getAndAddCredential({
   required String? codeVerifier,
   required bool sendProof,
   required String? authorization,
+  required DraftType draftType,
 }) async {
   final privateKey = await fetchPrivateKey(
     isEBSIV3: isEBSIV3,
@@ -64,6 +65,7 @@ Future<void> getAndAddCredential({
       codeVerifier: codeVerifier,
       sendProof: sendProof,
       authorization: authorization,
+      draftType: draftType,
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {

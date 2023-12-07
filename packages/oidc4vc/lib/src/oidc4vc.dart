@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_dynamic_calls, public_member_api_docs
 
 import 'dart:convert';
+import 'dart:js';
 
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
@@ -10,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
 import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
+import 'package:oidc4vc/src/draft_type.dart';
 import 'package:oidc4vc/src/helper_function.dart';
 import 'package:oidc4vc/src/issuer_token_parameters.dart';
 import 'package:oidc4vc/src/media_type.dart';
@@ -278,6 +280,7 @@ class OIDC4VC {
     required int indexValue,
     required String privateKey,
     required bool sendProof,
+    required DraftType draftType,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -366,6 +369,7 @@ class OIDC4VC {
           format: format,
           credentialIdentifier: credentialIdentifier,
           sendProof: sendProof,
+          draftType: draftType,
         );
 
         credentialResponseData.add(credentialResponseDataValue);
@@ -379,6 +383,7 @@ class OIDC4VC {
         types: types,
         format: format,
         sendProof: sendProof,
+        draftType: draftType,
       );
 
       credentialResponseData.add(credentialResponseDataValue);
@@ -394,6 +399,7 @@ class OIDC4VC {
     required List<String> types,
     required String format,
     required bool sendProof,
+    required DraftType draftType,
     String? credentialIdentifier,
   }) async {
     final credentialData = await buildCredentialData(

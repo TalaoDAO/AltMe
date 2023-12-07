@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 part 'profile.g.dart';
 
@@ -49,6 +50,7 @@ class ProfileModel extends Equatable {
     required this.clientId,
     required this.clientSecret,
     required this.isEbsiV3Profile,
+    required this.draftType,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
@@ -80,6 +82,7 @@ class ProfileModel extends Equatable {
         clientId: Parameters.clientId,
         clientSecret: Parameters.clientSecret,
         isEbsiV3Profile: false,
+        draftType: DraftType.draft10.toString(),
       );
 
   factory ProfileModel.EbsiV3(ProfileModel oldModel) => ProfileModel(
@@ -108,6 +111,7 @@ class ProfileModel extends Equatable {
         clientId: oldModel.clientId,
         clientSecret: oldModel.clientSecret,
         isEbsiV3Profile: true,
+        draftType: oldModel.draftType,
       );
 
   final String firstName;
@@ -136,6 +140,7 @@ class ProfileModel extends Equatable {
   final String clientId;
   final String clientSecret;
   final bool isEbsiV3Profile;
+  final String draftType;
 
   @override
   List<Object> get props => [
@@ -164,6 +169,7 @@ class ProfileModel extends Equatable {
         clientId,
         clientSecret,
         isEbsiV3Profile,
+        draftType,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
@@ -195,6 +201,7 @@ class ProfileModel extends Equatable {
     String? clientId,
     String? clientSecret,
     bool? isEbsiV3Profile,
+    String? draftType,
   }) {
     return ProfileModel(
       firstName: firstName ?? this.firstName,
@@ -227,6 +234,7 @@ class ProfileModel extends Equatable {
       isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
       enable4DigitPINCode: enable4DigitPINCode ?? this.enable4DigitPINCode,
       isEbsiV3Profile: isEbsiV3Profile ?? this.isEbsiV3Profile,
+      draftType: draftType ?? this.draftType,
     );
   }
 }

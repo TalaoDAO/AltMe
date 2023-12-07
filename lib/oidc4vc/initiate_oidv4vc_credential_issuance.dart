@@ -16,6 +16,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required QRCodeScanCubit qrCodeScanCubit,
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
+  required DraftType draftType,
   required SecureStorageProvider secureStorageProvider,
   required DioClient dioClient,
   required String? userPin,
@@ -114,6 +115,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       codeVerifier: null,
       authorization: null,
       sendProof: sendProof,
+      draftType: draftType,
     );
     oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
     qrCodeScanCubit.goBack();

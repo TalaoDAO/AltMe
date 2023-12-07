@@ -7,6 +7,7 @@ import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 import 'package:secure_storage/secure_storage.dart';
 
@@ -157,6 +158,11 @@ class ProfileCubit extends Cubit<ProfileState> {
           await secureStorageProvider.get(SecureStorageKeys.isEbsiV3Profile);
       final isEbsiV3Profile =
           isEbsiV3ProfileValue != null && isEbsiV3ProfileValue == 'true';
+
+      final draftType =
+          (await secureStorageProvider.get(SecureStorageKeys.draftType)) ??
+              DraftType.draft11.toString();
+
       final profileModel = ProfileModel(
         firstName: firstName,
         lastName: lastName,
@@ -183,6 +189,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         clientId: clientId,
         clientSecret: clientSecret,
         isEbsiV3Profile: isEbsiV3Profile,
+        draftType: draftType,
       );
       await update(profileModel);
     } catch (e, s) {
@@ -312,6 +319,11 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.isEbsiV3Profile.toString(),
       );
 
+      await secureStorageProvider.set(
+        SecureStorageKeys.draftType,
+        profileModel.draftType,
+      );
+
       emit(
         state.copyWith(
           model: profileModel,
@@ -436,6 +448,11 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> enable4DigitPINCode({bool enabled = false}) async {
     final profileModel = state.model.copyWith(enable4DigitPINCode: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> updateDraftType(DraftType draftType) async {
+    final profileModel = state.model.copyWith(draftType: draftType.toString());
     await update(profileModel);
   }
 

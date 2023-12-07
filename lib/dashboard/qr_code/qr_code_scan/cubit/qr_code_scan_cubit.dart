@@ -394,6 +394,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     uriFromScannedResponse.queryParameters
         .forEach((key, value) => keys.add(key));
 
+    final DraftType? draftTypeEnum = DraftType.values.firstWhereOrNull(
+      (enumValue) => enumValue.toString() == profileCubit.state.model.draftType,
+    );
+
+    if (draftTypeEnum == null) {
+      throw Exception();
+    }
+
     dynamic credentialOfferJson;
 
     if (keys.contains('credential_offer') ||
@@ -436,6 +444,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                     credentialOfferJson: credentialOfferJson,
                     sendProof: profileCubit
                         .state.model.enableCryptographicHolderBinding,
+                    draftType: draftTypeEnum,
                   );
                 },
               ),
@@ -458,6 +467,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       credentialOfferJson: credentialOfferJson,
       isEBSIV3: isEBSIV3,
       sendProof: profileCubit.state.model.enableCryptographicHolderBinding,
+      draftType: draftTypeEnum,
     );
   }
 
@@ -1126,6 +1136,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       for (int i = 0; i < selectedCredentials.length; i++) {
         emit(state.loading());
 
+        final DraftType? draftTypeEnum = DraftType.values.firstWhereOrNull(
+          (enumValue) =>
+              enumValue.toString() == profileCubit.state.model.draftType,
+        );
+
+        if (draftTypeEnum == null) {
+          throw Exception();
+        }
+
         await getAndAddCredential(
           scannedResponse: state.uri.toString(),
           credentialsCubit: credentialsCubit,
@@ -1143,6 +1162,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           codeVerifier: codeVerifier,
           sendProof: profileCubit.state.model.enableCryptographicHolderBinding,
           authorization: authorization,
+          draftType: draftTypeEnum,
         );
       }
 
