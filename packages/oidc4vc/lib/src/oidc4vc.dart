@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_dynamic_calls, public_member_api_docs
 
 import 'dart:convert';
-import 'dart:js';
 
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
@@ -411,6 +410,7 @@ class OIDC4VC {
       format: format,
       credentialIdentifier: credentialIdentifier,
       sendProof: sendProof,
+      draftType: draftType,
     );
 
     /// sign proof
@@ -593,14 +593,12 @@ class OIDC4VC {
     required List<String> types,
     required String format,
     required bool sendProof,
+    required DraftType draftType,
     String? credentialIdentifier,
   }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
 
-    final credentialData = <String, dynamic>{
-      'type': credentialType,
-      'types': types,
-    };
+    final credentialData = <String, dynamic>{};
 
     if (sendProof) {
       credentialData['proof'] = {
@@ -609,11 +607,18 @@ class OIDC4VC {
       };
     }
 
-    if (credentialIdentifier != null) {
-      credentialData['credential_identifier'] = credentialIdentifier;
-    } else {
-      /// add format if credential_identifier is absent
-      credentialData['format'] = format;
+    switch (draftType) {
+      case DraftType.draft8:
+        credentialData['type'] = credentialType;
+        credentialData['format'] = format;
+      case DraftType.draft11:
+        credentialData['types'] = types;
+        credentialData['format'] = format;
+      case DraftType.draft12:
+        credentialData['types'] = types;
+        if (credentialIdentifier != null) {
+          credentialData['credential_identifier'] = credentialIdentifier;
+        }
     }
 
     return credentialData;

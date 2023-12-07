@@ -82,7 +82,7 @@ class ProfileModel extends Equatable {
         clientId: Parameters.clientId,
         clientSecret: Parameters.clientSecret,
         isEbsiV3Profile: false,
-        draftType: DraftType.draft10.toString(),
+        draftType: DraftType.draft11.toString(),
       );
 
   factory ProfileModel.EbsiV3(ProfileModel oldModel) => ProfileModel(
