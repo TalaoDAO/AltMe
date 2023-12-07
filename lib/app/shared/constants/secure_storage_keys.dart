@@ -100,6 +100,7 @@ class SecureStorageKeys {
 
   static const String walletType = 'walletType';
   static const String walletAttestationData = 'walletAttestationData';
+  static const String enterpriseConfiguration = 'enterpriseConfiguration';
 
   static const String draftType = 'draftType';
 }

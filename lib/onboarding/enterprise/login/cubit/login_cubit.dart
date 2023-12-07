@@ -129,6 +129,11 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
       response,
     );
 
+    await secureStorageProvider.set(
+      SecureStorageKeys.enterpriseConfiguration,
+      response,
+    );
+
     // if (isVerified == VerificationType.verified) {
     //   emit(
     //     state.copyWith(
