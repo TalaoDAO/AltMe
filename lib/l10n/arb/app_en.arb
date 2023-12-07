@@ -1007,7 +1007,7 @@
   "walletProfiles": "Wallet Profiles",
   "walletProfilesDescription": "Choose your SSI profile or customize your own",
   "profileCustom": "Custom",
-  "profileEbsiV3": "EBSI V3",
+  "profileEbsiV3": "European Blockchain Services Infrastructure",
   "protectYourWallet": "Protect your wallet",
   "protectYourWalletMessage": "Use your fingerprint, face, or device PIN to secure and unlock Altme. Your data is securely encrypted on this device.",
   "pinUnlock": "PIN unlock",
