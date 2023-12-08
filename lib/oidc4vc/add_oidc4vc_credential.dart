@@ -16,6 +16,7 @@ Future<void> addOIDC4VCCredential({
   required bool isLastCall,
   required String format,
   String? credentialIdToBeDeleted,
+  required Map<String, dynamic>? openidConfigurationResponse,
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
   if (format == 'jwt_vc') {
@@ -62,7 +63,7 @@ Future<void> addOIDC4VCCredential({
     newCredential['credentialPreview']['id'] = 'urn:uuid:${const Uuid().v4()}';
   }
 
-  // if (newCredential['credentialPreview']['credentialSubject']['type'] == null) {
+  // if(newCredential['credentialPreview']['credentialSubject']['type']==null) {
   //   /// added id as type to recognise the card
   //   /// for ebsiv2 only
   //   newCredential['credentialPreview']['credentialSubject']['type'] =

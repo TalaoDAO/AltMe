@@ -121,6 +121,13 @@ class ProfileCubit extends Cubit<ProfileState> {
           enableCryptographicHolderBindingValue == null ||
               enableCryptographicHolderBindingValue == 'true';
 
+      final enableCredentialManifestSupportValue = await secureStorageProvider
+          .get(SecureStorageKeys.enableCredentialManifestSupport);
+
+      final enableCredentialManifestSupport =
+          enableCredentialManifestSupportValue == null ||
+              enableCredentialManifestSupportValue == 'true';
+
       final enableScopeParameterValue = await secureStorageProvider
           .get(SecureStorageKeys.enableScopeParameter);
 
@@ -183,6 +190,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         enable4DigitPINCode: enable4DigitPINCode,
         enableJWKThumbprint: enableJWKThumbprint,
         enableCryptographicHolderBinding: enableCryptographicHolderBinding,
+        enableCredentialManifestSupport: enableCredentialManifestSupport,
         enableScopeParameter: enableScopeParameter,
         useBasicClientAuthentication: useBasicClientAuthentication,
         clientId: clientId,
@@ -304,6 +312,11 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
+        SecureStorageKeys.enableCredentialManifestSupport,
+        profileModel.enableCredentialManifestSupport.toString(),
+      );
+
+      await secureStorageProvider.set(
         SecureStorageKeys.enableScopeParameter,
         profileModel.enableScopeParameter.toString(),
       );
@@ -422,6 +435,14 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
+  Future<void> updateCredentialManifestSupportStatus({
+    bool enabled = false,
+  }) async {
+    final profileModel =
+        state.model.copyWith(enableCredentialManifestSupport: enabled);
+    await update(profileModel);
+  }
+
   Future<void> updateScopeParameterStatus({bool enabled = false}) async {
     final profileModel = state.model.copyWith(enableScopeParameter: enabled);
     await update(profileModel);
@@ -492,6 +513,8 @@ class ProfileCubit extends Cubit<ProfileState> {
           enableJWKThumbprint: customProfileBackup.enableJWKThumbprint,
           enableCryptographicHolderBinding:
               customProfileBackup.enableCryptographicHolderBinding,
+          enableCredentialManifestSupport:
+              customProfileBackup.enableCredentialManifestSupport,
           didKeyType: customProfileBackup.didKeyType,
           enableScopeParameter: customProfileBackup.enableScopeParameter,
           useBasicClientAuthentication:

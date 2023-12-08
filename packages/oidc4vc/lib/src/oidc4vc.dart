@@ -271,7 +271,8 @@ class OIDC4VC {
   List<dynamic>? authorizationDetails;
 
   /// Retreive credential_type from url
-  Future<(List<dynamic>, String?, String)> getCredential({
+  Future<(List<dynamic>, String?, String, Map<String, dynamic>?)>
+      getCredential({
     required String issuer,
     required dynamic credential,
     required String did,
@@ -388,7 +389,12 @@ class OIDC4VC {
       credentialResponseData.add(credentialResponseDataValue);
     }
 
-    return (credentialResponseData, deferredCredentialEndpoint, format);
+    return (
+      credentialResponseData,
+      deferredCredentialEndpoint,
+      format,
+      openidConfigurationResponse,
+    );
   }
 
   Future<dynamic> getSingleCredential({

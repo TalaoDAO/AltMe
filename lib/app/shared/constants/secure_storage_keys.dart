@@ -35,6 +35,8 @@ class SecureStorageKeys {
   static const String enableJWKThumbprint = 'enableJWKThumbprint';
   static const String enableCryptographicHolderBinding =
       'enableCryptographicHolderBinding';
+  static const String enableCredentialManifestSupport =
+      'enableCredentialManifestSupport';
   static const String enableScopeParameter = 'enableScopeParameter';
   static const String useBasicClientAuthentication = 'isPreRegisteredWallet';
   static const String clientId = 'clientId';

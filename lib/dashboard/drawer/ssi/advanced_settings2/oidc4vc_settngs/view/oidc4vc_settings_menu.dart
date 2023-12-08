@@ -44,6 +44,7 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           const DidKeyTypeWidget(),
           const DraftTypeWidget(),
           const SubjectSyntaxTypeWidget(),
+          const CredentialManifestSupportWidget(),
           const CryptographicHolderBindingWidget(),
           const ScopeParameterWidget(),
           const ClientAuthenticationWidget(),

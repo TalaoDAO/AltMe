@@ -1,4 +1,5 @@
 export 'client_authentication_widget.dart';
+export 'credential_manifest_support.dart';
 export 'cryptograhic_holder_binding.dart';
 export 'did_key_type_widget.dart';
 export 'draft_type_widget.dart';

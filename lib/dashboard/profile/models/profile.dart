@@ -42,6 +42,7 @@ class ProfileModel extends Equatable {
     required this.userPINCodeForAuthentication,
     required this.enableJWKThumbprint,
     required this.enableCryptographicHolderBinding,
+    required this.enableCredentialManifestSupport,
     required this.enableScopeParameter,
     required this.useBasicClientAuthentication,
     this.companyName = '',
@@ -80,6 +81,7 @@ class ProfileModel extends Equatable {
         enable4DigitPINCode: false,
         enableJWKThumbprint: false,
         enableCryptographicHolderBinding: true,
+        enableCredentialManifestSupport: true,
         enableScopeParameter: false,
         useBasicClientAuthentication: false,
         clientId: Parameters.clientId,
@@ -109,6 +111,7 @@ class ProfileModel extends Equatable {
         enable4DigitPINCode: true,
         enableJWKThumbprint: false,
         enableCryptographicHolderBinding: true,
+        enableCredentialManifestSupport: false,
         enableScopeParameter: false,
         useBasicClientAuthentication: false,
         clientId: oldModel.clientId,
@@ -138,6 +141,7 @@ class ProfileModel extends Equatable {
         enable4DigitPINCode: true,
         enableJWKThumbprint: false,
         enableCryptographicHolderBinding: true,
+        enableCredentialManifestSupport: false,
         enableScopeParameter: false,
         useBasicClientAuthentication: false,
         clientId: oldModel.clientId,
@@ -167,6 +171,7 @@ class ProfileModel extends Equatable {
   final bool enable4DigitPINCode;
   final bool enableJWKThumbprint;
   final bool enableCryptographicHolderBinding;
+  final bool enableCredentialManifestSupport;
   final bool enableScopeParameter;
   final bool useBasicClientAuthentication;
   final String clientId;
@@ -196,6 +201,7 @@ class ProfileModel extends Equatable {
         enable4DigitPINCode,
         enableJWKThumbprint,
         enableCryptographicHolderBinding,
+        enableCredentialManifestSupport,
         enableScopeParameter,
         useBasicClientAuthentication,
         clientId,
@@ -228,6 +234,7 @@ class ProfileModel extends Equatable {
     bool? enable4DigitPINCode,
     bool? enableJWKThumbprint,
     bool? enableCryptographicHolderBinding,
+    bool? enableCredentialManifestSupport,
     bool? enableScopeParameter,
     bool? useBasicClientAuthentication,
     String? clientId,
@@ -251,6 +258,8 @@ class ProfileModel extends Equatable {
       enableJWKThumbprint: enableJWKThumbprint ?? this.enableJWKThumbprint,
       enableCryptographicHolderBinding: enableCryptographicHolderBinding ??
           this.enableCryptographicHolderBinding,
+      enableCredentialManifestSupport: enableCredentialManifestSupport ??
+          this.enableCredentialManifestSupport,
       enableScopeParameter: enableScopeParameter ?? this.enableScopeParameter,
       useBasicClientAuthentication:
           useBasicClientAuthentication ?? this.useBasicClientAuthentication,
