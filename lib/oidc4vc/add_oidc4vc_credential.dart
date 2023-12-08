@@ -6,6 +6,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activit
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dio/dio.dart';
 import 'package:jose/jose.dart';
+import 'package:uuid/uuid.dart';
 
 Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
@@ -25,6 +26,14 @@ Future<void> addOIDC4VCCredential({
 
     credentialFromOIDC4VC =
         jws.unverifiedPayload.jsonContent['vc'] as Map<String, dynamic>;
+  } else if (format == 'jwt_vc_json') {
+    //jwt_vc_json
+    final jws = JsonWebSignature.fromCompactSerialization(
+      encodedCredentialFromOIDC4VC['credential'] as String,
+    );
+
+    credentialFromOIDC4VC =
+        jws.unverifiedPayload.jsonContent as Map<String, dynamic>;
   } else if (format == 'ldp_vc') {
     //ldp_vc
 
@@ -41,19 +50,24 @@ Future<void> addOIDC4VCCredential({
   final Map<String, dynamic> newCredential =
       Map<String, dynamic>.from(credentialFromOIDC4VC);
 
-  if (format == 'jwt_vc') {
+  if (format == 'jwt_vc' || format == 'jwt_vc_json') {
     //jwt_vc_json
     newCredential['jwt'] = encodedCredentialFromOIDC4VC['credential'];
   }
 
   newCredential['credentialPreview'] = credentialFromOIDC4VC;
 
-  if (newCredential['credentialPreview']['credentialSubject']['type'] == null) {
-    /// added id as type to recognise the card
-    /// for ebsiv2 only
-    newCredential['credentialPreview']['credentialSubject']['type'] =
-        credentialFromOIDC4VC['credentialSchema']['id'];
+  if (newCredential['credentialPreview']['id'] == null) {
+    /// occuring in dutch blockchain
+    newCredential['credentialPreview']['id'] = 'urn:uuid:${const Uuid().v4()}';
   }
+
+  // if (newCredential['credentialPreview']['credentialSubject']['type'] == null) {
+  //   /// added id as type to recognise the card
+  //   /// for ebsiv2 only
+  //   newCredential['credentialPreview']['credentialSubject']['type'] =
+  //       credentialFromOIDC4VC['credentialSchema']['id'];
+  // }
 
   if (issuer != null) {
     final CredentialManifest? credentialManifest = await getCredentialManifest(
@@ -71,6 +85,7 @@ Future<void> addOIDC4VCCredential({
       ).toJson();
     }
   }
+
   final newCredentialModel = CredentialModel.fromJson(newCredential);
 
   final credentialModel = CredentialModel.copyWithData(

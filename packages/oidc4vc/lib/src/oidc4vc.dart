@@ -764,10 +764,11 @@ class OIDC4VC {
     IssuerTokenParameters tokenParameters,
     String nonce,
   ) async {
+    final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     final payload = {
       'iss': tokenParameters.did,
       'nonce': nonce,
-      'iat': DateTime.now().microsecondsSinceEpoch,
+      'iat': iat,
       'aud': tokenParameters.issuer,
     };
 
@@ -1052,10 +1053,11 @@ class OIDC4VC {
     final issAndSub = tokenParameters.useJWKThumbPrint
         ? tokenParameters.thumbprint
         : tokenParameters.did;
+    final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     final payload = {
-      'iat': DateTime.now().microsecondsSinceEpoch,
+      'iat': iat,
       'aud': tokenParameters.audience, // devrait être verifier
-      'exp': DateTime.now().microsecondsSinceEpoch + 1000,
+      'exp': iat + 1000,
       'sub': issAndSub,
       'iss': issAndSub,
     };
