@@ -1027,5 +1027,6 @@
   "enterTheSecurityCode": "Enter the security code",
   "yourEmail": "Your email",
   "publicKeyOfWalletInstance": "Public Key of Wallet Instance",
-  "walletInstanceKey": "Wallet Instance Key"
+  "walletInstanceKey": "Wallet Instance Key",
+  "protocoleStandardRelease": "Protocole standard release"
 }

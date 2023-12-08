@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/profile/profile.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,7 @@ class DraftTypeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
+        final l10n = context.l10n;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.max,
@@ -35,14 +37,14 @@ class DraftTypeWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Draft',
+                          'OIDC4VCI',
                           style: Theme.of(context).textTheme.drawerItemTitle,
                         ),
-                        // const SizedBox(height: 10),
-                        // Text(
-                        //   l10n.selectOneOfTheDid,
-                        //   style: Theme.of(context).textTheme.drawerItemSubtitle,
-                        // ),
+                        const SizedBox(height: 10),
+                        Text(
+                          l10n.protocoleStandardRelease,
+                          style: Theme.of(context).textTheme.drawerItemSubtitle,
+                        ),
                       ],
                     ),
                   ),

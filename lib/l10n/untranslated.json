@@ -933,7 +933,8 @@
     "enterTheSecurityCode",
     "yourEmail",
     "publicKeyOfWalletInstance",
-    "walletInstanceKey"
+    "walletInstanceKey",
+    "protocoleStandardRelease"
   ],
 
   "es": [
@@ -1870,7 +1871,8 @@
     "enterTheSecurityCode",
     "yourEmail",
     "publicKeyOfWalletInstance",
-    "walletInstanceKey"
+    "walletInstanceKey",
+    "protocoleStandardRelease"
   ],
 
   "fr": [
@@ -2111,7 +2113,8 @@
     "enterTheSecurityCode",
     "yourEmail",
     "publicKeyOfWalletInstance",
-    "walletInstanceKey"
+    "walletInstanceKey",
+    "protocoleStandardRelease"
   ],
 
   "it": [
@@ -3048,6 +3051,7 @@
     "enterTheSecurityCode",
     "yourEmail",
     "publicKeyOfWalletInstance",
-    "walletInstanceKey"
+    "walletInstanceKey",
+    "protocoleStandardRelease"
   ]
 }
