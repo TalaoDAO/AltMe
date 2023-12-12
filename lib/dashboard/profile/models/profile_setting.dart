@@ -40,6 +40,27 @@ class ProfileSetting extends Equatable {
 
   Map<String, dynamic> toJson() => _$ProfileSettingToJson(this);
 
+  ProfileSetting copyWith({
+    BlockchainOptions? blockchainOptions,
+    GeneralOptions? generalOptions,
+    HelpCenterOptions? helpCenterOptions,
+    SelfSovereignIdentityOptions? selfSovereignIdentityOptions,
+    SettingsMenu? settingsMenu,
+    String? version,
+    WalletSecurityOptions? walletSecurityOptions,
+  }) =>
+      ProfileSetting(
+        blockchainOptions: blockchainOptions ?? this.blockchainOptions,
+        generalOptions: generalOptions ?? this.generalOptions,
+        helpCenterOptions: helpCenterOptions ?? this.helpCenterOptions,
+        selfSovereignIdentityOptions:
+            selfSovereignIdentityOptions ?? this.selfSovereignIdentityOptions,
+        settingsMenu: settingsMenu ?? this.settingsMenu,
+        version: version ?? this.version,
+        walletSecurityOptions:
+            walletSecurityOptions ?? this.walletSecurityOptions,
+      );
+
   @override
   List<Object?> get props => [
         blockchainOptions,
@@ -93,6 +114,32 @@ class BlockchainOptions extends Equatable {
   final bool tzproRpcNode;
 
   Map<String, dynamic> toJson() => _$BlockchainOptionsToJson(this);
+
+  BlockchainOptions copyWth({
+    bool? bnbSupport,
+    bool? ethereumSupport,
+    bool? fantomSupport,
+    bool? hederaSupport,
+    String? infuraApiKey,
+    bool? infuraRpcNode,
+    bool? polygonSupport,
+    bool? tezosSupport,
+    String? tzproApiKey,
+    bool? tzproRpcNode,
+  }) {
+    return BlockchainOptions(
+      bnbSupport: bnbSupport ?? this.bnbSupport,
+      ethereumSupport: ethereumSupport ?? this.ethereumSupport,
+      fantomSupport: fantomSupport ?? this.fantomSupport,
+      hederaSupport: hederaSupport ?? this.hederaSupport,
+      infuraRpcNode: infuraRpcNode ?? this.infuraRpcNode,
+      polygonSupport: polygonSupport ?? this.polygonSupport,
+      tezosSupport: tezosSupport ?? this.tezosSupport,
+      tzproRpcNode: tzproRpcNode ?? this.tzproRpcNode,
+      infuraApiKey: infuraApiKey ?? this.infuraApiKey,
+      tzproApiKey: tzproApiKey ?? this.tzproApiKey,
+    );
+  }
 
   @override
   List<Object?> get props => [
@@ -153,6 +200,32 @@ class GeneralOptions extends Equatable {
 
   Map<String, dynamic> toJson() => _$GeneralOptionsToJson(this);
 
+  GeneralOptions copyWith({
+    WalletAppType? walletType,
+    String? companyName,
+    String? companyWebsite,
+    String? companyLogo,
+    String? tagLine,
+    String? profileName,
+    String? profileVersion,
+    DateTime? published,
+    String? profileId,
+    String? customerPlan,
+  }) {
+    return GeneralOptions(
+      walletType: walletType ?? this.walletType,
+      companyName: companyName ?? this.companyName,
+      companyWebsite: companyWebsite ?? this.companyWebsite,
+      companyLogo: companyLogo ?? this.companyLogo,
+      tagLine: tagLine ?? this.tagLine,
+      profileName: profileName ?? this.profileName,
+      profileVersion: profileVersion ?? this.profileVersion,
+      published: published ?? this.published,
+      profileId: profileId ?? this.profileId,
+      customerPlan: customerPlan ?? this.customerPlan,
+    );
+  }
+
   @override
   List<Object?> get props => [
         walletType,
@@ -198,6 +271,24 @@ class HelpCenterOptions extends Equatable {
 
   Map<String, dynamic> toJson() => _$HelpCenterOptionsToJson(this);
 
+  HelpCenterOptions copyWith({
+    bool? customChatSupport,
+    String? customChatSupportName,
+    String? customEmail,
+    bool? customEmailSupport,
+    bool? displayChatSupport,
+    bool? displayEmailSupport,
+  }) =>
+      HelpCenterOptions(
+        customChatSupport: customChatSupport ?? this.customChatSupport,
+        customEmailSupport: customEmailSupport ?? this.customEmailSupport,
+        displayChatSupport: displayChatSupport ?? this.displayChatSupport,
+        displayEmailSupport: displayEmailSupport ?? this.displayEmailSupport,
+        customChatSupportName:
+            customChatSupportName ?? this.customChatSupportName,
+        customEmail: customEmail ?? this.customEmail,
+      );
+
   @override
   List<Object?> get props => [
         customChatSupport,
@@ -238,6 +329,24 @@ class SelfSovereignIdentityOptions extends Equatable {
   final String oidv4VcProfile;
 
   Map<String, dynamic> toJson() => _$SelfSovereignIdentityOptionsToJson(this);
+
+  SelfSovereignIdentityOptions copyWith({
+    CustomOidc4VcProfile? customOidc4VcProfile,
+    bool? displayManageDecentralizedId,
+    bool? displaySsiAdvancedSettings,
+    bool? displayVerifiableDataRegistry,
+    String? oidv4VcProfile,
+  }) =>
+      SelfSovereignIdentityOptions(
+        customOidc4VcProfile: customOidc4VcProfile ?? this.customOidc4VcProfile,
+        displayManageDecentralizedId:
+            displayManageDecentralizedId ?? this.displayManageDecentralizedId,
+        displaySsiAdvancedSettings:
+            displaySsiAdvancedSettings ?? this.displaySsiAdvancedSettings,
+        displayVerifiableDataRegistry:
+            displayVerifiableDataRegistry ?? this.displayVerifiableDataRegistry,
+        oidv4VcProfile: oidv4VcProfile ?? this.oidv4VcProfile,
+      );
 
   @override
   List<Object?> get props => [
@@ -302,6 +411,38 @@ class CustomOidc4VcProfile extends Equatable {
 
   Map<String, dynamic> toJson() => _$CustomOidc4VcProfileToJson(this);
 
+  CustomOidc4VcProfile copyWith({
+    ClientAuthentication? clientAuthentication,
+    bool? credentialManifestSupport,
+    String? clientId,
+    String? clientSecret,
+    bool? cryptoHolderBinding,
+    DidKeyType? defaultDid,
+    OIDC4VCIDraftType? oidc4VciDraft,
+    OIDC4VPDraftType? oidc4VpDraft,
+    bool? scope,
+    SecurityLevel? securityLevel,
+    SIOPV2DraftType? siopv2Draft,
+    SubjectSyntax? subjectSyntaxeType,
+    UserPinDigits? userPinDigits,
+  }) =>
+      CustomOidc4VcProfile(
+        clientAuthentication: clientAuthentication ?? this.clientAuthentication,
+        credentialManifestSupport:
+            credentialManifestSupport ?? this.credentialManifestSupport,
+        cryptoHolderBinding: cryptoHolderBinding ?? this.cryptoHolderBinding,
+        defaultDid: defaultDid ?? this.defaultDid,
+        oidc4VciDraft: oidc4VciDraft ?? this.oidc4VciDraft,
+        oidc4VpDraft: oidc4VpDraft ?? this.oidc4VpDraft,
+        scope: scope ?? this.scope,
+        securityLevel: securityLevel ?? this.securityLevel,
+        siopv2Draft: siopv2Draft ?? this.siopv2Draft,
+        subjectSyntaxeType: subjectSyntaxeType ?? this.subjectSyntaxeType,
+        userPinDigits: userPinDigits ?? this.userPinDigits,
+        clientId: clientId ?? this.clientId,
+        clientSecret: clientSecret ?? this.clientSecret,
+      );
+
   @override
   List<Object?> get props => [
         clientAuthentication,
@@ -343,6 +484,17 @@ class SettingsMenu extends Equatable {
 
   Map<String, dynamic> toJson() => _$SettingsMenuToJson(this);
 
+  SettingsMenu copyWith({
+    bool? displayDeveloperMode,
+    bool? displayHelpCenter,
+    bool? displayProfile,
+  }) =>
+      SettingsMenu(
+        displayDeveloperMode: displayDeveloperMode ?? this.displayDeveloperMode,
+        displayHelpCenter: displayHelpCenter ?? this.displayHelpCenter,
+        displayProfile: displayProfile ?? this.displayProfile,
+      );
+
   @override
   List<Object?> get props => [
         displayDeveloperMode,
@@ -376,6 +528,25 @@ class WalletSecurityOptions extends Equatable {
   final bool verifySecurityIssuerWebsiteIdentity;
 
   Map<String, dynamic> toJson() => _$WalletSecurityOptionsToJson(this);
+
+  WalletSecurityOptions copyWith({
+    bool? confirmSecurityVerifierAccess,
+    bool? displaySecurityAdvancedSettings,
+    bool? secureSecurityAuthenticationWithPinCode,
+    bool? verifySecurityIssuerWebsiteIdentity,
+  }) =>
+      WalletSecurityOptions(
+        confirmSecurityVerifierAccess:
+            confirmSecurityVerifierAccess ?? this.confirmSecurityVerifierAccess,
+        displaySecurityAdvancedSettings: displaySecurityAdvancedSettings ??
+            this.displaySecurityAdvancedSettings,
+        secureSecurityAuthenticationWithPinCode:
+            secureSecurityAuthenticationWithPinCode ??
+                this.secureSecurityAuthenticationWithPinCode,
+        verifySecurityIssuerWebsiteIdentity:
+            verifySecurityIssuerWebsiteIdentity ??
+                this.verifySecurityIssuerWebsiteIdentity,
+      );
 
   @override
   List<Object?> get props => [

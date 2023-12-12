@@ -59,10 +59,6 @@ class ProfileCubit extends Cubit<ProfileState> {
               .get(SecureStorageKeys.polygonIdNetwork)) ??
           PolygonIdNetwork.PolygonMainnet.toString();
 
-      final didKeyType =
-          (await secureStorageProvider.get(SecureStorageKeys.didKeyType)) ??
-              DidKeyType.ebsiv3.toString();
-
       final walletType =
           (await secureStorageProvider.get(SecureStorageKeys.walletType)) ??
               WalletType.personal.toString();
@@ -70,6 +66,25 @@ class ProfileCubit extends Cubit<ProfileState> {
       final walletProtectionType = (await secureStorageProvider
               .get(SecureStorageKeys.walletProtectionType)) ??
           WalletProtectionType.pinCode.toString();
+
+      final isDeveloperModeValue =
+          await secureStorageProvider.get(SecureStorageKeys.isDeveloperMode);
+
+      final isDeveloperMode =
+          isDeveloperModeValue != null && isDeveloperModeValue == 'true';
+
+      final profileSettingJsonString =
+          await secureStorageProvider.get(SecureStorageKeys.profileSettings);
+
+      final ProfileSetting profileSetting = profileSettingJsonString == null
+          ? ProfileSetting.initial()
+          : ProfileSetting.fromJson(
+              jsonDecode(profileSettingJsonString) as Map<String, dynamic>,
+            );
+
+      final didKeyType =
+          (await secureStorageProvider.get(SecureStorageKeys.didKeyType)) ??
+              DidKeyType.ebsiv3.toString();
 
       final userConsentForIssuerAccess = (await secureStorageProvider
               .get(SecureStorageKeys.userConsentForIssuerAccess)) ==
@@ -84,12 +99,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       final enableSecurity =
           enableSecurityValue != null && enableSecurityValue == 'true';
-
-      final isDeveloperModeValue =
-          await secureStorageProvider.get(SecureStorageKeys.isDeveloperMode);
-
-      final isDeveloperMode =
-          isDeveloperModeValue != null && isDeveloperModeValue == 'true';
 
       final enableJWKThumbprintValue = await secureStorageProvider
           .get(SecureStorageKeys.enableJWKThumbprint);
@@ -172,7 +181,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         clientSecret: clientSecret,
         profileType: profileType,
         draftType: draftType,
-        profileSetting: ProfileSetting.initial(),
+        profileSetting: profileSetting,
       );
       await update(profileModel);
     } catch (e, s) {
@@ -200,10 +209,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         SecureStorageKeys.polygonIdNetwork,
         profileModel.polygonIdNetwork,
       );
-      await secureStorageProvider.set(
-        SecureStorageKeys.didKeyType,
-        profileModel.didKeyType,
-      );
 
       await secureStorageProvider.set(
         SecureStorageKeys.walletType,
@@ -213,6 +218,21 @@ class ProfileCubit extends Cubit<ProfileState> {
       await secureStorageProvider.set(
         SecureStorageKeys.walletProtectionType,
         profileModel.walletProtectionType,
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.isDeveloperMode,
+        profileModel.isDeveloperMode.toString(),
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.profileSettings,
+        jsonEncode(profileModel.profileSetting.toJson()),
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.didKeyType,
+        profileModel.didKeyType,
       );
 
       await secureStorageProvider.set(
@@ -233,11 +253,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       await secureStorageProvider.set(
         SecureStorageKeys.enableSecurity,
         profileModel.enableSecurity.toString(),
-      );
-
-      await secureStorageProvider.set(
-        SecureStorageKeys.isDeveloperMode,
-        profileModel.isDeveloperMode.toString(),
       );
 
       await secureStorageProvider.set(

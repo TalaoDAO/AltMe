@@ -22,6 +22,8 @@ class SecureStorageKeys {
   static const String isWalletIntegrityEnabled = 'isWalletIntegrityEnabled';
   static const String walletProtectionType = 'walletProtectionType';
 
+  static const String profileSettings = 'profileSettings';
+
   static const String userConsentForIssuerAccess = 'userConsentForIssuerAccess';
   static const String userConsentForVerifierAccess =
       'userConsentForVerifierAccess';
