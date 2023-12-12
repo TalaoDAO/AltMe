@@ -1,0 +1,1 @@
+enum WalletAppType { altme, talao }

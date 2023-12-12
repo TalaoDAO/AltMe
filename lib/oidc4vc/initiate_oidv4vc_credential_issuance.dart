@@ -16,7 +16,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required QRCodeScanCubit qrCodeScanCubit,
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
-  required DraftType draftType,
+  required OIDC4VCIDraftType draftType,
   required SecureStorageProvider secureStorageProvider,
   required DioClient dioClient,
   required String? userPin,

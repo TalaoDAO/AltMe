@@ -1,53 +1,40 @@
+import 'package:altme/app/app.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
-part 'enterprise_option.g.dart';
+part 'profile_setting.g.dart';
 
 @JsonSerializable()
-class EnterpriseOption extends Equatable {
-  const EnterpriseOption({
-    this.blockchainOptions,
-    this.exp,
-    this.generalOptions,
-    this.helpCenterOptions,
-    this.iat,
-    this.iss,
-    this.jti,
-    this.published,
-    this.selfSovereignIdentityOptions,
-    this.settingsMenu,
-    this.version,
-    this.walletSecurityOptions,
+class ProfileSetting extends Equatable {
+  const ProfileSetting({
+    required this.blockchainOptions,
+    required this.generalOptions,
+    required this.helpCenterOptions,
+    required this.selfSovereignIdentityOptions,
+    required this.settingsMenu,
+    required this.version,
+    required this.walletSecurityOptions,
   });
 
-  factory EnterpriseOption.fromJson(Map<String, dynamic> json) =>
-      _$EnterpriseOptionFromJson(json);
+  factory ProfileSetting.fromJson(Map<String, dynamic> json) =>
+      _$ProfileSettingFromJson(json);
 
   final BlockchainOptions? blockchainOptions;
-  final int? exp;
-  final GeneralOptions? generalOptions;
-  final HelpCenterOptions? helpCenterOptions;
-  final int? iat;
-  final String? iss;
-  final String? jti;
-  final DateTime? published;
-  final SelfSovereignIdentityOptions? selfSovereignIdentityOptions;
-  final SettingsMenu? settingsMenu;
-  final String? version;
-  final WalletSecurityOptions? walletSecurityOptions;
+  final GeneralOptions generalOptions;
+  final HelpCenterOptions helpCenterOptions;
+  final SelfSovereignIdentityOptions selfSovereignIdentityOptions;
+  final SettingsMenu settingsMenu;
+  final String version;
+  final WalletSecurityOptions walletSecurityOptions;
 
-  Map<String, dynamic> toJson() => _$EnterpriseOptionToJson(this);
+  Map<String, dynamic> toJson() => _$ProfileSettingToJson(this);
 
   @override
   List<Object?> get props => [
         blockchainOptions,
-        exp,
         generalOptions,
         helpCenterOptions,
-        iat,
-        iss,
-        jti,
-        published,
         selfSovereignIdentityOptions,
         settingsMenu,
         version,
@@ -58,31 +45,31 @@ class EnterpriseOption extends Equatable {
 @JsonSerializable()
 class BlockchainOptions extends Equatable {
   const BlockchainOptions({
-    this.bnbSupport,
-    this.ethereumSupport,
-    this.fantomSupport,
-    this.hederaSupport,
-    this.infuraApiKey,
-    this.infuraRpcNode,
-    this.polygonSupport,
-    this.tezosSupport,
+    required this.bnbSupport,
+    required this.ethereumSupport,
+    required this.fantomSupport,
+    required this.hederaSupport,
+    required this.infuraRpcNode,
+    required this.polygonSupport,
+    required this.tezosSupport,
+    required this.tzproRpcNode,
     this.tzproApiKey,
-    this.tzproRpcNode,
+    this.infuraApiKey,
   });
 
   factory BlockchainOptions.fromJson(Map<String, dynamic> json) =>
       _$BlockchainOptionsFromJson(json);
 
-  final bool? bnbSupport;
-  final bool? ethereumSupport;
-  final bool? fantomSupport;
-  final bool? hederaSupport;
+  final bool bnbSupport;
+  final bool ethereumSupport;
+  final bool fantomSupport;
+  final bool hederaSupport;
   final String? infuraApiKey;
-  final bool? infuraRpcNode;
-  final bool? polygonSupport;
-  final bool? tezosSupport;
+  final bool infuraRpcNode;
+  final bool polygonSupport;
+  final bool tezosSupport;
   final String? tzproApiKey;
-  final bool? tzproRpcNode;
+  final bool tzproRpcNode;
 
   Map<String, dynamic> toJson() => _$BlockchainOptionsToJson(this);
 
@@ -104,60 +91,69 @@ class BlockchainOptions extends Equatable {
 @JsonSerializable()
 class GeneralOptions extends Equatable {
   const GeneralOptions({
-    this.companyLogo,
-    this.companyName,
-    this.companyWebsite,
-    this.customerPlan,
-    this.profileName,
-    this.profileVersion,
-    this.walletType,
+    required this.walletType,
+    required this.companyName,
+    required this.companyWebsite,
+    required this.companyLogo,
+    required this.tagLine,
+    required this.profileName,
+    required this.profileVersion,
+    required this.published,
+    required this.profileId,
+    required this.customerPlan,
   });
 
   factory GeneralOptions.fromJson(Map<String, dynamic> json) =>
       _$GeneralOptionsFromJson(json);
 
-  final String? companyLogo;
-  final String? companyName;
-  final String? companyWebsite;
-  final String? customerPlan;
-  final String? profileName;
-  final String? profileVersion;
-  final String? walletType;
+  final WalletAppType walletType;
+  final String companyName;
+  final String companyWebsite;
+  final String companyLogo;
+  final String tagLine;
+  final String profileName;
+  final String profileVersion;
+  final DateTime published;
+  final String profileId;
+  final String customerPlan;
 
   Map<String, dynamic> toJson() => _$GeneralOptionsToJson(this);
 
   @override
   List<Object?> get props => [
-        companyLogo,
+        walletType,
         companyName,
         companyWebsite,
-        customerPlan,
+        companyLogo,
+        tagLine,
         profileName,
         profileVersion,
-        walletType,
+        published,
+        profileId,
+        customerPlan,
       ];
 }
 
 @JsonSerializable()
 class HelpCenterOptions extends Equatable {
   const HelpCenterOptions({
-    this.customChatSupport,
+    required this.customChatSupport,
     this.customChatSupportName,
-    this.customEmail,
-    this.customEmailSupport,
-    this.displayChatSupport,
-    this.displayEmailSupport,
+    required this.customEmail,
+    required this.customEmailSupport,
+    required this.displayChatSupport,
+    required this.displayEmailSupport,
   });
 
   factory HelpCenterOptions.fromJson(Map<String, dynamic> json) =>
       _$HelpCenterOptionsFromJson(json);
 
-  final bool? customChatSupport;
+  final bool customChatSupport;
   final String? customChatSupportName;
   final String? customEmail;
-  final bool? customEmailSupport;
-  final bool? displayChatSupport;
-  final bool? displayEmailSupport;
+  final bool customEmailSupport;
+  final bool displayChatSupport;
+  final bool displayEmailSupport;
 
   Map<String, dynamic> toJson() => _$HelpCenterOptionsToJson(this);
 
@@ -175,21 +171,21 @@ class HelpCenterOptions extends Equatable {
 @JsonSerializable()
 class SelfSovereignIdentityOptions extends Equatable {
   const SelfSovereignIdentityOptions({
-    this.customOidc4VcProfile,
-    this.displayManageDecentralizedId,
-    this.displaySsiAdvancedSettings,
-    this.displayVerifiableDataRegistry,
-    this.oidv4VcProfile,
+    required this.customOidc4VcProfile,
+    required this.displayManageDecentralizedId,
+    required this.displaySsiAdvancedSettings,
+    required this.displayVerifiableDataRegistry,
+    required this.oidv4VcProfile,
   });
 
   factory SelfSovereignIdentityOptions.fromJson(Map<String, dynamic> json) =>
       _$SelfSovereignIdentityOptionsFromJson(json);
 
-  final CustomOidc4VcProfile? customOidc4VcProfile;
-  final bool? displayManageDecentralizedId;
-  final bool? displaySsiAdvancedSettings;
-  final bool? displayVerifiableDataRegistry;
-  final String? oidv4VcProfile;
+  final CustomOidc4VcProfile customOidc4VcProfile;
+  final bool displayManageDecentralizedId;
+  final bool displaySsiAdvancedSettings;
+  final bool displayVerifiableDataRegistry;
+  final String oidv4VcProfile;
 
   Map<String, dynamic> toJson() => _$SelfSovereignIdentityOptionsToJson(this);
 
@@ -206,41 +202,46 @@ class SelfSovereignIdentityOptions extends Equatable {
 @JsonSerializable()
 class CustomOidc4VcProfile extends Equatable {
   const CustomOidc4VcProfile({
-    this.clientAuthentication,
+    required this.clientAuthentication,
+    required this.credentialManifestSupport,
+    required this.cryptoHolderBinding,
+    required this.defaultDid,
+    required this.oidc4VciDraft,
+    required this.oidc4VpDraft,
+    required this.scope,
+    required this.securityLevel,
+    required this.siopv2Draft,
+    required this.subjectSyntaxeType,
+    required this.userPinDigits,
     this.clientId,
     this.clientSecret,
-    this.cryptoHolderBinding,
-    this.defaultDid,
-    this.oidc4VciDraft,
-    this.oidc4VpDraft,
-    this.scope,
-    this.securityLevel,
-    this.siopv2Draft,
-    this.subjectSyntaxeType,
-    this.userPinDigits,
   });
 
   factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) =>
       _$CustomOidc4VcProfileFromJson(json);
 
-  final String? clientAuthentication;
+  final ClientAuthentication clientAuthentication;
+  final bool credentialManifestSupport;
+  @JsonKey(name: 'client_id')
   final String? clientId;
+  @JsonKey(name: 'client_secret')
   final String? clientSecret;
-  final bool? cryptoHolderBinding;
-  final String? defaultDid;
-  final String? oidc4VciDraft;
-  final String? oidc4VpDraft;
-  final bool? scope;
-  final String? securityLevel;
-  final String? siopv2Draft;
-  final String? subjectSyntaxeType;
-  final String? userPinDigits;
+  final bool cryptoHolderBinding;
+  final DidKeyType defaultDid;
+  final OIDC4VCIDraftType oidc4VciDraft;
+  final OIDC4VPDraftType oidc4VpDraft;
+  final bool scope;
+  final SecurityLevel securityLevel;
+  final SIOPV2DraftType siopv2Draft;
+  final SubjectSyntax subjectSyntaxeType;
+  final UserPinDigits userPinDigits;
 
   Map<String, dynamic> toJson() => _$CustomOidc4VcProfileToJson(this);
 
   @override
   List<Object?> get props => [
         clientAuthentication,
+        credentialManifestSupport,
         clientId,
         clientSecret,
         cryptoHolderBinding,
@@ -258,17 +259,17 @@ class CustomOidc4VcProfile extends Equatable {
 @JsonSerializable()
 class SettingsMenu extends Equatable {
   const SettingsMenu({
-    this.displayDeveloperMode,
-    this.displayHelpCenter,
-    this.displayProfile,
+    required this.displayDeveloperMode,
+    required this.displayHelpCenter,
+    required this.displayProfile,
   });
 
   factory SettingsMenu.fromJson(Map<String, dynamic> json) =>
       _$SettingsMenuFromJson(json);
 
-  final bool? displayDeveloperMode;
-  final bool? displayHelpCenter;
-  final bool? displayProfile;
+  final bool displayDeveloperMode;
+  final bool displayHelpCenter;
+  final bool displayProfile;
 
   Map<String, dynamic> toJson() => _$SettingsMenuToJson(this);
 

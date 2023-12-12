@@ -167,7 +167,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       final draftType =
           (await secureStorageProvider.get(SecureStorageKeys.draftType)) ??
-              DraftType.draft11.toString();
+              OIDC4VCIDraftType.draft11.toString();
 
       final profileModel = ProfileModel(
         firstName: firstName,
@@ -471,7 +471,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
-  Future<void> updateDraftType(DraftType draftType) async {
+  Future<void> updateDraftType(OIDC4VCIDraftType draftType) async {
     final profileModel = state.model.copyWith(draftType: draftType.toString());
     await update(profileModel);
   }

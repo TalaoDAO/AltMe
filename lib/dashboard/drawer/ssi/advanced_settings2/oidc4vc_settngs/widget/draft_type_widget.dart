@@ -50,12 +50,12 @@ class DraftTypeWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   ListView.builder(
-                    itemCount: DraftType.values.length,
+                    itemCount: OIDC4VCIDraftType.values.length,
                     shrinkWrap: true,
                     physics: const ScrollPhysics(),
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) {
-                      final draftType = DraftType.values[index];
+                      final draftType = OIDC4VCIDraftType.values[index];
                       return Column(
                         children: [
                           if (index != 0)

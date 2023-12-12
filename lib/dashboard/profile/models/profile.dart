@@ -6,25 +6,6 @@ import 'package:oidc4vc/oidc4vc.dart';
 
 part 'profile.g.dart';
 
-enum ProfileType {
-  custom,
-  ebsiV3,
-  dutch,
-}
-
-extension ProfileTypeX on ProfileType {
-  String getTitle(AppLocalizations l10n) {
-    switch (this) {
-      case ProfileType.custom:
-        return l10n.profileCustom;
-      case ProfileType.ebsiV3:
-        return l10n.profileEbsiV3;
-      case ProfileType.dutch:
-        return l10n.profileDutchBlockchainCoalition;
-    }
-  }
-}
-
 @JsonSerializable()
 class ProfileModel extends Equatable {
   const ProfileModel({
@@ -87,7 +68,7 @@ class ProfileModel extends Equatable {
         clientId: Parameters.clientId,
         clientSecret: Parameters.clientSecret,
         profileType: ProfileType.custom.toString(),
-        draftType: DraftType.draft11.toString(),
+        draftType: OIDC4VCIDraftType.draft11.toString(),
       );
 
   factory ProfileModel.ebsiV3(ProfileModel oldModel) => ProfileModel(
@@ -117,7 +98,7 @@ class ProfileModel extends Equatable {
         clientId: oldModel.clientId,
         clientSecret: oldModel.clientSecret,
         profileType: ProfileType.ebsiV3.toString(),
-        draftType: DraftType.draft11.toString(),
+        draftType: OIDC4VCIDraftType.draft11.toString(),
       );
 
   factory ProfileModel.dutch(ProfileModel oldModel) => ProfileModel(
@@ -147,37 +128,37 @@ class ProfileModel extends Equatable {
         clientId: oldModel.clientId,
         clientSecret: oldModel.clientSecret,
         profileType: ProfileType.dutch.toString(),
-        draftType: DraftType.draft11.toString(),
+        draftType: OIDC4VCIDraftType.draft11.toString(),
       );
 
-  final String firstName;
-  final String lastName;
-  final String phone;
-  final String location;
-  final String email;
-  final String companyName;
-  final String companyWebsite;
-  final String jobTitle;
   final String polygonIdNetwork;
-  final String didKeyType;
   final String walletType;
   final String walletProtectionType;
-  final bool userConsentForIssuerAccess;
-  final bool userConsentForVerifierAccess;
-  final bool userPINCodeForAuthentication;
-
-  final bool enableSecurity;
   final bool isDeveloperMode;
-  final bool enable4DigitPINCode;
+
+  final String firstName; //
+  final String lastName; //
+  final String phone; //
+  final String location; //
+  final String email; //
+  final String companyName; //
+  final String companyWebsite; //
+  final String jobTitle; //
+  final String didKeyType; //
+  final bool userConsentForIssuerAccess; //
+  final bool userConsentForVerifierAccess; //
+  final bool userPINCodeForAuthentication; //
+  final bool enableSecurity; //
+  final bool enable4DigitPINCode; //
   final bool enableJWKThumbprint;
-  final bool enableCryptographicHolderBinding;
-  final bool enableCredentialManifestSupport;
-  final bool enableScopeParameter;
-  final bool useBasicClientAuthentication;
-  final String clientId;
-  final String clientSecret;
+  final bool enableCryptographicHolderBinding; //
+  final bool enableCredentialManifestSupport; //
+  final bool enableScopeParameter; //
+  final bool useBasicClientAuthentication; //
+  final String clientId; //
+  final String clientSecret; //
   final String profileType;
-  final String draftType;
+  final String draftType; //
 
   @override
   List<Object> get props => [

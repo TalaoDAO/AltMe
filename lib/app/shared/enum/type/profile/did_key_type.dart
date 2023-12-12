@@ -1,6 +1,16 @@
 import 'package:altme/l10n/l10n.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-enum DidKeyType { secp256k1, p256, ebsiv3, jwkP256 }
+enum DidKeyType {
+  @JsonValue('did:key:secp256k1')
+  secp256k1,
+  @JsonValue('did:key:p-256')
+  p256,
+  @JsonValue('did:key:ebsi')
+  ebsiv3,
+  @JsonValue('did:jwk:p-256')
+  jwkP256,
+}
 
 extension DidKeyTypeX on DidKeyType {
   String get formattedString {

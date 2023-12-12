@@ -394,7 +394,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     uriFromScannedResponse.queryParameters
         .forEach((key, value) => keys.add(key));
 
-    final DraftType? draftTypeEnum = DraftType.values.firstWhereOrNull(
+    final OIDC4VCIDraftType? draftTypeEnum =
+        OIDC4VCIDraftType.values.firstWhereOrNull(
       (enumValue) => enumValue.toString() == profileCubit.state.model.draftType,
     );
 
@@ -1136,7 +1137,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       for (int i = 0; i < selectedCredentials.length; i++) {
         emit(state.loading());
 
-        final DraftType? draftTypeEnum = DraftType.values.firstWhereOrNull(
+        final OIDC4VCIDraftType? draftTypeEnum =
+            OIDC4VCIDraftType.values.firstWhereOrNull(
           (enumValue) =>
               enumValue.toString() == profileCubit.state.model.draftType,
         );

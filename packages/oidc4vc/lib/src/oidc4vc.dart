@@ -275,7 +275,7 @@ class OIDC4VC {
     required int indexValue,
     required String privateKey,
     required bool sendProof,
-    required DraftType draftType,
+    required OIDC4VCIDraftType draftType,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -398,7 +398,7 @@ class OIDC4VC {
     required List<String> types,
     required String format,
     required bool sendProof,
-    required DraftType draftType,
+    required OIDC4VCIDraftType draftType,
     String? credentialIdentifier,
   }) async {
     final credentialData = await buildCredentialData(
@@ -583,7 +583,7 @@ class OIDC4VC {
     required List<String> types,
     required String format,
     required bool sendProof,
-    required DraftType draftType,
+    required OIDC4VCIDraftType draftType,
     String? credentialIdentifier,
   }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
@@ -598,13 +598,13 @@ class OIDC4VC {
     }
 
     switch (draftType) {
-      case DraftType.draft8:
+      case OIDC4VCIDraftType.draft8:
         credentialData['type'] = credentialType;
         credentialData['format'] = format;
-      case DraftType.draft11:
+      case OIDC4VCIDraftType.draft11:
         credentialData['types'] = types;
         credentialData['format'] = format;
-      case DraftType.draft12:
+      case OIDC4VCIDraftType.draft12:
         credentialData['types'] = types;
         if (credentialIdentifier != null) {
           credentialData['credential_identifier'] = credentialIdentifier;
