@@ -55,24 +55,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     final log = getLogger('ProfileCubit - load');
     try {
-      final firstName =
-          await secureStorageProvider.get(SecureStorageKeys.firstNameKey) ?? '';
-      final lastName =
-          await secureStorageProvider.get(SecureStorageKeys.lastNameKey) ?? '';
-      final phone =
-          await secureStorageProvider.get(SecureStorageKeys.phoneKey) ?? '';
-      final location =
-          await secureStorageProvider.get(SecureStorageKeys.locationKey) ?? '';
-      final email =
-          await secureStorageProvider.get(SecureStorageKeys.emailKey) ?? '';
-      final companyName =
-          await secureStorageProvider.get(SecureStorageKeys.companyName) ?? '';
-      final companyWebsite =
-          await secureStorageProvider.get(SecureStorageKeys.companyWebsite) ??
-              '';
-      final jobTitle =
-          await secureStorageProvider.get(SecureStorageKeys.jobTitle) ?? '';
-
       final polygonIdNetwork = (await secureStorageProvider
               .get(SecureStorageKeys.polygonIdNetwork)) ??
           PolygonIdNetwork.PolygonMainnet.toString();
@@ -171,16 +153,8 @@ class ProfileCubit extends Cubit<ProfileState> {
               OIDC4VCIDraftType.draft11.toString();
 
       final profileModel = ProfileModel(
-        firstName: firstName,
-        lastName: lastName,
-        phone: phone,
-        location: location,
-        email: email,
         polygonIdNetwork: polygonIdNetwork,
         didKeyType: didKeyType,
-        companyName: companyName,
-        companyWebsite: companyWebsite,
-        jobTitle: jobTitle,
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         userConsentForIssuerAccess: userConsentForIssuerAccess,
@@ -222,38 +196,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     final log = getLogger('ProfileCubit - update');
 
     try {
-      await secureStorageProvider.set(
-        SecureStorageKeys.firstNameKey,
-        profileModel.firstName,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.lastNameKey,
-        profileModel.lastName,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.phoneKey,
-        profileModel.phone,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.locationKey,
-        profileModel.location,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.emailKey,
-        profileModel.email,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.companyName,
-        profileModel.companyName,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.companyWebsite,
-        profileModel.companyWebsite,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.jobTitle,
-        profileModel.jobTitle,
-      );
       await secureStorageProvider.set(
         SecureStorageKeys.polygonIdNetwork,
         profileModel.polygonIdNetwork,

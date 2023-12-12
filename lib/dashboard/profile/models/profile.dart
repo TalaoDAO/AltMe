@@ -9,11 +9,6 @@ part 'profile.g.dart';
 @JsonSerializable()
 class ProfileModel extends Equatable {
   const ProfileModel({
-    required this.firstName,
-    required this.lastName,
-    required this.phone,
-    required this.location,
-    required this.email,
     required this.polygonIdNetwork,
     required this.didKeyType,
     required this.walletType,
@@ -26,9 +21,6 @@ class ProfileModel extends Equatable {
     required this.enableCredentialManifestSupport,
     required this.enableScopeParameter,
     required this.useBasicClientAuthentication,
-    this.companyName = '',
-    this.companyWebsite = '',
-    this.jobTitle = '',
     required this.enableSecurity,
     required this.isDeveloperMode,
     required this.enable4DigitPINCode,
@@ -43,14 +35,6 @@ class ProfileModel extends Equatable {
       _$ProfileModelFromJson(json);
 
   factory ProfileModel.empty() => ProfileModel(
-        firstName: '',
-        lastName: '',
-        phone: '',
-        location: '',
-        email: '',
-        companyName: '',
-        companyWebsite: '',
-        jobTitle: '',
         polygonIdNetwork: PolygonIdNetwork.PolygonMainnet.toString(),
         walletType: WalletType.personal.toString(),
         walletProtectionType: WalletProtectionType.pinCode.toString(),
@@ -74,14 +58,6 @@ class ProfileModel extends Equatable {
       );
 
   factory ProfileModel.ebsiV3(ProfileModel oldModel) => ProfileModel(
-        firstName: oldModel.firstName,
-        lastName: oldModel.lastName,
-        phone: oldModel.phone,
-        location: oldModel.location,
-        email: oldModel.email,
-        companyName: oldModel.companyName,
-        companyWebsite: oldModel.companyWebsite,
-        jobTitle: oldModel.jobTitle,
         polygonIdNetwork: oldModel.polygonIdNetwork,
         walletType: oldModel.walletType,
         walletProtectionType: oldModel.walletProtectionType,
@@ -105,14 +81,6 @@ class ProfileModel extends Equatable {
       );
 
   factory ProfileModel.dutch(ProfileModel oldModel) => ProfileModel(
-        firstName: oldModel.firstName,
-        lastName: oldModel.lastName,
-        phone: oldModel.phone,
-        location: oldModel.location,
-        email: oldModel.email,
-        companyName: oldModel.companyName,
-        companyWebsite: oldModel.companyWebsite,
-        jobTitle: oldModel.jobTitle,
         polygonIdNetwork: oldModel.polygonIdNetwork,
         walletType: oldModel.walletType,
         walletProtectionType: oldModel.walletProtectionType,
@@ -142,14 +110,6 @@ class ProfileModel extends Equatable {
 
   final ProfileSetting profileSetting;
 
-  final String firstName; //
-  final String lastName; //
-  final String phone; //
-  final String location; //
-  final String email; //
-  final String companyName; //
-  final String companyWebsite; //
-  final String jobTitle; //
   final String didKeyType; //
   final bool userConsentForIssuerAccess; //
   final bool userConsentForVerifierAccess; //
@@ -168,16 +128,8 @@ class ProfileModel extends Equatable {
 
   @override
   List<Object> get props => [
-        firstName,
-        lastName,
-        phone,
-        location,
-        email,
         polygonIdNetwork,
         didKeyType,
-        companyName,
-        companyWebsite,
-        jobTitle,
         walletType,
         walletProtectionType,
         userConsentForIssuerAccess,
@@ -201,14 +153,6 @@ class ProfileModel extends Equatable {
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
 
   ProfileModel copyWith({
-    String? firstName,
-    String? lastName,
-    String? phone,
-    String? location,
-    String? email,
-    String? companyName,
-    String? companyWebsite,
-    String? jobTitle,
     String? polygonIdNetwork,
     TezosNetwork? tezosNetwork,
     String? didKeyType,
@@ -232,14 +176,6 @@ class ProfileModel extends Equatable {
     ProfileSetting? profileSetting,
   }) {
     return ProfileModel(
-      firstName: firstName ?? this.firstName,
-      lastName: lastName ?? this.lastName,
-      phone: phone ?? this.phone,
-      location: location ?? this.location,
-      email: email ?? this.email,
-      companyName: companyName ?? this.companyName,
-      companyWebsite: companyWebsite ?? this.companyWebsite,
-      jobTitle: jobTitle ?? this.jobTitle,
       polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
       didKeyType: didKeyType ?? this.didKeyType,
       walletType: walletType ?? this.walletType,
