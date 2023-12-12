@@ -19,7 +19,7 @@ class CredentialModel extends Equatable {
     required this.image,
     required this.credentialPreview,
     required this.shareLink,
-    required this.display,
+    this.display,
     required this.data,
     this.expirationDate,
     this.credentialManifest,
@@ -53,6 +53,7 @@ class CredentialModel extends Equatable {
     required CredentialModel oldCredentialModel,
     required Map<String, dynamic> newData,
     required List<Activity> activities,
+    Display? display,
     CredentialManifest? credentialManifest,
   }) {
     return CredentialModel(
@@ -60,7 +61,7 @@ class CredentialModel extends Equatable {
       image: oldCredentialModel.image,
       data: newData,
       shareLink: oldCredentialModel.shareLink,
-      display: oldCredentialModel.display,
+      display: display ?? oldCredentialModel.display,
       credentialPreview: Credential.fromJson(newData),
       expirationDate: newData['expirationDate'] as String? ??
           oldCredentialModel.expirationDate,
@@ -84,7 +85,7 @@ class CredentialModel extends Equatable {
   final String shareLink;
   final Credential credentialPreview;
   @JsonKey(fromJson: fromJsonDisplay)
-  final Display display;
+  final Display? display;
   final String? expirationDate;
   @JsonKey(name: 'credential_manifest', fromJson: credentialManifestFromJson)
   final CredentialManifest? credentialManifest;
@@ -140,9 +141,9 @@ class CredentialModel extends Equatable {
     }
   }
 
-  static Display fromJsonDisplay(dynamic json) {
+  static Display? fromJsonDisplay(dynamic json) {
     if (json == null || json == '') {
-      return const Display('', '', '', '');
+      return null;
     }
     return Display.fromJson(json as Map<String, dynamic>);
   }

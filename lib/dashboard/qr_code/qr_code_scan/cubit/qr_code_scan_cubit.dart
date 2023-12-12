@@ -727,18 +727,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       final (
         _,
-        Map<String, dynamic>? openidConfigurationResponse,
-        Map<String, dynamic>? authorizationServerConfiguration,
+        OpenIdConfiguration? openIdConfiguration,
+        OpenIdConfiguration? authorizationServerConfiguration,
         _,
       ) = await getIssuanceData(
         url: url,
         client: client,
+        oidc4vc: oidc4vc,
       );
 
-      if (openidConfigurationResponse != null) {
+      if (openIdConfiguration != null) {
         await handleErrorForOID4VCI(
           url: url,
-          openidConfigurationResponse: openidConfigurationResponse,
+          openIdConfiguration: openIdConfiguration,
           authorizationServerConfiguration: authorizationServerConfiguration,
         );
       }
@@ -901,7 +902,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       image: 'image',
       credentialPreview: Credential.dummy(),
       shareLink: 'shareLink',
-      display: Display.emptyDisplay(),
       data: const {},
       credentialManifest: credentialManifest,
     );

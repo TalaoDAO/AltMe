@@ -87,7 +87,6 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
               id: claimEntity.id,
               image: 'image',
               data: jsonCredential,
-              display: Display.emptyDisplay()..toJson(),
               shareLink: '',
               credentialPreview: credentialPreview,
               expirationDate: claimEntity.expiration,

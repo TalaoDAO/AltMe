@@ -14,12 +14,14 @@ dependencies:
   dart_bip32_bip44: ^0.2.0
   dart_web3: ^0.0.3
   dio: ^5.3.2
+  equatable: ^2.0.5
   fast_base58: ^0.2.1
   flutter:
     sdk: flutter
   hex: ^0.2.0
   http_mock_adapter: ^0.6.0
   jose: ^0.3.3
+  json_annotation: ^4.8.1
   json_path: ^0.4.4 #latest version creates test issue
   secp256k1: ^0.3.0
   tezart:
@@ -32,7 +34,9 @@ dependency_overrides:
   pinenacl: ^0.5.1 # tezart from git depends on pinenacl ^0.3.3
 
 dev_dependencies:
+  build_runner: ^2.4.4
   flutter_test:
     sdk: flutter
+  json_serializable: ^6.7.0
   mocktail: ^0.3.0
   very_good_analysis: ^5.0.0+1

@@ -52,7 +52,7 @@ Future<void> getAndAddCredential({
       List<dynamic> encodedCredentialOrFutureTokens,
       String? deferredCredentialEndpoint,
       String format,
-      Map<String, dynamic>? openidConfigurationResponse,
+      OpenIdConfiguration? openIdConfiguration,
     ) = await oidc4vc.getCredential(
       preAuthorizedCode: preAuthorizedCode,
       issuer: issuer,
@@ -101,7 +101,6 @@ Future<void> getAndAddCredential({
             [Evidence.emptyEvidence()],
           ),
           data: const {},
-          display: Display.emptyDisplay(),
           image: '',
           shareLink: '',
           pendingInfo: PendingInfo(
@@ -130,7 +129,7 @@ Future<void> getAndAddCredential({
           isLastCall:
               isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
           format: format,
-          openidConfigurationResponse: openidConfigurationResponse,
+          openIdConfiguration: openIdConfiguration,
         );
       }
     }

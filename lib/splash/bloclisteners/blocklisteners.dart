@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -229,12 +230,13 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           if (isOpenIDUrl || isFromDeeplink) {
             final (
               OIDC4VCType? oidc4vcType,
-              Map<String, dynamic>? openidConfigurationResponse,
-              Map<String, dynamic>? authorizationServerConfiguration,
+              OpenIdConfiguration? openIdConfiguration,
+              OpenIdConfiguration? authorizationServerConfiguration,
               dynamic credentialOfferJson,
             ) = await getIssuanceData(
               url: state.uri.toString(),
               client: client,
+              oidc4vc: OIDC4VC(),
             );
 
             oidc4vcTypeForIssuance = oidc4vcType;
@@ -249,7 +251,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   authorizationServerConfiguration:
                       authorizationServerConfiguration,
                   credentialOfferJson: credentialOfferJson,
-                  openidConfigurationResponse: openidConfigurationResponse,
+                  openIdConfiguration: openIdConfiguration,
                 );
               } else {
                 var url = state.uri!.toString();
@@ -328,10 +330,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               if (!moveAhead) return;
             }
 
-            if (openidConfigurationResponse != null) {
+            if (openIdConfiguration != null) {
               await handleErrorForOID4VCI(
                 url: state.uri.toString(),
-                openidConfigurationResponse: openidConfigurationResponse,
+                openIdConfiguration: openIdConfiguration,
                 authorizationServerConfiguration:
                     authorizationServerConfiguration,
               );

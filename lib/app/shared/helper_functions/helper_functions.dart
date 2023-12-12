@@ -6,7 +6,6 @@ import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
-import 'package:credential_manifest/credential_manifest.dart';
 
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -570,10 +569,11 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
   return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
 }
 
-Future<(OIDC4VCType?, Map<String, dynamic>?, Map<String, dynamic>?, dynamic)>
+Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
     getIssuanceData({
   required String url,
   required DioClient client,
+  required OIDC4VC oidc4vc,
 }) async {
   final uri = Uri.parse(url);
 
@@ -604,51 +604,56 @@ Future<(OIDC4VCType?, Map<String, dynamic>?, Map<String, dynamic>?, dynamic)>
     return (null, null, null, null);
   }
 
-  final openidConfigurationResponse = await getOpenIdConfig(
-    baseUrl: issuer,
-    client: client.dio,
-  );
+  final OpenIdConfiguration openIdConfiguration =
+      await oidc4vc.getOpenIdConfig(issuer);
 
-  final authorizationServer =
-      openidConfigurationResponse['authorization_server'];
+  final authorizationServer = openIdConfiguration.authorizationServer;
 
-  Map<String, dynamic>? authorizationServerConfiguration;
+  OpenIdConfiguration? authorizationServerConfiguration;
 
   if (authorizationServer != null) {
-    authorizationServerConfiguration = await getOpenIdConfig(
-      baseUrl: authorizationServer.toString(),
-      client: client.dio,
+    authorizationServerConfiguration =
+        await oidc4vc.getOpenIdConfig(authorizationServer);
+  }
+
+  final credentialsSupported = openIdConfiguration.credentialsSupported;
+
+  if (credentialsSupported == null) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description': 'The credental supported is missing.',
+      },
     );
   }
 
-  final credentialsSupported =
-      openidConfigurationResponse['credentials_supported'] as List<dynamic>;
-
-  final credSupported = credentialsSupported[0] as Map<String, dynamic>;
+  final credSupported = credentialsSupported[0];
   for (final oidc4vcType in OIDC4VCType.values) {
     if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
       if (oidc4vcType == OIDC4VCType.DEFAULT ||
           oidc4vcType == OIDC4VCType.EBSIV3) {
-        if (credSupported['trust_framework'] == null) {
+        if (credSupported.trustFramework != null &&
+            credSupported == credSupported.trustFramework) {
           return (
             OIDC4VCType.DEFAULT,
-            openidConfigurationResponse,
+            openIdConfiguration,
             authorizationServerConfiguration,
             credentialOfferJson,
           );
         }
 
-        if (credSupported['trust_framework']['name'] == 'ebsi') {
+        if (credSupported.trustFramework?.name != null &&
+            credSupported.trustFramework?.name == 'ebsi') {
           return (
             OIDC4VCType.EBSIV3,
-            openidConfigurationResponse,
+            openIdConfiguration,
             authorizationServerConfiguration,
             credentialOfferJson,
           );
         } else {
           return (
             OIDC4VCType.DEFAULT,
-            openidConfigurationResponse,
+            openIdConfiguration,
             authorizationServerConfiguration,
             credentialOfferJson,
           );
@@ -656,7 +661,7 @@ Future<(OIDC4VCType?, Map<String, dynamic>?, Map<String, dynamic>?, dynamic)>
       }
       return (
         oidc4vcType,
-        openidConfigurationResponse,
+        openIdConfiguration,
         authorizationServerConfiguration,
         credentialOfferJson,
       );
@@ -665,7 +670,7 @@ Future<(OIDC4VCType?, Map<String, dynamic>?, Map<String, dynamic>?, dynamic)>
 
   return (
     null,
-    openidConfigurationResponse,
+    openIdConfiguration,
     authorizationServerConfiguration,
     credentialOfferJson,
   );
@@ -673,39 +678,33 @@ Future<(OIDC4VCType?, Map<String, dynamic>?, Map<String, dynamic>?, dynamic)>
 
 Future<void> handleErrorForOID4VCI({
   required String url,
-  required Map<String, dynamic> openidConfigurationResponse,
-  required Map<String, dynamic>? authorizationServerConfiguration,
+  required OpenIdConfiguration openIdConfiguration,
+  required OpenIdConfiguration? authorizationServerConfiguration,
 }) async {
-  final authorizationServer =
-      openidConfigurationResponse['authorization_server'];
+  final authorizationServer = openIdConfiguration.authorizationServer;
 
   List<dynamic>? subjectSyntaxTypesSupported;
   String? tokenEndpoint;
 
-  if (openidConfigurationResponse
-      .containsKey('subject_syntax_types_supported')) {
+  if (openIdConfiguration.subjectSyntaxTypesSupported != null) {
     subjectSyntaxTypesSupported =
-        openidConfigurationResponse['subject_syntax_types_supported']
-            as List<dynamic>;
+        openIdConfiguration.subjectSyntaxTypesSupported;
   }
 
-  if (openidConfigurationResponse.containsKey('token_endpoint')) {
-    tokenEndpoint = openidConfigurationResponse['token_endpoint'].toString();
+  if (openIdConfiguration.tokenEndpoint != null) {
+    tokenEndpoint = openIdConfiguration.tokenEndpoint;
   }
 
   if (authorizationServer != null && authorizationServerConfiguration != null) {
     if (subjectSyntaxTypesSupported == null &&
-        authorizationServerConfiguration
-            .containsKey('subject_syntax_types_supported')) {
+        authorizationServerConfiguration.subjectSyntaxTypesSupported != null) {
       subjectSyntaxTypesSupported =
-          authorizationServerConfiguration['subject_syntax_types_supported']
-              as List<dynamic>;
+          authorizationServerConfiguration.subjectSyntaxTypesSupported;
     }
 
     if (tokenEndpoint == null &&
-        authorizationServerConfiguration.containsKey('token_endpoint')) {
-      tokenEndpoint =
-          authorizationServerConfiguration['token_endpoint'].toString();
+        authorizationServerConfiguration.tokenEndpoint != null) {
+      tokenEndpoint = authorizationServerConfiguration.tokenEndpoint;
     }
   }
 
@@ -719,7 +718,7 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (!openidConfigurationResponse.containsKey('credential_endpoint')) {
+  if (openIdConfiguration.credentialEndpoint == null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -729,7 +728,7 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (!openidConfigurationResponse.containsKey('credential_issuer')) {
+  if (openIdConfiguration.credentialIssuer == null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -739,7 +738,7 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (!openidConfigurationResponse.containsKey('credentials_supported')) {
+  if (openIdConfiguration.credentialsSupported == null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -830,7 +829,7 @@ Future<Map<String, dynamic>?> getClientMetada({
 
 Future<bool?> isEBSIV3ForVerifiers({
   required Uri uri,
-  required DioClient client,
+  required OIDC4VC oidc4vc,
 }) async {
   try {
     final String? clientId = uri.queryParameters['client_id'];
@@ -840,24 +839,21 @@ Future<bool?> isEBSIV3ForVerifiers({
     final isUrl = isURL(clientId);
     if (!isUrl) return false;
 
-    final openidConfigurationResponse = await getOpenIdConfig(
-      baseUrl: clientId,
-      client: client.dio,
+    final OpenIdConfiguration openIdConfiguration =
+        await oidc4vc.getOpenIdConfig(
+      clientId,
     );
 
-    final bool hasKey = openidConfigurationResponse
-        .containsKey('subject_trust_frameworks_supported');
+    final subjectTrustFrameworksSupported =
+        openIdConfiguration.subjectTrustFrameworksSupported;
 
     /// if subject_trust_frameworks_supported is not present => non-ebsi
-    if (!hasKey) {
+    if (subjectTrustFrameworksSupported == null) {
       return false;
     }
 
-    final subjectTrustFrameworksSupported =
-        openidConfigurationResponse['subject_trust_frameworks_supported'];
-
     /// if subject_trust_frameworks_supported is empty => non-ebsi
-    if ((subjectTrustFrameworksSupported as List<dynamic>).isEmpty) {
+    if (subjectTrustFrameworksSupported.isEmpty) {
       return false;
     }
 
@@ -1106,8 +1102,8 @@ bool hasIDTokenOrVPToken(String responseType) {
 
 String getFormattedStringOIDC4VCI({
   required String url,
-  Map<String, dynamic>? openidConfigurationResponse,
-  Map<String, dynamic>? authorizationServerConfiguration,
+  OpenIdConfiguration? openIdConfiguration,
+  OpenIdConfiguration? authorizationServerConfiguration,
   dynamic credentialOfferJson,
 }) {
   return '''
@@ -1115,17 +1111,17 @@ String getFormattedStringOIDC4VCI({
 <b>CREDENTIAL OFFER  :</b> 
 ${credentialOfferJson != null ? const JsonEncoder.withIndent('  ').convert(credentialOfferJson) : 'None'}\n
 <b>ENDPOINTS :</b>
-    authorization server endpoint : ${openidConfigurationResponse?['authorization_server'] ?? 'None'}
-    token endpoint : ${openidConfigurationResponse?['token_endpoint'] ?? authorizationServerConfiguration?['token_endpoint'] ?? 'None'}
-    credential endpoint : ${openidConfigurationResponse?['credential_endpoint'] ?? 'None'}
-    deferred endpoint : ${openidConfigurationResponse?['deferred_endpoint'] ?? 'None'}
-    batch endpoint : ${openidConfigurationResponse?['batch_endpoint'] ?? 'None'}\n
+    authorization server endpoint : ${openIdConfiguration?.authorizationServer ?? 'None'}
+    token endpoint : ${openIdConfiguration?.tokenEndpoint ?? authorizationServerConfiguration?.tokenEndpoint ?? 'None'}
+    credential endpoint : ${openIdConfiguration?.credentialEndpoint ?? 'None'}
+    deferred endpoint : ${openIdConfiguration?.deferredCredentialEndpoint ?? 'None'}
+    batch endpoint : ${openIdConfiguration?.batchEndpoint ?? 'None'}\n
 <b>CREDENTIAL SUPPORTED :</b> 
-${openidConfigurationResponse?['credentials_supported'] != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse!['credentials_supported']) : 'None'}\n
+${openIdConfiguration?.credentialsSupported != null ? const JsonEncoder.withIndent('  ').convert(openIdConfiguration!.credentialsSupported) : 'None'}\n
 <b>AUTHORIZATION SERVER CONFIGURATION :</b>
 ${authorizationServerConfiguration != null ? const JsonEncoder.withIndent('  ').convert(authorizationServerConfiguration) : 'None'}\n
 <b>CRDENTIAL ISSUER CONFIGURATION :</b> 
-${openidConfigurationResponse != null ? const JsonEncoder.withIndent('  ').convert(openidConfigurationResponse) : 'None'}
+${openIdConfiguration != null ? const JsonEncoder.withIndent('  ').convert(openIdConfiguration) : 'None'}
 ''';
 }
 

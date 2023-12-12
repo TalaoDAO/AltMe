@@ -521,7 +521,6 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       id: claimEntity.id,
       image: 'image',
       data: jsonCredential,
-      display: Display.emptyDisplay()..toJson(),
       shareLink: '',
       credentialPreview: credentialPreview,
       credentialManifest: credentialManifest,

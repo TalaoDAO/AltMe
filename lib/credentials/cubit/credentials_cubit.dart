@@ -132,7 +132,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         id: id,
         image: null,
         data: const <String, dynamic>{},
-        display: Display.emptyDisplay()..toJson(),
         shareLink: '',
         expirationDate: null,
         credentialPreview: Credential(

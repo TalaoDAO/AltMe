@@ -128,6 +128,12 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     final isDeveloperMode =
         context.read<ProfileCubit>().state.model.isDeveloperMode;
 
+    final credentialManifestSupport = context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .enableCredentialManifestSupport;
+
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -262,11 +268,19 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           CredentialActiveStatus(
                             credentialStatus: state.credentialStatus,
                           ),
-                          if (outputDescriptors != null) ...[
+                          if (credentialManifestSupport &&
+                              outputDescriptors != null) ...[
                             const SizedBox(height: 10),
                             CredentialManifestDetails(
-                              outputDescriptor: outputDescriptors.first,
+                              outputDescriptor: outputDescriptors.firstOrNull,
                               credentialModel: widget.credentialModel,
+                            ),
+                          ],
+                          if (!credentialManifestSupport &&
+                              widget.credentialModel.display != null) ...[
+                            const SizedBox(height: 10),
+                            DisplayWidget(
+                              display: widget.credentialModel.display!,
                             ),
                           ],
                           if (widget.credentialModel.credentialPreview

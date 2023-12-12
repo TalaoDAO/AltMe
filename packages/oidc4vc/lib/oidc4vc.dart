@@ -11,6 +11,7 @@ library ebsi;
 export 'src/draft_type.dart';
 export 'src/issuer_token_parameters.dart';
 export 'src/media_type.dart';
+export 'src/models/models.dart';
 export 'src/oidc4vc.dart';
 export 'src/pkce_dart.dart';
 export 'src/token_parameters.dart';

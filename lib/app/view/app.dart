@@ -98,6 +98,7 @@ class App extends StatelessWidget {
             client: DioClient(Urls.issuerBaseUrl, Dio()),
             secureStorageProvider: secure_storage.getSecureStorage,
             didCubit: context.read<DIDCubit>(),
+            oidc4vc: OIDC4VC(),
           ),
         ),
         BlocProvider<OnboardingCubit>(

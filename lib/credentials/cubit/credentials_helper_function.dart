@@ -198,7 +198,6 @@ Future<CredentialModel> _createCredential(
     id: id,
     image: 'image',
     data: jsonCredential,
-    display: Display.emptyDisplay()..toJson(),
     shareLink: '',
     credentialPreview: Credential.fromJson(jsonCredential),
     credentialManifest: credentialManifest,
