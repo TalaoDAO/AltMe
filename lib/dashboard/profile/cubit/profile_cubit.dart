@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/profile/models/models.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -197,6 +198,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         clientSecret: clientSecret,
         profileType: profileType,
         draftType: draftType,
+        profileSetting: ProfileSetting.initial(),
       );
       await update(profileModel);
     } catch (e, s) {

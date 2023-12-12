@@ -20,6 +20,16 @@ class ProfileSetting extends Equatable {
   factory ProfileSetting.fromJson(Map<String, dynamic> json) =>
       _$ProfileSettingFromJson(json);
 
+  factory ProfileSetting.initial() => ProfileSetting(
+        blockchainOptions: BlockchainOptions.initial(),
+        generalOptions: GeneralOptions.empty(),
+        helpCenterOptions: HelpCenterOptions.initial(),
+        selfSovereignIdentityOptions: SelfSovereignIdentityOptions.initial(),
+        settingsMenu: SettingsMenu.initial(),
+        version: '',
+        walletSecurityOptions: WalletSecurityOptions.initial(),
+      );
+
   final BlockchainOptions? blockchainOptions;
   final GeneralOptions generalOptions;
   final HelpCenterOptions helpCenterOptions;
@@ -59,6 +69,17 @@ class BlockchainOptions extends Equatable {
 
   factory BlockchainOptions.fromJson(Map<String, dynamic> json) =>
       _$BlockchainOptionsFromJson(json);
+
+  factory BlockchainOptions.initial() => const BlockchainOptions(
+        bnbSupport: true,
+        ethereumSupport: true,
+        fantomSupport: true,
+        hederaSupport: true,
+        infuraRpcNode: false,
+        polygonSupport: true,
+        tezosSupport: true,
+        tzproRpcNode: false,
+      );
 
   final bool bnbSupport;
   final bool ethereumSupport;
@@ -106,6 +127,19 @@ class GeneralOptions extends Equatable {
   factory GeneralOptions.fromJson(Map<String, dynamic> json) =>
       _$GeneralOptionsFromJson(json);
 
+  factory GeneralOptions.empty() => GeneralOptions(
+        walletType: WalletAppType.altme,
+        companyName: 'Altme',
+        companyWebsite: 'https://altme.io',
+        companyLogo: 'https://talao.co/static/img/icon.png',
+        tagLine: '',
+        profileName: '',
+        profileVersion: '',
+        published: DateTime.now(),
+        profileId: '',
+        customerPlan: '',
+      );
+
   final WalletAppType walletType;
   final String companyName;
   final String companyWebsite;
@@ -139,7 +173,7 @@ class HelpCenterOptions extends Equatable {
   const HelpCenterOptions({
     required this.customChatSupport,
     this.customChatSupportName,
-    required this.customEmail,
+    this.customEmail,
     required this.customEmailSupport,
     required this.displayChatSupport,
     required this.displayEmailSupport,
@@ -147,6 +181,13 @@ class HelpCenterOptions extends Equatable {
 
   factory HelpCenterOptions.fromJson(Map<String, dynamic> json) =>
       _$HelpCenterOptionsFromJson(json);
+
+  factory HelpCenterOptions.initial() => const HelpCenterOptions(
+        customChatSupport: false,
+        customEmailSupport: false,
+        displayChatSupport: true,
+        displayEmailSupport: true,
+      );
 
   final bool customChatSupport;
   final String? customChatSupportName;
@@ -180,6 +221,15 @@ class SelfSovereignIdentityOptions extends Equatable {
 
   factory SelfSovereignIdentityOptions.fromJson(Map<String, dynamic> json) =>
       _$SelfSovereignIdentityOptionsFromJson(json);
+
+  factory SelfSovereignIdentityOptions.initial() =>
+      SelfSovereignIdentityOptions(
+        customOidc4VcProfile: CustomOidc4VcProfile.initial(),
+        displayManageDecentralizedId: true,
+        displaySsiAdvancedSettings: true,
+        displayVerifiableDataRegistry: true,
+        oidv4VcProfile: 'custom',
+      );
 
   final CustomOidc4VcProfile customOidc4VcProfile;
   final bool displayManageDecentralizedId;
@@ -219,6 +269,20 @@ class CustomOidc4VcProfile extends Equatable {
 
   factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) =>
       _$CustomOidc4VcProfileFromJson(json);
+
+  factory CustomOidc4VcProfile.initial() => const CustomOidc4VcProfile(
+        clientAuthentication: ClientAuthentication.none,
+        credentialManifestSupport: true,
+        cryptoHolderBinding: true,
+        defaultDid: DidKeyType.p256,
+        oidc4VciDraft: OIDC4VCIDraftType.draft11,
+        oidc4VpDraft: OIDC4VPDraftType.draft18,
+        scope: false,
+        securityLevel: SecurityLevel.low,
+        siopv2Draft: SIOPV2DraftType.draft12,
+        subjectSyntaxeType: SubjectSyntax.did,
+        userPinDigits: UserPinDigits.six,
+      );
 
   final ClientAuthentication clientAuthentication;
   final bool credentialManifestSupport;
@@ -267,6 +331,12 @@ class SettingsMenu extends Equatable {
   factory SettingsMenu.fromJson(Map<String, dynamic> json) =>
       _$SettingsMenuFromJson(json);
 
+  factory SettingsMenu.initial() => const SettingsMenu(
+        displayDeveloperMode: true,
+        displayHelpCenter: true,
+        displayProfile: true,
+      );
+
   final bool displayDeveloperMode;
   final bool displayHelpCenter;
   final bool displayProfile;
@@ -284,19 +354,26 @@ class SettingsMenu extends Equatable {
 @JsonSerializable()
 class WalletSecurityOptions extends Equatable {
   const WalletSecurityOptions({
-    this.confirmSecurityVerifierAccess,
-    this.displaySecurityAdvancedSettings,
-    this.secureSecurityAuthenticationWithPinCode,
-    this.verifySecurityIssuerWebsiteIdentity,
+    required this.confirmSecurityVerifierAccess,
+    required this.displaySecurityAdvancedSettings,
+    required this.secureSecurityAuthenticationWithPinCode,
+    required this.verifySecurityIssuerWebsiteIdentity,
   });
 
   factory WalletSecurityOptions.fromJson(Map<String, dynamic> json) =>
       _$WalletSecurityOptionsFromJson(json);
 
-  final bool? confirmSecurityVerifierAccess;
-  final bool? displaySecurityAdvancedSettings;
-  final bool? secureSecurityAuthenticationWithPinCode;
-  final bool? verifySecurityIssuerWebsiteIdentity;
+  factory WalletSecurityOptions.initial() => const WalletSecurityOptions(
+        confirmSecurityVerifierAccess: false,
+        displaySecurityAdvancedSettings: true,
+        secureSecurityAuthenticationWithPinCode: false,
+        verifySecurityIssuerWebsiteIdentity: false,
+      );
+
+  final bool confirmSecurityVerifierAccess;
+  final bool displaySecurityAdvancedSettings;
+  final bool secureSecurityAuthenticationWithPinCode;
+  final bool verifySecurityIssuerWebsiteIdentity;
 
   Map<String, dynamic> toJson() => _$WalletSecurityOptionsToJson(this);
 

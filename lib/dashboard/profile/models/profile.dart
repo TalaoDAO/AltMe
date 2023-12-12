@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/l10n/l10n.dart';
+import 'package:altme/dashboard/profile/models/profile_setting.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -36,6 +36,7 @@ class ProfileModel extends Equatable {
     required this.clientSecret,
     required this.profileType,
     required this.draftType,
+    required this.profileSetting,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
@@ -69,6 +70,7 @@ class ProfileModel extends Equatable {
         clientSecret: Parameters.clientSecret,
         profileType: ProfileType.custom.toString(),
         draftType: OIDC4VCIDraftType.draft11.toString(),
+        profileSetting: ProfileSetting.initial(),
       );
 
   factory ProfileModel.ebsiV3(ProfileModel oldModel) => ProfileModel(
@@ -99,6 +101,7 @@ class ProfileModel extends Equatable {
         clientSecret: oldModel.clientSecret,
         profileType: ProfileType.ebsiV3.toString(),
         draftType: OIDC4VCIDraftType.draft11.toString(),
+        profileSetting: ProfileSetting.initial(),
       );
 
   factory ProfileModel.dutch(ProfileModel oldModel) => ProfileModel(
@@ -129,12 +132,15 @@ class ProfileModel extends Equatable {
         clientSecret: oldModel.clientSecret,
         profileType: ProfileType.dutch.toString(),
         draftType: OIDC4VCIDraftType.draft11.toString(),
+        profileSetting: ProfileSetting.initial(),
       );
 
   final String polygonIdNetwork;
   final String walletType;
   final String walletProtectionType;
   final bool isDeveloperMode;
+
+  final ProfileSetting profileSetting;
 
   final String firstName; //
   final String lastName; //
@@ -189,6 +195,7 @@ class ProfileModel extends Equatable {
         clientSecret,
         profileType,
         draftType,
+        profileSetting,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
@@ -222,6 +229,7 @@ class ProfileModel extends Equatable {
     String? clientSecret,
     String? profileType,
     String? draftType,
+    ProfileSetting? profileSetting,
   }) {
     return ProfileModel(
       firstName: firstName ?? this.firstName,
@@ -257,6 +265,7 @@ class ProfileModel extends Equatable {
       enable4DigitPINCode: enable4DigitPINCode ?? this.enable4DigitPINCode,
       profileType: profileType ?? this.profileType,
       draftType: draftType ?? this.draftType,
+      profileSetting: profileSetting ?? this.profileSetting,
     );
   }
 }
