@@ -69,9 +69,9 @@ class DidKeyTypeWidget extends StatelessWidget {
                             ),
                           ListTile(
                             onTap: () {
-                              context
-                                  .read<ProfileCubit>()
-                                  .updateDidKeyType(didKeyType);
+                              context.read<ProfileCubit>().updateProfileSetting(
+                                    didKeyType: didKeyType,
+                                  );
                             },
                             shape: const RoundedRectangleBorder(
                               side: BorderSide(
@@ -90,7 +90,13 @@ class DidKeyTypeWidget extends StatelessWidget {
                                   ),
                             ),
                             trailing: Icon(
-                              state.model.didKeyType == didKeyType.toString()
+                              state
+                                          .model
+                                          .profileSetting
+                                          .selfSovereignIdentityOptions
+                                          .customOidc4vcProfile
+                                          .defaultDid ==
+                                      didKeyType
                                   ? Icons.radio_button_checked
                                   : Icons.radio_button_unchecked,
                               size: Sizes.icon2x,

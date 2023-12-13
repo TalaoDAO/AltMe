@@ -325,6 +325,7 @@ DidKeyType? getDidKeyFromString(String? didKeyTypeString) {
 
 Future<String> fetchPrivateKey({
   required SecureStorageProvider secureStorage,
+  required DidKeyType didKeyType,
   bool? isEBSIV3,
   OIDC4VC? oidc4vc,
 }) async {
@@ -336,14 +337,6 @@ Future<String> fetchPrivateKey({
 
     return privateKey;
   }
-
-  /// other cases
-  final didKeyTypeString =
-      await secureStorage.get(SecureStorageKeys.didKeyType);
-
-  final didKeyType = getDidKeyFromString(didKeyTypeString);
-
-  if (didKeyType == null) throw Exception();
 
   final privateKey = await getPrivateKey(
     secureStorage: secureStorage,
@@ -490,6 +483,7 @@ Future<(String, String)> fetchDidAndKid({
   required String privateKey,
   bool? isEBSIV3,
   required SecureStorageProvider secureStorage,
+  required DidKeyType didKeyType,
   DIDKitProvider? didKitProvider,
 }) async {
   if (isEBSIV3 != null && isEBSIV3) {
@@ -502,14 +496,6 @@ Future<(String, String)> fetchDidAndKid({
 
     return (did, kid);
   }
-
-  /// other cases
-  final didKeyTypeString =
-      await secureStorage.get(SecureStorageKeys.didKeyType);
-
-  final didKeyType = getDidKeyFromString(didKeyTypeString);
-
-  if (didKeyType == null) throw Exception();
 
   final (did, kid) = await getDidAndKid(
     didKeyType: didKeyType,

@@ -7,3 +7,14 @@ enum UserPinDigits {
   @JsonValue('6')
   six,
 }
+
+extension UserPinDigitsX on UserPinDigits {
+  int get value {
+    switch (this) {
+      case UserPinDigits.four:
+        return 4;
+      case UserPinDigits.six:
+        return 6;
+    }
+  }
+}

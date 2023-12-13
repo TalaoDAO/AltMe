@@ -16,7 +16,7 @@ Future<void> getAuthorizationUriForIssuer({
   required List<dynamic> selectedCredentials,
   required String issuer,
   required dynamic credentialOfferJson,
-  required bool credentailsInScopeParameter,
+  required bool scope,
   required String clientId,
   required String? clientSecret,
   required bool useBasicClientAuthentication,
@@ -61,7 +61,7 @@ Future<void> getAuthorizationUriForIssuer({
     pkcePair: pkcePair,
     state: jwtToken,
     authorizationEndPoint: Parameters.authorizeEndPoint,
-    credentailsInScopeParameter: credentailsInScopeParameter,
+    scope: scope,
     tokenEndpointAuthMethod: tokenEndpointAuthMethod,
   );
 

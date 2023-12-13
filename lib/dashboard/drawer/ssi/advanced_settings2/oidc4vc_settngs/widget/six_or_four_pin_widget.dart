@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +21,14 @@ class SixOrForUserPinWidget extends StatelessWidget {
               builder: (context, state) {
                 return Switch(
                   onChanged: (value) async {
-                    await context
-                        .read<ProfileCubit>()
-                        .enable4DigitPINCode(enabled: value);
+                    await context.read<ProfileCubit>().updateProfileSetting(
+                          userPinDigits:
+                              value ? UserPinDigits.four : UserPinDigits.six,
+                        );
                   },
-                  value: state.model.enable4DigitPINCode,
+                  value: state.model.profileSetting.selfSovereignIdentityOptions
+                          .customOidc4vcProfile.userPinDigits ==
+                      UserPinDigits.four,
                   activeColor: Theme.of(context).colorScheme.primary,
                 );
               },

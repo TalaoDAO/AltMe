@@ -26,11 +26,13 @@ Future<void> getAndAddCredential({
   required bool sendProof,
   required String? authorization,
   required OIDC4VCIDraftType draftType,
+  required DidKeyType didKeyType,
 }) async {
   final privateKey = await fetchPrivateKey(
     isEBSIV3: isEBSIV3,
     oidc4vc: oidc4vc,
     secureStorage: getSecureStorage,
+    didKeyType: didKeyType,
   );
 
   final (did, kid) = await fetchDidAndKid(
@@ -38,6 +40,7 @@ Future<void> getAndAddCredential({
     privateKey: privateKey,
     didKitProvider: didKitProvider,
     secureStorage: getSecureStorage,
+    didKeyType: didKeyType,
   );
 
   if (preAuthorizedCode != null ||

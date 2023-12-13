@@ -17,6 +17,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
   required OIDC4VCIDraftType draftType,
+  required ProfileCubit profileCubit,
   required SecureStorageProvider secureStorageProvider,
   required DioClient dioClient,
   required String? userPin,
@@ -98,6 +99,8 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       }
     }
   } else {
+    final didKeyType = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
     await getAndAddCredential(
       scannedResponse: scannedResponse,
       isEBSIV3: isEBSIV3,
@@ -116,6 +119,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       authorization: null,
       sendProof: sendProof,
       draftType: draftType,
+      didKeyType: didKeyType,
     );
     oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
     qrCodeScanCubit.goBack();

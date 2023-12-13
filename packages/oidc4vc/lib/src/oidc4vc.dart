@@ -92,7 +92,7 @@ class OIDC4VC {
     required PkcePair pkcePair,
     required String state,
     required String authorizationEndPoint,
-    required bool credentailsInScopeParameter,
+    required bool scope,
     required String tokenEndpointAuthMethod,
   }) async {
     try {
@@ -114,7 +114,7 @@ class OIDC4VC {
         pkcePair: pkcePair,
         state: state,
         authorizationEndPoint: authorizationEndPoint,
-        credentailsInScopeParameter: credentailsInScopeParameter,
+        scope: scope,
         tokenEndpointAuthMethod: tokenEndpointAuthMethod,
       );
 
@@ -139,7 +139,7 @@ class OIDC4VC {
     required String authorizationEndPoint,
     required PkcePair pkcePair,
     required String state,
-    required bool credentailsInScopeParameter,
+    required bool scope,
     required String tokenEndpointAuthMethod,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
@@ -212,7 +212,7 @@ class OIDC4VC {
           authorizationEndPoint, tokenEndpointAuthMethod),
     };
 
-    if (credentailsInScopeParameter) {
+    if (scope) {
       myRequest['scope'] = listToString(credentials);
     } else {
       myRequest['scope'] = 'openid';

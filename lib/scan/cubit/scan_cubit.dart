@@ -67,15 +67,20 @@ class ScanCubit extends Cubit<ScanState> {
         // final bool isEBSIV3 =
         //     await isEBSIV3ForVerifier(client: client, uri: uri) ?? false;
 
+        final didKeyType = profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+
         final privateKey = await fetchPrivateKey(
           oidc4vc: oidc4vc,
           secureStorage: secureStorageProvider,
+          didKeyType: didKeyType,
         );
 
         final (did, kid) = await fetchDidAndKid(
           privateKey: privateKey,
           didKitProvider: didKitProvider,
           secureStorage: secureStorageProvider,
+          didKeyType: didKeyType,
         );
 
         final responseType = uri.queryParameters['response_type'] ?? '';

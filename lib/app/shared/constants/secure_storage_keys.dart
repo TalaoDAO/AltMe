@@ -30,8 +30,6 @@ class SecureStorageKeys {
   static const String userPINCodeForAuthentication =
       'userPINCodeForAuthentication';
 
-  static const String enableSecurity = 'enableSecurity';
-  static const String enable4DigitPINCode = 'enable4DigitPINCode';
   static const String profileType = 'profileType';
   static const String isDeveloperMode = 'isDeveloperMode';
   static const String enableJWKThumbprint = 'enableJWKThumbprint';
@@ -39,7 +37,6 @@ class SecureStorageKeys {
       'enableCryptographicHolderBinding';
   static const String enableCredentialManifestSupport =
       'enableCredentialManifestSupport';
-  static const String enableScopeParameter = 'enableScopeParameter';
   static const String useBasicClientAuthentication = 'isPreRegisteredWallet';
   static const String clientId = 'clientId';
   static const String clientSecret = 'clientSecret';
@@ -55,7 +52,6 @@ class SecureStorageKeys {
   static const String verificationMethod = 'verificationMethod';
 
   static const String polygonIdNetwork = 'profile/polygonIdNetwork';
-  static const String didKeyType = 'profile/didKeyType';
 
   static const String blockChainNetworksIndexing = 'blockChainNetworksIndexing';
   static const String credentialKey = 'credential';

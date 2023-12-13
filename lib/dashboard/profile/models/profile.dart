@@ -10,7 +10,6 @@ part 'profile.g.dart';
 class ProfileModel extends Equatable {
   const ProfileModel({
     required this.polygonIdNetwork,
-    required this.didKeyType,
     required this.walletType,
     required this.walletProtectionType,
     required this.userConsentForIssuerAccess,
@@ -19,11 +18,8 @@ class ProfileModel extends Equatable {
     required this.enableJWKThumbprint,
     required this.enableCryptographicHolderBinding,
     required this.enableCredentialManifestSupport,
-    required this.enableScopeParameter,
     required this.useBasicClientAuthentication,
-    required this.enableSecurity,
     required this.isDeveloperMode,
-    required this.enable4DigitPINCode,
     required this.clientId,
     required this.clientSecret,
     required this.profileType,
@@ -41,14 +37,10 @@ class ProfileModel extends Equatable {
         userConsentForIssuerAccess: true,
         userConsentForVerifierAccess: true,
         userPINCodeForAuthentication: true,
-        didKeyType: DidKeyType.p256.toString(),
-        enableSecurity: false,
         isDeveloperMode: false,
-        enable4DigitPINCode: false,
         enableJWKThumbprint: false,
         enableCryptographicHolderBinding: true,
         enableCredentialManifestSupport: true,
-        enableScopeParameter: false,
         useBasicClientAuthentication: false,
         clientId: Parameters.clientId,
         clientSecret: Parameters.clientSecret,
@@ -64,14 +56,10 @@ class ProfileModel extends Equatable {
         userConsentForIssuerAccess: oldModel.userConsentForVerifierAccess,
         userConsentForVerifierAccess: oldModel.userConsentForVerifierAccess,
         userPINCodeForAuthentication: oldModel.userPINCodeForAuthentication,
-        didKeyType: DidKeyType.ebsiv3.toString(),
-        enableSecurity: false,
         isDeveloperMode: oldModel.isDeveloperMode,
-        enable4DigitPINCode: true,
         enableJWKThumbprint: false,
         enableCryptographicHolderBinding: true,
         enableCredentialManifestSupport: false,
-        enableScopeParameter: false,
         useBasicClientAuthentication: false,
         clientId: oldModel.clientId,
         clientSecret: oldModel.clientSecret,
@@ -113,14 +101,10 @@ class ProfileModel extends Equatable {
         userConsentForIssuerAccess: oldModel.userConsentForVerifierAccess,
         userConsentForVerifierAccess: oldModel.userConsentForVerifierAccess,
         userPINCodeForAuthentication: oldModel.userPINCodeForAuthentication,
-        didKeyType: DidKeyType.jwkP256.toString(),
-        enableSecurity: false,
         isDeveloperMode: oldModel.isDeveloperMode,
-        enable4DigitPINCode: true,
         enableJWKThumbprint: false,
         enableCryptographicHolderBinding: true,
         enableCredentialManifestSupport: false,
-        enableScopeParameter: false,
         useBasicClientAuthentication: false,
         clientId: oldModel.clientId,
         clientSecret: oldModel.clientSecret,
@@ -159,19 +143,14 @@ class ProfileModel extends Equatable {
   final String walletType;
   final String walletProtectionType;
   final bool isDeveloperMode;
-
   final ProfileSetting profileSetting;
 
-  final String didKeyType; //
   final bool userConsentForIssuerAccess; //
   final bool userConsentForVerifierAccess; //
-  final bool userPINCodeForAuthentication; //
-  final bool enableSecurity; //
-  final bool enable4DigitPINCode; //
+  final bool userPINCodeForAuthentication; // //
   final bool enableJWKThumbprint;
   final bool enableCryptographicHolderBinding; //
   final bool enableCredentialManifestSupport; //
-  final bool enableScopeParameter; //
   final bool useBasicClientAuthentication; //
   final String clientId; //
   final String clientSecret; //
@@ -181,19 +160,15 @@ class ProfileModel extends Equatable {
   @override
   List<Object> get props => [
         polygonIdNetwork,
-        didKeyType,
         walletType,
         walletProtectionType,
         userConsentForIssuerAccess,
         userConsentForVerifierAccess,
         userPINCodeForAuthentication,
-        enableSecurity,
         isDeveloperMode,
-        enable4DigitPINCode,
         enableJWKThumbprint,
         enableCryptographicHolderBinding,
         enableCredentialManifestSupport,
-        enableScopeParameter,
         useBasicClientAuthentication,
         clientId,
         clientSecret,
@@ -207,19 +182,15 @@ class ProfileModel extends Equatable {
   ProfileModel copyWith({
     String? polygonIdNetwork,
     TezosNetwork? tezosNetwork,
-    String? didKeyType,
     String? walletType,
     String? walletProtectionType,
     bool? userConsentForIssuerAccess,
     bool? userConsentForVerifierAccess,
     bool? userPINCodeForAuthentication,
-    bool? enableSecurity,
     bool? isDeveloperMode,
-    bool? enable4DigitPINCode,
     bool? enableJWKThumbprint,
     bool? enableCryptographicHolderBinding,
     bool? enableCredentialManifestSupport,
-    bool? enableScopeParameter,
     bool? useBasicClientAuthentication,
     String? clientId,
     String? clientSecret,
@@ -229,7 +200,6 @@ class ProfileModel extends Equatable {
   }) {
     return ProfileModel(
       polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
-      didKeyType: didKeyType ?? this.didKeyType,
       walletType: walletType ?? this.walletType,
       walletProtectionType: walletProtectionType ?? this.walletProtectionType,
       enableJWKThumbprint: enableJWKThumbprint ?? this.enableJWKThumbprint,
@@ -237,7 +207,6 @@ class ProfileModel extends Equatable {
           this.enableCryptographicHolderBinding,
       enableCredentialManifestSupport: enableCredentialManifestSupport ??
           this.enableCredentialManifestSupport,
-      enableScopeParameter: enableScopeParameter ?? this.enableScopeParameter,
       useBasicClientAuthentication:
           useBasicClientAuthentication ?? this.useBasicClientAuthentication,
       clientId: clientId ?? this.clientId,
@@ -248,9 +217,7 @@ class ProfileModel extends Equatable {
           userConsentForVerifierAccess ?? this.userConsentForVerifierAccess,
       userPINCodeForAuthentication:
           userPINCodeForAuthentication ?? this.userPINCodeForAuthentication,
-      enableSecurity: enableSecurity ?? this.enableSecurity,
       isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
-      enable4DigitPINCode: enable4DigitPINCode ?? this.enable4DigitPINCode,
       profileType: profileType ?? this.profileType,
       draftType: draftType ?? this.draftType,
       profileSetting: profileSetting ?? this.profileSetting,
