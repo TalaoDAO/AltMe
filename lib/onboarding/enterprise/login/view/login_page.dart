@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
@@ -27,6 +28,7 @@ class EnterpriseLoginPage extends StatelessWidget {
         secureStorageProvider: getSecureStorage,
         jwtDecode: JWTDecode(),
         oidc4vc: OIDC4VC(),
+        profileCubit: context.read<ProfileCubit>(),
       ),
       child: const EnterpriseLoginView(),
     );

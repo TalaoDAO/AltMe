@@ -326,11 +326,34 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
+  Future<void> updatePolygonIdNetwork({
+    required PolygonIdNetwork polygonIdNetwork,
+    required PolygonIdCubit polygonIdCubit,
+  }) async {
+    emit(state.copyWith(status: AppStatus.loading));
+    final profileModel =
+        state.model.copyWith(polygonIdNetwork: polygonIdNetwork.toString());
+
+    await polygonIdCubit.setEnv(polygonIdNetwork);
+
+    await update(profileModel);
+  }
+
   Future<void> setWalletType({
     required WalletType walletType,
   }) async {
     final profileModel =
         state.model.copyWith(walletType: walletType.toString());
+    await update(profileModel);
+  }
+
+  Future<void> setDeveloperModeStatus({bool enabled = false}) async {
+    final profileModel = state.model.copyWith(isDeveloperMode: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> setProfileSetting(ProfileSetting profileSetting) async {
+    final profileModel = state.model.copyWith(profileSetting: profileSetting);
     await update(profileModel);
   }
 
@@ -352,19 +375,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
-  Future<void> updatePolygonIdNetwork({
-    required PolygonIdNetwork polygonIdNetwork,
-    required PolygonIdCubit polygonIdCubit,
-  }) async {
-    emit(state.copyWith(status: AppStatus.loading));
-    final profileModel =
-        state.model.copyWith(polygonIdNetwork: polygonIdNetwork.toString());
-
-    await polygonIdCubit.setEnv(polygonIdNetwork);
-
-    await update(profileModel);
-  }
-
   Future<void> updateDidKeyType(DidKeyType didKeyType) async {
     final profileModel =
         state.model.copyWith(didKeyType: didKeyType.toString());
@@ -373,11 +383,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> enableSecurity({bool enabled = false}) async {
     final profileModel = state.model.copyWith(enableSecurity: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> setDeveloperModeStatus({bool enabled = false}) async {
-    final profileModel = state.model.copyWith(isDeveloperMode: enabled);
     await update(profileModel);
   }
 

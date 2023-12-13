@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/profile/models/profile_setting.dart';
+import 'package:altme/dashboard/profile/profile.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,12 +22,14 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
     required this.secureStorageProvider,
     required this.jwtDecode,
     required this.oidc4vc,
+    required this.profileCubit,
   }) : super(const EnterpriseLoginState());
 
   final DioClient client;
   final SecureStorageProvider secureStorageProvider;
   final JWTDecode jwtDecode;
   final OIDC4VC oidc4vc;
+  final ProfileCubit profileCubit;
 
   void updateEmailFormat(String email) {
     const emailPattern = r'^[\w-]+(\.[\w-]+)*@([a-zA-Z0-9-]+\.)*[a-zA-Z]{2,}$';
@@ -129,11 +133,85 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
       response,
     );
 
+    //final profileSettingJson = jwtDecode.parseJwt(response);
+
+    final profileSettingJson = {
+      "version": "1.9",
+      "generalOptions": {
+        "walletType": "altme",
+        "companyName": "Altme",
+        "companyWebsite": "https://altme.io",
+        "companyLogo": "https://talao.co/static/img/icon.png",
+        "tagLine": "hhhhhhhhh",
+        "profileName": "Wallet Profile Demo",
+        "profileVersion": "1.0",
+        "published": "2023-12-03",
+        "profileId": "urn:uuid:lkjhj",
+        "customerPlan": "free"
+      },
+      "settingsMenu": {
+        "displayProfile": true,
+        "displayDeveloperMode": false,
+        "displayHelpCenter": true
+      },
+      "walletSecurityOptions": {
+        "displaySecurityAdvancedSettings": false,
+        "verifySecurityIssuerWebsiteIdentity": false,
+        "confirmSecurityVerifierAccess": false,
+        "secureSecurityAuthenticationWithPinCode": true
+      },
+      "blockchainOptions": {
+        "tezosSupport": true,
+        "ethereumSupport": true,
+        "hederaSupport": true,
+        "bnbSupport": true,
+        "fantomSupport": true,
+        "polygonSupport": true,
+        "tzproRpcNode": false,
+        "tzproApiKey": null,
+        "infuraRpcNode": false,
+        "infuraApiKey": null
+      },
+      "selfSovereignIdentityOptions": {
+        "displayManageDecentralizedId": true,
+        "displaySsiAdvancedSettings": true,
+        "displayVerifiableDataRegistry": true,
+        "oidv4vcProfile": "ebsi",
+        "customOidc4vcProfile": {
+          "securityLevel": "low",
+          "credentialManifestSupport": true,
+          "userPinDigits": "4",
+          "defaultDid": "did:key:ebsi",
+          "subjectSyntaxeType": "did",
+          "cryptoHolderBinding": true,
+          "scope": false,
+          "clientAuthentication": "none",
+          "client_id": null,
+          "client_secret": null,
+          "oidc4vciDraft": "11",
+          "oidc4vpDraft": "18",
+          "siopv2Draft": "12"
+        }
+      },
+      "helpCenterOptions": {
+        "displayChatSupport": true,
+        "customChatSupport": false,
+        "customChatSupportName": null,
+        "displayEmailSupport": true,
+        "customEmailSupport": false,
+        "customEmail": null
+      }
+    };
+
     await secureStorageProvider.set(
       SecureStorageKeys.enterpriseConfiguration,
-      response,
+      jsonEncode(profileSettingJson),
     );
 
+    final profileSetting = ProfileSetting.fromJson(profileSettingJson);
+
+    ///save to profileCubit
+    await profileCubit.setProfileSetting(profileSetting);
     // if (isVerified == VerificationType.verified) {
     //   emit(
     //     state.copyWith(

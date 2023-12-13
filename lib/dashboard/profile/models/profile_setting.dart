@@ -303,11 +303,11 @@ class HelpCenterOptions extends Equatable {
 @JsonSerializable()
 class SelfSovereignIdentityOptions extends Equatable {
   const SelfSovereignIdentityOptions({
-    required this.customOidc4VcProfile,
+    required this.customOidc4vcProfile,
     required this.displayManageDecentralizedId,
     required this.displaySsiAdvancedSettings,
     required this.displayVerifiableDataRegistry,
-    required this.oidv4VcProfile,
+    required this.oidv4vcProfile,
   });
 
   factory SelfSovereignIdentityOptions.fromJson(Map<String, dynamic> json) =>
@@ -315,46 +315,46 @@ class SelfSovereignIdentityOptions extends Equatable {
 
   factory SelfSovereignIdentityOptions.initial() =>
       SelfSovereignIdentityOptions(
-        customOidc4VcProfile: CustomOidc4VcProfile.initial(),
+        customOidc4vcProfile: CustomOidc4VcProfile.initial(),
         displayManageDecentralizedId: true,
         displaySsiAdvancedSettings: true,
         displayVerifiableDataRegistry: true,
-        oidv4VcProfile: 'custom',
+        oidv4vcProfile: 'custom',
       );
 
-  final CustomOidc4VcProfile customOidc4VcProfile;
+  final CustomOidc4VcProfile customOidc4vcProfile;
   final bool displayManageDecentralizedId;
   final bool displaySsiAdvancedSettings;
   final bool displayVerifiableDataRegistry;
-  final String oidv4VcProfile;
+  final String oidv4vcProfile;
 
   Map<String, dynamic> toJson() => _$SelfSovereignIdentityOptionsToJson(this);
 
   SelfSovereignIdentityOptions copyWith({
-    CustomOidc4VcProfile? customOidc4VcProfile,
+    CustomOidc4VcProfile? customOidc4vcProfile,
     bool? displayManageDecentralizedId,
     bool? displaySsiAdvancedSettings,
     bool? displayVerifiableDataRegistry,
-    String? oidv4VcProfile,
+    String? oidv4vcProfile,
   }) =>
       SelfSovereignIdentityOptions(
-        customOidc4VcProfile: customOidc4VcProfile ?? this.customOidc4VcProfile,
+        customOidc4vcProfile: customOidc4vcProfile ?? this.customOidc4vcProfile,
         displayManageDecentralizedId:
             displayManageDecentralizedId ?? this.displayManageDecentralizedId,
         displaySsiAdvancedSettings:
             displaySsiAdvancedSettings ?? this.displaySsiAdvancedSettings,
         displayVerifiableDataRegistry:
             displayVerifiableDataRegistry ?? this.displayVerifiableDataRegistry,
-        oidv4VcProfile: oidv4VcProfile ?? this.oidv4VcProfile,
+        oidv4vcProfile: oidv4vcProfile ?? this.oidv4vcProfile,
       );
 
   @override
   List<Object?> get props => [
-        customOidc4VcProfile,
+        customOidc4vcProfile,
         displayManageDecentralizedId,
         displaySsiAdvancedSettings,
         displayVerifiableDataRegistry,
-        oidv4VcProfile,
+        oidv4vcProfile,
       ];
 }
 
@@ -365,8 +365,8 @@ class CustomOidc4VcProfile extends Equatable {
     required this.credentialManifestSupport,
     required this.cryptoHolderBinding,
     required this.defaultDid,
-    required this.oidc4VciDraft,
-    required this.oidc4VpDraft,
+    required this.oidc4vciDraft,
+    required this.oidc4vpDraft,
     required this.scope,
     required this.securityLevel,
     required this.siopv2Draft,
@@ -384,8 +384,8 @@ class CustomOidc4VcProfile extends Equatable {
         credentialManifestSupport: true,
         cryptoHolderBinding: true,
         defaultDid: DidKeyType.p256,
-        oidc4VciDraft: OIDC4VCIDraftType.draft11,
-        oidc4VpDraft: OIDC4VPDraftType.draft18,
+        oidc4vciDraft: OIDC4VCIDraftType.draft11,
+        oidc4vpDraft: OIDC4VPDraftType.draft18,
         scope: false,
         securityLevel: SecurityLevel.low,
         siopv2Draft: SIOPV2DraftType.draft12,
@@ -401,8 +401,8 @@ class CustomOidc4VcProfile extends Equatable {
   final String? clientSecret;
   final bool cryptoHolderBinding;
   final DidKeyType defaultDid;
-  final OIDC4VCIDraftType oidc4VciDraft;
-  final OIDC4VPDraftType oidc4VpDraft;
+  final OIDC4VCIDraftType oidc4vciDraft;
+  final OIDC4VPDraftType oidc4vpDraft;
   final bool scope;
   final SecurityLevel securityLevel;
   final SIOPV2DraftType siopv2Draft;
@@ -418,8 +418,8 @@ class CustomOidc4VcProfile extends Equatable {
     String? clientSecret,
     bool? cryptoHolderBinding,
     DidKeyType? defaultDid,
-    OIDC4VCIDraftType? oidc4VciDraft,
-    OIDC4VPDraftType? oidc4VpDraft,
+    OIDC4VCIDraftType? oidc4vciDraft,
+    OIDC4VPDraftType? oidc4vpDraft,
     bool? scope,
     SecurityLevel? securityLevel,
     SIOPV2DraftType? siopv2Draft,
@@ -432,8 +432,8 @@ class CustomOidc4VcProfile extends Equatable {
             credentialManifestSupport ?? this.credentialManifestSupport,
         cryptoHolderBinding: cryptoHolderBinding ?? this.cryptoHolderBinding,
         defaultDid: defaultDid ?? this.defaultDid,
-        oidc4VciDraft: oidc4VciDraft ?? this.oidc4VciDraft,
-        oidc4VpDraft: oidc4VpDraft ?? this.oidc4VpDraft,
+        oidc4vciDraft: oidc4vciDraft ?? this.oidc4vciDraft,
+        oidc4vpDraft: oidc4vpDraft ?? this.oidc4vpDraft,
         scope: scope ?? this.scope,
         securityLevel: securityLevel ?? this.securityLevel,
         siopv2Draft: siopv2Draft ?? this.siopv2Draft,
@@ -451,8 +451,8 @@ class CustomOidc4VcProfile extends Equatable {
         clientSecret,
         cryptoHolderBinding,
         defaultDid,
-        oidc4VciDraft,
-        oidc4VpDraft,
+        oidc4vciDraft,
+        oidc4vpDraft,
         scope,
         securityLevel,
         siopv2Draft,
