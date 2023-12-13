@@ -29,11 +29,17 @@ class ProfileModel extends Equatable {
         profileSetting: ProfileSetting.initial(),
       );
 
-  factory ProfileModel.ebsiV3(ProfileModel oldModel) => ProfileModel(
-        polygonIdNetwork: oldModel.polygonIdNetwork,
-        walletType: oldModel.walletType,
-        walletProtectionType: oldModel.walletProtectionType,
-        isDeveloperMode: oldModel.isDeveloperMode,
+  factory ProfileModel.ebsiV3({
+    required String polygonIdNetwork,
+    required String walletType,
+    required String walletProtectionType,
+    required bool isDeveloperMode,
+  }) =>
+      ProfileModel(
+        polygonIdNetwork: polygonIdNetwork,
+        walletType: walletType,
+        walletProtectionType: walletProtectionType,
+        isDeveloperMode: isDeveloperMode,
         profileType: ProfileType.ebsiV3.toString(),
         profileSetting: ProfileSetting(
           blockchainOptions: BlockchainOptions.initial(),
@@ -59,16 +65,22 @@ class ProfileModel extends Equatable {
             ),
           ),
           settingsMenu: SettingsMenu.initial(),
-          version: oldModel.profileSetting.version,
+          version: '',
           walletSecurityOptions: WalletSecurityOptions.initial(),
         ),
       );
 
-  factory ProfileModel.dutch(ProfileModel oldModel) => ProfileModel(
-        polygonIdNetwork: oldModel.polygonIdNetwork,
-        walletType: oldModel.walletType,
-        walletProtectionType: oldModel.walletProtectionType,
-        isDeveloperMode: oldModel.isDeveloperMode,
+  factory ProfileModel.dutch({
+    required String polygonIdNetwork,
+    required String walletType,
+    required String walletProtectionType,
+    required bool isDeveloperMode,
+  }) =>
+      ProfileModel(
+        polygonIdNetwork: polygonIdNetwork,
+        walletType: walletType,
+        walletProtectionType: walletProtectionType,
+        isDeveloperMode: isDeveloperMode,
         profileType: ProfileType.dutch.toString(),
         profileSetting: ProfileSetting(
           blockchainOptions: BlockchainOptions.initial(),
@@ -94,7 +106,7 @@ class ProfileModel extends Equatable {
             ),
           ),
           settingsMenu: SettingsMenu.initial(),
-          version: oldModel.profileSetting.version,
+          version: '',
           walletSecurityOptions: WalletSecurityOptions.initial(),
         ),
       );

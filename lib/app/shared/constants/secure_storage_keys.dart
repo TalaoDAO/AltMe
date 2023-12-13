@@ -22,12 +22,8 @@ class SecureStorageKeys {
   static const String isWalletIntegrityEnabled = 'isWalletIntegrityEnabled';
   static const String walletProtectionType = 'walletProtectionType';
 
-  static const String profileSettings = 'profileSettings';
-
   static const String profileType = 'profileType';
   static const String isDeveloperMode = 'isDeveloperMode';
-
-  static const String customProfileBackup = 'customProfileBackup';
 
   static const String pinCode = 'pinCode';
   static const String data = 'data';
@@ -77,5 +73,7 @@ class SecureStorageKeys {
 
   static const String walletType = 'walletType';
   static const String walletAttestationData = 'walletAttestationData';
-  static const String enterpriseConfiguration = 'enterpriseConfiguration';
+
+  static const String customProfileSettings = 'customProfileSettings';
+  static const String enterpriseProfileSetting = 'enterpriseProfileSetting';
 }

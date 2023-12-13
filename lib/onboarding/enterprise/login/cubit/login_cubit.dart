@@ -203,7 +203,7 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
     };
 
     await secureStorageProvider.set(
-      SecureStorageKeys.enterpriseConfiguration,
+      SecureStorageKeys.enterpriseProfileSetting,
       jsonEncode(profileSettingJson),
     );
 
