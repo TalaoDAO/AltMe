@@ -76,11 +76,99 @@ class ProfileCubit extends Cubit<ProfileState> {
       final profileSettingJsonString =
           await secureStorageProvider.get(SecureStorageKeys.profileSettings);
 
-      final ProfileSetting profileSetting = profileSettingJsonString == null
-          ? ProfileSetting.initial()
-          : ProfileSetting.fromJson(
-              jsonDecode(profileSettingJsonString) as Map<String, dynamic>,
+      ProfileSetting profileSetting = ProfileSetting.initial();
+
+      /// migration - remove later
+      if (profileSettingJsonString == null) {
+        final customProfileBackupValue = await secureStorageProvider.get(
+          SecureStorageKeys.customProfileBackup,
+        );
+
+        if (customProfileBackupValue != null) {
+          try {
+            final customProfileBackup =
+                json.decode(customProfileBackupValue) as Map<String, dynamic>;
+
+            // // didKeyType: customProfileBackup.didKeyType,
+
+            var didKeyType = DidKeyType.p256;
+
+            if (customProfileBackup.containsKey('didKeyType')) {
+              for (final value in DidKeyType.values) {
+                if (value.toString() ==
+                    customProfileBackup.containsKey('didKeyType').toString()) {
+                  didKeyType = value;
+                }
+              }
+            }
+
+            profileSetting = ProfileSetting(
+              blockchainOptions: BlockchainOptions.initial(),
+              generalOptions: GeneralOptions.empty(),
+              helpCenterOptions: HelpCenterOptions.initial(),
+              selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
+                displayManageDecentralizedId: true,
+                displaySsiAdvancedSettings: true,
+                displayVerifiableDataRegistry: true,
+                oidv4vcProfile: 'custom',
+                customOidc4vcProfile: CustomOidc4VcProfile(
+                  clientAuthentication: customProfileBackup
+                              .containsKey('useBasicClientAuthentication') &&
+                          customProfileBackup['useBasicClientAuthentication'] ==
+                              'true'
+                      ? ClientAuthentication.clientSecretBasic
+                      : ClientAuthentication.none,
+                  credentialManifestSupport: customProfileBackup
+                          .containsKey('enableCredentialManifestSupport') &&
+                      customProfileBackup['enableCredentialManifestSupport'] ==
+                          'true',
+                  cryptoHolderBinding: customProfileBackup
+                          .containsKey('enableCryptographicHolderBinding') &&
+                      customProfileBackup['enableCryptographicHolderBinding'] ==
+                          'true',
+                  defaultDid: didKeyType,
+                  oidc4vciDraft: OIDC4VCIDraftType.draft11,
+                  oidc4vpDraft: OIDC4VPDraftType.draft18,
+                  scope:
+                      customProfileBackup.containsKey('enableScopeParameter') &&
+                          customProfileBackup['enableScopeParameter'] == 'true',
+                  securityLevel:
+                      customProfileBackup.containsKey('enableSecurity') &&
+                              customProfileBackup['enableSecurity'] == 'true'
+                          ? SecurityLevel.high
+                          : SecurityLevel.low,
+                  siopv2Draft: SIOPV2DraftType.draft12,
+                  subjectSyntaxeType: customProfileBackup
+                              .containsKey('enableJWKThumbprint') &&
+                          customProfileBackup['enableJWKThumbprint'] == 'true'
+                      ? SubjectSyntax.jwkThumbprint
+                      : SubjectSyntax.did,
+                  userPinDigits: customProfileBackup
+                              .containsKey('enable4DigitPINCode') &&
+                          customProfileBackup['enable4DigitPINCode'] == 'true'
+                      ? UserPinDigits.four
+                      : UserPinDigits.six,
+                  clientId: customProfileBackup.containsKey('clientId')
+                      ? customProfileBackup['clientId'].toString()
+                      : Parameters.clientId,
+                  clientSecret: customProfileBackup.containsKey('clientSecret')
+                      ? customProfileBackup['clientSecret'].toString()
+                      : Parameters.clientSecret,
+                ),
+              ),
+              settingsMenu: SettingsMenu.initial(),
+              version: '',
+              walletSecurityOptions: WalletSecurityOptions.initial(),
             );
+          } catch (e) {
+            profileSetting = ProfileSetting.initial();
+          }
+        }
+      } else {
+        profileSetting = ProfileSetting.fromJson(
+          jsonDecode(profileSettingJsonString) as Map<String, dynamic>,
+        );
+      }
 
       final profileType =
           (await secureStorageProvider.get(SecureStorageKeys.profileType)) ??
