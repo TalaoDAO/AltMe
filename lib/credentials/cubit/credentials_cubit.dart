@@ -33,6 +33,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required this.advanceSettingsCubit,
     required this.keyGenerator,
     required this.jwtDecode,
+    required this.profileCubit,
   }) : super(const CredentialsState());
 
   final CredentialsRepository credentialsRepository;
@@ -42,6 +43,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   final KeyGenerator keyGenerator;
   final AdvanceSettingsCubit advanceSettingsCubit;
   final JWTDecode jwtDecode;
+  final ProfileCubit profileCubit;
 
   final log = getLogger('CredentialsCubit');
 
@@ -101,14 +103,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> addWalletCredential() async {
     final log = getLogger('addRequiredCredentials');
 
-    final walletType =
-        await secureStorageProvider.get(SecureStorageKeys.walletType);
+    final walletType = profileCubit.state.model.walletType;
 
-    final WalletType? walletTypeEnum = WalletType.values.firstWhereOrNull(
-      (enumValue) => enumValue.toString() == walletType,
-    );
-
-    if (walletTypeEnum != WalletType.enterprise) {
+    if (walletType != WalletType.enterprise) {
       return;
     }
 

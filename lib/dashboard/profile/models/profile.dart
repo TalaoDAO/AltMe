@@ -21,18 +21,18 @@ class ProfileModel extends Equatable {
       _$ProfileModelFromJson(json);
 
   factory ProfileModel.empty() => ProfileModel(
-        polygonIdNetwork: PolygonIdNetwork.PolygonMainnet.toString(),
-        walletType: WalletType.personal.toString(),
-        walletProtectionType: WalletProtectionType.pinCode.toString(),
+        polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
+        walletType: WalletType.personal,
+        walletProtectionType: WalletProtectionType.pinCode,
         isDeveloperMode: false,
-        profileType: ProfileType.custom.toString(),
+        profileType: ProfileType.custom,
         profileSetting: ProfileSetting.initial(),
       );
 
   factory ProfileModel.ebsiV3({
-    required String polygonIdNetwork,
-    required String walletType,
-    required String walletProtectionType,
+    required PolygonIdNetwork polygonIdNetwork,
+    required WalletType walletType,
+    required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
   }) =>
       ProfileModel(
@@ -40,7 +40,7 @@ class ProfileModel extends Equatable {
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
-        profileType: ProfileType.ebsiV3.toString(),
+        profileType: ProfileType.ebsiV3,
         profileSetting: ProfileSetting(
           blockchainOptions: BlockchainOptions.initial(),
           generalOptions: GeneralOptions.empty(),
@@ -71,9 +71,9 @@ class ProfileModel extends Equatable {
       );
 
   factory ProfileModel.dutch({
-    required String polygonIdNetwork,
-    required String walletType,
-    required String walletProtectionType,
+    required PolygonIdNetwork polygonIdNetwork,
+    required WalletType walletType,
+    required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
   }) =>
       ProfileModel(
@@ -81,7 +81,7 @@ class ProfileModel extends Equatable {
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
-        profileType: ProfileType.dutch.toString(),
+        profileType: ProfileType.dutch,
         profileSetting: ProfileSetting(
           blockchainOptions: BlockchainOptions.initial(),
           generalOptions: GeneralOptions.empty(),
@@ -111,12 +111,12 @@ class ProfileModel extends Equatable {
         ),
       );
 
-  final String polygonIdNetwork;
-  final String walletType;
-  final String walletProtectionType;
+  final PolygonIdNetwork polygonIdNetwork;
+  final WalletType walletType;
+  final WalletProtectionType walletProtectionType;
   final bool isDeveloperMode;
   final ProfileSetting profileSetting;
-  final String profileType;
+  final ProfileType profileType;
 
   @override
   List<Object> get props => [
@@ -131,12 +131,11 @@ class ProfileModel extends Equatable {
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
 
   ProfileModel copyWith({
-    String? polygonIdNetwork,
-    TezosNetwork? tezosNetwork,
-    String? walletType,
-    String? walletProtectionType,
+    PolygonIdNetwork? polygonIdNetwork,
+    WalletType? walletType,
+    WalletProtectionType? walletProtectionType,
     bool? isDeveloperMode,
-    String? profileType,
+    ProfileType? profileType,
     ProfileSetting? profileSetting,
   }) {
     return ProfileModel(

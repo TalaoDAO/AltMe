@@ -62,8 +62,8 @@ class VerifiableDataRegistryPage extends StatelessWidget {
                 children: [
                   IssuerVerifierSelector(
                     title: PolygonIdNetwork.PolygonMainnet.name,
-                    isChecked: state.model.polygonIdNetwork
-                        .contains(PolygonIdNetwork.PolygonMainnet.toString()),
+                    isChecked: state.model.polygonIdNetwork ==
+                        PolygonIdNetwork.PolygonMainnet,
                     onTap: () {
                       context.read<ProfileCubit>().updatePolygonIdNetwork(
                             polygonIdCubit: context.read<PolygonIdCubit>(),
@@ -81,8 +81,8 @@ class VerifiableDataRegistryPage extends StatelessWidget {
                   ),
                   IssuerVerifierSelector(
                     title: PolygonIdNetwork.PolygonMumbai.name,
-                    isChecked: state.model.polygonIdNetwork
-                        .contains(PolygonIdNetwork.PolygonMumbai.toString()),
+                    isChecked: state.model.polygonIdNetwork ==
+                        PolygonIdNetwork.PolygonMumbai,
                     onTap: () {
                       context.read<ProfileCubit>().updatePolygonIdNetwork(
                             polygonIdCubit: context.read<PolygonIdCubit>(),

@@ -115,6 +115,7 @@ class App extends StatelessWidget {
             didCubit: context.read<DIDCubit>(),
             advanceSettingsCubit: context.read<AdvanceSettingsCubit>(),
             jwtDecode: JWTDecode(),
+            profileCubit: context.read<ProfileCubit>(),
           ),
         ),
         BlocProvider<WalletCubit>(

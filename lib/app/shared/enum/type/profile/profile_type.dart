@@ -4,6 +4,7 @@ enum ProfileType {
   custom,
   ebsiV3,
   dutch,
+  enterprise,
 }
 
 extension ProfileTypeX on ProfileType {
@@ -15,6 +16,8 @@ extension ProfileTypeX on ProfileType {
         return l10n.profileEbsiV3;
       case ProfileType.dutch:
         return l10n.profileDutchBlockchainCoalition;
+      case ProfileType.enterprise:
+        return 'Enterprise';
     }
   }
 }

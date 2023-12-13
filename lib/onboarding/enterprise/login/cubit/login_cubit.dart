@@ -210,7 +210,7 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
     final profileSetting = ProfileSetting.fromJson(profileSettingJson);
 
     ///save to profileCubit
-    await profileCubit.setProfileSetting(profileSetting);
+    await profileCubit.setEnterpriseProfileSetting(profileSetting);
     // if (isVerified == VerificationType.verified) {
     //   emit(
     //     state.copyWith(

@@ -55,17 +55,52 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     final log = getLogger('ProfileCubit - load');
     try {
-      final polygonIdNetwork = (await secureStorageProvider
-              .get(SecureStorageKeys.polygonIdNetwork)) ??
-          PolygonIdNetwork.PolygonMainnet.toString();
+      /// polygon id network
+      var polygonIdNetwork = PolygonIdNetwork.PolygonMainnet;
 
-      final walletType =
-          (await secureStorageProvider.get(SecureStorageKeys.walletType)) ??
-              WalletType.personal.toString();
+      final polygonIdNetworkString =
+          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
 
-      final walletProtectionType = (await secureStorageProvider
-              .get(SecureStorageKeys.walletProtectionType)) ??
-          WalletProtectionType.pinCode.toString();
+      if (polygonIdNetworkString != null) {
+        final enumVal = PolygonIdNetwork.values.firstWhereOrNull(
+          (ele) => ele.toString() == polygonIdNetworkString,
+        );
+        if (enumVal != null) {
+          polygonIdNetwork = enumVal;
+        }
+      }
+
+      /// walletType
+      var walletType = WalletType.personal;
+
+      final walletTypeString =
+          await secureStorageProvider.get(SecureStorageKeys.walletType);
+
+      if (walletTypeString != null) {
+        final enumVal = WalletType.values.firstWhereOrNull(
+          (ele) => ele.toString() == walletTypeString,
+        );
+        if (enumVal != null) {
+          walletType = enumVal;
+        }
+      }
+
+      /// polygon id network
+      var walletProtectionType = WalletProtectionType.pinCode;
+
+      final walletProtectionTypeString = await secureStorageProvider
+          .get(SecureStorageKeys.walletProtectionType);
+
+      if (walletProtectionTypeString != null) {
+        final enumVal = WalletProtectionType.values.firstWhereOrNull(
+          (ele) => ele.toString() == walletProtectionTypeString,
+        );
+        if (enumVal != null) {
+          walletProtectionType = enumVal;
+        }
+      }
+
+      /// developer mode
 
       final isDeveloperModeValue =
           await secureStorageProvider.get(SecureStorageKeys.isDeveloperMode);
@@ -73,10 +108,23 @@ class ProfileCubit extends Cubit<ProfileState> {
       final isDeveloperMode =
           isDeveloperModeValue != null && isDeveloperModeValue == 'true';
 
-      final profileType =
-          (await secureStorageProvider.get(SecureStorageKeys.profileType)) ??
-              ProfileType.custom.toString();
+      /// profileType
 
+      var profileType = ProfileType.custom;
+
+      final profileTypeString =
+          await secureStorageProvider.get(SecureStorageKeys.profileType);
+
+      if (profileTypeString != null) {
+        final enumVal = ProfileType.values.firstWhereOrNull(
+          (ele) => ele.toString() == profileTypeString,
+        );
+        if (enumVal != null) {
+          profileType = enumVal;
+        }
+      }
+
+      /// profileSetting
       late ProfileSetting profileSetting;
 
       /// migration - remove later
@@ -212,6 +260,31 @@ class ProfileCubit extends Cubit<ProfileState> {
               walletProtectionType: walletProtectionType,
               isDeveloperMode: isDeveloperMode,
             );
+
+          case ProfileType.enterprise:
+            final enterpriseProfileSettingJsonString =
+                await secureStorageProvider.get(
+              SecureStorageKeys.enterpriseProfileSetting,
+            );
+
+            if (enterpriseProfileSettingJsonString != null) {
+              profileSetting = ProfileSetting.fromJson(
+                json.decode(enterpriseProfileSettingJsonString)
+                    as Map<String, dynamic>,
+              );
+            } else {
+              profileSetting = ProfileSetting.initial();
+            }
+
+            final profileModel = ProfileModel(
+              polygonIdNetwork: polygonIdNetwork,
+              walletType: walletType,
+              walletProtectionType: walletProtectionType,
+              isDeveloperMode: isDeveloperMode,
+              profileType: profileType,
+              profileSetting: profileSetting,
+            );
+            await update(profileModel);
         }
       } else {
         profileModel = ProfileModel(
@@ -248,17 +321,17 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       await secureStorageProvider.set(
         SecureStorageKeys.polygonIdNetwork,
-        profileModel.polygonIdNetwork,
+        profileModel.polygonIdNetwork.toString(),
       );
 
       await secureStorageProvider.set(
         SecureStorageKeys.walletType,
-        profileModel.walletType,
+        profileModel.walletType.toString(),
       );
 
       await secureStorageProvider.set(
         SecureStorageKeys.walletProtectionType,
-        profileModel.walletProtectionType,
+        profileModel.walletProtectionType.toString(),
       );
 
       await secureStorageProvider.set(
@@ -273,7 +346,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       await secureStorageProvider.set(
         SecureStorageKeys.profileType,
-        profileModel.profileType,
+        profileModel.profileType.toString(),
       );
 
       emit(
@@ -302,8 +375,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> setWalletProtectionType({
     required WalletProtectionType walletProtectionType,
   }) async {
-    final profileModel = state.model
-        .copyWith(walletProtectionType: walletProtectionType.toString());
+    final profileModel =
+        state.model.copyWith(walletProtectionType: walletProtectionType);
     await update(profileModel);
   }
 
@@ -313,7 +386,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     emit(state.copyWith(status: AppStatus.loading));
     final profileModel =
-        state.model.copyWith(polygonIdNetwork: polygonIdNetwork.toString());
+        state.model.copyWith(polygonIdNetwork: polygonIdNetwork);
 
     await polygonIdCubit.setEnv(polygonIdNetwork);
 
@@ -323,8 +396,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> setWalletType({
     required WalletType walletType,
   }) async {
-    final profileModel =
-        state.model.copyWith(walletType: walletType.toString());
+    final profileModel = state.model.copyWith(walletType: walletType);
     await update(profileModel);
   }
 
@@ -382,8 +454,13 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
-  Future<void> setProfileSetting(ProfileSetting profileSetting) async {
-    final profileModel = state.model.copyWith(profileSetting: profileSetting);
+  Future<void> setEnterpriseProfileSetting(
+    ProfileSetting profileSetting,
+  ) async {
+    final profileModel = state.model.copyWith(
+      profileSetting: profileSetting,
+      profileType: ProfileType.enterprise,
+    );
     await update(profileModel);
   }
 
@@ -393,24 +470,24 @@ class ProfileCubit extends Cubit<ProfileState> {
     return super.close();
   }
 
-  Future<void> setProfile(ProfileType profile) async {
-    switch (profile) {
+  Future<void> setProfile(ProfileType profileType) async {
+    switch (profileType) {
       case ProfileType.ebsiV3:
         await update(
           ProfileModel.ebsiV3(
             polygonIdNetwork: state.model.polygonIdNetwork,
-            walletType: state.model.walletType,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
+            walletType: state.model.walletType,
           ),
         );
       case ProfileType.dutch:
         await update(
           ProfileModel.dutch(
             polygonIdNetwork: state.model.polygonIdNetwork,
-            walletType: state.model.walletType,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
+            walletType: state.model.walletType,
           ),
         );
       case ProfileType.custom:
@@ -422,11 +499,29 @@ class ProfileCubit extends Cubit<ProfileState> {
         final customProfileSetting = ProfileSetting.fromJson(
           json.decode(customProfileSettingBackup) as Map<String, dynamic>,
         );
-        final profileModel = state.model.copyWith(
-          profileType: profile.toString(),
-          profileSetting: customProfileSetting,
+
+        await update(
+          state.model.copyWith(
+            profileType: profileType,
+            profileSetting: customProfileSetting,
+          ),
         );
-        await update(profileModel);
+      case ProfileType.enterprise:
+        final String enterpriseProfileSettingData =
+            await secureStorageProvider.get(
+                  SecureStorageKeys.enterpriseProfileSetting,
+                ) ??
+                jsonEncode(state.model.profileSetting);
+        final enterpriseProfileSetting = ProfileSetting.fromJson(
+          json.decode(enterpriseProfileSettingData) as Map<String, dynamic>,
+        );
+
+        await update(
+          state.model.copyWith(
+            profileType: profileType,
+            profileSetting: enterpriseProfileSetting,
+          ),
+        );
     }
   }
 
