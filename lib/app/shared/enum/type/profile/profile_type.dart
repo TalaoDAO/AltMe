@@ -10,7 +10,7 @@ enum ProfileType {
 extension ProfileTypeX on ProfileType {
   String getTitle({
     required AppLocalizations l10n,
-    String? name,
+    required String name,
   }) {
     switch (this) {
       case ProfileType.custom:
@@ -20,7 +20,7 @@ extension ProfileTypeX on ProfileType {
       case ProfileType.dutch:
         return l10n.profileDutchBlockchainCoalition;
       case ProfileType.enterprise:
-        return name ?? 'Enterprise';
+        return name.isEmpty ? 'Enterprise' : name;
     }
   }
 }

@@ -176,9 +176,9 @@ class GeneralOptions extends Equatable {
 
   factory GeneralOptions.empty() => GeneralOptions(
         walletType: WalletAppType.altme,
-        companyName: 'Altme',
-        companyWebsite: 'https://altme.io',
-        companyLogo: 'https://talao.co/static/img/icon.png',
+        companyName: '',
+        companyWebsite: '',
+        companyLogo: '',
         tagLine: '',
         profileName: '',
         profileVersion: '',

@@ -87,10 +87,7 @@ class ProfileSelectorWidget extends StatelessWidget {
                             title: Text(
                               profileType.getTitle(
                                 l10n: l10n,
-                                name: isEnterprise
-                                    ? profile.profileSetting.generalOptions
-                                        .companyName
-                                    : null,
+                                name: profile.enterpriseWalletName ?? '',
                               ),
                               style: Theme.of(context)
                                   .textTheme

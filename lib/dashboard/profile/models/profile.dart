@@ -15,6 +15,7 @@ class ProfileModel extends Equatable {
     required this.isDeveloperMode,
     required this.profileType,
     required this.profileSetting,
+    this.enterpriseWalletName,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
@@ -34,8 +35,10 @@ class ProfileModel extends Equatable {
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
+    String? enterpriseWalletName,
   }) =>
       ProfileModel(
+        enterpriseWalletName: enterpriseWalletName,
         polygonIdNetwork: polygonIdNetwork,
         walletType: walletType,
         walletProtectionType: walletProtectionType,
@@ -75,8 +78,10 @@ class ProfileModel extends Equatable {
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
+    String? enterpriseWalletName,
   }) =>
       ProfileModel(
+        enterpriseWalletName: enterpriseWalletName,
         polygonIdNetwork: polygonIdNetwork,
         walletType: walletType,
         walletProtectionType: walletProtectionType,
@@ -117,14 +122,16 @@ class ProfileModel extends Equatable {
   final bool isDeveloperMode;
   final ProfileSetting profileSetting;
   final ProfileType profileType;
+  final String? enterpriseWalletName;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         polygonIdNetwork,
         walletType,
         walletProtectionType,
         isDeveloperMode,
         profileType,
+        enterpriseWalletName,
         profileSetting,
       ];
 
@@ -137,6 +144,7 @@ class ProfileModel extends Equatable {
     bool? isDeveloperMode,
     ProfileType? profileType,
     ProfileSetting? profileSetting,
+    String? enterpriseWalletName,
   }) {
     return ProfileModel(
       polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
@@ -145,6 +153,7 @@ class ProfileModel extends Equatable {
       isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
       profileType: profileType ?? this.profileType,
       profileSetting: profileSetting ?? this.profileSetting,
+      enterpriseWalletName: enterpriseWalletName ?? this.enterpriseWalletName,
     );
   }
 }

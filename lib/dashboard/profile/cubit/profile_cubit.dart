@@ -280,6 +280,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             isDeveloperMode: isDeveloperMode,
             profileType: profileType,
             profileSetting: profileSetting,
+            enterpriseWalletName: profileSetting.generalOptions.companyName,
           );
       }
       await update(profileModel);
@@ -466,6 +467,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
+            enterpriseWalletName: state.model.enterpriseWalletName,
           ),
         );
       case ProfileType.dutch:
@@ -475,6 +477,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
+            enterpriseWalletName: state.model.enterpriseWalletName,
           ),
         );
       case ProfileType.custom:
@@ -507,6 +510,8 @@ class ProfileCubit extends Cubit<ProfileState> {
           state.model.copyWith(
             profileType: profileType,
             profileSetting: enterpriseProfileSetting,
+            enterpriseWalletName:
+                enterpriseProfileSetting.generalOptions.companyName,
           ),
         );
     }
