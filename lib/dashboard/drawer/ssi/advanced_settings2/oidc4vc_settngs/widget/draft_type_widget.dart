@@ -71,7 +71,8 @@ class DraftTypeWidget extends StatelessWidget {
                           ListTile(
                             onTap: () {
                               context.read<ProfileCubit>().updateProfileSetting(
-                                  oidc4vciDraftType: draftType);
+                                    oidc4vciDraftType: draftType,
+                                  );
                             },
                             shape: const RoundedRectangleBorder(
                               side: BorderSide(

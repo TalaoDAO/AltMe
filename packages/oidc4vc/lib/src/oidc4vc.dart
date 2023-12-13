@@ -209,7 +209,9 @@ class OIDC4VC {
       'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
       'client_metadata': getWalletClientMetadata(
-          authorizationEndPoint, tokenEndpointAuthMethod),
+        authorizationEndPoint,
+        tokenEndpointAuthMethod,
+      ),
     };
 
     if (scope) {
@@ -222,7 +224,9 @@ class OIDC4VC {
   }
 
   String getWalletClientMetadata(
-      String authorizationEndPoint, String tokenEndpointAuthMethod) {
+    String authorizationEndPoint,
+    String tokenEndpointAuthMethod,
+  ) {
     return jsonEncode({
       'authorization_endpoint': authorizationEndPoint,
       'scopes_supported': ['openid'],
