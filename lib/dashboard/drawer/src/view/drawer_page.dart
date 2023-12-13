@@ -135,8 +135,8 @@ class DrawerView extends StatelessWidget {
                 ),
                 const SizedBox(height: Sizes.spaceSmall),
                 DrawerCategoryItem(
-                  title: l10n.aboutAltme,
-                  subTitle: l10n.aboutAltmeDescription,
+                  title: l10n.about,
+                  subTitle: l10n.aboutDescription,
                   onClick: () {
                     Navigator.of(context).push<void>(AboutAltmeMenu.route());
                   },

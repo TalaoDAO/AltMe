@@ -54,7 +54,7 @@ class AboutAltmeView extends StatelessWidget {
                       appVersion = snapShot.data?.version ?? '0.1.0';
                     }
                     return DrawerItem(
-                      title: '${l10n.yourAltmeAppVersion} : $appVersion',
+                      title: '${l10n.yourAppVersion} : $appVersion',
                       trailing: const Center(),
                     );
                   },
