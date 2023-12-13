@@ -51,8 +51,12 @@ class ProfileSelectorWidget extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final profileType = ProfileType.values[index];
 
-                      if (context.read<ProfileCubit>().state.model.walletType !=
-                              WalletType.enterprise &&
+                      final profile = context.read<ProfileCubit>().state.model;
+
+                      final isEnterprise =
+                          profile.walletType == WalletType.enterprise;
+
+                      if (!isEnterprise &&
                           profileType == ProfileType.enterprise) {
                         return Container();
                       }
@@ -81,7 +85,13 @@ class ProfileSelectorWidget extends StatelessWidget {
                               ),
                             ),
                             title: Text(
-                              profileType.getTitle(l10n),
+                              profileType.getTitle(
+                                l10n: l10n,
+                                name: isEnterprise
+                                    ? profile.profileSetting.generalOptions
+                                        .companyName
+                                    : null,
+                              ),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge

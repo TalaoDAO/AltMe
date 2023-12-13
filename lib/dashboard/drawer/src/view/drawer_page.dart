@@ -21,6 +21,9 @@ class DrawerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    final profileSetting =
+        context.read<ProfileCubit>().state.model.profileSetting;
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Drawer(
@@ -37,7 +40,17 @@ class DrawerView extends StatelessWidget {
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
-                const Center(child: AltMeLogo(size: 90)),
+
+                Center(
+                  child: profileSetting.generalOptions.companyLogo.isNotEmpty
+                      ? CachedImageFromNetwork(
+                          profileSetting.generalOptions.companyLogo,
+                          fit: BoxFit.contain,
+                          height: 90,
+                          width: 90,
+                        )
+                      : const AltMeLogo(size: 90),
+                ),
                 const SizedBox(height: Sizes.spaceSmall),
                 const AppVersionDrawer(),
                 const SizedBox(height: Sizes.spaceLarge),
