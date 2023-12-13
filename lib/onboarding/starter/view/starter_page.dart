@@ -59,6 +59,10 @@ class StarterPage extends StatelessWidget {
                       await profileCubit.setWalletType(
                         walletType: WalletType.personal,
                       );
+                      await profileCubit.setProfileSetting(
+                        profileSetting: ProfileSetting.initial(),
+                        profileType: ProfileType.custom,
+                      );
                       await Navigator.of(context).push(
                         ProtectWalletPage.route(
                           routeType: WalletRouteType.import,
@@ -74,6 +78,10 @@ class StarterPage extends StatelessWidget {
                     onPressed: () async {
                       await profileCubit.setWalletType(
                         walletType: WalletType.personal,
+                      );
+                      await profileCubit.setProfileSetting(
+                        profileSetting: ProfileSetting.initial(),
+                        profileType: ProfileType.custom,
                       );
                       await Navigator.of(context).push(
                         ProtectWalletPage.route(

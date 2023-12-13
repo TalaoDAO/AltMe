@@ -434,12 +434,13 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
-  Future<void> setEnterpriseProfileSetting(
-    ProfileSetting profileSetting,
-  ) async {
+  Future<void> setProfileSetting({
+    required ProfileSetting profileSetting,
+    required ProfileType profileType,
+  }) async {
     final profileModel = state.model.copyWith(
       profileSetting: profileSetting,
-      profileType: ProfileType.enterprise,
+      profileType: profileType,
     );
     await update(profileModel);
   }
