@@ -77,7 +77,33 @@ class ProfileModel extends Equatable {
         clientSecret: oldModel.clientSecret,
         profileType: ProfileType.ebsiV3.toString(),
         draftType: OIDC4VCIDraftType.draft11.toString(),
-        profileSetting: ProfileSetting.initial(),
+        profileSetting: ProfileSetting(
+          blockchainOptions: BlockchainOptions.initial(),
+          generalOptions: GeneralOptions.empty(),
+          helpCenterOptions: HelpCenterOptions.initial(),
+          selfSovereignIdentityOptions: const SelfSovereignIdentityOptions(
+            displayManageDecentralizedId: true,
+            displaySsiAdvancedSettings: false,
+            displayVerifiableDataRegistry: true,
+            oidv4vcProfile: 'ebsi',
+            customOidc4vcProfile: CustomOidc4VcProfile(
+              clientAuthentication: ClientAuthentication.none,
+              credentialManifestSupport: false,
+              cryptoHolderBinding: true,
+              defaultDid: DidKeyType.ebsiv3,
+              oidc4vciDraft: OIDC4VCIDraftType.draft11,
+              oidc4vpDraft: OIDC4VPDraftType.draft10,
+              scope: false,
+              securityLevel: SecurityLevel.low,
+              siopv2Draft: SIOPV2DraftType.draft12,
+              subjectSyntaxeType: SubjectSyntax.did,
+              userPinDigits: UserPinDigits.four,
+            ),
+          ),
+          settingsMenu: SettingsMenu.initial(),
+          version: oldModel.profileSetting.version,
+          walletSecurityOptions: WalletSecurityOptions.initial(),
+        ),
       );
 
   factory ProfileModel.dutch(ProfileModel oldModel) => ProfileModel(
@@ -100,7 +126,33 @@ class ProfileModel extends Equatable {
         clientSecret: oldModel.clientSecret,
         profileType: ProfileType.dutch.toString(),
         draftType: OIDC4VCIDraftType.draft11.toString(),
-        profileSetting: ProfileSetting.initial(),
+        profileSetting: ProfileSetting(
+          blockchainOptions: BlockchainOptions.initial(),
+          generalOptions: GeneralOptions.empty(),
+          helpCenterOptions: HelpCenterOptions.initial(),
+          selfSovereignIdentityOptions: const SelfSovereignIdentityOptions(
+            displayManageDecentralizedId: true,
+            displaySsiAdvancedSettings: false,
+            displayVerifiableDataRegistry: true,
+            oidv4vcProfile: 'diip',
+            customOidc4vcProfile: CustomOidc4VcProfile(
+              clientAuthentication: ClientAuthentication.none,
+              credentialManifestSupport: false,
+              cryptoHolderBinding: true,
+              defaultDid: DidKeyType.jwkP256,
+              oidc4vciDraft: OIDC4VCIDraftType.draft11,
+              oidc4vpDraft: OIDC4VPDraftType.draft10,
+              scope: false,
+              securityLevel: SecurityLevel.low,
+              siopv2Draft: SIOPV2DraftType.draft12,
+              subjectSyntaxeType: SubjectSyntax.did,
+              userPinDigits: UserPinDigits.four,
+            ),
+          ),
+          settingsMenu: SettingsMenu.initial(),
+          version: oldModel.profileSetting.version,
+          walletSecurityOptions: WalletSecurityOptions.initial(),
+        ),
       );
 
   final String polygonIdNetwork;
