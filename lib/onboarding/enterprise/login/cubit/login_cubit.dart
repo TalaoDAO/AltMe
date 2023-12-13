@@ -132,75 +132,7 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
       response,
     );
 
-    //final profileSettingJson = jwtDecode.parseJwt(response);
-
-    final profileSettingJson = {
-      'version': '1.9',
-      'generalOptions': {
-        'walletType': 'altme',
-        'companyName': 'Altme',
-        'companyWebsite': 'https://altme.io',
-        'companyLogo': 'https://talao.co/static/img/icon.png',
-        'tagLine': 'hhhhhhhhh',
-        'profileName': 'Wallet Profile Demo',
-        'profileVersion': '1.0',
-        'published': '2023-12-03',
-        'profileId': 'urn:uuid:lkjhj',
-        'customerPlan': 'free'
-      },
-      'settingsMenu': {
-        'displayProfile': true,
-        'displayDeveloperMode': false,
-        'displayHelpCenter': true
-      },
-      'walletSecurityOptions': {
-        'displaySecurityAdvancedSettings': false,
-        'verifySecurityIssuerWebsiteIdentity': false,
-        'confirmSecurityVerifierAccess': false,
-        'secureSecurityAuthenticationWithPinCode': true
-      },
-      'blockchainOptions': {
-        'tezosSupport': true,
-        'ethereumSupport': true,
-        'hederaSupport': true,
-        'bnbSupport': true,
-        'fantomSupport': true,
-        'polygonSupport': true,
-        'tzproRpcNode': false,
-        'tzproApiKey': null,
-        'infuraRpcNode': false,
-        'infuraApiKey': null
-      },
-      'selfSovereignIdentityOptions': {
-        'displayManageDecentralizedId': true,
-        'displaySsiAdvancedSettings': true,
-        'displayVerifiableDataRegistry': true,
-        'oidv4vcProfile': 'ebsi',
-        'customOidc4vcProfile': {
-          'securityLevel': 'low',
-          'credentialManifestSupport': true,
-          'userPinDigits': '4',
-          'defaultDid': 'did:key:ebsi',
-          'subjectSyntaxeType': 'did',
-          'cryptoHolderBinding': true,
-          'scope': false,
-          'clientAuthentication': 'none',
-          'client_id': null,
-          'client_secret': null,
-          'oidc4vciDraft': '11',
-          'oidc4vpDraft': '18',
-          'siopv2Draft': '12'
-        }
-      },
-      'helpCenterOptions': {
-        'displayChatSupport': true,
-        'customChatSupport': false,
-        'customChatSupportName': null,
-        'displayEmailSupport': true,
-        'customEmailSupport': false,
-        'customEmail': null
-      }
-    };
+    final profileSettingJson = jwtDecode.parseJwt(response);
 
     await secureStorageProvider.set(
       SecureStorageKeys.enterpriseProfileSetting,
