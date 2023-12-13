@@ -9,8 +9,8 @@ class ActiveBiometricsCubit extends Cubit<bool> {
 
   void load() {
     final type = profileCubit.state.model.walletProtectionType;
-    final isEnabled = type == WalletProtectionType.FA2.toString() ||
-        type == WalletProtectionType.biometrics.toString();
+    final isEnabled = type == WalletProtectionType.FA2 ||
+        type == WalletProtectionType.biometrics;
     emit(isEnabled);
   }
 

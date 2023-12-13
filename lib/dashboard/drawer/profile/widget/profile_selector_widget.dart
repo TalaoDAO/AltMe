@@ -50,6 +50,12 @@ class ProfileSelectorWidget extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) {
                       final profileType = ProfileType.values[index];
+
+                      if (context.read<ProfileCubit>().state.model.walletType !=
+                              WalletType.enterprise &&
+                          profileType == ProfileType.enterprise) {
+                        return Container();
+                      }
                       return Column(
                         children: [
                           if (index != 0)
@@ -85,7 +91,7 @@ class ProfileSelectorWidget extends StatelessWidget {
                                   ),
                             ),
                             trailing: Icon(
-                              state.model.profileType == profileType.toString()
+                              state.model.profileType == profileType
                                   ? Icons.radio_button_checked
                                   : Icons.radio_button_unchecked,
                               size: Sizes.icon2x,

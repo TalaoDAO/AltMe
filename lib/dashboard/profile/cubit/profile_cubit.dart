@@ -218,85 +218,70 @@ class ProfileCubit extends Cubit<ProfileState> {
       late ProfileModel profileModel;
 
       /// based on profileType set the profile setting
-      final ProfileType? profileEnumValue = ProfileType.values.firstWhereOrNull(
-        (e) => e.toString() == profileType,
-      );
 
-      if (profileEnumValue != null) {
-        switch (profileEnumValue) {
-          case ProfileType.custom:
-            final customProfileSettingJsonString = await secureStorageProvider
-                .get(SecureStorageKeys.customProfileSettings);
+      switch (profileType) {
+        case ProfileType.custom:
+          final customProfileSettingJsonString = await secureStorageProvider
+              .get(SecureStorageKeys.customProfileSettings);
 
-            if (customProfileSettingJsonString != null) {
-              profileSetting = ProfileSetting.fromJson(
-                jsonDecode(customProfileSettingJsonString)
-                    as Map<String, dynamic>,
-              );
-            } else {
-              profileSetting = ProfileSetting.initial();
-            }
-
-            profileModel = ProfileModel(
-              polygonIdNetwork: polygonIdNetwork,
-              walletType: walletType,
-              walletProtectionType: walletProtectionType,
-              isDeveloperMode: isDeveloperMode,
-              profileType: profileType,
-              profileSetting: profileSetting,
+          if (customProfileSettingJsonString != null) {
+            profileSetting = ProfileSetting.fromJson(
+              jsonDecode(customProfileSettingJsonString)
+                  as Map<String, dynamic>,
             );
+          } else {
+            profileSetting = ProfileSetting.initial();
+          }
 
-          case ProfileType.ebsiV3:
-            profileModel = ProfileModel.ebsiV3(
-              polygonIdNetwork: polygonIdNetwork,
-              walletType: walletType,
-              walletProtectionType: walletProtectionType,
-              isDeveloperMode: isDeveloperMode,
-            );
-          case ProfileType.dutch:
-            profileModel = ProfileModel.dutch(
-              polygonIdNetwork: polygonIdNetwork,
-              walletType: walletType,
-              walletProtectionType: walletProtectionType,
-              isDeveloperMode: isDeveloperMode,
-            );
+          profileModel = ProfileModel(
+            polygonIdNetwork: polygonIdNetwork,
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+            profileType: profileType,
+            profileSetting: profileSetting,
+          );
 
-          case ProfileType.enterprise:
-            final enterpriseProfileSettingJsonString =
-                await secureStorageProvider.get(
-              SecureStorageKeys.enterpriseProfileSetting,
-            );
+        case ProfileType.ebsiV3:
+          profileModel = ProfileModel.ebsiV3(
+            polygonIdNetwork: polygonIdNetwork,
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+          );
 
-            if (enterpriseProfileSettingJsonString != null) {
-              profileSetting = ProfileSetting.fromJson(
-                json.decode(enterpriseProfileSettingJsonString)
-                    as Map<String, dynamic>,
-              );
-            } else {
-              profileSetting = ProfileSetting.initial();
-            }
+        case ProfileType.dutch:
+          profileModel = ProfileModel.dutch(
+            polygonIdNetwork: polygonIdNetwork,
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+          );
 
-            final profileModel = ProfileModel(
-              polygonIdNetwork: polygonIdNetwork,
-              walletType: walletType,
-              walletProtectionType: walletProtectionType,
-              isDeveloperMode: isDeveloperMode,
-              profileType: profileType,
-              profileSetting: profileSetting,
+        case ProfileType.enterprise:
+          final enterpriseProfileSettingJsonString =
+              await secureStorageProvider.get(
+            SecureStorageKeys.enterpriseProfileSetting,
+          );
+
+          if (enterpriseProfileSettingJsonString != null) {
+            profileSetting = ProfileSetting.fromJson(
+              json.decode(enterpriseProfileSettingJsonString)
+                  as Map<String, dynamic>,
             );
-            await update(profileModel);
-        }
-      } else {
-        profileModel = ProfileModel(
-          polygonIdNetwork: polygonIdNetwork,
-          walletType: walletType,
-          walletProtectionType: walletProtectionType,
-          isDeveloperMode: isDeveloperMode,
-          profileType: profileType,
-          profileSetting: ProfileSetting.initial(),
-        );
+          } else {
+            profileSetting = ProfileSetting.initial();
+          }
+
+          profileModel = ProfileModel(
+            polygonIdNetwork: polygonIdNetwork,
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+            profileType: profileType,
+            profileSetting: profileSetting,
+          );
       }
-
       await update(profileModel);
     } catch (e, s) {
       log.e(
@@ -337,11 +322,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       await secureStorageProvider.set(
         SecureStorageKeys.isDeveloperMode,
         profileModel.isDeveloperMode.toString(),
-      );
-
-      await secureStorageProvider.set(
-        SecureStorageKeys.customProfileSettings,
-        jsonEncode(profileModel.profileSetting.toJson()),
       );
 
       await secureStorageProvider.set(
@@ -471,6 +451,12 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> setProfile(ProfileType profileType) async {
+    if (profileType != ProfileType.custom) {
+      await secureStorageProvider.set(
+        SecureStorageKeys.customProfileSettings,
+        jsonEncode(state.model.profileSetting.toJson()),
+      );
+    }
     switch (profileType) {
       case ProfileType.ebsiV3:
         await update(

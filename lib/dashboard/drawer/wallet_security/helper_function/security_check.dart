@@ -14,29 +14,14 @@ Future<void> securityCheck({
   final profile = context.read<ProfileCubit>().state.model;
   final walletProtectionType = profile.walletProtectionType;
 
-  final WalletProtectionType? enumValue =
-      WalletProtectionType.values.firstWhereOrNull(
-    (enumValue) => enumValue.toString() == walletProtectionType,
-  );
-
-  if (enumValue == null) {
-    return AlertMessage.showStateMessage(
-      context: context,
-      stateMessage: StateMessage.error(
-        showDialog: true,
-        stringMessage: l10n.somethingsWentWrongTryAgainLater,
-      ),
-    );
-  }
-
-  switch (enumValue) {
+  switch (walletProtectionType) {
     case WalletProtectionType.pinCode:
     case WalletProtectionType.FA2:
       await Navigator.of(context).push<void>(
         PinCodePage.route(
           isValidCallback: onSuccess.call,
           restrictToBack: false,
-          walletProtectionType: enumValue,
+          walletProtectionType: walletProtectionType,
         ),
       );
     case WalletProtectionType.biometrics:

@@ -36,6 +36,7 @@ class SplashCubit extends Cubit<SplashState> {
 
   Future<void> initialiseApp() async {
     double counter = 0;
+
     Timer.periodic(const Duration(milliseconds: 500), (timer) async {
       counter = counter + 0.5;
       emit(state.copyWith(loadedValue: counter / 5));

@@ -149,8 +149,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                   subtitle: l10n.secureWithDevicePINOnly,
                   image: IconStrings.pincode,
                   isSelected: !isFromOnboarding &&
-                      walletProtectionType ==
-                          WalletProtectionType.pinCode.toString(),
+                      walletProtectionType == WalletProtectionType.pinCode,
                   onTap: () {
                     Navigator.of(context).push<void>(
                       EnterNewPinCodePage.route(
@@ -185,8 +184,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                   subtitle: l10n.secureWithFingerprint,
                   image: IconStrings.right,
                   isSelected: !isFromOnboarding &&
-                      walletProtectionType ==
-                          WalletProtectionType.biometrics.toString(),
+                      walletProtectionType == WalletProtectionType.biometrics,
                   onTap: () {
                     Navigator.of(context).push<void>(
                       ActiviateBiometricsPage.route(
@@ -222,8 +220,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                   subtitle: l10n.secureWithFingerprintAndPINBackup,
                   image: IconStrings.lock,
                   isSelected: !isFromOnboarding &&
-                      walletProtectionType ==
-                          WalletProtectionType.FA2.toString(),
+                      walletProtectionType == WalletProtectionType.FA2,
                   onTap: () {
                     Navigator.of(context).push<void>(
                       EnterNewPinCodePage.route(

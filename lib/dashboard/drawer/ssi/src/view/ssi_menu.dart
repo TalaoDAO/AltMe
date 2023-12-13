@@ -72,7 +72,7 @@ class SSIView extends StatelessWidget {
                   },
                 ),
                 if (context.read<ProfileCubit>().state.model.profileType ==
-                    ProfileType.custom.toString())
+                    ProfileType.custom)
                   DrawerItem(
                     title: l10n.advanceSettings,
                     onTap: () async {
