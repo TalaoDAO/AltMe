@@ -70,9 +70,8 @@ class DraftTypeWidget extends StatelessWidget {
                             ),
                           ListTile(
                             onTap: () {
-                              context
-                                  .read<ProfileCubit>()
-                                  .updateDraftType(draftType);
+                              context.read<ProfileCubit>().updateProfileSetting(
+                                  oidc4vciDraftType: draftType);
                             },
                             shape: const RoundedRectangleBorder(
                               side: BorderSide(
@@ -91,7 +90,13 @@ class DraftTypeWidget extends StatelessWidget {
                                   ),
                             ),
                             trailing: Icon(
-                              state.model.draftType == draftType.toString()
+                              state
+                                          .model
+                                          .profileSetting
+                                          .selfSovereignIdentityOptions
+                                          .customOidc4vcProfile
+                                          .oidc4vciDraft ==
+                                      draftType
                                   ? Icons.radio_button_checked
                                   : Icons.radio_button_unchecked,
                               size: Sizes.icon2x,

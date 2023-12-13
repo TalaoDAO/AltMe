@@ -12,13 +12,8 @@ class ProfileModel extends Equatable {
     required this.polygonIdNetwork,
     required this.walletType,
     required this.walletProtectionType,
-    required this.userConsentForIssuerAccess,
-    required this.userConsentForVerifierAccess,
-    required this.userPINCodeForAuthentication,
-    required this.enableJWKThumbprint,
     required this.isDeveloperMode,
     required this.profileType,
-    required this.draftType,
     required this.profileSetting,
   });
 
@@ -29,13 +24,8 @@ class ProfileModel extends Equatable {
         polygonIdNetwork: PolygonIdNetwork.PolygonMainnet.toString(),
         walletType: WalletType.personal.toString(),
         walletProtectionType: WalletProtectionType.pinCode.toString(),
-        userConsentForIssuerAccess: true,
-        userConsentForVerifierAccess: true,
-        userPINCodeForAuthentication: true,
         isDeveloperMode: false,
-        enableJWKThumbprint: false,
         profileType: ProfileType.custom.toString(),
-        draftType: OIDC4VCIDraftType.draft11.toString(),
         profileSetting: ProfileSetting.initial(),
       );
 
@@ -43,13 +33,8 @@ class ProfileModel extends Equatable {
         polygonIdNetwork: oldModel.polygonIdNetwork,
         walletType: oldModel.walletType,
         walletProtectionType: oldModel.walletProtectionType,
-        userConsentForIssuerAccess: oldModel.userConsentForVerifierAccess,
-        userConsentForVerifierAccess: oldModel.userConsentForVerifierAccess,
-        userPINCodeForAuthentication: oldModel.userPINCodeForAuthentication,
         isDeveloperMode: oldModel.isDeveloperMode,
-        enableJWKThumbprint: false,
         profileType: ProfileType.ebsiV3.toString(),
-        draftType: OIDC4VCIDraftType.draft11.toString(),
         profileSetting: ProfileSetting(
           blockchainOptions: BlockchainOptions.initial(),
           generalOptions: GeneralOptions.empty(),
@@ -83,13 +68,8 @@ class ProfileModel extends Equatable {
         polygonIdNetwork: oldModel.polygonIdNetwork,
         walletType: oldModel.walletType,
         walletProtectionType: oldModel.walletProtectionType,
-        userConsentForIssuerAccess: oldModel.userConsentForVerifierAccess,
-        userConsentForVerifierAccess: oldModel.userConsentForVerifierAccess,
-        userPINCodeForAuthentication: oldModel.userPINCodeForAuthentication,
         isDeveloperMode: oldModel.isDeveloperMode,
-        enableJWKThumbprint: false,
         profileType: ProfileType.dutch.toString(),
-        draftType: OIDC4VCIDraftType.draft11.toString(),
         profileSetting: ProfileSetting(
           blockchainOptions: BlockchainOptions.initial(),
           generalOptions: GeneralOptions.empty(),
@@ -126,24 +106,13 @@ class ProfileModel extends Equatable {
   final ProfileSetting profileSetting;
   final String profileType;
 
-  final bool userConsentForIssuerAccess; //
-  final bool userConsentForVerifierAccess; //
-  final bool userPINCodeForAuthentication; // //
-  final bool enableJWKThumbprint;
-  final String draftType; //
-
   @override
   List<Object> get props => [
         polygonIdNetwork,
         walletType,
         walletProtectionType,
-        userConsentForIssuerAccess,
-        userConsentForVerifierAccess,
-        userPINCodeForAuthentication,
         isDeveloperMode,
-        enableJWKThumbprint,
         profileType,
-        draftType,
         profileSetting,
       ];
 
@@ -154,29 +123,16 @@ class ProfileModel extends Equatable {
     TezosNetwork? tezosNetwork,
     String? walletType,
     String? walletProtectionType,
-    bool? userConsentForIssuerAccess,
-    bool? userConsentForVerifierAccess,
-    bool? userPINCodeForAuthentication,
     bool? isDeveloperMode,
-    bool? enableJWKThumbprint,
     String? profileType,
-    String? draftType,
     ProfileSetting? profileSetting,
   }) {
     return ProfileModel(
       polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
       walletType: walletType ?? this.walletType,
       walletProtectionType: walletProtectionType ?? this.walletProtectionType,
-      enableJWKThumbprint: enableJWKThumbprint ?? this.enableJWKThumbprint,
-      userConsentForIssuerAccess:
-          userConsentForIssuerAccess ?? this.userConsentForIssuerAccess,
-      userConsentForVerifierAccess:
-          userConsentForVerifierAccess ?? this.userConsentForVerifierAccess,
-      userPINCodeForAuthentication:
-          userPINCodeForAuthentication ?? this.userPINCodeForAuthentication,
       isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
       profileType: profileType ?? this.profileType,
-      draftType: draftType ?? this.draftType,
       profileSetting: profileSetting ?? this.profileSetting,
     );
   }

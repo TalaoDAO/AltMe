@@ -50,11 +50,19 @@ class SubjectSyntaxTypeWidget extends StatelessWidget {
                   const SizedBox(height: 10),
                   Switch(
                     onChanged: (value) async {
-                      await context
-                          .read<ProfileCubit>()
-                          .updateJWKThumbprintStatus(enabled: value);
+                      await context.read<ProfileCubit>().updateProfileSetting(
+                            subjectSyntax: value
+                                ? SubjectSyntax.jwkThumbprint
+                                : SubjectSyntax.did,
+                          );
                     },
-                    value: state.model.enableJWKThumbprint,
+                    value: state
+                            .model
+                            .profileSetting
+                            .selfSovereignIdentityOptions
+                            .customOidc4vcProfile
+                            .subjectSyntaxeType ==
+                        SubjectSyntax.jwkThumbprint,
                     activeColor: Theme.of(context).colorScheme.primary,
                   ),
                 ],

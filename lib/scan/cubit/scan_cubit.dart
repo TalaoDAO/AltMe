@@ -795,6 +795,9 @@ class ScanCubit extends Cubit<ScanState> {
     final nonce = uri.queryParameters['nonce'] ?? '';
     final clientId = uri.queryParameters['client_id'] ?? '';
 
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
     final idToken = await oidc4vc.extractIdToken(
       clientId: clientId,
       credentialsToBePresented: credentialList,
@@ -802,7 +805,8 @@ class ScanCubit extends Cubit<ScanState> {
       kid: kid,
       privateKey: privateKey,
       nonce: nonce,
-      useJWKThumbPrint: profileCubit.state.model.enableJWKThumbprint,
+      useJWKThumbPrint: customOidc4vcProfile.subjectSyntaxeType ==
+          SubjectSyntax.jwkThumbprint,
     );
 
     return idToken;

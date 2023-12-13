@@ -25,7 +25,7 @@ Future<void> getAndAddCredential({
   required String? codeVerifier,
   required bool cryptoHolderBinding,
   required String? authorization,
-  required OIDC4VCIDraftType draftType,
+  required OIDC4VCIDraftType oidc4vciDraftType,
   required DidKeyType didKeyType,
 }) async {
   final privateKey = await fetchPrivateKey(
@@ -69,7 +69,7 @@ Future<void> getAndAddCredential({
       codeVerifier: codeVerifier,
       cryptoHolderBinding: cryptoHolderBinding,
       authorization: authorization,
-      draftType: draftType,
+      oidc4vciDraftType: oidc4vciDraftType,
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {

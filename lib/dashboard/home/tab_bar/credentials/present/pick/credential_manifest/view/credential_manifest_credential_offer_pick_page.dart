@@ -284,8 +284,13 @@ class CredentialManifestOfferPickView extends StatelessWidget {
         ),
       );
     } else {
-      final bool userPINCodeForAuthentication =
-          context.read<ProfileCubit>().state.model.userPINCodeForAuthentication;
+      final bool userPINCodeForAuthentication = context
+          .read<ProfileCubit>()
+          .state
+          .model
+          .profileSetting
+          .walletSecurityOptions
+          .secureSecurityAuthenticationWithPinCode;
 
       if (userPINCodeForAuthentication) {
         /// Authenticate

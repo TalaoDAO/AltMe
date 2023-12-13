@@ -275,7 +275,7 @@ class OIDC4VC {
     required int indexValue,
     required String privateKey,
     required bool cryptoHolderBinding,
-    required OIDC4VCIDraftType draftType,
+    required OIDC4VCIDraftType oidc4vciDraftType,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -363,7 +363,7 @@ class OIDC4VC {
           format: format,
           credentialIdentifier: credentialIdentifier,
           cryptoHolderBinding: cryptoHolderBinding,
-          draftType: draftType,
+          oidc4vciDraftType: oidc4vciDraftType,
         );
 
         credentialResponseData.add(credentialResponseDataValue);
@@ -377,7 +377,7 @@ class OIDC4VC {
         types: types,
         format: format,
         cryptoHolderBinding: cryptoHolderBinding,
-        draftType: draftType,
+        oidc4vciDraftType: oidc4vciDraftType,
       );
 
       credentialResponseData.add(credentialResponseDataValue);
@@ -398,7 +398,7 @@ class OIDC4VC {
     required List<String> types,
     required String format,
     required bool cryptoHolderBinding,
-    required OIDC4VCIDraftType draftType,
+    required OIDC4VCIDraftType oidc4vciDraftType,
     String? credentialIdentifier,
   }) async {
     final credentialData = await buildCredentialData(
@@ -410,7 +410,7 @@ class OIDC4VC {
       format: format,
       credentialIdentifier: credentialIdentifier,
       cryptoHolderBinding: cryptoHolderBinding,
-      draftType: draftType,
+      oidc4vciDraftType: oidc4vciDraftType,
     );
 
     /// sign proof
@@ -583,7 +583,7 @@ class OIDC4VC {
     required List<String> types,
     required String format,
     required bool cryptoHolderBinding,
-    required OIDC4VCIDraftType draftType,
+    required OIDC4VCIDraftType oidc4vciDraftType,
     String? credentialIdentifier,
   }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
@@ -597,7 +597,7 @@ class OIDC4VC {
       };
     }
 
-    switch (draftType) {
+    switch (oidc4vciDraftType) {
       case OIDC4VCIDraftType.draft8:
         credentialData['type'] = credentialType;
         credentialData['format'] = format;

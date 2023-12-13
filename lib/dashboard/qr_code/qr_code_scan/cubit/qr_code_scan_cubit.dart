@@ -230,6 +230,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           scannedResponse: state.uri.toString(),
           isEBSIV3: oidcType == OIDC4VCType.EBSIV3,
           qrCodeScanCubit: qrCodeScanCubit,
+          oidc4vciDraftType: profileCubit.state.model.profileSetting
+              .selfSovereignIdentityOptions.customOidc4vcProfile.oidc4vciDraft,
         );
         return;
       }
@@ -382,6 +384,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String scannedResponse,
     required bool isEBSIV3,
     required QRCodeScanCubit qrCodeScanCubit,
+    required OIDC4VCIDraftType oidc4vciDraftType,
   }) async {
     emit(
       state.copyWith(
@@ -393,15 +396,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     final keys = <String>[];
     uriFromScannedResponse.queryParameters
         .forEach((key, value) => keys.add(key));
-
-    final OIDC4VCIDraftType? draftTypeEnum =
-        OIDC4VCIDraftType.values.firstWhereOrNull(
-      (enumValue) => enumValue.toString() == profileCubit.state.model.draftType,
-    );
-
-    if (draftTypeEnum == null) {
-      throw Exception();
-    }
 
     dynamic credentialOfferJson;
 
@@ -450,7 +444,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                         .selfSovereignIdentityOptions
                         .customOidc4vcProfile
                         .cryptoHolderBinding,
-                    draftType: draftTypeEnum,
+                    oidc4vciDraftType: oidc4vciDraftType,
                     profileCubit: profileCubit,
                   );
                 },
@@ -480,7 +474,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           .selfSovereignIdentityOptions
           .customOidc4vcProfile
           .cryptoHolderBinding,
-      draftType: draftTypeEnum,
+      oidc4vciDraftType: oidc4vciDraftType,
       profileCubit: profileCubit,
     );
   }
@@ -952,10 +946,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       encodedData = request;
     }
 
-    final isSecurityEnabled = profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.securityLevel ==
-        SecurityLevel.high;
-    final enableJWKThumbprint = profileCubit.state.model.enableJWKThumbprint;
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+    final isSecurityEnabled =
+        customOidc4vcProfile.securityLevel == SecurityLevel.high;
+    final enableJWKThumbprint =
+        customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
 
     if (isSecurityEnabled && enableJWKThumbprint) {
       final Map<String, dynamic> payload =
@@ -1026,7 +1023,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         didKeyType: didKeyType,
       );
 
-      final enableJWKThumbprint = profileCubit.state.model.enableJWKThumbprint;
+      final customOidc4vcProfile = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+      final enableJWKThumbprint = customOidc4vcProfile.subjectSyntaxeType ==
+          SubjectSyntax.jwkThumbprint;
 
       final Response<dynamic> response = await oidc4vc.siopv2Flow(
         clientId: clientId,
@@ -1173,17 +1174,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       for (int i = 0; i < selectedCredentials.length; i++) {
         emit(state.loading());
 
-        final OIDC4VCIDraftType? draftTypeEnum =
-            OIDC4VCIDraftType.values.firstWhereOrNull(
-          (enumValue) =>
-              enumValue.toString() == profileCubit.state.model.draftType,
-        );
-
-        if (draftTypeEnum == null) {
-          throw Exception();
-        }
-        final didKeyType = profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+        final customOidc4vcProfile = profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile;
 
         await getAndAddCredential(
           scannedResponse: state.uri.toString(),
@@ -1200,16 +1192,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           preAuthorizedCode: preAuthorizedCode,
           codeForAuthorisedFlow: codeForAuthorisedFlow,
           codeVerifier: codeVerifier,
-          cryptoHolderBinding: profileCubit
-              .state
-              .model
-              .profileSetting
-              .selfSovereignIdentityOptions
-              .customOidc4vcProfile
-              .cryptoHolderBinding,
+          cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
           authorization: authorization,
-          draftType: draftTypeEnum,
-          didKeyType: didKeyType,
+          oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+          didKeyType: customOidc4vcProfile.defaultDid,
         );
       }
 

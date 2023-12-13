@@ -82,45 +82,16 @@ class ProfileCubit extends Cubit<ProfileState> {
               jsonDecode(profileSettingJsonString) as Map<String, dynamic>,
             );
 
-      final userConsentForIssuerAccess = (await secureStorageProvider
-              .get(SecureStorageKeys.userConsentForIssuerAccess)) ==
-          'true';
-
-      final userConsentForVerifierAccess = (await secureStorageProvider
-              .get(SecureStorageKeys.userConsentForVerifierAccess)) ==
-          'true';
-
-      final enableJWKThumbprintValue = await secureStorageProvider
-          .get(SecureStorageKeys.enableJWKThumbprint);
-
-      final enableJWKThumbprint = enableJWKThumbprintValue != null &&
-          enableJWKThumbprintValue == 'true';
-
-      final userPINCodeForAuthenticationValue = await secureStorageProvider
-          .get(SecureStorageKeys.userPINCodeForAuthentication);
-      final userPINCodeForAuthentication =
-          userPINCodeForAuthenticationValue == null ||
-              userPINCodeForAuthenticationValue == 'true';
-
       final profileType =
           (await secureStorageProvider.get(SecureStorageKeys.profileType)) ??
               ProfileType.custom.toString();
-
-      final draftType =
-          (await secureStorageProvider.get(SecureStorageKeys.draftType)) ??
-              OIDC4VCIDraftType.draft11.toString();
 
       final profileModel = ProfileModel(
         polygonIdNetwork: polygonIdNetwork,
         walletType: walletType,
         walletProtectionType: walletProtectionType,
-        userConsentForIssuerAccess: userConsentForIssuerAccess,
-        userConsentForVerifierAccess: userConsentForVerifierAccess,
-        userPINCodeForAuthentication: userPINCodeForAuthentication,
         isDeveloperMode: isDeveloperMode,
-        enableJWKThumbprint: enableJWKThumbprint,
         profileType: profileType,
-        draftType: draftType,
         profileSetting: profileSetting,
       );
       await update(profileModel);
@@ -171,33 +142,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.userConsentForIssuerAccess,
-        profileModel.userConsentForIssuerAccess.toString(),
-      );
-
-      await secureStorageProvider.set(
-        SecureStorageKeys.userConsentForVerifierAccess,
-        profileModel.userConsentForVerifierAccess.toString(),
-      );
-
-      await secureStorageProvider.set(
-        SecureStorageKeys.userPINCodeForAuthentication,
-        profileModel.userPINCodeForAuthentication.toString(),
-      );
-
-      await secureStorageProvider.set(
-        SecureStorageKeys.enableJWKThumbprint,
-        profileModel.enableJWKThumbprint.toString(),
-      );
-
-      await secureStorageProvider.set(
         SecureStorageKeys.profileType,
         profileModel.profileType,
-      );
-
-      await secureStorageProvider.set(
-        SecureStorageKeys.draftType,
-        profileModel.draftType,
       );
 
       emit(
@@ -262,9 +208,22 @@ class ProfileCubit extends Cubit<ProfileState> {
     ClientAuthentication? clientAuthentication,
     String? clientId,
     String? clientSecret,
+    bool? confirmSecurityVerifierAccess,
+    bool? secureSecurityAuthenticationWithPinCode,
+    bool? verifySecurityIssuerWebsiteIdentity,
+    OIDC4VCIDraftType? oidc4vciDraftType,
+    SubjectSyntax? subjectSyntax,
   }) async {
     final profileModel = state.model.copyWith(
       profileSetting: state.model.profileSetting.copyWith(
+        walletSecurityOptions:
+            state.model.profileSetting.walletSecurityOptions.copyWith(
+          confirmSecurityVerifierAccess: confirmSecurityVerifierAccess,
+          verifySecurityIssuerWebsiteIdentity:
+              verifySecurityIssuerWebsiteIdentity,
+          secureSecurityAuthenticationWithPinCode:
+              secureSecurityAuthenticationWithPinCode,
+        ),
         selfSovereignIdentityOptions:
             state.model.profileSetting.selfSovereignIdentityOptions.copyWith(
           customOidc4vcProfile: state.model.profileSetting
@@ -278,6 +237,8 @@ class ProfileCubit extends Cubit<ProfileState> {
             clientAuthentication: clientAuthentication,
             clientId: clientId,
             clientSecret: clientSecret,
+            oidc4vciDraft: oidc4vciDraftType,
+            subjectSyntaxeType: subjectSyntax,
           ),
         ),
       ),
@@ -293,34 +254,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> setProfileSetting(ProfileSetting profileSetting) async {
     final profileModel = state.model.copyWith(profileSetting: profileSetting);
-    await update(profileModel);
-  }
-
-  Future<void> setUserConsentForIssuerAccess({bool enabled = false}) async {
-    final profileModel =
-        state.model.copyWith(userConsentForIssuerAccess: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> setUserConsentForVerifierAccess({bool enabled = false}) async {
-    final profileModel =
-        state.model.copyWith(userConsentForVerifierAccess: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> setUserPINCodeForAuthentication({bool enabled = false}) async {
-    final profileModel =
-        state.model.copyWith(userPINCodeForAuthentication: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> updateJWKThumbprintStatus({bool enabled = false}) async {
-    final profileModel = state.model.copyWith(enableJWKThumbprint: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> updateDraftType(OIDC4VCIDraftType draftType) async {
-    final profileModel = state.model.copyWith(draftType: draftType.toString());
     await update(profileModel);
   }
 
@@ -358,7 +291,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           profileType: profile.toString(),
           // enableSecurity: customProfileBackup.enableSecurity,
           // enable4DigitPINCode: customProfileBackup.enable4DigitPINCode,
-          enableJWKThumbprint: customProfileBackup.enableJWKThumbprint,
+          // enableJWKThumbprint: customProfileBackup.enableJWKThumbprint,
           // enableCryptographicHolderBinding:
           //     customProfileBackup.enableCryptographicHolderBinding,
           // enableCredentialManifestSupport:

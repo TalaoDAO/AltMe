@@ -211,13 +211,16 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           var acceptHost = true;
           final approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
 
-          final bool userConsentForIssuerAccess =
-              profileCubit.state.model.userConsentForIssuerAccess;
-          final bool userConsentForVerifierAccess =
-              profileCubit.state.model.userConsentForVerifierAccess;
+          final walletSecurityOptions =
+              profileCubit.state.model.profileSetting.walletSecurityOptions;
 
-          bool showPrompt =
-              userConsentForIssuerAccess || userConsentForVerifierAccess;
+          final bool verifySecurityIssuerWebsiteIdentity =
+              walletSecurityOptions.verifySecurityIssuerWebsiteIdentity;
+          final bool confirmSecurityVerifierAccess =
+              walletSecurityOptions.confirmSecurityVerifierAccess;
+
+          bool showPrompt = verifySecurityIssuerWebsiteIdentity ||
+              confirmSecurityVerifierAccess;
 
           final bool isOpenIDUrl = isOIDC4VCIUrl(state.uri!);
           final bool isFromDeeplink = state.uri
@@ -346,14 +349,14 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
               if (oidc4vcTypeForIssuance != null) {
                 /// issuance case
-                if (!userConsentForIssuerAccess) showPrompt = false;
+                if (!verifySecurityIssuerWebsiteIdentity) showPrompt = false;
               } else {
                 /// verification case
-                if (!userConsentForVerifierAccess) showPrompt = false;
+                if (!confirmSecurityVerifierAccess) showPrompt = false;
               }
             } else {
               /// normal Case
-              if (!userConsentForIssuerAccess) showPrompt = false;
+              if (!verifySecurityIssuerWebsiteIdentity) showPrompt = false;
             }
 
             if (showPrompt) {
@@ -509,13 +512,16 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
       if (state.status == QrScanStatus.siopV2) {
         LoadingView().hide();
-        final bool userPINCodeForAuthentication = context
+
+        final bool secureSecurityAuthenticationWithPinCode = context
             .read<ProfileCubit>()
             .state
             .model
-            .userPINCodeForAuthentication;
+            .profileSetting
+            .walletSecurityOptions
+            .secureSecurityAuthenticationWithPinCode;
 
-        if (userPINCodeForAuthentication) {
+        if (secureSecurityAuthenticationWithPinCode) {
           /// Authenticate
           bool authenticated = false;
           await securityCheck(
@@ -756,12 +762,16 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       var accept = true;
       final profileCubit = context.read<ProfileCubit>();
 
-      final bool userConsentForIssuerAccess =
-          profileCubit.state.model.userConsentForIssuerAccess;
+      final bool verifySecurityIssuerWebsiteIdentity = profileCubit
+          .state
+          .model
+          .profileSetting
+          .walletSecurityOptions
+          .verifySecurityIssuerWebsiteIdentity;
 
       final l10n = context.l10n;
 
-      if (userConsentForIssuerAccess) {
+      if (verifySecurityIssuerWebsiteIdentity) {
         /// checking if it is issuer side
 
         LoadingView().hide();
