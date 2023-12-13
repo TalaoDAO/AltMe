@@ -33,13 +33,7 @@ class SecureStorageKeys {
   static const String profileType = 'profileType';
   static const String isDeveloperMode = 'isDeveloperMode';
   static const String enableJWKThumbprint = 'enableJWKThumbprint';
-  static const String enableCryptographicHolderBinding =
-      'enableCryptographicHolderBinding';
-  static const String enableCredentialManifestSupport =
-      'enableCredentialManifestSupport';
-  static const String useBasicClientAuthentication = 'isPreRegisteredWallet';
-  static const String clientId = 'clientId';
-  static const String clientSecret = 'clientSecret';
+
   static const String customProfileBackup = 'customProfileBackup';
 
   static const String pinCode = 'pinCode';

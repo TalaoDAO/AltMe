@@ -132,7 +132,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         .read<ProfileCubit>()
         .state
         .model
-        .enableCredentialManifestSupport;
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .credentialManifestSupport;
 
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {

@@ -96,35 +96,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       final enableJWKThumbprint = enableJWKThumbprintValue != null &&
           enableJWKThumbprintValue == 'true';
 
-      final enableCryptographicHolderBindingValue = await secureStorageProvider
-          .get(SecureStorageKeys.enableCryptographicHolderBinding);
-
-      final enableCryptographicHolderBinding =
-          enableCryptographicHolderBindingValue == null ||
-              enableCryptographicHolderBindingValue == 'true';
-
-      final enableCredentialManifestSupportValue = await secureStorageProvider
-          .get(SecureStorageKeys.enableCredentialManifestSupport);
-
-      final enableCredentialManifestSupport =
-          enableCredentialManifestSupportValue == null ||
-              enableCredentialManifestSupportValue == 'true';
-
-      final useBasicClientAuthenticationValue = await secureStorageProvider
-          .get(SecureStorageKeys.useBasicClientAuthentication);
-
-      final useBasicClientAuthentication =
-          useBasicClientAuthenticationValue != null &&
-              useBasicClientAuthenticationValue == 'true';
-
-      final clientId =
-          await secureStorageProvider.get(SecureStorageKeys.clientId) ??
-              Parameters.clientId;
-
-      final clientSecret =
-          await secureStorageProvider.get(SecureStorageKeys.clientSecret) ??
-              Parameters.clientSecret;
-
       final userPINCodeForAuthenticationValue = await secureStorageProvider
           .get(SecureStorageKeys.userPINCodeForAuthentication);
       final userPINCodeForAuthentication =
@@ -148,11 +119,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         userPINCodeForAuthentication: userPINCodeForAuthentication,
         isDeveloperMode: isDeveloperMode,
         enableJWKThumbprint: enableJWKThumbprint,
-        enableCryptographicHolderBinding: enableCryptographicHolderBinding,
-        enableCredentialManifestSupport: enableCredentialManifestSupport,
-        useBasicClientAuthentication: useBasicClientAuthentication,
-        clientId: clientId,
-        clientSecret: clientSecret,
         profileType: profileType,
         draftType: draftType,
         profileSetting: profileSetting,
@@ -225,21 +191,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.enableCryptographicHolderBinding,
-        profileModel.enableCryptographicHolderBinding.toString(),
-      );
-
-      await secureStorageProvider.set(
-        SecureStorageKeys.enableCredentialManifestSupport,
-        profileModel.enableCredentialManifestSupport.toString(),
-      );
-
-      await secureStorageProvider.set(
-        SecureStorageKeys.useBasicClientAuthentication,
-        profileModel.useBasicClientAuthentication.toString(),
-      );
-
-      await secureStorageProvider.set(
         SecureStorageKeys.profileType,
         profileModel.profileType,
       );
@@ -306,6 +257,11 @@ class ProfileCubit extends Cubit<ProfileState> {
     SecurityLevel? securityLevel,
     UserPinDigits? userPinDigits,
     bool? scope,
+    bool? cryptoHolderBinding,
+    bool? credentialManifestSupport,
+    ClientAuthentication? clientAuthentication,
+    String? clientId,
+    String? clientSecret,
   }) async {
     final profileModel = state.model.copyWith(
       profileSetting: state.model.profileSetting.copyWith(
@@ -317,6 +273,11 @@ class ProfileCubit extends Cubit<ProfileState> {
             defaultDid: didKeyType,
             securityLevel: securityLevel,
             scope: scope,
+            cryptoHolderBinding: cryptoHolderBinding,
+            credentialManifestSupport: credentialManifestSupport,
+            clientAuthentication: clientAuthentication,
+            clientId: clientId,
+            clientSecret: clientSecret,
           ),
         ),
       ),
@@ -355,40 +316,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> updateJWKThumbprintStatus({bool enabled = false}) async {
     final profileModel = state.model.copyWith(enableJWKThumbprint: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> updateCryptographicHolderBindingStatus({
-    bool enabled = false,
-  }) async {
-    final profileModel =
-        state.model.copyWith(enableCryptographicHolderBinding: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> updateCredentialManifestSupportStatus({
-    bool enabled = false,
-  }) async {
-    final profileModel =
-        state.model.copyWith(enableCredentialManifestSupport: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> updateBasicClientAuthenticationStatus({
-    bool enabled = false,
-  }) async {
-    final profileModel =
-        state.model.copyWith(useBasicClientAuthentication: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> updateClientId(String value) async {
-    final profileModel = state.model.copyWith(clientId: value);
-    await update(profileModel);
-  }
-
-  Future<void> updateClientSecret(String value) async {
-    final profileModel = state.model.copyWith(clientSecret: value);
     await update(profileModel);
   }
 
@@ -432,16 +359,16 @@ class ProfileCubit extends Cubit<ProfileState> {
           // enableSecurity: customProfileBackup.enableSecurity,
           // enable4DigitPINCode: customProfileBackup.enable4DigitPINCode,
           enableJWKThumbprint: customProfileBackup.enableJWKThumbprint,
-          enableCryptographicHolderBinding:
-              customProfileBackup.enableCryptographicHolderBinding,
-          enableCredentialManifestSupport:
-              customProfileBackup.enableCredentialManifestSupport,
-          // didKeyType: customProfileBackup.didKeyType,
-          // enableScopeParameter: customProfileBackup.enableScopeParameter,
-          useBasicClientAuthentication:
-              customProfileBackup.useBasicClientAuthentication,
-          clientId: customProfileBackup.clientId,
-          clientSecret: customProfileBackup.clientSecret,
+          // enableCryptographicHolderBinding:
+          //     customProfileBackup.enableCryptographicHolderBinding,
+          // enableCredentialManifestSupport:
+          //     customProfileBackup.enableCredentialManifestSupport,
+          // // didKeyType: customProfileBackup.didKeyType,
+          // // enableScopeParameter: customProfileBackup.enableScopeParameter,
+          // useBasicClientAuthentication:
+          //     customProfileBackup.useBasicClientAuthentication,
+          // clientId: customProfileBackup.clientId,
+          // clientSecret: customProfileBackup.clientSecret,
         );
         await update(profileModel);
     }

@@ -391,6 +391,8 @@ class CustomOidc4VcProfile extends Equatable {
         siopv2Draft: SIOPV2DraftType.draft12,
         subjectSyntaxeType: SubjectSyntax.did,
         userPinDigits: UserPinDigits.six,
+        clientId: Parameters.clientId,
+        clientSecret: Parameters.clientSecret,
       );
 
   final ClientAuthentication clientAuthentication;

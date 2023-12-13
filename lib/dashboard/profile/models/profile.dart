@@ -16,12 +16,7 @@ class ProfileModel extends Equatable {
     required this.userConsentForVerifierAccess,
     required this.userPINCodeForAuthentication,
     required this.enableJWKThumbprint,
-    required this.enableCryptographicHolderBinding,
-    required this.enableCredentialManifestSupport,
-    required this.useBasicClientAuthentication,
     required this.isDeveloperMode,
-    required this.clientId,
-    required this.clientSecret,
     required this.profileType,
     required this.draftType,
     required this.profileSetting,
@@ -39,11 +34,6 @@ class ProfileModel extends Equatable {
         userPINCodeForAuthentication: true,
         isDeveloperMode: false,
         enableJWKThumbprint: false,
-        enableCryptographicHolderBinding: true,
-        enableCredentialManifestSupport: true,
-        useBasicClientAuthentication: false,
-        clientId: Parameters.clientId,
-        clientSecret: Parameters.clientSecret,
         profileType: ProfileType.custom.toString(),
         draftType: OIDC4VCIDraftType.draft11.toString(),
         profileSetting: ProfileSetting.initial(),
@@ -58,11 +48,6 @@ class ProfileModel extends Equatable {
         userPINCodeForAuthentication: oldModel.userPINCodeForAuthentication,
         isDeveloperMode: oldModel.isDeveloperMode,
         enableJWKThumbprint: false,
-        enableCryptographicHolderBinding: true,
-        enableCredentialManifestSupport: false,
-        useBasicClientAuthentication: false,
-        clientId: oldModel.clientId,
-        clientSecret: oldModel.clientSecret,
         profileType: ProfileType.ebsiV3.toString(),
         draftType: OIDC4VCIDraftType.draft11.toString(),
         profileSetting: ProfileSetting(
@@ -103,11 +88,6 @@ class ProfileModel extends Equatable {
         userPINCodeForAuthentication: oldModel.userPINCodeForAuthentication,
         isDeveloperMode: oldModel.isDeveloperMode,
         enableJWKThumbprint: false,
-        enableCryptographicHolderBinding: true,
-        enableCredentialManifestSupport: false,
-        useBasicClientAuthentication: false,
-        clientId: oldModel.clientId,
-        clientSecret: oldModel.clientSecret,
         profileType: ProfileType.dutch.toString(),
         draftType: OIDC4VCIDraftType.draft11.toString(),
         profileSetting: ProfileSetting(
@@ -144,17 +124,12 @@ class ProfileModel extends Equatable {
   final String walletProtectionType;
   final bool isDeveloperMode;
   final ProfileSetting profileSetting;
+  final String profileType;
 
   final bool userConsentForIssuerAccess; //
   final bool userConsentForVerifierAccess; //
   final bool userPINCodeForAuthentication; // //
   final bool enableJWKThumbprint;
-  final bool enableCryptographicHolderBinding; //
-  final bool enableCredentialManifestSupport; //
-  final bool useBasicClientAuthentication; //
-  final String clientId; //
-  final String clientSecret; //
-  final String profileType;
   final String draftType; //
 
   @override
@@ -167,11 +142,6 @@ class ProfileModel extends Equatable {
         userPINCodeForAuthentication,
         isDeveloperMode,
         enableJWKThumbprint,
-        enableCryptographicHolderBinding,
-        enableCredentialManifestSupport,
-        useBasicClientAuthentication,
-        clientId,
-        clientSecret,
         profileType,
         draftType,
         profileSetting,
@@ -189,11 +159,6 @@ class ProfileModel extends Equatable {
     bool? userPINCodeForAuthentication,
     bool? isDeveloperMode,
     bool? enableJWKThumbprint,
-    bool? enableCryptographicHolderBinding,
-    bool? enableCredentialManifestSupport,
-    bool? useBasicClientAuthentication,
-    String? clientId,
-    String? clientSecret,
     String? profileType,
     String? draftType,
     ProfileSetting? profileSetting,
@@ -203,14 +168,6 @@ class ProfileModel extends Equatable {
       walletType: walletType ?? this.walletType,
       walletProtectionType: walletProtectionType ?? this.walletProtectionType,
       enableJWKThumbprint: enableJWKThumbprint ?? this.enableJWKThumbprint,
-      enableCryptographicHolderBinding: enableCryptographicHolderBinding ??
-          this.enableCryptographicHolderBinding,
-      enableCredentialManifestSupport: enableCredentialManifestSupport ??
-          this.enableCredentialManifestSupport,
-      useBasicClientAuthentication:
-          useBasicClientAuthentication ?? this.useBasicClientAuthentication,
-      clientId: clientId ?? this.clientId,
-      clientSecret: clientSecret ?? this.clientSecret,
       userConsentForIssuerAccess:
           userConsentForIssuerAccess ?? this.userConsentForIssuerAccess,
       userConsentForVerifierAccess:

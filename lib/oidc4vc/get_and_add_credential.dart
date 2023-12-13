@@ -23,7 +23,7 @@ Future<void> getAndAddCredential({
   required String issuer,
   required String? codeForAuthorisedFlow,
   required String? codeVerifier,
-  required bool sendProof,
+  required bool cryptoHolderBinding,
   required String? authorization,
   required OIDC4VCIDraftType draftType,
   required DidKeyType didKeyType,
@@ -67,7 +67,7 @@ Future<void> getAndAddCredential({
       userPin: userPin,
       code: codeForAuthorisedFlow,
       codeVerifier: codeVerifier,
-      sendProof: sendProof,
+      cryptoHolderBinding: cryptoHolderBinding,
       authorization: authorization,
       draftType: draftType,
     );

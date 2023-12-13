@@ -274,7 +274,7 @@ class OIDC4VC {
     required String kid,
     required int indexValue,
     required String privateKey,
-    required bool sendProof,
+    required bool cryptoHolderBinding,
     required OIDC4VCIDraftType draftType,
     String? preAuthorizedCode,
     String? userPin,
@@ -362,7 +362,7 @@ class OIDC4VC {
           types: types,
           format: format,
           credentialIdentifier: credentialIdentifier,
-          sendProof: sendProof,
+          cryptoHolderBinding: cryptoHolderBinding,
           draftType: draftType,
         );
 
@@ -376,7 +376,7 @@ class OIDC4VC {
         credentialType: credentialType,
         types: types,
         format: format,
-        sendProof: sendProof,
+        cryptoHolderBinding: cryptoHolderBinding,
         draftType: draftType,
       );
 
@@ -397,7 +397,7 @@ class OIDC4VC {
     required String credentialType,
     required List<String> types,
     required String format,
-    required bool sendProof,
+    required bool cryptoHolderBinding,
     required OIDC4VCIDraftType draftType,
     String? credentialIdentifier,
   }) async {
@@ -409,7 +409,7 @@ class OIDC4VC {
       types: types,
       format: format,
       credentialIdentifier: credentialIdentifier,
-      sendProof: sendProof,
+      cryptoHolderBinding: cryptoHolderBinding,
       draftType: draftType,
     );
 
@@ -582,7 +582,7 @@ class OIDC4VC {
     required String credentialType,
     required List<String> types,
     required String format,
-    required bool sendProof,
+    required bool cryptoHolderBinding,
     required OIDC4VCIDraftType draftType,
     String? credentialIdentifier,
   }) async {
@@ -590,7 +590,7 @@ class OIDC4VC {
 
     final credentialData = <String, dynamic>{};
 
-    if (sendProof) {
+    if (cryptoHolderBinding) {
       credentialData['proof'] = {
         'proof_type': 'jwt',
         'jwt': vcJwt,

@@ -22,7 +22,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required DioClient dioClient,
   required String? userPin,
   required dynamic credentialOfferJson,
-  required bool sendProof,
+  required bool cryptoHolderBinding,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -117,7 +117,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       codeForAuthorisedFlow: null,
       codeVerifier: null,
       authorization: null,
-      sendProof: sendProof,
+      cryptoHolderBinding: cryptoHolderBinding,
       draftType: draftType,
       didKeyType: didKeyType,
     );

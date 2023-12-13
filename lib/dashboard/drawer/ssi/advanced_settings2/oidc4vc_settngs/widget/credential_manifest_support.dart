@@ -50,13 +50,16 @@ class CredentialManifestSupportWidget extends StatelessWidget {
                   const SizedBox(height: 10),
                   Switch(
                     onChanged: (value) async {
-                      await context
-                          .read<ProfileCubit>()
-                          .updateCredentialManifestSupportStatus(
-                            enabled: value,
+                      await context.read<ProfileCubit>().updateProfileSetting(
+                            credentialManifestSupport: value,
                           );
                     },
-                    value: state.model.enableCredentialManifestSupport,
+                    value: state
+                        .model
+                        .profileSetting
+                        .selfSovereignIdentityOptions
+                        .customOidc4vcProfile
+                        .credentialManifestSupport,
                     activeColor: Theme.of(context).colorScheme.primary,
                   ),
                 ],
