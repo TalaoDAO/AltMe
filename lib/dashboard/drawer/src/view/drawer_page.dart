@@ -45,24 +45,26 @@ class DrawerView extends StatelessWidget {
                   child: profileSetting.generalOptions.companyLogo.isNotEmpty
                       ? CachedImageFromNetwork(
                           profileSetting.generalOptions.companyLogo,
-                          fit: BoxFit.contain,
+                          fit: BoxFit.cover,
                           height: 90,
-                          width: 90,
+                          bgColor:
+                              Theme.of(context).colorScheme.drawerBackground,
                         )
                       : const AltMeLogo(size: 90),
                 ),
                 const SizedBox(height: Sizes.spaceSmall),
                 const AppVersionDrawer(),
                 const SizedBox(height: Sizes.spaceLarge),
-                // const DidKey(),
-                DrawerCategoryItem(
-                  title: l10n.walletProfiles,
-                  subTitle: l10n.walletProfilesDescription,
-                  onClick: () {
-                    Navigator.of(context).push<void>(PickProfileMenu.route());
-                  },
-                ),
-                const SizedBox(height: Sizes.spaceSmall),
+                if (profileSetting.settingsMenu.displayProfile) ...[
+                  DrawerCategoryItem(
+                    title: l10n.walletProfiles,
+                    subTitle: l10n.walletProfilesDescription,
+                    onClick: () {
+                      Navigator.of(context).push<void>(PickProfileMenu.route());
+                    },
+                  ),
+                  const SizedBox(height: Sizes.spaceSmall),
+                ],
                 DrawerCategoryItem(
                   title: l10n.walletSecurity,
                   subTitle: l10n.walletSecurityDescription,
@@ -96,27 +98,31 @@ class DrawerView extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: Sizes.spaceSmall),
-                DrawerCategoryItem(
-                  title: l10n.developerMode,
-                  subTitle: l10n.developerModeSubtitle,
-                  trailing: SizedBox(
-                    height: 25,
-                    child: BlocBuilder<ProfileCubit, ProfileState>(
-                      builder: (context, state) {
-                        return Switch(
-                          onChanged: (value) async {
-                            await context
-                                .read<ProfileCubit>()
-                                .setDeveloperModeStatus(enabled: value);
-                          },
-                          value: state.model.isDeveloperMode,
-                          activeColor: Theme.of(context).colorScheme.primary,
-                        );
-                      },
+
+                if (profileSetting.settingsMenu.displayDeveloperMode) ...[
+                  DrawerCategoryItem(
+                    title: l10n.developerMode,
+                    subTitle: l10n.developerModeSubtitle,
+                    trailing: SizedBox(
+                      height: 25,
+                      child: BlocBuilder<ProfileCubit, ProfileState>(
+                        builder: (context, state) {
+                          return Switch(
+                            onChanged: (value) async {
+                              await context
+                                  .read<ProfileCubit>()
+                                  .setDeveloperModeStatus(enabled: value);
+                            },
+                            value: state.model.isDeveloperMode,
+                            activeColor: Theme.of(context).colorScheme.primary,
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-                // const SizedBox(height: Sizes.spaceSmall),
+                  const SizedBox(height: Sizes.spaceSmall),
+                ],
+
                 // DrawerCategoryItem(
                 //   title: l10n.checkLinkedinProfile,
                 //   subTitle: l10n.checkLinkedinProfile,
@@ -125,15 +131,19 @@ class DrawerView extends StatelessWidget {
                 //         .push<void>(CheckForLinkedInProfile.route());
                 //   },
                 // ),
-                const SizedBox(height: Sizes.spaceSmall),
-                DrawerCategoryItem(
-                  title: l10n.helpCenter,
-                  subTitle: l10n.helpCenterDescription,
-                  onClick: () {
-                    Navigator.of(context).push<void>(HelpCenterMenu.route());
-                  },
-                ),
-                const SizedBox(height: Sizes.spaceSmall),
+                //const SizedBox(height: Sizes.spaceSmall),
+
+                if (profileSetting.settingsMenu.displayHelpCenter) ...[
+                  DrawerCategoryItem(
+                    title: l10n.helpCenter,
+                    subTitle: l10n.helpCenterDescription,
+                    onClick: () {
+                      Navigator.of(context).push<void>(HelpCenterMenu.route());
+                    },
+                  ),
+                  const SizedBox(height: Sizes.spaceSmall),
+                ],
+
                 DrawerCategoryItem(
                   title: l10n.about,
                   subTitle: l10n.aboutDescription,

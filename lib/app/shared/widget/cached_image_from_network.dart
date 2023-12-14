@@ -12,6 +12,7 @@ class CachedImageFromNetwork extends StatelessWidget {
     this.height,
     this.borderRadius,
     this.errorMessage,
+    this.bgColor,
   });
 
   final String url;
@@ -20,6 +21,7 @@ class CachedImageFromNetwork extends StatelessWidget {
   final double? height;
   final BorderRadius? borderRadius;
   final String? errorMessage;
+  final Color? bgColor;
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +56,12 @@ class CachedImageFromNetwork extends StatelessWidget {
                 progressIndicatorBuilder: (context, child, downloadProgress) {
                   return errorMessage == null
                       ? Container(
-                          color: Theme.of(context).colorScheme.lightGrey,
+                          color: bgColor ??
+                              Theme.of(context).colorScheme.lightGrey,
                           margin: const EdgeInsets.all(10),
-                          child: Text(downloadProgress.progress.toString()),
+                          child: Center(
+                            child: Text(downloadProgress.progress.toString()),
+                          ),
                         )
                       : ErrorWidget(errorMessage: errorMessage);
                 },
