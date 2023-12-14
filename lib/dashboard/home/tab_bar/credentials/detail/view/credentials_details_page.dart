@@ -289,7 +289,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           if (widget.credentialModel.credentialPreview
                                   .credentialSubjectModel
                               is WalletCredentialModel) ...[
-                            const SizedBox(height: 10),
                             WalletCredentialetailsWidget(
                               credentialModel: widget.credentialModel,
                             ),
@@ -320,18 +319,21 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               valueColor:
                                   Theme.of(context).colorScheme.valueColor,
                             ),
-                            CredentialField(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 0,
-                                vertical: 8,
+                            if (widget.credentialModel.credentialPreview
+                                    .credentialSubjectModel
+                                is! WalletCredentialModel)
+                              CredentialField(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 0,
+                                  vertical: 8,
+                                ),
+                                title: l10n.subjectDID,
+                                value: subjectDid,
+                                titleColor:
+                                    Theme.of(context).colorScheme.titleColor,
+                                valueColor:
+                                    Theme.of(context).colorScheme.valueColor,
                               ),
-                              title: l10n.subjectDID,
-                              value: subjectDid,
-                              titleColor:
-                                  Theme.of(context).colorScheme.titleColor,
-                              valueColor:
-                                  Theme.of(context).colorScheme.valueColor,
-                            ),
                             CredentialField(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 0,

@@ -42,6 +42,17 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     emit(state.copyWith(status: AppStatus.loading));
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
+    if (item.credentialPreview.credentialSubjectModel.credentialSubjectType ==
+        CredentialSubjectType.walletCredential) {
+      emit(
+        state.copyWith(
+          credentialStatus: CredentialStatus.active,
+          status: AppStatus.idle,
+        ),
+      );
+      return;
+    }
+
     if (item.expirationDate != null) {
       final DateTime dateTimeExpirationDate =
           DateTime.parse(item.expirationDate!);

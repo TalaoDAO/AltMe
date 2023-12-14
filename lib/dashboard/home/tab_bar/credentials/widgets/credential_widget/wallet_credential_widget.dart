@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WalletCredentialWidget extends StatelessWidget {
   const WalletCredentialWidget({
@@ -49,14 +50,16 @@ class WalletCredentialetailsWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CredentialField(
-          padding: EdgeInsets.zero,
-          title: l10n.publicKeyOfWalletInstance,
-          value: walletCredential.publicKey ?? '',
-          titleColor: titleColor,
-          valueColor: valueColor,
-        ),
-        const SizedBox(height: 10),
+        if (context.read<ProfileCubit>().state.model.isDeveloperMode) ...[
+          CredentialField(
+            padding: EdgeInsets.zero,
+            title: l10n.publicKeyOfWalletInstance,
+            value: walletCredential.publicKey ?? '',
+            titleColor: titleColor,
+            valueColor: valueColor,
+          ),
+          const SizedBox(height: 10),
+        ],
         CredentialField(
           padding: EdgeInsets.zero,
           title: l10n.walletInstanceKey,
