@@ -6,12 +6,12 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class VerifiableDataRegistryPage extends StatelessWidget {
-  const VerifiableDataRegistryPage({super.key});
+class TrustFrameworkPage extends StatelessWidget {
+  const TrustFrameworkPage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (_) => const VerifiableDataRegistryPage(),
-        settings: const RouteSettings(name: '/VerifiableDataRegistryPage'),
+        builder: (_) => const TrustFrameworkPage(),
+        settings: const RouteSettings(name: '/TrustFrameworkPage'),
       );
 
   @override
@@ -19,7 +19,7 @@ class VerifiableDataRegistryPage extends StatelessWidget {
     final l10n = context.l10n;
 
     return BasePage(
-      title: l10n.verifiableDataRegistry,
+      title: l10n.trustFramework,
       titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       scrollView: true,
@@ -45,7 +45,7 @@ class VerifiableDataRegistryPage extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  l10n.chooseIssuerRegistryDescription,
+                  l10n.trustFrameworkDescription,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodySmall3,
                 ),
