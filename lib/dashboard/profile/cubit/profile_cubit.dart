@@ -280,7 +280,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             isDeveloperMode: isDeveloperMode,
             profileType: profileType,
             profileSetting: profileSetting,
-            enterpriseWalletName: profileSetting.generalOptions.companyName,
+            enterpriseWalletName: profileSetting.generalOptions.profileName,
           );
       }
       await update(profileModel);
@@ -511,7 +511,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileType: profileType,
             profileSetting: enterpriseProfileSetting,
             enterpriseWalletName:
-                enterpriseProfileSetting.generalOptions.companyName,
+                enterpriseProfileSetting.generalOptions.profileName,
           ),
         );
     }
