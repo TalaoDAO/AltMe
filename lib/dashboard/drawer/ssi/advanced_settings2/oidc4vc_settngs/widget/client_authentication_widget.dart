@@ -184,7 +184,7 @@ class ClientAuthenticationWidget extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          '${l10n.clientId}: ${state.model.profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile.clientId}',
+                                          '${l10n.clientId}: ${state.model.profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile.clientId ?? Parameters.clientId}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .drawerItemSubtitle,
@@ -218,11 +218,12 @@ class ClientAuthenticationWidget extends StatelessWidget {
                                       final clientSecretController =
                                           TextEditingController(
                                         text: state
-                                            .model
-                                            .profileSetting
-                                            .selfSovereignIdentityOptions
-                                            .customOidc4vcProfile
-                                            .clientSecret,
+                                                .model
+                                                .profileSetting
+                                                .selfSovereignIdentityOptions
+                                                .customOidc4vcProfile
+                                                .clientSecret ??
+                                            Parameters.clientSecret,
                                       );
 
                                       return AlertDialog(
@@ -329,7 +330,7 @@ class ClientAuthenticationWidget extends StatelessWidget {
                                       Expanded(
                                         child: Text(
                                           '${l10n.clientSecret}: '
-                                          '${state.model.profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret}',
+                                          '${state.model.profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret ?? Parameters.clientSecret}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .drawerItemSubtitle,
