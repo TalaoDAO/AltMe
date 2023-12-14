@@ -442,6 +442,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     final profileModel = state.model.copyWith(
       profileSetting: profileSetting,
       profileType: profileType,
+      enterpriseWalletName: profileSetting.generalOptions.profileName,
     );
     await update(profileModel);
   }

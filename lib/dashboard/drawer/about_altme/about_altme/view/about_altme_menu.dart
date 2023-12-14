@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class AboutAltmeMenu extends StatelessWidget {
@@ -27,6 +28,10 @@ class AboutAltmeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    final profileData = context.read<ProfileCubit>().state.model;
+
+    final profileSetting = profileData.profileSetting;
     return Drawer(
       backgroundColor: Theme.of(context).colorScheme.drawerBackground,
       child: SafeArea(
@@ -40,12 +45,61 @@ class AboutAltmeView extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
-                const Center(
-                  child: AltMeLogo(size: 90),
+                Center(
+                  child: profileSetting.generalOptions.companyLogo.isNotEmpty
+                      ? CachedImageFromNetwork(
+                          profileSetting.generalOptions.companyLogo,
+                          fit: BoxFit.cover,
+                          height: 90,
+                          bgColor:
+                              Theme.of(context).colorScheme.drawerBackground,
+                        )
+                      : const AltMeLogo(size: 90),
                 ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
+                const SizedBox(height: Sizes.spaceSmall),
+                const AppVersionDrawer(),
+                const SizedBox(height: Sizes.spaceLarge),
+                if (profileData.walletType == WalletType.enterprise) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.spaceXSmall,
+                    ),
+                    child: Text(
+                      l10n.organizationProfile,
+                      style:
+                          Theme.of(context).textTheme.drawerItemTitle.copyWith(
+                                fontSize: 18,
+                              ),
+                    ),
+                  ),
+                  const SizedBox(height: Sizes.spaceXSmall),
+                  EnterpriseData(
+                    title: l10n.profileName,
+                    value: profileSetting.generalOptions.profileName,
+                  ),
+                  EnterpriseData(
+                    title: l10n.companyName,
+                    value: profileSetting.generalOptions.companyName,
+                  ),
+                  EnterpriseData(
+                    title: l10n.configFileIdentifier,
+                    value: profileSetting.generalOptions.profileId,
+                  ),
+                  const SizedBox(height: Sizes.spaceSmall),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.spaceXSmall,
+                    ),
+                    child: Text(
+                      l10n.about,
+                      style:
+                          Theme.of(context).textTheme.drawerItemTitle.copyWith(
+                                fontSize: 18,
+                              ),
+                    ),
+                  ),
+                  const SizedBox(height: Sizes.spaceXSmall),
+                ],
                 FutureBuilder<PackageInfo>(
                   future: PackageInfo.fromPlatform(),
                   builder: (_, snapShot) {

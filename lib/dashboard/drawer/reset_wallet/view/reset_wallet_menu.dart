@@ -107,9 +107,9 @@ class ResetWalletView extends StatelessWidget {
                         context: context,
                         localAuthApi: LocalAuthApi(),
                         onSuccess: () async {
+                          await context.read<ProfileCubit>().resetProfile();
                           await context.read<WalletCubit>().resetWallet();
                           await context.read<AltmeChatSupportCubit>().dispose();
-                          await context.read<ProfileCubit>().resetProfile();
                         },
                       );
                     }

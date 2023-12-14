@@ -935,7 +935,10 @@
     "yourEmail",
     "publicKeyOfWalletInstance",
     "walletInstanceKey",
-    "protocoleStandardRelease"
+    "protocoleStandardRelease",
+    "organizationProfile",
+    "profileName",
+    "configFileIdentifier"
   ],
 
   "es": [
@@ -1874,7 +1877,10 @@
     "yourEmail",
     "publicKeyOfWalletInstance",
     "walletInstanceKey",
-    "protocoleStandardRelease"
+    "protocoleStandardRelease",
+    "organizationProfile",
+    "profileName",
+    "configFileIdentifier"
   ],
 
   "fr": [
@@ -2119,7 +2125,10 @@
     "yourEmail",
     "publicKeyOfWalletInstance",
     "walletInstanceKey",
-    "protocoleStandardRelease"
+    "protocoleStandardRelease",
+    "organizationProfile",
+    "profileName",
+    "configFileIdentifier"
   ],
 
   "it": [
@@ -3058,6 +3067,9 @@
     "yourEmail",
     "publicKeyOfWalletInstance",
     "walletInstanceKey",
-    "protocoleStandardRelease"
+    "protocoleStandardRelease",
+    "organizationProfile",
+    "profileName",
+    "configFileIdentifier"
   ]
 }

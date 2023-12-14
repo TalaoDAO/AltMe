@@ -1030,5 +1030,9 @@
   "yourEmail": "Your email",
   "publicKeyOfWalletInstance": "Public Key of Wallet Instance",
   "walletInstanceKey": "Wallet Instance Key",
-  "protocoleStandardRelease": "Protocole standard release"
+  "protocoleStandardRelease": "Protocole standard release",
+  "organizationProfile":"Organization Profile",
+  "profileName":"Profile Name",
+  "companyName":"Company Name",
+  "configFileIdentifier":"Config file identifier"
 }

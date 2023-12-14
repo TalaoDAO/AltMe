@@ -289,6 +289,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           if (widget.credentialModel.credentialPreview
                                   .credentialSubjectModel
                               is WalletCredentialModel) ...[
+                            const SizedBox(height: 10),
                             WalletCredentialetailsWidget(
                               credentialModel: widget.credentialModel,
                             ),
