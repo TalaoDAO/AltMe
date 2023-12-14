@@ -22,6 +22,7 @@ class CredentialManifestDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 10),
         DisplayDescriptionWidgetWithTitle(
           displayMapping: outputDescriptor?.display?.description,
           credentialModel: credentialModel,

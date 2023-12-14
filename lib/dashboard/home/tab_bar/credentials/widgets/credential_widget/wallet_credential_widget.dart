@@ -59,6 +59,8 @@ class WalletCredentialetailsWidget extends StatelessWidget {
             valueColor: valueColor,
           ),
           const SizedBox(height: 10),
+        ] else ...[
+          const SizedBox(height: 10),
         ],
         CredentialField(
           padding: EdgeInsets.zero,
