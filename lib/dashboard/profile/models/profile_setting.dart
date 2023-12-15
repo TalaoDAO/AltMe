@@ -387,7 +387,7 @@ class CustomOidc4VcProfile extends Equatable {
         oidc4vciDraft: OIDC4VCIDraftType.draft11,
         oidc4vpDraft: OIDC4VPDraftType.draft18,
         scope: false,
-        securityLevel: SecurityLevel.low,
+        securityLevel: false,
         siopv2Draft: SIOPV2DraftType.draft12,
         subjectSyntaxeType: SubjectSyntax.did,
         userPinDigits: UserPinDigits.six,
@@ -406,7 +406,7 @@ class CustomOidc4VcProfile extends Equatable {
   final OIDC4VCIDraftType oidc4vciDraft;
   final OIDC4VPDraftType oidc4vpDraft;
   final bool scope;
-  final SecurityLevel securityLevel;
+  final bool securityLevel;
   final SIOPV2DraftType siopv2Draft;
   final SubjectSyntax subjectSyntaxeType;
   final UserPinDigits userPinDigits;
@@ -423,7 +423,7 @@ class CustomOidc4VcProfile extends Equatable {
     OIDC4VCIDraftType? oidc4vciDraft,
     OIDC4VPDraftType? oidc4vpDraft,
     bool? scope,
-    SecurityLevel? securityLevel,
+    bool? securityLevel,
     SIOPV2DraftType? siopv2Draft,
     SubjectSyntax? subjectSyntaxeType,
     UserPinDigits? userPinDigits,

@@ -22,13 +22,11 @@ class SecurityLevelWidget extends StatelessWidget {
                 return Switch(
                   onChanged: (value) async {
                     await context.read<ProfileCubit>().updateProfileSetting(
-                          securityLevel:
-                              value ? SecurityLevel.high : SecurityLevel.low,
+                          securityLevel: value,
                         );
                   },
                   value: state.model.profileSetting.selfSovereignIdentityOptions
-                          .customOidc4vcProfile.securityLevel ==
-                      SecurityLevel.high,
+                      .customOidc4vcProfile.securityLevel,
                   activeColor: Theme.of(context).colorScheme.primary,
                 );
               },

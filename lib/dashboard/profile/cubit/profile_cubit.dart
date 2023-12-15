@@ -182,9 +182,7 @@ class ProfileCubit extends Cubit<ProfileState> {
                         customProfileBackup['enableScopeParameter'] == 'true',
                 securityLevel:
                     customProfileBackup.containsKey('enableSecurity') &&
-                            customProfileBackup['enableSecurity'] == 'true'
-                        ? SecurityLevel.high
-                        : SecurityLevel.low,
+                        customProfileBackup['enableSecurity'] == 'true',
                 siopv2Draft: SIOPV2DraftType.draft12,
                 subjectSyntaxeType:
                     customProfileBackup.containsKey('enableJWKThumbprint') &&
@@ -383,7 +381,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> updateProfileSetting({
     DidKeyType? didKeyType,
-    SecurityLevel? securityLevel,
+    bool? securityLevel,
     UserPinDigits? userPinDigits,
     bool? scope,
     bool? cryptoHolderBinding,
