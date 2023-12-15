@@ -42,6 +42,9 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     emit(state.copyWith(status: AppStatus.loading));
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
+    print(item.data);
+    print(item.jwt);
+
     if (item.credentialPreview.credentialSubjectModel.credentialSubjectType ==
         CredentialSubjectType.walletCredential) {
       emit(
@@ -71,7 +74,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       /// issuer did
       final issuerDid = item.issuer;
 
-      late final String issuerKid;
+      String? issuerKid;
       late final String encodedData;
       if (item.jwt == null) {
         issuerKid = item.data['proof']['verificationMethod'] as String;
@@ -80,7 +83,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
         final Map<String, dynamic> header =
             decodeHeader(jwtDecode: jwtDecode, token: encodedData);
-        issuerKid = header['kid'].toString();
+
+        if (header.containsKey('kid')) {
+          issuerKid = header['kid'].toString();
+        }
       }
 
       final VerificationType isVerified = await verifyEncodedData(

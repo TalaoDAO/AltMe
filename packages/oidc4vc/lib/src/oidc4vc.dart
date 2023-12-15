@@ -501,6 +501,7 @@ class OIDC4VC {
       final didDocument = await client.get<Map<String, dynamic>>(
         'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
       );
+
       return didDocument;
     } catch (e) {
       rethrow;
@@ -564,15 +565,22 @@ class OIDC4VC {
   }
 
   Map<String, dynamic> readPublicKeyJwk(
-    String holderKid,
+    String? holderKid,
     Response<Map<String, dynamic>> didDocumentResponse,
   ) {
     final jsonPath = JsonPath(r'$..verificationMethod');
-    final data = (jsonPath.read(didDocumentResponse.data).first.value as List)
-        .where(
-          (dynamic e) => e['id'].toString() == holderKid,
-        )
-        .toList();
+    late List<dynamic> data;
+
+    if (holderKid == null) {
+      data = (jsonPath.read(didDocumentResponse.data).first.value as List)
+          .toList();
+    } else {
+      data = (jsonPath.read(didDocumentResponse.data).first.value as List)
+          .where(
+            (dynamic e) => e['id'].toString() == holderKid,
+          )
+          .toList();
+    }
 
     final value = data.first['publicKeyJwk'];
 
@@ -668,7 +676,7 @@ class OIDC4VC {
 
   Future<VerificationType> verifyEncodedData({
     required String issuerDid,
-    required String issuerKid,
+    required String? issuerKid,
     required String jwt,
   }) async {
     try {
