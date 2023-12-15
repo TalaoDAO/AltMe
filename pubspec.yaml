@@ -1,6 +1,6 @@
 name: altme
 description: AltMe Flutter App
-version: 1.25.2+322
+version: 1.25.10+330
 
 environment:
   sdk: ">=3.1.0 <4.0.0"
@@ -27,7 +27,7 @@ dependencies:
   crypto: ^3.0.3
   cryptocurrency_keys:
     path: packages/cryptocurrency_keys
-  dart_jsonwebtoken: ^2.11.0
+  dart_jsonwebtoken: ^2.12.1
   dartez:
     git:
       url: https://github.com/TalebRafiepour/Dartez.git
@@ -66,7 +66,7 @@ dependencies:
   google_mlkit_barcode_scanning: ^0.8.0
   image: ^4.0.17
   image_picker: ^0.8.7+5
-  jose: ^0.3.3
+  jose: ^0.3.4
   json_annotation: ^4.8.1
   json_path: ^0.4.4 #latest version creates test issue
   jwt_decode:

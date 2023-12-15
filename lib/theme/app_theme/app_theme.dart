@@ -115,7 +115,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get kycKeyIconColor => const Color(0xFF86809D);
 
-  Color get lightPurple => const Color(0xFF86809D);
+  Color get lightPurple => const Color(0xFF5F556F);
 
   Color get popupBackground => const Color(0xff271C38);
 
@@ -258,6 +258,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffD1CCE3),
       );
 
+  TextStyle get textFieldTitle => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get keyboardDigitTextStyle =>
       GoogleFonts.roboto(fontSize: 30, color: Colors.white);
 
@@ -278,7 +284,7 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get starterTitleStyle => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
-        fontSize: 34,
+        fontSize: 32,
         fontWeight: FontWeight.w700,
       );
 
@@ -302,7 +308,7 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get starterSubTitleStyle => GoogleFonts.nunito(
         color: const Color(0xFFEEEEEE),
-        fontSize: 26,
+        fontSize: 22,
         fontWeight: FontWeight.w600,
       );
 
@@ -424,11 +430,11 @@ extension CustomTextTheme on TextTheme {
   TextStyle get drawerItemTitle => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
         fontSize: 16,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w800,
       );
 
   TextStyle get drawerItemSubtitle => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: const Color(0xFFD1CCE3),
         fontSize: 14,
         fontWeight: FontWeight.w500,
       );

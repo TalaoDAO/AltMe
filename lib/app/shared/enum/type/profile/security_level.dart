@@ -1,0 +1,1 @@
+enum SecurityLevel { high, low }

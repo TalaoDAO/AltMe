@@ -8,16 +8,15 @@ part 'display.g.dart';
 @immutable
 class Display extends Equatable {
   const Display(
-    this.backgroundColor,
-    this.icon,
     this.nameFallback,
     this.descriptionFallback,
+    this.backgroundColor,
+    this.textColor,
+    this.icon,
   );
 
   factory Display.fromJson(Map<String, dynamic> json) =>
       _$DisplayFromJson(json);
-
-  factory Display.emptyDisplay() => const Display('', '', '', '');
 
   @JsonKey(defaultValue: '')
   final String backgroundColor;
@@ -26,11 +25,13 @@ class Display extends Equatable {
   @JsonKey(defaultValue: '')
   final String nameFallback;
   @JsonKey(defaultValue: '')
+  final String textColor;
+  @JsonKey(defaultValue: '')
   final String descriptionFallback;
 
   Map<String, dynamic> toJson() => _$DisplayToJson(this);
 
   @override
   List<Object?> get props =>
-      [backgroundColor, icon, nameFallback, descriptionFallback];
+      [backgroundColor, icon, nameFallback, textColor, descriptionFallback];
 }

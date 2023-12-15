@@ -54,12 +54,6 @@ class PolygonIdProofPage extends StatelessWidget {
           image: 'image',
           credentialPreview: credentialPreview,
           shareLink: '',
-          display: const Display(
-            '',
-            '',
-            '',
-            '',
-          ),
           data: const <String, dynamic>{},
         ),
       );

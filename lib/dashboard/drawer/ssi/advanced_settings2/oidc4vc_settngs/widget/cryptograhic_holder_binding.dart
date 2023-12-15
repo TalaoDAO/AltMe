@@ -50,13 +50,16 @@ class CryptographicHolderBindingWidget extends StatelessWidget {
                   const SizedBox(height: 10),
                   Switch(
                     onChanged: (value) async {
-                      await context
-                          .read<ProfileCubit>()
-                          .updateCryptographicHolderBindingStatus(
-                            enabled: value,
+                      await context.read<ProfileCubit>().updateProfileSetting(
+                            cryptoHolderBinding: value,
                           );
                     },
-                    value: state.model.enableCryptographicHolderBinding,
+                    value: state
+                        .model
+                        .profileSetting
+                        .selfSovereignIdentityOptions
+                        .customOidc4vcProfile
+                        .cryptoHolderBinding,
                     activeColor: Theme.of(context).colorScheme.primary,
                   ),
                 ],

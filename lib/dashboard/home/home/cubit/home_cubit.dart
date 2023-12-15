@@ -6,7 +6,6 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/wallet/model/crypto_account.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';
@@ -14,6 +13,7 @@ import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:web3dart/crypto.dart';
 
@@ -25,11 +25,13 @@ class HomeCubit extends Cubit<HomeState> {
     required this.client,
     required this.didCubit,
     required this.secureStorageProvider,
+    required this.oidc4vc,
   }) : super(const HomeState());
 
   final DioClient client;
   final DIDCubit didCubit;
   final SecureStorageProvider secureStorageProvider;
+  final OIDC4VC oidc4vc;
 
   final log = getLogger('HomeCubit');
 
@@ -210,7 +212,7 @@ class HomeCubit extends Cubit<HomeState> {
             Map<String, dynamic>.from(credential);
         newCredential['credentialPreview'] = credential;
         final CredentialManifest credentialManifest =
-            await getCredentialManifestFromAltMe(client);
+            await getCredentialManifestFromAltMe(oidc4vc);
         credentialManifest.outputDescriptors
             ?.removeWhere((element) => element.id != credentialType);
         if (credentialManifest.outputDescriptors!.isNotEmpty) {

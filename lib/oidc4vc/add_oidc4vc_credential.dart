@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:dio/dio.dart';
 import 'package:jose/jose.dart';
+import 'package:json_path/json_path.dart';
+import 'package:oidc4vc/oidc4vc.dart';
+import 'package:uuid/uuid.dart';
 
 Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
@@ -15,6 +18,7 @@ Future<void> addOIDC4VCCredential({
   required bool isLastCall,
   required String format,
   String? credentialIdToBeDeleted,
+  required OpenIdConfiguration? openIdConfiguration,
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
   if (format == 'jwt_vc') {
@@ -25,6 +29,14 @@ Future<void> addOIDC4VCCredential({
 
     credentialFromOIDC4VC =
         jws.unverifiedPayload.jsonContent['vc'] as Map<String, dynamic>;
+  } else if (format == 'jwt_vc_json') {
+    //jwt_vc_json
+    final jws = JsonWebSignature.fromCompactSerialization(
+      encodedCredentialFromOIDC4VC['credential'] as String,
+    );
+
+    credentialFromOIDC4VC =
+        jws.unverifiedPayload.jsonContent as Map<String, dynamic>;
   } else if (format == 'ldp_vc') {
     //ldp_vc
 
@@ -41,24 +53,28 @@ Future<void> addOIDC4VCCredential({
   final Map<String, dynamic> newCredential =
       Map<String, dynamic>.from(credentialFromOIDC4VC);
 
-  if (format == 'jwt_vc') {
+  if (format == 'jwt_vc' || format == 'jwt_vc_json') {
     //jwt_vc_json
     newCredential['jwt'] = encodedCredentialFromOIDC4VC['credential'];
   }
 
   newCredential['credentialPreview'] = credentialFromOIDC4VC;
 
-  if (newCredential['credentialPreview']['credentialSubject']['type'] == null) {
-    /// added id as type to recognise the card
-    /// for ebsiv2 only
-    newCredential['credentialPreview']['credentialSubject']['type'] =
-        credentialFromOIDC4VC['credentialSchema']['id'];
+  if (newCredential['credentialPreview']['id'] == null) {
+    /// occuring in dutch blockchain
+    newCredential['credentialPreview']['id'] = 'urn:uuid:${const Uuid().v4()}';
   }
 
-  if (issuer != null) {
+  // if(newCredential['credentialPreview']['credentialSubject']['type']==null) {
+  //   /// added id as type to recognise the card
+  //   /// for ebsiv2 only
+  //   newCredential['credentialPreview']['credentialSubject']['type'] =
+  //       credentialFromOIDC4VC['credentialSchema']['id'];
+  // }
+
+  if (openIdConfiguration != null) {
     final CredentialManifest? credentialManifest = await getCredentialManifest(
-      client: Dio(),
-      baseUrl: issuer,
+      openidConfigurationJson: openIdConfiguration.toJson(),
       credentialType: credentialType,
     );
 
@@ -71,12 +87,50 @@ Future<void> addOIDC4VCCredential({
       ).toJson();
     }
   }
+
   final newCredentialModel = CredentialModel.fromJson(newCredential);
+
+  Display? display;
+
+  if (newCredentialModel.credentialManifest == null &&
+      openIdConfiguration?.credentialsSupported != null) {
+    final credentialsSupported = openIdConfiguration!.credentialsSupported!;
+    final CredentialsSupported? credSupported =
+        credentialsSupported.firstWhereOrNull(
+      (CredentialsSupported credentialsSupported) =>
+          credentialsSupported.types != null &&
+          credentialsSupported.types!.contains(credentialType),
+    );
+
+    if (credSupported != null) {
+      final displayJson = jsonDecode(jsonEncode(credSupported.display));
+
+      final name = JsonPath(r'$..name').read(displayJson).firstOrNull;
+
+      final description =
+          JsonPath(r'$..description').read(displayJson).firstOrNull;
+
+      final bgColor =
+          JsonPath(r'$..background_color').read(displayJson).firstOrNull;
+
+      final textColor =
+          JsonPath(r'$..text_color').read(displayJson).firstOrNull;
+
+      display = Display(
+        name?.value.toString() ?? '',
+        description?.value.toString() ?? '',
+        bgColor?.value.toString() ?? '',
+        textColor?.value.toString() ?? '',
+        '',
+      );
+    }
+  }
 
   final credentialModel = CredentialModel.copyWithData(
     oldCredentialModel: newCredentialModel,
     newData: credentialFromOIDC4VC,
     activities: [Activity(acquisitionAt: DateTime.now())],
+    display: display,
   );
 
   if (credentialIdToBeDeleted != null) {

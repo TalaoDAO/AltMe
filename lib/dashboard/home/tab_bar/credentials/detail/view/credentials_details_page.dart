@@ -128,6 +128,15 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     final isDeveloperMode =
         context.read<ProfileCubit>().state.model.isDeveloperMode;
 
+    final credentialManifestSupport = context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .credentialManifestSupport;
+
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -262,20 +271,33 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           CredentialActiveStatus(
                             credentialStatus: state.credentialStatus,
                           ),
-                          if (outputDescriptors != null) ...[
+                          if (credentialManifestSupport &&
+                              outputDescriptors != null) ...[
                             const SizedBox(height: 10),
                             CredentialManifestDetails(
-                              outputDescriptor: outputDescriptors.first,
+                              outputDescriptor: outputDescriptors.firstOrNull,
+                              credentialModel: widget.credentialModel,
+                            ),
+                          ],
+                          if (!credentialManifestSupport &&
+                              widget.credentialModel.display != null) ...[
+                            const SizedBox(height: 10),
+                            DisplayWidget(
+                              display: widget.credentialModel.display!,
+                            ),
+                          ],
+                          if (widget.credentialModel.credentialPreview
+                                  .credentialSubjectModel
+                              is WalletCredentialModel) ...[
+                            WalletCredentialetailsWidget(
                               credentialModel: widget.credentialModel,
                             ),
                           ],
                           if (widget.credentialModel.pendingInfo == null &&
                               isDeveloperMode) ...[
+                            const SizedBox(height: 10),
                             CredentialField(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 0,
-                                vertical: 8,
-                              ),
+                              padding: EdgeInsets.zero,
                               title: l10n.format,
                               value: format,
                               titleColor:
@@ -283,11 +305,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               valueColor:
                                   Theme.of(context).colorScheme.valueColor,
                             ),
+                            const SizedBox(height: 10),
                             CredentialField(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 0,
-                                vertical: 8,
-                              ),
+                              padding: EdgeInsets.zero,
                               title: l10n.issuerDID,
                               value: issuerDid,
                               titleColor:
@@ -295,23 +315,22 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               valueColor:
                                   Theme.of(context).colorScheme.valueColor,
                             ),
-                            CredentialField(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 0,
-                                vertical: 8,
+                            if (widget.credentialModel.credentialPreview
+                                    .credentialSubjectModel
+                                is! WalletCredentialModel) ...[
+                              CredentialField(
+                                padding: EdgeInsets.zero,
+                                title: l10n.subjectDID,
+                                value: subjectDid,
+                                titleColor:
+                                    Theme.of(context).colorScheme.titleColor,
+                                valueColor:
+                                    Theme.of(context).colorScheme.valueColor,
                               ),
-                              title: l10n.subjectDID,
-                              value: subjectDid,
-                              titleColor:
-                                  Theme.of(context).colorScheme.titleColor,
-                              valueColor:
-                                  Theme.of(context).colorScheme.valueColor,
-                            ),
+                            ],
+                            const SizedBox(height: 10),
                             CredentialField(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 0,
-                                vertical: 8,
-                              ),
+                              padding: EdgeInsets.zero,
                               title: l10n.type,
                               value: type,
                               titleColor:
@@ -321,11 +340,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             ),
                           ],
                           if (widget.credentialModel.pendingInfo != null) ...[
+                            const SizedBox(height: 10),
                             CredentialField(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 0,
-                                vertical: 8,
-                              ),
+                              padding: EdgeInsets.zero,
                               title: l10n.issuer,
                               value:
                                   widget.credentialModel.pendingInfo!.issuer ??
@@ -335,6 +352,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               valueColor:
                                   Theme.of(context).colorScheme.valueColor,
                             ),
+                            const SizedBox(height: 10),
                             CredentialField(
                               padding: EdgeInsets.zero,
                               title: l10n.dateOfRequest,

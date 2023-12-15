@@ -46,7 +46,13 @@ class ClientAuthenticationWidget extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         Opacity(
-                          opacity: state.model.useBasicClientAuthentication
+                          opacity: state
+                                      .model
+                                      .profileSetting
+                                      .selfSovereignIdentityOptions
+                                      .customOidc4vcProfile
+                                      .clientAuthentication ==
+                                  ClientAuthentication.clientSecretBasic
                               ? 1
                               : 0.5,
                           child: Column(
@@ -68,7 +74,12 @@ class ClientAuthenticationWidget extends StatelessWidget {
 
                                       final clientIdController =
                                           TextEditingController(
-                                        text: state.model.clientId,
+                                        text: state
+                                            .model
+                                            .profileSetting
+                                            .selfSovereignIdentityOptions
+                                            .customOidc4vcProfile
+                                            .clientId,
                                       );
 
                                       return AlertDialog(
@@ -145,7 +156,9 @@ class ClientAuthenticationWidget extends StatelessWidget {
                                   if (clientId != null) {
                                     await context
                                         .read<ProfileCubit>()
-                                        .updateClientId(clientId);
+                                        .updateProfileSetting(
+                                          clientId: clientId,
+                                        );
                                   }
                                 },
                                 child: Container(
@@ -171,7 +184,7 @@ class ClientAuthenticationWidget extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          '${l10n.clientId}: ${state.model.clientId}',
+                                          '${l10n.clientId}: ${state.model.profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile.clientId ?? Parameters.clientId}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .drawerItemSubtitle,
@@ -204,7 +217,13 @@ class ClientAuthenticationWidget extends StatelessWidget {
 
                                       final clientSecretController =
                                           TextEditingController(
-                                        text: state.model.clientSecret,
+                                        text: state
+                                                .model
+                                                .profileSetting
+                                                .selfSovereignIdentityOptions
+                                                .customOidc4vcProfile
+                                                .clientSecret ??
+                                            Parameters.clientSecret,
                                       );
 
                                       return AlertDialog(
@@ -282,7 +301,9 @@ class ClientAuthenticationWidget extends StatelessWidget {
                                   if (clientSecret != null) {
                                     await context
                                         .read<ProfileCubit>()
-                                        .updateClientSecret(clientSecret);
+                                        .updateProfileSetting(
+                                          clientSecret: clientSecret,
+                                        );
                                   }
                                 },
                                 child: Container(
@@ -309,7 +330,7 @@ class ClientAuthenticationWidget extends StatelessWidget {
                                       Expanded(
                                         child: Text(
                                           '${l10n.clientSecret}: '
-                                          '${state.model.clientSecret}',
+                                          '${state.model.profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret ?? Parameters.clientSecret}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .drawerItemSubtitle,
@@ -333,13 +354,19 @@ class ClientAuthenticationWidget extends StatelessWidget {
                   const SizedBox(height: 10),
                   Switch(
                     onChanged: (value) async {
-                      await context
-                          .read<ProfileCubit>()
-                          .updateBasicClientAuthenticationStatus(
-                            enabled: value,
+                      await context.read<ProfileCubit>().updateProfileSetting(
+                            clientAuthentication: value
+                                ? ClientAuthentication.clientSecretBasic
+                                : ClientAuthentication.none,
                           );
                     },
-                    value: state.model.useBasicClientAuthentication,
+                    value: state
+                            .model
+                            .profileSetting
+                            .selfSovereignIdentityOptions
+                            .customOidc4vcProfile
+                            .clientAuthentication ==
+                        ClientAuthentication.clientSecretBasic,
                     activeColor: Theme.of(context).colorScheme.primary,
                   ),
                 ],

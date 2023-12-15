@@ -57,9 +57,15 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                           onChanged: (value) async {
                             await context
                                 .read<ProfileCubit>()
-                                .setUserConsentForIssuerAccess(enabled: value);
+                                .updateProfileSetting(
+                                  verifySecurityIssuerWebsiteIdentity: value,
+                                );
                           },
-                          value: state.model.userConsentForIssuerAccess,
+                          value: state
+                              .model
+                              .profileSetting
+                              .walletSecurityOptions
+                              .verifySecurityIssuerWebsiteIdentity,
                           activeColor: Theme.of(context).colorScheme.primary,
                         ),
                       ),
@@ -73,11 +79,15 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                           onChanged: (value) async {
                             await context
                                 .read<ProfileCubit>()
-                                .setUserConsentForVerifierAccess(
-                                  enabled: value,
+                                .updateProfileSetting(
+                                  confirmSecurityVerifierAccess: value,
                                 );
                           },
-                          value: state.model.userConsentForVerifierAccess,
+                          value: state
+                              .model
+                              .profileSetting
+                              .walletSecurityOptions
+                              .confirmSecurityVerifierAccess,
                           activeColor: Theme.of(context).colorScheme.primary,
                         ),
                       ),
@@ -91,11 +101,16 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                           onChanged: (value) async {
                             await context
                                 .read<ProfileCubit>()
-                                .setUserPINCodeForAuthentication(
-                                  enabled: value,
+                                .updateProfileSetting(
+                                  secureSecurityAuthenticationWithPinCode:
+                                      value,
                                 );
                           },
-                          value: state.model.userPINCodeForAuthentication,
+                          value: state
+                              .model
+                              .profileSetting
+                              .walletSecurityOptions
+                              .secureSecurityAuthenticationWithPinCode,
                           activeColor: Theme.of(context).colorScheme.primary,
                         ),
                       ),

@@ -23,13 +23,16 @@ Future<void> getAndAddCredential({
   required String issuer,
   required String? codeForAuthorisedFlow,
   required String? codeVerifier,
-  required bool sendProof,
+  required bool cryptoHolderBinding,
   required String? authorization,
+  required OIDC4VCIDraftType oidc4vciDraftType,
+  required DidKeyType didKeyType,
 }) async {
   final privateKey = await fetchPrivateKey(
     isEBSIV3: isEBSIV3,
     oidc4vc: oidc4vc,
     secureStorage: getSecureStorage,
+    didKeyType: didKeyType,
   );
 
   final (did, kid) = await fetchDidAndKid(
@@ -37,6 +40,7 @@ Future<void> getAndAddCredential({
     privateKey: privateKey,
     didKitProvider: didKitProvider,
     secureStorage: getSecureStorage,
+    didKeyType: didKeyType,
   );
 
   if (preAuthorizedCode != null ||
@@ -50,7 +54,8 @@ Future<void> getAndAddCredential({
     final (
       List<dynamic> encodedCredentialOrFutureTokens,
       String? deferredCredentialEndpoint,
-      String format
+      String format,
+      OpenIdConfiguration? openIdConfiguration,
     ) = await oidc4vc.getCredential(
       preAuthorizedCode: preAuthorizedCode,
       issuer: issuer,
@@ -62,8 +67,9 @@ Future<void> getAndAddCredential({
       userPin: userPin,
       code: codeForAuthorisedFlow,
       codeVerifier: codeVerifier,
-      sendProof: sendProof,
+      cryptoHolderBinding: cryptoHolderBinding,
       authorization: authorization,
+      oidc4vciDraftType: oidc4vciDraftType,
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {
@@ -98,7 +104,6 @@ Future<void> getAndAddCredential({
             [Evidence.emptyEvidence()],
           ),
           data: const {},
-          display: Display.emptyDisplay(),
           image: '',
           shareLink: '',
           pendingInfo: PendingInfo(
@@ -127,6 +132,7 @@ Future<void> getAndAddCredential({
           isLastCall:
               isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
           format: format,
+          openIdConfiguration: openIdConfiguration,
         );
       }
     }
