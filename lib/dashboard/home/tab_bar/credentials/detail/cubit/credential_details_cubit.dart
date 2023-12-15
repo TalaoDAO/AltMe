@@ -42,9 +42,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     emit(state.copyWith(status: AppStatus.loading));
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
-    print(item.data);
-    print(item.jwt);
-
     if (item.credentialPreview.credentialSubjectModel.credentialSubjectType ==
         CredentialSubjectType.walletCredential) {
       emit(
