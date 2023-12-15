@@ -53,8 +53,9 @@ class StarterPage extends StatelessWidget {
                   const Spacer(flex: 1),
                   const SubTitle(),
                   const Spacer(flex: 4),
-                  GradientButtonText(
-                    text: l10n.import_wallet,
+                  MyGradientButton(
+                    text: l10n.createPersonalWallet,
+                    verticalSpacing: 15,
                     onPressed: () async {
                       await profileCubit.setWalletType(
                         walletType: WalletType.personal,
@@ -63,36 +64,18 @@ class StarterPage extends StatelessWidget {
                         profileSetting: ProfileSetting.initial(),
                         profileType: ProfileType.custom,
                       );
-                      await Navigator.of(context).push(
-                        ProtectWalletPage.route(
-                          routeType: WalletRouteType.import,
-                        ),
-                      );
-                    },
-                    fontSize: 18,
-                    upperCase: true,
-                  ),
-                  const Spacer(flex: 1),
-                  MyGradientButton(
-                    text: l10n.create_wallet,
-                    onPressed: () async {
-                      await profileCubit.setWalletType(
-                        walletType: WalletType.personal,
-                      );
-                      await profileCubit.setProfileSetting(
-                        profileSetting: ProfileSetting.initial(),
-                        profileType: ProfileType.custom,
-                      );
-                      await Navigator.of(context).push(
-                        ProtectWalletPage.route(
-                          routeType: WalletRouteType.create,
-                        ),
+                      await showDialog<void>(
+                        context: context,
+                        builder: (_) => const WalletDialog(),
                       );
                     },
                   ),
                   const Spacer(flex: 1),
-                  MyGradientButton(
-                    text: l10n.createAnEnterPriseWallet,
+                  MyOutlinedButton(
+                    text: l10n.createAnProfessionalWallet,
+                    textColor: Theme.of(context).colorScheme.lightPurple,
+                    borderColor: Theme.of(context).colorScheme.lightPurple,
+                    backgroundColor: Colors.transparent,
                     onPressed: () async {
                       await profileCubit.setWalletType(
                         walletType: WalletType.enterprise,
