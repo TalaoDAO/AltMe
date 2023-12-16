@@ -1,10 +1,11 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StarterPage extends StatelessWidget {
   const StarterPage({super.key});
@@ -19,6 +20,9 @@ class StarterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    final profileCubit = context.read<ProfileCubit>();
+
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -42,58 +46,48 @@ class StarterPage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const Spacer(flex: 2),
+                  const Spacer(flex: 5),
+                  const SplashImage(),
+                  const Spacer(flex: 3),
                   const TitleText(),
                   const Spacer(flex: 1),
                   const SubTitle(),
-                  const Spacer(flex: 3),
-                  const SplashImage(),
-                  const Spacer(flex: 2),
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).push<void>(
-                        EnterNewPinCodePage.route(
-                          isFromOnboarding: true,
-                          isValidCallback: () {
-                            Navigator.of(context).pushReplacement<void, void>(
-                              ActiviateBiometricsPage.route(
-                                routeType: WalletRouteType.recover,
-                              ),
-                            );
-                          },
-                          restrictToBack: false,
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(Sizes.spaceLarge),
-                      child: GradientButtonText(
-                        text: l10n.import_wallet,
-                        onPressed: () {},
-                        fontSize: 18,
-                        upperCase: true,
-                      ),
-                    ),
-                  ),
+                  const Spacer(flex: 4),
                   MyGradientButton(
-                    text: l10n.create_wallet,
-                    onPressed: () {
-                      Navigator.of(context).push<void>(
-                        EnterNewPinCodePage.route(
-                          isFromOnboarding: true,
-                          isValidCallback: () {
-                            Navigator.of(context).pushReplacement<void, void>(
-                              ActiviateBiometricsPage.route(
-                                routeType: WalletRouteType.create,
-                              ),
-                            );
-                          },
-                          restrictToBack: false,
-                        ),
+                    text: l10n.createPersonalWallet,
+                    verticalSpacing: 15,
+                    onPressed: () async {
+                      await profileCubit.setWalletType(
+                        walletType: WalletType.personal,
+                      );
+                      await profileCubit.setProfileSetting(
+                        profileSetting: ProfileSetting.initial(),
+                        profileType: ProfileType.custom,
+                      );
+                      await showDialog<void>(
+                        context: context,
+                        builder: (_) => const WalletDialog(),
                       );
                     },
                   ),
-                  const Spacer(),
+                  const Spacer(flex: 1),
+                  MyOutlinedButton(
+                    text: l10n.createAnProfessionalWallet,
+                    textColor: Theme.of(context).colorScheme.lightPurple,
+                    borderColor: Theme.of(context).colorScheme.lightPurple,
+                    backgroundColor: Colors.transparent,
+                    onPressed: () async {
+                      await profileCubit.setWalletType(
+                        walletType: WalletType.enterprise,
+                      );
+                      await Navigator.of(context).push(
+                        EnterpriseLoginPage.route(),
+                      );
+                    },
+                  ),
+                  const Spacer(flex: 1),
+                  const AppVersionDrawer(isShortForm: true),
+                  const Spacer(flex: 1),
                 ],
               ),
             ),

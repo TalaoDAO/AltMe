@@ -67,7 +67,6 @@ class CheckForLinkedInProfileView extends StatelessWidget {
                         credentialPreview: credentialPreview,
                         data: data['verifiableCredential']
                             as Map<String, dynamic>,
-                        display: Display.emptyDisplay(),
                         image: '',
                         shareLink: '',
                       );

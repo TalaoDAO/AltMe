@@ -75,5 +75,4 @@ export 'troopez_pass/troopez_pass_model.dart';
 export 'twitter_card/twitter_card_model.dart';
 export 'verifiable_identity_card/verifiable_identity_card_model.dart';
 export 'voucher/voucher_model.dart';
-export 'wallet_credential/wallet_credential.dart';
 export 'wallet_credential/wallet_credential_model.dart';

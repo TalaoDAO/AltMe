@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -130,14 +131,17 @@ class GradientButtonText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      upperCase ? text.toUpperCase() : text,
-      style: GoogleFonts.poppins(
-        color: onPressed != null
-            ? Theme.of(context).colorScheme.onElevatedButton
-            : Theme.of(context).colorScheme.disabledTextColor,
-        fontSize: fontSize,
-        fontWeight: FontWeight.w700,
+    return TransparentInkWell(
+      onTap: onPressed,
+      child: Text(
+        upperCase ? text.toUpperCase() : text,
+        style: GoogleFonts.poppins(
+          color: onPressed != null
+              ? Theme.of(context).colorScheme.onElevatedButton
+              : Theme.of(context).colorScheme.disabledTextColor,
+          fontSize: fontSize,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }

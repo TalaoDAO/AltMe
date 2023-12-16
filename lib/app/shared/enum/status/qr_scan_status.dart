@@ -4,6 +4,7 @@ enum QrScanStatus {
   loading,
   acceptHost,
   authorizationFlow,
+  siopV2,
   error,
   success,
   goBack,

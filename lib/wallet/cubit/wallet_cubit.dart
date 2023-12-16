@@ -61,11 +61,8 @@ class WalletCubit extends Cubit<WalletState> {
     })? onComplete,
   }) async {
     if (isFromOnboarding) {
-      final String? ssiKey =
-          await secureStorageProvider.get(SecureStorageKeys.ssiKey);
-      if (ssiKey != null) {
-        await credentialsCubit.addRequiredCredentials(ssiKey: ssiKey);
-      }
+      // if enterprise and walletAttestation data is available and added
+      await credentialsCubit.addWalletCredential();
     }
 
     /// tracking added accounts
@@ -489,7 +486,10 @@ class WalletCubit extends Cubit<WalletState> {
 
   Future<void> resetWallet() async {
     await secureStorageProvider.deleteAllExceptsSomeKeys(
-      [SecureStorageKeys.version],
+      [
+        SecureStorageKeys.version,
+        SecureStorageKeys.p256PrivateKeyForWallet,
+      ],
     );
 
     // await credentialsRepository.deleteAll();

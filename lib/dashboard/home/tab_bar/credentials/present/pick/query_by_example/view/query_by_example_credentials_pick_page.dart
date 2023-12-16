@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/theme/theme.dart';
@@ -177,14 +176,12 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
 
                                           /// Authenticate
                                           bool authenticated = false;
-                                          await Navigator.of(context)
-                                              .push<void>(
-                                            PinCodePage.route(
-                                              restrictToBack: false,
-                                              isValidCallback: () {
-                                                authenticated = true;
-                                              },
-                                            ),
+                                          await securityCheck(
+                                            context: context,
+                                            localAuthApi: LocalAuthApi(),
+                                            onSuccess: () {
+                                              authenticated = true;
+                                            },
                                           );
 
                                           if (!authenticated) {

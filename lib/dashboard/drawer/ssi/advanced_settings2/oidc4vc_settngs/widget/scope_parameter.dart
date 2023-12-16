@@ -50,13 +50,16 @@ class ScopeParameterWidget extends StatelessWidget {
                   const SizedBox(height: 10),
                   Switch(
                     onChanged: (value) async {
-                      await context
-                          .read<ProfileCubit>()
-                          .updateScopeParameterStatus(
-                            enabled: value,
+                      await context.read<ProfileCubit>().updateProfileSetting(
+                            scope: value,
                           );
                     },
-                    value: state.model.enableScopeParameter,
+                    value: state
+                        .model
+                        .profileSetting
+                        .selfSovereignIdentityOptions
+                        .customOidc4vcProfile
+                        .scope,
                     activeColor: Theme.of(context).colorScheme.primary,
                   ),
                 ],

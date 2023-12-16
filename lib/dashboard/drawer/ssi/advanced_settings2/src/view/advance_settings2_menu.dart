@@ -59,10 +59,10 @@ class AdvancedSettings2View extends StatelessWidget {
                   },
                 ),
                 DrawerItem(
-                  title: l10n.verifiableDataRegistry,
+                  title: l10n.trustFramework,
                   onTap: () async {
                     await Navigator.of(context)
-                        .push<void>(VerifiableDataRegistryPage.route());
+                        .push<void>(TrustFrameworkPage.route());
                   },
                 ),
               ],

@@ -128,4 +128,7 @@ class Urls {
   static const discoverCoinsWebView = 'https://discover-coins-part.webflow.io/';
   static const discoverNftsWebView =
       'https://discover-coins-part.webflow.io/prod-nota-available/nft-noir';
+
+  // wallet provider
+  static const walletProvider = 'https://wallet-provider.talao.co';
 }

@@ -20,26 +20,10 @@ class SecureStorageKeys {
   static const String isFinanceEnabled = 'isFinanceEnabled';
   static const String isHumanityProofEnabled = 'isHumanityProofEnabled';
   static const String isWalletIntegrityEnabled = 'isWalletIntegrityEnabled';
-  static const String isBiometricEnabled = 'fingerprintEnabled';
+  static const String walletProtectionType = 'walletProtectionType';
 
-  static const String userConsentForIssuerAccess = 'userConsentForIssuerAccess';
-  static const String userConsentForVerifierAccess =
-      'userConsentForVerifierAccess';
-  static const String userPINCodeForAuthentication =
-      'userPINCodeForAuthentication';
-
-  static const String enableSecurity = 'enableSecurity';
-  static const String enable4DigitPINCode = 'enable4DigitPINCode';
-  static const String isEbsiV3Profile = 'isEbsiV3Profile';
+  static const String profileType = 'profileType';
   static const String isDeveloperMode = 'isDeveloperMode';
-  static const String enableJWKThumbprint = 'enableJWKThumbprint';
-  static const String enableCryptographicHolderBinding =
-      'enableCryptographicHolderBinding';
-  static const String enableScopeParameter = 'enableScopeParameter';
-  static const String useBasicClientAuthentication = 'isPreRegisteredWallet';
-  static const String clientId = 'clientId';
-  static const String clientSecret = 'clientSecret';
-  static const String customProfileBackup = 'customProfileBackup';
 
   static const String pinCode = 'pinCode';
   static const String data = 'data';
@@ -50,19 +34,7 @@ class SecureStorageKeys {
   static const String didMethodName = 'DIDMethodName';
   static const String verificationMethod = 'verificationMethod';
 
-  static const String isEnterpriseUser = 'isEnterpriseUser';
-  static const String companyName = 'companyName';
-  static const String companyWebsite = 'companyWebsite';
-  static const String jobTitle = 'jobTitle';
-
-  static const String firstNameKey = 'profile/firstName';
-  static const String lastNameKey = 'profile/lastName';
-  static const String phoneKey = 'profile/phone';
-  static const String locationKey = 'profile/location';
-  static const String emailKey = 'profile/email';
-
   static const String polygonIdNetwork = 'profile/polygonIdNetwork';
-  static const String didKeyType = 'profile/didKeyType';
 
   static const String blockChainNetworksIndexing = 'blockChainNetworksIndexing';
   static const String credentialKey = 'credential';
@@ -73,6 +45,7 @@ class SecureStorageKeys {
   static const String p256PrivateKey = 'p256PrivateKey';
   static const String p256PrivateKey2 = 'p256PrivateKey2';
   static const String p256PrivateKey3 = 'p256PrivateKey3';
+  static const String p256PrivateKeyForWallet = 'p256PrivateKeyForWallet';
 
   static const String cryptoAccount = 'cryptoAccount';
   static const String cryptoAccounTrackingIndex = 'cryptoAccounTrackingIndex';
@@ -97,4 +70,10 @@ class SecureStorageKeys {
   static const String buildNumber = 'buildNumber';
 
   static const String hasVerifiedMnemonics = 'hasVerifiedMnemonics';
+
+  static const String walletType = 'walletType';
+  static const String walletAttestationData = 'walletAttestationData';
+
+  static const String customProfileSettings = 'customProfileSettings';
+  static const String enterpriseProfileSetting = 'enterpriseProfileSetting';
 }

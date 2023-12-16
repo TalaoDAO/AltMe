@@ -146,7 +146,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get kycKeyIconColor => const Color(0xFF86809D);
 
-  Color get lightPurple => const Color(0xFF86809D);
+  Color get lightPurple => const Color(0xFF5F556F);
 
   Color get popupBackground => onPrimary;
 
@@ -291,6 +291,12 @@ extension CustomTextTheme on TextTheme {
         color: onTertiary,
       );
 
+  TextStyle get textFieldTitle => GoogleFonts.poppins(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get keyboardDigitTextStyle =>
       GoogleFonts.poppins(fontSize: 30, color: digitPrimary);
 
@@ -311,7 +317,7 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get starterTitleStyle => GoogleFonts.poppins(
         color: onPrimary,
-        fontSize: 34,
+        fontSize: 32,
         fontWeight: FontWeight.w700,
       );
 
@@ -335,11 +341,11 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get starterSubTitleStyle => GoogleFonts.poppins(
         color: const Color(0xFFEEEEEE),
-        fontSize: 26,
+        fontSize: 22,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get badgeStyle => GoogleFonts.nunito(
+  TextStyle get badgeStyle => GoogleFonts.poppins(
         color: const Color(0xFFEEEEEE),
         fontSize: 8,
         fontWeight: FontWeight.w500,
@@ -457,7 +463,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get drawerItemTitle => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 16,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w800,
       );
 
   TextStyle get drawerItemSubtitle => GoogleFonts.poppins(
@@ -874,7 +880,7 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff71CBFF),
       );
 
-  TextStyle get pheaseVerifySubmessage => GoogleFonts.nunito(
+  TextStyle get pheaseVerifySubmessage => GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.w400,
         color: const Color(0xff86809D),

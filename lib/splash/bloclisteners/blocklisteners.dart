@@ -7,7 +7,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
@@ -21,18 +20,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:share_plus/share_plus.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
     if (state.status == SplashStatus.routeToPassCode) {
-      Navigator.of(context).push<void>(
-        PinCodePage.route(
-          isValidCallback: () {
-            Navigator.of(context).push<void>(DashboardPage.route());
-          },
-        ),
+      securityCheck(
+        context: context,
+        localAuthApi: LocalAuthApi(),
+        onSuccess: () {
+          Navigator.of(context).push<void>(DashboardPage.route());
+        },
       );
     }
 
@@ -211,13 +211,16 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           var acceptHost = true;
           final approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
 
-          final bool userConsentForIssuerAccess =
-              profileCubit.state.model.userConsentForIssuerAccess;
-          final bool userConsentForVerifierAccess =
-              profileCubit.state.model.userConsentForVerifierAccess;
+          final walletSecurityOptions =
+              profileCubit.state.model.profileSetting.walletSecurityOptions;
 
-          bool showPrompt =
-              userConsentForIssuerAccess || userConsentForVerifierAccess;
+          final bool verifySecurityIssuerWebsiteIdentity =
+              walletSecurityOptions.verifySecurityIssuerWebsiteIdentity;
+          final bool confirmSecurityVerifierAccess =
+              walletSecurityOptions.confirmSecurityVerifierAccess;
+
+          bool showPrompt = verifySecurityIssuerWebsiteIdentity ||
+              confirmSecurityVerifierAccess;
 
           final bool isOpenIDUrl = isOIDC4VCIUrl(state.uri!);
           final bool isFromDeeplink = state.uri
@@ -230,12 +233,13 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           if (isOpenIDUrl || isFromDeeplink) {
             final (
               OIDC4VCType? oidc4vcType,
-              Map<String, dynamic>? openidConfigurationResponse,
-              Map<String, dynamic>? authorizationServerConfiguration,
+              OpenIdConfiguration? openIdConfiguration,
+              OpenIdConfiguration? authorizationServerConfiguration,
               dynamic credentialOfferJson,
             ) = await getIssuanceData(
               url: state.uri.toString(),
               client: client,
+              oidc4vc: OIDC4VC(),
             );
 
             oidc4vcTypeForIssuance = oidc4vcType;
@@ -250,7 +254,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   authorizationServerConfiguration:
                       authorizationServerConfiguration,
                   credentialOfferJson: credentialOfferJson,
-                  openidConfigurationResponse: openidConfigurationResponse,
+                  openIdConfiguration: openIdConfiguration,
                 );
               } else {
                 var url = state.uri!.toString();
@@ -329,10 +333,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               if (!moveAhead) return;
             }
 
-            if (openidConfigurationResponse != null) {
+            if (openIdConfiguration != null) {
               await handleErrorForOID4VCI(
                 url: state.uri.toString(),
-                openidConfigurationResponse: openidConfigurationResponse,
+                openIdConfiguration: openIdConfiguration,
                 authorizationServerConfiguration:
                     authorizationServerConfiguration,
               );
@@ -345,14 +349,14 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
               if (oidc4vcTypeForIssuance != null) {
                 /// issuance case
-                if (!userConsentForIssuerAccess) showPrompt = false;
+                if (!verifySecurityIssuerWebsiteIdentity) showPrompt = false;
               } else {
                 /// verification case
-                if (!userConsentForVerifierAccess) showPrompt = false;
+                if (!confirmSecurityVerifierAccess) showPrompt = false;
               }
             } else {
               /// normal Case
-              if (!userConsentForIssuerAccess) showPrompt = false;
+              if (!verifySecurityIssuerWebsiteIdentity) showPrompt = false;
             }
 
             if (showPrompt) {
@@ -504,6 +508,36 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         } catch (e) {
           context.read<QRCodeScanCubit>().emitError(e);
         }
+      }
+
+      if (state.status == QrScanStatus.siopV2) {
+        LoadingView().hide();
+
+        final bool secureSecurityAuthenticationWithPinCode = context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting
+            .walletSecurityOptions
+            .secureSecurityAuthenticationWithPinCode;
+
+        if (secureSecurityAuthenticationWithPinCode) {
+          /// Authenticate
+          bool authenticated = false;
+          await securityCheck(
+            context: context,
+            localAuthApi: LocalAuthApi(),
+            onSuccess: () {
+              authenticated = true;
+            },
+          );
+
+          if (!authenticated) {
+            return;
+          }
+        }
+
+        await context.read<QRCodeScanCubit>().completeSiopV2Flow();
       }
 
       if (state.status == QrScanStatus.success) {
@@ -728,12 +762,16 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       var accept = true;
       final profileCubit = context.read<ProfileCubit>();
 
-      final bool userConsentForIssuerAccess =
-          profileCubit.state.model.userConsentForIssuerAccess;
+      final bool verifySecurityIssuerWebsiteIdentity = profileCubit
+          .state
+          .model
+          .profileSetting
+          .walletSecurityOptions
+          .verifySecurityIssuerWebsiteIdentity;
 
       final l10n = context.l10n;
 
-      if (userConsentForIssuerAccess) {
+      if (verifySecurityIssuerWebsiteIdentity) {
         /// checking if it is issuer side
 
         LoadingView().hide();
@@ -758,17 +796,17 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
         final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
             .getIden3Message(message: state.scannedResponse!);
 
-        await Navigator.of(context).push<void>(
-          PinCodePage.route(
-            isValidCallback: () {
-              context.read<PolygonIdCubit>().authenticateOrGenerateProof(
-                    iden3MessageEntity: iden3MessageEntity,
-                    isGenerateProof: false,
-                  );
-            },
-            restrictToBack: false,
-          ),
+        await securityCheck(
+          context: context,
+          localAuthApi: LocalAuthApi(),
+          onSuccess: () {
+            context.read<PolygonIdCubit>().authenticateOrGenerateProof(
+                  iden3MessageEntity: iden3MessageEntity,
+                  isGenerateProof: false,
+                );
+          },
         );
+
         return;
       }
     }

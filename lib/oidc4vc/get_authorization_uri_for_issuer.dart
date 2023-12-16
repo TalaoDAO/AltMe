@@ -16,10 +16,10 @@ Future<void> getAuthorizationUriForIssuer({
   required List<dynamic> selectedCredentials,
   required String issuer,
   required dynamic credentialOfferJson,
-  required bool credentailsInScopeParameter,
+  required bool scope,
   required String clientId,
   required String? clientSecret,
-  required bool useBasicClientAuthentication,
+  required ClientAuthentication clientAuthentication,
 }) async {
   /// this is first phase flow for authorization_code
 
@@ -49,7 +49,9 @@ Future<void> getAuthorizationUriForIssuer({
 
   final jwtToken = jwt.sign(SecretKey(authorizationUriSecretKey));
   final tokenEndpointAuthMethod =
-      useBasicClientAuthentication ? 'client_secret_basic' : 'none';
+      clientAuthentication == ClientAuthentication.clientSecretBasic
+          ? 'client_secret_basic'
+          : 'none';
   final Uri oidc4vcAuthenticationUri =
       await oidc4vc.getAuthorizationUriForIssuer(
     selectedCredentials: selectedCredentials,
@@ -61,7 +63,7 @@ Future<void> getAuthorizationUriForIssuer({
     pkcePair: pkcePair,
     state: jwtToken,
     authorizationEndPoint: Parameters.authorizeEndPoint,
-    credentailsInScopeParameter: credentailsInScopeParameter,
+    scope: scope,
     tokenEndpointAuthMethod: tokenEndpointAuthMethod,
   );
 
