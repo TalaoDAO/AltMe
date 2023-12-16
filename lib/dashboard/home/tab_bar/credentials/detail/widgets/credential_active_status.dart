@@ -56,7 +56,9 @@ class CredentialActiveStatus extends StatelessWidget {
               ),
           ],
         ),
-        if (context.read<ProfileCubit>().state.model.isDeveloperMode)
+        if (context.read<ProfileCubit>().state.model.isDeveloperMode &&
+            credentialStatus?.info(context) != null &&
+            credentialStatus!.info(context).isNotEmpty)
           Text(
             credentialStatus?.info(context) ?? '',
             style:

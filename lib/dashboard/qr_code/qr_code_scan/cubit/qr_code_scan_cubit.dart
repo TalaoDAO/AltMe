@@ -551,8 +551,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
 
     final bool isSecurityHigh = profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.securityLevel ==
-        SecurityLevel.high;
+        .selfSovereignIdentityOptions.customOidc4vcProfile.securityLevel;
 
     final registration = state.uri!.queryParameters['registration'];
 
@@ -949,8 +948,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-    final isSecurityEnabled =
-        customOidc4vcProfile.securityLevel == SecurityLevel.high;
+    final isSecurityEnabled = customOidc4vcProfile.securityLevel;
     final enableJWKThumbprint =
         customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
 
