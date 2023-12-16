@@ -1,4 +1,3 @@
-import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +21,11 @@ class SecurityLevelWidget extends StatelessWidget {
                 return Switch(
                   onChanged: (value) async {
                     await context.read<ProfileCubit>().updateProfileSetting(
-                          securityLevel:
-                              value ? SecurityLevel.high : SecurityLevel.low,
+                          securityLevel: value,
                         );
                   },
                   value: state.model.profileSetting.selfSovereignIdentityOptions
-                          .customOidc4vcProfile.securityLevel ==
-                      SecurityLevel.high,
+                      .customOidc4vcProfile.securityLevel,
                   activeColor: Theme.of(context).colorScheme.primary,
                 );
               },
