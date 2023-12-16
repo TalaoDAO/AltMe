@@ -172,7 +172,6 @@
     "recoveryCredentialAuthErrorMessage",
     "recoveryCredentialDefaultErrorMessage",
     "selfIssuedCreatedSuccessfully",
-    "companyName",
     "companyWebsite",
     "submit",
     "insertYourDIDKey",
@@ -298,7 +297,6 @@
     "trustFramework",
     "network",
     "issuerRegistry",
-    "about",
     "termsOfUse",
     "scanFingerprintToAuthenticate",
     "biometricsNotSupported",
@@ -647,6 +645,7 @@
     "ssiDescription",
     "helpCenter",
     "helpCenterDescription",
+    "about",
     "aboutDescription",
     "resetWallet",
     "resetWalletDescription",
@@ -938,6 +937,7 @@
     "protocoleStandardRelease",
     "organizationProfile",
     "profileName",
+    "companyName",
     "configFileIdentifier"
   ],
 
@@ -1114,7 +1114,6 @@
     "recoveryCredentialAuthErrorMessage",
     "recoveryCredentialDefaultErrorMessage",
     "selfIssuedCreatedSuccessfully",
-    "companyName",
     "companyWebsite",
     "submit",
     "insertYourDIDKey",
@@ -1240,7 +1239,6 @@
     "trustFramework",
     "network",
     "issuerRegistry",
-    "about",
     "termsOfUse",
     "scanFingerprintToAuthenticate",
     "biometricsNotSupported",
@@ -1589,6 +1587,7 @@
     "ssiDescription",
     "helpCenter",
     "helpCenterDescription",
+    "about",
     "aboutDescription",
     "resetWallet",
     "resetWalletDescription",
@@ -1880,6 +1879,7 @@
     "protocoleStandardRelease",
     "organizationProfile",
     "profileName",
+    "companyName",
     "configFileIdentifier"
   ],
 
@@ -2306,7 +2306,6 @@
     "recoveryCredentialAuthErrorMessage",
     "recoveryCredentialDefaultErrorMessage",
     "selfIssuedCreatedSuccessfully",
-    "companyName",
     "companyWebsite",
     "submit",
     "insertYourDIDKey",
@@ -2432,7 +2431,6 @@
     "trustFramework",
     "network",
     "issuerRegistry",
-    "about",
     "termsOfUse",
     "scanFingerprintToAuthenticate",
     "biometricsNotSupported",
@@ -2781,6 +2779,7 @@
     "ssiDescription",
     "helpCenter",
     "helpCenterDescription",
+    "about",
     "aboutDescription",
     "resetWallet",
     "resetWalletDescription",
@@ -3072,6 +3071,7 @@
     "protocoleStandardRelease",
     "organizationProfile",
     "profileName",
+    "companyName",
     "configFileIdentifier"
   ]
 }
