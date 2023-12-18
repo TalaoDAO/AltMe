@@ -98,8 +98,8 @@ Future<void> addOIDC4VCCredential({
     final CredentialsSupported? credSupported =
         credentialsSupported.firstWhereOrNull(
       (CredentialsSupported credentialsSupported) =>
-          credentialsSupported.types != null &&
-          credentialsSupported.types!.contains(credentialType),
+          credentialsSupported.id != null &&
+          credentialsSupported.id == credentialType,
     );
 
     if (credSupported != null) {
