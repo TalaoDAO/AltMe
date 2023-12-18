@@ -192,8 +192,8 @@ class ProfileCubit extends Cubit<ProfileState> {
                 userPinDigits:
                     customProfileBackup.containsKey('enable4DigitPINCode') &&
                             customProfileBackup['enable4DigitPINCode'] == 'true'
-                        ? UserPinDigits.four
-                        : UserPinDigits.six,
+                        ? UserPinDigits.six
+                        : UserPinDigits.four,
                 clientId: customProfileBackup.containsKey('clientId')
                     ? customProfileBackup['clientId'].toString()
                     : Parameters.clientId,
@@ -410,6 +410,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           customOidc4vcProfile: state.model.profileSetting
               .selfSovereignIdentityOptions.customOidc4vcProfile
               .copyWith(
+            userPinDigits: userPinDigits,
             defaultDid: didKeyType,
             securityLevel: securityLevel,
             scope: scope,
