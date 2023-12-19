@@ -22,7 +22,7 @@ Future<void> addOIDC4VCCredential({
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
   if (format == 'jwt_vc') {
-    //jwt_vc_json
+    //jwt_vc
     final jws = JsonWebSignature.fromCompactSerialization(
       encodedCredentialFromOIDC4VC['credential'] as String,
     );
