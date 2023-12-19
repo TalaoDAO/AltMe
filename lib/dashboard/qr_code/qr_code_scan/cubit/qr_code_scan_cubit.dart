@@ -912,6 +912,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       credentialPreview: Credential.dummy(),
       shareLink: 'shareLink',
       data: const {},
+      jwt: null,
+      format: 'ldp_vc',
       credentialManifest: credentialManifest,
     );
 

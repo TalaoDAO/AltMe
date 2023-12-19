@@ -104,6 +104,8 @@ Future<void> getAndAddCredential({
             [Evidence.emptyEvidence()],
           ),
           data: const {},
+          jwt: null,
+          format: 'ldp_vc',
           image: '',
           shareLink: '',
           pendingInfo: PendingInfo(

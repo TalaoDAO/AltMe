@@ -155,6 +155,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         ),
         activities: [Activity(acquisitionAt: DateTime.now())],
         jwt: walletAttestationData,
+        format: 'jwt_vc_json-ld',
       );
 
       log.i('CredentialSubjectType.walletCredential added');

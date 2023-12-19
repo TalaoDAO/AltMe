@@ -55,6 +55,8 @@ class PolygonIdProofPage extends StatelessWidget {
           credentialPreview: credentialPreview,
           shareLink: '',
           data: const <String, dynamic>{},
+          jwt: null,
+          format: 'ldp_vc',
         ),
       );
     }

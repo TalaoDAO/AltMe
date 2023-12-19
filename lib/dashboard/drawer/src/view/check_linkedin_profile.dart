@@ -69,6 +69,8 @@ class CheckForLinkedInProfileView extends StatelessWidget {
                             as Map<String, dynamic>,
                         image: '',
                         shareLink: '',
+                        jwt: null,
+                        format: 'ldp_vc',
                       );
 
                       await Navigator.of(context).push<void>(

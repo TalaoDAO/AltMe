@@ -164,8 +164,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.removeLast();
         }
 
-        final String format =
-            widget.credentialModel.jwt != null ? ' jwt_vc_json-ld' : 'ldp_vc';
+        String? format = widget.credentialModel.format;
+
+        format ??=
+            widget.credentialModel.jwt != null ? 'jwt_vc_json-ld' : 'ldp_vc';
 
         final String issuerDid =
             widget.credentialModel.credentialPreview.issuer;

@@ -57,7 +57,7 @@ Future<void> addOIDC4VCCredential({
     //jwt_vc_json
     newCredential['jwt'] = encodedCredentialFromOIDC4VC['credential'];
   }
-
+  newCredential['format'] = format;
   newCredential['credentialPreview'] = credentialFromOIDC4VC;
 
   if (newCredential['credentialPreview']['id'] == null) {
