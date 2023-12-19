@@ -1153,7 +1153,7 @@ Future<String> getFormattedStringOIDC4VPSIOPV2({
 ${response != null ? const JsonEncoder.withIndent('  ').convert(response) : 'None'}\n
 <b>CLIENT METADATA  :</b>  
 ${clientMetaData != null ? const JsonEncoder.withIndent('  ').convert(clientMetaData) : 'None'}\n
-PRESENTATION DEFINITION  :</b> 
+<b>PRESENTATION DEFINITION  :</b> 
 ${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}\n
 <b>REGISTRATION  :</b> 
 ${registrationMap != null ? const JsonEncoder.withIndent('  ').convert(registrationMap) : 'None'}
