@@ -554,7 +554,18 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         );
       }
     } catch (e) {
-      context.read<QRCodeScanCubit>().emitError(e);
+      if (e.toString().startsWith('Exception: Openid-Configuration-Issue')) {
+        context.read<QRCodeScanCubit>().emitError(
+              ResponseMessage(
+                data: {
+                  'error': 'unsupported_format',
+                  'error_description': 'Openid configuration response issue.',
+                },
+              ),
+            );
+      } else {
+        context.read<QRCodeScanCubit>().emitError(e);
+      }
     }
   },
 );

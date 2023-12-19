@@ -1135,12 +1135,8 @@ class OIDC4VC {
 
       return OpenIdConfiguration.fromJson(data);
     } catch (e) {
-      if (e.toString().startsWith('Exception: Second_Attempt_Fail')) {
-        rethrow;
-      } else {
-        final data = await getOpenIdConfigSecondAttempt(baseUrl);
-        return data;
-      }
+      final data = await getOpenIdConfigSecondAttempt(baseUrl);
+      return data;
     }
   }
 
@@ -1156,7 +1152,7 @@ class OIDC4VC {
           : response.data as Map<String, dynamic>;
       return OpenIdConfiguration.fromJson(data);
     } catch (e) {
-      throw Exception('Second_Attempt_Fail');
+      throw Exception('Openid-Configuration-Issue');
     }
   }
 }
