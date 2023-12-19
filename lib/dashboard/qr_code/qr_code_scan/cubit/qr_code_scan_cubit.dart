@@ -1105,33 +1105,29 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final customOidc4vcProfile = profileCubit.state.model.profileSetting
             .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-        final useBasicClientAuthentication =
-            customOidc4vcProfile.clientAuthentication ==
-                ClientAuthentication.clientSecretBasic;
+        switch (customOidc4vcProfile.clientAuthentication) {
+          case ClientAuthentication.none:
+            final didKeyType = customOidc4vcProfile.defaultDid;
 
-        final didKeyType = customOidc4vcProfile.defaultDid;
+            final privateKey = await fetchPrivateKey(
+              oidc4vc: oidc4vc,
+              secureStorage: secureStorageProvider,
+              isEBSIV3: isEBSIV3,
+              didKeyType: didKeyType,
+            );
 
-        if (useBasicClientAuthentication) {
-          clientId = customOidc4vcProfile.clientId ?? Parameters.clientId;
-          clientSecret =
-              customOidc4vcProfile.clientSecret ?? Parameters.clientSecret;
-        } else {
-          final privateKey = await fetchPrivateKey(
-            oidc4vc: oidc4vc,
-            secureStorage: secureStorageProvider,
-            isEBSIV3: isEBSIV3,
-            didKeyType: didKeyType,
-          );
-
-          final (did, _) = await fetchDidAndKid(
-            privateKey: privateKey,
-            isEBSIV3: isEBSIV3,
-            didKitProvider: didKitProvider,
-            secureStorage: secureStorageProvider,
-            didKeyType: didKeyType,
-          );
-          clientId = did;
-          //clientId = const Uuid().v4();
+            final (did, _) = await fetchDidAndKid(
+              privateKey: privateKey,
+              isEBSIV3: isEBSIV3,
+              didKitProvider: didKitProvider,
+              secureStorage: secureStorageProvider,
+              didKeyType: didKeyType,
+            );
+            clientId = did;
+          case ClientAuthentication.clientSecretBasic:
+          case ClientAuthentication.clientSecretPost:
+            clientId = customOidc4vcProfile.clientId;
+            clientSecret = customOidc4vcProfile.clientSecret;
         }
 
         await getAuthorizationUriForIssuer(

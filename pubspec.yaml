@@ -93,6 +93,7 @@ dependencies:
     path: packages/polygonid
   pretty_qr_code: ^2.0.3
   qr_flutter: ^4.1.0
+  random_string: ^2.3.1
   screenshot: ^2.1.0
   secure_application: ^3.8.0
   secure_storage:

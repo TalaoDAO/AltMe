@@ -1953,7 +1953,7 @@ packages:
     source: hosted
     version: "3.2.1"
   random_string:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: random_string
       sha256: "03b52435aae8cbdd1056cf91bfc5bf845e9706724dd35ae2e99fa14a1ef79d02"

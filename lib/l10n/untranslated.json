@@ -893,8 +893,8 @@
     "cryptographicHolderBindingSubtitle",
     "scopeParameters",
     "scopeParametersSubtitle",
-    "clientAuthentication",
-    "clientAuthenticationSubtitle",
+    "clientAuthenticationMethods",
+    "clientAuthenticationMethodsSubtitle",
     "theServiceIsNotAvailable",
     "issuerDID",
     "subjectDID",
@@ -937,7 +937,8 @@
     "protocoleStandardRelease",
     "organizationProfile",
     "profileName",
-    "configFileIdentifier"
+    "configFileIdentifier",
+    "clientCredentials"
   ],
 
   "es": [
@@ -1834,8 +1835,8 @@
     "cryptographicHolderBindingSubtitle",
     "scopeParameters",
     "scopeParametersSubtitle",
-    "clientAuthentication",
-    "clientAuthenticationSubtitle",
+    "clientAuthenticationMethods",
+    "clientAuthenticationMethodsSubtitle",
     "theServiceIsNotAvailable",
     "issuerDID",
     "subjectDID",
@@ -1878,7 +1879,8 @@
     "protocoleStandardRelease",
     "organizationProfile",
     "profileName",
-    "configFileIdentifier"
+    "configFileIdentifier",
+    "clientCredentials"
   ],
 
   "fr": [
@@ -2083,8 +2085,8 @@
     "cryptographicHolderBindingSubtitle",
     "scopeParameters",
     "scopeParametersSubtitle",
-    "clientAuthentication",
-    "clientAuthenticationSubtitle",
+    "clientAuthenticationMethods",
+    "clientAuthenticationMethodsSubtitle",
     "theServiceIsNotAvailable",
     "issuerDID",
     "subjectDID",
@@ -2127,7 +2129,8 @@
     "protocoleStandardRelease",
     "organizationProfile",
     "profileName",
-    "configFileIdentifier"
+    "configFileIdentifier",
+    "clientCredentials"
   ],
 
   "it": [
@@ -3024,8 +3027,8 @@
     "cryptographicHolderBindingSubtitle",
     "scopeParameters",
     "scopeParametersSubtitle",
-    "clientAuthentication",
-    "clientAuthenticationSubtitle",
+    "clientAuthenticationMethods",
+    "clientAuthenticationMethodsSubtitle",
     "theServiceIsNotAvailable",
     "issuerDID",
     "subjectDID",
@@ -3068,6 +3071,7 @@
     "protocoleStandardRelease",
     "organizationProfile",
     "profileName",
-    "configFileIdentifier"
+    "configFileIdentifier",
+    "clientCredentials"
   ]
 }

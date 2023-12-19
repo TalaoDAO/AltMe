@@ -40,6 +40,7 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SecurityLevelWidget(),
+          const ClientCredentialsWidget(),
           const SixOrForUserPinWidget(),
           const DidKeyTypeWidget(),
           const DraftTypeWidget(),
@@ -52,16 +53,14 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
             title: l10n.clientMetadata,
             onTap: () {
               final tokenEndpointAuthMethod = context
-                          .read<ProfileCubit>()
-                          .state
-                          .model
-                          .profileSetting
-                          .selfSovereignIdentityOptions
-                          .customOidc4vcProfile
-                          .clientAuthentication ==
-                      ClientAuthentication.none
-                  ? 'none'
-                  : 'client_secret_basic';
+                  .read<ProfileCubit>()
+                  .state
+                  .model
+                  .profileSetting
+                  .selfSovereignIdentityOptions
+                  .customOidc4vcProfile
+                  .clientAuthentication
+                  .value;
               const authorizationEndPoint = Parameters.authorizeEndPoint;
               final value = const JsonEncoder.withIndent('  ').convert(
                 jsonDecode(

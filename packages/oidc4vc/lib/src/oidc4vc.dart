@@ -85,6 +85,7 @@ class OIDC4VC {
   Future<Uri> getAuthorizationUriForIssuer({
     required List<dynamic> selectedCredentials,
     required String clientId,
+    String? clientSecret,
     required String redirectUri,
     required String issuer,
     required String issuerState,
@@ -93,7 +94,7 @@ class OIDC4VC {
     required String state,
     required String authorizationEndPoint,
     required bool scope,
-    required String tokenEndpointAuthMethod,
+    required ClientAuthentication clientAuthentication,
   }) async {
     try {
       final openIdConfiguration = await getOpenIdConfig(issuer);
@@ -107,6 +108,7 @@ class OIDC4VC {
         selectedCredentials: selectedCredentials,
         openIdConfiguration: openIdConfiguration,
         clientId: clientId,
+        clientSecret: clientSecret,
         issuer: issuer,
         redirectUri: redirectUri,
         issuerState: issuerState,
@@ -115,7 +117,7 @@ class OIDC4VC {
         state: state,
         authorizationEndPoint: authorizationEndPoint,
         scope: scope,
-        tokenEndpointAuthMethod: tokenEndpointAuthMethod,
+        clientAuthentication: clientAuthentication,
       );
 
       final url = Uri.parse(authorizationEndpoint);
@@ -131,6 +133,7 @@ class OIDC4VC {
   Map<String, dynamic> getAuthorizationRequestParemeters({
     required List<dynamic> selectedCredentials,
     required String clientId,
+    String? clientSecret,
     required String issuer,
     required String issuerState,
     required String nonce,
@@ -140,7 +143,7 @@ class OIDC4VC {
     required PkcePair pkcePair,
     required String state,
     required bool scope,
-    required String tokenEndpointAuthMethod,
+    required ClientAuthentication clientAuthentication,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -198,6 +201,7 @@ class OIDC4VC {
     }
 
     final codeChallenge = pkcePair.codeChallenge;
+    final tokenEndpointAuthMethod = clientAuthentication.value;
 
     final myRequest = <String, dynamic>{
       'response_type': 'code',
@@ -213,6 +217,10 @@ class OIDC4VC {
         tokenEndpointAuthMethod,
       ),
     };
+
+    if (clientAuthentication == ClientAuthentication.clientSecretPost) {
+      myRequest['client_secret'] = clientSecret;
+    }
 
     if (scope) {
       myRequest['scope'] = listToString(credentials);

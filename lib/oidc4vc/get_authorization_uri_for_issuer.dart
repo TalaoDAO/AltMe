@@ -36,7 +36,7 @@ Future<void> getAuthorizationUriForIssuer({
     'isEBSIV3': isEBSIV3,
   };
 
-  if (clientSecret != null && clientSecret != '') {
+  if (clientAuthentication == ClientAuthentication.clientSecretBasic) {
     data['authorization'] =
         base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
   }
@@ -48,14 +48,11 @@ Future<void> getAuthorizationUriForIssuer({
       dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
 
   final jwtToken = jwt.sign(SecretKey(authorizationUriSecretKey));
-  final tokenEndpointAuthMethod =
-      clientAuthentication == ClientAuthentication.clientSecretBasic
-          ? 'client_secret_basic'
-          : 'none';
   final Uri oidc4vcAuthenticationUri =
       await oidc4vc.getAuthorizationUriForIssuer(
     selectedCredentials: selectedCredentials,
     clientId: clientId,
+    clientSecret: clientSecret,
     redirectUri: Parameters.oidc4vcUniversalLink,
     issuer: issuer,
     issuerState: issuerState,
@@ -64,7 +61,7 @@ Future<void> getAuthorizationUriForIssuer({
     state: jwtToken,
     authorizationEndPoint: Parameters.authorizeEndPoint,
     scope: scope,
-    tokenEndpointAuthMethod: tokenEndpointAuthMethod,
+    clientAuthentication: clientAuthentication,
   );
 
   await LaunchUrl.launchUri(oidc4vcAuthenticationUri);
