@@ -34,13 +34,18 @@ Future<void> getAuthorizationUriForIssuer({
     'credentials': selectedCredentials,
     'issuer': issuer,
     'isEBSIV3': isEBSIV3,
-    'client_id': clientId,
-    'client_secret': clientSecret,
   };
 
-  if (clientAuthentication == ClientAuthentication.clientSecretBasic) {
-    data['authorization'] =
-        base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+  switch (clientAuthentication) {
+    case ClientAuthentication.none:
+      data['client_id'] = clientId;
+    case ClientAuthentication.clientSecretBasic:
+      data['client_id'] = clientId; // not used later, added just to avoid error
+      data['authorization'] =
+          base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+    case ClientAuthentication.clientSecretPost:
+      data['client_id'] = clientId;
+      data['client_secret'] = clientSecret!;
   }
 
   final jwt = JWT(data);

@@ -1240,9 +1240,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final containsAllRequiredKey = statePayload.containsKey('credentials') &&
           statePayload.containsKey('codeVerifier') &&
           statePayload.containsKey('issuer') &&
-          statePayload.containsKey('isEBSIV3') &&
-          statePayload.containsKey('client_id') &&
-          statePayload.containsKey('client_secret');
+          statePayload.containsKey('isEBSIV3');
 
       if (!containsAllRequiredKey) {
         throw ResponseMessage(

@@ -296,15 +296,6 @@ class OIDC4VC {
     String? codeVerifier,
     String? authorization,
   }) async {
-    final tokenData = buildTokenData(
-      preAuthorizedCode: preAuthorizedCode,
-      userPin: userPin,
-      code: code,
-      codeVerifier: codeVerifier,
-      clientId: clientId,
-      clientSecret: clientSecret,
-    );
-
     final openIdConfiguration = await getOpenIdConfig(issuer);
 
     final tokenEndPoint = await readTokenEndPoint(
@@ -313,11 +304,22 @@ class OIDC4VC {
     );
 
     if (nonce == null || accessToken == null) {
+      final tokenData = buildTokenData(
+        preAuthorizedCode: preAuthorizedCode,
+        userPin: userPin,
+        code: code,
+        codeVerifier: codeVerifier,
+        clientId: clientId,
+        clientSecret: clientSecret,
+        authorization: authorization,
+      );
+
       final response = await getToken(
         tokenEndPoint: tokenEndPoint,
         tokenData: tokenData,
         authorization: authorization,
       );
+
       nonce = response['c_nonce'] as String;
       accessToken = response['access_token'] as String;
       authorizationDetails =
@@ -481,6 +483,7 @@ class OIDC4VC {
     String? codeVerifier,
     String? clientId,
     String? clientSecret,
+    String? authorization,
   }) {
     late Map<String, dynamic> tokenData;
 
@@ -488,26 +491,23 @@ class OIDC4VC {
       tokenData = <String, dynamic>{
         'pre-authorized_code': preAuthorizedCode,
         'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
-        'client_id': clientId,
       };
-    } else if (code != null && codeVerifier != null && clientId != null) {
+    } else if (code != null && codeVerifier != null) {
       tokenData = <String, dynamic>{
         'code': code,
         'grant_type': 'authorization_code',
         'code_verifier': codeVerifier,
-        'client_id': clientId,
       };
     } else {
       throw Exception();
     }
 
-    if (clientSecret != null) {
-      tokenData['client_secret'] = clientSecret;
+    if (authorization == null) {
+      if (clientId != null) tokenData['client_id'] = clientId;
+      if (clientSecret != null) tokenData['client_secret'] = clientSecret;
     }
 
-    if (userPin != null) {
-      tokenData['user_pin'] = userPin;
-    }
+    if (userPin != null) tokenData['user_pin'] = userPin;
 
     return tokenData;
   }
