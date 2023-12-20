@@ -80,7 +80,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         final stateOfCredentialsSelected = jwt['options'] as List<dynamic>;
         final String codeVerifier = jwt['codeVerifier'].toString();
         final String? authorization = jwt['authorization'] as String?;
-        final String clientId = jwt['client_id'].toString();
+        final String? clientId = jwt['client_id'] as String?;
         final String? clientSecret = jwt['client_secret'] as String?;
 
         final selectedCredentials = stateOfCredentialsSelected

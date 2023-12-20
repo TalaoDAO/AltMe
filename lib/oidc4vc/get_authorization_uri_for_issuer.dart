@@ -17,7 +17,7 @@ Future<void> getAuthorizationUriForIssuer({
   required String issuer,
   required dynamic credentialOfferJson,
   required bool scope,
-  required String clientId,
+  required String? clientId,
   required String? clientSecret,
   required ClientAuthentication clientAuthentication,
 }) async {
@@ -38,13 +38,12 @@ Future<void> getAuthorizationUriForIssuer({
 
   switch (clientAuthentication) {
     case ClientAuthentication.none:
-      data['client_id'] = clientId;
+      break;
     case ClientAuthentication.clientSecretBasic:
-      data['client_id'] = clientId; // not used later, added just to avoid error
       data['authorization'] =
           base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
     case ClientAuthentication.clientSecretPost:
-      data['client_id'] = clientId;
+      data['client_id'] = clientId!;
       data['client_secret'] = clientSecret!;
   }
 

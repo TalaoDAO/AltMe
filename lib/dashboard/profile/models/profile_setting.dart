@@ -399,9 +399,9 @@ class CustomOidc4VcProfile extends Equatable {
   final ClientAuthentication clientAuthentication;
   final bool credentialManifestSupport;
   @JsonKey(name: 'client_id')
-  final String clientId;
+  final String? clientId;
   @JsonKey(name: 'client_secret')
-  final String clientSecret;
+  final String? clientSecret;
   final bool cryptoHolderBinding;
   final DidKeyType defaultDid;
   final OIDC4VCIDraftType oidc4vciDraft;

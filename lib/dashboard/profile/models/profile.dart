@@ -35,8 +35,8 @@ class ProfileModel extends Equatable {
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
-    required String clientId,
-    required String clientSecret,
+    required String? clientId,
+    required String? clientSecret,
     String? enterpriseWalletName,
   }) =>
       ProfileModel(
@@ -82,8 +82,8 @@ class ProfileModel extends Equatable {
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
-    required String clientId,
-    required String clientSecret,
+    required String? clientId,
+    required String? clientSecret,
     String? enterpriseWalletName,
   }) =>
       ProfileModel(

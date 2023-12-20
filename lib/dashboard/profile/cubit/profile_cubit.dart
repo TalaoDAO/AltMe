@@ -229,7 +229,6 @@ class ProfileCubit extends Cubit<ProfileState> {
                 jsonDecode(customProfileSettingJsonString)
                     as Map<String, dynamic>;
 
-            /// migration - remove later
             if (customProfileSettingMap['selfSovereignIdentityOptions']
                     ['customOidc4vcProfile']['client_id'] ==
                 null) {
@@ -242,8 +241,6 @@ class ProfileCubit extends Cubit<ProfileState> {
               customProfileSettingMap['selfSovereignIdentityOptions']
                   ['customOidc4vcProfile']['client_secret'] = randomString(12);
             }
-
-            /// migration - remove upto here
 
             profileSetting = ProfileSetting.fromJson(customProfileSettingMap);
           } else {

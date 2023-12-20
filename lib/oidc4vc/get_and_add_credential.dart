@@ -27,7 +27,7 @@ Future<void> getAndAddCredential({
   required String? authorization,
   required OIDC4VCIDraftType oidc4vciDraftType,
   required DidKeyType didKeyType,
-  required String clientId,
+  required String? clientId,
   required String? clientSecret,
 }) async {
   final privateKey = await fetchPrivateKey(

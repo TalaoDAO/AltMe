@@ -1082,18 +1082,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required dynamic credentialOfferJson,
   }) async {
     try {
-      String clientId = '';
+      String? clientId;
       String? clientSecret;
+      String? authorization;
 
       final customOidc4vcProfile = profileCubit.state.model.profileSetting
           .selfSovereignIdentityOptions.customOidc4vcProfile;
 
       final scope = customOidc4vcProfile.scope;
 
-      final clientAuthentication = customOidc4vcProfile.clientAuthentication;
-
       switch (customOidc4vcProfile.clientAuthentication) {
         case ClientAuthentication.none:
+          break;
+        case ClientAuthentication.clientSecretPost:
           final didKeyType = customOidc4vcProfile.defaultDid;
 
           final privateKey = await fetchPrivateKey(
@@ -1111,19 +1112,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             didKeyType: didKeyType,
           );
           clientId = did;
+          clientSecret = customOidc4vcProfile.clientSecret;
         case ClientAuthentication.clientSecretBasic:
-        case ClientAuthentication.clientSecretPost:
           clientId = customOidc4vcProfile.clientId;
           clientSecret = customOidc4vcProfile.clientSecret;
+          authorization =
+              base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
       }
 
       if (preAuthorizedCode != null) {
-        String? authorization;
-        if (clientAuthentication == ClientAuthentication.clientSecretBasic) {
-          authorization =
-              base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
-        }
-
         await addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
           isEBSIV3: isEBSIV3,
@@ -1168,7 +1165,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? codeForAuthorisedFlow,
     required String? codeVerifier,
     required String? authorization,
-    required String clientId,
+    required String? clientId,
     required String? clientSecret,
   }) async {
     try {
@@ -1256,7 +1253,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final String issuer = statePayload['issuer'].toString();
       final bool isEBSIV3 = statePayload['isEBSIV3'] as bool;
       final String? authorization = statePayload['authorization'] as String?;
-      final String clientId = statePayload['client_id'].toString();
+      final String? clientId = statePayload['client_id'] as String?;
       final String? clientSecret = statePayload['client_secret'] as String?;
 
       await addCredentialsInLoop(
