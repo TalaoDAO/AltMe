@@ -15,13 +15,11 @@ class WalletCredentialWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
         CredentialImage(
-          image: isAndroid
-              ? ImageStrings.walletCertificateAndroid
-              : ImageStrings.walletCertificateiOS,
-          child: const AspectRatio(
+          image: ImageStrings.walletCertificate,
+          child: AspectRatio(
             aspectRatio: Sizes.credentialAspectRatio,
           ),
         ),
