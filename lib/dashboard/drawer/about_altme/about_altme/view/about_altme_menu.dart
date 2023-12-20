@@ -51,8 +51,9 @@ class AboutAltmeView extends StatelessWidget {
                           profileSetting.generalOptions.companyLogo,
                           fit: BoxFit.cover,
                           height: 90,
-                          bgColor:
-                              Theme.of(context).colorScheme.drawerBackground,
+                          bgColor: Colors.transparent,
+                          errorMessage: '',
+                          showLoading: false,
                         )
                       : const AltMeLogo(size: 90),
                 ),
