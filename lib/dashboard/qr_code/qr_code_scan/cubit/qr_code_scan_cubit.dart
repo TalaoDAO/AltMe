@@ -1082,10 +1082,48 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required dynamic credentialOfferJson,
   }) async {
     try {
-      final scope = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.scope;
+      String clientId = '';
+      String? clientSecret;
+
+      final customOidc4vcProfile = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+      final scope = customOidc4vcProfile.scope;
+
+      final clientAuthentication = customOidc4vcProfile.clientAuthentication;
+
+      switch (customOidc4vcProfile.clientAuthentication) {
+        case ClientAuthentication.none:
+          final didKeyType = customOidc4vcProfile.defaultDid;
+
+          final privateKey = await fetchPrivateKey(
+            oidc4vc: oidc4vc,
+            secureStorage: secureStorageProvider,
+            isEBSIV3: isEBSIV3,
+            didKeyType: didKeyType,
+          );
+
+          final (did, _) = await fetchDidAndKid(
+            privateKey: privateKey,
+            isEBSIV3: isEBSIV3,
+            didKitProvider: didKitProvider,
+            secureStorage: secureStorageProvider,
+            didKeyType: didKeyType,
+          );
+          clientId = did;
+        case ClientAuthentication.clientSecretBasic:
+        case ClientAuthentication.clientSecretPost:
+          clientId = customOidc4vcProfile.clientId;
+          clientSecret = customOidc4vcProfile.clientSecret;
+      }
 
       if (preAuthorizedCode != null) {
+        String? authorization;
+        if (clientAuthentication == ClientAuthentication.clientSecretBasic) {
+          authorization =
+              base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+        }
+
         await addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
           isEBSIV3: isEBSIV3,
@@ -1094,41 +1132,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           issuer: issuer,
           codeForAuthorisedFlow: null,
           codeVerifier: null,
-          authorization: null,
+          authorization: authorization,
+          clientId: clientId,
+          clientSecret: clientSecret,
         );
       } else {
         emit(state.loading());
-
-        String clientId = '';
-        String? clientSecret;
-
-        final customOidc4vcProfile = profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile;
-
-        switch (customOidc4vcProfile.clientAuthentication) {
-          case ClientAuthentication.none:
-            final didKeyType = customOidc4vcProfile.defaultDid;
-
-            final privateKey = await fetchPrivateKey(
-              oidc4vc: oidc4vc,
-              secureStorage: secureStorageProvider,
-              isEBSIV3: isEBSIV3,
-              didKeyType: didKeyType,
-            );
-
-            final (did, _) = await fetchDidAndKid(
-              privateKey: privateKey,
-              isEBSIV3: isEBSIV3,
-              didKitProvider: didKitProvider,
-              secureStorage: secureStorageProvider,
-              didKeyType: didKeyType,
-            );
-            clientId = did;
-          case ClientAuthentication.clientSecretBasic:
-          case ClientAuthentication.clientSecretPost:
-            clientId = customOidc4vcProfile.clientId;
-            clientSecret = customOidc4vcProfile.clientSecret;
-        }
 
         await getAuthorizationUriForIssuer(
           scannedResponse: state.uri.toString(),
@@ -1141,13 +1150,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           scope: scope,
           clientId: clientId,
           clientSecret: clientSecret,
-          clientAuthentication: profileCubit
-              .state
-              .model
-              .profileSetting
-              .selfSovereignIdentityOptions
-              .customOidc4vcProfile
-              .clientAuthentication,
+          clientAuthentication: customOidc4vcProfile.clientAuthentication,
         );
         goBack();
       }
@@ -1165,6 +1168,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? codeForAuthorisedFlow,
     required String? codeVerifier,
     required String? authorization,
+    required String clientId,
+    required String? clientSecret,
   }) async {
     try {
       for (int i = 0; i < selectedCredentials.length; i++) {
@@ -1192,12 +1197,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           authorization: authorization,
           oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
           didKeyType: customOidc4vcProfile.defaultDid,
+          clientId: clientId,
+          clientSecret: clientSecret,
         );
       }
 
       oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
       goBack();
     } catch (e) {
+      oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
       emitError(e);
     }
   }
@@ -1232,7 +1240,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final containsAllRequiredKey = statePayload.containsKey('credentials') &&
           statePayload.containsKey('codeVerifier') &&
           statePayload.containsKey('issuer') &&
-          statePayload.containsKey('isEBSIV3');
+          statePayload.containsKey('isEBSIV3') &&
+          statePayload.containsKey('client_id') &&
+          statePayload.containsKey('client_secret');
 
       if (!containsAllRequiredKey) {
         throw ResponseMessage(
@@ -1248,6 +1258,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final String issuer = statePayload['issuer'].toString();
       final bool isEBSIV3 = statePayload['isEBSIV3'] as bool;
       final String? authorization = statePayload['authorization'] as String?;
+      final String clientId = statePayload['client_id'].toString();
+      final String? clientSecret = statePayload['client_secret'] as String?;
 
       await addCredentialsInLoop(
         selectedCredentials: selectedCredentials,
@@ -1258,6 +1270,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         codeForAuthorisedFlow: codeForAuthorisedFlow,
         codeVerifier: codeVerifier,
         authorization: authorization,
+        clientId: clientId,
+        clientSecret: clientSecret,
       );
     } catch (e) {
       emitError(e);

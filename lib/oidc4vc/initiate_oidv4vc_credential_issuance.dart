@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/oidc4vc/oidc4vc.dart';
 
 import 'package:did_kit/did_kit.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -81,6 +80,8 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         final stateOfCredentialsSelected = jwt['options'] as List<dynamic>;
         final String codeVerifier = jwt['codeVerifier'].toString();
         final String? authorization = jwt['authorization'] as String?;
+        final String clientId = jwt['client_id'].toString();
+        final String? clientSecret = jwt['client_secret'] as String?;
 
         final selectedCredentials = stateOfCredentialsSelected
             .map((index) => credentials[index])
@@ -95,33 +96,20 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           codeForAuthorisedFlow: codeForAuthorisedFlow,
           codeVerifier: codeVerifier,
           authorization: authorization,
+          clientId: clientId,
+          clientSecret: clientSecret,
         );
       }
     }
   } else {
-    final didKeyType = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
-    await getAndAddCredential(
-      scannedResponse: scannedResponse,
-      isEBSIV3: isEBSIV3,
-      oidc4vc: oidc4vc,
-      didKitProvider: didKitProvider,
-      credentialsCubit: credentialsCubit,
-      credential: credentials,
-      secureStorageProvider: secureStorageProvider,
-      isLastCall: true,
-      dioClient: dioClient,
+    // full phase flow of preAuthorized
+    await qrCodeScanCubit.processSelectedCredentials(
       userPin: userPin,
       issuer: issuer!,
       preAuthorizedCode: preAuthorizedCode,
-      codeForAuthorisedFlow: null,
-      codeVerifier: null,
-      authorization: null,
-      cryptoHolderBinding: cryptoHolderBinding,
-      oidc4vciDraftType: oidc4vciDraftType,
-      didKeyType: didKeyType,
+      isEBSIV3: isEBSIV3,
+      credentialOfferJson: credentialOfferJson,
+      selectedCredentials: [credentials],
     );
-    oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
-    qrCodeScanCubit.goBack();
   }
 }

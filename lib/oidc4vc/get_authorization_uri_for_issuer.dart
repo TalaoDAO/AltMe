@@ -34,6 +34,8 @@ Future<void> getAuthorizationUriForIssuer({
     'credentials': selectedCredentials,
     'issuer': issuer,
     'isEBSIV3': isEBSIV3,
+    'client_id': clientId,
+    'client_secret': clientSecret,
   };
 
   if (clientAuthentication == ClientAuthentication.clientSecretBasic) {

@@ -85,7 +85,6 @@ class OIDC4VC {
   Future<Uri> getAuthorizationUriForIssuer({
     required List<dynamic> selectedCredentials,
     required String clientId,
-    String? clientSecret,
     required String redirectUri,
     required String issuer,
     required String issuerState,
@@ -95,6 +94,7 @@ class OIDC4VC {
     required String authorizationEndPoint,
     required bool scope,
     required ClientAuthentication clientAuthentication,
+    String? clientSecret,
   }) async {
     try {
       final openIdConfiguration = await getOpenIdConfig(issuer);
@@ -133,7 +133,6 @@ class OIDC4VC {
   Map<String, dynamic> getAuthorizationRequestParemeters({
     required List<dynamic> selectedCredentials,
     required String clientId,
-    String? clientSecret,
     required String issuer,
     required String issuerState,
     required String nonce,
@@ -144,6 +143,7 @@ class OIDC4VC {
     required String state,
     required bool scope,
     required ClientAuthentication clientAuthentication,
+    String? clientSecret,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -218,7 +218,7 @@ class OIDC4VC {
       ),
     };
 
-    if (clientAuthentication == ClientAuthentication.clientSecretPost) {
+    if (clientAuthentication != ClientAuthentication.none) {
       myRequest['client_secret'] = clientSecret;
     }
 
@@ -283,11 +283,13 @@ class OIDC4VC {
     required String issuer,
     required dynamic credential,
     required String did,
+    required String clientId,
     required String kid,
     required int indexValue,
     required String privateKey,
     required bool cryptoHolderBinding,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    String? clientSecret,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -299,7 +301,8 @@ class OIDC4VC {
       userPin: userPin,
       code: code,
       codeVerifier: codeVerifier,
-      did: did,
+      clientId: clientId,
+      clientSecret: clientSecret,
     );
 
     final openIdConfiguration = await getOpenIdConfig(issuer);
@@ -476,7 +479,8 @@ class OIDC4VC {
     String? userPin,
     String? code,
     String? codeVerifier,
-    String? did,
+    String? clientId,
+    String? clientSecret,
   }) {
     late Map<String, dynamic> tokenData;
 
@@ -484,17 +488,21 @@ class OIDC4VC {
       tokenData = <String, dynamic>{
         'pre-authorized_code': preAuthorizedCode,
         'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
-        'client_id': did,
+        'client_id': clientId,
       };
-    } else if (code != null && codeVerifier != null && did != null) {
+    } else if (code != null && codeVerifier != null && clientId != null) {
       tokenData = <String, dynamic>{
         'code': code,
         'grant_type': 'authorization_code',
         'code_verifier': codeVerifier,
-        'client_id': did,
+        'client_id': clientId,
       };
     } else {
       throw Exception();
+    }
+
+    if (clientSecret != null) {
+      tokenData['client_secret'] = clientSecret;
     }
 
     if (userPin != null) {

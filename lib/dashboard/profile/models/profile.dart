@@ -56,7 +56,7 @@ class ProfileModel extends Equatable {
             displayVerifiableDataRegistry: true,
             oidv4vcProfile: 'ebsi',
             customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.none,
+              clientAuthentication: ClientAuthentication.clientSecretPost,
               credentialManifestSupport: false,
               cryptoHolderBinding: true,
               defaultDid: DidKeyType.ebsiv3,
@@ -103,7 +103,7 @@ class ProfileModel extends Equatable {
             displayVerifiableDataRegistry: true,
             oidv4vcProfile: 'diip',
             customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.none,
+              clientAuthentication: ClientAuthentication.clientSecretPost,
               credentialManifestSupport: false,
               cryptoHolderBinding: true,
               defaultDid: DidKeyType.jwkP256,
