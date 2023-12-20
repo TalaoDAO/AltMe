@@ -23,12 +23,12 @@ class SixOrForUserPinWidget extends StatelessWidget {
                   onChanged: (value) async {
                     await context.read<ProfileCubit>().updateProfileSetting(
                           userPinDigits:
-                              value ? UserPinDigits.six : UserPinDigits.four,
+                              value ? UserPinDigits.four : UserPinDigits.six,
                         );
                   },
                   value: state.model.profileSetting.selfSovereignIdentityOptions
                           .customOidc4vcProfile.userPinDigits ==
-                      UserPinDigits.six,
+                      UserPinDigits.four,
                   activeColor: Theme.of(context).colorScheme.primary,
                 );
               },

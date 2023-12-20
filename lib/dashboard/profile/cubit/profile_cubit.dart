@@ -193,8 +193,8 @@ class ProfileCubit extends Cubit<ProfileState> {
                 userPinDigits:
                     customProfileBackup.containsKey('enable4DigitPINCode') &&
                             customProfileBackup['enable4DigitPINCode'] == 'true'
-                        ? UserPinDigits.six
-                        : UserPinDigits.four,
+                        ? UserPinDigits.four
+                        : UserPinDigits.six,
                 clientId: customProfileBackup.containsKey('clientId')
                     ? customProfileBackup['clientId'].toString()
                     : Parameters.clientId,
