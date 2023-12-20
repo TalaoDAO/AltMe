@@ -222,40 +222,48 @@ class _SplashViewState extends State<SplashView> {
         walletConnectBlocListener,
         polygonIdBlocListener,
       ],
-      child: BasePage(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        scrollView: false,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                const Spacer(flex: 15),
-                const SplashImage(),
-                const Spacer(flex: 5),
-                const TitleText(),
-                const Spacer(flex: 1),
-                const SubTitle(),
-                const Spacer(flex: 5),
-                const LoadingText(),
-                const SizedBox(height: 10),
-                BlocBuilder<SplashCubit, SplashState>(
-                  builder: (context, state) {
-                    return TweenAnimationBuilder(
-                      tween: Tween<double>(begin: 0, end: state.loadedValue),
-                      duration: const Duration(milliseconds: 500),
-                      builder: (context, value, child) {
-                        return LoadingProgress(value: value);
+      child: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          return BasePage(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            scrollView: false,
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const Spacer(flex: 15),
+                    SplashImage(
+                      image:
+                          state.model.profileSetting.generalOptions.companyLogo,
+                    ),
+                    const Spacer(flex: 5),
+                    const TitleText(),
+                    const Spacer(flex: 1),
+                    const SubTitle(),
+                    const Spacer(flex: 5),
+                    const LoadingText(),
+                    const SizedBox(height: 10),
+                    BlocBuilder<SplashCubit, SplashState>(
+                      builder: (context, state) {
+                        return TweenAnimationBuilder(
+                          tween:
+                              Tween<double>(begin: 0, end: state.loadedValue),
+                          duration: const Duration(milliseconds: 500),
+                          builder: (context, value, child) {
+                            return LoadingProgress(value: value);
+                          },
+                        );
                       },
-                    );
-                  },
+                    ),
+                    const Spacer(flex: 6),
+                  ],
                 ),
-                const Spacer(flex: 6),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
