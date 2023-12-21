@@ -71,7 +71,7 @@ class WalletCredentialetailsWidget extends StatelessWidget {
         CredentialField(
           padding: EdgeInsets.zero,
           title: l10n.issuanceDate,
-          value: UiDate.fromMillisecondsSinceEpoch(
+          value: UiDate.formatDateForCredentialCard(
             credentialModel.credentialPreview.issuanceDate,
           ),
           titleColor: titleColor,
@@ -81,7 +81,7 @@ class WalletCredentialetailsWidget extends StatelessWidget {
         CredentialField(
           padding: EdgeInsets.zero,
           title: l10n.expirationDate,
-          value: UiDate.fromMillisecondsSinceEpoch(
+          value: UiDate.formatDateForCredentialCard(
             credentialModel.credentialPreview.expirationDate,
           ),
           titleColor: titleColor,
