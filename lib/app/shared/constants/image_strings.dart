@@ -6,6 +6,8 @@ class ImageStrings {
   static const String splashStage = '$splashPath/altme-stage.png';
 
   static const String imagePath = 'assets/image';
+  static const String ebsiLogo = '$imagePath/ebsi_logo.png';
+  static const String dutchLogo = '$imagePath/dutch_logo.png';
   static const String cardMissing = '$imagePath/card_missing.png';
   static const String employmentCertificateFront =
       '$imagePath/carte-attestation-employeur-recto.png';

@@ -50,7 +50,11 @@ class StarterPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         const Spacer(flex: 5),
-                        SplashImage(profileModel: state.model),
+                        WalletLogo(
+                          profileModel: state.model,
+                          width: MediaQuery.of(context).size.shortestSide * 0.6,
+                          height: MediaQuery.of(context).size.longestSide * 0.2,
+                        ),
                         const Spacer(flex: 3),
                         TitleText(profileModel: state.model),
                         const Spacer(flex: 1),

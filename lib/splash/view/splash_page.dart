@@ -8,7 +8,6 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
@@ -240,13 +239,20 @@ class _SplashViewState extends State<SplashView> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       const Spacer(flex: 15),
-                      SplashImage(profileModel: state.model),
+                      WalletLogo(
+                        profileModel: state.model,
+                        width: MediaQuery.of(context).size.shortestSide * 0.6,
+                        height: MediaQuery.of(context).size.longestSide * 0.2,
+                      ),
                       const Spacer(flex: 5),
                       TitleText(profileModel: state.model),
                       const Spacer(flex: 1),
                       SubTitle(profileModel: state.model),
                       const Spacer(flex: 5),
-                      const LoadingText(),
+                      if (state.model.profileType == ProfileType.custom)
+                        const LoadingText()
+                      else
+                        const PoweredByText(),
                       const SizedBox(height: 10),
                       BlocBuilder<SplashCubit, SplashState>(
                         builder: (context, state) {
