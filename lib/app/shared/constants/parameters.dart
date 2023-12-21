@@ -65,4 +65,6 @@ class Parameters {
 
   static const String clientId = 'urn:altme:0001';
   static const int maxEntries = 3;
+
+  static const String appName = 'Altme';
 }

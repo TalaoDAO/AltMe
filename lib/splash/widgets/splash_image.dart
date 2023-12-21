@@ -1,17 +1,20 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class SplashImage extends StatelessWidget {
   const SplashImage({
     super.key,
-    required this.image,
+    required this.profileModel,
   });
 
-  final String image;
+  final ProfileModel profileModel;
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width * 0.6;
+
+    final image = profileModel.profileSetting.generalOptions.companyLogo;
     return SizedBox(
       width: width,
       height: MediaQuery.of(context).size.height * 0.2,

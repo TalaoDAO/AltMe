@@ -8,6 +8,7 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
@@ -39,9 +40,11 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   void initState() {
-    Future<void>.delayed(const Duration(milliseconds: 500), () async {
-      await context.read<SplashCubit>().initialiseApp();
-    });
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        await context.read<SplashCubit>().initialiseApp();
+      },
+    );
     super.initState();
   }
 
@@ -224,41 +227,42 @@ class _SplashViewState extends State<SplashView> {
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
+          if (state.status != AppStatus.success) return Container();
+
           return BasePage(
             backgroundColor: Theme.of(context).colorScheme.background,
             scrollView: false,
             body: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    const Spacer(flex: 15),
-                    SplashImage(
-                      image:
-                          state.model.profileSetting.generalOptions.companyLogo,
-                    ),
-                    const Spacer(flex: 5),
-                    const TitleText(),
-                    const Spacer(flex: 1),
-                    const SubTitle(),
-                    const Spacer(flex: 5),
-                    const LoadingText(),
-                    const SizedBox(height: 10),
-                    BlocBuilder<SplashCubit, SplashState>(
-                      builder: (context, state) {
-                        return TweenAnimationBuilder(
-                          tween:
-                              Tween<double>(begin: 0, end: state.loadedValue),
-                          duration: const Duration(milliseconds: 500),
-                          builder: (context, value, child) {
-                            return LoadingProgress(value: value);
-                          },
-                        );
-                      },
-                    ),
-                    const Spacer(flex: 6),
-                  ],
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      const Spacer(flex: 15),
+                      SplashImage(profileModel: state.model),
+                      const Spacer(flex: 5),
+                      TitleText(profileModel: state.model),
+                      const Spacer(flex: 1),
+                      SubTitle(profileModel: state.model),
+                      const Spacer(flex: 5),
+                      const LoadingText(),
+                      const SizedBox(height: 10),
+                      BlocBuilder<SplashCubit, SplashState>(
+                        builder: (context, state) {
+                          return TweenAnimationBuilder(
+                            tween:
+                                Tween<double>(begin: 0, end: state.loadedValue),
+                            duration: const Duration(milliseconds: 500),
+                            builder: (context, value, child) {
+                              return LoadingProgress(value: value);
+                            },
+                          );
+                        },
+                      ),
+                      const Spacer(flex: 6),
+                    ],
+                  ),
                 ),
               ),
             ),
