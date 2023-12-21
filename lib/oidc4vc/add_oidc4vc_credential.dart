@@ -60,6 +60,11 @@ Future<void> addOIDC4VCCredential({
   newCredential['format'] = format;
   newCredential['credentialPreview'] = credentialFromOIDC4VC;
 
+  if (newCredential['id'] == null) {
+    /// occuring in ebsi test 1
+    newCredential['id'] = 'urn:uuid:${const Uuid().v4()}';
+  }
+
   if (newCredential['credentialPreview']['id'] == null) {
     /// occuring in dutch blockchain
     newCredential['credentialPreview']['id'] = 'urn:uuid:${const Uuid().v4()}';
