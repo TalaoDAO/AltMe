@@ -248,7 +248,7 @@ void main() {
         test(
             '''emits SplashStatus.routeToPassCode when SecureStorageKeys.isEnterpriseUser is null''',
             () async {
-          when(() => mockSecureStorage.get(SecureStorageKeys.isEnterpriseUser))
+          when(() => mockSecureStorage.get(SecureStorageKeys.walletType))
               .thenAnswer((_) => Future.value(null));
 
           final SplashCubit splashCubit = SplashCubit(
@@ -267,7 +267,7 @@ void main() {
         test(
             '''emits SplashStatus.routeToPassCode when SecureStorageKeys.isEnterpriseUser is empty''',
             () async {
-          when(() => mockSecureStorage.get(SecureStorageKeys.isEnterpriseUser))
+          when(() => mockSecureStorage.get(SecureStorageKeys.walletType))
               .thenAnswer((_) => Future.value(''));
 
           final SplashCubit splashCubit = SplashCubit(
@@ -286,7 +286,7 @@ void main() {
         group('when user is enterprise user', () {
           setUp(() {
             when(
-              () => mockSecureStorage.get(SecureStorageKeys.isEnterpriseUser),
+              () => mockSecureStorage.get(SecureStorageKeys.walletType),
             ).thenAnswer((_) => Future.value('true'));
           });
 

@@ -22,6 +22,7 @@ class BaseTextField extends StatelessWidget {
     this.maxLines = 1,
     this.hint,
     this.hintStyle,
+    this.obscureText = false,
   });
 
   final String? label;
@@ -41,6 +42,7 @@ class BaseTextField extends StatelessWidget {
   final int maxLines;
   final String? hint;
   final TextStyle? hintStyle;
+  final bool obscureText;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,7 @@ class BaseTextField extends StatelessWidget {
         textCapitalization: textCapitalization,
         style: Theme.of(context).textTheme.normal,
         validator: validator,
+        obscureText: obscureText,
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: hintStyle,

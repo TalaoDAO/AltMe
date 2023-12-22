@@ -1,17 +1,21 @@
-import 'package:altme/app/app.dart';
+import 'dart:convert';
+
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:json_path/json_path.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 Future<CredentialManifest> getCredentialManifestFromAltMe(
-  DioClient client,
+  OIDC4VC oidc4vc,
 ) async {
-  final Map<String, dynamic> wellKnown = await getOpenIdConfig(
-    baseUrl: 'https://issuer.talao.co',
-    client: client.dio,
+  final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
+    'https://issuer.talao.co',
   );
   final JsonPath credentialManifetPath = JsonPath(r'$..credential_manifest');
   final credentialManifest = CredentialManifest.fromJson(
-    credentialManifetPath.read(wellKnown).first.value as Map<String, dynamic>,
+    credentialManifetPath
+        .read(jsonDecode(jsonEncode(openIdConfiguration)))
+        .first
+        .value as Map<String, dynamic>,
   );
   return credentialManifest;
 }

@@ -134,8 +134,9 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       id: id,
       image: 'image',
       data: jsonCredential,
-      display: Display.emptyDisplay()..toJson(),
       shareLink: '',
+      jwt: null,
+      format: 'ldp_vc',
       credentialPreview: Credential.fromJson(jsonCredential),
       activities: [Activity(acquisitionAt: DateTime.now())],
     );

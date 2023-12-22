@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -50,13 +49,12 @@ class DidPrivateKey extends StatelessWidget {
                 false;
 
             if (confirm) {
-              await Navigator.of(context).push<void>(
-                PinCodePage.route(
-                  restrictToBack: false,
-                  isValidCallback: () {
-                    Navigator.push<void>(context, route);
-                  },
-                ),
+              await securityCheck(
+                context: context,
+                localAuthApi: LocalAuthApi(),
+                onSuccess: () {
+                  Navigator.push<void>(context, route);
+                },
               );
             }
           },

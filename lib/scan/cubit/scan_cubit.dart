@@ -67,15 +67,20 @@ class ScanCubit extends Cubit<ScanState> {
         // final bool isEBSIV3 =
         //     await isEBSIV3ForVerifier(client: client, uri: uri) ?? false;
 
+        final didKeyType = profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+
         final privateKey = await fetchPrivateKey(
           oidc4vc: oidc4vc,
           secureStorage: secureStorageProvider,
+          didKeyType: didKeyType,
         );
 
         final (did, kid) = await fetchDidAndKid(
           privateKey: privateKey,
           didKitProvider: didKitProvider,
           secureStorage: secureStorageProvider,
+          didKeyType: didKeyType,
         );
 
         final responseType = uri.queryParameters['response_type'] ?? '';
@@ -790,6 +795,12 @@ class ScanCubit extends Cubit<ScanState> {
     final nonce = uri.queryParameters['nonce'] ?? '';
     final clientId = uri.queryParameters['client_id'] ?? '';
 
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+    final enableJWKThumbprint =
+        customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
+
     final idToken = await oidc4vc.extractIdToken(
       clientId: clientId,
       credentialsToBePresented: credentialList,
@@ -797,7 +808,7 @@ class ScanCubit extends Cubit<ScanState> {
       kid: kid,
       privateKey: privateKey,
       nonce: nonce,
-      useJWKThumbPrint: profileCubit.state.model.enableJWKThumbprint,
+      useJWKThumbPrint: enableJWKThumbprint,
     );
 
     return idToken;

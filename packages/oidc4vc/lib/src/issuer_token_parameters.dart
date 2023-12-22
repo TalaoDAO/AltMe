@@ -7,10 +7,10 @@ class IssuerTokenParameters extends TokenParameters {
   IssuerTokenParameters({
     required super.privateKey,
     required super.did,
-    required super.kid,
-    required super.isProofOfOwnership,
+    required super.mediaType,
     required super.useJWKThumbPrint,
     required this.issuer,
+    super.kid,
   });
 
   /// [issuer] is id of credential we are aquiring.

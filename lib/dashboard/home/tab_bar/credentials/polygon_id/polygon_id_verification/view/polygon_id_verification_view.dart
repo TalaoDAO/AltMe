@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -277,20 +276,19 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                       MyGradientButton(
                         text: l10n.approve,
                         onPressed: state.canGenerateProof
-                            ? () {
-                                Navigator.of(context).push<void>(
-                                  PinCodePage.route(
-                                    isValidCallback: () {
-                                      context
-                                          .read<PolygonIdCubit>()
-                                          .authenticateOrGenerateProof(
-                                            iden3MessageEntity:
-                                                widget.iden3MessageEntity,
-                                            isGenerateProof: true,
-                                          );
-                                    },
-                                    restrictToBack: false,
-                                  ),
+                            ? () async {
+                                await securityCheck(
+                                  context: context,
+                                  localAuthApi: LocalAuthApi(),
+                                  onSuccess: () {
+                                    context
+                                        .read<PolygonIdCubit>()
+                                        .authenticateOrGenerateProof(
+                                          iden3MessageEntity:
+                                              widget.iden3MessageEntity,
+                                          isGenerateProof: true,
+                                        );
+                                  },
                                 );
                               }
                             : null,

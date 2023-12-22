@@ -46,17 +46,17 @@ class HelpCenterView extends StatelessWidget {
                   height: Sizes.spaceSmall,
                 ),
                 DrawerItem(
-                  title: l10n.altmeSupport,
+                  title: l10n.chatWithSupport,
                   onTap: () {
                     Navigator.of(context).push<void>(
                       AltmeSupportChatPage.route(
-                        appBarTitle: l10n.altmeSupport,
+                        appBarTitle: l10n.chatWithSupport,
                       ),
                     );
                   },
                 ),
                 DrawerItem(
-                  title: '${l10n.sendAnEmail} : ${AltMeStrings.appSupportMail}',
+                  title: l10n.sendAnEmail,
                   onTap: () {
                     Navigator.of(context).push<void>(ContactUsPage.route());
                   },
@@ -73,25 +73,7 @@ class HelpCenterView extends StatelessWidget {
                       'https://${AltMeStrings.appContactWebsiteName}',
                     );
                   },
-                  title: '${l10n.officialWebsite} : ',
-                  trailing: Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          AltMeStrings.appContactWebsiteName,
-                          textAlign: TextAlign.left,
-                          style: Theme.of(context).textTheme.drawerItemTitle,
-                        ),
-                        const Spacer(),
-                        Icon(
-                          Icons.chevron_right,
-                          size: 26,
-                          color: Theme.of(context).colorScheme.unSelectedLabel,
-                        ),
-                      ],
-                    ),
-                  ),
+                  title: l10n.officialWebsite,
                 ),
               ],
             ),

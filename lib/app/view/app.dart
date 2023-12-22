@@ -98,6 +98,7 @@ class App extends StatelessWidget {
             client: DioClient(Urls.issuerBaseUrl, Dio()),
             secureStorageProvider: secure_storage.getSecureStorage,
             didCubit: context.read<DIDCubit>(),
+            oidc4vc: OIDC4VC(),
           ),
         ),
         BlocProvider<OnboardingCubit>(
@@ -113,6 +114,8 @@ class App extends StatelessWidget {
             didKitProvider: DIDKitProvider(),
             didCubit: context.read<DIDCubit>(),
             advanceSettingsCubit: context.read<AdvanceSettingsCubit>(),
+            jwtDecode: JWTDecode(),
+            profileCubit: context.read<ProfileCubit>(),
           ),
         ),
         BlocProvider<WalletCubit>(

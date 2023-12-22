@@ -12,7 +12,7 @@ class CredentialManifestDetails extends StatelessWidget {
   });
 
   final CredentialModel credentialModel;
-  final OutputDescriptor outputDescriptor;
+  final OutputDescriptor? outputDescriptor;
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +22,16 @@ class CredentialManifestDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 10),
         DisplayDescriptionWidgetWithTitle(
-          displayMapping: outputDescriptor.display?.description,
+          displayMapping: outputDescriptor?.display?.description,
           credentialModel: credentialModel,
           titleColor: titleColor,
           valueColor: valueColor,
         ),
         const SizedBox(height: 10),
         DisplayPropertiesWidget(
-          properties: outputDescriptor.display?.properties,
+          properties: outputDescriptor?.display?.properties,
           credentialModel: credentialModel,
           titleColor: titleColor,
           valueColor: valueColor,

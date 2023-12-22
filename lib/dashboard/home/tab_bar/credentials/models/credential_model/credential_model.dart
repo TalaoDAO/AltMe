@@ -19,8 +19,9 @@ class CredentialModel extends Equatable {
     required this.image,
     required this.credentialPreview,
     required this.shareLink,
-    required this.display,
     required this.data,
+    this.format,
+    this.display,
     this.expirationDate,
     this.credentialManifest,
     this.receivedId,
@@ -53,6 +54,7 @@ class CredentialModel extends Equatable {
     required CredentialModel oldCredentialModel,
     required Map<String, dynamic> newData,
     required List<Activity> activities,
+    Display? display,
     CredentialManifest? credentialManifest,
   }) {
     return CredentialModel(
@@ -60,7 +62,7 @@ class CredentialModel extends Equatable {
       image: oldCredentialModel.image,
       data: newData,
       shareLink: oldCredentialModel.shareLink,
-      display: oldCredentialModel.display,
+      display: display ?? oldCredentialModel.display,
       credentialPreview: Credential.fromJson(newData),
       expirationDate: newData['expirationDate'] as String? ??
           oldCredentialModel.expirationDate,
@@ -71,6 +73,7 @@ class CredentialModel extends Equatable {
       domain: oldCredentialModel.domain,
       activities: activities,
       jwt: oldCredentialModel.jwt,
+      format: oldCredentialModel.format,
     );
   }
 
@@ -84,7 +87,7 @@ class CredentialModel extends Equatable {
   final String shareLink;
   final Credential credentialPreview;
   @JsonKey(fromJson: fromJsonDisplay)
-  final Display display;
+  final Display? display;
   final String? expirationDate;
   @JsonKey(name: 'credential_manifest', fromJson: credentialManifestFromJson)
   final CredentialManifest? credentialManifest;
@@ -93,6 +96,7 @@ class CredentialModel extends Equatable {
   final List<Activity> activities;
   final String? jwt;
   final PendingInfo? pendingInfo;
+  final String? format;
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
@@ -111,6 +115,7 @@ class CredentialModel extends Equatable {
     List<Activity>? activities,
     String? jwt,
     PendingInfo? pendingInfo,
+    String? format,
   }) {
     return CredentialModel(
       id: id ?? this.id,
@@ -127,6 +132,7 @@ class CredentialModel extends Equatable {
       activities: activities ?? this.activities,
       jwt: jwt ?? this.jwt,
       pendingInfo: pendingInfo ?? this.pendingInfo,
+      format: format ?? this.format,
     );
   }
 
@@ -140,9 +146,9 @@ class CredentialModel extends Equatable {
     }
   }
 
-  static Display fromJsonDisplay(dynamic json) {
+  static Display? fromJsonDisplay(dynamic json) {
     if (json == null || json == '') {
-      return const Display('', '', '', '');
+      return null;
     }
     return Display.fromJson(json as Map<String, dynamic>);
   }
@@ -245,5 +251,6 @@ class CredentialModel extends Equatable {
         activities,
         jwt,
         pendingInfo,
+        format,
       ];
 }

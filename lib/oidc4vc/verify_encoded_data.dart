@@ -2,7 +2,7 @@ import 'package:oidc4vc/oidc4vc.dart';
 
 Future<VerificationType> verifyEncodedData(
   String issuerDid,
-  String issuerKid,
+  String? issuerKid,
   String jwt,
 ) async {
   final OIDC4VC oidc4vc = OIDC4VC();

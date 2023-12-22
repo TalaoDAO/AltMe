@@ -16,10 +16,10 @@ Future<void> getAuthorizationUriForIssuer({
   required List<dynamic> selectedCredentials,
   required String issuer,
   required dynamic credentialOfferJson,
-  required bool credentailsInScopeParameter,
-  required String clientId,
+  required bool scope,
+  required String? clientId,
   required String? clientSecret,
-  required bool useBasicClientAuthentication,
+  required ClientAuthentication clientAuthentication,
 }) async {
   /// this is first phase flow for authorization_code
 
@@ -36,9 +36,15 @@ Future<void> getAuthorizationUriForIssuer({
     'isEBSIV3': isEBSIV3,
   };
 
-  if (clientSecret != null && clientSecret != '') {
-    data['authorization'] =
-        base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+  switch (clientAuthentication) {
+    case ClientAuthentication.none:
+      break;
+    case ClientAuthentication.clientSecretBasic:
+      data['authorization'] =
+          base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+    case ClientAuthentication.clientSecretPost:
+      data['client_id'] = clientId!;
+      data['client_secret'] = clientSecret!;
   }
 
   final jwt = JWT(data);
@@ -48,12 +54,11 @@ Future<void> getAuthorizationUriForIssuer({
       dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
 
   final jwtToken = jwt.sign(SecretKey(authorizationUriSecretKey));
-  final tokenEndpointAuthMethod =
-      useBasicClientAuthentication ? 'client_secret_basic' : 'none';
   final Uri oidc4vcAuthenticationUri =
       await oidc4vc.getAuthorizationUriForIssuer(
     selectedCredentials: selectedCredentials,
     clientId: clientId,
+    clientSecret: clientSecret,
     redirectUri: Parameters.oidc4vcUniversalLink,
     issuer: issuer,
     issuerState: issuerState,
@@ -61,8 +66,8 @@ Future<void> getAuthorizationUriForIssuer({
     pkcePair: pkcePair,
     state: jwtToken,
     authorizationEndPoint: Parameters.authorizeEndPoint,
-    credentailsInScopeParameter: credentailsInScopeParameter,
-    tokenEndpointAuthMethod: tokenEndpointAuthMethod,
+    scope: scope,
+    clientAuthentication: clientAuthentication,
   );
 
   await LaunchUrl.launchUri(oidc4vcAuthenticationUri);

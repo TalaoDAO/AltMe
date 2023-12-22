@@ -12,6 +12,8 @@ class CachedImageFromNetwork extends StatelessWidget {
     this.height,
     this.borderRadius,
     this.errorMessage,
+    this.showLoading = true,
+    this.bgColor,
   });
 
   final String url;
@@ -20,6 +22,8 @@ class CachedImageFromNetwork extends StatelessWidget {
   final double? height;
   final BorderRadius? borderRadius;
   final String? errorMessage;
+  final bool showLoading;
+  final Color? bgColor;
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +56,24 @@ class CachedImageFromNetwork extends StatelessWidget {
                 width: width,
                 height: height,
                 progressIndicatorBuilder: (context, child, downloadProgress) {
-                  return errorMessage == null
-                      ? Container(
-                          color: Theme.of(context).colorScheme.lightGrey,
-                          margin: const EdgeInsets.all(10),
-                          child: Text(downloadProgress.progress.toString()),
+                  return showLoading
+                      ? DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Theme.of(context).colorScheme.primary,
+                                Theme.of(context).colorScheme.secondary,
+                              ],
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight,
+                              stops: const [0.3, 1.0],
+                            ),
+                          ),
                         )
-                      : ErrorWidget(errorMessage: errorMessage);
+                      : Container(
+                          color: bgColor ??
+                              Theme.of(context).colorScheme.lightGrey,
+                        );
                 },
                 errorWidget: (context, error, dynamic _) => errorMessage == null
                     ? ColoredBox(
@@ -79,23 +94,28 @@ class ErrorWidget extends StatelessWidget {
   const ErrorWidget({
     super.key,
     required this.errorMessage,
+    this.bgColor,
   });
 
   final String? errorMessage;
+  final Color? bgColor;
 
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Theme.of(context).colorScheme.primary,
-            Theme.of(context).colorScheme.secondary,
-          ],
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-          stops: const [0.3, 1.0],
-        ),
+        color: bgColor,
+        gradient: bgColor != null
+            ? null
+            : LinearGradient(
+                colors: [
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.secondary,
+                ],
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                stops: const [0.3, 1.0],
+              ),
       ),
       child: Center(
         child: Padding(

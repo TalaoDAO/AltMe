@@ -53,19 +53,6 @@ Future<bool> isWalletCreated({
     return false;
   }
 
-  final String? isEnterprise =
-      await secureStorageProvider.get(SecureStorageKeys.isEnterpriseUser);
-
-  if (isEnterprise != null && isEnterprise.isNotEmpty) {
-    if (isEnterprise == 'true') {
-      final rsaKeyJson =
-          await secureStorageProvider.get(SecureStorageKeys.rsaKeyJson);
-      if (rsaKeyJson == null || rsaKeyJson.isEmpty) {
-        return false;
-      }
-    }
-  }
-
   await didCubit.load(
     did: did,
     didMethod: didMethod,

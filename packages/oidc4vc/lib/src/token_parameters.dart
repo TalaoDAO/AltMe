@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:crypto/crypto.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 /// Most of the parameters used to get or present EBSI credentials
 /// are computed from private key of the user wallet.
@@ -11,9 +12,9 @@ class TokenParameters {
   TokenParameters({
     required this.privateKey,
     required this.did,
-    required this.kid,
-    required this.isProofOfOwnership,
+    required this.mediaType,
     required this.useJWKThumbPrint,
+    this.kid,
   });
 
   /// [privateKey] is JWK (Json Web Key) of user private key
@@ -23,10 +24,10 @@ class TokenParameters {
   String did;
 
   /// [kid] kid
-  String kid;
+  String? kid;
 
-  /// [isProofOfOwnership] isIdToken
-  bool isProofOfOwnership;
+  /// [mediaType] is type sent in the header
+  MediaType mediaType;
 
   /// [publicJWK] is JWK (Json Web Key) of user public key
   /// computed from [privateKey]
@@ -66,6 +67,6 @@ class TokenParameters {
     final bytesToHash = utf8.encode(jsonString);
     final sha256Digest = sha256.convert(bytesToHash);
 
-    return base64Encode(sha256Digest.bytes);
+    return base64Encode(sha256Digest.bytes).replaceAll('=', '');
   }
 }

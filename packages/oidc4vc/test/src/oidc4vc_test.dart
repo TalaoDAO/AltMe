@@ -122,7 +122,7 @@ void main() {
   group('EBSI: getAuthorizationUriForIssuer', () {
     const issuer = 'https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi';
 
-    const openidConfiguration =
+    const openIdConfiguration =
         '{"authorization_server":"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/authorize_server","credential_endpoint":"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/credential","credential_issuer":"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi","credential_supported":[{"display":[{"locale":"en-GB","name":"Verifiable diploma"}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableDiploma"]},{"display":[{"locale":"en-GB","name":"Email proof"}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","EmailPass"]},{"display":[{"locale":"en-GB","name":"Verifiable Id"}],"format":"jwt_vc","id":"VerifiableId","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableId"]}],"credentials_supported":[{"display":[{"locale":"en-GB","name":"Verifiable diploma"}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableDiploma"]},{"display":[{"locale":"en-GB","name":"Email proof"}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","EmailPass"]},{"display":[{"locale":"en-GB","name":"Verifiable Id"}],"format":"jwt_vc","id":"VerifiableId","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableId"]}],"deferred_credential_endpoint":"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/deferred","service_documentation":"New environment for V3 compliance test, use specific did:key"}';
 
     const selectedCredentials = [
@@ -156,7 +156,7 @@ void main() {
 
     //     dioAdapter.onGet(
     //       issuer,
-    //       (request) => request.reply(200, jsonDecode(openidConfiguration)),
+    //       (request) => request.reply(200, jsonDecode(openIdConfiguration)),
     //     );
 
     //     final oidc4vc = OIDC4VC();

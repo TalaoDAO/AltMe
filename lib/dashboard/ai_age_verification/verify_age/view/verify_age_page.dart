@@ -1,10 +1,6 @@
-import 'package:altme/app/shared/constants/image_strings.dart';
-import 'package:altme/app/shared/constants/sizes.dart';
-import 'package:altme/app/shared/enum/enum.dart';
-import 'package:altme/app/shared/widget/widget.dart';
-import 'package:altme/dashboard/ai_age_verification/verify_age/view/camera_page.dart';
+import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +16,7 @@ class VerifyAgePage extends StatelessWidget {
     required CredentialSubjectType credentialSubjectType,
   }) {
     return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/VerifyAgePage'),
       builder: (_) => VerifyAgePage(
         credentialSubjectType: credentialSubjectType,
       ),
@@ -82,18 +79,17 @@ class _VerifyAgeViewState extends State<VerifyAgeView> {
             verticalSpacing: 16,
             borderRadius: Sizes.largeRadius,
             onPressed: () async {
-              await Navigator.of(context).push<void>(
-                PinCodePage.route(
-                  isValidCallback: () {
-                    Navigator.push(
-                      context,
-                      CameraPage.route(
-                        credentialSubjectType: widget.credentialSubjectType,
-                      ),
-                    );
-                  },
-                  restrictToBack: false,
-                ),
+              await securityCheck(
+                context: context,
+                localAuthApi: LocalAuthApi(),
+                onSuccess: () {
+                  Navigator.push(
+                    context,
+                    CameraPage.route(
+                      credentialSubjectType: widget.credentialSubjectType,
+                    ),
+                  );
+                },
               );
             },
           ),

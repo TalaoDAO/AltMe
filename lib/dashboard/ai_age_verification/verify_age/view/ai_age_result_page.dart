@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
@@ -181,18 +180,17 @@ class FailureWidget extends StatelessWidget {
           verticalSpacing: 16,
           borderRadius: Sizes.largeRadius,
           onPressed: () async {
-            await Navigator.of(context).push<void>(
-              PinCodePage.route(
-                isValidCallback: () {
-                  Navigator.pushReplacement(
-                    context,
-                    CameraPage.route(
-                      credentialSubjectType: CredentialSubjectType.over13,
-                    ),
-                  );
-                },
-                restrictToBack: false,
-              ),
+            await securityCheck(
+              context: context,
+              localAuthApi: LocalAuthApi(),
+              onSuccess: () {
+                Navigator.pushReplacement(
+                  context,
+                  CameraPage.route(
+                    credentialSubjectType: CredentialSubjectType.over13,
+                  ),
+                );
+              },
             );
           },
         ),
@@ -204,13 +202,14 @@ class FailureWidget extends StatelessWidget {
           verticalSpacing: 16,
           borderRadius: Sizes.largeRadius,
           onPressed: () async {
-            await Navigator.of(context).push<void>(
-              PinCodePage.route(
-                isValidCallback: () => context
+            await securityCheck(
+              context: context,
+              localAuthApi: LocalAuthApi(),
+              onSuccess: () {
+                context
                     .read<KycVerificationCubit>()
-                    .startKycVerifcation(vcType: KycVcType.verifiableId),
-                restrictToBack: false,
-              ),
+                    .startKycVerifcation(vcType: KycVcType.verifiableId);
+              },
             );
             await Navigator.pushAndRemoveUntil<void>(
               context,

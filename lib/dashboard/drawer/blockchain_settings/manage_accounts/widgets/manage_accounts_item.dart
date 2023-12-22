@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/model/model.dart';
 import 'package:flutter/material.dart';
@@ -120,17 +119,16 @@ class ManageAccountsItem extends StatelessWidget {
                       false;
 
                   if (confirm) {
-                    await Navigator.of(context).push<void>(
-                      PinCodePage.route(
-                        restrictToBack: false,
-                        isValidCallback: () {
-                          Navigator.of(context).push<void>(
-                            AccountPrivateKeyPage.route(
-                              privateKey: cryptoAccountData.secretKey,
-                            ),
-                          );
-                        },
-                      ),
+                    await securityCheck(
+                      context: context,
+                      localAuthApi: LocalAuthApi(),
+                      onSuccess: () {
+                        Navigator.of(context).push<void>(
+                          AccountPrivateKeyPage.route(
+                            privateKey: cryptoAccountData.secretKey,
+                          ),
+                        );
+                      },
                     );
                   }
                 },

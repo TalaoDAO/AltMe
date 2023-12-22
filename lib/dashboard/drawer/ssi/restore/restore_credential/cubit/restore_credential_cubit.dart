@@ -87,10 +87,11 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
               id: claimEntity.id,
               image: 'image',
               data: jsonCredential,
-              display: Display.emptyDisplay()..toJson(),
               shareLink: '',
               credentialPreview: credentialPreview,
               expirationDate: claimEntity.expiration,
+              jwt: null,
+              format: 'ldp_vc',
               activities: [Activity(acquisitionAt: DateTime.now())],
             );
             return credentialModel;

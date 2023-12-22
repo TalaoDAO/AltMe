@@ -7,10 +7,8 @@ part 'wallet_credential_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class WalletCredentialModel extends CredentialSubjectModel {
   WalletCredentialModel({
-    this.systemName,
-    this.deviceName,
-    this.systemVersion,
-    this.walletBuild,
+    this.publicKey,
+    this.walletInstanceKey,
     super.id,
     super.type,
     required Author super.issuedBy,
@@ -24,16 +22,10 @@ class WalletCredentialModel extends CredentialSubjectModel {
       _$WalletCredentialModelFromJson(json);
 
   @JsonKey(defaultValue: '')
-  final String? systemName;
+  final String? publicKey;
 
   @JsonKey(defaultValue: '')
-  final String? deviceName;
-
-  @JsonKey(defaultValue: '')
-  final String? systemVersion;
-
-  @JsonKey(defaultValue: '')
-  final String? walletBuild;
+  final String? walletInstanceKey;
 
   @override
   Map<String, dynamic> toJson() => _$WalletCredentialModelToJson(this);

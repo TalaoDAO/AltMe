@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -285,19 +284,23 @@ class CredentialManifestOfferPickView extends StatelessWidget {
         ),
       );
     } else {
-      final bool userPINCodeForAuthentication =
-          context.read<ProfileCubit>().state.model.userPINCodeForAuthentication;
+      final bool userPINCodeForAuthentication = context
+          .read<ProfileCubit>()
+          .state
+          .model
+          .profileSetting
+          .walletSecurityOptions
+          .secureSecurityAuthenticationWithPinCode;
 
       if (userPINCodeForAuthentication) {
         /// Authenticate
         bool authenticated = false;
-        await Navigator.of(context).push<void>(
-          PinCodePage.route(
-            restrictToBack: false,
-            isValidCallback: () {
-              authenticated = true;
-            },
-          ),
+        await securityCheck(
+          context: context,
+          localAuthApi: LocalAuthApi(),
+          onSuccess: () {
+            authenticated = true;
+          },
         );
 
         if (!authenticated) {

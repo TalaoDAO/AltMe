@@ -70,7 +70,7 @@ void main() {
         final Image image =
             find.byType(Image).evaluate().single.widget as Image;
         final AssetImage assetImage = image.image as AssetImage;
-        expect(assetImage.assetName, equals(ImageStrings.splashDev));
+        expect(assetImage.assetName, equals(ImageStrings.appLogo));
       });
 
       testWidgets('correct image is rendered for staging flavor',
@@ -81,7 +81,7 @@ void main() {
         final Image image =
             find.byType(Image).evaluate().single.widget as Image;
         final AssetImage assetImage = image.image as AssetImage;
-        expect(assetImage.assetName, equals(ImageStrings.splashStage));
+        expect(assetImage.assetName, equals(ImageStrings.appLogoStage));
       });
 
       testWidgets('correct image is rendered for production flavor',
@@ -92,7 +92,7 @@ void main() {
         final Image image =
             find.byType(Image).evaluate().single.widget as Image;
         final AssetImage assetImage = image.image as AssetImage;
-        expect(assetImage.assetName, equals(ImageStrings.splash));
+        expect(assetImage.assetName, equals(ImageStrings.appLogo));
       });
 
       // this test fails which does not make sense
