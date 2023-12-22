@@ -995,6 +995,13 @@ MessageHandler getMessageHandler(dynamic e) {
     );
   } else if (e is MessageHandler) {
     return e;
+  } else if (e is TypeError) {
+    return ResponseMessage(
+      data: {
+        'error': 'unsupported_format',
+        'error_description': 'Some issue in the response from the server.',
+      },
+    );
   } else {
     return ResponseMessage(
       message:
@@ -1153,7 +1160,7 @@ Future<String> getFormattedStringOIDC4VPSIOPV2({
 ${response != null ? const JsonEncoder.withIndent('  ').convert(response) : 'None'}\n
 <b>CLIENT METADATA  :</b>  
 ${clientMetaData != null ? const JsonEncoder.withIndent('  ').convert(clientMetaData) : 'None'}\n
-PRESENTATION DEFINITION  :</b> 
+<b>PRESENTATION DEFINITION  :</b> 
 ${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}\n
 <b>REGISTRATION  :</b> 
 ${registrationMap != null ? const JsonEncoder.withIndent('  ').convert(registrationMap) : 'None'}

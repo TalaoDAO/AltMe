@@ -17,7 +17,7 @@ extension OIDC4VCIDraftTypeX on OIDC4VCIDraftType {
       case OIDC4VCIDraftType.draft11:
         return 'Draft 11';
       case OIDC4VCIDraftType.draft12:
-        return 'Draft 12';
+        return 'Draft 12 (Partial)';
     }
   }
 }

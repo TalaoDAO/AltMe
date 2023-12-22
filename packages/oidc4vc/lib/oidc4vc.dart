@@ -8,6 +8,7 @@
 /// EBSI wallet compliance
 library ebsi;
 
+export 'src/client_authentication.dart';
 export 'src/issuer_token_parameters.dart';
 export 'src/media_type.dart';
 export 'src/models/models.dart';

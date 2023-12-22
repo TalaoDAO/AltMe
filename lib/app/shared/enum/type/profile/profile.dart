@@ -1,4 +1,3 @@
-export 'client_authentication.dart';
 export 'did_key_type.dart';
 export 'profile_type.dart';
 export 'subject_syntax.dart';

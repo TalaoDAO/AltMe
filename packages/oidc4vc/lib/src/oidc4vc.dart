@@ -84,7 +84,8 @@ class OIDC4VC {
   /// getAuthorizationUriForIssuer
   Future<Uri> getAuthorizationUriForIssuer({
     required List<dynamic> selectedCredentials,
-    required String clientId,
+    required String? clientId,
+    required String? clientSecret,
     required String redirectUri,
     required String issuer,
     required String issuerState,
@@ -93,7 +94,7 @@ class OIDC4VC {
     required String state,
     required String authorizationEndPoint,
     required bool scope,
-    required String tokenEndpointAuthMethod,
+    required ClientAuthentication clientAuthentication,
   }) async {
     try {
       final openIdConfiguration = await getOpenIdConfig(issuer);
@@ -107,6 +108,7 @@ class OIDC4VC {
         selectedCredentials: selectedCredentials,
         openIdConfiguration: openIdConfiguration,
         clientId: clientId,
+        clientSecret: clientSecret,
         issuer: issuer,
         redirectUri: redirectUri,
         issuerState: issuerState,
@@ -115,7 +117,7 @@ class OIDC4VC {
         state: state,
         authorizationEndPoint: authorizationEndPoint,
         scope: scope,
-        tokenEndpointAuthMethod: tokenEndpointAuthMethod,
+        clientAuthentication: clientAuthentication,
       );
 
       final url = Uri.parse(authorizationEndpoint);
@@ -130,7 +132,8 @@ class OIDC4VC {
   @visibleForTesting
   Map<String, dynamic> getAuthorizationRequestParemeters({
     required List<dynamic> selectedCredentials,
-    required String clientId,
+    required String? clientId,
+    required String? clientSecret,
     required String issuer,
     required String issuerState,
     required String nonce,
@@ -140,7 +143,7 @@ class OIDC4VC {
     required PkcePair pkcePair,
     required String state,
     required bool scope,
-    required String tokenEndpointAuthMethod,
+    required ClientAuthentication clientAuthentication,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -198,10 +201,10 @@ class OIDC4VC {
     }
 
     final codeChallenge = pkcePair.codeChallenge;
+    final tokenEndpointAuthMethod = clientAuthentication.value;
 
     final myRequest = <String, dynamic>{
       'response_type': 'code',
-      'client_id': clientId,
       'redirect_uri': redirectUri,
       'issuer_state': issuerState,
       'state': state,
@@ -213,6 +216,11 @@ class OIDC4VC {
         tokenEndpointAuthMethod,
       ),
     };
+
+    if (clientAuthentication == ClientAuthentication.clientSecretPost) {
+      myRequest['client_id'] = clientId;
+      myRequest['client_secret'] = clientSecret;
+    }
 
     if (scope) {
       myRequest['scope'] = listToString(credentials);
@@ -275,10 +283,13 @@ class OIDC4VC {
     required String issuer,
     required dynamic credential,
     required String did,
+    required String? clientId,
+    required String? clientSecret,
     required String kid,
     required int indexValue,
     required String privateKey,
     required bool cryptoHolderBinding,
+    required bool useJWKThumbPrint,
     required OIDC4VCIDraftType oidc4vciDraftType,
     String? preAuthorizedCode,
     String? userPin,
@@ -286,14 +297,6 @@ class OIDC4VC {
     String? codeVerifier,
     String? authorization,
   }) async {
-    final tokenData = buildTokenData(
-      preAuthorizedCode: preAuthorizedCode,
-      userPin: userPin,
-      code: code,
-      codeVerifier: codeVerifier,
-      did: did,
-    );
-
     final openIdConfiguration = await getOpenIdConfig(issuer);
 
     final tokenEndPoint = await readTokenEndPoint(
@@ -302,11 +305,22 @@ class OIDC4VC {
     );
 
     if (nonce == null || accessToken == null) {
+      final tokenData = buildTokenData(
+        preAuthorizedCode: preAuthorizedCode,
+        userPin: userPin,
+        code: code,
+        codeVerifier: codeVerifier,
+        clientId: clientId,
+        clientSecret: clientSecret,
+        authorization: authorization,
+      );
+
       final response = await getToken(
         tokenEndPoint: tokenEndPoint,
         tokenData: tokenData,
         authorization: authorization,
       );
+
       nonce = response['c_nonce'] as String;
       accessToken = response['access_token'] as String;
       authorizationDetails =
@@ -319,7 +333,7 @@ class OIDC4VC {
       kid: kid,
       issuer: issuer,
       mediaType: MediaType.proofOfOwnership,
-      useJWKThumbPrint: false,
+      useJWKThumbPrint: useJWKThumbPrint,
     );
 
     if (nonce == null) throw Exception();
@@ -468,7 +482,9 @@ class OIDC4VC {
     String? userPin,
     String? code,
     String? codeVerifier,
-    String? did,
+    String? clientId,
+    String? clientSecret,
+    String? authorization,
   }) {
     late Map<String, dynamic> tokenData;
 
@@ -476,22 +492,23 @@ class OIDC4VC {
       tokenData = <String, dynamic>{
         'pre-authorized_code': preAuthorizedCode,
         'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
-        'client_id': did,
       };
-    } else if (code != null && codeVerifier != null && did != null) {
+    } else if (code != null && codeVerifier != null) {
       tokenData = <String, dynamic>{
         'code': code,
         'grant_type': 'authorization_code',
         'code_verifier': codeVerifier,
-        'client_id': did,
       };
     } else {
       throw Exception();
     }
 
-    if (userPin != null) {
-      tokenData['user_pin'] = userPin;
+    if (authorization == null) {
+      if (clientId != null) tokenData['client_id'] = clientId;
+      if (clientSecret != null) tokenData['client_secret'] = clientSecret;
     }
+
+    if (userPin != null) tokenData['user_pin'] = userPin;
 
     return tokenData;
   }
@@ -1135,12 +1152,8 @@ class OIDC4VC {
 
       return OpenIdConfiguration.fromJson(data);
     } catch (e) {
-      if (e.toString().startsWith('Exception: Second_Attempt_Fail')) {
-        rethrow;
-      } else {
-        final data = await getOpenIdConfigSecondAttempt(baseUrl);
-        return data;
-      }
+      final data = await getOpenIdConfigSecondAttempt(baseUrl);
+      return data;
     }
   }
 
@@ -1156,7 +1169,7 @@ class OIDC4VC {
           : response.data as Map<String, dynamic>;
       return OpenIdConfiguration.fromJson(data);
     } catch (e) {
-      throw Exception('Second_Attempt_Fail');
+      throw Exception('Openid-Configuration-Issue');
     }
   }
 }

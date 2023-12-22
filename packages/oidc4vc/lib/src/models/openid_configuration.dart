@@ -1,3 +1,4 @@
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -17,6 +18,9 @@ class OpenIdConfiguration extends Equatable {
     this.subjectTrustFrameworksSupported,
     this.deferredCredentialEndpoint,
     this.serviceDocumentation,
+    this.credentialManifest,
+    this.credentialManifests,
+    this.issuer,
   });
 
   factory OpenIdConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -44,6 +48,11 @@ class OpenIdConfiguration extends Equatable {
   final String? deferredCredentialEndpoint;
   @JsonKey(name: 'service_documentation')
   final String? serviceDocumentation;
+  @JsonKey(name: 'credential_manifest')
+  final CredentialManifest? credentialManifest;
+  @JsonKey(name: 'credential_manifests')
+  final List<CredentialManifest>? credentialManifests;
+  final String? issuer;
 
   Map<String, dynamic> toJson() => _$OpenIdConfigurationToJson(this);
 
@@ -60,6 +69,9 @@ class OpenIdConfiguration extends Equatable {
         credentialsSupported,
         deferredCredentialEndpoint,
         serviceDocumentation,
+        credentialManifest,
+        credentialManifests,
+        issuer,
       ];
 }
 

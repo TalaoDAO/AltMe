@@ -798,6 +798,9 @@ class ScanCubit extends Cubit<ScanState> {
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
+    final enableJWKThumbprint =
+        customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
+
     final idToken = await oidc4vc.extractIdToken(
       clientId: clientId,
       credentialsToBePresented: credentialList,
@@ -805,8 +808,7 @@ class ScanCubit extends Cubit<ScanState> {
       kid: kid,
       privateKey: privateKey,
       nonce: nonce,
-      useJWKThumbPrint: customOidc4vcProfile.subjectSyntaxeType ==
-          SubjectSyntax.jwkThumbprint,
+      useJWKThumbPrint: enableJWKThumbprint,
     );
 
     return idToken;

@@ -22,151 +22,163 @@ class DrawerView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final profileSetting =
-        context.read<ProfileCubit>().state.model.profileSetting;
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Drawer(
-        backgroundColor: Theme.of(context).colorScheme.drawerBackground,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: ListView(
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: BackLeadingButton(
-                    padding: EdgeInsets.zero,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
-
-                Center(
-                  child: profileSetting.generalOptions.companyLogo.isNotEmpty
-                      ? CachedImageFromNetwork(
-                          profileSetting.generalOptions.companyLogo,
-                          fit: BoxFit.cover,
-                          height: 90,
-                          bgColor:
-                              Theme.of(context).colorScheme.drawerBackground,
-                        )
-                      : const AltMeLogo(size: 90),
-                ),
-                const SizedBox(height: Sizes.spaceSmall),
-                const AppVersionDrawer(),
-                const SizedBox(height: Sizes.spaceLarge),
-                if (profileSetting.settingsMenu.displayProfile) ...[
-                  DrawerCategoryItem(
-                    title: l10n.walletProfiles,
-                    subTitle: l10n.walletProfilesDescription,
-                    onClick: () {
-                      Navigator.of(context).push<void>(PickProfileMenu.route());
-                    },
-                  ),
-                  const SizedBox(height: Sizes.spaceSmall),
-                ],
-                DrawerCategoryItem(
-                  title: l10n.walletSecurity,
-                  subTitle: l10n.walletSecurityDescription,
-                  onClick: () {
-                    Navigator.of(context)
-                        .push<void>(WalletSecurityMenu.route());
-                  },
-                ),
-                if (Parameters.walletHandlesCrypto)
-                  Column(
-                    children: [
-                      const SizedBox(height: Sizes.spaceSmall),
-                      DrawerCategoryItem(
-                        title: l10n.blockchainSettings,
-                        subTitle: l10n.blockchainSettingsDescription,
-                        onClick: () {
-                          Navigator.of(context)
-                              .push<void>(BlockchainSettingsMenu.route());
-                        },
-                      ),
-                    ],
-                  )
-                else
-                  const SizedBox.shrink(),
-                const SizedBox(height: Sizes.spaceSmall),
-                DrawerCategoryItem(
-                  title: l10n.ssi,
-                  subTitle: l10n.ssiDescription,
-                  onClick: () {
-                    Navigator.of(context).push<void>(SSIMenu.route());
-                  },
-                ),
-                const SizedBox(height: Sizes.spaceSmall),
-
-                if (profileSetting.settingsMenu.displayDeveloperMode) ...[
-                  DrawerCategoryItem(
-                    title: l10n.developerMode,
-                    subTitle: l10n.developerModeSubtitle,
-                    trailing: SizedBox(
-                      height: 25,
-                      child: BlocBuilder<ProfileCubit, ProfileState>(
-                        builder: (context, state) {
-                          return Switch(
-                            onChanged: (value) async {
-                              await context
-                                  .read<ProfileCubit>()
-                                  .setDeveloperModeStatus(enabled: value);
-                            },
-                            value: state.model.isDeveloperMode,
-                            activeColor: Theme.of(context).colorScheme.primary,
-                          );
-                        },
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        final profileModel = state.model;
+        return SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Drawer(
+            backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: ListView(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: BackLeadingButton(
+                        padding: EdgeInsets.zero,
+                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: Sizes.spaceSmall),
-                ],
 
-                // DrawerCategoryItem(
-                //   title: l10n.checkLinkedinProfile,
-                //   subTitle: l10n.checkLinkedinProfile,
-                //   onClick: () {
-                //     Navigator.of(context)
-                //         .push<void>(CheckForLinkedInProfile.route());
-                //   },
-                // ),
-                //const SizedBox(height: Sizes.spaceSmall),
+                    Center(
+                      child: WalletLogo(
+                        profileModel: profileModel,
+                        height: 90,
+                        width: MediaQuery.of(context).size.shortestSide * 0.5,
+                      ),
+                    ),
+                    if (profileModel.profileType.showSponseredBy) ...[
+                      const SizedBox(height: 5),
+                      const PoweredByText(),
+                    ],
 
-                if (profileSetting.settingsMenu.displayHelpCenter) ...[
-                  DrawerCategoryItem(
-                    title: l10n.helpCenter,
-                    subTitle: l10n.helpCenterDescription,
-                    onClick: () {
-                      Navigator.of(context).push<void>(HelpCenterMenu.route());
-                    },
-                  ),
-                  const SizedBox(height: Sizes.spaceSmall),
-                ],
+                    const SizedBox(height: Sizes.spaceSmall),
+                    const AppVersionDrawer(),
+                    const SizedBox(height: Sizes.spaceLarge),
+                    if (profileModel
+                        .profileSetting.settingsMenu.displayProfile) ...[
+                      DrawerCategoryItem(
+                        title: l10n.walletProfiles,
+                        subTitle: l10n.walletProfilesDescription,
+                        onClick: () {
+                          Navigator.of(context)
+                              .push<void>(PickProfileMenu.route());
+                        },
+                      ),
+                      const SizedBox(height: Sizes.spaceSmall),
+                    ],
+                    DrawerCategoryItem(
+                      title: l10n.walletSecurity,
+                      subTitle: l10n.walletSecurityDescription,
+                      onClick: () {
+                        Navigator.of(context)
+                            .push<void>(WalletSecurityMenu.route());
+                      },
+                    ),
+                    if (Parameters.walletHandlesCrypto)
+                      Column(
+                        children: [
+                          const SizedBox(height: Sizes.spaceSmall),
+                          DrawerCategoryItem(
+                            title: l10n.blockchainSettings,
+                            subTitle: l10n.blockchainSettingsDescription,
+                            onClick: () {
+                              Navigator.of(context)
+                                  .push<void>(BlockchainSettingsMenu.route());
+                            },
+                          ),
+                        ],
+                      )
+                    else
+                      const SizedBox.shrink(),
+                    const SizedBox(height: Sizes.spaceSmall),
+                    DrawerCategoryItem(
+                      title: l10n.ssi,
+                      subTitle: l10n.ssiDescription,
+                      onClick: () {
+                        Navigator.of(context).push<void>(SSIMenu.route());
+                      },
+                    ),
+                    const SizedBox(height: Sizes.spaceSmall),
 
-                DrawerCategoryItem(
-                  title: l10n.about,
-                  subTitle: l10n.aboutDescription,
-                  onClick: () {
-                    Navigator.of(context).push<void>(AboutAltmeMenu.route());
-                  },
+                    if (profileModel
+                        .profileSetting.settingsMenu.displayDeveloperMode) ...[
+                      DrawerCategoryItem(
+                        title: l10n.developerMode,
+                        subTitle: l10n.developerModeSubtitle,
+                        trailing: SizedBox(
+                          height: 25,
+                          child: BlocBuilder<ProfileCubit, ProfileState>(
+                            builder: (context, state) {
+                              return Switch(
+                                onChanged: (value) async {
+                                  await context
+                                      .read<ProfileCubit>()
+                                      .setDeveloperModeStatus(enabled: value);
+                                },
+                                value: state.model.isDeveloperMode,
+                                activeColor:
+                                    Theme.of(context).colorScheme.primary,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: Sizes.spaceSmall),
+                    ],
+
+                    // DrawerCategoryItem(
+                    //   title: l10n.checkLinkedinProfile,
+                    //   subTitle: l10n.checkLinkedinProfile,
+                    //   onClick: () {
+                    //     Navigator.of(context)
+                    //         .push<void>(CheckForLinkedInProfile.route());
+                    //   },
+                    // ),
+                    //const SizedBox(height: Sizes.spaceSmall),
+
+                    if (profileModel
+                        .profileSetting.settingsMenu.displayHelpCenter) ...[
+                      DrawerCategoryItem(
+                        title: l10n.helpCenter,
+                        subTitle: l10n.helpCenterDescription,
+                        onClick: () {
+                          Navigator.of(context)
+                              .push<void>(HelpCenterMenu.route());
+                        },
+                      ),
+                      const SizedBox(height: Sizes.spaceSmall),
+                    ],
+
+                    DrawerCategoryItem(
+                      title: l10n.about,
+                      subTitle: l10n.aboutDescription,
+                      onClick: () {
+                        Navigator.of(context)
+                            .push<void>(AboutAltmeMenu.route());
+                      },
+                    ),
+                    const SizedBox(height: Sizes.spaceSmall),
+                    DrawerCategoryItem(
+                      title: l10n.resetWallet,
+                      subTitle: l10n.resetWalletDescription,
+                      onClick: () {
+                        Navigator.of(context)
+                            .push<void>(ResetWalletMenu.route());
+                      },
+                    ),
+                    const SizedBox(
+                      height: Sizes.spaceNormal,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: Sizes.spaceSmall),
-                DrawerCategoryItem(
-                  title: l10n.resetWallet,
-                  subTitle: l10n.resetWalletDescription,
-                  onClick: () {
-                    Navigator.of(context).push<void>(ResetWalletMenu.route());
-                  },
-                ),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

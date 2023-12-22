@@ -9,6 +9,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:random_string/random_string.dart';
 
 import 'package:secure_storage/secure_storage.dart';
 
@@ -199,7 +200,7 @@ class ProfileCubit extends Cubit<ProfileState> {
                     : Parameters.clientId,
                 clientSecret: customProfileBackup.containsKey('clientSecret')
                     ? customProfileBackup['clientSecret'].toString()
-                    : Parameters.clientSecret,
+                    : randomString(12),
               ),
             ),
             settingsMenu: SettingsMenu.initial(),
@@ -207,8 +208,9 @@ class ProfileCubit extends Cubit<ProfileState> {
             walletSecurityOptions: WalletSecurityOptions.initial(),
           );
         } catch (e) {
-          //
+          await secureStorageProvider.delete('customProfileBackup');
         }
+        await secureStorageProvider.delete('customProfileBackup');
       }
 
       /// migration - remove upto here
@@ -223,10 +225,24 @@ class ProfileCubit extends Cubit<ProfileState> {
               .get(SecureStorageKeys.customProfileSettings);
 
           if (customProfileSettingJsonString != null) {
-            profileSetting = ProfileSetting.fromJson(
-              jsonDecode(customProfileSettingJsonString)
-                  as Map<String, dynamic>,
-            );
+            final customProfileSettingMap =
+                jsonDecode(customProfileSettingJsonString)
+                    as Map<String, dynamic>;
+
+            if (customProfileSettingMap['selfSovereignIdentityOptions']
+                    ['customOidc4vcProfile']['client_id'] ==
+                null) {
+              customProfileSettingMap['selfSovereignIdentityOptions']
+                  ['customOidc4vcProfile']['client_id'] = Parameters.clientId;
+            }
+            if (customProfileSettingMap['selfSovereignIdentityOptions']
+                    ['customOidc4vcProfile']['client_secret'] ==
+                null) {
+              customProfileSettingMap['selfSovereignIdentityOptions']
+                  ['customOidc4vcProfile']['client_secret'] = randomString(12);
+            }
+
+            profileSetting = ProfileSetting.fromJson(customProfileSettingMap);
           } else {
             profileSetting = ProfileSetting.initial();
           }
@@ -241,19 +257,43 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
         case ProfileType.ebsiV3:
+          final privateKey = await getPrivateKey(
+            secureStorage: secureStorageProvider,
+            didKeyType: DidKeyType.ebsiv3,
+          );
+
+          final (did, _) = await getDidAndKid(
+            didKeyType: DidKeyType.ebsiv3,
+            privateKey: privateKey,
+            secureStorage: secureStorageProvider,
+          );
           profileModel = ProfileModel.ebsiV3(
             polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
+            clientId: did,
+            clientSecret: randomString(12),
           );
 
         case ProfileType.dutch:
+          final privateKey = await getPrivateKey(
+            secureStorage: secureStorageProvider,
+            didKeyType: DidKeyType.jwkP256,
+          );
+
+          final (did, _) = await getDidAndKid(
+            didKeyType: DidKeyType.jwkP256,
+            privateKey: privateKey,
+            secureStorage: secureStorageProvider,
+          );
           profileModel = ProfileModel.dutch(
             polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
+            clientId: did,
+            clientSecret: randomString(12),
           );
 
         case ProfileType.enterprise:
@@ -410,6 +450,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           customOidc4vcProfile: state.model.profileSetting
               .selfSovereignIdentityOptions.customOidc4vcProfile
               .copyWith(
+            userPinDigits: userPinDigits,
             defaultDid: didKeyType,
             securityLevel: securityLevel,
             scope: scope,
@@ -425,7 +466,17 @@ class ProfileCubit extends Cubit<ProfileState> {
       ),
     );
 
-    await update(profileModel);
+    await secureStorageProvider.set(
+      SecureStorageKeys.customProfileSettings,
+      jsonEncode(profileModel.profileSetting.toJson()),
+    );
+
+    emit(
+      state.copyWith(
+        model: profileModel,
+        status: AppStatus.success,
+      ),
+    );
   }
 
   Future<void> setDeveloperModeStatus({bool enabled = false}) async {
@@ -467,6 +518,10 @@ class ProfileCubit extends Cubit<ProfileState> {
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
             enterpriseWalletName: state.model.enterpriseWalletName,
+            clientId: state.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.clientId,
+            clientSecret: state.model.profileSetting
+                .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
           ),
         );
       case ProfileType.dutch:
@@ -477,6 +532,10 @@ class ProfileCubit extends Cubit<ProfileState> {
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
             enterpriseWalletName: state.model.enterpriseWalletName,
+            clientId: state.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.clientId,
+            clientSecret: state.model.profileSetting
+                .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
           ),
         );
       case ProfileType.custom:

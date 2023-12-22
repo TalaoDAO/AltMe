@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:random_string/random_string.dart';
 
 part 'profile_setting.g.dart';
 
@@ -372,16 +373,16 @@ class CustomOidc4VcProfile extends Equatable {
     required this.siopv2Draft,
     required this.subjectSyntaxeType,
     required this.userPinDigits,
-    this.clientId,
-    this.clientSecret,
+    required this.clientId,
+    required this.clientSecret,
   });
 
   factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) =>
       _$CustomOidc4VcProfileFromJson(json);
 
-  factory CustomOidc4VcProfile.initial() => const CustomOidc4VcProfile(
+  factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
         clientAuthentication: ClientAuthentication.none,
-        credentialManifestSupport: true,
+        credentialManifestSupport: false,
         cryptoHolderBinding: true,
         defaultDid: DidKeyType.p256,
         oidc4vciDraft: OIDC4VCIDraftType.draft11,
@@ -392,7 +393,7 @@ class CustomOidc4VcProfile extends Equatable {
         subjectSyntaxeType: SubjectSyntax.did,
         userPinDigits: UserPinDigits.six,
         clientId: Parameters.clientId,
-        clientSecret: Parameters.clientSecret,
+        clientSecret: randomString(12),
       );
 
   final ClientAuthentication clientAuthentication;

@@ -19,8 +19,9 @@ class CredentialModel extends Equatable {
     required this.image,
     required this.credentialPreview,
     required this.shareLink,
-    this.display,
     required this.data,
+    this.format,
+    this.display,
     this.expirationDate,
     this.credentialManifest,
     this.receivedId,
@@ -72,6 +73,7 @@ class CredentialModel extends Equatable {
       domain: oldCredentialModel.domain,
       activities: activities,
       jwt: oldCredentialModel.jwt,
+      format: oldCredentialModel.format,
     );
   }
 
@@ -94,6 +96,7 @@ class CredentialModel extends Equatable {
   final List<Activity> activities;
   final String? jwt;
   final PendingInfo? pendingInfo;
+  final String? format;
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
@@ -112,6 +115,7 @@ class CredentialModel extends Equatable {
     List<Activity>? activities,
     String? jwt,
     PendingInfo? pendingInfo,
+    String? format,
   }) {
     return CredentialModel(
       id: id ?? this.id,
@@ -128,6 +132,7 @@ class CredentialModel extends Equatable {
       activities: activities ?? this.activities,
       jwt: jwt ?? this.jwt,
       pendingInfo: pendingInfo ?? this.pendingInfo,
+      format: format ?? this.format,
     );
   }
 
@@ -246,5 +251,6 @@ class CredentialModel extends Equatable {
         activities,
         jwt,
         pendingInfo,
+        format,
       ];
 }

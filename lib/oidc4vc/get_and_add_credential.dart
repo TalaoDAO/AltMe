@@ -16,6 +16,7 @@ Future<void> getAndAddCredential({
   required CredentialsCubit credentialsCubit,
   required dynamic credential,
   required SecureStorageProvider secureStorageProvider,
+  required ProfileCubit profileCubit,
   required bool isLastCall,
   required DioClient dioClient,
   required String? userPin,
@@ -27,6 +28,8 @@ Future<void> getAndAddCredential({
   required String? authorization,
   required OIDC4VCIDraftType oidc4vciDraftType,
   required DidKeyType didKeyType,
+  required String? clientId,
+  required String? clientSecret,
 }) async {
   final privateKey = await fetchPrivateKey(
     isEBSIV3: isEBSIV3,
@@ -51,6 +54,13 @@ Future<void> getAndAddCredential({
     ///
     /// preAuthorizedCode != null
     /// this is full phase flow for preAuthorizedCode
+
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+    final enableJWKThumbprint =
+        customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
+
     final (
       List<dynamic> encodedCredentialOrFutureTokens,
       String? deferredCredentialEndpoint,
@@ -62,6 +72,8 @@ Future<void> getAndAddCredential({
       credential: credential,
       did: did,
       kid: kid,
+      clientId: clientId,
+      clientSecret: clientSecret,
       privateKey: privateKey,
       indexValue: getIndexValue(isEBSIV3: isEBSIV3),
       userPin: userPin,
@@ -70,6 +82,7 @@ Future<void> getAndAddCredential({
       cryptoHolderBinding: cryptoHolderBinding,
       authorization: authorization,
       oidc4vciDraftType: oidc4vciDraftType,
+      useJWKThumbPrint: enableJWKThumbprint,
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {
@@ -104,6 +117,8 @@ Future<void> getAndAddCredential({
             [Evidence.emptyEvidence()],
           ),
           data: const {},
+          jwt: null,
+          format: 'ldp_vc',
           image: '',
           shareLink: '',
           pendingInfo: PendingInfo(

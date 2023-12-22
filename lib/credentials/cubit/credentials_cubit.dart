@@ -130,12 +130,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         image: null,
         data: const <String, dynamic>{},
         shareLink: '',
-        expirationDate: null,
+        expirationDate: payload['exp'].toString(),
         credentialPreview: Credential(
           id,
           ['dummy2'],
           ['WalletCredential'],
-          'dummy3',
+          payload['iss'].toString(), // issuer
           payload['exp'].toString(),
           payload['iat'].toString(),
           [
@@ -155,6 +155,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         ),
         activities: [Activity(acquisitionAt: DateTime.now())],
         jwt: walletAttestationData,
+        format: 'jwt',
       );
 
       log.i('CredentialSubjectType.walletCredential added');

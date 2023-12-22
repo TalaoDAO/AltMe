@@ -5,7 +5,10 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     final Color backgroundColor;
     if (credentialModel.display?.backgroundColor != '') {
       backgroundColor = Color(
-        int.parse('FF${credentialModel.display?.backgroundColor}', radix: 16),
+        int.parse(
+          'FF${credentialModel.display?.backgroundColor.replaceAll('#', '')}',
+          radix: 16,
+        ),
       );
     } else {
       backgroundColor = defaultBackgroundColor;

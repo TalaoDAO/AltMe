@@ -37,17 +37,6 @@ class UiDate {
     }
   }
 
-  static String fromMillisecondsSinceEpoch(String dateTime) {
-    try {
-      final double doubleValue = double.parse(dateTime);
-      final int intValue = doubleValue.toInt();
-      final DateTime dt = DateTime.fromMillisecondsSinceEpoch(intValue * 1000);
-      return formatDate(dt);
-    } catch (e) {
-      return '';
-    }
-  }
-
   static String formatDate(DateTime? dateTime) {
     if (dateTime == null) return '';
     return outputFormat.format(dateTime);
@@ -65,17 +54,35 @@ class UiDate {
 
   static String formatDateForCredentialCard(String date) {
     try {
-      return DateFormat('dd MMM yyyy').format(
-        DateFormat('y-M-dThh:mm:ssZ')
-            .parse(
-              date,
-              true,
-            )
-            .toLocal(),
-      );
+      if (isTimestampString(date)) {
+        final double doubleValue = double.parse(date);
+        final int intValue = doubleValue.toInt();
+        final DateTime dt =
+            DateTime.fromMillisecondsSinceEpoch(intValue * 1000);
+        return formatDate(dt);
+      } else {
+        return outputFormat.format(
+          DateFormat('y-M-dThh:mm:ssZ')
+              .parse(
+                date,
+                true,
+              )
+              .toLocal(),
+        );
+      }
     } catch (e, s) {
       getLogger('date').e('e: $e, s: $s');
       return '';
+    }
+  }
+
+  static bool isTimestampString(String input) {
+    try {
+      final double doubleValue = double.parse(input);
+      doubleValue.toInt();
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 
