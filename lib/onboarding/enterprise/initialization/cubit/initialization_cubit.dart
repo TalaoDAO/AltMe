@@ -92,7 +92,16 @@ class EnterpriseInitializationCubit
       /// request the configuration and verify
       await requestTheConfigurationAndVerify(email: email, password: password);
     } catch (e) {
-      emitError(e);
+      // TODO(bibash): need to remove this hardcode later
+      emit(
+        state.error(
+          message: const StateMessage.error(
+            stringMessage:
+                'User not registered or email/password are incorrect',
+            showDialog: true,
+          ),
+        ),
+      );
     }
   }
 
