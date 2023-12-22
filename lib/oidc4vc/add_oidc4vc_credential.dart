@@ -8,6 +8,7 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:uuid/uuid.dart';
 
 Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
@@ -37,12 +38,7 @@ Future<void> addOIDC4VCCredential({
       if (jsonContent.containsKey('jti')) {
         credentialFromOIDC4VC['id'] = jsonContent['jti'];
       } else {
-        throw ResponseMessage(
-          data: {
-            'error': 'unsupported_format',
-            'error_description': 'Id is missing',
-          },
-        );
+        credentialFromOIDC4VC['id'] = 'urn:uuid:${const Uuid().v4()}';
       }
     }
 
@@ -64,6 +60,9 @@ Future<void> addOIDC4VCCredential({
     if (!credentialFromOIDC4VC.containsKey('issuanceDate')) {
       if (jsonContent.containsKey('iat')) {
         credentialFromOIDC4VC['issuanceDate'] = jsonContent['iat'].toString();
+      } else if (jsonContent.containsKey('issuanceDate')) {
+        credentialFromOIDC4VC['issuanceDate'] =
+            jsonContent['issuanceDate'].toString();
       } else {
         throw ResponseMessage(
           data: {
