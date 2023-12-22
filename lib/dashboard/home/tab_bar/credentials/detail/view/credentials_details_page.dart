@@ -125,17 +125,18 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     final outputDescriptors =
         widget.credentialModel.credentialManifest?.outputDescriptors;
 
-    final isDeveloperMode =
-        context.read<ProfileCubit>().state.model.isDeveloperMode;
+    final profileData = context.read<ProfileCubit>().state.model;
 
-    final credentialManifestSupport = context
-        .read<ProfileCubit>()
-        .state
-        .model
+    final isDeveloperMode = profileData.isDeveloperMode;
+
+    final credentialManifestSupport = profileData
         .profileSetting
         .selfSovereignIdentityOptions
         .customOidc4vcProfile
         .credentialManifestSupport;
+
+    final isSecure = profileData.profileSetting.selfSovereignIdentityOptions
+        .customOidc4vcProfile.securityLevel;
 
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
@@ -269,10 +270,14 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         const SizedBox(height: 10),
                         if (state.credentialDetailTabStatus ==
                             CredentialDetailTabStatus.informations) ...[
-                          const SizedBox(height: 10),
-                          CredentialActiveStatus(
-                            credentialStatus: state.credentialStatus,
-                          ),
+                          if (isSecure &&
+                              state.credentialStatus ==
+                                  CredentialStatus.active) ...[
+                            const SizedBox(height: 10),
+                            CredentialActiveStatus(
+                              credentialStatus: state.credentialStatus,
+                            ),
+                          ],
                           if (credentialManifestSupport &&
                               outputDescriptors != null) ...[
                             const SizedBox(height: 10),
