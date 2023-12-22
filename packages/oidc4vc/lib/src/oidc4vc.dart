@@ -289,6 +289,7 @@ class OIDC4VC {
     required int indexValue,
     required String privateKey,
     required bool cryptoHolderBinding,
+    required bool useJWKThumbPrint,
     required OIDC4VCIDraftType oidc4vciDraftType,
     String? preAuthorizedCode,
     String? userPin,
@@ -332,7 +333,7 @@ class OIDC4VC {
       kid: kid,
       issuer: issuer,
       mediaType: MediaType.proofOfOwnership,
-      useJWKThumbPrint: false,
+      useJWKThumbPrint: useJWKThumbPrint,
     );
 
     if (nonce == null) throw Exception();

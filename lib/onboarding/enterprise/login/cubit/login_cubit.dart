@@ -188,12 +188,18 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
     final p256KeyForWallet = await getWalletP256Key(secureStorageProvider);
     final privateKey = jsonDecode(p256KeyForWallet) as Map<String, dynamic>;
 
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+    final enableJWKThumbprint =
+        customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
+
     final tokenParameters = TokenParameters(
       privateKey: privateKey,
       did: '',
       kid: null,
       mediaType: MediaType.walletAttestation,
-      useJWKThumbPrint: false,
+      useJWKThumbPrint: enableJWKThumbprint,
     );
 
     final thumbPrint = tokenParameters.thumbprint;

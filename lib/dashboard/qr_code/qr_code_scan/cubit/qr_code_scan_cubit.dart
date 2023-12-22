@@ -1196,6 +1196,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           didKeyType: customOidc4vcProfile.defaultDid,
           clientId: clientId,
           clientSecret: clientSecret,
+          profileCubit: profileCubit,
         );
       }
 

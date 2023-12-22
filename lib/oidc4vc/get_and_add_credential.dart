@@ -16,6 +16,7 @@ Future<void> getAndAddCredential({
   required CredentialsCubit credentialsCubit,
   required dynamic credential,
   required SecureStorageProvider secureStorageProvider,
+  required ProfileCubit profileCubit,
   required bool isLastCall,
   required DioClient dioClient,
   required String? userPin,
@@ -53,6 +54,13 @@ Future<void> getAndAddCredential({
     ///
     /// preAuthorizedCode != null
     /// this is full phase flow for preAuthorizedCode
+
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+    final enableJWKThumbprint =
+        customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
+
     final (
       List<dynamic> encodedCredentialOrFutureTokens,
       String? deferredCredentialEndpoint,
@@ -74,6 +82,7 @@ Future<void> getAndAddCredential({
       cryptoHolderBinding: cryptoHolderBinding,
       authorization: authorization,
       oidc4vciDraftType: oidc4vciDraftType,
+      useJWKThumbPrint: enableJWKThumbprint,
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {
