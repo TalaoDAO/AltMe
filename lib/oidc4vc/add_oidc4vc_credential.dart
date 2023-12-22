@@ -77,6 +77,9 @@ Future<void> addOIDC4VCCredential({
     if (!credentialFromOIDC4VC.containsKey('expirationDate')) {
       if (jsonContent.containsKey('exp')) {
         credentialFromOIDC4VC['expirationDate'] = jsonContent['exp'].toString();
+      } else if (jsonContent.containsKey('expirationDate')) {
+        credentialFromOIDC4VC['expirationDate'] =
+            jsonContent['expirationDate'].toString();
       } else {
         throw ResponseMessage(
           data: {
