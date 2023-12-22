@@ -382,7 +382,7 @@ class CustomOidc4VcProfile extends Equatable {
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
         clientAuthentication: ClientAuthentication.none,
-        credentialManifestSupport: true,
+        credentialManifestSupport: false,
         cryptoHolderBinding: true,
         defaultDid: DidKeyType.p256,
         oidc4vciDraft: OIDC4VCIDraftType.draft11,
