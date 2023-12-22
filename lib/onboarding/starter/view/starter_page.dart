@@ -89,7 +89,7 @@ class StarterPage extends StatelessWidget {
                               walletType: WalletType.enterprise,
                             );
                             await Navigator.of(context).push(
-                              EnterpriseLoginPage.route(),
+                              EnterpriseInitializationPage.route(),
                             );
                           },
                         ),

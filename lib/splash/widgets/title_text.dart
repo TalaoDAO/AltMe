@@ -16,7 +16,7 @@ class TitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final isEnterprise = profileModel.walletType == WalletType.enterprise;
+    final isEnterprise = profileModel.profileType == ProfileType.enterprise;
     return MyText(
       '${isEnterprise ? l10n.professional : Parameters.appName} ${l10n.wallet}',
       maxLines: 1,

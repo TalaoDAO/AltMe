@@ -1,8 +1,8 @@
-part of 'login_cubit.dart';
+part of 'initialization_cubit.dart';
 
 @JsonSerializable()
-class EnterpriseLoginState extends Equatable {
-  const EnterpriseLoginState({
+class EnterpriseInitializationState extends Equatable {
+  const EnterpriseInitializationState({
     this.status = AppStatus.init,
     this.message,
     this.isEmailFormatCorrect = false,
@@ -10,8 +10,8 @@ class EnterpriseLoginState extends Equatable {
     this.obscurePassword = true,
   });
 
-  factory EnterpriseLoginState.fromJson(Map<String, dynamic> json) =>
-      _$EnterpriseLoginStateFromJson(json);
+  factory EnterpriseInitializationState.fromJson(Map<String, dynamic> json) =>
+      _$EnterpriseInitializationStateFromJson(json);
 
   final AppStatus status;
   final StateMessage? message;
@@ -19,28 +19,28 @@ class EnterpriseLoginState extends Equatable {
   final bool isPasswordFormatCorrect;
   final bool obscurePassword;
 
-  EnterpriseLoginState loading() {
+  EnterpriseInitializationState loading() {
     return copyWith(
       status: AppStatus.loading,
       message: null,
     );
   }
 
-  EnterpriseLoginState error({required StateMessage message}) {
+  EnterpriseInitializationState error({required StateMessage message}) {
     return copyWith(
       status: AppStatus.error,
       message: message,
     );
   }
 
-  EnterpriseLoginState copyWith({
+  EnterpriseInitializationState copyWith({
     required StateMessage? message,
     AppStatus? status,
     bool? isEmailFormatCorrect,
     bool? isPasswordFormatCorrect,
     bool? obscurePassword,
   }) {
-    return EnterpriseLoginState(
+    return EnterpriseInitializationState(
       status: status ?? this.status,
       message: message,
       isEmailFormatCorrect: isEmailFormatCorrect ?? this.isEmailFormatCorrect,
@@ -50,7 +50,7 @@ class EnterpriseLoginState extends Equatable {
     );
   }
 
-  Map<String, dynamic> toJson() => _$EnterpriseLoginStateToJson(this);
+  Map<String, dynamic> toJson() => _$EnterpriseInitializationStateToJson(this);
 
   @override
   List<Object?> get props => [

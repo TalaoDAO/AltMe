@@ -11,18 +11,19 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
-part 'login_cubit.g.dart';
+part 'initialization_cubit.g.dart';
 
-part 'login_state.dart';
+part 'initialization_state.dart';
 
-class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
-  EnterpriseLoginCubit({
+class EnterpriseInitializationCubit
+    extends Cubit<EnterpriseInitializationState> {
+  EnterpriseInitializationCubit({
     required this.client,
     required this.secureStorageProvider,
     required this.jwtDecode,
     required this.oidc4vc,
     required this.profileCubit,
-  }) : super(const EnterpriseLoginState());
+  }) : super(const EnterpriseInitializationState());
 
   final DioClient client;
   final SecureStorageProvider secureStorageProvider;
