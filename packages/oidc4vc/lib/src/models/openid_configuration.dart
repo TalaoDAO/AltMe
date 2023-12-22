@@ -19,6 +19,7 @@ class OpenIdConfiguration extends Equatable {
     this.deferredCredentialEndpoint,
     this.serviceDocumentation,
     this.credentialManifest,
+    this.credentialManifests,
     this.issuer,
   });
 
@@ -49,6 +50,8 @@ class OpenIdConfiguration extends Equatable {
   final String? serviceDocumentation;
   @JsonKey(name: 'credential_manifest')
   final CredentialManifest? credentialManifest;
+  @JsonKey(name: 'credential_manifests')
+  final List<CredentialManifest>? credentialManifests;
   final String? issuer;
 
   Map<String, dynamic> toJson() => _$OpenIdConfigurationToJson(this);
@@ -67,6 +70,7 @@ class OpenIdConfiguration extends Equatable {
         deferredCredentialEndpoint,
         serviceDocumentation,
         credentialManifest,
+        credentialManifests,
         issuer,
       ];
 }

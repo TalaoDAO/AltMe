@@ -129,8 +129,10 @@ Future<void> addOIDC4VCCredential({
   // }
 
   if (openIdConfiguration != null) {
+    final openidConfigurationJson =
+        jsonDecode(jsonEncode(openIdConfiguration)) as Map<String, dynamic>;
     final CredentialManifest? credentialManifest = await getCredentialManifest(
-      openidConfigurationJson: openIdConfiguration.toJson(),
+      openidConfigurationJson: openidConfigurationJson,
       credentialType: credentialType,
     );
 
