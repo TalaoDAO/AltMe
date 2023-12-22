@@ -78,7 +78,8 @@ class UiDate {
 
   static bool isTimestampString(String input) {
     try {
-      int.parse(input);
+      final double doubleValue = double.parse(input);
+      doubleValue.toInt();
       return true;
     } catch (e) {
       return false;

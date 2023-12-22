@@ -15,15 +15,19 @@ class WalletCredentialWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        CredentialImage(
-          image: ImageStrings.walletCertificate,
-          child: AspectRatio(
-            aspectRatio: Sizes.credentialAspectRatio,
-          ),
-        ),
-      ],
+    return CredentialBaseWidget(
+      cardBackgroundImagePath: ImageStrings.walletCertificate,
+      issuerName: credentialModel
+          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+      issuanceDate: UiDate.formatDateForCredentialCard(
+        credentialModel.credentialPreview.issuanceDate,
+      ),
+      value: '',
+      expirationDate: credentialModel.expirationDate == null
+          ? '--'
+          : UiDate.formatDateForCredentialCard(
+              credentialModel.expirationDate!,
+            ),
     );
   }
 }
@@ -49,6 +53,7 @@ class WalletCredentialetailsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (context.read<ProfileCubit>().state.model.isDeveloperMode) ...[
+          const SizedBox(height: 10),
           CredentialField(
             padding: EdgeInsets.zero,
             title: l10n.publicKeyOfWalletInstance,
