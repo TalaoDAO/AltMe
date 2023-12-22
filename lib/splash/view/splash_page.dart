@@ -249,10 +249,10 @@ class _SplashViewState extends State<SplashView> {
                       const Spacer(flex: 1),
                       SubTitle(profileModel: state.model),
                       const Spacer(flex: 5),
-                      if (state.model.profileType == ProfileType.custom)
-                        const LoadingText()
+                      if (state.model.profileType.showSponseredBy)
+                        const PoweredByText()
                       else
-                        const PoweredByText(),
+                        const LoadingText(),
                       const SizedBox(height: 10),
                       BlocBuilder<SplashCubit, SplashState>(
                         builder: (context, state) {

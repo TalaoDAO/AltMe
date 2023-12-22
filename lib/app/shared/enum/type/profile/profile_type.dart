@@ -18,9 +18,20 @@ extension ProfileTypeX on ProfileType {
       case ProfileType.ebsiV3:
         return l10n.profileEbsiV3;
       case ProfileType.dutch:
-        return l10n.profileDutchBlockchainCoalition;
+        return l10n.decentralizedIdentityInteropProfile;
       case ProfileType.enterprise:
         return name.isEmpty ? 'Enterprise' : name;
+    }
+  }
+
+  bool get showSponseredBy {
+    switch (this) {
+      case ProfileType.custom:
+      case ProfileType.dutch:
+        return false;
+      case ProfileType.ebsiV3:
+      case ProfileType.enterprise:
+        return true;
     }
   }
 }

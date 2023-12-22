@@ -23,15 +23,14 @@ class WalletLogo extends StatelessWidget {
 
     switch (profileModel.profileType) {
       case ProfileType.custom:
+      case ProfileType.dutch:
         image = flavorCubit.state == FlavorMode.development
-            ? ImageStrings.splashDev
+            ? ImageStrings.appLogoDev
             : flavorCubit.state == FlavorMode.staging
-                ? ImageStrings.splashStage
-                : ImageStrings.splash;
+                ? ImageStrings.appLogoStage
+                : ImageStrings.appLogo;
       case ProfileType.ebsiV3:
         image = ImageStrings.ebsiLogo;
-      case ProfileType.dutch:
-        image = ImageStrings.dutchLogo;
       case ProfileType.enterprise:
         image = profileModel.profileSetting.generalOptions.companyLogo;
     }

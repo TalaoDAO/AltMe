@@ -1,13 +1,12 @@
 class ImageStrings {
   static const String splashPath = 'assets/splash';
   static const String splashImage = '$splashPath/splash_image.png';
-  static const String splash = '$splashPath/altme.png';
-  static const String splashDev = '$splashPath/altme-dev.png';
-  static const String splashStage = '$splashPath/altme-stage.png';
+  static const String appLogo = '$splashPath/altme.png';
+  static const String appLogoDev = '$splashPath/altme-dev.png';
+  static const String appLogoStage = '$splashPath/altme-stage.png';
 
   static const String imagePath = 'assets/image';
   static const String ebsiLogo = '$imagePath/ebsi_logo.png';
-  static const String dutchLogo = '$imagePath/dutch_logo.png';
   static const String cardMissing = '$imagePath/card_missing.png';
   static const String employmentCertificateFront =
       '$imagePath/carte-attestation-employeur-recto.png';

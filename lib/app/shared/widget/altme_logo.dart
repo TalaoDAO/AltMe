@@ -18,10 +18,10 @@ class AltMeLogo extends StatelessWidget {
     final FlavorCubit flavorCubit = context.read<FlavorCubit>();
     return Image.asset(
       flavorCubit.state == FlavorMode.development
-          ? ImageStrings.splashDev
+          ? ImageStrings.appLogoDev
           : flavorCubit.state == FlavorMode.staging
-              ? ImageStrings.splashStage
-              : ImageStrings.splash,
+              ? ImageStrings.appLogoStage
+              : ImageStrings.appLogo,
       width: size,
       height: size,
       color: color,

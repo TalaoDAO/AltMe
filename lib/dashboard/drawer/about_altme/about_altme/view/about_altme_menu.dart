@@ -55,7 +55,7 @@ class AboutAltmeView extends StatelessWidget {
                         width: MediaQuery.of(context).size.shortestSide * 0.5,
                       ),
                     ),
-                    if (profileModel.profileType != ProfileType.custom) ...[
+                    if (profileModel.profileType.showSponseredBy) ...[
                       const SizedBox(height: 5),
                       const Center(child: PoweredByText()),
                     ],
