@@ -55,55 +55,59 @@ class AboutAltmeView extends StatelessWidget {
                         width: MediaQuery.of(context).size.shortestSide * 0.5,
                       ),
                     ),
-                    if (profileModel.profileType.showSponseredBy) ...[
-                      const SizedBox(height: 5),
-                      const Center(child: PoweredByText()),
+                    if (profileModel.profileType == ProfileType.enterprise) ...[
+                      if (profileModel.profileType.showSponseredBy) ...[
+                        const SizedBox(height: 5),
+                        const Center(child: PoweredByText()),
+                      ],
                     ],
                     const SizedBox(height: Sizes.spaceSmall),
                     const AppVersionDrawer(),
-                    const SizedBox(height: Sizes.spaceLarge),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Sizes.spaceXSmall,
+                    if (profileModel.profileType == ProfileType.enterprise) ...[
+                      const SizedBox(height: Sizes.spaceLarge),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Sizes.spaceXSmall,
+                        ),
+                        child: Text(
+                          profileSetting.generalOptions.companyName,
+                          style: Theme.of(context)
+                              .textTheme
+                              .drawerItemTitle
+                              .copyWith(
+                                fontSize: 18,
+                              ),
+                        ),
                       ),
-                      child: Text(
-                        l10n.organizationProfile,
-                        style: Theme.of(context)
-                            .textTheme
-                            .drawerItemTitle
-                            .copyWith(
-                              fontSize: 18,
-                            ),
+                      const SizedBox(height: Sizes.spaceXSmall),
+                      EnterpriseData(
+                        title: l10n.profileName,
+                        value: profileSetting.generalOptions.profileName,
                       ),
-                    ),
-                    const SizedBox(height: Sizes.spaceXSmall),
-                    EnterpriseData(
-                      title: l10n.profileName,
-                      value: profileSetting.generalOptions.profileName,
-                    ),
-                    EnterpriseData(
-                      title: l10n.companyName,
-                      value: profileSetting.generalOptions.companyName,
-                    ),
-                    EnterpriseData(
-                      title: l10n.configFileIdentifier,
-                      value: profileSetting.generalOptions.profileId,
-                    ),
-                    const SizedBox(height: Sizes.spaceSmall),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Sizes.spaceXSmall,
+                      // EnterpriseData(
+                      //   title: l10n.companyName,
+                      //   value: profileSetting.generalOptions.companyName,
+                      // ),
+                      EnterpriseData(
+                        title: l10n.configFileIdentifier,
+                        value: profileSetting.generalOptions.profileId,
                       ),
-                      child: Text(
-                        l10n.about,
-                        style: Theme.of(context)
-                            .textTheme
-                            .drawerItemTitle
-                            .copyWith(
-                              fontSize: 18,
-                            ),
+                      const SizedBox(height: Sizes.spaceSmall),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Sizes.spaceXSmall,
+                        ),
+                        child: Text(
+                          l10n.about,
+                          style: Theme.of(context)
+                              .textTheme
+                              .drawerItemTitle
+                              .copyWith(
+                                fontSize: 18,
+                              ),
+                        ),
                       ),
-                    ),
+                    ],
                     const SizedBox(height: Sizes.spaceXSmall),
                     FutureBuilder<PackageInfo>(
                       future: PackageInfo.fromPlatform(),
