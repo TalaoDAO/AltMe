@@ -11,24 +11,18 @@ class SecurityLevelWidget extends StatelessWidget {
     final l10n = context.l10n;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return DrawerItem2(
+        return OptionContainer(
           title: l10n.securityLevelTitle,
           subtitle: l10n.securityLevelSubTitle,
-          trailing: SizedBox(
-            height: 25,
-            child: BlocBuilder<ProfileCubit, ProfileState>(
-              builder: (context, state) {
-                return Switch(
-                  onChanged: (value) async {
-                    await context
-                        .read<ProfileCubit>()
-                        .enableSecurity(enabled: value);
-                  },
-                  value: state.model.enableSecurity,
-                  activeColor: Theme.of(context).colorScheme.primary,
-                );
-              },
-            ),
+          body: Switch(
+            onChanged: (value) async {
+              await context.read<ProfileCubit>().updateProfileSetting(
+                    securityLevel: value,
+                  );
+            },
+            value: state.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.securityLevel,
+            activeColor: Theme.of(context).colorScheme.primary,
           ),
         );
       },

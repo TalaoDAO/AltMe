@@ -31,5 +31,6 @@ Future<void> getAndAddDefferedCredential({
     isLastCall: true,
     format: credentialModel.pendingInfo!.format,
     credentialIdToBeDeleted: credentialModel.id,
+    openIdConfiguration: null,
   );
 }

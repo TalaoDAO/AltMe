@@ -2,7 +2,7 @@
 
 **GENERAL TERMS AND CONDITIONS OF USE**
 
-Effective Date: November 23, 2023
+Effective Date: December 5, 2023
 
 "GENERAL TERMS AND CONDITIONS OF USE
 
@@ -217,11 +217,13 @@ Provider's Efforts:
 
 **Conditions of Use**
 
-Eligibility and Responsibility:
+Eligibility and Scope of Use: 
 
+The Altme wallet services are designed for both personal and enterprise use. This Agreement is legally binding between the user (“User”, “you”, or “your”) and Altme (“Operator”, “we”, “us”, or “our”).  If you are entering into this agreement on behalf of a business, organization, or any other legal entity (“Entity”), you represent that you have the authority to bind such Entity and its affiliates to these terms and conditions. In such cases, “User”, “you”, and “your” shall refer collectively to the individual and the Entity. If you do not possess such authority, or if you do not agree with these terms, you must not accept this agreement and may not access or use the Altme wallet services. 
 
+By accessing and utilizing the Altme wallet services, you acknowledge that you have read, comprehended, and agree to adhere to the terms of this Agreement. You recognize that this Agreement, although electronic and not physically signed by you, constitutes a contract between you and Altme and governs your use of the services.  
 
-* Users acknowledge that Altme wallet services are for personal use only and bear full responsibility for their use.
+It is the responsibility of the User, whether an individual or an Entity, to use the Altme wallet services in accordance with all applicable laws, regulations, and policies, and to ensure the confidentiality and security of their account and related information.
 
 Wallet Initialization and Terms:
 

@@ -1,0 +1,80 @@
+{
+  "blockchainOptions": {
+    "bnbSupport": false,
+    "ethereumSupport": false,
+    "fantomSupport": false,
+    "hederaSupport": false,
+    "infuraApiKey": "",
+    "infuraRpcNode": false,
+    "polygonSupport": false,
+    "tezosSupport": false,
+    "tzproApiKey": "",
+    "tzproRpcNode": false
+  },
+  "discoverCardsOptions": {
+    "displayDefi": true,
+    "displayHumanity": true,
+    "displayOver13": false,
+    "displayOver15": true,
+    "displayOver18": true,
+    "displayRewardsCategory": true,
+    "displayVerifiableId": true
+  },
+  "exp": 1710845400,
+  "generalOptions": {
+    "companyLogo": "https://wallet-provider.talao.co/logos/Test_Bibash.png",
+    "companyName": "Ncell",
+    "companyWebsite": "www.ncell.com",
+    "customerPlan": "paid",
+    "profileId": "MjUxZTljZW",
+    "profileName": "Bibash Wallet",
+    "profileVersion": "1.0",
+    "published": "2023-12-20",
+    "tagLine": "ncell",
+    "walletType": "altme"
+  },
+  "helpCenterOptions": {
+    "customChatSupport": false,
+    "customChatSupportName": null,
+    "customEmail": null,
+    "customEmailSupport": false,
+    "displayChatSupport": false,
+    "displayEmailSupport": false
+  },
+  "iat": 1703069400,
+  "iss": "did:web:talao.co",
+  "jti": "a2d0c081-9f25-11ee-9b58-0a1628958560",
+  "selfSovereignIdentityOptions": {
+    "customOidc4vcProfile": {
+      "clientAuthentication": "none",
+      "client_id": null,
+      "client_secret": null,
+      "credentialManifestSupport": true,
+      "cryptoHolderBinding": false,
+      "defaultDid": "did:key:p-256",
+      "oidc4vciDraft": "11",
+      "oidc4vpDraft": "18",
+      "scope": false,
+      "securityLevel": false,
+      "siopv2Draft": "12",
+      "subjectSyntaxeType": "did",
+      "userPinDigits": "6"
+    },
+    "displayManageDecentralizedId": true,
+    "displaySsiAdvancedSettings": true,
+    "displayVerifiableDataRegistry": true,
+    "oidv4vcProfile": "custom"
+  },
+  "settingsMenu": {
+    "displayDeveloperMode": true,
+    "displayHelpCenter": true,
+    "displayProfile": true
+  },
+  "version": "1.10",
+  "walletSecurityOptions": {
+    "confirmSecurityVerifierAccess": true,
+    "displaySecurityAdvancedSettings": false,
+    "secureSecurityAuthenticationWithPinCode": true,
+    "verifySecurityIssuerWebsiteIdentity": true
+  }
+}

@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/oidc4vc/oidc4vc.dart';
 
 import 'package:did_kit/did_kit.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -16,11 +15,13 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required QRCodeScanCubit qrCodeScanCubit,
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
+  required OIDC4VCIDraftType oidc4vciDraftType,
+  required ProfileCubit profileCubit,
   required SecureStorageProvider secureStorageProvider,
   required DioClient dioClient,
   required String? userPin,
   required dynamic credentialOfferJson,
-  required bool sendProof,
+  required bool cryptoHolderBinding,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -79,6 +80,8 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         final stateOfCredentialsSelected = jwt['options'] as List<dynamic>;
         final String codeVerifier = jwt['codeVerifier'].toString();
         final String? authorization = jwt['authorization'] as String?;
+        final String? clientId = jwt['client_id'] as String?;
+        final String? clientSecret = jwt['client_secret'] as String?;
 
         final selectedCredentials = stateOfCredentialsSelected
             .map((index) => credentials[index])
@@ -93,29 +96,20 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           codeForAuthorisedFlow: codeForAuthorisedFlow,
           codeVerifier: codeVerifier,
           authorization: authorization,
+          clientId: clientId,
+          clientSecret: clientSecret,
         );
       }
     }
   } else {
-    await getAndAddCredential(
-      scannedResponse: scannedResponse,
-      isEBSIV3: isEBSIV3,
-      oidc4vc: oidc4vc,
-      didKitProvider: didKitProvider,
-      credentialsCubit: credentialsCubit,
-      credential: credentials,
-      secureStorageProvider: secureStorageProvider,
-      isLastCall: true,
-      dioClient: dioClient,
+    // full phase flow of preAuthorized
+    await qrCodeScanCubit.processSelectedCredentials(
       userPin: userPin,
       issuer: issuer!,
       preAuthorizedCode: preAuthorizedCode,
-      codeForAuthorisedFlow: null,
-      codeVerifier: null,
-      authorization: null,
-      sendProof: sendProof,
+      isEBSIV3: isEBSIV3,
+      credentialOfferJson: credentialOfferJson,
+      selectedCredentials: [credentials],
     );
-    oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
-    qrCodeScanCubit.goBack();
   }
 }

@@ -3,7 +3,6 @@ import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,16 +87,15 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
-  // void _startKycVerification() {
-  //   Navigator.of(context).push<void>(
-  //     PinCodePage.route(
-  //       isValidCallback: () {
-  //         context.read<KycVerificationCubit>().startKycVerifcation(
-  //               vcType: KycVcType.verifiableId,
-  //             );
-  //       },
-  //       restrictToBack: false,
-  //     ),
+  // Future<void> _startKycVerification() async {
+  //   await securityCheck(
+  //     context: context,
+  //     localAuthApi: LocalAuthApi(),
+  //     onSuccess: () {
+  //       context.read<KycVerificationCubit>().startKycVerifcation(
+  //             vcType: KycVcType.verifiableId,
+  //           );
+  //     },
   //   );
   // }
 
@@ -115,13 +113,12 @@ class _DashboardViewState extends State<DashboardView> {
                   title: l10n.warningDialogTitle,
                   description: l10n.needMnemonicVerificatinoDescription,
                   buttonLabel: l10n.verifyNow,
-                  onButtonClick: () {
-                    Navigator.of(context).push<void>(
-                      PinCodePage.route(
-                        isValidCallback: () => Navigator.of(context)
-                            .push<void>(RecoveryKeyPage.route()),
-                        restrictToBack: false,
-                      ),
+                  onButtonClick: () async {
+                    await securityCheck(
+                      context: context,
+                      localAuthApi: LocalAuthApi(),
+                      onSuccess: () => Navigator.of(context)
+                          .push<void>(RecoveryKeyPage.route()),
                     );
                   },
                 ),

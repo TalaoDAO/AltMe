@@ -39,9 +39,11 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   void initState() {
-    Future<void>.delayed(const Duration(milliseconds: 500), () async {
-      await context.read<SplashCubit>().initialiseApp();
-    });
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        await context.read<SplashCubit>().initialiseApp();
+      },
+    );
     super.initState();
   }
 
@@ -222,40 +224,56 @@ class _SplashViewState extends State<SplashView> {
         walletConnectBlocListener,
         polygonIdBlocListener,
       ],
-      child: BasePage(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        scrollView: false,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                const Spacer(flex: 15),
-                const SplashImage(),
-                const Spacer(flex: 5),
-                const TitleText(),
-                const Spacer(flex: 1),
-                const SubTitle(),
-                const Spacer(flex: 5),
-                const LoadingText(),
-                const SizedBox(height: 10),
-                BlocBuilder<SplashCubit, SplashState>(
-                  builder: (context, state) {
-                    return TweenAnimationBuilder(
-                      tween: Tween<double>(begin: 0, end: state.loadedValue),
-                      duration: const Duration(milliseconds: 500),
-                      builder: (context, value, child) {
-                        return LoadingProgress(value: value);
-                      },
-                    );
-                  },
+      child: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          if (state.status != AppStatus.success) return Container();
+
+          return BasePage(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            scrollView: false,
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      const Spacer(flex: 15),
+                      WalletLogo(
+                        profileModel: state.model,
+                        width: MediaQuery.of(context).size.shortestSide * 0.6,
+                        height: MediaQuery.of(context).size.longestSide * 0.2,
+                      ),
+                      const Spacer(flex: 5),
+                      TitleText(profileModel: state.model),
+                      const Spacer(flex: 1),
+                      SubTitle(profileModel: state.model),
+                      const Spacer(flex: 5),
+                      if (state.model.profileType.showSponseredBy)
+                        const PoweredByText()
+                      else
+                        const LoadingText(),
+                      const SizedBox(height: 10),
+                      BlocBuilder<SplashCubit, SplashState>(
+                        builder: (context, state) {
+                          return TweenAnimationBuilder(
+                            tween:
+                                Tween<double>(begin: 0, end: state.loadedValue),
+                            duration: const Duration(milliseconds: 500),
+                            builder: (context, value, child) {
+                              return LoadingProgress(value: value);
+                            },
+                          );
+                        },
+                      ),
+                      const Spacer(flex: 6),
+                    ],
+                  ),
                 ),
-                const Spacer(flex: 6),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
