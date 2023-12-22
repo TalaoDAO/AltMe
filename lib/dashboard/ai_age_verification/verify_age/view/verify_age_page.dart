@@ -16,6 +16,7 @@ class VerifyAgePage extends StatelessWidget {
     required CredentialSubjectType credentialSubjectType,
   }) {
     return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/VerifyAgePage'),
       builder: (_) => VerifyAgePage(
         credentialSubjectType: credentialSubjectType,
       ),

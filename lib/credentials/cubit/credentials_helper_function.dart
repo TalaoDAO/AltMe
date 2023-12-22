@@ -199,6 +199,8 @@ Future<CredentialModel> _createCredential(
     image: 'image',
     data: jsonCredential,
     shareLink: '',
+    jwt: null,
+    format: 'ldp_vc',
     credentialPreview: Credential.fromJson(jsonCredential),
     credentialManifest: credentialManifest,
     activities: [Activity(acquisitionAt: DateTime.now())],

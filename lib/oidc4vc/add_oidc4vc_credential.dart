@@ -21,22 +21,87 @@ Future<void> addOIDC4VCCredential({
   required OpenIdConfiguration? openIdConfiguration,
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
-  if (format == 'jwt_vc') {
-    //jwt_vc_json
+
+  if (format == 'jwt_vc' || format == 'jwt_vc_json') {
+    //jwt_vc
     final jws = JsonWebSignature.fromCompactSerialization(
       encodedCredentialFromOIDC4VC['credential'] as String,
     );
 
-    credentialFromOIDC4VC =
-        jws.unverifiedPayload.jsonContent['vc'] as Map<String, dynamic>;
-  } else if (format == 'jwt_vc_json') {
-    //jwt_vc_json
-    final jws = JsonWebSignature.fromCompactSerialization(
-      encodedCredentialFromOIDC4VC['credential'] as String,
-    );
-
-    credentialFromOIDC4VC =
+    final jsonContent =
         jws.unverifiedPayload.jsonContent as Map<String, dynamic>;
+
+    credentialFromOIDC4VC = jsonContent['vc'] as Map<String, dynamic>;
+
+    /// id -> jti
+    if (!credentialFromOIDC4VC.containsKey('id')) {
+      if (jsonContent.containsKey('jti')) {
+        credentialFromOIDC4VC['id'] = jsonContent['jti'];
+      } else {
+        credentialFromOIDC4VC['id'] = 'urn:uuid:${const Uuid().v4()}';
+      }
+    }
+
+    /// issuer -> iss
+    if (!credentialFromOIDC4VC.containsKey('issuer')) {
+      if (jsonContent.containsKey('iss')) {
+        credentialFromOIDC4VC['issuer'] = jsonContent['iss'];
+      } else {
+        throw ResponseMessage(
+          data: {
+            'error': 'unsupported_format',
+            'error_description': 'Issuer is missing',
+          },
+        );
+      }
+    }
+
+    /// issuanceDate -> iat
+    if (!credentialFromOIDC4VC.containsKey('issuanceDate')) {
+      if (jsonContent.containsKey('iat')) {
+        credentialFromOIDC4VC['issuanceDate'] = jsonContent['iat'].toString();
+      } else if (jsonContent.containsKey('issuanceDate')) {
+        credentialFromOIDC4VC['issuanceDate'] =
+            jsonContent['issuanceDate'].toString();
+      } else {
+        throw ResponseMessage(
+          data: {
+            'error': 'unsupported_format',
+            'error_description': 'Issuance date is missing',
+          },
+        );
+      }
+    }
+
+    /// expirationDate -> exp
+    if (!credentialFromOIDC4VC.containsKey('expirationDate')) {
+      if (jsonContent.containsKey('exp')) {
+        credentialFromOIDC4VC['expirationDate'] = jsonContent['exp'].toString();
+      } else if (jsonContent.containsKey('expirationDate')) {
+        credentialFromOIDC4VC['expirationDate'] =
+            jsonContent['expirationDate'].toString();
+      } else {
+        throw ResponseMessage(
+          data: {
+            'error': 'unsupported_format',
+            'error_description': 'Expiration date is missing',
+          },
+        );
+      }
+    }
+
+    /// cred,tailSubject.id -> sub
+
+    // if (newCredential['id'] == null) {
+    //   newCredential['id'] = 'urn:uuid:${const Uuid().v4()}';
+    // }
+
+    // if (newCredential['credentialPreview']['id'] == null) {
+    //   newCredential['credentialPreview']['id'] =
+    //       'urn:uuid:${const Uuid().v4()}';
+    // }
+
+    credentialFromOIDC4VC['jwt'] = encodedCredentialFromOIDC4VC['credential'];
   } else if (format == 'ldp_vc') {
     //ldp_vc
 
@@ -53,17 +118,8 @@ Future<void> addOIDC4VCCredential({
   final Map<String, dynamic> newCredential =
       Map<String, dynamic>.from(credentialFromOIDC4VC);
 
-  if (format == 'jwt_vc' || format == 'jwt_vc_json') {
-    //jwt_vc_json
-    newCredential['jwt'] = encodedCredentialFromOIDC4VC['credential'];
-  }
-
+  newCredential['format'] = format;
   newCredential['credentialPreview'] = credentialFromOIDC4VC;
-
-  if (newCredential['credentialPreview']['id'] == null) {
-    /// occuring in dutch blockchain
-    newCredential['credentialPreview']['id'] = 'urn:uuid:${const Uuid().v4()}';
-  }
 
   // if(newCredential['credentialPreview']['credentialSubject']['type']==null) {
   //   /// added id as type to recognise the card
@@ -73,8 +129,10 @@ Future<void> addOIDC4VCCredential({
   // }
 
   if (openIdConfiguration != null) {
+    final openidConfigurationJson =
+        jsonDecode(jsonEncode(openIdConfiguration)) as Map<String, dynamic>;
     final CredentialManifest? credentialManifest = await getCredentialManifest(
-      openidConfigurationJson: openIdConfiguration.toJson(),
+      openidConfigurationJson: openidConfigurationJson,
       credentialType: credentialType,
     );
 
@@ -98,8 +156,8 @@ Future<void> addOIDC4VCCredential({
     final CredentialsSupported? credSupported =
         credentialsSupported.firstWhereOrNull(
       (CredentialsSupported credentialsSupported) =>
-          credentialsSupported.types != null &&
-          credentialsSupported.types!.contains(credentialType),
+          credentialsSupported.id != null &&
+          credentialsSupported.id == credentialType,
     );
 
     if (credSupported != null) {

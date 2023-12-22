@@ -35,6 +35,8 @@ class ProfileModel extends Equatable {
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
+    required String? clientId,
+    required String? clientSecret,
     String? enterpriseWalletName,
   }) =>
       ProfileModel(
@@ -48,13 +50,13 @@ class ProfileModel extends Equatable {
           blockchainOptions: BlockchainOptions.initial(),
           generalOptions: GeneralOptions.empty(),
           helpCenterOptions: HelpCenterOptions.initial(),
-          selfSovereignIdentityOptions: const SelfSovereignIdentityOptions(
+          selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
             displayManageDecentralizedId: true,
             displaySsiAdvancedSettings: false,
             displayVerifiableDataRegistry: true,
             oidv4vcProfile: 'ebsi',
             customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.none,
+              clientAuthentication: ClientAuthentication.clientSecretPost,
               credentialManifestSupport: false,
               cryptoHolderBinding: true,
               defaultDid: DidKeyType.ebsiv3,
@@ -65,6 +67,8 @@ class ProfileModel extends Equatable {
               siopv2Draft: SIOPV2DraftType.draft12,
               subjectSyntaxeType: SubjectSyntax.did,
               userPinDigits: UserPinDigits.four,
+              clientId: clientId,
+              clientSecret: clientSecret,
             ),
           ),
           settingsMenu: SettingsMenu.initial(),
@@ -78,6 +82,8 @@ class ProfileModel extends Equatable {
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
+    required String? clientId,
+    required String? clientSecret,
     String? enterpriseWalletName,
   }) =>
       ProfileModel(
@@ -91,13 +97,13 @@ class ProfileModel extends Equatable {
           blockchainOptions: BlockchainOptions.initial(),
           generalOptions: GeneralOptions.empty(),
           helpCenterOptions: HelpCenterOptions.initial(),
-          selfSovereignIdentityOptions: const SelfSovereignIdentityOptions(
+          selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
             displayManageDecentralizedId: true,
             displaySsiAdvancedSettings: false,
             displayVerifiableDataRegistry: true,
             oidv4vcProfile: 'diip',
             customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.none,
+              clientAuthentication: ClientAuthentication.clientSecretPost,
               credentialManifestSupport: false,
               cryptoHolderBinding: true,
               defaultDid: DidKeyType.jwkP256,
@@ -108,6 +114,8 @@ class ProfileModel extends Equatable {
               siopv2Draft: SIOPV2DraftType.draft12,
               subjectSyntaxeType: SubjectSyntax.did,
               userPinDigits: UserPinDigits.four,
+              clientId: clientId,
+              clientSecret: clientSecret,
             ),
           ),
           settingsMenu: SettingsMenu.initial(),

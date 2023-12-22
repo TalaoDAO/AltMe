@@ -10,7 +10,7 @@ extension MediaTypeX on MediaType {
       case MediaType.proofOfOwnership:
         return 'openid4vci-proof+jwt';
       case MediaType.basic:
-        return 'jwt';
+        return 'JWT';
       case MediaType.walletAttestation:
         return 'wiar+jwt';
     }

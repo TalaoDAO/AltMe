@@ -15,17 +15,19 @@ class WalletCredentialWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CredentialImage(
-          image: isAndroid
-              ? ImageStrings.walletCertificateAndroid
-              : ImageStrings.walletCertificateiOS,
-          child: const AspectRatio(
-            aspectRatio: Sizes.credentialAspectRatio,
-          ),
-        ),
-      ],
+    return CredentialBaseWidget(
+      cardBackgroundImagePath: ImageStrings.walletCertificate,
+      issuerName: credentialModel
+          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+      issuanceDate: UiDate.formatDateForCredentialCard(
+        credentialModel.credentialPreview.issuanceDate,
+      ),
+      value: '',
+      expirationDate: credentialModel.expirationDate == null
+          ? '--'
+          : UiDate.formatDateForCredentialCard(
+              credentialModel.expirationDate!,
+            ),
     );
   }
 }
@@ -51,6 +53,7 @@ class WalletCredentialetailsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (context.read<ProfileCubit>().state.model.isDeveloperMode) ...[
+          const SizedBox(height: 10),
           CredentialField(
             padding: EdgeInsets.zero,
             title: l10n.publicKeyOfWalletInstance,
@@ -73,7 +76,7 @@ class WalletCredentialetailsWidget extends StatelessWidget {
         CredentialField(
           padding: EdgeInsets.zero,
           title: l10n.issuanceDate,
-          value: UiDate.fromMillisecondsSinceEpoch(
+          value: UiDate.formatDateForCredentialCard(
             credentialModel.credentialPreview.issuanceDate,
           ),
           titleColor: titleColor,
@@ -83,7 +86,7 @@ class WalletCredentialetailsWidget extends StatelessWidget {
         CredentialField(
           padding: EdgeInsets.zero,
           title: l10n.expirationDate,
-          value: UiDate.fromMillisecondsSinceEpoch(
+          value: UiDate.formatDateForCredentialCard(
             credentialModel.credentialPreview.expirationDate,
           ),
           titleColor: titleColor,

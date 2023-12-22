@@ -995,6 +995,13 @@ MessageHandler getMessageHandler(dynamic e) {
     );
   } else if (e is MessageHandler) {
     return e;
+  } else if (e is TypeError) {
+    return ResponseMessage(
+      data: {
+        'error': 'unsupported_format',
+        'error_description': 'Some issue in the response from the server.',
+      },
+    );
   } else {
     return ResponseMessage(
       message:

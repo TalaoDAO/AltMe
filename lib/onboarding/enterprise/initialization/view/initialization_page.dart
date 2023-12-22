@@ -10,41 +10,43 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class EnterpriseLoginPage extends StatelessWidget {
-  const EnterpriseLoginPage({super.key});
+class EnterpriseInitializationPage extends StatelessWidget {
+  const EnterpriseInitializationPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => const EnterpriseLoginPage(),
-      settings: const RouteSettings(name: '/EnterpriseLoginPage'),
+      builder: (_) => const EnterpriseInitializationPage(),
+      settings: const RouteSettings(name: '/EnterpriseInitializationPage'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => EnterpriseLoginCubit(
+      create: (_) => EnterpriseInitializationCubit(
         client: DioClient('', Dio()),
         secureStorageProvider: getSecureStorage,
         jwtDecode: JWTDecode(),
         oidc4vc: OIDC4VC(),
         profileCubit: context.read<ProfileCubit>(),
       ),
-      child: const EnterpriseLoginView(),
+      child: const EnterpriseInitializationView(),
     );
   }
 }
 
-class EnterpriseLoginView extends StatefulWidget {
-  const EnterpriseLoginView({
+class EnterpriseInitializationView extends StatefulWidget {
+  const EnterpriseInitializationView({
     super.key,
   });
 
   @override
-  State<EnterpriseLoginView> createState() => _EnterpriseLoginViewState();
+  State<EnterpriseInitializationView> createState() =>
+      _EnterpriseInitializationViewState();
 }
 
-class _EnterpriseLoginViewState extends State<EnterpriseLoginView> {
+class _EnterpriseInitializationViewState
+    extends State<EnterpriseInitializationView> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
 
@@ -54,18 +56,20 @@ class _EnterpriseLoginViewState extends State<EnterpriseLoginView> {
     passwordController = TextEditingController();
     emailController.addListener(() {
       context
-          .read<EnterpriseLoginCubit>()
+          .read<EnterpriseInitializationCubit>()
           .updateEmailFormat(emailController.text);
     });
     passwordController.addListener(() {
       context
-          .read<EnterpriseLoginCubit>()
+          .read<EnterpriseInitializationCubit>()
           .updatePasswordFormat(passwordController.text);
     });
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        await context.read<EnterpriseLoginCubit>().requestTheConfiguration(
+        await context
+            .read<EnterpriseInitializationCubit>()
+            .requestTheConfiguration(
               email: emailController.text.trim(),
               password: passwordController.text.trim(),
             );
@@ -78,7 +82,8 @@ class _EnterpriseLoginViewState extends State<EnterpriseLoginView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocConsumer<EnterpriseLoginCubit, EnterpriseLoginState>(
+    return BlocConsumer<EnterpriseInitializationCubit,
+        EnterpriseInitializationState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -106,7 +111,7 @@ class _EnterpriseLoginViewState extends State<EnterpriseLoginView> {
           padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
           titleLeading: const BackLeadingButton(),
           backgroundColor: Theme.of(context).colorScheme.drawerBackground,
-          title: l10n.login,
+          title: l10n.initialization,
           titleAlignment: Alignment.topCenter,
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,7 +172,7 @@ class _EnterpriseLoginViewState extends State<EnterpriseLoginView> {
                         ),
                         onTap: () {
                           context
-                              .read<EnterpriseLoginCubit>()
+                              .read<EnterpriseInitializationCubit>()
                               .obscurePassword();
                         },
                       ),
@@ -189,7 +194,7 @@ class _EnterpriseLoginViewState extends State<EnterpriseLoginView> {
                   state.isEmailFormatCorrect && state.isPasswordFormatCorrect
                       ? () async {
                           await context
-                              .read<EnterpriseLoginCubit>()
+                              .read<EnterpriseInitializationCubit>()
                               .requestTheConfiguration(
                                 email: emailController.text.trim(),
                                 password: passwordController.text.trim(),

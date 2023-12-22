@@ -11,18 +11,19 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
-part 'login_cubit.g.dart';
+part 'initialization_cubit.g.dart';
 
-part 'login_state.dart';
+part 'initialization_state.dart';
 
-class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
-  EnterpriseLoginCubit({
+class EnterpriseInitializationCubit
+    extends Cubit<EnterpriseInitializationState> {
+  EnterpriseInitializationCubit({
     required this.client,
     required this.secureStorageProvider,
     required this.jwtDecode,
     required this.oidc4vc,
     required this.profileCubit,
-  }) : super(const EnterpriseLoginState());
+  }) : super(const EnterpriseInitializationState());
 
   final DioClient client;
   final SecureStorageProvider secureStorageProvider;
@@ -91,7 +92,16 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
       /// request the configuration and verify
       await requestTheConfigurationAndVerify(email: email, password: password);
     } catch (e) {
-      emitError(e);
+      // TODO(bibash): need to remove this hardcode later
+      emit(
+        state.error(
+          message: const StateMessage.error(
+            stringMessage:
+                'User not registered or email/password are incorrect',
+            showDialog: true,
+          ),
+        ),
+      );
     }
   }
 
@@ -188,12 +198,18 @@ class EnterpriseLoginCubit extends Cubit<EnterpriseLoginState> {
     final p256KeyForWallet = await getWalletP256Key(secureStorageProvider);
     final privateKey = jsonDecode(p256KeyForWallet) as Map<String, dynamic>;
 
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+    final enableJWKThumbprint =
+        customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
+
     final tokenParameters = TokenParameters(
       privateKey: privateKey,
       did: '',
       kid: null,
       mediaType: MediaType.walletAttestation,
-      useJWKThumbPrint: false,
+      useJWKThumbPrint: enableJWKThumbprint,
     );
 
     final thumbPrint = tokenParameters.thumbprint;

@@ -17,7 +17,7 @@ Future<void> getAuthorizationUriForIssuer({
   required String issuer,
   required dynamic credentialOfferJson,
   required bool scope,
-  required String clientId,
+  required String? clientId,
   required String? clientSecret,
   required ClientAuthentication clientAuthentication,
 }) async {
@@ -36,9 +36,15 @@ Future<void> getAuthorizationUriForIssuer({
     'isEBSIV3': isEBSIV3,
   };
 
-  if (clientSecret != null && clientSecret != '') {
-    data['authorization'] =
-        base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+  switch (clientAuthentication) {
+    case ClientAuthentication.none:
+      break;
+    case ClientAuthentication.clientSecretBasic:
+      data['authorization'] =
+          base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+    case ClientAuthentication.clientSecretPost:
+      data['client_id'] = clientId!;
+      data['client_secret'] = clientSecret!;
   }
 
   final jwt = JWT(data);
@@ -48,14 +54,11 @@ Future<void> getAuthorizationUriForIssuer({
       dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
 
   final jwtToken = jwt.sign(SecretKey(authorizationUriSecretKey));
-  final tokenEndpointAuthMethod =
-      clientAuthentication == ClientAuthentication.clientSecretBasic
-          ? 'client_secret_basic'
-          : 'none';
   final Uri oidc4vcAuthenticationUri =
       await oidc4vc.getAuthorizationUriForIssuer(
     selectedCredentials: selectedCredentials,
     clientId: clientId,
+    clientSecret: clientSecret,
     redirectUri: Parameters.oidc4vcUniversalLink,
     issuer: issuer,
     issuerState: issuerState,
@@ -64,7 +67,7 @@ Future<void> getAuthorizationUriForIssuer({
     state: jwtToken,
     authorizationEndPoint: Parameters.authorizeEndPoint,
     scope: scope,
-    tokenEndpointAuthMethod: tokenEndpointAuthMethod,
+    clientAuthentication: clientAuthentication,
   );
 
   await LaunchUrl.launchUri(oidc4vcAuthenticationUri);

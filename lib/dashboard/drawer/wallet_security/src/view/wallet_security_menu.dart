@@ -91,14 +91,16 @@ class WalletSecurityView extends StatelessWidget {
                         }
                       },
                     ),
-                    DrawerItem(
-                      title: l10n.advancedSecuritySettings,
-                      onTap: () {
-                        Navigator.of(context).push<void>(
-                          AdvancedSecuritySettingsMenu.route(),
-                        );
-                      },
-                    ),
+                    if (context.read<ProfileCubit>().state.model.profileType ==
+                        ProfileType.custom)
+                      DrawerItem(
+                        title: l10n.advancedSecuritySettings,
+                        onTap: () {
+                          Navigator.of(context).push<void>(
+                            AdvancedSecuritySettingsMenu.route(),
+                          );
+                        },
+                      ),
                   ],
                 ),
               ),
