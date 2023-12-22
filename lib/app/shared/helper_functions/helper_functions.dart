@@ -999,7 +999,7 @@ MessageHandler getMessageHandler(dynamic e) {
     return ResponseMessage(
       data: {
         'error': 'unsupported_format',
-        'error_description': 'Some issue in the format.\n${e.stackTrace}',
+        'error_description': 'Some issue in the response from the server.',
       },
     );
   } else {
