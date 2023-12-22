@@ -62,51 +62,49 @@ class AboutAltmeView extends StatelessWidget {
                     const SizedBox(height: Sizes.spaceSmall),
                     const AppVersionDrawer(),
                     const SizedBox(height: Sizes.spaceLarge),
-                    if (profileModel.walletType == WalletType.enterprise) ...[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Sizes.spaceXSmall,
-                        ),
-                        child: Text(
-                          l10n.organizationProfile,
-                          style: Theme.of(context)
-                              .textTheme
-                              .drawerItemTitle
-                              .copyWith(
-                                fontSize: 18,
-                              ),
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Sizes.spaceXSmall,
                       ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      EnterpriseData(
-                        title: l10n.profileName,
-                        value: profileSetting.generalOptions.profileName,
+                      child: Text(
+                        l10n.organizationProfile,
+                        style: Theme.of(context)
+                            .textTheme
+                            .drawerItemTitle
+                            .copyWith(
+                              fontSize: 18,
+                            ),
                       ),
-                      EnterpriseData(
-                        title: l10n.companyName,
-                        value: profileSetting.generalOptions.companyName,
+                    ),
+                    const SizedBox(height: Sizes.spaceXSmall),
+                    EnterpriseData(
+                      title: l10n.profileName,
+                      value: profileSetting.generalOptions.profileName,
+                    ),
+                    EnterpriseData(
+                      title: l10n.companyName,
+                      value: profileSetting.generalOptions.companyName,
+                    ),
+                    EnterpriseData(
+                      title: l10n.configFileIdentifier,
+                      value: profileSetting.generalOptions.profileId,
+                    ),
+                    const SizedBox(height: Sizes.spaceSmall),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Sizes.spaceXSmall,
                       ),
-                      EnterpriseData(
-                        title: l10n.configFileIdentifier,
-                        value: profileSetting.generalOptions.profileId,
+                      child: Text(
+                        l10n.about,
+                        style: Theme.of(context)
+                            .textTheme
+                            .drawerItemTitle
+                            .copyWith(
+                              fontSize: 18,
+                            ),
                       ),
-                      const SizedBox(height: Sizes.spaceSmall),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Sizes.spaceXSmall,
-                        ),
-                        child: Text(
-                          l10n.about,
-                          style: Theme.of(context)
-                              .textTheme
-                              .drawerItemTitle
-                              .copyWith(
-                                fontSize: 18,
-                              ),
-                        ),
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                    ],
+                    ),
+                    const SizedBox(height: Sizes.spaceXSmall),
                     FutureBuilder<PackageInfo>(
                       future: PackageInfo.fromPlatform(),
                       builder: (_, snapShot) {
