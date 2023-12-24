@@ -238,13 +238,12 @@ class _SplashViewState extends State<SplashView> {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      const Spacer(flex: 15),
                       WalletLogo(
                         profileModel: state.model,
                         width: MediaQuery.of(context).size.shortestSide * 0.6,
                         height: MediaQuery.of(context).size.longestSide * 0.2,
                       ),
-                      const Spacer(flex: 5),
+                      const Spacer(flex: 2),
                       TitleText(profileModel: state.model),
                       const Spacer(flex: 1),
                       SubTitle(profileModel: state.model),
