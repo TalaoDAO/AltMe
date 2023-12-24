@@ -76,6 +76,18 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'New Enterprise Wallet mode',
+                                'Upload Enterprise Wallet profiles',
+                                'Suspension/Revocation of wallet instances',
+                                'Support of Decentralized Identity Interop Profile (DIIP OIDC4VC profile)',
+                                'Attestation based client authentication (RFC7521)',
+                                '2FA (biometric + PIN code)',
+                                'Bug fixes',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.25.2',
+                              features: [
                                 'Developer mode improvement',
                                 'OIDC4VCI improvement',
                                 'Update code licenses',
