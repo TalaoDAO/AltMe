@@ -60,10 +60,7 @@
       "subjectSyntaxeType": "did",
       "userPinDigits": "6"
     },
-    "displayManageDecentralizedId": true,
-    "displaySsiAdvancedSettings": true,
-    "displayVerifiableDataRegistry": true,
-    "oidv4vcProfile": "custom"
+    "displayManageDecentralizedId": true
   },
   "settingsMenu": {
     "displayDeveloperMode": true,

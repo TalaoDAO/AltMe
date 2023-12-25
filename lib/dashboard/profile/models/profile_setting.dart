@@ -306,9 +306,6 @@ class SelfSovereignIdentityOptions extends Equatable {
   const SelfSovereignIdentityOptions({
     required this.customOidc4vcProfile,
     required this.displayManageDecentralizedId,
-    required this.displaySsiAdvancedSettings,
-    required this.displayVerifiableDataRegistry,
-    required this.oidv4vcProfile,
   });
 
   factory SelfSovereignIdentityOptions.fromJson(Map<String, dynamic> json) =>
@@ -318,44 +315,27 @@ class SelfSovereignIdentityOptions extends Equatable {
       SelfSovereignIdentityOptions(
         customOidc4vcProfile: CustomOidc4VcProfile.initial(),
         displayManageDecentralizedId: true,
-        displaySsiAdvancedSettings: true,
-        displayVerifiableDataRegistry: true,
-        oidv4vcProfile: 'custom',
       );
 
   final CustomOidc4VcProfile customOidc4vcProfile;
   final bool displayManageDecentralizedId;
-  final bool displaySsiAdvancedSettings;
-  final bool displayVerifiableDataRegistry;
-  final String oidv4vcProfile;
 
   Map<String, dynamic> toJson() => _$SelfSovereignIdentityOptionsToJson(this);
 
   SelfSovereignIdentityOptions copyWith({
     CustomOidc4VcProfile? customOidc4vcProfile,
     bool? displayManageDecentralizedId,
-    bool? displaySsiAdvancedSettings,
-    bool? displayVerifiableDataRegistry,
-    String? oidv4vcProfile,
   }) =>
       SelfSovereignIdentityOptions(
         customOidc4vcProfile: customOidc4vcProfile ?? this.customOidc4vcProfile,
         displayManageDecentralizedId:
             displayManageDecentralizedId ?? this.displayManageDecentralizedId,
-        displaySsiAdvancedSettings:
-            displaySsiAdvancedSettings ?? this.displaySsiAdvancedSettings,
-        displayVerifiableDataRegistry:
-            displayVerifiableDataRegistry ?? this.displayVerifiableDataRegistry,
-        oidv4vcProfile: oidv4vcProfile ?? this.oidv4vcProfile,
       );
 
   @override
   List<Object?> get props => [
         customOidc4vcProfile,
         displayManageDecentralizedId,
-        displaySsiAdvancedSettings,
-        displayVerifiableDataRegistry,
-        oidv4vcProfile,
       ];
 }
 

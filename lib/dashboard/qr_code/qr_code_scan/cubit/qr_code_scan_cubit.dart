@@ -796,6 +796,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String issuer,
     required bool isEBSIV3,
     required dynamic credentialOfferJson,
+    required OpenIdConfiguration openIdConfiguration,
   }) {
     emit(
       state.copyWith(
@@ -807,6 +808,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           preAuthorizedCode: preAuthorizedCode,
           isEBSIV3: isEBSIV3,
           credentialOfferJson: credentialOfferJson,
+          openIdConfiguration: openIdConfiguration,
         ),
       ),
     );

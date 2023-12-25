@@ -95,22 +95,32 @@ class DefaultCardBody extends StatelessWidget {
             child: Row(
               children: [
                 if (logo != null) ...[
-                  CachedImageFromNetwork(
-                    logo,
-                    fit: BoxFit.contain,
-                    bgColor: Colors.transparent,
-                    errorMessage: '',
-                    showLoading: false,
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: CachedImageFromNetwork(
+                        logo,
+                        fit: BoxFit.contain,
+                        bgColor: Colors.transparent,
+                        errorMessage: '',
+                        showLoading: false,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 10),
                 ],
                 Expanded(
-                  child: DisplayNameCard(
-                    credentialModel: credentialModel,
-                    style: Theme.of(context)
-                        .textTheme
-                        .credentialBaseTitleText
-                        .copyWith(color: textColor),
+                  flex: 2,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: DisplayNameCard(
+                      credentialModel: credentialModel,
+                      style: Theme.of(context)
+                          .textTheme
+                          .credentialBaseTitleText
+                          .copyWith(color: textColor),
+                    ),
                   ),
                 ),
               ],
