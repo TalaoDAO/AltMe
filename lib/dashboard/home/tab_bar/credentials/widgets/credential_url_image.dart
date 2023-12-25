@@ -25,6 +25,12 @@ class CredentialUrlImage extends StatelessWidget {
             errorMessage: '',
             showLoading: false,
           ),
+          Opacity(
+            opacity: 0.3,
+            child: Container(
+              color: Colors.black,
+            ),
+          ),
           child,
         ],
       ),
