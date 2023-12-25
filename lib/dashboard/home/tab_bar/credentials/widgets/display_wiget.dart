@@ -2,6 +2,7 @@ import 'package:altme/dashboard/dashboard.dart';
 
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class DisplayWidget extends StatelessWidget {
   const DisplayWidget({
@@ -27,9 +28,9 @@ class DisplayWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (display.descriptionFallback.isNotEmpty)
+        if (display.description != null)
           DescriptionText(
-            text: display.descriptionFallback,
+            text: display.description!,
             titleTheme: titleTheme,
             valueTheme: valueTheme,
           ),

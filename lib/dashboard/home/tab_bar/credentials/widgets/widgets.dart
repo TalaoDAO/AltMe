@@ -7,6 +7,7 @@ export 'credential_dynamic_detail.dart';
 export 'credential_image.dart';
 export 'credential_manifest_widgets/credential_manifest.dart';
 export 'credential_selection_padding.dart';
+export 'credential_url_image.dart';
 export 'credential_widget/credential_widget.dart';
 export 'default_display_descriptor.dart';
 export 'descriptioni_dialog.dart';
