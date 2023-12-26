@@ -39,12 +39,6 @@ class DidKeyTypeWidget extends StatelessWidget {
                             didKeyType: didKeyType,
                           );
                     },
-                    shape: const RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Color(0xFFDDDDEE),
-                        width: 0.5,
-                      ),
-                    ),
                     title: Text(
                       didKeyType.formattedString,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
