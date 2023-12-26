@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:matrix/matrix.dart' hide User;
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -21,8 +23,6 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
     required this.secureStorageProvider,
     required this.matrixChat,
     required this.invites,
-    required this.storageKey,
-    required this.roomNamePrefix,
   }) : super(
           const ChatRoomState(),
         ) {
@@ -40,8 +40,6 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   StreamController<int>? _notificationStreamController =
       StreamController<int>.broadcast();
   final List<String>? invites;
-  final String storageKey;
-  final String roomNamePrefix;
 
   //
   final MatrixChatImpl matrixChat;
@@ -148,7 +146,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
       _notificationStreamController ??= StreamController<int>.broadcast();
 
       List<Message> retrivedMessageFromDB = [];
-      final savedRoomId = await matrixChat.getRoomIdFromStorage(storageKey);
+      final savedRoomId = await matrixChat.getRoomIdFromStorage();
       if (savedRoomId != null) {
         _roomId = savedRoomId;
         await matrixChat.enableRoomEncyption(savedRoomId);
@@ -264,16 +262,22 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   Future<void> _checkIfRoomNotExistThenCreateIt() async {
     if (_roomId == null || _roomId!.isEmpty) {
-      final did = await secureStorageProvider.get(SecureStorageKeys.did) ?? '';
-      final username = did.replaceAll(':', '-');
+      final privateKey = await secureStorageProvider
+              .get(SecureStorageKeys.p256PrivateKeyForWallet) ??
+          '';
+
+      final tokenParameters = TokenParameters(
+        privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
+        did: '', // just added as it is required field
+        mediaType: MediaType.basic, // just added as it is required field
+        useJWKThumbPrint: true, // just added as it is required field
+      );
+
       _roomId = await matrixChat.createRoomAndInviteSupport(
-        '$roomNamePrefix-$username',
+        tokenParameters.thumbprint,
         invites,
       );
-      await matrixChat.setRoomIdInStorage(
-        storageKey,
-        _roomId!,
-      );
+      await matrixChat.setRoomIdInStorage(_roomId!);
       _getUnreadMessageCount();
       await _subscribeToEventsOfRoom();
     }
