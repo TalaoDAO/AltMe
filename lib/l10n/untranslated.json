@@ -940,7 +940,13 @@
     "organizationProfile",
     "profileName",
     "configFileIdentifier",
-    "clientCredentials"
+    "clientCredentials",
+    "updateYourWalletConfigNow",
+    "updateConfigurationNow",
+    "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration",
+    "congrats",
+    "yourWalletConfigurationHasBeenSuccessfullyUpdated",
+    "continueString"
   ],
 
   "es": [
@@ -1884,7 +1890,13 @@
     "organizationProfile",
     "profileName",
     "configFileIdentifier",
-    "clientCredentials"
+    "clientCredentials",
+    "updateYourWalletConfigNow",
+    "updateConfigurationNow",
+    "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration",
+    "congrats",
+    "yourWalletConfigurationHasBeenSuccessfullyUpdated",
+    "continueString"
   ],
 
   "fr": [
@@ -2137,7 +2149,13 @@
     "organizationProfile",
     "profileName",
     "configFileIdentifier",
-    "clientCredentials"
+    "clientCredentials",
+    "updateYourWalletConfigNow",
+    "updateConfigurationNow",
+    "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration",
+    "congrats",
+    "yourWalletConfigurationHasBeenSuccessfullyUpdated",
+    "continueString"
   ],
 
   "it": [
@@ -3081,6 +3099,12 @@
     "organizationProfile",
     "profileName",
     "configFileIdentifier",
-    "clientCredentials"
+    "clientCredentials",
+    "updateYourWalletConfigNow",
+    "updateConfigurationNow",
+    "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration",
+    "congrats",
+    "yourWalletConfigurationHasBeenSuccessfullyUpdated",
+    "continueString"
   ]
 }

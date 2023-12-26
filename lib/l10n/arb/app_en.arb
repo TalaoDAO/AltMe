@@ -1037,5 +1037,11 @@
   "profileName":"Profile Name",
   "companyName":"Company Name",
   "configFileIdentifier":"Config file identifier",
-  "clientCredentials": "Client Credentials"
+  "clientCredentials": "Client Credentials",
+  "updateYourWalletConfigNow": "Update your wallet config now",
+  "updateConfigurationNow": "Update configuration now",
+  "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration": "Please enter your email and password to update your organization wallet configuration",
+  "congrats": "Congrats !",
+  "yourWalletConfigurationHasBeenSuccessfullyUpdated": "Your wallet configuration has been successfully updated",
+  "continueString": "Continue"
 }
