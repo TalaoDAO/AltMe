@@ -64,8 +64,11 @@ class HelpCenterView extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
-                const Center(
-                  child: AltMeLogo(size: 90),
+                WalletLogo(
+                  profileModel: context.read<ProfileCubit>().state.model,
+                  height: 90,
+                  width: MediaQuery.of(context).size.shortestSide * 0.5,
+                  showPoweredBy: true,
                 ),
                 if (helpCenterOptions.displayChatSupport) ...[
                   const SizedBox(height: Sizes.spaceSmall),
