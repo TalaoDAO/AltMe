@@ -361,7 +361,7 @@ class CustomOidc4VcProfile extends Equatable {
       _$CustomOidc4VcProfileFromJson(json);
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
-        clientAuthentication: ClientAuthentication.none,
+        clientAuthentication: ClientAuthentication.clientId,
         credentialManifestSupport: false,
         cryptoHolderBinding: true,
         defaultDid: DidKeyType.p256,

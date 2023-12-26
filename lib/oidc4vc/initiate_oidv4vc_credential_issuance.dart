@@ -95,7 +95,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         await qrCodeScanCubit.addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
           userPin: userPin,
-          issuer: issuer!,
+          issuer: issuer,
           preAuthorizedCode: null,
           isEBSIV3: isEBSIV3,
           codeForAuthorisedFlow: codeForAuthorisedFlow,

@@ -53,7 +53,7 @@ class ProfileModel extends Equatable {
           selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
             displayManageDecentralizedId: true,
             customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.clientSecretPost,
+              clientAuthentication: ClientAuthentication.clientId,
               credentialManifestSupport: false,
               cryptoHolderBinding: true,
               defaultDid: DidKeyType.ebsiv3,
@@ -97,7 +97,7 @@ class ProfileModel extends Equatable {
           selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
             displayManageDecentralizedId: true,
             customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.clientSecretPost,
+              clientAuthentication: ClientAuthentication.clientId,
               credentialManifestSupport: false,
               cryptoHolderBinding: true,
               defaultDid: DidKeyType.jwkP256,
