@@ -1121,7 +1121,35 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           authorization =
               base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
         case ClientAuthentication.clientId:
-          clientId = customOidc4vcProfile.clientId;
+          final didKeyType = customOidc4vcProfile.defaultDid;
+
+          final privateKey = await fetchPrivateKey(
+            oidc4vc: oidc4vc,
+            secureStorage: secureStorageProvider,
+            isEBSIV3: isEBSIV3,
+            didKeyType: didKeyType,
+          );
+
+          final (did, _) = await fetchDidAndKid(
+            privateKey: privateKey,
+            isEBSIV3: isEBSIV3,
+            didKitProvider: didKitProvider,
+            secureStorage: secureStorageProvider,
+            didKeyType: didKeyType,
+          );
+          switch (customOidc4vcProfile.subjectSyntaxeType) {
+            case SubjectSyntax.jwkThumbprint:
+              final tokenParameters = TokenParameters(
+                privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
+                did: '', // just added as it is required field
+                mediaType:
+                    MediaType.basic, // just added as it is required field
+                useJWKThumbPrint: true, // just added as it is required field
+              );
+              clientId = tokenParameters.thumbprint;
+            case SubjectSyntax.did:
+              clientId = did;
+          }
       }
 
       if (preAuthorizedCode != null) {
