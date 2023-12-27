@@ -50,8 +50,9 @@ class ConfirmDialog extends StatelessWidget {
             width: 50,
             height: 50,
             color: textColor,
+            fit: BoxFit.fill,
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 10),
           Text(
             title,
             style: Theme.of(context)

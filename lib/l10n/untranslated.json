@@ -734,7 +734,8 @@
     "scanAndDisplay",
     "whatsNew",
     "okGotIt",
-    "chatWithSupport",
+    "chatWith",
+    "support",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
     "credentialRequiredMessage",
@@ -759,7 +760,6 @@
     "verifyLater",
     "welDone",
     "mnemonicsVerifiedMessage",
-    "chatWith",
     "sendAnEmail",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
@@ -941,7 +941,13 @@
     "profileName",
     "companyName",
     "configFileIdentifier",
-    "clientCredentials"
+    "clientCredentials",
+    "updateYourWalletConfigNow",
+    "updateConfigurationNow",
+    "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration",
+    "congrats",
+    "yourWalletConfigurationHasBeenSuccessfullyUpdated",
+    "continueString"
   ],
 
   "es": [
@@ -1679,7 +1685,8 @@
     "scanAndDisplay",
     "whatsNew",
     "okGotIt",
-    "chatWithSupport",
+    "chatWith",
+    "support",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
     "credentialRequiredMessage",
@@ -1704,7 +1711,6 @@
     "verifyLater",
     "welDone",
     "mnemonicsVerifiedMessage",
-    "chatWith",
     "sendAnEmail",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
@@ -1886,7 +1892,13 @@
     "profileName",
     "companyName",
     "configFileIdentifier",
-    "clientCredentials"
+    "clientCredentials",
+    "updateYourWalletConfigNow",
+    "updateConfigurationNow",
+    "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration",
+    "congrats",
+    "yourWalletConfigurationHasBeenSuccessfullyUpdated",
+    "continueString"
   ],
 
   "fr": [
@@ -1937,7 +1949,8 @@
     "showWalletRecoveryPhraseSubtitle",
     "saveBackupPolygonCredentialSubtitle",
     "creationDate",
-    "chatWithSupport",
+    "chatWith",
+    "support",
     "keyDecentralizedIdEdSA",
     "keyDecentralizedIDSecp256k1",
     "polygonIdDecentralizedId",
@@ -1959,7 +1972,6 @@
     "verifyLater",
     "welDone",
     "mnemonicsVerifiedMessage",
-    "chatWith",
     "sendAnEmail",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
@@ -2140,7 +2152,13 @@
     "organizationProfile",
     "profileName",
     "configFileIdentifier",
-    "clientCredentials"
+    "clientCredentials",
+    "updateYourWalletConfigNow",
+    "updateConfigurationNow",
+    "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration",
+    "congrats",
+    "yourWalletConfigurationHasBeenSuccessfullyUpdated",
+    "continueString"
   ],
 
   "it": [
@@ -2878,7 +2896,8 @@
     "scanAndDisplay",
     "whatsNew",
     "okGotIt",
-    "chatWithSupport",
+    "chatWith",
+    "support",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
     "credentialRequiredMessage",
@@ -2903,7 +2922,6 @@
     "verifyLater",
     "welDone",
     "mnemonicsVerifiedMessage",
-    "chatWith",
     "sendAnEmail",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
@@ -3085,6 +3103,12 @@
     "profileName",
     "companyName",
     "configFileIdentifier",
-    "clientCredentials"
+    "clientCredentials",
+    "updateYourWalletConfigNow",
+    "updateConfigurationNow",
+    "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration",
+    "congrats",
+    "yourWalletConfigurationHasBeenSuccessfullyUpdated",
+    "continueString"
   ]
 }

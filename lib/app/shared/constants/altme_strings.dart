@@ -19,8 +19,11 @@ class AltMeStrings {
   static const String email = 'email';
   static const String time = 'time';
 
-  //Chat
+  //page
   static const String matrixSupportId = '@support:matrix.talao.co';
+
+  //Chat
+  static const String dashBoardPage = '/dashboardPage';
 
   //ID360
   /// ALTME
@@ -39,4 +42,7 @@ class AltMeStrings {
     'KT1VuCBGQW4WakHj1PXhFC1G848dKyNy34kB',
     'KT1Wv4dPiswWYj2H9UrSrVNmcMd9w5NtzczG',
   ];
+
+  static const emailPattern =
+      r'^[\w-]+(\.[\w-]+)*@([a-zA-Z0-9-]+\.)*[a-zA-Z]{2,}$';
 }

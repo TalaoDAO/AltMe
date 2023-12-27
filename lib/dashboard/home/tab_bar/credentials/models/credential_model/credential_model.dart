@@ -7,6 +7,7 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:uuid/uuid.dart';
 
 part 'credential_model.g.dart';

@@ -138,7 +138,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
             onDoneButtonClick: () {
               Navigator.popUntil(
                 context,
-                (route) => route.settings.name == '/dashboardPage',
+                (route) => route.settings.name == AltMeStrings.dashBoardPage,
               );
             },
           );

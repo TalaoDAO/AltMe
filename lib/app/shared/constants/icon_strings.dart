@@ -89,4 +89,5 @@ class IconStrings {
   static const String lock = '$base/lock.png';
   static const String pincode = '$base/pincode.png';
   static const String right = '$base/right.png';
+  static const String tickCircle = '$base/tick-circle.png';
 }

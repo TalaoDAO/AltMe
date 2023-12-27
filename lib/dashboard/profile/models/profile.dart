@@ -52,11 +52,8 @@ class ProfileModel extends Equatable {
           helpCenterOptions: HelpCenterOptions.initial(),
           selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
             displayManageDecentralizedId: true,
-            displaySsiAdvancedSettings: false,
-            displayVerifiableDataRegistry: true,
-            oidv4vcProfile: 'ebsi',
             customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.clientSecretPost,
+              clientAuthentication: ClientAuthentication.clientId,
               credentialManifestSupport: false,
               cryptoHolderBinding: true,
               defaultDid: DidKeyType.ebsiv3,
@@ -99,11 +96,8 @@ class ProfileModel extends Equatable {
           helpCenterOptions: HelpCenterOptions.initial(),
           selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
             displayManageDecentralizedId: true,
-            displaySsiAdvancedSettings: false,
-            displayVerifiableDataRegistry: true,
-            oidv4vcProfile: 'diip',
             customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.clientSecretPost,
+              clientAuthentication: ClientAuthentication.clientId,
               credentialManifestSupport: false,
               cryptoHolderBinding: true,
               defaultDid: DidKeyType.jwkP256,

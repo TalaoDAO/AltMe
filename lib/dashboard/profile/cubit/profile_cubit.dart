@@ -157,9 +157,6 @@ class ProfileCubit extends Cubit<ProfileState> {
             helpCenterOptions: HelpCenterOptions.initial(),
             selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
               displayManageDecentralizedId: true,
-              displaySsiAdvancedSettings: true,
-              displayVerifiableDataRegistry: true,
-              oidv4vcProfile: 'custom',
               customOidc4vcProfile: CustomOidc4VcProfile(
                 clientAuthentication: customProfileBackup
                             .containsKey('useBasicClientAuthentication') &&

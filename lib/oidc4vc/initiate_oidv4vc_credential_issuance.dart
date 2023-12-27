@@ -48,15 +48,19 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         Uri.parse(scannedResponse).queryParameters['code'];
     final state = Uri.parse(scannedResponse).queryParameters['state'];
 
+    final OpenIdConfiguration openIdConfiguration =
+        await oidc4vc.getOpenIdConfig(issuer!);
+
     if (preAuthorizedCode != null) {
       /// full phase flow of preAuthorized
       qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
         credentials: credentials,
         userPin: userPin,
-        issuer: issuer!,
+        issuer: issuer,
         preAuthorizedCode: preAuthorizedCode,
         isEBSIV3: isEBSIV3,
         credentialOfferJson: credentialOfferJson,
+        openIdConfiguration: openIdConfiguration,
       );
     } else {
       if (codeForAuthorisedFlow == null || state == null) {
@@ -64,10 +68,11 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
           credentials: credentials,
           userPin: userPin,
-          issuer: issuer!,
+          issuer: issuer,
           preAuthorizedCode: preAuthorizedCode,
           isEBSIV3: isEBSIV3,
           credentialOfferJson: credentialOfferJson,
+          openIdConfiguration: openIdConfiguration,
         );
       } else {
         /// second phase flow of authorised
@@ -90,7 +95,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         await qrCodeScanCubit.addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
           userPin: userPin,
-          issuer: issuer!,
+          issuer: issuer,
           preAuthorizedCode: null,
           isEBSIV3: isEBSIV3,
           codeForAuthorisedFlow: codeForAuthorisedFlow,
