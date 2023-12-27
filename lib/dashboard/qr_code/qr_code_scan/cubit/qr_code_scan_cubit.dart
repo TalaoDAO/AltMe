@@ -1097,23 +1097,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         case ClientAuthentication.none:
           break;
         case ClientAuthentication.clientSecretPost:
-          final didKeyType = customOidc4vcProfile.defaultDid;
-
-          final privateKey = await fetchPrivateKey(
-            oidc4vc: oidc4vc,
-            secureStorage: secureStorageProvider,
-            isEBSIV3: isEBSIV3,
-            didKeyType: didKeyType,
-          );
-
-          final (did, _) = await fetchDidAndKid(
-            privateKey: privateKey,
-            isEBSIV3: isEBSIV3,
-            didKitProvider: didKitProvider,
-            secureStorage: secureStorageProvider,
-            didKeyType: didKeyType,
-          );
-          clientId = did;
+          clientId = customOidc4vcProfile.clientId;
           clientSecret = customOidc4vcProfile.clientSecret;
         case ClientAuthentication.clientSecretBasic:
           clientId = customOidc4vcProfile.clientId;
