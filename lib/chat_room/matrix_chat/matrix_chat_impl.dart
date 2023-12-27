@@ -114,16 +114,13 @@ class MatrixChatImpl extends MatrixChatInterface {
   }
 
   @override
-  Future<String?> getRoomIdFromStorage(String key) async {
-    return secureStorageProvider.get(key);
+  Future<String?> getRoomIdFromStorage() async {
+    return secureStorageProvider.get(SecureStorageKeys.supportRoomId);
   }
 
   @override
-  Future<void> setRoomIdInStorage(String key, String roomId) async {
-    await secureStorageProvider.set(
-      key,
-      roomId,
-    );
+  Future<void> setRoomIdInStorage(String roomId) async {
+    await secureStorageProvider.set(SecureStorageKeys.supportRoomId, roomId);
   }
 
   @override

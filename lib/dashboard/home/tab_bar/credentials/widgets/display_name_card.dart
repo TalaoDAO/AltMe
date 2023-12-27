@@ -28,7 +28,7 @@ class DisplayNameCard extends StatelessWidget {
       context.l10n,
     );
     if (nameValue == '') {
-      nameValue = credentialModel.display?.nameFallback ?? '';
+      nameValue = credentialModel.display?.name ?? '';
     }
     if (nameValue == '') {
       nameValue = credentialModel.credentialPreview.type.last;

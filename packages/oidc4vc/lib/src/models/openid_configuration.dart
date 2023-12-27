@@ -89,7 +89,7 @@ class CredentialsSupported extends Equatable {
   factory CredentialsSupported.fromJson(Map<String, dynamic> json) =>
       _$CredentialsSupportedFromJson(json);
 
-  final List<dynamic>? display;
+  final List<Display>? display;
   final String? format;
   @JsonKey(name: 'trust_framework')
   final TrustFramework? trustFramework;
@@ -132,5 +132,68 @@ class TrustFramework extends Equatable {
         name,
         type,
         uri,
+      ];
+}
+
+@JsonSerializable()
+class Display extends Equatable {
+  const Display({
+    this.locale,
+    this.name,
+    this.description,
+    this.textColor,
+    this.backgroundColor,
+    this.backgroundImage,
+    this.logo,
+  });
+
+  factory Display.fromJson(Map<String, dynamic> json) =>
+      _$DisplayFromJson(json);
+
+  final String? locale;
+  final String? name;
+  final String? description;
+  @JsonKey(name: 'text_color')
+  final String? textColor;
+  @JsonKey(name: 'background_color')
+  final String? backgroundColor;
+  @JsonKey(name: 'background_image')
+  final DisplayDetails? backgroundImage;
+  final DisplayDetails? logo;
+
+  Map<String, dynamic> toJson() => _$DisplayToJson(this);
+
+  @override
+  List<Object?> get props => [
+        locale,
+        name,
+        description,
+        textColor,
+        backgroundColor,
+        backgroundImage,
+        logo,
+      ];
+}
+
+@JsonSerializable()
+class DisplayDetails extends Equatable {
+  const DisplayDetails({
+    this.url,
+    this.altText,
+  });
+
+  factory DisplayDetails.fromJson(Map<String, dynamic> json) =>
+      _$DisplayDetailsFromJson(json);
+
+  final String? url;
+  @JsonKey(name: 'alt_text')
+  final String? altText;
+
+  Map<String, dynamic> toJson() => _$DisplayDetailsToJson(this);
+
+  @override
+  List<Object?> get props => [
+        url,
+        altText,
       ];
 }
