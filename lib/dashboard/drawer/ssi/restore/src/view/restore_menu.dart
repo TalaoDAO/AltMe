@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RestoreMenu extends StatelessWidget {
   const RestoreMenu({super.key});
@@ -39,8 +40,11 @@ class RestoreView extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
-                const Center(
-                  child: AltMeLogo(size: 90),
+                WalletLogo(
+                  profileModel: context.read<ProfileCubit>().state.model,
+                  height: 90,
+                  width: MediaQuery.of(context).size.shortestSide * 0.5,
+                  showPoweredBy: true,
                 ),
                 const SizedBox(
                   height: Sizes.spaceSmall,

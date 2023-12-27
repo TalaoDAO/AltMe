@@ -270,9 +270,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         const SizedBox(height: 10),
                         if (state.credentialDetailTabStatus ==
                             CredentialDetailTabStatus.informations) ...[
-                          if (isSecure &&
-                              state.credentialStatus ==
-                                  CredentialStatus.active) ...[
+                          if (isSecure ||
+                              (!isSecure &&
+                                  state.credentialStatus ==
+                                      CredentialStatus.active)) ...[
                             const SizedBox(height: 10),
                             CredentialActiveStatus(
                               credentialStatus: state.credentialStatus,

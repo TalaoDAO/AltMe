@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoadingView {
   factory LoadingView() => _shared;
@@ -64,7 +66,12 @@ class LoadingView {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 10),
-                      const AltMeLogo(size: Sizes.logoNormal),
+                      WalletLogo(
+                        profileModel: context.read<ProfileCubit>().state.model,
+                        height: Sizes.logoNormal,
+                        width: MediaQuery.of(context).size.shortestSide * 0.5,
+                        showPoweredBy: true,
+                      ),
                       const SizedBox(height: 20),
                       StreamBuilder(
                         stream: textController.stream,

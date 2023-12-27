@@ -5,7 +5,5 @@ class CardChatSupportCubit extends ChatRoomCubit {
     required super.secureStorageProvider,
     required super.matrixChat,
     required super.invites,
-    required super.storageKey,
-    required super.roomNamePrefix,
   });
 }

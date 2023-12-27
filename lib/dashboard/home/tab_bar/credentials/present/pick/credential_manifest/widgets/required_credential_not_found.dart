@@ -69,7 +69,7 @@ class RequiredCredentialNotFound extends StatelessWidget {
           onPressed: () {
             Navigator.popUntil(
               context,
-              (route) => route.settings.name == '/dashboardPage',
+              (route) => route.settings.name == AltMeStrings.dashBoardPage,
             );
           },
         ),

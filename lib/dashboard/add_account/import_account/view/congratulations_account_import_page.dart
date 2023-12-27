@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CongratulationsAccountImportPage extends StatelessWidget {
   const CongratulationsAccountImportPage({
@@ -66,8 +67,11 @@ class _CongratulationsAccountImportViewState
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const AltMeLogo(
-                  size: Sizes.logo2XLarge,
+                WalletLogo(
+                  profileModel: context.read<ProfileCubit>().state.model,
+                  height: Sizes.logo2XLarge,
+                  width: MediaQuery.of(context).size.shortestSide * 0.5,
+                  showPoweredBy: true,
                 ),
                 const SizedBox(
                   height: Sizes.spaceNormal,

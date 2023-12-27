@@ -32,9 +32,7 @@ class EnterpriseInitializationCubit
   final ProfileCubit profileCubit;
 
   void updateEmailFormat(String email) {
-    const emailPattern = r'^[\w-]+(\.[\w-]+)*@([a-zA-Z0-9-]+\.)*[a-zA-Z]{2,}$';
-
-    final regExpEmail = RegExp(emailPattern);
+    final regExpEmail = RegExp(AltMeStrings.emailPattern);
 
     final isValid = regExpEmail.hasMatch(email);
     emit(

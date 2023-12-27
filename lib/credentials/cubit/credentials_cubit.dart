@@ -571,6 +571,34 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         //(CredentialSubjectType.tezotopiaMembership);
       }
 
+      // show cards in discover based on profile
+      final discoverCardsOptions =
+          profileCubit.state.model.profileSetting.discoverCardsOptions;
+
+      if (discoverCardsOptions != null) {
+        if (!discoverCardsOptions.displayDefi) {
+          allSubjectTypeForCategory
+              .remove(CredentialSubjectType.defiCompliance);
+        }
+        if (!discoverCardsOptions.displayHumanity) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.livenessCard);
+        }
+        if (!discoverCardsOptions.displayOver13) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over13);
+        }
+        if (!discoverCardsOptions.displayOver15) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over15);
+        }
+        if (!discoverCardsOptions.displayOver18) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
+        }
+
+        if (!discoverCardsOptions.displayVerifiableId) {
+          allSubjectTypeForCategory
+              .remove(CredentialSubjectType.verifiableIdCard);
+        }
+      }
+
       final List<CredentialSubjectType> requiredDummySubjects = [];
 
       for (final subjectType in allSubjectTypeForCategory) {

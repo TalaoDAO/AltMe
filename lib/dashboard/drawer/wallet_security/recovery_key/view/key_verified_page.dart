@@ -1,7 +1,9 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 //import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class KeyVerifiedPage extends StatelessWidget {
   const KeyVerifiedPage({super.key});
@@ -34,7 +36,12 @@ class WalletReadyView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const AltMeLogo(size: Sizes.logo2XLarge),
+              WalletLogo(
+                profileModel: context.read<ProfileCubit>().state.model,
+                height: 90,
+                width: MediaQuery.of(context).size.shortestSide * 0.5,
+                showPoweredBy: true,
+              ),
               const SizedBox(height: Sizes.spaceNormal),
               Text(
                 l10n.welDone,

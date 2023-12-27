@@ -1,4 +1,3 @@
-import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -16,17 +15,12 @@ class HomeCredentialItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (credentialModel.data['credentialSubject']?['chatSupport'] != null) {
-      final cardName = credentialModel
-          .credentialPreview.credentialSubjectModel.credentialSubjectType.name;
-
       final cardChatSupportCubit = CardChatSupportCubit(
         secureStorageProvider: getSecureStorage,
         matrixChat: MatrixChatImpl(),
         invites: [
           credentialModel.data['credentialSubject']?['chatSupport'] as String,
         ],
-        storageKey: '$cardName-${SecureStorageKeys.cardChatSupportRoomId}',
-        roomNamePrefix: cardName,
       );
 
       return BlocProvider(

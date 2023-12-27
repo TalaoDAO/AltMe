@@ -12,7 +12,7 @@ class DashboardPage extends StatelessWidget {
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (context) => const DashboardPage(),
-        settings: const RouteSettings(name: '/dashboardPage'),
+        settings: const RouteSettings(name: AltMeStrings.dashBoardPage),
       );
 
   @override

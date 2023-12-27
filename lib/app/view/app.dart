@@ -225,8 +225,6 @@ class App extends StatelessWidget {
             secureStorageProvider: getSecureStorage,
             matrixChat: MatrixChatImpl(),
             invites: [AltMeStrings.matrixSupportId],
-            storageKey: SecureStorageKeys.supportRoomId,
-            roomNamePrefix: 'Altme',
           ),
         ),
         BlocProvider(

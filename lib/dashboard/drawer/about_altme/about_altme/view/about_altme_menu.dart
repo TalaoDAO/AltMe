@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,19 +47,12 @@ class AboutAltmeView extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
-                    Center(
-                      child: WalletLogo(
-                        profileModel: profileModel,
-                        height: 90,
-                        width: MediaQuery.of(context).size.shortestSide * 0.5,
-                      ),
+                    WalletLogo(
+                      profileModel: profileModel,
+                      height: 90,
+                      width: MediaQuery.of(context).size.shortestSide * 0.5,
+                      showPoweredBy: true,
                     ),
-                    if (profileModel.profileType == ProfileType.enterprise) ...[
-                      if (profileModel.profileType.showSponseredBy) ...[
-                        const SizedBox(height: 5),
-                        const Center(child: PoweredByText()),
-                      ],
-                    ],
                     const SizedBox(height: Sizes.spaceSmall),
                     const AppVersionDrawer(),
                     if (profileModel.profileType == ProfileType.enterprise) ...[

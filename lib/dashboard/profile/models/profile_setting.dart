@@ -9,7 +9,8 @@ part 'profile_setting.g.dart';
 @JsonSerializable()
 class ProfileSetting extends Equatable {
   const ProfileSetting({
-    required this.blockchainOptions,
+    this.blockchainOptions,
+    this.discoverCardsOptions,
     required this.generalOptions,
     required this.helpCenterOptions,
     required this.selfSovereignIdentityOptions,
@@ -23,6 +24,7 @@ class ProfileSetting extends Equatable {
 
   factory ProfileSetting.initial() => ProfileSetting(
         blockchainOptions: BlockchainOptions.initial(),
+        discoverCardsOptions: DiscoverCardsOptions.empty(),
         generalOptions: GeneralOptions.empty(),
         helpCenterOptions: HelpCenterOptions.initial(),
         selfSovereignIdentityOptions: SelfSovereignIdentityOptions.initial(),
@@ -32,6 +34,7 @@ class ProfileSetting extends Equatable {
       );
 
   final BlockchainOptions? blockchainOptions;
+  final DiscoverCardsOptions? discoverCardsOptions;
   final GeneralOptions generalOptions;
   final HelpCenterOptions helpCenterOptions;
   final SelfSovereignIdentityOptions selfSovereignIdentityOptions;
@@ -43,6 +46,7 @@ class ProfileSetting extends Equatable {
 
   ProfileSetting copyWith({
     BlockchainOptions? blockchainOptions,
+    DiscoverCardsOptions? discoverCardsOptions,
     GeneralOptions? generalOptions,
     HelpCenterOptions? helpCenterOptions,
     SelfSovereignIdentityOptions? selfSovereignIdentityOptions,
@@ -52,6 +56,7 @@ class ProfileSetting extends Equatable {
   }) =>
       ProfileSetting(
         blockchainOptions: blockchainOptions ?? this.blockchainOptions,
+        discoverCardsOptions: discoverCardsOptions ?? this.discoverCardsOptions,
         generalOptions: generalOptions ?? this.generalOptions,
         helpCenterOptions: helpCenterOptions ?? this.helpCenterOptions,
         selfSovereignIdentityOptions:
@@ -65,6 +70,7 @@ class ProfileSetting extends Equatable {
   @override
   List<Object?> get props => [
         blockchainOptions,
+        discoverCardsOptions,
         generalOptions,
         helpCenterOptions,
         selfSovereignIdentityOptions,
@@ -154,6 +160,74 @@ class BlockchainOptions extends Equatable {
         tezosSupport,
         tzproApiKey,
         tzproRpcNode,
+      ];
+}
+
+@JsonSerializable()
+class DiscoverCardsOptions extends Equatable {
+  const DiscoverCardsOptions({
+    required this.displayDefi,
+    required this.displayHumanity,
+    required this.displayOver13,
+    required this.displayOver15,
+    required this.displayOver18,
+    required this.displayRewardsCategory,
+    required this.displayVerifiableId,
+  });
+
+  factory DiscoverCardsOptions.fromJson(Map<String, dynamic> json) =>
+      _$DiscoverCardsOptionsFromJson(json);
+
+  factory DiscoverCardsOptions.empty() => const DiscoverCardsOptions(
+        displayDefi: true,
+        displayHumanity: true,
+        displayOver13: false,
+        displayOver15: true,
+        displayOver18: true,
+        displayRewardsCategory: true,
+        displayVerifiableId: true,
+      );
+
+  final bool displayDefi;
+  final bool displayHumanity;
+  final bool displayOver13;
+  final bool displayOver15;
+  final bool displayOver18;
+  final bool displayRewardsCategory;
+  final bool displayVerifiableId;
+
+  Map<String, dynamic> toJson() => _$DiscoverCardsOptionsToJson(this);
+
+  DiscoverCardsOptions copyWith({
+    bool? displayDefi,
+    bool? displayHumanity,
+    bool? displayOver13,
+    bool? displayOver15,
+    bool? displayOver18,
+    bool? displayRewardsCategory,
+    bool? displayVerifiableId,
+  }) {
+    return DiscoverCardsOptions(
+      displayDefi: displayDefi ?? this.displayDefi,
+      displayHumanity: displayHumanity ?? this.displayHumanity,
+      displayOver13: displayOver13 ?? this.displayOver13,
+      displayOver15: displayOver15 ?? this.displayOver15,
+      displayOver18: displayOver18 ?? this.displayOver18,
+      displayRewardsCategory:
+          displayRewardsCategory ?? this.displayRewardsCategory,
+      displayVerifiableId: displayVerifiableId ?? this.displayVerifiableId,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        displayDefi,
+        displayHumanity,
+        displayOver13,
+        displayOver15,
+        displayOver18,
+        displayRewardsCategory,
+        displayVerifiableId,
       ];
 }
 
@@ -306,9 +380,6 @@ class SelfSovereignIdentityOptions extends Equatable {
   const SelfSovereignIdentityOptions({
     required this.customOidc4vcProfile,
     required this.displayManageDecentralizedId,
-    required this.displaySsiAdvancedSettings,
-    required this.displayVerifiableDataRegistry,
-    required this.oidv4vcProfile,
   });
 
   factory SelfSovereignIdentityOptions.fromJson(Map<String, dynamic> json) =>
@@ -318,44 +389,27 @@ class SelfSovereignIdentityOptions extends Equatable {
       SelfSovereignIdentityOptions(
         customOidc4vcProfile: CustomOidc4VcProfile.initial(),
         displayManageDecentralizedId: true,
-        displaySsiAdvancedSettings: true,
-        displayVerifiableDataRegistry: true,
-        oidv4vcProfile: 'custom',
       );
 
   final CustomOidc4VcProfile customOidc4vcProfile;
   final bool displayManageDecentralizedId;
-  final bool displaySsiAdvancedSettings;
-  final bool displayVerifiableDataRegistry;
-  final String oidv4vcProfile;
 
   Map<String, dynamic> toJson() => _$SelfSovereignIdentityOptionsToJson(this);
 
   SelfSovereignIdentityOptions copyWith({
     CustomOidc4VcProfile? customOidc4vcProfile,
     bool? displayManageDecentralizedId,
-    bool? displaySsiAdvancedSettings,
-    bool? displayVerifiableDataRegistry,
-    String? oidv4vcProfile,
   }) =>
       SelfSovereignIdentityOptions(
         customOidc4vcProfile: customOidc4vcProfile ?? this.customOidc4vcProfile,
         displayManageDecentralizedId:
             displayManageDecentralizedId ?? this.displayManageDecentralizedId,
-        displaySsiAdvancedSettings:
-            displaySsiAdvancedSettings ?? this.displaySsiAdvancedSettings,
-        displayVerifiableDataRegistry:
-            displayVerifiableDataRegistry ?? this.displayVerifiableDataRegistry,
-        oidv4vcProfile: oidv4vcProfile ?? this.oidv4vcProfile,
       );
 
   @override
   List<Object?> get props => [
         customOidc4vcProfile,
         displayManageDecentralizedId,
-        displaySsiAdvancedSettings,
-        displayVerifiableDataRegistry,
-        oidv4vcProfile,
       ];
 }
 
@@ -381,7 +435,7 @@ class CustomOidc4VcProfile extends Equatable {
       _$CustomOidc4VcProfileFromJson(json);
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
-        clientAuthentication: ClientAuthentication.none,
+        clientAuthentication: ClientAuthentication.clientId,
         credentialManifestSupport: false,
         cryptoHolderBinding: true,
         defaultDid: DidKeyType.p256,

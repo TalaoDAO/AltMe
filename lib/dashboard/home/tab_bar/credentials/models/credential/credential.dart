@@ -35,7 +35,7 @@ class Credential {
       ['dummy3'],
       'dummy4',
       'dummy5',
-      'dummy6',
+      '', //date
       [
         Proof.dummy(),
       ],

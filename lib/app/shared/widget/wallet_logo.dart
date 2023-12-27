@@ -10,11 +10,13 @@ class WalletLogo extends StatelessWidget {
     required this.profileModel,
     this.height,
     this.width,
+    this.showPoweredBy = false,
   });
 
   final ProfileModel profileModel;
   final double? height;
   final double? width;
+  final bool showPoweredBy;
 
   @override
   Widget build(BuildContext context) {
@@ -35,25 +37,38 @@ class WalletLogo extends StatelessWidget {
         image = profileModel.profileSetting.generalOptions.companyLogo;
     }
 
-    return SizedBox(
-      width: width,
-      height: height,
-      child: profileModel.profileType == ProfileType.enterprise
-          ? CachedImageFromNetwork(
-              image,
-              fit: BoxFit.contain,
-              width: width,
-              bgColor: Colors.transparent,
-              height: height,
-              errorMessage: '',
-              showLoading: false,
-            )
-          : Image.asset(
-              image,
-              fit: BoxFit.contain,
-              width: width,
-              height: height,
-            ),
+    return Column(
+      children: [
+        Center(
+          child: SizedBox(
+            width: width,
+            height: height,
+            child: profileModel.profileType == ProfileType.enterprise
+                ? CachedImageFromNetwork(
+                    image,
+                    fit: BoxFit.contain,
+                    width: width,
+                    bgColor: Colors.transparent,
+                    height: height,
+                    errorMessage: '',
+                    showLoading: false,
+                  )
+                : Image.asset(
+                    image,
+                    fit: BoxFit.contain,
+                    width: width,
+                    height: height,
+                  ),
+          ),
+        ),
+        if (showPoweredBy &&
+            profileModel.profileType == ProfileType.enterprise) ...[
+          if (profileModel.profileType.showSponseredBy) ...[
+            const SizedBox(height: 5),
+            const Center(child: PoweredByText()),
+          ],
+        ],
+      ],
     );
   }
 }

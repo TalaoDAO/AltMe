@@ -93,8 +93,11 @@ class SuccessWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Spacer(),
-        const AltMeLogo(
-          size: Sizes.logo2XLarge,
+        WalletLogo(
+          profileModel: context.read<ProfileCubit>().state.model,
+          height: Sizes.logo2XLarge,
+          width: MediaQuery.of(context).size.shortestSide * 0.5,
+          showPoweredBy: true,
         ),
         const SizedBox(
           height: Sizes.spaceNormal,
@@ -154,8 +157,11 @@ class FailureWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Spacer(),
-        const AltMeLogo(
-          size: Sizes.logo2XLarge,
+        WalletLogo(
+          profileModel: context.read<ProfileCubit>().state.model,
+          height: Sizes.logo2XLarge,
+          width: MediaQuery.of(context).size.shortestSide * 0.5,
+          showPoweredBy: true,
         ),
         const SizedBox(
           height: Sizes.spaceNormal,

@@ -19,30 +19,42 @@ class DefaultDisplayDescriptor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = credentialModel.display?.backgroundColor;
+    final backgroundImage = credentialModel.display?.backgroundImage?.url;
 
-    return backgroundColor != null
-        ? CredentialBackground(
-            credentialModel: credentialModel,
-            showBgDecoration: showBgDecoration,
-            padding: EdgeInsets.zero,
-            child: AspectRatio(
-              aspectRatio: Sizes.credentialAspectRatio,
+    return backgroundImage != null
+        ? AspectRatio(
+            aspectRatio: Sizes.credentialAspectRatio,
+            child: CredentialUrlImage(
+              url: backgroundImage,
               child: DefaultCardBody(
                 credentialModel: credentialModel,
                 descriptionMaxLine: descriptionMaxLine,
               ),
             ),
           )
-        : CredentialImage(
-            image: ImageStrings.defaultCard,
-            child: AspectRatio(
-              aspectRatio: Sizes.credentialAspectRatio,
-              child: DefaultCardBody(
+        : backgroundColor != null
+            ? CredentialBackground(
                 credentialModel: credentialModel,
-                descriptionMaxLine: descriptionMaxLine,
-              ),
-            ),
-          );
+                showBgDecoration: showBgDecoration,
+                padding: EdgeInsets.zero,
+                child: AspectRatio(
+                  aspectRatio: Sizes.credentialAspectRatio,
+                  child: DefaultCardBody(
+                    credentialModel: credentialModel,
+                    descriptionMaxLine: descriptionMaxLine,
+                  ),
+                ),
+              )
+            : CredentialImage(
+                image: ImageStrings.defaultCard,
+                child: AspectRatio(
+                  aspectRatio: Sizes.credentialAspectRatio,
+                  child: DefaultCardBody(
+                    credentialModel: credentialModel,
+                    descriptionMaxLine: descriptionMaxLine,
+                  ),
+                ),
+              );
   }
 }
 
@@ -64,28 +76,54 @@ class DefaultCardBody extends StatelessWidget {
     final textColor = credentialModel.display?.textColor != null
         ? Color(
             int.parse(
-              'FF${credentialModel.display?.textColor.replaceAll('#', '')}',
+              'FF${credentialModel.display?.textColor!.replaceAll('#', '')}',
               radix: 16,
             ),
           )
         : null;
+
+    final logo = credentialModel.display?.logo?.url;
+
     return CustomMultiChildLayout(
       delegate: CredentialBaseWidgetDelegate(position: Offset.zero),
       children: [
         LayoutId(
           id: 'title',
           child: FractionallySizedBox(
-            widthFactor: 0.7,
+            widthFactor: 0.8,
             heightFactor: 0.19,
-            child: Container(
-              alignment: Alignment.centerLeft,
-              child: DisplayNameCard(
-                credentialModel: credentialModel,
-                style: Theme.of(context)
-                    .textTheme
-                    .credentialBaseTitleText
-                    .copyWith(color: textColor),
-              ),
+            child: Row(
+              children: [
+                if (logo != null) ...[
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: CachedImageFromNetwork(
+                        logo,
+                        fit: BoxFit.contain,
+                        bgColor: Colors.transparent,
+                        errorMessage: '',
+                        showLoading: false,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                ],
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: DisplayNameCard(
+                      credentialModel: credentialModel,
+                      style: Theme.of(context)
+                          .textTheme
+                          .credentialBaseTitleText
+                          .copyWith(color: textColor),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

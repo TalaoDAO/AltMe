@@ -3,10 +3,10 @@ part of 'credential_subject_type.dart';
 extension CredentialSubjectTypeExtension on CredentialSubjectType {
   Color backgroundColor(CredentialModel credentialModel) {
     final Color backgroundColor;
-    if (credentialModel.display?.backgroundColor != '') {
+    if (credentialModel.display?.backgroundColor != null) {
       backgroundColor = Color(
         int.parse(
-          'FF${credentialModel.display?.backgroundColor.replaceAll('#', '')}',
+          'FF${credentialModel.display?.backgroundColor!.replaceAll('#', '')}',
           radix: 16,
         ),
       );

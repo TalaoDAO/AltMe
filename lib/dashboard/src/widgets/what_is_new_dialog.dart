@@ -59,9 +59,13 @@ class WhatIsNewDialog extends StatelessWidget {
                         ),
                         child: Column(
                           children: [
-                            const AltMeLogo(
-                              color: Colors.white,
-                              size: Sizes.logoLarge * 1.05,
+                            WalletLogo(
+                              profileModel:
+                                  context.read<ProfileCubit>().state.model,
+                              height: Sizes.logoLarge * 1.05,
+                              width: MediaQuery.of(context).size.shortestSide *
+                                  0.5,
+                              showPoweredBy: true,
                             ),
                             Text(
                               l10n.whatsNew,

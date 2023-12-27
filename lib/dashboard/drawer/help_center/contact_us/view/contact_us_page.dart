@@ -3,23 +3,35 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ContactUsPage extends StatelessWidget {
-  const ContactUsPage({super.key});
+  const ContactUsPage({
+    super.key,
+    required this.email,
+  });
 
-  static Route<dynamic> route() {
+  final String email;
+
+  static Route<dynamic> route({
+    required String email,
+  }) {
     return MaterialPageRoute<void>(
-      builder: (_) => const ContactUsPage(),
+      builder: (_) => ContactUsPage(email: email),
       settings: const RouteSettings(name: '/ContactUsPage'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return const ContactUsView();
+    return ContactUsView(email: email);
   }
 }
 
 class ContactUsView extends StatefulWidget {
-  const ContactUsView({super.key});
+  const ContactUsView({
+    super.key,
+    required this.email,
+  });
+
+  final String email;
 
   @override
   State<ContactUsView> createState() => _ContactUsViewState();
@@ -125,7 +137,7 @@ class _ContactUsViewState extends State<ContactUsView> {
               formKey.currentState?.save();
               try {
                 await LaunchUrl.launch(
-                  '''mailto:${AltMeStrings.appSupportMail}?subject=$subject&body=$message''',
+                  '''mailto:${widget.email}?subject=$subject&body=$message''',
                 );
                 Navigator.pop(context);
               } catch (_) {

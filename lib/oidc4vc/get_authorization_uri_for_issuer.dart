@@ -45,6 +45,8 @@ Future<void> getAuthorizationUriForIssuer({
     case ClientAuthentication.clientSecretPost:
       data['client_id'] = clientId!;
       data['client_secret'] = clientSecret!;
+    case ClientAuthentication.clientId:
+      data['client_id'] = clientId!;
   }
 
   final jwt = JWT(data);
