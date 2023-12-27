@@ -29,20 +29,23 @@ class WalletDialog extends StatelessWidget {
               IconStrings.cardSend,
               width: 50,
               height: 50,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.dialogText,
             ),
             const SizedBox(height: 30),
             Text(
               l10n.createTitle,
               style: Theme.of(context).textTheme.defaultDialogTitle.copyWith(
-                    fontSize: 18,
-                  ),
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.dialogText),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 5),
             Text(
               l10n.createSubtitle,
-              style: Theme.of(context).textTheme.defaultDialogSubtitle,
+              style: Theme.of(context)
+                  .textTheme
+                  .defaultDialogSubtitle
+                  .copyWith(color: Theme.of(context).colorScheme.dialogText),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
@@ -51,6 +54,7 @@ class WalletDialog extends StatelessWidget {
                 Expanded(
                   child: MyElevatedButton(
                     text: l10n.create.toUpperCase(),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     verticalSpacing: 12,
                     fontSize: 13,
                     borderRadius: 8,
@@ -72,8 +76,11 @@ class WalletDialog extends StatelessWidget {
                     fontSize: 13,
                     borderRadius: 8,
                     textColor: Theme.of(context).colorScheme.lightPurple,
-                    borderColor: Theme.of(context).colorScheme.lightPurple,
-                    backgroundColor: Colors.transparent,
+                    borderColor: Theme.of(context)
+                        .colorScheme
+                        .defualtDialogCancelButtonBorderColor,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.popupBackground,
                     onPressed: () {
                       Navigator.pop(context);
                       Navigator.of(context).push(

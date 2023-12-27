@@ -41,8 +41,8 @@ abstract class MatrixChatInterface {
   });
   Future<void> dispose();
   Future<void> init();
-  Future<String?> getRoomIdFromStorage(String key);
-  Future<void> setRoomIdInStorage(String key, String roomId);
+  Future<String?> getRoomIdFromStorage();
+  Future<void> setRoomIdInStorage(String roomId);
   int getUnreadMessageCount(String? roomId);
   Future<List<Message>> retriveMessagesFromDB(String roomId);
   Future<void> markMessageAsRead(

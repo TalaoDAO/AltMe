@@ -796,6 +796,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String issuer,
     required bool isEBSIV3,
     required dynamic credentialOfferJson,
+    required OpenIdConfiguration openIdConfiguration,
   }) {
     emit(
       state.copyWith(
@@ -807,6 +808,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           preAuthorizedCode: preAuthorizedCode,
           isEBSIV3: isEBSIV3,
           credentialOfferJson: credentialOfferJson,
+          openIdConfiguration: openIdConfiguration,
         ),
       ),
     );
@@ -1095,6 +1097,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         case ClientAuthentication.none:
           break;
         case ClientAuthentication.clientSecretPost:
+          clientId = customOidc4vcProfile.clientId;
+          clientSecret = customOidc4vcProfile.clientSecret;
+        case ClientAuthentication.clientSecretBasic:
+          clientId = customOidc4vcProfile.clientId;
+          clientSecret = customOidc4vcProfile.clientSecret;
+          authorization =
+              base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+        case ClientAuthentication.clientId:
           final didKeyType = customOidc4vcProfile.defaultDid;
 
           final privateKey = await fetchPrivateKey(
@@ -1111,13 +1121,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             secureStorage: secureStorageProvider,
             didKeyType: didKeyType,
           );
-          clientId = did;
-          clientSecret = customOidc4vcProfile.clientSecret;
-        case ClientAuthentication.clientSecretBasic:
-          clientId = customOidc4vcProfile.clientId;
-          clientSecret = customOidc4vcProfile.clientSecret;
-          authorization =
-              base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+          switch (customOidc4vcProfile.subjectSyntaxeType) {
+            case SubjectSyntax.jwkThumbprint:
+              final tokenParameters = TokenParameters(
+                privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
+                did: '', // just added as it is required field
+                mediaType:
+                    MediaType.basic, // just added as it is required field
+                useJWKThumbPrint: true, // just added as it is required field
+              );
+              clientId = tokenParameters.thumbprint;
+            case SubjectSyntax.did:
+              clientId = did;
+          }
       }
 
       if (preAuthorizedCode != null) {

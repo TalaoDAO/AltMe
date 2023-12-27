@@ -6,7 +6,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:jose/jose.dart';
-import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:uuid/uuid.dart';
 
@@ -160,26 +159,10 @@ Future<void> addOIDC4VCCredential({
           credentialsSupported.id == credentialType,
     );
 
-    if (credSupported != null) {
-      final displayJson = jsonDecode(jsonEncode(credSupported.display));
-
-      final name = JsonPath(r'$..name').read(displayJson).firstOrNull;
-
-      final description =
-          JsonPath(r'$..description').read(displayJson).firstOrNull;
-
-      final bgColor =
-          JsonPath(r'$..background_color').read(displayJson).firstOrNull;
-
-      final textColor =
-          JsonPath(r'$..text_color').read(displayJson).firstOrNull;
-
-      display = Display(
-        name?.value.toString() ?? '',
-        description?.value.toString() ?? '',
-        bgColor?.value.toString() ?? '',
-        textColor?.value.toString() ?? '',
-        '',
+    if (credSupported != null && credSupported.display != null) {
+      display = credSupported.display!.firstWhereOrNull(
+        (Display display) =>
+            display.locale == 'en-US' || display.locale == 'en-GB',
       );
     }
   }

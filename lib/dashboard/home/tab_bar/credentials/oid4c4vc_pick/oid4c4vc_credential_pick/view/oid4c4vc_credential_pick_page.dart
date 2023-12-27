@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class Oidc4vcCredentialPickPage extends StatelessWidget {
   const Oidc4vcCredentialPickPage({
@@ -13,6 +14,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     required this.issuer,
     required this.isEBSIV3,
     required this.credentialOfferJson,
+    required this.openIdConfiguration,
   });
 
   final List<dynamic> credentials;
@@ -21,6 +23,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
   final String issuer;
   final bool isEBSIV3;
   final dynamic credentialOfferJson;
+  final OpenIdConfiguration openIdConfiguration;
 
   static Route<dynamic> route({
     required List<dynamic> credentials,
@@ -29,6 +32,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     required String issuer,
     required bool isEBSIV3,
     required dynamic credentialOfferJson,
+    required OpenIdConfiguration openIdConfiguration,
   }) =>
       MaterialPageRoute<void>(
         builder: (context) => Oidc4vcCredentialPickPage(
@@ -38,6 +42,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
           preAuthorizedCode: preAuthorizedCode,
           isEBSIV3: isEBSIV3,
           credentialOfferJson: credentialOfferJson,
+          openIdConfiguration: openIdConfiguration,
         ),
         settings: const RouteSettings(name: '/Oidc4vcCredentialPickPage'),
       );
@@ -53,6 +58,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
         preAuthorizedCode: preAuthorizedCode,
         isEBSIV3: isEBSIV3,
         credentialOfferJson: credentialOfferJson,
+        openIdConfiguration: openIdConfiguration,
       ),
     );
   }
@@ -67,6 +73,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
     required this.issuer,
     required this.isEBSIV3,
     required this.credentialOfferJson,
+    required this.openIdConfiguration,
   });
 
   final List<dynamic> credentials;
@@ -75,6 +82,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
   final String issuer;
   final bool isEBSIV3;
   final dynamic credentialOfferJson;
+  final OpenIdConfiguration openIdConfiguration;
 
   @override
   Widget build(BuildContext context) {
@@ -100,9 +108,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                 ...List.generate(
                   credentials.length,
                   (index) {
-                    final credential = getCredentialData(
-                      credentials[index],
-                    );
+                    final credential = getCredentialData(credentials[index]);
 
                     final CredentialSubjectType credentialSubjectType =
                         getCredTypeFromName(credential) ??
@@ -113,17 +119,53 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                       credentialSubjectType,
                     );
 
+                    Display? display;
+
+                    // fetch for displaying the image
+                    if (openIdConfiguration.credentialsSupported != null) {
+                      final credentialsSupported =
+                          openIdConfiguration.credentialsSupported!;
+                      final CredentialsSupported? credSupported =
+                          credentialsSupported.firstWhereOrNull(
+                        (CredentialsSupported credentialsSupported) =>
+                            credentialsSupported.id != null &&
+                            credentialsSupported.id == credential,
+                      );
+
+                      if (credSupported != null &&
+                          credSupported.display != null) {
+                        display = credSupported.display!.firstWhereOrNull(
+                          (Display display) =>
+                              display.locale == 'en-US' ||
+                              display.locale == 'en-GB',
+                        );
+                      }
+                    }
+
                     return TransparentInkWell(
                       onTap: () => context
                           .read<Oidc4vcCredentialPickCubit>()
                           .updateList(index),
                       child: Column(
                         children: [
-                          DummyCredentialImage(
-                            credentialSubjectType: credentialSubjectType,
-                            image: discoverDummyCredential.image,
-                            credentialName: credential,
-                          ),
+                          if (display != null)
+                            CredentialDisplay(
+                              credentialModel: CredentialModel(
+                                id: '',
+                                image: '',
+                                credentialPreview: Credential.dummy(),
+                                shareLink: '',
+                                data: const <String, dynamic>{},
+                                display: display,
+                              ),
+                              credDisplayType: CredDisplayType.List,
+                            )
+                          else
+                            DummyCredentialImage(
+                              credentialSubjectType: credentialSubjectType,
+                              image: discoverDummyCredential.image,
+                              credentialName: credential,
+                            ),
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
