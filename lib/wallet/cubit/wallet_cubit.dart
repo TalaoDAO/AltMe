@@ -488,7 +488,6 @@ class WalletCubit extends Cubit<WalletState> {
     await secureStorageProvider.deleteAllExceptsSomeKeys(
       [
         SecureStorageKeys.version,
-        SecureStorageKeys.p256PrivateKeyForWallet,
       ],
     );
 
