@@ -63,8 +63,8 @@ class Parameters {
 
   static const walletConnectEvents = ['chainChanged', 'accountsChanged'];
 
-  static const String clientId = 'urn:altme:0001';
+  static const String clientId = 'urn:talao:0001';
   static const int maxEntries = 3;
 
-  static const String appName = 'Altme';
+  static const String appName = 'Talao';
 }
