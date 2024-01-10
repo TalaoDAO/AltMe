@@ -239,6 +239,7 @@ class GeneralOptions extends Equatable {
     required this.companyWebsite,
     required this.companyLogo,
     required this.tagLine,
+    this.splashScreenTitle,
     required this.profileName,
     required this.profileVersion,
     required this.published,
@@ -255,6 +256,7 @@ class GeneralOptions extends Equatable {
         companyWebsite: '',
         companyLogo: '',
         tagLine: '',
+        splashScreenTitle: '',
         profileName: '',
         profileVersion: '',
         published: DateTime.now(),
@@ -267,6 +269,7 @@ class GeneralOptions extends Equatable {
   final String companyWebsite;
   final String companyLogo;
   final String tagLine;
+  final String? splashScreenTitle;
   final String profileName;
   final String profileVersion;
   final DateTime published;
@@ -280,6 +283,7 @@ class GeneralOptions extends Equatable {
     String? companyName,
     String? companyWebsite,
     String? companyLogo,
+    String? splashScreenTitle,
     String? tagLine,
     String? profileName,
     String? profileVersion,
@@ -293,6 +297,7 @@ class GeneralOptions extends Equatable {
       companyWebsite: companyWebsite ?? this.companyWebsite,
       companyLogo: companyLogo ?? this.companyLogo,
       tagLine: tagLine ?? this.tagLine,
+      splashScreenTitle: splashScreenTitle ?? this.splashScreenTitle,
       profileName: profileName ?? this.profileName,
       profileVersion: profileVersion ?? this.profileVersion,
       published: published ?? this.published,
@@ -308,6 +313,7 @@ class GeneralOptions extends Equatable {
         companyWebsite,
         companyLogo,
         tagLine,
+        splashScreenTitle,
         profileName,
         profileVersion,
         published,
