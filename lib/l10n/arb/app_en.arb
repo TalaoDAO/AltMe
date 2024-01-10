@@ -991,7 +991,7 @@
   "scopeParameters": "Scope Parameters",
   "scopeParametersSubtitle": "Default : Off\nEnable to force wallet to use scope instead of authorization_details.",
   "clientAuthenticationMethods": "Client Authentication Methods",
-  "clientAuthenticationMethodsSubtitle": "Default : Public client\nEnable to use the Basic Authentication scheme.",
+  "clientAuthenticationMethodsSubtitle": "Default: Client id as DID or JWK\nSelect to other authentication methods if needed.",
   "theServiceIsNotAvailable": "The service is not available",
   "issuerDID": "Issuer DID",
   "subjectDID": "Subject DID",
