@@ -79,49 +79,22 @@ class HomeCubit extends Cubit<HomeState> {
 
     try {
       await _getCredentialByAI(
-        url: Urls.over13AIValidationUrl,
+        url: credentialType.aiValidationUrl,
         apiKey: YOTI_AI_API_KEY,
         data: data,
-        credentialType: 'Over13',
+        credentialType: credentialType.name,
         credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
 
-      await _getCredentialByAI(
-        url: Urls.over15AIValidationUrl,
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'Over15',
-        credentialsCubit: credentialsCubit,
-        cameraCubit: cameraCubit,
-      );
-
-      await _getCredentialByAI(
-        url: Urls.over18AIValidationUrl,
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'Over18',
-        credentialsCubit: credentialsCubit,
-        cameraCubit: cameraCubit,
-      );
-
-      await _getCredentialByAI(
-        url: Urls.ageRangeAIValidationUrl,
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'AgeRange',
-        credentialsCubit: credentialsCubit,
-        cameraCubit: cameraCubit,
-      );
-
-      await _getCredentialByAI(
-        url: 'https://issuer.talao.co/ai/ageestimate',
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'AgeEstimate',
-        credentialsCubit: credentialsCubit,
-        cameraCubit: cameraCubit,
-      );
+      // await _getCredentialByAI(
+      //   url: 'https://issuer.talao.co/ai/ageestimate',
+      //   apiKey: YOTI_AI_API_KEY,
+      //   data: data,
+      //   credentialType: 'AgeEstimate',
+      //   credentialsCubit: credentialsCubit,
+      //   cameraCubit: cameraCubit,
+      // );
     } catch (e) {
       final logger = getLogger('HomeCubit - AISelfiValidation');
       logger.e('error: $e');
