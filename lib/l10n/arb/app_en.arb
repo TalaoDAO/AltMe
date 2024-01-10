@@ -884,11 +884,11 @@
   "takePicture": "Take a picture",
   "kyc": "KYC",
   "aiSystemWasNotAbleToEstimateYourAge": "AI system was not able to estimate your age",
-  "youGotAgeCredentials": "You got {credentialsCount} credentials",
+  "youGotAgeCredentials": "You got your {credential} credential.",
   "@youGotAgeCredentials": {
     "description": "the description for the getting credentials",
     "placeholders": {
-      "credentialsCount": {}
+      "credential": {}
     }
   },
   "yourAgeEstimationIs": "Your AI age estimation is {ageEstimate} years",

@@ -116,7 +116,10 @@ class _CameraViewState extends State<CameraView> {
             LoadingView().hide();
             await Navigator.pushReplacement<void, void>(
               context,
-              AiAgeResultPage.route(context),
+              AiAgeResultPage.route(
+                context: context,
+                credentialSubjectType: widget.credentialSubjectType,
+              ),
             );
           }
         },

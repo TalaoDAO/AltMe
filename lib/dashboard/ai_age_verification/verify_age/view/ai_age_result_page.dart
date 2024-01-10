@@ -8,14 +8,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AiAgeResultPage extends StatelessWidget {
-  const AiAgeResultPage({super.key, required this.blocContext});
+  const AiAgeResultPage({
+    super.key,
+    required this.blocContext,
+    required this.credentialSubjectType,
+  });
 
   final BuildContext blocContext;
+  final CredentialSubjectType credentialSubjectType;
 
-  static Route<dynamic> route(BuildContext context) {
+  static Route<dynamic> route({
+    required BuildContext context,
+    required CredentialSubjectType credentialSubjectType,
+  }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/AiAgeResultPage'),
-      builder: (_) => AiAgeResultPage(blocContext: context),
+      builder: (_) => AiAgeResultPage(
+        blocContext: context,
+        credentialSubjectType: credentialSubjectType,
+      ),
     );
   }
 
@@ -23,13 +34,20 @@ class AiAgeResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CameraCubit>(
       create: (context) => BlocProvider.of<CameraCubit>(blocContext),
-      child: const AiAgeResultView(),
+      child: AiAgeResultView(
+        credentialSubjectType: credentialSubjectType,
+      ),
     );
   }
 }
 
 class AiAgeResultView extends StatefulWidget {
-  const AiAgeResultView({super.key});
+  const AiAgeResultView({
+    super.key,
+    required this.credentialSubjectType,
+  });
+
+  final CredentialSubjectType credentialSubjectType;
 
   @override
   State<AiAgeResultView> createState() => _AiAgeResultViewState();
@@ -57,8 +75,11 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
               scrollView: false,
               body: Center(
                 child: state.acquiredCredentialsQuantity > 0
-                    ? SuccessWidget(state)
-                    : FailureWidget(state),
+                    ? SuccessWidget(
+                        ageEstimate: state.ageEstimate,
+                        credentialSubjectType: widget.credentialSubjectType,
+                      )
+                    : const FailureWidget(),
               ),
             ),
             if (state.acquiredCredentialsQuantity > 0)
@@ -78,11 +99,13 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
 }
 
 class SuccessWidget extends StatelessWidget {
-  const SuccessWidget(
-    this.state, {
+  const SuccessWidget({
     super.key,
+    required this.credentialSubjectType,
+    required this.ageEstimate,
   });
-  final CameraState state;
+  final CredentialSubjectType credentialSubjectType;
+  final String ageEstimate;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +128,7 @@ class SuccessWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8),
           child: Text(
-            l10n.yourAgeEstimationIs(state.ageEstimate),
+            l10n.yourAgeEstimationIs(ageEstimate),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
@@ -116,7 +139,7 @@ class SuccessWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8),
           child: Text(
-            l10n.youGotAgeCredentials(state.acquiredCredentialsQuantity),
+            l10n.youGotAgeCredentials(credentialSubjectType.title),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.normal,
@@ -142,11 +165,7 @@ class SuccessWidget extends StatelessWidget {
 }
 
 class FailureWidget extends StatelessWidget {
-  const FailureWidget(
-    this.state, {
-    super.key,
-  });
-  final CameraState state;
+  const FailureWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

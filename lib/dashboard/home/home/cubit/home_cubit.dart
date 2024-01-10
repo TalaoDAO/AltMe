@@ -82,19 +82,17 @@ class HomeCubit extends Cubit<HomeState> {
         url: credentialType.aiValidationUrl,
         apiKey: YOTI_AI_API_KEY,
         data: data,
-        credentialType: credentialType.name,
+        credentialSubjectType: credentialType,
         credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
 
-      // await _getCredentialByAI(
-      //   url: 'https://issuer.talao.co/ai/ageestimate',
-      //   apiKey: YOTI_AI_API_KEY,
-      //   data: data,
-      //   credentialType: 'AgeEstimate',
-      //   credentialsCubit: credentialsCubit,
-      //   cameraCubit: cameraCubit,
-      // );
+      await ageEstimate(
+        url: 'https://issuer.talao.co/ai/ageestimate',
+        apiKey: YOTI_AI_API_KEY,
+        data: data,
+        cameraCubit: cameraCubit,
+      );
     } catch (e) {
       final logger = getLogger('HomeCubit - AISelfiValidation');
       logger.e('error: $e');
@@ -140,29 +138,15 @@ class HomeCubit extends Cubit<HomeState> {
     required String url,
     required String apiKey,
     required Map<String, dynamic> data,
-    required String credentialType,
+    required CredentialSubjectType credentialSubjectType,
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
   }) async {
     /// if credential of this type is already in the wallet do nothing
     /// Ensure credentialType = name of credential type in CredentialModel
-    CredentialSubjectType credentialTypeEnum =
-        CredentialSubjectType.aragoEmailPass;
-    if (credentialType == 'AgeRange') {
-      credentialTypeEnum = CredentialSubjectType.ageRange;
-    }
-    if (credentialType == 'Over13') {
-      credentialTypeEnum = CredentialSubjectType.over13;
-    }
-    if (credentialType == 'Over15') {
-      credentialTypeEnum = CredentialSubjectType.over15;
-    }
-    if (credentialType == 'Over18') {
-      credentialTypeEnum = CredentialSubjectType.over18;
-    }
 
     final List<CredentialModel> credentialList = await credentialsCubit
-        .credentialListFromCredentialSubjectType(credentialTypeEnum);
+        .credentialListFromCredentialSubjectType(credentialSubjectType);
     if (credentialList.isEmpty) {
       dynamic response;
 
@@ -186,8 +170,9 @@ class HomeCubit extends Cubit<HomeState> {
         newCredential['credentialPreview'] = credential;
         final CredentialManifest credentialManifest =
             await getCredentialManifestFromAltMe(oidc4vc);
-        credentialManifest.outputDescriptors
-            ?.removeWhere((element) => element.id != credentialType);
+        credentialManifest.outputDescriptors?.removeWhere(
+          (element) => element.id != credentialSubjectType.name,
+        );
         if (credentialManifest.outputDescriptors!.isNotEmpty) {
           newCredential['credential_manifest'] = CredentialManifest(
             credentialManifest.id,
@@ -204,19 +189,40 @@ class HomeCubit extends Cubit<HomeState> {
           newData: credential,
           activities: [Activity(acquisitionAt: DateTime.now())],
         );
-        if (credentialType != 'AgeEstimate') {
-          await credentialsCubit.insertCredential(
-            credential: credentialModel,
-            showMessage: true,
-          );
-          await cameraCubit.incrementAcquiredCredentialsQuantity();
-          emit(state.copyWith(status: AppStatus.success));
-        } else {
-          await cameraCubit.updateAgeEstimate(
-            credentialModel.data['credentialSubject']['ageEstimate'] as String,
-          );
-        }
+        await credentialsCubit.insertCredential(
+          credential: credentialModel,
+          showMessage: true,
+        );
+        await cameraCubit.incrementAcquiredCredentialsQuantity();
+        emit(state.copyWith(status: AppStatus.success));
       }
+    }
+  }
+
+  Future<void> ageEstimate({
+    required String url,
+    required String apiKey,
+    required Map<String, dynamic> data,
+    required CameraCubit cameraCubit,
+  }) async {
+    dynamic response;
+
+    emit(state.copyWith(status: AppStatus.loading));
+    response = await client.post(
+      url,
+      headers: <String, dynamic>{
+        'accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-API-KEY': apiKey,
+      },
+      data: data,
+    );
+
+    if (response != null) {
+      final credential = jsonDecode(response as String) as Map<String, dynamic>;
+      await cameraCubit.updateAgeEstimate(
+        credential['credentialSubject']['ageEstimate'] as String,
+      );
     }
   }
 
