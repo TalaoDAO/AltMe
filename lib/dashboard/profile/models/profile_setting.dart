@@ -277,6 +277,7 @@ class GeneralOptions extends Equatable {
     required this.companyWebsite,
     required this.companyLogo,
     required this.tagLine,
+    this.splashScreenTitle,
     required this.profileName,
     required this.profileVersion,
     required this.published,
@@ -293,6 +294,7 @@ class GeneralOptions extends Equatable {
         companyWebsite: '',
         companyLogo: '',
         tagLine: '',
+        splashScreenTitle: '',
         profileName: '',
         profileVersion: '',
         published: DateTime.now(),
@@ -305,6 +307,7 @@ class GeneralOptions extends Equatable {
   final String companyWebsite;
   final String companyLogo;
   final String tagLine;
+  final String? splashScreenTitle;
   final String profileName;
   final String profileVersion;
   final DateTime published;
@@ -318,6 +321,7 @@ class GeneralOptions extends Equatable {
     String? companyName,
     String? companyWebsite,
     String? companyLogo,
+    String? splashScreenTitle,
     String? tagLine,
     String? profileName,
     String? profileVersion,
@@ -331,6 +335,7 @@ class GeneralOptions extends Equatable {
       companyWebsite: companyWebsite ?? this.companyWebsite,
       companyLogo: companyLogo ?? this.companyLogo,
       tagLine: tagLine ?? this.tagLine,
+      splashScreenTitle: splashScreenTitle ?? this.splashScreenTitle,
       profileName: profileName ?? this.profileName,
       profileVersion: profileVersion ?? this.profileVersion,
       published: published ?? this.published,
@@ -346,6 +351,7 @@ class GeneralOptions extends Equatable {
         companyWebsite,
         companyLogo,
         tagLine,
+        splashScreenTitle,
         profileName,
         profileVersion,
         published,
@@ -562,6 +568,7 @@ class SettingsMenu extends Equatable {
     required this.displayDeveloperMode,
     required this.displayHelpCenter,
     required this.displayProfile,
+    this.displaySelfSovereignIdentity = true,
   });
 
   factory SettingsMenu.fromJson(Map<String, dynamic> json) =>
@@ -571,11 +578,13 @@ class SettingsMenu extends Equatable {
         displayDeveloperMode: true,
         displayHelpCenter: true,
         displayProfile: true,
+        displaySelfSovereignIdentity: true,
       );
 
   final bool displayDeveloperMode;
   final bool displayHelpCenter;
   final bool displayProfile;
+  final bool displaySelfSovereignIdentity;
 
   Map<String, dynamic> toJson() => _$SettingsMenuToJson(this);
 
@@ -583,11 +592,14 @@ class SettingsMenu extends Equatable {
     bool? displayDeveloperMode,
     bool? displayHelpCenter,
     bool? displayProfile,
+    bool? displaySelfSovereignIdentity,
   }) =>
       SettingsMenu(
         displayDeveloperMode: displayDeveloperMode ?? this.displayDeveloperMode,
         displayHelpCenter: displayHelpCenter ?? this.displayHelpCenter,
         displayProfile: displayProfile ?? this.displayProfile,
+        displaySelfSovereignIdentity:
+            displaySelfSovereignIdentity ?? this.displaySelfSovereignIdentity,
       );
 
   @override
@@ -595,6 +607,7 @@ class SettingsMenu extends Equatable {
         displayDeveloperMode,
         displayHelpCenter,
         displayProfile,
+        displaySelfSovereignIdentity,
       ];
 }
 

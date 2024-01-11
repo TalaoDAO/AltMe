@@ -407,6 +407,20 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
+  String get aiValidationUrl {
+    if (this == CredentialSubjectType.over13) {
+      return Urls.over13AIValidationUrl;
+    } else if (this == CredentialSubjectType.over15) {
+      return Urls.over15AIValidationUrl;
+    } else if (this == CredentialSubjectType.over18) {
+      return Urls.over18AIValidationUrl;
+    } else if (this == CredentialSubjectType.ageRange) {
+      return Urls.ageRangeAIValidationUrl;
+    } else {
+      throw Exception();
+    }
+  }
+
   bool get byPassDeepLink {
     if (this == CredentialSubjectType.tezotopiaMembership ||
         this == CredentialSubjectType.chainbornMembership ||
