@@ -75,6 +75,7 @@ class DiscoverDetailsView extends StatelessWidget {
                         credentialSubjectType:
                             dummyCredential.credentialSubjectType,
                         image: dummyCredential.image,
+                        displayExternalIssuer: dummyCredential.display,
                       ),
                     ),
                     DetailFields(dummyCredential: dummyCredential),

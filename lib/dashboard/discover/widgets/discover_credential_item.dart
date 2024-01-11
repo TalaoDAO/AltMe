@@ -44,6 +44,7 @@ class DiscoverCredentialItem extends StatelessWidget {
         );
       },
       child: DummyCredentialImage(
+        displayExternalIssuer: dummyCredential.display,
         credentialSubjectType: dummyCredential.credentialSubjectType,
         image: dummyCredential.image,
       ),

@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 part 'discover_dummy_credential.g.dart';
 
@@ -15,6 +16,7 @@ class DiscoverDummyCredential extends Equatable {
     this.expirationDateDetails,
     this.howToGetIt,
     this.longDescription,
+    this.display,
   });
 
   factory DiscoverDummyCredential.fromJson(Map<String, dynamic> json) =>
@@ -350,6 +352,7 @@ class DiscoverDummyCredential extends Equatable {
   final MessageHandler? howToGetIt;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? longDescription;
+  final Display? display;
 
   Map<String, dynamic> toJson() => _$DiscoverDummyCredentialToJson(this);
 
@@ -363,5 +366,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails,
         howToGetIt,
         longDescription,
+        display
       ];
 }

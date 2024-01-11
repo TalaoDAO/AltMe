@@ -722,7 +722,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.certificateOfEmployment:
         return 85;
       case CredentialSubjectType.defaultCredential:
-        return 0;
+        return 100;
       case CredentialSubjectType.ecole42LearningAchievement:
         return 0;
       case CredentialSubjectType.emailPass:

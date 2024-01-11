@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -647,24 +648,20 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
   // filtering the external issuer list
   final List<DisplayExternalIssuer> list = List.from(externalIssuers);
   list.removeWhere((element) => element.category != category.name);
-  /*
-  const DiscoverDummyCredential({
-    required this.credentialSubjectType,
-    this.link,
-    this.image,
-    this.websiteLink,
-    this.whyGetThisCard,
-    this.expirationDateDetails,
-    this.howToGetIt,
-    this.longDescription,
-  });
-  */
   return list
       .map(
         (e) => DiscoverDummyCredential(
           credentialSubjectType: CredentialSubjectType.defaultCredential,
           link: e.redirect,
           image: e.background_image,
+          display: Display(
+            backgroundColor: e.background_color,
+            backgroundImage: DisplayDetails(url: e.background_image),
+            name: e.name,
+            textColor: e.text_color,
+            logo: DisplayDetails(url: e.logo),
+            description: e.description,
+          ),
         ),
       )
       .toList();
