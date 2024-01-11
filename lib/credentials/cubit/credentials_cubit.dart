@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/model/model.dart';
 import 'package:bloc/bloc.dart';
@@ -552,6 +553,13 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Map<CredentialCategory, List<DiscoverDummyCredential>>
       _getAvalaibleDummyCredentials(List<CredentialModel> credentials) {
     final dummies = <CredentialCategory, List<DiscoverDummyCredential>>{};
+    // entreprise user may have options to display some dummies (true/false)
+    final discoverCardsOptions =
+        profileCubit.state.model.profileSetting.discoverCardsOptions;
+    // entreprise user may have a list of external issuer
+    final externalIssuers = profileCubit
+        .state.model.profileSetting.discoverCardsOptions?.displayExternalIssuer;
+
     for (final category in getCredentialCategorySorted) {
       final List<CredentialSubjectType> currentCredentialsSubjectTypeList =
           credentials
@@ -572,9 +580,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       }
 
       // show cards in discover based on profile
-      final discoverCardsOptions =
-          profileCubit.state.model.profileSetting.discoverCardsOptions;
-
       if (discoverCardsOptions != null) {
         if (!discoverCardsOptions.displayDefi) {
           allSubjectTypeForCategory
@@ -593,6 +598,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
         }
 
+        if (!discoverCardsOptions.displayOver21) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
+        }
+        if (!discoverCardsOptions.displayOver50) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
+        }
+        if (!discoverCardsOptions.displayOver65) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
+        }
         if (!discoverCardsOptions.displayVerifiableId) {
           allSubjectTypeForCategory
               .remove(CredentialSubjectType.verifiableIdCard);
@@ -612,11 +626,46 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           requiredDummySubjects.add(subjectType);
         }
       }
-
-      dummies[category] = requiredDummySubjects
-          .map(DiscoverDummyCredential.fromSubjectType)
-          .toList();
+// Generate list of external issuer from the profile
+      dummies[category] =
+          getDummiesFromExternalIssuerList(category, externalIssuers ?? []);
+// add dummies from the category
+      dummies[category]?.addAll(
+        requiredDummySubjects
+            .map(DiscoverDummyCredential.fromSubjectType)
+            .toList(),
+      );
     }
     return dummies;
   }
+}
+
+List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
+  CredentialCategory category,
+  List<DisplayExternalIssuer> externalIssuers,
+) {
+  // filtering the external issuer list
+  final List<DisplayExternalIssuer> list = List.from(externalIssuers);
+  list.removeWhere((element) => element.category != category.name);
+  /*
+  const DiscoverDummyCredential({
+    required this.credentialSubjectType,
+    this.link,
+    this.image,
+    this.websiteLink,
+    this.whyGetThisCard,
+    this.expirationDateDetails,
+    this.howToGetIt,
+    this.longDescription,
+  });
+  */
+  return list
+      .map(
+        (e) => DiscoverDummyCredential(
+          credentialSubjectType: CredentialSubjectType.defaultCredential,
+          link: e.redirect,
+          image: e.background_image,
+        ),
+      )
+      .toList();
 }

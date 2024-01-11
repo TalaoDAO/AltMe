@@ -74,14 +74,6 @@ class DiscoverDummyCredential extends Equatable {
             ResponseString.RESPONSE_STRING_emailPassExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_emailPassHowToGetIt;
 
-      case CredentialSubjectType.over18:
-        image = ImageStrings.dummyOver18Card;
-        link = Urls.over18Url;
-        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
-        expirationDateDetails =
-            ResponseString.RESPONSE_STRING_over18ExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
-
       case CredentialSubjectType.over13:
         image = ImageStrings.dummyOver13Card;
         link = Urls.over13Url;
@@ -97,6 +89,38 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over15ExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_over15HowToGetIt;
+
+      case CredentialSubjectType.over18:
+        image = ImageStrings.dummyOver18Card;
+        link = Urls.over18Url;
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over18ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
+
+      case CredentialSubjectType.over21:
+        image = ImageStrings.dummyOver18Card;
+        link = Urls.over18Url;
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over18ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
+
+      case CredentialSubjectType.over50:
+        image = ImageStrings.dummyOver18Card;
+        link = Urls.over18Url;
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over18ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
+
+      case CredentialSubjectType.over65:
+        image = ImageStrings.dummyOver18Card;
+        link = Urls.over18Url;
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over18ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
 
       case CredentialSubjectType.passportFootprint:
         image = ImageStrings.dummyPassportFootprintCard;
