@@ -17,8 +17,13 @@ class TitleText extends StatelessWidget {
     final l10n = context.l10n;
 
     final isEnterprise = profileModel.profileType == ProfileType.enterprise;
+
+    final splashScreenTitle =
+        profileModel.profileSetting.generalOptions.splashScreenTitle ??
+            '${l10n.professional} ${l10n.wallet}';
+
     return MyText(
-      '${isEnterprise ? l10n.professional : Parameters.appName} ${l10n.wallet}',
+      isEnterprise ? splashScreenTitle : '${Parameters.appName} ${l10n.wallet}',
       maxLines: 1,
       textAlign: TextAlign.center,
       style: Theme.of(context).textTheme.starterTitleStyle,

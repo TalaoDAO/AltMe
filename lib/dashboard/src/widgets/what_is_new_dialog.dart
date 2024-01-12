@@ -80,6 +80,14 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'Improve Enterprise Wallet',
+                                'User experience improvement',
+                                'Bug fixes',
+                              ],
+                            ),
+                            NewContent(
+                              version: '2.0.8',
+                              features: const [
                                 'New Enterprise Wallet mode',
                                 'Upload Enterprise Wallet profiles',
                                 'Suspension/Revocation of wallet instances',

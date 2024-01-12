@@ -21,7 +21,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
     final backgroundColor = credentialModel.display?.backgroundColor;
     final backgroundImage = credentialModel.display?.backgroundImage?.url;
 
-    return backgroundImage != null
+    return (backgroundImage != null && backgroundImage != '')
         ? AspectRatio(
             aspectRatio: Sizes.credentialAspectRatio,
             child: CredentialUrlImage(
@@ -94,7 +94,7 @@ class DefaultCardBody extends StatelessWidget {
             heightFactor: 0.19,
             child: Row(
               children: [
-                if (logo != null) ...[
+                if (logo != null && logo != '') ...[
                   Expanded(
                     flex: 1,
                     child: Container(

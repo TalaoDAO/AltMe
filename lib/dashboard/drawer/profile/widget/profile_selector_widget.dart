@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/profile/profile.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
@@ -73,10 +74,13 @@ class ProfileSelectorWidget extends StatelessWidget {
                               ),
                             ),
                           ListTile(
-                            onTap: () {
-                              context
+                            onTap: () async {
+                              await context
                                   .read<ProfileCubit>()
                                   .setProfile(profileType);
+                              await context
+                                  .read<CredentialsCubit>()
+                                  .loadAllCredentials();
                             },
                             shape: const RoundedRectangleBorder(
                               side: BorderSide(

@@ -26,7 +26,8 @@ class DiscoverCredentialItem extends StatelessWidget {
           );
           return;
         }
-
+// If dummyCredential is an external issuer we don't display the detail screen
+// we go directly to the issuer endpoint
         await Navigator.push<void>(
           context,
           DiscoverDetailsPage.route(
@@ -43,6 +44,7 @@ class DiscoverCredentialItem extends StatelessWidget {
         );
       },
       child: DummyCredentialImage(
+        displayExternalIssuer: dummyCredential.display,
         credentialSubjectType: dummyCredential.credentialSubjectType,
         image: dummyCredential.image,
       ),

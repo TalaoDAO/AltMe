@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -166,13 +167,19 @@ class BlockchainOptions extends Equatable {
 @JsonSerializable()
 class DiscoverCardsOptions extends Equatable {
   const DiscoverCardsOptions({
+    required this.displayOver21,
+    required this.displayOver65,
+    required this.displayAgeRange,
+    required this.displayGender,
     required this.displayDefi,
     required this.displayHumanity,
     required this.displayOver13,
     required this.displayOver15,
     required this.displayOver18,
+    required this.displayOver50,
     required this.displayRewardsCategory,
     required this.displayVerifiableId,
+    required this.displayExternalIssuer,
   });
 
   factory DiscoverCardsOptions.fromJson(Map<String, dynamic> json) =>
@@ -184,8 +191,14 @@ class DiscoverCardsOptions extends Equatable {
         displayOver13: false,
         displayOver15: true,
         displayOver18: true,
+        displayOver21: false,
+        displayOver50: false,
         displayRewardsCategory: true,
         displayVerifiableId: true,
+        displayOver65: false,
+        displayAgeRange: true,
+        displayGender: true,
+        displayExternalIssuer: [],
       );
 
   final bool displayDefi;
@@ -193,8 +206,14 @@ class DiscoverCardsOptions extends Equatable {
   final bool displayOver13;
   final bool displayOver15;
   final bool displayOver18;
+  final bool displayOver21;
+  final bool displayOver50;
+  final bool displayOver65;
+  final bool displayAgeRange;
   final bool displayRewardsCategory;
   final bool displayVerifiableId;
+  final bool displayGender;
+  final List<DisplayExternalIssuer> displayExternalIssuer;
 
   Map<String, dynamic> toJson() => _$DiscoverCardsOptionsToJson(this);
 
@@ -206,6 +225,12 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayOver18,
     bool? displayRewardsCategory,
     bool? displayVerifiableId,
+    bool? displayOver21,
+    bool? displayOver65,
+    bool? displayAgeRange,
+    bool? displayGender,
+    bool? displayOver50,
+    List<DisplayExternalIssuer>? displayExternalIssuer,
   }) {
     return DiscoverCardsOptions(
       displayDefi: displayDefi ?? this.displayDefi,
@@ -216,6 +241,13 @@ class DiscoverCardsOptions extends Equatable {
       displayRewardsCategory:
           displayRewardsCategory ?? this.displayRewardsCategory,
       displayVerifiableId: displayVerifiableId ?? this.displayVerifiableId,
+      displayOver21: displayOver21 ?? this.displayOver21,
+      displayOver65: displayOver65 ?? this.displayOver65,
+      displayAgeRange: displayAgeRange ?? this.displayAgeRange,
+      displayGender: displayGender ?? this.displayGender,
+      displayOver50: displayOver50 ?? this.displayOver50,
+      displayExternalIssuer:
+          displayExternalIssuer ?? this.displayExternalIssuer,
     );
   }
 
@@ -228,6 +260,12 @@ class DiscoverCardsOptions extends Equatable {
         displayOver18,
         displayRewardsCategory,
         displayVerifiableId,
+        displayOver21,
+        displayOver65,
+        displayAgeRange,
+        displayGender,
+        displayOver50,
+        displayExternalIssuer,
       ];
 }
 
@@ -239,6 +277,7 @@ class GeneralOptions extends Equatable {
     required this.companyWebsite,
     required this.companyLogo,
     required this.tagLine,
+    this.splashScreenTitle,
     required this.profileName,
     required this.profileVersion,
     required this.published,
@@ -255,6 +294,7 @@ class GeneralOptions extends Equatable {
         companyWebsite: '',
         companyLogo: '',
         tagLine: '',
+        splashScreenTitle: '',
         profileName: '',
         profileVersion: '',
         published: DateTime.now(),
@@ -267,6 +307,7 @@ class GeneralOptions extends Equatable {
   final String companyWebsite;
   final String companyLogo;
   final String tagLine;
+  final String? splashScreenTitle;
   final String profileName;
   final String profileVersion;
   final DateTime published;
@@ -280,6 +321,7 @@ class GeneralOptions extends Equatable {
     String? companyName,
     String? companyWebsite,
     String? companyLogo,
+    String? splashScreenTitle,
     String? tagLine,
     String? profileName,
     String? profileVersion,
@@ -293,6 +335,7 @@ class GeneralOptions extends Equatable {
       companyWebsite: companyWebsite ?? this.companyWebsite,
       companyLogo: companyLogo ?? this.companyLogo,
       tagLine: tagLine ?? this.tagLine,
+      splashScreenTitle: splashScreenTitle ?? this.splashScreenTitle,
       profileName: profileName ?? this.profileName,
       profileVersion: profileVersion ?? this.profileVersion,
       published: published ?? this.published,
@@ -308,6 +351,7 @@ class GeneralOptions extends Equatable {
         companyWebsite,
         companyLogo,
         tagLine,
+        splashScreenTitle,
         profileName,
         profileVersion,
         published,
@@ -524,6 +568,7 @@ class SettingsMenu extends Equatable {
     required this.displayDeveloperMode,
     required this.displayHelpCenter,
     required this.displayProfile,
+    this.displaySelfSovereignIdentity = true,
   });
 
   factory SettingsMenu.fromJson(Map<String, dynamic> json) =>
@@ -533,11 +578,13 @@ class SettingsMenu extends Equatable {
         displayDeveloperMode: true,
         displayHelpCenter: true,
         displayProfile: true,
+        displaySelfSovereignIdentity: true,
       );
 
   final bool displayDeveloperMode;
   final bool displayHelpCenter;
   final bool displayProfile;
+  final bool displaySelfSovereignIdentity;
 
   Map<String, dynamic> toJson() => _$SettingsMenuToJson(this);
 
@@ -545,11 +592,14 @@ class SettingsMenu extends Equatable {
     bool? displayDeveloperMode,
     bool? displayHelpCenter,
     bool? displayProfile,
+    bool? displaySelfSovereignIdentity,
   }) =>
       SettingsMenu(
         displayDeveloperMode: displayDeveloperMode ?? this.displayDeveloperMode,
         displayHelpCenter: displayHelpCenter ?? this.displayHelpCenter,
         displayProfile: displayProfile ?? this.displayProfile,
+        displaySelfSovereignIdentity:
+            displaySelfSovereignIdentity ?? this.displaySelfSovereignIdentity,
       );
 
   @override
@@ -557,6 +607,7 @@ class SettingsMenu extends Equatable {
         displayDeveloperMode,
         displayHelpCenter,
         displayProfile,
+        displaySelfSovereignIdentity,
       ];
 }
 

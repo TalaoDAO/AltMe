@@ -157,14 +157,18 @@ class CredentialDisplay extends StatelessWidget {
             );
         }
 
-      case CredentialSubjectType.over18:
-        return Over18Widget(credentialModel: credentialModel);
-
       case CredentialSubjectType.over13:
         return Over13Widget(credentialModel: credentialModel);
-
       case CredentialSubjectType.over15:
         return Over15Widget(credentialModel: credentialModel);
+      case CredentialSubjectType.over18:
+        return Over18Widget(credentialModel: credentialModel);
+      case CredentialSubjectType.over21:
+        return Over18Widget(credentialModel: credentialModel);
+      case CredentialSubjectType.over50:
+        return Over18Widget(credentialModel: credentialModel);
+      case CredentialSubjectType.over65:
+        return Over18Widget(credentialModel: credentialModel);
 
       case CredentialSubjectType.passportFootprint:
         return PassportFootprintWidget(credentialModel: credentialModel);

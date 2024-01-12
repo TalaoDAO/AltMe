@@ -4,11 +4,14 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
-Future<CredentialManifest> getCredentialManifestFromAltMe(
-  OIDC4VC oidc4vc,
-) async {
+Future<CredentialManifest> getCredentialManifestFromAltMe({
+  required OIDC4VC oidc4vc,
+  required OIDC4VCIDraftType oidc4vciDraftType,
+}) async {
   final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
-    'https://issuer.talao.co',
+    baseUrl: 'https://issuer.talao.co',
+    isAuthorizationServer: false,
+    oidc4vciDraftType: oidc4vciDraftType,
   );
   final JsonPath credentialManifetPath = JsonPath(r'$..credential_manifest');
   final credentialManifest = CredentialManifest.fromJson(

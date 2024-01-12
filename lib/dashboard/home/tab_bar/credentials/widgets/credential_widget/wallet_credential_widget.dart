@@ -17,17 +17,14 @@ class WalletCredentialWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.walletCertificate,
-      issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+      issuerName: '',
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
       value: '',
       expirationDate: credentialModel.expirationDate == null
           ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+          : UiDate.formatDateForCredentialCard(credentialModel.expirationDate!),
     );
   }
 }

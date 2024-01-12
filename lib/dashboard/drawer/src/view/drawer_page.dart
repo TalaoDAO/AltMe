@@ -102,14 +102,18 @@ class DrawerView extends StatelessWidget {
                     else
                       const SizedBox.shrink(),
                     const SizedBox(height: Sizes.spaceSmall),
-                    DrawerCategoryItem(
-                      title: l10n.ssi,
-                      subTitle: l10n.ssiDescription,
-                      onClick: () {
-                        Navigator.of(context).push<void>(SSIMenu.route());
-                      },
-                    ),
-                    const SizedBox(height: Sizes.spaceSmall),
+
+                    if (profileModel.profileSetting.settingsMenu
+                        .displaySelfSovereignIdentity) ...[
+                      DrawerCategoryItem(
+                        title: l10n.ssi,
+                        subTitle: l10n.ssiDescription,
+                        onClick: () {
+                          Navigator.of(context).push<void>(SSIMenu.route());
+                        },
+                      ),
+                      const SizedBox(height: Sizes.spaceSmall),
+                    ],
 
                     if (profileModel
                         .profileSetting.settingsMenu.displayDeveloperMode) ...[

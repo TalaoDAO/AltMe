@@ -20,6 +20,7 @@ Future<void> getAuthorizationUriForIssuer({
   required String? clientId,
   required String? clientSecret,
   required ClientAuthentication clientAuthentication,
+  required OIDC4VCIDraftType oidc4vciDraftType,
 }) async {
   /// this is first phase flow for authorization_code
 
@@ -56,6 +57,7 @@ Future<void> getAuthorizationUriForIssuer({
       dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
 
   final jwtToken = jwt.sign(SecretKey(authorizationUriSecretKey));
+
   final Uri oidc4vcAuthenticationUri =
       await oidc4vc.getAuthorizationUriForIssuer(
     selectedCredentials: selectedCredentials,
@@ -70,6 +72,7 @@ Future<void> getAuthorizationUriForIssuer({
     authorizationEndPoint: Parameters.authorizeEndPoint,
     scope: scope,
     clientAuthentication: clientAuthentication,
+    oidc4vciDraftType: oidc4vciDraftType,
   );
 
   await LaunchUrl.launchUri(oidc4vcAuthenticationUri);

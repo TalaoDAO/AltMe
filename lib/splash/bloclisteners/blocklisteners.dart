@@ -240,6 +240,13 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               url: state.uri.toString(),
               client: client,
               oidc4vc: OIDC4VC(),
+              oidc4vciDraftType: profileCubit
+                  .state
+                  .model
+                  .profileSetting
+                  .selfSovereignIdentityOptions
+                  .customOidc4vcProfile
+                  .oidc4vciDraft,
             );
 
             oidc4vcTypeForIssuance = oidc4vcType;
@@ -268,13 +275,14 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
                 if (requestUri != null || request != null) {
                   late dynamic encodedData;
-                  if (requestUri != null) {
+
+                  if (request != null) {
+                    encodedData = request;
+                  } else if (requestUri != null) {
                     encodedData = await fetchRequestUriPayload(
                       url: requestUri,
                       client: client,
                     );
-                  } else {
-                    encodedData = request;
                   }
 
                   response = decodePayload(
@@ -283,7 +291,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   );
 
                   url = getUpdatedUrlForSIOPV2OIC4VP(
-                    url: state.uri.toString(),
+                    uri: state.uri!,
                     response: response,
                   );
                 }

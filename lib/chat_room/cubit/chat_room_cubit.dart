@@ -262,12 +262,10 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   Future<void> _checkIfRoomNotExistThenCreateIt() async {
     if (_roomId == null || _roomId!.isEmpty) {
-      final privateKey = await secureStorageProvider
-              .get(SecureStorageKeys.p256PrivateKeyForWallet) ??
-          '';
+      final p256KeyForWallet = await getWalletP256Key(secureStorageProvider);
 
       final tokenParameters = TokenParameters(
-        privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
+        privateKey: jsonDecode(p256KeyForWallet) as Map<String, dynamic>,
         did: '', // just added as it is required field
         mediaType: MediaType.basic, // just added as it is required field
         useJWKThumbPrint: true, // just added as it is required field

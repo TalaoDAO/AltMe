@@ -95,13 +95,19 @@ class OIDC4VC {
     required String authorizationEndPoint,
     required bool scope,
     required ClientAuthentication clientAuthentication,
+    required OIDC4VCIDraftType oidc4vciDraftType,
   }) async {
     try {
-      final openIdConfiguration = await getOpenIdConfig(issuer);
+      final openIdConfiguration = await getOpenIdConfig(
+        baseUrl: issuer,
+        isAuthorizationServer: false,
+        oidc4vciDraftType: oidc4vciDraftType,
+      );
 
       final authorizationEndpoint = await readAuthorizationEndPoint(
         openIdConfiguration: openIdConfiguration,
         issuer: issuer,
+        oidc4vciDraftType: oidc4vciDraftType,
       );
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
@@ -217,9 +223,17 @@ class OIDC4VC {
       ),
     };
 
-    if (clientAuthentication == ClientAuthentication.clientSecretPost) {
-      myRequest['client_id'] = clientId;
-      myRequest['client_secret'] = clientSecret;
+    switch (clientAuthentication) {
+      case ClientAuthentication.none:
+        break;
+      case ClientAuthentication.clientSecretBasic:
+        myRequest['authorization'] =
+            base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+      case ClientAuthentication.clientSecretPost:
+        myRequest['client_id'] = clientId;
+        myRequest['client_secret'] = clientSecret;
+      case ClientAuthentication.clientId:
+        myRequest['client_id'] = clientId;
     }
 
     if (scope) {
@@ -297,11 +311,16 @@ class OIDC4VC {
     String? codeVerifier,
     String? authorization,
   }) async {
-    final openIdConfiguration = await getOpenIdConfig(issuer);
+    final openIdConfiguration = await getOpenIdConfig(
+      baseUrl: issuer,
+      isAuthorizationServer: false,
+      oidc4vciDraftType: oidc4vciDraftType,
+    );
 
     final tokenEndPoint = await readTokenEndPoint(
       openIdConfiguration: openIdConfiguration,
       issuer: issuer,
+      oidc4vciDraftType: oidc4vciDraftType,
     );
 
     if (nonce == null || accessToken == null) {
@@ -528,13 +547,17 @@ class OIDC4VC {
   Future<String> readTokenEndPoint({
     required OpenIdConfiguration openIdConfiguration,
     required String issuer,
+    required OIDC4VCIDraftType oidc4vciDraftType,
   }) async {
     var tokenEndPoint = '$issuer/token';
 
     final authorizationServer = openIdConfiguration.authorizationServer;
     if (authorizationServer != null) {
-      final authorizationServerConfiguration =
-          await getOpenIdConfig(authorizationServer);
+      final authorizationServerConfiguration = await getOpenIdConfig(
+        baseUrl: authorizationServer,
+        isAuthorizationServer: true,
+        oidc4vciDraftType: oidc4vciDraftType,
+      );
 
       if (authorizationServerConfiguration.tokenEndpoint != null) {
         tokenEndPoint = authorizationServerConfiguration.tokenEndpoint!;
@@ -550,13 +573,17 @@ class OIDC4VC {
   Future<String> readAuthorizationEndPoint({
     required OpenIdConfiguration openIdConfiguration,
     required String issuer,
+    required OIDC4VCIDraftType oidc4vciDraftType,
   }) async {
     var authorizationEndpoint = '$issuer/authorize';
 
     final authorizationServer = openIdConfiguration.authorizationServer;
     if (authorizationServer != null) {
-      final authorizationServerConfiguration =
-          await getOpenIdConfig(authorizationServer);
+      final authorizationServerConfiguration = await getOpenIdConfig(
+        baseUrl: authorizationServer,
+        isAuthorizationServer: true,
+        oidc4vciDraftType: oidc4vciDraftType,
+      );
 
       if (authorizationServerConfiguration.authorizationEndpoint != null) {
         authorizationEndpoint =
@@ -1141,8 +1168,18 @@ class OIDC4VC {
   //   return tokenParameters.kid;
   // }
 
-  Future<OpenIdConfiguration> getOpenIdConfig(String baseUrl) async {
+  Future<OpenIdConfiguration> getOpenIdConfig({
+    required String baseUrl,
+    required bool isAuthorizationServer,
+    required OIDC4VCIDraftType oidc4vciDraftType,
+  }) async {
     final url = '$baseUrl/.well-known/openid-configuration';
+
+    if (!isAuthorizationServer &&
+        oidc4vciDraftType == OIDC4VCIDraftType.draft11) {
+      final data = await getOpenIdConfigSecondMethod(baseUrl);
+      return data;
+    }
 
     try {
       final response = await client.get<dynamic>(url);
@@ -1152,12 +1189,12 @@ class OIDC4VC {
 
       return OpenIdConfiguration.fromJson(data);
     } catch (e) {
-      final data = await getOpenIdConfigSecondAttempt(baseUrl);
+      final data = await getOpenIdConfigSecondMethod(baseUrl);
       return data;
     }
   }
 
-  Future<OpenIdConfiguration> getOpenIdConfigSecondAttempt(
+  Future<OpenIdConfiguration> getOpenIdConfigSecondMethod(
     String baseUrl,
   ) async {
     final url = '$baseUrl/.well-known/openid-credential-issuer';
