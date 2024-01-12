@@ -63,7 +63,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final OIDC4VC oidc4vc;
 
   final log = getLogger('QRCodeScanCubit');
-  late dynamic encodedData;
 
   @override
   Future<void> close() async {
@@ -485,6 +484,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     /// check if request uri is provided or not
     if (requestUri != null || request != null) {
+      late dynamic encodedData;
+
+      if (request != null) {
+        encodedData = request;
+      } else if (requestUri != null) {
+        encodedData = await fetchRequestUriPayload(
+          url: requestUri,
+          client: client,
+        );
+      }
+
       /// verifier side (oidc4vp) or (siopv2 oidc4vc) with request_uri
       /// afer verification process
       final Map<String, dynamic> response = decodePayload(
@@ -493,10 +503,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
 
       final String newUrl = getUpdatedUrlForSIOPV2OIC4VP(
-        url: uri.toString(),
+        uri: uri,
         response: response,
       );
-      encodedData = null;
 
       emit(
         state.copyWith(
@@ -743,6 +752,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         url: url,
         client: client,
         oidc4vc: oidc4vc,
+        oidc4vciDraftType: profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.oidc4vciDraft,
       );
 
       if (openIdConfiguration != null) {
@@ -940,13 +951,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     final String? requestUri = state.uri?.queryParameters['request_uri'];
     final String? request = state.uri?.queryParameters['request'];
 
-    if (requestUri != null) {
+    late dynamic encodedData;
+
+    if (request != null) {
+      encodedData = request;
+    } else if (requestUri != null) {
       encodedData = await fetchRequestUriPayload(
         url: requestUri,
-        client: requestClient,
+        client: client,
       );
-    } else {
-      encodedData = request;
     }
 
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
@@ -1164,6 +1177,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           clientId: clientId,
           clientSecret: clientSecret,
           clientAuthentication: customOidc4vcProfile.clientAuthentication,
+          oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
         );
         goBack();
       }

@@ -1022,7 +1022,7 @@
   "secureWithFingerprintAndPINBackup": "Secure with Fingerprint + PIN backup",
   "secureYourWalletWithPINCodeAndBiometrics": "Secure your wallet with PIN code and Biometrics",
   "twoFactorAuthenticationHasBeenEnabled": "Two factor authentication has been enabled.",
-  "createAnProfessionalWallet": "Create Professional Wallet",
+  "createAnProfessionalWallet": "Create Enterprise Wallet",
   "initialization": "Initialization",
   "login": "Login",
   "password": "Password",

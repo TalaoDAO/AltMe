@@ -230,10 +230,10 @@ packages:
     dependency: "direct dev"
     description:
       name: build_runner
-      sha256: "67d591d602906ef9201caf93452495ad1812bea2074f04e25dbd7c133785821b"
+      sha256: "581bacf68f89ec8792f5e5a0b2c4decd1c948e97ce659dc783688c8a88fbec21"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.7"
+    version: "2.4.8"
   build_runner_core:
     dependency: transitive
     description:
@@ -298,6 +298,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.10.8+16"
+<<<<<<< HEAD
   camera_avfoundation:
     dependency: transitive
     description:
@@ -306,6 +307,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.13+9"
+=======
+>>>>>>> main
   camera_platform_interface:
     dependency: transitive
     description:
@@ -1239,10 +1242,17 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
+<<<<<<< HEAD
       sha256: "1a27bf4cc0330389cebe465bab08fe6dec97e44015b4899637344bb7297759ec"
       url: "https://pub.dev"
     source: hosted
     version: "0.8.9+2"
+=======
+      sha256: "39f2bfe497e495450c81abcd44b62f56c2a36a37a175da7d137b4454977b51b1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.9+3"
+>>>>>>> main
   image_picker_for_web:
     dependency: transitive
     description:
@@ -1255,10 +1265,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_ios
-      sha256: eac0a62104fa12feed213596df0321f57ce5a572562f72a68c4ff81e9e4caacf
+      sha256: fadafce49e8569257a0cad56d24438a6fa1f0cbd7ee0af9b631f7492818a4ca3
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.9"
+    version: "0.8.9+1"
   image_picker_linux:
     dependency: transitive
     description:
@@ -1413,10 +1423,10 @@ packages:
     dependency: transitive
     description:
       name: local_auth_ios
-      sha256: "8293faf72ef0ac4710f209edd03916c2d4c1eeab0483bdcf9b2e659c2f7d737b"
+      sha256: eb283b530029b334698918f1e282d4483737cbca972ff21b9193be3d6de8e2b8
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.5"
+    version: "1.1.6"
   local_auth_platform_interface:
     dependency: transitive
     description:
@@ -1684,10 +1694,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_foundation
-      sha256: "19314d595120f82aca0ba62787d58dde2cc6b5df7d2f0daf72489e38d1b57f2d"
+      sha256: "5a7999be66e000916500be4f15a3633ebceb8302719b47b9cc49ce924125350f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.2"
   path_provider_linux:
     dependency: transitive
     description:
@@ -2067,10 +2077,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_foundation
-      sha256: "7bf53a9f2d007329ee6f3df7268fd498f8373602f943c975598bbb34649b62a7"
+      sha256: "7708d83064f38060c7b39db12aefe449cb8cdc031d6062280087bc4cdb988f5c"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.4"
+    version: "2.3.5"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -2381,6 +2391,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.2.2"
+<<<<<<< HEAD
   url_launcher_ios:
     dependency: transitive
     description:
@@ -2389,6 +2400,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.2.3"
+=======
+>>>>>>> main
   url_launcher_linux:
     dependency: transitive
     description:
@@ -2581,6 +2594,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.9.1"
+<<<<<<< HEAD
   webview_flutter_wkwebview:
     dependency: "direct main"
     description:
@@ -2589,6 +2603,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.10.1"
+=======
+>>>>>>> main
   win32:
     dependency: transitive
     description:

@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -166,13 +167,19 @@ class BlockchainOptions extends Equatable {
 @JsonSerializable()
 class DiscoverCardsOptions extends Equatable {
   const DiscoverCardsOptions({
+    required this.displayOver21,
+    required this.displayOver65,
+    required this.displayAgeRange,
+    required this.displayGender,
     required this.displayDefi,
     required this.displayHumanity,
     required this.displayOver13,
     required this.displayOver15,
     required this.displayOver18,
+    required this.displayOver50,
     required this.displayRewardsCategory,
     required this.displayVerifiableId,
+    required this.displayExternalIssuer,
   });
 
   factory DiscoverCardsOptions.fromJson(Map<String, dynamic> json) =>
@@ -184,8 +191,14 @@ class DiscoverCardsOptions extends Equatable {
         displayOver13: false,
         displayOver15: true,
         displayOver18: true,
+        displayOver21: false,
+        displayOver50: false,
         displayRewardsCategory: true,
         displayVerifiableId: true,
+        displayOver65: false,
+        displayAgeRange: true,
+        displayGender: true,
+        displayExternalIssuer: [],
       );
 
   final bool displayDefi;
@@ -193,8 +206,14 @@ class DiscoverCardsOptions extends Equatable {
   final bool displayOver13;
   final bool displayOver15;
   final bool displayOver18;
+  final bool displayOver21;
+  final bool displayOver50;
+  final bool displayOver65;
+  final bool displayAgeRange;
   final bool displayRewardsCategory;
   final bool displayVerifiableId;
+  final bool displayGender;
+  final List<DisplayExternalIssuer> displayExternalIssuer;
 
   Map<String, dynamic> toJson() => _$DiscoverCardsOptionsToJson(this);
 
@@ -206,6 +225,12 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayOver18,
     bool? displayRewardsCategory,
     bool? displayVerifiableId,
+    bool? displayOver21,
+    bool? displayOver65,
+    bool? displayAgeRange,
+    bool? displayGender,
+    bool? displayOver50,
+    List<DisplayExternalIssuer>? displayExternalIssuer,
   }) {
     return DiscoverCardsOptions(
       displayDefi: displayDefi ?? this.displayDefi,
@@ -216,6 +241,13 @@ class DiscoverCardsOptions extends Equatable {
       displayRewardsCategory:
           displayRewardsCategory ?? this.displayRewardsCategory,
       displayVerifiableId: displayVerifiableId ?? this.displayVerifiableId,
+      displayOver21: displayOver21 ?? this.displayOver21,
+      displayOver65: displayOver65 ?? this.displayOver65,
+      displayAgeRange: displayAgeRange ?? this.displayAgeRange,
+      displayGender: displayGender ?? this.displayGender,
+      displayOver50: displayOver50 ?? this.displayOver50,
+      displayExternalIssuer:
+          displayExternalIssuer ?? this.displayExternalIssuer,
     );
   }
 
@@ -228,6 +260,12 @@ class DiscoverCardsOptions extends Equatable {
         displayOver18,
         displayRewardsCategory,
         displayVerifiableId,
+        displayOver21,
+        displayOver65,
+        displayAgeRange,
+        displayGender,
+        displayOver50,
+        displayExternalIssuer,
       ];
 }
 
