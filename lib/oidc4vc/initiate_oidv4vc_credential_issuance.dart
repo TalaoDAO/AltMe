@@ -49,7 +49,11 @@ Future<void> initiateOIDC4VCCredentialIssuance({
     final state = Uri.parse(scannedResponse).queryParameters['state'];
 
     final OpenIdConfiguration openIdConfiguration =
-        await oidc4vc.getOpenIdConfig(issuer!);
+        await oidc4vc.getOpenIdConfig(
+      baseUrl: issuer!,
+      isAuthorizationServer: false,
+      oidc4vciDraftType: oidc4vciDraftType,
+    );
 
     if (preAuthorizedCode != null) {
       /// full phase flow of preAuthorized

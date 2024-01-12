@@ -240,6 +240,13 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               url: state.uri.toString(),
               client: client,
               oidc4vc: OIDC4VC(),
+              oidc4vciDraftType: profileCubit
+                  .state
+                  .model
+                  .profileSetting
+                  .selfSovereignIdentityOptions
+                  .customOidc4vcProfile
+                  .oidc4vciDraft,
             );
 
             oidc4vcTypeForIssuance = oidc4vcType;

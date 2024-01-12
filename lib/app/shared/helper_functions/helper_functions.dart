@@ -560,6 +560,7 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
   required String url,
   required DioClient client,
   required OIDC4VC oidc4vc,
+  required OIDC4VCIDraftType oidc4vciDraftType,
 }) async {
   final uri = Uri.parse(url);
 
@@ -590,16 +591,22 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
     return (null, null, null, null);
   }
 
-  final OpenIdConfiguration openIdConfiguration =
-      await oidc4vc.getOpenIdConfig(issuer);
+  final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
+    baseUrl: issuer,
+    isAuthorizationServer: false,
+    oidc4vciDraftType: oidc4vciDraftType,
+  );
 
   final authorizationServer = openIdConfiguration.authorizationServer;
 
   OpenIdConfiguration? authorizationServerConfiguration;
 
   if (authorizationServer != null) {
-    authorizationServerConfiguration =
-        await oidc4vc.getOpenIdConfig(authorizationServer);
+    authorizationServerConfiguration = await oidc4vc.getOpenIdConfig(
+      baseUrl: authorizationServer,
+      isAuthorizationServer: true,
+      oidc4vciDraftType: oidc4vciDraftType,
+    );
   }
 
   final credentialsSupported = openIdConfiguration.credentialsSupported;
@@ -816,6 +823,7 @@ Future<Map<String, dynamic>?> getClientMetada({
 Future<bool?> isEBSIV3ForVerifiers({
   required Uri uri,
   required OIDC4VC oidc4vc,
+  required OIDC4VCIDraftType oidc4vciDraftType,
 }) async {
   try {
     final String? clientId = uri.queryParameters['client_id'];
@@ -827,7 +835,9 @@ Future<bool?> isEBSIV3ForVerifiers({
 
     final OpenIdConfiguration openIdConfiguration =
         await oidc4vc.getOpenIdConfig(
-      clientId,
+      baseUrl: clientId,
+      isAuthorizationServer: false,
+      oidc4vciDraftType: oidc4vciDraftType,
     );
 
     final subjectTrustFrameworksSupported =

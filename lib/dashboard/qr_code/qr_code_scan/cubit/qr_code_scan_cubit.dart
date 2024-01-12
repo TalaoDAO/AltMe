@@ -743,6 +743,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         url: url,
         client: client,
         oidc4vc: oidc4vc,
+        oidc4vciDraftType: profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.oidc4vciDraft,
       );
 
       if (openIdConfiguration != null) {
@@ -1164,6 +1166,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           clientId: clientId,
           clientSecret: clientSecret,
           clientAuthentication: customOidc4vcProfile.clientAuthentication,
+          oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
         );
         goBack();
       }
