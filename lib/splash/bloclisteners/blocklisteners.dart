@@ -275,13 +275,14 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
                 if (requestUri != null || request != null) {
                   late dynamic encodedData;
-                  if (requestUri != null) {
+
+                  if (request != null) {
+                    encodedData = request;
+                  } else if (requestUri != null) {
                     encodedData = await fetchRequestUriPayload(
                       url: requestUri,
                       client: client,
                     );
-                  } else {
-                    encodedData = request;
                   }
 
                   response = decodePayload(

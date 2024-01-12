@@ -486,13 +486,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     if (requestUri != null || request != null) {
       late dynamic encodedData;
 
-      if (requestUri != null) {
+      if (request != null) {
+        encodedData = request;
+      } else if (requestUri != null) {
         encodedData = await fetchRequestUriPayload(
           url: requestUri,
-          client: requestClient,
+          client: client,
         );
-      } else {
-        encodedData = request;
       }
 
       /// verifier side (oidc4vp) or (siopv2 oidc4vc) with request_uri
@@ -953,13 +953,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     late dynamic encodedData;
 
-    if (requestUri != null) {
+    if (request != null) {
+      encodedData = request;
+    } else if (requestUri != null) {
       encodedData = await fetchRequestUriPayload(
         url: requestUri,
-        client: requestClient,
+        client: client,
       );
-    } else {
-      encodedData = request;
     }
 
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
