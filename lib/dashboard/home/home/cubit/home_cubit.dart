@@ -40,6 +40,7 @@ class HomeCubit extends Cubit<HomeState> {
     required List<int> imageBytes,
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
+    required OIDC4VCIDraftType oidc4vciDraftType,
   }) async {
     // launch url to get Over18, Over15, Over13,AgeRange Credentials
     emit(state.loading());
@@ -85,6 +86,7 @@ class HomeCubit extends Cubit<HomeState> {
         credentialSubjectType: credentialType,
         credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
+        oidc4vciDraftType: oidc4vciDraftType,
       );
 
       await ageEstimate(
@@ -141,6 +143,7 @@ class HomeCubit extends Cubit<HomeState> {
     required CredentialSubjectType credentialSubjectType,
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
+    required OIDC4VCIDraftType oidc4vciDraftType,
   }) async {
     /// if credential of this type is already in the wallet do nothing
     /// Ensure credentialType = name of credential type in CredentialModel
@@ -169,7 +172,10 @@ class HomeCubit extends Cubit<HomeState> {
             Map<String, dynamic>.from(credential);
         newCredential['credentialPreview'] = credential;
         final CredentialManifest credentialManifest =
-            await getCredentialManifestFromAltMe(oidc4vc);
+            await getCredentialManifestFromAltMe(
+          oidc4vc: oidc4vc,
+          oidc4vciDraftType: oidc4vciDraftType,
+        );
         credentialManifest.outputDescriptors?.removeWhere(
           (element) => element.id != credentialSubjectType.name,
         );
