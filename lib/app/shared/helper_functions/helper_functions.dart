@@ -615,7 +615,7 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
     throw ResponseMessage(
       data: {
         'error': 'invalid_request',
-        'error_description': 'The credental supported is missing.',
+        'error_description': 'The credential supported is missing.',
       },
     );
   }
