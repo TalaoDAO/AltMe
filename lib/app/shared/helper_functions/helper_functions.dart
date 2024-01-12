@@ -1205,7 +1205,7 @@ Future<dynamic> fetchRequestUriPayload({
 }
 
 String getUpdatedUrlForSIOPV2OIC4VP({
-  required String url,
+  required Uri uri,
   required Map<String, dynamic> response,
 }) {
   final responseType = response['response_type'];
@@ -1225,67 +1225,74 @@ String getUpdatedUrlForSIOPV2OIC4VP({
 
   final queryJson = <String, dynamic>{};
 
-  if (scope != null) {
+  if (!uri.queryParameters.containsKey('scope') && scope != null) {
     queryJson['scope'] = scope;
   }
 
-  if (clientId != null) {
+  if (!uri.queryParameters.containsKey('client_id') && clientId != null) {
     queryJson['client_id'] = clientId;
   }
 
-  if (redirectUri != null) {
+  if (!uri.queryParameters.containsKey('redirect_uri') && redirectUri != null) {
     queryJson['redirect_uri'] = redirectUri;
   }
 
-  if (responseUri != null) {
+  if (!uri.queryParameters.containsKey('response_uri') && responseUri != null) {
     queryJson['response_uri'] = responseUri;
   }
 
-  if (responseMode != null) {
+  if (!uri.queryParameters.containsKey('response_mode') &&
+      responseMode != null) {
     queryJson['response_mode'] = responseMode;
   }
 
-  if (nonce != null) {
+  if (!uri.queryParameters.containsKey('nonce') && nonce != null) {
     queryJson['nonce'] = nonce;
   }
 
-  if (stateValue != null) {
+  if (!uri.queryParameters.containsKey('state') && stateValue != null) {
     queryJson['state'] = stateValue;
   }
 
-  if (responseType != null) {
+  if (!uri.queryParameters.containsKey('response_type') &&
+      responseType != null) {
     queryJson['response_type'] = responseType;
   }
 
-  if (claims != null) {
+  if (!uri.queryParameters.containsKey('claims') && claims != null) {
     queryJson['claims'] = jsonEncode(claims).replaceAll('"', "'");
   }
 
-  if (presentationDefinition != null) {
+  if (!uri.queryParameters.containsKey('presentation_definition') &&
+      presentationDefinition != null) {
     queryJson['presentation_definition'] =
         jsonEncode(presentationDefinition).replaceAll('"', "'");
   }
 
-  if (presentationDefinitionUri != null) {
+  if (!uri.queryParameters.containsKey('presentation_definition_uri') &&
+      presentationDefinitionUri != null) {
     queryJson['presentation_definition_uri'] = presentationDefinitionUri;
   }
 
-  if (registration != null) {
+  if (!uri.queryParameters.containsKey('registration') &&
+      registration != null) {
     queryJson['registration'] =
         registration is Map ? jsonEncode(registration) : registration;
   }
 
-  if (clientMetadata != null) {
+  if (!uri.queryParameters.containsKey('client_metadata') &&
+      clientMetadata != null) {
     queryJson['client_metadata'] =
         clientMetadata is Map ? jsonEncode(clientMetadata) : clientMetadata;
   }
 
-  if (clientMetadataUri != null) {
+  if (!uri.queryParameters.containsKey('client_metadata_uri') &&
+      clientMetadataUri != null) {
     queryJson['client_metadata_uri'] = clientMetadataUri;
   }
 
   final String queryString = Uri(queryParameters: queryJson).query;
 
-  final String newUrl = '$url&$queryString';
+  final String newUrl = '$uri&$queryString';
   return newUrl;
 }

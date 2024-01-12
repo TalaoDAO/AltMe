@@ -57,6 +57,7 @@ Future<void> getAuthorizationUriForIssuer({
       dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
 
   final jwtToken = jwt.sign(SecretKey(authorizationUriSecretKey));
+
   final Uri oidc4vcAuthenticationUri =
       await oidc4vc.getAuthorizationUriForIssuer(
     selectedCredentials: selectedCredentials,

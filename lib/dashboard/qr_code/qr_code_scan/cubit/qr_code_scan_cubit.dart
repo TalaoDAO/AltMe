@@ -63,7 +63,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final OIDC4VC oidc4vc;
 
   final log = getLogger('QRCodeScanCubit');
-  late dynamic encodedData;
 
   @override
   Future<void> close() async {
@@ -485,6 +484,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     /// check if request uri is provided or not
     if (requestUri != null || request != null) {
+      late dynamic encodedData;
+
+      if (requestUri != null) {
+        encodedData = await fetchRequestUriPayload(
+          url: requestUri,
+          client: requestClient,
+        );
+      } else {
+        encodedData = request;
+      }
+
       /// verifier side (oidc4vp) or (siopv2 oidc4vc) with request_uri
       /// afer verification process
       final Map<String, dynamic> response = decodePayload(
@@ -493,10 +503,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
 
       final String newUrl = getUpdatedUrlForSIOPV2OIC4VP(
-        url: uri.toString(),
+        uri: uri,
         response: response,
       );
-      encodedData = null;
 
       emit(
         state.copyWith(
@@ -941,6 +950,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> verifyJWTBeforeLaunchingOIDC4VCANDSIOPV2Flow() async {
     final String? requestUri = state.uri?.queryParameters['request_uri'];
     final String? request = state.uri?.queryParameters['request'];
+
+    late dynamic encodedData;
 
     if (requestUri != null) {
       encodedData = await fetchRequestUriPayload(

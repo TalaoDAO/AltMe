@@ -33,9 +33,7 @@ class DummyCredentialImage extends StatelessWidget {
     if (credential == '' && credentialName != null) {
       credential = credentialName!;
     }
-    final ImageProvider imageProvider = image!.startsWith('assets')
-        ? AssetImage(image!) as ImageProvider
-        : NetworkImage(image!);
+
     late Widget dummyCredentialImage;
     if (image == null) {
       dummyCredentialImage = DefaultCredentialWidget(

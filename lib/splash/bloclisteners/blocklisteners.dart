@@ -290,7 +290,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   );
 
                   url = getUpdatedUrlForSIOPV2OIC4VP(
-                    url: state.uri.toString(),
+                    uri: state.uri!,
                     response: response,
                   );
                 }
