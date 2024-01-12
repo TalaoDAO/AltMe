@@ -40,6 +40,7 @@ class HomeCubit extends Cubit<HomeState> {
     required List<int> imageBytes,
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
+    required OIDC4VCIDraftType oidc4vciDraftType,
   }) async {
     // launch url to get Over18, Over15, Over13,AgeRange Credentials
     emit(state.loading());
@@ -79,47 +80,19 @@ class HomeCubit extends Cubit<HomeState> {
 
     try {
       await _getCredentialByAI(
-        url: Urls.over13AIValidationUrl,
+        url: credentialType.aiValidationUrl,
         apiKey: YOTI_AI_API_KEY,
         data: data,
-        credentialType: 'Over13',
+        credentialSubjectType: credentialType,
         credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
+        oidc4vciDraftType: oidc4vciDraftType,
       );
 
-      await _getCredentialByAI(
-        url: Urls.over15AIValidationUrl,
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'Over15',
-        credentialsCubit: credentialsCubit,
-        cameraCubit: cameraCubit,
-      );
-
-      await _getCredentialByAI(
-        url: Urls.over18AIValidationUrl,
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'Over18',
-        credentialsCubit: credentialsCubit,
-        cameraCubit: cameraCubit,
-      );
-
-      await _getCredentialByAI(
-        url: Urls.ageRangeAIValidationUrl,
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'AgeRange',
-        credentialsCubit: credentialsCubit,
-        cameraCubit: cameraCubit,
-      );
-
-      await _getCredentialByAI(
+      await ageEstimate(
         url: 'https://issuer.talao.co/ai/ageestimate',
         apiKey: YOTI_AI_API_KEY,
         data: data,
-        credentialType: 'AgeEstimate',
-        credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
     } catch (e) {
@@ -167,29 +140,16 @@ class HomeCubit extends Cubit<HomeState> {
     required String url,
     required String apiKey,
     required Map<String, dynamic> data,
-    required String credentialType,
+    required CredentialSubjectType credentialSubjectType,
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
+    required OIDC4VCIDraftType oidc4vciDraftType,
   }) async {
     /// if credential of this type is already in the wallet do nothing
     /// Ensure credentialType = name of credential type in CredentialModel
-    CredentialSubjectType credentialTypeEnum =
-        CredentialSubjectType.aragoEmailPass;
-    if (credentialType == 'AgeRange') {
-      credentialTypeEnum = CredentialSubjectType.ageRange;
-    }
-    if (credentialType == 'Over13') {
-      credentialTypeEnum = CredentialSubjectType.over13;
-    }
-    if (credentialType == 'Over15') {
-      credentialTypeEnum = CredentialSubjectType.over15;
-    }
-    if (credentialType == 'Over18') {
-      credentialTypeEnum = CredentialSubjectType.over18;
-    }
 
     final List<CredentialModel> credentialList = await credentialsCubit
-        .credentialListFromCredentialSubjectType(credentialTypeEnum);
+        .credentialListFromCredentialSubjectType(credentialSubjectType);
     if (credentialList.isEmpty) {
       dynamic response;
 
@@ -212,9 +172,13 @@ class HomeCubit extends Cubit<HomeState> {
             Map<String, dynamic>.from(credential);
         newCredential['credentialPreview'] = credential;
         final CredentialManifest credentialManifest =
-            await getCredentialManifestFromAltMe(oidc4vc);
-        credentialManifest.outputDescriptors
-            ?.removeWhere((element) => element.id != credentialType);
+            await getCredentialManifestFromAltMe(
+          oidc4vc: oidc4vc,
+          oidc4vciDraftType: oidc4vciDraftType,
+        );
+        credentialManifest.outputDescriptors?.removeWhere(
+          (element) => element.id != credentialSubjectType.name,
+        );
         if (credentialManifest.outputDescriptors!.isNotEmpty) {
           newCredential['credential_manifest'] = CredentialManifest(
             credentialManifest.id,
@@ -231,19 +195,40 @@ class HomeCubit extends Cubit<HomeState> {
           newData: credential,
           activities: [Activity(acquisitionAt: DateTime.now())],
         );
-        if (credentialType != 'AgeEstimate') {
-          await credentialsCubit.insertCredential(
-            credential: credentialModel,
-            showMessage: true,
-          );
-          await cameraCubit.incrementAcquiredCredentialsQuantity();
-          emit(state.copyWith(status: AppStatus.success));
-        } else {
-          await cameraCubit.updateAgeEstimate(
-            credentialModel.data['credentialSubject']['ageEstimate'] as String,
-          );
-        }
+        await credentialsCubit.insertCredential(
+          credential: credentialModel,
+          showMessage: true,
+        );
+        await cameraCubit.incrementAcquiredCredentialsQuantity();
+        emit(state.copyWith(status: AppStatus.success));
       }
+    }
+  }
+
+  Future<void> ageEstimate({
+    required String url,
+    required String apiKey,
+    required Map<String, dynamic> data,
+    required CameraCubit cameraCubit,
+  }) async {
+    dynamic response;
+
+    emit(state.copyWith(status: AppStatus.loading));
+    response = await client.post(
+      url,
+      headers: <String, dynamic>{
+        'accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-API-KEY': apiKey,
+      },
+      data: data,
+    );
+
+    if (response != null) {
+      final credential = jsonDecode(response as String) as Map<String, dynamic>;
+      await cameraCubit.updateAgeEstimate(
+        credential['credentialSubject']['ageEstimate'] as String,
+      );
     }
   }
 

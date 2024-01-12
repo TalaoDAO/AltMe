@@ -28,6 +28,14 @@ class SSIView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    final displayManageDecentralizedId = context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .displayManageDecentralizedId;
     return Drawer(
       backgroundColor: Theme.of(context).colorScheme.drawerBackground,
       child: SafeArea(
@@ -50,12 +58,13 @@ class SSIView extends StatelessWidget {
                 const SizedBox(
                   height: Sizes.spaceSmall,
                 ),
-                DrawerItem(
-                  title: l10n.manageDecentralizedID,
-                  onTap: () {
-                    Navigator.of(context).push<void>(DidMenu.route());
-                  },
-                ),
+                if (displayManageDecentralizedId)
+                  DrawerItem(
+                    title: l10n.manageDecentralizedID,
+                    onTap: () {
+                      Navigator.of(context).push<void>(DidMenu.route());
+                    },
+                  ),
                 DrawerItem(
                   title: l10n.backup,
                   onTap: () async {

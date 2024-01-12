@@ -79,13 +79,6 @@ Future<void> addOIDC4VCCredential({
       } else if (jsonContent.containsKey('expirationDate')) {
         credentialFromOIDC4VC['expirationDate'] =
             jsonContent['expirationDate'].toString();
-      } else {
-        throw ResponseMessage(
-          data: {
-            'error': 'unsupported_format',
-            'error_description': 'Expiration date is missing',
-          },
-        );
       }
     }
 
