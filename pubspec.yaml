@@ -1,6 +1,6 @@
 name: altme
 description: AltMe Flutter App
-version: 2.0.9+346
+version: 2.0.10+347
 
 environment:
   sdk: ">=3.1.0 <4.0.0"
