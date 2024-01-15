@@ -878,13 +878,37 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
     }
 
-    if (presentationDefinition.format == null) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'Presentation definition is invalid',
-        },
+    if (profileCubit.state.model.profileType == ProfileType.ebsiV3) {
+      if (presentationDefinition.format == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Presentation definition is invalid',
+          },
+        );
+      }
+    } else {
+      final Map<String, dynamic>? clientMetaData = await getClientMetada(
+        client: client,
+        uri: state.uri!,
       );
+      if (clientMetaData == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Client metaData is invalid',
+          },
+        );
+      }
+
+      if (!clientMetaData.containsKey('vp_formats')) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Client metaData is invalid',
+          },
+        );
+      }
     }
 
     for (final descriptor in presentationDefinition.inputDescriptors) {
