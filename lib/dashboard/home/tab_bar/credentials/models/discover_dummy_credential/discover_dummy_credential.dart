@@ -101,24 +101,24 @@ class DiscoverDummyCredential extends Equatable {
         howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
 
       case CredentialSubjectType.over21:
-        image = ImageStrings.dummyOver18Card;
-        link = Urls.over18Url;
+        image = ImageStrings.dummyOver21Card;
+        link = Urls.over21Url;
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
 
       case CredentialSubjectType.over50:
-        image = ImageStrings.dummyOver18Card;
-        link = Urls.over18Url;
+        image = ImageStrings.dummyOver50Card;
+        link = Urls.over50Url;
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
 
       case CredentialSubjectType.over65:
-        image = ImageStrings.dummyOver18Card;
-        link = Urls.over18Url;
+        image = ImageStrings.dummyOver65Card;
+        link = Urls.over65Url;
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;

@@ -399,6 +399,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       CredentialSubjectType.over13,
       CredentialSubjectType.over15,
       CredentialSubjectType.over18,
+      CredentialSubjectType.over21,
+      CredentialSubjectType.over50,
+      CredentialSubjectType.over65,
       CredentialSubjectType.ageRange,
     ];
 
@@ -600,13 +603,13 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         }
 
         if (!discoverCardsOptions.displayOver21) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over21);
         }
         if (!discoverCardsOptions.displayOver50) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over50);
         }
         if (!discoverCardsOptions.displayOver65) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over65);
         }
         if (!discoverCardsOptions.displayVerifiableId) {
           allSubjectTypeForCategory
