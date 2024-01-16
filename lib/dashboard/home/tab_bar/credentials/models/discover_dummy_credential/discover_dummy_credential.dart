@@ -36,7 +36,7 @@ class DiscoverDummyCredential extends Equatable {
     switch (credentialSubjectType) {
       case CredentialSubjectType.defiCompliance:
         image = ImageStrings.dummyDefiComplianceCard;
-        link = Urls.ageRangeUrl;
+        link = '';
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_defiComplianceWhyGetThisCard;
         expirationDateDetails =
@@ -45,7 +45,7 @@ class DiscoverDummyCredential extends Equatable {
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.ageRange:
         image = ImageStrings.dummyAgeRangeCard;
-        link = Urls.ageRangeUrl;
+        link = '';
         whyGetThisCard = ResponseString.RESPONSE_STRING_ageRangeWhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_ageRangeExpirationDate;
@@ -53,7 +53,7 @@ class DiscoverDummyCredential extends Equatable {
 
       case CredentialSubjectType.nationality:
         image = ImageStrings.dummyNationalityCard;
-        link = Urls.nationalityUrl;
+        link = '';
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_nationalityWhyGetThisCard;
         expirationDateDetails =
@@ -62,7 +62,7 @@ class DiscoverDummyCredential extends Equatable {
 
       case CredentialSubjectType.gender:
         image = ImageStrings.dummyGenderCard;
-        link = Urls.genderUrl;
+        link = '';
         whyGetThisCard = ResponseString.RESPONSE_STRING_genderWhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_genderExpirationDate;
@@ -78,7 +78,7 @@ class DiscoverDummyCredential extends Equatable {
 
       case CredentialSubjectType.over13:
         image = ImageStrings.dummyOver13Card;
-        link = Urls.over13Url;
+        link = '';
         whyGetThisCard = ResponseString.RESPONSE_STRING_over13WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over13ExpirationDate;
@@ -86,7 +86,7 @@ class DiscoverDummyCredential extends Equatable {
 
       case CredentialSubjectType.over15:
         image = ImageStrings.dummyOver15Card;
-        link = Urls.over15Url;
+        link = '';
         whyGetThisCard = ResponseString.RESPONSE_STRING_over15WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over15ExpirationDate;
@@ -94,7 +94,7 @@ class DiscoverDummyCredential extends Equatable {
 
       case CredentialSubjectType.over18:
         image = ImageStrings.dummyOver18Card;
-        link = Urls.over18Url;
+        link = '';
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
@@ -102,7 +102,7 @@ class DiscoverDummyCredential extends Equatable {
 
       case CredentialSubjectType.over21:
         image = ImageStrings.dummyOver21Card;
-        link = Urls.over21Url;
+        link = '';
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
@@ -110,7 +110,7 @@ class DiscoverDummyCredential extends Equatable {
 
       case CredentialSubjectType.over50:
         image = ImageStrings.dummyOver50Card;
-        link = Urls.over50Url;
+        link = '';
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
@@ -118,7 +118,7 @@ class DiscoverDummyCredential extends Equatable {
 
       case CredentialSubjectType.over65:
         image = ImageStrings.dummyOver65Card;
-        link = Urls.over65Url;
+        link = '';
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
@@ -126,7 +126,7 @@ class DiscoverDummyCredential extends Equatable {
 
       case CredentialSubjectType.passportFootprint:
         image = ImageStrings.dummyPassportFootprintCard;
-        link = Urls.passportFootprintUrl;
+        link = '';
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard;
         expirationDateDetails =

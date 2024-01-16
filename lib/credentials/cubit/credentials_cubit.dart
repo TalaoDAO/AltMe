@@ -583,7 +583,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         //(CredentialSubjectType.tezotopiaMembership);
       }
 
-      // show cards in discover based on profile
+      // remove cards in discover based on profile
       if (discoverCardsOptions != null) {
         if (!discoverCardsOptions.displayDefi) {
           allSubjectTypeForCategory
@@ -614,6 +614,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         if (!discoverCardsOptions.displayVerifiableId) {
           allSubjectTypeForCategory
               .remove(CredentialSubjectType.verifiableIdCard);
+        }
+        // add cards in discover based on profile
+        if (category == CredentialCategory.identityCards) {
+          if (discoverCardsOptions.displayOver13 &&
+              !allSubjectTypeForCategory
+                  .contains(CredentialSubjectType.over13)) {
+            allSubjectTypeForCategory.add(CredentialSubjectType.over13);
+          }
         }
       }
 

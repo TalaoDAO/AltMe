@@ -17,26 +17,6 @@ class Urls {
   static const String issuerBaseUrl = 'https://issuer.talao.co';
   static const String phonePassUrl = 'https://issuer.talao.co/phonepass';
   static const String emailPassUrl = 'https://issuer.talao.co/emailpass';
-  static const String ageRangeUrl =
-      'https://issuer.talao.co/passbase/endpoint/agerange/';
-  static const String nationalityUrl =
-      'https://issuer.talao.co/passbase/endpoint/nationality/';
-  static const String genderUrl =
-      'https://issuer.talao.co/passbase/endpoint/gender/';
-  static const String over18Url =
-      'https://issuer.talao.co/passbase/endpoint/over18/';
-  static const String over13Url =
-      'https://issuer.talao.co/passbase/endpoint/over13/';
-  static const String over15Url =
-      'https://issuer.talao.co/passbase/endpoint/over15/';
-  static const String over21Url =
-      'https://issuer.talao.co/passbase/endpoint/over21/';
-  static const String over50Url =
-      'https://issuer.talao.co/passbase/endpoint/over50/';
-  static const String over65Url =
-      'https://issuer.talao.co/passbase/endpoint/over65/';
-  static const String passportFootprintUrl =
-      'https://issuer.talao.co/passbase/endpoint/passportnumber/';
 
   static const String tezotopiaVoucherUrl =
       'https://issuer.tezotopia.altme.io/issuer/voucher_mobile';

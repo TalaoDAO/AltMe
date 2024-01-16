@@ -6,14 +6,19 @@ part 'display_external_issuer.g.dart';
 @JsonSerializable()
 class DisplayExternalIssuer extends Equatable {
   const DisplayExternalIssuer({
-    this.name,
-    this.description,
+    this.name, //title
+    this.description, //subtitle
     this.category,
     this.redirect,
     this.background_image,
     this.logo,
     this.background_color,
     this.text_color,
+    // issuer website
+    // description
+    // expirationdate
+    // how to get it
+    // whygetthiscard
   });
 
   factory DisplayExternalIssuer.fromJson(Map<String, dynamic> json) =>
