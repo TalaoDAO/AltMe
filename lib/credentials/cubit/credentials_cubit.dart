@@ -11,6 +11,7 @@ import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -564,7 +565,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final externalIssuers = profileCubit
         .state.model.profileSetting.discoverCardsOptions?.displayExternalIssuer;
 
-    for (final category in getCredentialCategorySorted) {
+    for (final CredentialCategory category in getCredentialCategorySorted) {
       final List<CredentialSubjectType> currentCredentialsSubjectTypeList =
           credentials
               .map(
@@ -616,12 +617,92 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               .remove(CredentialSubjectType.verifiableIdCard);
         }
         // add cards in discover based on profile
-        if (category == CredentialCategory.identityCards) {
-          if (discoverCardsOptions.displayOver13 &&
-              !allSubjectTypeForCategory
-                  .contains(CredentialSubjectType.over13)) {
-            allSubjectTypeForCategory.add(CredentialSubjectType.over13);
-          }
+
+        switch (category) {
+          case CredentialCategory.identityCards:
+            if (discoverCardsOptions.displayOver13 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over13)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over13);
+            }
+            if (discoverCardsOptions.displayOver15 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over15)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over15);
+            }
+            if (discoverCardsOptions.displayOver18 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over18)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over18);
+            }
+            if (discoverCardsOptions.displayOver21 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over21)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over21);
+            }
+            if (discoverCardsOptions.displayOver50 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over50)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over50);
+            }
+            if (discoverCardsOptions.displayOver65 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over65)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over65);
+            }
+            if (discoverCardsOptions.displayVerifiableId &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.verifiableIdCard)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.verifiableIdCard,
+              );
+            }
+            if (discoverCardsOptions.displayDefi &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.defiCompliance)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.defiCompliance,
+              );
+            }
+            if (discoverCardsOptions.displayAgeRange &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.ageRange)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.ageRange);
+            }
+            if (discoverCardsOptions.displayHumanity &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.livenessCard)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.livenessCard);
+            }
+            if (discoverCardsOptions.displayGender &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.gender)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.gender);
+            }
+          case CredentialCategory.advantagesCards:
+          // TODO: Handle this case.
+          case CredentialCategory.professionalCards:
+          // TODO: Handle this case.
+          case CredentialCategory.contactInfoCredentials:
+          // TODO: Handle this case.
+          case CredentialCategory.educationCards:
+          // TODO: Handle this case.
+          case CredentialCategory.financeCards:
+          // TODO: Handle this case.
+          case CredentialCategory.humanityProofCards:
+          // TODO: Handle this case.
+          case CredentialCategory.socialMediaCards:
+          // TODO: Handle this case.
+          case CredentialCategory.walletIntegrity:
+          // TODO: Handle this case.
+          case CredentialCategory.blockchainAccountsCards:
+          // TODO: Handle this case.
+          case CredentialCategory.othersCards:
+          // TODO: Handle this case.
+          case CredentialCategory.polygonidCards:
+          // TODO: Handle this case.
+          case CredentialCategory.pendingCards:
+          // TODO: Handle this case.
         }
       }
 
