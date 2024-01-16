@@ -119,6 +119,23 @@ void main() {
     });
   });
 
+  test('P256 JWK from mnemonics', () {
+    final oidc4vc = OIDC4VC();
+    final jwk = oidc4vc.p256PrivateKeyFromMnemonics(
+      mnemonic: mnemonic,
+      indexValue: 0,
+    );
+    final expectedP256Jwk = {
+      'kty': 'EC',
+      'crv': 'P-256',
+      'd': 'cFCdgT569Shto8jEVbyKqdtEck0EcUSwGz_vqrclTC8',
+      'x': 'vhoSh07qpGqiCJNGQJmY8YaARnxuHUgv403c5TmrABQ',
+      'y': 'E04Ate9RceryoHlz1x3BVIbN9LZR74TWRCeeMNY-oew',
+    };
+
+    expect(jsonDecode(jwk), expectedP256Jwk);
+  });
+
   group('EBSI: getAuthorizationUriForIssuer', () {
     const issuer = 'https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi';
 
