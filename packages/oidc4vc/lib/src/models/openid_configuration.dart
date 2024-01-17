@@ -21,6 +21,7 @@ class OpenIdConfiguration extends Equatable {
     this.credentialManifest,
     this.credentialManifests,
     this.issuer,
+    this.jwksUri,
   });
 
   factory OpenIdConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -53,6 +54,8 @@ class OpenIdConfiguration extends Equatable {
   @JsonKey(name: 'credential_manifests')
   final List<CredentialManifest>? credentialManifests;
   final String? issuer;
+  @JsonKey(name: 'jwks_uri')
+  final String? jwksUri;
 
   Map<String, dynamic> toJson() => _$OpenIdConfigurationToJson(this);
 
@@ -72,6 +75,7 @@ class OpenIdConfiguration extends Equatable {
         credentialManifest,
         credentialManifests,
         issuer,
+        jwksUri,
       ];
 }
 

@@ -6,6 +6,7 @@ import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
 import 'package:cryptography/cryptography.dart' as cryptography;
 import 'package:dio/dio.dart';
+import 'package:elliptic/elliptic.dart' as elliptic;
 import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
 import 'package:jose/jose.dart';
@@ -25,10 +26,10 @@ class OIDC4VC {
   final Dio client = Dio();
 
   /// create JWK from mnemonic
-  Future<String> privateKeyFromMnemonic({
+  String privateKeyFromMnemonic({
     required String mnemonic,
     required int indexValue,
-  }) async {
+  }) {
     final seed = bip393.mnemonicToSeed(mnemonic);
 
     final rootKey = bip32.BIP32.fromSeed(seed); //Instance of 'BIP32'
@@ -75,6 +76,49 @@ class OIDC4VC {
       'y': y.replaceAll('=', ''),
     };
     return jwk;
+  }
+
+  String p256PrivateKeyFromMnemonics({
+    required String mnemonic,
+    required int indexValue,
+  }) {
+    final seed = bip393.mnemonicToSeed(mnemonic);
+    final rootKey = bip32.BIP32.fromSeed(seed);
+
+    final child = rootKey.derivePath("m/44'/5467'/0'/$indexValue'");
+
+    final iterable = child.privateKey!;
+    final keySeed = HEX.encode(List.from(iterable));
+
+    // calculate teh pub key
+    final ec = elliptic.getP256();
+    final priv = elliptic.PrivateKey.fromHex(ec, keySeed);
+    final pub = priv.publicKey.toString();
+
+    // format the "d"
+    final ad = HEX.decode(priv.toString());
+    final d = base64Url.encode(ad);
+
+    // extract the "x"
+    final mx = pub.substring(2, 66);
+
+    /// start at 2 to remove first byte of the pub key
+    final ax = HEX.decode(mx);
+    final x = base64Url.encode(ax);
+    // extract the "y"
+    final my = pub.substring(66, 130); // last 32 bytes
+    final ay = HEX.decode(my);
+    final y = base64Url.encode(ay);
+
+    final key = {
+      'kty': 'EC',
+      'crv': 'P-256',
+      'd': d.replaceAll('=', ''),
+      'x': x.replaceAll('=', ''),
+      'y': y.replaceAll('=', ''),
+    };
+
+    return jsonEncode(key);
   }
 
   /// https://www.rfc-editor.org/rfc/rfc7638
@@ -534,14 +578,46 @@ class OIDC4VC {
 
   Future<Response<Map<String, dynamic>>> getDidDocument(String didKey) async {
     try {
-      final didDocument = await client.get<Map<String, dynamic>>(
-        'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
-      );
+      if (isURL(didKey)) {
+        OpenIdConfiguration openIdConfiguration;
 
-      return didDocument;
+        openIdConfiguration = await getOpenIdConfig(
+          baseUrl: didKey,
+          isAuthorizationServer: false,
+        );
+
+        final authorizationServer = openIdConfiguration.authorizationServer;
+
+        if (authorizationServer != null) {
+          openIdConfiguration = await getOpenIdConfig(
+            baseUrl: authorizationServer,
+            isAuthorizationServer: true,
+          );
+        }
+
+        if (openIdConfiguration.jwksUri == null) {
+          throw Exception();
+        }
+
+        final response = await client
+            .get<Map<String, dynamic>>(openIdConfiguration.jwksUri!);
+
+        return response;
+      } else {
+        final didDocument = await client.get<Map<String, dynamic>>(
+          'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
+        );
+
+        return didDocument;
+      }
     } catch (e) {
       rethrow;
     }
+  }
+
+  bool isURL(String input) {
+    final uri = Uri.tryParse(input)?.hasAbsolutePath ?? false;
+    return uri;
   }
 
   Future<String> readTokenEndPoint({
@@ -608,27 +684,46 @@ class OIDC4VC {
     return data['id'] as String;
   }
 
-  Map<String, dynamic> readPublicKeyJwk(
-    String? holderKid,
-    Response<Map<String, dynamic>> didDocumentResponse,
-  ) {
-    final jsonPath = JsonPath(r'$..verificationMethod');
-    late List<dynamic> data;
+  Map<String, dynamic> readPublicKeyJwk({
+    required String didKey,
+    required String? holderKid,
+    required Response<Map<String, dynamic>> didDocumentResponse,
+  }) {
+    if (isURL(didKey)) {
+      final jsonPath = JsonPath(r'$..keys');
+      late dynamic data;
 
-    if (holderKid == null) {
-      data = (jsonPath.read(didDocumentResponse.data).first.value as List)
-          .toList();
+      if (holderKid == null) {
+        data =
+            (jsonPath.read(didDocumentResponse.data).first.value as List).first;
+      } else {
+        data = (jsonPath.read(didDocumentResponse.data).first.value as List)
+            .where(
+              (dynamic e) => e['kid'].toString() == holderKid,
+            )
+            .first;
+      }
+
+      return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
     } else {
-      data = (jsonPath.read(didDocumentResponse.data).first.value as List)
-          .where(
-            (dynamic e) => e['id'].toString() == holderKid,
-          )
-          .toList();
+      final jsonPath = JsonPath(r'$..verificationMethod');
+      late List<dynamic> data;
+
+      if (holderKid == null) {
+        data = (jsonPath.read(didDocumentResponse.data).first.value as List)
+            .toList();
+      } else {
+        data = (jsonPath.read(didDocumentResponse.data).first.value as List)
+            .where(
+              (dynamic e) => e['id'].toString() == holderKid,
+            )
+            .toList();
+      }
+
+      final value = data.first['publicKeyJwk'];
+
+      return jsonDecode(jsonEncode(value)) as Map<String, dynamic>;
     }
-
-    final value = data.first['publicKeyJwk'];
-
-    return jsonDecode(jsonEncode(value)) as Map<String, dynamic>;
   }
 
   Future<Map<String, dynamic>> buildCredentialData({
@@ -725,7 +820,12 @@ class OIDC4VC {
   }) async {
     try {
       final didDocument = await getDidDocument(issuerDid);
-      final publicKeyJwk = readPublicKeyJwk(issuerKid, didDocument);
+
+      final publicKeyJwk = readPublicKeyJwk(
+        didKey: issuerDid,
+        holderKid: issuerKid,
+        didDocumentResponse: didDocument,
+      );
 
       final kty = publicKeyJwk['kty'].toString();
 
@@ -794,6 +894,24 @@ class OIDC4VC {
         await cryptography.Ed25519().verify(message, signature: signature);
 
     return result;
+  }
+
+  Future<String> getSignedJwt({
+    required Map<String, dynamic> payload,
+    required Map<String, dynamic> p256Key,
+  }) async {
+    // Create a JsonWebSignatureBuilder
+    final builder = JsonWebSignatureBuilder()
+      ..jsonContent = payload
+      ..setProtectedHeader('alg', 'ES256')
+      ..addRecipient(
+        JsonWebKey.fromJson(p256Key),
+        algorithm: 'ES256',
+      );
+    // build the jws
+    final jws = builder.build();
+
+    return jws.toCompactSerialization();
   }
 
   String readCredentialEndpoint(
@@ -1171,11 +1289,12 @@ class OIDC4VC {
   Future<OpenIdConfiguration> getOpenIdConfig({
     required String baseUrl,
     required bool isAuthorizationServer,
-    required OIDC4VCIDraftType oidc4vciDraftType,
+    OIDC4VCIDraftType? oidc4vciDraftType,
   }) async {
     final url = '$baseUrl/.well-known/openid-configuration';
 
     if (!isAuthorizationServer &&
+        oidc4vciDraftType != null &&
         oidc4vciDraftType == OIDC4VCIDraftType.draft11) {
       final data = await getOpenIdConfigSecondMethod(baseUrl);
       return data;

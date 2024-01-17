@@ -687,6 +687,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  elliptic:
+    dependency: transitive
+    description:
+      name: elliptic
+      sha256: "98e2fa89a714c649174553c823db2612dc9581814477fe1264a499d448237b6b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.10"
   encrypt:
     dependency: transitive
     description:
