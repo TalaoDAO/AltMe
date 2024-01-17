@@ -578,14 +578,46 @@ class OIDC4VC {
 
   Future<Response<Map<String, dynamic>>> getDidDocument(String didKey) async {
     try {
-      final didDocument = await client.get<Map<String, dynamic>>(
-        'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
-      );
+      if (isURL(didKey)) {
+        OpenIdConfiguration openIdConfiguration;
 
-      return didDocument;
+        openIdConfiguration = await getOpenIdConfig(
+          baseUrl: didKey,
+          isAuthorizationServer: false,
+        );
+
+        final authorizationServer = openIdConfiguration.authorizationServer;
+
+        if (authorizationServer != null) {
+          openIdConfiguration = await getOpenIdConfig(
+            baseUrl: authorizationServer,
+            isAuthorizationServer: true,
+          );
+        }
+
+        if (openIdConfiguration.jwksUri == null) {
+          throw Exception();
+        }
+
+        final response = await client
+            .get<Map<String, dynamic>>(openIdConfiguration.jwksUri!);
+
+        return response;
+      } else {
+        final didDocument = await client.get<Map<String, dynamic>>(
+          'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
+        );
+
+        return didDocument;
+      }
     } catch (e) {
       rethrow;
     }
+  }
+
+  bool isURL(String input) {
+    final uri = Uri.tryParse(input)?.hasAbsolutePath ?? false;
+    return uri;
   }
 
   Future<String> readTokenEndPoint({
@@ -652,27 +684,46 @@ class OIDC4VC {
     return data['id'] as String;
   }
 
-  Map<String, dynamic> readPublicKeyJwk(
-    String? holderKid,
-    Response<Map<String, dynamic>> didDocumentResponse,
-  ) {
-    final jsonPath = JsonPath(r'$..verificationMethod');
-    late List<dynamic> data;
+  Map<String, dynamic> readPublicKeyJwk({
+    required String didKey,
+    required String? holderKid,
+    required Response<Map<String, dynamic>> didDocumentResponse,
+  }) {
+    if (isURL(didKey)) {
+      final jsonPath = JsonPath(r'$..keys');
+      late dynamic data;
 
-    if (holderKid == null) {
-      data = (jsonPath.read(didDocumentResponse.data).first.value as List)
-          .toList();
+      if (holderKid == null) {
+        data =
+            (jsonPath.read(didDocumentResponse.data).first.value as List).first;
+      } else {
+        data = (jsonPath.read(didDocumentResponse.data).first.value as List)
+            .where(
+              (dynamic e) => e['kid'].toString() == holderKid,
+            )
+            .first;
+      }
+
+      return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
     } else {
-      data = (jsonPath.read(didDocumentResponse.data).first.value as List)
-          .where(
-            (dynamic e) => e['id'].toString() == holderKid,
-          )
-          .toList();
+      final jsonPath = JsonPath(r'$..verificationMethod');
+      late List<dynamic> data;
+
+      if (holderKid == null) {
+        data = (jsonPath.read(didDocumentResponse.data).first.value as List)
+            .toList();
+      } else {
+        data = (jsonPath.read(didDocumentResponse.data).first.value as List)
+            .where(
+              (dynamic e) => e['id'].toString() == holderKid,
+            )
+            .toList();
+      }
+
+      final value = data.first['publicKeyJwk'];
+
+      return jsonDecode(jsonEncode(value)) as Map<String, dynamic>;
     }
-
-    final value = data.first['publicKeyJwk'];
-
-    return jsonDecode(jsonEncode(value)) as Map<String, dynamic>;
   }
 
   Future<Map<String, dynamic>> buildCredentialData({
@@ -769,7 +820,12 @@ class OIDC4VC {
   }) async {
     try {
       final didDocument = await getDidDocument(issuerDid);
-      final publicKeyJwk = readPublicKeyJwk(issuerKid, didDocument);
+
+      final publicKeyJwk = readPublicKeyJwk(
+        didKey: issuerDid,
+        holderKid: issuerKid,
+        didDocumentResponse: didDocument,
+      );
 
       final kty = publicKeyJwk['kty'].toString();
 
@@ -1233,11 +1289,12 @@ class OIDC4VC {
   Future<OpenIdConfiguration> getOpenIdConfig({
     required String baseUrl,
     required bool isAuthorizationServer,
-    required OIDC4VCIDraftType oidc4vciDraftType,
+    OIDC4VCIDraftType? oidc4vciDraftType,
   }) async {
     final url = '$baseUrl/.well-known/openid-configuration';
 
     if (!isAuthorizationServer &&
+        oidc4vciDraftType != null &&
         oidc4vciDraftType == OIDC4VCIDraftType.draft11) {
       final data = await getOpenIdConfigSecondMethod(baseUrl);
       return data;

@@ -998,7 +998,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
 
       final Map<String, dynamic> header =
-          decodeHeader(jwtDecode: jwtDecode, token: encodedData as String);
+          decodeHeader(jwtDecode: jwtDecode, token: encodedData);
 
       final String issuerDid = jsonEncode(payload['client_id']);
       final String issuerKid = jsonEncode(header['kid']);
@@ -1008,7 +1008,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final VerificationType isVerified = await verifyEncodedData(
           issuerDid,
           issuerKid,
-          encodedData.toString(),
+          encodedData,
         );
 
         if (isVerified == VerificationType.verified) {
