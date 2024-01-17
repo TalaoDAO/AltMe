@@ -17,6 +17,11 @@ class DiscoverDummyCredential extends Equatable {
     this.howToGetIt,
     this.longDescription,
     this.display,
+    this.whyGetThisCardExtern,
+    this.expirationDateDetailsExtern,
+    this.howToGetItExtern,
+    this.longDescriptionExtern,
+    this.websiteLinkExtern,
   });
 
   factory DiscoverDummyCredential.fromJson(Map<String, dynamic> json) =>
@@ -353,7 +358,11 @@ class DiscoverDummyCredential extends Equatable {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? longDescription;
   final Display? display;
-
+  final String? whyGetThisCardExtern;
+  final String? expirationDateDetailsExtern;
+  final String? howToGetItExtern;
+  final String? longDescriptionExtern;
+  final String? websiteLinkExtern;
   Map<String, dynamic> toJson() => _$DiscoverDummyCredentialToJson(this);
 
   @override
@@ -366,6 +375,11 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails,
         howToGetIt,
         longDescription,
-        display
+        display,
+        whyGetThisCardExtern,
+        expirationDateDetailsExtern,
+        howToGetItExtern,
+        longDescriptionExtern,
+        websiteLinkExtern,
       ];
 }

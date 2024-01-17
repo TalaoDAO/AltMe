@@ -11,7 +11,6 @@ import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -616,6 +615,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           allSubjectTypeForCategory
               .remove(CredentialSubjectType.verifiableIdCard);
         }
+        if (!discoverCardsOptions.displayGender) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.gender);
+        }
         // add cards in discover based on profile
 
         switch (category) {
@@ -749,11 +751,16 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
           display: Display(
             backgroundColor: e.background_color,
             backgroundImage: DisplayDetails(url: e.background_image),
-            name: e.name,
+            name: e.title,
             textColor: e.text_color,
             logo: DisplayDetails(url: e.logo),
-            description: e.description,
+            description: e.subtitle,
           ),
+          whyGetThisCardExtern: e.why_get_this_card,
+          expirationDateDetailsExtern: e.validity_period,
+          howToGetItExtern: e.how_to_get_it,
+          longDescriptionExtern: e.description,
+          websiteLink: e.website,
         ),
       )
       .toList();
