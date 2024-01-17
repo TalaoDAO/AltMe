@@ -275,6 +275,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
         tokenParameters.thumbprint,
         invites,
       );
+
       await matrixChat.setRoomIdInStorage(_roomId!);
       _getUnreadMessageCount();
       await _subscribeToEventsOfRoom();

@@ -175,16 +175,6 @@ class App extends StatelessWidget {
           ),
         ),
         BlocProvider(
-          create: (context) => SplashCubit(
-            secureStorageProvider: secure_storage.getSecureStorage,
-            didCubit: context.read<DIDCubit>(),
-            homeCubit: context.read<HomeCubit>(),
-            walletCubit: context.read<WalletCubit>(),
-            credentialsCubit: context.read<CredentialsCubit>(),
-            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-          ),
-        ),
-        BlocProvider(
           create: (context) => AllTokensCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
             client: DioClient(
@@ -226,6 +216,17 @@ class App extends StatelessWidget {
             secureStorageProvider: getSecureStorage,
             matrixChat: MatrixChatImpl(),
             invites: [AltMeStrings.matrixSupportId],
+          ),
+        ),
+        BlocProvider(
+          create: (context) => SplashCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            didCubit: context.read<DIDCubit>(),
+            homeCubit: context.read<HomeCubit>(),
+            walletCubit: context.read<WalletCubit>(),
+            credentialsCubit: context.read<CredentialsCubit>(),
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
+            altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
           ),
         ),
         BlocProvider(
