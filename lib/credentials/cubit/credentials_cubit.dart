@@ -659,13 +659,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 CredentialSubjectType.verifiableIdCard,
               );
             }
-            if (discoverCardsOptions.displayDefi &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.defiCompliance)) {
-              allSubjectTypeForCategory.add(
-                CredentialSubjectType.defiCompliance,
-              );
-            }
             if (discoverCardsOptions.displayAgeRange &&
                 !allSubjectTypeForCategory
                     .contains(CredentialSubjectType.ageRange)) {
@@ -682,29 +675,37 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               allSubjectTypeForCategory.add(CredentialSubjectType.gender);
             }
           case CredentialCategory.advantagesCards:
-          // TODO: Handle this case.
+            break;
+
           case CredentialCategory.professionalCards:
-          // TODO: Handle this case.
+            break;
           case CredentialCategory.contactInfoCredentials:
-          // TODO: Handle this case.
+            break;
+
           case CredentialCategory.educationCards:
-          // TODO: Handle this case.
+            break;
           case CredentialCategory.financeCards:
-          // TODO: Handle this case.
+            if (discoverCardsOptions.displayDefi &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.defiCompliance)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.defiCompliance,
+              );
+            }
           case CredentialCategory.humanityProofCards:
-          // TODO: Handle this case.
+            break;
           case CredentialCategory.socialMediaCards:
-          // TODO: Handle this case.
+            break;
           case CredentialCategory.walletIntegrity:
-          // TODO: Handle this case.
+            break;
           case CredentialCategory.blockchainAccountsCards:
-          // TODO: Handle this case.
+            break;
           case CredentialCategory.othersCards:
-          // TODO: Handle this case.
+            break;
           case CredentialCategory.polygonidCards:
-          // TODO: Handle this case.
+            break;
           case CredentialCategory.pendingCards:
-          // TODO: Handle this case.
+            break;
         }
       }
 
