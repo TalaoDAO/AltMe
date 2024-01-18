@@ -35,6 +35,9 @@ class ImageStrings {
   static const String over18 = '$imagePath/over18.png';
   static const String over15 = '$imagePath/over15.png';
   static const String over13 = '$imagePath/over13.png';
+  static const String over21 = '$imagePath/over21.png';
+  static const String over50 = '$imagePath/over50.png';
+  static const String over65 = '$imagePath/over65.png';
   static const String passportFootprint = '$imagePath/passport_footprint.png';
   static const String professionalStudentCardFront =
       '$imagePath/adecco_student_card_recto.png';
@@ -121,6 +124,9 @@ class ImageStrings {
   static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
   static const String dummyOver13Card = '$imagePath/dummy_over13_card.png';
   static const String dummyOver15Card = '$imagePath/dummy_over15_card.png';
+  static const String dummyOver21Card = '$imagePath/dummy_over21_card.png';
+  static const String dummyOver50Card = '$imagePath/dummy_over50_card.png';
+  static const String dummyOver65Card = '$imagePath/dummy_over65_card.png';
   static const String dummyPassportFootprintCard =
       '$imagePath/dummy_passport_footprint_card.png';
   static const String dummyAgeRangeCard = '$imagePath/dummy_age_range_card.png';

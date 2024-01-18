@@ -399,6 +399,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       CredentialSubjectType.over13,
       CredentialSubjectType.over15,
       CredentialSubjectType.over18,
+      CredentialSubjectType.over21,
+      CredentialSubjectType.over50,
+      CredentialSubjectType.over65,
       CredentialSubjectType.ageRange,
     ];
 
@@ -561,7 +564,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final externalIssuers = profileCubit
         .state.model.profileSetting.discoverCardsOptions?.displayExternalIssuer;
 
-    for (final category in getCredentialCategorySorted) {
+    for (final CredentialCategory category in getCredentialCategorySorted) {
       final List<CredentialSubjectType> currentCredentialsSubjectTypeList =
           credentials
               .map(
@@ -580,7 +583,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         //(CredentialSubjectType.tezotopiaMembership);
       }
 
-      // show cards in discover based on profile
+      // remove cards in discover based on profile
       if (discoverCardsOptions != null) {
         if (!discoverCardsOptions.displayDefi) {
           allSubjectTypeForCategory
@@ -600,17 +603,109 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         }
 
         if (!discoverCardsOptions.displayOver21) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over21);
         }
         if (!discoverCardsOptions.displayOver50) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over50);
         }
         if (!discoverCardsOptions.displayOver65) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over65);
         }
         if (!discoverCardsOptions.displayVerifiableId) {
           allSubjectTypeForCategory
               .remove(CredentialSubjectType.verifiableIdCard);
+        }
+        if (!discoverCardsOptions.displayGender) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.gender);
+        }
+        // add cards in discover based on profile
+
+        switch (category) {
+          case CredentialCategory.identityCards:
+            if (discoverCardsOptions.displayOver13 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over13)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over13);
+            }
+            if (discoverCardsOptions.displayOver15 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over15)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over15);
+            }
+            if (discoverCardsOptions.displayOver18 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over18)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over18);
+            }
+            if (discoverCardsOptions.displayOver21 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over21)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over21);
+            }
+            if (discoverCardsOptions.displayOver50 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over50)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over50);
+            }
+            if (discoverCardsOptions.displayOver65 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over65)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over65);
+            }
+            if (discoverCardsOptions.displayVerifiableId &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.verifiableIdCard)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.verifiableIdCard,
+              );
+            }
+            if (discoverCardsOptions.displayAgeRange &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.ageRange)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.ageRange);
+            }
+            if (discoverCardsOptions.displayHumanity &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.livenessCard)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.livenessCard);
+            }
+            if (discoverCardsOptions.displayGender &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.gender)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.gender);
+            }
+          case CredentialCategory.advantagesCards:
+            break;
+
+          case CredentialCategory.professionalCards:
+            break;
+          case CredentialCategory.contactInfoCredentials:
+            break;
+
+          case CredentialCategory.educationCards:
+            break;
+          case CredentialCategory.financeCards:
+            if (discoverCardsOptions.displayDefi &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.defiCompliance)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.defiCompliance,
+              );
+            }
+          case CredentialCategory.humanityProofCards:
+            break;
+          case CredentialCategory.socialMediaCards:
+            break;
+          case CredentialCategory.walletIntegrity:
+            break;
+          case CredentialCategory.blockchainAccountsCards:
+            break;
+          case CredentialCategory.othersCards:
+            break;
+          case CredentialCategory.polygonidCards:
+            break;
+          case CredentialCategory.pendingCards:
+            break;
         }
       }
 
@@ -657,11 +752,16 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
           display: Display(
             backgroundColor: e.background_color,
             backgroundImage: DisplayDetails(url: e.background_image),
-            name: e.name,
+            name: e.title,
             textColor: e.text_color,
             logo: DisplayDetails(url: e.logo),
-            description: e.description,
+            description: e.subtitle,
           ),
+          whyGetThisCardExtern: e.why_get_this_card,
+          expirationDateDetailsExtern: e.validity_period,
+          howToGetItExtern: e.how_to_get_it,
+          longDescriptionExtern: e.description,
+          websiteLink: e.website,
         ),
       )
       .toList();

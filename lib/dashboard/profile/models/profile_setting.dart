@@ -187,7 +187,7 @@ class DiscoverCardsOptions extends Equatable {
 
   factory DiscoverCardsOptions.empty() => const DiscoverCardsOptions(
         displayDefi: true,
-        displayHumanity: true,
+        displayHumanity: false,
         displayOver13: false,
         displayOver15: true,
         displayOver18: true,
@@ -196,8 +196,8 @@ class DiscoverCardsOptions extends Equatable {
         displayRewardsCategory: true,
         displayVerifiableId: true,
         displayOver65: false,
-        displayAgeRange: true,
-        displayGender: true,
+        displayAgeRange: false,
+        displayGender: false,
         displayExternalIssuer: [],
       );
 
