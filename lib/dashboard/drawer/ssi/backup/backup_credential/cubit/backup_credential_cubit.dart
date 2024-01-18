@@ -40,12 +40,12 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
     try {
       if (!isPermissionStatusGranted) {
         throw ResponseMessage(
-          ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE,
+          message: ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE,
         );
       }
 
       final dateTime = getDateTimeWithoutSpace();
-      final fileName = 'altme-credential-$dateTime';
+      final fileName = 'altme-data-$dateTime';
 
       final credentialModels = credentialsCubit.state.credentials;
 
@@ -54,6 +54,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
         'date': date,
         'credentials': credentialModels,
       };
+
       final encrypted =
           await cryptoKeys.encrypt(jsonEncode(message), mnemonic!);
       final encryptedString = jsonEncode(encrypted);
@@ -75,7 +76,8 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
             status: AppStatus.success,
             filePath: filePath,
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
+              message: ResponseString
+                  .RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
             ),
           ),
         );
@@ -87,7 +89,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR,
+              message: ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR,
             ),
           ),
         );

@@ -5,9 +5,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class NetworkException with MessageHandler {
-  NetworkException({required this.message, this.data});
+  NetworkException({
+    this.message,
+    this.data,
+  });
 
-  final NetworkError message;
+  final NetworkError? message;
   final dynamic data;
 
   static NetworkException handleResponse(int? statusCode, DioException? error) {
@@ -164,8 +167,8 @@ class NetworkException with MessageHandler {
     MessageHandler messageHandler, {
     String? injectedMessage,
   }) {
-    if (messageHandler is NetworkException) {
-      switch (messageHandler.message) {
+    if (messageHandler is NetworkException && messageHandler.message != null) {
+      switch (messageHandler.message!) {
         case NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED:
           return NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED.localise(context);
         case NetworkError.NETWORK_ERROR_REQUEST_CANCELLED:

@@ -1,10 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/author/author.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/credential/evidence.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/credential/proof.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_status_field/credential_status_field.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/default_credential_subject/default_credential_subject_model.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'credential.g.dart';
@@ -35,12 +30,12 @@ class Credential {
 
   factory Credential.dummy() {
     return Credential(
-      'dummy',
-      ['dummy'],
-      ['dummy'],
-      'dummy',
-      'dummy',
-      'dummy',
+      'dummy1',
+      ['dummy2'],
+      ['dummy3'],
+      'dummy4',
+      'dummy5',
+      '', //date
       [
         Proof.dummy(),
       ],

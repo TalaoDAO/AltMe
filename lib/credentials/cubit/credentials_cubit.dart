@@ -4,17 +4,18 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/model/model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -33,6 +34,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required this.didKitProvider,
     required this.advanceSettingsCubit,
     required this.keyGenerator,
+    required this.jwtDecode,
+    required this.profileCubit,
   }) : super(const CredentialsState());
 
   final CredentialsRepository credentialsRepository;
@@ -41,6 +44,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   final DIDKitProvider didKitProvider;
   final KeyGenerator keyGenerator;
   final AdvanceSettingsCubit advanceSettingsCubit;
+  final JWTDecode jwtDecode;
+  final ProfileCubit profileCubit;
 
   final log = getLogger('CredentialsCubit');
 
@@ -95,29 +100,71 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       ),
     );
     log.i('credentials loaded from repository - ${savedCredentials.length}');
-    await addRequiredCredentials(ssiKey: ssiKey);
   }
 
-  Future<void> addRequiredCredentials({required String ssiKey}) async {
+  Future<void> addWalletCredential() async {
     final log = getLogger('addRequiredCredentials');
+
+    final walletType = profileCubit.state.model.walletType;
+
+    if (walletType != WalletType.enterprise) {
+      return;
+    }
+
+    final walletAttestationData = await secureStorageProvider
+        .get(SecureStorageKeys.walletAttestationData);
+
+    if (walletAttestationData == null) {
+      return;
+    }
 
     /// device info card
     final walletCredentialCards = await credentialListFromCredentialSubjectType(
       CredentialSubjectType.walletCredential,
     );
+
+    final payload = jwtDecode.parseJwt(walletAttestationData);
+
     if (walletCredentialCards.isEmpty) {
-      final walletCredential = await generateWalletCredential(
-        ssiKey: ssiKey,
-        didKitProvider: didKitProvider,
-        didCubit: didCubit,
+      final id = 'urn:uuid:${const Uuid().v4()}';
+      final walletCredential = CredentialModel(
+        id: id,
+        image: null,
+        data: const <String, dynamic>{},
+        shareLink: '',
+        expirationDate: payload['exp'].toString(),
+        credentialPreview: Credential(
+          id,
+          ['dummy2'],
+          ['WalletCredential'],
+          payload['iss'].toString(), // issuer
+          payload['exp'].toString(),
+          payload['iat'].toString(),
+          [
+            Proof.dummy(),
+          ],
+          WalletCredentialModel(
+            id: id,
+            type: 'WalletCredential',
+            issuedBy: const Author(''),
+            publicKey: payload['cnf']['jwk'].toString(),
+            walletInstanceKey: payload['sub'].toString(),
+          ),
+          [Translation('en', '')],
+          [Translation('en', '')],
+          CredentialStatusField.emptyCredentialStatusField(),
+          [Evidence.emptyEvidence()],
+        ),
+        activities: [Activity(acquisitionAt: DateTime.now())],
+        jwt: walletAttestationData,
+        format: 'jwt',
       );
-      if (walletCredential != null) {
-        log.i('CredentialSubjectType.walletCredential added');
-        await insertCredential(
-          credential: walletCredential,
-          showMessage: false,
-        );
-      }
+
+      log.i('CredentialSubjectType.walletCredential added');
+      await insertCredential(
+        credential: walletCredential,
+        showMessage: false,
+      );
     }
   }
 
@@ -146,7 +193,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         dummyCredentials: dummies,
         messageHandler: showMessage
             ? ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE,
               )
             : null,
@@ -171,7 +218,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         credentials: credentials,
         messageHandler: showMessage
             ? ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE,
               )
             : null,
@@ -213,8 +260,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           ),
         ),
       );
-      if (!isPendingCredential)
+      if (!isPendingCredential) {
         await modifyCredential(credential: updatedCredential);
+      }
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
     } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
@@ -226,8 +274,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           ),
         ),
       );
-      if (!isPendingCredential)
+      if (!isPendingCredential) {
         await modifyCredential(credential: updatedCredential);
+      }
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
     } else {
@@ -250,7 +299,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         dummyCredentials: dummies,
         messageHandler: showMessage
             ? ResponseMessage(
-                ResponseString.RESPONSE_STRING_CREDENTIAL_ADDED_MESSAGE,
+                message:
+                    ResponseString.RESPONSE_STRING_CREDENTIAL_ADDED_MESSAGE,
               )
             : null,
       ),
@@ -327,13 +377,18 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
           if (iteratedCredentialSubjectModel.credentialSubjectType ==
               CredentialSubjectType.emailPass) {
+            /// check if email is same
             if (email ==
                 (iteratedCredentialSubjectModel as EmailPassModel).email) {
-              await deleteById(
-                id: storedCredential.id,
-                showMessage: false,
-              );
-              break;
+              /// format should be same ldp_vc or jwt_vc
+              if ((credential.jwt == null && storedCredential.jwt == null) ||
+                  (credential.jwt != null && storedCredential.jwt != null)) {
+                await deleteById(
+                  id: storedCredential.id,
+                  showMessage: false,
+                );
+                break;
+              }
             }
           }
         }
@@ -344,7 +399,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       CredentialSubjectType.over13,
       CredentialSubjectType.over15,
       CredentialSubjectType.over18,
-      CredentialSubjectType.ageRange
+      CredentialSubjectType.over21,
+      CredentialSubjectType.over50,
+      CredentialSubjectType.over65,
+      CredentialSubjectType.ageRange,
     ];
 
     ///remove old card added by YOTI
@@ -417,24 +475,60 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         Field(path: [r'$..type'], filter: blockchainType.filter),
         Field(
           path: [r'$..associatedAddress'],
-          filter: Filter('String', cryptoAccountData.walletAddress),
+          filter: Filter(
+            type: 'String',
+            pattern: cryptoAccountData.walletAddress,
+          ),
         ),
       ],
       credentialList: oldCredentialList,
       isJwtVpInJwtVCRequired: null,
+      presentJwtVc: null,
+      presentLdpVc: null,
     );
 
     /// update or create AssociatedAddres credential with new name
     if (filteredCredentialList.isNotEmpty) {
-      final credential = await createAssociatedWalletCredential(
+      //find old id of the credential
+      final oldCredential = oldCredentialList.where((CredentialModel element) {
+        final credentialSubjectModel =
+            element.credentialPreview.credentialSubjectModel;
+
+        String? walletAddress;
+
+        if (credentialSubjectModel is EthereumAssociatedAddressModel) {
+          walletAddress = credentialSubjectModel.associatedAddress;
+        } else if (credentialSubjectModel is TezosAssociatedAddressModel) {
+          walletAddress = credentialSubjectModel.associatedAddress;
+        } else if (credentialSubjectModel is FantomAssociatedAddressModel) {
+          walletAddress = credentialSubjectModel.associatedAddress;
+        } else if (credentialSubjectModel is BinanceAssociatedAddressModel) {
+          walletAddress = credentialSubjectModel.associatedAddress;
+        } else if (credentialSubjectModel is PolygonAssociatedAddressModel) {
+          walletAddress = credentialSubjectModel.associatedAddress;
+        } else {
+          return false;
+        }
+
+        if (walletAddress != null &&
+            walletAddress == cryptoAccountData.walletAddress) {
+          return true;
+        }
+
+        return false;
+      }).first;
+
+      // final credential = state.credentials.where((element) => element.);
+      final credential = await createOrUpdateAssociatedWalletCredential(
         blockchainType: blockchainType,
         cryptoAccountData: cryptoAccountData,
+        oldId: oldCredential.id,
       );
       if (credential != null) {
         await updateCredential(credential: credential);
       }
     } else {
-      final credential = await createAssociatedWalletCredential(
+      final credential = await createOrUpdateAssociatedWalletCredential(
         blockchainType: blockchainType,
         cryptoAccountData: cryptoAccountData,
       );
@@ -444,9 +538,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     }
   }
 
-  Future<CredentialModel?> createAssociatedWalletCredential({
+  Future<CredentialModel?> createOrUpdateAssociatedWalletCredential({
     required BlockchainType blockchainType,
     required CryptoAccountData cryptoAccountData,
+    String? oldId,
   }) async {
     return generateAssociatedWalletCredential(
       cryptoAccountData: cryptoAccountData,
@@ -454,6 +549,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       didKitProvider: didKitProvider,
       blockchainType: blockchainType,
       keyGenerator: keyGenerator,
+      oldId: oldId,
     );
   }
 
@@ -461,7 +557,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Map<CredentialCategory, List<DiscoverDummyCredential>>
       _getAvalaibleDummyCredentials(List<CredentialModel> credentials) {
     final dummies = <CredentialCategory, List<DiscoverDummyCredential>>{};
-    for (final category in getCredentialCategorySorted) {
+    // entreprise user may have options to display some dummies (true/false)
+    final discoverCardsOptions =
+        profileCubit.state.model.profileSetting.discoverCardsOptions;
+    // entreprise user may have a list of external issuer
+    final externalIssuers = profileCubit
+        .state.model.profileSetting.discoverCardsOptions?.displayExternalIssuer;
+
+    for (final CredentialCategory category in getCredentialCategorySorted) {
       final List<CredentialSubjectType> currentCredentialsSubjectTypeList =
           credentials
               .map(
@@ -480,6 +583,132 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         //(CredentialSubjectType.tezotopiaMembership);
       }
 
+      // remove cards in discover based on profile
+      if (discoverCardsOptions != null) {
+        if (!discoverCardsOptions.displayDefi) {
+          allSubjectTypeForCategory
+              .remove(CredentialSubjectType.defiCompliance);
+        }
+        if (!discoverCardsOptions.displayHumanity) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.livenessCard);
+        }
+        if (!discoverCardsOptions.displayOver13) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over13);
+        }
+        if (!discoverCardsOptions.displayOver15) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over15);
+        }
+        if (!discoverCardsOptions.displayOver18) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
+        }
+
+        if (!discoverCardsOptions.displayOver21) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over21);
+        }
+        if (!discoverCardsOptions.displayOver50) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over50);
+        }
+        if (!discoverCardsOptions.displayOver65) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.over65);
+        }
+        if (!discoverCardsOptions.displayVerifiableId) {
+          allSubjectTypeForCategory
+              .remove(CredentialSubjectType.verifiableIdCard);
+        }
+        if (!discoverCardsOptions.displayGender) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.gender);
+        }
+        // add cards in discover based on profile
+
+        switch (category) {
+          case CredentialCategory.identityCards:
+            if (discoverCardsOptions.displayOver13 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over13)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over13);
+            }
+            if (discoverCardsOptions.displayOver15 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over15)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over15);
+            }
+            if (discoverCardsOptions.displayOver18 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over18)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over18);
+            }
+            if (discoverCardsOptions.displayOver21 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over21)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over21);
+            }
+            if (discoverCardsOptions.displayOver50 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over50)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over50);
+            }
+            if (discoverCardsOptions.displayOver65 &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.over65)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.over65);
+            }
+            if (discoverCardsOptions.displayVerifiableId &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.verifiableIdCard)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.verifiableIdCard,
+              );
+            }
+            if (discoverCardsOptions.displayAgeRange &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.ageRange)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.ageRange);
+            }
+            if (discoverCardsOptions.displayHumanity &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.livenessCard)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.livenessCard);
+            }
+            if (discoverCardsOptions.displayGender &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.gender)) {
+              allSubjectTypeForCategory.add(CredentialSubjectType.gender);
+            }
+          case CredentialCategory.advantagesCards:
+            break;
+
+          case CredentialCategory.professionalCards:
+            break;
+          case CredentialCategory.contactInfoCredentials:
+            break;
+
+          case CredentialCategory.educationCards:
+            break;
+          case CredentialCategory.financeCards:
+            if (discoverCardsOptions.displayDefi &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.defiCompliance)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.defiCompliance,
+              );
+            }
+          case CredentialCategory.humanityProofCards:
+            break;
+          case CredentialCategory.socialMediaCards:
+            break;
+          case CredentialCategory.walletIntegrity:
+            break;
+          case CredentialCategory.blockchainAccountsCards:
+            break;
+          case CredentialCategory.othersCards:
+            break;
+          case CredentialCategory.polygonidCards:
+            break;
+          case CredentialCategory.pendingCards:
+            break;
+        }
+      }
+
       final List<CredentialSubjectType> requiredDummySubjects = [];
 
       for (final subjectType in allSubjectTypeForCategory) {
@@ -493,11 +722,47 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           requiredDummySubjects.add(subjectType);
         }
       }
-
-      dummies[category] = requiredDummySubjects
-          .map(DiscoverDummyCredential.fromSubjectType)
-          .toList();
+// Generate list of external issuer from the profile
+      dummies[category] =
+          getDummiesFromExternalIssuerList(category, externalIssuers ?? []);
+// add dummies from the category
+      dummies[category]?.addAll(
+        requiredDummySubjects
+            .map(DiscoverDummyCredential.fromSubjectType)
+            .toList(),
+      );
     }
     return dummies;
   }
+}
+
+List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
+  CredentialCategory category,
+  List<DisplayExternalIssuer> externalIssuers,
+) {
+  // filtering the external issuer list
+  final List<DisplayExternalIssuer> list = List.from(externalIssuers);
+  list.removeWhere((element) => element.category != category.name);
+  return list
+      .map(
+        (e) => DiscoverDummyCredential(
+          credentialSubjectType: CredentialSubjectType.defaultCredential,
+          link: e.redirect,
+          image: e.background_image,
+          display: Display(
+            backgroundColor: e.background_color,
+            backgroundImage: DisplayDetails(url: e.background_image),
+            name: e.title,
+            textColor: e.text_color,
+            logo: DisplayDetails(url: e.logo),
+            description: e.subtitle,
+          ),
+          whyGetThisCardExtern: e.why_get_this_card,
+          expirationDateDetailsExtern: e.validity_period,
+          howToGetItExtern: e.how_to_get_it,
+          longDescriptionExtern: e.description,
+          websiteLink: e.website,
+        ),
+      )
+      .toList();
 }

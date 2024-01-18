@@ -1,5 +1,4 @@
 export 'add_account/add_account.dart';
-export 'altme_logo.dart';
 export 'app_version.dart';
 export 'app_version_drawer.dart';
 export 'back_leading_button.dart';
@@ -25,8 +24,10 @@ export 'my_rich_text.dart';
 export 'my_text.dart';
 export 'numeric_keyboard.dart';
 export 'phrase_word.dart';
+export 'powered_by_text.dart';
 export 'share_button.dart';
 export 'shimmer_widget.dart';
 export 'spinner.dart';
 export 'tooltip_text.dart';
 export 'transparent_ink_well.dart';
+export 'wallet_logo.dart';

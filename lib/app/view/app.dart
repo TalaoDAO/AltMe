@@ -33,6 +33,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:secure_storage/secure_storage.dart';
@@ -70,6 +71,7 @@ class App extends StatelessWidget {
         BlocProvider<ProfileCubit>(
           create: (context) => ProfileCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
+            oidc4vc: OIDC4VC(),
           ),
         ),
         BlocProvider<AdvanceSettingsCubit>(
@@ -78,11 +80,6 @@ class App extends StatelessWidget {
               secureStorageProvider: getSecureStorage,
             );
           },
-        ),
-        BlocProvider<ManageNetworkCubit>(
-          create: (context) => ManageNetworkCubit(
-            secureStorageProvider: secure_storage.getSecureStorage,
-          ),
         ),
         BlocProvider<DIDCubit>(
           create: (context) => DIDCubit(
@@ -104,6 +101,7 @@ class App extends StatelessWidget {
             client: DioClient(Urls.issuerBaseUrl, Dio()),
             secureStorageProvider: secure_storage.getSecureStorage,
             didCubit: context.read<DIDCubit>(),
+            oidc4vc: OIDC4VC(),
           ),
         ),
         BlocProvider<OnboardingCubit>(
@@ -119,6 +117,8 @@ class App extends StatelessWidget {
             didKitProvider: DIDKitProvider(),
             didCubit: context.read<DIDCubit>(),
             advanceSettingsCubit: context.read<AdvanceSettingsCubit>(),
+            jwtDecode: JWTDecode(),
+            profileCubit: context.read<ProfileCubit>(),
           ),
         ),
         BlocProvider<WalletCubit>(
@@ -129,6 +129,12 @@ class App extends StatelessWidget {
             keyGenerator: KeyGenerator(),
             credentialsCubit: context.read<CredentialsCubit>(),
             walletConnectCubit: context.read<WalletConnectCubit>(),
+          ),
+        ),
+        BlocProvider<ManageNetworkCubit>(
+          create: (context) => ManageNetworkCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            walletCubit: context.read<WalletCubit>(),
           ),
         ),
         BlocProvider<PolygonIdCubit>(
@@ -148,6 +154,7 @@ class App extends StatelessWidget {
             secureStorageProvider: secure_storage.getSecureStorage,
             profileCubit: context.read<ProfileCubit>(),
             didCubit: context.read<DIDCubit>(),
+            oidc4vc: OIDC4VC(),
           ),
         ),
         BlocProvider<QRCodeScanCubit>(
@@ -166,6 +173,7 @@ class App extends StatelessWidget {
             polygonIdCubit: context.read<PolygonIdCubit>(),
             didCubit: context.read<DIDCubit>(),
             didKitProvider: DIDKitProvider(),
+            oidc4vc: OIDC4VC(),
           ),
         ),
         BlocProvider(
@@ -220,8 +228,6 @@ class App extends StatelessWidget {
             secureStorageProvider: getSecureStorage,
             matrixChat: MatrixChatImpl(),
             invites: [AltMeStrings.matrixSupportId],
-            storageKey: SecureStorageKeys.supportRoomId,
-            roomNamePrefix: 'Altme',
           ),
         ),
         BlocProvider(

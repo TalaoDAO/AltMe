@@ -1,9 +1,9 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RestoreMenu extends StatelessWidget {
   const RestoreMenu({super.key});
@@ -40,8 +40,11 @@ class RestoreView extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
-                const Center(
-                  child: AltMeLogo(size: 90),
+                WalletLogo(
+                  profileModel: context.read<ProfileCubit>().state.model,
+                  height: 90,
+                  width: MediaQuery.of(context).size.shortestSide * 0.5,
+                  showPoweredBy: true,
                 ),
                 const SizedBox(
                   height: Sizes.spaceSmall,
@@ -62,22 +65,21 @@ class RestoreView extends StatelessWidget {
                         false;
 
                     if (confirm) {
-                      await Navigator.of(context).push<void>(
-                        PinCodePage.route(
-                          restrictToBack: false,
-                          isValidCallback: () {
-                            Navigator.of(context).push<void>(
-                              RestoreCredentialMnemonicPage.route(
-                                title: l10n.restoreCredential,
-                                isValidCallback: () {
-                                  Navigator.of(context).push<void>(
-                                    RestoreCredentialPage.route(),
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        ),
+                      await securityCheck(
+                        context: context,
+                        localAuthApi: LocalAuthApi(),
+                        onSuccess: () {
+                          Navigator.of(context).push<void>(
+                            RestoreCredentialMnemonicPage.route(
+                              title: l10n.restoreCredential,
+                              isValidCallback: () {
+                                Navigator.of(context).push<void>(
+                                  RestoreCredentialPage.route(),
+                                );
+                              },
+                            ),
+                          );
+                        },
                       );
                     }
                   },
@@ -85,22 +87,21 @@ class RestoreView extends StatelessWidget {
                 DrawerItem(
                   title: l10n.restorePolygonIdCredentials,
                   onTap: () {
-                    Navigator.of(context).push<void>(
-                      PinCodePage.route(
-                        restrictToBack: false,
-                        isValidCallback: () {
-                          Navigator.of(context).push<void>(
-                            RestoreCredentialMnemonicPage.route(
-                              title: l10n.restorePolygonIdCredentials,
-                              isValidCallback: () {
-                                Navigator.of(context).push<void>(
-                                  RestorePolygonIdCredentialPage.route(),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      ),
+                    securityCheck(
+                      context: context,
+                      localAuthApi: LocalAuthApi(),
+                      onSuccess: () {
+                        Navigator.of(context).push<void>(
+                          RestoreCredentialMnemonicPage.route(
+                            title: l10n.restorePolygonIdCredentials,
+                            isValidCallback: () {
+                              Navigator.of(context).push<void>(
+                                RestorePolygonIdCredentialPage.route(),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     );
                   },
                 ),

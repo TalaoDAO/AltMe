@@ -1,7 +1,6 @@
 class SecureStorageKeys {
   static const String isUserRegisteredMatrix = 'isUserRegisteredMatrix';
   static const String supportRoomId = 'MatrixSupportRoomId';
-  static const String cardChatSupportRoomId = 'MatrixLoyaltyCardsupportRoomId';
   static const String isFirstSelectedTokenContracts =
       'isFirstSelectedTokenContracts';
   static const String selectedContracts = 'selectedContracts';
@@ -20,14 +19,10 @@ class SecureStorageKeys {
   static const String isFinanceEnabled = 'isFinanceEnabled';
   static const String isHumanityProofEnabled = 'isHumanityProofEnabled';
   static const String isWalletIntegrityEnabled = 'isWalletIntegrityEnabled';
-  static const String isBiometricEnabled = 'fingerprintEnabled';
+  static const String walletProtectionType = 'walletProtectionType';
 
-  static const String alertEnabled = 'alertEnabled';
-  static const String userConsentForIssuerAccess = 'userConsentForIssuerAccess';
-  static const String userConsentForVerifierAccess =
-      'userConsentForVerifierAccess';
-  static const String userPINCodeForAuthentication =
-      'userPINCodeForAuthentication';
+  static const String profileType = 'profileType';
+  static const String isDeveloperMode = 'isDeveloperMode';
 
   static const String pinCode = 'pinCode';
   static const String data = 'data';
@@ -38,26 +33,15 @@ class SecureStorageKeys {
   static const String didMethodName = 'DIDMethodName';
   static const String verificationMethod = 'verificationMethod';
 
-  static const String isEnterpriseUser = 'isEnterpriseUser';
-  static const String companyName = 'companyName';
-  static const String companyWebsite = 'companyWebsite';
-  static const String jobTitle = 'jobTitle';
-
-  static const String firstNameKey = 'profile/firstName';
-  static const String lastNameKey = 'profile/lastName';
-  static const String phoneKey = 'profile/phone';
-  static const String locationKey = 'profile/location';
-  static const String emailKey = 'profile/email';
-
   static const String polygonIdNetwork = 'profile/polygonIdNetwork';
 
-  static const String blockchainNetworkKey = 'profile/blockchainNetwork';
+  static const String blockChainNetworksIndexing = 'blockChainNetworksIndexing';
   static const String credentialKey = 'credential';
 
   static const String ssiMnemonic = 'ssi/mnemonic';
   static const String ssiKey = 'ssi/key';
 
-  static const String p256PrivateKey = 'ssi/p256PrivateKey';
+  static const String p256PrivateKeyForWallet = 'p256PrivateKeyForWallet';
 
   static const String cryptoAccount = 'cryptoAccount';
   static const String cryptoAccounTrackingIndex = 'cryptoAccounTrackingIndex';
@@ -83,5 +67,9 @@ class SecureStorageKeys {
 
   static const String hasVerifiedMnemonics = 'hasVerifiedMnemonics';
 
-  static const String oidc4vcType = 'oidc4vcType';
+  static const String walletType = 'walletType';
+  static const String walletAttestationData = 'walletAttestationData';
+
+  static const String customProfileSettings = 'customProfileSettings';
+  static const String enterpriseProfileSetting = 'enterpriseProfileSetting';
 }

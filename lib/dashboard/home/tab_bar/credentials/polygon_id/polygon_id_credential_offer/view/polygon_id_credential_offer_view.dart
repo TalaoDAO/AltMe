@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -142,14 +141,13 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
           children: [
             MyGradientButton(
               text: l10n.accept,
-              onPressed: () {
-                Navigator.of(context).push<void>(
-                  PinCodePage.route(
-                    isValidCallback: () {
-                      context.read<PolygonIdCubit>().addPolygonIdCredentials();
-                    },
-                    restrictToBack: false,
-                  ),
+              onPressed: () async {
+                await securityCheck(
+                  context: context,
+                  localAuthApi: LocalAuthApi(),
+                  onSuccess: () {
+                    context.read<PolygonIdCubit>().addPolygonIdCredentials();
+                  },
                 );
               },
             ),

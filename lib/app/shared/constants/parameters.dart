@@ -22,7 +22,10 @@ class Parameters {
   );
 
   static const oidc4vcUniversalLink =
-      'https://app.altme.io/app/download/oidc4vc/';
+      'https://app.altme.io/app/download/callback';
+
+  static const authorizeEndPoint =
+      'https://app.altme.io/app/download/authorize';
 
   static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 
@@ -59,4 +62,9 @@ class Parameters {
   ];
 
   static const walletConnectEvents = ['chainChanged', 'accountsChanged'];
+
+  static const String clientId = 'urn:altme:0001';
+  static const int maxEntries = 3;
+
+  static const String appName = 'Altme';
 }

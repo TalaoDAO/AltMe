@@ -2,9 +2,13 @@ import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class ResponseMessage with MessageHandler {
-  ResponseMessage(this.message);
+  ResponseMessage({
+    this.message,
+    this.data,
+  });
 
-  final ResponseString message;
+  final ResponseString? message;
+  final dynamic data;
 
   @override
   String getMessage(
@@ -12,8 +16,8 @@ class ResponseMessage with MessageHandler {
     MessageHandler messageHandler, {
     String? injectedMessage,
   }) {
-    if (messageHandler is ResponseMessage) {
-      switch (messageHandler.message) {
+    if (messageHandler is ResponseMessage && messageHandler.message != null) {
+      switch (messageHandler.message!) {
         case ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard
               .localise(context);
@@ -24,6 +28,19 @@ class ResponseMessage with MessageHandler {
 
         case ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt:
           return ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_livenessCardExpirationDate:
+          return ResponseString.RESPONSE_STRING_livenessCardExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_livenessCardHowToGetIt:
+          return ResponseString.RESPONSE_STRING_livenessCardHowToGetIt.localise(
             context,
           );
 
@@ -627,6 +644,12 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
+        case ResponseString.RESPONSE_STRING_livenessCardLongDescription:
+          return ResponseString.RESPONSE_STRING_livenessCardLongDescription
+              .localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_succesfullyAuthenticated:
           return ResponseString.RESPONSE_STRING_succesfullyAuthenticated
               .localise(
@@ -716,6 +739,102 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady:
           return ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady
               .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_theRequestIsRejected:
+          return ResponseString.RESPONSE_STRING_theRequestIsRejected.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_userPinIsIncorrect:
+          return ResponseString.RESPONSE_STRING_userPinIsIncorrect.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_responseTypeNotSupported:
+          return ResponseString.RESPONSE_STRING_responseTypeNotSupported
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_invalidRequest:
+          return ResponseString.RESPONSE_STRING_invalidRequest.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported:
+          return ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_accessDenied:
+          return ResponseString.RESPONSE_STRING_accessDenied.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_thisRequestIsNotSupported:
+          return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_unsupportedCredential:
+          return ResponseString.RESPONSE_STRING_unsupportedCredential.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_aloginIsRequired:
+          return ResponseString.RESPONSE_STRING_aloginIsRequired.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_userConsentIsRequired:
+          return ResponseString.RESPONSE_STRING_userConsentIsRequired.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_theWalletIsNotRegistered:
+          return ResponseString.RESPONSE_STRING_theWalletIsNotRegistered
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_credentialIssuanceDenied:
+          return ResponseString.RESPONSE_STRING_credentialIssuanceDenied
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_thisCredentialFormatIsNotSupported:
+          return ResponseString
+              .RESPONSE_STRING_thisCredentialFormatIsNotSupported.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_thisFormatIsNotSupported:
+          return ResponseString.RESPONSE_STRING_thisFormatIsNotSupported
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid:
+          return ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_theServiceIsNotAvailable:
+          return ResponseString.RESPONSE_STRING_theServiceIsNotAvailable
+              .localise(
+            context,
+          );
+
+        case ResponseString
+              .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending:
+          return ResponseString
+              .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending.localise(
             context,
           );
       }

@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 part 'discover_dummy_credential.g.dart';
 
@@ -15,6 +16,12 @@ class DiscoverDummyCredential extends Equatable {
     this.expirationDateDetails,
     this.howToGetIt,
     this.longDescription,
+    this.display,
+    this.whyGetThisCardExtern,
+    this.expirationDateDetailsExtern,
+    this.howToGetItExtern,
+    this.longDescriptionExtern,
+    this.websiteLinkExtern,
   });
 
   factory DiscoverDummyCredential.fromJson(Map<String, dynamic> json) =>
@@ -34,7 +41,7 @@ class DiscoverDummyCredential extends Equatable {
     switch (credentialSubjectType) {
       case CredentialSubjectType.defiCompliance:
         image = ImageStrings.dummyDefiComplianceCard;
-        link = Urls.ageRangeUrl;
+        link = '';
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_defiComplianceWhyGetThisCard;
         expirationDateDetails =
@@ -43,7 +50,7 @@ class DiscoverDummyCredential extends Equatable {
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.ageRange:
         image = ImageStrings.dummyAgeRangeCard;
-        link = Urls.ageRangeUrl;
+        link = '';
         whyGetThisCard = ResponseString.RESPONSE_STRING_ageRangeWhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_ageRangeExpirationDate;
@@ -51,7 +58,7 @@ class DiscoverDummyCredential extends Equatable {
 
       case CredentialSubjectType.nationality:
         image = ImageStrings.dummyNationalityCard;
-        link = Urls.nationalityUrl;
+        link = '';
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_nationalityWhyGetThisCard;
         expirationDateDetails =
@@ -60,7 +67,7 @@ class DiscoverDummyCredential extends Equatable {
 
       case CredentialSubjectType.gender:
         image = ImageStrings.dummyGenderCard;
-        link = Urls.genderUrl;
+        link = '';
         whyGetThisCard = ResponseString.RESPONSE_STRING_genderWhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_genderExpirationDate;
@@ -74,17 +81,9 @@ class DiscoverDummyCredential extends Equatable {
             ResponseString.RESPONSE_STRING_emailPassExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_emailPassHowToGetIt;
 
-      case CredentialSubjectType.over18:
-        image = ImageStrings.dummyOver18Card;
-        link = Urls.over18Url;
-        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
-        expirationDateDetails =
-            ResponseString.RESPONSE_STRING_over18ExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
-
       case CredentialSubjectType.over13:
         image = ImageStrings.dummyOver13Card;
-        link = Urls.over13Url;
+        link = '';
         whyGetThisCard = ResponseString.RESPONSE_STRING_over13WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over13ExpirationDate;
@@ -92,15 +91,47 @@ class DiscoverDummyCredential extends Equatable {
 
       case CredentialSubjectType.over15:
         image = ImageStrings.dummyOver15Card;
-        link = Urls.over15Url;
+        link = '';
         whyGetThisCard = ResponseString.RESPONSE_STRING_over15WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over15ExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_over15HowToGetIt;
 
+      case CredentialSubjectType.over18:
+        image = ImageStrings.dummyOver18Card;
+        link = '';
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over18ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
+
+      case CredentialSubjectType.over21:
+        image = ImageStrings.dummyOver21Card;
+        link = '';
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over18ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
+
+      case CredentialSubjectType.over50:
+        image = ImageStrings.dummyOver50Card;
+        link = '';
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over18ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
+
+      case CredentialSubjectType.over65:
+        image = ImageStrings.dummyOver65Card;
+        link = '';
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over18ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
+
       case CredentialSubjectType.passportFootprint:
         image = ImageStrings.dummyPassportFootprintCard;
-        link = Urls.passportFootprintUrl;
+        link = '';
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard;
         expirationDateDetails =
@@ -236,6 +267,17 @@ class DiscoverDummyCredential extends Equatable {
         longDescription =
             ResponseString.RESPONSE_STRING_bloometaPassLongDescription;
 
+      case CredentialSubjectType.livenessCard:
+        image = ImageStrings.livenessDummy;
+        link = Urls.livenessCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_livenessCardExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_livenessCardHowToGetIt;
+        longDescription =
+            ResponseString.RESPONSE_STRING_livenessCardLongDescription;
+
       case CredentialSubjectType.ethereumAssociatedWallet:
         image = ImageStrings.ethereumOwnershipCard;
       case CredentialSubjectType.fantomAssociatedWallet:
@@ -288,15 +330,18 @@ class DiscoverDummyCredential extends Equatable {
       image: image,
       link: link,
       credentialSubjectType: credentialSubjectType,
-      whyGetThisCard:
-          whyGetThisCard == null ? null : ResponseMessage(whyGetThisCard),
+      whyGetThisCard: whyGetThisCard == null
+          ? null
+          : ResponseMessage(message: whyGetThisCard),
       expirationDateDetails: expirationDateDetails == null
           ? null
-          : ResponseMessage(expirationDateDetails),
-      howToGetIt: howToGetIt == null ? null : ResponseMessage(howToGetIt),
+          : ResponseMessage(message: expirationDateDetails),
+      howToGetIt:
+          howToGetIt == null ? null : ResponseMessage(message: howToGetIt),
       websiteLink: websiteLink,
-      longDescription:
-          longDescription == null ? null : ResponseMessage(longDescription),
+      longDescription: longDescription == null
+          ? null
+          : ResponseMessage(message: longDescription),
     );
   }
 
@@ -312,7 +357,12 @@ class DiscoverDummyCredential extends Equatable {
   final MessageHandler? howToGetIt;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? longDescription;
-
+  final Display? display;
+  final String? whyGetThisCardExtern;
+  final String? expirationDateDetailsExtern;
+  final String? howToGetItExtern;
+  final String? longDescriptionExtern;
+  final String? websiteLinkExtern;
   Map<String, dynamic> toJson() => _$DiscoverDummyCredentialToJson(this);
 
   @override
@@ -325,5 +375,11 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails,
         howToGetIt,
         longDescription,
+        display,
+        whyGetThisCardExtern,
+        expirationDateDetailsExtern,
+        howToGetItExtern,
+        longDescriptionExtern,
+        websiteLinkExtern,
       ];
 }

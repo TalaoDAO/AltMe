@@ -18,11 +18,11 @@ part 'wallet_connect_cubit.g.dart';
 part 'wallet_connect_state.dart';
 
 class WalletConnectCubit extends Cubit<WalletConnectState> {
-  WalletConnectCubit(
-      {required this.connectedDappRepository,
-      required this.secureStorageProvider,
-      required this.routeCubit})
-      : super(const WalletConnectState()) {
+  WalletConnectCubit({
+    required this.connectedDappRepository,
+    required this.secureStorageProvider,
+    required this.routeCubit,
+  }) : super(const WalletConnectState()) {
     initialise();
   }
 
@@ -219,7 +219,8 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           status: WalletConnectStatus.error,
           message: StateMessage.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp,
+              message:
+                  ResponseString.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp,
             ),
             injectedMessage: value,
           ),
@@ -231,7 +232,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           status: WalletConnectStatus.error,
           message: StateMessage.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),

@@ -168,7 +168,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       log.e('failed to verify credential, ${jsonVerification['errors']}');
       if (jsonVerification['errors'][0] != 'No applicable proof') {
         throw ResponseMessage(
-          ResponseString
+          message: ResponseString
               .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
         );
       } else {
@@ -198,121 +198,11 @@ Future<CredentialModel> _createCredential(
     id: id,
     image: 'image',
     data: jsonCredential,
-    display: Display.emptyDisplay()..toJson(),
     shareLink: '',
+    jwt: null,
+    format: 'ldp_vc',
     credentialPreview: Credential.fromJson(jsonCredential),
     credentialManifest: credentialManifest,
     activities: [Activity(acquisitionAt: DateTime.now())],
   );
-}
-
-Future<CredentialModel?> generateWalletCredential({
-  required String ssiKey,
-  required DIDKitProvider didKitProvider,
-  required DIDCubit didCubit,
-  String? oldId,
-}) async {
-  final log =
-      getLogger('CredentialsCubit - generateWalletCredentialCredential');
-  try {
-    const didMethod = AltMeStrings.defaultDIDMethod;
-    final didSsi = didCubit.state.did!;
-    final did = didKitProvider.keyToDID(didMethod, ssiKey);
-
-    final verificationMethod =
-        await didKitProvider.keyToVerificationMethod(didMethod, ssiKey);
-
-    final options = {
-      'proofPurpose': 'assertionMethod',
-      'verificationMethod': verificationMethod,
-    };
-    final verifyOptions = {'proofPurpose': 'assertionMethod'};
-    final id = 'urn:uuid:${const Uuid().v4()}';
-    final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
-    final issuanceDate = '${formatter.format(DateTime.now())}Z';
-
-    final credentialManifest = CredentialManifest.fromJson(
-      ConstantsJson.walletCredentialManifestJson,
-    );
-
-    late String deviceName;
-    late String systemName;
-    late String systemVersion;
-
-    if (isAndroid) {
-      final androidDeviceInfo = await DeviceInfoPlugin().androidInfo;
-      deviceName = androidDeviceInfo.model;
-      systemName = 'android';
-      systemVersion = androidDeviceInfo.version.codename;
-    } else {
-      final iosDeviceInfo = await DeviceInfoPlugin().iosInfo;
-      deviceName = iosDeviceInfo.utsname.machine;
-      systemName = 'iOS';
-      systemVersion = iosDeviceInfo.systemVersion;
-    }
-
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
-    final version = packageInfo.version;
-    final buildNumber = packageInfo.buildNumber;
-
-    final walletBuild = '$version ($buildNumber)';
-
-    final walletCredentialModel = WalletCredentialModel(
-      id: didSsi,
-      systemName: systemName,
-      deviceName: deviceName,
-      systemVersion: systemVersion,
-      type: 'WalletCredential',
-      issuedBy: const Author('My wallet'),
-      walletBuild: walletBuild,
-    );
-
-    final walletCredential = WalletCredential(
-      id: id,
-      issuer: did,
-      issuanceDate: issuanceDate,
-      credentialSubjectModel: walletCredentialModel,
-    );
-
-    log.i('walletCredential: ${walletCredential.toJson()}');
-
-    final vc = await didKitProvider.issueCredential(
-      jsonEncode(walletCredential.toJson()),
-      jsonEncode(options),
-      ssiKey,
-    );
-
-    final result =
-        await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions));
-    final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
-
-    if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
-      log.w(
-        'credential verification return warnings',
-        error: jsonVerification['warnings'],
-      );
-    }
-
-    if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
-      log.e('failed to verify credential, ${jsonVerification['errors']}');
-      if (jsonVerification['errors'][0] != 'No applicable proof') {
-        throw ResponseMessage(
-          ResponseString
-              .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
-        );
-      } else {
-        return _createCredential(vc, oldId, credentialManifest);
-      }
-    } else {
-      return _createCredential(vc, oldId, credentialManifest);
-    }
-  } catch (e, s) {
-    log.e(
-      'something went wrong e: $e, stackTrace: $s',
-      error: e,
-      stackTrace: s,
-    );
-    return null;
-  }
 }

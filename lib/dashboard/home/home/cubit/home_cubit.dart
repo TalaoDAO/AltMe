@@ -6,7 +6,6 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/wallet/model/crypto_account.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';
@@ -14,6 +13,7 @@ import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:web3dart/crypto.dart';
 
@@ -25,11 +25,13 @@ class HomeCubit extends Cubit<HomeState> {
     required this.client,
     required this.didCubit,
     required this.secureStorageProvider,
+    required this.oidc4vc,
   }) : super(const HomeState());
 
   final DioClient client;
   final DIDCubit didCubit;
   final SecureStorageProvider secureStorageProvider;
+  final OIDC4VC oidc4vc;
 
   final log = getLogger('HomeCubit');
 
@@ -38,8 +40,10 @@ class HomeCubit extends Cubit<HomeState> {
     required List<int> imageBytes,
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
+    required OIDC4VCIDraftType oidc4vciDraftType,
   }) async {
-    // launch url to get Over18, Over15, Over13,AgeRange Credentials
+    // launch url to get Over18, Over15, Over13,Over21,Over50,Over65,
+    // AgeRange Credentials
     emit(state.loading());
     final verificationMethod =
         await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
@@ -77,47 +81,19 @@ class HomeCubit extends Cubit<HomeState> {
 
     try {
       await _getCredentialByAI(
-        url: Urls.over13AIValidationUrl,
+        url: credentialType.aiValidationUrl,
         apiKey: YOTI_AI_API_KEY,
         data: data,
-        credentialType: 'Over13',
+        credentialSubjectType: credentialType,
         credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
+        oidc4vciDraftType: oidc4vciDraftType,
       );
 
-      await _getCredentialByAI(
-        url: Urls.over15AIValidationUrl,
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'Over15',
-        credentialsCubit: credentialsCubit,
-        cameraCubit: cameraCubit,
-      );
-
-      await _getCredentialByAI(
-        url: Urls.over18AIValidationUrl,
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'Over18',
-        credentialsCubit: credentialsCubit,
-        cameraCubit: cameraCubit,
-      );
-
-      await _getCredentialByAI(
-        url: Urls.ageRangeAIValidationUrl,
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'AgeRange',
-        credentialsCubit: credentialsCubit,
-        cameraCubit: cameraCubit,
-      );
-
-      await _getCredentialByAI(
+      await ageEstimate(
         url: 'https://issuer.talao.co/ai/ageestimate',
         apiKey: YOTI_AI_API_KEY,
         data: data,
-        credentialType: 'AgeEstimate',
-        credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
     } catch (e) {
@@ -151,7 +127,7 @@ class HomeCubit extends Cubit<HomeState> {
             stringMessage: message,
             messageHandler: message == null
                 ? ResponseMessage(
-                    ResponseString
+                    message: ResponseString
                         .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
                   )
                 : null,
@@ -165,29 +141,16 @@ class HomeCubit extends Cubit<HomeState> {
     required String url,
     required String apiKey,
     required Map<String, dynamic> data,
-    required String credentialType,
+    required CredentialSubjectType credentialSubjectType,
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
+    required OIDC4VCIDraftType oidc4vciDraftType,
   }) async {
     /// if credential of this type is already in the wallet do nothing
     /// Ensure credentialType = name of credential type in CredentialModel
-    CredentialSubjectType credentialTypeEnum =
-        CredentialSubjectType.aragoEmailPass;
-    if (credentialType == 'AgeRange') {
-      credentialTypeEnum = CredentialSubjectType.ageRange;
-    }
-    if (credentialType == 'Over13') {
-      credentialTypeEnum = CredentialSubjectType.over13;
-    }
-    if (credentialType == 'Over15') {
-      credentialTypeEnum = CredentialSubjectType.over15;
-    }
-    if (credentialType == 'Over18') {
-      credentialTypeEnum = CredentialSubjectType.over18;
-    }
 
     final List<CredentialModel> credentialList = await credentialsCubit
-        .credentialListFromCredentialSubjectType(credentialTypeEnum);
+        .credentialListFromCredentialSubjectType(credentialSubjectType);
     if (credentialList.isEmpty) {
       dynamic response;
 
@@ -210,9 +173,13 @@ class HomeCubit extends Cubit<HomeState> {
             Map<String, dynamic>.from(credential);
         newCredential['credentialPreview'] = credential;
         final CredentialManifest credentialManifest =
-            await getCredentialManifestFromAltMe(client);
-        credentialManifest.outputDescriptors
-            ?.removeWhere((element) => element.id != credentialType);
+            await getCredentialManifestFromAltMe(
+          oidc4vc: oidc4vc,
+          oidc4vciDraftType: oidc4vciDraftType,
+        );
+        credentialManifest.outputDescriptors?.removeWhere(
+          (element) => element.id != credentialSubjectType.name,
+        );
         if (credentialManifest.outputDescriptors!.isNotEmpty) {
           newCredential['credential_manifest'] = CredentialManifest(
             credentialManifest.id,
@@ -229,19 +196,40 @@ class HomeCubit extends Cubit<HomeState> {
           newData: credential,
           activities: [Activity(acquisitionAt: DateTime.now())],
         );
-        if (credentialType != 'AgeEstimate') {
-          await credentialsCubit.insertCredential(
-            credential: credentialModel,
-            showMessage: true,
-          );
-          await cameraCubit.incrementAcquiredCredentialsQuantity();
-          emit(state.copyWith(status: AppStatus.success));
-        } else {
-          await cameraCubit.updateAgeEstimate(
-            credentialModel.data['credentialSubject']['ageEstimate'] as String,
-          );
-        }
+        await credentialsCubit.insertCredential(
+          credential: credentialModel,
+          showMessage: true,
+        );
+        await cameraCubit.incrementAcquiredCredentialsQuantity();
+        emit(state.copyWith(status: AppStatus.success));
       }
+    }
+  }
+
+  Future<void> ageEstimate({
+    required String url,
+    required String apiKey,
+    required Map<String, dynamic> data,
+    required CameraCubit cameraCubit,
+  }) async {
+    dynamic response;
+
+    emit(state.copyWith(status: AppStatus.loading));
+    response = await client.post(
+      url,
+      headers: <String, dynamic>{
+        'accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-API-KEY': apiKey,
+      },
+      data: data,
+    );
+
+    if (response != null) {
+      final credential = jsonDecode(response as String) as Map<String, dynamic>;
+      await cameraCubit.updateAgeEstimate(
+        credential['credentialSubject']['ageEstimate'] as String,
+      );
     }
   }
 
@@ -267,157 +255,157 @@ class HomeCubit extends Cubit<HomeState> {
     await LaunchUrl.launch(link ?? state.link!);
   }
 
-  Future<void> periodicCheckRewardOnTezosBlockchain() async {
-    Timer.periodic(const Duration(minutes: 1), (timer) async {
-      List<String> walletAddresses = [];
-      final String? savedCryptoAccount =
-          await secureStorageProvider.get(SecureStorageKeys.cryptoAccount);
+  // Future<void> periodicCheckRewardOnTezosBlockchain() async {
+  //   Timer.periodic(const Duration(minutes: 1), (timer) async {
+  //     List<String> walletAddresses = [];
+  //     final String? savedCryptoAccount =
+  //         await secureStorageProvider.get(SecureStorageKeys.cryptoAccount);
 
-      if (savedCryptoAccount != null && savedCryptoAccount.isNotEmpty) {
-        //load all the content of walletAddress
-        final cryptoAccountJson =
-            jsonDecode(savedCryptoAccount) as Map<String, dynamic>;
-        final CryptoAccount cryptoAccount =
-            CryptoAccount.fromJson(cryptoAccountJson);
+  //     if (savedCryptoAccount != null && savedCryptoAccount.isNotEmpty) {
+  //       //load all the content of walletAddress
+  //       final cryptoAccountJson =
+  //           jsonDecode(savedCryptoAccount) as Map<String, dynamic>;
+  //       final CryptoAccount cryptoAccount =
+  //           CryptoAccount.fromJson(cryptoAccountJson);
 
-        walletAddresses =
-            cryptoAccount.data.map((e) => e.walletAddress).toList();
-      }
-      if (walletAddresses.isEmpty) return;
-      try {
-        final tezosWalletAddresses =
-            walletAddresses.where((e) => e.startsWith('tz')).toList();
-        if (tezosWalletAddresses.isEmpty) return;
-        await checkRewards(tezosWalletAddresses);
-      } catch (e, s) {
-        getLogger('HomeCubit')
-            .e('error in checking for reward , error: $e, stack: $s');
-      }
-    });
-  }
+  //       walletAddresses =
+  //           cryptoAccount.data.map((e) => e.walletAddress).toList();
+  //     }
+  //     if (walletAddresses.isEmpty) return;
+  //     try {
+  //       final tezosWalletAddresses =
+  //           walletAddresses.where((e) => e.startsWith('tz')).toList();
+  //       if (tezosWalletAddresses.isEmpty) return;
+  //       await checkRewards(tezosWalletAddresses);
+  //     } catch (e, s) {
+  //       getLogger('HomeCubit')
+  //           .e('error in checking for reward , error: $e, stack: $s');
+  //     }
+  //   });
+  // }
 
-  Future<void> checkRewards(List<String> walletAddresses) async {
-    for (int i = 0; i < walletAddresses.length; i++) {
-      await checkUNOReward(walletAddresses[i]);
-      await checkXTZReward(walletAddresses[i]);
-    }
-  }
+  // Future<void> checkRewards(List<String> walletAddresses) async {
+  //   for (int i = 0; i < walletAddresses.length; i++) {
+  //     await checkUNOReward(walletAddresses[i]);
+  //     await checkXTZReward(walletAddresses[i]);
+  //   }
+  // }
 
-  Future<void> checkUNOReward(String walletAddress) async {
-    getLogger('HomeCubit').i('check for UNO reward');
-    final response = await client.get(
-      '${Urls.tzktMainnetUrl}/v1/tokens/transfers',
-      queryParameters: <String, dynamic>{
-        'from': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
-        'to': walletAddress,
-        'token.contract.eq': 'KT1ErKVqEhG9jxXgUG2KGLW3bNM7zXHX8SDF', // UNO
-        'sort.desc': 'timestamp',
-      },
-    ) as List<dynamic>;
+  // Future<void> checkUNOReward(String walletAddress) async {
+  //   getLogger('HomeCubit').i('check for UNO reward');
+  //   final response = await client.get(
+  //     '${Urls.tzktMainnetUrl}/v1/tokens/transfers',
+  //     queryParameters: <String, dynamic>{
+  //       'from': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
+  //       'to': walletAddress,
+  //       'token.contract.eq': 'KT1ErKVqEhG9jxXgUG2KGLW3bNM7zXHX8SDF', // UNO
+  //       'sort.desc': 'timestamp',
+  //     },
+  //   ) as List<dynamic>;
 
-    if (response.isEmpty) {
-      return;
-    }
+  //   if (response.isEmpty) {
+  //     return;
+  //   }
 
-    final operations = response
-        .map(
-          (dynamic e) => OperationModel.fromFa2Json(e as Map<String, dynamic>),
-        )
-        .toList();
+  //   final operations = response
+  //       .map(
+  //         (dynamic e) => OperationModel.fromFa2Json(e as Map<String, dynamic>),
+  //       )
+  //       .toList();
 
-    final String? lastNotifiedRewardId = await secureStorageProvider.get(
-      SecureStorageKeys.lastNotifiedUNORewardId + walletAddress,
-    );
+  //   final String? lastNotifiedRewardId = await secureStorageProvider.get(
+  //     SecureStorageKeys.lastNotifiedUNORewardId + walletAddress,
+  //   );
 
-    final lastOperation = operations.first; //operations sorted by time in api
-    if (lastOperation.id.toString() == lastNotifiedRewardId) {
-      return;
-    } else {
-      // save the operation id to storage
-      await secureStorageProvider.set(
-        SecureStorageKeys.lastNotifiedUNORewardId + walletAddress,
-        lastOperation.id.toString(),
-      );
+  //   final lastOperation = operations.first; //operations sorted by time in api
+  //   if (lastOperation.id.toString() == lastNotifiedRewardId) {
+  //     return;
+  //   } else {
+  //     // save the operation id to storage
+  //     await secureStorageProvider.set(
+  //       SecureStorageKeys.lastNotifiedUNORewardId + walletAddress,
+  //       lastOperation.id.toString(),
+  //     );
 
-      emit(
-        state.copyWith(
-          status: AppStatus.gotTokenReward,
-          tokenReward: TokenReward(
-            amount: lastOperation.calcAmount(
-              decimal: 9, //UNO
-              value: lastOperation.amount.toString(),
-            ),
-            txId: lastOperation.hash,
-            counter: lastOperation.counter,
-            account: walletAddress,
-            origin:
-                'Tezotopia Membership Card', // TODO(all): dynamic text later
-            symbol: 'UNO',
-            name: 'Unobtanium',
-          ),
-        ),
-      );
-    }
-  }
+  //     emit(
+  //       state.copyWith(
+  //         status: AppStatus.gotTokenReward,
+  //         tokenReward: TokenReward(
+  //           amount: lastOperation.calcAmount(
+  //             decimal: 9, //UNO
+  //             value: lastOperation.amount.toString(),
+  //           ),
+  //           txId: lastOperation.hash,
+  //           counter: lastOperation.counter,
+  //           account: walletAddress,
+  //           origin:
+  //               'Tezotopia Membership Card', // TODO(all): dynamic text later
+  //           symbol: 'UNO',
+  //           name: 'Unobtanium',
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 
-  Future<void> checkXTZReward(String walletAddress) async {
-    getLogger('HomeCubit').i('check for XTZ reward');
+  // Future<void> checkXTZReward(String walletAddress) async {
+  //   getLogger('HomeCubit').i('check for XTZ reward');
 
-    final result = await client.get(
-      '${Urls.tzktMainnetUrl}/v1/operations/transactions',
-      queryParameters: <String, dynamic>{
-        'sender': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
-        'target': walletAddress,
-        'amount.gt': 0,
-      },
-    ) as List<dynamic>;
+  //   final result = await client.get(
+  //     '${Urls.tzktMainnetUrl}/v1/operations/transactions',
+  //     queryParameters: <String, dynamic>{
+  //       'sender': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
+  //       'target': walletAddress,
+  //       'amount.gt': 0,
+  //     },
+  //   ) as List<dynamic>;
 
-    if (result.isEmpty) {
-      return;
-    }
+  //   if (result.isEmpty) {
+  //     return;
+  //   }
 
-    final operations = result
-        .map(
-          (dynamic e) => OperationModel.fromJson(e as Map<String, dynamic>),
-        )
-        .toList();
-    //sort for last transaction at first
-    operations.sort(
-      (a, b) => b.dateTime.compareTo(a.dateTime),
-    );
+  //   final operations = result
+  //       .map(
+  //         (dynamic e) => OperationModel.fromJson(e as Map<String, dynamic>),
+  //       )
+  //       .toList();
+  //   //sort for last transaction at first
+  //   operations.sort(
+  //     (a, b) => b.dateTime.compareTo(a.dateTime),
+  //   );
 
-    final String? lastNotifiedRewardId = await secureStorageProvider.get(
-      SecureStorageKeys.lastNotifiedXTZRewardId + walletAddress,
-    );
+  //   final String? lastNotifiedRewardId = await secureStorageProvider.get(
+  //     SecureStorageKeys.lastNotifiedXTZRewardId + walletAddress,
+  //   );
 
-    final lastOperation = operations.first; //operations sorted by time in api
-    if (lastOperation.id.toString() == lastNotifiedRewardId) {
-      return;
-    } else {
-      // save the operation id to storage
-      await secureStorageProvider.set(
-        SecureStorageKeys.lastNotifiedXTZRewardId + walletAddress,
-        lastOperation.id.toString(),
-      );
+  //   final lastOperation = operations.first; //operations sorted by time in api
+  //   if (lastOperation.id.toString() == lastNotifiedRewardId) {
+  //     return;
+  //   } else {
+  //     // save the operation id to storage
+  //     await secureStorageProvider.set(
+  //       SecureStorageKeys.lastNotifiedXTZRewardId + walletAddress,
+  //       lastOperation.id.toString(),
+  //     );
 
-      emit(
-        state.copyWith(
-          status: AppStatus.gotTokenReward,
-          tokenReward: TokenReward(
-            amount: lastOperation.calcAmount(
-              decimal: 6, //XTZ
-              value: lastOperation.amount.toString(),
-            ),
-            account: walletAddress,
-            txId: lastOperation.hash,
-            counter: lastOperation.counter,
-            origin:
-                'Tezotopia Membership Card', // TODO(all): dynamic text later
-            symbol: 'XTZ',
-            name: 'Tezos',
-          ),
-        ),
-      );
-    }
-  }
+  //     emit(
+  //       state.copyWith(
+  //         status: AppStatus.gotTokenReward,
+  //         tokenReward: TokenReward(
+  //           amount: lastOperation.calcAmount(
+  //             decimal: 6, //XTZ
+  //             value: lastOperation.amount.toString(),
+  //           ),
+  //           account: walletAddress,
+  //           txId: lastOperation.hash,
+  //           counter: lastOperation.counter,
+  //           origin:
+  //               'Tezotopia Membership Card', // TODO(all): dynamic text later
+  //           symbol: 'XTZ',
+  //           name: 'Tezos',
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 }

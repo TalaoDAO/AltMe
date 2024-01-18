@@ -1,220 +1,124 @@
-import 'dart:convert';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/oidc4vc/add_oidc4vc_credential.dart';
 
 import 'package:did_kit/did_kit.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+
 import 'package:secure_storage/secure_storage.dart';
-import 'package:uuid/uuid.dart';
 
 Future<void> initiateOIDC4VCCredentialIssuance({
   required String scannedResponse,
-  required OIDC4VCType oidc4vcType,
+  required OIDC4VC oidc4vc,
+  required bool isEBSIV3,
   required QRCodeScanCubit qrCodeScanCubit,
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
+  required OIDC4VCIDraftType oidc4vciDraftType,
+  required ProfileCubit profileCubit,
   required SecureStorageProvider secureStorageProvider,
   required DioClient dioClient,
   required String? userPin,
-}) async {
-  final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
-
-  late dynamic credentials;
-
-  switch (oidc4vcType) {
-    case OIDC4VCType.DEFAULT:
-    case OIDC4VCType.GREENCYPHER:
-    case OIDC4VCType.EBSIV3:
-      final dynamic credentialOfferJson = await getCredentialOfferJson(
-        scannedResponse: scannedResponse,
-        dioClient: dioClient,
-      );
-      if (credentialOfferJson == null) throw Exception();
-
-      credentials = credentialOfferJson['credentials'];
-
-    case OIDC4VCType.GAIAX:
-    case OIDC4VCType.EBSIV2:
-      credentials = uriFromScannedResponse.queryParameters['credential_type'];
-
-    case OIDC4VCType.JWTVC:
-      break;
-  }
-
-  if (credentials is List<dynamic>) {
-    qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
-      credentials: credentials,
-      userPin: userPin,
-    );
-  } else {
-    final OIDC4VC oidc4vc = oidc4vcType.getOIDC4VC;
-    await getAndAddCredential(
-      scannedResponse: scannedResponse,
-      oidc4vcType: oidc4vcType,
-      oidc4vc: oidc4vc,
-      didKitProvider: didKitProvider,
-      credentialsCubit: credentialsCubit,
-      credential: credentials,
-      secureStorageProvider: secureStorageProvider,
-      isLastCall: true,
-      dioClient: dioClient,
-      userPin: userPin,
-    );
-    oidc4vc.resetNonceAndAccessToken();
-    qrCodeScanCubit.goBack();
-  }
-}
-
-Future<void> getAndAddCredential({
-  required String scannedResponse,
-  required OIDC4VC oidc4vc,
-  required OIDC4VCType oidc4vcType,
-  required DIDKitProvider didKitProvider,
-  required CredentialsCubit credentialsCubit,
-  required dynamic credential,
-  required SecureStorageProvider secureStorageProvider,
-  required bool isLastCall,
-  required DioClient dioClient,
-  required String? userPin,
-}) async {
-  final (preAuthorizedCode, issuer) = await getIssuerAndPreAuthorizedCode(
-    oidc4vcType: oidc4vcType,
-    scannedResponse: scannedResponse,
-    dioClient: dioClient,
-  );
-
-  final mnemonic =
-      await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
-
-  final privateKey = await oidc4vc.privateKeyFromMnemonic(
-    mnemonic: mnemonic!,
-    indexValue: oidc4vcType.indexValue,
-  );
-
-  final (did, kid) = await getDidAndKid(
-    oidc4vcType: oidc4vcType,
-    privateKey: privateKey,
-    didKitProvider: didKitProvider,
-  );
-
-  final codeForAuthorisedFlow =
-      Uri.parse(scannedResponse).queryParameters['code'];
-
-  if (preAuthorizedCode != null || codeForAuthorisedFlow != null) {
-    final (
-      dynamic encodedCredentialOrFutureToken,
-      String? deferredCredentialEndpoint,
-      String format
-    ) = await oidc4vc.getCredential(
-      preAuthorizedCode: preAuthorizedCode,
-      issuer: issuer,
-      credential: credential,
-      did: did,
-      kid: kid,
-      privateKey: privateKey,
-      indexValue: oidc4vcType.indexValue,
-      userPin: userPin,
-      code: codeForAuthorisedFlow,
-    );
-    final String credentialName = getCredentialData(credential);
-    final acceptanceToken = encodedCredentialOrFutureToken['acceptance_token'];
-
-    if (acceptanceToken != null && deferredCredentialEndpoint != null) {
-      /// add deferred card
-      final id = const Uuid().v4();
-
-      final credentialModel = CredentialModel(
-        id: id,
-        credentialPreview: Credential(
-          'dummy1',
-          ['dummy2'],
-          [credentialName],
-          'dummy4',
-          'dummy5',
-          '',
-          [Proof.dummy()],
-          CredentialSubjectModel(
-            id: 'dummy7',
-            type: 'dummy8',
-            issuedBy: const Author(''),
-            credentialCategory: CredentialCategory.pendingCards,
-            credentialSubjectType: CredentialSubjectType.defaultCredential,
-          ),
-          [Translation('en', '')],
-          [Translation('en', '')],
-          CredentialStatusField.emptyCredentialStatusField(),
-          [Evidence.emptyEvidence()],
-        ),
-        data: const {},
-        display: Display.emptyDisplay(),
-        image: '',
-        shareLink: '',
-        pendingInfo: PendingInfo(
-          acceptanceToken: acceptanceToken.toString(),
-          deferredCredentialEndpoint: deferredCredentialEndpoint,
-          format: format,
-          url: scannedResponse,
-        ),
-      );
-      // insert the credential in the wallet
-      await credentialsCubit.insertCredential(
-        credential: credentialModel,
-        showStatus: false,
-        showMessage: isLastCall,
-        isPendingCredential: true,
-      );
-    } else {
-      await addOIDC4VCCredential(
-        encodedCredentialFromOIDC4VC: encodedCredentialOrFutureToken,
-        credentialsCubit: credentialsCubit,
-        oidc4vcType: oidc4vcType,
-        issuer: issuer,
-        credentialType: credentialName,
-        isLastCall: isLastCall,
-        format: format,
-      );
-    }
-  } else {
-    final dynamic credentialOfferJson = await getCredentialOfferJson(
-      scannedResponse: scannedResponse,
-      dioClient: dioClient,
-    );
-
-    final Uri ebsiAuthenticationUri =
-        await oidc4vc.getAuthorizationUriForIssuer(
-      credentialOfferJson: credentialOfferJson,
-      clientId: did,
-      redirectUrl: '${Parameters.oidc4vcUniversalLink}$scannedResponse',
-    );
-    await LaunchUrl.launchUri(ebsiAuthenticationUri);
-  }
-}
-
-Future<dynamic> getCredentialOfferJson({
-  required String scannedResponse,
-  required DioClient dioClient,
+  required dynamic credentialOfferJson,
+  required bool cryptoHolderBinding,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
   final keys = <String>[];
   uriFromScannedResponse.queryParameters.forEach((key, value) => keys.add(key));
 
-  dynamic credentialOfferJson;
+  late dynamic credentials;
 
-  if (keys.contains('credential_offer')) {
-    credentialOfferJson = jsonDecode(
-      uriFromScannedResponse.queryParameters['credential_offer'].toString(),
-    );
-  } else if (keys.contains('credential_offer_uri')) {
-    final url = uriFromScannedResponse.queryParameters['credential_offer_uri']
-        .toString();
-    final response = await dioClient.get(url);
+  if (keys.contains('credential_type')) {
+    credentials = uriFromScannedResponse.queryParameters['credential_type'];
+  } else {
+    if (credentialOfferJson == null) throw Exception();
 
-    credentialOfferJson = response;
+    credentials = credentialOfferJson['credentials'];
   }
 
-  return credentialOfferJson;
+  final (preAuthorizedCode, issuer) = await getIssuerAndPreAuthorizedCode(
+    scannedResponse: scannedResponse,
+    dioClient: dioClient,
+  );
+
+  if (credentials is List<dynamic>) {
+    final codeForAuthorisedFlow =
+        Uri.parse(scannedResponse).queryParameters['code'];
+    final state = Uri.parse(scannedResponse).queryParameters['state'];
+
+    final OpenIdConfiguration openIdConfiguration =
+        await oidc4vc.getOpenIdConfig(
+      baseUrl: issuer!,
+      isAuthorizationServer: false,
+      oidc4vciDraftType: oidc4vciDraftType,
+    );
+
+    if (preAuthorizedCode != null) {
+      /// full phase flow of preAuthorized
+      qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
+        credentials: credentials,
+        userPin: userPin,
+        issuer: issuer,
+        preAuthorizedCode: preAuthorizedCode,
+        isEBSIV3: isEBSIV3,
+        credentialOfferJson: credentialOfferJson,
+        openIdConfiguration: openIdConfiguration,
+      );
+    } else {
+      if (codeForAuthorisedFlow == null || state == null) {
+        /// first phase flow of authorised
+        qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
+          credentials: credentials,
+          userPin: userPin,
+          issuer: issuer,
+          preAuthorizedCode: preAuthorizedCode,
+          isEBSIV3: isEBSIV3,
+          credentialOfferJson: credentialOfferJson,
+          openIdConfiguration: openIdConfiguration,
+        );
+      } else {
+        /// second phase flow of authorised
+
+        final jwt = decodePayload(
+          jwtDecode: JWTDecode(),
+          token: state,
+        );
+
+        final stateOfCredentialsSelected = jwt['options'] as List<dynamic>;
+        final String codeVerifier = jwt['codeVerifier'].toString();
+        final String? authorization = jwt['authorization'] as String?;
+        final String? clientId = jwt['client_id'] as String?;
+        final String? clientSecret = jwt['client_secret'] as String?;
+
+        final selectedCredentials = stateOfCredentialsSelected
+            .map((index) => credentials[index])
+            .toList();
+
+        await qrCodeScanCubit.addCredentialsInLoop(
+          selectedCredentials: selectedCredentials,
+          userPin: userPin,
+          issuer: issuer,
+          preAuthorizedCode: null,
+          isEBSIV3: isEBSIV3,
+          codeForAuthorisedFlow: codeForAuthorisedFlow,
+          codeVerifier: codeVerifier,
+          authorization: authorization,
+          clientId: clientId,
+          clientSecret: clientSecret,
+        );
+      }
+    }
+  } else {
+    // full phase flow of preAuthorized
+    await qrCodeScanCubit.processSelectedCredentials(
+      userPin: userPin,
+      issuer: issuer!,
+      preAuthorizedCode: preAuthorizedCode,
+      isEBSIV3: isEBSIV3,
+      credentialOfferJson: credentialOfferJson,
+      selectedCredentials: [credentials],
+    );
+  }
 }

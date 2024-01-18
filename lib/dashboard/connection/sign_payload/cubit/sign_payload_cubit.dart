@@ -71,7 +71,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             encodedPayload = stringToHexPrefixedWith05(payload: payload);
             signingType = SigningType.raw;
           }
-          final bytes = hexToBytes(encodedPayload);
+          final bytes = hexToBytes(encodedPayload).filterPayload;
+
           payloadMessage = utf8.decode(bytes, allowMalformed: true);
 
         case ConnectionBridgeType.walletconnect:
@@ -96,7 +97,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             payloadMessage = jsonEncode(walletConnectCubit.state.parameters[0]);
           } else {
             throw ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             );
           }
@@ -139,7 +140,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_payloadFormatErrorMessage,
+            message: ResponseString.RESPONSE_STRING_payloadFormatErrorMessage,
           ),
         ),
       );
@@ -172,7 +173,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
           if (currentAccount == null) {
             throw ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             );
           }
@@ -215,7 +216,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             publicKey = walletConnectState.parameters[0]['from'].toString();
           } else {
             throw ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             );
           }
@@ -226,7 +227,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           log.i('currentAccount -$currentAccount');
           if (currentAccount == null) {
             throw ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             );
           }
@@ -286,7 +287,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             success = true;
           } else {
             throw ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             );
           }
@@ -302,7 +303,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
               status: AppStatus.success,
               message: StateMessage.success(
                 messageHandler: ResponseMessage(
-                  ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+                  message: ResponseString
+                      .RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
                 ),
               ),
             ),
@@ -314,7 +316,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
               status: AppStatus.success,
               message: StateMessage.success(
                 messageHandler: ResponseMessage(
-                  ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+                  message: ResponseString
+                      .RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
                 ),
               ),
             ),
@@ -322,7 +325,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         }
       } else {
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD,
+          message: ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD,
         );
       }
     } catch (e) {
@@ -333,7 +336,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),

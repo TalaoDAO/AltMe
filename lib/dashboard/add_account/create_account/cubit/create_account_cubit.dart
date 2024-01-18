@@ -39,7 +39,7 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
           state.success(
             cryptoAccount: cryptoAccount,
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+              message: ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
             ),
           ),
         );

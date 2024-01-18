@@ -10,6 +10,8 @@ class PendingInfo extends Equatable {
     required this.deferredCredentialEndpoint,
     required this.format,
     required this.url,
+    required this.issuer,
+    required this.requestedAt,
   });
 
   factory PendingInfo.fromJson(Map<String, dynamic> json) =>
@@ -19,6 +21,8 @@ class PendingInfo extends Equatable {
   final String deferredCredentialEndpoint;
   final String format;
   final String url;
+  final String? issuer;
+  final DateTime? requestedAt;
 
   Map<String, dynamic> toJson() => _$PendingInfoToJson(this);
 

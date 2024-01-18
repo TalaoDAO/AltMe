@@ -26,7 +26,8 @@ class GeneralInformationPage extends StatelessWidget {
         children: [
           DIDDisplay(
             isEnterpriseUser:
-                context.read<ProfileCubit>().state.model.isEnterprise,
+                context.read<ProfileCubit>().state.model.walletType ==
+                    WalletType.enterprise,
           ),
           const SizedBox(height: 30),
           Center(

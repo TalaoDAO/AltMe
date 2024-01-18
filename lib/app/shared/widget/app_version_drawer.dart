@@ -5,7 +5,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 class AppVersionDrawer extends StatelessWidget {
   const AppVersionDrawer({
     super.key,
+    this.isShortForm = false,
   });
+
+  final bool isShortForm;
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +22,11 @@ class AppVersionDrawer extends StatelessWidget {
               final buildNumber = snapshot.data?.buildNumber ?? '1';
 
               return Text(
-                'Version $version ($buildNumber)',
-                style: Theme.of(context).textTheme.bodySmall2,
+                isShortForm ? 'V $version' : 'Version $version ($buildNumber)',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall2
+                    .copyWith(fontWeight: FontWeight.w800),
               );
             case ConnectionState.waiting:
             case ConnectionState.none:

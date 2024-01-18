@@ -2,21 +2,31 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AiAgeResultPage extends StatelessWidget {
-  const AiAgeResultPage({super.key, required this.blocContext});
+  const AiAgeResultPage({
+    super.key,
+    required this.blocContext,
+    required this.credentialSubjectType,
+  });
 
   final BuildContext blocContext;
+  final CredentialSubjectType credentialSubjectType;
 
-  static Route<dynamic> route(BuildContext context) {
+  static Route<dynamic> route({
+    required BuildContext context,
+    required CredentialSubjectType credentialSubjectType,
+  }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/AiAgeResultPage'),
-      builder: (_) => AiAgeResultPage(blocContext: context),
+      builder: (_) => AiAgeResultPage(
+        blocContext: context,
+        credentialSubjectType: credentialSubjectType,
+      ),
     );
   }
 
@@ -24,13 +34,20 @@ class AiAgeResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CameraCubit>(
       create: (context) => BlocProvider.of<CameraCubit>(blocContext),
-      child: const AiAgeResultView(),
+      child: AiAgeResultView(
+        credentialSubjectType: credentialSubjectType,
+      ),
     );
   }
 }
 
 class AiAgeResultView extends StatefulWidget {
-  const AiAgeResultView({super.key});
+  const AiAgeResultView({
+    super.key,
+    required this.credentialSubjectType,
+  });
+
+  final CredentialSubjectType credentialSubjectType;
 
   @override
   State<AiAgeResultView> createState() => _AiAgeResultViewState();
@@ -58,8 +75,11 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
               scrollView: false,
               body: Center(
                 child: state.acquiredCredentialsQuantity > 0
-                    ? SuccessWidget(state)
-                    : FailureWidget(state),
+                    ? SuccessWidget(
+                        ageEstimate: state.ageEstimate,
+                        credentialSubjectType: widget.credentialSubjectType,
+                      )
+                    : const FailureWidget(),
               ),
             ),
             if (state.acquiredCredentialsQuantity > 0)
@@ -79,11 +99,13 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
 }
 
 class SuccessWidget extends StatelessWidget {
-  const SuccessWidget(
-    this.state, {
+  const SuccessWidget({
     super.key,
+    required this.credentialSubjectType,
+    required this.ageEstimate,
   });
-  final CameraState state;
+  final CredentialSubjectType credentialSubjectType;
+  final String ageEstimate;
 
   @override
   Widget build(BuildContext context) {
@@ -94,8 +116,11 @@ class SuccessWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Spacer(),
-        const AltMeLogo(
-          size: Sizes.logo2XLarge,
+        WalletLogo(
+          profileModel: context.read<ProfileCubit>().state.model,
+          height: Sizes.logo2XLarge,
+          width: MediaQuery.of(context).size.shortestSide * 0.5,
+          showPoweredBy: true,
         ),
         const SizedBox(
           height: Sizes.spaceNormal,
@@ -103,7 +128,7 @@ class SuccessWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8),
           child: Text(
-            l10n.yourAgeEstimationIs(state.ageEstimate),
+            l10n.yourAgeEstimationIs(ageEstimate),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
@@ -114,7 +139,7 @@ class SuccessWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8),
           child: Text(
-            l10n.youGotAgeCredentials(state.acquiredCredentialsQuantity),
+            l10n.youGotAgeCredentials(credentialSubjectType.title),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.normal,
@@ -140,11 +165,7 @@ class SuccessWidget extends StatelessWidget {
 }
 
 class FailureWidget extends StatelessWidget {
-  const FailureWidget(
-    this.state, {
-    super.key,
-  });
-  final CameraState state;
+  const FailureWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -155,8 +176,11 @@ class FailureWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Spacer(),
-        const AltMeLogo(
-          size: Sizes.logo2XLarge,
+        WalletLogo(
+          profileModel: context.read<ProfileCubit>().state.model,
+          height: Sizes.logo2XLarge,
+          width: MediaQuery.of(context).size.shortestSide * 0.5,
+          showPoweredBy: true,
         ),
         const SizedBox(
           height: Sizes.spaceNormal,
@@ -181,18 +205,17 @@ class FailureWidget extends StatelessWidget {
           verticalSpacing: 16,
           borderRadius: Sizes.largeRadius,
           onPressed: () async {
-            await Navigator.of(context).push<void>(
-              PinCodePage.route(
-                isValidCallback: () {
-                  Navigator.pushReplacement(
-                    context,
-                    CameraPage.route(
-                      credentialSubjectType: CredentialSubjectType.over13,
-                    ),
-                  );
-                },
-                restrictToBack: false,
-              ),
+            await securityCheck(
+              context: context,
+              localAuthApi: LocalAuthApi(),
+              onSuccess: () {
+                Navigator.pushReplacement(
+                  context,
+                  CameraPage.route(
+                    credentialSubjectType: CredentialSubjectType.over13,
+                  ),
+                );
+              },
             );
           },
         ),
@@ -204,13 +227,14 @@ class FailureWidget extends StatelessWidget {
           verticalSpacing: 16,
           borderRadius: Sizes.largeRadius,
           onPressed: () async {
-            await Navigator.of(context).push<void>(
-              PinCodePage.route(
-                isValidCallback: () => context
+            await securityCheck(
+              context: context,
+              localAuthApi: LocalAuthApi(),
+              onSuccess: () {
+                context
                     .read<KycVerificationCubit>()
-                    .startKycVerifcation(vcType: KycVcType.verifiableId),
-                restrictToBack: false,
-              ),
+                    .startKycVerifcation(vcType: KycVcType.verifiableId);
+              },
             );
             await Navigator.pushAndRemoveUntil<void>(
               context,

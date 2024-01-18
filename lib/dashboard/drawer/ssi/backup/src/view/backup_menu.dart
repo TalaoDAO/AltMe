@@ -1,9 +1,9 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BackupMenu extends StatelessWidget {
   const BackupMenu({super.key});
@@ -40,52 +40,51 @@ class BackupView extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
-                const Center(
-                  child: AltMeLogo(size: 90),
+                WalletLogo(
+                  profileModel: context.read<ProfileCubit>().state.model,
+                  height: 90,
+                  width: MediaQuery.of(context).size.shortestSide * 0.5,
+                  showPoweredBy: true,
                 ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
+                const SizedBox(height: Sizes.spaceSmall),
                 DrawerItem(
                   title: l10n.backupCredential,
                   onTap: () async {
-                    await Navigator.of(context).push<void>(
-                      PinCodePage.route(
-                        restrictToBack: false,
-                        isValidCallback: () {
-                          Navigator.of(context).push<void>(
-                            BackupMnemonicPage.route(
-                              title: l10n.backupCredential,
-                              isValidCallback: () {
-                                Navigator.of(context)
-                                    .push<void>(BackupCredentialPage.route());
-                              },
-                            ),
-                          );
-                        },
-                      ),
+                    await securityCheck(
+                      context: context,
+                      localAuthApi: LocalAuthApi(),
+                      onSuccess: () {
+                        Navigator.of(context).push<void>(
+                          BackupMnemonicPage.route(
+                            title: l10n.backupCredential,
+                            isValidCallback: () {
+                              Navigator.of(context)
+                                  .push<void>(BackupCredentialPage.route());
+                            },
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
                 DrawerItem(
                   title: l10n.backupPolygonIdIdentity,
                   onTap: () async {
-                    await Navigator.of(context).push<void>(
-                      PinCodePage.route(
-                        restrictToBack: false,
-                        isValidCallback: () {
-                          Navigator.of(context).push<void>(
-                            BackupMnemonicPage.route(
-                              title: l10n.backupPolygonIdIdentity,
-                              isValidCallback: () {
-                                Navigator.of(context).push<void>(
-                                  BackupPolygonIdIdentityPage.route(),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      ),
+                    await securityCheck(
+                      context: context,
+                      localAuthApi: LocalAuthApi(),
+                      onSuccess: () {
+                        Navigator.of(context).push<void>(
+                          BackupMnemonicPage.route(
+                            title: l10n.backupPolygonIdIdentity,
+                            isValidCallback: () {
+                              Navigator.of(context).push<void>(
+                                BackupPolygonIdIdentityPage.route(),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     );
                   },
                 ),

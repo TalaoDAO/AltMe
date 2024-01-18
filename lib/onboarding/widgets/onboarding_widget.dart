@@ -4,6 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/widgets/widgets.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OnBoardingWidget extends StatelessWidget {
   const OnBoardingWidget({
@@ -24,9 +25,14 @@ class OnBoardingWidget extends StatelessWidget {
     final l10n = context.l10n;
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.all(8),
-          child: AltMeLogo(size: 80),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: WalletLogo(
+            profileModel: context.read<ProfileCubit>().state.model,
+            height: 90,
+            width: MediaQuery.of(context).size.shortestSide * 0.5,
+            showPoweredBy: true,
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(8),

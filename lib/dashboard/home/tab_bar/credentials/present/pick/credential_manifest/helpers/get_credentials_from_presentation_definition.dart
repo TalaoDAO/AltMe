@@ -5,11 +5,15 @@ List<CredentialModel> getCredentialsFromPresentationDefinition({
   required PresentationDefinition presentationDefinition,
   required List<CredentialModel> credentialList,
   required int inputDescriptorIndex,
-  required bool? isJwtVpInJwtVCRequired,
 }) {
   final filterList = presentationDefinition
           .inputDescriptors[inputDescriptorIndex].constraints?.fields ??
       <Field>[];
+
+  final isJwtVpInJwtVCRequired = presentationDefinition.format?.jwtVp != null;
+
+  final presentLdpVc = presentationDefinition.format?.ldpVc != null;
+  final presentJwtVc = presentationDefinition.format?.jwtVc != null;
 
   /// If we have some instructions we filter the wallet's
   /// crendential list whith it
@@ -17,6 +21,8 @@ List<CredentialModel> getCredentialsFromPresentationDefinition({
     filterList: filterList,
     credentialList: credentialList,
     isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
+    presentLdpVc: presentLdpVc,
+    presentJwtVc: presentJwtVc,
   );
   return filteredCredentialList;
 }

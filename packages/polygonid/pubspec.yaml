@@ -4,7 +4,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=3.1.0 <4.0.0"
 
 dependencies:
   bip39: ^1.0.6
@@ -14,7 +14,7 @@ dependencies:
   polygonid_flutter_sdk:
     git:
       url: https://github.com/iden3/polygonid-flutter-sdk.git
-      ref: 8aba45dd3e29ef89b389e5b676baa13410ec10c8
+      ref: v2.2.8+2
   web3dart: ^2.3.5
 
 dev_dependencies:

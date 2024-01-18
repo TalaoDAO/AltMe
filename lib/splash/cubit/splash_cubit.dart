@@ -36,11 +36,13 @@ class SplashCubit extends Cubit<SplashState> {
 
   Future<void> initialiseApp() async {
     double counter = 0;
+
     Timer.periodic(const Duration(milliseconds: 500), (timer) async {
       counter = counter + 0.5;
       emit(state.copyWith(loadedValue: counter / 5));
       if (counter > 5) {
         timer.cancel();
+
         final bool hasWallet = await isWalletCreated(
           secureStorageProvider: secureStorageProvider,
           didCubit: didCubit,
@@ -51,11 +53,11 @@ class SplashCubit extends Cubit<SplashState> {
         if (hasWallet) {
           await homeCubit.emitHasWallet();
           emit(state.copyWith(status: SplashStatus.routeToPassCode));
-          if (Parameters.walletHandlesCrypto) {
-            unawaited(
-              homeCubit.periodicCheckRewardOnTezosBlockchain(),
-            );
-          }
+          // if (Parameters.walletHandlesCrypto) {
+          //   unawaited(
+          //     homeCubit.periodicCheckRewardOnTezosBlockchain(),
+          //   );
+          // }
         } else {
           homeCubit.emitHasNoWallet();
           emit(state.copyWith(status: SplashStatus.routeToOnboarding));

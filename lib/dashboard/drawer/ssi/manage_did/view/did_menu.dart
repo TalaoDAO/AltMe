@@ -41,38 +41,40 @@ class DidView extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
-                const Center(
-                  child: AltMeLogo(size: 90),
+                WalletLogo(
+                  profileModel: context.read<ProfileCubit>().state.model,
+                  height: 90,
+                  width: MediaQuery.of(context).size.shortestSide * 0.5,
+                  showPoweredBy: true,
                 ),
                 const SizedBox(
                   height: Sizes.spaceSmall,
                 ),
                 DrawerItem(
-                  title: l10n.manageKeyDecentralizedIdEdSA,
+                  title: l10n.keyDecentralizedIdEdSA,
                   onTap: () {
                     Navigator.of(context)
                         .push<void>(ManageDIDEdDSAPage.route());
                   },
                 ),
-                DrawerItem(
-                  title: l10n.manageKeyDecentralizedIDSecp256k1,
-                  onTap: () {
-                    Navigator.of(context)
-                        .push<void>(ManageDidSecp256k1Page.route());
-                  },
-                ),
-                DrawerItem(
-                  title: l10n.manageEbsiV2DecentralizedId,
-                  onTap: () {
-                    Navigator.of(context)
-                        .push<void>(ManageDidEbsiV2Page.route());
-                  },
-                ),
-                DrawerItem(
-                  title: l10n.manageEbsiV3DecentralizedId,
-                  onTap: () {
-                    Navigator.of(context)
-                        .push<void>(ManageDidEbsiV3Page.route());
+                ListView.builder(
+                  itemCount: DidKeyType.values.length,
+                  shrinkWrap: true,
+                  physics: const ScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final didKeyType = DidKeyType.values[index];
+
+                    final title = didKeyType.getTitle(l10n);
+                    return DrawerItem(
+                      title: title,
+                      onTap: () {
+                        Navigator.of(context).push<void>(
+                          ManageOtherDidPage.route(
+                            didKeyType: didKeyType,
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
                 DrawerItem(
@@ -93,7 +95,7 @@ class DidView extends StatelessWidget {
                           showDialog: true,
                           //stringMessage: e.toString(),
                           messageHandler: ResponseMessage(
-                            ResponseString
+                            message: ResponseString
                                 .RESPONSE_STRING_deviceIncompatibilityMessage,
                           ),
                         ),

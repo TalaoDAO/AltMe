@@ -1,11 +1,12 @@
 class ImageStrings {
   static const String splashPath = 'assets/splash';
   static const String splashImage = '$splashPath/splash_image.png';
-  static const String splash = '$splashPath/altme.png';
-  static const String splashDev = '$splashPath/altme-dev.png';
-  static const String splashStage = '$splashPath/altme-stage.png';
+  static const String appLogo = '$splashPath/altme.png';
+  static const String appLogoDev = '$splashPath/altme-dev.png';
+  static const String appLogoStage = '$splashPath/altme-stage.png';
 
   static const String imagePath = 'assets/image';
+  static const String ebsiLogo = '$imagePath/ebsi_logo.png';
   static const String cardMissing = '$imagePath/card_missing.png';
   static const String employmentCertificateFront =
       '$imagePath/carte-attestation-employeur-recto.png';
@@ -16,11 +17,9 @@ class ImageStrings {
   static const String biometrics = '$imagePath/biometrics.png';
   static const String emailProof = '$imagePath/email-proof.png';
   static const String phoneProof = '$imagePath/phone-proof.png';
-  static const String walletCertificateiOS =
-      '$imagePath/wallet-certificate-ios.png';
-  static const String walletCertificateAndroid =
-      '$imagePath/wallet-certificate-android.png';
+  static const String walletCertificate = '$imagePath/wallet-certificate.png';
   static const String bloometaPass = '$imagePath/bloometa-pass.png';
+  static const String livenessCard = '$imagePath/liveness-card.png';
   static const String tezotopiaMemberShip =
       '$imagePath/tezotopia-membership.png';
   static const String chainbornMemberShip =
@@ -36,6 +35,9 @@ class ImageStrings {
   static const String over18 = '$imagePath/over18.png';
   static const String over15 = '$imagePath/over15.png';
   static const String over13 = '$imagePath/over13.png';
+  static const String over21 = '$imagePath/over21.png';
+  static const String over50 = '$imagePath/over50.png';
+  static const String over65 = '$imagePath/over65.png';
   static const String passportFootprint = '$imagePath/passport_footprint.png';
   static const String professionalStudentCardFront =
       '$imagePath/adecco_student_card_recto.png';
@@ -114,6 +116,7 @@ class ImageStrings {
   static const String tezotopiaMemberShipDummy =
       '$imagePath/tezotopia-membership-dummy.png';
   static const String bloometaDummy = '$imagePath/bloometa-dummy.png';
+  static const String livenessDummy = '$imagePath/liveness-dummy.png';
   static const String chainbornMemberShipDummy =
       '$imagePath/chainborn-membership-dummy.png';
   static const String twitterCardDummy = '$imagePath/twitter-card-dummy.png';
@@ -121,6 +124,9 @@ class ImageStrings {
   static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
   static const String dummyOver13Card = '$imagePath/dummy_over13_card.png';
   static const String dummyOver15Card = '$imagePath/dummy_over15_card.png';
+  static const String dummyOver21Card = '$imagePath/dummy_over21_card.png';
+  static const String dummyOver50Card = '$imagePath/dummy_over50_card.png';
+  static const String dummyOver65Card = '$imagePath/dummy_over65_card.png';
   static const String dummyPassportFootprintCard =
       '$imagePath/dummy_passport_footprint_card.png';
   static const String dummyAgeRangeCard = '$imagePath/dummy_age_range_card.png';

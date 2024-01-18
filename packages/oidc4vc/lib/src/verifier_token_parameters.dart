@@ -6,14 +6,16 @@ import 'package:oidc4vc/src/token_parameters.dart';
 /// for verifier interactions.
 class VerifierTokenParameters extends TokenParameters {
   ///
-  VerifierTokenParameters(
-    super.privateKey,
-    super.did,
-    super.kid,
-    this.audience,
-    this.credentials,
+  VerifierTokenParameters({
+    required super.privateKey,
+    required super.did,
+    required super.mediaType,
+    required this.audience,
+    required this.credentials,
+    required super.useJWKThumbPrint,
     this.nonce,
-  );
+    super.kid,
+  });
 
   /// [audience] is is client id of the request
   final String audience;
@@ -22,7 +24,7 @@ class VerifierTokenParameters extends TokenParameters {
   final List<String> credentials;
 
   /// [nonce] is a number given by verifier to handle request authentication
-  final String nonce;
+  final String? nonce;
 
   /// [jsonIdOrJwtList] is list of jwt or jsonIds from the credentials
   ///  wich contains other credential's metadata

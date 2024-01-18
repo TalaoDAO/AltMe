@@ -6,26 +6,28 @@ class DrawerCategoryItem extends StatelessWidget {
   const DrawerCategoryItem({
     super.key,
     required this.title,
-    required this.subTitle,
+    this.subTitle,
     this.onClick,
+    this.trailing,
+    this.padding = const EdgeInsets.all(Sizes.spaceSmall),
   });
 
   final String title;
-  final String subTitle;
+  final String? subTitle;
   final VoidCallback? onClick;
+  final Widget? trailing;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onClick,
       child: Container(
-        padding: const EdgeInsets.all(Sizes.spaceSmall),
+        padding: padding,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.drawerSurface,
           borderRadius: const BorderRadius.all(
-            Radius.circular(
-              Sizes.normalRadius,
-            ),
+            Radius.circular(Sizes.normalRadius),
           ),
         ),
         child: Row(
@@ -39,25 +41,26 @@ class DrawerCategoryItem extends StatelessWidget {
                     title,
                     style: Theme.of(context).textTheme.drawerCategoryTitle,
                   ),
-                  const SizedBox(
-                    height: Sizes.space2XSmall,
-                  ),
-                  Text(
-                    subTitle,
-                    style: Theme.of(context).textTheme.drawerCategorySubTitle,
-                  ),
+                  if (subTitle != null) ...[
+                    const SizedBox(height: Sizes.space2XSmall),
+                    Text(
+                      subTitle!,
+                      style: Theme.of(context).textTheme.drawerCategorySubTitle,
+                    ),
+                  ],
                 ],
               ),
             ),
-            Container(
-              width: Sizes.icon3x,
-              alignment: Alignment.center,
-              child: Icon(
+            if (trailing != null)
+              trailing!
+            else ...[
+              const SizedBox(width: 16),
+              Icon(
                 Icons.chevron_right,
                 size: Sizes.icon2x,
                 color: Theme.of(context).colorScheme.unSelectedLabel,
               ),
-            ),
+            ],
           ],
         ),
       ),

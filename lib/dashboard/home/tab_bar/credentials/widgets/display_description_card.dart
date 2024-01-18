@@ -31,7 +31,7 @@ class DisplayDescriptionCard extends StatelessWidget {
       context.l10n,
     );
     if (nameValue == '') {
-      nameValue = credentialModel.display.descriptionFallback;
+      nameValue = credentialModel.display?.description ?? '';
     }
 
     return nameValue;

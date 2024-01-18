@@ -3,9 +3,12 @@ part of 'credential_subject_type.dart';
 extension CredentialSubjectTypeExtension on CredentialSubjectType {
   Color backgroundColor(CredentialModel credentialModel) {
     final Color backgroundColor;
-    if (credentialModel.display.backgroundColor != '') {
+    if (credentialModel.display?.backgroundColor != null) {
       backgroundColor = Color(
-        int.parse('FF${credentialModel.display.backgroundColor}', radix: 16),
+        int.parse(
+          'FF${credentialModel.display?.backgroundColor!.replaceAll('#', '')}',
+          radix: 16,
+        ),
       );
     } else {
       backgroundColor = defaultBackgroundColor;
@@ -39,6 +42,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xff8247E5);
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.bloometaPass:
+      case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.nationality:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
@@ -52,9 +56,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.verifiableIdCard:
       case CredentialSubjectType.linkedInCard:
-      case CredentialSubjectType.over18:
       case CredentialSubjectType.over13:
       case CredentialSubjectType.over15:
+      case CredentialSubjectType.over18:
+      case CredentialSubjectType.over21:
+      case CredentialSubjectType.over50:
+      case CredentialSubjectType.over65:
       case CredentialSubjectType.passportFootprint:
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.emailPass:
@@ -108,6 +115,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'DefiCompliance';
       case CredentialSubjectType.bloometaPass:
         return 'BloometaPass';
+      case CredentialSubjectType.livenessCard:
+        return 'Liveness';
       case CredentialSubjectType.troopezPass:
         return 'TroopezPass';
       case CredentialSubjectType.pigsPass:
@@ -166,12 +175,18 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'LinkedinCard';
       case CredentialSubjectType.learningAchievement:
         return 'LearningAchievement';
-      case CredentialSubjectType.over18:
-        return 'Over18';
       case CredentialSubjectType.over13:
         return 'Over13';
       case CredentialSubjectType.over15:
         return 'Over15';
+      case CredentialSubjectType.over18:
+        return 'Over18';
+      case CredentialSubjectType.over21:
+        return 'Over21';
+      case CredentialSubjectType.over50:
+        return 'Over50';
+      case CredentialSubjectType.over65:
+        return 'Over65';
       case CredentialSubjectType.passportFootprint:
         return 'PassportNumber';
       case CredentialSubjectType.phonePass:
@@ -235,6 +250,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return DefiComplianceModel.fromJson(json);
       case CredentialSubjectType.bloometaPass:
         return BloometaPassModel.fromJson(json);
+      case CredentialSubjectType.livenessCard:
+        return LivenessCardModel.fromJson(json);
       case CredentialSubjectType.troopezPass:
         return TroopezPassModel.fromJson(json);
       case CredentialSubjectType.pigsPass:
@@ -283,12 +300,18 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return VerifiableIdCardModel.fromJson(json);
       case CredentialSubjectType.learningAchievement:
         return LearningAchievementModel.fromJson(json);
-      case CredentialSubjectType.over18:
-        return Over18Model.fromJson(json);
       case CredentialSubjectType.over13:
         return Over13Model.fromJson(json);
       case CredentialSubjectType.over15:
         return Over15Model.fromJson(json);
+      case CredentialSubjectType.over18:
+        return Over18Model.fromJson(json);
+      case CredentialSubjectType.over21:
+        return Over21Model.fromJson(json);
+      case CredentialSubjectType.over50:
+        return Over50Model.fromJson(json);
+      case CredentialSubjectType.over65:
+        return Over65Model.fromJson(json);
       case CredentialSubjectType.passportFootprint:
         return PassportFootprintModel.fromJson(json);
       case CredentialSubjectType.phonePass:
@@ -360,8 +383,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     if (this == CredentialSubjectType.over18 ||
         this == CredentialSubjectType.over13 ||
         this == CredentialSubjectType.over15 ||
+        this == CredentialSubjectType.over21 ||
+        this == CredentialSubjectType.over50 ||
+        this == CredentialSubjectType.over65 ||
         this == CredentialSubjectType.ageRange ||
-        this == CredentialSubjectType.defiCompliance) {
+        this == CredentialSubjectType.defiCompliance ||
+        this == CredentialSubjectType.livenessCard) {
       return true;
     }
     return false;
@@ -374,12 +401,38 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       return KycVcType.over13;
     } else if (this == CredentialSubjectType.over15) {
       return KycVcType.over15;
+    } else if (this == CredentialSubjectType.over21) {
+      return KycVcType.over21;
+    } else if (this == CredentialSubjectType.over50) {
+      return KycVcType.over50;
+    } else if (this == CredentialSubjectType.over65) {
+      return KycVcType.over65;
     } else if (this == CredentialSubjectType.ageRange) {
       return KycVcType.ageRange;
     } else if (this == CredentialSubjectType.defiCompliance) {
       return KycVcType.defiCompliance;
     } else {
       return KycVcType.verifiableId;
+    }
+  }
+
+  String get aiValidationUrl {
+    if (this == CredentialSubjectType.over13) {
+      return Urls.over13AIValidationUrl;
+    } else if (this == CredentialSubjectType.over15) {
+      return Urls.over15AIValidationUrl;
+    } else if (this == CredentialSubjectType.over18) {
+      return Urls.over18AIValidationUrl;
+    } else if (this == CredentialSubjectType.over21) {
+      return Urls.over21AIValidationUrl;
+    } else if (this == CredentialSubjectType.over50) {
+      return Urls.over50AIValidationUrl;
+    } else if (this == CredentialSubjectType.over65) {
+      return Urls.over65AIValidationUrl;
+    } else if (this == CredentialSubjectType.ageRange) {
+      return Urls.ageRangeAIValidationUrl;
+    } else {
+      throw Exception();
     }
   }
 
@@ -390,6 +443,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.over13 ||
         this == CredentialSubjectType.over15 ||
         this == CredentialSubjectType.over18 ||
+        this == CredentialSubjectType.over21 ||
+        this == CredentialSubjectType.over50 ||
+        this == CredentialSubjectType.over65 ||
         this == CredentialSubjectType.verifiableIdCard ||
         this == CredentialSubjectType.ageRange ||
         this == CredentialSubjectType.nationality ||
@@ -443,6 +499,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Defi Compliance';
       case CredentialSubjectType.bloometaPass:
         return 'Bloometa';
+      case CredentialSubjectType.livenessCard:
+        return 'Liveness';
       case CredentialSubjectType.troopezPass:
         return 'Troopez Pass';
       case CredentialSubjectType.pigsPass:
@@ -501,12 +559,18 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Linkedin Card';
       case CredentialSubjectType.learningAchievement:
         return 'Learning Achievement';
-      case CredentialSubjectType.over18:
-        return 'Over18';
       case CredentialSubjectType.over13:
         return 'Over13';
       case CredentialSubjectType.over15:
         return 'Over15';
+      case CredentialSubjectType.over18:
+        return 'Over18';
+      case CredentialSubjectType.over21:
+        return 'Over18';
+      case CredentialSubjectType.over50:
+        return 'Over18';
+      case CredentialSubjectType.over65:
+        return 'Over18';
       case CredentialSubjectType.passportFootprint:
         return 'Passport Number';
       case CredentialSubjectType.phonePass:
@@ -568,6 +632,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
       case CredentialSubjectType.bloometaPass:
+      case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
       case CredentialSubjectType.ageRange:
@@ -575,9 +640,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.gender:
       case CredentialSubjectType.identityPass:
       case CredentialSubjectType.verifiableIdCard:
-      case CredentialSubjectType.over18:
       case CredentialSubjectType.over13:
       case CredentialSubjectType.over15:
+      case CredentialSubjectType.over18:
+      case CredentialSubjectType.over21:
+      case CredentialSubjectType.over50:
+      case CredentialSubjectType.over65:
       case CredentialSubjectType.passportFootprint:
       case CredentialSubjectType.residentCard:
       case CredentialSubjectType.voucher:
@@ -639,6 +707,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 0;
       case CredentialSubjectType.bloometaPass:
         return 76;
+      case CredentialSubjectType.livenessCard:
+        return 75;
       case CredentialSubjectType.troopezPass:
         return 73;
       case CredentialSubjectType.pigsPass:
@@ -684,7 +754,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.certificateOfEmployment:
         return 85;
       case CredentialSubjectType.defaultCredential:
-        return 0;
+        return 100;
       case CredentialSubjectType.ecole42LearningAchievement:
         return 0;
       case CredentialSubjectType.emailPass:
@@ -697,12 +767,18 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 86;
       case CredentialSubjectType.learningAchievement:
         return 0;
-      case CredentialSubjectType.over18:
-        return 97;
       case CredentialSubjectType.over13:
-        return 95;
+        return 97.3;
       case CredentialSubjectType.over15:
+        return 97.2;
+      case CredentialSubjectType.over18:
+        return 97.1;
+      case CredentialSubjectType.over21:
+        return 97;
+      case CredentialSubjectType.over50:
         return 96;
+      case CredentialSubjectType.over65:
+        return 95;
       case CredentialSubjectType.passportFootprint:
         return 91;
       case CredentialSubjectType.phonePass:

@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -24,76 +23,77 @@ class WalletDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const DialogCloseButton(),
+            const DialogCloseButton(showText: false),
             const SizedBox(height: 15),
+            Image.asset(
+              IconStrings.cardSend,
+              width: 50,
+              height: 50,
+              color: Theme.of(context).colorScheme.dialogText,
+            ),
+            const SizedBox(height: 30),
             Text(
-              l10n.walletAltme,
-              style: Theme.of(context).textTheme.defaultDialogTitle,
+              l10n.createTitle,
+              style: Theme.of(context).textTheme.defaultDialogTitle.copyWith(
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.dialogText),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 5),
             Text(
-              l10n.createTitle,
-              style: Theme.of(context).textTheme.defaultDialogSubtitle,
-              textAlign: TextAlign.center,
-            ),
-            Image.asset(
-              ImageStrings.createWalletImage,
-              fit: BoxFit.fitWidth,
-              width: MediaQuery.of(context).size.shortestSide * 0.5,
-            ),
-            Text(
               l10n.createSubtitle,
-              style: Theme.of(context).textTheme.defaultDialogSubtitle,
+              style: Theme.of(context)
+                  .textTheme
+                  .defaultDialogSubtitle
+                  .copyWith(color: Theme.of(context).colorScheme.dialogText),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 15),
-            MyElevatedButton(
-              text: l10n.create_wallet.toUpperCase(),
-              verticalSpacing: 20,
-              fontSize: 18,
-              borderRadius: 20,
-              onPressed: () {
-                Navigator.of(context).push<void>(
-                  EnterNewPinCodePage.route(
-                    isFromOnboarding: true,
-                    isValidCallback: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushAndRemoveUntil<void>(
-                        ActiviateBiometricsPage.route(
+            const SizedBox(height: 30),
+            Row(
+              children: [
+                Expanded(
+                  child: MyElevatedButton(
+                    text: l10n.create.toUpperCase(),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    verticalSpacing: 12,
+                    fontSize: 13,
+                    borderRadius: 8,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).push(
+                        ProtectWalletPage.route(
                           routeType: WalletRouteType.create,
                         ),
-                        (Route<dynamic> route) => route.isFirst,
                       );
                     },
-                    restrictToBack: false,
                   ),
-                );
-              },
-            ),
-            TextButton(
-              child: Text(
-                l10n.import_wallet.toUpperCase(),
-                style: Theme.of(context).textTheme.textButton,
-              ),
-              onPressed: () {
-                Navigator.of(context).push<void>(
-                  EnterNewPinCodePage.route(
-                    isFromOnboarding: true,
-                    isValidCallback: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushAndRemoveUntil<void>(
-                        ActiviateBiometricsPage.route(
-                          routeType: WalletRouteType.recover,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: MyOutlinedButton(
+                    text: l10n.import.toUpperCase(),
+                    verticalSpacing: 12,
+                    fontSize: 13,
+                    borderRadius: 8,
+                    textColor: Theme.of(context).colorScheme.lightPurple,
+                    borderColor: Theme.of(context)
+                        .colorScheme
+                        .defualtDialogCancelButtonBorderColor,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.popupBackground,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).push(
+                        ProtectWalletPage.route(
+                          routeType: WalletRouteType.import,
                         ),
-                        (Route<dynamic> route) => route.isFirst,
                       );
                     },
-                    restrictToBack: false,
                   ),
-                );
-              },
+                ),
+              ],
             ),
+            const SizedBox(height: 5),
           ],
         ),
       ),

@@ -125,6 +125,19 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     final outputDescriptors =
         widget.credentialModel.credentialManifest?.outputDescriptors;
 
+    final profileData = context.read<ProfileCubit>().state.model;
+
+    final isDeveloperMode = profileData.isDeveloperMode;
+
+    final credentialManifestSupport = profileData
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .credentialManifestSupport;
+
+    final isSecure = profileData.profileSetting.selfSovereignIdentityOptions
+        .customOidc4vcProfile.securityLevel;
+
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -152,8 +165,18 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.removeLast();
         }
 
-        final String format =
-            widget.credentialModel.jwt != null ? ' jwt_vc_json-ld' : 'ldp_vc';
+        String? format = widget.credentialModel.format;
+
+        format ??=
+            widget.credentialModel.jwt != null ? 'jwt_vc_json-ld' : 'ldp_vc';
+
+        final String issuerDid =
+            widget.credentialModel.credentialPreview.issuer;
+        final String subjectDid = widget
+                .credentialModel.credentialPreview.credentialSubjectModel.id ??
+            '';
+        final String type =
+            widget.credentialModel.credentialPreview.type.toString();
 
         return BasePage(
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
@@ -247,25 +270,104 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         const SizedBox(height: 10),
                         if (state.credentialDetailTabStatus ==
                             CredentialDetailTabStatus.informations) ...[
-                          const SizedBox(height: 10),
-                          CredentialActiveStatus(
-                            credentialStatus: state.credentialStatus,
-                          ),
-                          if (outputDescriptors != null) ...[
+                          if (isSecure ||
+                              (!isSecure &&
+                                  state.credentialStatus ==
+                                      CredentialStatus.active)) ...[
+                            const SizedBox(height: 10),
+                            CredentialActiveStatus(
+                              credentialStatus: state.credentialStatus,
+                            ),
+                          ],
+                          if (credentialManifestSupport &&
+                              outputDescriptors != null) ...[
                             const SizedBox(height: 10),
                             CredentialManifestDetails(
-                              outputDescriptor: outputDescriptors.first,
+                              outputDescriptor: outputDescriptors.firstOrNull,
                               credentialModel: widget.credentialModel,
                             ),
                           ],
-                          if (widget.credentialModel.pendingInfo == null) ...[
+                          if (!credentialManifestSupport &&
+                              widget.credentialModel.display != null) ...[
+                            const SizedBox(height: 10),
+                            DisplayWidget(
+                              display: widget.credentialModel.display!,
+                            ),
+                          ],
+                          if (widget.credentialModel.credentialPreview
+                                  .credentialSubjectModel
+                              is WalletCredentialModel) ...[
+                            WalletCredentialetailsWidget(
+                              credentialModel: widget.credentialModel,
+                            ),
+                          ],
+                          if (widget.credentialModel.pendingInfo == null &&
+                              isDeveloperMode) ...[
+                            const SizedBox(height: 10),
                             CredentialField(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 0,
-                                vertical: 8,
-                              ),
+                              padding: EdgeInsets.zero,
                               title: l10n.format,
                               value: format,
+                              titleColor:
+                                  Theme.of(context).colorScheme.titleColor,
+                              valueColor:
+                                  Theme.of(context).colorScheme.valueColor,
+                            ),
+                            const SizedBox(height: 10),
+                            CredentialField(
+                              padding: EdgeInsets.zero,
+                              title: l10n.issuerDID,
+                              value: issuerDid,
+                              titleColor:
+                                  Theme.of(context).colorScheme.titleColor,
+                              valueColor:
+                                  Theme.of(context).colorScheme.valueColor,
+                            ),
+                            if (widget.credentialModel.credentialPreview
+                                    .credentialSubjectModel
+                                is! WalletCredentialModel) ...[
+                              const SizedBox(height: 10),
+                              CredentialField(
+                                padding: EdgeInsets.zero,
+                                title: l10n.subjectDID,
+                                value: subjectDid,
+                                titleColor:
+                                    Theme.of(context).colorScheme.titleColor,
+                                valueColor:
+                                    Theme.of(context).colorScheme.valueColor,
+                              ),
+                            ],
+                            const SizedBox(height: 10),
+                            CredentialField(
+                              padding: EdgeInsets.zero,
+                              title: l10n.type,
+                              value: type,
+                              titleColor:
+                                  Theme.of(context).colorScheme.titleColor,
+                              valueColor:
+                                  Theme.of(context).colorScheme.valueColor,
+                            ),
+                          ],
+                          if (widget.credentialModel.pendingInfo != null) ...[
+                            const SizedBox(height: 10),
+                            CredentialField(
+                              padding: EdgeInsets.zero,
+                              title: l10n.issuer,
+                              value:
+                                  widget.credentialModel.pendingInfo!.issuer ??
+                                      '',
+                              titleColor:
+                                  Theme.of(context).colorScheme.titleColor,
+                              valueColor:
+                                  Theme.of(context).colorScheme.valueColor,
+                            ),
+                            const SizedBox(height: 10),
+                            CredentialField(
+                              padding: EdgeInsets.zero,
+                              title: l10n.dateOfRequest,
+                              value: UiDate.formatDate(
+                                widget.credentialModel.pendingInfo!.requestedAt,
+                              ),
                               titleColor:
                                   Theme.of(context).colorScheme.titleColor,
                               valueColor:
@@ -312,51 +414,54 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         ),
                         const SizedBox(height: 8),
                         if (widget.credentialModel.pendingInfo == null) ...[
-                          MyOutlinedButton(
-                            text: widget.credentialModel.isLinkeInCard
-                                ? l10n.exportToLinkedIn
-                                : l10n.share,
-                            onPressed: () {
-                              if (widget.credentialModel.isLinkeInCard) {
-                                Navigator.of(context).push<void>(
-                                  GetLinkedinInfoPage.route(
-                                    credentialModel: widget.credentialModel,
-                                  ),
-                                );
-                              } else {
-                                if (widget.credentialModel.isEbsiCard) {
-                                  /// removing type that was added in add_ebsi_credential.dart
-                                  widget
-                                      .credentialModel.data['credentialSubject']
-                                      .remove('type');
-                                }
-
-                                late String data;
-                                final String? jwt = widget.credentialModel.jwt;
-                                if (jwt != null) {
-                                  data = jwt;
+                          if (isDeveloperMode)
+                            MyOutlinedButton(
+                              text: widget.credentialModel.isLinkeInCard
+                                  ? l10n.exportToLinkedIn
+                                  : l10n.download,
+                              onPressed: () {
+                                if (widget.credentialModel.isLinkeInCard) {
+                                  Navigator.of(context).push<void>(
+                                    GetLinkedinInfoPage.route(
+                                      credentialModel: widget.credentialModel,
+                                    ),
+                                  );
                                 } else {
-                                  data =
-                                      jsonEncode(widget.credentialModel.data);
+                                  if (widget.credentialModel.isEbsiCard) {
+                                    /// removing type that was added in add_ebsi_credential.dart
+                                    widget.credentialModel
+                                        .data['credentialSubject']
+                                        .remove('type');
+                                  }
+
+                                  late String data;
+                                  final String? jwt =
+                                      widget.credentialModel.jwt;
+                                  if (jwt != null) {
+                                    data = jwt;
+                                  } else {
+                                    data =
+                                        jsonEncode(widget.credentialModel.data);
+                                  }
+
+                                  getLogger(
+                                    'CredentialDetailsPage - shared date',
+                                  ).i(data);
+
+                                  final box =
+                                      context.findRenderObject() as RenderBox?;
+                                  final subject = l10n.shareWith;
+
+                                  Share.share(
+                                    data,
+                                    subject: subject,
+                                    sharePositionOrigin:
+                                        box!.localToGlobal(Offset.zero) &
+                                            box.size,
+                                  );
                                 }
-
-                                getLogger('CredentialDetailsPage - shared date')
-                                    .i(data);
-
-                                final box =
-                                    context.findRenderObject() as RenderBox?;
-                                final subject = l10n.shareWith;
-
-                                Share.share(
-                                  data,
-                                  subject: subject,
-                                  sharePositionOrigin:
-                                      box!.localToGlobal(Offset.zero) &
-                                          box.size,
-                                );
-                              }
-                            },
-                          ),
+                              },
+                            ),
                         ] else ...[
                           MyOutlinedButton(
                             text: l10n.getItNow,

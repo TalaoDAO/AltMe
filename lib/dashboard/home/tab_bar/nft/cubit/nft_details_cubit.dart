@@ -26,7 +26,7 @@ class NftDetailsCubit extends Cubit<NftDetailsState> {
       emit(state.copyWith(status: AppStatus.loading));
       final selectedNetwork =
           manageNetworkCubit.state.network as EthereumNetwork;
-      final rpcUrl = selectedNetwork.rpcNodeUrl;
+      final rpcUrl = selectedNetwork.rpcNodeUrl as String;
       final chainId = selectedNetwork.chainId;
       final contractAddress = nftModel.contractAddress;
       final abi = await rootBundle.loadString('assets/abi/ssi-sbt-abi.json');
@@ -59,7 +59,7 @@ class NftDetailsCubit extends Cubit<NftDetailsState> {
             status: AppStatus.error,
             message: StateMessage.error(
               messageHandler: ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
               ),
               showDialog: true,

@@ -1,12 +1,10 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class ResetWalletMenu extends StatelessWidget {
   const ResetWalletMenu({super.key});
@@ -105,22 +103,15 @@ class ResetWalletView extends StatelessWidget {
               onPressed: state.isBackupCredentialSaved &&
                       state.isRecoveryPhraseWritten
                   ? () async {
-                      final pinCode =
-                          await getSecureStorage.get(SecureStorageKeys.pinCode);
-                      if (pinCode?.isEmpty ?? true) {
-                        await context.read<WalletCubit>().resetWallet();
-                        await context.read<AltmeChatSupportCubit>().dispose();
-                      } else {
-                        await Navigator.of(context).push<void>(
-                          PinCodePage.route(
-                            isValidCallback: () {
-                              context.read<WalletCubit>().resetWallet();
-                              context.read<AltmeChatSupportCubit>().dispose();
-                            },
-                            restrictToBack: false,
-                          ),
-                        );
-                      }
+                      await securityCheck(
+                        context: context,
+                        localAuthApi: LocalAuthApi(),
+                        onSuccess: () async {
+                          await context.read<ProfileCubit>().resetProfile();
+                          await context.read<WalletCubit>().resetWallet();
+                          await context.read<AltmeChatSupportCubit>().dispose();
+                        },
+                      );
                     }
                   : null,
             ),

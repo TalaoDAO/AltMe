@@ -112,11 +112,22 @@ class _CameraViewState extends State<CameraView> {
                   imageBytes: state.data!,
                   credentialsCubit: context.read<CredentialsCubit>(),
                   cameraCubit: context.read<CameraCubit>(),
+                  oidc4vciDraftType: context
+                      .read<ProfileCubit>()
+                      .state
+                      .model
+                      .profileSetting
+                      .selfSovereignIdentityOptions
+                      .customOidc4vcProfile
+                      .oidc4vciDraft,
                 );
             LoadingView().hide();
             await Navigator.pushReplacement<void, void>(
               context,
-              AiAgeResultPage.route(context),
+              AiAgeResultPage.route(
+                context: context,
+                credentialSubjectType: widget.credentialSubjectType,
+              ),
             );
           }
         },

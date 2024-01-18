@@ -68,7 +68,7 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
@@ -83,7 +83,9 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
 
     try {
       if (!isPermissionStatusGranted) {
-        throw ResponseMessage(ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE);
+        throw ResponseMessage(
+          message: ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE,
+        );
       }
       final dateTime = getDateTimeWithoutSpace();
       final fileName = 'linkedin-banner-$dateTime';
@@ -102,7 +104,8 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
           state.copyWith(
             status: AppStatus.success,
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_linkedInBannerSuccessfullyExported,
+              message: ResponseString
+                  .RESPONSE_STRING_linkedInBannerSuccessfullyExported,
             ),
           ),
         );
@@ -114,7 +117,7 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),

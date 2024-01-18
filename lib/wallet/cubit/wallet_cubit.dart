@@ -61,11 +61,8 @@ class WalletCubit extends Cubit<WalletState> {
     })? onComplete,
   }) async {
     if (isFromOnboarding) {
-      final String? ssiKey =
-          await secureStorageProvider.get(SecureStorageKeys.ssiKey);
-      if (ssiKey != null) {
-        await credentialsCubit.addRequiredCredentials(ssiKey: ssiKey);
-      }
+      // if enterprise and walletAttestation data is available and added
+      await credentialsCubit.addWalletCredential();
     }
 
     /// tracking added accounts
@@ -101,7 +98,8 @@ class WalletCubit extends Cubit<WalletState> {
         onComplete?.call(
           cryptoAccount: CryptoAccount(data: cryptoAccountDataList),
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST,
+            message:
+                ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST,
           ),
         );
         return;
@@ -257,7 +255,7 @@ class WalletCubit extends Cubit<WalletState> {
     onComplete?.call(
       cryptoAccount: updatedCryptoAccount,
       messageHandler: ResponseMessage(
-        ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+        message: ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
       ),
     );
 
@@ -349,7 +347,7 @@ class WalletCubit extends Cubit<WalletState> {
     /// If we are not using crypto in the wallet we are not generating
     /// AssociatedAddress credentials.
     final credential = Parameters.walletHandlesCrypto
-        ? await credentialsCubit.createAssociatedWalletCredential(
+        ? await credentialsCubit.createOrUpdateAssociatedWalletCredential(
             blockchainType: blockchainType,
             cryptoAccountData: cryptoAccountData,
           )
@@ -488,7 +486,9 @@ class WalletCubit extends Cubit<WalletState> {
 
   Future<void> resetWallet() async {
     await secureStorageProvider.deleteAllExceptsSomeKeys(
-      [SecureStorageKeys.version],
+      [
+        SecureStorageKeys.version,
+      ],
     );
 
     // await credentialsRepository.deleteAll();

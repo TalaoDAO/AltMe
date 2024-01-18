@@ -59,10 +59,10 @@ class ScanState extends Equatable {
     );
   }
 
-  ScanState error({required MessageHandler messageHandler}) {
+  ScanState error({required StateMessage message}) {
     return ScanState(
       status: ScanStatus.error,
-      message: StateMessage.error(messageHandler: messageHandler),
+      message: message,
     );
   }
 

@@ -204,7 +204,8 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           state.copyWith(
             status: AppStatus.loading,
             loadingText: ResponseMessage(
-              ResponseString.RESPONSE_STRING_downloadingCircuitLoadingMessage,
+              message: ResponseString
+                  .RESPONSE_STRING_downloadingCircuitLoadingMessage,
             ),
           ),
         );
@@ -224,7 +225,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
             log.i(roundedValue);
           } else {
             throw ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             );
           }
@@ -239,7 +240,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           state.copyWith(
             message: StateMessage.error(
               messageHandler: ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
               ),
             ),
@@ -277,7 +278,8 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           status: AppStatus.error,
           message: StateMessage.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_pleaseSwitchPolygonNetwork,
+              message:
+                  ResponseString.RESPONSE_STRING_pleaseSwitchPolygonNetwork,
             ),
             injectedMessage: state.currentNetwork.oppositeNetwork,
           ),
@@ -358,7 +360,8 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       } catch (e) {
         log.e('can not get the credntials manifest for polygon error: $e');
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          message: ResponseString
+              .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
         );
       }
     } else if (iden3MessageEntity.messageType ==
@@ -372,7 +375,8 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       );
     } else {
       throw ResponseMessage(
-        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        message:
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
       );
     }
   }
@@ -410,7 +414,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
             status: isGenerateProof ? AppStatus.goBack : AppStatus.idle,
             message: StateMessage.success(
               messageHandler: ResponseMessage(
-                isGenerateProof
+                message: isGenerateProof
                     ? ResponseString.RESPONSE_STRING_successfullyGeneratingProof
                     : ResponseString.RESPONSE_STRING_succesfullyAuthenticated,
               ),
@@ -419,7 +423,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         );
       } else {
         throw ResponseMessage(
-          isGenerateProof
+          message: isGenerateProof
               ? ResponseString.RESPONSE_STRING_errorGeneratingProof
               : ResponseString.RESPONSE_STRING_authenticationFailed,
         );
@@ -433,7 +437,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           state.copyWith(
             message: StateMessage.error(
               messageHandler: ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
               ),
             ),
@@ -496,7 +500,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           state.copyWith(
             message: StateMessage.error(
               messageHandler: ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
               ),
             ),
@@ -517,8 +521,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       id: claimEntity.id,
       image: 'image',
       data: jsonCredential,
-      display: Display.emptyDisplay()..toJson(),
       shareLink: '',
+      jwt: null,
+      format: 'ldp_vc',
       credentialPreview: credentialPreview,
       credentialManifest: credentialManifest,
       expirationDate: claimEntity.expiration,

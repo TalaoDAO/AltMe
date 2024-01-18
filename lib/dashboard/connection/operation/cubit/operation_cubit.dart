@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -88,7 +89,7 @@ class OperationCubit extends Cubit<OperationState> {
           log.i('currentAccount -$currentAccount');
           if (currentAccount == null) {
             throw ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             );
           } else {
@@ -105,7 +106,7 @@ class OperationCubit extends Cubit<OperationState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
@@ -149,7 +150,7 @@ class OperationCubit extends Cubit<OperationState> {
             status: AppStatus.errorWhileFetching,
             message: StateMessage.error(
               messageHandler: ResponseMessage(
-                ResponseString
+                message: ResponseString
                     .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
               ),
             ),
@@ -276,7 +277,7 @@ class OperationCubit extends Cubit<OperationState> {
             state.copyWith(
               status: AppStatus.errorWhileFetching,
               message: StateMessage.error(
-                messageHandler: ResponseMessage(responseString),
+                messageHandler: ResponseMessage(message: responseString),
               ),
             ),
           );
@@ -286,7 +287,7 @@ class OperationCubit extends Cubit<OperationState> {
               status: AppStatus.errorWhileFetching,
               message: StateMessage.error(
                 messageHandler: ResponseMessage(
-                  ResponseString.RESPONSE_STRING_OPERATION_FAILED,
+                  message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
                 ),
               ),
             ),
@@ -298,7 +299,7 @@ class OperationCubit extends Cubit<OperationState> {
             status: AppStatus.errorWhileFetching,
             message: StateMessage.error(
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_OPERATION_COMPLETED,
+                message: ResponseString.RESPONSE_STRING_OPERATION_COMPLETED,
               ),
             ),
           ),
@@ -353,11 +354,11 @@ class OperationCubit extends Cubit<OperationState> {
             case BlockchainType.ethereum:
               rpcUrl = await web3RpcMainnetInfuraURL();
             case BlockchainType.fantom:
-              rpcUrl = FantomNetwork.mainNet().rpcNodeUrl;
+              rpcUrl = FantomNetwork.mainNet().rpcNodeUrl as String;
             case BlockchainType.polygon:
-              rpcUrl = PolygonNetwork.mainNet().rpcNodeUrl;
+              rpcUrl = PolygonNetwork.mainNet().rpcNodeUrl as String;
             case BlockchainType.binance:
-              rpcUrl = BinanceNetwork.mainNet().rpcNodeUrl;
+              rpcUrl = BinanceNetwork.mainNet().rpcNodeUrl as String;
           }
 
           log.i('rpcUrl - $rpcUrl');
@@ -387,7 +388,7 @@ class OperationCubit extends Cubit<OperationState> {
             status: AppStatus.success,
             message: StateMessage.success(
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_OPERATION_COMPLETED,
+                message: ResponseString.RESPONSE_STRING_OPERATION_COMPLETED,
               ),
             ),
           ),
@@ -396,7 +397,7 @@ class OperationCubit extends Cubit<OperationState> {
         unawaited(tokensCubit.fetchFromZero());
       } else {
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_OPERATION_FAILED,
+          message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
         );
       }
     } catch (e) {
@@ -409,7 +410,7 @@ class OperationCubit extends Cubit<OperationState> {
           emit(
             state.error(
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
+                message: ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
               ),
             ),
           );
@@ -417,7 +418,7 @@ class OperationCubit extends Cubit<OperationState> {
           emit(
             state.error(
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_OPERATION_FAILED,
+                message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
               ),
             ),
           );
@@ -426,7 +427,7 @@ class OperationCubit extends Cubit<OperationState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_OPERATION_FAILED,
+              message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
             ),
           ),
         );
@@ -457,117 +458,141 @@ class OperationCubit extends Cubit<OperationState> {
     emit(state.copyWith(status: AppStatus.goBack));
   }
 
+  String? rpcNodeUrlForTransaction;
+
   Future<OperationsList> getBeaonOperationList({
     required bool preCheckBalance,
   }) async {
-    try {
-      log.i('getOperationList');
+    int retryCount = 0;
+    const maxRetries = Parameters.maxEntries;
+    while (retryCount < maxRetries) {
+      try {
+        log.i('getOperationList');
 
-      final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
+        final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
 
-      final CryptoAccountData? currentAccount = walletCubit
-          .getCryptoAccountData(beaconRequest.request!.sourceAddress!);
+        final CryptoAccountData? currentAccount = walletCubit
+            .getCryptoAccountData(beaconRequest.request!.sourceAddress!);
 
-      if (currentAccount == null) {
-        throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-        );
-      }
-
-      late String baseUrl;
-      late String rpcNodeUrl;
-
-      switch (beaconRequest.request!.network!.type!) {
-        case NetworkType.mainnet:
-          baseUrl = TezosNetwork.mainNet().apiUrl;
-          rpcNodeUrl = TezosNetwork.mainNet().rpcNodeUrl;
-        case NetworkType.ghostnet:
-          baseUrl = TezosNetwork.ghostnet().apiUrl;
-          rpcNodeUrl = TezosNetwork.ghostnet().rpcNodeUrl;
-        case NetworkType.mondaynet:
-        case NetworkType.delphinet:
-        case NetworkType.edonet:
-        case NetworkType.florencenet:
-        case NetworkType.granadanet:
-        case NetworkType.hangzhounet:
-        case NetworkType.ithacanet:
-        case NetworkType.jakartanet:
-        case NetworkType.kathmandunet:
-        case NetworkType.custom:
+        if (currentAccount == null) {
           throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            message: ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           );
-      }
+        }
 
-      // TezartError also handles low balance
+        late String baseUrl;
 
-      if (preCheckBalance) {
-        /// check xtz balance
-        log.i('checking xtz');
-        final int balance = await dioClient.get(
-          '$baseUrl/v1/accounts/${beaconRequest.request!.sourceAddress!}/balance',
-        ) as int;
-        log.i('total xtz - $balance');
-        final formattedBalance = int.parse(
-          balance.toStringAsFixed(6).replaceAll('.', '').replaceAll(',', ''),
-        );
+        final NetworkType? networkType = beaconRequest.request?.network?.type;
 
-        final amount = int.parse(beaconRequest.operationDetails!.first.amount!);
+        if (networkType == null) {
+          throw ResponseMessage(
+            message: ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          );
+        }
 
-        if (amount >= formattedBalance) {
-          emit(
-            state.copyWith(
-              message: StateMessage.error(
-                messageHandler: ResponseMessage(
-                  ResponseString.RESPONSE_STRING_transactionIsLikelyToFail,
+        if (networkType == NetworkType.mainnet) {
+          baseUrl = TezosNetwork.mainNet().apiUrl;
+          final rpcNodeUrlList =
+              TezosNetwork.mainNet().rpcNodeUrl as List<String>;
+
+          rpcNodeUrlForTransaction ??=
+              rpcNodeUrlList[Random().nextInt(rpcNodeUrlList.length)];
+        } else if (networkType == NetworkType.ghostnet) {
+          baseUrl = TezosNetwork.ghostnet().apiUrl;
+          rpcNodeUrlForTransaction =
+              TezosNetwork.ghostnet().rpcNodeUrl as String;
+        } else {
+          throw ResponseMessage(
+            message: ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          );
+        }
+
+        // TezartError also handles low balance
+
+        if (preCheckBalance) {
+          /// check xtz balance
+          log.i('checking xtz');
+          final int balance = await dioClient.get(
+            '$baseUrl/v1/accounts/${beaconRequest.request!.sourceAddress!}/balance',
+          ) as int;
+          log.i('total xtz - $balance');
+          final formattedBalance = int.parse(
+            balance.toStringAsFixed(6).replaceAll('.', '').replaceAll(',', ''),
+          );
+
+          final amount =
+              int.parse(beaconRequest.operationDetails!.first.amount!);
+
+          if (amount >= formattedBalance) {
+            emit(
+              state.copyWith(
+                message: StateMessage.error(
+                  messageHandler: ResponseMessage(
+                    message: ResponseString
+                        .RESPONSE_STRING_transactionIsLikelyToFail,
+                  ),
                 ),
               ),
-            ),
+            );
+          }
+        }
+
+        final client = TezartClient(rpcNodeUrlForTransaction!);
+        final keystore =
+            keyGenerator.getKeystore(secretKey: currentAccount.secretKey);
+
+        final operationList = OperationsList(
+          source: keystore,
+          publicKey: keystore.publicKey,
+          rpcInterface: client.rpcInterface,
+        );
+
+        final List<Operation> operations = getBeaonOperation();
+        for (final element in operations) {
+          operationList.appendOperation(element);
+        }
+
+        final isReveal = await client.isKeyRevealed(keystore.address);
+        if (!isReveal) {
+          operationList.prependOperation(RevealOperation());
+        }
+        log.i(
+          'publicKey: ${keystore.publicKey} '
+          'amount: ${state.amount} '
+          'networkFee: ${state.fee} '
+          'address: ${keystore.address} =>To address: '
+          '${beaconRequest.operationDetails!.first.destination!}',
+        );
+
+        return operationList;
+      } catch (e, s) {
+        log.e('error : $e, s: $s');
+        retryCount++;
+        log.i('retryCount: $retryCount');
+
+        if (e is MessageHandler) {
+          rethrow;
+        } else if (e is TezartNodeError) {
+          log.e('e: $e , metadata: ${e.metadata} , s: $s');
+          if (retryCount < maxRetries) {
+            await Future<void>.delayed(const Duration(seconds: 1));
+          } else {
+            rethrow;
+          }
+        } else {
+          throw ResponseMessage(
+            message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
           );
         }
       }
-
-      final client = TezartClient(rpcNodeUrl);
-      final keystore =
-          keyGenerator.getKeystore(secretKey: currentAccount.secretKey);
-
-      final operationList = OperationsList(
-        source: keystore,
-        publicKey: keystore.publicKey,
-        rpcInterface: client.rpcInterface,
-      );
-
-      final List<Operation> operations = getBeaonOperation();
-      for (final element in operations) {
-        operationList.appendOperation(element);
-      }
-
-      final isReveal = await client.isKeyRevealed(keystore.address);
-      if (!isReveal) {
-        operationList.prependOperation(RevealOperation());
-      }
-      log.i(
-        'publicKey: ${keystore.publicKey} '
-        'amount: ${state.amount} '
-        'networkFee: ${state.fee} '
-        'address: ${keystore.address} =>To address: '
-        '${beaconRequest.operationDetails!.first.destination!}',
-      );
-
-      return operationList;
-    } catch (e, s) {
-      log.e('error : $e, s: $s');
-      if (e is MessageHandler) {
-        rethrow;
-      } else if (e is TezartNodeError) {
-        log.e('e: $e , metadata: ${e.metadata} , s: $s');
-        rethrow;
-      } else {
-        throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_OPERATION_FAILED,
-        );
-      }
     }
+
+    throw ResponseMessage(
+      message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
+    );
   }
 
   List<Operation> getBeaonOperation() {

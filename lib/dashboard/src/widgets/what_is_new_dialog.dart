@@ -59,9 +59,13 @@ class WhatIsNewDialog extends StatelessWidget {
                         ),
                         child: Column(
                           children: [
-                            const AltMeLogo(
-                              color: Colors.white,
-                              size: Sizes.logoLarge * 1.05,
+                            WalletLogo(
+                              profileModel:
+                                  context.read<ProfileCubit>().state.model,
+                              height: Sizes.logoLarge * 1.05,
+                              width: MediaQuery.of(context).size.shortestSide *
+                                  0.5,
+                              showPoweredBy: true,
                             ),
                             Text(
                               l10n.whatsNew,
@@ -76,6 +80,50 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'Improve Enterprise Wallet',
+                                'User experience improvement',
+                                'Bug fixes',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '2.0.8',
+                              features: [
+                                'New Enterprise Wallet mode',
+                                'Upload Enterprise Wallet profiles',
+                                'Suspension/Revocation of wallet instances',
+                                'Support of Decentralized Identity Interop Profile (DIIP OIDC4VC profile)',
+                                'Attestation based client authentication (RFC7521)',
+                                '2FA (biometric + PIN code)',
+                                'Bug fixes',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.25.2',
+                              features: [
+                                'Developer mode improvement',
+                                'OIDC4VCI improvement',
+                                'Update code licenses',
+                                'Bug correction',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.23.0',
+                              features: [
+                                'Developer mode improvement',
+                                'Bug correction',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.21.8',
+                              features: [
+                                'Developper mode',
+                                'New splash screen',
+                                'extended OIDC4VC options',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.20.18',
+                              features: [
                                 'Wallet connect V2 integration',
                                 'Bug fixes',
                               ],

@@ -8,8 +8,6 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:altme/theme/app_theme/app_theme.dart';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
@@ -41,9 +39,11 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   void initState() {
-    Future<void>.delayed(const Duration(milliseconds: 500), () async {
-      await context.read<SplashCubit>().initialiseApp();
-    });
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        await context.read<SplashCubit>().initialiseApp();
+      },
+    );
     super.initState();
   }
 
@@ -81,6 +81,7 @@ class _SplashViewState extends State<SplashView> {
     final l10n = context.l10n;
     String beaconData = '';
     bool isBeaconRequest = false;
+
     if (uri.toString().startsWith('${Urls.appDeepLink}/dashboard')) {
       await Navigator.pushAndRemoveUntil<void>(
         context,
@@ -91,26 +92,13 @@ class _SplashViewState extends State<SplashView> {
     }
 
     if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
-      final url = uri.toString().split(Parameters.oidc4vcUniversalLink)[1];
+      await context.read<QRCodeScanCubit>().authorizedFlowStart(uri!);
+      return;
+    }
 
-      final List<String> parts = url.split('?');
-
-      final String modifiedUrl = '${parts[0]}?${parts.sublist(1).join('&')}';
-
-      final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-          getOIDC4VCTypeForIssuance(modifiedUrl);
-
-      if (currentOIIDC4VCTypeForIssuance != null) {
-        /// issuer side (oidc4VCI)
-
-        await context.read<QRCodeScanCubit>().startOIDC4VCCredentialIssuance(
-              scannedResponse: modifiedUrl,
-              currentOIIDC4VCType: currentOIIDC4VCTypeForIssuance,
-              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-            );
-        return;
-      }
-
+    if (uri.toString().startsWith(Parameters.authorizeEndPoint)) {
+      context.read<DeepLinkCubit>().addDeepLink(uri!.toString());
+      await context.read<QRCodeScanCubit>().deepLink();
       return;
     }
 
@@ -160,6 +148,7 @@ class _SplashViewState extends State<SplashView> {
             await secure_storage.getSecureStorage.get(SecureStorageKeys.ssiKey);
         if (ssiKey != null) {
           await context.read<QRCodeScanCubit>().deepLink();
+          return;
         }
       }
       if (key == 'type' && value == 'tzip10') {
@@ -168,20 +157,14 @@ class _SplashViewState extends State<SplashView> {
       if (key == 'data') {
         beaconData = value;
       }
-      if (uri.scheme == 'openid' && uri.authority == 'initiate_issuance') {
-        final OIDC4VCType? currentOIIDC4VCTypeForIssuance =
-            getOIDC4VCTypeForIssuance(uri.toString());
-
-        if (currentOIIDC4VCTypeForIssuance != null) {
-          // ignore: require_trailing_commas
-          await context.read<QRCodeScanCubit>().startOIDC4VCCredentialIssuance(
-                scannedResponse: uri.toString(),
-                currentOIIDC4VCType: currentOIIDC4VCTypeForIssuance,
-                qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-              );
-        }
-      }
     });
+
+    if (isOIDC4VCIUrl(uri)) {
+      context.read<DeepLinkCubit>().addDeepLink(uri.toString());
+      await context.read<QRCodeScanCubit>().deepLink();
+      return;
+    }
+
     if (isBeaconRequest && beaconData != '') {
       unawaited(
         context.read<BeaconCubit>().peerFromDeepLink(beaconData),
@@ -241,51 +224,56 @@ class _SplashViewState extends State<SplashView> {
         walletConnectBlocListener,
         polygonIdBlocListener,
       ],
-      child: Scaffold(
-        body: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).colorScheme.darkGradientStartColor,
-                Theme.of(context).colorScheme.darkGradientEndColor,
-              ],
-              end: Alignment.topCenter,
-              begin: Alignment.bottomCenter,
-            ),
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const Spacer(flex: 3),
-                  const TitleText(),
-                  const Spacer(flex: 1),
-                  const SubTitle(),
-                  const Spacer(flex: 2),
-                  const SplashImage(),
-                  const Spacer(flex: 3),
-                  const LoadingText(),
-                  const SizedBox(height: 10),
-                  BlocBuilder<SplashCubit, SplashState>(
-                    builder: (context, state) {
-                      return TweenAnimationBuilder(
-                        tween: Tween<double>(begin: 0, end: state.loadedValue),
-                        duration: const Duration(milliseconds: 500),
-                        builder: (context, value, child) {
-                          return LoadingProgress(value: value);
+      child: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          if (state.status != AppStatus.success) return Container();
+
+          return BasePage(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            scrollView: false,
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      const Spacer(flex: 2),
+                      WalletLogo(
+                        profileModel: state.model,
+                        width: MediaQuery.of(context).size.shortestSide * 0.6,
+                        height: MediaQuery.of(context).size.longestSide * 0.2,
+                      ),
+                      const Spacer(flex: 2),
+                      TitleText(profileModel: state.model),
+                      const Spacer(flex: 1),
+                      SubTitle(profileModel: state.model),
+                      const Spacer(flex: 5),
+                      if (state.model.profileType.showSponseredBy)
+                        const PoweredByText()
+                      else
+                        const LoadingText(),
+                      const SizedBox(height: 10),
+                      BlocBuilder<SplashCubit, SplashState>(
+                        builder: (context, state) {
+                          return TweenAnimationBuilder(
+                            tween:
+                                Tween<double>(begin: 0, end: state.loadedValue),
+                            duration: const Duration(milliseconds: 500),
+                            builder: (context, value, child) {
+                              return LoadingProgress(value: value);
+                            },
+                          );
                         },
-                      );
-                    },
+                      ),
+                      const Spacer(flex: 2),
+                    ],
                   ),
-                  const Spacer(flex: 2),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

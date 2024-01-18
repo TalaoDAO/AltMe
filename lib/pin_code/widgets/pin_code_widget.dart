@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/cupertino.dart';
@@ -104,7 +105,18 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                 if (widget.header != null)
                                   widget.header!
                                 else
-                                  const AltMeLogo(size: Sizes.logoLarge),
+                                  WalletLogo(
+                                    profileModel: context
+                                        .read<ProfileCubit>()
+                                        .state
+                                        .model,
+                                    height: 90,
+                                    width: MediaQuery.of(context)
+                                            .size
+                                            .shortestSide *
+                                        0.5,
+                                    showPoweredBy: true,
+                                  ),
                                 const SizedBox(height: Sizes.spaceNormal),
                                 PinCodeTitle(
                                   title: widget.title,
@@ -154,14 +166,11 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                             Positioned(
                               bottom: 0,
                               right: 0,
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: DeleteButton(
-                                  cancelButton: widget.cancelButton,
-                                  deleteButton: widget.deleteButton,
-                                  cancelCallback: widget.cancelCallback,
-                                  keyboardUIConfig: widget.keyboardUIConfig,
-                                ),
+                              child: DeleteButton(
+                                cancelButton: widget.cancelButton,
+                                deleteButton: widget.deleteButton,
+                                cancelCallback: widget.cancelCallback,
+                                keyboardUIConfig: widget.keyboardUIConfig,
                               ),
                             ),
                           ],
@@ -190,8 +199,17 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                           if (widget.header != null)
                                             widget.header!
                                           else
-                                            const AltMeLogo(
-                                              size: Sizes.logoLarge,
+                                            WalletLogo(
+                                              profileModel: context
+                                                  .read<ProfileCubit>()
+                                                  .state
+                                                  .model,
+                                              height: 90,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .shortestSide *
+                                                  0.5,
+                                              showPoweredBy: true,
                                             ),
                                           const SizedBox(
                                             height: Sizes.spaceNormal,

@@ -5,11 +5,34 @@ List<CredentialModel> getCredentialsFromFilterList({
   required List<Field> filterList,
   required List<CredentialModel> credentialList,
   required bool? isJwtVpInJwtVCRequired,
+  required bool? presentLdpVc,
+  required bool? presentJwtVc,
 }) {
   /// If we have some instructions we filter the wallet's
   /// crendential list whith it
   if (filterList.isNotEmpty) {
     final selectedCredential = <CredentialModel>[];
+
+    /// remove ldp_vp if jwt_vp is required
+    if (isJwtVpInJwtVCRequired != null && isJwtVpInJwtVCRequired) {
+      credentialList.removeWhere(
+        (CredentialModel credentialModel) => credentialModel.jwt == null,
+      );
+    }
+
+    /// remove ldp_vc
+    if (presentJwtVc != null && presentJwtVc) {
+      credentialList.removeWhere(
+        (CredentialModel credentialModel) => credentialModel.jwt == null,
+      );
+    }
+
+    /// remove jwt_vc
+    if (presentLdpVc != null && presentLdpVc) {
+      credentialList.removeWhere(
+        (CredentialModel credentialModel) => credentialModel.jwt != null,
+      );
+    }
 
     for (final field in filterList) {
       for (final credential in credentialList) {
@@ -19,10 +42,25 @@ List<CredentialModel> getCredentialsFromFilterList({
             /// remove unmatched credential
             searchList.removeWhere(
               (element) {
-                if (element == field.filter?.pattern ||
-                    field.filter?.pattern == null) {
-                  return false;
+                String? pattern;
+
+                if (field.filter?.pattern != null) {
+                  pattern = field.filter!.pattern;
+                } else if (field.filter?.contains?.containsConst != null) {
+                  pattern = field.filter?.contains?.containsConst;
                 }
+
+                if (pattern == null) return true;
+
+                if (pattern.endsWith(r'$')) {
+                  final RegExp regEx = RegExp(pattern);
+                  final Match? match = regEx.firstMatch(element);
+
+                  if (match != null) return false;
+                } else {
+                  if (element == pattern) return false;
+                }
+
                 return true;
               },
             );

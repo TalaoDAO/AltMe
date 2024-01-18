@@ -45,7 +45,8 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
 
     if (recoveryMnemonic == null) {
       throw ResponseMessage(
-        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        message:
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
       );
     }
 
@@ -86,10 +87,11 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
               id: claimEntity.id,
               image: 'image',
               data: jsonCredential,
-              display: Display.emptyDisplay()..toJson(),
               shareLink: '',
               credentialPreview: credentialPreview,
               expirationDate: claimEntity.expiration,
+              jwt: null,
+              format: 'ldp_vc',
               activities: [Activity(acquisitionAt: DateTime.now())],
             );
             return credentialModel;
@@ -103,7 +105,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
             json['cipherText'] is! String ||
             json['authenticationTag'] is! String) {
           throw ResponseMessage(
-            ResponseString
+            message: ResponseString
                 .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
           );
         }
@@ -118,10 +120,11 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
             !decryptedJson.containsKey('credentials') ||
             decryptedJson['date'] is! String) {
           throw ResponseMessage(
-            ResponseString
+            message: ResponseString
                 .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
           );
         }
+
         final List<dynamic> credentialJson =
             decryptedJson['credentials'] as List<dynamic>;
         final credentials = credentialJson.map(
@@ -145,7 +148,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_RECOVERY_CREDENTIAL_AUTH_ERROR_MESSAGE,
             ),
           ),
@@ -154,7 +157,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
+              message: ResponseString
                   .RESPONSE_STRING_RECOVERY_CREDENTIAL_DEFAULT_ERROR_MESSAGE,
             ),
           ),

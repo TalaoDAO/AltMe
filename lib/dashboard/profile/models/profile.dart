@@ -1,135 +1,161 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/profile/models/profile_setting.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 part 'profile.g.dart';
 
 @JsonSerializable()
 class ProfileModel extends Equatable {
   const ProfileModel({
-    required this.firstName,
-    required this.lastName,
-    required this.phone,
-    required this.location,
-    required this.email,
     required this.polygonIdNetwork,
-    required this.tezosNetwork,
-    required this.isEnterprise,
-    required this.isBiometricEnabled,
-    required this.isAlertEnabled,
-    required this.userConsentForIssuerAccess,
-    required this.userConsentForVerifierAccess,
-    required this.userPINCodeForAuthentication,
-    this.companyName = '',
-    this.companyWebsite = '',
-    this.jobTitle = '',
-    required this.oidc4vcType,
+    required this.walletType,
+    required this.walletProtectionType,
+    required this.isDeveloperMode,
+    required this.profileType,
+    required this.profileSetting,
+    this.enterpriseWalletName,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
       _$ProfileModelFromJson(json);
 
   factory ProfileModel.empty() => ProfileModel(
-        firstName: '',
-        lastName: '',
-        phone: '',
-        location: '',
-        email: '',
-        companyName: '',
-        companyWebsite: '',
-        jobTitle: '',
-        polygonIdNetwork: PolygonIdNetwork.PolygonMainnet.toString(),
-        isEnterprise: false,
-        isBiometricEnabled: false,
-        isAlertEnabled: false,
-        userConsentForIssuerAccess: true,
-        userConsentForVerifierAccess: true,
-        userPINCodeForAuthentication: true,
-        tezosNetwork: TezosNetwork.mainNet(),
-        oidc4vcType: OIDC4VCType.EBSIV3,
+        polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
+        walletType: WalletType.personal,
+        walletProtectionType: WalletProtectionType.pinCode,
+        isDeveloperMode: false,
+        profileType: ProfileType.custom,
+        profileSetting: ProfileSetting.initial(),
       );
 
-  final String firstName;
-  final String lastName;
-  final String phone;
-  final String location;
-  final String email;
-  final String companyName;
-  final String companyWebsite;
-  final String jobTitle;
-  final String polygonIdNetwork;
-  final TezosNetwork tezosNetwork;
-  final bool isEnterprise;
-  final bool isBiometricEnabled;
-  final bool isAlertEnabled;
-  final bool userConsentForIssuerAccess;
-  final bool userConsentForVerifierAccess;
-  final bool userPINCodeForAuthentication;
-  final OIDC4VCType oidc4vcType;
+  factory ProfileModel.ebsiV3({
+    required PolygonIdNetwork polygonIdNetwork,
+    required WalletType walletType,
+    required WalletProtectionType walletProtectionType,
+    required bool isDeveloperMode,
+    required String? clientId,
+    required String? clientSecret,
+    String? enterpriseWalletName,
+  }) =>
+      ProfileModel(
+        enterpriseWalletName: enterpriseWalletName,
+        polygonIdNetwork: polygonIdNetwork,
+        walletType: walletType,
+        walletProtectionType: walletProtectionType,
+        isDeveloperMode: isDeveloperMode,
+        profileType: ProfileType.ebsiV3,
+        profileSetting: ProfileSetting(
+          blockchainOptions: BlockchainOptions.initial(),
+          generalOptions: GeneralOptions.empty(),
+          helpCenterOptions: HelpCenterOptions.initial(),
+          selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
+            displayManageDecentralizedId: true,
+            customOidc4vcProfile: CustomOidc4VcProfile(
+              clientAuthentication: ClientAuthentication.clientId,
+              credentialManifestSupport: false,
+              cryptoHolderBinding: true,
+              defaultDid: DidKeyType.ebsiv3,
+              oidc4vciDraft: OIDC4VCIDraftType.draft11,
+              oidc4vpDraft: OIDC4VPDraftType.draft10,
+              scope: false,
+              securityLevel: false,
+              siopv2Draft: SIOPV2DraftType.draft12,
+              subjectSyntaxeType: SubjectSyntax.did,
+              userPinDigits: UserPinDigits.four,
+              clientId: clientId,
+              clientSecret: clientSecret,
+            ),
+          ),
+          settingsMenu: SettingsMenu.initial(),
+          version: '',
+          walletSecurityOptions: WalletSecurityOptions.initial(),
+        ),
+      );
+
+  factory ProfileModel.dutch({
+    required PolygonIdNetwork polygonIdNetwork,
+    required WalletType walletType,
+    required WalletProtectionType walletProtectionType,
+    required bool isDeveloperMode,
+    required String? clientId,
+    required String? clientSecret,
+    String? enterpriseWalletName,
+  }) =>
+      ProfileModel(
+        enterpriseWalletName: enterpriseWalletName,
+        polygonIdNetwork: polygonIdNetwork,
+        walletType: walletType,
+        walletProtectionType: walletProtectionType,
+        isDeveloperMode: isDeveloperMode,
+        profileType: ProfileType.dutch,
+        profileSetting: ProfileSetting(
+          blockchainOptions: BlockchainOptions.initial(),
+          generalOptions: GeneralOptions.empty(),
+          helpCenterOptions: HelpCenterOptions.initial(),
+          selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
+            displayManageDecentralizedId: true,
+            customOidc4vcProfile: CustomOidc4VcProfile(
+              clientAuthentication: ClientAuthentication.clientId,
+              credentialManifestSupport: false,
+              cryptoHolderBinding: true,
+              defaultDid: DidKeyType.jwkP256,
+              oidc4vciDraft: OIDC4VCIDraftType.draft11,
+              oidc4vpDraft: OIDC4VPDraftType.draft10,
+              scope: false,
+              securityLevel: false,
+              siopv2Draft: SIOPV2DraftType.draft12,
+              subjectSyntaxeType: SubjectSyntax.did,
+              userPinDigits: UserPinDigits.four,
+              clientId: clientId,
+              clientSecret: clientSecret,
+            ),
+          ),
+          settingsMenu: SettingsMenu.initial(),
+          version: '',
+          walletSecurityOptions: WalletSecurityOptions.initial(),
+        ),
+      );
+
+  final PolygonIdNetwork polygonIdNetwork;
+  final WalletType walletType;
+  final WalletProtectionType walletProtectionType;
+  final bool isDeveloperMode;
+  final ProfileSetting profileSetting;
+  final ProfileType profileType;
+  final String? enterpriseWalletName;
 
   @override
-  List<Object> get props => [
-        firstName,
-        lastName,
-        phone,
-        location,
-        email,
+  List<Object?> get props => [
         polygonIdNetwork,
-        tezosNetwork,
-        companyName,
-        companyWebsite,
-        jobTitle,
-        isEnterprise,
-        isBiometricEnabled,
-        isAlertEnabled,
-        userConsentForIssuerAccess,
-        userConsentForVerifierAccess,
-        userPINCodeForAuthentication,
-        oidc4vcType,
+        walletType,
+        walletProtectionType,
+        isDeveloperMode,
+        profileType,
+        enterpriseWalletName,
+        profileSetting,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
 
   ProfileModel copyWith({
-    String? firstName,
-    String? lastName,
-    String? phone,
-    String? location,
-    String? email,
-    String? companyName,
-    String? companyWebsite,
-    String? jobTitle,
-    String? polygonIdNetwork,
-    TezosNetwork? tezosNetwork,
-    bool? isEnterprise,
-    bool? isBiometricEnabled,
-    bool? isAlertEnabled,
-    bool? userConsentForIssuerAccess,
-    bool? userConsentForVerifierAccess,
-    bool? userPINCodeForAuthentication,
-    OIDC4VCType? oidc4vcType,
+    PolygonIdNetwork? polygonIdNetwork,
+    WalletType? walletType,
+    WalletProtectionType? walletProtectionType,
+    bool? isDeveloperMode,
+    ProfileType? profileType,
+    ProfileSetting? profileSetting,
+    String? enterpriseWalletName,
   }) {
     return ProfileModel(
-      firstName: firstName ?? this.firstName,
-      lastName: lastName ?? this.lastName,
-      phone: phone ?? this.phone,
-      location: location ?? this.location,
-      email: email ?? this.email,
-      companyName: companyName ?? this.companyName,
-      companyWebsite: companyWebsite ?? this.companyWebsite,
-      jobTitle: jobTitle ?? this.jobTitle,
       polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
-      tezosNetwork: tezosNetwork ?? this.tezosNetwork,
-      isEnterprise: isEnterprise ?? this.isEnterprise,
-      isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
-      isAlertEnabled: isAlertEnabled ?? this.isAlertEnabled,
-      userConsentForIssuerAccess:
-          userConsentForIssuerAccess ?? this.userConsentForIssuerAccess,
-      userConsentForVerifierAccess:
-          userConsentForVerifierAccess ?? this.userConsentForVerifierAccess,
-      userPINCodeForAuthentication:
-          userPINCodeForAuthentication ?? this.userPINCodeForAuthentication,
-      oidc4vcType: oidc4vcType ?? this.oidc4vcType,
+      walletType: walletType ?? this.walletType,
+      walletProtectionType: walletProtectionType ?? this.walletProtectionType,
+      isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
+      profileType: profileType ?? this.profileType,
+      profileSetting: profileSetting ?? this.profileSetting,
+      enterpriseWalletName: enterpriseWalletName ?? this.enterpriseWalletName,
     );
   }
 }

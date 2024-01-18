@@ -3,10 +3,13 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/profile/models/models.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
+import 'package:random_string/random_string.dart';
 
 import 'package:secure_storage/secure_storage.dart';
 
@@ -15,12 +18,15 @@ part 'profile_cubit.g.dart';
 part 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
-  ProfileCubit({required this.secureStorageProvider})
-      : super(ProfileState(model: ProfileModel.empty())) {
+  ProfileCubit({
+    required this.secureStorageProvider,
+    required this.oidc4vc,
+  }) : super(ProfileState(model: ProfileModel.empty())) {
     load();
   }
 
   final SecureStorageProvider secureStorageProvider;
+  final OIDC4VC oidc4vc;
 
   Timer? _timer;
 
@@ -53,100 +59,273 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     final log = getLogger('ProfileCubit - load');
     try {
-      final firstName =
-          await secureStorageProvider.get(SecureStorageKeys.firstNameKey) ?? '';
-      final lastName =
-          await secureStorageProvider.get(SecureStorageKeys.lastNameKey) ?? '';
-      final phone =
-          await secureStorageProvider.get(SecureStorageKeys.phoneKey) ?? '';
-      final location =
-          await secureStorageProvider.get(SecureStorageKeys.locationKey) ?? '';
-      final email =
-          await secureStorageProvider.get(SecureStorageKeys.emailKey) ?? '';
-      final companyName =
-          await secureStorageProvider.get(SecureStorageKeys.companyName) ?? '';
-      final companyWebsite =
-          await secureStorageProvider.get(SecureStorageKeys.companyWebsite) ??
-              '';
-      final jobTitle =
-          await secureStorageProvider.get(SecureStorageKeys.jobTitle) ?? '';
+      /// polygon id network
+      var polygonIdNetwork = PolygonIdNetwork.PolygonMainnet;
 
-      final polygonIdNetwork = (await secureStorageProvider
-              .get(SecureStorageKeys.polygonIdNetwork)) ??
-          PolygonIdNetwork.PolygonMainnet.toString();
+      final polygonIdNetworkString =
+          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
 
-      final tezosNetworkJson = await secureStorageProvider
-          .get(SecureStorageKeys.blockchainNetworkKey);
-      final tezosNetwork = tezosNetworkJson != null
-          ? TezosNetwork.fromJson(
-              json.decode(tezosNetworkJson) as Map<String, dynamic>,
-            )
-          : TezosNetwork.mainNet();
-      final isEnterprise = (await secureStorageProvider
-              .get(SecureStorageKeys.isEnterpriseUser)) ==
-          'true';
-
-      final isBiometricEnabled = (await secureStorageProvider
-              .get(SecureStorageKeys.isBiometricEnabled)) ==
-          'true';
-
-      final alertValue =
-          await secureStorageProvider.get(SecureStorageKeys.alertEnabled);
-      final isAlertEnabled = alertValue == null || alertValue == 'true';
-
-      final userConsentForIssuerAccess = (await secureStorageProvider
-              .get(SecureStorageKeys.userConsentForIssuerAccess)) ==
-          'true';
-
-      final userConsentForVerifierAccess = (await secureStorageProvider
-              .get(SecureStorageKeys.userConsentForVerifierAccess)) ==
-          'true';
-
-      final userPINCodeForAuthenticationValue = await secureStorageProvider
-          .get(SecureStorageKeys.userPINCodeForAuthentication);
-      final userPINCodeForAuthentication =
-          userPINCodeForAuthenticationValue == null ||
-              userPINCodeForAuthenticationValue == 'true';
-
-      var oidc4vcType = OIDC4VCType.EBSIV3;
-
-      for (final type in OIDC4VCType.values) {
-        final oidc4vcTypeName =
-            await secureStorageProvider.get(SecureStorageKeys.oidc4vcType);
-
-        if (oidc4vcTypeName != null) {
-          if (type.name == oidc4vcTypeName) {
-            oidc4vcType = type;
-          }
+      if (polygonIdNetworkString != null) {
+        final enumVal = PolygonIdNetwork.values.firstWhereOrNull(
+          (ele) => ele.toString() == polygonIdNetworkString,
+        );
+        if (enumVal != null) {
+          polygonIdNetwork = enumVal;
         }
       }
 
-      final profileModel = ProfileModel(
-        firstName: firstName,
-        lastName: lastName,
-        phone: phone,
-        location: location,
-        email: email,
-        polygonIdNetwork: polygonIdNetwork,
-        tezosNetwork: tezosNetwork,
-        companyName: companyName,
-        companyWebsite: companyWebsite,
-        jobTitle: jobTitle,
-        isEnterprise: isEnterprise,
-        isBiometricEnabled: isBiometricEnabled,
-        isAlertEnabled: isAlertEnabled,
-        userConsentForIssuerAccess: userConsentForIssuerAccess,
-        userConsentForVerifierAccess: userConsentForVerifierAccess,
-        userPINCodeForAuthentication: userPINCodeForAuthentication,
-        oidc4vcType: oidc4vcType,
+      /// walletType
+      var walletType = WalletType.personal;
+
+      final walletTypeString =
+          await secureStorageProvider.get(SecureStorageKeys.walletType);
+
+      if (walletTypeString != null) {
+        final enumVal = WalletType.values.firstWhereOrNull(
+          (ele) => ele.toString() == walletTypeString,
+        );
+        if (enumVal != null) {
+          walletType = enumVal;
+        }
+      }
+
+      /// polygon id network
+      var walletProtectionType = WalletProtectionType.pinCode;
+
+      final walletProtectionTypeString = await secureStorageProvider
+          .get(SecureStorageKeys.walletProtectionType);
+
+      if (walletProtectionTypeString != null) {
+        final enumVal = WalletProtectionType.values.firstWhereOrNull(
+          (ele) => ele.toString() == walletProtectionTypeString,
+        );
+        if (enumVal != null) {
+          walletProtectionType = enumVal;
+        }
+      }
+
+      /// developer mode
+
+      final isDeveloperModeValue =
+          await secureStorageProvider.get(SecureStorageKeys.isDeveloperMode);
+
+      final isDeveloperMode =
+          isDeveloperModeValue != null && isDeveloperModeValue == 'true';
+
+      /// profileType
+
+      var profileType = ProfileType.custom;
+
+      final profileTypeString =
+          await secureStorageProvider.get(SecureStorageKeys.profileType);
+
+      if (profileTypeString != null) {
+        final enumVal = ProfileType.values.firstWhereOrNull(
+          (ele) => ele.toString() == profileTypeString,
+        );
+        if (enumVal != null) {
+          profileType = enumVal;
+        }
+      }
+
+      /// profileSetting
+      late ProfileSetting profileSetting;
+
+      /// migration - remove later
+      final customProfileBackupValue = await secureStorageProvider.get(
+        'customProfileBackup',
       );
 
-      emit(
-        state.copyWith(
-          model: profileModel,
-          status: AppStatus.success,
-        ),
-      );
+      if (customProfileBackupValue != null) {
+        try {
+          final customProfileBackup =
+              json.decode(customProfileBackupValue) as Map<String, dynamic>;
+
+          // // didKeyType: customProfileBackup.didKeyType,
+
+          var didKeyType = DidKeyType.p256;
+
+          if (customProfileBackup.containsKey('didKeyType')) {
+            for (final value in DidKeyType.values) {
+              if (value.toString() ==
+                  customProfileBackup.containsKey('didKeyType').toString()) {
+                didKeyType = value;
+              }
+            }
+          }
+
+          profileSetting = ProfileSetting(
+            blockchainOptions: BlockchainOptions.initial(),
+            generalOptions: GeneralOptions.empty(),
+            helpCenterOptions: HelpCenterOptions.initial(),
+            selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
+              displayManageDecentralizedId: true,
+              customOidc4vcProfile: CustomOidc4VcProfile(
+                clientAuthentication: customProfileBackup
+                            .containsKey('useBasicClientAuthentication') &&
+                        customProfileBackup['useBasicClientAuthentication'] ==
+                            'true'
+                    ? ClientAuthentication.clientSecretBasic
+                    : ClientAuthentication.none,
+                credentialManifestSupport: customProfileBackup
+                        .containsKey('enableCredentialManifestSupport') &&
+                    customProfileBackup['enableCredentialManifestSupport'] ==
+                        'true',
+                cryptoHolderBinding: customProfileBackup
+                        .containsKey('enableCryptographicHolderBinding') &&
+                    customProfileBackup['enableCryptographicHolderBinding'] ==
+                        'true',
+                defaultDid: didKeyType,
+                oidc4vciDraft: OIDC4VCIDraftType.draft11,
+                oidc4vpDraft: OIDC4VPDraftType.draft18,
+                scope:
+                    customProfileBackup.containsKey('enableScopeParameter') &&
+                        customProfileBackup['enableScopeParameter'] == 'true',
+                securityLevel:
+                    customProfileBackup.containsKey('enableSecurity') &&
+                        customProfileBackup['enableSecurity'] == 'true',
+                siopv2Draft: SIOPV2DraftType.draft12,
+                subjectSyntaxeType:
+                    customProfileBackup.containsKey('enableJWKThumbprint') &&
+                            customProfileBackup['enableJWKThumbprint'] == 'true'
+                        ? SubjectSyntax.jwkThumbprint
+                        : SubjectSyntax.did,
+                userPinDigits:
+                    customProfileBackup.containsKey('enable4DigitPINCode') &&
+                            customProfileBackup['enable4DigitPINCode'] == 'true'
+                        ? UserPinDigits.four
+                        : UserPinDigits.six,
+                clientId: customProfileBackup.containsKey('clientId')
+                    ? customProfileBackup['clientId'].toString()
+                    : Parameters.clientId,
+                clientSecret: customProfileBackup.containsKey('clientSecret')
+                    ? customProfileBackup['clientSecret'].toString()
+                    : randomString(12),
+              ),
+            ),
+            settingsMenu: SettingsMenu.initial(),
+            version: '',
+            walletSecurityOptions: WalletSecurityOptions.initial(),
+          );
+        } catch (e) {
+          await secureStorageProvider.delete('customProfileBackup');
+        }
+        await secureStorageProvider.delete('customProfileBackup');
+      }
+
+      /// migration - remove upto here
+
+      late ProfileModel profileModel;
+
+      /// based on profileType set the profile setting
+
+      switch (profileType) {
+        case ProfileType.custom:
+          final customProfileSettingJsonString = await secureStorageProvider
+              .get(SecureStorageKeys.customProfileSettings);
+
+          if (customProfileSettingJsonString != null) {
+            final customProfileSettingMap =
+                jsonDecode(customProfileSettingJsonString)
+                    as Map<String, dynamic>;
+
+            if (customProfileSettingMap['selfSovereignIdentityOptions']
+                    ['customOidc4vcProfile']['client_id'] ==
+                null) {
+              customProfileSettingMap['selfSovereignIdentityOptions']
+                  ['customOidc4vcProfile']['client_id'] = Parameters.clientId;
+            }
+            if (customProfileSettingMap['selfSovereignIdentityOptions']
+                    ['customOidc4vcProfile']['client_secret'] ==
+                null) {
+              customProfileSettingMap['selfSovereignIdentityOptions']
+                  ['customOidc4vcProfile']['client_secret'] = randomString(12);
+            }
+
+            profileSetting = ProfileSetting.fromJson(customProfileSettingMap);
+          } else {
+            profileSetting = ProfileSetting.initial();
+          }
+
+          profileModel = ProfileModel(
+            polygonIdNetwork: polygonIdNetwork,
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+            profileType: profileType,
+            profileSetting: profileSetting,
+          );
+
+        case ProfileType.ebsiV3:
+          final privateKey = await getPrivateKey(
+            secureStorage: secureStorageProvider,
+            didKeyType: DidKeyType.ebsiv3,
+            oidc4vc: oidc4vc,
+          );
+
+          final (did, _) = await getDidAndKid(
+            didKeyType: DidKeyType.ebsiv3,
+            privateKey: privateKey,
+            secureStorage: secureStorageProvider,
+          );
+
+          profileModel = ProfileModel.ebsiV3(
+            polygonIdNetwork: polygonIdNetwork,
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+            clientId: did,
+            clientSecret: randomString(12),
+          );
+
+        case ProfileType.dutch:
+          final privateKey = await getPrivateKey(
+            secureStorage: secureStorageProvider,
+            didKeyType: DidKeyType.jwkP256,
+            oidc4vc: oidc4vc,
+          );
+
+          final (did, _) = await getDidAndKid(
+            didKeyType: DidKeyType.jwkP256,
+            privateKey: privateKey,
+            secureStorage: secureStorageProvider,
+          );
+
+          profileModel = ProfileModel.dutch(
+            polygonIdNetwork: polygonIdNetwork,
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+            clientId: did,
+            clientSecret: randomString(12),
+          );
+
+        case ProfileType.enterprise:
+          final enterpriseProfileSettingJsonString =
+              await secureStorageProvider.get(
+            SecureStorageKeys.enterpriseProfileSetting,
+          );
+
+          if (enterpriseProfileSettingJsonString != null) {
+            profileSetting = ProfileSetting.fromJson(
+              json.decode(enterpriseProfileSettingJsonString)
+                  as Map<String, dynamic>,
+            );
+          } else {
+            profileSetting = ProfileSetting.initial();
+          }
+
+          profileModel = ProfileModel(
+            polygonIdNetwork: polygonIdNetwork,
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+            profileType: profileType,
+            profileSetting: profileSetting,
+            enterpriseWalletName: profileSetting.generalOptions.profileName,
+          );
+      }
+      await update(profileModel);
     } catch (e, s) {
       log.e(
         'something went wrong',
@@ -156,7 +335,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE,
+            message: ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE,
           ),
         ),
       );
@@ -169,75 +348,28 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     try {
       await secureStorageProvider.set(
-        SecureStorageKeys.firstNameKey,
-        profileModel.firstName,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.lastNameKey,
-        profileModel.lastName,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.phoneKey,
-        profileModel.phone,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.locationKey,
-        profileModel.location,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.emailKey,
-        profileModel.email,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.companyName,
-        profileModel.companyName,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.companyWebsite,
-        profileModel.companyWebsite,
-      );
-      await secureStorageProvider.set(
-        SecureStorageKeys.jobTitle,
-        profileModel.jobTitle,
-      );
-      await secureStorageProvider.set(
         SecureStorageKeys.polygonIdNetwork,
-        profileModel.polygonIdNetwork,
+        profileModel.polygonIdNetwork.toString(),
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.isEnterpriseUser,
-        profileModel.isEnterprise.toString(),
+        SecureStorageKeys.walletType,
+        profileModel.walletType.toString(),
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.isBiometricEnabled,
-        profileModel.isBiometricEnabled.toString(),
+        SecureStorageKeys.walletProtectionType,
+        profileModel.walletProtectionType.toString(),
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.alertEnabled,
-        profileModel.isAlertEnabled.toString(),
+        SecureStorageKeys.isDeveloperMode,
+        profileModel.isDeveloperMode.toString(),
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.userConsentForIssuerAccess,
-        profileModel.userConsentForIssuerAccess.toString(),
-      );
-
-      await secureStorageProvider.set(
-        SecureStorageKeys.userConsentForVerifierAccess,
-        profileModel.userConsentForVerifierAccess.toString(),
-      );
-
-      await secureStorageProvider.set(
-        SecureStorageKeys.userPINCodeForAuthentication,
-        profileModel.userPINCodeForAuthentication.toString(),
-      );
-
-      await secureStorageProvider.set(
-        SecureStorageKeys.oidc4vcType,
-        profileModel.oidc4vcType.name,
+        SecureStorageKeys.profileType,
+        profileModel.profileType.toString(),
       );
 
       emit(
@@ -256,38 +388,18 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_FAILED_TO_SAVE_PROFILE,
+            message: ResponseString.RESPONSE_STRING_FAILED_TO_SAVE_PROFILE,
           ),
         ),
       );
     }
   }
 
-  Future<void> setFingerprintEnabled({bool enabled = false}) async {
-    final profileModel = state.model.copyWith(isBiometricEnabled: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> setAlertEnabled({bool enabled = false}) async {
-    final profileModel = state.model.copyWith(isAlertEnabled: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> setUserConsentForIssuerAccess({bool enabled = false}) async {
+  Future<void> setWalletProtectionType({
+    required WalletProtectionType walletProtectionType,
+  }) async {
     final profileModel =
-        state.model.copyWith(userConsentForIssuerAccess: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> setUserConsentForVerifierAccess({bool enabled = false}) async {
-    final profileModel =
-        state.model.copyWith(userConsentForVerifierAccess: enabled);
-    await update(profileModel);
-  }
-
-  Future<void> setUserPINCodeForAuthentication({bool enabled = false}) async {
-    final profileModel =
-        state.model.copyWith(userPINCodeForAuthentication: enabled);
+        state.model.copyWith(walletProtectionType: walletProtectionType);
     await update(profileModel);
   }
 
@@ -297,16 +409,94 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     emit(state.copyWith(status: AppStatus.loading));
     final profileModel =
-        state.model.copyWith(polygonIdNetwork: polygonIdNetwork.toString());
+        state.model.copyWith(polygonIdNetwork: polygonIdNetwork);
 
     await polygonIdCubit.setEnv(polygonIdNetwork);
 
     await update(profileModel);
   }
 
-  Future<void> updateOIDC4VCType(OIDC4VCType oidc4vcTye) async {
-    emit(state.copyWith(status: AppStatus.loading));
-    final profileModel = state.model.copyWith(oidc4vcType: oidc4vcTye);
+  Future<void> setWalletType({
+    required WalletType walletType,
+  }) async {
+    final profileModel = state.model.copyWith(walletType: walletType);
+    await update(profileModel);
+  }
+
+  Future<void> updateProfileSetting({
+    DidKeyType? didKeyType,
+    bool? securityLevel,
+    UserPinDigits? userPinDigits,
+    bool? scope,
+    bool? cryptoHolderBinding,
+    bool? credentialManifestSupport,
+    ClientAuthentication? clientAuthentication,
+    String? clientId,
+    String? clientSecret,
+    bool? confirmSecurityVerifierAccess,
+    bool? secureSecurityAuthenticationWithPinCode,
+    bool? verifySecurityIssuerWebsiteIdentity,
+    OIDC4VCIDraftType? oidc4vciDraftType,
+    SubjectSyntax? subjectSyntax,
+  }) async {
+    final profileModel = state.model.copyWith(
+      profileSetting: state.model.profileSetting.copyWith(
+        walletSecurityOptions:
+            state.model.profileSetting.walletSecurityOptions.copyWith(
+          confirmSecurityVerifierAccess: confirmSecurityVerifierAccess,
+          verifySecurityIssuerWebsiteIdentity:
+              verifySecurityIssuerWebsiteIdentity,
+          secureSecurityAuthenticationWithPinCode:
+              secureSecurityAuthenticationWithPinCode,
+        ),
+        selfSovereignIdentityOptions:
+            state.model.profileSetting.selfSovereignIdentityOptions.copyWith(
+          customOidc4vcProfile: state.model.profileSetting
+              .selfSovereignIdentityOptions.customOidc4vcProfile
+              .copyWith(
+            userPinDigits: userPinDigits,
+            defaultDid: didKeyType,
+            securityLevel: securityLevel,
+            scope: scope,
+            cryptoHolderBinding: cryptoHolderBinding,
+            credentialManifestSupport: credentialManifestSupport,
+            clientAuthentication: clientAuthentication,
+            clientId: clientId,
+            clientSecret: clientSecret,
+            oidc4vciDraft: oidc4vciDraftType,
+            subjectSyntaxeType: subjectSyntax,
+          ),
+        ),
+      ),
+    );
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.customProfileSettings,
+      jsonEncode(profileModel.profileSetting.toJson()),
+    );
+
+    emit(
+      state.copyWith(
+        model: profileModel,
+        status: AppStatus.success,
+      ),
+    );
+  }
+
+  Future<void> setDeveloperModeStatus({bool enabled = false}) async {
+    final profileModel = state.model.copyWith(isDeveloperMode: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> setProfileSetting({
+    required ProfileSetting profileSetting,
+    required ProfileType profileType,
+  }) async {
+    final profileModel = state.model.copyWith(
+      profileSetting: profileSetting,
+      profileType: profileType,
+      enterpriseWalletName: profileSetting.generalOptions.profileName,
+    );
     await update(profileModel);
   }
 
@@ -314,5 +504,83 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> close() async {
     _timer?.cancel();
     return super.close();
+  }
+
+  Future<void> setProfile(ProfileType profileType) async {
+    if (profileType != ProfileType.custom) {
+      await secureStorageProvider.set(
+        SecureStorageKeys.customProfileSettings,
+        jsonEncode(state.model.profileSetting.toJson()),
+      );
+    }
+    switch (profileType) {
+      case ProfileType.ebsiV3:
+        await update(
+          ProfileModel.ebsiV3(
+            polygonIdNetwork: state.model.polygonIdNetwork,
+            walletProtectionType: state.model.walletProtectionType,
+            isDeveloperMode: state.model.isDeveloperMode,
+            walletType: state.model.walletType,
+            enterpriseWalletName: state.model.enterpriseWalletName,
+            clientId: state.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.clientId,
+            clientSecret: state.model.profileSetting
+                .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
+          ),
+        );
+      case ProfileType.dutch:
+        await update(
+          ProfileModel.dutch(
+            polygonIdNetwork: state.model.polygonIdNetwork,
+            walletProtectionType: state.model.walletProtectionType,
+            isDeveloperMode: state.model.isDeveloperMode,
+            walletType: state.model.walletType,
+            enterpriseWalletName: state.model.enterpriseWalletName,
+            clientId: state.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.clientId,
+            clientSecret: state.model.profileSetting
+                .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
+          ),
+        );
+      case ProfileType.custom:
+        final String customProfileSettingBackup =
+            await secureStorageProvider.get(
+                  SecureStorageKeys.customProfileSettings,
+                ) ??
+                jsonEncode(state.model.profileSetting);
+        final customProfileSetting = ProfileSetting.fromJson(
+          json.decode(customProfileSettingBackup) as Map<String, dynamic>,
+        );
+
+        await update(
+          state.model.copyWith(
+            profileType: profileType,
+            profileSetting: customProfileSetting,
+          ),
+        );
+      case ProfileType.enterprise:
+        final String enterpriseProfileSettingData =
+            await secureStorageProvider.get(
+                  SecureStorageKeys.enterpriseProfileSetting,
+                ) ??
+                jsonEncode(state.model.profileSetting);
+        final enterpriseProfileSetting = ProfileSetting.fromJson(
+          json.decode(enterpriseProfileSettingData) as Map<String, dynamic>,
+        );
+
+        await update(
+          state.model.copyWith(
+            profileType: profileType,
+            profileSetting: enterpriseProfileSetting,
+            enterpriseWalletName:
+                enterpriseProfileSetting.generalOptions.profileName,
+          ),
+        );
+    }
+  }
+
+  Future<void> resetProfile() async {
+    final profileModel = ProfileModel.empty();
+    await update(profileModel);
   }
 }

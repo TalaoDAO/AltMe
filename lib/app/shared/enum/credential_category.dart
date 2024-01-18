@@ -33,7 +33,7 @@ extension CredentialCategoryX on CredentialCategory {
   int get order {
     switch (this) {
       case CredentialCategory.advantagesCards:
-        return 150;
+        return 8;
       case CredentialCategory.identityCards:
         return 140;
       case CredentialCategory.professionalCards:
@@ -67,7 +67,7 @@ extension CredentialCategoryX on CredentialCategory {
         return [
           CredentialSubjectType.tezotopiaMembership,
           CredentialSubjectType.chainbornMembership,
-          CredentialSubjectType.bloometaPass,
+          //CredentialSubjectType.bloometaPass,
           // CredentialSubjectType.troopezPass,
           // CredentialSubjectType.pigsPass,
           // CredentialSubjectType.matterlightPass,
@@ -76,14 +76,18 @@ extension CredentialCategoryX on CredentialCategory {
         ];
       case CredentialCategory.identityCards:
         return [
-          //CredentialSubjectType.gender,
-          CredentialSubjectType.ageRange,
+          // CredentialSubjectType.gender,
+          // CredentialSubjectType.ageRange,
           // CredentialSubjectType.nationality,
+          // CredentialSubjectType.over65,
+          // CredentialSubjectType.over50,
+          // CredentialSubjectType.over21,
           CredentialSubjectType.over18,
           CredentialSubjectType.over15,
-          CredentialSubjectType.over13,
+          // CredentialSubjectType.over13,
           // CredentialSubjectType.passportFootprint,
           CredentialSubjectType.verifiableIdCard,
+          // CredentialSubjectType.livenessCard,
         ];
       case CredentialCategory.contactInfoCredentials:
         return [
@@ -106,7 +110,7 @@ extension CredentialCategoryX on CredentialCategory {
         return [];
       case CredentialCategory.socialMediaCards:
         return [
-          CredentialSubjectType.twitterCard,
+          //CredentialSubjectType.twitterCard,
         ];
       case CredentialCategory.walletIntegrity:
         return [];

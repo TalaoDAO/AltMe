@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -17,7 +16,6 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     required this.issuer,
     required this.inputDescriptorIndex,
     required this.credentialsToBePresented,
-    required this.isJwtVpInJwtVCRequired,
   });
 
   final Uri uri;
@@ -25,7 +23,6 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
   final Issuer issuer;
   final int inputDescriptorIndex;
   final List<CredentialModel> credentialsToBePresented;
-  final bool? isJwtVpInJwtVCRequired;
 
   static Route<dynamic> route({
     required Uri uri,
@@ -33,7 +30,6 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     required Issuer issuer,
     required int inputDescriptorIndex,
     required List<CredentialModel> credentialsToBePresented,
-    required bool? isJwtVpInJwtVCRequired,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => CredentialManifestOfferPickPage(
@@ -42,7 +38,6 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
         issuer: issuer,
         inputDescriptorIndex: inputDescriptorIndex,
         credentialsToBePresented: credentialsToBePresented,
-        isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
       ),
       settings: const RouteSettings(name: '/CredentialManifestOfferPickPage'),
     );
@@ -52,13 +47,10 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        final presentationDefinition =
-            credential.credentialManifest!.presentationDefinition!;
         return CredentialManifestPickCubit(
-          presentationDefinition: presentationDefinition,
+          credential: credential,
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
-          isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
         );
       },
       child: CredentialManifestOfferPickView(
@@ -67,7 +59,6 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
         issuer: issuer,
         inputDescriptorIndex: inputDescriptorIndex,
         credentialsToBePresented: credentialsToBePresented,
-        isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
       ),
     );
   }
@@ -81,7 +72,6 @@ class CredentialManifestOfferPickView extends StatelessWidget {
     required this.issuer,
     required this.inputDescriptorIndex,
     required this.credentialsToBePresented,
-    required this.isJwtVpInJwtVCRequired,
   });
 
   final Uri uri;
@@ -89,7 +79,6 @@ class CredentialManifestOfferPickView extends StatelessWidget {
   final Issuer issuer;
   final int inputDescriptorIndex;
   final List<CredentialModel> credentialsToBePresented;
-  final bool? isJwtVpInJwtVCRequired;
 
   @override
   Widget build(BuildContext context) {
@@ -292,23 +281,26 @@ class CredentialManifestOfferPickView extends StatelessWidget {
           issuer: issuer,
           inputDescriptorIndex: inputDescriptorIndex + 1,
           credentialsToBePresented: updatedCredentials,
-          isJwtVpInJwtVCRequired: isJwtVpInJwtVCRequired,
         ),
       );
     } else {
-      final bool userPINCodeForAuthentication =
-          context.read<ProfileCubit>().state.model.userPINCodeForAuthentication;
+      final bool userPINCodeForAuthentication = context
+          .read<ProfileCubit>()
+          .state
+          .model
+          .profileSetting
+          .walletSecurityOptions
+          .secureSecurityAuthenticationWithPinCode;
 
       if (userPINCodeForAuthentication) {
         /// Authenticate
         bool authenticated = false;
-        await Navigator.of(context).push<void>(
-          PinCodePage.route(
-            restrictToBack: false,
-            isValidCallback: () {
-              authenticated = true;
-            },
-          ),
+        await securityCheck(
+          context: context,
+          localAuthApi: LocalAuthApi(),
+          onSuccess: () {
+            authenticated = true;
+          },
         );
 
         if (!authenticated) {
@@ -321,6 +313,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
             keyId: SecureStorageKeys.ssiKey,
             credentialsToBePresented: updatedCredentials,
             issuer: issuer,
+            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
           );
     }
   }

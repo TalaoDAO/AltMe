@@ -32,6 +32,7 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
     final l10n = context.l10n;
     final List<CryptoAccountData> cryptoAccount =
         context.read<ManageAccountsCubit>().state.cryptoAccount.data;
+
     final accountNameList = cryptoAccount.map((e) => e.name).toList();
 
     final cryptoAccountData = cryptoAccount[index];
