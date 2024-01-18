@@ -121,43 +121,56 @@ class DetailFields extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (dummyCredential.websiteLink != null)
+        if (dummyCredential.websiteLink != null ||
+            dummyCredential.websiteLinkExtern != null)
           DiscoverDynamicDetial(
             title: l10n.website,
-            value: dummyCredential.websiteLink!,
+            value: dummyCredential.websiteLinkExtern ??
+                dummyCredential.websiteLink!,
             format: AltMeStrings.uri,
           ),
-        if (dummyCredential.longDescription != null)
+        if (dummyCredential.longDescription != null ||
+            dummyCredential.longDescriptionExtern != null)
           DiscoverDynamicDetial(
-            title: dummyCredential.credentialSubjectType.title,
-            value: dummyCredential.whyGetThisCard!.getMessage(
-              context,
-              dummyCredential.longDescription!,
-            ),
+            title: dummyCredential.credentialSubjectType ==
+                    CredentialSubjectType.defaultCredential
+                ? dummyCredential.display?.name
+                : dummyCredential.credentialSubjectType.title,
+            value: dummyCredential.longDescriptionExtern ??
+                dummyCredential.longDescription!.getMessage(
+                  context,
+                  dummyCredential.longDescription!,
+                ),
           ),
-        if (dummyCredential.whyGetThisCard != null)
+        if (dummyCredential.whyGetThisCard != null ||
+            dummyCredential.whyGetThisCardExtern != null)
           DiscoverDynamicDetial(
             title: l10n.whyGetThisCard,
-            value: dummyCredential.whyGetThisCard!.getMessage(
-              context,
-              dummyCredential.whyGetThisCard!,
-            ),
+            value: dummyCredential.whyGetThisCardExtern ??
+                dummyCredential.whyGetThisCard!.getMessage(
+                  context,
+                  dummyCredential.whyGetThisCard!,
+                ),
           ),
-        if (dummyCredential.expirationDateDetails != null)
+        if (dummyCredential.expirationDateDetails != null ||
+            dummyCredential.expirationDateDetailsExtern != null)
           DiscoverDynamicDetial(
             title: l10n.expirationDate,
-            value: dummyCredential.expirationDateDetails!.getMessage(
-              context,
-              dummyCredential.expirationDateDetails!,
-            ),
+            value: dummyCredential.expirationDateDetailsExtern ??
+                dummyCredential.expirationDateDetails!.getMessage(
+                  context,
+                  dummyCredential.expirationDateDetails!,
+                ),
           ),
-        if (dummyCredential.howToGetIt != null)
+        if (dummyCredential.howToGetIt != null ||
+            dummyCredential.howToGetItExtern != null)
           DiscoverDynamicDetial(
             title: l10n.howToGetIt,
-            value: dummyCredential.howToGetIt!.getMessage(
-              context,
-              dummyCredential.howToGetIt!,
-            ),
+            value: dummyCredential.howToGetItExtern ??
+                dummyCredential.howToGetIt!.getMessage(
+                  context,
+                  dummyCredential.howToGetIt!,
+                ),
           ),
       ],
     );

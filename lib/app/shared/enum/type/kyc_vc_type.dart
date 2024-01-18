@@ -3,6 +3,9 @@ enum KycVcType {
   over13,
   over15,
   over18,
+  over21,
+  over50,
+  over65,
   ageRange,
   defiCompliance,
 }
@@ -18,6 +21,12 @@ extension KycVcTypeX on KycVcType {
         return 'Over15';
       case KycVcType.over18:
         return 'Over18';
+      case KycVcType.over21:
+        return 'Over21';
+      case KycVcType.over50:
+        return 'Over50';
+      case KycVcType.over65:
+        return 'Over65';
       case KycVcType.ageRange:
         return 'AgeRange';
       case KycVcType.defiCompliance:

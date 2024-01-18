@@ -18,12 +18,15 @@ part 'profile_cubit.g.dart';
 part 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
-  ProfileCubit({required this.secureStorageProvider})
-      : super(ProfileState(model: ProfileModel.empty())) {
+  ProfileCubit({
+    required this.secureStorageProvider,
+    required this.oidc4vc,
+  }) : super(ProfileState(model: ProfileModel.empty())) {
     load();
   }
 
   final SecureStorageProvider secureStorageProvider;
+  final OIDC4VC oidc4vc;
 
   Timer? _timer;
 
@@ -257,6 +260,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           final privateKey = await getPrivateKey(
             secureStorage: secureStorageProvider,
             didKeyType: DidKeyType.ebsiv3,
+            oidc4vc: oidc4vc,
           );
 
           final (did, _) = await getDidAndKid(
@@ -264,6 +268,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             privateKey: privateKey,
             secureStorage: secureStorageProvider,
           );
+
           profileModel = ProfileModel.ebsiV3(
             polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
@@ -277,6 +282,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           final privateKey = await getPrivateKey(
             secureStorage: secureStorageProvider,
             didKeyType: DidKeyType.jwkP256,
+            oidc4vc: oidc4vc,
           );
 
           final (did, _) = await getDidAndKid(
@@ -284,6 +290,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             privateKey: privateKey,
             secureStorage: secureStorageProvider,
           );
+
           profileModel = ProfileModel.dutch(
             polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,

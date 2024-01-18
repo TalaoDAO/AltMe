@@ -61,6 +61,8 @@ Future<void> getAndAddCredential({
     final enableJWKThumbprint =
         customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
 
+    final index = getIndexValue(isEBSIV3: isEBSIV3, didKeyType: didKeyType);
+
     final (
       List<dynamic> encodedCredentialOrFutureTokens,
       String? deferredCredentialEndpoint,
@@ -75,7 +77,7 @@ Future<void> getAndAddCredential({
       clientId: clientId,
       clientSecret: clientSecret,
       privateKey: privateKey,
-      indexValue: getIndexValue(isEBSIV3: isEBSIV3),
+      indexValue: index,
       userPin: userPin,
       code: codeForAuthorisedFlow,
       codeVerifier: codeVerifier,

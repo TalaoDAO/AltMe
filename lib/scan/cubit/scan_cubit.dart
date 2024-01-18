@@ -483,6 +483,12 @@ class ScanCubit extends Cubit<ScanState> {
         );
       }
 
+      Map<String, dynamic>? clientMetaData;
+
+      if (presentationDefinition.format == null) {
+        clientMetaData = await getClientMetada(client: client, uri: uri);
+      }
+
       final String vpToken = await createVpToken(
         credentialsToBePresented: credentialsToBePresented,
         did: did,
@@ -491,16 +497,18 @@ class ScanCubit extends Cubit<ScanState> {
         presentationDefinition: presentationDefinition,
         privateKey: privateKey,
         uri: uri,
+        clientMetaData: clientMetaData,
       );
 
-      final presentationSubmissionString = getPresentationSubmission(
+      final presentationSubmissionJson = await getPresentationSubmission(
         credentialsToBePresented: credentialsToBePresented,
         presentationDefinition: presentationDefinition,
+        clientMetaData: clientMetaData,
       );
 
       final responseData = <String, dynamic>{
         'vp_token': vpToken,
-        'presentation_submission': presentationSubmissionString,
+        'presentation_submission': presentationSubmissionJson,
       };
 
       if (idTokenNeeded && idToken != null) {
@@ -596,10 +604,11 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  String getPresentationSubmission({
+  Future<Map<String, dynamic>> getPresentationSubmission({
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
-  }) {
+    required Map<String, dynamic>? clientMetaData,
+  }) async {
     final uuid1 = const Uuid().v4();
 
     final Map<String, dynamic> presentationSubmission = {
@@ -609,30 +618,59 @@ class ScanCubit extends Cubit<ScanState> {
 
     final inputDescriptors = <Map<String, dynamic>>[];
 
-    final ldpVc = presentationDefinition.format?.ldpVc != null;
-    final jwtVc = presentationDefinition.format?.jwtVc != null;
-
     String? vcFormat;
-
-    if (ldpVc) {
-      vcFormat = 'ldp_vc';
-    } else if (jwtVc) {
-      vcFormat = 'jwt_vc';
-    } else {
-      throw Exception();
-    }
-
-    final ldpVp = presentationDefinition.format?.ldpVp != null;
-    final jwtVp = presentationDefinition.format?.jwtVp != null;
-
     String? vpFormat;
 
-    if (ldpVp) {
-      vpFormat = 'ldp_vp';
-    } else if (jwtVp) {
-      vpFormat = 'jwt_vp';
+    if (presentationDefinition.format != null) {
+      final ldpVc = presentationDefinition.format?.ldpVc != null;
+      final jwtVc = presentationDefinition.format?.jwtVc != null;
+
+      if (ldpVc) {
+        vcFormat = 'ldp_vc';
+      } else if (jwtVc) {
+        vcFormat = 'jwt_vc';
+      }
+
+      final ldpVp = presentationDefinition.format?.ldpVp != null;
+      final jwtVp = presentationDefinition.format?.jwtVp != null;
+
+      if (ldpVp) {
+        vpFormat = 'ldp_vp';
+      } else if (jwtVp) {
+        vpFormat = 'jwt_vp';
+      }
     } else {
-      throw Exception();
+      if (clientMetaData == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Client metaData is invalid',
+          },
+        );
+      }
+
+      final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
+
+      if (vpFormats.containsKey('ldp_vc')) {
+        vcFormat = 'ldp_vc';
+      } else if (vpFormats.containsKey('jwt_vc')) {
+        vcFormat = 'jwt_vc';
+      }
+
+      if (vpFormats.containsKey('ldp_vp')) {
+        vpFormat = 'ldp_vp';
+      } else if (vpFormats.containsKey('jwt_vp')) {
+        vpFormat = 'jwt_vp';
+      }
+    }
+
+    if (vcFormat == null && vpFormat == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'VC format is missing.',
+        },
+      );
     }
 
     if (credentialsToBePresented.length == 1) {
@@ -641,13 +679,33 @@ class ScanCubit extends Cubit<ScanState> {
       for (final InputDescriptor inputDescriptor
           in presentationDefinition.inputDescriptors) {
         for (final Field field in inputDescriptor.constraints!.fields!) {
-          final credentialName =
-              field.filter!.pattern ?? field.filter!.contains!.containsConst;
-          if (credentialsToBePresented[0]
-              .credentialPreview
-              .type
-              .contains(credentialName)) {
-            descriptor = inputDescriptor;
+          final element =
+              credentialsToBePresented[0].credentialPreview.type.last;
+
+          String? pattern;
+
+          if (field.filter?.pattern != null) {
+            pattern = field.filter!.pattern;
+          } else if (field.filter?.contains?.containsConst != null) {
+            pattern = field.filter?.contains?.containsConst;
+          }
+
+          if (pattern == null) {
+            throw ResponseMessage(
+              data: {
+                'error': 'invalid_request',
+                'error_description': 'pattern or containsConst is missing',
+              },
+            );
+          }
+
+          if (pattern.endsWith(r'$')) {
+            final RegExp regEx = RegExp(pattern);
+            final Match? match = regEx.firstMatch(element);
+
+            if (match != null) descriptor = inputDescriptor;
+          } else {
+            if (element == pattern) descriptor = inputDescriptor;
           }
         }
       }
@@ -696,9 +754,9 @@ class ScanCubit extends Cubit<ScanState> {
 
     presentationSubmission['descriptor_map'] = inputDescriptors;
 
-    final presentationSubmissionString = jsonEncode(presentationSubmission);
+    // final presentationSubmissionString = jsonEncode(presentationSubmission);
 
-    return presentationSubmissionString;
+    return presentationSubmission;
   }
 
   Future<void> askPermissionDIDAuthCHAPI({
@@ -727,15 +785,47 @@ class ScanCubit extends Cubit<ScanState> {
     required String did,
     required String kid,
     required Uri uri,
+    required Map<String, dynamic>? clientMetaData,
   }) async {
     final nonce = uri.queryParameters['nonce'] ?? '';
     final clientId = uri.queryParameters['client_id'] ?? '';
 
-    /// ldp_vc
-    final presentLdpVc = presentationDefinition.format?.ldpVc != null;
+    bool presentLdpVc = false;
+    bool presentJwtVc = false;
 
-    /// jwt_vc
-    final presentJwtVc = presentationDefinition.format?.jwtVc != null;
+    if (presentationDefinition.format != null) {
+      /// ldp_vc
+      presentLdpVc = presentationDefinition.format?.ldpVc != null;
+
+      /// jwt_vc
+      presentJwtVc = presentationDefinition.format?.jwtVc != null;
+    } else {
+      if (clientMetaData == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Client metaData is invalid',
+          },
+        );
+      }
+
+      final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
+
+      /// ldp_vc
+      presentLdpVc = vpFormats.containsKey('ldp_vc');
+
+      /// jwt_vc
+      presentJwtVc = vpFormats.containsKey('jwt_vc');
+    }
+
+    if (!presentLdpVc && !presentJwtVc) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'VC format is missing',
+        },
+      );
+    }
 
     if (presentLdpVc) {
       final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);

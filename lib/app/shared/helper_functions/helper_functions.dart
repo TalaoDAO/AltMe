@@ -244,42 +244,60 @@ Future<String> web3RpcMainnetInfuraURL() async {
   return '$prefixUrl$infuraApiKey';
 }
 
+int getIndexValue({
+  required bool isEBSIV3,
+  required DidKeyType didKeyType,
+}) {
+  switch (didKeyType) {
+    case DidKeyType.secp256k1:
+      if (isEBSIV3) {
+        return 3;
+      } else {
+        return 1;
+      }
+    case DidKeyType.p256:
+      return 4;
+    case DidKeyType.ebsiv3:
+      return 5;
+    case DidKeyType.jwkP256:
+      return 6;
+  }
+}
+
 Future<String> getPrivateKey({
   required SecureStorageProvider secureStorage,
   required DidKeyType didKeyType,
-  OIDC4VC? oidc4vc,
+  required OIDC4VC oidc4vc,
 }) async {
-  late String storageKey;
+  final mnemonic = await secureStorage.get(SecureStorageKeys.ssiMnemonic);
 
   switch (didKeyType) {
     case DidKeyType.secp256k1:
-      if (oidc4vc == null) throw Exception();
-      final mnemonic = await secureStorage.get(SecureStorageKeys.ssiMnemonic);
-      final index = getIndexValue(isEBSIV3: true);
-      final key = await oidc4vc.privateKeyFromMnemonic(
+      final index = getIndexValue(
+        isEBSIV3: true,
+        didKeyType: didKeyType,
+      );
+      final key = oidc4vc.privateKeyFromMnemonic(
         mnemonic: mnemonic!,
         indexValue: index,
       );
       return key;
 
     case DidKeyType.p256:
-      storageKey = SecureStorageKeys.p256PrivateKey;
     case DidKeyType.ebsiv3:
-      storageKey = SecureStorageKeys.p256PrivateKey2;
     case DidKeyType.jwkP256:
-      storageKey = SecureStorageKeys.p256PrivateKey3;
+      final indexValue = getIndexValue(
+        isEBSIV3: false,
+        didKeyType: didKeyType,
+      );
+
+      final key = oidc4vc.p256PrivateKeyFromMnemonics(
+        mnemonic: mnemonic!,
+        indexValue: indexValue,
+      );
+
+      return key;
   }
-
-  /// return key if it is already created
-  final String? p256PrivateKey = await secureStorage.get(storageKey);
-  if (p256PrivateKey != null) return p256PrivateKey.replaceAll('=', '');
-
-  /// create key if it is not created
-  final newKey = generateP256Key();
-
-  await secureStorage.set(storageKey, newKey);
-
-  return newKey;
 }
 
 Future<String> getWalletP256Key(SecureStorageProvider secureStorage) async {
@@ -290,14 +308,14 @@ Future<String> getWalletP256Key(SecureStorageProvider secureStorage) async {
   if (p256PrivateKey != null) return p256PrivateKey.replaceAll('=', '');
 
   /// create key if it is not created
-  final newKey = generateP256Key();
+  final newKey = generateRandomP256Key();
 
   await secureStorage.set(storageKey, newKey);
 
   return newKey;
 }
 
-String generateP256Key() {
+String generateRandomP256Key() {
   /// create key if it is not created
   final jwk = JsonWebKey.generate('ES256');
 
@@ -326,13 +344,14 @@ DidKeyType? getDidKeyFromString(String? didKeyTypeString) {
 Future<String> fetchPrivateKey({
   required SecureStorageProvider secureStorage,
   required DidKeyType didKeyType,
+  required OIDC4VC oidc4vc,
   bool? isEBSIV3,
-  OIDC4VC? oidc4vc,
 }) async {
   if (isEBSIV3 != null && isEBSIV3) {
     final privateKey = await getPrivateKey(
       secureStorage: secureStorage,
       didKeyType: DidKeyType.ebsiv3,
+      oidc4vc: oidc4vc,
     );
 
     return privateKey;
@@ -981,14 +1000,6 @@ Future<(String?, String?)> getIssuerAndPreAuthorizedCode({
 bool isURL(String input) {
   final bool uri = Uri.tryParse(input)?.hasAbsolutePath ?? false;
   return uri;
-}
-
-int getIndexValue({required bool isEBSIV3}) {
-  if (isEBSIV3) {
-    return 3;
-  } else {
-    return 1;
-  }
 }
 
 MessageHandler getMessageHandler(dynamic e) {

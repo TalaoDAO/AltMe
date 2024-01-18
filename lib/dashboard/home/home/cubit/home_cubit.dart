@@ -42,7 +42,8 @@ class HomeCubit extends Cubit<HomeState> {
     required CameraCubit cameraCubit,
     required OIDC4VCIDraftType oidc4vciDraftType,
   }) async {
-    // launch url to get Over18, Over15, Over13,AgeRange Credentials
+    // launch url to get Over18, Over15, Over13,Over21,Over50,Over65,
+    // AgeRange Credentials
     emit(state.loading());
     final verificationMethod =
         await secureStorageProvider.get(SecureStorageKeys.verificationMethod);

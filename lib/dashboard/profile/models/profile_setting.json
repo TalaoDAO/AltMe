@@ -17,6 +17,9 @@
     "displayOver13": false,
     "displayOver15": true,
     "displayOver18": true,
+    "displayOver21": false,
+    "displayOver50": false,
+    "displayOver65": false,
     "displayRewardsCategory": true,
     "displayVerifiableId": true
   },
