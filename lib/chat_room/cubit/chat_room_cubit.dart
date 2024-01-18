@@ -146,6 +146,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
       _notificationStreamController ??= StreamController<int>.broadcast();
 
       List<Message> retrivedMessageFromDB = [];
+      await _checkIfRoomNotExistThenCreateIt();
       final savedRoomId = await matrixChat.getRoomIdFromStorage();
       if (savedRoomId != null) {
         _roomId = savedRoomId;
