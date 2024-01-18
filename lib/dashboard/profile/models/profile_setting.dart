@@ -186,7 +186,7 @@ class DiscoverCardsOptions extends Equatable {
       _$DiscoverCardsOptionsFromJson(json);
 
   factory DiscoverCardsOptions.empty() => const DiscoverCardsOptions(
-        displayDefi: true,
+        displayDefi: false,
         displayHumanity: false,
         displayOver13: false,
         displayOver15: true,
