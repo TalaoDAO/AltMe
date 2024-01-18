@@ -182,11 +182,11 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over18:
         return 'Over18';
       case CredentialSubjectType.over21:
-        return 'Over18';
+        return 'Over21';
       case CredentialSubjectType.over50:
-        return 'Over18';
+        return 'Over50';
       case CredentialSubjectType.over65:
-        return 'Over18';
+        return 'Over65';
       case CredentialSubjectType.passportFootprint:
         return 'PassportNumber';
       case CredentialSubjectType.phonePass:
@@ -307,11 +307,11 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over18:
         return Over18Model.fromJson(json);
       case CredentialSubjectType.over21:
-        return Over18Model.fromJson(json);
+        return Over21Model.fromJson(json);
       case CredentialSubjectType.over50:
-        return Over18Model.fromJson(json);
+        return Over50Model.fromJson(json);
       case CredentialSubjectType.over65:
-        return Over18Model.fromJson(json);
+        return Over65Model.fromJson(json);
       case CredentialSubjectType.passportFootprint:
         return PassportFootprintModel.fromJson(json);
       case CredentialSubjectType.phonePass:
@@ -383,6 +383,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     if (this == CredentialSubjectType.over18 ||
         this == CredentialSubjectType.over13 ||
         this == CredentialSubjectType.over15 ||
+        this == CredentialSubjectType.over21 ||
+        this == CredentialSubjectType.over50 ||
+        this == CredentialSubjectType.over65 ||
         this == CredentialSubjectType.ageRange ||
         this == CredentialSubjectType.defiCompliance ||
         this == CredentialSubjectType.livenessCard) {
@@ -398,6 +401,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       return KycVcType.over13;
     } else if (this == CredentialSubjectType.over15) {
       return KycVcType.over15;
+    } else if (this == CredentialSubjectType.over21) {
+      return KycVcType.over21;
+    } else if (this == CredentialSubjectType.over50) {
+      return KycVcType.over50;
+    } else if (this == CredentialSubjectType.over65) {
+      return KycVcType.over65;
     } else if (this == CredentialSubjectType.ageRange) {
       return KycVcType.ageRange;
     } else if (this == CredentialSubjectType.defiCompliance) {
@@ -414,6 +423,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       return Urls.over15AIValidationUrl;
     } else if (this == CredentialSubjectType.over18) {
       return Urls.over18AIValidationUrl;
+    } else if (this == CredentialSubjectType.over21) {
+      return Urls.over21AIValidationUrl;
+    } else if (this == CredentialSubjectType.over50) {
+      return Urls.over50AIValidationUrl;
+    } else if (this == CredentialSubjectType.over65) {
+      return Urls.over65AIValidationUrl;
     } else if (this == CredentialSubjectType.ageRange) {
       return Urls.ageRangeAIValidationUrl;
     } else {
@@ -428,6 +443,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.over13 ||
         this == CredentialSubjectType.over15 ||
         this == CredentialSubjectType.over18 ||
+        this == CredentialSubjectType.over21 ||
+        this == CredentialSubjectType.over50 ||
+        this == CredentialSubjectType.over65 ||
         this == CredentialSubjectType.verifiableIdCard ||
         this == CredentialSubjectType.ageRange ||
         this == CredentialSubjectType.nationality ||
@@ -750,17 +768,17 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.learningAchievement:
         return 0;
       case CredentialSubjectType.over13:
-        return 95;
-      case CredentialSubjectType.over15:
-        return 96;
-      case CredentialSubjectType.over18:
-        return 97;
-      case CredentialSubjectType.over21:
-        return 97.1;
-      case CredentialSubjectType.over50:
-        return 97.2;
-      case CredentialSubjectType.over65:
         return 97.3;
+      case CredentialSubjectType.over15:
+        return 97.2;
+      case CredentialSubjectType.over18:
+        return 97.1;
+      case CredentialSubjectType.over21:
+        return 97;
+      case CredentialSubjectType.over50:
+        return 96;
+      case CredentialSubjectType.over65:
+        return 95;
       case CredentialSubjectType.passportFootprint:
         return 91;
       case CredentialSubjectType.phonePass:

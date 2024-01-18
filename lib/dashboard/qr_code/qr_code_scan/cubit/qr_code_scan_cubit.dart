@@ -878,13 +878,37 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
     }
 
-    if (presentationDefinition.format == null) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'Presentation definition is invalid',
-        },
+    if (profileCubit.state.model.profileType == ProfileType.ebsiV3) {
+      if (presentationDefinition.format == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Presentation definition is invalid',
+          },
+        );
+      }
+    } else {
+      final Map<String, dynamic>? clientMetaData = await getClientMetada(
+        client: client,
+        uri: state.uri!,
       );
+      if (clientMetaData == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Client metaData is invalid',
+          },
+        );
+      }
+
+      if (!clientMetaData.containsKey('vp_formats')) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Client metaData is invalid',
+          },
+        );
+      }
     }
 
     for (final descriptor in presentationDefinition.inputDescriptors) {
@@ -974,7 +998,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
 
       final Map<String, dynamic> header =
-          decodeHeader(jwtDecode: jwtDecode, token: encodedData as String);
+          decodeHeader(jwtDecode: jwtDecode, token: encodedData);
 
       final String issuerDid = jsonEncode(payload['client_id']);
       final String issuerKid = jsonEncode(header['kid']);
@@ -984,7 +1008,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final VerificationType isVerified = await verifyEncodedData(
           issuerDid,
           issuerKid,
-          encodedData.toString(),
+          encodedData,
         );
 
         if (isVerified == VerificationType.verified) {

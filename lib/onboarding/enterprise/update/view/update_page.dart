@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -190,6 +191,9 @@ class _EnterpriseUpdateViewState extends State<EnterpriseUpdateView> {
                                 email: emailController.text.trim(),
                                 password: passwordController.text.trim(),
                               );
+                          await context
+                              .read<CredentialsCubit>()
+                              .loadAllCredentials();
                         }
                       : null,
             ),

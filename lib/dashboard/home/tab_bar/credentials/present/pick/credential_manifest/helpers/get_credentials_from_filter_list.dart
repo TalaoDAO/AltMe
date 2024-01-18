@@ -42,12 +42,23 @@ List<CredentialModel> getCredentialsFromFilterList({
             /// remove unmatched credential
             searchList.removeWhere(
               (element) {
-                if (field.filter?.pattern != null &&
-                    element == field.filter?.pattern) {
-                  return false;
-                } else if (field.filter?.contains != null &&
-                    element == field.filter?.contains?.containsConst) {
-                  return false;
+                String? pattern;
+
+                if (field.filter?.pattern != null) {
+                  pattern = field.filter!.pattern;
+                } else if (field.filter?.contains?.containsConst != null) {
+                  pattern = field.filter?.contains?.containsConst;
+                }
+
+                if (pattern == null) return true;
+
+                if (pattern.endsWith(r'$')) {
+                  final RegExp regEx = RegExp(pattern);
+                  final Match? match = regEx.firstMatch(element);
+
+                  if (match != null) return false;
+                } else {
+                  if (element == pattern) return false;
                 }
 
                 return true;
