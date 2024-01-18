@@ -500,7 +500,7 @@ class ScanCubit extends Cubit<ScanState> {
         clientMetaData: clientMetaData,
       );
 
-      final presentationSubmissionJson = await getPresentationSubmission(
+      final presentationSubmissionString = await getPresentationSubmission(
         credentialsToBePresented: credentialsToBePresented,
         presentationDefinition: presentationDefinition,
         clientMetaData: clientMetaData,
@@ -508,7 +508,7 @@ class ScanCubit extends Cubit<ScanState> {
 
       final responseData = <String, dynamic>{
         'vp_token': vpToken,
-        'presentation_submission': presentationSubmissionJson,
+        'presentation_submission': presentationSubmissionString,
       };
 
       if (idTokenNeeded && idToken != null) {
@@ -604,7 +604,7 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  Future<Map<String, dynamic>> getPresentationSubmission({
+  Future<String> getPresentationSubmission({
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
     required Map<String, dynamic>? clientMetaData,
@@ -754,9 +754,9 @@ class ScanCubit extends Cubit<ScanState> {
 
     presentationSubmission['descriptor_map'] = inputDescriptors;
 
-    // final presentationSubmissionString = jsonEncode(presentationSubmission);
+    final presentationSubmissionString = jsonEncode(presentationSubmission);
 
-    return presentationSubmission;
+    return presentationSubmissionString;
   }
 
   Future<void> askPermissionDIDAuthCHAPI({
