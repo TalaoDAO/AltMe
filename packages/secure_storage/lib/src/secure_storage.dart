@@ -21,7 +21,7 @@ Future<void> get initSecureStorage async {
     } catch (e) {
       const defaultAndroidOptions = AndroidOptions(
         encryptedSharedPreferences: true,
-        sharedPreferencesName: 'altme',
+        sharedPreferencesName: 'altme2',
       );
 
       const storage = FlutterSecureStorage(
