@@ -34,6 +34,7 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
         homeCubit: context.read<HomeCubit>(),
         walletCubit: context.read<WalletCubit>(),
         splashCubit: context.read<SplashCubit>(),
+        altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
       ),
       child: const OnBoardingGenPhraseView(),
     );
@@ -68,9 +69,6 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          if (state.status == AppStatus.success) {
-            await context.read<AltmeChatSupportCubit>().init();
-          }
           LoadingView().hide();
         }
 

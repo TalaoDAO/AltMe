@@ -46,6 +46,7 @@ class ProtectWalletPage extends StatelessWidget {
         homeCubit: context.read<HomeCubit>(),
         walletCubit: context.read<WalletCubit>(),
         splashCubit: context.read<SplashCubit>(),
+        altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
       ),
       child: ProtectWalletView(
         routeType: routeType,
@@ -102,9 +103,6 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          if (state.status == AppStatus.success) {
-            await context.read<AltmeChatSupportCubit>().init();
-          }
           LoadingView().hide();
         }
 

@@ -101,9 +101,6 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          if (state.status == AppStatus.success && widget.isFromOnboard) {
-            await context.read<AltmeChatSupportCubit>().init();
-          }
           LoadingView().hide();
         }
 

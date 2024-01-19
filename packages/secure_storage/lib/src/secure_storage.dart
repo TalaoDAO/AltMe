@@ -7,6 +7,11 @@ SecureStorageProvider get getSecureStorage {
   return SecureStorageProvider();
 }
 
+AndroidOptions _getAndroidOptions() => const AndroidOptions(
+      encryptedSharedPreferences: true,
+      sharedPreferencesName: 'altme',
+    );
+
 /// Initialize and test secure storage availability on the phone.
 Future<void> get initSecureStorage async {
   if (Platform.isAndroid) {
@@ -20,12 +25,8 @@ Future<void> get initSecureStorage async {
       const storage = FlutterSecureStorage();
       await testStorage(storage);
     } catch (e) {
-      const defaultAndroidOptions = AndroidOptions(
-        encryptedSharedPreferences: true,
-        sharedPreferencesName: 'talao',
-      );
-      const storage = FlutterSecureStorage(
-        aOptions: defaultAndroidOptions,
+      final storage = FlutterSecureStorage(
+        aOptions: _getAndroidOptions(),
       );
       await testStorage(storage);
       await testStorage(storage);

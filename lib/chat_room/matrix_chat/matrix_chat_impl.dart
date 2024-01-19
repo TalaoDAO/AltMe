@@ -289,10 +289,10 @@ class MatrixChatImpl extends MatrixChatInterface {
         await client!.joinRoomById(roomId);
         await enableRoomEncyption(roomId);
       }
-      final eventId = await client!.getRoomById(roomId)?.sendTextEvent(
-            partialText.text,
-            txid: messageId,
-          );
+      final eventId = await room?.sendTextEvent(
+        partialText.text,
+        txid: messageId,
+      );
       logger.i('send text event: $eventId');
     } catch (e, s) {
       logger.e('e: $e , s: $s');
@@ -480,7 +480,7 @@ class MatrixChatImpl extends MatrixChatInterface {
       data: data,
     );
 
-    logger.i('regester response: $response');
+    logger.i('register response: $response');
   }
 
   Future<String> _getDidAuth(String did, String nonce) async {
