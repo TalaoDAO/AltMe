@@ -37,7 +37,6 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:secure_storage/secure_storage.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 class App extends StatelessWidget {
   const App({super.key, this.flavorMode = FlavorMode.production});
@@ -46,7 +45,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Sentry.captureException('starting Altme');
     return MultiBlocProvider(
       providers: [
         BlocProvider<FlavorCubit>(

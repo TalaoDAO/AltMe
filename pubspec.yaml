@@ -97,7 +97,6 @@ dependencies:
   secure_application: ^3.8.0
   secure_storage:
     path: packages/secure_storage
-  sentry_flutter: ^7.8.0
   share_plus: ^7.0.2
   shimmer: ^3.0.0
   stream_channel: ^2.1.1
