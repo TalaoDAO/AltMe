@@ -48,6 +48,7 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
         walletCubit: context.read<WalletCubit>(),
         splashCubit: context.read<SplashCubit>(),
         flavorCubit: context.read<FlavorCubit>(),
+        altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
       ),
       child: OnBoardingVerifyPhraseView(
         mnemonic: mnemonic,
@@ -92,9 +93,6 @@ class _OnBoardingVerifyPhraseViewState
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          if (state.status == AppStatus.success && widget.isFromOnboarding) {
-            await context.read<AltmeChatSupportCubit>().init();
-          }
           LoadingView().hide();
         }
 
