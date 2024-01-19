@@ -346,14 +346,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
-  charcode:
-    dependency: transitive
-    description:
-      name: charcode
-      sha256: fb98c0f6d12c920a02ee2d998da788bca066ca5f148492b7085ee23372b12306
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.1"
   checked_yaml:
     dependency: transitive
     description:
@@ -981,10 +973,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: "7c4e42e66fb24bc912b64860c69806ef5cc0ad1480772aa2201ede568125a379"
+      sha256: "30088ce826b5b9cfbf9e8bece34c716c8a59fa54461dcae1e4ac01a94639e762"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.9+1"
+    version: "0.6.18+3"
   flutter_native_timezone:
     dependency: "direct main"
     description:
@@ -1005,10 +997,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_openssl_crypto
-      sha256: b64a0825d79f10b6d5f5951f7ce2d5ddc12ed532129fc5a7e0ce472f5b97d78e
+      sha256: "6dcecf6f7c1804ae6f5d73ee05df8af72ea8133bf2447d25979d739503186c96"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.3.0"
   flutter_parsed_text:
     dependency: transitive
     description:
@@ -1119,10 +1111,10 @@ packages:
     dependency: transitive
     description:
       name: get_it
-      sha256: d0b88dc35a7f97fd91fec0cf8f165abd97a57977968d8fc02ba0bc92e14ba07e
+      sha256: e6017ce7fdeaf218dc51a100344d8cb70134b80e28b760f8bb23c242437bafd7
       url: "https://pub.dev"
     source: hosted
-    version: "7.6.6"
+    version: "7.6.7"
   glob:
     dependency: transitive
     description:
@@ -1469,10 +1461,10 @@ packages:
     dependency: "direct main"
     description:
       name: markdown
-      sha256: "01512006c8429f604eb10f9848717baeaedf99e991d14a50d540d9beff08e5c6"
+      sha256: "4e304b422905967f1f7e35a03cd2a3f8f34306b3e1b0cc7a8677d7a306471a0e"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "7.2.0"
   matcher:
     dependency: transitive
     description:
@@ -1493,10 +1485,10 @@ packages:
     dependency: "direct main"
     description:
       name: matrix
-      sha256: "304e804f1f669e3b9e17b0317f7f33c2a2850d8e4f0b840897e012523ebd9775"
+      sha256: ae57870b14484044896a07abbc102b29cfafcfe38c382e954ba057e63196afdd
       url: "https://pub.dev"
     source: hosted
-    version: "0.22.4"
+    version: "0.25.5"
   matrix_api_lite:
     dependency: transitive
     description:
