@@ -878,16 +878,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
     }
 
-    if (profileCubit.state.model.profileType == ProfileType.ebsiV3) {
-      if (presentationDefinition.format == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Presentation definition is invalid',
-          },
-        );
-      }
-    } else {
+    if (presentationDefinition.format == null) {
       final Map<String, dynamic>? clientMetaData = await getClientMetada(
         client: client,
         uri: state.uri!,
@@ -905,7 +896,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         throw ResponseMessage(
           data: {
             'error': 'invalid_request',
-            'error_description': 'Client metaData is invalid',
+            'error_description': 'Format is missing.',
           },
         );
       }
