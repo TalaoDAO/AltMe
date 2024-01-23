@@ -49,6 +49,7 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
         splashCubit: context.read<SplashCubit>(),
         flavorCubit: context.read<FlavorCubit>(),
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
+        profileCubit: context.read<ProfileCubit>(),
       ),
       child: OnBoardingVerifyPhraseView(
         mnemonic: mnemonic,

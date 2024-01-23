@@ -17,6 +17,7 @@ Future<void> generateAccount({
   required WalletCubit walletCubit,
   required SplashCubit splashCubit,
   required AltmeChatSupportCubit altmeChatSupportCubit,
+  required ProfileCubit profileCubit,
 }) async {
   final mnemonicFormatted = mnemonic.join(' ');
 
@@ -56,8 +57,10 @@ Future<void> generateAccount({
     isFromOnboarding: true,
   );
 
-  /// initiate chat
-  await altmeChatSupportCubit.init();
+  if (profileCubit.state.model.profileType == ProfileType.enterprise) {
+    /// initiate chat if it is enterprise
+    await altmeChatSupportCubit.init();
+  }
 
   await homeCubit.emitHasWallet();
 }

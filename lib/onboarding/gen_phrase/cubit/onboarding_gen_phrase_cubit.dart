@@ -25,6 +25,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     required this.walletCubit,
     required this.splashCubit,
     required this.altmeChatSupportCubit,
+    required this.profileCubit,
   }) : super(const OnBoardingGenPhraseState());
 
   final SecureStorageProvider secureStorageProvider;
@@ -35,6 +36,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
   final WalletCubit walletCubit;
   final SplashCubit splashCubit;
   final AltmeChatSupportCubit altmeChatSupportCubit;
+  final ProfileCubit profileCubit;
 
   final log = getLogger('OnBoardingGenPhraseCubit');
 
@@ -51,6 +53,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        profileCubit: profileCubit,
       );
       await secureStorageProvider.set(
         SecureStorageKeys.hasVerifiedMnemonics,

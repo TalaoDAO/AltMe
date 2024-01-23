@@ -25,6 +25,9 @@ class MockCredentialsCubit extends MockCubit<CredentialsState>
 
 class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {}
 
+class MockProfileCubit extends MockCubit<ProfileState>
+    implements ProfileCubit {}
+
 void main() {
   late SecureStorageProvider mockSecureStorage;
   late DIDCubit didCubit;
@@ -32,6 +35,7 @@ void main() {
   late CredentialsCubit credentialsCubit;
   late WalletCubit walletCubit;
   late AltmeChatSupportCubit altmeChatSupportCubit;
+  late ProfileCubit profileCubit;
 
   setUp(() {
     mockSecureStorage = MockSecureStorage();
@@ -40,6 +44,7 @@ void main() {
     credentialsCubit = MockCredentialsCubit();
     walletCubit = MockWalletCubit();
     altmeChatSupportCubit = MockAltmeChatSupportCubit();
+    profileCubit = MockProfileCubit();
   });
 
   group('Splash Cubit', () {
@@ -53,6 +58,7 @@ void main() {
           walletCubit: walletCubit,
           client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           altmeChatSupportCubit: altmeChatSupportCubit,
+          profileCubit: profileCubit,
         ).state,
         SplashStatus.init,
       );
@@ -74,6 +80,7 @@ void main() {
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            profileCubit: profileCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -94,6 +101,7 @@ void main() {
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            profileCubit: profileCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -121,6 +129,7 @@ void main() {
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            profileCubit: profileCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -141,6 +150,7 @@ void main() {
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            profileCubit: profileCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -170,6 +180,7 @@ void main() {
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            profileCubit: profileCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -190,6 +201,7 @@ void main() {
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            profileCubit: profileCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -221,6 +233,7 @@ void main() {
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            profileCubit: profileCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -241,6 +254,7 @@ void main() {
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            profileCubit: profileCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -274,6 +288,7 @@ void main() {
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            profileCubit: profileCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -294,6 +309,7 @@ void main() {
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            profileCubit: profileCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -321,6 +337,7 @@ void main() {
               walletCubit: walletCubit,
               client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
               altmeChatSupportCubit: altmeChatSupportCubit,
+              profileCubit: profileCubit,
             );
             await splashCubit.initialiseApp();
 
@@ -341,6 +358,7 @@ void main() {
               walletCubit: walletCubit,
               client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
               altmeChatSupportCubit: altmeChatSupportCubit,
+              profileCubit: profileCubit,
             );
             await splashCubit.initialiseApp();
 
@@ -361,6 +379,7 @@ void main() {
               walletCubit: walletCubit,
               client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
               altmeChatSupportCubit: altmeChatSupportCubit,
+              profileCubit: profileCubit,
             );
             await splashCubit.initialiseApp();
 
