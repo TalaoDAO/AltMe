@@ -24,6 +24,7 @@ class SplashCubit extends Cubit<SplashState> {
     required this.credentialsCubit,
     required this.altmeChatSupportCubit,
     required this.client,
+    required this.profileCubit,
   }) : super(const SplashState()) {
     _getAppVersion();
   }
@@ -35,6 +36,7 @@ class SplashCubit extends Cubit<SplashState> {
   final CredentialsCubit credentialsCubit;
   final AltmeChatSupportCubit altmeChatSupportCubit;
   final DioClient client;
+  final ProfileCubit profileCubit;
 
   Future<void> initialiseApp() async {
     double counter = 0;
@@ -54,7 +56,11 @@ class SplashCubit extends Cubit<SplashState> {
 
         if (hasWallet) {
           await homeCubit.emitHasWallet();
-          await altmeChatSupportCubit.init();
+
+          if (profileCubit.state.model.walletType == WalletType.enterprise) {
+            await altmeChatSupportCubit.init();
+          }
+
           emit(state.copyWith(status: SplashStatus.routeToPassCode));
           // if (Parameters.walletHandlesCrypto) {
           //   unawaited(

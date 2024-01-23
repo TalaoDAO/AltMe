@@ -28,6 +28,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     required this.splashCubit,
     required this.flavorCubit,
     required this.altmeChatSupportCubit,
+    required this.profileCubit,
   }) : super(OnBoardingVerifyPhraseState());
 
   final SecureStorageProvider secureStorageProvider;
@@ -39,6 +40,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
   final FlavorCubit flavorCubit;
   final SplashCubit splashCubit;
   final AltmeChatSupportCubit altmeChatSupportCubit;
+  final ProfileCubit profileCubit;
 
   final log = getLogger('OnBoardingVerifyPhraseCubit');
 
@@ -124,6 +126,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
           walletCubit: walletCubit,
           splashCubit: splashCubit,
           altmeChatSupportCubit: altmeChatSupportCubit,
+          profileCubit: profileCubit,
         );
       }
       await secureStorageProvider.set(
