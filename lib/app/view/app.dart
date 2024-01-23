@@ -215,7 +215,7 @@ class App extends StatelessWidget {
           create: (context) => AltmeChatSupportCubit(
             secureStorageProvider: getSecureStorage,
             matrixChat: MatrixChatImpl(),
-            invites: [AltMeStrings.matrixSupportId],
+            profileCubit: context.read<ProfileCubit>(),
           ),
         ),
         BlocProvider(
@@ -227,6 +227,7 @@ class App extends StatelessWidget {
             credentialsCubit: context.read<CredentialsCubit>(),
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
+            profileCubit: context.read<ProfileCubit>(),
           ),
         ),
         BlocProvider(

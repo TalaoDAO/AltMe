@@ -35,6 +35,7 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
         walletCubit: context.read<WalletCubit>(),
         splashCubit: context.read<SplashCubit>(),
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
+        profileCubit: context.read<ProfileCubit>(),
       ),
       child: const OnBoardingGenPhraseView(),
     );
