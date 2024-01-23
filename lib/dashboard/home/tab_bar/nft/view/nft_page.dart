@@ -65,38 +65,41 @@ class _NftViewState extends State<NftView> {
             ),
           ),
           const SizedBox(height: Sizes.spaceXSmall),
-          Center(
-            child: TransparentInkWell(
-              onTap: () {
-                Navigator.of(context).push<void>(
-                  ReceivePage.route(
-                    accountAddress: context
-                        .read<WalletCubit>()
-                        .state
-                        .currentAccount!
-                        .walletAddress,
-                    item: l10n.nft,
-                    description: l10n.sendOnlyNftToThisAddressDescription,
-                  ),
-                );
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.asset(
-                    IconStrings.addSquare,
-                    width: Sizes.icon,
-                    height: Sizes.icon,
-                  ),
-                  const SizedBox(width: Sizes.spaceXSmall),
-                  Text(
-                    l10n.receiveNft,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ],
+          if (isAndroid)
+            Center(
+              child: TransparentInkWell(
+                onTap: () {
+                  Navigator.of(context).push<void>(
+                    ReceivePage.route(
+                      accountAddress: context
+                          .read<WalletCubit>()
+                          .state
+                          .currentAccount!
+                          .walletAddress,
+                      item: l10n.nft,
+                      description: l10n.sendOnlyNftToThisAddressDescription,
+                    ),
+                  );
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      IconStrings.addSquare,
+                      width: Sizes.icon,
+                      height: Sizes.icon,
+                    ),
+                    const SizedBox(width: Sizes.spaceXSmall),
+                    Text(
+                      l10n.receiveNft,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
+            )
+          else
+            const SizedBox.shrink(),
           const SizedBox(height: Sizes.spaceNormal),
           Expanded(
             child: MultiBlocListener(
