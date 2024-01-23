@@ -216,15 +216,23 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
           emit(state.copyWith(messages: newMessages));
         } else {
           final Message message = matrixChat.mapEventToMessage(event);
-          _getUnreadMessageCount();
           emit(
             state.copyWith(
               messages: [message, ...state.messages],
             ),
           );
         }
+
+        setMessagesAsRead();
+
+        Future<void>.delayed(const Duration(seconds: 1))
+            .then((val) => _getUnreadMessageCount());
       }
     });
+  }
+
+  void hardCodeAllMessageAsRead() {
+    _notificationStreamController?.sink.add(0);
   }
 
   int get unreadMessageCount => matrixChat.getUnreadMessageCount(_roomId);
