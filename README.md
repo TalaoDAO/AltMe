@@ -641,7 +641,7 @@ $ sudo chmod 777 script.sh
 
 
 ## Current store's versions
-prod  
+<pre>prod  
   altme  
     android:    365 (2.2.3)  
     ios:        365 (2.2.3)  
@@ -655,7 +655,7 @@ test
   talao  
     android: 	368 (2.2.6)  
     ios: 	    368 (2.2.6)  
-      
+</pre> 
 
 [coverage_badge]: coverage_badge.svg
 [flutter_localizations_link]: https://api.flutter.dev/flutter/flutter_localizations/flutter_localizations-library.html
