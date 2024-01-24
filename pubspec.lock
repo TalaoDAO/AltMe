@@ -595,8 +595,8 @@ packages:
   didkit:
     dependency: transitive
     description:
-      path: "/wallet/deps/didkit/lib/flutter"
-      relative: false
+      path: "../didkit/lib/flutter"
+      relative: true
     source: path
     version: "0.0.2"
   diff_match_patch:
