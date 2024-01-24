@@ -643,8 +643,8 @@ $ sudo chmod 777 script.sh
 ## Current store's versions
 prod
   altme
-    android: 	365 (2.2.3)
-    ios: 	    365 (2.2.3)
+    android:    365 (2.2.3)
+    ios:        365 (2.2.3)
   talao
     android: 	363 (2.2.0)
     ios: 	    359 (2.2.0)
