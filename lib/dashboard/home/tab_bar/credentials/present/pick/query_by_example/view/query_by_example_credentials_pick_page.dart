@@ -193,7 +193,6 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                               // ignore: lines_longer_than_80_chars
                                               .verifiablePresentationRequest(
                                                 url: uri.toString(),
-                                                keyId: SecureStorageKeys.ssiKey,
                                                 credentialsToBePresented:
                                                     updatedCredentials,
                                                 challenge: preview['challenge']

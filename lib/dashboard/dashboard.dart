@@ -4,7 +4,6 @@ export 'connection/connection.dart';
 export 'crypto_account_switcher/crypto_account_switcher.dart';
 export 'discover/discover.dart';
 export 'drawer/drawer.dart';
-export 'general_information/general_information.dart';
 export 'home/home.dart';
 export 'json_viewer/json_viewer.dart';
 export 'missing_creentials/missing_credentials.dart';

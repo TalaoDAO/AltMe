@@ -1,9 +1,12 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/did/cubit/did_cubit.dart';
+import 'package:altme/dashboard/dashboard.dart';
+import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'kyc_verification_state.dart';
 part 'kyc_verification_cubit.g.dart';
@@ -11,22 +14,46 @@ part 'kyc_verification_cubit.g.dart';
 class KycVerificationCubit extends Cubit<KycVerificationState> {
   KycVerificationCubit({
     required this.client,
-    required this.didCubit,
+    required this.profileCubit,
+    required this.secureStorageProvider,
+    required this.oidc4vc,
+    required this.didKitProvider,
   }) : super(const KycVerificationState());
 
   final DioClient client;
-  final DIDCubit didCubit;
+  final ProfileCubit profileCubit;
+  final SecureStorageProvider secureStorageProvider;
+  final OIDC4VC oidc4vc;
+  final DIDKitProvider didKitProvider;
+
   final logger = getLogger('KycVerificationCubit');
 
   Future<String?> _getApiCode() async {
     try {
       await dotenv.load();
       final walletApiKey = dotenv.get('WALLET_API_KEY_ID360');
+
+      final didKeyType = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+
+      final privateKey = await getPrivateKey(
+        secureStorage: getSecureStorage,
+        didKeyType: didKeyType,
+        oidc4vc: oidc4vc,
+      );
+
+      final (did, _) = await getDidAndKid(
+        didKeyType: didKeyType,
+        privateKey: privateKey,
+        secureStorage: getSecureStorage,
+        didKitProvider: didKitProvider,
+      );
+
       final response = await client.get(
         Urls.getCodeForId360,
         queryParameters: {
           'client_id': AltMeStrings.clientIdForID360,
-          'did': didCubit.state.did ?? '',
+          'did': did,
         },
         headers: {
           'api-key': walletApiKey,

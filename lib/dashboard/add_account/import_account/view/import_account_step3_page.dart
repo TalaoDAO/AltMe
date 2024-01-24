@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
@@ -29,7 +28,6 @@ class ImportAccountStep3Page extends StatelessWidget {
     return BlocProvider(
       create: (_) => ImportAccountCubit(
         secureStorageProvider: getSecureStorage,
-        didCubit: context.read<DIDCubit>(),
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),

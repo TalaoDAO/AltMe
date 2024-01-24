@@ -5,7 +5,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/wallet/model/model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -30,22 +29,23 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   CredentialsCubit({
     required this.credentialsRepository,
     required this.secureStorageProvider,
-    required this.didCubit,
     required this.didKitProvider,
     required this.advanceSettingsCubit,
     required this.keyGenerator,
     required this.jwtDecode,
     required this.profileCubit,
+    required this.oidc4vc,
   }) : super(const CredentialsState());
 
   final CredentialsRepository credentialsRepository;
   final SecureStorageProvider secureStorageProvider;
-  final DIDCubit didCubit;
+
   final DIDKitProvider didKitProvider;
   final KeyGenerator keyGenerator;
   final AdvanceSettingsCubit advanceSettingsCubit;
   final JWTDecode jwtDecode;
   final ProfileCubit profileCubit;
+  final OIDC4VC oidc4vc;
 
   final log = getLogger('CredentialsCubit');
 
@@ -545,11 +545,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   }) async {
     return generateAssociatedWalletCredential(
       cryptoAccountData: cryptoAccountData,
-      didCubit: didCubit,
       didKitProvider: didKitProvider,
       blockchainType: blockchainType,
       keyGenerator: keyGenerator,
       oldId: oldId,
+      oidc4vc: oidc4vc,
+      profileCubit: profileCubit,
     );
   }
 

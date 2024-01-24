@@ -1,11 +1,11 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/drawer/drawer.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
-class ManageDIDEdDSAPage extends StatelessWidget {
+class ManageDIDEdDSAPage extends StatefulWidget {
   const ManageDIDEdDSAPage({super.key});
 
   static Route<dynamic> route() {
@@ -16,9 +16,21 @@ class ManageDIDEdDSAPage extends StatelessWidget {
   }
 
   @override
+  State<ManageDIDEdDSAPage> createState() => _ManageDIDEdDSAPageState();
+}
+
+class _ManageDIDEdDSAPageState extends State<ManageDIDEdDSAPage> {
+  Future<String> getDid() async {
+    const didMethod = AltMeStrings.defaultDIDMethod;
+    final ssiKey = await getSecureStorage.get(SecureStorageKeys.ssiKey);
+    final did = DIDKitProvider().keyToDID(didMethod, ssiKey!);
+
+    return did;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final did = context.read<DIDCubit>().state.did ?? '...';
     return BasePage(
       title: l10n.keyDecentralizedIdEdSA,
       titleAlignment: Alignment.topCenter,
@@ -33,7 +45,20 @@ class ManageDIDEdDSAPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Did(did: did),
+            FutureBuilder<String>(
+              future: getDid(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.done:
+                    final did = snapshot.data!;
+                    return Did(did: did);
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                  case ConnectionState.active:
+                    return const SizedBox();
+                }
+              },
+            ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
               child: Divider(),

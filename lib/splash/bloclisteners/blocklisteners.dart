@@ -149,7 +149,6 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
 
       if (confirm) {
         await scanCubit.getDIDAuthCHAPI(
-          keyId: state.keyId!,
           done: state.done!,
           uri: state.uri!,
           challenge: state.challenge!,

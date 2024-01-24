@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
@@ -20,7 +19,6 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
     required this.secureStorageProvider,
     required this.keyGenerator,
     required this.homeCubit,
-    required this.didCubit,
     required this.walletCubit,
   }) : super(const ImportAccountState());
 
@@ -28,7 +26,6 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
   final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;
   final HomeCubit homeCubit;
-  final DIDCubit didCubit;
   final WalletCubit walletCubit;
 
   void isMnemonicsOrKeyValid(String value) {

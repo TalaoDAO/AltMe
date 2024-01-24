@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:crypto/crypto.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart' hide User;
 import 'package:mime/mime.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -25,52 +27,63 @@ typedef OnMessageCreated = Future<String> Function(Message);
 class MatrixChatImpl extends MatrixChatInterface {
   factory MatrixChatImpl() {
     _instance ??= MatrixChatImpl._(
-      didKit: DIDKitProvider(),
+      didKitProvider: DIDKitProvider(),
       dioClient: DioClient('', Dio()),
       secureStorageProvider: getSecureStorage,
+      oidc4vc: OIDC4VC(),
     );
     return _instance!;
   }
 
   MatrixChatImpl._({
-    required this.didKit,
+    required this.didKitProvider,
     required this.dioClient,
     required this.secureStorageProvider,
-  }) {
-    secureStorageProvider.get(SecureStorageKeys.did).then((did) {
-      if (did != null && did.isNotEmpty) {
-        init();
-      }
-    });
-  }
+    required this.oidc4vc,
+  });
 
   static MatrixChatImpl? _instance;
 
-  final DIDKitProvider didKit;
+  final DIDKitProvider didKitProvider;
   final DioClient dioClient;
   final SecureStorageProvider secureStorageProvider;
+  final OIDC4VC oidc4vc;
 
   @override
-  Future<User> init() async {
+  Future<User> init(ProfileCubit profileCubit) async {
     logger.i('init()');
     if (client != null && user != null) {
       return user!;
     }
-    final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
-    final did = await secureStorageProvider.get(SecureStorageKeys.did) ?? '';
+
+    final didKeyType = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+
+    final privateKey = await getPrivateKey(
+      secureStorage: getSecureStorage,
+      didKeyType: didKeyType,
+      oidc4vc: oidc4vc,
+    );
+
+    final (did, kid) = await getDidAndKid(
+      didKeyType: didKeyType,
+      privateKey: privateKey,
+      secureStorage: getSecureStorage,
+      didKitProvider: didKitProvider,
+    );
+
     final username = did.replaceAll(':', '-');
-    if (ssiKey == null || ssiKey.isEmpty || did.isEmpty || username.isEmpty) {
-      throw Exception(
-        'ssiKey == null || ssiKey.isEmpty || did.isEmpty || username.isEmpty',
-      );
-    }
 
     await _initClient();
     final isUserRegisteredMatrix = await secureStorageProvider
         .get(SecureStorageKeys.isUserRegisteredMatrix);
     late String userId;
     if (isUserRegisteredMatrix != 'true') {
-      await register(did: did);
+      await register(
+        did: did,
+        kid: kid,
+        privateKey: privateKey,
+      );
       await secureStorageProvider.set(
         SecureStorageKeys.isUserRegisteredMatrix,
         true.toString(),
@@ -139,7 +152,7 @@ class MatrixChatImpl extends MatrixChatInterface {
     try {
       for (final eventId in eventIds) {
         if (eventId != null) {
-          await room.setReadMarker(eventId);
+          await room.setReadMarker(eventId, mRead: eventId);
         }
       }
     } catch (e, s) {
@@ -459,9 +472,16 @@ class MatrixChatImpl extends MatrixChatInterface {
   @override
   Future<void> register({
     required String did,
+    required String kid,
+    required String privateKey,
   }) async {
     final nonce = await _getNonce(did);
-    final didAuth = await _getDidAuth(did, nonce);
+    final didAuth = await _getDidAuth(
+      did: did,
+      kid: kid,
+      nonce: nonce,
+      privateKey: privateKey,
+    );
     await dotenv.load();
     final apiKey = dotenv.get('TALAO_MATRIX_API_KEY');
     final password = await _getPasswordForDID();
@@ -483,23 +503,23 @@ class MatrixChatImpl extends MatrixChatInterface {
     logger.i('register response: $response');
   }
 
-  Future<String> _getDidAuth(String did, String nonce) async {
-    final verificationMethod =
-        await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
-
+  Future<String> _getDidAuth({
+    required String did,
+    required String kid,
+    required String nonce,
+    required String privateKey,
+  }) async {
     final options = <String, dynamic>{
-      'verificationMethod': verificationMethod,
+      'verificationMethod': kid,
       'proofPurpose': 'authentication',
       'challenge': nonce,
       'domain': 'issuer.talao.co',
     };
 
-    final key = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
-
-    final String didAuth = await didKit.didAuth(
+    final String didAuth = await didKitProvider.didAuth(
       did,
       jsonEncode(options),
-      key,
+      privateKey,
     );
 
     return didAuth;

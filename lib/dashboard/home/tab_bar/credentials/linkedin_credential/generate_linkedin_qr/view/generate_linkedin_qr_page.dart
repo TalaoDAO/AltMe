@@ -1,11 +1,12 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/home.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -40,7 +41,8 @@ class GenerateLinkedinQrPage extends StatelessWidget {
         didKitProvider: DIDKitProvider(),
         secureStorageProvider: getSecureStorage,
         fileSaver: FileSaver.instance,
-        didCubit: context.read<DIDCubit>(),
+        profileCubit: context.read<ProfileCubit>(),
+        oidc4vc: OIDC4VC(),
       ),
       child: GenerateLinkedinQrView(
         linkedinUrl: linkedinUrl,

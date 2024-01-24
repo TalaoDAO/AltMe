@@ -47,16 +47,16 @@ class DidView extends StatelessWidget {
                   width: MediaQuery.of(context).size.shortestSide * 0.5,
                   showPoweredBy: true,
                 ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
-                DrawerItem(
-                  title: l10n.keyDecentralizedIdEdSA,
-                  onTap: () {
-                    Navigator.of(context)
-                        .push<void>(ManageDIDEdDSAPage.route());
-                  },
-                ),
+                // const SizedBox(
+                //   height: Sizes.spaceSmall,
+                // ),
+                // DrawerItem(
+                //   title: l10n.keyDecentralizedIdEdSA,
+                //   onTap: () {
+                //     Navigator.of(context)
+                //         .push<void>(ManageDIDEdDSAPage.route());
+                //   },
+                // ),
                 ListView.builder(
                   itemCount: DidKeyType.values.length,
                   shrinkWrap: true,

@@ -18,9 +18,7 @@ class HomeCredentialItem extends StatelessWidget {
       final cardChatSupportCubit = CardChatSupportCubit(
         secureStorageProvider: getSecureStorage,
         matrixChat: MatrixChatImpl(),
-        invites: [
-          credentialModel.data['credentialSubject']?['chatSupport'] as String,
-        ],
+        profileCubit: context.read<ProfileCubit>(),
       );
 
       return BlocProvider(

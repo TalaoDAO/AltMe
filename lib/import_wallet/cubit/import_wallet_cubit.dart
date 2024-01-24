@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
@@ -21,7 +20,6 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
     required this.secureStorageProvider,
     required this.keyGenerator,
     required this.homeCubit,
-    required this.didCubit,
     required this.walletCubit,
     required this.splashCubit,
   }) : super(const ImportWalletState());
@@ -30,7 +28,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
   final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;
   final HomeCubit homeCubit;
-  final DIDCubit didCubit;
+
   final WalletCubit walletCubit;
   final SplashCubit splashCubit;
 
@@ -89,18 +87,6 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
           accountType: AccountType.ssi,
         );
         await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
-
-        const didMethod = AltMeStrings.defaultDIDMethod;
-        final did = didKitProvider.keyToDID(didMethod, ssiKey);
-        final verificationMethod =
-            await didKitProvider.keyToVerificationMethod(didMethod, ssiKey);
-
-        await didCubit.set(
-          did: did,
-          didMethod: didMethod,
-          didMethodName: AltMeStrings.defaultDIDMethodName,
-          verificationMethod: verificationMethod,
-        );
       }
 
       /// what's new popup disabled
