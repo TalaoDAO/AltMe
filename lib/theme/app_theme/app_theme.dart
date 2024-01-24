@@ -101,6 +101,7 @@ abstract class AppTheme {
             fontWeight: FontWeight.w400,
           ),
         ),
+        tabBarTheme: const TabBarTheme(dividerColor: Colors.transparent),
       );
 }
 

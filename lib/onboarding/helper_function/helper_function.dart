@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
@@ -12,11 +11,11 @@ Future<void> generateAccount({
   required SecureStorageProvider secureStorageProvider,
   required KeyGenerator keyGenerator,
   required DIDKitProvider didKitProvider,
-  required DIDCubit didCubit,
   required HomeCubit homeCubit,
   required WalletCubit walletCubit,
   required SplashCubit splashCubit,
   required AltmeChatSupportCubit altmeChatSupportCubit,
+  required ProfileCubit profileCubit,
 }) async {
   final mnemonicFormatted = mnemonic.join(' ');
 
@@ -31,20 +30,8 @@ Future<void> generateAccount({
     mnemonic: mnemonicFormatted,
     accountType: AccountType.ssi,
   );
+
   await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
-
-  const didMethod = AltMeStrings.defaultDIDMethod;
-  final did = didKitProvider.keyToDID(didMethod, ssiKey);
-  const didMethodName = AltMeStrings.defaultDIDMethodName;
-  final verificationMethod =
-      await didKitProvider.keyToVerificationMethod(didMethod, ssiKey);
-
-  await didCubit.set(
-    did: did,
-    didMethod: didMethod,
-    didMethodName: didMethodName,
-    verificationMethod: verificationMethod,
-  );
 
   /// what's new popup disabled
   splashCubit.disableWhatsNewPopUp();
@@ -56,8 +43,10 @@ Future<void> generateAccount({
     isFromOnboarding: true,
   );
 
-  /// initiate chat
-  await altmeChatSupportCubit.init();
+  if (profileCubit.state.model.profileType == ProfileType.enterprise) {
+    /// initiate chat if it is enterprise
+    await altmeChatSupportCubit.init();
+  }
 
   await homeCubit.emitHasWallet();
 }

@@ -24,17 +24,27 @@ class ChatRoomView<B extends ChatRoomCubit> extends StatefulWidget {
 }
 
 class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
-  late final B liveChatCubit;
+  B? liveChatCubit;
 
   bool pageIsVisible = false;
 
   @override
   void initState() {
-    liveChatCubit = context.read<B>();
-
-    /// we are on same screen, it is considered as read
-    context.read<AltmeChatSupportCubit>().hardCodeAllMessageAsRead();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        liveChatCubit = context.read<B>();
+
+        if (context.read<ProfileCubit>().state.model.walletType ==
+            WalletType.personal) {
+          // for enterprise we are initialisation at start
+          await context.read<AltmeChatSupportCubit>().init();
+        }
+
+        /// we are on same screen, it is considered as read
+        context.read<AltmeChatSupportCubit>().hardCodeAllMessageAsRead();
+      },
+    );
   }
 
   @override
@@ -72,18 +82,21 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
             return Center(
               child: ErrorView(
                 message: message,
-                onTap: liveChatCubit.init,
+                onTap: liveChatCubit!.init,
               ),
             );
           } else {
+            if (liveChatCubit == null) {
+              return Container();
+            }
             if (pageIsVisible) {
-              liveChatCubit.setMessagesAsRead();
+              liveChatCubit!.setMessagesAsRead();
             }
             return VisibilityDetector(
               key: const Key('chat-widget'),
               onVisibilityChanged: (visibilityInfo) {
                 if (visibilityInfo.visibleFraction == 1.0) {
-                  liveChatCubit.setMessagesAsRead();
+                  liveChatCubit!.setMessagesAsRead();
                   pageIsVisible = true;
                 } else {
                   FocusManager.instance.primaryFocus?.unfocus();
@@ -98,12 +111,12 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                     messages: state.messages,
                     onSendPressed: (partialText) {
                       FocusManager.instance.primaryFocus?.unfocus();
-                      liveChatCubit.onSendPressed(partialText);
+                      liveChatCubit!.onSendPressed(partialText);
                     },
                     onAttachmentPressed: _handleAttachmentPressed,
                     onMessageTap: _handleMessageTap,
                     onPreviewDataFetched:
-                        liveChatCubit.handlePreviewDataFetched,
+                        liveChatCubit!.handlePreviewDataFetched,
                     user: state.user ?? const User(id: ''),
                   ),
                   if (state.messages.isEmpty)
@@ -166,7 +179,7 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  liveChatCubit.handleImageSelection();
+                  liveChatCubit!.handleImageSelection();
                 },
                 child: const Align(
                   alignment: AlignmentDirectional.centerStart,
@@ -176,7 +189,7 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  liveChatCubit.handleFileSelection();
+                  liveChatCubit!.handleFileSelection();
                 },
                 child: const Align(
                   alignment: AlignmentDirectional.centerStart,
@@ -198,6 +211,6 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
   }
 
   Future<void> _handleMessageTap(BuildContext _, Message message) async {
-    await liveChatCubit.handleMessageTap(message);
+    await liveChatCubit!.handleMessageTap(message);
   }
 }

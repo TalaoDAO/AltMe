@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/flavor/flavor.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
@@ -41,7 +40,6 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => OnBoardingVerifyPhraseCubit(
         secureStorageProvider: getSecureStorage,
-        didCubit: context.read<DIDCubit>(),
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),
@@ -49,6 +47,7 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
         splashCubit: context.read<SplashCubit>(),
         flavorCubit: context.read<FlavorCubit>(),
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
+        profileCubit: context.read<ProfileCubit>(),
       ),
       child: OnBoardingVerifyPhraseView(
         mnemonic: mnemonic,

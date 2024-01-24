@@ -28,11 +28,6 @@ class SecureStorageKeys {
   static const String data = 'data';
   static const String rsaKeyJson = 'RSAKeyJson';
 
-  static const String did = 'DID';
-  static const String didMethod = 'DIDMethod';
-  static const String didMethodName = 'DIDMethodName';
-  static const String verificationMethod = 'verificationMethod';
-
   static const String polygonIdNetwork = 'profile/polygonIdNetwork';
 
   static const String blockChainNetworksIndexing = 'blockChainNetworksIndexing';

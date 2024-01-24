@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -20,21 +19,22 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     required this.secureStorageProvider,
     required this.keyGenerator,
     required this.didKitProvider,
-    required this.didCubit,
     required this.homeCubit,
     required this.walletCubit,
     required this.splashCubit,
     required this.altmeChatSupportCubit,
+    required this.profileCubit,
   }) : super(const OnBoardingGenPhraseState());
 
   final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;
   final DIDKitProvider didKitProvider;
-  final DIDCubit didCubit;
+
   final HomeCubit homeCubit;
   final WalletCubit walletCubit;
   final SplashCubit splashCubit;
   final AltmeChatSupportCubit altmeChatSupportCubit;
+  final ProfileCubit profileCubit;
 
   final log = getLogger('OnBoardingGenPhraseCubit');
 
@@ -46,11 +46,11 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         secureStorageProvider: secureStorageProvider,
         keyGenerator: keyGenerator,
         didKitProvider: didKitProvider,
-        didCubit: didCubit,
         homeCubit: homeCubit,
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        profileCubit: profileCubit,
       );
       await secureStorageProvider.set(
         SecureStorageKeys.hasVerifiedMnemonics,

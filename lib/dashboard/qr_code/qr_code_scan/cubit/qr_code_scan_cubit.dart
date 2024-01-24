@@ -7,7 +7,6 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/credential_manifest/helpers/apply_submission_requirements.dart';
 import 'package:altme/deep_link/deep_link.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
@@ -41,7 +40,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.walletConnectCubit,
     required this.secureStorageProvider,
     required this.polygonIdCubit,
-    required this.didCubit,
     required this.didKitProvider,
     required this.oidc4vc,
   }) : super(const QRCodeScanState());
@@ -58,7 +56,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final WalletConnectCubit walletConnectCubit;
   final SecureStorageProvider secureStorageProvider;
   final PolygonIdCubit polygonIdCubit;
-  final DIDCubit didCubit;
   final DIDKitProvider didKitProvider;
   final OIDC4VC oidc4vc;
 
