@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -28,7 +27,6 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => OnBoardingGenPhraseCubit(
         secureStorageProvider: getSecureStorage,
-        didCubit: context.read<DIDCubit>(),
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),
@@ -57,8 +55,6 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
   void initState() {
     super.initState();
     mnemonic = bip39.generateMnemonic().split(' ');
-    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize())
-        .catchError((_) => null);
   }
 
   @override

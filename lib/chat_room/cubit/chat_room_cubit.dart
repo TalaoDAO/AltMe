@@ -135,7 +135,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   Future<void> init() async {
     try {
       emit(state.copyWith(status: AppStatus.loading));
-      final user = await matrixChat.init();
+      final user = await matrixChat.init(profileCubit);
       _notificationStreamController ??= StreamController<int>.broadcast();
 
       List<Message> retrivedMessageFromDB = [];

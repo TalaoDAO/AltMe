@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/splash/helper_function/is_wallet_created.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
@@ -18,7 +17,6 @@ part 'splash_state.dart';
 class SplashCubit extends Cubit<SplashState> {
   SplashCubit({
     required this.secureStorageProvider,
-    required this.didCubit,
     required this.homeCubit,
     required this.walletCubit,
     required this.credentialsCubit,
@@ -30,7 +28,6 @@ class SplashCubit extends Cubit<SplashState> {
   }
 
   final SecureStorageProvider secureStorageProvider;
-  final DIDCubit didCubit;
   final HomeCubit homeCubit;
   final WalletCubit walletCubit;
   final CredentialsCubit credentialsCubit;
@@ -49,7 +46,6 @@ class SplashCubit extends Cubit<SplashState> {
 
         final bool hasWallet = await isWalletCreated(
           secureStorageProvider: secureStorageProvider,
-          didCubit: didCubit,
           walletCubit: walletCubit,
           credentialsCubit: credentialsCubit,
         );

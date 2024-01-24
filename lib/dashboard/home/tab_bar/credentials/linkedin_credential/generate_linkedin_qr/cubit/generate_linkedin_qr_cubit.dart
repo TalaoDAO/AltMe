@@ -1,14 +1,15 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/home.dart';
-import 'package:altme/did/did.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,13 +21,15 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
     required this.didKitProvider,
     required this.secureStorageProvider,
     required this.fileSaver,
-    required this.didCubit,
+    required this.profileCubit,
+    required this.oidc4vc,
   }) : super(const GenerateLinkedInQrState());
 
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
   final FileSaver fileSaver;
-  final DIDCubit didCubit;
+  final ProfileCubit profileCubit;
+  final OIDC4VC oidc4vc;
 
   Future<void> generatePresentationForLinkedInCard({
     required String linkedInUrl,
@@ -40,23 +43,37 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
 
       final presentationId = 'urn:uuid:${const Uuid().v4()}';
 
-      final key = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+      final didKeyType = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+
+      final privateKey = await getPrivateKey(
+        secureStorage: getSecureStorage,
+        didKeyType: didKeyType,
+        oidc4vc: oidc4vc,
+      );
+
+      final (did, kid) = await getDidAndKid(
+        didKeyType: didKeyType,
+        privateKey: privateKey,
+        secureStorage: getSecureStorage,
+        didKitProvider: didKitProvider,
+      );
 
       final presentation = await didKitProvider.issuePresentation(
         jsonEncode({
           '@context': ['https://www.w3.org/2018/credentials/v1'],
           'type': ['VerifiablePresentation'],
           'id': presentationId,
-          'holder': didCubit.state.did,
+          'holder': did,
           'verifiableCredential': credentialModel.data,
         }),
         jsonEncode({
-          'verificationMethod': didCubit.state.verificationMethod,
+          'verificationMethod': kid,
           'proofPurpose': 'assertionMethod',
           'challenge': credentialModel.challenge,
           'domain': linkedInUrl,
         }),
-        key!,
+        privateKey,
       );
 
       emit(state.copyWith(status: AppStatus.idle, qrValue: presentation));

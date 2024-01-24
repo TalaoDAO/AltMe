@@ -4,7 +4,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
-import 'package:altme/did/did.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -38,7 +37,6 @@ class ScanCubit extends Cubit<ScanState> {
     required this.didKitProvider,
     required this.secureStorageProvider,
     required this.profileCubit,
-    required this.didCubit,
     required this.oidc4vc,
   }) : super(const ScanState());
 
@@ -47,7 +45,6 @@ class ScanCubit extends Cubit<ScanState> {
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
   final ProfileCubit profileCubit;
-  final DIDCubit didCubit;
   final OIDC4VC oidc4vc;
 
   Future<void> credentialOfferOrPresent({
@@ -63,25 +60,25 @@ class ScanCubit extends Cubit<ScanState> {
     final log = getLogger('ScanCubit - credentialOffer');
 
     try {
+      final didKeyType = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+
+      final privateKey = await fetchPrivateKey(
+        oidc4vc: oidc4vc,
+        secureStorage: secureStorageProvider,
+        didKeyType: didKeyType,
+      );
+
+      final (did, kid) = await fetchDidAndKid(
+        privateKey: privateKey,
+        didKitProvider: didKitProvider,
+        secureStorage: secureStorageProvider,
+        didKeyType: didKeyType,
+      );
+
       if (isSIOPV2OROIDC4VPUrl(uri)) {
         // final bool isEBSIV3 =
         //     await isEBSIV3ForVerifier(client: client, uri: uri) ?? false;
-
-        final didKeyType = profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
-
-        final privateKey = await fetchPrivateKey(
-          oidc4vc: oidc4vc,
-          secureStorage: secureStorageProvider,
-          didKeyType: didKeyType,
-        );
-
-        final (did, kid) = await fetchDidAndKid(
-          privateKey: privateKey,
-          didKitProvider: didKitProvider,
-          secureStorage: secureStorageProvider,
-          didKeyType: didKeyType,
-        );
 
         final responseType = uri.queryParameters['response_type'] ?? '';
         final stateValue = uri.queryParameters['state'];
@@ -130,22 +127,32 @@ class ScanCubit extends Cubit<ScanState> {
           throw Exception();
         }
       } else {
-        final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
-
         /// If credential manifest exist we follow instructions to present
         /// credential
         /// If credential manifest doesn't exist we add DIDAuth to the post
         /// If id was in preview we send it in the post
         ///  https://github.com/TalaoDAO/wallet-interaction/blob/main/README.md#credential-offer-protocol
         ///
-        final key = (await secureStorageProvider.get(keyId))!;
-        final verificationMethod = await secureStorageProvider
-            .get(SecureStorageKeys.verificationMethod);
+        final didKeyType = profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+
+        final privateKey = await getPrivateKey(
+          secureStorage: getSecureStorage,
+          didKeyType: didKeyType,
+          oidc4vc: oidc4vc,
+        );
+
+        final (did, kid) = await getDidAndKid(
+          didKeyType: didKeyType,
+          privateKey: privateKey,
+          secureStorage: getSecureStorage,
+          didKitProvider: didKitProvider,
+        );
 
         List<String> presentations = <String>[];
         if (credentialsToBePresented == null) {
           final options = <String, dynamic>{
-            'verificationMethod': verificationMethod,
+            'verificationMethod': kid,
             'proofPurpose': 'authentication',
             'challenge': credentialModel.challenge ?? '',
             'domain': credentialModel.domain ?? '',
@@ -154,7 +161,7 @@ class ScanCubit extends Cubit<ScanState> {
           final presentation = await didKitProvider.didAuth(
             did,
             jsonEncode(options),
-            key,
+            privateKey,
           );
 
           presentations = List.of(presentations)..add(presentation);
@@ -171,12 +178,12 @@ class ScanCubit extends Cubit<ScanState> {
                 'verifiableCredential': item.data,
               }),
               jsonEncode({
-                'verificationMethod': verificationMethod,
+                'verificationMethod': kid,
                 'proofPurpose': 'assertionMethod',
                 'challenge': credentialModel.challenge,
                 'domain': credentialModel.domain,
               }),
-              key,
+              privateKey,
             );
             presentations = List.of(presentations)..add(presentation);
           }
@@ -299,7 +306,6 @@ class ScanCubit extends Cubit<ScanState> {
 
   Future<void> verifiablePresentationRequest({
     required String url,
-    required String keyId,
     required List<CredentialModel> credentialsToBePresented,
     required String challenge,
     required String domain,
@@ -310,10 +316,21 @@ class ScanCubit extends Cubit<ScanState> {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
-      final key = (await secureStorageProvider.get(keyId))!;
-      final did = await secureStorageProvider.get(SecureStorageKeys.did);
-      final verificationMethod =
-          await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
+      final didKeyType = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+
+      final privateKey = await fetchPrivateKey(
+        oidc4vc: oidc4vc,
+        secureStorage: secureStorageProvider,
+        didKeyType: didKeyType,
+      );
+
+      final (did, kid) = await fetchDidAndKid(
+        privateKey: privateKey,
+        didKitProvider: didKitProvider,
+        secureStorage: secureStorageProvider,
+        didKeyType: didKeyType,
+      );
 
       final presentationId = 'urn:uuid:${const Uuid().v4()}';
       final presentation = await didKitProvider.issuePresentation(
@@ -327,12 +344,12 @@ class ScanCubit extends Cubit<ScanState> {
               : credentialsToBePresented.map((c) => c.data).toList(),
         }),
         jsonEncode({
-          'verificationMethod': verificationMethod,
+          'verificationMethod': kid,
           'proofPurpose': 'authentication',
           'challenge': challenge,
           'domain': domain,
         }),
-        key,
+        privateKey,
       );
 
       log.i('presentation $presentation');
@@ -386,7 +403,6 @@ class ScanCubit extends Cubit<ScanState> {
 
   Future<void> getDIDAuthCHAPI({
     required Uri uri,
-    required String keyId,
     required dynamic Function(String) done,
     required String challenge,
     required String domain,
@@ -396,50 +412,57 @@ class ScanCubit extends Cubit<ScanState> {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
-      final key = (await secureStorageProvider.get(keyId))!;
-      final did = await secureStorageProvider.get(SecureStorageKeys.did);
-      final verificationMethod =
-          await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
+      final didKeyType = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
-      if (did != null) {
-        final presentation = await didKitProvider.didAuth(
-          did,
-          jsonEncode({
-            'verificationMethod': verificationMethod,
-            'proofPurpose': 'authentication',
-            'challenge': challenge,
-            'domain': domain,
-          }),
-          key,
-        );
-        final dynamic credential = await client.post(
-          uri.toString(),
-          data: FormData.fromMap(<String, dynamic>{
-            'presentation': presentation,
-          }),
-        );
-        if (credential == 'ok') {
-          done(presentation);
+      final privateKey = await fetchPrivateKey(
+        oidc4vc: oidc4vc,
+        secureStorage: secureStorageProvider,
+        didKeyType: didKeyType,
+      );
 
-          emit(
-            state.copyWith(
-              status: ScanStatus.success,
-              message: StateMessage.success(
-                messageHandler: ResponseMessage(
-                  message: ResponseString
-                      .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
-                ),
+      final (did, kid) = await fetchDidAndKid(
+        privateKey: privateKey,
+        didKitProvider: didKitProvider,
+        secureStorage: secureStorageProvider,
+        didKeyType: didKeyType,
+      );
+
+      final presentation = await didKitProvider.didAuth(
+        did,
+        jsonEncode({
+          'verificationMethod': kid,
+          'proofPurpose': 'authentication',
+          'challenge': challenge,
+          'domain': domain,
+        }),
+        privateKey,
+      );
+      final dynamic credential = await client.post(
+        uri.toString(),
+        data: FormData.fromMap(<String, dynamic>{
+          'presentation': presentation,
+        }),
+      );
+      if (credential == 'ok') {
+        done(presentation);
+
+        emit(
+          state.copyWith(
+            status: ScanStatus.success,
+            message: StateMessage.success(
+              messageHandler: ResponseMessage(
+                message: ResponseString
+                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
               ),
             ),
-          );
-        } else {
-          throw ResponseMessage(
-            message: ResponseString
-                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          );
-        }
+          ),
+        );
       } else {
-        throw Exception('DID is not set. It is required to present DIDAuth');
+        throw ResponseMessage(
+          message: ResponseString
+              .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
       }
     } catch (e, s) {
       log.e('something went wrong', error: e, stackTrace: s);
@@ -828,11 +851,8 @@ class ScanCubit extends Cubit<ScanState> {
     }
 
     if (presentLdpVc) {
-      final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
-      final did = await secureStorageProvider.get(SecureStorageKeys.did);
       final options = jsonEncode({
-        'verificationMethod': await secureStorageProvider
-            .get(SecureStorageKeys.verificationMethod),
+        'verificationMethod': kid,
         'proofPurpose': 'authentication',
         'challenge': nonce,
         'domain': clientId,
@@ -849,7 +869,7 @@ class ScanCubit extends Cubit<ScanState> {
               : credentialsToBePresented.map((c) => c.data).toList(),
         }),
         options,
-        ssiKey!,
+        privateKey,
       );
       return vpToken;
     } else if (presentJwtVc) {
