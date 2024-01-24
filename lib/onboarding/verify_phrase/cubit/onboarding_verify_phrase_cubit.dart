@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/flavor/flavor.dart';
 import 'package:altme/onboarding/helper_function/helper_function.dart';
 import 'package:altme/splash/splash.dart';
@@ -22,23 +21,24 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     required this.secureStorageProvider,
     required this.keyGenerator,
     required this.didKitProvider,
-    required this.didCubit,
     required this.homeCubit,
     required this.walletCubit,
     required this.splashCubit,
     required this.flavorCubit,
     required this.altmeChatSupportCubit,
+    required this.profileCubit,
   }) : super(OnBoardingVerifyPhraseState());
 
   final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;
   final DIDKitProvider didKitProvider;
-  final DIDCubit didCubit;
+
   final HomeCubit homeCubit;
   final WalletCubit walletCubit;
   final FlavorCubit flavorCubit;
   final SplashCubit splashCubit;
   final AltmeChatSupportCubit altmeChatSupportCubit;
+  final ProfileCubit profileCubit;
 
   final log = getLogger('OnBoardingVerifyPhraseCubit');
 
@@ -119,11 +119,11 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
           secureStorageProvider: secureStorageProvider,
           keyGenerator: keyGenerator,
           didKitProvider: didKitProvider,
-          didCubit: didCubit,
           homeCubit: homeCubit,
           walletCubit: walletCubit,
           splashCubit: splashCubit,
           altmeChatSupportCubit: altmeChatSupportCubit,
+          profileCubit: profileCubit,
         );
       }
       await secureStorageProvider.set(

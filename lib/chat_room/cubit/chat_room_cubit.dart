@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
@@ -22,16 +23,8 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   ChatRoomCubit({
     required this.secureStorageProvider,
     required this.matrixChat,
-    required this.invites,
-  }) : super(
-          const ChatRoomState(),
-        ) {
-    secureStorageProvider.get(SecureStorageKeys.did).then((did) {
-      if (did != null && did.isNotEmpty) {
-        init();
-      }
-    });
-  }
+    required this.profileCubit,
+  }) : super(const ChatRoomState());
 
   final SecureStorageProvider secureStorageProvider;
   final logger = getLogger('ChatRoomCubit');
@@ -39,10 +32,10 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   StreamSubscription<Event>? _onEventSubscription;
   StreamController<int>? _notificationStreamController =
       StreamController<int>.broadcast();
-  final List<String>? invites;
 
   //
   final MatrixChatImpl matrixChat;
+  final ProfileCubit profileCubit;
 
   Stream<int> get unreadMessageCountStream {
     _notificationStreamController ??= StreamController<int>.broadcast();
@@ -142,7 +135,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   Future<void> init() async {
     try {
       emit(state.copyWith(status: AppStatus.loading));
-      final user = await matrixChat.init();
+      final user = await matrixChat.init(profileCubit);
       _notificationStreamController ??= StreamController<int>.broadcast();
 
       List<Message> retrivedMessageFromDB = [];
@@ -216,15 +209,23 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
           emit(state.copyWith(messages: newMessages));
         } else {
           final Message message = matrixChat.mapEventToMessage(event);
-          _getUnreadMessageCount();
           emit(
             state.copyWith(
               messages: [message, ...state.messages],
             ),
           );
         }
+
+        setMessagesAsRead();
+
+        Future<void>.delayed(const Duration(seconds: 1))
+            .then((val) => _getUnreadMessageCount());
       }
     });
+  }
+
+  void hardCodeAllMessageAsRead() {
+    _notificationStreamController?.sink.add(0);
   }
 
   int get unreadMessageCount => matrixChat.getUnreadMessageCount(_roomId);
@@ -271,6 +272,19 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
         mediaType: MediaType.basic, // just added as it is required field
         useJWKThumbPrint: true, // just added as it is required field
       );
+
+      final helpCenterOptions =
+          profileCubit.state.model.profileSetting.helpCenterOptions;
+
+      final List<String> invites = [];
+
+      if (profileCubit.state.model.walletType == WalletType.enterprise &&
+          helpCenterOptions.customChatSupport &&
+          helpCenterOptions.customChatSupportName != null) {
+        invites.add(helpCenterOptions.customChatSupportName!);
+      } else {
+        invites.add(AltMeStrings.matrixSupportId);
+      }
 
       _roomId = await matrixChat.createRoomAndInviteSupport(
         tokenParameters.thumbprint,

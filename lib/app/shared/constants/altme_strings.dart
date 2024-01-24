@@ -3,8 +3,6 @@ class AltMeStrings {
   static const String cryptoTezosDIDMethod = 'pkh:tz';
   static const String cryptoEVMDIDMethod = 'pkh:eth';
   static const String defaultDIDMethodName = 'Tezos';
-  static const String enterpriseDIDMethod = 'web';
-  static const String enterpriseDIDMethodName = 'Web';
   static const String databaseFilename = 'wallet.db';
   static const String appContactWebsiteName = 'www.talao.io';
   static const String appContactMail = 'contact@altme.io';

@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
@@ -40,13 +39,13 @@ class ProtectWalletPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => OnBoardingGenPhraseCubit(
         secureStorageProvider: getSecureStorage,
-        didCubit: context.read<DIDCubit>(),
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),
         walletCubit: context.read<WalletCubit>(),
         splashCubit: context.read<SplashCubit>(),
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
+        profileCubit: context.read<ProfileCubit>(),
       ),
       child: ProtectWalletView(
         routeType: routeType,

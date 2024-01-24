@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:logger/logger.dart';
 import 'package:matrix/matrix.dart' hide User;
@@ -38,9 +39,11 @@ abstract class MatrixChatInterface {
   });
   Future<void> register({
     required String did,
+    required String kid,
+    required String privateKey,
   });
   Future<void> dispose();
-  Future<void> init();
+  Future<void> init(ProfileCubit profileCubit);
   Future<String?> getRoomIdFromStorage();
   Future<void> setRoomIdInStorage(String roomId);
   int getUnreadMessageCount(String? roomId);

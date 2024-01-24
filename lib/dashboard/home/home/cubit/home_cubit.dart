@@ -5,7 +5,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
-import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';
@@ -23,15 +22,17 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit({
     required this.client,
-    required this.didCubit,
     required this.secureStorageProvider,
     required this.oidc4vc,
+    required this.profileCubit,
+    required this.didKitProvider,
   }) : super(const HomeState());
 
   final DioClient client;
-  final DIDCubit didCubit;
   final SecureStorageProvider secureStorageProvider;
   final OIDC4VC oidc4vc;
+  final ProfileCubit profileCubit;
+  final DIDKitProvider didKitProvider;
 
   final log = getLogger('HomeCubit');
 
@@ -45,8 +46,22 @@ class HomeCubit extends Cubit<HomeState> {
     // launch url to get Over18, Over15, Over13,Over21,Over50,Over65,
     // AgeRange Credentials
     emit(state.loading());
-    final verificationMethod =
-        await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
+
+    final didKeyType = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+
+    final privateKey = await getPrivateKey(
+      secureStorage: getSecureStorage,
+      didKeyType: didKeyType,
+      oidc4vc: oidc4vc,
+    );
+
+    final (did, kid) = await getDidAndKid(
+      didKeyType: didKeyType,
+      privateKey: privateKey,
+      secureStorage: getSecureStorage,
+      didKitProvider: didKitProvider,
+    );
 
     final base64EncodedImage = base64Encode(imageBytes);
 
@@ -54,20 +69,16 @@ class HomeCubit extends Cubit<HomeState> {
         bytesToHex(sha256.convert(utf8.encode(base64EncodedImage)).bytes);
 
     final options = <String, dynamic>{
-      'verificationMethod': verificationMethod,
+      'verificationMethod': kid,
       'proofPurpose': 'authentication',
       'challenge': challenge,
       'domain': 'issuer.talao.co',
     };
 
-    final key = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
-    final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
-
-    final DIDKitProvider didKitProvider = DIDKitProvider();
     final String did_auth = await didKitProvider.didAuth(
       did,
       jsonEncode(options),
-      key,
+      privateKey,
     );
 
     final data = <String, dynamic>{
