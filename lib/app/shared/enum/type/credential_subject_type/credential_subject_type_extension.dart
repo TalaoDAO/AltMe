@@ -633,6 +633,72 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
+  List<VCFormatType> get getVCFormatType {
+    switch (this) {
+      case CredentialSubjectType.over13:
+      case CredentialSubjectType.over15:
+      case CredentialSubjectType.over18:
+      case CredentialSubjectType.over21:
+      case CredentialSubjectType.over50:
+      case CredentialSubjectType.over65:
+      case CredentialSubjectType.gender:
+      case CredentialSubjectType.ageRange:
+      case CredentialSubjectType.ethereumAssociatedWallet:
+      case CredentialSubjectType.fantomAssociatedWallet:
+      case CredentialSubjectType.polygonAssociatedWallet:
+      case CredentialSubjectType.binanceAssociatedWallet:
+      case CredentialSubjectType.tezosAssociatedWallet:
+        return [VCFormatType.ldpVc];
+
+      case CredentialSubjectType.defiCompliance:
+      case CredentialSubjectType.livenessCard:
+      case CredentialSubjectType.tezotopiaMembership:
+      case CredentialSubjectType.chainbornMembership:
+      case CredentialSubjectType.nationality:
+      case CredentialSubjectType.identityPass:
+      case CredentialSubjectType.verifiableIdCard:
+      case CredentialSubjectType.passportFootprint:
+      case CredentialSubjectType.residentCard:
+      case CredentialSubjectType.voucher:
+      case CredentialSubjectType.tezVoucher:
+      case CredentialSubjectType.diplomaCard:
+      case CredentialSubjectType.twitterCard:
+      case CredentialSubjectType.walletCredential:
+      case CredentialSubjectType.tezosPooAddress:
+      case CredentialSubjectType.ethereumPooAddress:
+      case CredentialSubjectType.fantomPooAddress:
+      case CredentialSubjectType.polygonPooAddress:
+      case CredentialSubjectType.binancePooAddress:
+      case CredentialSubjectType.certificateOfEmployment:
+      case CredentialSubjectType.defaultCredential:
+      case CredentialSubjectType.ecole42LearningAchievement:
+      case CredentialSubjectType.emailPass:
+      case CredentialSubjectType.linkedInCard:
+      case CredentialSubjectType.learningAchievement:
+      case CredentialSubjectType.phonePass:
+      case CredentialSubjectType.professionalExperienceAssessment:
+      case CredentialSubjectType.professionalSkillAssessment:
+      case CredentialSubjectType.professionalStudentCard:
+      case CredentialSubjectType.selfIssued:
+      case CredentialSubjectType.studentCard:
+      case CredentialSubjectType.aragoPass:
+      case CredentialSubjectType.aragoEmailPass:
+      case CredentialSubjectType.aragoIdentityCard:
+      case CredentialSubjectType.aragoLearningAchievement:
+      case CredentialSubjectType.aragoOver18:
+      case CredentialSubjectType.pcdsAgentCertificate:
+      case CredentialSubjectType.euDiplomaCard:
+      case CredentialSubjectType.euVerifiableId:
+      case CredentialSubjectType.kycAgeCredential:
+      case CredentialSubjectType.kycCountryOfResidence:
+      case CredentialSubjectType.proofOfTwitterStats:
+      case CredentialSubjectType.civicPassCredential:
+      case CredentialSubjectType.employeeCredential:
+      case CredentialSubjectType.legalPersonalCredential:
+        return [VCFormatType.jwtVc];
+    }
+  }
+
   // Future changes will be made to values where 0 appears
   double get order {
     switch (this) {

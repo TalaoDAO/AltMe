@@ -22,6 +22,7 @@ class DiscoverDummyCredential extends Equatable {
     this.howToGetItExtern,
     this.longDescriptionExtern,
     this.websiteLinkExtern,
+    this.vcFormatTypes,
   });
 
   factory DiscoverDummyCredential.fromJson(Map<String, dynamic> json) =>
@@ -283,6 +284,7 @@ class DiscoverDummyCredential extends Equatable {
       longDescription: longDescription == null
           ? null
           : ResponseMessage(message: longDescription),
+      vcFormatTypes: credentialSubjectType.getVCFormatType,
     );
   }
 
@@ -304,6 +306,7 @@ class DiscoverDummyCredential extends Equatable {
   final String? howToGetItExtern;
   final String? longDescriptionExtern;
   final String? websiteLinkExtern;
+  final List<VCFormatType>? vcFormatTypes;
   Map<String, dynamic> toJson() => _$DiscoverDummyCredentialToJson(this);
 
   @override
@@ -322,5 +325,6 @@ class DiscoverDummyCredential extends Equatable {
         howToGetItExtern,
         longDescriptionExtern,
         websiteLinkExtern,
+        vcFormatTypes,
       ];
 }
