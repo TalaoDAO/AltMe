@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,9 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
   @override
   void initState() {
     liveChatCubit = context.read<B>();
+
+    /// we are on same screen, it is considered as read
+    context.read<AltmeChatSupportCubit>().hardCodeAllMessageAsRead();
     super.initState();
   }
 

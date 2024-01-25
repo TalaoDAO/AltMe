@@ -56,9 +56,12 @@ class MatrixChatImpl extends MatrixChatInterface {
     if (client != null && user != null) {
       return user!;
     }
+
     final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
     final did = await secureStorageProvider.get(SecureStorageKeys.did) ?? '';
+
     final username = did.replaceAll(':', '-');
+
     if (ssiKey == null || ssiKey.isEmpty || did.isEmpty || username.isEmpty) {
       throw Exception(
         'ssiKey == null || ssiKey.isEmpty || did.isEmpty || username.isEmpty',
@@ -139,7 +142,7 @@ class MatrixChatImpl extends MatrixChatInterface {
     try {
       for (final eventId in eventIds) {
         if (eventId != null) {
-          await room.setReadMarker(eventId);
+          await room.setReadMarker(eventId, mRead: eventId);
         }
       }
     } catch (e, s) {

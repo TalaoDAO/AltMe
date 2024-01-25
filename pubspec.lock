@@ -346,14 +346,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
-  charcode:
-    dependency: transitive
-    description:
-      name: charcode
-      sha256: fb98c0f6d12c920a02ee2d998da788bca066ca5f148492b7085ee23372b12306
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.1"
   checked_yaml:
     dependency: transitive
     description:
@@ -981,10 +973,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: "7c4e42e66fb24bc912b64860c69806ef5cc0ad1480772aa2201ede568125a379"
+      sha256: "30088ce826b5b9cfbf9e8bece34c716c8a59fa54461dcae1e4ac01a94639e762"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.9+1"
+    version: "0.6.18+3"
   flutter_native_timezone:
     dependency: "direct main"
     description:
@@ -1005,10 +997,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_openssl_crypto
-      sha256: b64a0825d79f10b6d5f5951f7ce2d5ddc12ed532129fc5a7e0ce472f5b97d78e
+      sha256: "6dcecf6f7c1804ae6f5d73ee05df8af72ea8133bf2447d25979d739503186c96"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.3.0"
   flutter_parsed_text:
     dependency: transitive
     description:
@@ -1469,10 +1461,10 @@ packages:
     dependency: "direct main"
     description:
       name: markdown
-      sha256: "01512006c8429f604eb10f9848717baeaedf99e991d14a50d540d9beff08e5c6"
+      sha256: "1b134d9f8ff2da15cb298efe6cd8b7d2a78958c1b00384ebcbdf13fe340a6c90"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "7.2.1"
   matcher:
     dependency: transitive
     description:
@@ -1493,10 +1485,10 @@ packages:
     dependency: "direct main"
     description:
       name: matrix
-      sha256: "304e804f1f669e3b9e17b0317f7f33c2a2850d8e4f0b840897e012523ebd9775"
+      sha256: "1cea8c269054329a8882f47fa36c6573d6b62465b8e7b06f1211b4113fdcd201"
       url: "https://pub.dev"
     source: hosted
-    version: "0.22.4"
+    version: "0.25.6"
   matrix_api_lite:
     dependency: transitive
     description:
@@ -2393,10 +2385,10 @@ packages:
     dependency: "direct main"
     description:
       name: url_launcher
-      sha256: d25bb0ca00432a5e1ee40e69c36c85863addf7cc45e433769d61bed3fe81fd96
+      sha256: c512655380d241a337521703af62d2c122bf7b77a46ff7dd750092aa9433499c
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.3"
+    version: "6.2.4"
   url_launcher_android:
     dependency: transitive
     description:
@@ -2601,10 +2593,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_platform_interface
-      sha256: "80b40ae4fb959957eef9fa8970b6c9accda9f49fc45c2b75154696a8e8996cfe"
+      sha256: d937581d6e558908d7ae3dc1989c4f87b786891ab47bb9df7de548a151779d8d
       url: "https://pub.dev"
     source: hosted
-    version: "2.9.1"
+    version: "2.10.0"
   webview_flutter_wkwebview:
     dependency: "direct main"
     description:
