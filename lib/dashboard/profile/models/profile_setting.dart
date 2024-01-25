@@ -473,10 +473,8 @@ class CustomOidc4VcProfile extends Equatable {
     required this.userPinDigits,
     required this.clientId,
     required this.clientSecret,
+    this.vcFormatType = VCFormatType.ldpVc,
   });
-
-  factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) =>
-      _$CustomOidc4VcProfileFromJson(json);
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
         clientAuthentication: ClientAuthentication.clientId,
@@ -492,7 +490,11 @@ class CustomOidc4VcProfile extends Equatable {
         userPinDigits: UserPinDigits.six,
         clientId: Parameters.clientId,
         clientSecret: randomString(12),
+        vcFormatType: VCFormatType.ldpVc,
       );
+
+  factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) =>
+      _$CustomOidc4VcProfileFromJson(json);
 
   final ClientAuthentication clientAuthentication;
   final bool credentialManifestSupport;
@@ -509,6 +511,7 @@ class CustomOidc4VcProfile extends Equatable {
   final SIOPV2DraftType siopv2Draft;
   final SubjectSyntax subjectSyntaxeType;
   final UserPinDigits userPinDigits;
+  final VCFormatType vcFormatType;
 
   Map<String, dynamic> toJson() => _$CustomOidc4VcProfileToJson(this);
 
@@ -526,6 +529,7 @@ class CustomOidc4VcProfile extends Equatable {
     SIOPV2DraftType? siopv2Draft,
     SubjectSyntax? subjectSyntaxeType,
     UserPinDigits? userPinDigits,
+    VCFormatType? vcFormatType,
   }) =>
       CustomOidc4VcProfile(
         clientAuthentication: clientAuthentication ?? this.clientAuthentication,
@@ -542,6 +546,7 @@ class CustomOidc4VcProfile extends Equatable {
         userPinDigits: userPinDigits ?? this.userPinDigits,
         clientId: clientId ?? this.clientId,
         clientSecret: clientSecret ?? this.clientSecret,
+        vcFormatType: vcFormatType ?? this.vcFormatType,
       );
 
   @override
@@ -559,6 +564,7 @@ class CustomOidc4VcProfile extends Equatable {
         siopv2Draft,
         subjectSyntaxeType,
         userPinDigits,
+        vcFormatType,
       ];
 }
 
