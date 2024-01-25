@@ -47,7 +47,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_defiComplianceExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_defiComplianceHowToGetIt;
-      case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.ageRange:
         image = ImageStrings.dummyAgeRangeCard;
         link = '';
@@ -323,6 +322,7 @@ class DiscoverDummyCredential extends Equatable {
       case CredentialSubjectType.proofOfTwitterStats:
       case CredentialSubjectType.civicPassCredential:
       case CredentialSubjectType.legalPersonalCredential:
+      case CredentialSubjectType.walletCredential:
         break;
     }
 
