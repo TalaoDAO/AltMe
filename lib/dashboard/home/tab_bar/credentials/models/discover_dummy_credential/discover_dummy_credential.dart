@@ -147,10 +147,6 @@ class DiscoverDummyCredential extends Equatable {
             ResponseString.RESPONSE_STRING_tezVoucherExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_tezVoucherHowToGetIt;
 
-      case CredentialSubjectType.talaoCommunityCard:
-        image = ImageStrings.dummyTalaoCommunityCardCard;
-        link = Urls.talaoCommunityCardUrl;
-
       case CredentialSubjectType.verifiableIdCard:
         image = ImageStrings.dummyVerifiableIdCard;
         link = Urls.identityCardUrl;
@@ -202,49 +198,6 @@ class DiscoverDummyCredential extends Equatable {
             ResponseString.RESPONSE_STRING_twitterExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_twitterHowToGetIt;
 
-      case CredentialSubjectType.bunnyPass:
-        image = ImageStrings.bunnyPassDummy;
-        link = Urls.bunnyPassCardUrl;
-        whyGetThisCard = ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard;
-        expirationDateDetails =
-            ResponseString.RESPONSE_STRING_bunnyPassExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_bunnyPassHowToGetIt;
-
-      case CredentialSubjectType.dogamiPass:
-        image = ImageStrings.dogamiPassDummy;
-        link = Urls.dogamiPassCardUrl;
-        whyGetThisCard =
-            ResponseString.RESPONSE_STRING_dogamiPassWhyGetThisCard;
-        expirationDateDetails =
-            ResponseString.RESPONSE_STRING_dogamiPassExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_dogamiPassHowToGetIt;
-
-      case CredentialSubjectType.matterlightPass:
-        image = ImageStrings.matterlightPassDummy;
-        link = Urls.matterlightPassCardUrl;
-        whyGetThisCard =
-            ResponseString.RESPONSE_STRING_matterlightPassWhyGetThisCard;
-        expirationDateDetails =
-            ResponseString.RESPONSE_STRING_matterlightPassExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_matterlightPassHowToGetIt;
-
-      case CredentialSubjectType.pigsPass:
-        image = ImageStrings.pigsPassDummy;
-        link = Urls.pigsPassCardUrl;
-        whyGetThisCard = ResponseString.RESPONSE_STRING_pigsPassWhyGetThisCard;
-        expirationDateDetails =
-            ResponseString.RESPONSE_STRING_pigsPassExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_pigsPassHowToGetIt;
-
-      case CredentialSubjectType.troopezPass:
-        image = ImageStrings.trooperzPassDummy;
-        link = Urls.trooperzPassCardUrl;
-        whyGetThisCard =
-            ResponseString.RESPONSE_STRING_trooperzPassWhyGetThisCard;
-        expirationDateDetails =
-            ResponseString.RESPONSE_STRING_trooperzPassExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt;
-
       case CredentialSubjectType.phonePass:
         image = ImageStrings.dummyPhonePassCard;
         link = Urls.phonePassUrl;
@@ -253,18 +206,6 @@ class DiscoverDummyCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_phoneProofExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_phoneProofHowToGetIt;
-
-      case CredentialSubjectType.bloometaPass:
-        image = ImageStrings.bloometaDummy;
-        websiteLink = 'https://bloometa.com';
-        link = Urls.bloometaCardUrl;
-        whyGetThisCard =
-            ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard;
-        expirationDateDetails =
-            ResponseString.RESPONSE_STRING_bloometaPassExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt;
-        longDescription =
-            ResponseString.RESPONSE_STRING_bloometaPassLongDescription;
 
       case CredentialSubjectType.livenessCard:
         image = ImageStrings.livenessDummy;

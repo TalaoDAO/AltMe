@@ -24,9 +24,6 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.walletCredential:
         return WalletCredentialWidget(credentialModel: credentialModel);
 
-      case CredentialSubjectType.bloometaPass:
-        return BloometaPassWidget(credentialModel: credentialModel);
-
       case CredentialSubjectType.livenessCard:
         return LivenessCardWidget(credentialModel: credentialModel);
 
@@ -35,21 +32,6 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.chainbornMembership:
         return ChainbornMemberShipWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.troopezPass:
-        return TrooperzPassWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.pigsPass:
-        return PigsPassWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.matterlightPass:
-        return MatterlightPassWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.dogamiPass:
-        return DogamiPassWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.bunnyPass:
-        return BunnyPassWidget(credentialModel: credentialModel);
 
       case CredentialSubjectType.ageRange:
         return AgeRangeWidget(credentialModel: credentialModel);
@@ -254,9 +236,6 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.tezVoucher:
         return TezotopiaVoucherWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.talaoCommunityCard:
-        return TalaoCommunityCardWidget(credentialModel: credentialModel);
 
       case CredentialSubjectType.diplomaCard:
         return DiplomaCardWidget(credentialModel: credentialModel);

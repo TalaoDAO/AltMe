@@ -91,9 +91,7 @@ class DiscoverDetailsView extends StatelessWidget {
           Sizes.spaceSmall,
         ),
         child: MyGradientButton(
-          onPressed: dummyCredential.credentialSubjectType.isDisabled
-              ? null
-              : onCallBack,
+          onPressed: onCallBack,
           text: buttonText,
         ),
       ),
@@ -112,12 +110,7 @@ class DetailFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    if (dummyCredential.credentialSubjectType.isDisabled) {
-      return DiscoverDynamicDetial(
-        title: l10n.credentialManifestDescription,
-        value: l10n.soonCardDescription,
-      );
-    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

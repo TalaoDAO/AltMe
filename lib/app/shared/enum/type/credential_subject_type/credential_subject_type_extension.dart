@@ -41,17 +41,11 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.kycCountryOfResidence:
         return const Color(0xff8247E5);
       case CredentialSubjectType.walletCredential:
-      case CredentialSubjectType.bloometaPass:
       case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.nationality:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
       case CredentialSubjectType.twitterCard:
-      case CredentialSubjectType.troopezPass:
-      case CredentialSubjectType.pigsPass:
-      case CredentialSubjectType.matterlightPass:
-      case CredentialSubjectType.dogamiPass:
-      case CredentialSubjectType.bunnyPass:
       case CredentialSubjectType.gender:
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.verifiableIdCard:
@@ -72,7 +66,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.voucher:
       case CredentialSubjectType.tezVoucher:
       case CredentialSubjectType.diplomaCard:
-      case CredentialSubjectType.talaoCommunityCard:
       case CredentialSubjectType.aragoPass:
       case CredentialSubjectType.aragoIdentityCard:
       case CredentialSubjectType.aragoLearningAchievement:
@@ -98,35 +91,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
-  bool get isDisabled {
-    if (this == CredentialSubjectType.dogamiPass ||
-        this == CredentialSubjectType.pigsPass ||
-        this == CredentialSubjectType.bunnyPass ||
-        this == CredentialSubjectType.troopezPass ||
-        this == CredentialSubjectType.matterlightPass) {
-      return true;
-    }
-    return false;
-  }
-
   String get name {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
         return 'DefiCompliance';
-      case CredentialSubjectType.bloometaPass:
-        return 'BloometaPass';
       case CredentialSubjectType.livenessCard:
         return 'Liveness';
-      case CredentialSubjectType.troopezPass:
-        return 'TroopezPass';
-      case CredentialSubjectType.pigsPass:
-        return 'PigsPass';
-      case CredentialSubjectType.matterlightPass:
-        return 'MatterlightPass';
-      case CredentialSubjectType.dogamiPass:
-        return 'DogamiPass';
-      case CredentialSubjectType.bunnyPass:
-        return 'BunnyPass';
       case CredentialSubjectType.tezotopiaMembership:
         return 'MembershipCard_1';
       case CredentialSubjectType.chainbornMembership:
@@ -211,8 +181,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Voucher';
       case CredentialSubjectType.tezVoucher:
         return 'TezVoucher_1';
-      case CredentialSubjectType.talaoCommunityCard:
-        return 'TalaoCommunity';
       case CredentialSubjectType.diplomaCard:
         return 'VerifiableDiploma';
       case CredentialSubjectType.aragoPass:
@@ -248,20 +216,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
         return DefiComplianceModel.fromJson(json);
-      case CredentialSubjectType.bloometaPass:
-        return BloometaPassModel.fromJson(json);
       case CredentialSubjectType.livenessCard:
         return LivenessCardModel.fromJson(json);
-      case CredentialSubjectType.troopezPass:
-        return TroopezPassModel.fromJson(json);
-      case CredentialSubjectType.pigsPass:
-        return PigsPassModel.fromJson(json);
-      case CredentialSubjectType.matterlightPass:
-        return MatterlightPassModel.fromJson(json);
-      case CredentialSubjectType.dogamiPass:
-        return DogamiPassModel.fromJson(json);
-      case CredentialSubjectType.bunnyPass:
-        return BunnyPassModel.fromJson(json);
       case CredentialSubjectType.tezotopiaMembership:
         return TezotopiaMembershipModel.fromJson(json);
       case CredentialSubjectType.chainbornMembership:
@@ -332,8 +288,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return VoucherModel.fromJson(json);
       case CredentialSubjectType.tezVoucher:
         return TezotopiaVoucherModel.fromJson(json);
-      case CredentialSubjectType.talaoCommunityCard:
-        return TalaoCommunityCardModel.fromJson(json);
       case CredentialSubjectType.diplomaCard:
         return DiplomaCardModel.fromJson(json);
       case CredentialSubjectType.aragoPass:
@@ -497,20 +451,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
         return 'Defi Compliance';
-      case CredentialSubjectType.bloometaPass:
-        return 'Bloometa';
       case CredentialSubjectType.livenessCard:
         return 'Liveness';
-      case CredentialSubjectType.troopezPass:
-        return 'Troopez Pass';
-      case CredentialSubjectType.pigsPass:
-        return 'Pigs Pass';
-      case CredentialSubjectType.matterlightPass:
-        return 'Matterlight Pass';
-      case CredentialSubjectType.dogamiPass:
-        return 'Dogami Pass';
-      case CredentialSubjectType.bunnyPass:
-        return 'Bunny Pass';
       case CredentialSubjectType.tezotopiaMembership:
         return 'Membership Card';
       case CredentialSubjectType.chainbornMembership:
@@ -591,8 +533,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Voucher';
       case CredentialSubjectType.tezVoucher:
         return 'TezVoucher';
-      case CredentialSubjectType.talaoCommunityCard:
-        return 'Talao Community';
       case CredentialSubjectType.diplomaCard:
         return 'Verifiable Diploma';
       case CredentialSubjectType.aragoPass:
@@ -631,7 +571,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
   bool get weCanRemoveItIfCredentialExist {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
-      case CredentialSubjectType.bloometaPass:
       case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
@@ -668,11 +607,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.defaultCredential:
       case CredentialSubjectType.ecole42LearningAchievement:
       case CredentialSubjectType.emailPass:
-      case CredentialSubjectType.troopezPass:
-      case CredentialSubjectType.pigsPass:
-      case CredentialSubjectType.matterlightPass:
-      case CredentialSubjectType.dogamiPass:
-      case CredentialSubjectType.bunnyPass:
       case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.phonePass:
@@ -681,7 +615,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.professionalStudentCard:
       case CredentialSubjectType.selfIssued:
       case CredentialSubjectType.studentCard:
-      case CredentialSubjectType.talaoCommunityCard:
       case CredentialSubjectType.aragoPass:
       case CredentialSubjectType.aragoEmailPass:
       case CredentialSubjectType.aragoIdentityCard:
@@ -705,20 +638,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
         return 0;
-      case CredentialSubjectType.bloometaPass:
-        return 76;
       case CredentialSubjectType.livenessCard:
         return 75;
-      case CredentialSubjectType.troopezPass:
-        return 73;
-      case CredentialSubjectType.pigsPass:
-        return 75;
-      case CredentialSubjectType.matterlightPass:
-        return 74;
-      case CredentialSubjectType.dogamiPass:
-        return 78;
-      case CredentialSubjectType.bunnyPass:
-        return 77;
       case CredentialSubjectType.tezotopiaMembership:
         return 79;
       case CredentialSubjectType.chainbornMembership:
@@ -799,8 +720,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 81;
       case CredentialSubjectType.tezVoucher:
         return 80;
-      case CredentialSubjectType.talaoCommunityCard:
-        return 84;
       case CredentialSubjectType.diplomaCard:
         return 89;
       case CredentialSubjectType.aragoPass:
