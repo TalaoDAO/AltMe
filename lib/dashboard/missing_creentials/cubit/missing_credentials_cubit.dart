@@ -19,6 +19,7 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
     required this.secureStorageProvider,
     required this.credentialManifest,
     required this.query,
+    required this.profileCubit,
   }) : super(MissingCredentialsState()) {
     initialize();
   }
@@ -27,11 +28,15 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
   final SecureStorageProvider secureStorageProvider;
   final CredentialManifest? credentialManifest;
   final Query? query;
+  final ProfileCubit profileCubit;
 
   Future<void> initialize() async {
     emit(state.loading());
 
     final List<DiscoverDummyCredential> dummyCredentials = [];
+
+    final vcFormatType = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
     if (credentialManifest != null) {
       final PresentationDefinition? presentationDefinition =
@@ -64,9 +69,7 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
 
             if (credentialSubjectType != null) {
               dummyCredentials.add(
-                DiscoverDummyCredential.fromSubjectType(
-                  credentialSubjectType,
-                ),
+                credentialSubjectType.dummyCredential(vcFormatType),
               );
             }
           }
@@ -88,9 +91,8 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
           final credentialSubjectType = getCredTypeFromName(credentialName);
 
           if (credentialSubjectType != null) {
-            dummyCredentials.add(
-              DiscoverDummyCredential.fromSubjectType(credentialSubjectType),
-            );
+            dummyCredentials
+                .add(credentialSubjectType.dummyCredential(vcFormatType));
           }
         }
       }

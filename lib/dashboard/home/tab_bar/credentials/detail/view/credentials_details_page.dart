@@ -178,6 +178,15 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         final String type =
             widget.credentialModel.credentialPreview.type.toString();
 
+        final vcFormatType = context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .vcFormatType;
+
         return BasePage(
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
           titleAlignment: Alignment.topCenter,
@@ -195,6 +204,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         CredentialDisplay(
                           credentialModel: widget.credentialModel,
                           credDisplayType: CredDisplayType.Detail,
+                          vcFormatType: vcFormatType,
                         ),
                         const SizedBox(height: 20),
                         Column(

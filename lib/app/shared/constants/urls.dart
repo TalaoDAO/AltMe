@@ -46,8 +46,11 @@ class Urls {
 
   static const String twitterCardUrl = 'https://issuer.talao.co/twitter/';
 
-  static const String identityCardUrl =
+  static const String identityCardUrlLDPVC =
       'https://issuer.talao.co/passbase/endpoint/verifiableid/';
+  static const String identityCardUrlJWTVCJSON =
+      'https://talao.co/id360/oidc4vc/';
+
   static const String linkedinCardUrl =
       'https://issuer.talao.co/passbase/endpoint/linkedincard/';
   static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
