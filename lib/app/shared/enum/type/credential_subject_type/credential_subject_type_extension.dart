@@ -648,10 +648,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.polygonAssociatedWallet:
       case CredentialSubjectType.binanceAssociatedWallet:
       case CredentialSubjectType.tezosAssociatedWallet:
+      case CredentialSubjectType.defiCompliance:
+      case CredentialSubjectType.emailPass:
+      case CredentialSubjectType.livenessCard:
+      case CredentialSubjectType.phonePass:
         return [VCFormatType.ldpVc];
 
-      case CredentialSubjectType.defiCompliance:
-      case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
       case CredentialSubjectType.nationality:
@@ -672,10 +674,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.defaultCredential:
       case CredentialSubjectType.ecole42LearningAchievement:
-      case CredentialSubjectType.emailPass:
       case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.learningAchievement:
-      case CredentialSubjectType.phonePass:
       case CredentialSubjectType.professionalExperienceAssessment:
       case CredentialSubjectType.professionalSkillAssessment:
       case CredentialSubjectType.professionalStudentCard:
