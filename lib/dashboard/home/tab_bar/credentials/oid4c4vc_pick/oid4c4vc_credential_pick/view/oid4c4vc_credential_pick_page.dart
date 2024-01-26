@@ -114,10 +114,17 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                         getCredTypeFromName(credential) ??
                             CredentialSubjectType.defaultCredential;
 
+                    final vcFormatType = context
+                        .read<ProfileCubit>()
+                        .state
+                        .model
+                        .profileSetting
+                        .selfSovereignIdentityOptions
+                        .customOidc4vcProfile
+                        .vcFormatType;
+
                     final DiscoverDummyCredential discoverDummyCredential =
-                        DiscoverDummyCredential.fromSubjectType(
-                      credentialSubjectType,
-                    );
+                        credentialSubjectType.dummyCredential(vcFormatType);
 
                     Display? display;
 
@@ -159,6 +166,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                 display: display,
                               ),
                               credDisplayType: CredDisplayType.List,
+                              vcFormatType: vcFormatType,
                             )
                           else
                             DummyCredentialImage(

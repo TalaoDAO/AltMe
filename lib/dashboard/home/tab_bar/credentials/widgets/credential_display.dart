@@ -1,17 +1,19 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class CredentialDisplay extends StatelessWidget {
   const CredentialDisplay({
     super.key,
     required this.credentialModel,
     required this.credDisplayType,
+    required this.vcFormatType,
   });
 
   final CredentialModel credentialModel;
-
   final CredDisplayType credDisplayType;
+  final VCFormatType vcFormatType;
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +26,6 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.walletCredential:
         return WalletCredentialWidget(credentialModel: credentialModel);
 
-      case CredentialSubjectType.bloometaPass:
-        return BloometaPassWidget(credentialModel: credentialModel);
-
       case CredentialSubjectType.livenessCard:
         return LivenessCardWidget(credentialModel: credentialModel);
 
@@ -35,21 +34,6 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.chainbornMembership:
         return ChainbornMemberShipWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.troopezPass:
-        return TrooperzPassWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.pigsPass:
-        return PigsPassWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.matterlightPass:
-        return MatterlightPassWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.dogamiPass:
-        return DogamiPassWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.bunnyPass:
-        return BunnyPassWidget(credentialModel: credentialModel);
 
       case CredentialSubjectType.ageRange:
         return AgeRangeWidget(credentialModel: credentialModel);
@@ -82,7 +66,7 @@ class CredentialDisplay extends StatelessWidget {
                   CredentialSubjectType.defaultCredential;
 
           final DiscoverDummyCredential discoverDummyCredential =
-              DiscoverDummyCredential.fromSubjectType(credentialSubjectType);
+              credentialSubjectType.dummyCredential(vcFormatType);
 
           return Opacity(
             opacity: 0.5,
@@ -254,9 +238,6 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.tezVoucher:
         return TezotopiaVoucherWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.talaoCommunityCard:
-        return TalaoCommunityCardWidget(credentialModel: credentialModel);
 
       case CredentialSubjectType.diplomaCard:
         return DiplomaCardWidget(credentialModel: credentialModel);

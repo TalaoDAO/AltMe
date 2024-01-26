@@ -80,6 +80,10 @@ extension CredentialCategoryX on CredentialCategory {
           // CredentialSubjectType.ageRange,
           // CredentialSubjectType.nationality,
           // CredentialSubjectType.over65,
+
+          /// Note: If credential removed from here needs KYC then add
+          /// in discover_credential.dart
+
           // CredentialSubjectType.over50,
           // CredentialSubjectType.over21,
           CredentialSubjectType.over18,

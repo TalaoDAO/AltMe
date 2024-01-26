@@ -559,11 +559,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       _getAvalaibleDummyCredentials(List<CredentialModel> credentials) {
     final dummies = <CredentialCategory, List<DiscoverDummyCredential>>{};
     // entreprise user may have options to display some dummies (true/false)
-    final discoverCardsOptions =
-        profileCubit.state.model.profileSetting.discoverCardsOptions;
+
+    final profileSetting = profileCubit.state.model.profileSetting;
+    final discoverCardsOptions = profileSetting.discoverCardsOptions;
     // entreprise user may have a list of external issuer
-    final externalIssuers = profileCubit
-        .state.model.profileSetting.discoverCardsOptions?.displayExternalIssuer;
+    final externalIssuers =
+        profileSetting.discoverCardsOptions?.displayExternalIssuer;
 
     for (final CredentialCategory category in getCredentialCategorySorted) {
       final List<CredentialSubjectType> currentCredentialsSubjectTypeList =
@@ -723,13 +724,17 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           requiredDummySubjects.add(subjectType);
         }
       }
+
+      final vcFormatType = profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+
 // Generate list of external issuer from the profile
       dummies[category] =
           getDummiesFromExternalIssuerList(category, externalIssuers ?? []);
 // add dummies from the category
       dummies[category]?.addAll(
         requiredDummySubjects
-            .map(DiscoverDummyCredential.fromSubjectType)
+            .map((item) => item.dummyCredential(vcFormatType))
             .toList(),
       );
     }

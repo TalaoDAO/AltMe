@@ -20,13 +20,9 @@ class Urls {
 
   static const String tezotopiaVoucherUrl =
       'https://issuer.tezotopia.altme.io/issuer/voucher_mobile';
-  static const String talaoCommunityCardUrl =
-      'https://issuer.talao.co/talao_community';
 
   static const String tezotopiaMembershipCardUrl =
       'https://issuer.talao.co/tezotopia/membershipcard/';
-
-  static const String bloometaCardUrl = 'https://issuer.talao.co/bloometa';
 
   static const String livenessCardUrl =
       'https://issuer.talao.co/passbase/endpoint/liveness';
@@ -50,8 +46,11 @@ class Urls {
 
   static const String twitterCardUrl = 'https://issuer.talao.co/twitter/';
 
-  static const String identityCardUrl =
+  static const String identityCardUrlLDPVC =
       'https://issuer.talao.co/passbase/endpoint/verifiableid/';
+  static const String identityCardUrlJWTVCJSON =
+      'https://talao.co/id360/oidc4vc/';
+
   static const String linkedinCardUrl =
       'https://issuer.talao.co/passbase/endpoint/linkedincard/';
   static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
@@ -85,13 +84,6 @@ class Urls {
 
   static const objktUrl = 'https://objkt.com/';
   static const raribleUrl = 'https://rarible.com/';
-
-  static const String bunnyPassCardUrl = 'https://issuer.tezotopia.altme.io';
-  static const String dogamiPassCardUrl = 'https://issuer.tezotopia.altme.io';
-  static const String matterlightPassCardUrl =
-      'https://issuer.tezotopia.altme.io';
-  static const String pigsPassCardUrl = 'https://issuer.tezotopia.altme.io';
-  static const String trooperzPassCardUrl = 'https://issuer.tezotopia.altme.io';
 
   static const over13AIValidationUrl = 'https://issuer.talao.co/ai/over13';
   static const over15AIValidationUrl = 'https://issuer.talao.co/ai/over15';

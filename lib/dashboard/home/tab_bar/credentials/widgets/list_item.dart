@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class _BaseItem extends StatefulWidget {
   const _BaseItem({
@@ -83,6 +84,14 @@ class CredentialsDisplayItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vcFormatType = context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .vcFormatType;
     return _BaseItem(
       enabled: true,
       onTap: onTap,
@@ -90,6 +99,7 @@ class CredentialsDisplayItem extends StatelessWidget {
           ? CredentialDisplay(
               credentialModel: credentialModel,
               credDisplayType: CredDisplayType.List,
+              vcFormatType: vcFormatType,
             )
           : DisplaySelectionElement(
               credentialModel: credentialModel,
@@ -112,12 +122,21 @@ class DisplaySelectionElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final credential = Credential.fromJsonOrDummy(credentialModel.data);
+    final vcFormatType = context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .vcFormatType;
     return CredentialSelectionPadding(
       child: Column(
         children: <Widget>[
           CredentialDisplay(
             credentialModel: credentialModel,
             credDisplayType: CredDisplayType.List,
+            vcFormatType: vcFormatType,
           ),
           Align(
             alignment: Alignment.centerRight,

@@ -19,7 +19,17 @@ Future<void> discoverCredential({
     ..remove(CredentialSubjectType.twitterCard)
 
     ///items to add because needs KYC
-    ..add(CredentialSubjectType.defiCompliance);
+    ..addAll([
+      CredentialSubjectType.defiCompliance,
+      CredentialSubjectType.gender,
+      CredentialSubjectType.ageRange,
+      CredentialSubjectType.over65,
+      CredentialSubjectType.over50,
+      CredentialSubjectType.over21,
+      CredentialSubjectType.over18,
+      CredentialSubjectType.over15,
+      CredentialSubjectType.over13,
+    ]);
 
   if (credentialSubjectTypeList
       .contains(dummyCredential.credentialSubjectType)) {

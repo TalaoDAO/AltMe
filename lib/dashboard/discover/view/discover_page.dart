@@ -28,13 +28,23 @@ class _DiscoverPageState extends State<DiscoverPage> {
       scrollView: false,
       padding: EdgeInsets.zero,
       backgroundColor: Theme.of(context).colorScheme.transparent,
-      body: BlocBuilder<CredentialsCubit, CredentialsState>(
-        builder: (context, state) {
-          return DiscoverCredentialCategoryList(
-            onRefresh: onRefresh,
-            dummyCredentials: state.dummyCredentials,
-          );
+      body: BlocListener<ProfileCubit, ProfileState>(
+        listenWhen: (previous, current) =>
+            current.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.vcFormatType !=
+            previous.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.vcFormatType,
+        listener: (context, state) {
+          onRefresh();
         },
+        child: BlocBuilder<CredentialsCubit, CredentialsState>(
+          builder: (context, state) {
+            return DiscoverCredentialCategoryList(
+              onRefresh: onRefresh,
+              dummyCredentials: state.dummyCredentials,
+            );
+          },
+        ),
       ),
     );
   }
