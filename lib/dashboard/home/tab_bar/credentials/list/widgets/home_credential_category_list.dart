@@ -40,15 +40,27 @@ class HomeCredentialCategoryList extends StatelessWidget {
               ).map((category) {
                 final categorizedCredentials = credentials.where(
                   (element) {
+                    /// id credential category does not match, do not show
+                    if (element.credentialPreview.credentialSubjectModel
+                            .credentialCategory !=
+                        category) {
+                      return false;
+                    }
+
+                    /// wallet credential to be shown always
+                    if (element.credentialPreview.credentialSubjectModel
+                            .credentialSubjectType ==
+                        CredentialSubjectType.walletCredential) {
+                      return true;
+                    }
+
                     /// do not load the credential if vc format is different
                     if (element.format != null &&
                         vcFormatType.formattedString != element.format) {
                       return false;
                     }
 
-                    return element.credentialPreview.credentialSubjectModel
-                            .credentialCategory ==
-                        category;
+                    return true;
                   },
                 ).toList();
                 if (categorizedCredentials.isEmpty) {

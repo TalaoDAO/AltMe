@@ -829,7 +829,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
             link = Urls.identityCardUrlJWTVCJSON;
           case VCFormatType.jwtVc:
           case VCFormatType.jwtVcJsonLd:
-            throw Exception();
+            link = '';
         }
 
         whyGetThisCard =
