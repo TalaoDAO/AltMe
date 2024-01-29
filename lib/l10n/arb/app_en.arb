@@ -977,7 +977,7 @@
   "clientAuthenticationMethods": "Client Authentication Methods",
   "clientAuthenticationMethodsSubtitle": "Default: Client id as DID or JWK\nSelect to other authentication methods if needed.",
   "vcFormatType": "VC Format",
-  "vcFormatTypeSubtitle": "Default: ldp_vc\nSelect one of the format.",
+  "vcFormatTypeSubtitle": "Default: ldp_vc\nSelect one of the VC formats..",
   "theServiceIsNotAvailable": "The service is not available",
   "issuerDID": "Issuer DID",
   "subjectDID": "Subject DID",
