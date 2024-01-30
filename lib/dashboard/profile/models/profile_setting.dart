@@ -511,6 +511,7 @@ class CustomOidc4VcProfile extends Equatable {
   final SIOPV2DraftType siopv2Draft;
   final SubjectSyntax subjectSyntaxeType;
   final UserPinDigits userPinDigits;
+  @JsonKey(name: 'vcFormat')
   final VCFormatType vcFormatType;
 
   Map<String, dynamic> toJson() => _$CustomOidc4VcProfileToJson(this);
