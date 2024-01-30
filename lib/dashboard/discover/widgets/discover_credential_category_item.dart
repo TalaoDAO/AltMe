@@ -23,14 +23,15 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
 
     final discoverCardsOptions = profileSetting.discoverCardsOptions;
 
-    final vcFormatType = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
-
+    /// check if advantage card to be shown or not
     if (discoverCardsOptions != null &&
         !discoverCardsOptions.displayRewardsCategory &&
         credentialCategory == CredentialCategory.advantagesCards) {
       return Container();
     }
+
+    final vcFormatType = profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
     /// remove dummy credential if format is not matched
     dummyCredentials.removeWhere((element) {

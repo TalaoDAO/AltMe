@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:uuid/uuid.dart';
 
 Future<void> discoverCredential({
@@ -11,6 +12,11 @@ Future<void> discoverCredential({
 }) async {
   final List<CredentialSubjectType> credentialSubjectTypeList =
       List.of(CredentialCategory.identityCards.credSubjectsToShowInDiscover);
+
+  final profileCubit = context.read<ProfileCubit>();
+
+  final vcFormatType = profileCubit.state.model.profileSetting
+      .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
   /// items to remove to bypass KYC
   credentialSubjectTypeList
@@ -37,7 +43,8 @@ Future<void> discoverCredential({
 
     /// here check for over18, over15, age range and over13 to take photo for
     /// AI KYC
-    if (dummyCredential.credentialSubjectType.checkForAIKYC) {
+    if (vcFormatType == VCFormatType.ldpVc &&
+        dummyCredential.credentialSubjectType.checkForAIKYC) {
       /// For DefiCompliance, it is not necessary to use Yoti. Instead,
       /// we can directly proceed with Id360.
       if (dummyCredential.credentialSubjectType ==

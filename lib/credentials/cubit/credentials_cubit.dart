@@ -561,6 +561,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     // entreprise user may have options to display some dummies (true/false)
 
     final profileSetting = profileCubit.state.model.profileSetting;
+    final vcFormatType = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+
     final discoverCardsOptions = profileSetting.discoverCardsOptions;
     // entreprise user may have a list of external issuer
     final externalIssuers =
@@ -577,12 +580,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
       final allSubjectTypeForCategory = category.credSubjectsToShowInDiscover;
 
-      /// tezVoucher and tezotopiaMembership is available only on Android
-      /// platform
+      /// tezVoucher is available only on Android platform
       if (isIOS) {
         allSubjectTypeForCategory.remove(CredentialSubjectType.tezVoucher);
-        //allSubjectTypeForCategory.remove
-        //(CredentialSubjectType.tezotopiaMembership);
       }
 
       // remove cards in discover based on profile
@@ -591,7 +591,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           allSubjectTypeForCategory
               .remove(CredentialSubjectType.defiCompliance);
         }
-        if (!discoverCardsOptions.displayHumanity) {
+        if (!discoverCardsOptions.displayHumanity ||
+            !discoverCardsOptions.displayHumanityJwt) {
           allSubjectTypeForCategory.remove(CredentialSubjectType.livenessCard);
         }
         if (!discoverCardsOptions.displayOver13) {
@@ -600,7 +601,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         if (!discoverCardsOptions.displayOver15) {
           allSubjectTypeForCategory.remove(CredentialSubjectType.over15);
         }
-        if (!discoverCardsOptions.displayOver18) {
+        if (!discoverCardsOptions.displayOver18 ||
+            !discoverCardsOptions.displayOver18Jwt) {
           allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
         }
 
@@ -613,15 +615,16 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         if (!discoverCardsOptions.displayOver65) {
           allSubjectTypeForCategory.remove(CredentialSubjectType.over65);
         }
-        if (!discoverCardsOptions.displayVerifiableId) {
+        if (!discoverCardsOptions.displayVerifiableId ||
+            !discoverCardsOptions.displayVerifiableIdJwt) {
           allSubjectTypeForCategory
               .remove(CredentialSubjectType.verifiableIdCard);
         }
         if (!discoverCardsOptions.displayGender) {
           allSubjectTypeForCategory.remove(CredentialSubjectType.gender);
         }
-        // add cards in discover based on profile
 
+        // add cards in discover based on profile
         switch (category) {
           case CredentialCategory.identityCards:
             if (discoverCardsOptions.displayOver13 &&
@@ -634,11 +637,19 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     .contains(CredentialSubjectType.over15)) {
               allSubjectTypeForCategory.add(CredentialSubjectType.over15);
             }
-            if (discoverCardsOptions.displayOver18 &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.over18)) {
-              allSubjectTypeForCategory.add(CredentialSubjectType.over18);
+
+            if (!allSubjectTypeForCategory
+                .contains(CredentialSubjectType.over18)) {
+              final displayOver18 = vcFormatType == VCFormatType.ldpVc &&
+                  discoverCardsOptions.displayOver18;
+              final displayOver18Jwt = vcFormatType == VCFormatType.jwtVcJson &&
+                  discoverCardsOptions.displayOver18Jwt;
+
+              if (displayOver18 || displayOver18Jwt) {
+                allSubjectTypeForCategory.add(CredentialSubjectType.over18);
+              }
             }
+
             if (discoverCardsOptions.displayOver21 &&
                 !allSubjectTypeForCategory
                     .contains(CredentialSubjectType.over21)) {
@@ -654,23 +665,47 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     .contains(CredentialSubjectType.over65)) {
               allSubjectTypeForCategory.add(CredentialSubjectType.over65);
             }
-            if (discoverCardsOptions.displayVerifiableId &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.verifiableIdCard)) {
-              allSubjectTypeForCategory.add(
-                CredentialSubjectType.verifiableIdCard,
-              );
+
+            if (!allSubjectTypeForCategory
+                .contains(CredentialSubjectType.verifiableIdCard)) {
+              final displayVerifiableId = vcFormatType == VCFormatType.ldpVc &&
+                  discoverCardsOptions.displayVerifiableId;
+              final displayVerifiableIdJwt =
+                  vcFormatType == VCFormatType.jwtVcJson &&
+                      discoverCardsOptions.displayVerifiableIdJwt;
+
+              if (displayVerifiableId || displayVerifiableIdJwt) {
+                allSubjectTypeForCategory
+                    .add(CredentialSubjectType.verifiableIdCard);
+              }
             }
+
             if (discoverCardsOptions.displayAgeRange &&
                 !allSubjectTypeForCategory
                     .contains(CredentialSubjectType.ageRange)) {
               allSubjectTypeForCategory.add(CredentialSubjectType.ageRange);
             }
+
             if (discoverCardsOptions.displayHumanity &&
                 !allSubjectTypeForCategory
                     .contains(CredentialSubjectType.livenessCard)) {
               allSubjectTypeForCategory.add(CredentialSubjectType.livenessCard);
             }
+
+            if (!allSubjectTypeForCategory
+                .contains(CredentialSubjectType.livenessCard)) {
+              final displayHumanity = vcFormatType == VCFormatType.ldpVc &&
+                  discoverCardsOptions.displayHumanity;
+              final displayHumanityJwt =
+                  vcFormatType == VCFormatType.jwtVcJson &&
+                      discoverCardsOptions.displayHumanityJwt;
+
+              if (displayHumanity || displayHumanityJwt) {
+                allSubjectTypeForCategory
+                    .add(CredentialSubjectType.livenessCard);
+              }
+            }
+
             if (discoverCardsOptions.displayGender &&
                 !allSubjectTypeForCategory
                     .contains(CredentialSubjectType.gender)) {
@@ -725,9 +760,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         }
       }
 
-      final vcFormatType = profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
-
 // Generate list of external issuer from the profile
       dummies[category] =
           getDummiesFromExternalIssuerList(category, externalIssuers ?? []);
@@ -738,6 +770,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             .toList(),
       );
     }
+
     return dummies;
   }
 }

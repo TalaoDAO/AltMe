@@ -173,12 +173,15 @@ class DiscoverCardsOptions extends Equatable {
     required this.displayGender,
     required this.displayDefi,
     required this.displayHumanity,
+    required this.displayHumanityJwt,
     required this.displayOver13,
     required this.displayOver15,
     required this.displayOver18,
+    required this.displayOver18Jwt,
     required this.displayOver50,
     required this.displayRewardsCategory,
     required this.displayVerifiableId,
+    required this.displayVerifiableIdJwt,
     required this.displayExternalIssuer,
   });
 
@@ -188,13 +191,16 @@ class DiscoverCardsOptions extends Equatable {
   factory DiscoverCardsOptions.empty() => const DiscoverCardsOptions(
         displayDefi: true,
         displayHumanity: false,
+        displayHumanityJwt: false,
         displayOver13: false,
         displayOver15: true,
         displayOver18: true,
+        displayOver18Jwt: true,
         displayOver21: false,
         displayOver50: false,
         displayRewardsCategory: true,
         displayVerifiableId: true,
+        displayVerifiableIdJwt: true,
         displayOver65: false,
         displayAgeRange: false,
         displayGender: false,
@@ -203,15 +209,18 @@ class DiscoverCardsOptions extends Equatable {
 
   final bool displayDefi;
   final bool displayHumanity;
+  final bool displayHumanityJwt;
   final bool displayOver13;
   final bool displayOver15;
   final bool displayOver18;
+  final bool displayOver18Jwt;
   final bool displayOver21;
   final bool displayOver50;
   final bool displayOver65;
   final bool displayAgeRange;
   final bool displayRewardsCategory;
   final bool displayVerifiableId;
+  final bool displayVerifiableIdJwt;
   final bool displayGender;
   final List<DisplayExternalIssuer> displayExternalIssuer;
 
@@ -220,11 +229,14 @@ class DiscoverCardsOptions extends Equatable {
   DiscoverCardsOptions copyWith({
     bool? displayDefi,
     bool? displayHumanity,
+    bool? displayHumanityJwt,
     bool? displayOver13,
     bool? displayOver15,
     bool? displayOver18,
+    bool? displayOver18Jwt,
     bool? displayRewardsCategory,
     bool? displayVerifiableId,
+    bool? displayVerifiableIdJwt,
     bool? displayOver21,
     bool? displayOver65,
     bool? displayAgeRange,
@@ -235,12 +247,16 @@ class DiscoverCardsOptions extends Equatable {
     return DiscoverCardsOptions(
       displayDefi: displayDefi ?? this.displayDefi,
       displayHumanity: displayHumanity ?? this.displayHumanity,
+      displayHumanityJwt: displayHumanityJwt ?? this.displayHumanityJwt,
       displayOver13: displayOver13 ?? this.displayOver13,
       displayOver15: displayOver15 ?? this.displayOver15,
       displayOver18: displayOver18 ?? this.displayOver18,
+      displayOver18Jwt: displayOver18Jwt ?? this.displayOver18Jwt,
       displayRewardsCategory:
           displayRewardsCategory ?? this.displayRewardsCategory,
       displayVerifiableId: displayVerifiableId ?? this.displayVerifiableId,
+      displayVerifiableIdJwt:
+          displayVerifiableIdJwt ?? this.displayVerifiableIdJwt,
       displayOver21: displayOver21 ?? this.displayOver21,
       displayOver65: displayOver65 ?? this.displayOver65,
       displayAgeRange: displayAgeRange ?? this.displayAgeRange,
@@ -266,6 +282,9 @@ class DiscoverCardsOptions extends Equatable {
         displayGender,
         displayOver50,
         displayExternalIssuer,
+        displayHumanityJwt,
+        displayOver18Jwt,
+        displayVerifiableIdJwt,
       ];
 }
 

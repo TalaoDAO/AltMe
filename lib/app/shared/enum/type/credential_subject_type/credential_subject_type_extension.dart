@@ -637,7 +637,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.over13:
       case CredentialSubjectType.over15:
-      case CredentialSubjectType.over18:
       case CredentialSubjectType.over21:
       case CredentialSubjectType.over50:
       case CredentialSubjectType.over65:
@@ -650,11 +649,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.defiCompliance:
       case CredentialSubjectType.emailPass:
-      case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.phonePass:
         return [VCFormatType.ldpVc];
 
       case CredentialSubjectType.verifiableIdCard:
+      case CredentialSubjectType.over18:
+      case CredentialSubjectType.livenessCard:
         return [VCFormatType.ldpVc, VCFormatType.jwtVcJson];
 
       case CredentialSubjectType.tezotopiaMembership:
@@ -770,7 +770,15 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
       case CredentialSubjectType.over18:
         image = ImageStrings.dummyOver18Card;
-        link = '';
+        switch (vcFormatType) {
+          case VCFormatType.ldpVc:
+            link = ''; // handle by aivalidation url
+          case VCFormatType.jwtVcJson:
+            link = Urls.over18JWTVCJSON;
+          case VCFormatType.jwtVc:
+          case VCFormatType.jwtVcJsonLd:
+            link = '';
+        }
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
@@ -891,7 +899,17 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
       case CredentialSubjectType.livenessCard:
         image = ImageStrings.livenessDummy;
-        link = Urls.livenessCardUrl;
+
+        switch (vcFormatType) {
+          case VCFormatType.ldpVc:
+            link = Urls.livenessCardUrl;
+          case VCFormatType.jwtVcJson:
+            link = Urls.livenessCardJWTVCJSON;
+          case VCFormatType.jwtVc:
+          case VCFormatType.jwtVcJsonLd:
+            link = '';
+        }
+
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard;
         expirationDateDetails =

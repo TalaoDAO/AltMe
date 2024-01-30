@@ -62,36 +62,20 @@ extension CredentialCategoryX on CredentialCategory {
   }
 
   List<CredentialSubjectType> get credSubjectsToShowInDiscover {
+    /// Note: If credential removed from here needs KYC then add
+    /// in discover_credential.dart
+
     switch (this) {
       case CredentialCategory.advantagesCards:
         return [
           CredentialSubjectType.tezotopiaMembership,
           CredentialSubjectType.chainbornMembership,
-          //CredentialSubjectType.bloometaPass,
-          // CredentialSubjectType.troopezPass,
-          // CredentialSubjectType.pigsPass,
-          // CredentialSubjectType.matterlightPass,
-          // CredentialSubjectType.dogamiPass,
-          // CredentialSubjectType.bunnyPass,
         ];
       case CredentialCategory.identityCards:
         return [
-          // CredentialSubjectType.gender,
-          // CredentialSubjectType.ageRange,
-          // CredentialSubjectType.nationality,
-          // CredentialSubjectType.over65,
-
-          /// Note: If credential removed from here needs KYC then add
-          /// in discover_credential.dart
-
-          // CredentialSubjectType.over50,
-          // CredentialSubjectType.over21,
           CredentialSubjectType.over18,
           CredentialSubjectType.over15,
-          // CredentialSubjectType.over13,
-          // CredentialSubjectType.passportFootprint,
           CredentialSubjectType.verifiableIdCard,
-          // CredentialSubjectType.livenessCard,
         ];
       case CredentialCategory.contactInfoCredentials:
         return [

@@ -27,6 +27,9 @@ class Urls {
   static const String livenessCardUrl =
       'https://issuer.talao.co/passbase/endpoint/liveness';
 
+  static const String livenessCardJWTVCJSON =
+      'https://talao.co/id360/oidc4vc?type=liveness';
+
   static const String defaultPolygonIdCardUrl =
       'https://issuer.talao.co/credential-manifest/polygonid/default';
 
@@ -50,6 +53,9 @@ class Urls {
       'https://issuer.talao.co/passbase/endpoint/verifiableid/';
   static const String identityCardUrlJWTVCJSON =
       'https://talao.co/id360/oidc4vc/';
+
+  static const String over18JWTVCJSON =
+      'https://talao.co/id360/oidc4vc?type=over18';
 
   static const String linkedinCardUrl =
       'https://issuer.talao.co/passbase/endpoint/linkedincard/';

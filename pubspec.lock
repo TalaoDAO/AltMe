@@ -1485,10 +1485,10 @@ packages:
     dependency: "direct main"
     description:
       name: matrix
-      sha256: "1cea8c269054329a8882f47fa36c6573d6b62465b8e7b06f1211b4113fdcd201"
+      sha256: "84e5745dd41468a2870d119e597529e6471f3ce2f400e4b35d5bd6a036a98692"
       url: "https://pub.dev"
     source: hosted
-    version: "0.25.6"
+    version: "0.25.7"
   matrix_api_lite:
     dependency: transitive
     description:
@@ -2236,6 +2236,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.5.3"
+  sqlite3:
+    dependency: transitive
+    description:
+      name: sqlite3
+      sha256: c4a4c5a4b2a32e2d0f6837b33d7c91a67903891a5b7dbe706cf4b1f6b0c798c5
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
   stack_trace:
     dependency: transitive
     description:
