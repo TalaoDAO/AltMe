@@ -55,8 +55,7 @@ class HomeCredentialCategoryList extends StatelessWidget {
                     }
 
                     /// do not load the credential if vc format is different
-                    if (element.format != null &&
-                        vcFormatType.formattedString != element.format) {
+                    if (vcFormatType.formattedString != element.getFormat) {
                       return false;
                     }
 

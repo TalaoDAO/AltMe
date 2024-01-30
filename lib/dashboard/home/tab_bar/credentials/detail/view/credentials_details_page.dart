@@ -165,11 +165,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.removeLast();
         }
 
-        String? format = widget.credentialModel.format;
-
-        format ??=
-            widget.credentialModel.jwt != null ? 'jwt_vc_json-ld' : 'ldp_vc';
-
         final String issuerDid =
             widget.credentialModel.credentialPreview.issuer;
         final String subjectDid = widget
@@ -317,7 +312,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             CredentialField(
                               padding: EdgeInsets.zero,
                               title: l10n.format,
-                              value: format,
+                              value: widget.credentialModel.getFormat,
                               titleColor:
                                   Theme.of(context).colorScheme.titleColor,
                               valueColor:
