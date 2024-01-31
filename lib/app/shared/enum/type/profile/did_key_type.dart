@@ -18,7 +18,7 @@ extension DidKeyTypeX on DidKeyType {
   String get formattedString {
     switch (this) {
       case DidKeyType.edDSA:
-        return 'did:key eddsa';
+        return 'did:key edDSA';
       case DidKeyType.secp256k1:
         return 'did:key secp256k1';
       case DidKeyType.p256:
