@@ -2,6 +2,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 enum DidKeyType {
+  @JsonValue('did:key:eddsa')
+  edDSA,
   @JsonValue('did:key:secp256k1')
   secp256k1,
   @JsonValue('did:key:p-256')
@@ -15,6 +17,8 @@ enum DidKeyType {
 extension DidKeyTypeX on DidKeyType {
   String get formattedString {
     switch (this) {
+      case DidKeyType.edDSA:
+        return 'did:key eddsa';
       case DidKeyType.secp256k1:
         return 'did:key secp256k1';
       case DidKeyType.p256:
@@ -28,6 +32,8 @@ extension DidKeyTypeX on DidKeyType {
 
   String getTitle(AppLocalizations l10n) {
     switch (this) {
+      case DidKeyType.edDSA:
+        return l10n.keyDecentralizedIdEdSA;
       case DidKeyType.secp256k1:
         return l10n.keyDecentralizedIDSecp256k1;
       case DidKeyType.p256:
