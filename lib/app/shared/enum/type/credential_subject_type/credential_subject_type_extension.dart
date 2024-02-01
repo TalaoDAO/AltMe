@@ -649,7 +649,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.defiCompliance:
       case CredentialSubjectType.emailPass:
+      case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.phonePass:
+      case CredentialSubjectType.chainbornMembership:
         return [VCFormatType.ldpVc];
 
       case CredentialSubjectType.verifiableIdCard:
@@ -657,8 +659,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.livenessCard:
         return [VCFormatType.ldpVc, VCFormatType.jwtVcJson];
 
-      case CredentialSubjectType.tezotopiaMembership:
-      case CredentialSubjectType.chainbornMembership:
       case CredentialSubjectType.nationality:
       case CredentialSubjectType.identityPass:
       case CredentialSubjectType.passportFootprint:
