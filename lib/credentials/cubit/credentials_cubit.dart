@@ -57,6 +57,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       log.i('can not load all credentials beacuse there is no ssi key');
       return;
     }
+
     emit(state.copyWith(status: CredentialsStatus.loading));
     final savedCredentials = await credentialsRepository.findAll(/* filters */);
     final dummies = _getAvalaibleDummyCredentials(savedCredentials);
@@ -624,6 +625,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           allSubjectTypeForCategory.remove(CredentialSubjectType.gender);
         }
 
+        if (!discoverCardsOptions.displayEmailPass) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.emailPass);
+        }
+
+        if (!discoverCardsOptions.displayPhonePass) {
+          allSubjectTypeForCategory.remove(CredentialSubjectType.phonePass);
+        }
+
         // add cards in discover based on profile
         switch (category) {
           case CredentialCategory.identityCards:
@@ -717,7 +726,21 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           case CredentialCategory.professionalCards:
             break;
           case CredentialCategory.contactInfoCredentials:
-            break;
+            if (discoverCardsOptions.displayEmailPass &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.emailPass)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.emailPass,
+              );
+            }
+
+            if (discoverCardsOptions.displayPhonePass &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.phonePass)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.phonePass,
+              );
+            }
 
           case CredentialCategory.educationCards:
             break;
@@ -729,6 +752,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 CredentialSubjectType.defiCompliance,
               );
             }
+
           case CredentialCategory.humanityProofCards:
             break;
           case CredentialCategory.socialMediaCards:

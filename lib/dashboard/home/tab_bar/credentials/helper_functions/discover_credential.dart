@@ -18,24 +18,18 @@ Future<void> discoverCredential({
   final vcFormatType = profileCubit.state.model.profileSetting
       .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
-  /// items to remove to bypass KYC
-  credentialSubjectTypeList
-    ..remove(CredentialSubjectType.emailPass)
-    ..remove(CredentialSubjectType.phonePass)
-    ..remove(CredentialSubjectType.twitterCard)
-
-    ///items to add because needs KYC
-    ..addAll([
-      CredentialSubjectType.defiCompliance,
-      CredentialSubjectType.gender,
-      CredentialSubjectType.ageRange,
-      CredentialSubjectType.over65,
-      CredentialSubjectType.over50,
-      CredentialSubjectType.over21,
-      CredentialSubjectType.over18,
-      CredentialSubjectType.over15,
-      CredentialSubjectType.over13,
-    ]);
+  ///items to add because needs KYC
+  credentialSubjectTypeList.addAll([
+    CredentialSubjectType.defiCompliance,
+    CredentialSubjectType.gender,
+    CredentialSubjectType.ageRange,
+    CredentialSubjectType.over65,
+    CredentialSubjectType.over50,
+    CredentialSubjectType.over21,
+    CredentialSubjectType.over18,
+    CredentialSubjectType.over15,
+    CredentialSubjectType.over13,
+  ]);
 
   if (credentialSubjectTypeList
       .contains(dummyCredential.credentialSubjectType)) {

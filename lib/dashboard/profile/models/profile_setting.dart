@@ -179,6 +179,10 @@ class DiscoverCardsOptions extends Equatable {
     required this.displayOver18,
     required this.displayOver18Jwt,
     required this.displayOver50,
+    required this.displayEmailPass,
+    required this.displayEmailPassJwt,
+    required this.displayPhonePass,
+    required this.displayPhonePassJwt,
     required this.displayRewardsCategory,
     required this.displayVerifiableId,
     required this.displayVerifiableIdJwt,
@@ -202,6 +206,10 @@ class DiscoverCardsOptions extends Equatable {
         displayVerifiableId: true,
         displayVerifiableIdJwt: true,
         displayOver65: false,
+        displayEmailPass: false,
+        displayEmailPassJwt: false,
+        displayPhonePass: false,
+        displayPhonePassJwt: false,
         displayAgeRange: false,
         displayGender: false,
         displayExternalIssuer: [],
@@ -217,6 +225,10 @@ class DiscoverCardsOptions extends Equatable {
   final bool displayOver21;
   final bool displayOver50;
   final bool displayOver65;
+  final bool displayEmailPass;
+  final bool displayEmailPassJwt;
+  final bool displayPhonePass;
+  final bool displayPhonePassJwt;
   final bool displayAgeRange;
   final bool displayRewardsCategory;
   final bool displayVerifiableId;
@@ -239,6 +251,10 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayVerifiableIdJwt,
     bool? displayOver21,
     bool? displayOver65,
+    bool? displayEmailPass,
+    bool? displayEmailPassJwt,
+    bool? displayPhonePass,
+    bool? displayPhonePassJwt,
     bool? displayAgeRange,
     bool? displayGender,
     bool? displayOver50,
@@ -259,6 +275,10 @@ class DiscoverCardsOptions extends Equatable {
           displayVerifiableIdJwt ?? this.displayVerifiableIdJwt,
       displayOver21: displayOver21 ?? this.displayOver21,
       displayOver65: displayOver65 ?? this.displayOver65,
+      displayEmailPass: displayEmailPass ?? this.displayEmailPass,
+      displayEmailPassJwt: displayEmailPassJwt ?? this.displayEmailPassJwt,
+      displayPhonePass: displayPhonePass ?? this.displayPhonePass,
+      displayPhonePassJwt: displayPhonePassJwt ?? this.displayPhonePassJwt,
       displayAgeRange: displayAgeRange ?? this.displayAgeRange,
       displayGender: displayGender ?? this.displayGender,
       displayOver50: displayOver50 ?? this.displayOver50,
@@ -281,6 +301,10 @@ class DiscoverCardsOptions extends Equatable {
         displayAgeRange,
         displayGender,
         displayOver50,
+        displayEmailPass,
+        displayEmailPassJwt,
+        displayPhonePass,
+        displayPhonePassJwt,
         displayExternalIssuer,
         displayHumanityJwt,
         displayOver18Jwt,
