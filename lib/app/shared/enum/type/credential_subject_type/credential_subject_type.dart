@@ -20,7 +20,6 @@ enum CredentialSubjectType {
   defaultCredential,
   defiCompliance,
   diplomaCard,
-  ecole42LearningAchievement,
   emailPass,
   ethereumAssociatedWallet,
   ethereumPooAddress,

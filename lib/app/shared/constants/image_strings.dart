@@ -49,8 +49,6 @@ class ImageStrings {
   static const String voucherBack = '$imagePath/carte-coupon-verso.png';
   static const String tezotopiaVoucher = '$imagePath/tezotopia_voucher.png';
 
-  static const String ecole42LearningAchievement =
-      '$imagePath/certificate-42.png';
   static const String talaoCommunityCard =
       '$imagePath/talao_community_card.png';
   static const String verifiableIdCard = '$imagePath/verifiable_id_card.png';

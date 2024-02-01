@@ -21,7 +21,6 @@ export 'default_credential_subject/default_credential_subject_model.dart';
 export 'defi_compliance/defi_compliance_model.dart';
 export 'diploma_card/diploma_card_model.dart';
 export 'discover_dummy_credential/discover_dummy_credential.dart';
-export 'ecole_42_learning_achievement/ecole_42_learning_achievement_model.dart';
 export 'email_pass/email_pass_model.dart';
 export 'employee_credential/employee_credential_model.dart';
 export 'ethereum_associated_address/ethereum_associated_address_credential.dart';

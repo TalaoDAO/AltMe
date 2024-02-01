@@ -32,8 +32,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xffEFF0F6);
       case CredentialSubjectType.defaultCredential:
         return Colors.white;
-      case CredentialSubjectType.ecole42LearningAchievement:
-        return const Color(0xFFffD6A5);
       case CredentialSubjectType.professionalStudentCard:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.kycAgeCredential:
@@ -133,8 +131,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'TezosPooAddress';
       case CredentialSubjectType.certificateOfEmployment:
         return 'CertificateOfEmployment';
-      case CredentialSubjectType.ecole42LearningAchievement:
-        return 'Ecole42LearningAchievement';
       case CredentialSubjectType.emailPass:
         return 'EmailPass';
       case CredentialSubjectType.identityPass:
@@ -246,8 +242,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return CertificateOfEmploymentModel.fromJson(json);
       case CredentialSubjectType.defaultCredential:
         return DefaultCredentialSubjectModel.fromJson(json);
-      case CredentialSubjectType.ecole42LearningAchievement:
-        return Ecole42LearningAchievementModel.fromJson(json);
       case CredentialSubjectType.emailPass:
         return EmailPassModel.fromJson(json);
       case CredentialSubjectType.identityPass:
@@ -489,8 +483,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Tezos Poo Address';
       case CredentialSubjectType.certificateOfEmployment:
         return 'Certificate of Employment';
-      case CredentialSubjectType.ecole42LearningAchievement:
-        return 'Ecole42 Learning Achievement';
       case CredentialSubjectType.emailPass:
         return 'Email Pass';
       case CredentialSubjectType.identityPass:
@@ -605,7 +597,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.binancePooAddress:
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.defaultCredential:
-      case CredentialSubjectType.ecole42LearningAchievement:
       case CredentialSubjectType.emailPass:
       case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.learningAchievement:
@@ -675,7 +666,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.binancePooAddress:
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.defaultCredential:
-      case CredentialSubjectType.ecole42LearningAchievement:
       case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.professionalExperienceAssessment:
@@ -940,7 +930,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.professionalSkillAssessment:
       case CredentialSubjectType.professionalStudentCard:
       case CredentialSubjectType.identityPass:
-      case CredentialSubjectType.ecole42LearningAchievement:
       case CredentialSubjectType.studentCard:
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.certificateOfEmployment:
@@ -1030,8 +1019,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 85;
       case CredentialSubjectType.defaultCredential:
         return 100;
-      case CredentialSubjectType.ecole42LearningAchievement:
-        return 0;
       case CredentialSubjectType.emailPass:
         return 99;
       case CredentialSubjectType.identityPass:

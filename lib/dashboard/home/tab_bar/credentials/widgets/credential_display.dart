@@ -93,18 +93,6 @@ class CredentialDisplay extends StatelessWidget {
           }
         }
 
-      case CredentialSubjectType.ecole42LearningAchievement:
-        switch (credDisplayType) {
-          case CredDisplayType.List:
-            return DefaultCredentialWidget(
-              credentialModel: credentialModel,
-            );
-          case CredDisplayType.Detail:
-            return Ecole42LearningAchievementWidget(
-              credentialModel: credentialModel,
-            );
-        }
-
       case CredentialSubjectType.emailPass:
         return EmailPassWidget(credentialModel: credentialModel);
 
