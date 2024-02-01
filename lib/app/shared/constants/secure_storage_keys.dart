@@ -67,4 +67,6 @@ class SecureStorageKeys {
 
   static const String customProfileSettings = 'customProfileSettings';
   static const String enterpriseProfileSetting = 'enterpriseProfileSetting';
+
+  static const String walletProviderType = 'walletProviderType';
 }

@@ -934,7 +934,8 @@
     "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration",
     "congrats",
     "yourWalletConfigurationHasBeenSuccessfullyUpdated",
-    "continueString"
+    "continueString",
+    "walletProvider"
   ],
 
   "es": [
@@ -1872,7 +1873,8 @@
     "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration",
     "congrats",
     "yourWalletConfigurationHasBeenSuccessfullyUpdated",
-    "continueString"
+    "continueString",
+    "walletProvider"
   ],
 
   "fr": [
@@ -2135,7 +2137,8 @@
     "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration",
     "congrats",
     "yourWalletConfigurationHasBeenSuccessfullyUpdated",
-    "continueString"
+    "continueString",
+    "walletProvider"
   ],
 
   "it": [
@@ -3073,6 +3076,7 @@
     "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration",
     "congrats",
     "yourWalletConfigurationHasBeenSuccessfullyUpdated",
-    "continueString"
+    "continueString",
+    "walletProvider"
   ]
 }

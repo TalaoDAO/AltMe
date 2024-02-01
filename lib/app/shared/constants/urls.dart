@@ -118,4 +118,5 @@ class Urls {
 
   // wallet provider
   static const walletProvider = 'https://wallet-provider.talao.co';
+  static const walletTestProvider = 'https://preprod.wallet-provider.talao.co';
 }
