@@ -50,6 +50,7 @@ class ProfileModel extends Equatable {
           blockchainOptions: BlockchainOptions.initial(),
           generalOptions: GeneralOptions.empty(),
           helpCenterOptions: HelpCenterOptions.initial(),
+          discoverCardsOptions: DiscoverCardsOptions.initial(),
           selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
             displayManageDecentralizedId: true,
             customOidc4vcProfile: CustomOidc4VcProfile(
@@ -95,6 +96,7 @@ class ProfileModel extends Equatable {
           blockchainOptions: BlockchainOptions.initial(),
           generalOptions: GeneralOptions.empty(),
           helpCenterOptions: HelpCenterOptions.initial(),
+          discoverCardsOptions: DiscoverCardsOptions.initial(),
           selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
             displayManageDecentralizedId: true,
             customOidc4vcProfile: CustomOidc4VcProfile(

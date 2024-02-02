@@ -25,7 +25,7 @@ class ProfileSetting extends Equatable {
 
   factory ProfileSetting.initial() => ProfileSetting(
         blockchainOptions: BlockchainOptions.initial(),
-        discoverCardsOptions: DiscoverCardsOptions.empty(),
+        discoverCardsOptions: DiscoverCardsOptions.initial(),
         generalOptions: GeneralOptions.empty(),
         helpCenterOptions: HelpCenterOptions.initial(),
         selfSovereignIdentityOptions: SelfSovereignIdentityOptions.initial(),
@@ -183,16 +183,17 @@ class DiscoverCardsOptions extends Equatable {
     required this.displayEmailPassJwt,
     required this.displayPhonePass,
     required this.displayPhonePassJwt,
-    required this.displayRewardsCategory,
     required this.displayVerifiableId,
     required this.displayVerifiableIdJwt,
     required this.displayExternalIssuer,
+    required this.displayChainborn,
+    required this.displayTezotopia,
   });
 
   factory DiscoverCardsOptions.fromJson(Map<String, dynamic> json) =>
       _$DiscoverCardsOptionsFromJson(json);
 
-  factory DiscoverCardsOptions.empty() => const DiscoverCardsOptions(
+  factory DiscoverCardsOptions.initial() => const DiscoverCardsOptions(
         displayDefi: true,
         displayHumanity: false,
         displayHumanityJwt: false,
@@ -202,14 +203,15 @@ class DiscoverCardsOptions extends Equatable {
         displayOver18Jwt: true,
         displayOver21: false,
         displayOver50: false,
-        displayRewardsCategory: true,
+        displayChainborn: false,
+        displayTezotopia: false,
         displayVerifiableId: true,
         displayVerifiableIdJwt: true,
         displayOver65: false,
-        displayEmailPass: false,
-        displayEmailPassJwt: false,
-        displayPhonePass: false,
-        displayPhonePassJwt: false,
+        displayEmailPass: true,
+        displayEmailPassJwt: true,
+        displayPhonePass: true,
+        displayPhonePassJwt: true,
         displayAgeRange: false,
         displayGender: false,
         displayExternalIssuer: [],
@@ -230,11 +232,12 @@ class DiscoverCardsOptions extends Equatable {
   final bool displayPhonePass;
   final bool displayPhonePassJwt;
   final bool displayAgeRange;
-  final bool displayRewardsCategory;
   final bool displayVerifiableId;
   final bool displayVerifiableIdJwt;
   final bool displayGender;
   final List<DisplayExternalIssuer> displayExternalIssuer;
+  final bool displayChainborn;
+  final bool displayTezotopia;
 
   Map<String, dynamic> toJson() => _$DiscoverCardsOptionsToJson(this);
 
@@ -246,7 +249,6 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayOver15,
     bool? displayOver18,
     bool? displayOver18Jwt,
-    bool? displayRewardsCategory,
     bool? displayVerifiableId,
     bool? displayVerifiableIdJwt,
     bool? displayOver21,
@@ -259,6 +261,8 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayGender,
     bool? displayOver50,
     List<DisplayExternalIssuer>? displayExternalIssuer,
+    bool? displayChainborn,
+    bool? displayTezotopia,
   }) {
     return DiscoverCardsOptions(
       displayDefi: displayDefi ?? this.displayDefi,
@@ -268,8 +272,6 @@ class DiscoverCardsOptions extends Equatable {
       displayOver15: displayOver15 ?? this.displayOver15,
       displayOver18: displayOver18 ?? this.displayOver18,
       displayOver18Jwt: displayOver18Jwt ?? this.displayOver18Jwt,
-      displayRewardsCategory:
-          displayRewardsCategory ?? this.displayRewardsCategory,
       displayVerifiableId: displayVerifiableId ?? this.displayVerifiableId,
       displayVerifiableIdJwt:
           displayVerifiableIdJwt ?? this.displayVerifiableIdJwt,
@@ -284,6 +286,8 @@ class DiscoverCardsOptions extends Equatable {
       displayOver50: displayOver50 ?? this.displayOver50,
       displayExternalIssuer:
           displayExternalIssuer ?? this.displayExternalIssuer,
+      displayChainborn: displayChainborn ?? this.displayChainborn,
+      displayTezotopia: displayTezotopia ?? this.displayTezotopia,
     );
   }
 
@@ -294,7 +298,6 @@ class DiscoverCardsOptions extends Equatable {
         displayOver13,
         displayOver15,
         displayOver18,
-        displayRewardsCategory,
         displayVerifiableId,
         displayOver21,
         displayOver65,
@@ -309,6 +312,8 @@ class DiscoverCardsOptions extends Equatable {
         displayHumanityJwt,
         displayOver18Jwt,
         displayVerifiableIdJwt,
+        displayChainborn,
+        displayTezotopia,
       ];
 }
 

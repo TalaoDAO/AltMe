@@ -21,15 +21,6 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
     final profileSetting =
         context.read<ProfileCubit>().state.model.profileSetting;
 
-    final discoverCardsOptions = profileSetting.discoverCardsOptions;
-
-    /// check if advantage card to be shown or not
-    if (discoverCardsOptions != null &&
-        !discoverCardsOptions.displayRewardsCategory &&
-        credentialCategory == CredentialCategory.advantagesCards) {
-      return Container();
-    }
-
     final vcFormatType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 

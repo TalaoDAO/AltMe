@@ -10,16 +10,12 @@ Future<void> discoverCredential({
   required DiscoverDummyCredential dummyCredential,
   required BuildContext context,
 }) async {
-  final List<CredentialSubjectType> credentialSubjectTypeList =
-      List.of(CredentialCategory.identityCards.credSubjectsToShowInDiscover);
-
   final profileCubit = context.read<ProfileCubit>();
 
   final vcFormatType = profileCubit.state.model.profileSetting
       .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
-  ///items to add because needs KYC
-  credentialSubjectTypeList.addAll([
+  final List<CredentialSubjectType> credentialSubjectTypeListForCheck = [
     CredentialSubjectType.defiCompliance,
     CredentialSubjectType.gender,
     CredentialSubjectType.ageRange,
@@ -29,9 +25,10 @@ Future<void> discoverCredential({
     CredentialSubjectType.over18,
     CredentialSubjectType.over15,
     CredentialSubjectType.over13,
-  ]);
+    CredentialSubjectType.verifiableIdCard,
+  ];
 
-  if (credentialSubjectTypeList
+  if (credentialSubjectTypeListForCheck
       .contains(dummyCredential.credentialSubjectType)) {
     getLogger('discoverCredential').i(dummyCredential.credentialSubjectType);
 

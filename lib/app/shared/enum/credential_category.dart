@@ -61,54 +61,6 @@ extension CredentialCategoryX on CredentialCategory {
     }
   }
 
-  List<CredentialSubjectType> get credSubjectsToShowInDiscover {
-    /// Note: If credential removed from here needs KYC then add
-    /// in discover_credential.dart
-
-    switch (this) {
-      case CredentialCategory.advantagesCards:
-        return [
-          CredentialSubjectType.tezotopiaMembership,
-          CredentialSubjectType.chainbornMembership,
-        ];
-      case CredentialCategory.identityCards:
-        return [
-          CredentialSubjectType.over18,
-          CredentialSubjectType.over15,
-          CredentialSubjectType.verifiableIdCard,
-        ];
-      case CredentialCategory.contactInfoCredentials:
-        return [
-          CredentialSubjectType.emailPass,
-          CredentialSubjectType.phonePass,
-        ];
-      case CredentialCategory.professionalCards:
-        return [];
-      case CredentialCategory.blockchainAccountsCards:
-        return [];
-      case CredentialCategory.educationCards:
-        return [];
-      case CredentialCategory.othersCards:
-        return [];
-      case CredentialCategory.financeCards:
-        return [
-          CredentialSubjectType.defiCompliance,
-        ];
-      case CredentialCategory.humanityProofCards:
-        return [];
-      case CredentialCategory.socialMediaCards:
-        return [
-          //CredentialSubjectType.twitterCard,
-        ];
-      case CredentialCategory.walletIntegrity:
-        return [];
-      case CredentialCategory.polygonidCards:
-        return [];
-      case CredentialCategory.pendingCards:
-        return [];
-    }
-  }
-
   bool get showInHomeIfListEmpty {
     switch (this) {
       case CredentialCategory.advantagesCards:
