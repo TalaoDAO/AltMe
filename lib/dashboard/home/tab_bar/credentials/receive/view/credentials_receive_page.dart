@@ -62,6 +62,15 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
 
         final textColor = Theme.of(context).colorScheme.valueColor;
 
+        final vcFormatType = context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .vcFormatType;
+
         return BasePage(
           title: l10n.credentialReceiveTitle,
           useSafeArea: true,
@@ -87,6 +96,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
               CredentialDisplay(
                 credentialModel: credentialModel,
                 credDisplayType: CredDisplayType.Detail,
+                vcFormatType: vcFormatType,
               ),
               if (outputDescriptors != null) ...[
                 const SizedBox(height: 30),

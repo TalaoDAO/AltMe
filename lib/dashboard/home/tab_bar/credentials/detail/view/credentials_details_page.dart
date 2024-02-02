@@ -165,11 +165,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.removeLast();
         }
 
-        String? format = widget.credentialModel.format;
-
-        format ??=
-            widget.credentialModel.jwt != null ? 'jwt_vc_json-ld' : 'ldp_vc';
-
         final String issuerDid =
             widget.credentialModel.credentialPreview.issuer;
         final String subjectDid = widget
@@ -177,6 +172,15 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
             '';
         final String type =
             widget.credentialModel.credentialPreview.type.toString();
+
+        final vcFormatType = context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .vcFormatType;
 
         return BasePage(
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
@@ -195,6 +199,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         CredentialDisplay(
                           credentialModel: widget.credentialModel,
                           credDisplayType: CredDisplayType.Detail,
+                          vcFormatType: vcFormatType,
                         ),
                         const SizedBox(height: 20),
                         Column(
@@ -307,7 +312,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             CredentialField(
                               padding: EdgeInsets.zero,
                               title: l10n.format,
-                              value: format,
+                              value: widget.credentialModel.getFormat,
                               titleColor:
                                   Theme.of(context).colorScheme.titleColor,
                               valueColor:

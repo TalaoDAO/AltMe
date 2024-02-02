@@ -261,6 +261,9 @@ int getIndexValue({
       return 5;
     case DidKeyType.jwkP256:
       return 6;
+
+    case DidKeyType.edDSA:
+      return 0; // it is not needed, just assigned
   }
 }
 
@@ -272,6 +275,10 @@ Future<String> getPrivateKey({
   final mnemonic = await secureStorage.get(SecureStorageKeys.ssiMnemonic);
 
   switch (didKeyType) {
+    case DidKeyType.edDSA:
+      final ssiKey = await getSecureStorage.get(SecureStorageKeys.ssiKey);
+      return ssiKey.toString();
+
     case DidKeyType.secp256k1:
       final index = getIndexValue(
         isEBSIV3: true,
@@ -488,6 +495,7 @@ Future<(String, String)> getDidAndKid({
       kid = '$did#0';
     case DidKeyType.p256:
     case DidKeyType.secp256k1:
+    case DidKeyType.edDSA:
       if (didKitProvider == null) throw Exception();
 
       const didMethod = AltMeStrings.defaultDIDMethod;

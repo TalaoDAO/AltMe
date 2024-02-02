@@ -584,18 +584,6 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get ecole42LearningAchievementStudentIdentity => GoogleFonts.roboto(
-        color: const Color(0xff212121),
-        fontSize: 6,
-        fontWeight: FontWeight.w700,
-      );
-
-  TextStyle get ecole42LearningAchievementLevel => GoogleFonts.roboto(
-        color: const Color(0xff212121),
-        fontSize: 5,
-        fontWeight: FontWeight.w700,
-      );
-
   TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.roboto(
         color: const Color(0xFF0650C6),
         fontSize: 20,

@@ -33,6 +33,7 @@ class DummyCredentialImage extends StatelessWidget {
     if (credential == '' && credentialName != null) {
       credential = credentialName!;
     }
+
     late Widget dummyCredentialImage;
     if (image == null) {
       dummyCredentialImage = DefaultCredentialWidget(

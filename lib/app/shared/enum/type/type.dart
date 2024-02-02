@@ -9,5 +9,6 @@ export 'oidc4vc_type.dart';
 export 'profile/did_key_type.dart';
 export 'profile/profile.dart';
 export 'wallet_protection_type.dart';
+export 'wallet_provider_type.dart';
 export 'wallet_route_type.dart';
 export 'wallet_type.dart';

@@ -3,31 +3,39 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:uuid/uuid.dart';
 
 Future<void> discoverCredential({
   required DiscoverDummyCredential dummyCredential,
   required BuildContext context,
 }) async {
-  final List<CredentialSubjectType> credentialSubjectTypeList =
-      List.of(CredentialCategory.identityCards.credSubjectsToShowInDiscover);
+  final profileCubit = context.read<ProfileCubit>();
 
-  /// items to remove to bypass KYC
-  credentialSubjectTypeList
-    ..remove(CredentialSubjectType.emailPass)
-    ..remove(CredentialSubjectType.phonePass)
-    ..remove(CredentialSubjectType.twitterCard)
+  final vcFormatType = profileCubit.state.model.profileSetting
+      .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
-    ///items to add because needs KYC
-    ..add(CredentialSubjectType.defiCompliance);
+  final List<CredentialSubjectType> credentialSubjectTypeListForCheck = [
+    CredentialSubjectType.defiCompliance,
+    CredentialSubjectType.gender,
+    CredentialSubjectType.ageRange,
+    CredentialSubjectType.over65,
+    CredentialSubjectType.over50,
+    CredentialSubjectType.over21,
+    CredentialSubjectType.over18,
+    CredentialSubjectType.over15,
+    CredentialSubjectType.over13,
+    CredentialSubjectType.verifiableIdCard,
+  ];
 
-  if (credentialSubjectTypeList
+  if (credentialSubjectTypeListForCheck
       .contains(dummyCredential.credentialSubjectType)) {
     getLogger('discoverCredential').i(dummyCredential.credentialSubjectType);
 
     /// here check for over18, over15, age range and over13 to take photo for
     /// AI KYC
-    if (dummyCredential.credentialSubjectType.checkForAIKYC) {
+    if (vcFormatType == VCFormatType.ldpVc &&
+        dummyCredential.credentialSubjectType.checkForAIKYC) {
       /// For DefiCompliance, it is not necessary to use Yoti. Instead,
       /// we can directly proceed with Id360.
       if (dummyCredential.credentialSubjectType ==

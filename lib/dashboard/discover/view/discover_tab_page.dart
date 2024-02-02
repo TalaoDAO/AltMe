@@ -54,63 +54,60 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-                child: Theme(
-                  data: ThemeData(),
-                  child: TabBar(
-                    controller: _tabController,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.space2XSmall,
-                    ),
-                    indicatorPadding: EdgeInsets.zero,
-                    labelPadding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.space2XSmall,
-                    ),
-                    indicatorWeight: 0.0000001,
-                    indicator: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.zero,
-                      border: Border.all(
-                        color: Colors.transparent,
-                        width: 0,
-                      ),
-                    ),
-                    indicatorSize: TabBarIndicatorSize.label,
-                    tabs: [
-                      MyTab(
-                        text: l10n.cards,
-                        icon: tabState == 0
-                            ? IconStrings.cards
-                            : IconStrings.cardsBlur,
-                        isSelected: tabState == 0,
-                        onPressed: () {
-                          _tabController.animateTo(0);
-                          context.read<HomeTabbarCubit>().setIndex(0);
-                        },
-                      ),
-                      MyTab(
-                        text: l10n.nfts,
-                        icon: tabState == 1
-                            ? IconStrings.ghost
-                            : IconStrings.ghostBlur,
-                        isSelected: tabState == 1,
-                        onPressed: () {
-                          _tabController.animateTo(1);
-                          context.read<HomeTabbarCubit>().setIndex(1);
-                        },
-                      ),
-                      MyTab(
-                        text: l10n.coins,
-                        icon: tabState == 2
-                            ? IconStrings.health
-                            : IconStrings.healthBlur,
-                        isSelected: tabState == 2,
-                        onPressed: () {
-                          _tabController.animateTo(2);
-                          context.read<HomeTabbarCubit>().setIndex(2);
-                        },
-                      ),
-                    ],
+                child: TabBar(
+                  controller: _tabController,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.space2XSmall,
                   ),
+                  indicatorPadding: EdgeInsets.zero,
+                  labelPadding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.space2XSmall,
+                  ),
+                  indicatorWeight: 0.0000001,
+                  indicator: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.zero,
+                    border: Border.all(
+                      color: Colors.transparent,
+                      width: 0,
+                    ),
+                  ),
+                  indicatorSize: TabBarIndicatorSize.label,
+                  tabs: [
+                    MyTab(
+                      text: l10n.cards,
+                      icon: tabState == 0
+                          ? IconStrings.cards
+                          : IconStrings.cardsBlur,
+                      isSelected: tabState == 0,
+                      onPressed: () {
+                        _tabController.animateTo(0);
+                        context.read<HomeTabbarCubit>().setIndex(0);
+                      },
+                    ),
+                    MyTab(
+                      text: l10n.nfts,
+                      icon: tabState == 1
+                          ? IconStrings.ghost
+                          : IconStrings.ghostBlur,
+                      isSelected: tabState == 1,
+                      onPressed: () {
+                        _tabController.animateTo(1);
+                        context.read<HomeTabbarCubit>().setIndex(1);
+                      },
+                    ),
+                    MyTab(
+                      text: l10n.coins,
+                      icon: tabState == 2
+                          ? IconStrings.health
+                          : IconStrings.healthBlur,
+                      isSelected: tabState == 2,
+                      onPressed: () {
+                        _tabController.animateTo(2);
+                        context.read<HomeTabbarCubit>().setIndex(2);
+                      },
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: Sizes.spaceSmall),

@@ -8,6 +8,7 @@ class EnterpriseInitializationState extends Equatable {
     this.isEmailFormatCorrect = false,
     this.isPasswordFormatCorrect = false,
     this.obscurePassword = true,
+    this.walletProviderType = WalletProviderType.Talao,
   });
 
   factory EnterpriseInitializationState.fromJson(Map<String, dynamic> json) =>
@@ -18,6 +19,7 @@ class EnterpriseInitializationState extends Equatable {
   final bool isEmailFormatCorrect;
   final bool isPasswordFormatCorrect;
   final bool obscurePassword;
+  final WalletProviderType walletProviderType;
 
   EnterpriseInitializationState loading() {
     return copyWith(
@@ -39,6 +41,7 @@ class EnterpriseInitializationState extends Equatable {
     bool? isEmailFormatCorrect,
     bool? isPasswordFormatCorrect,
     bool? obscurePassword,
+    WalletProviderType? walletProviderType,
   }) {
     return EnterpriseInitializationState(
       status: status ?? this.status,
@@ -47,6 +50,7 @@ class EnterpriseInitializationState extends Equatable {
       isPasswordFormatCorrect:
           isPasswordFormatCorrect ?? this.isPasswordFormatCorrect,
       obscurePassword: obscurePassword ?? this.obscurePassword,
+      walletProviderType: walletProviderType ?? this.walletProviderType,
     );
   }
 
@@ -58,6 +62,7 @@ class EnterpriseInitializationState extends Equatable {
         message,
         isEmailFormatCorrect,
         isPasswordFormatCorrect,
-        obscurePassword
+        obscurePassword,
+        walletProviderType,
       ];
 }

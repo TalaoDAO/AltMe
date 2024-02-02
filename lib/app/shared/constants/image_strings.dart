@@ -18,7 +18,7 @@ class ImageStrings {
   static const String emailProof = '$imagePath/email-proof.png';
   static const String phoneProof = '$imagePath/phone-proof.png';
   static const String walletCertificate = '$imagePath/wallet-certificate.png';
-  static const String bloometaPass = '$imagePath/bloometa-pass.png';
+
   static const String livenessCard = '$imagePath/liveness-card.png';
   static const String tezotopiaMemberShip =
       '$imagePath/tezotopia-membership.png';
@@ -48,20 +48,7 @@ class ImageStrings {
   static const String voucherFront = '$imagePath/carte-coupon-recto.png';
   static const String voucherBack = '$imagePath/carte-coupon-verso.png';
   static const String tezotopiaVoucher = '$imagePath/tezotopia_voucher.png';
-  static const String bunnyPassDummy = '$imagePath/bunny-pass-dummy-soon.png';
-  static const String bunnyPass = '$imagePath/bunny-pass.png';
-  static const String dogamiPassDummy = '$imagePath/dogami-pass-dummy-soon.png';
-  static const String dogamiPass = '$imagePath/dogami-pass.png';
-  static const String matterlightPassDummy =
-      '$imagePath/matterlight-pass-dummy-soon.png';
-  static const String matterlightPass = '$imagePath/matterlight-pass.png';
-  static const String pigsPassDummy = '$imagePath/pigs-pass-dummy-soon.png';
-  static const String pigsPass = '$imagePath/pigs-pass.png';
-  static const String trooperzPassDummy =
-      '$imagePath/trooperz-pass-dummy-soon.png';
-  static const String trooperzPass = '$imagePath/trooperz-pass.png';
-  static const String ecole42LearningAchievement =
-      '$imagePath/certificate-42.png';
+
   static const String talaoCommunityCard =
       '$imagePath/talao_community_card.png';
   static const String verifiableIdCard = '$imagePath/verifiable_id_card.png';
@@ -115,7 +102,6 @@ class ImageStrings {
       '$imagePath/dummy_nationality_card.png';
   static const String tezotopiaMemberShipDummy =
       '$imagePath/tezotopia-membership-dummy.png';
-  static const String bloometaDummy = '$imagePath/bloometa-dummy.png';
   static const String livenessDummy = '$imagePath/liveness-dummy.png';
   static const String chainbornMemberShipDummy =
       '$imagePath/chainborn-membership-dummy.png';
@@ -132,8 +118,7 @@ class ImageStrings {
   static const String dummyAgeRangeCard = '$imagePath/dummy_age_range_card.png';
   static const String dummyTezotopiaVoucherCard =
       '$imagePath/dummy_tezotopia_voucher_card.png';
-  static const String dummyTalaoCommunityCardCard =
-      '$imagePath/dummy_talao_community_card.png';
+
   static const String dummyVerifiableIdCard =
       '$imagePath/dummy_verifiable_id_card.png';
   static const String dummyLinkedinCard = '$imagePath/dummy_linkedin_card.png';

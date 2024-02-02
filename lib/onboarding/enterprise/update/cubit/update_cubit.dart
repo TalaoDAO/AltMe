@@ -81,8 +81,20 @@ class EnterpriseUpdateCubit extends Cubit<EnterpriseUpdateState> {
         'assertion': walletAttestationData,
       };
 
+      final walletProviderTypeString = await secureStorageProvider.get(
+        SecureStorageKeys.walletProviderType,
+      );
+
+      if (walletProviderTypeString == null) throw Exception();
+
+      final walletProviderType = WalletProviderType.values.firstWhereOrNull(
+        (type) => type.toString() == walletProviderTypeString,
+      );
+
+      if (walletProviderType == null) throw Exception();
+
       final response = await client.post(
-        '${Urls.walletProvider}/update',
+        '${walletProviderType.url}/update',
         headers: headers,
         data: data,
       );

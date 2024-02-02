@@ -57,6 +57,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       log.i('can not load all credentials beacuse there is no ssi key');
       return;
     }
+
     emit(state.copyWith(status: CredentialsStatus.loading));
     final savedCredentials = await credentialsRepository.findAll(/* filters */);
     final dummies = _getAvalaibleDummyCredentials(savedCredentials);
@@ -559,11 +560,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       _getAvalaibleDummyCredentials(List<CredentialModel> credentials) {
     final dummies = <CredentialCategory, List<DiscoverDummyCredential>>{};
     // entreprise user may have options to display some dummies (true/false)
-    final discoverCardsOptions =
-        profileCubit.state.model.profileSetting.discoverCardsOptions;
+
+    final profileSetting = profileCubit.state.model.profileSetting;
+    final vcFormatType = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+
+    final discoverCardsOptions = profileSetting.discoverCardsOptions;
     // entreprise user may have a list of external issuer
-    final externalIssuers = profileCubit
-        .state.model.profileSetting.discoverCardsOptions?.displayExternalIssuer;
+    final externalIssuers =
+        profileSetting.discoverCardsOptions?.displayExternalIssuer;
 
     for (final CredentialCategory category in getCredentialCategorySorted) {
       final List<CredentialSubjectType> currentCredentialsSubjectTypeList =
@@ -574,53 +579,16 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               )
               .toList();
 
-      final allSubjectTypeForCategory = category.credSubjectsToShowInDiscover;
+      final allSubjectTypeForCategory = <CredentialSubjectType>[];
 
-      /// tezVoucher and tezotopiaMembership is available only on Android
-      /// platform
+      /// tezVoucher is available only on Android platform
       if (isIOS) {
         allSubjectTypeForCategory.remove(CredentialSubjectType.tezVoucher);
-        //allSubjectTypeForCategory.remove
-        //(CredentialSubjectType.tezotopiaMembership);
       }
 
       // remove cards in discover based on profile
       if (discoverCardsOptions != null) {
-        if (!discoverCardsOptions.displayDefi) {
-          allSubjectTypeForCategory
-              .remove(CredentialSubjectType.defiCompliance);
-        }
-        if (!discoverCardsOptions.displayHumanity) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.livenessCard);
-        }
-        if (!discoverCardsOptions.displayOver13) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over13);
-        }
-        if (!discoverCardsOptions.displayOver15) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over15);
-        }
-        if (!discoverCardsOptions.displayOver18) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
-        }
-
-        if (!discoverCardsOptions.displayOver21) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over21);
-        }
-        if (!discoverCardsOptions.displayOver50) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over50);
-        }
-        if (!discoverCardsOptions.displayOver65) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over65);
-        }
-        if (!discoverCardsOptions.displayVerifiableId) {
-          allSubjectTypeForCategory
-              .remove(CredentialSubjectType.verifiableIdCard);
-        }
-        if (!discoverCardsOptions.displayGender) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.gender);
-        }
         // add cards in discover based on profile
-
         switch (category) {
           case CredentialCategory.identityCards:
             if (discoverCardsOptions.displayOver13 &&
@@ -633,11 +601,19 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     .contains(CredentialSubjectType.over15)) {
               allSubjectTypeForCategory.add(CredentialSubjectType.over15);
             }
-            if (discoverCardsOptions.displayOver18 &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.over18)) {
-              allSubjectTypeForCategory.add(CredentialSubjectType.over18);
+
+            if (!allSubjectTypeForCategory
+                .contains(CredentialSubjectType.over18)) {
+              final displayOver18 = vcFormatType == VCFormatType.ldpVc &&
+                  discoverCardsOptions.displayOver18;
+              final displayOver18Jwt = vcFormatType == VCFormatType.jwtVcJson &&
+                  discoverCardsOptions.displayOver18Jwt;
+
+              if (displayOver18 || displayOver18Jwt) {
+                allSubjectTypeForCategory.add(CredentialSubjectType.over18);
+              }
             }
+
             if (discoverCardsOptions.displayOver21 &&
                 !allSubjectTypeForCategory
                     .contains(CredentialSubjectType.over21)) {
@@ -653,35 +629,87 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     .contains(CredentialSubjectType.over65)) {
               allSubjectTypeForCategory.add(CredentialSubjectType.over65);
             }
-            if (discoverCardsOptions.displayVerifiableId &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.verifiableIdCard)) {
-              allSubjectTypeForCategory.add(
-                CredentialSubjectType.verifiableIdCard,
-              );
+
+            if (!allSubjectTypeForCategory
+                .contains(CredentialSubjectType.verifiableIdCard)) {
+              final displayVerifiableId = vcFormatType == VCFormatType.ldpVc &&
+                  discoverCardsOptions.displayVerifiableId;
+              final displayVerifiableIdJwt =
+                  vcFormatType == VCFormatType.jwtVcJson &&
+                      discoverCardsOptions.displayVerifiableIdJwt;
+
+              if (displayVerifiableId || displayVerifiableIdJwt) {
+                allSubjectTypeForCategory
+                    .add(CredentialSubjectType.verifiableIdCard);
+              }
             }
+
             if (discoverCardsOptions.displayAgeRange &&
                 !allSubjectTypeForCategory
                     .contains(CredentialSubjectType.ageRange)) {
               allSubjectTypeForCategory.add(CredentialSubjectType.ageRange);
             }
+
             if (discoverCardsOptions.displayHumanity &&
                 !allSubjectTypeForCategory
                     .contains(CredentialSubjectType.livenessCard)) {
               allSubjectTypeForCategory.add(CredentialSubjectType.livenessCard);
             }
+
+            if (!allSubjectTypeForCategory
+                .contains(CredentialSubjectType.livenessCard)) {
+              final displayHumanity = vcFormatType == VCFormatType.ldpVc &&
+                  discoverCardsOptions.displayHumanity;
+              final displayHumanityJwt =
+                  vcFormatType == VCFormatType.jwtVcJson &&
+                      discoverCardsOptions.displayHumanityJwt;
+
+              if (displayHumanity || displayHumanityJwt) {
+                allSubjectTypeForCategory
+                    .add(CredentialSubjectType.livenessCard);
+              }
+            }
+
             if (discoverCardsOptions.displayGender &&
                 !allSubjectTypeForCategory
                     .contains(CredentialSubjectType.gender)) {
               allSubjectTypeForCategory.add(CredentialSubjectType.gender);
             }
           case CredentialCategory.advantagesCards:
-            break;
+            if (discoverCardsOptions.displayChainborn &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.chainbornMembership)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.chainbornMembership,
+              );
+            }
+            if (discoverCardsOptions.displayTezotopia &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.tezotopiaMembership)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.tezotopiaMembership,
+              );
+            }
 
           case CredentialCategory.professionalCards:
             break;
+
           case CredentialCategory.contactInfoCredentials:
-            break;
+            if (discoverCardsOptions.displayEmailPass &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.emailPass)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.emailPass,
+              );
+            }
+
+            if (discoverCardsOptions.displayPhonePass &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.phonePass)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.phonePass,
+              );
+            }
 
           case CredentialCategory.educationCards:
             break;
@@ -693,6 +721,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 CredentialSubjectType.defiCompliance,
               );
             }
+
           case CredentialCategory.humanityProofCards:
             break;
           case CredentialCategory.socialMediaCards:
@@ -723,16 +752,18 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           requiredDummySubjects.add(subjectType);
         }
       }
+
 // Generate list of external issuer from the profile
       dummies[category] =
           getDummiesFromExternalIssuerList(category, externalIssuers ?? []);
 // add dummies from the category
       dummies[category]?.addAll(
         requiredDummySubjects
-            .map(DiscoverDummyCredential.fromSubjectType)
+            .map((item) => item.dummyCredential(vcFormatType))
             .toList(),
       );
     }
+
     return dummies;
   }
 }
