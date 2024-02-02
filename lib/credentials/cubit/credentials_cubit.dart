@@ -579,7 +579,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               )
               .toList();
 
-      final allSubjectTypeForCategory = category.credSubjectsToShowInDiscover;
+      final allSubjectTypeForCategory = <CredentialSubjectType>[];
 
       /// tezVoucher is available only on Android platform
       if (isIOS) {
@@ -588,51 +588,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
       // remove cards in discover based on profile
       if (discoverCardsOptions != null) {
-        if (!discoverCardsOptions.displayDefi) {
-          allSubjectTypeForCategory
-              .remove(CredentialSubjectType.defiCompliance);
-        }
-        if (!discoverCardsOptions.displayHumanity ||
-            !discoverCardsOptions.displayHumanityJwt) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.livenessCard);
-        }
-        if (!discoverCardsOptions.displayOver13) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over13);
-        }
-        if (!discoverCardsOptions.displayOver15) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over15);
-        }
-        if (!discoverCardsOptions.displayOver18 ||
-            !discoverCardsOptions.displayOver18Jwt) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over18);
-        }
-
-        if (!discoverCardsOptions.displayOver21) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over21);
-        }
-        if (!discoverCardsOptions.displayOver50) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over50);
-        }
-        if (!discoverCardsOptions.displayOver65) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.over65);
-        }
-        if (!discoverCardsOptions.displayVerifiableId ||
-            !discoverCardsOptions.displayVerifiableIdJwt) {
-          allSubjectTypeForCategory
-              .remove(CredentialSubjectType.verifiableIdCard);
-        }
-        if (!discoverCardsOptions.displayGender) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.gender);
-        }
-
-        if (!discoverCardsOptions.displayEmailPass) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.emailPass);
-        }
-
-        if (!discoverCardsOptions.displayPhonePass) {
-          allSubjectTypeForCategory.remove(CredentialSubjectType.phonePass);
-        }
-
         // add cards in discover based on profile
         switch (category) {
           case CredentialCategory.identityCards:
@@ -721,10 +676,24 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               allSubjectTypeForCategory.add(CredentialSubjectType.gender);
             }
           case CredentialCategory.advantagesCards:
-            break;
+            if (discoverCardsOptions.displayChainborn &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.chainbornMembership)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.chainbornMembership,
+              );
+            }
+            if (discoverCardsOptions.displayTezotopia &&
+                !allSubjectTypeForCategory
+                    .contains(CredentialSubjectType.tezotopiaMembership)) {
+              allSubjectTypeForCategory.add(
+                CredentialSubjectType.tezotopiaMembership,
+              );
+            }
 
           case CredentialCategory.professionalCards:
             break;
+
           case CredentialCategory.contactInfoCredentials:
             if (discoverCardsOptions.displayEmailPass &&
                 !allSubjectTypeForCategory
