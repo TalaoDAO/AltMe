@@ -32,8 +32,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xffEFF0F6);
       case CredentialSubjectType.defaultCredential:
         return Colors.white;
-      case CredentialSubjectType.ecole42LearningAchievement:
-        return const Color(0xFFffD6A5);
       case CredentialSubjectType.professionalStudentCard:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.kycAgeCredential:
@@ -41,17 +39,11 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.kycCountryOfResidence:
         return const Color(0xff8247E5);
       case CredentialSubjectType.walletCredential:
-      case CredentialSubjectType.bloometaPass:
       case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.nationality:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
       case CredentialSubjectType.twitterCard:
-      case CredentialSubjectType.troopezPass:
-      case CredentialSubjectType.pigsPass:
-      case CredentialSubjectType.matterlightPass:
-      case CredentialSubjectType.dogamiPass:
-      case CredentialSubjectType.bunnyPass:
       case CredentialSubjectType.gender:
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.verifiableIdCard:
@@ -72,7 +64,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.voucher:
       case CredentialSubjectType.tezVoucher:
       case CredentialSubjectType.diplomaCard:
-      case CredentialSubjectType.talaoCommunityCard:
       case CredentialSubjectType.aragoPass:
       case CredentialSubjectType.aragoIdentityCard:
       case CredentialSubjectType.aragoLearningAchievement:
@@ -98,35 +89,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
-  bool get isDisabled {
-    if (this == CredentialSubjectType.dogamiPass ||
-        this == CredentialSubjectType.pigsPass ||
-        this == CredentialSubjectType.bunnyPass ||
-        this == CredentialSubjectType.troopezPass ||
-        this == CredentialSubjectType.matterlightPass) {
-      return true;
-    }
-    return false;
-  }
-
   String get name {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
         return 'DefiCompliance';
-      case CredentialSubjectType.bloometaPass:
-        return 'BloometaPass';
       case CredentialSubjectType.livenessCard:
         return 'Liveness';
-      case CredentialSubjectType.troopezPass:
-        return 'TroopezPass';
-      case CredentialSubjectType.pigsPass:
-        return 'PigsPass';
-      case CredentialSubjectType.matterlightPass:
-        return 'MatterlightPass';
-      case CredentialSubjectType.dogamiPass:
-        return 'DogamiPass';
-      case CredentialSubjectType.bunnyPass:
-        return 'BunnyPass';
       case CredentialSubjectType.tezotopiaMembership:
         return 'MembershipCard_1';
       case CredentialSubjectType.chainbornMembership:
@@ -163,8 +131,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'TezosPooAddress';
       case CredentialSubjectType.certificateOfEmployment:
         return 'CertificateOfEmployment';
-      case CredentialSubjectType.ecole42LearningAchievement:
-        return 'Ecole42LearningAchievement';
       case CredentialSubjectType.emailPass:
         return 'EmailPass';
       case CredentialSubjectType.identityPass:
@@ -211,8 +177,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Voucher';
       case CredentialSubjectType.tezVoucher:
         return 'TezVoucher_1';
-      case CredentialSubjectType.talaoCommunityCard:
-        return 'TalaoCommunity';
       case CredentialSubjectType.diplomaCard:
         return 'VerifiableDiploma';
       case CredentialSubjectType.aragoPass:
@@ -248,20 +212,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
         return DefiComplianceModel.fromJson(json);
-      case CredentialSubjectType.bloometaPass:
-        return BloometaPassModel.fromJson(json);
       case CredentialSubjectType.livenessCard:
         return LivenessCardModel.fromJson(json);
-      case CredentialSubjectType.troopezPass:
-        return TroopezPassModel.fromJson(json);
-      case CredentialSubjectType.pigsPass:
-        return PigsPassModel.fromJson(json);
-      case CredentialSubjectType.matterlightPass:
-        return MatterlightPassModel.fromJson(json);
-      case CredentialSubjectType.dogamiPass:
-        return DogamiPassModel.fromJson(json);
-      case CredentialSubjectType.bunnyPass:
-        return BunnyPassModel.fromJson(json);
       case CredentialSubjectType.tezotopiaMembership:
         return TezotopiaMembershipModel.fromJson(json);
       case CredentialSubjectType.chainbornMembership:
@@ -290,8 +242,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return CertificateOfEmploymentModel.fromJson(json);
       case CredentialSubjectType.defaultCredential:
         return DefaultCredentialSubjectModel.fromJson(json);
-      case CredentialSubjectType.ecole42LearningAchievement:
-        return Ecole42LearningAchievementModel.fromJson(json);
       case CredentialSubjectType.emailPass:
         return EmailPassModel.fromJson(json);
       case CredentialSubjectType.identityPass:
@@ -332,8 +282,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return VoucherModel.fromJson(json);
       case CredentialSubjectType.tezVoucher:
         return TezotopiaVoucherModel.fromJson(json);
-      case CredentialSubjectType.talaoCommunityCard:
-        return TalaoCommunityCardModel.fromJson(json);
       case CredentialSubjectType.diplomaCard:
         return DiplomaCardModel.fromJson(json);
       case CredentialSubjectType.aragoPass:
@@ -497,20 +445,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
         return 'Defi Compliance';
-      case CredentialSubjectType.bloometaPass:
-        return 'Bloometa';
       case CredentialSubjectType.livenessCard:
         return 'Liveness';
-      case CredentialSubjectType.troopezPass:
-        return 'Troopez Pass';
-      case CredentialSubjectType.pigsPass:
-        return 'Pigs Pass';
-      case CredentialSubjectType.matterlightPass:
-        return 'Matterlight Pass';
-      case CredentialSubjectType.dogamiPass:
-        return 'Dogami Pass';
-      case CredentialSubjectType.bunnyPass:
-        return 'Bunny Pass';
       case CredentialSubjectType.tezotopiaMembership:
         return 'Membership Card';
       case CredentialSubjectType.chainbornMembership:
@@ -547,8 +483,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Tezos Poo Address';
       case CredentialSubjectType.certificateOfEmployment:
         return 'Certificate of Employment';
-      case CredentialSubjectType.ecole42LearningAchievement:
-        return 'Ecole42 Learning Achievement';
       case CredentialSubjectType.emailPass:
         return 'Email Pass';
       case CredentialSubjectType.identityPass:
@@ -591,8 +525,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Voucher';
       case CredentialSubjectType.tezVoucher:
         return 'TezVoucher';
-      case CredentialSubjectType.talaoCommunityCard:
-        return 'Talao Community';
       case CredentialSubjectType.diplomaCard:
         return 'Verifiable Diploma';
       case CredentialSubjectType.aragoPass:
@@ -631,7 +563,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
   bool get weCanRemoveItIfCredentialExist {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
-      case CredentialSubjectType.bloometaPass:
       case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
@@ -666,13 +597,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.binancePooAddress:
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.defaultCredential:
-      case CredentialSubjectType.ecole42LearningAchievement:
       case CredentialSubjectType.emailPass:
-      case CredentialSubjectType.troopezPass:
-      case CredentialSubjectType.pigsPass:
-      case CredentialSubjectType.matterlightPass:
-      case CredentialSubjectType.dogamiPass:
-      case CredentialSubjectType.bunnyPass:
       case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.phonePass:
@@ -681,7 +606,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.professionalStudentCard:
       case CredentialSubjectType.selfIssued:
       case CredentialSubjectType.studentCard:
-      case CredentialSubjectType.talaoCommunityCard:
       case CredentialSubjectType.aragoPass:
       case CredentialSubjectType.aragoEmailPass:
       case CredentialSubjectType.aragoIdentityCard:
@@ -700,25 +624,365 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
+  List<VCFormatType> get getVCFormatType {
+    switch (this) {
+      case CredentialSubjectType.over13:
+      case CredentialSubjectType.over15:
+      case CredentialSubjectType.over21:
+      case CredentialSubjectType.over50:
+      case CredentialSubjectType.over65:
+      case CredentialSubjectType.gender:
+      case CredentialSubjectType.ageRange:
+      case CredentialSubjectType.ethereumAssociatedWallet:
+      case CredentialSubjectType.fantomAssociatedWallet:
+      case CredentialSubjectType.polygonAssociatedWallet:
+      case CredentialSubjectType.binanceAssociatedWallet:
+      case CredentialSubjectType.tezosAssociatedWallet:
+      case CredentialSubjectType.defiCompliance:
+      case CredentialSubjectType.emailPass:
+      case CredentialSubjectType.tezotopiaMembership:
+      case CredentialSubjectType.phonePass:
+      case CredentialSubjectType.chainbornMembership:
+        return [VCFormatType.ldpVc];
+
+      case CredentialSubjectType.verifiableIdCard:
+      case CredentialSubjectType.over18:
+      case CredentialSubjectType.livenessCard:
+        return [VCFormatType.ldpVc, VCFormatType.jwtVcJson];
+
+      case CredentialSubjectType.nationality:
+      case CredentialSubjectType.identityPass:
+      case CredentialSubjectType.passportFootprint:
+      case CredentialSubjectType.residentCard:
+      case CredentialSubjectType.voucher:
+      case CredentialSubjectType.tezVoucher:
+      case CredentialSubjectType.diplomaCard:
+      case CredentialSubjectType.twitterCard:
+      case CredentialSubjectType.walletCredential:
+      case CredentialSubjectType.tezosPooAddress:
+      case CredentialSubjectType.ethereumPooAddress:
+      case CredentialSubjectType.fantomPooAddress:
+      case CredentialSubjectType.polygonPooAddress:
+      case CredentialSubjectType.binancePooAddress:
+      case CredentialSubjectType.certificateOfEmployment:
+      case CredentialSubjectType.defaultCredential:
+      case CredentialSubjectType.linkedInCard:
+      case CredentialSubjectType.learningAchievement:
+      case CredentialSubjectType.professionalExperienceAssessment:
+      case CredentialSubjectType.professionalSkillAssessment:
+      case CredentialSubjectType.professionalStudentCard:
+      case CredentialSubjectType.selfIssued:
+      case CredentialSubjectType.studentCard:
+      case CredentialSubjectType.aragoPass:
+      case CredentialSubjectType.aragoEmailPass:
+      case CredentialSubjectType.aragoIdentityCard:
+      case CredentialSubjectType.aragoLearningAchievement:
+      case CredentialSubjectType.aragoOver18:
+      case CredentialSubjectType.pcdsAgentCertificate:
+      case CredentialSubjectType.euDiplomaCard:
+      case CredentialSubjectType.euVerifiableId:
+      case CredentialSubjectType.kycAgeCredential:
+      case CredentialSubjectType.kycCountryOfResidence:
+      case CredentialSubjectType.proofOfTwitterStats:
+      case CredentialSubjectType.civicPassCredential:
+      case CredentialSubjectType.employeeCredential:
+      case CredentialSubjectType.legalPersonalCredential:
+        return [VCFormatType.jwtVc];
+    }
+  }
+
+  DiscoverDummyCredential dummyCredential(VCFormatType vcFormatType) {
+    String? image;
+    String? link;
+    String? websiteLink;
+    ResponseString? whyGetThisCard;
+    ResponseString? expirationDateDetails;
+    ResponseString? howToGetIt;
+    ResponseString? longDescription;
+
+    switch (this) {
+      case CredentialSubjectType.defiCompliance:
+        image = ImageStrings.dummyDefiComplianceCard;
+        link = '';
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_defiComplianceWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_defiComplianceExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_defiComplianceHowToGetIt;
+      case CredentialSubjectType.ageRange:
+        image = ImageStrings.dummyAgeRangeCard;
+        link = '';
+        whyGetThisCard = ResponseString.RESPONSE_STRING_ageRangeWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_ageRangeExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_ageRangeHowToGetIt;
+
+      case CredentialSubjectType.nationality:
+        image = ImageStrings.dummyNationalityCard;
+        link = '';
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_nationalityWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_nationalityExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_nationalityHowToGetIt;
+
+      case CredentialSubjectType.gender:
+        image = ImageStrings.dummyGenderCard;
+        link = '';
+        whyGetThisCard = ResponseString.RESPONSE_STRING_genderWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_genderExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_genderHowToGetIt;
+
+      case CredentialSubjectType.emailPass:
+        image = ImageStrings.dummyEmailPassCard;
+        link = Urls.emailPassUrl;
+        whyGetThisCard = ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_emailPassExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_emailPassHowToGetIt;
+
+      case CredentialSubjectType.over13:
+        image = ImageStrings.dummyOver13Card;
+        link = '';
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over13WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over13ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over13HowToGetIt;
+
+      case CredentialSubjectType.over15:
+        image = ImageStrings.dummyOver15Card;
+        link = '';
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over15WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over15ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over15HowToGetIt;
+
+      case CredentialSubjectType.over18:
+        image = ImageStrings.dummyOver18Card;
+        switch (vcFormatType) {
+          case VCFormatType.ldpVc:
+            link = ''; // handle by aivalidation url
+          case VCFormatType.jwtVcJson:
+            link = Urls.over18JWTVCJSON;
+          case VCFormatType.jwtVc:
+          case VCFormatType.jwtVcJsonLd:
+            link = '';
+        }
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over18ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
+
+      case CredentialSubjectType.over21:
+        image = ImageStrings.dummyOver21Card;
+        link = '';
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over18ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
+
+      case CredentialSubjectType.over50:
+        image = ImageStrings.dummyOver50Card;
+        link = '';
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over18ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
+
+      case CredentialSubjectType.over65:
+        image = ImageStrings.dummyOver65Card;
+        link = '';
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over18ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
+
+      case CredentialSubjectType.passportFootprint:
+        image = ImageStrings.dummyPassportFootprintCard;
+        link = '';
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_passportFootprintExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_passportFootprintHowToGetIt;
+
+      case CredentialSubjectType.tezVoucher:
+        image = ImageStrings.dummyTezotopiaVoucherCard;
+        link = Urls.tezotopiaVoucherUrl;
+        websiteLink = 'https://tezotopia.com';
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_tezVoucherWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_tezVoucherExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_tezVoucherHowToGetIt;
+
+      case CredentialSubjectType.verifiableIdCard:
+        image = ImageStrings.dummyVerifiableIdCard;
+
+        switch (vcFormatType) {
+          case VCFormatType.ldpVc:
+            link = Urls.identityCardUrlLDPVC;
+          case VCFormatType.jwtVcJson:
+            link = Urls.identityCardUrlJWTVCJSON;
+          case VCFormatType.jwtVc:
+          case VCFormatType.jwtVcJsonLd:
+            link = '';
+        }
+
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_verifiableIdCardWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_verifiableIdCardExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_verifiableIdCardHowToGetIt;
+
+      case CredentialSubjectType.linkedInCard:
+        image = ImageStrings.dummyLinkedinCard;
+        link = Urls.linkedinCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_linkedinCardExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt;
+
+      case CredentialSubjectType.tezotopiaMembership:
+        image = ImageStrings.tezotopiaMemberShipDummy;
+        link = Urls.tezotopiaMembershipCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_tezotopiaMembershipExpirationDate;
+        howToGetIt =
+            ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt;
+        longDescription =
+            ResponseString.RESPONSE_STRING_tezotopiaMembershipLongDescription;
+
+      case CredentialSubjectType.chainbornMembership:
+        image = ImageStrings.chainbornMemberShipDummy;
+        link = Urls.chainbornMembershipCardUrl;
+        websiteLink = 'https://chainborn.xyz/';
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_chainbornMembershipWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_chainbornMembershipExpirationDate;
+        howToGetIt =
+            ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt;
+        longDescription =
+            ResponseString.RESPONSE_STRING_chainbornMembershipLongDescription;
+
+      case CredentialSubjectType.twitterCard:
+        image = ImageStrings.twitterCardDummy;
+        link = Urls.twitterCardUrl;
+        whyGetThisCard = ResponseString.RESPONSE_STRING_twitterWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_twitterExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_twitterHowToGetIt;
+
+      case CredentialSubjectType.phonePass:
+        image = ImageStrings.dummyPhonePassCard;
+        link = Urls.phonePassUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_phoneProofWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_phoneProofExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_phoneProofHowToGetIt;
+
+      case CredentialSubjectType.livenessCard:
+        image = ImageStrings.livenessDummy;
+
+        switch (vcFormatType) {
+          case VCFormatType.ldpVc:
+            link = Urls.livenessCardUrl;
+          case VCFormatType.jwtVcJson:
+            link = Urls.livenessCardJWTVCJSON;
+          case VCFormatType.jwtVc:
+          case VCFormatType.jwtVcJsonLd:
+            link = '';
+        }
+
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_livenessCardExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_livenessCardHowToGetIt;
+        longDescription =
+            ResponseString.RESPONSE_STRING_livenessCardLongDescription;
+
+      case CredentialSubjectType.ethereumAssociatedWallet:
+        image = ImageStrings.ethereumOwnershipCard;
+      case CredentialSubjectType.fantomAssociatedWallet:
+        image = ImageStrings.fantomOwnershipCard;
+      case CredentialSubjectType.polygonAssociatedWallet:
+        image = ImageStrings.polygonOwnershipCard;
+      case CredentialSubjectType.binanceAssociatedWallet:
+        image = ImageStrings.binanceOwnershipCard;
+      case CredentialSubjectType.tezosAssociatedWallet:
+        image = ImageStrings.tezosOwnershipCard;
+
+      case CredentialSubjectType.employeeCredential:
+        image = ImageStrings.dummyEmployeeCard;
+
+      case CredentialSubjectType.voucher:
+      case CredentialSubjectType.selfIssued:
+      case CredentialSubjectType.defaultCredential:
+      case CredentialSubjectType.residentCard:
+      case CredentialSubjectType.professionalExperienceAssessment:
+      case CredentialSubjectType.professionalSkillAssessment:
+      case CredentialSubjectType.professionalStudentCard:
+      case CredentialSubjectType.identityPass:
+      case CredentialSubjectType.studentCard:
+      case CredentialSubjectType.learningAchievement:
+      case CredentialSubjectType.certificateOfEmployment:
+      case CredentialSubjectType.diplomaCard:
+      case CredentialSubjectType.aragoEmailPass:
+      case CredentialSubjectType.aragoIdentityCard:
+      case CredentialSubjectType.aragoLearningAchievement:
+      case CredentialSubjectType.aragoOver18:
+      case CredentialSubjectType.aragoPass:
+      case CredentialSubjectType.pcdsAgentCertificate:
+      case CredentialSubjectType.tezosPooAddress:
+      case CredentialSubjectType.ethereumPooAddress:
+      case CredentialSubjectType.fantomPooAddress:
+      case CredentialSubjectType.polygonPooAddress:
+      case CredentialSubjectType.binancePooAddress:
+      case CredentialSubjectType.euDiplomaCard:
+      case CredentialSubjectType.euVerifiableId:
+      case CredentialSubjectType.kycAgeCredential:
+      case CredentialSubjectType.kycCountryOfResidence:
+      case CredentialSubjectType.proofOfTwitterStats:
+      case CredentialSubjectType.civicPassCredential:
+      case CredentialSubjectType.legalPersonalCredential:
+      case CredentialSubjectType.walletCredential:
+        break;
+    }
+
+    return DiscoverDummyCredential(
+      image: image,
+      link: link,
+      credentialSubjectType: this,
+      whyGetThisCard: whyGetThisCard == null
+          ? null
+          : ResponseMessage(message: whyGetThisCard),
+      expirationDateDetails: expirationDateDetails == null
+          ? null
+          : ResponseMessage(message: expirationDateDetails),
+      howToGetIt:
+          howToGetIt == null ? null : ResponseMessage(message: howToGetIt),
+      websiteLink: websiteLink,
+      longDescription: longDescription == null
+          ? null
+          : ResponseMessage(message: longDescription),
+      vcFormatTypes: getVCFormatType,
+    );
+  }
+
   // Future changes will be made to values where 0 appears
   double get order {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
         return 0;
-      case CredentialSubjectType.bloometaPass:
-        return 76;
       case CredentialSubjectType.livenessCard:
         return 75;
-      case CredentialSubjectType.troopezPass:
-        return 73;
-      case CredentialSubjectType.pigsPass:
-        return 75;
-      case CredentialSubjectType.matterlightPass:
-        return 74;
-      case CredentialSubjectType.dogamiPass:
-        return 78;
-      case CredentialSubjectType.bunnyPass:
-        return 77;
       case CredentialSubjectType.tezotopiaMembership:
         return 79;
       case CredentialSubjectType.chainbornMembership:
@@ -755,8 +1019,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 85;
       case CredentialSubjectType.defaultCredential:
         return 100;
-      case CredentialSubjectType.ecole42LearningAchievement:
-        return 0;
       case CredentialSubjectType.emailPass:
         return 99;
       case CredentialSubjectType.identityPass:
@@ -799,8 +1061,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 81;
       case CredentialSubjectType.tezVoucher:
         return 80;
-      case CredentialSubjectType.talaoCommunityCard:
-        return 84;
       case CredentialSubjectType.diplomaCard:
         return 89;
       case CredentialSubjectType.aragoPass:

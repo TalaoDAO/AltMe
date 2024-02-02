@@ -617,20 +617,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get ecole42LearningAchievementStudentIdentity =>
-      GoogleFonts.poppins(
-        color: const Color(0xff212121),
-        fontSize: 6,
-        fontWeight: FontWeight.w700,
-      );
-
-  TextStyle get ecole42LearningAchievementLevel => GoogleFonts.poppins(
-        color: const Color(0xff212121),
-        fontSize: 5,
-        fontWeight: FontWeight.w700,
-      );
-
-  TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.poppins(
+  TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.roboto(
         color: const Color(0xFF0650C6),
         fontSize: 20,
         fontWeight: FontWeight.bold,

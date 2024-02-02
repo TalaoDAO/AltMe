@@ -332,7 +332,7 @@ class OIDC4VC {
     });
   }
 
-  String? nonce;
+  String? cnonce;
   String? accessToken;
   List<dynamic>? authorizationDetails;
 
@@ -367,7 +367,7 @@ class OIDC4VC {
       oidc4vciDraftType: oidc4vciDraftType,
     );
 
-    if (nonce == null || accessToken == null) {
+    if (accessToken == null) {
       final tokenData = buildTokenData(
         preAuthorizedCode: preAuthorizedCode,
         userPin: userPin,
@@ -384,7 +384,10 @@ class OIDC4VC {
         authorization: authorization,
       );
 
-      nonce = response['c_nonce'] as String;
+      if (response is Map<String, dynamic> && response.containsKey('c_nonce')) {
+        cnonce = response['c_nonce'] as String;
+      }
+
       accessToken = response['access_token'] as String;
       authorizationDetails =
           response['authorization_details'] as List<dynamic>?;
@@ -398,8 +401,6 @@ class OIDC4VC {
       mediaType: MediaType.proofOfOwnership,
       useJWKThumbPrint: useJWKThumbPrint,
     );
-
-    if (nonce == null) throw Exception();
 
     String? deferredCredentialEndpoint;
 
@@ -483,7 +484,7 @@ class OIDC4VC {
     String? credentialIdentifier,
   }) async {
     final credentialData = await buildCredentialData(
-      nonce: nonce!,
+      cnonce: cnonce,
       issuerTokenParameters: issuerTokenParameters,
       openIdConfiguration: openIdConfiguration,
       credentialType: credentialType,
@@ -511,9 +512,14 @@ class OIDC4VC {
       data: credentialData,
     );
 
-    nonce = credentialResponse.data['c_nonce'].toString();
+    final credentialResponselData = credentialResponse.data;
 
-    return credentialResponse.data;
+    if (credentialResponselData is Map<String, dynamic> &&
+        credentialResponselData.containsKey('c_nonce')) {
+      cnonce = credentialResponselData['c_nonce'].toString();
+    }
+
+    return credentialResponselData;
   }
 
   /// get Deferred credential from url
@@ -535,7 +541,7 @@ class OIDC4VC {
   }
 
   void resetNonceAndAccessTokenAndAuthorizationDetails() {
-    nonce = null;
+    cnonce = null;
     accessToken = null;
     authorizationDetails = null;
   }
@@ -727,7 +733,6 @@ class OIDC4VC {
   }
 
   Future<Map<String, dynamic>> buildCredentialData({
-    required String nonce,
     required IssuerTokenParameters issuerTokenParameters,
     required OpenIdConfiguration openIdConfiguration,
     required String credentialType,
@@ -736,8 +741,9 @@ class OIDC4VC {
     required bool cryptoHolderBinding,
     required OIDC4VCIDraftType oidc4vciDraftType,
     String? credentialIdentifier,
+    String? cnonce,
   }) async {
-    final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
+    final vcJwt = await getIssuerJwt(issuerTokenParameters, cnonce);
 
     final credentialData = <String, dynamic>{};
 
@@ -928,15 +934,18 @@ class OIDC4VC {
   @visibleForTesting
   Future<String> getIssuerJwt(
     IssuerTokenParameters tokenParameters,
-    String nonce,
+    String? cnonce,
   ) async {
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     final payload = {
       'iss': tokenParameters.did,
-      'nonce': nonce,
       'iat': iat,
       'aud': tokenParameters.issuer,
     };
+
+    if (cnonce != null) {
+      payload['nonce'] = cnonce;
+    }
 
     final jwt = generateToken(
       payload: payload,

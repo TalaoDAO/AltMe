@@ -61,66 +61,6 @@ extension CredentialCategoryX on CredentialCategory {
     }
   }
 
-  List<CredentialSubjectType> get credSubjectsToShowInDiscover {
-    switch (this) {
-      case CredentialCategory.advantagesCards:
-        return [
-          // CredentialSubjectType.tezotopiaMembership,
-          // CredentialSubjectType.chainbornMembership,
-          // CredentialSubjectType.bloometaPass,
-          // CredentialSubjectType.troopezPass,
-          // CredentialSubjectType.pigsPass,
-          // CredentialSubjectType.matterlightPass,
-          // CredentialSubjectType.dogamiPass,
-          // CredentialSubjectType.bunnyPass,
-        ];
-      case CredentialCategory.identityCards:
-        return [
-          // CredentialSubjectType.gender,
-          // CredentialSubjectType.ageRange,
-          // CredentialSubjectType.nationality,
-          // CredentialSubjectType.over65,
-          // CredentialSubjectType.over50,
-          // CredentialSubjectType.over21,
-          CredentialSubjectType.over18,
-          CredentialSubjectType.over15,
-          // CredentialSubjectType.over13,
-          // CredentialSubjectType.passportFootprint,
-          CredentialSubjectType.verifiableIdCard,
-          // CredentialSubjectType.livenessCard,
-        ];
-      case CredentialCategory.contactInfoCredentials:
-        return [
-          CredentialSubjectType.emailPass,
-          CredentialSubjectType.phonePass,
-        ];
-      case CredentialCategory.professionalCards:
-        return [];
-      case CredentialCategory.blockchainAccountsCards:
-        return [];
-      case CredentialCategory.educationCards:
-        return [];
-      case CredentialCategory.othersCards:
-        return [];
-      case CredentialCategory.financeCards:
-        return [
-          CredentialSubjectType.defiCompliance,
-        ];
-      case CredentialCategory.humanityProofCards:
-        return [];
-      case CredentialCategory.socialMediaCards:
-        return [
-          //CredentialSubjectType.twitterCard,
-        ];
-      case CredentialCategory.walletIntegrity:
-        return [];
-      case CredentialCategory.polygonidCards:
-        return [];
-      case CredentialCategory.pendingCards:
-        return [];
-    }
-  }
-
   bool get showInHomeIfListEmpty {
     switch (this) {
       case CredentialCategory.advantagesCards:
