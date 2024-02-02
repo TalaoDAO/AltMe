@@ -438,6 +438,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     bool? verifySecurityIssuerWebsiteIdentity,
     OIDC4VCIDraftType? oidc4vciDraftType,
     SubjectSyntax? subjectSyntax,
+    VCFormatType? vcFormatType,
   }) async {
     final profileModel = state.model.copyWith(
       profileSetting: state.model.profileSetting.copyWith(
@@ -465,6 +466,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             clientSecret: clientSecret,
             oidc4vciDraft: oidc4vciDraftType,
             subjectSyntaxeType: subjectSyntax,
+            vcFormatType: vcFormatType,
           ),
         ),
       ),

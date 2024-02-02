@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class ManageOtherDidPage extends StatefulWidget {
-  const ManageOtherDidPage({
+class ManageDidPage extends StatefulWidget {
+  const ManageDidPage({
     super.key,
     required this.didKeyType,
   });
@@ -18,18 +18,18 @@ class ManageOtherDidPage extends StatefulWidget {
     required DidKeyType didKeyType,
   }) {
     return MaterialPageRoute<void>(
-      builder: (_) => ManageOtherDidPage(
+      builder: (_) => ManageDidPage(
         didKeyType: didKeyType,
       ),
-      settings: const RouteSettings(name: '/ManageOtherDidPage'),
+      settings: const RouteSettings(name: '/ManageDidPage'),
     );
   }
 
   @override
-  State<ManageOtherDidPage> createState() => _ManageDidEbsiPageState();
+  State<ManageDidPage> createState() => _ManageDidEbsiPageState();
 }
 
-class _ManageDidEbsiPageState extends State<ManageOtherDidPage> {
+class _ManageDidEbsiPageState extends State<ManageDidPage> {
   Future<String> getDid() async {
     final privateKey = await getPrivateKey(
       secureStorage: getSecureStorage,
@@ -84,7 +84,7 @@ class _ManageDidEbsiPageState extends State<ManageOtherDidPage> {
                 child: Divider(),
               ),
               DidPrivateKey(
-                route: OtherDidPrivateKeyPage.route(
+                route: DidPrivateKeyPage.route(
                   didKeyType: widget.didKeyType,
                 ),
               ),

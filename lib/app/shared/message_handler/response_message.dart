@@ -18,19 +18,6 @@ class ResponseMessage with MessageHandler {
   }) {
     if (messageHandler is ResponseMessage && messageHandler.message != null) {
       switch (messageHandler.message!) {
-        case ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard:
-          return ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_bloometaPassExpirationDate:
-          return ResponseString.RESPONSE_STRING_bloometaPassExpirationDate
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt.localise(
-            context,
-          );
-
         case ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard
               .localise(context);
@@ -368,72 +355,6 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
-        case ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard:
-          return ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_bunnyPassExpirationDate:
-          return ResponseString.RESPONSE_STRING_bunnyPassExpirationDate
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_bunnyPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_bunnyPassHowToGetIt.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_dogamiPassWhyGetThisCard:
-          return ResponseString.RESPONSE_STRING_dogamiPassWhyGetThisCard
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_dogamiPassExpirationDate:
-          return ResponseString.RESPONSE_STRING_dogamiPassExpirationDate
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_dogamiPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_dogamiPassHowToGetIt.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_matterlightPassWhyGetThisCard:
-          return ResponseString.RESPONSE_STRING_matterlightPassWhyGetThisCard
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_matterlightPassExpirationDate:
-          return ResponseString.RESPONSE_STRING_matterlightPassExpirationDate
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_matterlightPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_matterlightPassHowToGetIt
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_pigsPassWhyGetThisCard:
-          return ResponseString.RESPONSE_STRING_pigsPassWhyGetThisCard.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_pigsPassExpirationDate:
-          return ResponseString.RESPONSE_STRING_pigsPassExpirationDate.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_pigsPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_pigsPassHowToGetIt.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_trooperzPassWhyGetThisCard:
-          return ResponseString.RESPONSE_STRING_trooperzPassWhyGetThisCard
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_trooperzPassExpirationDate:
-          return ResponseString.RESPONSE_STRING_trooperzPassExpirationDate
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt.localise(
-            context,
-          );
-
         case ResponseString.RESPONSE_STRING_over18WhyGetThisCard:
           return ResponseString.RESPONSE_STRING_over18WhyGetThisCard.localise(
             context,
@@ -635,12 +556,6 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_chainbornMembershipLongDescription:
           return ResponseString
               .RESPONSE_STRING_chainbornMembershipLongDescription.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_bloometaPassLongDescription:
-          return ResponseString.RESPONSE_STRING_bloometaPassLongDescription
-              .localise(
             context,
           );
 

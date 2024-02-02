@@ -521,12 +521,14 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey: privateKey,
         uri: uri,
         clientMetaData: clientMetaData,
+        profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
       );
 
       final presentationSubmissionString = await getPresentationSubmission(
         credentialsToBePresented: credentialsToBePresented,
         presentationDefinition: presentationDefinition,
         clientMetaData: clientMetaData,
+        profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
       );
 
       final responseData = <String, dynamic>{
@@ -631,6 +633,7 @@ class ScanCubit extends Cubit<ScanState> {
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
     required Map<String, dynamic>? clientMetaData,
+    required ProfileSetting profileSetting,
   }) async {
     final uuid1 = const Uuid().v4();
 
@@ -684,6 +687,17 @@ class ScanCubit extends Cubit<ScanState> {
         vpFormat = 'ldp_vp';
       } else if (vpFormats.containsKey('jwt_vp')) {
         vpFormat = 'jwt_vp';
+      }
+    }
+
+    final vcFormatType = profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+
+    if (vcFormat == null) {
+      if (vcFormatType == VCFormatType.ldpVc) {
+        vcFormat = 'ldp_vc';
+      } else if (vcFormatType == VCFormatType.jwtVc) {
+        vcFormat = 'jwt_vc';
       }
     }
 
@@ -809,6 +823,7 @@ class ScanCubit extends Cubit<ScanState> {
     required String kid,
     required Uri uri,
     required Map<String, dynamic>? clientMetaData,
+    required ProfileSetting profileSetting,
   }) async {
     final nonce = uri.queryParameters['nonce'] ?? '';
     final clientId = uri.queryParameters['client_id'] ?? '';
@@ -839,6 +854,15 @@ class ScanCubit extends Cubit<ScanState> {
 
       /// jwt_vc
       presentJwtVc = vpFormats.containsKey('jwt_vc');
+    }
+
+    final vcFormatType = profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+
+    if (!presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
+      presentLdpVc = true;
+    } else if (!presentJwtVc && vcFormatType == VCFormatType.jwtVc) {
+      presentJwtVc = true;
     }
 
     if (!presentLdpVc && !presentJwtVc) {

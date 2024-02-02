@@ -52,6 +52,23 @@ class EnterpriseInitializationCubit
     );
   }
 
+  Future<void> setWalletProviderType(
+    WalletProviderType walletProviderType,
+  ) async {
+    emit(state.loading());
+    await secureStorageProvider.set(
+      SecureStorageKeys.walletProviderType,
+      walletProviderType.toString(),
+    );
+    emit(
+      state.copyWith(
+        walletProviderType: walletProviderType,
+        message: null,
+        status: AppStatus.idle,
+      ),
+    );
+  }
+
   void obscurePassword() {
     emit(
       state.copyWith(
@@ -100,6 +117,7 @@ class EnterpriseInitializationCubit
           ),
         ),
       );
+      jwtVc = null;
     }
   }
 
@@ -123,7 +141,7 @@ class EnterpriseInitializationCubit
     };
 
     final response = await client.post(
-      '${Urls.walletProvider}/configuration',
+      '${state.walletProviderType.url}/configuration',
       headers: headers,
       data: data,
     );
@@ -186,7 +204,7 @@ class EnterpriseInitializationCubit
 
   Future<String> getNonce() async {
     final dynamic getRepsponse =
-        await client.get('${Urls.walletProvider}/nonce');
+        await client.get('${state.walletProviderType.url}/nonce');
     final nonce = getRepsponse['nonce'].toString();
     return nonce;
   }
@@ -248,7 +266,7 @@ class EnterpriseInitializationCubit
   Future<String> getJWTVc(Map<String, dynamic> data) async {
     /// get vc
     final response = await client.post(
-      '${Urls.walletProvider}/token',
+      '${state.walletProviderType.url}/token',
       headers: <String, dynamic>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },

@@ -38,6 +38,7 @@ class MissingCredentialsPage extends StatelessWidget {
         repository: CredentialsRepository(secure_storage.getSecureStorage),
         credentialManifest: credentialManifest,
         query: query,
+        profileCubit: context.read<ProfileCubit>(),
       ),
       child: MissingCredentialsView(
         credentialManifest: credentialManifest,

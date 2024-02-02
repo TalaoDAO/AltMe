@@ -236,6 +236,12 @@ class CredentialModel extends Equatable {
           credentialPreview.credentialSubjectModel.issuedBy?.name ==
               'My wallet');
 
+  String get getFormat => format != null
+      ? format!
+      : jwt != null
+          ? 'jwt_vc_json-ld'
+          : 'ldp_vc';
+
   @override
   List<Object?> get props => [
         id,

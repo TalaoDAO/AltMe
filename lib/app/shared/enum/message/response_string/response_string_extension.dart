@@ -4,15 +4,6 @@ extension ResponseStringX on ResponseString {
   String localise(BuildContext context, {String? injectedMessage}) {
     final GlobalMessage globalMessage = GlobalMessage(context.l10n);
     switch (this) {
-      case ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt:
-        return globalMessage.RESPONSE_STRING_bloometaPassHowToGetIt;
-
-      case ResponseString.RESPONSE_STRING_bloometaPassExpirationDate:
-        return globalMessage.RESPONSE_STRING_bloometaPassExpirationDate;
-
-      case ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_bloometaPassWhyGetThisCard;
-
       case ResponseString.RESPONSE_STRING_livenessCardHowToGetIt:
         return globalMessage.RESPONSE_STRING_livenessCardHowToGetIt;
 
@@ -263,51 +254,6 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_twitterHowToGetIt:
         return globalMessage.RESPONSE_STRING_twitterHowToGetIt;
 
-      case ResponseString.RESPONSE_STRING_trooperzPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_trooperzPassWhyGetThisCard;
-
-      case ResponseString.RESPONSE_STRING_pigsPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_pigsPassWhyGetThisCard;
-
-      case ResponseString.RESPONSE_STRING_matterlightPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_matterlightPassWhyGetThisCard;
-
-      case ResponseString.RESPONSE_STRING_dogamiPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_dogamiPassWhyGetThisCard;
-
-      case ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_bunnyPassWhyGetThisCard;
-
-      case ResponseString.RESPONSE_STRING_bunnyPassExpirationDate:
-        return globalMessage.RESPONSE_STRING_bunnyPassExpirationDate;
-
-      case ResponseString.RESPONSE_STRING_bunnyPassHowToGetIt:
-        return globalMessage.RESPONSE_STRING_bunnyPassHowToGetIt;
-
-      case ResponseString.RESPONSE_STRING_dogamiPassExpirationDate:
-        return globalMessage.RESPONSE_STRING_dogamiPassExpirationDate;
-
-      case ResponseString.RESPONSE_STRING_dogamiPassHowToGetIt:
-        return globalMessage.RESPONSE_STRING_dogamiPassHowToGetIt;
-
-      case ResponseString.RESPONSE_STRING_matterlightPassExpirationDate:
-        return globalMessage.RESPONSE_STRING_matterlightPassExpirationDate;
-
-      case ResponseString.RESPONSE_STRING_matterlightPassHowToGetIt:
-        return globalMessage.RESPONSE_STRING_matterlightPassHowToGetIt;
-
-      case ResponseString.RESPONSE_STRING_pigsPassExpirationDate:
-        return globalMessage.RESPONSE_STRING_pigsPassExpirationDate;
-
-      case ResponseString.RESPONSE_STRING_pigsPassHowToGetIt:
-        return globalMessage.RESPONSE_STRING_pigsPassHowToGetIt;
-
-      case ResponseString.RESPONSE_STRING_trooperzPassExpirationDate:
-        return globalMessage.RESPONSE_STRING_trooperzPassExpirationDate;
-
-      case ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt:
-        return globalMessage.RESPONSE_STRING_trooperzPassHowToGetIt;
-
       case ResponseString.RESPONSE_STRING_over18WhyGetThisCard:
         return globalMessage.RESPONSE_STRING_over18WhyGetThisCard;
 
@@ -436,9 +382,6 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_chainbornMembershipLongDescription:
         return globalMessage.RESPONSE_STRING_chainbornMembershipLongDescription;
-
-      case ResponseString.RESPONSE_STRING_bloometaPassLongDescription:
-        return globalMessage.RESPONSE_STRING_bloometaPassLongDescription;
 
       case ResponseString.RESPONSE_STRING_livenessCardLongDescription:
         return globalMessage.RESPONSE_STRING_livenessCardLongDescription;

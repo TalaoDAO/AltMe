@@ -65,17 +65,6 @@ class _EnterpriseInitializationViewState
           .updatePasswordFormat(passwordController.text);
     });
 
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        await context
-            .read<EnterpriseInitializationCubit>()
-            .requestTheConfiguration(
-              email: emailController.text.trim(),
-              password: passwordController.text.trim(),
-            );
-      },
-    );
-
     super.initState();
   }
 
@@ -117,14 +106,51 @@ class _EnterpriseInitializationViewState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const SizedBox(height: Sizes.space2XSmall),
-              const MStepper(step: 1, totalStep: 2),
-              const SizedBox(height: Sizes.spaceNormal),
               Text(
                 l10n.pleaseEnterYourEmailAndYourCompanyPasswordToCreateYourAccount,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall3,
               ),
               const SizedBox(height: Sizes.spaceNormal),
+              Text(
+                l10n.walletProvider,
+                style: Theme.of(context).textTheme.textFieldTitle,
+              ),
+              const SizedBox(height: Sizes.spaceSmall),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 2, horizontal: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Theme.of(context).highlightColor,
+                  border: Border.all(
+                    color: Theme.of(context).highlightColor,
+                    width: 0,
+                  ),
+                ),
+                child: DropdownButton<WalletProviderType>(
+                  value: state.walletProviderType,
+                  underline: Container(),
+                  dropdownColor: Theme.of(context).highlightColor,
+                  isExpanded: true,
+                  onChanged: (WalletProviderType? newValue) {
+                    context
+                        .read<EnterpriseInitializationCubit>()
+                        .setWalletProviderType(newValue!);
+                  },
+                  items: WalletProviderType.values.map((type) {
+                    return DropdownMenuItem<WalletProviderType>(
+                      value: type,
+                      child: Text(
+                        type.formattedString,
+                        style: Theme.of(context).textTheme.normal,
+                      ),
+                    );
+                  }).toList(),
+                  style: Theme.of(context).textTheme.normal,
+                ),
+              ),
+              const SizedBox(height: Sizes.spaceSmall),
               Text(
                 l10n.email,
                 style: Theme.of(context).textTheme.textFieldTitle,

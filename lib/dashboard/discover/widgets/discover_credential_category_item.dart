@@ -18,18 +18,17 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final discoverCardsOptions = context
-        .read<ProfileCubit>()
-        .state
-        .model
-        .profileSetting
-        .discoverCardsOptions;
+    final profileSetting =
+        context.read<ProfileCubit>().state.model.profileSetting;
 
-    if (discoverCardsOptions != null &&
-        !discoverCardsOptions.displayRewardsCategory &&
-        credentialCategory == CredentialCategory.advantagesCards) {
-      return Container();
-    }
+    final vcFormatType = profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+
+    /// remove dummy credential if format is not matched
+    dummyCredentials.removeWhere((element) {
+      final vcFormatTypes = element.vcFormatTypes;
+      return vcFormatTypes != null && !vcFormatTypes.contains(vcFormatType);
+    });
 
     final credentialCategoryConfig = credentialCategory.config(context);
     //sort credentials by order
@@ -37,6 +36,11 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
       (a, b) =>
           a.credentialSubjectType.order < b.credentialSubjectType.order ? 1 : 0,
     );
+
+    if (dummyCredentials.isEmpty) {
+      return Container();
+    }
+
     return Padding(
       padding: margin,
       child: Column(
@@ -70,8 +74,10 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
             ),
             itemCount: dummyCredentials.length,
             itemBuilder: (_, index) {
+              final dummyCredential = dummyCredentials[index];
+
               return DiscoverCredentialItem(
-                dummyCredential: dummyCredentials[index],
+                dummyCredential: dummyCredential,
               );
             },
           ),

@@ -120,7 +120,7 @@ Future<void> getAndAddCredential({
           ),
           data: const {},
           jwt: null,
-          format: 'ldp_vc',
+          format: 'jwt_vc',
           image: '',
           shareLink: '',
           pendingInfo: PendingInfo(

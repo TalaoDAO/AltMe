@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:flutter/material.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 part 'credential_subject_type_extension.dart';
 
@@ -13,16 +14,12 @@ enum CredentialSubjectType {
   aragoPass,
   binanceAssociatedWallet,
   binancePooAddress,
-  bloometaPass,
   livenessCard,
-  bunnyPass,
   certificateOfEmployment,
   chainbornMembership,
   defaultCredential,
   defiCompliance,
   diplomaCard,
-  dogamiPass,
-  ecole42LearningAchievement,
   emailPass,
   ethereumAssociatedWallet,
   ethereumPooAddress,
@@ -36,7 +33,6 @@ enum CredentialSubjectType {
   kycCountryOfResidence,
   learningAchievement,
   linkedInCard,
-  matterlightPass,
   nationality,
   over13,
   over15,
@@ -47,7 +43,6 @@ enum CredentialSubjectType {
   passportFootprint,
   pcdsAgentCertificate,
   phonePass,
-  pigsPass,
   polygonAssociatedWallet,
   polygonPooAddress,
   professionalExperienceAssessment,
@@ -56,12 +51,10 @@ enum CredentialSubjectType {
   residentCard,
   selfIssued,
   studentCard,
-  talaoCommunityCard,
   tezosAssociatedWallet,
   tezosPooAddress,
   tezotopiaMembership,
   tezVoucher,
-  troopezPass,
   twitterCard,
   verifiableIdCard,
   voucher,

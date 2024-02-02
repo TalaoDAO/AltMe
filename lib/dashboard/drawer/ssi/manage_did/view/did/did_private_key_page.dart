@@ -6,8 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class OtherDidPrivateKeyPage extends StatefulWidget {
-  const OtherDidPrivateKeyPage({
+class DidPrivateKeyPage extends StatefulWidget {
+  const DidPrivateKeyPage({
     super.key,
     required this.didKeyType,
   });
@@ -18,18 +18,18 @@ class OtherDidPrivateKeyPage extends StatefulWidget {
     required DidKeyType didKeyType,
   }) {
     return MaterialPageRoute<void>(
-      builder: (_) => OtherDidPrivateKeyPage(
+      builder: (_) => DidPrivateKeyPage(
         didKeyType: didKeyType,
       ),
-      settings: const RouteSettings(name: '/OtherDidPrivateKeyPage'),
+      settings: const RouteSettings(name: '/DidPrivateKeyPage'),
     );
   }
 
   @override
-  State<OtherDidPrivateKeyPage> createState() => _OtherDidPrivateKeyPageState();
+  State<DidPrivateKeyPage> createState() => _DidPrivateKeyPageState();
 }
 
-class _OtherDidPrivateKeyPageState extends State<OtherDidPrivateKeyPage>
+class _DidPrivateKeyPageState extends State<DidPrivateKeyPage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;

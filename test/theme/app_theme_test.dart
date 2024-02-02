@@ -284,20 +284,6 @@ void main() {
                   key: const Key('voucherOverlay'),
                   style: Theme.of(context).textTheme.voucherOverlay,
                 ),
-                Text(
-                  'ecole42LearningAchievementStudentIdentity',
-                  key: const Key('ecole42LearningAchievementStudentIdentity'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .ecole42LearningAchievementStudentIdentity,
-                ),
-                Text(
-                  'ecole42LearningAchievementLevel',
-                  key: const Key('ecole42LearningAchievementLevel'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .ecole42LearningAchievementLevel,
-                ),
               ],
             ),
           ),

@@ -37,26 +37,36 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
       scrollView: false,
       padding: EdgeInsets.zero,
       backgroundColor: Theme.of(context).colorScheme.transparent,
-      body: BlocBuilder<CredentialsCubit, CredentialsState>(
-        builder: (context, state) {
-          String message = '';
-          if (state.message != null) {
-            final MessageHandler messageHandler =
-                state.message!.messageHandler!;
-            message = messageHandler.getMessage(context, messageHandler);
-          }
-
-          if (state.status == CredentialsStatus.loading) {
-            return const CredentialListShimmer();
-          } else if (state.status == CredentialsStatus.error) {
-            return ErrorView(message: message, onTap: onRefresh);
-          } else {
-            return HomeCredentialCategoryList(
-              credentials: state.credentials,
-              onRefresh: onRefresh,
-            );
-          }
+      body: BlocListener<ProfileCubit, ProfileState>(
+        listenWhen: (previous, current) =>
+            current.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.vcFormatType !=
+            previous.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.vcFormatType,
+        listener: (context, state) {
+          onRefresh();
         },
+        child: BlocBuilder<CredentialsCubit, CredentialsState>(
+          builder: (context, state) {
+            String message = '';
+            if (state.message != null) {
+              final MessageHandler messageHandler =
+                  state.message!.messageHandler!;
+              message = messageHandler.getMessage(context, messageHandler);
+            }
+
+            if (state.status == CredentialsStatus.loading) {
+              return const CredentialListShimmer();
+            } else if (state.status == CredentialsStatus.error) {
+              return ErrorView(message: message, onTap: onRefresh);
+            } else {
+              return HomeCredentialCategoryList(
+                credentials: state.credentials,
+                onRefresh: onRefresh,
+              );
+            }
+          },
+        ),
       ),
     );
   }
