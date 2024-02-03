@@ -531,6 +531,7 @@ class ScanCubit extends Cubit<ScanState> {
         profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
       );
 
+      await Future<void>.delayed(const Duration(milliseconds: 1000));
       final responseData = <String, dynamic>{
         'vp_token': vpToken,
         'presentation_submission': presentationSubmissionString,
