@@ -85,11 +85,11 @@ class EnterpriseUpdateCubit extends Cubit<EnterpriseUpdateState> {
         SecureStorageKeys.walletProviderType,
       );
 
-      if (walletProviderTypeString == null) throw Exception();
-
-      final walletProviderType = WalletProviderType.values.firstWhereOrNull(
-        (type) => type.toString() == walletProviderTypeString,
-      );
+      final walletProviderType = walletProviderTypeString != null
+          ? WalletProviderType.values.firstWhereOrNull(
+              (type) => type.toString() == walletProviderTypeString,
+            )
+          : WalletProviderType.Talao;
 
       if (walletProviderType == null) throw Exception();
 
