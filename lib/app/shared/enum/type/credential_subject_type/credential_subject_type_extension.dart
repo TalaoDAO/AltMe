@@ -744,6 +744,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
             link = Urls.emailPassUrlJWTVCJSON;
           case VCFormatType.jwtVc:
           case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
             link = '';
         }
 
@@ -777,6 +778,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
             link = Urls.over18JWTVCJSON;
           case VCFormatType.jwtVc:
           case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
             link = '';
         }
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -837,6 +839,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
             link = Urls.identityCardUrlJWTVCJSON;
           case VCFormatType.jwtVc:
           case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
             link = '';
         }
 
@@ -907,6 +910,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
             link = Urls.livenessCardJWTVCJSON;
           case VCFormatType.jwtVc:
           case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
             link = '';
         }
 

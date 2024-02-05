@@ -9,6 +9,8 @@ enum VCFormatType {
   jwtVcJson,
   @JsonValue('jwt_vc_json-ld')
   jwtVcJsonLd,
+  @JsonValue('vc+sd-jwt')
+  vcSdJWT,
 }
 
 extension VCFormatTypeX on VCFormatType {
@@ -22,6 +24,8 @@ extension VCFormatTypeX on VCFormatType {
         return 'jwt_vc_json';
       case VCFormatType.jwtVcJsonLd:
         return 'jwt_vc_json-ld';
+      case VCFormatType.vcSdJWT:
+        return 'vc+sd-jwt (Experimental)';
     }
   }
 }
