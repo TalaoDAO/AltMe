@@ -406,11 +406,21 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
 
         bool? userPinRequired;
+        TxCode? txCode;
 
-        if (preAuthorizedCodeGrant != null &&
-            preAuthorizedCodeGrant is Map &&
-            preAuthorizedCodeGrant.containsKey('user_pin_required')) {
-          userPinRequired = preAuthorizedCodeGrant['user_pin_required'] as bool;
+        if (preAuthorizedCodeGrant != null && preAuthorizedCodeGrant is Map) {
+          if (preAuthorizedCodeGrant.containsKey('user_pin_required')) {
+            userPinRequired =
+                preAuthorizedCodeGrant['user_pin_required'] as bool;
+          } else if (preAuthorizedCodeGrant.containsKey('tx_code')) {
+            /// draft 13
+            final txCodeMap = preAuthorizedCodeGrant['tx_code'];
+
+            if (txCodeMap is Map<String, dynamic>) {
+              txCode = TxCode.fromJson(txCodeMap);
+              userPinRequired = true;
+            }
+          }
         }
 
         if (userPinRequired != null && userPinRequired) {
@@ -418,6 +428,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             state.copyWith(
               qrScanStatus: QrScanStatus.success,
               route: UserPinPage.route(
+                txCode: txCode,
                 onCancel: () {
                   goBack();
                 },

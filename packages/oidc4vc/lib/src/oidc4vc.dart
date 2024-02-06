@@ -582,7 +582,12 @@ class OIDC4VC {
       if (clientSecret != null) tokenData['client_secret'] = clientSecret;
     }
 
-    if (userPin != null) tokenData['user_pin'] = userPin;
+    if (userPin != null) {
+      tokenData['user_pin'] = userPin;
+
+      /// draft 13
+      tokenData['tx_code'] = userPin;
+    }
 
     return tokenData;
   }
