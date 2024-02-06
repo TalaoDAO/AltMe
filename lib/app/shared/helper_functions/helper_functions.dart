@@ -637,8 +637,11 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
   }
 
   final credentialsSupported = openIdConfiguration.credentialsSupported;
+  final credentialConfigurationsSupported =
+      openIdConfiguration.credentialConfigurationsSupported;
 
-  if (credentialsSupported == null) {
+  if (credentialsSupported == null &&
+      credentialConfigurationsSupported == null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_request',
@@ -647,13 +650,18 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
     );
   }
 
-  final credSupported = credentialsSupported[0];
+  CredentialsSupported? credSupported;
+
+  if (credentialsSupported != null) {
+    credSupported = credentialsSupported[0];
+  }
+
   for (final oidc4vcType in OIDC4VCType.values) {
     if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
       if (oidc4vcType == OIDC4VCType.DEFAULT ||
           oidc4vcType == OIDC4VCType.EBSIV3) {
-        if (credSupported.trustFramework != null &&
-            credSupported == credSupported.trustFramework) {
+        if (credSupported?.trustFramework != null &&
+            credSupported == credSupported?.trustFramework) {
           return (
             OIDC4VCType.DEFAULT,
             openIdConfiguration,
@@ -662,8 +670,8 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
           );
         }
 
-        if (credSupported.trustFramework?.name != null &&
-            credSupported.trustFramework?.name == 'ebsi') {
+        if (credSupported?.trustFramework?.name != null &&
+            credSupported?.trustFramework?.name == 'ebsi') {
           return (
             OIDC4VCType.EBSIV3,
             openIdConfiguration,
@@ -758,7 +766,8 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (openIdConfiguration.credentialsSupported == null) {
+  if (openIdConfiguration.credentialsSupported == null &&
+      openIdConfiguration.credentialConfigurationsSupported == null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -1011,7 +1020,9 @@ bool isURL(String input) {
 }
 
 MessageHandler getMessageHandler(dynamic e) {
-  if (e is DioException) {
+  if (e is MessageHandler) {
+    return e;
+  } else if (e is DioException) {
     final error = NetworkException.getDioException(error: e);
 
     return NetworkException(data: error.data);
@@ -1022,8 +1033,6 @@ MessageHandler getMessageHandler(dynamic e) {
         'error_description': '${e.message}\n\n${e.source}',
       },
     );
-  } else if (e is MessageHandler) {
-    return e;
   } else if (e is TypeError) {
     return ResponseMessage(
       data: {
@@ -1032,10 +1041,20 @@ MessageHandler getMessageHandler(dynamic e) {
       },
     );
   } else {
-    return ResponseMessage(
-      message:
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-    );
+    final stringException = e.toString().replaceAll('Exception: ', '');
+    if (stringException == 'CREDENTIAL_SUPPORT_DATA_ERROR') {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_credential_format',
+          'error_description': 'The credential support format has some issues.',
+        },
+      );
+    } else {
+      return ResponseMessage(
+        message:
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+      );
+    }
   }
 }
 
