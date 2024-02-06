@@ -409,7 +409,8 @@ class OIDC4VC {
           openIdConfiguration.deferredCredentialEndpoint;
     }
 
-    final (credentialType, types, format) = await getCredentialData(
+    final (credentialType, types, credentialDefinition, format) =
+        await getCredentialData(
       openIdConfiguration: openIdConfiguration,
       credential: credential,
     );
@@ -446,6 +447,7 @@ class OIDC4VC {
           credentialIdentifier: credentialIdentifier,
           cryptoHolderBinding: cryptoHolderBinding,
           oidc4vciDraftType: oidc4vciDraftType,
+          credentialDefinition: credentialDefinition,
         );
 
         credentialResponseData.add(credentialResponseDataValue);
@@ -460,6 +462,7 @@ class OIDC4VC {
         format: format,
         cryptoHolderBinding: cryptoHolderBinding,
         oidc4vciDraftType: oidc4vciDraftType,
+        credentialDefinition: credentialDefinition,
       );
 
       credentialResponseData.add(credentialResponseDataValue);
@@ -477,11 +480,12 @@ class OIDC4VC {
     required IssuerTokenParameters issuerTokenParameters,
     required OpenIdConfiguration openIdConfiguration,
     required String credentialType,
-    required List<String> types,
+    required List<String>? types,
     required String format,
     required bool cryptoHolderBinding,
     required OIDC4VCIDraftType oidc4vciDraftType,
     String? credentialIdentifier,
+    Map<String, dynamic>? credentialDefinition,
   }) async {
     final credentialData = await buildCredentialData(
       cnonce: cnonce,
@@ -493,6 +497,7 @@ class OIDC4VC {
       credentialIdentifier: credentialIdentifier,
       cryptoHolderBinding: cryptoHolderBinding,
       oidc4vciDraftType: oidc4vciDraftType,
+      credentialDefinition: credentialDefinition,
     );
 
     /// sign proof
@@ -736,12 +741,13 @@ class OIDC4VC {
     required IssuerTokenParameters issuerTokenParameters,
     required OpenIdConfiguration openIdConfiguration,
     required String credentialType,
-    required List<String> types,
+    required List<String>? types,
     required String format,
     required bool cryptoHolderBinding,
     required OIDC4VCIDraftType oidc4vciDraftType,
     String? credentialIdentifier,
     String? cnonce,
+    Map<String, dynamic>? credentialDefinition,
   }) async {
     final vcJwt = await getIssuerJwt(issuerTokenParameters, cnonce);
 
@@ -758,25 +764,47 @@ class OIDC4VC {
       case OIDC4VCIDraftType.draft8:
         credentialData['type'] = credentialType;
         credentialData['format'] = format;
+
       case OIDC4VCIDraftType.draft11:
+        if (types == null) {
+          throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+        }
+
         credentialData['types'] = types;
         credentialData['format'] = format;
+
       case OIDC4VCIDraftType.draft12:
+        if (types == null) {
+          throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+        }
+
         credentialData['types'] = types;
         if (credentialIdentifier != null) {
           credentialData['credential_identifier'] = credentialIdentifier;
         }
+
+      case OIDC4VCIDraftType.draft13:
+        credentialData['format'] = format;
+
+        if (credentialDefinition == null) {
+          throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+        }
+
+        credentialData['credential_definition'] = credentialDefinition;
     }
 
     return credentialData;
   }
 
-  Future<(String, List<String>, String)> getCredentialData({
+  /// (credentialType, types, credential_definition, format)
+  Future<(String, List<String>?, Map<String, dynamic>?, String)>
+      getCredentialData({
     required OpenIdConfiguration openIdConfiguration,
     required dynamic credential,
   }) async {
     String? credentialType;
     List<String>? types;
+    Map<String, dynamic>? credentialDefinition;
     String? format;
 
     if (credential is String) {
@@ -830,36 +858,28 @@ class OIDC4VC {
         }
 
         final credentialSupportedMapEntry = credentialsSupported.entries.where(
-          (dynamic entry) {
-            final dynamic ele = entry.value;
-            if (ele is! Map<String, dynamic>) return false;
+          (entry) {
+            final dynamic ele = entry.key;
 
-            final credentialDefinition = ele['credential_definition'];
-
-            if (credentialDefinition is! Map<String, dynamic>) return false;
-
-            if (!credentialDefinition.containsKey('type')) return false;
-
-            final type = credentialDefinition['type'];
-
-            if (type is! List<dynamic>) return false;
-
-            if (type.contains(credential)) return true;
+            if (ele == credential) return true;
 
             return false;
           },
         ).firstOrNull;
 
-        if (credentialSupportedMapEntry == null) throw Exception();
+        if (credentialSupportedMapEntry == null) {
+          throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+        }
 
         final credentialSupported = credentialSupportedMapEntry.value;
 
-        types = (credentialSupported['credential_definition']['type']
-                as List<dynamic>)
-            .map((e) => e.toString())
-            .toList();
-
         format = credentialSupported['format'].toString();
+
+        if ((credentialSupported is Map<String, dynamic>) &&
+            (credentialSupported.containsKey('credential_definition'))) {
+          credentialDefinition = credentialSupported['credential_definition']
+              as Map<String, dynamic>;
+        }
       } else {
         throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
       }
@@ -873,7 +893,7 @@ class OIDC4VC {
       throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
     }
 
-    return (credentialType, types, format);
+    return (credentialType, types, credentialDefinition, format);
   }
 
   Future<VerificationType> verifyEncodedData({
