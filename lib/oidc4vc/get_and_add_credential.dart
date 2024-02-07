@@ -4,6 +4,7 @@ import 'package:altme/dashboard/dashboard.dart';
 
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -30,6 +31,7 @@ Future<void> getAndAddCredential({
   required DidKeyType didKeyType,
   required String? clientId,
   required String? clientSecret,
+  required JWTDecode jwtDecode,
 }) async {
   final privateKey = await fetchPrivateKey(
     isEBSIV3: isEBSIV3,
@@ -150,6 +152,7 @@ Future<void> getAndAddCredential({
               isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
           format: format,
           openIdConfiguration: openIdConfiguration,
+          jwtDecode: jwtDecode,
         );
       }
     }

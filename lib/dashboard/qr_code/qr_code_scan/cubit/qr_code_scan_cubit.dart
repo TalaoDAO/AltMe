@@ -777,6 +777,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         credentialsCubit: credentialsCubit,
         dioClient: client,
         oidc4vc: oidc4vc,
+        jwtDecode: jwtDecode,
       );
     } catch (e) {
       emitError(e);
@@ -1250,6 +1251,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           clientId: clientId,
           clientSecret: clientSecret,
           profileCubit: profileCubit,
+          jwtDecode: jwtDecode,
         );
       }
 
