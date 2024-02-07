@@ -1,11 +1,6 @@
 import 'package:altme/l10n/l10n.dart';
 
-enum ProfileType {
-  custom,
-  ebsiV3,
-  dutch,
-  enterprise,
-}
+enum ProfileType { custom, ebsiV3, dutch, enterprise, gainPOCExperimental }
 
 extension ProfileTypeX on ProfileType {
   String getTitle({
@@ -21,6 +16,8 @@ extension ProfileTypeX on ProfileType {
         return l10n.decentralizedIdentityInteropProfile;
       case ProfileType.enterprise:
         return name.isEmpty ? 'Enterprise' : name;
+      case ProfileType.gainPOCExperimental:
+        return 'GAIN POC (Experimental)';
     }
   }
 
@@ -31,6 +28,7 @@ extension ProfileTypeX on ProfileType {
         return false;
       case ProfileType.ebsiV3:
       case ProfileType.enterprise:
+      case ProfileType.gainPOCExperimental:
         return true;
     }
   }

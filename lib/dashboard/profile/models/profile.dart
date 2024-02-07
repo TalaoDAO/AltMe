@@ -122,6 +122,52 @@ class ProfileModel extends Equatable {
         ),
       );
 
+  factory ProfileModel.gainPOCExperimental({
+    required PolygonIdNetwork polygonIdNetwork,
+    required WalletType walletType,
+    required WalletProtectionType walletProtectionType,
+    required bool isDeveloperMode,
+    required String? clientId,
+    required String? clientSecret,
+    String? enterpriseWalletName,
+  }) =>
+      ProfileModel(
+        enterpriseWalletName: enterpriseWalletName,
+        polygonIdNetwork: polygonIdNetwork,
+        walletType: walletType,
+        walletProtectionType: walletProtectionType,
+        isDeveloperMode: isDeveloperMode,
+        profileType: ProfileType.gainPOCExperimental,
+        profileSetting: ProfileSetting(
+          blockchainOptions: BlockchainOptions.initial(),
+          generalOptions: GeneralOptions.empty(),
+          helpCenterOptions: HelpCenterOptions.initial(),
+          discoverCardsOptions: DiscoverCardsOptions.initial(),
+          selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
+            displayManageDecentralizedId: true,
+            customOidc4vcProfile: CustomOidc4VcProfile(
+              clientAuthentication: ClientAuthentication.clientId,
+              credentialManifestSupport: true,
+              cryptoHolderBinding: true,
+              defaultDid: DidKeyType.p256,
+              oidc4vciDraft: OIDC4VCIDraftType.draft13,
+              oidc4vpDraft: OIDC4VPDraftType.draft18,
+              scope: false,
+              securityLevel: false,
+              siopv2Draft: SIOPV2DraftType.draft12,
+              subjectSyntaxeType: SubjectSyntax.did,
+              userPinDigits: UserPinDigits.four,
+              clientId: clientId,
+              clientSecret: clientSecret,
+              vcFormatType: VCFormatType.vcSdJWT,
+            ),
+          ),
+          settingsMenu: SettingsMenu.initial(),
+          version: '',
+          walletSecurityOptions: WalletSecurityOptions.initial(),
+        ),
+      );
+
   final PolygonIdNetwork polygonIdNetwork;
   final WalletType walletType;
   final WalletProtectionType walletProtectionType;

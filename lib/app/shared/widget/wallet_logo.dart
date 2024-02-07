@@ -35,6 +35,8 @@ class WalletLogo extends StatelessWidget {
         image = ImageStrings.ebsiLogo;
       case ProfileType.enterprise:
         image = profileModel.profileSetting.generalOptions.companyLogo;
+      case ProfileType.gainPOCExperimental:
+        image = ImageStrings.gainPOCExperimentalLogo;
     }
 
     return Column(
@@ -61,13 +63,13 @@ class WalletLogo extends StatelessWidget {
                   ),
           ),
         ),
-        if (showPoweredBy &&
-            profileModel.profileType == ProfileType.enterprise) ...[
-          if (profileModel.profileType.showSponseredBy) ...[
-            const SizedBox(height: 5),
-            const Center(child: PoweredByText()),
-          ],
-        ],
+        // if (showPoweredBy &&
+        //     profileModel.profileType == ProfileType.enterprise) ...[
+        //   if (profileModel.profileType.showSponseredBy) ...[
+        //     const SizedBox(height: 5),
+        //     const Center(child: PoweredByText()),
+        //   ],
+        // ],
       ],
     );
   }

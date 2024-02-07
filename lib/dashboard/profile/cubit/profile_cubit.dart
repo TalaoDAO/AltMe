@@ -6,6 +6,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/profile/models/models.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:bloc/bloc.dart';
+import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -21,12 +22,14 @@ class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit({
     required this.secureStorageProvider,
     required this.oidc4vc,
+    required this.didKitProvider,
   }) : super(ProfileState(model: ProfileModel.empty())) {
     load();
   }
 
   final SecureStorageProvider secureStorageProvider;
   final OIDC4VC oidc4vc;
+  final DIDKitProvider didKitProvider;
 
   Timer? _timer;
 
@@ -267,6 +270,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             didKeyType: DidKeyType.ebsiv3,
             privateKey: privateKey,
             secureStorage: secureStorageProvider,
+            didKitProvider: didKitProvider,
           );
 
           profileModel = ProfileModel.ebsiV3(
@@ -289,9 +293,33 @@ class ProfileCubit extends Cubit<ProfileState> {
             didKeyType: DidKeyType.jwkP256,
             privateKey: privateKey,
             secureStorage: secureStorageProvider,
+            didKitProvider: didKitProvider,
           );
 
           profileModel = ProfileModel.dutch(
+            polygonIdNetwork: polygonIdNetwork,
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+            clientId: did,
+            clientSecret: randomString(12),
+          );
+
+        case ProfileType.gainPOCExperimental:
+          final privateKey = await getPrivateKey(
+            secureStorage: secureStorageProvider,
+            didKeyType: DidKeyType.p256,
+            oidc4vc: oidc4vc,
+          );
+
+          final (did, _) = await getDidAndKid(
+            didKeyType: DidKeyType.p256,
+            privateKey: privateKey,
+            secureStorage: secureStorageProvider,
+            didKitProvider: didKitProvider,
+          );
+
+          profileModel = ProfileModel.gainPOCExperimental(
             polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
@@ -533,6 +561,20 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.dutch:
         await update(
           ProfileModel.dutch(
+            polygonIdNetwork: state.model.polygonIdNetwork,
+            walletProtectionType: state.model.walletProtectionType,
+            isDeveloperMode: state.model.isDeveloperMode,
+            walletType: state.model.walletType,
+            enterpriseWalletName: state.model.enterpriseWalletName,
+            clientId: state.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.clientId,
+            clientSecret: state.model.profileSetting
+                .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
+          ),
+        );
+      case ProfileType.gainPOCExperimental:
+        await update(
+          ProfileModel.gainPOCExperimental(
             polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,

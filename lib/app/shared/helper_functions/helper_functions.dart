@@ -468,7 +468,7 @@ Future<(String, String)> getDidAndKid({
   required String privateKey,
   required SecureStorageProvider secureStorage,
   required DidKeyType didKeyType,
-  DIDKitProvider? didKitProvider,
+  required DIDKitProvider? didKitProvider,
 }) async {
   late String did;
   late String kid;
