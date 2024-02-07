@@ -754,11 +754,10 @@ class OIDC4VC {
     String? cnonce,
     Map<String, dynamic>? credentialDefinition,
   }) async {
-    final vcJwt = await getIssuerJwt(issuerTokenParameters, cnonce);
-
     final credentialData = <String, dynamic>{};
 
     if (cryptoHolderBinding) {
+      final vcJwt = await getIssuerJwt(issuerTokenParameters, cnonce);
       credentialData['proof'] = {
         'proof_type': 'jwt',
         'jwt': vcJwt,
