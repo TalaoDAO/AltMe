@@ -517,14 +517,14 @@ class OIDC4VC {
       data: credentialData,
     );
 
-    final credentialResponselData = credentialResponse.data;
+    final credentialResponseData = credentialResponse.data;
 
-    if (credentialResponselData is Map<String, dynamic> &&
-        credentialResponselData.containsKey('c_nonce')) {
-      cnonce = credentialResponselData['c_nonce'].toString();
+    if (credentialResponseData is Map<String, dynamic> &&
+        credentialResponseData.containsKey('c_nonce')) {
+      cnonce = credentialResponseData['c_nonce'].toString();
     }
 
-    return credentialResponselData;
+    return credentialResponseData;
   }
 
   /// get Deferred credential from url
@@ -1383,9 +1383,7 @@ class OIDC4VC {
   }) async {
     final url = '$baseUrl/.well-known/openid-configuration';
 
-    if (!isAuthorizationServer &&
-        oidc4vciDraftType != null &&
-        oidc4vciDraftType == OIDC4VCIDraftType.draft11) {
+    if (!isAuthorizationServer) {
       final data = await getOpenIdConfigSecondMethod(baseUrl);
       return data;
     }

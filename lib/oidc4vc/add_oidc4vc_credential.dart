@@ -145,27 +145,59 @@ Future<void> addOIDC4VCCredential({
     }
   }
 
-  final newCredentialModel = CredentialModel.fromJson(newCredential);
-
   Display? display;
 
-  if (newCredentialModel.credentialManifest == null &&
-      openIdConfiguration?.credentialsSupported != null) {
-    final credentialsSupported = openIdConfiguration!.credentialsSupported!;
-    final CredentialsSupported? credSupported =
-        credentialsSupported.firstWhereOrNull(
-      (CredentialsSupported credentialsSupported) =>
-          credentialsSupported.id != null &&
-          credentialsSupported.id == credentialType,
-    );
-
-    if (credSupported != null && credSupported.display != null) {
-      display = credSupported.display!.firstWhereOrNull(
-        (Display display) =>
-            display.locale == 'en-US' || display.locale == 'en-GB',
+  if (!newCredential.containsKey('credential_manifest')) {
+    if (openIdConfiguration?.credentialsSupported != null) {
+      final credentialsSupported = openIdConfiguration!.credentialsSupported!;
+      final CredentialsSupported? credSupported =
+          credentialsSupported.firstWhereOrNull(
+        (CredentialsSupported credentialsSupported) =>
+            credentialsSupported.id != null &&
+            credentialsSupported.id == credentialType,
       );
+
+      if (credSupported != null && credSupported.display != null) {
+        display = credSupported.display!.firstWhereOrNull(
+          (Display display) =>
+              display.locale == 'en-US' || display.locale == 'en-GB',
+        );
+      }
+    } else if (openIdConfiguration?.credentialConfigurationsSupported != null) {
+      final credentialsSupported =
+          openIdConfiguration!.credentialConfigurationsSupported;
+
+      if ((credentialsSupported is Map<String, dynamic>) &&
+          credentialsSupported.containsKey(credentialType)) {
+        final credSupported = credentialsSupported[credentialType];
+
+        if (credSupported is Map<String, dynamic>) {
+          /// claims
+          if (credSupported.containsKey('claims')) {
+            newCredential['claims'] = credSupported['claims'];
+          }
+
+          /// display
+          if (credSupported.containsKey('display')) {
+            final displayData = credSupported['display'];
+
+            if (displayData is List<dynamic>) {
+              final displays = displayData
+                  .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
+                  .toList();
+
+              display = displays.firstWhereOrNull(
+                (Display display) =>
+                    display.locale == 'en-US' || display.locale == 'en-GB',
+              );
+            }
+          }
+        }
+      }
     }
   }
+
+  final newCredentialModel = CredentialModel.fromJson(newCredential);
 
   final credentialModel = CredentialModel.copyWithData(
     oldCredentialModel: newCredentialModel,
