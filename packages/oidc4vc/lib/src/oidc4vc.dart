@@ -643,8 +643,12 @@ class OIDC4VC {
   }) async {
     var tokenEndPoint = '$issuer/token';
 
-    final authorizationServer = openIdConfiguration.authorizationServer;
-    if (authorizationServer != null) {
+    if (openIdConfiguration.tokenEndpoint != null) {
+      tokenEndPoint = openIdConfiguration.tokenEndpoint!;
+    } else {
+      final authorizationServer =
+          openIdConfiguration.authorizationServer ?? issuer;
+
       final authorizationServerConfiguration = await getOpenIdConfig(
         baseUrl: authorizationServer,
         isAuthorizationServer: true,
@@ -654,11 +658,8 @@ class OIDC4VC {
       if (authorizationServerConfiguration.tokenEndpoint != null) {
         tokenEndPoint = authorizationServerConfiguration.tokenEndpoint!;
       }
-    } else {
-      if (openIdConfiguration.tokenEndpoint != null) {
-        tokenEndPoint = openIdConfiguration.tokenEndpoint!;
-      }
     }
+
     return tokenEndPoint;
   }
 
@@ -790,11 +791,14 @@ class OIDC4VC {
       case OIDC4VCIDraftType.draft13:
         credentialData['format'] = format;
 
-        if (credentialDefinition == null) {
-          throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+        if (format == VCFormatType.vcSdJWT.value) {
+          credentialData['vct'] = 'sth';
+        } else {
+          if (credentialDefinition == null) {
+            throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+          }
+          credentialData['credential_definition'] = credentialDefinition;
         }
-
-        credentialData['credential_definition'] = credentialDefinition;
     }
 
     return credentialData;
