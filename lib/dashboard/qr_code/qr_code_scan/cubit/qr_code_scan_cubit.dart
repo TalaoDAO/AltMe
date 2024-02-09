@@ -1077,6 +1077,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         nonce: nonce,
         stateValue: stateValue,
         useJWKThumbPrint: enableJWKThumbprint,
+        proofHeaderType: customOidc4vcProfile.proofHeader,
       );
 
       String? url;
@@ -1166,6 +1167,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 mediaType:
                     MediaType.basic, // just added as it is required field
                 useJWKThumbPrint: true, // just added as it is required field
+                proofHeaderType: customOidc4vcProfile.proofHeader,
               );
               clientId = tokenParameters.thumbprint;
             case SubjectSyntax.did:

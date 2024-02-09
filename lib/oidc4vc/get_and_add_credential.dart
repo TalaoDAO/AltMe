@@ -87,6 +87,7 @@ Future<void> getAndAddCredential({
       authorization: authorization,
       oidc4vciDraftType: oidc4vciDraftType,
       useJWKThumbPrint: enableJWKThumbprint,
+      proofHeaderType: customOidc4vcProfile.proofHeader,
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {

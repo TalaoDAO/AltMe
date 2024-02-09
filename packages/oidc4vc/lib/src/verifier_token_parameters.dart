@@ -9,10 +9,11 @@ class VerifierTokenParameters extends TokenParameters {
   VerifierTokenParameters({
     required super.privateKey,
     required super.did,
+    required super.proofHeaderType,
     required super.mediaType,
     required this.audience,
-    required this.credentials,
     required super.useJWKThumbPrint,
+    required this.credentials,
     this.nonce,
     super.kid,
   });

@@ -226,6 +226,7 @@ class EnterpriseInitializationCubit
       kid: null,
       mediaType: MediaType.walletAttestation,
       useJWKThumbPrint: enableJWKThumbprint,
+      proofHeaderType: customOidc4vcProfile.proofHeader,
     );
 
     final thumbPrint = tokenParameters.thumbprint;

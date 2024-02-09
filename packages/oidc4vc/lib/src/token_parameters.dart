@@ -13,6 +13,7 @@ class TokenParameters {
     required this.privateKey,
     required this.did,
     required this.mediaType,
+    required this.proofHeaderType,
     required this.useJWKThumbPrint,
     this.kid,
   });
@@ -34,6 +35,9 @@ class TokenParameters {
   Map<String, dynamic> get publicJWK {
     return Map.of(privateKey)..removeWhere((key, value) => key == 'd');
   }
+
+  ///[proofHeaderType] use Jwk or kid
+  ProofHeaderType proofHeaderType;
 
   /// [alg] is computed from crv of [privateKey]'s fingerprint
   String get alg {

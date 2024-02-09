@@ -348,6 +348,7 @@ class OIDC4VC {
     required String privateKey,
     required bool cryptoHolderBinding,
     required bool useJWKThumbPrint,
+    required ProofHeaderType proofHeaderType,
     required OIDC4VCIDraftType oidc4vciDraftType,
     String? preAuthorizedCode,
     String? userPin,
@@ -400,6 +401,7 @@ class OIDC4VC {
       issuer: issuer,
       mediaType: MediaType.proofOfOwnership,
       useJWKThumbPrint: useJWKThumbPrint,
+      proofHeaderType: proofHeaderType,
     );
 
     String? deferredCredentialEndpoint;
@@ -1127,6 +1129,7 @@ class OIDC4VC {
     required String did,
     required String kid,
     required String privateKey,
+    required ProofHeaderType proofHeaderType,
   }) async {
     try {
       final private = jsonDecode(privateKey) as Map<String, dynamic>;
@@ -1140,6 +1143,7 @@ class OIDC4VC {
         nonce: nonce,
         mediaType: MediaType.basic,
         useJWKThumbPrint: false,
+        proofHeaderType: proofHeaderType,
       );
 
       final vpToken = await getVpToken(tokenParameters);
@@ -1158,6 +1162,7 @@ class OIDC4VC {
     required String nonce,
     required bool useJWKThumbPrint,
     required String privateKey,
+    required ProofHeaderType proofHeaderType,
   }) async {
     try {
       final private = jsonDecode(privateKey) as Map<String, dynamic>;
@@ -1170,6 +1175,7 @@ class OIDC4VC {
         nonce: nonce,
         mediaType: MediaType.basic,
         useJWKThumbPrint: useJWKThumbPrint,
+        proofHeaderType: proofHeaderType,
       );
 
       final verifierIdToken = await getIdToken(tokenParameters);
@@ -1189,6 +1195,7 @@ class OIDC4VC {
     required String privateKey,
     required String? stateValue,
     required bool useJWKThumbPrint,
+    required ProofHeaderType proofHeaderType,
   }) async {
     try {
       final private = jsonDecode(privateKey) as Map<String, dynamic>;
@@ -1202,6 +1209,7 @@ class OIDC4VC {
         nonce: nonce,
         mediaType: MediaType.basic,
         useJWKThumbPrint: useJWKThumbPrint,
+        proofHeaderType: proofHeaderType,
       );
 
       // structures
@@ -1292,11 +1300,19 @@ class OIDC4VC {
       // add a key to sign, can only add one for JWT
       ..addRecipient(key, algorithm: tokenParameters.alg);
 
-    if (!tokenParameters.useJWKThumbPrint) {
-      vpBuilder.setProtectedHeader(
-        'kid',
-        tokenParameters.kid ?? tokenParameters.thumbprint,
-      );
+    switch (tokenParameters.proofHeaderType) {
+      case ProofHeaderType.kid:
+        if (!tokenParameters.useJWKThumbPrint) {
+          vpBuilder.setProtectedHeader(
+            'kid',
+            tokenParameters.kid ?? tokenParameters.thumbprint,
+          );
+        }
+      case ProofHeaderType.jwk:
+        vpBuilder.setProtectedHeader(
+          'jwk',
+          tokenParameters.publicJWK,
+        );
     }
 
     // build the jws

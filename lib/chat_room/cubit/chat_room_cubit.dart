@@ -266,11 +266,15 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
     if (_roomId == null || _roomId!.isEmpty) {
       final p256KeyForWallet = await getWalletP256Key(secureStorageProvider);
 
+      final customOidc4vcProfile = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile;
+
       final tokenParameters = TokenParameters(
         privateKey: jsonDecode(p256KeyForWallet) as Map<String, dynamic>,
         did: '', // just added as it is required field
         mediaType: MediaType.basic, // just added as it is required field
         useJWKThumbPrint: true, // just added as it is required field
+        proofHeaderType: customOidc4vcProfile.proofHeader,
       );
 
       final helpCenterOptions =

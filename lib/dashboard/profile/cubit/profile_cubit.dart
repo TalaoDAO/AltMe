@@ -204,6 +204,7 @@ class ProfileCubit extends Cubit<ProfileState> {
                 clientSecret: customProfileBackup.containsKey('clientSecret')
                     ? customProfileBackup['clientSecret'].toString()
                     : randomString(12),
+                proofHeader: ProofHeaderType.kid,
               ),
             ),
             settingsMenu: SettingsMenu.initial(),
@@ -467,6 +468,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     OIDC4VCIDraftType? oidc4vciDraftType,
     SubjectSyntax? subjectSyntax,
     VCFormatType? vcFormatType,
+    ProofHeaderType? proofHeaderType,
   }) async {
     final profileModel = state.model.copyWith(
       profileSetting: state.model.profileSetting.copyWith(
@@ -486,6 +488,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             userPinDigits: userPinDigits,
             defaultDid: didKeyType,
             securityLevel: securityLevel,
+            proofHeader: proofHeaderType,
             scope: scope,
             cryptoHolderBinding: cryptoHolderBinding,
             credentialManifestSupport: credentialManifestSupport,
