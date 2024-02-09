@@ -325,6 +325,14 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           if (widget.credentialModel.claims != null) ...[
                             ClaimsData(credentialModel: widget.credentialModel),
                           ],
+
+                          /// selective disclouse data - _sd
+                          if (widget.credentialModel.jwt != null &&
+                              widget.credentialModel.jwt!.contains('~')) ...[
+                            SelectiveDisclosureData(
+                              credentialModel: widget.credentialModel,
+                            ),
+                          ],
                         ],
                         if (state.credentialDetailTabStatus ==
                             CredentialDetailTabStatus.activity) ...[
