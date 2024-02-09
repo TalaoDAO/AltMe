@@ -711,7 +711,7 @@ class ScanCubit extends Cubit<ScanState> {
     }
 
     if (credentialsToBePresented.length == 1) {
-      late InputDescriptor descriptor;
+      InputDescriptor? descriptor;
 
       for (final InputDescriptor inputDescriptor
           in presentationDefinition.inputDescriptors) {
@@ -746,20 +746,21 @@ class ScanCubit extends Cubit<ScanState> {
           }
         }
       }
-
-      inputDescriptors.add({
-        'id': descriptor.id,
-        'format': vpFormat,
-        'path': r'$',
-        'path_nested': {
+      if (descriptor != null) {
+        inputDescriptors.add({
           'id': descriptor.id,
-          'format': vcFormat,
-          'path': r'$.verifiableCredential',
-        },
-      });
+          'format': vpFormat,
+          'path': r'$',
+          'path_nested': {
+            'id': descriptor.id,
+            'format': vcFormat,
+            'path': r'$.verifiableCredential',
+          },
+        });
+      }
     } else {
       for (int i = 0; i < credentialsToBePresented.length; i++) {
-        late InputDescriptor descriptor;
+        InputDescriptor? descriptor;
 
         for (final InputDescriptor inputDescriptor
             in presentationDefinition.inputDescriptors) {
@@ -774,18 +775,19 @@ class ScanCubit extends Cubit<ScanState> {
             }
           }
         }
-
-        inputDescriptors.add({
-          'id': descriptor.id,
-          'format': vpFormat,
-          'path': r'$',
-          'path_nested': {
+        if (descriptor != null) {
+          inputDescriptors.add({
             'id': descriptor.id,
-            'format': vcFormat,
-            // ignore: prefer_interpolation_to_compose_strings
-            'path': r'$.verifiableCredential[' + i.toString() + ']',
-          },
-        });
+            'format': vpFormat,
+            'path': r'$',
+            'path_nested': {
+              'id': descriptor.id,
+              'format': vcFormat,
+              // ignore: prefer_interpolation_to_compose_strings
+              'path': r'$.verifiableCredential[' + i.toString() + ']',
+            },
+          });
+        }
       }
     }
 
