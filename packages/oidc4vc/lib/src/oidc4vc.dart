@@ -411,7 +411,7 @@ class OIDC4VC {
           openIdConfiguration.deferredCredentialEndpoint;
     }
 
-    final (credentialType, types, credentialDefinition, format) =
+    final (credentialType, types, credentialDefinition, vct, format) =
         await getCredentialData(
       openIdConfiguration: openIdConfiguration,
       credential: credential,
@@ -450,6 +450,7 @@ class OIDC4VC {
           cryptoHolderBinding: cryptoHolderBinding,
           oidc4vciDraftType: oidc4vciDraftType,
           credentialDefinition: credentialDefinition,
+          vct: vct,
         );
 
         credentialResponseData.add(credentialResponseDataValue);
@@ -465,6 +466,8 @@ class OIDC4VC {
         cryptoHolderBinding: cryptoHolderBinding,
         oidc4vciDraftType: oidc4vciDraftType,
         credentialDefinition: credentialDefinition,
+        vct: vct,
+        credentialIdentifier: null,
       );
 
       credentialResponseData.add(credentialResponseDataValue);
@@ -486,8 +489,9 @@ class OIDC4VC {
     required String format,
     required bool cryptoHolderBinding,
     required OIDC4VCIDraftType oidc4vciDraftType,
-    String? credentialIdentifier,
-    Map<String, dynamic>? credentialDefinition,
+    required String? credentialIdentifier,
+    required Map<String, dynamic>? credentialDefinition,
+    required String? vct,
   }) async {
     final credentialData = await buildCredentialData(
       cnonce: cnonce,
@@ -500,6 +504,7 @@ class OIDC4VC {
       cryptoHolderBinding: cryptoHolderBinding,
       oidc4vciDraftType: oidc4vciDraftType,
       credentialDefinition: credentialDefinition,
+      vct: vct,
     );
 
     /// sign proof
@@ -753,9 +758,10 @@ class OIDC4VC {
     required String format,
     required bool cryptoHolderBinding,
     required OIDC4VCIDraftType oidc4vciDraftType,
-    String? credentialIdentifier,
-    String? cnonce,
-    Map<String, dynamic>? credentialDefinition,
+    required String? credentialIdentifier,
+    required String? cnonce,
+    required String? vct,
+    required Map<String, dynamic>? credentialDefinition,
   }) async {
     final credentialData = <String, dynamic>{};
 
@@ -793,21 +799,20 @@ class OIDC4VC {
       case OIDC4VCIDraftType.draft13:
         credentialData['format'] = format;
 
-        if (format == VCFormatType.vcSdJWT.value) {
-          credentialData['vct'] = 'sth';
-        } else {
-          if (credentialDefinition == null) {
-            throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
-          }
+        if (credentialDefinition != null) {
           credentialData['credential_definition'] = credentialDefinition;
+        }
+
+        if (vct != null) {
+          credentialData['vct'] = vct;
         }
     }
 
     return credentialData;
   }
 
-  /// (credentialType, types, credential_definition, format)
-  Future<(String, List<String>?, Map<String, dynamic>?, String)>
+  /// (credentialType, types, credential_definition, vct, format)
+  Future<(String, List<String>?, Map<String, dynamic>?, String?, String)>
       getCredentialData({
     required OpenIdConfiguration openIdConfiguration,
     required dynamic credential,
@@ -815,6 +820,7 @@ class OIDC4VC {
     String? credentialType;
     List<String>? types;
     Map<String, dynamic>? credentialDefinition;
+    String? vct;
     String? format;
 
     if (credential is String) {
@@ -885,10 +891,15 @@ class OIDC4VC {
 
         format = credentialSupported['format'].toString();
 
-        if ((credentialSupported is Map<String, dynamic>) &&
-            (credentialSupported.containsKey('credential_definition'))) {
-          credentialDefinition = credentialSupported['credential_definition']
-              as Map<String, dynamic>;
+        if (credentialSupported is Map<String, dynamic>) {
+          if (credentialSupported.containsKey('credential_definition')) {
+            credentialDefinition = credentialSupported['credential_definition']
+                as Map<String, dynamic>;
+          }
+
+          if (credentialSupported.containsKey('vct')) {
+            vct = credentialSupported['vct'].toString();
+          }
         }
       } else {
         throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
@@ -903,7 +914,7 @@ class OIDC4VC {
       throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
     }
 
-    return (credentialType, types, credentialDefinition, format);
+    return (credentialType, types, credentialDefinition, vct, format);
   }
 
   Future<VerificationType> verifyEncodedData({
