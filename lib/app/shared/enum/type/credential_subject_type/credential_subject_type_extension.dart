@@ -639,7 +639,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.binanceAssociatedWallet:
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.defiCompliance:
-      case CredentialSubjectType.emailPass:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.phonePass:
       case CredentialSubjectType.chainbornMembership:
@@ -648,6 +647,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.verifiableIdCard:
       case CredentialSubjectType.over18:
       case CredentialSubjectType.livenessCard:
+      case CredentialSubjectType.emailPass:
         return [VCFormatType.ldpVc, VCFormatType.jwtVcJson];
 
       case CredentialSubjectType.nationality:
@@ -736,7 +736,18 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
       case CredentialSubjectType.emailPass:
         image = ImageStrings.dummyEmailPassCard;
-        link = Urls.emailPassUrl;
+
+        switch (vcFormatType) {
+          case VCFormatType.ldpVc:
+            link = Urls.emailPassUrl;
+          case VCFormatType.jwtVcJson:
+            link = Urls.emailPassUrlJWTVCJSON;
+          case VCFormatType.jwtVc:
+          case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
+            link = '';
+        }
+
         whyGetThisCard = ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_emailPassExpirationDate;
@@ -767,6 +778,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
             link = Urls.over18JWTVCJSON;
           case VCFormatType.jwtVc:
           case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
             link = '';
         }
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -827,6 +839,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
             link = Urls.identityCardUrlJWTVCJSON;
           case VCFormatType.jwtVc:
           case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
             link = '';
         }
 
@@ -897,6 +910,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
             link = Urls.livenessCardJWTVCJSON;
           case VCFormatType.jwtVc:
           case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
             link = '';
         }
 

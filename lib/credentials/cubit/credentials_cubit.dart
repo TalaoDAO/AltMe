@@ -695,12 +695,17 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             break;
 
           case CredentialCategory.contactInfoCredentials:
-            if (discoverCardsOptions.displayEmailPass &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.emailPass)) {
-              allSubjectTypeForCategory.add(
-                CredentialSubjectType.emailPass,
-              );
+            if (!allSubjectTypeForCategory
+                .contains(CredentialSubjectType.emailPass)) {
+              final displayEmailPass = vcFormatType == VCFormatType.ldpVc &&
+                  discoverCardsOptions.displayEmailPass;
+              final displayEmailPassJwt =
+                  vcFormatType == VCFormatType.jwtVcJson &&
+                      discoverCardsOptions.displayEmailPassJwt;
+
+              if (displayEmailPass || displayEmailPassJwt) {
+                allSubjectTypeForCategory.add(CredentialSubjectType.emailPass);
+              }
             }
 
             if (discoverCardsOptions.displayPhonePass &&

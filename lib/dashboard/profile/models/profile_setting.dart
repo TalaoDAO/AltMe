@@ -522,6 +522,7 @@ class CustomOidc4VcProfile extends Equatable {
     required this.clientId,
     required this.clientSecret,
     this.vcFormatType = VCFormatType.ldpVc,
+    this.proofHeader = ProofHeaderType.kid,
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
@@ -532,6 +533,7 @@ class CustomOidc4VcProfile extends Equatable {
         oidc4vciDraft: OIDC4VCIDraftType.draft11,
         oidc4vpDraft: OIDC4VPDraftType.draft18,
         scope: false,
+        proofHeader: ProofHeaderType.kid,
         securityLevel: false,
         siopv2Draft: SIOPV2DraftType.draft12,
         subjectSyntaxeType: SubjectSyntax.did,
@@ -555,6 +557,7 @@ class CustomOidc4VcProfile extends Equatable {
   final OIDC4VCIDraftType oidc4vciDraft;
   final OIDC4VPDraftType oidc4vpDraft;
   final bool scope;
+  final ProofHeaderType proofHeader;
   final bool securityLevel;
   final SIOPV2DraftType siopv2Draft;
   final SubjectSyntax subjectSyntaxeType;
@@ -574,6 +577,7 @@ class CustomOidc4VcProfile extends Equatable {
     OIDC4VCIDraftType? oidc4vciDraft,
     OIDC4VPDraftType? oidc4vpDraft,
     bool? scope,
+    ProofHeaderType? proofHeader,
     bool? securityLevel,
     SIOPV2DraftType? siopv2Draft,
     SubjectSyntax? subjectSyntaxeType,
@@ -589,6 +593,7 @@ class CustomOidc4VcProfile extends Equatable {
         oidc4vciDraft: oidc4vciDraft ?? this.oidc4vciDraft,
         oidc4vpDraft: oidc4vpDraft ?? this.oidc4vpDraft,
         scope: scope ?? this.scope,
+        proofHeader: proofHeader ?? this.proofHeader,
         securityLevel: securityLevel ?? this.securityLevel,
         siopv2Draft: siopv2Draft ?? this.siopv2Draft,
         subjectSyntaxeType: subjectSyntaxeType ?? this.subjectSyntaxeType,
@@ -609,6 +614,7 @@ class CustomOidc4VcProfile extends Equatable {
         oidc4vciDraft,
         oidc4vpDraft,
         scope,
+        proofHeader,
         securityLevel,
         siopv2Draft,
         subjectSyntaxeType,

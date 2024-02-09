@@ -406,11 +406,21 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
 
         bool? userPinRequired;
+        TxCode? txCode;
 
-        if (preAuthorizedCodeGrant != null &&
-            preAuthorizedCodeGrant is Map &&
-            preAuthorizedCodeGrant.containsKey('user_pin_required')) {
-          userPinRequired = preAuthorizedCodeGrant['user_pin_required'] as bool;
+        if (preAuthorizedCodeGrant != null && preAuthorizedCodeGrant is Map) {
+          if (preAuthorizedCodeGrant.containsKey('user_pin_required')) {
+            userPinRequired =
+                preAuthorizedCodeGrant['user_pin_required'] as bool;
+          } else if (preAuthorizedCodeGrant.containsKey('tx_code')) {
+            /// draft 13
+            final txCodeMap = preAuthorizedCodeGrant['tx_code'];
+
+            if (txCodeMap is Map<String, dynamic>) {
+              txCode = TxCode.fromJson(txCodeMap);
+              userPinRequired = true;
+            }
+          }
         }
 
         if (userPinRequired != null && userPinRequired) {
@@ -418,6 +428,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             state.copyWith(
               qrScanStatus: QrScanStatus.success,
               route: UserPinPage.route(
+                txCode: txCode,
                 onCancel: () {
                   goBack();
                 },
@@ -766,6 +777,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         credentialsCubit: credentialsCubit,
         dioClient: client,
         oidc4vc: oidc4vc,
+        jwtDecode: jwtDecode,
       );
     } catch (e) {
       emitError(e);
@@ -1065,6 +1077,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         nonce: nonce,
         stateValue: stateValue,
         useJWKThumbPrint: enableJWKThumbprint,
+        proofHeaderType: customOidc4vcProfile.proofHeader,
       );
 
       String? url;
@@ -1154,6 +1167,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 mediaType:
                     MediaType.basic, // just added as it is required field
                 useJWKThumbPrint: true, // just added as it is required field
+                proofHeaderType: customOidc4vcProfile.proofHeader,
               );
               clientId = tokenParameters.thumbprint;
             case SubjectSyntax.did:
@@ -1239,6 +1253,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           clientId: clientId,
           clientSecret: clientSecret,
           profileCubit: profileCubit,
+          jwtDecode: jwtDecode,
         );
       }
 

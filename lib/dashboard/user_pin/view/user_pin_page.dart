@@ -12,19 +12,23 @@ class UserPinPage extends StatelessWidget {
     super.key,
     required this.onProceed,
     required this.onCancel,
+    required this.txCode,
   });
 
   final void Function(String pincode) onProceed;
   final Function onCancel;
+  final TxCode? txCode;
 
   static Route<dynamic> route({
     required void Function(String pincode) onProceed,
     required Function onCancel,
+    required TxCode? txCode,
   }) {
     return MaterialPageRoute<void>(
       builder: (_) => UserPinPage(
         onProceed: onProceed,
         onCancel: onCancel,
+        txCode: txCode,
       ),
       settings: const RouteSettings(name: '/UserPinPage'),
     );
@@ -38,6 +42,7 @@ class UserPinPage extends StatelessWidget {
       child: UserPinView(
         onCancel: onCancel,
         onProceed: onProceed,
+        txCode: txCode,
       ),
     );
   }
@@ -48,10 +53,12 @@ class UserPinView extends StatefulWidget {
     super.key,
     required this.onProceed,
     required this.onCancel,
+    required this.txCode,
   });
 
   final void Function(String pincode) onProceed;
   final Function onCancel;
+  final TxCode? txCode;
 
   @override
   State<UserPinView> createState() => _UserPinViewState();
@@ -80,15 +87,12 @@ class _UserPinViewState extends State<UserPinView> {
             backgroundColor: Theme.of(context).colorScheme.background,
             scrollView: false,
             body: PinCodeWidget(
-              title: l10n.pleaseInsertTheSecredCodeReceived,
+              title: widget.txCode?.description ??
+                  l10n.pleaseInsertTheSecredCodeReceived,
               passwordEnteredCallback: _onPasscodeEntered,
-              passwordDigits: state
-                  .model
-                  .profileSetting
-                  .selfSovereignIdentityOptions
-                  .customOidc4vcProfile
-                  .userPinDigits
-                  .value,
+              passwordDigits: widget.txCode?.length ??
+                  state.model.profileSetting.selfSovereignIdentityOptions
+                      .customOidc4vcProfile.userPinDigits.value,
               deleteButton: Text(
                 l10n.delete,
                 style: Theme.of(context).textTheme.labelLarge,

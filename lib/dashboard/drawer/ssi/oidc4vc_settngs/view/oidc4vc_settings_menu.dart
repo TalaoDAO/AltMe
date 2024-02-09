@@ -40,7 +40,6 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SecurityLevelWidget(),
-          const ClientCredentialsWidget(),
           const SixOrForUserPinWidget(),
           const DidKeyTypeWidget(),
           const DraftTypeWidget(),
@@ -49,7 +48,9 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           const CryptographicHolderBindingWidget(),
           const ScopeParameterWidget(),
           const ClientAuthenticationWidget(),
+          const ClientCredentialsWidget(),
           const VCFormatWidget(),
+          const ProofHeaderWidget(),
           DrawerItem(
             title: l10n.clientMetadata,
             onTap: () {

@@ -69,6 +69,7 @@ class App extends StatelessWidget {
           create: (context) => ProfileCubit(
             secureStorageProvider: secureStorageProvider,
             oidc4vc: OIDC4VC(),
+            didKitProvider: DIDKitProvider(),
           ),
         ),
         BlocProvider<AdvanceSettingsCubit>(

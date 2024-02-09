@@ -17,6 +17,8 @@ class Urls {
   static const String issuerBaseUrl = 'https://issuer.talao.co';
   static const String phonePassUrl = 'https://issuer.talao.co/phonepass';
   static const String emailPassUrl = 'https://issuer.talao.co/emailpass';
+  static const String emailPassUrlJWTVCJSON =
+      'https://issuer.talao.co/emailpass?format=jwt_vc_json';
 
   static const String tezotopiaVoucherUrl =
       'https://issuer.tezotopia.altme.io/issuer/voucher_mobile';
