@@ -157,6 +157,8 @@ Future<void> addOIDC4VCCredential({
             credentialsSupported.id == credentialType,
       );
 
+      newCredential['credentialSupported'] = credentialsSupported;
+
       if (credSupported != null && credSupported.display != null) {
         display = credSupported.display!.firstWhereOrNull(
           (Display display) =>
@@ -171,12 +173,10 @@ Future<void> addOIDC4VCCredential({
           credentialsSupported.containsKey(credentialType)) {
         final credSupported = credentialsSupported[credentialType];
 
-        if (credSupported is Map<String, dynamic>) {
-          /// claims
-          if (credSupported.containsKey('claims')) {
-            newCredential['claims'] = credSupported['claims'];
-          }
+        /// credentialSupported
+        newCredential['credentialSupported'] = credSupported;
 
+        if (credSupported is Map<String, dynamic>) {
           /// display
           if (credSupported.containsKey('display')) {
             final displayData = credSupported['display'];

@@ -297,6 +297,11 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             ),
                           ],
 
+                          /// credentialSubjectData
+                          CredentialSubjectData(
+                            credentialModel: widget.credentialModel,
+                          ),
+
                           //// wallet attestation data
                           if (widget.credentialModel.credentialPreview
                                   .credentialSubjectModel
@@ -322,7 +327,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           ],
 
                           /// claims data , from draft 13
-                          if (widget.credentialModel.claims != null) ...[
+                          if (widget.credentialModel.credentialSupported !=
+                                  null &&
+                              widget.credentialModel.credentialSupported!
+                                  .containsKey('claims')) ...[
                             ClaimsData(credentialModel: widget.credentialModel),
                           ],
 
