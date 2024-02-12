@@ -483,9 +483,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         ),
       ],
       credentialList: oldCredentialList,
-      isJwtVpInJwtVCRequired: null,
-      presentJwtVc: null,
-      presentLdpVc: null,
     );
 
     /// update or create AssociatedAddres credential with new name
