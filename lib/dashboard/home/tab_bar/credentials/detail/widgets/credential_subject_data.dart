@@ -2,9 +2,10 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:json_path/json_path.dart';
 
-class ClaimsData extends StatelessWidget {
-  const ClaimsData({
+class CredentialSubjectData extends StatelessWidget {
+  const CredentialSubjectData({
     super.key,
     required this.credentialModel,
   });
@@ -15,22 +16,28 @@ class ClaimsData extends StatelessWidget {
   Widget build(BuildContext context) {
     final credentialSupported = credentialModel.credentialSupported;
 
-    final claims = credentialSupported!['claims'];
+    final credentialSubjectReference = JsonPath(r'$..credentialSubject')
+        .read(credentialSupported)
+        .firstOrNull
+        ?.value;
 
-    if (claims! is Map<String, dynamic>) {
-      return Container();
-    }
+    if (credentialSubjectReference == null) return Container();
+    if (credentialSubjectReference is! Map<String, dynamic>) return Container();
+
+    final credentialSubjectData = credentialModel.data['credentialSubject'];
+
+    if (credentialSubjectData == null) return Container();
+    if (credentialSubjectData is! Map<String, dynamic>) return Container();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: (claims as Map<String, dynamic>)
-          .entries
+      children: credentialSubjectReference.entries
           .map((MapEntry<String, dynamic> map) {
+        String? title;
+        String? data;
+
         final key = map.key;
         final value = map.value;
-
-        String title = key;
-        String data = value.toString();
 
         if (value is! Map<String, dynamic>) return Container();
 
@@ -46,19 +53,27 @@ class ClaimsData extends StatelessWidget {
         if (value.containsKey('display')) {
           final displays = value['display'];
           if (displays is! List<dynamic>) return Container();
-          if (displays.length < 2) return Container();
 
-          for (final display in displays) {
-            if (display is! Map<String, dynamic>) return Container();
+          final display = displays.where((element) {
+            if (element is Map<String, dynamic> &&
+                element.containsKey('locale') &&
+                element['locale'] == 'en-US') {
+              return true;
+            }
+            return false;
+          }).firstOrNull;
 
-            if (display['name'] == null) return Container();
+          if (display == null) return Container();
+
+          if (credentialSubjectData.containsKey(key)) {
+            title = display['name'].toString();
+            data = credentialSubjectData[key].toString();
           }
-
-          title = displays[0]['name'].toString();
-          data = displays[1]['name'].toString();
         } else {
           return Container();
         }
+
+        if (title == null || data == null) return Container();
 
         return Padding(
           padding: const EdgeInsets.only(top: 10),
