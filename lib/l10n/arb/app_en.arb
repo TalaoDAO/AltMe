@@ -1032,5 +1032,8 @@
   "congrats": "Congrats !",
   "yourWalletConfigurationHasBeenSuccessfullyUpdated": "Your wallet configuration has been successfully updated",
   "continueString": "Continue",
-  "walletProvider": "Wallet Provider"
+  "walletProvider": "Wallet Provider",
+  "theLdpFormatIsNotSupportedByThisDIDMethod": "The ldp_format is not supported by this DID method.",
+  "switchOffCryptoHolderBindingForThatDIDMethod": "Switch off Crypto Holder Binding for that DID Method.",
+  "thisTypeProofCannotBeUsedWithThisVCFormat": "This type proof cannot be used with this VC Format."
 }

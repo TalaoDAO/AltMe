@@ -36,6 +36,9 @@ class VCFormatWidget extends StatelessWidget {
                     ),
                   ListTile(
                     onTap: () {
+                      final customOidc4vcProfile = state.model.profileSetting
+                          .selfSovereignIdentityOptions.customOidc4vcProfile;
+
                       context.read<ProfileCubit>().updateProfileSetting(
                             vcFormatType: vcFormatType,
                           );

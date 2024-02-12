@@ -937,7 +937,10 @@
     "congrats",
     "yourWalletConfigurationHasBeenSuccessfullyUpdated",
     "continueString",
-    "walletProvider"
+    "walletProvider",
+    "theLdpFormatIsNotSupportedByThisDIDMethod",
+    "switchOffCryptoHolderBindingForThatDIDMethod",
+    "thisTypeProofCannotBeUsedWithThisVCFormat"
   ],
 
   "es": [
@@ -1878,7 +1881,10 @@
     "congrats",
     "yourWalletConfigurationHasBeenSuccessfullyUpdated",
     "continueString",
-    "walletProvider"
+    "walletProvider",
+    "theLdpFormatIsNotSupportedByThisDIDMethod",
+    "switchOffCryptoHolderBindingForThatDIDMethod",
+    "thisTypeProofCannotBeUsedWithThisVCFormat"
   ],
 
   "fr": [
@@ -2144,7 +2150,10 @@
     "congrats",
     "yourWalletConfigurationHasBeenSuccessfullyUpdated",
     "continueString",
-    "walletProvider"
+    "walletProvider",
+    "theLdpFormatIsNotSupportedByThisDIDMethod",
+    "switchOffCryptoHolderBindingForThatDIDMethod",
+    "thisTypeProofCannotBeUsedWithThisVCFormat"
   ],
 
   "it": [
@@ -3085,6 +3094,9 @@
     "congrats",
     "yourWalletConfigurationHasBeenSuccessfullyUpdated",
     "continueString",
-    "walletProvider"
+    "walletProvider",
+    "theLdpFormatIsNotSupportedByThisDIDMethod",
+    "switchOffCryptoHolderBindingForThatDIDMethod",
+    "thisTypeProofCannotBeUsedWithThisVCFormat"
   ]
 }
