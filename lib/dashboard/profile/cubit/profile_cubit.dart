@@ -306,7 +306,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             clientSecret: randomString(12),
           );
 
-        case ProfileType.gainPOCExperimental:
+        case ProfileType.owfBaselineProfile:
           final privateKey = await getPrivateKey(
             secureStorage: secureStorageProvider,
             didKeyType: DidKeyType.p256,
@@ -320,7 +320,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             didKitProvider: didKitProvider,
           );
 
-          profileModel = ProfileModel.gainPOCExperimental(
+          profileModel = ProfileModel.owfBaselineProfile(
             polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
@@ -575,9 +575,9 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
           ),
         );
-      case ProfileType.gainPOCExperimental:
+      case ProfileType.owfBaselineProfile:
         await update(
-          ProfileModel.gainPOCExperimental(
+          ProfileModel.owfBaselineProfile(
             polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,

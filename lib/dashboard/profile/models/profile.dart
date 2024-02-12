@@ -124,7 +124,7 @@ class ProfileModel extends Equatable {
         ),
       );
 
-  factory ProfileModel.gainPOCExperimental({
+  factory ProfileModel.owfBaselineProfile({
     required PolygonIdNetwork polygonIdNetwork,
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
@@ -139,7 +139,7 @@ class ProfileModel extends Equatable {
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
-        profileType: ProfileType.gainPOCExperimental,
+        profileType: ProfileType.owfBaselineProfile,
         profileSetting: ProfileSetting(
           blockchainOptions: BlockchainOptions.initial(),
           generalOptions: GeneralOptions.empty(),
@@ -151,7 +151,7 @@ class ProfileModel extends Equatable {
               clientAuthentication: ClientAuthentication.clientId,
               credentialManifestSupport: true,
               cryptoHolderBinding: true,
-              defaultDid: DidKeyType.p256,
+              defaultDid: DidKeyType.jwkP256,
               oidc4vciDraft: OIDC4VCIDraftType.draft13,
               oidc4vpDraft: OIDC4VPDraftType.draft18,
               scope: false,
