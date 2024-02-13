@@ -147,50 +147,50 @@ Future<void> addOIDC4VCCredential({
 
   Display? display;
 
-  if (!newCredential.containsKey('credential_manifest')) {
-    if (openIdConfiguration?.credentialsSupported != null) {
-      final credentialsSupported = openIdConfiguration!.credentialsSupported!;
-      final CredentialsSupported? credSupported =
-          credentialsSupported.firstWhereOrNull(
-        (CredentialsSupported credentialsSupported) =>
-            credentialsSupported.id != null &&
-            credentialsSupported.id == credentialType,
-      );
+  if (openIdConfiguration?.credentialsSupported != null) {
+    final credentialsSupported = openIdConfiguration!.credentialsSupported!;
+    final CredentialsSupported? credSupported =
+        credentialsSupported.firstWhereOrNull(
+      (CredentialsSupported credentialsSupported) =>
+          credentialsSupported.id != null &&
+          credentialsSupported.id == credentialType,
+    );
 
-      newCredential['credentialSupported'] = credentialsSupported;
+    if (credSupported != null) {
+      newCredential['credentialSupported'] = credSupported.toJson();
 
-      if (credSupported != null && credSupported.display != null) {
+      if (credSupported.display != null) {
         display = credSupported.display!.firstWhereOrNull(
           (Display display) =>
               display.locale == 'en-US' || display.locale == 'en-GB',
         );
       }
-    } else if (openIdConfiguration?.credentialConfigurationsSupported != null) {
-      final credentialsSupported =
-          openIdConfiguration!.credentialConfigurationsSupported;
+    }
+  } else if (openIdConfiguration?.credentialConfigurationsSupported != null) {
+    final credentialsSupported =
+        openIdConfiguration!.credentialConfigurationsSupported;
 
-      if ((credentialsSupported is Map<String, dynamic>) &&
-          credentialsSupported.containsKey(credentialType)) {
-        final credSupported = credentialsSupported[credentialType];
+    if ((credentialsSupported is Map<String, dynamic>) &&
+        credentialsSupported.containsKey(credentialType)) {
+      final credSupported = credentialsSupported[credentialType];
 
-        /// credentialSupported
-        newCredential['credentialSupported'] = credSupported;
+      /// credentialSupported
+      newCredential['credentialSupported'] = credSupported;
 
-        if (credSupported is Map<String, dynamic>) {
-          /// display
-          if (credSupported.containsKey('display')) {
-            final displayData = credSupported['display'];
+      if (credSupported is Map<String, dynamic>) {
+        /// display
+        if (credSupported.containsKey('display')) {
+          final displayData = credSupported['display'];
 
-            if (displayData is List<dynamic>) {
-              final displays = displayData
-                  .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
-                  .toList();
+          if (displayData is List<dynamic>) {
+            final displays = displayData
+                .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
+                .toList();
 
-              display = displays.firstWhereOrNull(
-                (Display display) =>
-                    display.locale == 'en-US' || display.locale == 'en-GB',
-              );
-            }
+            display = displays.firstWhereOrNull(
+              (Display display) =>
+                  display.locale == 'en-US' || display.locale == 'en-GB',
+            );
           }
         }
       }

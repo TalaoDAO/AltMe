@@ -302,6 +302,14 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             credentialModel: widget.credentialModel,
                           ),
 
+                          /// claims data , from draft 13
+                          if (widget.credentialModel.credentialSupported !=
+                                  null &&
+                              widget.credentialModel.credentialSupported!
+                                  .containsKey('claims')) ...[
+                            ClaimsData(credentialModel: widget.credentialModel),
+                          ],
+
                           //// wallet attestation data
                           if (widget.credentialModel.credentialPreview
                                   .credentialSubjectModel
@@ -324,14 +332,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             DeferredCredentialData(
                               credentialModel: widget.credentialModel,
                             ),
-                          ],
-
-                          /// claims data , from draft 13
-                          if (widget.credentialModel.credentialSupported !=
-                                  null &&
-                              widget.credentialModel.credentialSupported!
-                                  .containsKey('claims')) ...[
-                            ClaimsData(credentialModel: widget.credentialModel),
                           ],
 
                           /// selective disclouse data - _sd

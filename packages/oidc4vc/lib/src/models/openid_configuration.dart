@@ -92,6 +92,7 @@ class CredentialsSupported extends Equatable {
     this.types,
     this.id,
     this.scope,
+    this.credentialSubject,
   });
 
   factory CredentialsSupported.fromJson(Map<String, dynamic> json) =>
@@ -104,6 +105,7 @@ class CredentialsSupported extends Equatable {
   final List<String>? types;
   final String? id;
   final String? scope;
+  final dynamic credentialSubject;
 
   Map<String, dynamic> toJson() => _$CredentialsSupportedToJson(this);
 
@@ -115,6 +117,7 @@ class CredentialsSupported extends Equatable {
         types,
         id,
         scope,
+        credentialSubject,
       ];
 }
 
