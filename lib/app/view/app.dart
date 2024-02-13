@@ -242,7 +242,7 @@ class MaterialAppDefinition extends StatelessWidget {
       create: (context) => LangCubit(),
       child: BlocBuilder<LangCubit, Locale>(
         builder: (context, lang) {
-          //context.read<LangCubit>().fetchLocale();
+          context.read<LangCubit>().fetchLocale();
           return MaterialApp(
             builder: isStaging ? DevicePreview.appBuilder : null,
             locale: isStaging ? DevicePreview.locale(context) : lang,

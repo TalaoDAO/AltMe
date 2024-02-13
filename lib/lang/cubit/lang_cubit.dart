@@ -10,14 +10,11 @@ class LangCubit extends Cubit<Locale> {
 
   Future<void> fetchLocale() async {
     final Locale? locale = await Devicelocale.currentAsLocale;
-    const Locale frenchLocale = Locale('fr', 'FR');
 
     final langauageCode = locale!.languageCode;
 
     if (AppLocalizations.supportedLocales.contains(Locale(langauageCode))) {
-      if (langauageCode == frenchLocale.languageCode) {
-        emit(locale);
-      }
+      emit(locale);
     }
   }
 }

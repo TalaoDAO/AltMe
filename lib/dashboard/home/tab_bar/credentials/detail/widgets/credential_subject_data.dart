@@ -1,7 +1,9 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_path/json_path.dart';
 
 class CredentialSubjectData extends StatelessWidget {
@@ -28,6 +30,10 @@ class CredentialSubjectData extends StatelessWidget {
 
     if (credentialSubjectData == null) return Container();
     if (credentialSubjectData is! Map<String, dynamic>) return Container();
+
+    final locale = context.read<LangCubit>().state;
+
+    final localeString = '${locale.languageCode}-${locale.countryCode}';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,9 +62,12 @@ class CredentialSubjectData extends StatelessWidget {
 
           final display = displays.where((element) {
             if (element is Map<String, dynamic> &&
-                element.containsKey('locale') &&
-                element['locale'] == 'en-US') {
-              return true;
+                element.containsKey('locale')) {
+              if (element['locale'] == localeString) {
+                return true;
+              } else if (element['locale'] == 'en-US') {
+                return true;
+              }
             }
             return false;
           }).firstOrNull;
