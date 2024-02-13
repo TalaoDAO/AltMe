@@ -193,11 +193,6 @@ class ProfileCubit extends Cubit<ProfileState> {
                             customProfileBackup['enableJWKThumbprint'] == 'true'
                         ? SubjectSyntax.jwkThumbprint
                         : SubjectSyntax.did,
-                userPinDigits:
-                    customProfileBackup.containsKey('enable4DigitPINCode') &&
-                            customProfileBackup['enable4DigitPINCode'] == 'true'
-                        ? UserPinDigits.four
-                        : UserPinDigits.six,
                 clientId: customProfileBackup.containsKey('clientId')
                     ? customProfileBackup['clientId'].toString()
                     : Parameters.clientId,
@@ -455,7 +450,6 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateProfileSetting({
     DidKeyType? didKeyType,
     bool? securityLevel,
-    UserPinDigits? userPinDigits,
     bool? scope,
     bool? cryptoHolderBinding,
     bool? credentialManifestSupport,
@@ -485,7 +479,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           customOidc4vcProfile: state.model.profileSetting
               .selfSovereignIdentityOptions.customOidc4vcProfile
               .copyWith(
-            userPinDigits: userPinDigits,
             defaultDid: didKeyType,
             securityLevel: securityLevel,
             proofHeader: proofHeaderType,

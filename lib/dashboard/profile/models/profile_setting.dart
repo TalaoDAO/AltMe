@@ -518,7 +518,6 @@ class CustomOidc4VcProfile extends Equatable {
     required this.securityLevel,
     required this.siopv2Draft,
     required this.subjectSyntaxeType,
-    required this.userPinDigits,
     required this.clientId,
     required this.clientSecret,
     this.vcFormatType = VCFormatType.ldpVc,
@@ -537,7 +536,6 @@ class CustomOidc4VcProfile extends Equatable {
         securityLevel: false,
         siopv2Draft: SIOPV2DraftType.draft12,
         subjectSyntaxeType: SubjectSyntax.did,
-        userPinDigits: UserPinDigits.six,
         clientId: Parameters.clientId,
         clientSecret: randomString(12),
         vcFormatType: VCFormatType.ldpVc,
@@ -561,7 +559,6 @@ class CustomOidc4VcProfile extends Equatable {
   final bool securityLevel;
   final SIOPV2DraftType siopv2Draft;
   final SubjectSyntax subjectSyntaxeType;
-  final UserPinDigits userPinDigits;
   @JsonKey(name: 'vcFormat')
   final VCFormatType vcFormatType;
 
@@ -581,7 +578,6 @@ class CustomOidc4VcProfile extends Equatable {
     bool? securityLevel,
     SIOPV2DraftType? siopv2Draft,
     SubjectSyntax? subjectSyntaxeType,
-    UserPinDigits? userPinDigits,
     VCFormatType? vcFormatType,
   }) =>
       CustomOidc4VcProfile(
@@ -597,7 +593,6 @@ class CustomOidc4VcProfile extends Equatable {
         securityLevel: securityLevel ?? this.securityLevel,
         siopv2Draft: siopv2Draft ?? this.siopv2Draft,
         subjectSyntaxeType: subjectSyntaxeType ?? this.subjectSyntaxeType,
-        userPinDigits: userPinDigits ?? this.userPinDigits,
         clientId: clientId ?? this.clientId,
         clientSecret: clientSecret ?? this.clientSecret,
         vcFormatType: vcFormatType ?? this.vcFormatType,
@@ -618,7 +613,6 @@ class CustomOidc4VcProfile extends Equatable {
         securityLevel,
         siopv2Draft,
         subjectSyntaxeType,
-        userPinDigits,
         vcFormatType,
       ];
 }
