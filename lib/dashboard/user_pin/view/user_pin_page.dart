@@ -90,9 +90,7 @@ class _UserPinViewState extends State<UserPinView> {
               title: widget.txCode?.description ??
                   l10n.pleaseInsertTheSecredCodeReceived,
               passwordEnteredCallback: _onPasscodeEntered,
-              passwordDigits: widget.txCode?.length ??
-                  state.model.profileSetting.selfSovereignIdentityOptions
-                      .customOidc4vcProfile.userPinDigits.value,
+              passwordDigits: widget.txCode?.length ?? 4,
               deleteButton: Text(
                 l10n.delete,
                 style: Theme.of(context).textTheme.labelLarge,

@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ClaimsData extends StatelessWidget {
   const ClaimsData({
@@ -17,20 +21,48 @@ class ClaimsData extends StatelessWidget {
 
     final claims = credentialSupported!['claims'];
 
-    if (claims! is Map<String, dynamic>) {
+    if (claims is! Map<String, dynamic>) {
       return Container();
     }
 
+    final encryptedDatas = credentialModel.jwt?.split('~');
+
+    final credentialSubjectData = <String, dynamic>{};
+
+    if (encryptedDatas != null) {
+      encryptedDatas.removeAt(0);
+
+      for (final element in encryptedDatas) {
+        try {
+          final decryptedData = utf8.decode(base64Decode(element));
+          if (decryptedData.isNotEmpty) {
+            final lisString = decryptedData
+                .substring(1, decryptedData.length - 1)
+                .replaceAll('"', '')
+                .split(',');
+
+            if (lisString.length == 3) {
+              credentialSubjectData[lisString[1].trim()] = lisString[2].trim();
+            }
+          }
+        } catch (e) {
+          //
+        }
+      }
+    }
+
+    final locale = context.read<LangCubit>().state;
+
+    final localeString = '${locale.languageCode}-${locale.countryCode}';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: (claims as Map<String, dynamic>)
-          .entries
-          .map((MapEntry<String, dynamic> map) {
+      children: claims.entries.map((MapEntry<String, dynamic> map) {
+        String? title;
+        String? data;
+
         final key = map.key;
         final value = map.value;
-
-        String title = key;
-        String data = value.toString();
 
         if (value is! Map<String, dynamic>) return Container();
 
@@ -46,19 +78,35 @@ class ClaimsData extends StatelessWidget {
         if (value.containsKey('display')) {
           final displays = value['display'];
           if (displays is! List<dynamic>) return Container();
-          if (displays.length < 2) return Container();
+          if (displays.isEmpty) return Container();
 
-          for (final display in displays) {
-            if (display is! Map<String, dynamic>) return Container();
+          final display = displays.where((element) {
+            if (element is Map<String, dynamic> &&
+                element.containsKey('locale')) {
+              if (element['locale'] == localeString) {
+                return true;
+              } else if (element['locale'] == 'en-US') {
+                return true;
+              }
+            }
+            return false;
+          }).firstOrNull;
 
-            if (display['name'] == null) return Container();
+          if (display == null) return Container();
+
+          if (credentialSubjectData.isNotEmpty &&
+              credentialSubjectData.containsKey(key)) {
+            title = display['name'].toString();
+            data = credentialSubjectData[key].toString();
+          } else if (credentialModel.data.containsKey(key)) {
+            title = display['name'].toString();
+            data = credentialModel.data[key].toString();
           }
-
-          title = displays[0]['name'].toString();
-          data = displays[1]['name'].toString();
         } else {
           return Container();
         }
+
+        if (title == null || data == null) return Container();
 
         return Padding(
           padding: const EdgeInsets.only(top: 10),
