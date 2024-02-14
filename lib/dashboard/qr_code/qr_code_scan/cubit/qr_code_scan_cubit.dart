@@ -1185,7 +1185,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           codeForAuthorisedFlow: null,
           codeVerifier: null,
           authorization: authorization,
-          clientId: clientId,
+          clientId: clientId ?? '',
           clientSecret: clientSecret,
         );
       } else {
@@ -1221,7 +1221,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? codeForAuthorisedFlow,
     required String? codeVerifier,
     required String? authorization,
-    required String? clientId,
+    required String clientId,
     required String? clientSecret,
   }) async {
     try {
@@ -1323,7 +1323,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         codeForAuthorisedFlow: codeForAuthorisedFlow,
         codeVerifier: codeVerifier,
         authorization: authorization,
-        clientId: clientId,
+        clientId: clientId ?? '',
         clientSecret: clientSecret,
       );
     } catch (e) {

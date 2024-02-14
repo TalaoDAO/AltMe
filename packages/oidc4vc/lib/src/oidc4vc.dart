@@ -341,7 +341,7 @@ class OIDC4VC {
     required String issuer,
     required dynamic credential,
     required String did,
-    required String? clientId,
+    required String clientId,
     required String? clientSecret,
     required String kid,
     required int indexValue,
@@ -350,6 +350,7 @@ class OIDC4VC {
     required bool useJWKThumbPrint,
     required ProofHeaderType proofHeaderType,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required ClientAuthentication clientAuthentication,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -402,6 +403,7 @@ class OIDC4VC {
       mediaType: MediaType.proofOfOwnership,
       useJWKThumbPrint: useJWKThumbPrint,
       proofHeaderType: proofHeaderType,
+      clientId: clientId,
     );
 
     String? deferredCredentialEndpoint;
@@ -450,6 +452,7 @@ class OIDC4VC {
           cryptoHolderBinding: cryptoHolderBinding,
           oidc4vciDraftType: oidc4vciDraftType,
           credentialDefinition: credentialDefinition,
+          clientAuthentication: clientAuthentication,
           vct: vct,
         );
 
@@ -466,6 +469,7 @@ class OIDC4VC {
         cryptoHolderBinding: cryptoHolderBinding,
         oidc4vciDraftType: oidc4vciDraftType,
         credentialDefinition: credentialDefinition,
+        clientAuthentication: clientAuthentication,
         vct: vct,
         credentialIdentifier: null,
       );
@@ -489,6 +493,7 @@ class OIDC4VC {
     required String format,
     required bool cryptoHolderBinding,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required ClientAuthentication clientAuthentication,
     required String? credentialIdentifier,
     required Map<String, dynamic>? credentialDefinition,
     required String? vct,
@@ -504,6 +509,7 @@ class OIDC4VC {
       cryptoHolderBinding: cryptoHolderBinding,
       oidc4vciDraftType: oidc4vciDraftType,
       credentialDefinition: credentialDefinition,
+      clientAuthentication: clientAuthentication,
       vct: vct,
     );
 
@@ -758,6 +764,7 @@ class OIDC4VC {
     required String format,
     required bool cryptoHolderBinding,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required ClientAuthentication clientAuthentication,
     required String? credentialIdentifier,
     required String? cnonce,
     required String? vct,
@@ -766,7 +773,12 @@ class OIDC4VC {
     final credentialData = <String, dynamic>{};
 
     if (cryptoHolderBinding) {
-      final vcJwt = await getIssuerJwt(issuerTokenParameters, cnonce);
+      final vcJwt = await getIssuerJwt(
+        tokenParameters: issuerTokenParameters,
+        clientAuthentication: clientAuthentication,
+        oidc4vciDraftType: oidc4vciDraftType,
+        cnonce: cnonce,
+      );
       credentialData['proof'] = {
         'proof_type': 'jwt',
         'jwt': vcJwt,
@@ -1030,13 +1042,26 @@ class OIDC4VC {
   }
 
   @visibleForTesting
-  Future<String> getIssuerJwt(
-    IssuerTokenParameters tokenParameters,
+  Future<String> getIssuerJwt({
+    required IssuerTokenParameters tokenParameters,
+    required ClientAuthentication clientAuthentication,
+    required OIDC4VCIDraftType oidc4vciDraftType,
     String? cnonce,
-  ) async {
+  }) async {
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+
+    var iss = tokenParameters.did;
+
+    if (clientAuthentication == ClientAuthentication.clientSecretPost ||
+        clientAuthentication == ClientAuthentication.clientSecretBasic) {
+      if (oidc4vciDraftType == OIDC4VCIDraftType.draft11 ||
+          oidc4vciDraftType == OIDC4VCIDraftType.draft13) {
+        iss = tokenParameters.clientId;
+      }
+    }
+
     final payload = {
-      'iss': tokenParameters.did,
+      'iss': iss,
       'iat': iat,
       'aud': tokenParameters.issuer,
     };

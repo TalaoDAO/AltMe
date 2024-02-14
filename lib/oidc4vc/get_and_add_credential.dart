@@ -29,7 +29,7 @@ Future<void> getAndAddCredential({
   required String? authorization,
   required OIDC4VCIDraftType oidc4vciDraftType,
   required DidKeyType didKeyType,
-  required String? clientId,
+  required String clientId,
   required String? clientSecret,
   required JWTDecode jwtDecode,
 }) async {
@@ -88,6 +88,7 @@ Future<void> getAndAddCredential({
       oidc4vciDraftType: oidc4vciDraftType,
       useJWKThumbPrint: enableJWKThumbprint,
       proofHeaderType: customOidc4vcProfile.proofHeader,
+      clientAuthentication: customOidc4vcProfile.clientAuthentication,
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {

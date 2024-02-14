@@ -11,9 +11,13 @@ class IssuerTokenParameters extends TokenParameters {
     required super.proofHeaderType,
     required super.useJWKThumbPrint,
     required this.issuer,
+    required this.clientId,
     super.kid,
   });
 
   /// [issuer] is id of credential we are aquiring.
   final String issuer;
+
+  /// [clientId] is clientId.
+  final String clientId;
 }
