@@ -31,9 +31,7 @@ class CredentialSubjectData extends StatelessWidget {
     if (credentialSubjectData == null) return Container();
     if (credentialSubjectData is! Map<String, dynamic>) return Container();
 
-    final locale = context.read<LangCubit>().state;
-
-    final localeString = '${locale.languageCode}-${locale.countryCode}';
+    final languageCode = context.read<LangCubit>().state.languageCode;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +61,7 @@ class CredentialSubjectData extends StatelessWidget {
           final display = displays.where((element) {
             if (element is Map<String, dynamic> &&
                 element.containsKey('locale')) {
-              if (element['locale'] == localeString) {
+              if (element['locale'].toString().contains(languageCode)) {
                 return true;
               } else if (element['locale'] == 'en-US') {
                 return true;
