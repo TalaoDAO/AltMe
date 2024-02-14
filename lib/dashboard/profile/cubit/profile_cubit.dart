@@ -407,7 +407,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     bool? secureSecurityAuthenticationWithPinCode,
     bool? verifySecurityIssuerWebsiteIdentity,
     OIDC4VCIDraftType? oidc4vciDraftType,
-    SubjectSyntax? subjectSyntax,
+    ClientType? clientType,
     VCFormatType? vcFormatType,
     ProofHeaderType? proofHeaderType,
   }) async {
@@ -436,7 +436,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             clientId: clientId,
             clientSecret: clientSecret,
             oidc4vciDraft: oidc4vciDraftType,
-            subjectSyntaxeType: subjectSyntax,
+            clientType: clientType,
             vcFormatType: vcFormatType,
           ),
         ),

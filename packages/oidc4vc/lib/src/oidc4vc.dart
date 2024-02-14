@@ -324,7 +324,7 @@ class OIDC4VC {
       ],
       'subject_syntax_types_discriminations': [
         'did:key:jwk_jcs-pub',
-        'did:ebsi:v1'
+        'did:ebsi:v1',
       ],
       'subject_trust_frameworks_supported': ['ebsi'],
       'id_token_types_supported': ['subject_signed_id_token'],
@@ -347,7 +347,7 @@ class OIDC4VC {
     required int indexValue,
     required String privateKey,
     required bool cryptoHolderBinding,
-    required bool useJWKThumbPrint,
+    required ClientType clientType,
     required ProofHeaderType proofHeaderType,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required ClientAuthentication clientAuthentication,
@@ -401,7 +401,7 @@ class OIDC4VC {
       kid: kid,
       issuer: issuer,
       mediaType: MediaType.proofOfOwnership,
-      useJWKThumbPrint: useJWKThumbPrint,
+      clientType: clientType,
       proofHeaderType: proofHeaderType,
       clientId: clientId,
     );
@@ -1178,8 +1178,9 @@ class OIDC4VC {
         credentials: credentialsToBePresented,
         nonce: nonce,
         mediaType: MediaType.basic,
-        useJWKThumbPrint: false,
+        clientType: ClientType.did,
         proofHeaderType: proofHeaderType,
+        clientId: clientId,
       );
 
       final vpToken = await getVpToken(tokenParameters);
@@ -1196,7 +1197,7 @@ class OIDC4VC {
     required String did,
     required String kid,
     required String nonce,
-    required bool useJWKThumbPrint,
+    required ClientType clientType,
     required String privateKey,
     required ProofHeaderType proofHeaderType,
   }) async {
@@ -1210,8 +1211,9 @@ class OIDC4VC {
         credentials: credentialsToBePresented,
         nonce: nonce,
         mediaType: MediaType.basic,
-        useJWKThumbPrint: useJWKThumbPrint,
+        clientType: clientType,
         proofHeaderType: proofHeaderType,
+        clientId: clientId,
       );
 
       final verifierIdToken = await getIdToken(tokenParameters);
@@ -1230,7 +1232,7 @@ class OIDC4VC {
     required String? nonce,
     required String privateKey,
     required String? stateValue,
-    required bool useJWKThumbPrint,
+    required ClientType clientType,
     required ProofHeaderType proofHeaderType,
   }) async {
     try {
@@ -1244,8 +1246,9 @@ class OIDC4VC {
         credentials: [],
         nonce: nonce,
         mediaType: MediaType.basic,
-        useJWKThumbPrint: useJWKThumbPrint,
+        clientType: clientType,
         proofHeaderType: proofHeaderType,
+        clientId: clientId,
       );
 
       // structures
@@ -1338,12 +1341,11 @@ class OIDC4VC {
 
     switch (tokenParameters.proofHeaderType) {
       case ProofHeaderType.kid:
-        if (!tokenParameters.useJWKThumbPrint) {
-          vpBuilder.setProtectedHeader(
-            'kid',
-            tokenParameters.kid ?? tokenParameters.thumbprint,
-          );
-        }
+        vpBuilder.setProtectedHeader(
+          'kid',
+          tokenParameters.kid ?? tokenParameters.thumbprint,
+        );
+
       case ProofHeaderType.jwk:
         vpBuilder.setProtectedHeader(
           'jwk',
@@ -1362,9 +1364,18 @@ class OIDC4VC {
   @visibleForTesting
   Future<String> getIdToken(VerifierTokenParameters tokenParameters) async {
     /// build id token
-    final issAndSub = tokenParameters.useJWKThumbPrint
-        ? tokenParameters.thumbprint
-        : tokenParameters.did;
+
+    var issAndSub = tokenParameters.thumbprint;
+
+    switch (tokenParameters.clientType) {
+      case ClientType.jwkThumbprint:
+        issAndSub = tokenParameters.thumbprint;
+      case ClientType.did:
+        issAndSub = tokenParameters.did;
+      case ClientType.confidential:
+        issAndSub = tokenParameters.clientId;
+    }
+
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     final payload = {
       'iat': iat,
@@ -1378,7 +1389,7 @@ class OIDC4VC {
       payload['nonce'] = tokenParameters.nonce!;
     }
 
-    if (tokenParameters.useJWKThumbPrint) {
+    if (tokenParameters.clientType == ClientType.jwkThumbprint) {
       payload['sub_jwk'] = tokenParameters.publicJWK;
     }
 

@@ -217,16 +217,14 @@ class EnterpriseInitializationCubit
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-    final enableJWKThumbprint =
-        customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
-
     final tokenParameters = TokenParameters(
       privateKey: privateKey,
       did: '',
       kid: null,
       mediaType: MediaType.walletAttestation,
-      useJWKThumbPrint: enableJWKThumbprint,
+      clientType: customOidc4vcProfile.clientType,
       proofHeaderType: customOidc4vcProfile.proofHeader,
+      clientId: customOidc4vcProfile.clientId ?? '',
     );
 
     final thumbPrint = tokenParameters.thumbprint;

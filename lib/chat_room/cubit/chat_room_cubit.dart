@@ -273,8 +273,10 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
         privateKey: jsonDecode(p256KeyForWallet) as Map<String, dynamic>,
         did: '', // just added as it is required field
         mediaType: MediaType.basic, // just added as it is required field
-        useJWKThumbPrint: true, // just added as it is required field
+        clientType:
+            ClientType.jwkThumbprint, // just added as it is required field
         proofHeaderType: customOidc4vcProfile.proofHeader,
+        clientId: customOidc4vcProfile.clientId ?? '',
       );
 
       final helpCenterOptions =
