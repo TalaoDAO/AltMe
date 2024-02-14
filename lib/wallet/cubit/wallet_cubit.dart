@@ -30,7 +30,7 @@ class WalletCubit extends Cubit<WalletState> {
   final HomeCubit homeCubit;
   final KeyGenerator keyGenerator;
   final CredentialsCubit credentialsCubit;
-  WalletConnectCubit walletConnectCubit;
+  final WalletConnectCubit walletConnectCubit;
 
   final log = getLogger('WalletCubit');
 

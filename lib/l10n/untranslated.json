@@ -940,7 +940,10 @@
     "walletProvider",
     "theLdpFormatIsNotSupportedByThisDIDMethod",
     "switchOffCryptoHolderBindingForThatDIDMethod",
-    "thisTypeProofCannotBeUsedWithThisVCFormat"
+    "thisTypeProofCannotBeUsedWithThisVCFormat",
+    "enterprise",
+    "oWFBaselineProfile",
+    "defaultProfile"
   ],
 
   "es": [
@@ -1884,7 +1887,10 @@
     "walletProvider",
     "theLdpFormatIsNotSupportedByThisDIDMethod",
     "switchOffCryptoHolderBindingForThatDIDMethod",
-    "thisTypeProofCannotBeUsedWithThisVCFormat"
+    "thisTypeProofCannotBeUsedWithThisVCFormat",
+    "enterprise",
+    "oWFBaselineProfile",
+    "defaultProfile"
   ],
 
   "fr": [
@@ -2153,7 +2159,10 @@
     "walletProvider",
     "theLdpFormatIsNotSupportedByThisDIDMethod",
     "switchOffCryptoHolderBindingForThatDIDMethod",
-    "thisTypeProofCannotBeUsedWithThisVCFormat"
+    "thisTypeProofCannotBeUsedWithThisVCFormat",
+    "enterprise",
+    "oWFBaselineProfile",
+    "defaultProfile"
   ],
 
   "it": [
@@ -3097,6 +3106,9 @@
     "walletProvider",
     "theLdpFormatIsNotSupportedByThisDIDMethod",
     "switchOffCryptoHolderBindingForThatDIDMethod",
-    "thisTypeProofCannotBeUsedWithThisVCFormat"
+    "thisTypeProofCannotBeUsedWithThisVCFormat",
+    "enterprise",
+    "oWFBaselineProfile",
+    "defaultProfile"
   ]
 }
