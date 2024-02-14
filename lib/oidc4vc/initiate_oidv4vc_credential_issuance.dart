@@ -131,7 +131,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           codeForAuthorisedFlow: codeForAuthorisedFlow,
           codeVerifier: codeVerifier,
           authorization: authorization,
-          clientId: clientId,
+          clientId: clientId ?? '',
           clientSecret: clientSecret,
         );
       }

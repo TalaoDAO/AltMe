@@ -874,8 +874,8 @@
     "jwkDecentralizedIDP256",
     "defaultDid",
     "selectOneOfTheDid",
-    "subjectSyntaxType",
-    "enableToUseTheJWKThumprintOfTheKey",
+    "clientTypeTitle",
+    "clientTypeSubtitle",
     "cryptographicHolderBinding",
     "cryptographicHolderBindingSubtitle",
     "scopeParameters",
@@ -940,7 +940,10 @@
     "walletProvider",
     "theLdpFormatIsNotSupportedByThisDIDMethod",
     "switchOffCryptoHolderBindingForThatDIDMethod",
-    "thisTypeProofCannotBeUsedWithThisVCFormat"
+    "thisTypeProofCannotBeUsedWithThisVCFormat",
+    "enterprise",
+    "oWFBaselineProfile",
+    "defaultProfile"
   ],
 
   "es": [
@@ -1818,8 +1821,8 @@
     "jwkDecentralizedIDP256",
     "defaultDid",
     "selectOneOfTheDid",
-    "subjectSyntaxType",
-    "enableToUseTheJWKThumprintOfTheKey",
+    "clientTypeTitle",
+    "clientTypeSubtitle",
     "cryptographicHolderBinding",
     "cryptographicHolderBindingSubtitle",
     "scopeParameters",
@@ -1884,7 +1887,10 @@
     "walletProvider",
     "theLdpFormatIsNotSupportedByThisDIDMethod",
     "switchOffCryptoHolderBindingForThatDIDMethod",
-    "thisTypeProofCannotBeUsedWithThisVCFormat"
+    "thisTypeProofCannotBeUsedWithThisVCFormat",
+    "enterprise",
+    "oWFBaselineProfile",
+    "defaultProfile"
   ],
 
   "fr": [
@@ -2087,8 +2093,8 @@
     "jwkDecentralizedIDP256",
     "defaultDid",
     "selectOneOfTheDid",
-    "subjectSyntaxType",
-    "enableToUseTheJWKThumprintOfTheKey",
+    "clientTypeTitle",
+    "clientTypeSubtitle",
     "cryptographicHolderBinding",
     "cryptographicHolderBindingSubtitle",
     "scopeParameters",
@@ -2153,7 +2159,10 @@
     "walletProvider",
     "theLdpFormatIsNotSupportedByThisDIDMethod",
     "switchOffCryptoHolderBindingForThatDIDMethod",
-    "thisTypeProofCannotBeUsedWithThisVCFormat"
+    "thisTypeProofCannotBeUsedWithThisVCFormat",
+    "enterprise",
+    "oWFBaselineProfile",
+    "defaultProfile"
   ],
 
   "it": [
@@ -3031,8 +3040,8 @@
     "jwkDecentralizedIDP256",
     "defaultDid",
     "selectOneOfTheDid",
-    "subjectSyntaxType",
-    "enableToUseTheJWKThumprintOfTheKey",
+    "clientTypeTitle",
+    "clientTypeSubtitle",
     "cryptographicHolderBinding",
     "cryptographicHolderBindingSubtitle",
     "scopeParameters",
@@ -3097,6 +3106,9 @@
     "walletProvider",
     "theLdpFormatIsNotSupportedByThisDIDMethod",
     "switchOffCryptoHolderBindingForThatDIDMethod",
-    "thisTypeProofCannotBeUsedWithThisVCFormat"
+    "thisTypeProofCannotBeUsedWithThisVCFormat",
+    "enterprise",
+    "oWFBaselineProfile",
+    "defaultProfile"
   ]
 }

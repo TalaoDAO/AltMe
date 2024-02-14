@@ -51,9 +51,7 @@ class ClaimsData extends StatelessWidget {
       }
     }
 
-    final locale = context.read<LangCubit>().state;
-
-    final localeString = '${locale.languageCode}-${locale.countryCode}';
+    final languageCode = context.read<LangCubit>().state.languageCode;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +81,7 @@ class ClaimsData extends StatelessWidget {
           final display = displays.where((element) {
             if (element is Map<String, dynamic> &&
                 element.containsKey('locale')) {
-              if (element['locale'] == localeString) {
+              if (element['locale'].toString().contains(languageCode)) {
                 return true;
               } else if (element['locale'] == 'en-US') {
                 return true;

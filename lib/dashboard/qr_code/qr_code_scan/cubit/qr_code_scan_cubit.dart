@@ -991,7 +991,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     final isSecurityEnabled = customOidc4vcProfile.securityLevel;
     final enableJWKThumbprint =
-        customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
+        customOidc4vcProfile.clientType == ClientType.jwkThumbprint;
 
     if (isSecurityEnabled && enableJWKThumbprint) {
       final Map<String, dynamic> payload =
@@ -1065,9 +1065,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final customOidc4vcProfile = profileCubit.state.model.profileSetting
           .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-      final enableJWKThumbprint = customOidc4vcProfile.subjectSyntaxeType ==
-          SubjectSyntax.jwkThumbprint;
-
       final Response<dynamic> response = await oidc4vc.siopv2Flow(
         clientId: clientId,
         privateKey: privateKey,
@@ -1076,7 +1073,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         redirectUri: redirectUri!,
         nonce: nonce,
         stateValue: stateValue,
-        useJWKThumbPrint: enableJWKThumbprint,
+        clientType: customOidc4vcProfile.clientType,
         proofHeaderType: customOidc4vcProfile.proofHeader,
       );
 
@@ -1159,19 +1156,23 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             secureStorage: secureStorageProvider,
             didKeyType: didKeyType,
           );
-          switch (customOidc4vcProfile.subjectSyntaxeType) {
-            case SubjectSyntax.jwkThumbprint:
+          switch (customOidc4vcProfile.clientType) {
+            case ClientType.jwkThumbprint:
               final tokenParameters = TokenParameters(
                 privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
                 did: '', // just added as it is required field
                 mediaType:
                     MediaType.basic, // just added as it is required field
-                useJWKThumbPrint: true, // just added as it is required field
+                clientType: ClientType
+                    .jwkThumbprint, // just added as it is required field
                 proofHeaderType: customOidc4vcProfile.proofHeader,
+                clientId: '',
               );
               clientId = tokenParameters.thumbprint;
-            case SubjectSyntax.did:
+            case ClientType.did:
               clientId = did;
+            case ClientType.confidential:
+              clientId = customOidc4vcProfile.clientId;
           }
       }
 
@@ -1185,7 +1186,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           codeForAuthorisedFlow: null,
           codeVerifier: null,
           authorization: authorization,
-          clientId: clientId,
+          clientId: clientId ?? '',
           clientSecret: clientSecret,
         );
       } else {
@@ -1221,7 +1222,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? codeForAuthorisedFlow,
     required String? codeVerifier,
     required String? authorization,
-    required String? clientId,
+    required String clientId,
     required String? clientSecret,
   }) async {
     try {
@@ -1323,7 +1324,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         codeForAuthorisedFlow: codeForAuthorisedFlow,
         codeVerifier: codeVerifier,
         authorization: authorization,
-        clientId: clientId,
+        clientId: clientId ?? '',
         clientSecret: clientSecret,
       );
     } catch (e) {

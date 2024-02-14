@@ -14,7 +14,13 @@ class LangCubit extends Cubit<Locale> {
     final langauageCode = locale!.languageCode;
 
     if (AppLocalizations.supportedLocales.contains(Locale(langauageCode))) {
-      emit(locale);
+      setLocale(locale);
+    } else {
+      setLocale(const Locale('en', 'US'));
     }
+  }
+
+  void setLocale(Locale locale) {
+    emit(locale);
   }
 }

@@ -195,12 +195,12 @@ class DiscoverCardsOptions extends Equatable {
 
   factory DiscoverCardsOptions.initial() => const DiscoverCardsOptions(
         displayDefi: true,
-        displayHumanity: false,
-        displayHumanityJwt: false,
+        displayHumanity: true,
+        displayHumanityJwt: true,
         displayOver13: false,
-        displayOver15: true,
+        displayOver15: false,
         displayOver18: true,
-        displayOver18Jwt: true,
+        displayOver18Jwt: false,
         displayOver21: false,
         displayOver50: false,
         displayChainborn: false,
@@ -212,6 +212,30 @@ class DiscoverCardsOptions extends Equatable {
         displayEmailPassJwt: true,
         displayPhonePass: true,
         displayPhonePassJwt: true,
+        displayAgeRange: false,
+        displayGender: false,
+        displayExternalIssuer: [],
+      );
+
+  factory DiscoverCardsOptions.none() => const DiscoverCardsOptions(
+        displayDefi: false,
+        displayHumanity: false,
+        displayHumanityJwt: false,
+        displayOver13: false,
+        displayOver15: false,
+        displayOver18: false,
+        displayOver18Jwt: false,
+        displayOver21: false,
+        displayOver50: false,
+        displayChainborn: false,
+        displayTezotopia: false,
+        displayVerifiableId: false,
+        displayVerifiableIdJwt: false,
+        displayOver65: false,
+        displayEmailPass: false,
+        displayEmailPassJwt: false,
+        displayPhonePass: false,
+        displayPhonePassJwt: false,
         displayAgeRange: false,
         displayGender: false,
         displayExternalIssuer: [],
@@ -517,7 +541,7 @@ class CustomOidc4VcProfile extends Equatable {
     required this.scope,
     required this.securityLevel,
     required this.siopv2Draft,
-    required this.subjectSyntaxeType,
+    required this.clientType,
     required this.clientId,
     required this.clientSecret,
     this.vcFormatType = VCFormatType.ldpVc,
@@ -535,7 +559,7 @@ class CustomOidc4VcProfile extends Equatable {
         proofHeader: ProofHeaderType.kid,
         securityLevel: false,
         siopv2Draft: SIOPV2DraftType.draft12,
-        subjectSyntaxeType: SubjectSyntax.did,
+        clientType: ClientType.did,
         clientId: Parameters.clientId,
         clientSecret: randomString(12),
         vcFormatType: VCFormatType.ldpVc,
@@ -558,7 +582,8 @@ class CustomOidc4VcProfile extends Equatable {
   final ProofHeaderType proofHeader;
   final bool securityLevel;
   final SIOPV2DraftType siopv2Draft;
-  final SubjectSyntax subjectSyntaxeType;
+  @JsonKey(name: 'subjectSyntaxeType')
+  final ClientType clientType;
   @JsonKey(name: 'vcFormat')
   final VCFormatType vcFormatType;
 
@@ -577,7 +602,7 @@ class CustomOidc4VcProfile extends Equatable {
     ProofHeaderType? proofHeader,
     bool? securityLevel,
     SIOPV2DraftType? siopv2Draft,
-    SubjectSyntax? subjectSyntaxeType,
+    ClientType? clientType,
     VCFormatType? vcFormatType,
   }) =>
       CustomOidc4VcProfile(
@@ -592,7 +617,7 @@ class CustomOidc4VcProfile extends Equatable {
         proofHeader: proofHeader ?? this.proofHeader,
         securityLevel: securityLevel ?? this.securityLevel,
         siopv2Draft: siopv2Draft ?? this.siopv2Draft,
-        subjectSyntaxeType: subjectSyntaxeType ?? this.subjectSyntaxeType,
+        clientType: clientType ?? this.clientType,
         clientId: clientId ?? this.clientId,
         clientSecret: clientSecret ?? this.clientSecret,
         vcFormatType: vcFormatType ?? this.vcFormatType,
@@ -612,7 +637,7 @@ class CustomOidc4VcProfile extends Equatable {
         proofHeader,
         securityLevel,
         siopv2Draft,
-        subjectSyntaxeType,
+        clientType,
         vcFormatType,
       ];
 }

@@ -324,7 +324,7 @@ class OIDC4VC {
       ],
       'subject_syntax_types_discriminations': [
         'did:key:jwk_jcs-pub',
-        'did:ebsi:v1'
+        'did:ebsi:v1',
       ],
       'subject_trust_frameworks_supported': ['ebsi'],
       'id_token_types_supported': ['subject_signed_id_token'],
@@ -341,15 +341,16 @@ class OIDC4VC {
     required String issuer,
     required dynamic credential,
     required String did,
-    required String? clientId,
+    required String clientId,
     required String? clientSecret,
     required String kid,
     required int indexValue,
     required String privateKey,
     required bool cryptoHolderBinding,
-    required bool useJWKThumbPrint,
+    required ClientType clientType,
     required ProofHeaderType proofHeaderType,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required ClientAuthentication clientAuthentication,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -400,8 +401,9 @@ class OIDC4VC {
       kid: kid,
       issuer: issuer,
       mediaType: MediaType.proofOfOwnership,
-      useJWKThumbPrint: useJWKThumbPrint,
+      clientType: clientType,
       proofHeaderType: proofHeaderType,
+      clientId: clientId,
     );
 
     String? deferredCredentialEndpoint;
@@ -450,6 +452,7 @@ class OIDC4VC {
           cryptoHolderBinding: cryptoHolderBinding,
           oidc4vciDraftType: oidc4vciDraftType,
           credentialDefinition: credentialDefinition,
+          clientAuthentication: clientAuthentication,
           vct: vct,
         );
 
@@ -466,6 +469,7 @@ class OIDC4VC {
         cryptoHolderBinding: cryptoHolderBinding,
         oidc4vciDraftType: oidc4vciDraftType,
         credentialDefinition: credentialDefinition,
+        clientAuthentication: clientAuthentication,
         vct: vct,
         credentialIdentifier: null,
       );
@@ -489,6 +493,7 @@ class OIDC4VC {
     required String format,
     required bool cryptoHolderBinding,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required ClientAuthentication clientAuthentication,
     required String? credentialIdentifier,
     required Map<String, dynamic>? credentialDefinition,
     required String? vct,
@@ -504,6 +509,7 @@ class OIDC4VC {
       cryptoHolderBinding: cryptoHolderBinding,
       oidc4vciDraftType: oidc4vciDraftType,
       credentialDefinition: credentialDefinition,
+      clientAuthentication: clientAuthentication,
       vct: vct,
     );
 
@@ -758,6 +764,7 @@ class OIDC4VC {
     required String format,
     required bool cryptoHolderBinding,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required ClientAuthentication clientAuthentication,
     required String? credentialIdentifier,
     required String? cnonce,
     required String? vct,
@@ -766,7 +773,12 @@ class OIDC4VC {
     final credentialData = <String, dynamic>{};
 
     if (cryptoHolderBinding) {
-      final vcJwt = await getIssuerJwt(issuerTokenParameters, cnonce);
+      final vcJwt = await getIssuerJwt(
+        tokenParameters: issuerTokenParameters,
+        clientAuthentication: clientAuthentication,
+        oidc4vciDraftType: oidc4vciDraftType,
+        cnonce: cnonce,
+      );
       credentialData['proof'] = {
         'proof_type': 'jwt',
         'jwt': vcJwt,
@@ -1030,13 +1042,26 @@ class OIDC4VC {
   }
 
   @visibleForTesting
-  Future<String> getIssuerJwt(
-    IssuerTokenParameters tokenParameters,
+  Future<String> getIssuerJwt({
+    required IssuerTokenParameters tokenParameters,
+    required ClientAuthentication clientAuthentication,
+    required OIDC4VCIDraftType oidc4vciDraftType,
     String? cnonce,
-  ) async {
+  }) async {
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+
+    var iss = tokenParameters.did;
+
+    if (clientAuthentication == ClientAuthentication.clientSecretPost ||
+        clientAuthentication == ClientAuthentication.clientSecretBasic) {
+      if (oidc4vciDraftType == OIDC4VCIDraftType.draft11 ||
+          oidc4vciDraftType == OIDC4VCIDraftType.draft13) {
+        iss = tokenParameters.clientId;
+      }
+    }
+
     final payload = {
-      'iss': tokenParameters.did,
+      'iss': iss,
       'iat': iat,
       'aud': tokenParameters.issuer,
     };
@@ -1153,8 +1178,9 @@ class OIDC4VC {
         credentials: credentialsToBePresented,
         nonce: nonce,
         mediaType: MediaType.basic,
-        useJWKThumbPrint: false,
+        clientType: ClientType.did,
         proofHeaderType: proofHeaderType,
+        clientId: clientId,
       );
 
       final vpToken = await getVpToken(tokenParameters);
@@ -1171,7 +1197,7 @@ class OIDC4VC {
     required String did,
     required String kid,
     required String nonce,
-    required bool useJWKThumbPrint,
+    required ClientType clientType,
     required String privateKey,
     required ProofHeaderType proofHeaderType,
   }) async {
@@ -1185,8 +1211,9 @@ class OIDC4VC {
         credentials: credentialsToBePresented,
         nonce: nonce,
         mediaType: MediaType.basic,
-        useJWKThumbPrint: useJWKThumbPrint,
+        clientType: clientType,
         proofHeaderType: proofHeaderType,
+        clientId: clientId,
       );
 
       final verifierIdToken = await getIdToken(tokenParameters);
@@ -1205,7 +1232,7 @@ class OIDC4VC {
     required String? nonce,
     required String privateKey,
     required String? stateValue,
-    required bool useJWKThumbPrint,
+    required ClientType clientType,
     required ProofHeaderType proofHeaderType,
   }) async {
     try {
@@ -1219,8 +1246,9 @@ class OIDC4VC {
         credentials: [],
         nonce: nonce,
         mediaType: MediaType.basic,
-        useJWKThumbPrint: useJWKThumbPrint,
+        clientType: clientType,
         proofHeaderType: proofHeaderType,
+        clientId: clientId,
       );
 
       // structures
@@ -1313,12 +1341,11 @@ class OIDC4VC {
 
     switch (tokenParameters.proofHeaderType) {
       case ProofHeaderType.kid:
-        if (!tokenParameters.useJWKThumbPrint) {
-          vpBuilder.setProtectedHeader(
-            'kid',
-            tokenParameters.kid ?? tokenParameters.thumbprint,
-          );
-        }
+        vpBuilder.setProtectedHeader(
+          'kid',
+          tokenParameters.kid ?? tokenParameters.thumbprint,
+        );
+
       case ProofHeaderType.jwk:
         vpBuilder.setProtectedHeader(
           'jwk',
@@ -1337,9 +1364,18 @@ class OIDC4VC {
   @visibleForTesting
   Future<String> getIdToken(VerifierTokenParameters tokenParameters) async {
     /// build id token
-    final issAndSub = tokenParameters.useJWKThumbPrint
-        ? tokenParameters.thumbprint
-        : tokenParameters.did;
+
+    var issAndSub = tokenParameters.thumbprint;
+
+    switch (tokenParameters.clientType) {
+      case ClientType.jwkThumbprint:
+        issAndSub = tokenParameters.thumbprint;
+      case ClientType.did:
+        issAndSub = tokenParameters.did;
+      case ClientType.confidential:
+        issAndSub = tokenParameters.clientId;
+    }
+
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     final payload = {
       'iat': iat,
@@ -1353,7 +1389,7 @@ class OIDC4VC {
       payload['nonce'] = tokenParameters.nonce!;
     }
 
-    if (tokenParameters.useJWKThumbPrint) {
+    if (tokenParameters.clientType == ClientType.jwkThumbprint) {
       payload['sub_jwk'] = tokenParameters.publicJWK;
     }
 

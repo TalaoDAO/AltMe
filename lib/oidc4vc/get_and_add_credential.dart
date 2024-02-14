@@ -29,7 +29,7 @@ Future<void> getAndAddCredential({
   required String? authorization,
   required OIDC4VCIDraftType oidc4vciDraftType,
   required DidKeyType didKeyType,
-  required String? clientId,
+  required String clientId,
   required String? clientSecret,
   required JWTDecode jwtDecode,
 }) async {
@@ -60,9 +60,6 @@ Future<void> getAndAddCredential({
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-    final enableJWKThumbprint =
-        customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
-
     final index = getIndexValue(isEBSIV3: isEBSIV3, didKeyType: didKeyType);
 
     final (
@@ -86,8 +83,9 @@ Future<void> getAndAddCredential({
       cryptoHolderBinding: cryptoHolderBinding,
       authorization: authorization,
       oidc4vciDraftType: oidc4vciDraftType,
-      useJWKThumbPrint: enableJWKThumbprint,
+      clientType: customOidc4vcProfile.clientType,
       proofHeaderType: customOidc4vcProfile.proofHeader,
+      clientAuthentication: customOidc4vcProfile.clientAuthentication,
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {

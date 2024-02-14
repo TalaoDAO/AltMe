@@ -968,8 +968,8 @@
   "jwkDecentralizedIDP256": "JWK Decentralized ID P-256",
   "defaultDid": "Default DID",
   "selectOneOfTheDid": "Select one of the DIDs",
-  "subjectSyntaxType": "Subject Syntax Type",
-  "enableToUseTheJWKThumprintOfTheKey": "Default: DID\nEnable to use the JWK thumprint of the key",
+  "clientTypeTitle": "OIDC4VCI Client Type",
+  "clientTypeSubtitle": "Default: DID\nSwitch to change the client type",
   "cryptographicHolderBinding": "Cryptographic Holder Binding",
   "cryptographicHolderBindingSubtitle": "Default : On\nDisable cryptographic binding for claim based binding credentials.",
   "scopeParameters": "Scope Parameters",
@@ -1035,5 +1035,8 @@
   "walletProvider": "Wallet Provider",
   "theLdpFormatIsNotSupportedByThisDIDMethod": "The ldp_format is not supported by this DID method.",
   "switchOffCryptoHolderBindingForThatDIDMethod": "Switch off Crypto Holder Binding for that DID Method.",
-  "thisTypeProofCannotBeUsedWithThisVCFormat": "This type proof cannot be used with this VC Format."
+  "thisTypeProofCannotBeUsedWithThisVCFormat": "This type proof cannot be used with this VC Format.",
+  "enterprise": "Enterprise",
+  "oWFBaselineProfile": "OWF Baseline Profile",
+  "defaultProfile":"Default"
 }

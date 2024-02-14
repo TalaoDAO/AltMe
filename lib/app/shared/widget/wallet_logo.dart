@@ -26,6 +26,7 @@ class WalletLogo extends StatelessWidget {
     switch (profileModel.profileType) {
       case ProfileType.custom:
       case ProfileType.dutch:
+      case ProfileType.defaultOne:
         image = flavorCubit.state == FlavorMode.development
             ? ImageStrings.appLogoDev
             : flavorCubit.state == FlavorMode.staging
