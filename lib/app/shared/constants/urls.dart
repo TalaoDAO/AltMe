@@ -55,6 +55,8 @@ class Urls {
       'https://issuer.talao.co/passbase/endpoint/verifiableid/';
   static const String identityCardUrlJWTVCJSON =
       'https://talao.co/id360/oidc4vc/';
+  static const String identityCardUrlVCSDJWT =
+      'https://talao.co/id360/oidc4vc?format=vcsd-jwt&type=identitycredential';
 
   static const String over18JWTVCJSON =
       'https://talao.co/id360/oidc4vc?type=over18';

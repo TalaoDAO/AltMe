@@ -645,6 +645,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return [VCFormatType.ldpVc];
 
       case CredentialSubjectType.verifiableIdCard:
+        return [
+          VCFormatType.ldpVc,
+          VCFormatType.jwtVcJson,
+          VCFormatType.vcSdJWT,
+        ];
+
       case CredentialSubjectType.over18:
       case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.emailPass:
@@ -839,8 +845,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
             link = Urls.identityCardUrlJWTVCJSON;
           case VCFormatType.jwtVc:
           case VCFormatType.jwtVcJsonLd:
-          case VCFormatType.vcSdJWT:
             link = '';
+          case VCFormatType.vcSdJWT:
+            link = Urls.identityCardUrlVCSDJWT;
         }
 
         whyGetThisCard =
