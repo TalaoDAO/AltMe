@@ -260,9 +260,7 @@ class OIDC4VC {
 
           data = {
             'type': 'openid_credential',
-            'locations': [issuer],
-            'format': credentialSupported['format'],
-            //'types': credential['types'],
+            'credential_configuration_id': credential,
           };
 
           final scope = credentialSupported['scope'];
