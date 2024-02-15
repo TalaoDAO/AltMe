@@ -203,38 +203,78 @@ class OIDC4VC {
     for (final credential in selectedCredentials) {
       late Map<String, dynamic> data;
       if (credential is String) {
-        //
-        final credentialsSupported = openIdConfiguration.credentialsSupported;
+        if (openIdConfiguration.credentialsSupported != null) {
+          final credentialsSupported = openIdConfiguration.credentialsSupported;
 
-        if (credentialsSupported == null) {
-          throw Exception();
-        }
+          dynamic credentailData;
 
-        dynamic credentailData;
-
-        for (final dynamic cred in credentialsSupported) {
-          if (cred is Map<String, dynamic> &&
-              ((cred.containsKey('scope') &&
-                      cred['scope'].toString() == credential) ||
-                  (cred.containsKey('id') &&
-                      cred['id'].toString() == credential))) {
-            credentailData = cred;
-            break;
+          for (final dynamic cred in credentialsSupported!) {
+            if (cred is Map<String, dynamic> &&
+                ((cred.containsKey('scope') &&
+                        cred['scope'].toString() == credential) ||
+                    (cred.containsKey('id') &&
+                        cred['id'].toString() == credential))) {
+              credentailData = cred;
+              break;
+            }
           }
+
+          if (credentailData == null) {
+            throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+          }
+
+          data = {
+            'type': 'openid_credential',
+            'locations': [issuer],
+            'format': credentailData['format'],
+            'types': credentailData['types'],
+          };
+
+          credentials.add((credentailData['types'] as List<dynamic>).last);
+        } else if (openIdConfiguration.credentialConfigurationsSupported !=
+            null) {
+          // draft 13 case
+          final credentialsSupported =
+              openIdConfiguration.credentialConfigurationsSupported;
+
+          if (credentialsSupported is! Map<String, dynamic>) {
+            throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+          }
+
+          final credentialSupportedMapEntry =
+              credentialsSupported.entries.where(
+            (entry) {
+              final dynamic ele = entry.key;
+
+              if (ele == credential) return true;
+
+              return false;
+            },
+          ).firstOrNull;
+
+          if (credentialSupportedMapEntry == null) {
+            throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+          }
+
+          final credentialSupported = credentialSupportedMapEntry.value;
+
+          data = {
+            'type': 'openid_credential',
+            'locations': [issuer],
+            'format': credentialSupported['format'],
+            //'types': credential['types'],
+          };
+
+          final scope = credentialSupported['scope'];
+
+          if (scope == null) {
+            throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+          }
+
+          credentials.add(scope);
+        } else {
+          throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
         }
-
-        if (credentailData == null) {
-          throw Exception();
-        }
-
-        data = {
-          'type': 'openid_credential',
-          'locations': [issuer],
-          'format': credentailData['format'],
-          'types': credentailData['types'],
-        };
-
-        credentials.add((credentailData['types'] as List<dynamic>).last);
       } else if (credential is Map<String, dynamic>) {
         data = {
           'type': 'openid_credential',
