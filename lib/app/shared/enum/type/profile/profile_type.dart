@@ -1,12 +1,12 @@
 import 'package:altme/l10n/l10n.dart';
 
 enum ProfileType {
-  custom,
+  defaultOne,
   ebsiV3,
   dutch,
   enterprise,
   owfBaselineProfile,
-  defaultOne
+  custom,
 }
 
 extension ProfileTypeX on ProfileType {
