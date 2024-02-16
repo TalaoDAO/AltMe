@@ -480,12 +480,14 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> setProfile(ProfileType profileType) async {
-    if (profileType != ProfileType.custom) {
+    final previousProfileType = state.model.profileType;
+    if (previousProfileType == ProfileType.custom) {
       await secureStorageProvider.set(
         SecureStorageKeys.customProfileSettings,
         jsonEncode(state.model.profileSetting.toJson()),
       );
     }
+
     switch (profileType) {
       case ProfileType.ebsiV3:
         await update(
