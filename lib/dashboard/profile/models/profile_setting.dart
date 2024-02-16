@@ -544,15 +544,15 @@ class CustomOidc4VcProfile extends Equatable {
     required this.clientType,
     required this.clientId,
     required this.clientSecret,
-    this.vcFormatType = VCFormatType.ldpVc,
+    this.vcFormatType = VCFormatType.jwtVcJson,
     this.proofHeader = ProofHeaderType.kid,
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
         clientAuthentication: ClientAuthentication.clientId,
-        credentialManifestSupport: true,
+        credentialManifestSupport: false,
         cryptoHolderBinding: true,
-        defaultDid: DidKeyType.edDSA,
+        defaultDid: DidKeyType.p256,
         oidc4vciDraft: OIDC4VCIDraftType.draft11,
         oidc4vpDraft: OIDC4VPDraftType.draft18,
         scope: false,
@@ -562,7 +562,7 @@ class CustomOidc4VcProfile extends Equatable {
         clientType: ClientType.did,
         clientId: Parameters.clientId,
         clientSecret: randomString(12),
-        vcFormatType: VCFormatType.ldpVc,
+        vcFormatType: VCFormatType.jwtVcJson,
       );
 
   factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) =>
