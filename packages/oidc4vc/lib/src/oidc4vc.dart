@@ -721,8 +721,12 @@ class OIDC4VC {
   }) async {
     var authorizationEndpoint = '$issuer/authorize';
 
-    final authorizationServer = openIdConfiguration.authorizationServer;
-    if (authorizationServer != null) {
+    if (openIdConfiguration.authorizationEndpoint != null) {
+      authorizationEndpoint = openIdConfiguration.authorizationEndpoint!;
+    } else {
+      final authorizationServer =
+          openIdConfiguration.authorizationServer ?? issuer;
+
       final authorizationServerConfiguration = await getOpenIdConfig(
         baseUrl: authorizationServer,
         isAuthorizationServer: true,
@@ -732,10 +736,6 @@ class OIDC4VC {
       if (authorizationServerConfiguration.authorizationEndpoint != null) {
         authorizationEndpoint =
             authorizationServerConfiguration.authorizationEndpoint!;
-      }
-    } else {
-      if (openIdConfiguration.authorizationEndpoint != null) {
-        authorizationEndpoint = openIdConfiguration.authorizationEndpoint!;
       }
     }
     return authorizationEndpoint;

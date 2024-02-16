@@ -32,9 +32,14 @@ class ClaimsData extends StatelessWidget {
     if (encryptedDatas != null) {
       encryptedDatas.removeAt(0);
 
-      for (final element in encryptedDatas) {
+      for (var element in encryptedDatas) {
         try {
+          while (element.length % 4 != 0) {
+            element += '=';
+          }
+
           final decryptedData = utf8.decode(base64Decode(element));
+
           if (decryptedData.isNotEmpty) {
             final lisString = decryptedData
                 .substring(1, decryptedData.length - 1)
