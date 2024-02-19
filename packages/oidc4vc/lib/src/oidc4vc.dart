@@ -140,6 +140,7 @@ class OIDC4VC {
     required bool scope,
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required VCFormatType vcFormatType,
   }) async {
     try {
       final openIdConfiguration = await getOpenIdConfig(
@@ -155,22 +156,22 @@ class OIDC4VC {
       );
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
-        selectedCredentials: selectedCredentials,
-        openIdConfiguration: openIdConfiguration,
-        clientId: clientId,
-        clientSecret: clientSecret,
-        issuer: issuer,
-        redirectUri: redirectUri,
-        issuerState: issuerState,
-        nonce: nonce,
-        pkcePair: pkcePair,
-        state: state,
-        authorizationEndPoint: authorizationEndPoint,
-        scope: scope,
-        clientAuthentication: clientAuthentication,
-        oidc4vciDraftType: oidc4vciDraftType,
-      );
-      
+          selectedCredentials: selectedCredentials,
+          openIdConfiguration: openIdConfiguration,
+          clientId: clientId,
+          clientSecret: clientSecret,
+          issuer: issuer,
+          redirectUri: redirectUri,
+          issuerState: issuerState,
+          nonce: nonce,
+          pkcePair: pkcePair,
+          state: state,
+          authorizationEndPoint: authorizationEndPoint,
+          scope: scope,
+          clientAuthentication: clientAuthentication,
+          oidc4vciDraftType: oidc4vciDraftType,
+          vcFormatType: vcFormatType);
+
       final url = Uri.parse(authorizationEndpoint);
       final authorizationUri =
           Uri.https(url.authority, url.path, authorizationRequestParemeters);
@@ -196,6 +197,7 @@ class OIDC4VC {
     required bool scope,
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required VCFormatType vcFormatType,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -264,7 +266,8 @@ class OIDC4VC {
             'type': 'openid_credential',
             'credential_configuration_id': credential,
           };
-          if (oidc4vciDraftType == OIDC4VCIDraftType.draft13) {
+          if (oidc4vciDraftType == OIDC4VCIDraftType.draft13 &&
+              vcFormatType == VCFormatType.vcSdJWT) {
             data = {
               'type': 'openid_credential',
               'format': 'vc+sd-jwt',
