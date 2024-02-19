@@ -86,6 +86,7 @@ Future<void> getAndAddCredential({
       clientType: customOidc4vcProfile.clientType,
       proofHeaderType: customOidc4vcProfile.proofHeader,
       clientAuthentication: customOidc4vcProfile.clientAuthentication,
+      redirectUri: Parameters.oidc4vcUniversalLink,
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {

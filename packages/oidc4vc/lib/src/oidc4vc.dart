@@ -389,6 +389,7 @@ class OIDC4VC {
     required ProofHeaderType proofHeaderType,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required ClientAuthentication clientAuthentication,
+    required String redirectUri,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -416,6 +417,7 @@ class OIDC4VC {
         clientId: clientId,
         clientSecret: clientSecret,
         authorization: authorization,
+        redirectUri: redirectUri,
       );
 
       final response = await getToken(
@@ -603,6 +605,7 @@ class OIDC4VC {
   }
 
   Map<String, dynamic> buildTokenData({
+    required String redirectUri,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -623,6 +626,7 @@ class OIDC4VC {
         'code': code,
         'grant_type': 'authorization_code',
         'code_verifier': codeVerifier,
+      'redirect_uri': redirectUri,
       };
     } else {
       throw Exception();
@@ -1138,63 +1142,6 @@ class OIDC4VC {
     return tokenResponse.data;
   }
 
-  // Future<void> sendPresentation({
-  //   required String clientId,
-  //   required String redirectUrl,
-  //   required String did,
-  //   required String kid,
-  //   required List<String> credentialsToBePresented,
-  //   required String nonce,
-  //   required int indexValue,
-  //   required String? stateValue,
-  //   String? mnemonic,
-  //   String? privateKey,
-  // }) async {
-  //   try {
-  //     final private = await getPrivateKey(
-  //       mnemonic: mnemonic,
-  //       privateKey: privateKey,
-  //       indexValue: indexValue,
-  //     );
-
-  //     final tokenParameters = VerifierTokenParameters(
-  //       privateKey: private,
-  //       did: did,
-  //       kid: kid,
-  //       audience: clientId,
-  //       credentials: credentialsToBePresented,
-  //       nonce: nonce,
-  //     );
-
-  //     // structures
-  //     final verifierIdToken = await getIdToken(tokenParameters);
-
-  //     /// build vp token
-
-  //     final vpToken = await getVpToken(tokenParameters);
-
-  //     final responseHeaders = {
-  //       'Content-Type': 'application/x-www-form-urlencoded',
-  //     };
-
-  //     final responseData = <String, dynamic>{
-  //       'id_token': verifierIdToken,
-  //       'vp_token': vpToken,
-  //     };
-
-  //     if (stateValue != null) {
-  //       responseData['state'] = stateValue;
-  //     }
-
-  //     await client.post<dynamic>(
-  //       redirectUrl,
-  //       options: Options(headers: responseHeaders),
-  //       data: responseData,
-  //     );
-  //   } catch (e) {
-  //     throw Exception(e);
-  //   }
-  // }
 
   Future<String> extractVpToken({
     required String clientId,
