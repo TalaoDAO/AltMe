@@ -1138,7 +1138,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           clientId = customOidc4vcProfile.clientId;
           clientSecret = customOidc4vcProfile.clientSecret;
           authorization =
-              base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+              base64UrlEncode(utf8.encode('$clientId:$clientSecret'))
+                  .replaceAll('=', '');
         case ClientAuthentication.clientId:
           final didKeyType = customOidc4vcProfile.defaultDid;
 

@@ -152,19 +152,6 @@ class ProfileCubit extends Cubit<ProfileState> {
                 jsonDecode(customProfileSettingJsonString)
                     as Map<String, dynamic>;
 
-            if (customProfileSettingMap['selfSovereignIdentityOptions']
-                    ['customOidc4vcProfile']['client_id'] ==
-                null) {
-              customProfileSettingMap['selfSovereignIdentityOptions']
-                  ['customOidc4vcProfile']['client_id'] = Parameters.clientId;
-            }
-            if (customProfileSettingMap['selfSovereignIdentityOptions']
-                    ['customOidc4vcProfile']['client_secret'] ==
-                null) {
-              customProfileSettingMap['selfSovereignIdentityOptions']
-                  ['customOidc4vcProfile']['client_secret'] = randomString(12);
-            }
-
             profileSetting = ProfileSetting.fromJson(customProfileSettingMap);
           } else {
             profileSetting = ProfileSetting.initial();
@@ -546,14 +533,21 @@ class ProfileCubit extends Cubit<ProfileState> {
           ),
         );
       case ProfileType.custom:
-        final String customProfileSettingBackup =
+        final String? customProfileSettingBackup =
             await secureStorageProvider.get(
-                  SecureStorageKeys.customProfileSettings,
-                ) ??
-                jsonEncode(state.model.profileSetting);
-        final customProfileSetting = ProfileSetting.fromJson(
-          json.decode(customProfileSettingBackup) as Map<String, dynamic>,
+          SecureStorageKeys.customProfileSettings,
         );
+
+        late ProfileSetting customProfileSetting;
+
+        if (customProfileSettingBackup == null) {
+          customProfileSetting = ProfileSetting.initial();
+        } else {
+          final profileJson =
+              json.decode(customProfileSettingBackup) as Map<String, dynamic>;
+
+          customProfileSetting = ProfileSetting.fromJson(profileJson);
+        }
 
         await update(
           state.model.copyWith(

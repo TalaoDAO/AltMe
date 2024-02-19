@@ -568,14 +568,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         profileSetting.discoverCardsOptions?.displayExternalIssuer;
 
     for (final CredentialCategory category in getCredentialCategorySorted) {
-      final List<CredentialSubjectType> currentCredentialsSubjectTypeList =
-          credentials
-              .map(
-                (e) => e.credentialPreview.credentialSubjectModel
-                    .credentialSubjectType,
-              )
-              .toList();
-
       final allSubjectTypeForCategory = <CredentialSubjectType>[];
 
       /// tezVoucher is available only on Android platform
@@ -745,11 +737,30 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       final List<CredentialSubjectType> requiredDummySubjects = [];
 
       for (final subjectType in allSubjectTypeForCategory) {
-        if (currentCredentialsSubjectTypeList.contains(subjectType)) {
-          if (subjectType.weCanRemoveItIfCredentialExist) {
-            continue;
-          } else {
-            requiredDummySubjects.add(subjectType);
+        /// remove if format is not matching
+        if (!subjectType.getVCFormatType.contains(vcFormatType)) {
+          continue;
+        }
+
+        final credentialsOfSameType = credentials
+            .where(
+              (element) =>
+                  element.credentialPreview.credentialSubjectModel
+                      .credentialSubjectType ==
+                  subjectType,
+            )
+            .toList();
+
+        /// if repetition is not allowed
+        if (subjectType.weCanRemoveItIfCredentialExist &&
+            credentialsOfSameType.isNotEmpty) {
+          for (final credential in credentialsOfSameType) {
+            if (vcFormatType.value == credential.getFormat) {
+              /// remove if format matched
+              continue;
+            } else {
+              requiredDummySubjects.add(subjectType);
+            }
           }
         } else {
           requiredDummySubjects.add(subjectType);

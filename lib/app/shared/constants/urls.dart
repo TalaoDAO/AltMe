@@ -52,9 +52,11 @@ class Urls {
   static const String twitterCardUrl = 'https://issuer.talao.co/twitter/';
 
   static const String identityCardUrlLDPVC =
-      'https://issuer.talao.co/passbase/endpoint/verifiableid/';
+      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=verifiableid';
+
   static const String identityCardUrlJWTVCJSON =
-      'https://talao.co/id360/oidc4vc/';
+      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=verifiableid';
+
   static const String identityCardUrlVCSDJWT =
       'https://talao.co/id360/oidc4vc?format=vcsd-jwt&type=identitycredential';
 
