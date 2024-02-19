@@ -31,7 +31,7 @@ class CredentialModel extends Equatable {
     this.activities = const [],
     this.jwt,
     this.pendingInfo,
-    this.claims,
+    this.credentialSupported,
   });
 
   factory CredentialModel.fromJson(Map<String, dynamic> json) {
@@ -76,7 +76,7 @@ class CredentialModel extends Equatable {
       activities: activities,
       jwt: oldCredentialModel.jwt,
       format: oldCredentialModel.format,
-      claims: oldCredentialModel.claims,
+      credentialSupported: oldCredentialModel.credentialSupported,
     );
   }
 
@@ -100,7 +100,7 @@ class CredentialModel extends Equatable {
   final String? jwt;
   final PendingInfo? pendingInfo;
   final String? format;
-  final Map<String, dynamic>? claims;
+  final Map<String, dynamic>? credentialSupported;
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
@@ -138,7 +138,7 @@ class CredentialModel extends Equatable {
       jwt: jwt ?? this.jwt,
       pendingInfo: pendingInfo ?? this.pendingInfo,
       format: format ?? this.format,
-      claims: claims ?? this.claims,
+      credentialSupported: credentialSupported ?? this.credentialSupported,
     );
   }
 
@@ -264,6 +264,6 @@ class CredentialModel extends Equatable {
         jwt,
         pendingInfo,
         format,
-        claims,
+        credentialSupported,
       ];
 }

@@ -297,6 +297,32 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             ),
                           ],
 
+                          /// credentialSubjectData
+                          CredentialSubjectData(
+                            credentialModel: widget.credentialModel,
+                          ),
+
+                          /// selective disclouse data - _sd
+                          /// and normal data too
+                          if (widget.credentialModel.credentialSupported !=
+                                  null &&
+                              widget.credentialModel.credentialSupported!
+                                  .containsKey('claims')) ...[
+                            ClaimsData(
+                              credentialModel: widget.credentialModel,
+                            ),
+                          ],
+
+                          // /// normal claims data
+                          // if (widget.credentialModel.credentialSupported !=
+                          //         null &&
+                          //     widget.credentialModel.credentialSupported!
+                          //         .containsKey('claims')) ...[
+                          //   NormalClaimsData(
+                          //     credentialModel: widget.credentialModel,
+                          //   ),
+                          // ],
+
                           //// wallet attestation data
                           if (widget.credentialModel.credentialPreview
                                   .credentialSubjectModel
@@ -317,19 +343,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           /// deferred credential data
                           if (widget.credentialModel.pendingInfo != null) ...[
                             DeferredCredentialData(
-                              credentialModel: widget.credentialModel,
-                            ),
-                          ],
-
-                          /// claims data , from draft 13
-                          if (widget.credentialModel.claims != null) ...[
-                            ClaimsData(credentialModel: widget.credentialModel),
-                          ],
-
-                          /// selective disclouse data - _sd
-                          if (widget.credentialModel.jwt != null &&
-                              widget.credentialModel.jwt!.contains('~')) ...[
-                            SelectiveDisclosureData(
                               credentialModel: widget.credentialModel,
                             ),
                           ],

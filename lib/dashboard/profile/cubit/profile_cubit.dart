@@ -58,6 +58,11 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> load() async {
+    final ssiKey = await getSecureStorage.get(SecureStorageKeys.ssiKey);
+    if (ssiKey == null) {
+      return emit(state.copyWith(status: AppStatus.success));
+    }
+
     emit(state.loading());
 
     final log = getLogger('ProfileCubit - load');
@@ -117,7 +122,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       /// profileType
 
-      var profileType = ProfileType.custom;
+      var profileType = ProfileType.defaultOne;
 
       final profileTypeString =
           await secureStorageProvider.get(SecureStorageKeys.profileType);
@@ -134,95 +139,9 @@ class ProfileCubit extends Cubit<ProfileState> {
       /// profileSetting
       late ProfileSetting profileSetting;
 
-      /// migration - remove later
-      final customProfileBackupValue = await secureStorageProvider.get(
-        'customProfileBackup',
-      );
-
-      if (customProfileBackupValue != null) {
-        try {
-          final customProfileBackup =
-              json.decode(customProfileBackupValue) as Map<String, dynamic>;
-
-          // // didKeyType: customProfileBackup.didKeyType,
-
-          var didKeyType = DidKeyType.p256;
-
-          if (customProfileBackup.containsKey('didKeyType')) {
-            for (final value in DidKeyType.values) {
-              if (value.toString() ==
-                  customProfileBackup.containsKey('didKeyType').toString()) {
-                didKeyType = value;
-              }
-            }
-          }
-
-          profileSetting = ProfileSetting(
-            blockchainOptions: BlockchainOptions.initial(),
-            generalOptions: GeneralOptions.empty(),
-            helpCenterOptions: HelpCenterOptions.initial(),
-            selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
-              displayManageDecentralizedId: true,
-              customOidc4vcProfile: CustomOidc4VcProfile(
-                clientAuthentication: customProfileBackup
-                            .containsKey('useBasicClientAuthentication') &&
-                        customProfileBackup['useBasicClientAuthentication'] ==
-                            'true'
-                    ? ClientAuthentication.clientSecretBasic
-                    : ClientAuthentication.none,
-                credentialManifestSupport: customProfileBackup
-                        .containsKey('enableCredentialManifestSupport') &&
-                    customProfileBackup['enableCredentialManifestSupport'] ==
-                        'true',
-                cryptoHolderBinding: customProfileBackup
-                        .containsKey('enableCryptographicHolderBinding') &&
-                    customProfileBackup['enableCryptographicHolderBinding'] ==
-                        'true',
-                defaultDid: didKeyType,
-                oidc4vciDraft: OIDC4VCIDraftType.draft11,
-                oidc4vpDraft: OIDC4VPDraftType.draft18,
-                scope:
-                    customProfileBackup.containsKey('enableScopeParameter') &&
-                        customProfileBackup['enableScopeParameter'] == 'true',
-                securityLevel:
-                    customProfileBackup.containsKey('enableSecurity') &&
-                        customProfileBackup['enableSecurity'] == 'true',
-                siopv2Draft: SIOPV2DraftType.draft12,
-                subjectSyntaxeType:
-                    customProfileBackup.containsKey('enableJWKThumbprint') &&
-                            customProfileBackup['enableJWKThumbprint'] == 'true'
-                        ? SubjectSyntax.jwkThumbprint
-                        : SubjectSyntax.did,
-                userPinDigits:
-                    customProfileBackup.containsKey('enable4DigitPINCode') &&
-                            customProfileBackup['enable4DigitPINCode'] == 'true'
-                        ? UserPinDigits.four
-                        : UserPinDigits.six,
-                clientId: customProfileBackup.containsKey('clientId')
-                    ? customProfileBackup['clientId'].toString()
-                    : Parameters.clientId,
-                clientSecret: customProfileBackup.containsKey('clientSecret')
-                    ? customProfileBackup['clientSecret'].toString()
-                    : randomString(12),
-                proofHeader: ProofHeaderType.kid,
-              ),
-            ),
-            settingsMenu: SettingsMenu.initial(),
-            version: '',
-            walletSecurityOptions: WalletSecurityOptions.initial(),
-          );
-        } catch (e) {
-          await secureStorageProvider.delete('customProfileBackup');
-        }
-        await secureStorageProvider.delete('customProfileBackup');
-      }
-
-      /// migration - remove upto here
-
       late ProfileModel profileModel;
 
       /// based on profileType set the profile setting
-
       switch (profileType) {
         case ProfileType.custom:
           final customProfileSettingJsonString = await secureStorageProvider
@@ -232,19 +151,6 @@ class ProfileCubit extends Cubit<ProfileState> {
             final customProfileSettingMap =
                 jsonDecode(customProfileSettingJsonString)
                     as Map<String, dynamic>;
-
-            if (customProfileSettingMap['selfSovereignIdentityOptions']
-                    ['customOidc4vcProfile']['client_id'] ==
-                null) {
-              customProfileSettingMap['selfSovereignIdentityOptions']
-                  ['customOidc4vcProfile']['client_id'] = Parameters.clientId;
-            }
-            if (customProfileSettingMap['selfSovereignIdentityOptions']
-                    ['customOidc4vcProfile']['client_secret'] ==
-                null) {
-              customProfileSettingMap['selfSovereignIdentityOptions']
-                  ['customOidc4vcProfile']['client_secret'] = randomString(12);
-            }
 
             profileSetting = ProfileSetting.fromJson(customProfileSettingMap);
           } else {
@@ -260,15 +166,38 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileSetting: profileSetting,
           );
 
-        case ProfileType.ebsiV3:
+        case ProfileType.defaultOne:
           final privateKey = await getPrivateKey(
             secureStorage: secureStorageProvider,
-            didKeyType: DidKeyType.ebsiv3,
+            didKeyType: Parameters.didKeyTypeForDefault,
             oidc4vc: oidc4vc,
           );
 
           final (did, _) = await getDidAndKid(
-            didKeyType: DidKeyType.ebsiv3,
+            didKeyType: Parameters.didKeyTypeForDefault,
+            privateKey: privateKey,
+            secureStorage: secureStorageProvider,
+            didKitProvider: didKitProvider,
+          );
+
+          profileModel = ProfileModel.defaultOne(
+            polygonIdNetwork: polygonIdNetwork,
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+            clientId: did,
+            clientSecret: randomString(12),
+          );
+
+        case ProfileType.ebsiV3:
+          final privateKey = await getPrivateKey(
+            secureStorage: secureStorageProvider,
+            didKeyType: Parameters.didKeyTypeForEbsiV3,
+            oidc4vc: oidc4vc,
+          );
+
+          final (did, _) = await getDidAndKid(
+            didKeyType: Parameters.didKeyTypeForEbsiV3,
             privateKey: privateKey,
             secureStorage: secureStorageProvider,
             didKitProvider: didKitProvider,
@@ -286,12 +215,12 @@ class ProfileCubit extends Cubit<ProfileState> {
         case ProfileType.dutch:
           final privateKey = await getPrivateKey(
             secureStorage: secureStorageProvider,
-            didKeyType: DidKeyType.jwkP256,
+            didKeyType: Parameters.didKeyTypeForDutch,
             oidc4vc: oidc4vc,
           );
 
           final (did, _) = await getDidAndKid(
-            didKeyType: DidKeyType.jwkP256,
+            didKeyType: Parameters.didKeyTypeForDutch,
             privateKey: privateKey,
             secureStorage: secureStorageProvider,
             didKitProvider: didKitProvider,
@@ -306,21 +235,21 @@ class ProfileCubit extends Cubit<ProfileState> {
             clientSecret: randomString(12),
           );
 
-        case ProfileType.gainPOCExperimental:
+        case ProfileType.owfBaselineProfile:
           final privateKey = await getPrivateKey(
             secureStorage: secureStorageProvider,
-            didKeyType: DidKeyType.p256,
+            didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
             oidc4vc: oidc4vc,
           );
 
           final (did, _) = await getDidAndKid(
-            didKeyType: DidKeyType.p256,
+            didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
             privateKey: privateKey,
             secureStorage: secureStorageProvider,
             didKitProvider: didKitProvider,
           );
 
-          profileModel = ProfileModel.gainPOCExperimental(
+          profileModel = ProfileModel.owfBaselineProfile(
             polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
@@ -455,7 +384,6 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateProfileSetting({
     DidKeyType? didKeyType,
     bool? securityLevel,
-    UserPinDigits? userPinDigits,
     bool? scope,
     bool? cryptoHolderBinding,
     bool? credentialManifestSupport,
@@ -466,7 +394,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     bool? secureSecurityAuthenticationWithPinCode,
     bool? verifySecurityIssuerWebsiteIdentity,
     OIDC4VCIDraftType? oidc4vciDraftType,
-    SubjectSyntax? subjectSyntax,
+    ClientType? clientType,
     VCFormatType? vcFormatType,
     ProofHeaderType? proofHeaderType,
   }) async {
@@ -485,7 +413,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           customOidc4vcProfile: state.model.profileSetting
               .selfSovereignIdentityOptions.customOidc4vcProfile
               .copyWith(
-            userPinDigits: userPinDigits,
             defaultDid: didKeyType,
             securityLevel: securityLevel,
             proofHeader: proofHeaderType,
@@ -496,7 +423,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             clientId: clientId,
             clientSecret: clientSecret,
             oidc4vciDraft: oidc4vciDraftType,
-            subjectSyntaxeType: subjectSyntax,
+            clientType: clientType,
             vcFormatType: vcFormatType,
           ),
         ),
@@ -540,16 +467,32 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> setProfile(ProfileType profileType) async {
-    if (profileType != ProfileType.custom) {
+    final previousProfileType = state.model.profileType;
+    if (previousProfileType == ProfileType.custom) {
       await secureStorageProvider.set(
         SecureStorageKeys.customProfileSettings,
         jsonEncode(state.model.profileSetting.toJson()),
       );
     }
+
     switch (profileType) {
       case ProfileType.ebsiV3:
         await update(
           ProfileModel.ebsiV3(
+            polygonIdNetwork: state.model.polygonIdNetwork,
+            walletProtectionType: state.model.walletProtectionType,
+            isDeveloperMode: state.model.isDeveloperMode,
+            walletType: state.model.walletType,
+            enterpriseWalletName: state.model.enterpriseWalletName,
+            clientId: state.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.clientId,
+            clientSecret: state.model.profileSetting
+                .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
+          ),
+        );
+      case ProfileType.defaultOne:
+        await update(
+          ProfileModel.defaultOne(
             polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
@@ -575,9 +518,9 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
           ),
         );
-      case ProfileType.gainPOCExperimental:
+      case ProfileType.owfBaselineProfile:
         await update(
-          ProfileModel.gainPOCExperimental(
+          ProfileModel.owfBaselineProfile(
             polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
@@ -590,14 +533,21 @@ class ProfileCubit extends Cubit<ProfileState> {
           ),
         );
       case ProfileType.custom:
-        final String customProfileSettingBackup =
+        final String? customProfileSettingBackup =
             await secureStorageProvider.get(
-                  SecureStorageKeys.customProfileSettings,
-                ) ??
-                jsonEncode(state.model.profileSetting);
-        final customProfileSetting = ProfileSetting.fromJson(
-          json.decode(customProfileSettingBackup) as Map<String, dynamic>,
+          SecureStorageKeys.customProfileSettings,
         );
+
+        late ProfileSetting customProfileSetting;
+
+        if (customProfileSettingBackup == null) {
+          customProfileSetting = ProfileSetting.initial();
+        } else {
+          final profileJson =
+              json.decode(customProfileSettingBackup) as Map<String, dynamic>;
+
+          customProfileSetting = ProfileSetting.fromJson(profileJson);
+        }
 
         await update(
           state.model.copyWith(

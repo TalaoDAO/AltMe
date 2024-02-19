@@ -1,14 +1,13 @@
-import 'dart:convert';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:json_path/json_path.dart';
 
-class ClaimsData extends StatelessWidget {
-  const ClaimsData({
+class CredentialSubjectData extends StatelessWidget {
+  const CredentialSubjectData({
     super.key,
     required this.credentialModel,
   });
@@ -19,48 +18,25 @@ class ClaimsData extends StatelessWidget {
   Widget build(BuildContext context) {
     final credentialSupported = credentialModel.credentialSupported;
 
-    final claims = credentialSupported!['claims'];
+    final credentialSubjectReference = JsonPath(r'$..credentialSubject')
+        .read(credentialSupported)
+        .firstOrNull
+        ?.value;
 
-    if (claims is! Map<String, dynamic>) {
-      return Container();
-    }
+    if (credentialSubjectReference == null) return Container();
+    if (credentialSubjectReference is! Map<String, dynamic>) return Container();
 
-    final encryptedDatas = credentialModel.jwt?.split('~');
+    final credentialSubjectData = credentialModel.data['credentialSubject'];
 
-    final credentialSubjectData = <String, dynamic>{};
-
-    if (encryptedDatas != null) {
-      encryptedDatas.removeAt(0);
-
-      for (var element in encryptedDatas) {
-        try {
-          while (element.length % 4 != 0) {
-            element += '=';
-          }
-
-          final decryptedData = utf8.decode(base64Decode(element));
-
-          if (decryptedData.isNotEmpty) {
-            final lisString = decryptedData
-                .substring(1, decryptedData.length - 1)
-                .replaceAll('"', '')
-                .split(',');
-
-            if (lisString.length == 3) {
-              credentialSubjectData[lisString[1].trim()] = lisString[2].trim();
-            }
-          }
-        } catch (e) {
-          //
-        }
-      }
-    }
+    if (credentialSubjectData == null) return Container();
+    if (credentialSubjectData is! Map<String, dynamic>) return Container();
 
     final languageCode = context.read<LangCubit>().state.languageCode;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: claims.entries.map((MapEntry<String, dynamic> map) {
+      children: credentialSubjectReference.entries
+          .map((MapEntry<String, dynamic> map) {
         String? title;
         String? data;
 
@@ -81,7 +57,6 @@ class ClaimsData extends StatelessWidget {
         if (value.containsKey('display')) {
           final displays = value['display'];
           if (displays is! List<dynamic>) return Container();
-          if (displays.isEmpty) return Container();
 
           final display = displays.where((element) {
             if (element is Map<String, dynamic> &&
@@ -97,13 +72,9 @@ class ClaimsData extends StatelessWidget {
 
           if (display == null) return Container();
 
-          if (credentialSubjectData.isNotEmpty &&
-              credentialSubjectData.containsKey(key)) {
+          if (credentialSubjectData.containsKey(key)) {
             title = display['name'].toString();
             data = credentialSubjectData[key].toString();
-          } else if (credentialModel.data.containsKey(key)) {
-            title = display['name'].toString();
-            data = credentialModel.data[key].toString();
           }
         } else {
           return Container();

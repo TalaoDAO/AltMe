@@ -34,11 +34,4 @@ extension StringExtension on String {
   }
 
   Characters get characters => Characters(this);
-
-  String get beautityTitle {
-    List<String> words = split('_');
-    words =
-        words.map((word) => word[0].toUpperCase() + word.substring(1)).toList();
-    return words.join('');
-  }
 }

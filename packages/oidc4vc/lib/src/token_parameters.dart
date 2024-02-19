@@ -14,12 +14,16 @@ class TokenParameters {
     required this.did,
     required this.mediaType,
     required this.proofHeaderType,
-    required this.useJWKThumbPrint,
+    required this.clientType,
+    required this.clientId,
     this.kid,
   });
 
   /// [privateKey] is JWK (Json Web Key) of user private key
   final Map<String, dynamic> privateKey;
+
+  /// [clientId] is clientId.
+  final String clientId;
 
   /// [did] did
   String did;
@@ -47,8 +51,8 @@ class TokenParameters {
     return privateKey['crv'] == 'P-256' ? 'ES256' : 'ES256K';
   }
 
-  /// whether to use did or thumbprint
-  bool useJWKThumbPrint;
+  /// client type
+  ClientType clientType;
 
   /// [thumbprint] of JWK as defined in https://www.rfc-editor.org/rfc/rfc7638
   String get thumbprint {

@@ -1,3 +1,4 @@
+import 'package:altme/app/shared/enum/enum.dart';
 import 'package:altme/dashboard/dashboard.dart';
 
 class Parameters {
@@ -67,4 +68,9 @@ class Parameters {
   static const int maxEntries = 3;
 
   static const String appName = 'Altme';
+
+  static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
+  static const DidKeyType didKeyTypeForDefault = DidKeyType.p256;
+  static const DidKeyType didKeyTypeForDutch = DidKeyType.jwkP256;
+  static const DidKeyType didKeyTypeForOwfBaselineProfile = DidKeyType.jwkP256;
 }

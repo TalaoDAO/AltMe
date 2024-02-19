@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DiscoverCredentialCategoryItem extends StatelessWidget {
   const DiscoverCredentialCategoryItem({
@@ -18,18 +17,6 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileSetting =
-        context.read<ProfileCubit>().state.model.profileSetting;
-
-    final vcFormatType = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
-
-    /// remove dummy credential if format is not matched
-    dummyCredentials.removeWhere((element) {
-      final vcFormatTypes = element.vcFormatTypes;
-      return vcFormatTypes != null && !vcFormatTypes.contains(vcFormatType);
-    });
-
     final credentialCategoryConfig = credentialCategory.config(context);
     //sort credentials by order
     dummyCredentials.sort(

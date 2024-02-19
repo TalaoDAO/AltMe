@@ -1,6 +1,13 @@
 import 'package:altme/l10n/l10n.dart';
 
-enum ProfileType { custom, ebsiV3, dutch, enterprise, gainPOCExperimental }
+enum ProfileType {
+  defaultOne,
+  ebsiV3,
+  dutch,
+  enterprise,
+  owfBaselineProfile,
+  custom,
+}
 
 extension ProfileTypeX on ProfileType {
   String getTitle({
@@ -15,20 +22,23 @@ extension ProfileTypeX on ProfileType {
       case ProfileType.dutch:
         return l10n.decentralizedIdentityInteropProfile;
       case ProfileType.enterprise:
-        return name.isEmpty ? 'Enterprise' : name;
-      case ProfileType.gainPOCExperimental:
-        return 'GAIN POC (Experimental)';
+        return name.isEmpty ? l10n.enterprise : name;
+      case ProfileType.owfBaselineProfile:
+        return l10n.oWFBaselineProfile;
+      case ProfileType.defaultOne:
+        return l10n.defaultProfile;
     }
   }
 
   bool get showSponseredBy {
     switch (this) {
       case ProfileType.custom:
+      case ProfileType.defaultOne:
       case ProfileType.dutch:
         return false;
       case ProfileType.ebsiV3:
       case ProfileType.enterprise:
-      case ProfileType.gainPOCExperimental:
+      case ProfileType.owfBaselineProfile:
         return true;
     }
   }
