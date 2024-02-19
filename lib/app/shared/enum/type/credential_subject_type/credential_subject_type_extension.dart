@@ -993,7 +993,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       longDescription: longDescription == null
           ? null
           : ResponseMessage(message: longDescription),
-      vcFormatTypes: getVCFormatType,
     );
   }
 
