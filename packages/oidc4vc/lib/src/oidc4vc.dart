@@ -626,7 +626,7 @@ class OIDC4VC {
         'code': code,
         'grant_type': 'authorization_code',
         'code_verifier': codeVerifier,
-      'redirect_uri': redirectUri,
+        'redirect_uri': redirectUri,
       };
     } else {
       throw Exception();
@@ -1090,7 +1090,7 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     String? cnonce,
   }) async {
-    final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+    final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round() - 30;
 
     var iss = tokenParameters.did;
 
@@ -1141,7 +1141,6 @@ class OIDC4VC {
     );
     return tokenResponse.data;
   }
-
 
   Future<String> extractVpToken({
     required String clientId,
