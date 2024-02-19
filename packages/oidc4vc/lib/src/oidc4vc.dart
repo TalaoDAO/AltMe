@@ -168,8 +168,9 @@ class OIDC4VC {
         authorizationEndPoint: authorizationEndPoint,
         scope: scope,
         clientAuthentication: clientAuthentication,
+        oidc4vciDraftType: oidc4vciDraftType,
       );
-
+      
       final url = Uri.parse(authorizationEndpoint);
       final authorizationUri =
           Uri.https(url.authority, url.path, authorizationRequestParemeters);
@@ -194,6 +195,7 @@ class OIDC4VC {
     required String state,
     required bool scope,
     required ClientAuthentication clientAuthentication,
+    required OIDC4VCIDraftType oidc4vciDraftType,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -262,7 +264,13 @@ class OIDC4VC {
             'type': 'openid_credential',
             'credential_configuration_id': credential,
           };
-
+          if (oidc4vciDraftType == OIDC4VCIDraftType.draft13) {
+            data = {
+              'type': 'openid_credential',
+              'format': 'vc+sd-jwt',
+              'vct': credentialSupported['vct'].toString(),
+            };
+          }
           final scope = credentialSupported['scope'];
 
           if (scope == null) {
