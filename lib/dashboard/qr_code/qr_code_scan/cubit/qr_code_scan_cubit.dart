@@ -11,6 +11,7 @@ import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -42,6 +43,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.polygonIdCubit,
     required this.didKitProvider,
     required this.oidc4vc,
+    required this.walletCubit,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -58,6 +60,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final PolygonIdCubit polygonIdCubit;
   final DIDKitProvider didKitProvider;
   final OIDC4VC oidc4vc;
+  final WalletCubit walletCubit;
 
   final log = getLogger('QRCodeScanCubit');
 
@@ -778,6 +781,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         dioClient: client,
         oidc4vc: oidc4vc,
         jwtDecode: jwtDecode,
+        blockchainType: walletCubit.state.currentAccount!.blockchainType,
       );
     } catch (e) {
       emitError(e);
@@ -1257,6 +1261,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           clientSecret: clientSecret,
           profileCubit: profileCubit,
           jwtDecode: jwtDecode,
+          blockchainType: walletCubit.state.currentAccount!.blockchainType,
         );
       }
 

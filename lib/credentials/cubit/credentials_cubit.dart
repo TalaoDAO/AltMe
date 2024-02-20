@@ -49,7 +49,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   final log = getLogger('CredentialsCubit');
 
-  Future<void> loadAllCredentials() async {
+  Future<void> loadAllCredentials({
+    required BlockchainType blockchainType,
+  }) async {
     final log = getLogger('loadAllCredentials');
     final String? ssiKey =
         await secureStorageProvider.get(SecureStorageKeys.ssiKey);
@@ -60,7 +62,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     emit(state.copyWith(status: CredentialsStatus.loading));
     final savedCredentials = await credentialsRepository.findAll(/* filters */);
-    final dummies = _getAvalaibleDummyCredentials(savedCredentials);
+    final dummies = _getAvalaibleDummyCredentials(
+      credentials: savedCredentials,
+      blockchainType: blockchainType,
+    );
 
     final List<CredentialModel> updatedCredentials = <CredentialModel>[];
 
@@ -103,7 +108,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     log.i('credentials loaded from repository - ${savedCredentials.length}');
   }
 
-  Future<void> addWalletCredential() async {
+  Future<void> addWalletCredential({
+    required BlockchainType? blockchainType,
+  }) async {
     final log = getLogger('addRequiredCredentials');
 
     final walletType = profileCubit.state.model.walletType;
@@ -165,6 +172,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       await insertCredential(
         credential: walletCredential,
         showMessage: false,
+        blockchainType: blockchainType,
       );
     }
   }
@@ -180,13 +188,17 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> deleteById({
     required String id,
+    required BlockchainType? blockchainType,
     bool showMessage = true,
   }) async {
     emit(state.loading());
     await credentialsRepository.deleteById(id);
     final credentials = List.of(state.credentials)
       ..removeWhere((element) => element.id == id);
-    final dummies = _getAvalaibleDummyCredentials(credentials);
+    final dummies = _getAvalaibleDummyCredentials(
+      credentials: credentials,
+      blockchainType: blockchainType,
+    );
     emit(
       state.copyWith(
         status: CredentialsStatus.delete,
@@ -246,6 +258,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> insertCredential({
     required CredentialModel credential,
+    required BlockchainType? blockchainType,
     bool showMessage = true,
     bool showStatus = true,
     bool isPendingCredential = false,
@@ -262,7 +275,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         ),
       );
       if (!isPendingCredential) {
-        await modifyCredential(credential: updatedCredential);
+        await modifyCredential(
+          credential: updatedCredential,
+          blockchainType: blockchainType,
+        );
       }
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
@@ -276,12 +292,20 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         ),
       );
       if (!isPendingCredential) {
-        await modifyCredential(credential: updatedCredential);
+        await modifyCredential(
+          credential: updatedCredential,
+          blockchainType: blockchainType,
+        );
       }
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
     } else {
-      if (!isPendingCredential) await modifyCredential(credential: credential);
+      if (!isPendingCredential) {
+        await modifyCredential(
+          credential: credential,
+          blockchainType: blockchainType,
+        );
+      }
       await credentialsRepository.insert(credential);
       credentials = List.of(state.credentials)..add(credential);
     }
@@ -291,7 +315,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     enableCredentialCategory(category: credentialCategory);
 
-    final dummies = _getAvalaibleDummyCredentials(credentials);
+    final dummies = _getAvalaibleDummyCredentials(
+      credentials: credentials,
+      blockchainType: blockchainType,
+    );
 
     emit(
       state.copyWith(
@@ -358,6 +385,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> modifyCredential({
     required CredentialModel credential,
     bool showMessage = true,
+    required BlockchainType? blockchainType,
   }) async {
     final credentialSubjectModel =
         credential.credentialPreview.credentialSubjectModel;
@@ -387,6 +415,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 await deleteById(
                   id: storedCredential.id,
                   showMessage: false,
+                  blockchainType: blockchainType,
                 );
                 break;
               }
@@ -419,6 +448,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             await deleteById(
               id: storedCredential.id,
               showMessage: false,
+              blockchainType: blockchainType,
             );
             break;
           }
@@ -463,7 +493,46 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     return resultList;
   }
 
-  Future<void> insertOrUpdateAssociatedWalletCredential({
+  Future<void> insertAssociatedWalletCredential({
+    required CryptoAccountData cryptoAccountData,
+  }) async {
+    if (!profileCubit.state.model.profileType.supportAssociatedCredential) {
+      throw Exception();
+    }
+
+    final didKeyType = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+
+    final privateKey = await getPrivateKey(
+      secureStorage: getSecureStorage,
+      didKeyType: didKeyType,
+      oidc4vc: oidc4vc,
+    );
+
+    final (did, _) = await getDidAndKid(
+      didKeyType: didKeyType,
+      privateKey: privateKey,
+      secureStorage: getSecureStorage,
+      didKitProvider: didKitProvider,
+    );
+
+    final credential = await generateAssociatedWalletCredential(
+      cryptoAccountData: cryptoAccountData,
+      didKitProvider: didKitProvider,
+      blockchainType: cryptoAccountData.blockchainType,
+      keyGenerator: keyGenerator,
+      did: did,
+    );
+
+    if (credential != null) {
+      await insertCredential(
+        credential: credential,
+        blockchainType: cryptoAccountData.blockchainType,
+      );
+    }
+  }
+
+  Future<void> updateAssociatedWalletCredential({
     required BlockchainType blockchainType,
     required CryptoAccountData cryptoAccountData,
   }) async {
@@ -485,7 +554,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       credentialList: oldCredentialList,
     );
 
-    /// update or create AssociatedAddres credential with new name
+    /// update AssociatedAddres credential with new name
     if (filteredCredentialList.isNotEmpty) {
       //find old id of the credential
       final oldCredential = oldCredentialList.where((CredentialModel element) {
@@ -516,45 +585,32 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         return false;
       }).first;
 
-      // final credential = state.credentials.where((element) => element.);
-      final credential = await createOrUpdateAssociatedWalletCredential(
-        blockchainType: blockchainType,
+      final did = oldCredential.credentialPreview.credentialSubjectModel.id;
+
+      if (did == null) {
+        throw Exception();
+      }
+
+      final credential = await generateAssociatedWalletCredential(
         cryptoAccountData: cryptoAccountData,
+        didKitProvider: didKitProvider,
+        blockchainType: blockchainType,
+        keyGenerator: keyGenerator,
         oldId: oldCredential.id,
+        did: oldCredential.credentialPreview.credentialSubjectModel.id!,
       );
       if (credential != null) {
         await updateCredential(credential: credential);
       }
-    } else {
-      final credential = await createOrUpdateAssociatedWalletCredential(
-        blockchainType: blockchainType,
-        cryptoAccountData: cryptoAccountData,
-      );
-      if (credential != null) {
-        await insertCredential(credential: credential);
-      }
     }
-  }
-
-  Future<CredentialModel?> createOrUpdateAssociatedWalletCredential({
-    required BlockchainType blockchainType,
-    required CryptoAccountData cryptoAccountData,
-    String? oldId,
-  }) async {
-    return generateAssociatedWalletCredential(
-      cryptoAccountData: cryptoAccountData,
-      didKitProvider: didKitProvider,
-      blockchainType: blockchainType,
-      keyGenerator: keyGenerator,
-      oldId: oldId,
-      oidc4vc: oidc4vc,
-      profileCubit: profileCubit,
-    );
   }
 
   ///get dummy cards
   Map<CredentialCategory, List<DiscoverDummyCredential>>
-      _getAvalaibleDummyCredentials(List<CredentialModel> credentials) {
+      _getAvalaibleDummyCredentials({
+    required List<CredentialModel> credentials,
+    required BlockchainType? blockchainType,
+  }) {
     final dummies = <CredentialCategory, List<DiscoverDummyCredential>>{};
     // entreprise user may have options to display some dummies (true/false)
 
@@ -712,9 +768,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             if (discoverCardsOptions.displayDefi &&
                 !allSubjectTypeForCategory
                     .contains(CredentialSubjectType.defiCompliance)) {
-              allSubjectTypeForCategory.add(
-                CredentialSubjectType.defiCompliance,
-              );
+              allSubjectTypeForCategory
+                  .add(CredentialSubjectType.defiCompliance);
             }
 
           case CredentialCategory.humanityProofCards:
@@ -724,7 +779,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           case CredentialCategory.walletIntegrity:
             break;
           case CredentialCategory.blockchainAccountsCards:
-            break;
+            allSubjectTypeForCategory.addAll([
+              CredentialSubjectType.tezosAssociatedWallet,
+              CredentialSubjectType.ethereumAssociatedWallet,
+              CredentialSubjectType.fantomAssociatedWallet,
+              CredentialSubjectType.binanceAssociatedWallet,
+              CredentialSubjectType.polygonAssociatedWallet,
+            ]);
+
           case CredentialCategory.othersCards:
             break;
           case CredentialCategory.polygonidCards:
@@ -751,19 +813,36 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             )
             .toList();
 
-        /// if repetition is not allowed
-        if (subjectType.weCanRemoveItIfCredentialExist &&
-            credentialsOfSameType.isNotEmpty) {
+        if (credentialsOfSameType.isNotEmpty &&
+            subjectType.weCanRemoveItIfCredentialExist) {
           for (final credential in credentialsOfSameType) {
             if (vcFormatType.value == credential.getFormat) {
-              /// remove if format matched
-              continue;
+              /// do not add if format matched
+              /// there can ssame credentials with different format
             } else {
               requiredDummySubjects.add(subjectType);
             }
           }
         } else {
-          requiredDummySubjects.add(subjectType);
+          final Map<BlockchainType, CredentialSubjectType>
+              blockchainToSubjectType = {
+            BlockchainType.tezos: CredentialSubjectType.tezosAssociatedWallet,
+            BlockchainType.fantom: CredentialSubjectType.fantomAssociatedWallet,
+            BlockchainType.binance:
+                CredentialSubjectType.binanceAssociatedWallet,
+            BlockchainType.ethereum:
+                CredentialSubjectType.ethereumAssociatedWallet,
+            BlockchainType.polygon:
+                CredentialSubjectType.polygonAssociatedWallet,
+          };
+          if (subjectType.isBlockchainAccount &&
+              blockchainToSubjectType[blockchainType] != subjectType &&
+              profileCubit
+                  .state.model.profileType.supportAssociatedCredential) {
+            /// do not add if blockchain matched
+          } else {
+            requiredDummySubjects.add(subjectType);
+          }
         }
       }
 

@@ -780,6 +780,8 @@
     "financeCredentialsHomeTitle",
     "financeCredentialsDiscoverTitle",
     "financeCredentialsDiscoverSubtitle",
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
     "financeCredentialsHomeSubtitle",
     "hummanityProofCredentialsHomeTitle",
     "hummanityProofCredentialsHomeSubtitle",
@@ -1727,6 +1729,8 @@
     "financeCredentialsHomeTitle",
     "financeCredentialsDiscoverTitle",
     "financeCredentialsDiscoverSubtitle",
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
     "financeCredentialsHomeSubtitle",
     "hummanityProofCredentialsHomeTitle",
     "hummanityProofCredentialsHomeSubtitle",
@@ -1891,6 +1895,11 @@
     "enterprise",
     "oWFBaselineProfile",
     "defaultProfile"
+  ],
+
+  "fr": [
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle"
   ],
 
   "it": [
@@ -2674,6 +2683,8 @@
     "financeCredentialsHomeTitle",
     "financeCredentialsDiscoverTitle",
     "financeCredentialsDiscoverSubtitle",
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
     "financeCredentialsHomeSubtitle",
     "hummanityProofCredentialsHomeTitle",
     "hummanityProofCredentialsHomeSubtitle",

@@ -6,8 +6,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   required DIDKitProvider didKitProvider,
   required BlockchainType blockchainType,
   required KeyGenerator keyGenerator,
-  required ProfileCubit profileCubit,
-  required OIDC4VC oidc4vc,
+  required String did,
   String? oldId,
 }) async {
   final log =
@@ -55,22 +54,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         verificationMethod = '$issuer#Recovery2020';
     }
     log.i('hardcoded verificationMethod - $verificationMethod');
-
-    final didKeyType = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
-
-    final privateKey = await getPrivateKey(
-      secureStorage: getSecureStorage,
-      didKeyType: didKeyType,
-      oidc4vc: oidc4vc,
-    );
-
-    final (did, _) = await getDidAndKid(
-      didKeyType: didKeyType,
-      privateKey: privateKey,
-      secureStorage: getSecureStorage,
-      didKitProvider: didKitProvider,
-    );
 
     final options = {
       'proofPurpose': 'assertionMethod',

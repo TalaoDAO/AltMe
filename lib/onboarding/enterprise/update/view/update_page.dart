@@ -4,6 +4,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -182,20 +183,24 @@ class _EnterpriseUpdateViewState extends State<EnterpriseUpdateView> {
             padding: const EdgeInsets.all(Sizes.spaceSmall),
             child: MyElevatedButton(
               text: l10n.next,
-              onPressed:
-                  state.isEmailFormatCorrect && state.isPasswordFormatCorrect
-                      ? () async {
-                          await context
-                              .read<EnterpriseUpdateCubit>()
-                              .updateTheConfiguration(
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim(),
-                              );
-                          await context
-                              .read<CredentialsCubit>()
-                              .loadAllCredentials();
-                        }
-                      : null,
+              onPressed: state.isEmailFormatCorrect &&
+                      state.isPasswordFormatCorrect
+                  ? () async {
+                      await context
+                          .read<EnterpriseUpdateCubit>()
+                          .updateTheConfiguration(
+                            email: emailController.text.trim(),
+                            password: passwordController.text.trim(),
+                          );
+                      await context.read<CredentialsCubit>().loadAllCredentials(
+                            blockchainType: context
+                                .read<WalletCubit>()
+                                .state
+                                .currentAccount!
+                                .blockchainType,
+                          );
+                    }
+                  : null,
             ),
           ),
         );

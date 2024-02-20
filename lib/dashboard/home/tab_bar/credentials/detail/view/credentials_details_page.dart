@@ -8,6 +8,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activit
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -115,7 +116,11 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
     if (confirm) {
       final credentialsCubit = context.read<CredentialsCubit>();
-      await credentialsCubit.deleteById(id: widget.credentialModel.id);
+      await credentialsCubit.deleteById(
+        id: widget.credentialModel.id,
+        blockchainType:
+            context.read<WalletCubit>().state.currentAccount!.blockchainType,
+      );
     }
   }
 

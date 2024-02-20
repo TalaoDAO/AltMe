@@ -139,7 +139,9 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
         credentials: credentialList,
         isPolygonIdCredentials: isPolygonIdCredentials,
       );
-      await credentialsCubit.loadAllCredentials();
+      await credentialsCubit.loadAllCredentials(
+        blockchainType: walletCubit.state.currentAccount!.blockchainType,
+      );
       emit(state.success(recoveredCredentialLength: credentialList.length));
     } catch (e) {
       if (e is MessageHandler) {

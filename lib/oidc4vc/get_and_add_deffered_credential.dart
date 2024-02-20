@@ -12,6 +12,7 @@ Future<void> getAndAddDefferedCredential({
   required DioClient dioClient,
   required OIDC4VC oidc4vc,
   required JWTDecode jwtDecode,
+  required BlockchainType blockchainType,
 }) async {
   final (_, issuer) = await getIssuerAndPreAuthorizedCode(
     scannedResponse: credentialModel.pendingInfo!.url,
@@ -35,5 +36,6 @@ Future<void> getAndAddDefferedCredential({
     credentialIdToBeDeleted: credentialModel.id,
     openIdConfiguration: null,
     jwtDecode: jwtDecode,
+    blockchainType: blockchainType,
   );
 }

@@ -32,6 +32,7 @@ Future<void> getAndAddCredential({
   required String clientId,
   required String? clientSecret,
   required JWTDecode jwtDecode,
+  required BlockchainType blockchainType,
 }) async {
   final privateKey = await fetchPrivateKey(
     isEBSIV3: isEBSIV3,
@@ -141,6 +142,7 @@ Future<void> getAndAddCredential({
           showMessage:
               isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
           isPendingCredential: true,
+          blockchainType: blockchainType,
         );
       } else {
         await addOIDC4VCCredential(
@@ -153,6 +155,7 @@ Future<void> getAndAddCredential({
           format: format,
           openIdConfiguration: openIdConfiguration,
           jwtDecode: jwtDecode,
+          blockchainType: blockchainType,
         );
       }
     }
