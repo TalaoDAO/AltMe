@@ -640,6 +640,11 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over65:
       case CredentialSubjectType.gender:
       case CredentialSubjectType.ageRange:
+      case CredentialSubjectType.tezosPooAddress:
+      case CredentialSubjectType.ethereumPooAddress:
+      case CredentialSubjectType.fantomPooAddress:
+      case CredentialSubjectType.polygonPooAddress:
+      case CredentialSubjectType.binancePooAddress:
       case CredentialSubjectType.defiCompliance:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
@@ -670,11 +675,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.diplomaCard:
       case CredentialSubjectType.twitterCard:
       case CredentialSubjectType.walletCredential:
-      case CredentialSubjectType.tezosPooAddress:
-      case CredentialSubjectType.ethereumPooAddress:
-      case CredentialSubjectType.fantomPooAddress:
-      case CredentialSubjectType.polygonPooAddress:
-      case CredentialSubjectType.binancePooAddress:
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.defaultCredential:
       case CredentialSubjectType.linkedInCard:

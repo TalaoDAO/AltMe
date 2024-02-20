@@ -1,5 +1,7 @@
 {
   "ca": [
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
     "clientTypeTitle",
     "clientTypeSubtitle",
     "proofHeader",
@@ -10,13 +12,13 @@
     "enterprise",
     "oWFBaselineProfile",
     "defaultProfile",
-    "blockchainCardsDiscoverTitle",
-    "blockchainCardsDiscoverSubtitle",
     "successfullyAddedEnterpriseAccount",
     "successfullyUpdatedEnterpriseAccount"
   ],
 
   "es": [
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
     "clientTypeTitle",
     "clientTypeSubtitle",
     "proofHeader",
@@ -27,8 +29,6 @@
     "enterprise",
     "oWFBaselineProfile",
     "defaultProfile",
-    "blockchainCardsDiscoverTitle",
-    "blockchainCardsDiscoverSubtitle",
     "successfullyAddedEnterpriseAccount",
     "successfullyUpdatedEnterpriseAccount"
   ]
