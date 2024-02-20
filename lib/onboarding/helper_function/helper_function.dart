@@ -33,6 +33,9 @@ Future<void> generateAccount({
 
   await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
 
+  /// create profile
+  await profileCubit.load();
+
   /// what's new popup disabled
   splashCubit.disableWhatsNewPopUp();
 

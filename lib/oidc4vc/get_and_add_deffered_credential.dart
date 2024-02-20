@@ -3,6 +3,7 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 
 import 'package:altme/oidc4vc/oidc4vc.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 Future<void> getAndAddDefferedCredential({
@@ -10,6 +11,7 @@ Future<void> getAndAddDefferedCredential({
   required CredentialsCubit credentialsCubit,
   required DioClient dioClient,
   required OIDC4VC oidc4vc,
+  required JWTDecode jwtDecode,
 }) async {
   final (_, issuer) = await getIssuerAndPreAuthorizedCode(
     scannedResponse: credentialModel.pendingInfo!.url,
@@ -32,5 +34,6 @@ Future<void> getAndAddDefferedCredential({
     format: credentialModel.pendingInfo!.format,
     credentialIdToBeDeleted: credentialModel.id,
     openIdConfiguration: null,
+    jwtDecode: jwtDecode,
   );
 }

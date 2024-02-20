@@ -9,6 +9,7 @@
 library ebsi;
 
 export 'src/client_authentication.dart';
+export 'src/client_type.dart';
 export 'src/issuer_token_parameters.dart';
 export 'src/media_type.dart';
 export 'src/models/models.dart';
@@ -16,6 +17,7 @@ export 'src/oidc4vc.dart';
 export 'src/oidc4vci_draft_type.dart';
 export 'src/oidc4vp_draft_type.dart';
 export 'src/pkce_dart.dart';
+export 'src/proof_header_type.dart';
 export 'src/soipv2_draft_type.dart';
 export 'src/token_parameters.dart';
 export 'src/vc_format_type.dart';

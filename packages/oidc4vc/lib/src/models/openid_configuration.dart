@@ -9,6 +9,7 @@ class OpenIdConfiguration extends Equatable {
   const OpenIdConfiguration({
     this.authorizationServer,
     this.credentialsSupported,
+    this.credentialConfigurationsSupported,
     this.credentialEndpoint,
     this.credentialIssuer,
     this.subjectSyntaxTypesSupported,
@@ -45,6 +46,8 @@ class OpenIdConfiguration extends Equatable {
   final List<dynamic>? subjectTrustFrameworksSupported;
   @JsonKey(name: 'credentials_supported')
   final List<CredentialsSupported>? credentialsSupported;
+  @JsonKey(name: 'credential_configurations_supported')
+  final dynamic credentialConfigurationsSupported;
   @JsonKey(name: 'deferred_credential_endpoint')
   final String? deferredCredentialEndpoint;
   @JsonKey(name: 'service_documentation')
@@ -70,6 +73,7 @@ class OpenIdConfiguration extends Equatable {
         authorizationEndpoint,
         subjectTrustFrameworksSupported,
         credentialsSupported,
+        credentialConfigurationsSupported,
         deferredCredentialEndpoint,
         serviceDocumentation,
         credentialManifest,
@@ -88,6 +92,7 @@ class CredentialsSupported extends Equatable {
     this.types,
     this.id,
     this.scope,
+    this.credentialSubject,
   });
 
   factory CredentialsSupported.fromJson(Map<String, dynamic> json) =>
@@ -100,6 +105,7 @@ class CredentialsSupported extends Equatable {
   final List<String>? types;
   final String? id;
   final String? scope;
+  final dynamic credentialSubject;
 
   Map<String, dynamic> toJson() => _$CredentialsSupportedToJson(this);
 
@@ -111,6 +117,7 @@ class CredentialsSupported extends Equatable {
         types,
         id,
         scope,
+        credentialSubject,
       ];
 }
 

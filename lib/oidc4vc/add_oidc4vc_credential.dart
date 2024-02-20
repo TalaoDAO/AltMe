@@ -5,32 +5,46 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:jose/jose.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:uuid/uuid.dart';
 
 Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
   required CredentialsCubit credentialsCubit,
-  String? issuer,
   required String credentialType,
   required bool isLastCall,
   required String format,
-  String? credentialIdToBeDeleted,
   required OpenIdConfiguration? openIdConfiguration,
+  required JWTDecode jwtDecode,
+  String? credentialIdToBeDeleted,
+  String? issuer,
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
 
-  if (format == 'jwt_vc' || format == 'jwt_vc_json') {
+  if (format == 'jwt_vc' || format == 'jwt_vc_json' || format == 'vc+sd-jwt') {
     //jwt_vc
-    final jws = JsonWebSignature.fromCompactSerialization(
-      encodedCredentialFromOIDC4VC['credential'] as String,
-    );
+    final data = encodedCredentialFromOIDC4VC['credential'] as String;
 
-    final jsonContent =
-        jws.unverifiedPayload.jsonContent as Map<String, dynamic>;
+    final jsonContent = jwtDecode.parseJwt(data);
 
-    credentialFromOIDC4VC = jsonContent['vc'] as Map<String, dynamic>;
+    if (format == 'vc+sd-jwt') {
+      credentialFromOIDC4VC = jsonContent;
+    } else {
+      credentialFromOIDC4VC = jsonContent['vc'] as Map<String, dynamic>;
+    }
+
+    if (format == 'vc+sd-jwt') {
+      /// type
+      if (!credentialFromOIDC4VC.containsKey('type')) {
+        credentialFromOIDC4VC['type'] = [credentialType];
+      }
+
+      ///credentialSubject
+      if (!credentialFromOIDC4VC.containsKey('credentialSubject')) {
+        credentialFromOIDC4VC['credentialSubject'] = {'type': credentialType};
+      }
+    }
 
     /// id -> jti
     if (!credentialFromOIDC4VC.containsKey('id')) {
@@ -86,7 +100,7 @@ Future<void> addOIDC4VCCredential({
     //       'urn:uuid:${const Uuid().v4()}';
     // }
 
-    credentialFromOIDC4VC['jwt'] = encodedCredentialFromOIDC4VC['credential'];
+    credentialFromOIDC4VC['jwt'] = data;
   } else if (format == 'ldp_vc') {
     //ldp_vc
 
@@ -131,12 +145,9 @@ Future<void> addOIDC4VCCredential({
     }
   }
 
-  final newCredentialModel = CredentialModel.fromJson(newCredential);
-
   Display? display;
 
-  if (newCredentialModel.credentialManifest == null &&
-      openIdConfiguration?.credentialsSupported != null) {
+  if (openIdConfiguration?.credentialsSupported != null) {
     final credentialsSupported = openIdConfiguration!.credentialsSupported!;
     final CredentialsSupported? credSupported =
         credentialsSupported.firstWhereOrNull(
@@ -145,13 +156,48 @@ Future<void> addOIDC4VCCredential({
           credentialsSupported.id == credentialType,
     );
 
-    if (credSupported != null && credSupported.display != null) {
-      display = credSupported.display!.firstWhereOrNull(
-        (Display display) =>
-            display.locale == 'en-US' || display.locale == 'en-GB',
-      );
+    if (credSupported != null) {
+      newCredential['credentialSupported'] = credSupported.toJson();
+
+      if (credSupported.display != null) {
+        display = credSupported.display!.firstWhereOrNull(
+          (Display display) =>
+              display.locale == 'en-US' || display.locale == 'en-GB',
+        );
+      }
+    }
+  } else if (openIdConfiguration?.credentialConfigurationsSupported != null) {
+    final credentialsSupported =
+        openIdConfiguration!.credentialConfigurationsSupported;
+
+    if ((credentialsSupported is Map<String, dynamic>) &&
+        credentialsSupported.containsKey(credentialType)) {
+      final credSupported = credentialsSupported[credentialType];
+
+      /// credentialSupported
+      newCredential['credentialSupported'] = credSupported;
+
+      if (credSupported is Map<String, dynamic>) {
+        /// display
+        if (credSupported.containsKey('display')) {
+          final displayData = credSupported['display'];
+
+          if (displayData is List<dynamic>) {
+            final displays = displayData
+                .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
+                .toList();
+
+            display = displays.firstWhereOrNull(
+              (Display display) =>
+                  display.locale == 'en-US' || display.locale == 'en-GB',
+            );
+          }
+        }
+      }
     }
   }
+
+  final newCredentialModel = CredentialModel.fromJson(newCredential);
 
   final credentialModel = CredentialModel.copyWithData(
     oldCredentialModel: newCredentialModel,

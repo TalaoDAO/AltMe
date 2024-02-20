@@ -167,6 +167,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                               ),
                               credDisplayType: CredDisplayType.List,
                               vcFormatType: vcFormatType,
+                              displyalDescription: false,
                             )
                           else
                             DummyCredentialImage(

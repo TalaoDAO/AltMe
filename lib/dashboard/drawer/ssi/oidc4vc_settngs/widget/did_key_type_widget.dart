@@ -4,6 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class DidKeyTypeWidget extends StatelessWidget {
   const DidKeyTypeWidget({super.key});
@@ -35,10 +36,56 @@ class DidKeyTypeWidget extends StatelessWidget {
                     ),
                   ListTile(
                     onTap: () {
+                      final customOidc4vcProfile = state.model.profileSetting
+                          .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+                      /// if user chooses VC format ldp_vc with did:ebsi or
+                      /// did:jwk - Display message "The ldp_format is not
+                      /// supported by this DID method"
+                      final isldpVc = customOidc4vcProfile.vcFormatType ==
+                          VCFormatType.ldpVc;
+
+                      final isUnmatchedDid = didKeyType == DidKeyType.ebsiv3 ||
+                          didKeyType == DidKeyType.jwkP256;
+
+                      if (isldpVc && isUnmatchedDid) {
+                        showDialog<bool>(
+                          context: context,
+                          builder: (context) => ErrorDetailsDialog(
+                            erroDescription:
+                                l10n.theLdpFormatIsNotSupportedByThisDIDMethod,
+                          ),
+                        );
+
+                        return;
+                      }
+
+                      ///if DID method is did eddsa then Cryrto Holder Binding
+                      ///must be Off -> display message "Switch off Crypto
+                      ///Holder Binding for that DID Method"
+                      if (didKeyType == DidKeyType.edDSA &&
+                          customOidc4vcProfile.cryptoHolderBinding) {
+                        showDialog<bool>(
+                          context: context,
+                          builder: (context) => ErrorDetailsDialog(
+                            erroDescription: l10n
+                                .switchOffCryptoHolderBindingForThatDIDMethod,
+                          ),
+                        );
+
+                        return;
+                      }
+
                       context.read<ProfileCubit>().updateProfileSetting(
                             didKeyType: didKeyType,
                           );
                     },
+                    shape: const RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: Color(0xFFDDDDEE),
+                        width: 0.5,
+                      ),
+                    ),
                     title: Text(
                       didKeyType.formattedString,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(

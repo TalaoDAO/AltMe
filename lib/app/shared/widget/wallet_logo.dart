@@ -26,6 +26,7 @@ class WalletLogo extends StatelessWidget {
     switch (profileModel.profileType) {
       case ProfileType.custom:
       case ProfileType.dutch:
+      case ProfileType.defaultOne:
         image = flavorCubit.state == FlavorMode.development
             ? ImageStrings.appLogoDev
             : flavorCubit.state == FlavorMode.staging
@@ -35,6 +36,8 @@ class WalletLogo extends StatelessWidget {
         image = ImageStrings.ebsiLogo;
       case ProfileType.enterprise:
         image = profileModel.profileSetting.generalOptions.companyLogo;
+      case ProfileType.owfBaselineProfile:
+        image = ImageStrings.owfBaselineProfileLogo;
     }
 
     return Column(
@@ -61,13 +64,13 @@ class WalletLogo extends StatelessWidget {
                   ),
           ),
         ),
-        if (showPoweredBy &&
-            profileModel.profileType == ProfileType.enterprise) ...[
-          if (profileModel.profileType.showSponseredBy) ...[
-            const SizedBox(height: 5),
-            const Center(child: PoweredByText()),
-          ],
-        ],
+        // if (showPoweredBy &&
+        //     profileModel.profileType == ProfileType.enterprise) ...[
+        //   if (profileModel.profileType.showSponseredBy) ...[
+        //     const SizedBox(height: 5),
+        //     const Center(child: PoweredByText()),
+        //   ],
+        // ],
       ],
     );
   }

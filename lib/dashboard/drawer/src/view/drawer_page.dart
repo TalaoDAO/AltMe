@@ -116,7 +116,8 @@ class DrawerView extends StatelessWidget {
                     ],
 
                     if (profileModel
-                        .profileSetting.settingsMenu.displayDeveloperMode) ...[
+                            .profileSetting.settingsMenu.displayDeveloperMode &&
+                        profileModel.profileType != ProfileType.defaultOne) ...[
                       DrawerCategoryItem(
                         title: l10n.developerMode,
                         subTitle: l10n.developerModeSubtitle,
@@ -152,7 +153,8 @@ class DrawerView extends StatelessWidget {
                     //const SizedBox(height: Sizes.spaceSmall),
 
                     if (profileModel
-                        .profileSetting.settingsMenu.displayHelpCenter) ...[
+                            .profileSetting.settingsMenu.displayHelpCenter &&
+                        profileModel.profileType != ProfileType.defaultOne) ...[
                       DrawerCategoryItem(
                         title: l10n.helpCenter,
                         subTitle: l10n.helpCenterDescription,

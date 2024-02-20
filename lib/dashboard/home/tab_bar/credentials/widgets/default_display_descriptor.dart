@@ -10,11 +10,13 @@ class DefaultDisplayDescriptor extends StatelessWidget {
     this.showBgDecoration = true,
     required this.credentialModel,
     required this.descriptionMaxLine,
+    this.displyalDescription = true,
   });
 
   final CredentialModel credentialModel;
   final int descriptionMaxLine;
   final bool showBgDecoration;
+  final bool displyalDescription;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
               child: DefaultCardBody(
                 credentialModel: credentialModel,
                 descriptionMaxLine: descriptionMaxLine,
+                displyalDescription: displyalDescription,
               ),
             ),
           )
@@ -42,6 +45,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                   child: DefaultCardBody(
                     credentialModel: credentialModel,
                     descriptionMaxLine: descriptionMaxLine,
+                    displyalDescription: displyalDescription,
                   ),
                 ),
               )
@@ -52,6 +56,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                   child: DefaultCardBody(
                     credentialModel: credentialModel,
                     descriptionMaxLine: descriptionMaxLine,
+                    displyalDescription: displyalDescription,
                   ),
                 ),
               );
@@ -64,11 +69,14 @@ class DefaultCardBody extends StatelessWidget {
     required this.credentialModel,
     required this.descriptionMaxLine,
     this.showBgDecoration = true,
+    this.displyalDescription = true,
   });
 
   final CredentialModel credentialModel;
   final int descriptionMaxLine;
   final bool showBgDecoration;
+
+  final bool displyalDescription;
 
   @override
   Widget build(BuildContext context) {
@@ -160,24 +168,25 @@ class DefaultCardBody extends StatelessWidget {
               ),
             ),
           ),
-        LayoutId(
-          id: 'value',
-          child: FractionallySizedBox(
-            widthFactor: 0.8,
-            heightFactor: 0.15,
-            child: Container(
-              alignment: Alignment.centerLeft,
-              child: DisplayDescriptionCard(
-                credentialModel: credentialModel,
-                style: Theme.of(context)
-                    .textTheme
-                    .credentialBaseBoldText
-                    .copyWith(color: textColor),
-                maxLines: descriptionMaxLine,
+        if (displyalDescription)
+          LayoutId(
+            id: 'value',
+            child: FractionallySizedBox(
+              widthFactor: 0.8,
+              heightFactor: 0.15,
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: DisplayDescriptionCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context)
+                      .textTheme
+                      .credentialBaseBoldText
+                      .copyWith(color: textColor),
+                  maxLines: descriptionMaxLine,
+                ),
               ),
             ),
           ),
-        ),
         if (credentialModel.credentialPreview.issuanceDate != '')
           LayoutId(
             id: 'issued-on',

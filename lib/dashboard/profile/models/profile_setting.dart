@@ -173,45 +173,60 @@ class DiscoverCardsOptions extends Equatable {
     required this.displayGender,
     required this.displayDefi,
     required this.displayHumanity,
-    required this.displayHumanityJwt,
     required this.displayOver13,
     required this.displayOver15,
     required this.displayOver18,
-    required this.displayOver18Jwt,
     required this.displayOver50,
-    required this.displayEmailPass,
-    required this.displayEmailPassJwt,
-    required this.displayPhonePass,
-    required this.displayPhonePassJwt,
     required this.displayVerifiableId,
-    required this.displayVerifiableIdJwt,
     required this.displayExternalIssuer,
-    required this.displayChainborn,
-    required this.displayTezotopia,
+    this.displayOver18Jwt = false,
+    this.displayVerifiableIdJwt = true,
+    this.displayEmailPass = true,
+    this.displayEmailPassJwt = true,
+    this.displayPhonePass = true,
+    this.displayPhonePassJwt = true,
+    this.displayChainborn = false,
+    this.displayTezotopia = false,
+    this.displayHumanityJwt = true,
   });
 
   factory DiscoverCardsOptions.fromJson(Map<String, dynamic> json) =>
       _$DiscoverCardsOptionsFromJson(json);
 
   factory DiscoverCardsOptions.initial() => const DiscoverCardsOptions(
+        displayDefi: true,
+        displayHumanity: true,
+        displayOver13: false,
+        displayOver15: false,
+        displayOver18: true,
+        displayOver21: false,
+        displayOver50: false,
+        displayVerifiableId: true,
+        displayOver65: false,
+        displayAgeRange: false,
+        displayGender: false,
+        displayExternalIssuer: [],
+      );
+
+  factory DiscoverCardsOptions.none() => const DiscoverCardsOptions(
         displayDefi: false,
         displayHumanity: false,
         displayHumanityJwt: false,
         displayOver13: false,
-        displayOver15: true,
-        displayOver18: true,
-        displayOver18Jwt: true,
+        displayOver15: false,
+        displayOver18: false,
+        displayOver18Jwt: false,
         displayOver21: false,
         displayOver50: false,
         displayChainborn: false,
         displayTezotopia: false,
-        displayVerifiableId: true,
-        displayVerifiableIdJwt: true,
+        displayVerifiableId: false,
+        displayVerifiableIdJwt: false,
         displayOver65: false,
-        displayEmailPass: true,
-        displayEmailPassJwt: true,
-        displayPhonePass: true,
-        displayPhonePassJwt: true,
+        displayEmailPass: false,
+        displayEmailPassJwt: false,
+        displayPhonePass: false,
+        displayPhonePassJwt: false,
         displayAgeRange: false,
         displayGender: false,
         displayExternalIssuer: [],
@@ -517,28 +532,26 @@ class CustomOidc4VcProfile extends Equatable {
     required this.scope,
     required this.securityLevel,
     required this.siopv2Draft,
-    required this.subjectSyntaxeType,
-    required this.userPinDigits,
-    required this.clientId,
-    required this.clientSecret,
-    this.vcFormatType = VCFormatType.ldpVc,
+    required this.clientType,
+    this.clientId = Parameters.clientId,
+    this.clientSecret = 'FGbzMrvUpeFr',
+    this.vcFormatType = VCFormatType.jwtVcJson,
+    this.proofHeader = ProofHeaderType.kid,
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
         clientAuthentication: ClientAuthentication.clientId,
-        credentialManifestSupport: true,
+        credentialManifestSupport: false,
         cryptoHolderBinding: true,
-        defaultDid: DidKeyType.edDSA,
+        defaultDid: DidKeyType.p256,
         oidc4vciDraft: OIDC4VCIDraftType.draft11,
         oidc4vpDraft: OIDC4VPDraftType.draft18,
         scope: false,
         securityLevel: false,
         siopv2Draft: SIOPV2DraftType.draft12,
-        subjectSyntaxeType: SubjectSyntax.did,
-        userPinDigits: UserPinDigits.six,
+        clientType: ClientType.did,
         clientId: Parameters.clientId,
         clientSecret: randomString(12),
-        vcFormatType: VCFormatType.ldpVc,
       );
 
   factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) =>
@@ -555,10 +568,11 @@ class CustomOidc4VcProfile extends Equatable {
   final OIDC4VCIDraftType oidc4vciDraft;
   final OIDC4VPDraftType oidc4vpDraft;
   final bool scope;
+  final ProofHeaderType proofHeader;
   final bool securityLevel;
   final SIOPV2DraftType siopv2Draft;
-  final SubjectSyntax subjectSyntaxeType;
-  final UserPinDigits userPinDigits;
+  @JsonKey(name: 'subjectSyntaxeType')
+  final ClientType clientType;
   @JsonKey(name: 'vcFormat')
   final VCFormatType vcFormatType;
 
@@ -574,10 +588,10 @@ class CustomOidc4VcProfile extends Equatable {
     OIDC4VCIDraftType? oidc4vciDraft,
     OIDC4VPDraftType? oidc4vpDraft,
     bool? scope,
+    ProofHeaderType? proofHeader,
     bool? securityLevel,
     SIOPV2DraftType? siopv2Draft,
-    SubjectSyntax? subjectSyntaxeType,
-    UserPinDigits? userPinDigits,
+    ClientType? clientType,
     VCFormatType? vcFormatType,
   }) =>
       CustomOidc4VcProfile(
@@ -589,10 +603,10 @@ class CustomOidc4VcProfile extends Equatable {
         oidc4vciDraft: oidc4vciDraft ?? this.oidc4vciDraft,
         oidc4vpDraft: oidc4vpDraft ?? this.oidc4vpDraft,
         scope: scope ?? this.scope,
+        proofHeader: proofHeader ?? this.proofHeader,
         securityLevel: securityLevel ?? this.securityLevel,
         siopv2Draft: siopv2Draft ?? this.siopv2Draft,
-        subjectSyntaxeType: subjectSyntaxeType ?? this.subjectSyntaxeType,
-        userPinDigits: userPinDigits ?? this.userPinDigits,
+        clientType: clientType ?? this.clientType,
         clientId: clientId ?? this.clientId,
         clientSecret: clientSecret ?? this.clientSecret,
         vcFormatType: vcFormatType ?? this.vcFormatType,
@@ -609,10 +623,10 @@ class CustomOidc4VcProfile extends Equatable {
         oidc4vciDraft,
         oidc4vpDraft,
         scope,
+        proofHeader,
         securityLevel,
         siopv2Draft,
-        subjectSyntaxeType,
-        userPinDigits,
+        clientType,
         vcFormatType,
       ];
 }
@@ -633,7 +647,6 @@ class SettingsMenu extends Equatable {
         displayDeveloperMode: true,
         displayHelpCenter: true,
         displayProfile: true,
-        displaySelfSovereignIdentity: true,
       );
 
   final bool displayDeveloperMode;

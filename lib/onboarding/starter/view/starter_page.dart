@@ -69,7 +69,7 @@ class StarterPage extends StatelessWidget {
                             );
                             await profileCubit.setProfileSetting(
                               profileSetting: ProfileSetting.initial(),
-                              profileType: ProfileType.custom,
+                              profileType: ProfileType.defaultOne,
                             );
                             await showDialog<void>(
                               context: context,

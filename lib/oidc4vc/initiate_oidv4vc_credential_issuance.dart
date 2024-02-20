@@ -33,15 +33,41 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   if (keys.contains('credential_type')) {
     credentials = uriFromScannedResponse.queryParameters['credential_type'];
   } else {
-    if (credentialOfferJson == null) throw Exception();
+    final validCredentialOffer = credentialOfferJson != null &&
+        credentialOfferJson is Map<String, dynamic>;
 
-    credentials = credentialOfferJson['credentials'];
+    if (!validCredentialOffer) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_issuer_metadata',
+          'error_description': 'The issuer configuration is invalid. '
+              'The credential offer is missing.',
+        },
+      );
+    }
+
+    if (credentialOfferJson.containsKey('credentials')) {
+      credentials = credentialOfferJson['credentials'];
+    } else if (credentialOfferJson
+        .containsKey('credential_configuration_ids')) {
+      credentials = credentialOfferJson['credential_configuration_ids'];
+    } else {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_issuer_metadata',
+          'error_description': 'The issuer configuration is invalid. '
+              'The credential offer is missing.',
+        },
+      );
+    }
   }
 
   final (preAuthorizedCode, issuer) = await getIssuerAndPreAuthorizedCode(
     scannedResponse: scannedResponse,
     dioClient: dioClient,
   );
+
+  //cleared up to here
 
   if (credentials is List<dynamic>) {
     final codeForAuthorisedFlow =
@@ -105,7 +131,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           codeForAuthorisedFlow: codeForAuthorisedFlow,
           codeVerifier: codeVerifier,
           authorization: authorization,
-          clientId: clientId,
+          clientId: clientId ?? '',
           clientSecret: clientSecret,
         );
       }
