@@ -21,6 +21,7 @@ Future<void> getAuthorizationUriForIssuer({
   required String? clientSecret,
   required ClientAuthentication clientAuthentication,
   required OIDC4VCIDraftType oidc4vciDraftType,
+  required VCFormatType vcFormatType,
 }) async {
   /// this is first phase flow for authorization_code
 
@@ -72,7 +73,7 @@ Future<void> getAuthorizationUriForIssuer({
     authorizationEndPoint: Parameters.authorizeEndPoint,
     scope: scope,
     clientAuthentication: clientAuthentication,
-    oidc4vciDraftType: oidc4vciDraftType,
+    oidc4vciDraftType: oidc4vciDraftType, vcFormatType: vcFormatType,
   );
 
   await LaunchUrl.launchUri(oidc4vcAuthenticationUri);
