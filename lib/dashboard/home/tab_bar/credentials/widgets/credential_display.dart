@@ -9,11 +9,13 @@ class CredentialDisplay extends StatelessWidget {
     required this.credentialModel,
     required this.credDisplayType,
     required this.vcFormatType,
+    this.displyalDescription = true,
   });
 
   final CredentialModel credentialModel;
   final CredDisplayType credDisplayType;
   final VCFormatType vcFormatType;
+  final bool displyalDescription;
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +85,7 @@ class CredentialDisplay extends StatelessWidget {
               return DefaultCredentialWidget(
                 credentialModel: credentialModel,
                 showBgDecoration: false,
+                displyalDescription: displyalDescription,
               );
             case CredDisplayType.Detail:
               return DefaultCredentialWidget(

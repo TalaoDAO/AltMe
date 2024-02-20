@@ -176,7 +176,6 @@ class ClientCredentialsWidget extends StatelessWidget {
                                 controller: clientSecretController,
                                 style: Theme.of(context).textTheme.labelMedium,
                                 maxLines: 1,
-                                maxLength: 12,
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(

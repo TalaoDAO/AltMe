@@ -11,6 +11,7 @@ class VerifiableIdCardModel extends CredentialSubjectModel {
     this.firstName,
     this.bithPlace,
     this.birthDate,
+    this.dateOfBirth,
     this.addressCountry,
     super.issuedBy,
     super.offeredBy,
@@ -30,6 +31,8 @@ class VerifiableIdCardModel extends CredentialSubjectModel {
   String? firstName;
   @JsonKey(defaultValue: '')
   String? birthDate;
+  @JsonKey(defaultValue: '')
+  String? dateOfBirth;
   @JsonKey(defaultValue: '')
   String? bithPlace;
   @JsonKey(defaultValue: '')

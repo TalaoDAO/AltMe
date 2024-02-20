@@ -14,6 +14,7 @@ export 'src/models/display_mapping_text.dart';
 export 'src/models/display_object.dart';
 export 'src/models/field.dart';
 export 'src/models/filter.dart';
+export 'src/models/format.dart';
 export 'src/models/image_object.dart';
 export 'src/models/input_descriptor.dart';
 export 'src/models/issued_by.dart';

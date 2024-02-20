@@ -71,10 +71,14 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
     required String link,
     dynamic Function()? onKycApproved,
   }) async {
-    await startKycVerifcation(vcType: vcType);
+    await startKycVerifcation(
+      vcType: vcType,
+      link: link,
+    );
   }
 
   Future<void> startKycVerifcation({
+    String? link,
     KycVcType vcType = KycVcType.verifiableId,
   }) async {
     emit(state.copyWith(status: KycVerificationStatus.loading));
@@ -85,13 +89,15 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
     }
     //emit(state.copyWith(status: KycVerificationStatus.pending));
     const walletId = AltMeStrings.clientIdForID360;
-    final url = '${Urls.authenticateForId360}/$code?vc_type=${vcType.value}'
-        '&client_id=$walletId&callback=${Urls.appDeepLink}';
-    await LaunchUrl.launchUri(
-      Uri.parse(
-        url,
-      ),
-    );
+    late String url;
+
+    if (link == null) {
+      url = '${Urls.authenticateForId360}/$code?vc_type=${vcType.value}'
+          '&client_id=$walletId&callback=${Urls.appDeepLink}';
+    } else {
+      url = link;
+    }
+    await LaunchUrl.launchUri(Uri.parse(url));
     emit(state.copyWith(status: KycVerificationStatus.unkown));
   }
 }

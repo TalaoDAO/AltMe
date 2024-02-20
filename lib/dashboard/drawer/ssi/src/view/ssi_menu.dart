@@ -84,14 +84,29 @@ class SSIView extends StatelessWidget {
                   },
                 ),
                 if (context.read<ProfileCubit>().state.model.profileType ==
-                    ProfileType.custom)
+                    ProfileType.custom) ...[
+                  // DrawerItem(
+                  //   title: l10n.oidc4vcProfile,
+                  //   onTap: () async {
+                  //     await Navigator.of(context)
+                  //         .push<void>(OIDC4VCProfilePage.route());
+                  //   },
+                  // ),
                   DrawerItem(
-                    title: l10n.advanceSettings,
-                    onTap: () async {
-                      await Navigator.of(context)
-                          .push<void>(AdvancedSettings2Menu.route());
+                    title: l10n.oidc4vc_settings,
+                    onTap: () {
+                      Navigator.of(context)
+                          .push<void>(Oidc4vcSettingMenu.route());
                     },
                   ),
+                  DrawerItem(
+                    title: l10n.trustFramework,
+                    onTap: () async {
+                      await Navigator.of(context)
+                          .push<void>(TrustFrameworkPage.route());
+                    },
+                  ),
+                ],
               ],
             ),
           ),

@@ -4,6 +4,7 @@ import 'package:altme/dashboard/dashboard.dart';
 
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -28,8 +29,9 @@ Future<void> getAndAddCredential({
   required String? authorization,
   required OIDC4VCIDraftType oidc4vciDraftType,
   required DidKeyType didKeyType,
-  required String? clientId,
+  required String clientId,
   required String? clientSecret,
+  required JWTDecode jwtDecode,
 }) async {
   final privateKey = await fetchPrivateKey(
     isEBSIV3: isEBSIV3,
@@ -58,9 +60,6 @@ Future<void> getAndAddCredential({
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-    final enableJWKThumbprint =
-        customOidc4vcProfile.subjectSyntaxeType == SubjectSyntax.jwkThumbprint;
-
     final index = getIndexValue(isEBSIV3: isEBSIV3, didKeyType: didKeyType);
 
     final (
@@ -84,7 +83,10 @@ Future<void> getAndAddCredential({
       cryptoHolderBinding: cryptoHolderBinding,
       authorization: authorization,
       oidc4vciDraftType: oidc4vciDraftType,
-      useJWKThumbPrint: enableJWKThumbprint,
+      clientType: customOidc4vcProfile.clientType,
+      proofHeaderType: customOidc4vcProfile.proofHeader,
+      clientAuthentication: customOidc4vcProfile.clientAuthentication,
+      redirectUri: Parameters.oidc4vcUniversalLink,
     );
 
     for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {
@@ -150,6 +152,7 @@ Future<void> getAndAddCredential({
               isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
           format: format,
           openIdConfiguration: openIdConfiguration,
+          jwtDecode: jwtDecode,
         );
       }
     }

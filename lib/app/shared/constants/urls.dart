@@ -17,6 +17,8 @@ class Urls {
   static const String issuerBaseUrl = 'https://issuer.talao.co';
   static const String phonePassUrl = 'https://issuer.talao.co/phonepass';
   static const String emailPassUrl = 'https://issuer.talao.co/emailpass';
+  static const String emailPassUrlJWTVCJSON =
+      'https://issuer.talao.co/emailpass?format=jwt_vc_json';
 
   static const String tezotopiaVoucherUrl =
       'https://issuer.tezotopia.altme.io/issuer/voucher_mobile';
@@ -50,9 +52,13 @@ class Urls {
   static const String twitterCardUrl = 'https://issuer.talao.co/twitter/';
 
   static const String identityCardUrlLDPVC =
-      'https://issuer.talao.co/passbase/endpoint/verifiableid/';
+      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=verifiableid';
+
   static const String identityCardUrlJWTVCJSON =
-      'https://talao.co/id360/oidc4vc/';
+      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=verifiableid';
+
+  static const String identityCardUrlVCSDJWT =
+      'https://talao.co/id360/oidc4vc?format=vcsd-jwt&type=identitycredential';
 
   static const String over18JWTVCJSON =
       'https://talao.co/id360/oidc4vc?type=over18';
