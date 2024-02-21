@@ -779,7 +779,11 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         image = ImageStrings.dummyOver18Card;
         switch (vcFormatType) {
           case VCFormatType.ldpVc:
-            link = ''; // handle by aivalidation url
+
+            /// id360 link use to oidc4vc over18 credential.
+            /// another link is automatically used when getting the credential
+            /// through yoti.
+            link = 'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over18';
           case VCFormatType.jwtVcJson:
             link = Urls.over18JWTVCJSON;
           case VCFormatType.jwtVc:

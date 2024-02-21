@@ -36,15 +36,6 @@ Future<void> discoverCredential({
     /// AI KYC
     if (vcFormatType == VCFormatType.ldpVc &&
         dummyCredential.credentialSubjectType.checkForAIKYC) {
-      /// temporary: For Over18 with VCFormatType.ldpVc let's go directly for yoti
-      if (dummyCredential.credentialSubjectType ==
-          CredentialSubjectType.over18) {
-        await Navigator.of(context).push<void>(
-          VerifyAgePage.route(
-            credentialSubjectType: dummyCredential.credentialSubjectType,
-          ),
-        );
-      }
 
       /// For DefiCompliance, it is not necessary to use Yoti. Instead,
       /// we can directly proceed with Id360.
