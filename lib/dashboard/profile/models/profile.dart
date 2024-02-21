@@ -102,7 +102,7 @@ class ProfileModel extends Equatable {
             customOidc4vcProfile: CustomOidc4VcProfile(
               clientAuthentication: ClientAuthentication.clientId,
               credentialManifestSupport: true,
-              cryptoHolderBinding: true,
+              cryptoHolderBinding: false,
               defaultDid: Parameters.didKeyTypeForDefault,
               oidc4vciDraft: OIDC4VCIDraftType.draft11,
               oidc4vpDraft: OIDC4VPDraftType.draft18,
