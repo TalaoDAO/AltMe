@@ -187,7 +187,7 @@ class DiscoverCardsOptions extends Equatable {
     this.displayPhonePassJwt = true,
     this.displayChainborn = false,
     this.displayTezotopia = false,
-    this.displayHumanityJwt = true,
+    this.displayHumanityJwt = false,
   });
 
   factory DiscoverCardsOptions.fromJson(Map<String, dynamic> json) =>
@@ -195,7 +195,7 @@ class DiscoverCardsOptions extends Equatable {
 
   factory DiscoverCardsOptions.initial() => const DiscoverCardsOptions(
         displayDefi: true,
-        displayHumanity: true,
+        displayHumanity: false,
         displayOver13: false,
         displayOver15: false,
         displayOver18: true,

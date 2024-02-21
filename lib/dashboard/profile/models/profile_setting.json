@@ -13,7 +13,7 @@
   },
   "discoverCardsOptions": {
     "displayDefi": true,
-    "displayHumanity": true,
+    "displayHumanity": false,
     "displayOver13": false,
     "displayOver15": true,
     "displayOver18": true,

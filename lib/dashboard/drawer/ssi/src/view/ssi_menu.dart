@@ -85,13 +85,6 @@ class SSIView extends StatelessWidget {
                 ),
                 if (context.read<ProfileCubit>().state.model.profileType ==
                     ProfileType.custom) ...[
-                  // DrawerItem(
-                  //   title: l10n.oidc4vcProfile,
-                  //   onTap: () async {
-                  //     await Navigator.of(context)
-                  //         .push<void>(OIDC4VCProfilePage.route());
-                  //   },
-                  // ),
                   DrawerItem(
                     title: l10n.oidc4vc_settings,
                     onTap: () {
