@@ -70,7 +70,7 @@ class Parameters {
   static const String appName = 'Altme';
 
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
-  static const DidKeyType didKeyTypeForDefault = DidKeyType.p256;
+  static const DidKeyType didKeyTypeForDefault = DidKeyType.edDSA;
   static const DidKeyType didKeyTypeForDutch = DidKeyType.jwkP256;
   static const DidKeyType didKeyTypeForOwfBaselineProfile = DidKeyType.jwkP256;
 }

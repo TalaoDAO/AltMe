@@ -545,6 +545,7 @@ class ScanCubit extends Cubit<ScanState> {
         responseData['state'] = stateValue;
       }
 
+      await Future<void>.delayed(const Duration(seconds: 2));
       final response = await client.dio.post<dynamic>(
         responseOrRedirectUri,
         data: responseData,
