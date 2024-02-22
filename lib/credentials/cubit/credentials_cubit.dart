@@ -516,12 +516,18 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       didKitProvider: didKitProvider,
     );
 
+    final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
     final credential = await generateAssociatedWalletCredential(
       cryptoAccountData: cryptoAccountData,
       didKitProvider: didKitProvider,
       blockchainType: cryptoAccountData.blockchainType,
       keyGenerator: keyGenerator,
       did: did,
+      vcFormatType: profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
+      oidc4vc: oidc4vc,
+      privateKey: private,
     );
 
     if (credential != null) {
@@ -591,6 +597,17 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         throw Exception();
       }
 
+      final didKeyType = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+
+      final privateKey = await getPrivateKey(
+        secureStorage: getSecureStorage,
+        didKeyType: didKeyType,
+        oidc4vc: oidc4vc,
+      );
+
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
       final credential = await generateAssociatedWalletCredential(
         cryptoAccountData: cryptoAccountData,
         didKitProvider: didKitProvider,
@@ -598,7 +615,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         keyGenerator: keyGenerator,
         oldId: oldCredential.id,
         did: oldCredential.credentialPreview.credentialSubjectModel.id!,
+        vcFormatType: profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
+        oidc4vc: oidc4vc,
+        privateKey: private,
       );
+
       if (credential != null) {
         await updateCredential(credential: credential);
       }
@@ -804,6 +826,27 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           continue;
         }
 
+        final Map<BlockchainType, CredentialSubjectType>
+            blockchainToSubjectType = {
+          BlockchainType.tezos: CredentialSubjectType.tezosAssociatedWallet,
+          BlockchainType.fantom: CredentialSubjectType.fantomAssociatedWallet,
+          BlockchainType.binance: CredentialSubjectType.binanceAssociatedWallet,
+          BlockchainType.ethereum:
+              CredentialSubjectType.ethereumAssociatedWallet,
+          BlockchainType.polygon: CredentialSubjectType.polygonAssociatedWallet,
+        };
+        final isCurrentBlockchainAccount =
+            blockchainToSubjectType[blockchainType] == subjectType;
+        final isBlockchainAccount = subjectType.isBlockchainAccount;
+        final supportAssociatedCredential =
+            profileCubit.state.model.profileType.supportAssociatedCredential;
+
+        /// remove if credential is blockchain account and
+        /// profile do not support
+        if (isBlockchainAccount && !supportAssociatedCredential) {
+          continue;
+        }
+
         final credentialsOfSameType = credentials
             .where(
               (element) =>
@@ -815,31 +858,26 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
         if (credentialsOfSameType.isNotEmpty &&
             subjectType.weCanRemoveItIfCredentialExist) {
+          /// credential available case
           for (final credential in credentialsOfSameType) {
-            if (vcFormatType.value == credential.getFormat) {
-              /// do not add if format matched
-              /// there can ssame credentials with different format
+            if (isBlockchainAccount && supportAssociatedCredential) {
+              /// do not add if it is blockchain
             } else {
-              requiredDummySubjects.add(subjectType);
+              if (vcFormatType.value == credential.getFormat) {
+                /// do not add if format matched
+                /// there can be same credentials with different format
+              } else {
+                requiredDummySubjects.add(subjectType);
+              }
             }
           }
         } else {
-          final Map<BlockchainType, CredentialSubjectType>
-              blockchainToSubjectType = {
-            BlockchainType.tezos: CredentialSubjectType.tezosAssociatedWallet,
-            BlockchainType.fantom: CredentialSubjectType.fantomAssociatedWallet,
-            BlockchainType.binance:
-                CredentialSubjectType.binanceAssociatedWallet,
-            BlockchainType.ethereum:
-                CredentialSubjectType.ethereumAssociatedWallet,
-            BlockchainType.polygon:
-                CredentialSubjectType.polygonAssociatedWallet,
-          };
-          if (subjectType.isBlockchainAccount &&
-              blockchainToSubjectType[blockchainType] != subjectType &&
-              profileCubit
-                  .state.model.profileType.supportAssociatedCredential) {
-            /// do not add if blockchain matched
+          /// credential not available case
+
+          if (isBlockchainAccount &&
+              supportAssociatedCredential &&
+              !isCurrentBlockchainAccount) {
+            /// do not add if current blockchain acccount does not match
           } else {
             requiredDummySubjects.add(subjectType);
           }

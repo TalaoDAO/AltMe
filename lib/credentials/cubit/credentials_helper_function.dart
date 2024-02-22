@@ -7,6 +7,9 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   required BlockchainType blockchainType,
   required KeyGenerator keyGenerator,
   required String did,
+  required VCFormatType vcFormatType,
+  required OIDC4VC oidc4vc,
+  required Map<String, dynamic> privateKey,
   String? oldId,
 }) async {
   final log =
@@ -170,10 +173,24 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
               .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
         );
       } else {
-        return _createCredential(vc, oldId, credentialManifest);
+        return _createCredential(
+          vc: vc,
+          oldId: oldId,
+          credentialManifest: credentialManifest,
+          vcFormatType: vcFormatType,
+          oidc4vc: oidc4vc,
+          privateKey: privateKey,
+        );
       }
     } else {
-      return _createCredential(vc, oldId, credentialManifest);
+      return _createCredential(
+        vc: vc,
+        oldId: oldId,
+        credentialManifest: credentialManifest,
+        vcFormatType: vcFormatType,
+        oidc4vc: oidc4vc,
+        privateKey: privateKey,
+      );
     }
   } catch (e, s) {
     log.e(
@@ -185,20 +202,33 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   }
 }
 
-Future<CredentialModel> _createCredential(
-  String vc,
+Future<CredentialModel> _createCredential({
+  required String vc,
+  required CredentialManifest credentialManifest,
+  required VCFormatType vcFormatType,
+  required OIDC4VC oidc4vc,
+  required Map<String, dynamic> privateKey,
   String? oldId,
-  CredentialManifest credentialManifest,
-) async {
+}) async {
   final jsonCredential = jsonDecode(vc) as Map<String, dynamic>;
+
+  String? jwt;
+
+  if (vcFormatType != VCFormatType.ldpVc) {
+    jwt = await oidc4vc.getSignedJwt(
+      payload: jsonCredential,
+      p256Key: privateKey,
+    );
+  }
+
   final id = oldId ?? 'urn:uuid:${const Uuid().v4()}';
   return CredentialModel(
     id: id,
     image: 'image',
     data: jsonCredential,
     shareLink: '',
-    jwt: null,
-    format: 'ldp_vc',
+    jwt: jwt,
+    format: vcFormatType.value,
     credentialPreview: Credential.fromJson(jsonCredential),
     credentialManifest: credentialManifest,
     activities: [Activity(acquisitionAt: DateTime.now())],

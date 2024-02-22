@@ -7,6 +7,7 @@ import 'package:did_kit/did_kit.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:uuid/uuid.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 Future<void> getAuthorizationUriForIssuer({
   required String scannedResponse,
@@ -73,7 +74,8 @@ Future<void> getAuthorizationUriForIssuer({
     authorizationEndPoint: Parameters.authorizeEndPoint,
     scope: scope,
     clientAuthentication: clientAuthentication,
-    oidc4vciDraftType: oidc4vciDraftType, vcFormatType: vcFormatType,
+    oidc4vciDraftType: oidc4vciDraftType,
+    vcFormatType: vcFormatType,
   );
 
   await LaunchUrl.launchUri(oidc4vcAuthenticationUri);
