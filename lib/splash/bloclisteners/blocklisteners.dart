@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -836,6 +837,27 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
         stateMessage: const StateMessage.error(
           stringMessage: 'This feature is not available yet in our app.',
         ),
+      );
+    }
+  },
+);
+
+final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
+  listener: (BuildContext context, EnterpriseState state) {
+    if (state.status == AppStatus.loading) {
+      LoadingView().show(context: context);
+    } else {
+      LoadingView().hide();
+    }
+
+    if (state.status == AppStatus.goBack) {
+      Navigator.of(context).pop();
+    }
+
+    if (state.message != null) {
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: state.message!,
       );
     }
   },

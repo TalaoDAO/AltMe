@@ -133,14 +133,14 @@ class Urls {
   static String ethPrice(String symbol) =>
       '$cryptoCompareBaseUrl/data/price?fsym=$symbol&tsyms=USD';
 
-  // TZKT
+  /// TZKT
   static const tzktMainnetUrl = 'https://api.tzkt.io';
   static const tzktGhostnetUrl = 'https://api.ghostnet.tzkt.io';
 
-  //Moralis
+  /// Moralis
   static const moralisBaseUrl = 'https://deep-index.moralis.io/api/v2';
 
-  //Infura
+  /// Infura
   static const infuraBaseUrl = 'https://mainnet.infura.io/v3/';
 
   static const objktUrl = 'https://objkt.com/';
@@ -154,24 +154,24 @@ class Urls {
   static const over65AIValidationUrl = 'https://issuer.talao.co/ai/over65';
   static const ageRangeAIValidationUrl = 'https://issuer.talao.co/ai/agerange';
 
-  //Matrix home server
+  /// Matrix home server
   static const matrixHomeServer = 'https://matrix.talao.co';
   static const getNonce = 'https://talao.co/matrix/nonce';
   static const registerToMatrix = 'https://talao.co/matrix/register';
 
-  //deeplink
+  /// deeplink
   static const appDeepLink = 'https://app.altme.io/app/download';
 
-  //ID360
+  /// ID360
   static const getCodeForId360 = 'https://talao.co/id360/get_code';
   static const authenticateForId360 = 'https://talao.co/id360/authenticate';
 
-  //Discover
+  /// Discover
   static const discoverCoinsWebView = 'https://discover-coins-part.webflow.io/';
   static const discoverNftsWebView =
       'https://discover-coins-part.webflow.io/prod-nota-available/nft-noir';
 
-  // wallet provider
+  /// wallet provider
   static const walletProvider = 'https://wallet-provider.talao.co';
   static const walletTestProvider = 'https://preprod.wallet-provider.talao.co';
 }

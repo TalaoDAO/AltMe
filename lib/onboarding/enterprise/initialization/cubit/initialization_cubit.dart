@@ -56,10 +56,10 @@ class EnterpriseInitializationCubit
     WalletProviderType walletProviderType,
   ) async {
     emit(state.loading());
-    await secureStorageProvider.set(
-      SecureStorageKeys.walletProviderType,
-      walletProviderType.toString(),
-    );
+    // await secureStorageProvider.set(
+    //   SecureStorageKeys.walletProviderType,
+    //   walletProviderType.toString(),
+    // );
     emit(
       state.copyWith(
         walletProviderType: walletProviderType,
@@ -126,7 +126,6 @@ class EnterpriseInitializationCubit
     required String password,
   }) async {
     /// request the configuration
-    //final encodedData = utf8.encode('thierry@altme.io:talao');
     final encodedData = utf8.encode('$email:$password');
     final base64Encoded = base64UrlEncode(encodedData).replaceAll('=', '');
 
@@ -172,6 +171,7 @@ class EnterpriseInitializationCubit
       profileSetting: profileSetting,
       profileType: ProfileType.enterprise,
     );
+
     // if (isVerified == VerificationType.verified) {
     //   emit(
     //     state.copyWith(

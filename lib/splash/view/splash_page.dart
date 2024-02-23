@@ -223,6 +223,7 @@ class _SplashViewState extends State<SplashView> {
         beaconBlocListener,
         walletConnectBlocListener,
         polygonIdBlocListener,
+        enterpriseBlocListener,
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {

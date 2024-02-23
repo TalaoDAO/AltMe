@@ -11,6 +11,7 @@ import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
+import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -142,6 +143,14 @@ class App extends StatelessWidget {
             walletCubit: context.read<WalletCubit>(),
           ),
         ),
+        BlocProvider<EnterpriseCubit>(
+          create: (context) => EnterpriseCubit(
+            client: DioClient('', Dio()),
+            jwtDecode: JWTDecode(),
+            profileCubit: context.read<ProfileCubit>(),
+            walletCubit: context.read<WalletCubit>(),
+          ),
+        ),
         BlocProvider<ScanCubit>(
           create: (context) => ScanCubit(
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
@@ -170,6 +179,7 @@ class App extends StatelessWidget {
             didKitProvider: DIDKitProvider(),
             oidc4vc: OIDC4VC(),
             walletCubit: context.read<WalletCubit>(),
+            enterpriseCubit: context.read<EnterpriseCubit>(),
           ),
         ),
         BlocProvider(
