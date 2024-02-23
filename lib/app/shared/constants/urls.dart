@@ -15,54 +15,103 @@ class Urls {
   };
 
   static const String issuerBaseUrl = 'https://issuer.talao.co';
+
+  /// phone pass
   static const String phonePassUrl = 'https://issuer.talao.co/phonepass';
+
+  /// email pass
   static const String emailPassUrl = 'https://issuer.talao.co/emailpass';
   static const String emailPassUrlJWTVCJSON =
       'https://issuer.talao.co/emailpass?format=jwt_vc_json';
 
+  /// tezotopia voucher
   static const String tezotopiaVoucherUrl =
       'https://issuer.tezotopia.altme.io/issuer/voucher_mobile';
 
+  /// tezotopia membership
   static const String tezotopiaMembershipCardUrl =
       'https://issuer.talao.co/tezotopia/membershipcard/';
 
+  /// liveness
   static const String livenessCardUrl =
-      'https://issuer.talao.co/passbase/endpoint/liveness';
-
+      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=liveness';
   static const String livenessCardJWTVCJSON =
-      'https://talao.co/id360/oidc4vc?type=liveness';
+      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=liveness';
 
+  /// polygon
   static const String defaultPolygonIdCardUrl =
       'https://issuer.talao.co/credential-manifest/polygonid/default';
 
+  /// KYC Age
   static const String kycAgeCredentialUrl =
       'https://issuer.talao.co/credential-manifest/polygonid/kycagecredential';
+
+  /// KYC Country
   static const String kycCountryOfResidenceUrl =
       'https://issuer.talao.co/credential-manifest/polygonid/kyccountryofresidencecredential';
 
+  /// twitter proof
   static const String proofOfTwitterStatsUrl =
       'https://issuer.talao.co/credential-manifest/polygonid/ProofOfTwitterStats';
 
+  /// civic pass
   static const String civicPassCredentialUrl =
       'https://issuer.talao.co/credential-manifest/polygonid/civicpasscredential';
 
+  /// chainborn membership
   static const String chainbornMembershipCardUrl =
       'https://issuer.talao.co/chainborn/membershipcard/';
 
+  /// twitter card
   static const String twitterCardUrl = 'https://issuer.talao.co/twitter/';
 
-  static const String identityCardUrlLDPVC =
+  /// verifiableIdCard
+  static const String verifiableIdCardUrlLDPVC =
       'https://talao.co/id360/oidc4vc?format=ldp_vc&type=verifiableid';
 
-  static const String identityCardUrlJWTVCJSON =
+  static const String verifiableIdCardUrlJWTVCJSON =
       'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=verifiableid';
 
-  static const String identityCardUrlVCSDJWT =
+  static const String verifiableIdCardUrlVCSDJWT =
       'https://talao.co/id360/oidc4vc?format=vcsd-jwt&type=identitycredential';
 
-  static const String over18JWTVCJSON =
-      'https://talao.co/id360/oidc4vc?type=over18';
+  /// over 13
+  static const String over13Url =
+      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over13';
+  static const String over13JWTVCJSON =
+      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=over13';
 
+  /// over 15
+  static const String over15Url =
+      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over15';
+  static const String over15JWTVCJSON =
+      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=over15';
+
+  /// over 18
+  static const String over18Url =
+      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over18';
+  static const String over18JWTVCJSON =
+      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=over18';
+
+  /// over 21
+  static const String over21Url =
+      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over21';
+  static const String over21JWTVCJSON =
+      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=over21';
+
+  /// over 50
+  static const String over50Url =
+      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over50';
+  static const String over50JWTVCJSON =
+      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=over50';
+
+  /// over 65
+  static const String over65Url =
+      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over65';
+  static const String over65JWTVCJSON =
+      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=over65';
+
+  /// linkedin card
   static const String linkedinCardUrl =
       'https://issuer.talao.co/passbase/endpoint/linkedincard/';
   static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
