@@ -524,8 +524,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       blockchainType: cryptoAccountData.blockchainType,
       keyGenerator: keyGenerator,
       did: did,
-      vcFormatType: profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
+      customOidc4vcProfile: profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile,
       oidc4vc: oidc4vc,
       privateKey: private,
     );
@@ -615,8 +615,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         keyGenerator: keyGenerator,
         oldId: oldCredential.id,
         did: oldCredential.credentialPreview.credentialSubjectModel.id!,
-        vcFormatType: profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
+        customOidc4vcProfile: profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile,
         oidc4vc: oidc4vc,
         privateKey: private,
       );

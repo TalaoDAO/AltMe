@@ -7,7 +7,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   required BlockchainType blockchainType,
   required KeyGenerator keyGenerator,
   required String did,
-  required VCFormatType vcFormatType,
+  required CustomOidc4VcProfile customOidc4vcProfile,
   required OIDC4VC oidc4vc,
   required Map<String, dynamic> privateKey,
   String? oldId,
@@ -177,9 +177,11 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           vc: vc,
           oldId: oldId,
           credentialManifest: credentialManifest,
-          vcFormatType: vcFormatType,
+          customOidc4vcProfile: customOidc4vcProfile,
           oidc4vc: oidc4vc,
           privateKey: privateKey,
+          kid: verificationMethod,
+          did: did,
         );
       }
     } else {
@@ -187,9 +189,11 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         vc: vc,
         oldId: oldId,
         credentialManifest: credentialManifest,
-        vcFormatType: vcFormatType,
+        customOidc4vcProfile: customOidc4vcProfile,
         oidc4vc: oidc4vc,
         privateKey: privateKey,
+        kid: verificationMethod,
+        did: did,
       );
     }
   } catch (e, s) {
@@ -205,19 +209,55 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
 Future<CredentialModel> _createCredential({
   required String vc,
   required CredentialManifest credentialManifest,
-  required VCFormatType vcFormatType,
+  required CustomOidc4VcProfile customOidc4vcProfile,
   required OIDC4VC oidc4vc,
   required Map<String, dynamic> privateKey,
+  required String did,
+  required String kid,
   String? oldId,
 }) async {
-  final jsonCredential = jsonDecode(vc) as Map<String, dynamic>;
+  final jsonLd = jsonDecode(vc) as Map<String, dynamic>;
 
   String? jwt;
+  DateTime dateTime = DateTime.now();
 
-  if (vcFormatType != VCFormatType.ldpVc) {
-    jwt = await oidc4vc.getSignedJwt(
-      payload: jsonCredential,
-      p256Key: privateKey,
+  if (customOidc4vcProfile.vcFormatType != VCFormatType.ldpVc) {
+    /// id -> jti (optional)
+    /// issuer -> iss (compulsary)
+    /// issuanceDate -> iat (optional)
+    /// expirationDate -> exp (optional)
+
+    try {
+      dateTime = DateTime.parse(jsonLd['issuanceDate'].toString());
+    } catch (e) {
+      dateTime = DateTime.now();
+    }
+
+    final iat = (dateTime.millisecondsSinceEpoch / 1000).round();
+
+    final jsonContent = <String, dynamic>{
+      'iat': iat,
+      'exp': iat + 1000,
+      'iss': jsonLd['issuer'],
+      'jti': jsonLd['id'] ?? 'urn:uuid:${const Uuid().v4()}',
+      'sub': did,
+      'vc': jsonLd,
+    };
+
+    final tokenParameters = TokenParameters(
+      privateKey: privateKey,
+      did: did,
+      kid: kid,
+      mediaType: MediaType.basic,
+      clientType: customOidc4vcProfile.clientType,
+      proofHeaderType: customOidc4vcProfile.proofHeader,
+      clientId: customOidc4vcProfile.clientId ?? '',
+    );
+
+    /// sign and get token
+    jwt = oidc4vc.generateToken(
+      payload: jsonContent,
+      tokenParameters: tokenParameters,
     );
   }
 
@@ -225,12 +265,12 @@ Future<CredentialModel> _createCredential({
   return CredentialModel(
     id: id,
     image: 'image',
-    data: jsonCredential,
+    data: jsonLd,
     shareLink: '',
     jwt: jwt,
-    format: vcFormatType.value,
-    credentialPreview: Credential.fromJson(jsonCredential),
+    format: customOidc4vcProfile.vcFormatType.value,
+    credentialPreview: Credential.fromJson(jsonLd),
     credentialManifest: credentialManifest,
-    activities: [Activity(acquisitionAt: DateTime.now())],
+    activities: [Activity(acquisitionAt: dateTime)],
   );
 }

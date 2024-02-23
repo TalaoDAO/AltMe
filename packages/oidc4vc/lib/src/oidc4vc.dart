@@ -1065,24 +1065,6 @@ class OIDC4VC {
     return result;
   }
 
-  Future<String> getSignedJwt({
-    required Map<String, dynamic> payload,
-    required Map<String, dynamic> p256Key,
-  }) async {
-    // Create a JsonWebSignatureBuilder
-    final builder = JsonWebSignatureBuilder()
-      ..jsonContent = payload
-      ..setProtectedHeader('alg', 'ES256')
-      ..addRecipient(
-        JsonWebKey.fromJson(p256Key),
-        algorithm: 'ES256',
-      );
-    // build the jws
-    final jws = builder.build();
-
-    return jws.toCompactSerialization();
-  }
-
   String readCredentialEndpoint(
     OpenIdConfiguration openIdConfiguration,
   ) {
@@ -1310,8 +1292,9 @@ class OIDC4VC {
     return verifierVpJwt;
   }
 
+  /// getSignedJwt
   String generateToken({
-    required Map<String, Object> payload,
+    required Map<String, dynamic> payload,
     required TokenParameters tokenParameters,
   }) {
     final vpVerifierClaims = JsonWebTokenClaims.fromJson(payload);
