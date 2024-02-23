@@ -761,7 +761,18 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
       case CredentialSubjectType.over13:
         image = ImageStrings.dummyOver13Card;
-        link = '';
+
+        switch (vcFormatType) {
+          case VCFormatType.ldpVc:
+            link = Urls.over13Url;
+          case VCFormatType.jwtVcJson:
+            link = Urls.over13JWTVCJSON;
+          case VCFormatType.jwtVc:
+          case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
+            link = '';
+        }
+
         whyGetThisCard = ResponseString.RESPONSE_STRING_over13WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over13ExpirationDate;
@@ -769,7 +780,18 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
       case CredentialSubjectType.over15:
         image = ImageStrings.dummyOver15Card;
-        link = '';
+
+        switch (vcFormatType) {
+          case VCFormatType.ldpVc:
+            link = Urls.over15Url;
+          case VCFormatType.jwtVcJson:
+            link = Urls.over15JWTVCJSON;
+          case VCFormatType.jwtVc:
+          case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
+            link = '';
+        }
+
         whyGetThisCard = ResponseString.RESPONSE_STRING_over15WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over15ExpirationDate;
@@ -783,7 +805,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
             /// id360 link use to oidc4vc over18 credential.
             /// another link is automatically used when getting the credential
             /// through yoti.
-            link = 'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over18';
+            link = Urls.over18Url;
           case VCFormatType.jwtVcJson:
             link = Urls.over18JWTVCJSON;
           case VCFormatType.jwtVc:
@@ -798,7 +820,18 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
       case CredentialSubjectType.over21:
         image = ImageStrings.dummyOver21Card;
-        link = '';
+
+        switch (vcFormatType) {
+          case VCFormatType.ldpVc:
+            link = Urls.over21Url;
+          case VCFormatType.jwtVcJson:
+            link = Urls.over21JWTVCJSON;
+          case VCFormatType.jwtVc:
+          case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
+            link = '';
+        }
+
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
@@ -806,7 +839,18 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
       case CredentialSubjectType.over50:
         image = ImageStrings.dummyOver50Card;
-        link = '';
+
+        switch (vcFormatType) {
+          case VCFormatType.ldpVc:
+            link = Urls.over50Url;
+          case VCFormatType.jwtVcJson:
+            link = Urls.over50JWTVCJSON;
+          case VCFormatType.jwtVc:
+          case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
+            link = '';
+        }
+
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
@@ -814,7 +858,18 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
       case CredentialSubjectType.over65:
         image = ImageStrings.dummyOver65Card;
-        link = '';
+
+        switch (vcFormatType) {
+          case VCFormatType.ldpVc:
+            link = Urls.over65Url;
+          case VCFormatType.jwtVcJson:
+            link = Urls.over65JWTVCJSON;
+          case VCFormatType.jwtVc:
+          case VCFormatType.jwtVcJsonLd:
+          case VCFormatType.vcSdJWT:
+            link = '';
+        }
+
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
@@ -844,14 +899,14 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         switch (vcFormatType) {
           case VCFormatType.ldpVc:
-            link = Urls.identityCardUrlLDPVC;
+            link = Urls.verifiableIdCardUrlLDPVC;
           case VCFormatType.jwtVcJson:
-            link = Urls.identityCardUrlJWTVCJSON;
+            link = Urls.verifiableIdCardUrlJWTVCJSON;
           case VCFormatType.jwtVc:
           case VCFormatType.jwtVcJsonLd:
             link = '';
           case VCFormatType.vcSdJWT:
-            link = Urls.identityCardUrlVCSDJWT;
+            link = Urls.verifiableIdCardUrlVCSDJWT;
         }
 
         whyGetThisCard =
