@@ -30,11 +30,8 @@ class Urls {
   static const String tezotopiaMembershipCardUrl =
       'https://issuer.talao.co/tezotopia/membershipcard/';
 
-  /// liveness
-  static const String livenessCardUrl =
-      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=liveness';
-  static const String livenessCardJWTVCJSON =
-      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=liveness';
+  /// id360 url
+  static const String id360Url = 'https://talao.co/id360/oidc4vc';
 
   /// polygon
   static const String defaultPolygonIdCardUrl =
@@ -62,52 +59,6 @@ class Urls {
 
   /// twitter card
   static const String twitterCardUrl = 'https://issuer.talao.co/twitter/';
-
-  /// verifiableIdCard
-  static const String verifiableIdCardUrlLDPVC =
-      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=verifiableid';
-
-  static const String verifiableIdCardUrlJWTVCJSON =
-      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=verifiableid';
-
-  static const String verifiableIdCardUrlVCSDJWT =
-      'https://talao.co/id360/oidc4vc?format=vcsd-jwt&type=identitycredential';
-
-  /// over 13
-  static const String over13Url =
-      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over13';
-  static const String over13JWTVCJSON =
-      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=over13';
-
-  /// over 15
-  static const String over15Url =
-      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over15';
-  static const String over15JWTVCJSON =
-      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=over15';
-
-  /// over 18
-  static const String over18Url =
-      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over18';
-  static const String over18JWTVCJSON =
-      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=over18';
-
-  /// over 21
-  static const String over21Url =
-      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over21';
-  static const String over21JWTVCJSON =
-      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=over21';
-
-  /// over 50
-  static const String over50Url =
-      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over50';
-  static const String over50JWTVCJSON =
-      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=over50';
-
-  /// over 65
-  static const String over65Url =
-      'https://talao.co/id360/oidc4vc?format=ldp_vc&type=over65';
-  static const String over65JWTVCJSON =
-      'https://talao.co/id360/oidc4vc?format=jwt_vc_json&type=over65';
 
   /// linkedin card
   static const String linkedinCardUrl =

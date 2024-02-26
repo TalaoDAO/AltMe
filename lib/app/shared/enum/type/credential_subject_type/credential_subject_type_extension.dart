@@ -751,7 +751,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.emailPassUrl}'
             '?draft=${oidc4vcDraftType.numbering}'
-            'format=${vcFormatType.value}';
+            '&format=${vcFormatType.urlValue}';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard;
         expirationDateDetails =
@@ -761,16 +761,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over13:
         image = ImageStrings.dummyOver13Card;
 
-        switch (vcFormatType) {
-          case VCFormatType.ldpVc:
-            link = Urls.over13Url;
-          case VCFormatType.jwtVcJson:
-            link = Urls.over13JWTVCJSON;
-          case VCFormatType.jwtVc:
-          case VCFormatType.jwtVcJsonLd:
-          case VCFormatType.vcSdJWT:
-            link = '';
-        }
+        link = '${Urls.id360Url}'
+            '?format=${vcFormatType.urlValue}'
+            '&type=over13';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over13WhyGetThisCard;
         expirationDateDetails =
@@ -780,16 +773,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over15:
         image = ImageStrings.dummyOver15Card;
 
-        switch (vcFormatType) {
-          case VCFormatType.ldpVc:
-            link = Urls.over15Url;
-          case VCFormatType.jwtVcJson:
-            link = Urls.over15JWTVCJSON;
-          case VCFormatType.jwtVc:
-          case VCFormatType.jwtVcJsonLd:
-          case VCFormatType.vcSdJWT:
-            link = '';
-        }
+        link = '${Urls.id360Url}'
+            '?format=${vcFormatType.urlValue}'
+            '&type=over15';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over15WhyGetThisCard;
         expirationDateDetails =
@@ -798,20 +784,11 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
       case CredentialSubjectType.over18:
         image = ImageStrings.dummyOver18Card;
-        switch (vcFormatType) {
-          case VCFormatType.ldpVc:
 
-            /// id360 link use to oidc4vc over18 credential.
-            /// another link is automatically used when getting the credential
-            /// through yoti.
-            link = Urls.over18Url;
-          case VCFormatType.jwtVcJson:
-            link = Urls.over18JWTVCJSON;
-          case VCFormatType.jwtVc:
-          case VCFormatType.jwtVcJsonLd:
-          case VCFormatType.vcSdJWT:
-            link = '';
-        }
+        link = '${Urls.id360Url}'
+            '?format=${vcFormatType.urlValue}'
+            '&type=over18';
+
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
@@ -820,16 +797,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over21:
         image = ImageStrings.dummyOver21Card;
 
-        switch (vcFormatType) {
-          case VCFormatType.ldpVc:
-            link = Urls.over21Url;
-          case VCFormatType.jwtVcJson:
-            link = Urls.over21JWTVCJSON;
-          case VCFormatType.jwtVc:
-          case VCFormatType.jwtVcJsonLd:
-          case VCFormatType.vcSdJWT:
-            link = '';
-        }
+        link = '${Urls.id360Url}'
+            '?format=${vcFormatType.urlValue}'
+            '&type=over21';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
@@ -839,16 +809,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over50:
         image = ImageStrings.dummyOver50Card;
 
-        switch (vcFormatType) {
-          case VCFormatType.ldpVc:
-            link = Urls.over50Url;
-          case VCFormatType.jwtVcJson:
-            link = Urls.over50JWTVCJSON;
-          case VCFormatType.jwtVc:
-          case VCFormatType.jwtVcJsonLd:
-          case VCFormatType.vcSdJWT:
-            link = '';
-        }
+        link = '${Urls.id360Url}'
+            '?format=${vcFormatType.urlValue}'
+            '&type=over50';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
@@ -858,16 +821,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over65:
         image = ImageStrings.dummyOver65Card;
 
-        switch (vcFormatType) {
-          case VCFormatType.ldpVc:
-            link = Urls.over65Url;
-          case VCFormatType.jwtVcJson:
-            link = Urls.over65JWTVCJSON;
-          case VCFormatType.jwtVc:
-          case VCFormatType.jwtVcJsonLd:
-          case VCFormatType.vcSdJWT:
-            link = '';
-        }
+        link = '${Urls.id360Url}'
+            '?format=${vcFormatType.urlValue}'
+            '&type=over65';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
         expirationDateDetails =
@@ -896,17 +852,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.verifiableIdCard:
         image = ImageStrings.dummyVerifiableIdCard;
 
-        switch (vcFormatType) {
-          case VCFormatType.ldpVc:
-            link = Urls.verifiableIdCardUrlLDPVC;
-          case VCFormatType.jwtVcJson:
-            link = Urls.verifiableIdCardUrlJWTVCJSON;
-          case VCFormatType.jwtVc:
-          case VCFormatType.jwtVcJsonLd:
-            link = '';
-          case VCFormatType.vcSdJWT:
-            link = Urls.verifiableIdCardUrlVCSDJWT;
-        }
+        link = '${Urls.id360Url}'
+            '?format=${vcFormatType.urlValue}'
+            '&type=verifiableid';
 
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_verifiableIdCardWhyGetThisCard;
@@ -961,7 +909,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.phonePassUrl}'
             '?draft=${oidc4vcDraftType.numbering}'
-            'format=${vcFormatType.value}';
+            '&format=${vcFormatType.urlValue}';
 
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_phoneProofWhyGetThisCard;
@@ -972,16 +920,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.livenessCard:
         image = ImageStrings.livenessDummy;
 
-        switch (vcFormatType) {
-          case VCFormatType.ldpVc:
-            link = Urls.livenessCardUrl;
-          case VCFormatType.jwtVcJson:
-            link = Urls.livenessCardJWTVCJSON;
-          case VCFormatType.jwtVc:
-          case VCFormatType.jwtVcJsonLd:
-          case VCFormatType.vcSdJWT:
-            link = '';
-        }
+        link = '${Urls.id360Url}'
+            '?format=${vcFormatType.urlValue}'
+            '&type=liveness';
 
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard;
