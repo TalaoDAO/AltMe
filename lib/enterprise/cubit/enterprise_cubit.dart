@@ -28,11 +28,9 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
   final ProfileCubit profileCubit;
   final WalletCubit walletCubit;
 
-  Future<void> requestTheConfiguration(String scannedResponse) async {
+  Future<void> requestTheConfiguration(Uri uri) async {
     try {
       emit(state.loading());
-
-      final uri = Uri.parse(scannedResponse);
 
       final String? email = uri.queryParameters['login'];
       final String? password = uri.queryParameters['password'];

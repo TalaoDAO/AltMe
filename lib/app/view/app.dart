@@ -179,7 +179,6 @@ class App extends StatelessWidget {
             didKitProvider: DIDKitProvider(),
             oidc4vc: OIDC4VC(),
             walletCubit: context.read<WalletCubit>(),
-            enterpriseCubit: context.read<EnterpriseCubit>(),
           ),
         ),
         BlocProvider(

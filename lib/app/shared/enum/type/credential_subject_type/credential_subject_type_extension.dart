@@ -652,6 +652,11 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         ];
 
       case CredentialSubjectType.over18:
+        return [
+          VCFormatType.ldpVc,
+          VCFormatType.jwtVcJson,
+        ];
+
       case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.emailPass:
         return [VCFormatType.ldpVc, VCFormatType.jwtVcJson];

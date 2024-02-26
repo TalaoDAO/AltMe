@@ -636,9 +636,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final dummies = <CredentialCategory, List<DiscoverDummyCredential>>{};
     // entreprise user may have options to display some dummies (true/false)
 
-    final profileSetting = profileCubit.state.model.profileSetting;
-    final vcFormatType = profileCubit.state.model.profileSetting
+    final profileModel = profileCubit.state.model;
+    final profileSetting = profileModel.profileSetting;
+    final vcFormatType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+
+    final isDutchProfile = profileModel.profileType == ProfileType.dutch;
 
     final discoverCardsOptions = profileSetting.discoverCardsOptions;
     // entreprise user may have a list of external issuer
@@ -676,7 +679,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               final displayOver18Jwt = vcFormatType == VCFormatType.jwtVcJson &&
                   discoverCardsOptions.displayOver18Jwt;
 
-              if (displayOver18 || displayOver18Jwt) {
+              if (isDutchProfile || displayOver18 || displayOver18Jwt) {
                 allSubjectTypeForCategory.add(CredentialSubjectType.over18);
               }
             }

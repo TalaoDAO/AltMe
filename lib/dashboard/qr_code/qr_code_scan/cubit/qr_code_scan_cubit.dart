@@ -7,7 +7,6 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/credential_manifest/helpers/apply_submission_requirements.dart';
 import 'package:altme/deep_link/deep_link.dart';
-import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
@@ -45,7 +44,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.didKitProvider,
     required this.oidc4vc,
     required this.walletCubit,
-    required this.enterpriseCubit,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -63,7 +61,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final DIDKitProvider didKitProvider;
   final OIDC4VC oidc4vc;
   final WalletCubit walletCubit;
-  final EnterpriseCubit enterpriseCubit;
 
   final log = getLogger('QRCodeScanCubit');
 
@@ -111,10 +108,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           scannedResponse.substring('${Urls.appDeepLink}?uri='.length),
         );
         await verify(uri: Uri.parse(url));
-      } else if (scannedResponse.startsWith('configuration://?')) {
-        /// enterprise
-        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-        await enterpriseCubit.requestTheConfiguration(scannedResponse);
       } else {
         final uri = Uri.parse(scannedResponse);
         await verify(uri: uri);
