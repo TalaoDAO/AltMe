@@ -839,9 +839,9 @@ class OIDC4VC {
     }
 
     switch (oidc4vciDraftType) {
-      case OIDC4VCIDraftType.draft8:
-        credentialData['type'] = credentialType;
-        credentialData['format'] = format;
+      // case OIDC4VCIDraftType.draft8:
+      //   credentialData['type'] = credentialType;
+      //   credentialData['format'] = format;
 
       case OIDC4VCIDraftType.draft11:
         if (types == null) {
