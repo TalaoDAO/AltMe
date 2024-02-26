@@ -35,7 +35,9 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
 
     final List<DiscoverDummyCredential> dummyCredentials = [];
 
-    final vcFormatType = profileCubit.state.model.profileSetting
+    final profileSetting = profileCubit.state.model.profileSetting;
+
+    final vcFormatType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
     if (credentialManifest != null) {
@@ -69,7 +71,7 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
 
             if (credentialSubjectType != null) {
               dummyCredentials.add(
-                credentialSubjectType.dummyCredential(vcFormatType),
+                credentialSubjectType.dummyCredential(profileSetting),
               );
             }
           }
@@ -92,7 +94,7 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
 
           if (credentialSubjectType != null) {
             dummyCredentials
-                .add(credentialSubjectType.dummyCredential(vcFormatType));
+                .add(credentialSubjectType.dummyCredential(profileSetting));
           }
         }
       }

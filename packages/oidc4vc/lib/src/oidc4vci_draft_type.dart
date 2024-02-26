@@ -20,4 +20,15 @@ extension OIDC4VCIDraftTypeX on OIDC4VCIDraftType {
         return 'Draft 13';
     }
   }
+
+  String get numbering {
+    switch (this) {
+      case OIDC4VCIDraftType.draft11:
+        return '11';
+      case OIDC4VCIDraftType.draft12:
+        return '12';
+      case OIDC4VCIDraftType.draft13:
+        return '13';
+    }
+  }
 }

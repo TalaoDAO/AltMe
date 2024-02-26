@@ -170,14 +170,11 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.removeLast();
         }
 
-        final vcFormatType = context
-            .read<ProfileCubit>()
-            .state
-            .model
-            .profileSetting
-            .selfSovereignIdentityOptions
-            .customOidc4vcProfile
-            .vcFormatType;
+        final profileSetting =
+            context.read<ProfileCubit>().state.model.profileSetting;
+
+        final vcFormatType = profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
         return BasePage(
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
@@ -196,7 +193,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         CredentialDisplay(
                           credentialModel: widget.credentialModel,
                           credDisplayType: CredDisplayType.Detail,
-                          vcFormatType: vcFormatType,
+                          profileSetting: profileSetting,
                         ),
                         const SizedBox(height: 20),
                         Column(

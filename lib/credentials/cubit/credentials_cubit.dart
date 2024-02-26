@@ -890,7 +890,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 // add dummies from the category
       dummies[category]?.addAll(
         requiredDummySubjects
-            .map((item) => item.dummyCredential(vcFormatType))
+            .map((item) => item.dummyCredential(profileSetting))
             .toList(),
       );
     }
