@@ -626,6 +626,13 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   List<VCFormatType> get getVCFormatType {
     switch (this) {
+      case CredentialSubjectType.ethereumAssociatedWallet:
+      case CredentialSubjectType.fantomAssociatedWallet:
+      case CredentialSubjectType.polygonAssociatedWallet:
+      case CredentialSubjectType.binanceAssociatedWallet:
+      case CredentialSubjectType.tezosAssociatedWallet:
+        return VCFormatType.values;
+
       case CredentialSubjectType.over13:
       case CredentialSubjectType.over15:
       case CredentialSubjectType.over21:
@@ -633,11 +640,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over65:
       case CredentialSubjectType.gender:
       case CredentialSubjectType.ageRange:
-      case CredentialSubjectType.ethereumAssociatedWallet:
-      case CredentialSubjectType.fantomAssociatedWallet:
-      case CredentialSubjectType.polygonAssociatedWallet:
-      case CredentialSubjectType.binanceAssociatedWallet:
-      case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.defiCompliance:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
