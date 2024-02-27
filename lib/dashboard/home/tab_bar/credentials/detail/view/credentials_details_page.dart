@@ -173,9 +173,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         final profileSetting =
             context.read<ProfileCubit>().state.model.profileSetting;
 
-        final vcFormatType = profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
-
         return BasePage(
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
           titleAlignment: Alignment.topCenter,

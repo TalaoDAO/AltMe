@@ -65,9 +65,6 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
         final profileSetting =
             context.read<ProfileCubit>().state.model.profileSetting;
 
-        final vcFormatType = profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
-
         return BasePage(
           title: l10n.credentialReceiveTitle,
           useSafeArea: true,

@@ -117,11 +117,6 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                     final profileSetting =
                         context.read<ProfileCubit>().state.model.profileSetting;
 
-                    final vcFormatType = profileSetting
-                        .selfSovereignIdentityOptions
-                        .customOidc4vcProfile
-                        .vcFormatType;
-
                     final DiscoverDummyCredential discoverDummyCredential =
                         credentialSubjectType.dummyCredential(profileSetting);
 

@@ -121,6 +121,7 @@ class CredentialModel extends Equatable {
     PendingInfo? pendingInfo,
     String? format,
     Map<String, dynamic>? claims,
+    Map<String, dynamic>? credentialSupported,
   }) {
     return CredentialModel(
       id: id ?? this.id,

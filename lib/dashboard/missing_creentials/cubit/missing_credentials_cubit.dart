@@ -37,9 +37,6 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
 
     final profileSetting = profileCubit.state.model.profileSetting;
 
-    final vcFormatType = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
-
     if (credentialManifest != null) {
       final PresentationDefinition? presentationDefinition =
           credentialManifest!.presentationDefinition;
