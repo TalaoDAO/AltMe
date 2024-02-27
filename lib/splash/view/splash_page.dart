@@ -93,12 +93,12 @@ class _SplashViewState extends State<SplashView> {
     }
 
     if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
-      await context.read<EnterpriseCubit>().requestTheConfiguration(uri!);
+      await context.read<QRCodeScanCubit>().authorizedFlowStart(uri!);
       return;
     }
 
     if (uri.toString().startsWith('configuration://?')) {
-      await context.read<QRCodeScanCubit>().authorizedFlowStart(uri!);
+      await context.read<EnterpriseCubit>().requestTheConfiguration(uri!);
       return;
     }
 
