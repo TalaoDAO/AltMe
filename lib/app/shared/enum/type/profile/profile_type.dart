@@ -42,17 +42,4 @@ extension ProfileTypeX on ProfileType {
         return true;
     }
   }
-
-  bool get supportAssociatedCredential {
-    switch (this) {
-      case ProfileType.custom:
-      case ProfileType.owfBaselineProfile:
-        return false;
-      case ProfileType.defaultOne:
-      case ProfileType.dutch:
-      case ProfileType.ebsiV3:
-      case ProfileType.enterprise:
-        return true;
-    }
-  }
 }

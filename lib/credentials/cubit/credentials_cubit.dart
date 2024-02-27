@@ -496,9 +496,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> insertAssociatedWalletCredential({
     required CryptoAccountData cryptoAccountData,
   }) async {
-    if (!profileCubit.state.model.profileType.supportAssociatedCredential) {
-      throw Exception();
-    }
+    final supportAssociatedCredential =
+        supportCryptoCredential(profileCubit.state.model.profileSetting);
+
+    if (!supportAssociatedCredential) throw Exception();
 
     final didKeyType = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
@@ -841,8 +842,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         final isCurrentBlockchainAccount =
             blockchainToSubjectType[blockchainType] == subjectType;
         final isBlockchainAccount = subjectType.isBlockchainAccount;
+
         final supportAssociatedCredential =
-            profileCubit.state.model.profileType.supportAssociatedCredential;
+            supportCryptoCredential(profileCubit.state.model.profileSetting);
 
         /// remove if credential is blockchain account and
         /// profile do not support

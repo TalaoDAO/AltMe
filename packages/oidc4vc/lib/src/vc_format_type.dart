@@ -58,4 +58,16 @@ extension VCFormatTypeX on VCFormatType {
         return 'vcsd-jwt';
     }
   }
+
+  bool get supportCryptoCredential {
+    switch (this) {
+      case VCFormatType.ldpVc:
+      case VCFormatType.jwtVcJson:
+        return true;
+      case VCFormatType.jwtVc:
+      case VCFormatType.jwtVcJsonLd:
+      case VCFormatType.vcSdJWT:
+        return false;
+    }
+  }
 }

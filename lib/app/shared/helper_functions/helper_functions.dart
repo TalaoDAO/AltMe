@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -1333,4 +1334,20 @@ String getUpdatedUrlForSIOPV2OIC4VP({
 
   final String newUrl = '$uri&$queryString';
   return newUrl;
+}
+
+bool supportCryptoCredential(ProfileSetting profileSetting) {
+  final customOidc4vcProfile =
+      profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
+
+  final supportCryptoCredentialByVCFormat =
+      customOidc4vcProfile.vcFormatType.supportCryptoCredential;
+
+  final supportCryptoCredentialByDidKey =
+      customOidc4vcProfile.defaultDid.supportCryptoCredential;
+
+  final supportAssociatedCredential =
+      supportCryptoCredentialByVCFormat && supportCryptoCredentialByDidKey;
+
+  return supportAssociatedCredential;
 }
