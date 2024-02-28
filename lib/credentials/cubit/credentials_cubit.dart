@@ -861,8 +861,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             )
             .toList();
 
-        if (credentialsOfSameType.isNotEmpty &&
-            subjectType.weCanRemoveItIfCredentialExist) {
+        if (credentialsOfSameType.isNotEmpty && subjectType.supportSingleOnly) {
           /// credential available case
           for (final credential in credentialsOfSameType) {
             if (isBlockchainAccount && supportAssociatedCredential) {
