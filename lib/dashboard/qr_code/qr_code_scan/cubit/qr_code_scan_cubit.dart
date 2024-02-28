@@ -1275,6 +1275,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               return;
             }
           }
+
           await addCredentialData(
             scannedResponse: state.uri.toString(),
             credentialsCubit: credentialsCubit,
