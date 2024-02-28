@@ -576,6 +576,49 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         await context.read<QRCodeScanCubit>().completeSiopV2Flow();
       }
 
+      if (state.status == QrScanStatus.pauseForDialog) {
+        LoadingView().hide();
+        final formattedData = showFormatted(
+          title: state.title ?? '',
+          jsonValue: state.jsonValue,
+        );
+        final bool moveAhead = await showDialog<bool>(
+              context: context,
+              builder: (_) {
+                return DeveloperModeDialog(
+                  onDisplay: () {
+                    Navigator.of(context).push<void>(
+                      JsonViewerPage.route(
+                        title: l10n.display,
+                        data: formattedData,
+                      ),
+                    );
+                    return;
+                  },
+                  onDownload: () {
+                    final box = context.findRenderObject() as RenderBox?;
+                    final subject = l10n.shareWith;
+
+                    Share.share(
+                      formattedData,
+                      subject: subject,
+                      sharePositionOrigin:
+                          box!.localToGlobal(Offset.zero) & box.size,
+                    );
+                    return;
+                  },
+                  onSkip: () {
+                    Navigator.of(context).pop(true);
+                  },
+                );
+              },
+            ) ??
+            true;
+
+        context.read<QRCodeScanCubit>().completer!.complete(moveAhead);
+        LoadingView().show(context: context);
+      }
+
       if (state.status == QrScanStatus.success) {
         if (state.route != null) {
           await Navigator.of(context).push<void>(state.route!);

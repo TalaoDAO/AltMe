@@ -1176,12 +1176,12 @@ $codeForAuthorisedFlow
 }
 
 String showFormatted({
-  required String title,
-  required Map<String, dynamic> jsonValue,
+  required String? title,
+  required Map<String, dynamic>? jsonValue,
 }) {
   return '''
 <b>$title :</b>
-${const JsonEncoder.withIndent('  ').convert(jsonValue)}
+${jsonValue != null ? const JsonEncoder.withIndent('  ').convert(jsonValue) : 'None'}
 ''';
 }
 

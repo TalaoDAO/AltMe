@@ -386,7 +386,16 @@ class OIDC4VC {
   List<dynamic>? authorizationDetails;
 
   /// Retreive credential_type from url
-  Future<(List<dynamic>, String?, String, OpenIdConfiguration?)> getCredential({
+  /// credentialResponseData, deferredCredentialEndpoint, format,
+  /// openIdConfiguration, tokenResponse
+  Future<
+      (
+        List<dynamic>,
+        String?,
+        String,
+        OpenIdConfiguration?,
+        Map<String, dynamic>?
+      )> getCredential({
     required String issuer,
     required dynamic credential,
     required String did,
@@ -419,6 +428,8 @@ class OIDC4VC {
       oidc4vciDraftType: oidc4vciDraftType,
     );
 
+    Map<String, dynamic>? tokenResponse;
+
     if (accessToken == null) {
       final tokenData = buildTokenData(
         preAuthorizedCode: preAuthorizedCode,
@@ -431,19 +442,19 @@ class OIDC4VC {
         redirectUri: redirectUri,
       );
 
-      final response = await getToken(
+      tokenResponse = await getToken(
         tokenEndPoint: tokenEndPoint,
         tokenData: tokenData,
         authorization: authorization,
       );
 
-      if (response is Map<String, dynamic> && response.containsKey('c_nonce')) {
-        cnonce = response['c_nonce'] as String;
+      if (tokenResponse.containsKey('c_nonce')) {
+        cnonce = tokenResponse['c_nonce'] as String;
       }
 
-      accessToken = response['access_token'] as String;
+      accessToken = tokenResponse['access_token'] as String;
       authorizationDetails =
-          response['authorization_details'] as List<dynamic>?;
+          tokenResponse['authorization_details'] as List<dynamic>?;
     }
 
     final issuerTokenParameters = IssuerTokenParameters(
@@ -533,6 +544,7 @@ class OIDC4VC {
       deferredCredentialEndpoint,
       format,
       openIdConfiguration,
+      tokenResponse,
     );
   }
 
@@ -1113,7 +1125,7 @@ class OIDC4VC {
   }
 
   @visibleForTesting
-  Future<dynamic> getToken({
+  Future<Map<String, dynamic>> getToken({
     required String tokenEndPoint,
     required Map<String, dynamic> tokenData,
     required String? authorization,
@@ -1132,7 +1144,7 @@ class OIDC4VC {
       options: Options(headers: tokenHeaders),
       data: tokenData,
     );
-    return tokenResponse.data;
+    return tokenResponse.data as Map<String, dynamic>;
   }
 
   Future<String> extractVpToken({

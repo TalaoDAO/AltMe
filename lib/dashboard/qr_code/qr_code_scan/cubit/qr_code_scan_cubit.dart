@@ -1194,6 +1194,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
+  Completer<bool>? completer;
+
   Future<void> addCredentialsInLoop({
     required List<dynamic> selectedCredentials,
     required bool isEBSIV3,
@@ -1213,31 +1215,84 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final customOidc4vcProfile = profileCubit.state.model.profileSetting
             .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-        await getAndAddCredential(
-          scannedResponse: state.uri.toString(),
-          credentialsCubit: credentialsCubit,
-          oidc4vc: oidc4vc,
-          isEBSIV3: isEBSIV3,
-          didKitProvider: didKitProvider,
-          secureStorageProvider: getSecureStorage,
-          credential: selectedCredentials[i],
-          isLastCall: i + 1 == selectedCredentials.length,
-          dioClient: client,
-          userPin: userPin,
-          issuer: issuer,
-          preAuthorizedCode: preAuthorizedCode,
-          codeForAuthorisedFlow: codeForAuthorisedFlow,
-          codeVerifier: codeVerifier,
-          cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
-          authorization: authorization,
-          oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
-          didKeyType: customOidc4vcProfile.defaultDid,
-          clientId: clientId,
-          clientSecret: clientSecret,
-          profileCubit: profileCubit,
-          jwtDecode: jwtDecode,
-          blockchainType: walletCubit.state.currentAccount!.blockchainType,
-        );
+        if (preAuthorizedCode != null ||
+            (codeForAuthorisedFlow != null && codeVerifier != null)) {
+          /// codeForAuthorisedFlow != null
+          /// this is second phase flow for authorization_code
+          /// first phase is need for the authentication
+          ///
+          /// preAuthorizedCode != null
+          /// this is full phase flow for preAuthorizedCode
+
+          /// get credentials
+          final (
+            List<dynamic> encodedCredentialOrFutureTokens,
+            String? deferredCredentialEndpoint,
+            String format,
+            OpenIdConfiguration? openIdConfiguration,
+            Map<String, dynamic>? tokenResponse,
+          ) = await getCredential(
+            oidc4vc: oidc4vc,
+            isEBSIV3: isEBSIV3,
+            didKitProvider: didKitProvider,
+            credential: selectedCredentials[i],
+            userPin: userPin,
+            issuer: issuer,
+            preAuthorizedCode: preAuthorizedCode,
+            codeForAuthorisedFlow: codeForAuthorisedFlow,
+            codeVerifier: codeVerifier,
+            cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
+            authorization: authorization,
+            oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+            didKeyType: customOidc4vcProfile.defaultDid,
+            clientId: clientId,
+            clientSecret: clientSecret,
+            profileCubit: profileCubit,
+          );
+
+          if (profileCubit.state.model.isDeveloperMode &&
+              tokenResponse != null) {
+            completer = Completer<bool>();
+            emit(
+              state.copyWith(
+                qrScanStatus: QrScanStatus.pauseForDialog,
+                title: 'TOKEN_RESPONSE',
+                jsonValue: tokenResponse,
+              ),
+            );
+
+            final value = await completer!.future;
+
+            if (value) {
+              completer = null;
+            } else {
+              completer = null;
+              oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
+              goBack();
+              return;
+            }
+          }
+          await addCredentialData(
+            scannedResponse: state.uri.toString(),
+            credentialsCubit: credentialsCubit,
+            secureStorageProvider: getSecureStorage,
+            credential: selectedCredentials[i],
+            isLastCall: i + 1 == selectedCredentials.length,
+            issuer: issuer,
+            profileCubit: profileCubit,
+            jwtDecode: jwtDecode,
+            blockchainType: walletCubit.state.currentAccount!.blockchainType,
+            deferredCredentialEndpoint: deferredCredentialEndpoint,
+            encodedCredentialOrFutureTokens: encodedCredentialOrFutureTokens,
+            format: format,
+            openIdConfiguration: openIdConfiguration,
+            tokenResponse: tokenResponse,
+          );
+
+          /// add credentials
+        } else {
+          throw Exception();
+        }
       }
 
       oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
