@@ -578,10 +578,9 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
       if (state.status == QrScanStatus.pauseForDialog) {
         LoadingView().hide();
-        final formattedData = showFormatted(
-          title: state.title ?? '',
-          jsonValue: state.jsonValue,
-        );
+
+        final data = state.dialogData ?? '';
+
         final bool moveAhead = await showDialog<bool>(
               context: context,
               builder: (_) {
@@ -590,7 +589,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     Navigator.of(context).push<void>(
                       JsonViewerPage.route(
                         title: l10n.display,
-                        data: formattedData,
+                        data: data,
                       ),
                     );
                     return;
@@ -600,7 +599,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     final subject = l10n.shareWith;
 
                     Share.share(
-                      formattedData,
+                      data,
                       subject: subject,
                       sharePositionOrigin:
                           box!.localToGlobal(Offset.zero) & box.size,

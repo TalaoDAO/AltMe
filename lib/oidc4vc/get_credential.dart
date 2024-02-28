@@ -1,9 +1,7 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 
 import 'package:did_kit/did_kit.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 

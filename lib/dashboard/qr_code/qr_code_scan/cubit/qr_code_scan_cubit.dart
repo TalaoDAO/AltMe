@@ -1250,14 +1250,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             profileCubit: profileCubit,
           );
 
-          if (profileCubit.state.model.isDeveloperMode &&
-              tokenResponse != null) {
+          if (profileCubit.state.model.isDeveloperMode) {
             completer = Completer<bool>();
+
+            final formattedData = getFormattedStringResponse(
+              tokenData: tokenResponse,
+              credentialData: encodedCredentialOrFutureTokens,
+            );
             emit(
               state.copyWith(
                 qrScanStatus: QrScanStatus.pauseForDialog,
-                title: 'TOKEN_RESPONSE',
-                jsonValue: tokenResponse,
+                dialogData: formattedData,
               ),
             );
 
@@ -1272,6 +1275,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               return;
             }
           }
+
           await addCredentialData(
             scannedResponse: state.uri.toString(),
             credentialsCubit: credentialsCubit,

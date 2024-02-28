@@ -1175,13 +1175,15 @@ $codeForAuthorisedFlow
 ''';
 }
 
-String showFormatted({
-  required String? title,
-  required Map<String, dynamic>? jsonValue,
+String getFormattedStringResponse({
+  required Map<String, dynamic>? tokenData,
+  required List<dynamic>? credentialData,
 }) {
   return '''
-<b>$title :</b>
-${jsonValue != null ? const JsonEncoder.withIndent('  ').convert(jsonValue) : 'None'}
+<b>TOKEN RESPONSE :</b> 
+${tokenData != null ? const JsonEncoder.withIndent('  ').convert(tokenData) : 'None'}\n
+<b>CREDENTIAL RESPONSE :</b>
+${credentialData != null ? const JsonEncoder.withIndent('  ').convert(credentialData) : 'None'}\n
 ''';
 }
 
