@@ -9,16 +9,11 @@ import 'package:oidc4vc/oidc4vc.dart';
 Future<void> getAndAddDefferedCredential({
   required CredentialModel credentialModel,
   required CredentialsCubit credentialsCubit,
-  required DioClient dioClient,
   required OIDC4VC oidc4vc,
   required JWTDecode jwtDecode,
   required BlockchainType blockchainType,
+  required String? issuer,
 }) async {
-  final (_, issuer) = await getIssuerAndPreAuthorizedCode(
-    scannedResponse: credentialModel.pendingInfo!.url,
-    dioClient: dioClient,
-  );
-
   final dynamic encodedCredentialOrFutureToken =
       await oidc4vc.getDeferredCredential(
     acceptanceToken: credentialModel.pendingInfo!.acceptanceToken,

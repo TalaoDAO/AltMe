@@ -390,7 +390,7 @@ class OIDC4VC {
     required String issuer,
     required dynamic credential,
     required String did,
-    required String clientId,
+    required String? clientId,
     required String? clientSecret,
     required String kid,
     required int indexValue,
@@ -454,7 +454,7 @@ class OIDC4VC {
       mediaType: MediaType.proofOfOwnership,
       clientType: clientType,
       proofHeaderType: proofHeaderType,
-      clientId: clientId,
+      clientId: clientId ?? '',
     );
 
     String? deferredCredentialEndpoint;

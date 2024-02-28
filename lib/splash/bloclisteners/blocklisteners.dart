@@ -207,12 +207,16 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         LoadingView().show(context: context);
         if (state.uri != null) {
           final profileCubit = context.read<ProfileCubit>();
+          final oidc4vc = OIDC4VC();
 
           var acceptHost = true;
           final approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
 
-          final walletSecurityOptions =
-              profileCubit.state.model.profileSetting.walletSecurityOptions;
+          final profileSetting = profileCubit.state.model.profileSetting;
+          final customOidc4vcProfile =
+              profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
+
+          final walletSecurityOptions = profileSetting.walletSecurityOptions;
 
           final bool verifySecurityIssuerWebsiteIdentity =
               walletSecurityOptions.verifySecurityIssuerWebsiteIdentity;
@@ -229,6 +233,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               state.uri.toString().startsWith(Parameters.oidc4vcUniversalLink);
 
           OIDC4VCType? oidc4vcTypeForIssuance;
+          dynamic credentialOfferJsonForIssuance;
+          OpenIdConfiguration? openIdConfigurationForIssuance;
+          String? issuerForIssuance;
+          String? preAuthorizedCodeForIssuance;
 
           if (isOpenIDUrl || isFromDeeplink) {
             final (
@@ -236,32 +244,50 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               OpenIdConfiguration? openIdConfiguration,
               OpenIdConfiguration? authorizationServerConfiguration,
               dynamic credentialOfferJson,
+              String? issuer,
+              String? preAuthorizedCode,
             ) = await getIssuanceData(
               url: state.uri.toString(),
               client: client,
-              oidc4vc: OIDC4VC(),
-              oidc4vciDraftType: profileCubit
-                  .state
-                  .model
-                  .profileSetting
-                  .selfSovereignIdentityOptions
-                  .customOidc4vcProfile
-                  .oidc4vciDraft,
+              oidc4vc: oidc4vc,
+              oidc4vciDraftType: profileSetting.selfSovereignIdentityOptions
+                  .customOidc4vcProfile.oidc4vciDraft,
             );
 
             oidc4vcTypeForIssuance = oidc4vcType;
+            credentialOfferJsonForIssuance = credentialOfferJson;
+            openIdConfigurationForIssuance = openIdConfiguration;
+            issuerForIssuance = issuer;
+            preAuthorizedCodeForIssuance = preAuthorizedCode;
 
             /// if dev mode is ON show some dialog to show data
             if (profileCubit.state.model.isDeveloperMode) {
               late String formattedData;
               if (oidc4vcTypeForIssuance != null) {
                 /// issuance case
+
+                var tokenEndPoint = 'None';
+                var credentialEndpoint = 'None';
+
+                if (openIdConfiguration != null && issuer != null) {
+                  tokenEndPoint = await oidc4vc.readTokenEndPoint(
+                    openIdConfiguration: openIdConfiguration,
+                    issuer: issuer,
+                    oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+                  );
+
+                  credentialEndpoint =
+                      oidc4vc.readCredentialEndpoint(openIdConfiguration);
+                }
+
                 formattedData = getFormattedStringOIDC4VCI(
                   url: state.uri.toString(),
                   authorizationServerConfiguration:
                       authorizationServerConfiguration,
                   credentialOfferJson: credentialOfferJson,
                   openIdConfiguration: openIdConfiguration,
+                  tokenEndpoint: tokenEndPoint,
+                  credentialEndpoint: credentialEndpoint,
                 );
               } else {
                 var url = state.uri!.toString();
@@ -308,9 +334,8 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     context: context,
                     builder: (_) {
                       return DeveloperModeDialog(
-                        onDisplay: () async {
-                          Navigator.of(context).pop(false);
-                          await Navigator.of(context).push<void>(
+                        onDisplay: () {
+                          Navigator.of(context).push<void>(
                             JsonViewerPage.route(
                               title: l10n.display,
                               data: formattedData,
@@ -319,8 +344,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                           return;
                         },
                         onDownload: () {
-                          Navigator.of(context).pop(false);
-
                           final box = context.findRenderObject() as RenderBox?;
                           final subject = l10n.shareWith;
 
@@ -330,6 +353,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                             sharePositionOrigin:
                                 box!.localToGlobal(Offset.zero) & box.size,
                           );
+                          return;
                         },
                         onSkip: () {
                           Navigator.of(context).pop(true);
@@ -400,9 +424,13 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           LoadingView().hide();
           if (acceptHost) {
             await context.read<QRCodeScanCubit>().accept(
-                  issuer: approvedIssuer,
+                  approvedIssuer: approvedIssuer,
                   qrCodeScanCubit: context.read<QRCodeScanCubit>(),
                   oidcType: oidc4vcTypeForIssuance,
+                  credentialOfferJson: credentialOfferJsonForIssuance,
+                  openIdConfiguration: openIdConfigurationForIssuance,
+                  issuer: issuerForIssuance,
+                  preAuthorizedCode: preAuthorizedCodeForIssuance,
                 );
           } else {
             context.read<QRCodeScanCubit>().emitError(
