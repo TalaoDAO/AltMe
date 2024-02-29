@@ -780,12 +780,17 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               }
             }
 
-            if (discoverCardsOptions.displayPhonePass &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.phonePass)) {
-              allSubjectTypeForCategory.add(
-                CredentialSubjectType.phonePass,
-              );
+            if (!allSubjectTypeForCategory
+                .contains(CredentialSubjectType.phonePass)) {
+              final displayPhonePass = vcFormatType == VCFormatType.ldpVc &&
+                  discoverCardsOptions.displayPhonePass;
+              final displayPhonePassJwt =
+                  vcFormatType == VCFormatType.jwtVcJson &&
+                      discoverCardsOptions.displayPhonePassJwt;
+
+              if (displayPhonePass || displayPhonePassJwt) {
+                allSubjectTypeForCategory.add(CredentialSubjectType.phonePass);
+              }
             }
 
           case CredentialCategory.educationCards:
