@@ -181,7 +181,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           oidc4vc: oidc4vc,
           privateKey: privateKey,
           kid: verificationMethod,
-          did: did,
+          issuer: issuer,
         );
       }
     } else {
@@ -193,7 +193,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         oidc4vc: oidc4vc,
         privateKey: privateKey,
         kid: verificationMethod,
-        did: did,
+        issuer: issuer,
       );
     }
   } catch (e, s) {
@@ -212,7 +212,7 @@ Future<CredentialModel> _createCredential({
   required CustomOidc4VcProfile customOidc4vcProfile,
   required OIDC4VC oidc4vc,
   required Map<String, dynamic> privateKey,
-  required String did,
+  required String issuer,
   required String kid,
   String? oldId,
 }) async {
@@ -240,13 +240,13 @@ Future<CredentialModel> _createCredential({
       'exp': iat + 1000,
       'iss': jsonLd['issuer'],
       'jti': jsonLd['id'] ?? 'urn:uuid:${const Uuid().v4()}',
-      'sub': did,
+      'sub': issuer,
       'vc': jsonLd,
     };
 
     final tokenParameters = TokenParameters(
       privateKey: privateKey,
-      did: did,
+      did: issuer,
       kid: kid,
       mediaType: MediaType.basic,
       clientType: customOidc4vcProfile.clientType,
