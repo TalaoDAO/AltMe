@@ -1038,5 +1038,7 @@
   "thisTypeProofCannotBeUsedWithThisVCFormat": "This type proof cannot be used with this VC Format.",
   "enterprise": "Enterprise",
   "oWFBaselineProfile": "OWF Baseline Profile",
-  "defaultProfile":"Default"
+  "defaultProfile":"Default",
+  "successfullyAddedEnterpriseAccount": "Successfully added enterprise account!",
+  "successfullyUpdatedEnterpriseAccount": "Successfully updated enterprise account!"
 }

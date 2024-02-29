@@ -943,7 +943,9 @@
     "thisTypeProofCannotBeUsedWithThisVCFormat",
     "enterprise",
     "oWFBaselineProfile",
-    "defaultProfile"
+    "defaultProfile",
+    "successfullyAddedEnterpriseAccount",
+    "successfullyUpdatedEnterpriseAccount"
   ],
 
   "es": [
@@ -1890,12 +1892,16 @@
     "thisTypeProofCannotBeUsedWithThisVCFormat",
     "enterprise",
     "oWFBaselineProfile",
-    "defaultProfile"
+    "defaultProfile",
+    "successfullyAddedEnterpriseAccount",
+    "successfullyUpdatedEnterpriseAccount"
   ],
 
   "fr": [
     "blockchainCardsDiscoverTitle",
-    "blockchainCardsDiscoverSubtitle"
+    "blockchainCardsDiscoverSubtitle",
+    "successfullyAddedEnterpriseAccount",
+    "successfullyUpdatedEnterpriseAccount"
   ],
 
   "it": [
@@ -2842,6 +2848,8 @@
     "thisTypeProofCannotBeUsedWithThisVCFormat",
     "enterprise",
     "oWFBaselineProfile",
-    "defaultProfile"
+    "defaultProfile",
+    "successfullyAddedEnterpriseAccount",
+    "successfullyUpdatedEnterpriseAccount"
   ]
 }
