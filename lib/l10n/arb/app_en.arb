@@ -3,7 +3,6 @@
   "genericError": "An error has occurred!",
   "@genericError": {
     "description": "Generic error message",
-    "@@locale": "en",
     "type": "text",
     "placeholders": {}
   },
@@ -222,7 +221,6 @@
     }
   },
   "selfIssuedCreatedSuccessfully": "Self issued credential created successfully",
-  "companyName": "Company Name",
   "companyWebsite": "Company Website",
   "submit": "Submit",
   "insertYourDIDKey": "Insert your DID",
@@ -348,7 +346,6 @@
   "trustFramework": "Trust Framework",
   "network": "Network",
   "issuerRegistry": "Issuer Registry",
-  "about": "About",
   "termsOfUse": "Terms of Use & Confidentiality",
   "scanFingerprintToAuthenticate": "Scan Fingerprint to Authenticate",
   "biometricsNotSupported": "Biometrics not supported",

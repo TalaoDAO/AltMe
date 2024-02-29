@@ -221,7 +221,6 @@
     }
   },
   "selfIssuedCreatedSuccessfully": "Credencial autoemitida creada",
-  "companyName": "Nombre de la empresa",
   "companyWebsite": "Sitio web de la empresa",
   "submit": "Enviar",
   "insertYourDIDKey": "Inserte su DID",
@@ -348,7 +347,6 @@
   "trustFramework": "Marco de confianza",
   "network": "Red",
   "issuerRegistry": "Registro de emisor",
-  "about": "Acerca de",
   "termsOfUse": "Términos de uso y confidencialidad",
   "scanFingerprintToAuthenticate": "Escanear huella dactilar para autenticarse",
   "biometricsNotSupported": "Biometría no compatible",

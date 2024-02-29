@@ -1,8 +1,6 @@
 {
   "ca": [
     "walletSecurity",
-    "blockchainCardsDiscoverTitle",
-    "blockchainCardsDiscoverSubtitle",
     "clientTypeTitle",
     "clientTypeSubtitle",
     "proofHeader",
@@ -12,7 +10,11 @@
     "thisTypeProofCannotBeUsedWithThisVCFormat",
     "enterprise",
     "oWFBaselineProfile",
-    "defaultProfile"
+    "defaultProfile",
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
+    "successfullyAddedEnterpriseAccount",
+    "successfullyUpdatedEnterpriseAccount"
   ],
 
   "de": [
@@ -795,8 +797,6 @@
     "financeCredentialsHomeTitle",
     "financeCredentialsDiscoverTitle",
     "financeCredentialsDiscoverSubtitle",
-    "blockchainCardsDiscoverTitle",
-    "blockchainCardsDiscoverSubtitle",
     "financeCredentialsHomeSubtitle",
     "hummanityProofCredentialsHomeTitle",
     "hummanityProofCredentialsHomeSubtitle",
@@ -960,13 +960,13 @@
     "enterprise",
     "oWFBaselineProfile",
     "defaultProfile",
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
     "successfullyAddedEnterpriseAccount",
     "successfullyUpdatedEnterpriseAccount"
   ],
 
   "es": [
-    "blockchainCardsDiscoverTitle",
-    "blockchainCardsDiscoverSubtitle",
     "clientTypeTitle",
     "clientTypeSubtitle",
     "proofHeader",
@@ -977,6 +977,8 @@
     "enterprise",
     "oWFBaselineProfile",
     "defaultProfile",
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
     "successfullyAddedEnterpriseAccount",
     "successfullyUpdatedEnterpriseAccount"
   ],
@@ -1768,8 +1770,6 @@
     "financeCredentialsHomeTitle",
     "financeCredentialsDiscoverTitle",
     "financeCredentialsDiscoverSubtitle",
-    "blockchainCardsDiscoverTitle",
-    "blockchainCardsDiscoverSubtitle",
     "financeCredentialsHomeSubtitle",
     "hummanityProofCredentialsHomeTitle",
     "hummanityProofCredentialsHomeSubtitle",
@@ -1933,6 +1933,8 @@
     "enterprise",
     "oWFBaselineProfile",
     "defaultProfile",
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
     "successfullyAddedEnterpriseAccount",
     "successfullyUpdatedEnterpriseAccount"
   ]

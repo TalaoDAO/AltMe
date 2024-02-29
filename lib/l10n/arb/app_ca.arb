@@ -221,7 +221,6 @@
     }
   },
   "selfIssuedCreatedSuccessfully": "Credencial autoemesa creada correctament",
-  "companyName": "Nom de l’empresa",
   "companyWebsite": "Web de l’empresa",
   "submit": "Enviar",
   "insertYourDIDKey": "Indica el DID",
@@ -348,7 +347,6 @@
   "trustFramework": "Marc de confiança",
   "network": "Xarxa",
   "issuerRegistry": "Registre d’emissors",
-  "about": "Informació",
   "termsOfUse": "Condicions d’ús i privadesa",
   "scanFingerprintToAuthenticate": "Escaneja l’empremta digital per autenticar-te",
   "biometricsNotSupported": "Biomètrica no compatible",
