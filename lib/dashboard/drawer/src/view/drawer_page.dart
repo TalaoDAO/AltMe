@@ -58,6 +58,7 @@ class DrawerView extends StatelessWidget {
                         title: l10n.updateYourWalletConfigNow,
                         padding: const EdgeInsets.all(16),
                         onClick: () async {
+                          Navigator.of(context).pop();
                           await context
                               .read<EnterpriseCubit>()
                               .updateTheConfiguration();
