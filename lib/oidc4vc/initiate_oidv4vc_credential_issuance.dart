@@ -22,6 +22,9 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required String? userPin,
   required dynamic credentialOfferJson,
   required bool cryptoHolderBinding,
+  required OpenIdConfiguration? openIdConfiguration,
+  required String issuer,
+  required String? preAuthorizedCode,
 }) async {
   final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
 
@@ -62,11 +65,6 @@ Future<void> initiateOIDC4VCCredentialIssuance({
     }
   }
 
-  final (preAuthorizedCode, issuer) = await getIssuerAndPreAuthorizedCode(
-    scannedResponse: scannedResponse,
-    dioClient: dioClient,
-  );
-
   //cleared up to here
 
   if (credentials is List<dynamic>) {
@@ -74,12 +72,14 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         Uri.parse(scannedResponse).queryParameters['code'];
     final state = Uri.parse(scannedResponse).queryParameters['state'];
 
-    final OpenIdConfiguration openIdConfiguration =
-        await oidc4vc.getOpenIdConfig(
-      baseUrl: issuer!,
-      isAuthorizationServer: false,
-      oidc4vciDraftType: oidc4vciDraftType,
-    );
+    if (openIdConfiguration == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_issuer_metadata',
+          'error_description': 'The open id configuration is invalid.',
+        },
+      );
+    }
 
     if (preAuthorizedCode != null) {
       /// full phase flow of preAuthorized
@@ -131,7 +131,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           codeForAuthorisedFlow: codeForAuthorisedFlow,
           codeVerifier: codeVerifier,
           authorization: authorization,
-          clientId: clientId ?? '',
+          clientId: clientId,
           clientSecret: clientSecret,
         );
       }
@@ -140,7 +140,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
     // full phase flow of preAuthorized
     await qrCodeScanCubit.processSelectedCredentials(
       userPin: userPin,
-      issuer: issuer!,
+      issuer: issuer,
       preAuthorizedCode: preAuthorizedCode,
       isEBSIV3: isEBSIV3,
       credentialOfferJson: credentialOfferJson,

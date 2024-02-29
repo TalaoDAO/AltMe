@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:altme/wallet/wallet.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -37,6 +38,7 @@ class ScanCubit extends Cubit<ScanState> {
     required this.didKitProvider,
     required this.secureStorageProvider,
     required this.profileCubit,
+    required this.walletCubit,
     required this.oidc4vc,
   }) : super(const ScanState());
 
@@ -45,6 +47,7 @@ class ScanCubit extends Cubit<ScanState> {
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
   final ProfileCubit profileCubit;
+  final WalletCubit walletCubit;
   final OIDC4VC oidc4vc;
 
   Future<void> credentialOfferOrPresent({
@@ -272,6 +275,7 @@ class ScanCubit extends Cubit<ScanState> {
         CredentialManifest? credentialManifest;
 
         await credentialsCubit.insertCredential(
+          blockchainType: walletCubit.state.currentAccount!.blockchainType,
           credential: CredentialModel.copyWithData(
             oldCredentialModel: credentialModel,
             newData: jsonCredential as Map<String, dynamic>,

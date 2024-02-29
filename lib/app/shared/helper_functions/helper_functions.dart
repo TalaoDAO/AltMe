@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/home.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
@@ -582,8 +582,17 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
   return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
 }
 
-Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
-    getIssuanceData({
+/// OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?,
+/// credentialOfferJson, issuer, pre-authorizedCode
+Future<
+    (
+      OIDC4VCType?,
+      OpenIdConfiguration?,
+      OpenIdConfiguration?,
+      dynamic,
+      String?,
+      String?,
+    )> getIssuanceData({
   required String url,
   required DioClient client,
   required OIDC4VC oidc4vc,
@@ -596,6 +605,7 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
 
   dynamic credentialOfferJson;
   String? issuer;
+  String? preAuthorizedCode;
 
   if (keys.contains('credential_offer') ||
       keys.contains('credential_offer_uri')) {
@@ -604,18 +614,32 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
       scannedResponse: uri.toString(),
       dioClient: client,
     );
-    if (credentialOfferJson == null) throw Exception();
 
-    issuer = credentialOfferJson['credential_issuer'].toString();
+    if (credentialOfferJson != null) {
+      final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
+          ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+
+      if (preAuthorizedCodeGrant != null &&
+          preAuthorizedCodeGrant is Map &&
+          preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
+        preAuthorizedCode =
+            preAuthorizedCodeGrant['pre-authorized_code'] as String;
+      }
+
+      issuer = credentialOfferJson['credential_issuer'].toString();
+    }
   }
 
   if (keys.contains('issuer')) {
     /// issuance case 1
     issuer = uri.queryParameters['issuer'].toString();
+
+    /// preAuthorizedCode can be null
+    preAuthorizedCode = uri.queryParameters['pre-authorized_code'];
   }
 
   if (issuer == null) {
-    return (null, null, null, null);
+    return (null, null, null, null, null, null);
   }
 
   final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
@@ -667,6 +691,8 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
             openIdConfiguration,
             authorizationServerConfiguration,
             credentialOfferJson,
+            issuer,
+            preAuthorizedCode,
           );
         }
 
@@ -677,6 +703,8 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
             openIdConfiguration,
             authorizationServerConfiguration,
             credentialOfferJson,
+            issuer,
+            preAuthorizedCode,
           );
         } else {
           return (
@@ -684,6 +712,8 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
             openIdConfiguration,
             authorizationServerConfiguration,
             credentialOfferJson,
+            issuer,
+            preAuthorizedCode,
           );
         }
       }
@@ -692,6 +722,8 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
         openIdConfiguration,
         authorizationServerConfiguration,
         credentialOfferJson,
+        issuer,
+        preAuthorizedCode,
       );
     }
   }
@@ -701,6 +733,8 @@ Future<(OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?, dynamic)>
     openIdConfiguration,
     authorizationServerConfiguration,
     credentialOfferJson,
+    issuer,
+    preAuthorizedCode,
   );
 }
 
@@ -973,47 +1007,6 @@ Future<String> getHost({
   }
 }
 
-Future<(String?, String?)> getIssuerAndPreAuthorizedCode({
-  required String scannedResponse,
-  required DioClient dioClient,
-}) async {
-  String? preAuthorizedCode;
-  String? issuer;
-
-  final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
-
-  final keys = <String>[];
-  uriFromScannedResponse.queryParameters.forEach((key, value) => keys.add(key));
-
-  if (keys.contains('issuer')) {
-    issuer = uriFromScannedResponse.queryParameters['issuer'].toString();
-    //preAuthorizedCode can be null
-    preAuthorizedCode =
-        uriFromScannedResponse.queryParameters['pre-authorized_code'];
-  } else if (keys.contains('credential_offer') ||
-      keys.contains('credential_offer_uri')) {
-    final dynamic credentialOfferJson = await getCredentialOfferJson(
-      scannedResponse: scannedResponse,
-      dioClient: dioClient,
-    );
-    if (credentialOfferJson == null) throw Exception();
-
-    final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
-        ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
-
-    if (preAuthorizedCodeGrant != null &&
-        preAuthorizedCodeGrant is Map &&
-        preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
-      preAuthorizedCode =
-          preAuthorizedCodeGrant['pre-authorized_code'] as String;
-    }
-
-    issuer = credentialOfferJson['credential_issuer'].toString();
-  }
-
-  return (preAuthorizedCode, issuer);
-}
-
 bool isURL(String input) {
   final bool uri = Uri.tryParse(input)?.hasAbsolutePath ?? false;
   return uri;
@@ -1143,6 +1136,8 @@ bool hasIDTokenOrVPToken(String responseType) {
 
 String getFormattedStringOIDC4VCI({
   required String url,
+  required String tokenEndpoint,
+  required String credentialEndpoint,
   OpenIdConfiguration? openIdConfiguration,
   OpenIdConfiguration? authorizationServerConfiguration,
   dynamic credentialOfferJson,
@@ -1153,8 +1148,8 @@ String getFormattedStringOIDC4VCI({
 ${credentialOfferJson != null ? const JsonEncoder.withIndent('  ').convert(credentialOfferJson) : 'None'}\n
 <b>ENDPOINTS :</b>
     authorization server endpoint : ${openIdConfiguration?.authorizationServer ?? 'None'}
-    token endpoint : ${openIdConfiguration?.tokenEndpoint ?? authorizationServerConfiguration?.tokenEndpoint ?? 'None'}
-    credential endpoint : ${openIdConfiguration?.credentialEndpoint ?? 'None'}
+    token endpoint : $tokenEndpoint}
+    credential endpoint : $credentialEndpoint}
     deferred endpoint : ${openIdConfiguration?.deferredCredentialEndpoint ?? 'None'}
     batch endpoint : ${openIdConfiguration?.batchEndpoint ?? 'None'}\n
 <b>CREDENTIAL SUPPORTED :</b> 
@@ -1177,6 +1172,18 @@ String getFormattedStringOIDC4VCIAuthorizedCodeFlow({
 ${statePayload != null ? const JsonEncoder.withIndent('  ').convert(statePayload) : 'None'}\n 
 <b>CODE  :</b> 
 $codeForAuthorisedFlow
+''';
+}
+
+String getFormattedStringResponse({
+  required Map<String, dynamic>? tokenData,
+  required List<dynamic>? credentialData,
+}) {
+  return '''
+<b>TOKEN RESPONSE :</b> 
+${tokenData != null ? const JsonEncoder.withIndent('  ').convert(tokenData) : 'None'}\n
+<b>CREDENTIAL RESPONSE :</b>
+${credentialData != null ? const JsonEncoder.withIndent('  ').convert(credentialData) : 'None'}\n
 ''';
 }
 
@@ -1333,4 +1340,96 @@ String getUpdatedUrlForSIOPV2OIC4VP({
 
   final String newUrl = '$uri&$queryString';
   return newUrl;
+}
+
+bool supportCryptoCredential(ProfileSetting profileSetting) {
+  final customOidc4vcProfile =
+      profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
+
+  /// suported VC format
+  final supportCryptoCredentialByVCFormat =
+      customOidc4vcProfile.vcFormatType.supportCryptoCredential;
+
+  /// supported did key
+  final supportCryptoCredentialByDidKey =
+      customOidc4vcProfile.defaultDid.supportCryptoCredential;
+
+  /// match format 1
+  final matchFormat1 =
+      supportCryptoCredentialByVCFormat && supportCryptoCredentialByDidKey;
+
+  /// match format 2
+  final matchFormat2 = customOidc4vcProfile.defaultDid == DidKeyType.edDSA &&
+      customOidc4vcProfile.vcFormatType == VCFormatType.ldpVc &&
+      !customOidc4vcProfile.cryptoHolderBinding;
+
+  final supportAssociatedCredential = matchFormat1 || matchFormat2;
+
+  return supportAssociatedCredential;
+}
+
+Future<(String?, String?, String?)> getClientDetails({
+  required ProfileCubit profileCubit,
+  required bool isEBSIV3,
+}) async {
+  try {
+    String? clientId;
+    String? clientSecret;
+    String? authorization;
+
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+    switch (customOidc4vcProfile.clientAuthentication) {
+      case ClientAuthentication.none:
+        break;
+      case ClientAuthentication.clientSecretPost:
+        clientId = customOidc4vcProfile.clientId;
+        clientSecret = customOidc4vcProfile.clientSecret;
+      case ClientAuthentication.clientSecretBasic:
+        clientId = customOidc4vcProfile.clientId;
+        clientSecret = customOidc4vcProfile.clientSecret;
+        authorization = base64UrlEncode(utf8.encode('$clientId:$clientSecret'))
+            .replaceAll('=', '');
+      case ClientAuthentication.clientId:
+        final didKeyType = customOidc4vcProfile.defaultDid;
+
+        final privateKey = await fetchPrivateKey(
+          oidc4vc: profileCubit.oidc4vc,
+          secureStorage: profileCubit.secureStorageProvider,
+          isEBSIV3: isEBSIV3,
+          didKeyType: didKeyType,
+        );
+
+        final (did, _) = await fetchDidAndKid(
+          privateKey: privateKey,
+          isEBSIV3: isEBSIV3,
+          didKitProvider: profileCubit.didKitProvider,
+          secureStorage: profileCubit.secureStorageProvider,
+          didKeyType: didKeyType,
+        );
+
+        switch (customOidc4vcProfile.clientType) {
+          case ClientType.jwkThumbprint:
+            final tokenParameters = TokenParameters(
+              privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
+              did: '', // just added as it is required field
+              mediaType: MediaType.basic, // just added as it is required field
+              clientType: ClientType
+                  .jwkThumbprint, // just added as it is required field
+              proofHeaderType: customOidc4vcProfile.proofHeader,
+              clientId: '',
+            );
+            clientId = tokenParameters.thumbprint;
+          case ClientType.did:
+            clientId = did;
+          case ClientType.confidential:
+            clientId = customOidc4vcProfile.clientId;
+        }
+    }
+
+    return (clientId, clientSecret, authorization);
+  } catch (e) {
+    return (null, null, null);
+  }
 }

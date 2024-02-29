@@ -490,6 +490,13 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_theIssuanceOfThisCredentialIsPending:
         return globalMessage
             .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending;
+
+      case ResponseString.RESPONSE_STRING_successfullyAddedEnterpriseAccount:
+        return globalMessage.RESPONSE_STRING_successfullyAddedEnterpriseAccount;
+
+      case ResponseString.RESPONSE_STRING_successfullyUpdatedEnterpriseAccount:
+        return globalMessage
+            .RESPONSE_STRING_successfullyUpdatedEnterpriseAccount;
     }
   }
 }

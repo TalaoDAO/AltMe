@@ -1,20 +1,19 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
-import 'package:oidc4vc/oidc4vc.dart';
 
 class CredentialDisplay extends StatelessWidget {
   const CredentialDisplay({
     super.key,
     required this.credentialModel,
     required this.credDisplayType,
-    required this.vcFormatType,
+    required this.profileSetting,
     this.displyalDescription = true,
   });
 
   final CredentialModel credentialModel;
   final CredDisplayType credDisplayType;
-  final VCFormatType vcFormatType;
+  final ProfileSetting profileSetting;
   final bool displyalDescription;
 
   @override
@@ -68,7 +67,7 @@ class CredentialDisplay extends StatelessWidget {
                   CredentialSubjectType.defaultCredential;
 
           final DiscoverDummyCredential discoverDummyCredential =
-              credentialSubjectType.dummyCredential(vcFormatType);
+              credentialSubjectType.dummyCredential(profileSetting);
 
           return Opacity(
             opacity: 0.5,

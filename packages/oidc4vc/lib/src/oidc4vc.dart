@@ -386,11 +386,20 @@ class OIDC4VC {
   List<dynamic>? authorizationDetails;
 
   /// Retreive credential_type from url
-  Future<(List<dynamic>, String?, String, OpenIdConfiguration?)> getCredential({
+  /// credentialResponseData, deferredCredentialEndpoint, format,
+  /// openIdConfiguration, tokenResponse
+  Future<
+      (
+        List<dynamic>,
+        String?,
+        String,
+        OpenIdConfiguration?,
+        Map<String, dynamic>?
+      )> getCredential({
     required String issuer,
     required dynamic credential,
     required String did,
-    required String clientId,
+    required String? clientId,
     required String? clientSecret,
     required String kid,
     required int indexValue,
@@ -419,6 +428,8 @@ class OIDC4VC {
       oidc4vciDraftType: oidc4vciDraftType,
     );
 
+    Map<String, dynamic>? tokenResponse;
+
     if (accessToken == null) {
       final tokenData = buildTokenData(
         preAuthorizedCode: preAuthorizedCode,
@@ -431,19 +442,19 @@ class OIDC4VC {
         redirectUri: redirectUri,
       );
 
-      final response = await getToken(
+      tokenResponse = await getToken(
         tokenEndPoint: tokenEndPoint,
         tokenData: tokenData,
         authorization: authorization,
       );
 
-      if (response is Map<String, dynamic> && response.containsKey('c_nonce')) {
-        cnonce = response['c_nonce'] as String;
+      if (tokenResponse.containsKey('c_nonce')) {
+        cnonce = tokenResponse['c_nonce'] as String;
       }
 
-      accessToken = response['access_token'] as String;
+      accessToken = tokenResponse['access_token'] as String;
       authorizationDetails =
-          response['authorization_details'] as List<dynamic>?;
+          tokenResponse['authorization_details'] as List<dynamic>?;
     }
 
     final issuerTokenParameters = IssuerTokenParameters(
@@ -454,7 +465,7 @@ class OIDC4VC {
       mediaType: MediaType.proofOfOwnership,
       clientType: clientType,
       proofHeaderType: proofHeaderType,
-      clientId: clientId,
+      clientId: clientId ?? '',
     );
 
     String? deferredCredentialEndpoint;
@@ -533,6 +544,7 @@ class OIDC4VC {
       deferredCredentialEndpoint,
       format,
       openIdConfiguration,
+      tokenResponse,
     );
   }
 
@@ -839,9 +851,9 @@ class OIDC4VC {
     }
 
     switch (oidc4vciDraftType) {
-      case OIDC4VCIDraftType.draft8:
-        credentialData['type'] = credentialType;
-        credentialData['format'] = format;
+      // case OIDC4VCIDraftType.draft8:
+      //   credentialData['type'] = credentialType;
+      //   credentialData['format'] = format;
 
       case OIDC4VCIDraftType.draft11:
         if (types == null) {
@@ -1065,24 +1077,6 @@ class OIDC4VC {
     return result;
   }
 
-  Future<String> getSignedJwt({
-    required Map<String, dynamic> payload,
-    required Map<String, dynamic> p256Key,
-  }) async {
-    // Create a JsonWebSignatureBuilder
-    final builder = JsonWebSignatureBuilder()
-      ..jsonContent = payload
-      ..setProtectedHeader('alg', 'ES256')
-      ..addRecipient(
-        JsonWebKey.fromJson(p256Key),
-        algorithm: 'ES256',
-      );
-    // build the jws
-    final jws = builder.build();
-
-    return jws.toCompactSerialization();
-  }
-
   String readCredentialEndpoint(
     OpenIdConfiguration openIdConfiguration,
   ) {
@@ -1131,7 +1125,7 @@ class OIDC4VC {
   }
 
   @visibleForTesting
-  Future<dynamic> getToken({
+  Future<Map<String, dynamic>> getToken({
     required String tokenEndPoint,
     required Map<String, dynamic> tokenData,
     required String? authorization,
@@ -1150,7 +1144,7 @@ class OIDC4VC {
       options: Options(headers: tokenHeaders),
       data: tokenData,
     );
-    return tokenResponse.data;
+    return tokenResponse.data as Map<String, dynamic>;
   }
 
   Future<String> extractVpToken({
@@ -1310,8 +1304,9 @@ class OIDC4VC {
     return verifierVpJwt;
   }
 
+  /// getSignedJwt
   String generateToken({
-    required Map<String, Object> payload,
+    required Map<String, dynamic> payload,
     required TokenParameters tokenParameters,
   }) {
     final vpVerifierClaims = JsonWebTokenClaims.fromJson(payload);

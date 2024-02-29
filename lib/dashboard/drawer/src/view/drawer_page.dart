@@ -1,8 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/drawer/profile/view/pick_profile_menu.dart';
+import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,9 +57,11 @@ class DrawerView extends StatelessWidget {
                       DrawerCategoryItem(
                         title: l10n.updateYourWalletConfigNow,
                         padding: const EdgeInsets.all(16),
-                        onClick: () {
-                          Navigator.of(context)
-                              .push<void>(EnterpriseUpdatePage.route());
+                        onClick: () async {
+                          Navigator.of(context).pop();
+                          await context
+                              .read<EnterpriseCubit>()
+                              .updateTheConfiguration();
                         },
                       ),
                       const SizedBox(height: Sizes.spaceSmall),
