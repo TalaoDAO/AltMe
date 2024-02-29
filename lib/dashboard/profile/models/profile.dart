@@ -101,7 +101,7 @@ class ProfileModel extends Equatable {
             displayManageDecentralizedId: true,
             customOidc4vcProfile: CustomOidc4VcProfile(
               clientAuthentication: ClientAuthentication.clientId,
-              credentialManifestSupport: true,
+              credentialManifestSupport: false,
               cryptoHolderBinding: false,
               defaultDid: Parameters.didKeyTypeForDefault,
               oidc4vciDraft: OIDC4VCIDraftType.draft11,

@@ -62,7 +62,9 @@ class WalletCubit extends Cubit<WalletState> {
   }) async {
     if (isFromOnboarding) {
       // if enterprise and walletAttestation data is available and added
-      await credentialsCubit.addWalletCredential();
+      await credentialsCubit.addWalletCredential(
+        blockchainType: state.currentAccount?.blockchainType,
+      );
     }
 
     /// tracking added accounts
@@ -80,7 +82,7 @@ class WalletCubit extends Cubit<WalletState> {
     if (blockchainType != null) {
       /// Here, we create temporary accounts and check for their
       /// existence beforehand.
-      final newAcc = await _generateAccount(
+      final newAcc = await generateAccount(
         mnemonicOrKey: mnemonicOrKey,
         isImported: isImported,
         isSecretKey: isSecretKey,
@@ -344,22 +346,15 @@ class WalletCubit extends Cubit<WalletState> {
 
     log.i('$blockchainType created');
 
+    /// disable associated wallet account creation at start
     /// If we are not using crypto in the wallet we are not generating
     /// AssociatedAddress credentials.
-    final credential = Parameters.walletHandlesCrypto
-        ? await credentialsCubit.createOrUpdateAssociatedWalletCredential(
-            blockchainType: blockchainType,
-            cryptoAccountData: cryptoAccountData,
-          )
-        : null;
-
-    if (credential != null) {
-      await credentialsCubit.insertCredential(
-        credential: credential,
-        showMessage: false,
-        showStatus: showStatus,
-      );
-    }
+    // if (Parameters.walletHandlesCrypto) {
+    //   await credentialsCubit.insertAssociatedWalletCredential(
+    //     blockchainType: blockchainType,
+    //     cryptoAccountData: cryptoAccountData,
+    //   );
+    // }
 
     return cryptoAccountData;
   }
@@ -376,7 +371,7 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future<CryptoAccountData> _generateAccount({
+  Future<CryptoAccountData> generateAccount({
     String? accountName,
     required String mnemonicOrKey,
     required bool isImported,
@@ -465,7 +460,10 @@ class WalletCubit extends Cubit<WalletState> {
       cryptoAccountString,
     );
 
-    await credentialsCubit.insertOrUpdateAssociatedWalletCredential(
+    /// check if associated wallet credential is available for
+    /// blockchain type
+
+    await credentialsCubit.updateAssociatedWalletCredential(
       blockchainType: blockchainType,
       cryptoAccountData: cryptoAccountData,
     );

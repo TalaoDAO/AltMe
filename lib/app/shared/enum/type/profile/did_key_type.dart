@@ -44,4 +44,16 @@ extension DidKeyTypeX on DidKeyType {
         return l10n.jwkDecentralizedIDP256;
     }
   }
+
+  bool get supportCryptoCredential {
+    switch (this) {
+      case DidKeyType.secp256k1:
+      case DidKeyType.p256:
+        return true;
+      case DidKeyType.edDSA:
+      case DidKeyType.ebsiv3:
+      case DidKeyType.jwkP256:
+        return false;
+    }
+  }
 }

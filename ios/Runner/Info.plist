@@ -140,6 +140,16 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>configuration</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>configuration</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>tezos</string>
 			<key>CFBundleURLSchemes</key>
 			<array>

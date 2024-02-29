@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,12 +23,18 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
 
   @override
   void initState() {
-    context.read<CredentialsCubit>().loadAllCredentials();
+    context.read<CredentialsCubit>().loadAllCredentials(
+          blockchainType:
+              context.read<WalletCubit>().state.currentAccount!.blockchainType,
+        );
     super.initState();
   }
 
   Future<void> onRefresh() async {
-    await context.read<CredentialsCubit>().loadAllCredentials();
+    await context.read<CredentialsCubit>().loadAllCredentials(
+          blockchainType:
+              context.read<WalletCubit>().state.currentAccount!.blockchainType,
+        );
   }
 
   @override

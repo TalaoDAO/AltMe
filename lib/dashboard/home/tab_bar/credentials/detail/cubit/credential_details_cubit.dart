@@ -39,136 +39,156 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   }
 
   Future<void> verifyCredential(CredentialModel item) async {
-    emit(state.copyWith(status: AppStatus.loading));
-    await Future<void>.delayed(const Duration(milliseconds: 500));
+    try {
+      emit(state.copyWith(status: AppStatus.loading));
+      await Future<void>.delayed(const Duration(milliseconds: 500));
 
-    if (item.credentialPreview.credentialSubjectModel.credentialSubjectType ==
-        CredentialSubjectType.walletCredential) {
-      emit(
-        state.copyWith(
-          credentialStatus: CredentialStatus.active,
-          status: AppStatus.idle,
-        ),
-      );
-      return;
-    }
-
-    if (item.expirationDate != null) {
-      final DateTime dateTimeExpirationDate =
-          DateTime.parse(item.expirationDate!);
-      if (!dateTimeExpirationDate.isAfter(DateTime.now())) {
+      if (!profileCubit.state.model.profileSetting.selfSovereignIdentityOptions
+          .customOidc4vcProfile.securityLevel) {
         emit(
           state.copyWith(
-            credentialStatus: CredentialStatus.suspended,
+            credentialStatus: CredentialStatus.notVerified,
             status: AppStatus.idle,
           ),
         );
         return;
       }
-    }
 
-    if (item.jwt != null) {
-      /// issuer did
-      final issuerDid = item.issuer;
-
-      String? issuerKid;
-      late final String encodedData;
-      if (item.jwt == null) {
-        issuerKid = item.data['proof']['verificationMethod'] as String;
-      } else {
-        encodedData = item.jwt!;
-
-        final Map<String, dynamic> header =
-            decodeHeader(jwtDecode: jwtDecode, token: encodedData);
-
-        if (header.containsKey('kid')) {
-          issuerKid = header['kid'].toString();
-        }
+      if (item.credentialPreview.credentialSubjectModel.credentialSubjectType ==
+          CredentialSubjectType.walletCredential) {
+        emit(
+          state.copyWith(
+            credentialStatus: CredentialStatus.active,
+            status: AppStatus.idle,
+          ),
+        );
+        return;
       }
 
-      final VerificationType isVerified = await verifyEncodedData(
-        issuerDid,
-        issuerKid,
-        encodedData,
-      );
-
-      late CredentialStatus credentialStatus;
-
-      switch (isVerified) {
-        case VerificationType.verified:
-          credentialStatus = CredentialStatus.active;
-        case VerificationType.notVerified:
-          credentialStatus = CredentialStatus.notVerified;
-        case VerificationType.unKnown:
-          credentialStatus = CredentialStatus.suspended;
-      }
-
-      emit(
-        state.copyWith(
-          credentialStatus: credentialStatus,
-          status: AppStatus.idle,
-        ),
-      );
-    } else if (item.isPolygonssuer) {
-      final mnemonic =
-          await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
-      await polygonIdCubit.initialise();
-
-      String network = Parameters.POLYGON_MAIN_NETWORK;
-
-      if (item.issuer.contains('polygon:main')) {
-        network = Parameters.POLYGON_MAIN_NETWORK;
-      } else {
-        network = Parameters.POLYGON_TEST_NETWORK;
-      }
-
-      final List<ClaimEntity> claim =
-          await polygonIdCubit.polygonId.getClaimById(
-        claimId: item.id,
-        mnemonic: mnemonic!,
-        network: network,
-      );
-
-      late CredentialStatus credentialStatus;
-
-      if (claim.isEmpty) {
-        credentialStatus = CredentialStatus.suspended;
-      } else {
-        switch (claim[0].state) {
-          case ClaimState.active:
-            credentialStatus = CredentialStatus.active;
-          case ClaimState.expired:
-            credentialStatus = CredentialStatus.expired;
-          case ClaimState.pending:
-            credentialStatus = CredentialStatus.pending;
-          case ClaimState.revoked:
-            credentialStatus = CredentialStatus.revoked;
-        }
-      }
-
-      emit(
-        state.copyWith(
-          credentialStatus: credentialStatus,
-          status: AppStatus.idle,
-        ),
-      );
-    } else {
-      if (item.credentialPreview.credentialStatus.type != '') {
-        final CredentialStatus credentialStatus =
-            await item.checkRevocationStatus();
-        if (credentialStatus == CredentialStatus.active) {
-          await verifyProofOfPurpose(item);
-        } else {
+      if (item.expirationDate != null) {
+        final DateTime dateTimeExpirationDate =
+            DateTime.parse(item.expirationDate!);
+        if (!dateTimeExpirationDate.isAfter(DateTime.now())) {
           emit(
             state.copyWith(
               credentialStatus: CredentialStatus.suspended,
               status: AppStatus.idle,
             ),
           );
+          return;
         }
-      } else {
-        await verifyProofOfPurpose(item);
       }
+
+      if (item.jwt != null) {
+        /// issuer did
+        final issuerDid = item.issuer;
+
+        String? issuerKid;
+        late final String encodedData;
+        if (item.jwt == null) {
+          issuerKid = item.data['proof']['verificationMethod'] as String;
+        } else {
+          encodedData = item.jwt!;
+
+          final Map<String, dynamic> header =
+              decodeHeader(jwtDecode: jwtDecode, token: encodedData);
+
+          if (header.containsKey('kid')) {
+            issuerKid = header['kid'].toString();
+          }
+        }
+
+        final VerificationType isVerified = await verifyEncodedData(
+          issuerDid,
+          issuerKid,
+          encodedData,
+        );
+
+        late CredentialStatus credentialStatus;
+
+        switch (isVerified) {
+          case VerificationType.verified:
+            credentialStatus = CredentialStatus.active;
+          case VerificationType.notVerified:
+            credentialStatus = CredentialStatus.notVerified;
+          case VerificationType.unKnown:
+            credentialStatus = CredentialStatus.suspended;
+        }
+
+        emit(
+          state.copyWith(
+            credentialStatus: credentialStatus,
+            status: AppStatus.idle,
+          ),
+        );
+      } else if (item.isPolygonssuer) {
+        final mnemonic =
+            await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+        await polygonIdCubit.initialise();
+
+        String network = Parameters.POLYGON_MAIN_NETWORK;
+
+        if (item.issuer.contains('polygon:main')) {
+          network = Parameters.POLYGON_MAIN_NETWORK;
+        } else {
+          network = Parameters.POLYGON_TEST_NETWORK;
+        }
+
+        final List<ClaimEntity> claim =
+            await polygonIdCubit.polygonId.getClaimById(
+          claimId: item.id,
+          mnemonic: mnemonic!,
+          network: network,
+        );
+
+        late CredentialStatus credentialStatus;
+
+        if (claim.isEmpty) {
+          credentialStatus = CredentialStatus.suspended;
+        } else {
+          switch (claim[0].state) {
+            case ClaimState.active:
+              credentialStatus = CredentialStatus.active;
+            case ClaimState.expired:
+              credentialStatus = CredentialStatus.expired;
+            case ClaimState.pending:
+              credentialStatus = CredentialStatus.pending;
+            case ClaimState.revoked:
+              credentialStatus = CredentialStatus.revoked;
+          }
+        }
+
+        emit(
+          state.copyWith(
+            credentialStatus: credentialStatus,
+            status: AppStatus.idle,
+          ),
+        );
+      } else {
+        if (item.credentialPreview.credentialStatus.type != '') {
+          final CredentialStatus credentialStatus =
+              await item.checkRevocationStatus();
+          if (credentialStatus == CredentialStatus.active) {
+            await verifyProofOfPurpose(item);
+          } else {
+            emit(
+              state.copyWith(
+                credentialStatus: CredentialStatus.suspended,
+                status: AppStatus.idle,
+              ),
+            );
+          }
+        } else {
+          await verifyProofOfPurpose(item);
+        }
+      }
+    } catch (e) {
+      emit(
+        state.copyWith(
+          credentialStatus: CredentialStatus.notVerified,
+          status: AppStatus.idle,
+        ),
+      );
     }
   }
 

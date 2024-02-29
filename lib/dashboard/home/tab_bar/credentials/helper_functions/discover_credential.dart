@@ -1,19 +1,50 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 Future<void> discoverCredential({
   required DiscoverDummyCredential dummyCredential,
   required BuildContext context,
 }) async {
+  if (dummyCredential.credentialSubjectType.isBlockchainAccount) {
+    final String? ssiMnemonic =
+        await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+
+    /// tracking added accounts
+    final String totalAccountsYet = await getSecureStorage.get(
+          SecureStorageKeys.cryptoAccounTrackingIndex,
+        ) ??
+        '0';
+
+    final credentialCubit = context.read<CredentialsCubit>();
+    final walletCubit = context.read<WalletCubit>();
+
+    final cryptoAccountData = await walletCubit.generateAccount(
+      mnemonicOrKey: ssiMnemonic!,
+      isImported: false,
+      isSecretKey: false,
+      blockchainType: walletCubit.state.currentAccount!.blockchainType,
+      totalAccountsYet: int.parse(totalAccountsYet),
+    );
+
+    await credentialCubit.insertAssociatedWalletCredential(
+      cryptoAccountData: cryptoAccountData,
+    );
+
+    return;
+  }
+
   final profileCubit = context.read<ProfileCubit>();
 
-  final vcFormatType = profileCubit.state.model.profileSetting
-      .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+  final customOidc4vcProfile = profileCubit.state.model.profileSetting
+      .selfSovereignIdentityOptions.customOidc4vcProfile;
 
   final List<CredentialSubjectType> credentialSubjectTypeListForCheck = [
     CredentialSubjectType.defiCompliance,
@@ -34,9 +65,8 @@ Future<void> discoverCredential({
 
     /// here check for over18, over15, age range and over13 to take photo for
     /// AI KYC
-    if (vcFormatType == VCFormatType.ldpVc &&
+    if (customOidc4vcProfile.vcFormatType == VCFormatType.ldpVc &&
         dummyCredential.credentialSubjectType.checkForAIKYC) {
-
       /// For DefiCompliance, it is not necessary to use Yoti. Instead,
       /// we can directly proceed with Id360.
       if (dummyCredential.credentialSubjectType ==
@@ -48,6 +78,23 @@ Future<void> discoverCredential({
               link: dummyCredential.link!,
             );
         return;
+      }
+
+      if (profileCubit.state.model.walletType == WalletType.enterprise) {
+        final discoverCardsOptions =
+            profileCubit.state.model.profileSetting.discoverCardsOptions;
+
+        if (discoverCardsOptions != null) {
+          if (discoverCardsOptions.displayOver13 ||
+              discoverCardsOptions.displayOver15 ||
+              discoverCardsOptions.displayOver18 ||
+              discoverCardsOptions.displayOver21 ||
+              discoverCardsOptions.displayOver50 ||
+              discoverCardsOptions.displayOver65) {
+            await LaunchUrl.launch(dummyCredential.link!);
+            return;
+          }
+        }
       }
 
       await Navigator.push<void>(

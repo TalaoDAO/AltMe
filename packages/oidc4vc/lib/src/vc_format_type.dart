@@ -43,4 +43,31 @@ extension VCFormatTypeX on VCFormatType {
         return 'vc+sd-jwt';
     }
   }
+
+  String get urlValue {
+    switch (this) {
+      case VCFormatType.ldpVc:
+        return 'ldp_vc';
+      case VCFormatType.jwtVc:
+        return 'jwt_vc';
+      case VCFormatType.jwtVcJson:
+        return 'jwt_vc_json';
+      case VCFormatType.jwtVcJsonLd:
+        return 'jwt_vc_json-ld';
+      case VCFormatType.vcSdJWT:
+        return 'vcsd-jwt';
+    }
+  }
+
+  bool get supportCryptoCredential {
+    switch (this) {
+      case VCFormatType.ldpVc:
+      case VCFormatType.jwtVcJson:
+        return true;
+      case VCFormatType.jwtVc:
+      case VCFormatType.jwtVcJsonLd:
+      case VCFormatType.vcSdJWT:
+        return false;
+    }
+  }
 }

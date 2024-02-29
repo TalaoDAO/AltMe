@@ -1,6 +1,8 @@
 {
   "ca": [
     "walletSecurity",
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
     "clientTypeTitle",
     "clientTypeSubtitle",
     "proofHeader",
@@ -269,7 +271,6 @@
     "enterNewPinCode",
     "confirmYourPinCode",
     "walletAltme",
-    "createPersonalWallet",
     "createTitle",
     "createSubtitle",
     "enterYourPinCode",
@@ -794,6 +795,8 @@
     "financeCredentialsHomeTitle",
     "financeCredentialsDiscoverTitle",
     "financeCredentialsDiscoverSubtitle",
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
     "financeCredentialsHomeSubtitle",
     "hummanityProofCredentialsHomeTitle",
     "hummanityProofCredentialsHomeSubtitle",
@@ -930,7 +933,6 @@
     "secureWithFingerprintAndPINBackup",
     "secureYourWalletWithPINCodeAndBiometrics",
     "twoFactorAuthenticationHasBeenEnabled",
-    "createAnProfessionalWallet",
     "initialization",
     "login",
     "password",
@@ -961,6 +963,8 @@
   ],
 
   "es": [
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
     "clientTypeTitle",
     "clientTypeSubtitle",
     "proofHeader",
@@ -971,6 +975,11 @@
     "enterprise",
     "oWFBaselineProfile",
     "defaultProfile"
+  ],
+
+  "fr": [
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle"
   ],
 
   "it": [
@@ -1229,7 +1238,6 @@
     "enterNewPinCode",
     "confirmYourPinCode",
     "walletAltme",
-    "createPersonalWallet",
     "createTitle",
     "createSubtitle",
     "enterYourPinCode",
@@ -1754,6 +1762,8 @@
     "financeCredentialsHomeTitle",
     "financeCredentialsDiscoverTitle",
     "financeCredentialsDiscoverSubtitle",
+    "blockchainCardsDiscoverTitle",
+    "blockchainCardsDiscoverSubtitle",
     "financeCredentialsHomeSubtitle",
     "hummanityProofCredentialsHomeTitle",
     "hummanityProofCredentialsHomeSubtitle",
@@ -1890,7 +1900,6 @@
     "secureWithFingerprintAndPINBackup",
     "secureYourWalletWithPINCodeAndBiometrics",
     "twoFactorAuthenticationHasBeenEnabled",
-    "createAnProfessionalWallet",
     "initialization",
     "login",
     "password",

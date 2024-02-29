@@ -115,8 +115,8 @@ extension CredentialCategoryX on CredentialCategory {
         return CredentialCategoryConfig(
           homeTitle: '${l10n.my} ${l10n.blockchainAccounts.toLowerCase()}',
           homeSubTitle: l10n.blockchainAccountsCredentialHomeSubtitle,
-          discoverTitle: '${l10n.get} ${l10n.blockchainAccounts.toLowerCase()}',
-          discoverSubTitle: '',
+          discoverTitle: l10n.blockchainCardsDiscoverTitle,
+          discoverSubTitle: l10n.blockchainCardsDiscoverSubtitle,
         );
       case CredentialCategory.educationCards:
         return CredentialCategoryConfig(
