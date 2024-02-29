@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -120,6 +121,11 @@ class _CameraViewState extends State<CameraView> {
                       .selfSovereignIdentityOptions
                       .customOidc4vcProfile
                       .oidc4vciDraft,
+                  blockchainType: context
+                      .read<WalletCubit>()
+                      .state
+                      .currentAccount!
+                      .blockchainType,
                 );
             LoadingView().hide();
             await Navigator.pushReplacement<void, void>(

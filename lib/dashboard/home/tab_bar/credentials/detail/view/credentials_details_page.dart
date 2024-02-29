@@ -8,6 +8,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activit
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -115,7 +116,11 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
     if (confirm) {
       final credentialsCubit = context.read<CredentialsCubit>();
-      await credentialsCubit.deleteById(id: widget.credentialModel.id);
+      await credentialsCubit.deleteById(
+        id: widget.credentialModel.id,
+        blockchainType:
+            context.read<WalletCubit>().state.currentAccount!.blockchainType,
+      );
     }
   }
 
@@ -165,14 +170,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.removeLast();
         }
 
-        final vcFormatType = context
-            .read<ProfileCubit>()
-            .state
-            .model
-            .profileSetting
-            .selfSovereignIdentityOptions
-            .customOidc4vcProfile
-            .vcFormatType;
+        final profileSetting =
+            context.read<ProfileCubit>().state.model.profileSetting;
 
         return BasePage(
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
@@ -191,7 +190,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         CredentialDisplay(
                           credentialModel: widget.credentialModel,
                           credDisplayType: CredDisplayType.Detail,
-                          vcFormatType: vcFormatType,
+                          profileSetting: profileSetting,
                         ),
                         const SizedBox(height: 20),
                         Column(

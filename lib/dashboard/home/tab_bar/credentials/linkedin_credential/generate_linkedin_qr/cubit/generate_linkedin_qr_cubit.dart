@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/home.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_saver/file_saver.dart';

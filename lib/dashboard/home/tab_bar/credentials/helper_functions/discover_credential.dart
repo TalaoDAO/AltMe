@@ -1,15 +1,46 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 Future<void> discoverCredential({
   required DiscoverDummyCredential dummyCredential,
   required BuildContext context,
 }) async {
+  if (dummyCredential.credentialSubjectType.isBlockchainAccount) {
+    final String? ssiMnemonic =
+        await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+
+    /// tracking added accounts
+    final String totalAccountsYet = await getSecureStorage.get(
+          SecureStorageKeys.cryptoAccounTrackingIndex,
+        ) ??
+        '0';
+
+    final credentialCubit = context.read<CredentialsCubit>();
+    final walletCubit = context.read<WalletCubit>();
+
+    final cryptoAccountData = await walletCubit.generateAccount(
+      mnemonicOrKey: ssiMnemonic!,
+      isImported: false,
+      isSecretKey: false,
+      blockchainType: walletCubit.state.currentAccount!.blockchainType,
+      totalAccountsYet: int.parse(totalAccountsYet),
+    );
+
+    await credentialCubit.insertAssociatedWalletCredential(
+      cryptoAccountData: cryptoAccountData,
+    );
+
+    return;
+  }
+
   final profileCubit = context.read<ProfileCubit>();
 
   final customOidc4vcProfile = profileCubit.state.model.profileSetting

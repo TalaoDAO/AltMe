@@ -5,6 +5,7 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/self_issued_credential_button/models/self_issued_credential.dart';
+import 'package:altme/wallet/wallet.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
@@ -26,6 +27,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
     required this.didKitProvider,
     required this.profileCubit,
     required this.oidc4vc,
+    required this.walletCubit,
   }) : super(const SelfIssuedCredentialButtonState());
 
   final CredentialsCubit credentialsCubit;
@@ -34,6 +36,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
   final DIDKitProvider didKitProvider;
   final ProfileCubit profileCubit;
   final OIDC4VC oidc4vc;
+  final WalletCubit walletCubit;
 
   Future<void> createSelfIssuedCredential({
     required SelfIssuedCredentialDataModel selfIssuedCredentialDataModel,
@@ -155,7 +158,10 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       credentialPreview: Credential.fromJson(jsonCredential),
       activities: [Activity(acquisitionAt: DateTime.now())],
     );
-    await credentialsCubit.insertCredential(credential: credentialModel);
+    await credentialsCubit.insertCredential(
+      credential: credentialModel,
+      blockchainType: walletCubit.state.currentAccount!.blockchainType,
+    );
     emit(
       state.success(
         messageHandler: ResponseMessage(
