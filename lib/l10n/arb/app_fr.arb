@@ -643,7 +643,7 @@
   "seeTransaction": "Voir la transaction",
   "nftListSubtitle": "Voici tous les NFTs de votre collection.",
   "tokenListSubtitle": "Voici toutes les cryptos de votre compte.",
-  "my": "Mon",
+  "my": "Mes",
   "get": "Obtenir",
   "seeMoreNFTInformationOn": "Voir plus d'informations sur les NFT sur",
   "credentialStatus": "Status",
@@ -1035,5 +1035,10 @@
   "thisTypeProofCannotBeUsedWithThisVCFormat": "Ce type de preuve ne peut pas être utilisé avec ce format de VC.",
   "enterprise": "Entreprise",
   "oWFBaselineProfile": "Profil de base OWF",
-  "defaultProfile":"Profil par défaut"
+  "defaultProfile":"Profil par défaut",
+  "blockchainCardsDiscoverTitle": "Prouvez que vous possédez un compte crypto.",
+  "blockchainCardsDiscoverSubtitle": "Prouvez que vous possédez un compte crypto.",
+  "successfullyAddedEnterpriseAccount": "Compte entreprise ajouté avec succès !",
+  "successfullyUpdatedEnterpriseAccount": "Compte entreprise mis à jour avec succès !"
+
 }
