@@ -87,6 +87,11 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         blockchainType: walletCubit.state.currentAccount!.blockchainType,
       );
 
+      // if enterprise and walletAttestation data is available and added
+      await walletCubit.credentialsCubit.addWalletCredential(
+        blockchainType: walletCubit.state.currentAccount?.blockchainType,
+      );
+
       emit(
         state.copyWith(
           message: StateMessage.success(
