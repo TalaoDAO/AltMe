@@ -3,7 +3,6 @@
   "genericError": "Une erreur est survenue!",
   "@genericError": {
     "description": "Message d'erreur générique",
-    "@@locale": "fr",
     "type": "text",
     "placeholders": {}
   },
@@ -222,7 +221,6 @@
     }
   },
   "selfIssuedCreatedSuccessfully": "Identifiant auto-émis créé avec succès",
-  "companyName": "Nom de l'entreprise",
   "companyWebsite": "Site Web de l'entreprise",
   "submit": "Envoyer",
   "insertYourDIDKey": "Insérez votre DID",
@@ -349,7 +347,6 @@
   "trustFramework": "Cadre de confiance",
   "network": "Réseau",
   "issuerRegistry": "Registre des émetteurs",
-  "about": "À propos",
   "termsOfUse": "Conditions d'utilisation et de confidentialité",
   "scanFingerprintToAuthenticate": "Scanner l'empreinte digitale pour s'authentifier",
   "biometricsNotSupported": "La biométrie n'est pas prise en charge",
@@ -689,7 +686,7 @@
   "decline": "Refuser",
   "yotiCameraAppbarTitle": "Rapprochez votre visage au maximum avant de prendre la photo",
   "cameraSubtitle": "Vous avez 5 secondes pour prendre votre photo. Rapprochez votre visage au maximum avant de commencer.",
-  "todoImportant": "TODO(all): update the text of below keys","walletSecurity": "Wallet Security",
+  "walletSecurity": "Sécurité du portefeuille",
   "walletSecurityDescription": "Protégez votre portefeuille avec le code PIN et l'authentification biométrique",
   "blockchainSettings": "Paramètres de la blockchain",
   "blockchainSettingsDescription": "Gérer vos comptes, votre phrase de récupération, et les dApps",

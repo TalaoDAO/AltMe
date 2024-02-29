@@ -686,7 +686,7 @@
   "decline": "Rechazar",
   "yotiCameraAppbarTitle": "Sitúe el rostro en el centro.",
   "cameraSubtitle": "Tiene 5 segundos para hacerse la foto.\nAntes de comenzar, asegúrese de que hay suficiente luz.",
-  "todoImportant": "TODO(all): update the text of below keys","walletSecurity": "Wallet Security",
+  "walletSecurity": "Wallet Security",
   "walletSecurityDescription": "Proteja su cartera con código PIN y autenticación biométrica",
   "blockchainSettings": "Configuración de blockchain",
   "blockchainSettingsDescription": "Administrar cuentas, frase de recuperación, dApps y redes conectadas",
