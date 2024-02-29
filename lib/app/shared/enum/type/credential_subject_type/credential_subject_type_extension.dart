@@ -642,7 +642,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.ageRange:
       case CredentialSubjectType.defiCompliance:
       case CredentialSubjectType.tezotopiaMembership:
-      case CredentialSubjectType.phonePass:
       case CredentialSubjectType.chainbornMembership:
         return [VCFormatType.ldpVc];
 
@@ -654,14 +653,13 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         ];
 
       case CredentialSubjectType.over18:
+      case CredentialSubjectType.phonePass:
+      case CredentialSubjectType.livenessCard:
+      case CredentialSubjectType.emailPass:
         return [
           VCFormatType.ldpVc,
           VCFormatType.jwtVcJson,
         ];
-
-      case CredentialSubjectType.livenessCard:
-      case CredentialSubjectType.emailPass:
-        return [VCFormatType.ldpVc, VCFormatType.jwtVcJson];
 
       case CredentialSubjectType.nationality:
       case CredentialSubjectType.identityPass:

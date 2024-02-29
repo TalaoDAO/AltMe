@@ -60,12 +60,12 @@ class WalletCubit extends Cubit<WalletState> {
       required MessageHandler messageHandler,
     })? onComplete,
   }) async {
-    if (isFromOnboarding) {
-      // if enterprise and walletAttestation data is available and added
-      await credentialsCubit.addWalletCredential(
-        blockchainType: state.currentAccount?.blockchainType,
-      );
-    }
+    // if (isFromOnboarding) {
+    //   // if enterprise and walletAttestation data is available and added
+    //   await credentialsCubit.addWalletCredential(
+    //     blockchainType: state.currentAccount?.blockchainType,
+    //   );
+    // }
 
     /// tracking added accounts
     final String totalAccountsYet = await secureStorageProvider.get(

@@ -46,6 +46,16 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         );
       }
 
+      final savedEmail = await profileCubit.secureStorageProvider.get(
+        SecureStorageKeys.enterpriseEmail,
+      );
+
+      if (savedEmail != null && email == savedEmail) {
+        /// if email is matched then update the configuration
+        await updateTheConfiguration();
+        return;
+      }
+
       /// get vc and store it in the wallet
       final walletAttestationData = await getWalletAttestationData(url);
 
@@ -77,10 +87,18 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         blockchainType: walletCubit.state.currentAccount!.blockchainType,
       );
 
+      // if enterprise and walletAttestation data is available and added
+      await walletCubit.credentialsCubit.addWalletCredential(
+        blockchainType: walletCubit.state.currentAccount?.blockchainType,
+      );
+
       emit(
         state.copyWith(
-          message: const StateMessage.success(
-            stringMessage: 'Successfully upgraded to enterprise account!',
+          message: StateMessage.success(
+            messageHandler: ResponseMessage(
+              message: ResponseString
+                  .RESPONSE_STRING_successfullyAddedEnterpriseAccount,
+            ),
           ),
         ),
       );
@@ -274,23 +292,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     try {
       emit(state.loading());
 
-      // final email = await profileCubit.secureStorageProvider.get(
-      //   SecureStorageKeys.enterpriseEmail,
-      // );
-
-      // final password = await profileCubit.secureStorageProvider.get(
-      //   SecureStorageKeys.enterprisePassword,
-      // );
-
-      // if (email == null || password == null) {
-      //   throw ResponseMessage(
-      //     data: {
-      //       'error': 'invalid_request',
-      //       'error_description': 'The email or password is missing.',
-      //     },
-      //   );
-      // }
-
       final provider = await profileCubit.secureStorageProvider.get(
         SecureStorageKeys.enterpriseWalletProvider,
       );
@@ -375,8 +376,11 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       emit(
         state.copyWith(
           status: AppStatus.success,
-          message: const StateMessage.success(
-            stringMessage: 'Successfully upgdated enterprise account!',
+          message: StateMessage.success(
+            messageHandler: ResponseMessage(
+              message: ResponseString
+                  .RESPONSE_STRING_successfullyUpdatedEnterpriseAccount,
+            ),
           ),
         ),
       );

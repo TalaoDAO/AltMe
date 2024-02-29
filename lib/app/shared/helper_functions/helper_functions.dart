@@ -1346,14 +1346,24 @@ bool supportCryptoCredential(ProfileSetting profileSetting) {
   final customOidc4vcProfile =
       profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
 
+  /// suported VC format
   final supportCryptoCredentialByVCFormat =
       customOidc4vcProfile.vcFormatType.supportCryptoCredential;
 
+  /// supported did key
   final supportCryptoCredentialByDidKey =
       customOidc4vcProfile.defaultDid.supportCryptoCredential;
 
-  final supportAssociatedCredential =
+  /// match format 1
+  final matchFormat1 =
       supportCryptoCredentialByVCFormat && supportCryptoCredentialByDidKey;
+
+  /// match format 2
+  final matchFormat2 = customOidc4vcProfile.defaultDid == DidKeyType.edDSA &&
+      customOidc4vcProfile.vcFormatType == VCFormatType.ldpVc &&
+      !customOidc4vcProfile.cryptoHolderBinding;
+
+  final supportAssociatedCredential = matchFormat1 || matchFormat2;
 
   return supportAssociatedCredential;
 }

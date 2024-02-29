@@ -1038,5 +1038,7 @@
   "oWFBaselineProfile": "OWF Baseline Profile",
   "defaultProfile":"Default",
   "blockchainCardsDiscoverTitle": "Get a proof of crypto account ownership",
-  "blockchainCardsDiscoverSubtitle": "Get a proof of crypto account ownership."
+  "blockchainCardsDiscoverSubtitle": "Get a proof of crypto account ownership.",
+  "successfullyAddedEnterpriseAccount": "Successfully added enterprise account!",
+  "successfullyUpdatedEnterpriseAccount": "Successfully updated enterprise account!"
 }
