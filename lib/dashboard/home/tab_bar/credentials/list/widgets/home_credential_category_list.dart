@@ -54,11 +54,11 @@ class HomeCredentialCategoryList extends StatelessWidget {
                       return true;
                     }
 
-                    /// crypto credential account to be shown always
-                    if (element.credentialPreview.credentialSubjectModel
-                        .credentialSubjectType.isBlockchainAccount) {
-                      return true;
-                    }
+                    // /// crypto credential account to be shown always
+                    // if (element.credentialPreview.credentialSubjectModel
+                    //         .credentialSubjectType.isBlockchainAccount  ) {
+                    //   return true;
+                    // }
 
                     /// do not load the credential if vc format is different
                     if (vcFormatType.value != element.getFormat) {
