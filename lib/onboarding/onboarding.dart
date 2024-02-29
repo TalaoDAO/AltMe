@@ -1,5 +1,4 @@
 export 'activate_biometircs/activate_biometrics.dart';
-export 'enterprise/enterprise.dart';
 export 'gen_phrase/onboarding_gen_phrase.dart';
 export 'helper_function/helper_function.dart';
 export 'protect_wallet/protect_wallet.dart';

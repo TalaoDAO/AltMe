@@ -270,39 +270,32 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     return jwtVc;
   }
 
-  Future<void> updateTheConfiguration(String scannedResponse) async {
+  Future<void> updateTheConfiguration() async {
     try {
       emit(state.loading());
-      final uri = Uri.parse(scannedResponse);
 
-      final String? url = uri.queryParameters['wallet-provider'];
+      // final email = await profileCubit.secureStorageProvider.get(
+      //   SecureStorageKeys.enterpriseEmail,
+      // );
 
-      if (url == null) {
-        throw Exception();
-      }
+      // final password = await profileCubit.secureStorageProvider.get(
+      //   SecureStorageKeys.enterprisePassword,
+      // );
 
-      final email = await profileCubit.secureStorageProvider.get(
-        SecureStorageKeys.enterpriseEmail,
-      );
-
-      final password = await profileCubit.secureStorageProvider.get(
-        SecureStorageKeys.enterprisePassword,
-      );
-
-      if (email == null || password == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'The email or password is missing.',
-          },
-        );
-      }
+      // if (email == null || password == null) {
+      //   throw ResponseMessage(
+      //     data: {
+      //       'error': 'invalid_request',
+      //       'error_description': 'The email or password is missing.',
+      //     },
+      //   );
+      // }
 
       final provider = await profileCubit.secureStorageProvider.get(
-        SecureStorageKeys.enterpriseProfileSetting,
+        SecureStorageKeys.enterpriseWalletProvider,
       );
 
-      if (provider == null || provider != url) {
+      if (provider == null) {
         throw ResponseMessage(
           data: {
             'error': 'invalid_request',
@@ -311,9 +304,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         );
       }
 
-      final encodedData = utf8.encode('$email:$password');
-      final base64Encoded = base64UrlEncode(encodedData).replaceAll('=', '');
-
       final walletAttestationData =
           await profileCubit.secureStorageProvider.get(
         SecureStorageKeys.walletAttestationData,
@@ -321,7 +311,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
       final headers = <String, dynamic>{
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic $base64Encoded',
       };
 
       final data = <String, dynamic>{
@@ -330,7 +319,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       };
 
       final response = await client.post(
-        '$url/update',
+        '$provider/update',
         headers: headers,
         data: data,
       );
@@ -386,7 +375,9 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       emit(
         state.copyWith(
           status: AppStatus.success,
-          message: null,
+          message: const StateMessage.success(
+            stringMessage: 'Successfully upgdated enterprise account!',
+          ),
         ),
       );
     } catch (e) {
