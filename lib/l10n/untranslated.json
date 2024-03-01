@@ -13,7 +13,9 @@
     "oWFBaselineProfile",
     "defaultProfile",
     "successfullyAddedEnterpriseAccount",
-    "successfullyUpdatedEnterpriseAccount"
+    "successfullyUpdatedEnterpriseAccount",
+    "proofType",
+    "proofTypeSubtitle"
   ],
 
   "es": [
@@ -30,6 +32,8 @@
     "oWFBaselineProfile",
     "defaultProfile",
     "successfullyAddedEnterpriseAccount",
-    "successfullyUpdatedEnterpriseAccount"
+    "successfullyUpdatedEnterpriseAccount",
+    "proofType",
+    "proofTypeSubtitle"
   ]
 }

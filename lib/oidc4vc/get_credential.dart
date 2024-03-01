@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 
@@ -79,6 +81,7 @@ Future<
     proofHeaderType: customOidc4vcProfile.proofHeader,
     clientAuthentication: customOidc4vcProfile.clientAuthentication,
     redirectUri: Parameters.oidc4vcUniversalLink,
+    proofType: customOidc4vcProfile.proofType,
   );
 
   return (

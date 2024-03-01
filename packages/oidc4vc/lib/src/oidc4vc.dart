@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
 import 'package:cryptography/cryptography.dart' as cryptography;
+import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:elliptic/elliptic.dart' as elliptic;
 import 'package:flutter/foundation.dart';
@@ -410,6 +411,7 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required ClientAuthentication clientAuthentication,
     required String redirectUri,
+    required ProofType proofType,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -516,6 +518,11 @@ class OIDC4VC {
           credentialDefinition: credentialDefinition,
           clientAuthentication: clientAuthentication,
           vct: vct,
+          proofType: proofType,
+          did: did,
+          issuer: issuer,
+          kid: kid,
+          privateKey: privateKey,
         );
 
         credentialResponseData.add(credentialResponseDataValue);
@@ -534,6 +541,11 @@ class OIDC4VC {
         clientAuthentication: clientAuthentication,
         vct: vct,
         credentialIdentifier: null,
+        proofType: proofType,
+        did: did,
+        issuer: issuer,
+        kid: kid,
+        privateKey: privateKey,
       );
 
       credentialResponseData.add(credentialResponseDataValue);
@@ -560,6 +572,11 @@ class OIDC4VC {
     required String? credentialIdentifier,
     required Map<String, dynamic>? credentialDefinition,
     required String? vct,
+    required ProofType proofType,
+    required String did,
+    required String issuer,
+    required String kid,
+    required String privateKey,
   }) async {
     final credentialData = await buildCredentialData(
       cnonce: cnonce,
@@ -574,6 +591,11 @@ class OIDC4VC {
       credentialDefinition: credentialDefinition,
       clientAuthentication: clientAuthentication,
       vct: vct,
+      proofType: proofType,
+      did: did,
+      issuer: issuer,
+      kid: kid,
+      privateKey: privateKey,
     );
 
     /// sign proof
@@ -834,20 +856,53 @@ class OIDC4VC {
     required String? cnonce,
     required String? vct,
     required Map<String, dynamic>? credentialDefinition,
+    required ProofType proofType,
+    required String did,
+    required String issuer,
+    required String kid,
+    required String privateKey,
   }) async {
     final credentialData = <String, dynamic>{};
 
     if (cryptoHolderBinding) {
-      final vcJwt = await getIssuerJwt(
-        tokenParameters: issuerTokenParameters,
-        clientAuthentication: clientAuthentication,
-        oidc4vciDraftType: oidc4vciDraftType,
-        cnonce: cnonce,
-      );
-      credentialData['proof'] = {
-        'proof_type': 'jwt',
-        'jwt': vcJwt,
-      };
+      switch (proofType) {
+        case ProofType.ldpVp:
+          final options = <String, dynamic>{
+            'verificationMethod': kid,
+            'proofPurpose': 'authentication',
+            'domain': issuer,
+          };
+
+          if (cnonce != null) {
+            options['challenge'] = cnonce;
+          }
+
+          final didKitProvider = DIDKitProvider();
+
+          final didAuth = await didKitProvider.didAuth(
+            did,
+            jsonEncode(options),
+            privateKey,
+          );
+
+          credentialData['proof'] = {
+            'proof_type': 'ldp_vp',
+            'ldp_vp': jsonDecode(didAuth),
+          };
+
+        case ProofType.jwt:
+          final vcJwt = await getIssuerJwt(
+            tokenParameters: issuerTokenParameters,
+            clientAuthentication: clientAuthentication,
+            oidc4vciDraftType: oidc4vciDraftType,
+            cnonce: cnonce,
+          );
+
+          credentialData['proof'] = {
+            'proof_type': 'jwt',
+            'jwt': vcJwt,
+          };
+      }
     }
 
     switch (oidc4vciDraftType) {
