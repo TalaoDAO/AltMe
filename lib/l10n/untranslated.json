@@ -15,7 +15,8 @@
     "successfullyAddedEnterpriseAccount",
     "successfullyUpdatedEnterpriseAccount",
     "proofType",
-    "proofTypeSubtitle"
+    "proofTypeSubtitle",
+    "thisWalleIsAlreadyConfigured"
   ],
 
   "es": [
@@ -34,6 +35,13 @@
     "successfullyAddedEnterpriseAccount",
     "successfullyUpdatedEnterpriseAccount",
     "proofType",
-    "proofTypeSubtitle"
+    "proofTypeSubtitle",
+    "thisWalleIsAlreadyConfigured"
+  ],
+
+  "fr": [
+    "proofType",
+    "proofTypeSubtitle",
+    "thisWalleIsAlreadyConfigured"
   ]
 }

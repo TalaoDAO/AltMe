@@ -1041,5 +1041,6 @@
   "successfullyAddedEnterpriseAccount": "Successfully added enterprise account!",
   "successfullyUpdatedEnterpriseAccount": "Successfully updated enterprise account!",
   "proofType": "OIDC4VCI Proof Type",
-  "proofTypeSubtitle": "Default: jwt\nSelect one of the proof type."
+  "proofTypeSubtitle": "Default: jwt\nSelect one of the proof type.",
+  "thisWalleIsAlreadyConfigured": "This wallet is already configured"
 }
