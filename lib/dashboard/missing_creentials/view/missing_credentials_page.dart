@@ -65,7 +65,7 @@ class MissingCredentialsView extends StatelessWidget {
     String issuerName = '';
 
     if (credentialManifest != null) {
-      issuerName = credentialManifest!.issuedBy!.name;
+      issuerName = credentialManifest!.issuedBy?.name ?? '';
     }
 
     if (query != null) {
