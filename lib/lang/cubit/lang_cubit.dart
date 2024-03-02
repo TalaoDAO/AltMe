@@ -68,11 +68,11 @@ class LangCubit extends Cubit<LangState> {
     } else {
       await recordLanguage(locale.languageCode);
       newLocale = locale;
-      newlanguageType = getLanguageType(locale.languageCode, newlanguageType)
+      newlanguageType = getLanguageType(locale.languageCode, newlanguageType);
     }
     if (AppLocalizations.supportedLocales
         .contains(Locale(newLocale.languageCode))) {
       emit(LangState(languageType: newlanguageType, locale: newLocale));
-    } 
+    }
   }
 }
