@@ -840,8 +840,6 @@
   "financeCredentialsHomeTitle": "My financial credentials",
   "financeCredentialsDiscoverTitle": "Get verified financial credentials",
   "financeCredentialsDiscoverSubtitle": "Access new investment opportunities in web3.",
-  "blockchainCardsDiscoverTitle": "Get a proof of crypto account ownership",
-  "blockchainCardsDiscoverSubtitle": "Get a proof of crypto account ownership.",
   "financeCredentialsHomeSubtitle": "Access new investment opportunities in web3",
   "hummanityProofCredentialsHomeTitle": "My proof of humanity",
   "hummanityProofCredentialsHomeSubtitle": "Easily prove you are a human and not a bot.",
@@ -1042,5 +1040,14 @@
   "successfullyUpdatedEnterpriseAccount": "Successfully updated enterprise account!",
   "proofType": "OIDC4VCI Proof Type",
   "proofTypeSubtitle": "Default: jwt\nSelect one of the proof type.",
-  "thisWalleIsAlreadyConfigured": "This wallet is already configured"
+  "thisWalleIsAlreadyConfigured": "This wallet is already configured",
+  "walletSettings": "Wallet Settings",
+  "walletSettingsDescription": "Choose your language",
+  "languageSelectorTitle": "Language",
+  "french": "Français",
+  "spanish": "Español",
+  "catalan": "Català",
+  "english": "English",
+  "phoneLanguage": "Phone language"
+
 }

@@ -16,6 +16,7 @@ import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
+import 'package:altme/lang/cubit/lang_state.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
@@ -252,21 +253,24 @@ class MaterialAppDefinition extends StatelessWidget {
     final bool isStaging =
         context.read<FlavorCubit>().flavorMode == FlavorMode.staging;
     return BlocProvider(
-      create: (context) => LangCubit(),
-      child: BlocBuilder<LangCubit, Locale>(
-        builder: (context, lang) {
+      create: (context) => LangCubit(
+        secureStorageProvider: getSecureStorage,
+      ),
+      child: BlocBuilder<LangCubit, LangState>(
+        builder: (context, state) {
           if (isStaging) {
             final locale = DevicePreview.locale(context);
             if (locale != null) {
               context.read<LangCubit>().setLocale(locale);
             }
-          } else {
-            context.read<LangCubit>().fetchLocale();
+          }
+          if (state == const Locale('en')) {
+            context.read<LangCubit>().checkLocale();
           }
 
           return MaterialApp(
             builder: isStaging ? DevicePreview.appBuilder : null,
-            locale: lang,
+            locale: state.locale,
             title: 'AltMe',
             darkTheme: AppTheme.darkThemeData,
             navigatorObservers: [MyRouteObserver(context)],

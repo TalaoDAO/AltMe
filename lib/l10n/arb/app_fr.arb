@@ -1039,6 +1039,16 @@
   "blockchainCardsDiscoverTitle": "Prouvez que vous possédez un compte crypto.",
   "blockchainCardsDiscoverSubtitle": "Prouvez que vous possédez un compte crypto.",
   "successfullyAddedEnterpriseAccount": "Compte entreprise ajouté avec succès !",
-  "successfullyUpdatedEnterpriseAccount": "Compte entreprise mis à jour avec succès !"
-
+  "successfullyUpdatedEnterpriseAccount": "Compte entreprise mis à jour avec succès !",
+  "proofType": "Type de preuve OIDC4VCI",
+  "proofTypeSubtitle": "Par défault: jwt\nSéléctionnez un type de preuve.",
+  "thisWalleIsAlreadyConfigured": "Ce wallet est déjà configuré",
+  "walletSettings": "Paramètres du wallet",
+  "walletSettingsDescription": "Choisissez votre langue",
+  "languageSelectorTitle": "Langue",
+  "french": "Français",
+  "spanish": "Español",
+  "catalan": "Català",
+  "english": "English",
+  "phoneLanguage": "Langue du téléphone"
 }
