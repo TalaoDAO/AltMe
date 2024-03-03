@@ -1,35 +1,27 @@
 {
   "ca": [
-    "clientTypeTitle",
-    "clientTypeSubtitle",
-    "proofHeader",
-    "proofHeaderSubtitle",
-    "theLdpFormatIsNotSupportedByThisDIDMethod",
-    "switchOffCryptoHolderBindingForThatDIDMethod",
-    "thisTypeProofCannotBeUsedWithThisVCFormat",
-    "enterprise",
-    "oWFBaselineProfile",
-    "defaultProfile",
-    "blockchainCardsDiscoverTitle",
-    "blockchainCardsDiscoverSubtitle",
-    "successfullyAddedEnterpriseAccount",
-    "successfullyUpdatedEnterpriseAccount"
+    "proofType",
+    "proofTypeSubtitle",
+    "thisWalleIsAlreadyConfigured",
+    "walletSettings",
+    "walletSettingsDescription",
+    "french",
+    "spanish",
+    "catalan",
+    "english",
+    "phoneLanguage"
   ],
 
   "es": [
-    "clientTypeTitle",
-    "clientTypeSubtitle",
-    "proofHeader",
-    "proofHeaderSubtitle",
-    "theLdpFormatIsNotSupportedByThisDIDMethod",
-    "switchOffCryptoHolderBindingForThatDIDMethod",
-    "thisTypeProofCannotBeUsedWithThisVCFormat",
-    "enterprise",
-    "oWFBaselineProfile",
-    "defaultProfile",
-    "blockchainCardsDiscoverTitle",
-    "blockchainCardsDiscoverSubtitle",
-    "successfullyAddedEnterpriseAccount",
-    "successfullyUpdatedEnterpriseAccount"
+    "proofType",
+    "proofTypeSubtitle",
+    "thisWalleIsAlreadyConfigured",
+    "walletSettings",
+    "walletSettingsDescription",
+    "french",
+    "spanish",
+    "catalan",
+    "english",
+    "phoneLanguage"
   ]
 }

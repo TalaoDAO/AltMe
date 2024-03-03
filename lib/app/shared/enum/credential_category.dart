@@ -62,10 +62,10 @@ extension CredentialCategoryX on CredentialCategory {
 
   bool get showInHomeIfListEmpty {
     switch (this) {
-      case CredentialCategory.advantagesCards:
       case CredentialCategory.identityCards:
         return true;
       case CredentialCategory.professionalCards:
+      case CredentialCategory.advantagesCards:
       case CredentialCategory.contactInfoCredentials:
       case CredentialCategory.blockchainAccountsCards:
       case CredentialCategory.educationCards:

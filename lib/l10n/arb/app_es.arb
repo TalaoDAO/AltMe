@@ -1027,5 +1027,21 @@
   "congrats": "¡Enhorabuena!",
   "yourWalletConfigurationHasBeenSuccessfullyUpdated": "Configuración de cartera actualizada",
   "continueString": "Continuar",
-  "walletProvider": "Proveedor de cartera"
+  "walletProvider": "Proveedor de cartera",
+  "clientTypeTitle": "Tipo de Cliente OIDC4VCI",
+  "clientTypeSubtitle" : "Predeterminado: DID\nDesplace para cambiar el tipo de cliente",
+  "proofHeader" : "Encabezado de Prueba de Posesión",
+  "proofHeaderSubtitle" : "Predeterminado: kid\nCambiar si necesita JWK en el encabezado.",
+  "theLdpFormatIsNotSupportedByThisDIDMethod": "El formato LDP no es compatible con este método DID.",
+  "switchOffCryptoHolderBindingForThatDIDMethod": "Desactivar la vinculación del titular (o poseedor) de criptoactivos para ese método DID",
+  "thisTypeProofCannotBeUsedWithThisVCFormat": "Este tipo de prueba no se puede utilizar con este formato de CV.",
+  "enterprise" : "Organización/Empresa",
+  "oWFBaselineProfile": "Perfil de Línea Base de OWF",
+  "defaultProfile" : "Predeterminado",
+  "blockchainCardsDiscoverTitle": "Obtener prueba de propiedad de cuenta cripto",
+  "blockchainCardsDiscoverSubtitle" : "Obtener prueba de propiedad de cuenta de criptoactivos",
+  "successfullyAddedEnterpriseAccount":"¡Cuenta de Organización/Empresa añadida con éxito!",
+  "successfullyUpdatedEnterpriseAccount": "¡Cuenta de Organiza ción/Empresa actualizada con éxito!",
+  "languageSelectorTitle": "espagnol"
+
 }

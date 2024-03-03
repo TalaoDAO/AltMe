@@ -236,11 +236,7 @@ class CredentialModel extends Equatable {
 
   bool get disAllowDelete =>
       credentialPreview.credentialSubjectModel.credentialSubjectType ==
-          CredentialSubjectType.walletCredential ||
-      (credentialPreview.credentialSubjectModel.credentialCategory ==
-              CredentialCategory.blockchainAccountsCards &&
-          credentialPreview.credentialSubjectModel.issuedBy?.name ==
-              'My wallet');
+      CredentialSubjectType.walletCredential;
 
   String get getFormat => format != null
       ? format!

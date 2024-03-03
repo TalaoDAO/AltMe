@@ -71,4 +71,5 @@ class SecureStorageKeys {
   static const String enterpriseEmail = 'enterpriseEmail';
   static const String enterprisePassword = 'enterprisePassword';
   static const String enterpriseWalletProvider = 'enterpriseWalletProvider';
+  static const String language = 'language';
 }

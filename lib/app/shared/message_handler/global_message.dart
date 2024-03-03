@@ -388,4 +388,6 @@ class GlobalMessage {
       l10n.successfullyAddedEnterpriseAccount;
   String get RESPONSE_STRING_successfullyUpdatedEnterpriseAccount =>
       l10n.successfullyUpdatedEnterpriseAccount;
+  String get RESPONSE_STRING_thisWalleIsAlreadyConfigured =>
+      l10n.thisWalleIsAlreadyConfigured;
 }

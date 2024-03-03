@@ -102,6 +102,11 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
+    if (uri.toString().startsWith('configuration://?')) {
+      await context.read<EnterpriseCubit>().requestTheConfiguration(uri!);
+      return;
+    }
+
     if (uri.toString().startsWith(Parameters.authorizeEndPoint)) {
       context.read<DeepLinkCubit>().addDeepLink(uri!.toString());
       await context.read<QRCodeScanCubit>().deepLink();

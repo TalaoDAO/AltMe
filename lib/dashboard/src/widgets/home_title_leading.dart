@@ -14,7 +14,7 @@ class HomeTitleLeading extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: ImageIcon(
-        const AssetImage(IconStrings.icMenu),
+        const AssetImage(IconStrings.settings),
         color: Theme.of(context).colorScheme.leadingButton,
       ),
       onPressed: onPressed,

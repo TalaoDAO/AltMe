@@ -497,6 +497,9 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_successfullyUpdatedEnterpriseAccount:
         return globalMessage
             .RESPONSE_STRING_successfullyUpdatedEnterpriseAccount;
+
+      case ResponseString.RESPONSE_STRING_thisWalleIsAlreadyConfigured:
+        return globalMessage.RESPONSE_STRING_thisWalleIsAlreadyConfigured;
     }
   }
 }

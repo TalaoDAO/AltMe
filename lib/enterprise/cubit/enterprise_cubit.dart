@@ -50,10 +50,17 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         SecureStorageKeys.enterpriseEmail,
       );
 
-      if (savedEmail != null && email == savedEmail) {
-        /// if email is matched then update the configuration
-        await updateTheConfiguration();
-        return;
+      if (savedEmail != null) {
+        if (email == savedEmail) {
+          /// if email is matched then update the configuration
+          await updateTheConfiguration();
+          return;
+        } else {
+          throw ResponseMessage(
+            message:
+                ResponseString.RESPONSE_STRING_thisWalleIsAlreadyConfigured,
+          );
+        }
       }
 
       /// get vc and store it in the wallet

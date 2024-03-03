@@ -492,10 +492,10 @@ packages:
     dependency: transitive
     description:
       name: dart_style
-      sha256: "25b4624c231844a7a70a3817a729a6190a751ef1c07ded256e126a3b72261444"
+      sha256: "99e066ce75c89d6b29903d788a7bb9369cf754f7b24bf70bf4b6d6d6b26853b9"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.5"
+    version: "2.3.6"
   dart_web3:
     dependency: transitive
     description:
@@ -1119,10 +1119,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_fonts
-      sha256: f0b8d115a13ecf827013ec9fc883390ccc0e87a96ed5347a3114cac177ef18e8
+      sha256: "5b1726fee554d1cc9db1baef8061b126567ff0a1140a03ed7de936e62f2ab98b"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "6.2.0"
   google_mlkit_barcode_scanning:
     dependency: "direct main"
     description:
@@ -1501,10 +1501,10 @@ packages:
     dependency: "direct main"
     description:
       name: matrix
-      sha256: "64b71793b689f57521f24d5412dadd090a61762084971ff13c7b8870b3cebeb7"
+      sha256: baefc62fd4ea6e857fd8cfe6f8b0421a08cd58223dbf94c9b3cc3bc29497a8ff
       url: "https://pub.dev"
     source: hosted
-    version: "0.25.11"
+    version: "0.25.12"
   matrix_api_lite:
     dependency: transitive
     description:

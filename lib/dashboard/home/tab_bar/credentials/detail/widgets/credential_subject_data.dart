@@ -31,7 +31,7 @@ class CredentialSubjectData extends StatelessWidget {
     if (credentialSubjectData == null) return Container();
     if (credentialSubjectData is! Map<String, dynamic>) return Container();
 
-    final languageCode = context.read<LangCubit>().state.languageCode;
+    final languageCode = context.read<LangCubit>().state.locale.languageCode;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
