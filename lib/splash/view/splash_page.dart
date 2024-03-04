@@ -78,10 +78,23 @@ class _SplashViewState extends State<SplashView> {
 
   bool isPolygonFunctionCalled = false;
 
+  String? _deeplink;
+
   Future<void> processIncomingUri(Uri? uri, BuildContext context) async {
     final l10n = context.l10n;
     String beaconData = '';
     bool isBeaconRequest = false;
+
+    Timer.periodic(const Duration(seconds: 3), (timer) {
+      timer.cancel();
+      _deeplink = null;
+    });
+
+    if (_deeplink != null && _deeplink == uri.toString()) {
+      return;
+    }
+
+    _deeplink = uri.toString();
 
     if (uri.toString().startsWith('${Urls.appDeepLink}/dashboard')) {
       await Navigator.pushAndRemoveUntil<void>(
