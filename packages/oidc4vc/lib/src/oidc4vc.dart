@@ -412,6 +412,7 @@ class OIDC4VC {
     required ClientAuthentication clientAuthentication,
     required String redirectUri,
     required ProofType proofType,
+    required String iss,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -523,6 +524,7 @@ class OIDC4VC {
           issuer: issuer,
           kid: kid,
           privateKey: privateKey,
+          iss: iss,
         );
 
         credentialResponseData.add(credentialResponseDataValue);
@@ -546,6 +548,7 @@ class OIDC4VC {
         issuer: issuer,
         kid: kid,
         privateKey: privateKey,
+        iss: iss,
       );
 
       credentialResponseData.add(credentialResponseDataValue);
@@ -577,6 +580,7 @@ class OIDC4VC {
     required String issuer,
     required String kid,
     required String privateKey,
+    required String iss,
   }) async {
     final credentialData = await buildCredentialData(
       cnonce: cnonce,
@@ -596,6 +600,7 @@ class OIDC4VC {
       issuer: issuer,
       kid: kid,
       privateKey: privateKey,
+      iss: iss,
     );
 
     /// sign proof
@@ -858,6 +863,7 @@ class OIDC4VC {
     required Map<String, dynamic>? credentialDefinition,
     required ProofType proofType,
     required String did,
+    required String iss,
     required String issuer,
     required String kid,
     required String privateKey,
@@ -896,6 +902,7 @@ class OIDC4VC {
             clientAuthentication: clientAuthentication,
             oidc4vciDraftType: oidc4vciDraftType,
             cnonce: cnonce,
+            iss: iss,
           );
 
           credentialData['proof'] = {
@@ -1148,19 +1155,10 @@ class OIDC4VC {
     required IssuerTokenParameters tokenParameters,
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required String iss,
     String? cnonce,
   }) async {
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round() - 30;
-
-    var iss = tokenParameters.did;
-
-    if (clientAuthentication == ClientAuthentication.clientSecretPost ||
-        clientAuthentication == ClientAuthentication.clientSecretBasic) {
-      if (oidc4vciDraftType == OIDC4VCIDraftType.draft11 ||
-          oidc4vciDraftType == OIDC4VCIDraftType.draft13) {
-        iss = tokenParameters.clientId;
-      }
-    }
 
     final payload = {
       'iss': iss,
