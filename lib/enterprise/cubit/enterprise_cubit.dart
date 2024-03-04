@@ -50,17 +50,23 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         SecureStorageKeys.enterpriseEmail,
       );
 
+      // if (savedEmail != null) {
+      //   if (email == savedEmail) {
+      //     /// if email is matched then update the configuration
+      //     await updateTheConfiguration();
+      //     return;
+      //   } else {
+      //     throw ResponseMessage(
+      //       message:
+      //           ResponseString.RESPONSE_STRING_thisWalleIsAlreadyConfigured,
+      //     );
+      //   }
+      // }
+
       if (savedEmail != null) {
-        if (email == savedEmail) {
-          /// if email is matched then update the configuration
-          await updateTheConfiguration();
-          return;
-        } else {
-          throw ResponseMessage(
-            message:
-                ResponseString.RESPONSE_STRING_thisWalleIsAlreadyConfigured,
-          );
-        }
+        throw ResponseMessage(
+          message: ResponseString.RESPONSE_STRING_thisWalleIsAlreadyConfigured,
+        );
       }
 
       /// get vc and store it in the wallet
@@ -273,7 +279,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       data: data,
     );
 
-    String jwtVc = response.toString();
+    final jwtVc = response.toString();
 
     /// parse
     final header = jwtDecode.parseJwtHeader(jwtVc!);
@@ -299,26 +305,40 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     try {
       emit(state.loading());
 
+      final savedEmail = await profileCubit.secureStorageProvider.get(
+        SecureStorageKeys.enterpriseEmail,
+      );
+      final savedPassword = await profileCubit.secureStorageProvider.get(
+        SecureStorageKeys.enterprisePassword,
+      );
+
       final provider = await profileCubit.secureStorageProvider.get(
         SecureStorageKeys.enterpriseWalletProvider,
       );
-
-      if (provider == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'The wallet provider does not match.',
-          },
-        );
-      }
 
       final walletAttestationData =
           await profileCubit.secureStorageProvider.get(
         SecureStorageKeys.walletAttestationData,
       );
 
+      if (savedEmail == null ||
+          savedPassword == null ||
+          provider == null ||
+          walletAttestationData == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The wallet is not configured yet.',
+          },
+        );
+      }
+
+      final encodedData = utf8.encode('$savedEmail:$savedPassword');
+      final base64Encoded = base64UrlEncode(encodedData).replaceAll('=', '');
+
       final headers = <String, dynamic>{
         'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic $base64Encoded',
       };
 
       final data = <String, dynamic>{
