@@ -767,7 +767,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         image = ImageStrings.dummyOver13Card;
 
         link = '${Urls.id360Url}'
-            '?format=${vcFormatType.urlValue}'
+            '?draft=${oidc4vcDraftType.numbering}'
+            '&format=${vcFormatType.urlValue}'
             '&type=over13';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over13WhyGetThisCard;
@@ -779,7 +780,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         image = ImageStrings.dummyOver15Card;
 
         link = '${Urls.id360Url}'
-            '?format=${vcFormatType.urlValue}'
+            '?draft=${oidc4vcDraftType.numbering}'
+            '&format=${vcFormatType.urlValue}'
             '&type=over15';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over15WhyGetThisCard;
@@ -791,7 +793,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         image = ImageStrings.dummyOver18Card;
 
         link = '${Urls.id360Url}'
-            '?format=${vcFormatType.urlValue}'
+            '?draft=${oidc4vcDraftType.numbering}'
+            '&format=${vcFormatType.urlValue}'
             '&type=over18';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -803,7 +806,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         image = ImageStrings.dummyOver21Card;
 
         link = '${Urls.id360Url}'
-            '?format=${vcFormatType.urlValue}'
+            '?draft=${oidc4vcDraftType.numbering}'
+            '&format=${vcFormatType.urlValue}'
             '&type=over21';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -815,7 +819,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         image = ImageStrings.dummyOver50Card;
 
         link = '${Urls.id360Url}'
-            '?format=${vcFormatType.urlValue}'
+            '?draft=${oidc4vcDraftType.numbering}'
+            '&format=${vcFormatType.urlValue}'
             '&type=over50';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -827,7 +832,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         image = ImageStrings.dummyOver65Card;
 
         link = '${Urls.id360Url}'
-            '?format=${vcFormatType.urlValue}'
+            '?draft=${oidc4vcDraftType.numbering}'
+            '&format=${vcFormatType.urlValue}'
             '&type=over65';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -857,9 +863,16 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.verifiableIdCard:
         image = ImageStrings.dummyVerifiableIdCard;
 
+        var type = 'verifiableid';
+
+        if (vcFormatType == VCFormatType.vcSdJWT) {
+          type = 'identitycredential';
+        }
+
         link = '${Urls.id360Url}'
-            '?format=${vcFormatType.urlValue}'
-            '&type=verifiableid';
+            '?draft=${oidc4vcDraftType.numbering}'
+            '&format=${vcFormatType.urlValue}'
+            '&type=$type';
 
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_verifiableIdCardWhyGetThisCard;
@@ -926,7 +939,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         image = ImageStrings.livenessDummy;
 
         link = '${Urls.id360Url}'
-            '?format=${vcFormatType.urlValue}'
+            '?draft=${oidc4vcDraftType.numbering}'
+            '&format=${vcFormatType.urlValue}'
             '&type=liveness';
 
         whyGetThisCard =

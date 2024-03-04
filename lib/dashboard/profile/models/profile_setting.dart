@@ -181,6 +181,7 @@ class DiscoverCardsOptions extends Equatable {
     required this.displayExternalIssuer,
     this.displayOver18Jwt = false,
     this.displayVerifiableIdJwt = true,
+    this.displayVerifiableIdSdJwt = true,
     this.displayEmailPass = true,
     this.displayEmailPassJwt = true,
     this.displayPhonePass = true,
@@ -202,6 +203,7 @@ class DiscoverCardsOptions extends Equatable {
         displayOver21: false,
         displayOver50: false,
         displayVerifiableId: true,
+        displayVerifiableIdSdJwt: true,
         displayOver65: false,
         displayAgeRange: false,
         displayGender: false,
@@ -249,6 +251,7 @@ class DiscoverCardsOptions extends Equatable {
   final bool displayAgeRange;
   final bool displayVerifiableId;
   final bool displayVerifiableIdJwt;
+  final bool displayVerifiableIdSdJwt;
   final bool displayGender;
   final List<DisplayExternalIssuer> displayExternalIssuer;
   final bool displayChainborn;
