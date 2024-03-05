@@ -264,7 +264,7 @@ class MaterialAppDefinition extends StatelessWidget {
               context.read<LangCubit>().setLocale(locale);
             }
           }
-          if (state == const Locale('en')) {
+          if (state.locale == const Locale('en')) {
             context.read<LangCubit>().checkLocale();
           }
 
