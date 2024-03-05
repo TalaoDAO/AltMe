@@ -1161,13 +1161,19 @@ ${openIdConfiguration != null ? const JsonEncoder.withIndent('  ').convert(openI
 ''';
 }
 
-String getFormattedStringResponse({
+String getFormattedTokenResponse({
   required Map<String, dynamic>? tokenData,
-  required List<dynamic>? credentialData,
 }) {
   return '''
 <b>TOKEN RESPONSE :</b> 
 ${tokenData != null ? const JsonEncoder.withIndent('  ').convert(tokenData) : 'None'}\n
+''';
+}
+
+String getFormattedCredentialResponse({
+  required List<dynamic>? credentialData,
+}) {
+  return '''
 <b>CREDENTIAL RESPONSE :</b>
 ${credentialData != null ? const JsonEncoder.withIndent('  ').convert(credentialData) : 'None'}\n
 ''';

@@ -13,7 +13,6 @@ Future<void> addCredentialData({
   required String? deferredCredentialEndpoint,
   required String format,
   required OpenIdConfiguration? openIdConfiguration,
-  required Map<String, dynamic>? tokenResponse,
   required SecureStorageProvider secureStorageProvider,
   required ProfileCubit profileCubit,
   required CredentialsCubit credentialsCubit,

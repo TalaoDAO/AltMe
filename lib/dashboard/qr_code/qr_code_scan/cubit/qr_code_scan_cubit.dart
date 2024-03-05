@@ -1194,6 +1194,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
+  String? savedNonce;
+  String? savedAccessToken;
+  List<dynamic>? savedAuthorizationDetails;
   Completer<bool>? completer;
 
   Future<void> addCredentialsInLoop({
@@ -1224,37 +1227,93 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           /// preAuthorizedCode != null
           /// this is full phase flow for preAuthorizedCode
 
+          /// get openid configuration
+          final openIdConfiguration = await oidc4vc.getOpenIdConfig(
+            baseUrl: issuer,
+            isAuthorizationServer: false,
+            oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+          );
+
+          if (savedAccessToken == null) {
+            /// get token response
+            final (
+              Map<String, dynamic>? tokenResponse,
+              String? accessToken,
+              String? cnonce,
+              List<dynamic>? authorizationDetails,
+            ) = await oidc4vc.getTokenResponse(
+              preAuthorizedCode: preAuthorizedCode,
+              issuer: issuer,
+              clientId: clientId,
+              clientSecret: clientSecret,
+              userPin: userPin,
+              code: codeForAuthorisedFlow,
+              codeVerifier: codeVerifier,
+              authorization: authorization,
+              oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+              redirectUri: Parameters.oidc4vcUniversalLink,
+              openIdConfiguration: openIdConfiguration,
+            );
+
+            savedAccessToken = accessToken;
+            savedNonce = cnonce;
+            savedAuthorizationDetails = authorizationDetails;
+
+            if (profileCubit.state.model.isDeveloperMode) {
+              completer = Completer<bool>();
+
+              final formattedData =
+                  getFormattedTokenResponse(tokenData: tokenResponse);
+              emit(
+                state.copyWith(
+                  qrScanStatus: QrScanStatus.pauseForDialog,
+                  dialogData: formattedData,
+                ),
+              );
+
+              final value = await completer!.future;
+
+              if (value) {
+                completer = null;
+              } else {
+                completer = null;
+                resetNonceAndAccessTokenAndAuthorizationDetails();
+                goBack();
+                return;
+              }
+            }
+          }
+
+          if (savedAccessToken == null || savedNonce == null) {
+            throw Exception();
+          }
+
           /// get credentials
           final (
             List<dynamic> encodedCredentialOrFutureTokens,
             String? deferredCredentialEndpoint,
             String format,
-            OpenIdConfiguration? openIdConfiguration,
-            Map<String, dynamic>? tokenResponse,
           ) = await getCredential(
             oidc4vc: oidc4vc,
             isEBSIV3: isEBSIV3,
             didKitProvider: didKitProvider,
             credential: selectedCredentials[i],
-            userPin: userPin,
             issuer: issuer,
-            preAuthorizedCode: preAuthorizedCode,
-            codeForAuthorisedFlow: codeForAuthorisedFlow,
-            codeVerifier: codeVerifier,
             cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
-            authorization: authorization,
             oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
             didKeyType: customOidc4vcProfile.defaultDid,
             clientId: clientId,
-            clientSecret: clientSecret,
             profileCubit: profileCubit,
+            accessToken: savedAccessToken!,
+            nonce: savedNonce!,
+            authorizationDetails: savedAuthorizationDetails,
+            openIdConfiguration: openIdConfiguration,
           );
 
           if (profileCubit.state.model.isDeveloperMode) {
             completer = Completer<bool>();
 
-            final formattedData = getFormattedStringResponse(
-              tokenData: tokenResponse,
+            final formattedData = getFormattedCredentialResponse(
               credentialData: encodedCredentialOrFutureTokens,
             );
             emit(
@@ -1270,12 +1329,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               completer = null;
             } else {
               completer = null;
-              oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
+              resetNonceAndAccessTokenAndAuthorizationDetails();
               goBack();
               return;
             }
           }
 
+          /// add credentials
           await addCredentialData(
             scannedResponse: state.uri.toString(),
             credentialsCubit: credentialsCubit,
@@ -1290,21 +1350,24 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             encodedCredentialOrFutureTokens: encodedCredentialOrFutureTokens,
             format: format,
             openIdConfiguration: openIdConfiguration,
-            tokenResponse: tokenResponse,
           );
-
-          /// add credentials
         } else {
           throw Exception();
         }
       }
 
-      oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
+      resetNonceAndAccessTokenAndAuthorizationDetails();
       goBack();
     } catch (e) {
-      oidc4vc.resetNonceAndAccessTokenAndAuthorizationDetails();
+      resetNonceAndAccessTokenAndAuthorizationDetails();
       emitError(e);
     }
+  }
+
+  void resetNonceAndAccessTokenAndAuthorizationDetails() {
+    savedAccessToken = null;
+    savedNonce = null;
+    savedAuthorizationDetails = null;
   }
 
   void goBack() {

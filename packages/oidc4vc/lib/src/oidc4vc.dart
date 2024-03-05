@@ -382,84 +382,32 @@ class OIDC4VC {
     });
   }
 
-  String? cnonce;
-  String? accessToken;
-  List<dynamic>? authorizationDetails;
-
   /// Retreive credential_type from url
   /// credentialResponseData, deferredCredentialEndpoint, format,
-  /// openIdConfiguration, tokenResponse
   Future<
       (
         List<dynamic>,
         String?,
         String,
-        OpenIdConfiguration?,
-        Map<String, dynamic>?
       )> getCredential({
     required String issuer,
     required dynamic credential,
     required String did,
     required String? clientId,
-    required String? clientSecret,
     required String kid,
-    required int indexValue,
     required String privateKey,
     required bool cryptoHolderBinding,
     required ClientType clientType,
     required ProofHeaderType proofHeaderType,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required ClientAuthentication clientAuthentication,
-    required String redirectUri,
     required ProofType proofType,
     required String iss,
-    String? preAuthorizedCode,
-    String? userPin,
-    String? code,
-    String? codeVerifier,
-    String? authorization,
+    required OpenIdConfiguration openIdConfiguration,
+    required String accessToken,
+    required String cnonce,
+    List<dynamic>? authorizationDetails,
   }) async {
-    final openIdConfiguration = await getOpenIdConfig(
-      baseUrl: issuer,
-      isAuthorizationServer: false,
-      oidc4vciDraftType: oidc4vciDraftType,
-    );
-
-    final tokenEndPoint = await readTokenEndPoint(
-      openIdConfiguration: openIdConfiguration,
-      issuer: issuer,
-      oidc4vciDraftType: oidc4vciDraftType,
-    );
-
-    Map<String, dynamic>? tokenResponse;
-
-    if (accessToken == null) {
-      final tokenData = buildTokenData(
-        preAuthorizedCode: preAuthorizedCode,
-        userPin: userPin,
-        code: code,
-        codeVerifier: codeVerifier,
-        clientId: clientId,
-        clientSecret: clientSecret,
-        authorization: authorization,
-        redirectUri: redirectUri,
-      );
-
-      tokenResponse = await getToken(
-        tokenEndPoint: tokenEndPoint,
-        tokenData: tokenData,
-        authorization: authorization,
-      );
-
-      if (tokenResponse.containsKey('c_nonce')) {
-        cnonce = tokenResponse['c_nonce'] as String;
-      }
-
-      accessToken = tokenResponse['access_token'] as String;
-      authorizationDetails =
-          tokenResponse['authorization_details'] as List<dynamic>?;
-    }
-
     final issuerTokenParameters = IssuerTokenParameters(
       privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
       did: did,
@@ -506,8 +454,11 @@ class OIDC4VC {
               .map((dynamic element) => element.toString())
               .toList();
 
+      var nonce = cnonce;
+
       for (final credentialIdentifier in credentialIdentifiers) {
-        final credentialResponseDataValue = await getSingleCredential(
+        final (credentialResponseDataValue, updateNonce) =
+            await getSingleCredential(
           issuerTokenParameters: issuerTokenParameters,
           openIdConfiguration: openIdConfiguration,
           credentialType: credentialType,
@@ -525,13 +476,18 @@ class OIDC4VC {
           kid: kid,
           privateKey: privateKey,
           iss: iss,
+          accessToken: accessToken,
+          nonce: nonce,
         );
+
+        /// update nonce value
+        nonce = updateNonce;
 
         credentialResponseData.add(credentialResponseDataValue);
       }
 //
     } else {
-      final credentialResponseDataValue = await getSingleCredential(
+      final (credentialResponseDataValue, _) = await getSingleCredential(
         issuerTokenParameters: issuerTokenParameters,
         openIdConfiguration: openIdConfiguration,
         credentialType: credentialType,
@@ -549,6 +505,8 @@ class OIDC4VC {
         kid: kid,
         privateKey: privateKey,
         iss: iss,
+        accessToken: accessToken,
+        nonce: cnonce,
       );
 
       credentialResponseData.add(credentialResponseDataValue);
@@ -558,12 +516,64 @@ class OIDC4VC {
       credentialResponseData,
       deferredCredentialEndpoint,
       format,
-      openIdConfiguration,
-      tokenResponse,
     );
   }
 
-  Future<dynamic> getSingleCredential({
+  /// tokenResponse, accessToken, cnonce, authorizationDetails
+  Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
+      getTokenResponse({
+    required String issuer,
+    required String? clientId,
+    required String? clientSecret,
+    required OIDC4VCIDraftType oidc4vciDraftType,
+    required String redirectUri,
+    required OpenIdConfiguration openIdConfiguration,
+    String? preAuthorizedCode,
+    String? userPin,
+    String? code,
+    String? codeVerifier,
+    String? authorization,
+  }) async {
+    final tokenEndPoint = await readTokenEndPoint(
+      openIdConfiguration: openIdConfiguration,
+      issuer: issuer,
+      oidc4vciDraftType: oidc4vciDraftType,
+    );
+
+    Map<String, dynamic>? tokenResponse;
+    String? accessToken;
+    String? cnonce;
+    List<dynamic>? authorizationDetails;
+
+    final tokenData = buildTokenData(
+      preAuthorizedCode: preAuthorizedCode,
+      userPin: userPin,
+      code: code,
+      codeVerifier: codeVerifier,
+      clientId: clientId,
+      clientSecret: clientSecret,
+      authorization: authorization,
+      redirectUri: redirectUri,
+    );
+
+    tokenResponse = await getToken(
+      tokenEndPoint: tokenEndPoint,
+      tokenData: tokenData,
+      authorization: authorization,
+    );
+
+    if (tokenResponse.containsKey('c_nonce')) {
+      cnonce = tokenResponse['c_nonce'] as String;
+    }
+
+    accessToken = tokenResponse['access_token'] as String;
+    authorizationDetails =
+        tokenResponse['authorization_details'] as List<dynamic>?;
+
+    return (tokenResponse, accessToken, cnonce, authorizationDetails);
+  }
+
+  Future<(dynamic, String)> getSingleCredential({
     required IssuerTokenParameters issuerTokenParameters,
     required OpenIdConfiguration openIdConfiguration,
     required String credentialType,
@@ -581,9 +591,11 @@ class OIDC4VC {
     required String kid,
     required String privateKey,
     required String iss,
+    required String accessToken,
+    required String nonce,
   }) async {
     final credentialData = await buildCredentialData(
-      cnonce: cnonce,
+      nonce: nonce,
       issuerTokenParameters: issuerTokenParameters,
       openIdConfiguration: openIdConfiguration,
       credentialType: credentialType,
@@ -607,8 +619,6 @@ class OIDC4VC {
 
     final credentialEndpoint = readCredentialEndpoint(openIdConfiguration);
 
-    if (accessToken == null) throw Exception();
-
     final credentialHeaders = <String, dynamic>{
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
@@ -622,12 +632,14 @@ class OIDC4VC {
 
     final credentialResponseData = credentialResponse.data;
 
+    var cnonce = nonce;
+
     if (credentialResponseData is Map<String, dynamic> &&
         credentialResponseData.containsKey('c_nonce')) {
       cnonce = credentialResponseData['c_nonce'].toString();
     }
 
-    return credentialResponseData;
+    return (credentialResponseData, cnonce);
   }
 
   /// get Deferred credential from url
@@ -646,12 +658,6 @@ class OIDC4VC {
     );
 
     return credentialResponse.data;
-  }
-
-  void resetNonceAndAccessTokenAndAuthorizationDetails() {
-    cnonce = null;
-    accessToken = null;
-    authorizationDetails = null;
   }
 
   Map<String, dynamic> buildTokenData({
@@ -858,7 +864,7 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required ClientAuthentication clientAuthentication,
     required String? credentialIdentifier,
-    required String? cnonce,
+    required String? nonce,
     required String? vct,
     required Map<String, dynamic>? credentialDefinition,
     required ProofType proofType,
@@ -879,8 +885,8 @@ class OIDC4VC {
             'domain': issuer,
           };
 
-          if (cnonce != null) {
-            options['challenge'] = cnonce;
+          if (nonce != null) {
+            options['challenge'] = nonce;
           }
 
           final didKitProvider = DIDKitProvider();
@@ -901,7 +907,7 @@ class OIDC4VC {
             tokenParameters: issuerTokenParameters,
             clientAuthentication: clientAuthentication,
             oidc4vciDraftType: oidc4vciDraftType,
-            cnonce: cnonce,
+            cnonce: nonce,
             iss: iss,
           );
 
