@@ -44,14 +44,7 @@ class DrawerView extends StatelessWidget {
                       ),
                     ),
 
-                    WalletLogo(
-                      profileModel: profileModel,
-                      height: 90,
-                      width: MediaQuery.of(context).size.shortestSide * 0.5,
-                      showPoweredBy: true,
-                    ),
-
-                    const SizedBox(height: Sizes.spaceSmall),
+                    const DrawerLogo(),
                     const AppVersionDrawer(),
                     const SizedBox(height: Sizes.spaceLarge),
                     if (profileModel.profileType == ProfileType.enterprise) ...[

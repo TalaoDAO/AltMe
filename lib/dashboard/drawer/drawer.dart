@@ -7,3 +7,5 @@ export 'reset_wallet/reset_wallet.dart';
 export 'src/src.dart';
 export 'ssi/ssi.dart';
 export 'wallet_security/wallet_security.dart';
+export 'wallet_settings/wallet_settings.dart';
+export 'widget/widget.dart';
