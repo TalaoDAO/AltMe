@@ -1161,20 +1161,6 @@ ${openIdConfiguration != null ? const JsonEncoder.withIndent('  ').convert(openI
 ''';
 }
 
-String getFormattedStringOIDC4VCIAuthorizedCodeFlow({
-  required String url,
-  Map<String, dynamic>? statePayload,
-  dynamic codeForAuthorisedFlow,
-}) {
-  return '''
-<b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
-<b>STATE  :</b> 
-${statePayload != null ? const JsonEncoder.withIndent('  ').convert(statePayload) : 'None'}\n 
-<b>CODE  :</b> 
-$codeForAuthorisedFlow
-''';
-}
-
 String getFormattedStringResponse({
   required Map<String, dynamic>? tokenData,
   required List<dynamic>? credentialData,
