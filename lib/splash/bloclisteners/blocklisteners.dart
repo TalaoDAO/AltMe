@@ -490,52 +490,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
             final statePayload = jwt.payload as Map<String, dynamic>;
 
-            /// if dev mode is ON show some dialog to show data
-            if (profileCubit.state.model.isDeveloperMode) {
-              final String formattedData =
-                  getFormattedStringOIDC4VCIAuthorizedCodeFlow(
-                url: state.uri.toString(),
-                codeForAuthorisedFlow: codeForAuthorisedFlow,
-                statePayload: statePayload,
-              );
-
-              LoadingView().hide();
-              final bool moveAhead = await showDialog<bool>(
-                    context: context,
-                    builder: (_) {
-                      return DeveloperModeDialog(
-                        onDisplay: () async {
-                          Navigator.of(context).pop(false);
-                          await Navigator.of(context).push<void>(
-                            JsonViewerPage.route(
-                              title: l10n.display,
-                              data: formattedData,
-                            ),
-                          );
-                          return;
-                        },
-                        onDownload: () {
-                          Navigator.of(context).pop(false);
-
-                          final box = context.findRenderObject() as RenderBox?;
-                          final subject = l10n.shareWith;
-
-                          Share.share(
-                            formattedData,
-                            subject: subject,
-                            sharePositionOrigin:
-                                box!.localToGlobal(Offset.zero) & box.size,
-                          );
-                        },
-                        onSkip: () {
-                          Navigator.of(context).pop(true);
-                        },
-                      );
-                    },
-                  ) ??
-                  true;
-              if (!moveAhead) return;
-            }
             await context.read<QRCodeScanCubit>().authorizedFlowCompletion(
                   statePayload: statePayload,
                   codeForAuthorisedFlow: codeForAuthorisedFlow,

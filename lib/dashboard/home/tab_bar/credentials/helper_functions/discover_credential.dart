@@ -97,6 +97,7 @@ Future<void> discoverCredential({
         }
       }
 
+      LoadingView().hide();
       await Navigator.push<void>(
         context,
         ChooseVerificationMethodPage.route(

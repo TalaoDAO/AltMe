@@ -1031,7 +1031,6 @@
   "continueString": "Continuer",
   "walletProvider": "Fournisseur de Portefeuille",
   "theLdpFormatIsNotSupportedByThisDIDMethod": "Le format LDP n'est pas pris en charge par cette méthode DID.",
-  "switchOffCryptoHolderBindingForThatDIDMethod": "Désactivez la fonctionnalité \"Crypto Holder Binding\" pour cette méthode DID.",
   "thisTypeProofCannotBeUsedWithThisVCFormat": "Ce type de preuve ne peut pas être utilisé avec ce format de VC.",
   "enterprise": "Entreprise",
   "oWFBaselineProfile": "Profil de base OWF",

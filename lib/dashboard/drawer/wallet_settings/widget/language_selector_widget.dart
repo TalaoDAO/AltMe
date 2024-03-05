@@ -32,6 +32,19 @@ class LanguageSelectorWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.walletSettingsDescription,
+                          style: Theme.of(context).textTheme.drawerItemSubtitle,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   ListView.builder(
                     itemCount: LanguageType.values.length,
                     shrinkWrap: true,

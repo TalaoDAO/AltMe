@@ -706,11 +706,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               final displayVerifiableId = vcFormatType == VCFormatType.ldpVc &&
                   discoverCardsOptions.displayVerifiableId;
               final displayVerifiableIdJwt =
-                  (vcFormatType == VCFormatType.jwtVcJson ||
-                          vcFormatType == VCFormatType.vcSdJWT) &&
+                  vcFormatType == VCFormatType.jwtVcJson &&
                       discoverCardsOptions.displayVerifiableIdJwt;
+              final displayVerifiableIdSdJwt =
+                  vcFormatType == VCFormatType.vcSdJWT &&
+                      discoverCardsOptions.displayVerifiableIdSdJwt;
 
-              if (displayVerifiableId || displayVerifiableIdJwt) {
+              if (displayVerifiableId ||
+                  displayVerifiableIdJwt ||
+                  displayVerifiableIdSdJwt) {
                 allSubjectTypeForCategory
                     .add(CredentialSubjectType.verifiableIdCard);
               }

@@ -10,7 +10,7 @@ extension ProofTypeeX on ProofType {
   String get formattedString {
     switch (this) {
       case ProofType.ldpVp:
-        return 'ldp_vc';
+        return 'ldp_vp';
       case ProofType.jwt:
         return 'jwt';
     }
@@ -19,7 +19,7 @@ extension ProofTypeeX on ProofType {
   String get value {
     switch (this) {
       case ProofType.ldpVp:
-        return 'ldp_vc';
+        return 'ldp_vp';
       case ProofType.jwt:
         return 'jwt';
     }

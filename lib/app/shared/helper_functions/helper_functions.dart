@@ -1161,27 +1161,19 @@ ${openIdConfiguration != null ? const JsonEncoder.withIndent('  ').convert(openI
 ''';
 }
 
-String getFormattedStringOIDC4VCIAuthorizedCodeFlow({
-  required String url,
-  Map<String, dynamic>? statePayload,
-  dynamic codeForAuthorisedFlow,
-}) {
-  return '''
-<b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
-<b>STATE  :</b> 
-${statePayload != null ? const JsonEncoder.withIndent('  ').convert(statePayload) : 'None'}\n 
-<b>CODE  :</b> 
-$codeForAuthorisedFlow
-''';
-}
-
-String getFormattedStringResponse({
+String getFormattedTokenResponse({
   required Map<String, dynamic>? tokenData,
-  required List<dynamic>? credentialData,
 }) {
   return '''
 <b>TOKEN RESPONSE :</b> 
 ${tokenData != null ? const JsonEncoder.withIndent('  ').convert(tokenData) : 'None'}\n
+''';
+}
+
+String getFormattedCredentialResponse({
+  required List<dynamic>? credentialData,
+}) {
+  return '''
 <b>CREDENTIAL RESPONSE :</b>
 ${credentialData != null ? const JsonEncoder.withIndent('  ').convert(credentialData) : 'None'}\n
 ''';

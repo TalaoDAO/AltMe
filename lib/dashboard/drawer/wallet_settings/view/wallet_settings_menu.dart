@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/wallet_settings/widget/language_selector_widget.dart';
-import 'package:altme/l10n/l10n.dart';
+import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class WalletSettingsMenu extends StatelessWidget {
@@ -24,15 +24,23 @@ class WalletSettingsMenuView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BasePage(
-      title: l10n.languageSelectorTitle,
+      backgroundColor: Theme.of(context).colorScheme.drawerBackground,
       useSafeArea: true,
       scrollView: true,
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-      titleLeading: const BackLeadingButton(),
-      body: const LanguageSelectorWidget(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          BackLeadingButton(
+            padding: EdgeInsets.zero,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+          const DrawerLogo(),
+          const LanguageSelectorWidget(),
+        ],
+      ),
     );
   }
 }
