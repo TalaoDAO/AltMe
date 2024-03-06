@@ -149,7 +149,7 @@ class _DashboardViewState extends State<DashboardView> {
             context.read<AltmeChatSupportCubit>().setMessagesAsRead();
           }
 
-          final displayChatSupport = !context
+          final displayChatSupport = context
               .read<ProfileCubit>()
               .state
               .model
