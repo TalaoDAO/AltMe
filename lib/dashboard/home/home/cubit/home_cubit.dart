@@ -42,6 +42,7 @@ class HomeCubit extends Cubit<HomeState> {
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required BlockchainType blockchainType,
   }) async {
     // launch url to get Over18, Over15, Over13,Over21,Over50,Over65,
     // AgeRange Credentials
@@ -99,6 +100,7 @@ class HomeCubit extends Cubit<HomeState> {
         credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
         oidc4vciDraftType: oidc4vciDraftType,
+        blockchainType: blockchainType,
       );
 
       await ageEstimate(
@@ -156,6 +158,7 @@ class HomeCubit extends Cubit<HomeState> {
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required BlockchainType blockchainType,
   }) async {
     /// if credential of this type is already in the wallet do nothing
     /// Ensure credentialType = name of credential type in CredentialModel
@@ -210,6 +213,7 @@ class HomeCubit extends Cubit<HomeState> {
         await credentialsCubit.insertCredential(
           credential: credentialModel,
           showMessage: true,
+          blockchainType: blockchainType,
         );
         await cameraCubit.incrementAcquiredCredentialsQuantity();
         emit(state.copyWith(status: AppStatus.success));

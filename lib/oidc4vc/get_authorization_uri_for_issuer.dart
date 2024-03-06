@@ -73,7 +73,8 @@ Future<void> getAuthorizationUriForIssuer({
     authorizationEndPoint: Parameters.authorizeEndPoint,
     scope: scope,
     clientAuthentication: clientAuthentication,
-    oidc4vciDraftType: oidc4vciDraftType, vcFormatType: vcFormatType,
+    oidc4vciDraftType: oidc4vciDraftType,
+    vcFormatType: vcFormatType,
   );
 
   await LaunchUrl.launchUri(oidc4vcAuthenticationUri);

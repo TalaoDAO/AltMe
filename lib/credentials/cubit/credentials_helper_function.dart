@@ -6,8 +6,10 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   required DIDKitProvider didKitProvider,
   required BlockchainType blockchainType,
   required KeyGenerator keyGenerator,
-  required ProfileCubit profileCubit,
+  required String did,
+  required CustomOidc4VcProfile customOidc4vcProfile,
   required OIDC4VC oidc4vc,
+  required Map<String, dynamic> privateKey,
   String? oldId,
 }) async {
   final log =
@@ -55,22 +57,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         verificationMethod = '$issuer#Recovery2020';
     }
     log.i('hardcoded verificationMethod - $verificationMethod');
-
-    final didKeyType = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
-
-    final privateKey = await getPrivateKey(
-      secureStorage: getSecureStorage,
-      didKeyType: didKeyType,
-      oidc4vc: oidc4vc,
-    );
-
-    final (did, _) = await getDidAndKid(
-      didKeyType: didKeyType,
-      privateKey: privateKey,
-      secureStorage: getSecureStorage,
-      didKitProvider: didKitProvider,
-    );
 
     final options = {
       'proofPurpose': 'assertionMethod',
@@ -187,10 +173,28 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
               .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
         );
       } else {
-        return _createCredential(vc, oldId, credentialManifest);
+        return _createCredential(
+          vc: vc,
+          oldId: oldId,
+          credentialManifest: credentialManifest,
+          customOidc4vcProfile: customOidc4vcProfile,
+          oidc4vc: oidc4vc,
+          privateKey: privateKey,
+          kid: verificationMethod,
+          issuer: issuer,
+        );
       }
     } else {
-      return _createCredential(vc, oldId, credentialManifest);
+      return _createCredential(
+        vc: vc,
+        oldId: oldId,
+        credentialManifest: credentialManifest,
+        customOidc4vcProfile: customOidc4vcProfile,
+        oidc4vc: oidc4vc,
+        privateKey: privateKey,
+        kid: verificationMethod,
+        issuer: issuer,
+      );
     }
   } catch (e, s) {
     log.e(
@@ -202,22 +206,71 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   }
 }
 
-Future<CredentialModel> _createCredential(
-  String vc,
+Future<CredentialModel> _createCredential({
+  required String vc,
+  required CredentialManifest credentialManifest,
+  required CustomOidc4VcProfile customOidc4vcProfile,
+  required OIDC4VC oidc4vc,
+  required Map<String, dynamic> privateKey,
+  required String issuer,
+  required String kid,
   String? oldId,
-  CredentialManifest credentialManifest,
-) async {
-  final jsonCredential = jsonDecode(vc) as Map<String, dynamic>;
+}) async {
+  final jsonLd = jsonDecode(vc) as Map<String, dynamic>;
+
+  String? jwt;
+  DateTime dateTime = DateTime.now();
+
+  if (customOidc4vcProfile.vcFormatType != VCFormatType.ldpVc) {
+    /// id -> jti (optional)
+    /// issuer -> iss (compulsary)
+    /// issuanceDate -> iat (optional)
+    /// expirationDate -> exp (optional)
+
+    try {
+      dateTime = DateTime.parse(jsonLd['issuanceDate'].toString());
+    } catch (e) {
+      dateTime = DateTime.now();
+    }
+
+    final iat = (dateTime.millisecondsSinceEpoch / 1000).round();
+
+    final jsonContent = <String, dynamic>{
+      'iat': iat,
+      'exp': iat + 1000,
+      'iss': jsonLd['issuer'],
+      'jti': jsonLd['id'] ?? 'urn:uuid:${const Uuid().v4()}',
+      'sub': issuer,
+      'vc': jsonLd,
+    };
+
+    final tokenParameters = TokenParameters(
+      privateKey: privateKey,
+      did: issuer,
+      kid: kid,
+      mediaType: MediaType.basic,
+      clientType: customOidc4vcProfile.clientType,
+      proofHeaderType: customOidc4vcProfile.proofHeader,
+      clientId: customOidc4vcProfile.clientId ?? '',
+    );
+
+    /// sign and get token
+    jwt = oidc4vc.generateToken(
+      payload: jsonContent,
+      tokenParameters: tokenParameters,
+    );
+  }
+
   final id = oldId ?? 'urn:uuid:${const Uuid().v4()}';
   return CredentialModel(
     id: id,
     image: 'image',
-    data: jsonCredential,
+    data: jsonLd,
     shareLink: '',
-    jwt: null,
-    format: 'ldp_vc',
-    credentialPreview: Credential.fromJson(jsonCredential),
+    jwt: jwt,
+    format: customOidc4vcProfile.vcFormatType.value,
+    credentialPreview: Credential.fromJson(jsonLd),
     credentialManifest: credentialManifest,
-    activities: [Activity(acquisitionAt: DateTime.now())],
+    activities: [Activity(acquisitionAt: dateTime)],
   );
 }

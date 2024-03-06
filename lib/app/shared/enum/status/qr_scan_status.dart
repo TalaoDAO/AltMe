@@ -8,4 +8,5 @@ enum QrScanStatus {
   error,
   success,
   goBack,
+  pauseForDialog,
 }

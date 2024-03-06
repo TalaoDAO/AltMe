@@ -60,22 +60,6 @@ class DidKeyTypeWidget extends StatelessWidget {
                         return;
                       }
 
-                      ///if DID method is did eddsa then Cryrto Holder Binding
-                      ///must be Off -> display message "Switch off Crypto
-                      ///Holder Binding for that DID Method"
-                      if (didKeyType == DidKeyType.edDSA &&
-                          customOidc4vcProfile.cryptoHolderBinding) {
-                        showDialog<bool>(
-                          context: context,
-                          builder: (context) => ErrorDetailsDialog(
-                            erroDescription: l10n
-                                .switchOffCryptoHolderBindingForThatDIDMethod,
-                          ),
-                        );
-
-                        return;
-                      }
-
                       context.read<ProfileCubit>().updateProfileSetting(
                             didKeyType: didKeyType,
                           );

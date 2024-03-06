@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
 import 'package:cryptography/cryptography.dart' as cryptography;
+import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:elliptic/elliptic.dart' as elliptic;
 import 'package:flutter/foundation.dart';
@@ -381,71 +382,32 @@ class OIDC4VC {
     });
   }
 
-  String? cnonce;
-  String? accessToken;
-  List<dynamic>? authorizationDetails;
-
   /// Retreive credential_type from url
-  Future<(List<dynamic>, String?, String, OpenIdConfiguration?)> getCredential({
+  /// credentialResponseData, deferredCredentialEndpoint, format,
+  Future<
+      (
+        List<dynamic>,
+        String?,
+        String,
+      )> getCredential({
     required String issuer,
     required dynamic credential,
     required String did,
-    required String clientId,
-    required String? clientSecret,
+    required String? clientId,
     required String kid,
-    required int indexValue,
     required String privateKey,
     required bool cryptoHolderBinding,
     required ClientType clientType,
     required ProofHeaderType proofHeaderType,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required ClientAuthentication clientAuthentication,
-    required String redirectUri,
-    String? preAuthorizedCode,
-    String? userPin,
-    String? code,
-    String? codeVerifier,
-    String? authorization,
+    required ProofType proofType,
+    required String iss,
+    required OpenIdConfiguration openIdConfiguration,
+    required String accessToken,
+    required String cnonce,
+    List<dynamic>? authorizationDetails,
   }) async {
-    final openIdConfiguration = await getOpenIdConfig(
-      baseUrl: issuer,
-      isAuthorizationServer: false,
-      oidc4vciDraftType: oidc4vciDraftType,
-    );
-
-    final tokenEndPoint = await readTokenEndPoint(
-      openIdConfiguration: openIdConfiguration,
-      issuer: issuer,
-      oidc4vciDraftType: oidc4vciDraftType,
-    );
-
-    if (accessToken == null) {
-      final tokenData = buildTokenData(
-        preAuthorizedCode: preAuthorizedCode,
-        userPin: userPin,
-        code: code,
-        codeVerifier: codeVerifier,
-        clientId: clientId,
-        clientSecret: clientSecret,
-        authorization: authorization,
-        redirectUri: redirectUri,
-      );
-
-      final response = await getToken(
-        tokenEndPoint: tokenEndPoint,
-        tokenData: tokenData,
-        authorization: authorization,
-      );
-
-      if (response is Map<String, dynamic> && response.containsKey('c_nonce')) {
-        cnonce = response['c_nonce'] as String;
-      }
-
-      accessToken = response['access_token'] as String;
-      authorizationDetails =
-          response['authorization_details'] as List<dynamic>?;
-    }
-
     final issuerTokenParameters = IssuerTokenParameters(
       privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
       did: did,
@@ -454,7 +416,7 @@ class OIDC4VC {
       mediaType: MediaType.proofOfOwnership,
       clientType: clientType,
       proofHeaderType: proofHeaderType,
-      clientId: clientId,
+      clientId: clientId ?? '',
     );
 
     String? deferredCredentialEndpoint;
@@ -492,8 +454,11 @@ class OIDC4VC {
               .map((dynamic element) => element.toString())
               .toList();
 
+      var nonce = cnonce;
+
       for (final credentialIdentifier in credentialIdentifiers) {
-        final credentialResponseDataValue = await getSingleCredential(
+        final (credentialResponseDataValue, updateNonce) =
+            await getSingleCredential(
           issuerTokenParameters: issuerTokenParameters,
           openIdConfiguration: openIdConfiguration,
           credentialType: credentialType,
@@ -505,13 +470,24 @@ class OIDC4VC {
           credentialDefinition: credentialDefinition,
           clientAuthentication: clientAuthentication,
           vct: vct,
+          proofType: proofType,
+          did: did,
+          issuer: issuer,
+          kid: kid,
+          privateKey: privateKey,
+          iss: iss,
+          accessToken: accessToken,
+          nonce: nonce,
         );
+
+        /// update nonce value
+        nonce = updateNonce;
 
         credentialResponseData.add(credentialResponseDataValue);
       }
 //
     } else {
-      final credentialResponseDataValue = await getSingleCredential(
+      final (credentialResponseDataValue, _) = await getSingleCredential(
         issuerTokenParameters: issuerTokenParameters,
         openIdConfiguration: openIdConfiguration,
         credentialType: credentialType,
@@ -523,6 +499,14 @@ class OIDC4VC {
         clientAuthentication: clientAuthentication,
         vct: vct,
         credentialIdentifier: null,
+        proofType: proofType,
+        did: did,
+        issuer: issuer,
+        kid: kid,
+        privateKey: privateKey,
+        iss: iss,
+        accessToken: accessToken,
+        nonce: cnonce,
       );
 
       credentialResponseData.add(credentialResponseDataValue);
@@ -532,11 +516,64 @@ class OIDC4VC {
       credentialResponseData,
       deferredCredentialEndpoint,
       format,
-      openIdConfiguration,
     );
   }
 
-  Future<dynamic> getSingleCredential({
+  /// tokenResponse, accessToken, cnonce, authorizationDetails
+  Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
+      getTokenResponse({
+    required String issuer,
+    required String? clientId,
+    required String? clientSecret,
+    required OIDC4VCIDraftType oidc4vciDraftType,
+    required String redirectUri,
+    required OpenIdConfiguration openIdConfiguration,
+    String? preAuthorizedCode,
+    String? userPin,
+    String? code,
+    String? codeVerifier,
+    String? authorization,
+  }) async {
+    final tokenEndPoint = await readTokenEndPoint(
+      openIdConfiguration: openIdConfiguration,
+      issuer: issuer,
+      oidc4vciDraftType: oidc4vciDraftType,
+    );
+
+    Map<String, dynamic>? tokenResponse;
+    String? accessToken;
+    String? cnonce;
+    List<dynamic>? authorizationDetails;
+
+    final tokenData = buildTokenData(
+      preAuthorizedCode: preAuthorizedCode,
+      userPin: userPin,
+      code: code,
+      codeVerifier: codeVerifier,
+      clientId: clientId,
+      clientSecret: clientSecret,
+      authorization: authorization,
+      redirectUri: redirectUri,
+    );
+
+    tokenResponse = await getToken(
+      tokenEndPoint: tokenEndPoint,
+      tokenData: tokenData,
+      authorization: authorization,
+    );
+
+    if (tokenResponse.containsKey('c_nonce')) {
+      cnonce = tokenResponse['c_nonce'] as String;
+    }
+
+    accessToken = tokenResponse['access_token'] as String;
+    authorizationDetails =
+        tokenResponse['authorization_details'] as List<dynamic>?;
+
+    return (tokenResponse, accessToken, cnonce, authorizationDetails);
+  }
+
+  Future<(dynamic, String)> getSingleCredential({
     required IssuerTokenParameters issuerTokenParameters,
     required OpenIdConfiguration openIdConfiguration,
     required String credentialType,
@@ -548,9 +585,17 @@ class OIDC4VC {
     required String? credentialIdentifier,
     required Map<String, dynamic>? credentialDefinition,
     required String? vct,
+    required ProofType proofType,
+    required String did,
+    required String issuer,
+    required String kid,
+    required String privateKey,
+    required String iss,
+    required String accessToken,
+    required String nonce,
   }) async {
     final credentialData = await buildCredentialData(
-      cnonce: cnonce,
+      nonce: nonce,
       issuerTokenParameters: issuerTokenParameters,
       openIdConfiguration: openIdConfiguration,
       credentialType: credentialType,
@@ -562,13 +607,17 @@ class OIDC4VC {
       credentialDefinition: credentialDefinition,
       clientAuthentication: clientAuthentication,
       vct: vct,
+      proofType: proofType,
+      did: did,
+      issuer: issuer,
+      kid: kid,
+      privateKey: privateKey,
+      iss: iss,
     );
 
     /// sign proof
 
     final credentialEndpoint = readCredentialEndpoint(openIdConfiguration);
-
-    if (accessToken == null) throw Exception();
 
     final credentialHeaders = <String, dynamic>{
       'Content-Type': 'application/json',
@@ -583,12 +632,14 @@ class OIDC4VC {
 
     final credentialResponseData = credentialResponse.data;
 
+    var cnonce = nonce;
+
     if (credentialResponseData is Map<String, dynamic> &&
         credentialResponseData.containsKey('c_nonce')) {
       cnonce = credentialResponseData['c_nonce'].toString();
     }
 
-    return credentialResponseData;
+    return (credentialResponseData, cnonce);
   }
 
   /// get Deferred credential from url
@@ -607,12 +658,6 @@ class OIDC4VC {
     );
 
     return credentialResponse.data;
-  }
-
-  void resetNonceAndAccessTokenAndAuthorizationDetails() {
-    cnonce = null;
-    accessToken = null;
-    authorizationDetails = null;
   }
 
   Map<String, dynamic> buildTokenData({
@@ -819,29 +864,64 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required ClientAuthentication clientAuthentication,
     required String? credentialIdentifier,
-    required String? cnonce,
+    required String? nonce,
     required String? vct,
     required Map<String, dynamic>? credentialDefinition,
+    required ProofType proofType,
+    required String did,
+    required String iss,
+    required String issuer,
+    required String kid,
+    required String privateKey,
   }) async {
     final credentialData = <String, dynamic>{};
 
     if (cryptoHolderBinding) {
-      final vcJwt = await getIssuerJwt(
-        tokenParameters: issuerTokenParameters,
-        clientAuthentication: clientAuthentication,
-        oidc4vciDraftType: oidc4vciDraftType,
-        cnonce: cnonce,
-      );
-      credentialData['proof'] = {
-        'proof_type': 'jwt',
-        'jwt': vcJwt,
-      };
+      switch (proofType) {
+        case ProofType.ldpVp:
+          final options = <String, dynamic>{
+            'verificationMethod': kid,
+            'proofPurpose': 'authentication',
+            'domain': issuer,
+          };
+
+          if (nonce != null) {
+            options['challenge'] = nonce;
+          }
+
+          final didKitProvider = DIDKitProvider();
+
+          final didAuth = await didKitProvider.didAuth(
+            did,
+            jsonEncode(options),
+            privateKey,
+          );
+
+          credentialData['proof'] = {
+            'proof_type': 'ldp_vp',
+            'ldp_vp': jsonDecode(didAuth),
+          };
+
+        case ProofType.jwt:
+          final vcJwt = await getIssuerJwt(
+            tokenParameters: issuerTokenParameters,
+            clientAuthentication: clientAuthentication,
+            oidc4vciDraftType: oidc4vciDraftType,
+            cnonce: nonce,
+            iss: iss,
+          );
+
+          credentialData['proof'] = {
+            'proof_type': 'jwt',
+            'jwt': vcJwt,
+          };
+      }
     }
 
     switch (oidc4vciDraftType) {
-      case OIDC4VCIDraftType.draft8:
-        credentialData['type'] = credentialType;
-        credentialData['format'] = format;
+      // case OIDC4VCIDraftType.draft8:
+      //   credentialData['type'] = credentialType;
+      //   credentialData['format'] = format;
 
       case OIDC4VCIDraftType.draft11:
         if (types == null) {
@@ -1065,24 +1145,6 @@ class OIDC4VC {
     return result;
   }
 
-  Future<String> getSignedJwt({
-    required Map<String, dynamic> payload,
-    required Map<String, dynamic> p256Key,
-  }) async {
-    // Create a JsonWebSignatureBuilder
-    final builder = JsonWebSignatureBuilder()
-      ..jsonContent = payload
-      ..setProtectedHeader('alg', 'ES256')
-      ..addRecipient(
-        JsonWebKey.fromJson(p256Key),
-        algorithm: 'ES256',
-      );
-    // build the jws
-    final jws = builder.build();
-
-    return jws.toCompactSerialization();
-  }
-
   String readCredentialEndpoint(
     OpenIdConfiguration openIdConfiguration,
   ) {
@@ -1099,19 +1161,10 @@ class OIDC4VC {
     required IssuerTokenParameters tokenParameters,
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required String iss,
     String? cnonce,
   }) async {
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round() - 30;
-
-    var iss = tokenParameters.did;
-
-    if (clientAuthentication == ClientAuthentication.clientSecretPost ||
-        clientAuthentication == ClientAuthentication.clientSecretBasic) {
-      if (oidc4vciDraftType == OIDC4VCIDraftType.draft11 ||
-          oidc4vciDraftType == OIDC4VCIDraftType.draft13) {
-        iss = tokenParameters.clientId;
-      }
-    }
 
     final payload = {
       'iss': iss,
@@ -1131,7 +1184,7 @@ class OIDC4VC {
   }
 
   @visibleForTesting
-  Future<dynamic> getToken({
+  Future<Map<String, dynamic>> getToken({
     required String tokenEndPoint,
     required Map<String, dynamic> tokenData,
     required String? authorization,
@@ -1150,7 +1203,7 @@ class OIDC4VC {
       options: Options(headers: tokenHeaders),
       data: tokenData,
     );
-    return tokenResponse.data;
+    return tokenResponse.data as Map<String, dynamic>;
   }
 
   Future<String> extractVpToken({
@@ -1310,8 +1363,9 @@ class OIDC4VC {
     return verifierVpJwt;
   }
 
+  /// getSignedJwt
   String generateToken({
-    required Map<String, Object> payload,
+    required Map<String, dynamic> payload,
     required TokenParameters tokenParameters,
   }) {
     final vpVerifierClaims = JsonWebTokenClaims.fromJson(payload);

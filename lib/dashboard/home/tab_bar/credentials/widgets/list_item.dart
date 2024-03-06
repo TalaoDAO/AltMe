@@ -84,14 +84,9 @@ class CredentialsDisplayItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vcFormatType = context
-        .read<ProfileCubit>()
-        .state
-        .model
-        .profileSetting
-        .selfSovereignIdentityOptions
-        .customOidc4vcProfile
-        .vcFormatType;
+    final profileSetting =
+        context.read<ProfileCubit>().state.model.profileSetting;
+
     return _BaseItem(
       enabled: true,
       onTap: onTap,
@@ -99,7 +94,7 @@ class CredentialsDisplayItem extends StatelessWidget {
           ? CredentialDisplay(
               credentialModel: credentialModel,
               credDisplayType: CredDisplayType.List,
-              vcFormatType: vcFormatType,
+              profileSetting: profileSetting,
             )
           : DisplaySelectionElement(
               credentialModel: credentialModel,
@@ -122,21 +117,16 @@ class DisplaySelectionElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final credential = Credential.fromJsonOrDummy(credentialModel.data);
-    final vcFormatType = context
-        .read<ProfileCubit>()
-        .state
-        .model
-        .profileSetting
-        .selfSovereignIdentityOptions
-        .customOidc4vcProfile
-        .vcFormatType;
+    final profileSetting =
+        context.read<ProfileCubit>().state.model.profileSetting;
+
     return CredentialSelectionPadding(
       child: Column(
         children: <Widget>[
           CredentialDisplay(
             credentialModel: credentialModel,
             credDisplayType: CredDisplayType.List,
-            vcFormatType: vcFormatType,
+            profileSetting: profileSetting,
           ),
           Align(
             alignment: Alignment.centerRight,

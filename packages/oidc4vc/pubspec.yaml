@@ -11,6 +11,8 @@ dependencies:
   bip39: ^1.0.6
   credential_manifest:
     path: ../credential_manifest
+  did_kit:
+    path: ../did_kit
   crypto: ^3.0.3
   cryptography: ^2.5.0
   dart_bip32_bip44: ^0.2.0
@@ -41,5 +43,5 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: ^6.7.0
-  mocktail: ^0.3.0
+  mocktail: ^1.0.3
   very_good_analysis: ^5.0.0+1

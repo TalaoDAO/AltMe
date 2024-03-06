@@ -56,7 +56,7 @@ class ClaimsData extends StatelessWidget {
       }
     }
 
-    final languageCode = context.read<LangCubit>().state.languageCode;
+    final languageCode = context.read<LangCubit>().state.locale.languageCode;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,8 +1,9 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/drawer/profile/view/pick_profile_menu.dart';
+import 'package:altme/dashboard/drawer/wallet_settings/view/wallet_settings_menu.dart';
+import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,23 +44,18 @@ class DrawerView extends StatelessWidget {
                       ),
                     ),
 
-                    WalletLogo(
-                      profileModel: profileModel,
-                      height: 90,
-                      width: MediaQuery.of(context).size.shortestSide * 0.5,
-                      showPoweredBy: true,
-                    ),
-
-                    const SizedBox(height: Sizes.spaceSmall),
+                    const DrawerLogo(),
                     const AppVersionDrawer(),
                     const SizedBox(height: Sizes.spaceLarge),
                     if (profileModel.profileType == ProfileType.enterprise) ...[
                       DrawerCategoryItem(
                         title: l10n.updateYourWalletConfigNow,
                         padding: const EdgeInsets.all(16),
-                        onClick: () {
-                          Navigator.of(context)
-                              .push<void>(EnterpriseUpdatePage.route());
+                        onClick: () async {
+                          Navigator.of(context).pop();
+                          await context
+                              .read<EnterpriseCubit>()
+                              .updateTheConfiguration();
                         },
                       ),
                       const SizedBox(height: Sizes.spaceSmall),
@@ -83,6 +79,15 @@ class DrawerView extends StatelessWidget {
                       onClick: () {
                         Navigator.of(context)
                             .push<void>(WalletSecurityMenu.route());
+                      },
+                    ),
+                    const SizedBox(height: Sizes.spaceSmall),
+                    DrawerCategoryItem(
+                      title: l10n.walletSettings,
+                      subTitle: l10n.walletSettingsDescription,
+                      onClick: () {
+                        Navigator.of(context)
+                            .push<void>(WalletSettingsMenu.route());
                       },
                     ),
                     if (Parameters.walletHandlesCrypto)
