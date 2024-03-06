@@ -332,7 +332,7 @@ class OIDC4VC {
         myRequest['client_secret'] = clientSecret;
       case ClientAuthentication.clientId:
         myRequest['client_id'] = clientId;
-      case ClientAuthentication.clientAuthenticationJwt:
+      case ClientAuthentication.clientSecretJwt:
         myRequest['client_id'] = clientId;
         myRequest['client_assertion'] = clientAssertion;
     }
@@ -1376,6 +1376,7 @@ class OIDC4VC {
   String generateToken({
     required Map<String, dynamic> payload,
     required TokenParameters tokenParameters,
+    bool clientSecretJwt = false,
   }) {
     final vpVerifierClaims = JsonWebTokenClaims.fromJson(payload);
     // create a builder, decoding the JWT in a JWS, so using a
@@ -1391,24 +1392,27 @@ class OIDC4VC {
     final vpBuilder = JsonWebSignatureBuilder()
       // set the content
       ..jsonContent = vpVerifierClaims.toJson()
-      ..setProtectedHeader('typ', tokenParameters.mediaType.typ)
       ..setProtectedHeader('alg', tokenParameters.alg)
 
       // add a key to sign, can only add one for JWT
       ..addRecipient(key, algorithm: tokenParameters.alg);
 
-    switch (tokenParameters.proofHeaderType) {
-      case ProofHeaderType.kid:
-        vpBuilder.setProtectedHeader(
-          'kid',
-          tokenParameters.kid ?? tokenParameters.thumbprint,
-        );
+    if (!clientSecretJwt) {
+      vpBuilder.setProtectedHeader('typ', tokenParameters.mediaType.typ);
 
-      case ProofHeaderType.jwk:
-        vpBuilder.setProtectedHeader(
-          'jwk',
-          tokenParameters.publicJWK,
-        );
+      switch (tokenParameters.proofHeaderType) {
+        case ProofHeaderType.kid:
+          vpBuilder.setProtectedHeader(
+            'kid',
+            tokenParameters.kid ?? tokenParameters.thumbprint,
+          );
+
+        case ProofHeaderType.jwk:
+          vpBuilder.setProtectedHeader(
+            'jwk',
+            tokenParameters.publicJWK,
+          );
+      }
     }
 
     // build the jws

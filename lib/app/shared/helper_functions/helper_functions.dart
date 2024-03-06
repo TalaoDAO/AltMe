@@ -1414,7 +1414,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
         break;
       case ClientAuthentication.clientSecretPost:
       case ClientAuthentication.clientId:
-      case ClientAuthentication.clientAuthenticationJwt:
+      case ClientAuthentication.clientSecretJwt:
         switch (customOidc4vcProfile.clientType) {
           case ClientType.jwkThumbprint:
             clientId = tokenParameters.thumbprint;
@@ -1437,7 +1437,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
       case ClientAuthentication.clientSecretBasic:
         authorization = base64UrlEncode(utf8.encode('$clientId:$clientSecret'))
             .replaceAll('=', '');
-      case ClientAuthentication.clientAuthenticationJwt:
+      case ClientAuthentication.clientSecretJwt:
         if (profileCubit.state.model.walletType != WalletType.enterprise) {
           throw Exception();
         }
@@ -1450,26 +1450,34 @@ Future<(String?, String?, String?, String?)> getClientDetails({
         final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
         final nbf = iat - 10;
 
-        final payload = jwtDecode.parseJwt(walletAttestationData);
+        final walletAttestationDataPayload =
+            jwtDecode.parseJwt(walletAttestationData);
 
-        final publicKey = payload['cnf']['jwk'].toString();
+        final p256KeyForWallet =
+            await getWalletP256Key(profileCubit.secureStorageProvider);
+
+        final tokenParameter = TokenParameters(
+          privateKey: jsonDecode(p256KeyForWallet) as Map<String, dynamic>,
+          kid: walletAttestationDataPayload['cnf']['jwk']['kid'].toString(),
+          did: '', // just added as it is required field
+          mediaType: MediaType.basic, // just added as it is required field
+          clientType:
+              ClientType.jwkThumbprint, // just added as it is required field
+          proofHeaderType: customOidc4vcProfile.proofHeader,
+          clientId: '', // just added as it is required field
+        );
+
+        final payload = {
+          'iss': clientId,
+          'aud': issuer,
+          'nbf': nbf,
+          'exp': nbf + 60,
+        };
 
         final jwtProofOfPossession = oidc4vc.generateToken(
-          payload: {
-            'iss': clientId,
-            'aud': issuer,
-            'nbf': nbf,
-            'exp': nbf + 60,
-          },
-          tokenParameters: TokenParameters(
-            privateKey: jsonDecode(publicKey) as Map<String, dynamic>,
-            did: '', // just added as it is required field
-            mediaType: MediaType.basic, // just added as it is required field
-            clientType:
-                ClientType.jwkThumbprint, // just added as it is required field
-            proofHeaderType: customOidc4vcProfile.proofHeader,
-            clientId: '', // just added as it is required field
-          ),
+          payload: payload,
+          tokenParameters: tokenParameter,
+          clientSecretJwt: true,
         );
 
         clientAssertion = '$walletAttestationData~$jwtProofOfPossession';

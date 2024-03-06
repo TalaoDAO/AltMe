@@ -50,7 +50,7 @@ Future<void> getAuthorizationUriForIssuer({
       data['client_secret'] = clientSecret!;
     case ClientAuthentication.clientId:
       data['client_id'] = clientId!;
-    case ClientAuthentication.clientAuthenticationJwt:
+    case ClientAuthentication.clientSecretJwt:
       data['client_id'] = clientId!;
       data['client_assertion'] = clientAssertion!;
   }
