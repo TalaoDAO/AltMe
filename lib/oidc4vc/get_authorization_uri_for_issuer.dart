@@ -22,6 +22,7 @@ Future<void> getAuthorizationUriForIssuer({
   required ClientAuthentication clientAuthentication,
   required OIDC4VCIDraftType oidc4vciDraftType,
   required VCFormatType vcFormatType,
+  required String? clientAssertion,
 }) async {
   /// this is first phase flow for authorization_code
 
@@ -49,6 +50,9 @@ Future<void> getAuthorizationUriForIssuer({
       data['client_secret'] = clientSecret!;
     case ClientAuthentication.clientId:
       data['client_id'] = clientId!;
+    case ClientAuthentication.clientAuthenticationJwt:
+      data['client_id'] = clientId!;
+      data['client_assertion'] = clientAssertion!;
   }
 
   final jwt = JWT(data);
@@ -75,6 +79,7 @@ Future<void> getAuthorizationUriForIssuer({
     clientAuthentication: clientAuthentication,
     oidc4vciDraftType: oidc4vciDraftType,
     vcFormatType: vcFormatType,
+    clientAssertion: clientAssertion,
   );
 
   await LaunchUrl.launchUri(oidc4vcAuthenticationUri);

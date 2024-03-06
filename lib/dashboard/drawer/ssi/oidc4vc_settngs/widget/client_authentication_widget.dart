@@ -25,6 +25,14 @@ class ClientAuthenticationWidget extends StatelessWidget {
             itemBuilder: (context, index) {
               final clientAuthenticationType =
                   ClientAuthentication.values[index];
+
+              final isEnterPrise =
+                  state.model.profileType == ProfileType.enterprise;
+              final isClientAuthenticationJwt = clientAuthenticationType ==
+                  ClientAuthentication.clientAuthenticationJwt;
+
+              if (isEnterPrise && isClientAuthenticationJwt) return Container();
+
               return Column(
                 children: [
                   if (index != 0)

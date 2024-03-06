@@ -1360,58 +1360,63 @@ bool supportCryptoCredential(ProfileSetting profileSetting) {
   return supportAssociatedCredential;
 }
 
-Future<(String?, String?, String?)> getClientDetails({
+Future<(String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
   required bool isEBSIV3,
+  required String issuer,
+  required JWTDecode jwtDecode,
+  required OIDC4VC oidc4vc,
 }) async {
   try {
     String? clientId;
     String? clientSecret;
     String? authorization;
+    String? clientAssertion;
 
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
+    final didKeyType = customOidc4vcProfile.defaultDid;
+
+    final privateKey = await fetchPrivateKey(
+      oidc4vc: profileCubit.oidc4vc,
+      secureStorage: profileCubit.secureStorageProvider,
+      isEBSIV3: isEBSIV3,
+      didKeyType: didKeyType,
+    );
+
+    final (did, _) = await fetchDidAndKid(
+      privateKey: privateKey,
+      isEBSIV3: isEBSIV3,
+      didKitProvider: profileCubit.didKitProvider,
+      secureStorage: profileCubit.secureStorageProvider,
+      didKeyType: didKeyType,
+    );
+
+    final tokenParameters = TokenParameters(
+      privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
+      did: '', // just added as it is required field
+      mediaType: MediaType.basic, // just added as it is required field
+      clientType:
+          ClientType.jwkThumbprint, // just added as it is required field
+      proofHeaderType: customOidc4vcProfile.proofHeader,
+      clientId: '', // just added as it is required field
+    );
+
+    /// clientId fetching
     switch (customOidc4vcProfile.clientAuthentication) {
+      /// none
       case ClientAuthentication.none:
         break;
-      case ClientAuthentication.clientSecretPost:
-        clientId = customOidc4vcProfile.clientId;
-        clientSecret = customOidc4vcProfile.clientSecret;
+
+      ///  only secret
       case ClientAuthentication.clientSecretBasic:
-        clientId = customOidc4vcProfile.clientId;
-        clientSecret = customOidc4vcProfile.clientSecret;
-        authorization = base64UrlEncode(utf8.encode('$clientId:$clientSecret'))
-            .replaceAll('=', '');
+        break;
+      case ClientAuthentication.clientSecretPost:
       case ClientAuthentication.clientId:
-        final didKeyType = customOidc4vcProfile.defaultDid;
-
-        final privateKey = await fetchPrivateKey(
-          oidc4vc: profileCubit.oidc4vc,
-          secureStorage: profileCubit.secureStorageProvider,
-          isEBSIV3: isEBSIV3,
-          didKeyType: didKeyType,
-        );
-
-        final (did, _) = await fetchDidAndKid(
-          privateKey: privateKey,
-          isEBSIV3: isEBSIV3,
-          didKitProvider: profileCubit.didKitProvider,
-          secureStorage: profileCubit.secureStorageProvider,
-          didKeyType: didKeyType,
-        );
-
+      case ClientAuthentication.clientAuthenticationJwt:
         switch (customOidc4vcProfile.clientType) {
           case ClientType.jwkThumbprint:
-            final tokenParameters = TokenParameters(
-              privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
-              did: '', // just added as it is required field
-              mediaType: MediaType.basic, // just added as it is required field
-              clientType: ClientType
-                  .jwkThumbprint, // just added as it is required field
-              proofHeaderType: customOidc4vcProfile.proofHeader,
-              clientId: '',
-            );
             clientId = tokenParameters.thumbprint;
           case ClientType.did:
             clientId = did;
@@ -1420,8 +1425,58 @@ Future<(String?, String?, String?)> getClientDetails({
         }
     }
 
-    return (clientId, clientSecret, authorization);
+    switch (customOidc4vcProfile.clientAuthentication) {
+      ///  none
+      case ClientAuthentication.none:
+
+      ///  only clientId
+      case ClientAuthentication.clientId:
+        break;
+      case ClientAuthentication.clientSecretPost:
+        clientSecret = customOidc4vcProfile.clientSecret;
+      case ClientAuthentication.clientSecretBasic:
+        authorization = base64UrlEncode(utf8.encode('$clientId:$clientSecret'))
+            .replaceAll('=', '');
+      case ClientAuthentication.clientAuthenticationJwt:
+        if (profileCubit.state.model.walletType != WalletType.enterprise) {
+          throw Exception();
+        }
+        final walletAttestationData = await profileCubit.secureStorageProvider
+            .get(SecureStorageKeys.walletAttestationData);
+
+        if (walletAttestationData == null) {
+          throw Exception();
+        }
+        final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+        final nbf = iat - 10;
+
+        final payload = jwtDecode.parseJwt(walletAttestationData);
+
+        final publicKey = payload['cnf']['jwk'].toString();
+
+        final jwtProofOfPossession = oidc4vc.generateToken(
+          payload: {
+            'iss': clientId,
+            'aud': issuer,
+            'nbf': nbf,
+            'exp': nbf + 60,
+          },
+          tokenParameters: TokenParameters(
+            privateKey: jsonDecode(publicKey) as Map<String, dynamic>,
+            did: '', // just added as it is required field
+            mediaType: MediaType.basic, // just added as it is required field
+            clientType:
+                ClientType.jwkThumbprint, // just added as it is required field
+            proofHeaderType: customOidc4vcProfile.proofHeader,
+            clientId: '', // just added as it is required field
+          ),
+        );
+
+        clientAssertion = '$walletAttestationData~$jwtProofOfPossession';
+    }
+
+    return (clientId, clientSecret, authorization, clientAssertion);
   } catch (e) {
-    return (null, null, null);
+    return (null, null, null, null);
   }
 }

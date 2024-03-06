@@ -49,26 +49,6 @@ Future<
   final customOidc4vcProfile = profileCubit.state.model.profileSetting
       .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-  var iss = '';
-
-  switch (customOidc4vcProfile.clientType) {
-    case ClientType.jwkThumbprint:
-      final tokenParameters = TokenParameters(
-        privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
-        did: '', // just added as it is required field
-        mediaType: MediaType.basic, // just added as it is required field
-        clientType:
-            ClientType.jwkThumbprint, // just added as it is required field
-        proofHeaderType: customOidc4vcProfile.proofHeader,
-        clientId: '',
-      );
-      iss = tokenParameters.thumbprint;
-    case ClientType.did:
-      iss = did;
-    case ClientType.confidential:
-      iss = customOidc4vcProfile.clientId ?? '';
-  }
-
   final (
     List<dynamic> encodedCredentialOrFutureTokens,
     String? deferredCredentialEndpoint,
@@ -86,7 +66,6 @@ Future<
     proofHeaderType: customOidc4vcProfile.proofHeader,
     clientAuthentication: customOidc4vcProfile.clientAuthentication,
     proofType: customOidc4vcProfile.proofType,
-    iss: iss,
     accessToken: accessToken,
     cnonce: nonce,
     authorizationDetails: authorizationDetails,

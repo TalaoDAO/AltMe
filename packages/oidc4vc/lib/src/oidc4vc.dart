@@ -142,6 +142,7 @@ class OIDC4VC {
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required VCFormatType vcFormatType,
+    required String? clientAssertion,
   }) async {
     try {
       final openIdConfiguration = await getOpenIdConfig(
@@ -157,21 +158,23 @@ class OIDC4VC {
       );
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
-          selectedCredentials: selectedCredentials,
-          openIdConfiguration: openIdConfiguration,
-          clientId: clientId,
-          clientSecret: clientSecret,
-          issuer: issuer,
-          redirectUri: redirectUri,
-          issuerState: issuerState,
-          nonce: nonce,
-          pkcePair: pkcePair,
-          state: state,
-          authorizationEndPoint: authorizationEndPoint,
-          scope: scope,
-          clientAuthentication: clientAuthentication,
-          oidc4vciDraftType: oidc4vciDraftType,
-          vcFormatType: vcFormatType);
+        selectedCredentials: selectedCredentials,
+        openIdConfiguration: openIdConfiguration,
+        clientId: clientId,
+        clientSecret: clientSecret,
+        issuer: issuer,
+        redirectUri: redirectUri,
+        issuerState: issuerState,
+        nonce: nonce,
+        pkcePair: pkcePair,
+        state: state,
+        authorizationEndPoint: authorizationEndPoint,
+        scope: scope,
+        clientAuthentication: clientAuthentication,
+        oidc4vciDraftType: oidc4vciDraftType,
+        vcFormatType: vcFormatType,
+        clientAssertion: clientAssertion,
+      );
 
       final url = Uri.parse(authorizationEndpoint);
       final authorizationUri =
@@ -199,6 +202,7 @@ class OIDC4VC {
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required VCFormatType vcFormatType,
+    required String? clientAssertion,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -328,6 +332,9 @@ class OIDC4VC {
         myRequest['client_secret'] = clientSecret;
       case ClientAuthentication.clientId:
         myRequest['client_id'] = clientId;
+      case ClientAuthentication.clientAuthenticationJwt:
+        myRequest['client_id'] = clientId;
+        myRequest['client_assertion'] = clientAssertion;
     }
 
     if (scope) {
@@ -402,7 +409,6 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required ClientAuthentication clientAuthentication,
     required ProofType proofType,
-    required String iss,
     required OpenIdConfiguration openIdConfiguration,
     required String accessToken,
     required String cnonce,
@@ -475,7 +481,6 @@ class OIDC4VC {
           issuer: issuer,
           kid: kid,
           privateKey: privateKey,
-          iss: iss,
           accessToken: accessToken,
           nonce: nonce,
         );
@@ -504,7 +509,6 @@ class OIDC4VC {
         issuer: issuer,
         kid: kid,
         privateKey: privateKey,
-        iss: iss,
         accessToken: accessToken,
         nonce: cnonce,
       );
@@ -533,6 +537,7 @@ class OIDC4VC {
     String? code,
     String? codeVerifier,
     String? authorization,
+    String? clientAssertion,
   }) async {
     final tokenEndPoint = await readTokenEndPoint(
       openIdConfiguration: openIdConfiguration,
@@ -554,6 +559,7 @@ class OIDC4VC {
       clientSecret: clientSecret,
       authorization: authorization,
       redirectUri: redirectUri,
+      clientAssertion: clientAssertion,
     );
 
     tokenResponse = await getToken(
@@ -590,7 +596,6 @@ class OIDC4VC {
     required String issuer,
     required String kid,
     required String privateKey,
-    required String iss,
     required String accessToken,
     required String nonce,
   }) async {
@@ -612,7 +617,6 @@ class OIDC4VC {
       issuer: issuer,
       kid: kid,
       privateKey: privateKey,
-      iss: iss,
     );
 
     /// sign proof
@@ -669,6 +673,7 @@ class OIDC4VC {
     String? clientId,
     String? clientSecret,
     String? authorization,
+    String? clientAssertion,
   }) {
     late Map<String, dynamic> tokenData;
 
@@ -691,6 +696,13 @@ class OIDC4VC {
     if (authorization == null) {
       if (clientId != null) tokenData['client_id'] = clientId;
       if (clientSecret != null) tokenData['client_secret'] = clientSecret;
+    }
+
+    if (clientAssertion != null) {
+      tokenData['client_assertion_type'] =
+          'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
+      tokenData['client_assertion'] = clientAssertion;
+      tokenData['client_id'] = clientId;
     }
 
     if (userPin != null) {
@@ -869,7 +881,6 @@ class OIDC4VC {
     required Map<String, dynamic>? credentialDefinition,
     required ProofType proofType,
     required String did,
-    required String iss,
     required String issuer,
     required String kid,
     required String privateKey,
@@ -906,9 +917,8 @@ class OIDC4VC {
           final vcJwt = await getIssuerJwt(
             tokenParameters: issuerTokenParameters,
             clientAuthentication: clientAuthentication,
-            oidc4vciDraftType: oidc4vciDraftType,
             cnonce: nonce,
-            iss: iss,
+            iss: issuerTokenParameters.clientId,
           );
 
           credentialData['proof'] = {
@@ -1160,7 +1170,6 @@ class OIDC4VC {
   Future<String> getIssuerJwt({
     required IssuerTokenParameters tokenParameters,
     required ClientAuthentication clientAuthentication,
-    required OIDC4VCIDraftType oidc4vciDraftType,
     required String iss,
     String? cnonce,
   }) async {
