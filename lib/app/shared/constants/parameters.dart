@@ -68,6 +68,7 @@ class Parameters {
   static const int maxEntries = 3;
 
   static const String appName = 'Altme';
+  static const bool supportDefiCompliance = true;
 
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
   static const DidKeyType didKeyTypeForDefault = DidKeyType.edDSA;

@@ -800,11 +800,13 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           case CredentialCategory.educationCards:
             break;
           case CredentialCategory.financeCards:
-            if (discoverCardsOptions.displayDefi &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.defiCompliance)) {
-              allSubjectTypeForCategory
-                  .add(CredentialSubjectType.defiCompliance);
+            if (Parameters.supportDefiCompliance) {
+              if (discoverCardsOptions.displayDefi &&
+                  !allSubjectTypeForCategory
+                      .contains(CredentialSubjectType.defiCompliance)) {
+                allSubjectTypeForCategory
+                    .add(CredentialSubjectType.defiCompliance);
+              }
             }
 
           case CredentialCategory.humanityProofCards:
