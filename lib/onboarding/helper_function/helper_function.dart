@@ -46,7 +46,7 @@ Future<void> generateAccount({
     isFromOnboarding: true,
   );
 
-  if (profileCubit.state.model.profileType == ProfileType.enterprise) {
+  if (profileCubit.state.model.walletType == WalletType.enterprise) {
     /// initiate chat if it is enterprise
     await altmeChatSupportCubit.init();
   }

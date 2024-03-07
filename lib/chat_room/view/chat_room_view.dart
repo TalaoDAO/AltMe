@@ -36,7 +36,7 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
         liveChatCubit = context.read<B>();
 
         if (context.read<ProfileCubit>().state.model.walletType ==
-            WalletType.personal) {
+            WalletType.enterprise) {
           // for enterprise we are initialisation at start
           await context.read<AltmeChatSupportCubit>().init();
         }
