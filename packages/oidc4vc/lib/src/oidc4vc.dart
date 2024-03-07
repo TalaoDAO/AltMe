@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
-import 'package:cryptography/cryptography.dart' as cryptography;
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:elliptic/elliptic.dart' as elliptic;
@@ -1094,18 +1094,10 @@ class OIDC4VC {
 
       late final bool isVerified;
       if (kty == 'OKP') {
-        var xString = publicKeyJwk['x'].toString();
-        final paddingLength = 4 - (xString.length % 4);
-        xString += '=' * paddingLength;
-
-        final publicKeyBytes = base64Url.decode(xString);
-
-        final publicKey = cryptography.SimplePublicKey(
-          publicKeyBytes,
-          type: cryptography.KeyPairType.ed25519,
+        isVerified = verifyTokenEdDSA(
+          publicKey: publicKeyJwk,
+          token: jwt,
         );
-
-        isVerified = await verifyJwt(jwt, publicKey);
       } else {
         final jws = JsonWebSignature.fromCompactSerialization(jwt);
 
@@ -1128,31 +1120,38 @@ class OIDC4VC {
     }
   }
 
-  Future<bool> verifyJwt(
-    String vcJwt,
-    cryptography.SimplePublicKey publicKey,
-  ) async {
-    final parts = vcJwt.split('.');
+  String generateTokenEdDSA({
+    required Map<String, dynamic> payload,
+    required Map<String, dynamic> privateKey,
+  }) {
+    final d = base64Url.decode(privateKey['d'].toString());
+    final x = base64Url.decode(privateKey['x'].toString());
 
-    final header = parts[0];
-    final payload = parts[1];
+    final secretKey = [...d, ...x];
 
-    final message = utf8.encode('$header.$payload');
+    final jwt = JWT(payload);
 
-    // Get the signature
-    var signatureString = parts[2];
-    final paddingLength = 4 - (signatureString.length % 4);
-    signatureString += '=' * paddingLength;
-    final signatureBytes = base64Url.decode(signatureString);
+    final token = jwt.sign(
+      EdDSAPrivateKey(secretKey),
+      algorithm: JWTAlgorithm.EdDSA,
+    );
 
-    final signature =
-        cryptography.Signature(signatureBytes, publicKey: publicKey);
+    return token;
+  }
 
-    //verify signature
-    final result =
-        await cryptography.Ed25519().verify(message, signature: signature);
-
-    return result;
+  bool verifyTokenEdDSA({
+    required String token,
+    required Map<String, dynamic> publicKey,
+  }) {
+    try {
+      final x = base64Url.decode(publicKey['x'].toString());
+      JWT.verify(token, EdDSAPublicKey(x));
+      return true;
+    } on JWTExpiredException {
+      return false;
+    } on JWTException catch (_) {
+      return false;
+    }
   }
 
   String readCredentialEndpoint(
@@ -1378,49 +1377,60 @@ class OIDC4VC {
     required TokenParameters tokenParameters,
     bool clientSecretJwt = false,
   }) {
-    final vpVerifierClaims = JsonWebTokenClaims.fromJson(payload);
-    // create a builder, decoding the JWT in a JWS, so using a
-    // JsonWebSignatureBuilder
-    final privateKey = Map<String, dynamic>.from(tokenParameters.privateKey);
+    final kty = tokenParameters.privateKey['kty'].toString();
 
-    if (tokenParameters.privateKey['crv'] == 'secp256k1') {
-      privateKey['crv'] = 'P-256K';
-    }
+    if (kty == 'OKP') {
+      final jwt = generateTokenEdDSA(
+        payload: payload,
+        privateKey: tokenParameters.privateKey,
+      );
 
-    final key = JsonWebKey.fromJson(privateKey);
+      return jwt;
+    } else {
+      final vpVerifierClaims = JsonWebTokenClaims.fromJson(payload);
+      // create a builder, decoding the JWT in a JWS, so using a
+      // JsonWebSignatureBuilder
+      final privateKey = Map<String, dynamic>.from(tokenParameters.privateKey);
 
-    final vpBuilder = JsonWebSignatureBuilder()
-      // set the content
-      ..jsonContent = vpVerifierClaims.toJson()
-      ..setProtectedHeader('alg', tokenParameters.alg)
-
-      // add a key to sign, can only add one for JWT
-      ..addRecipient(key, algorithm: tokenParameters.alg);
-
-    if (!clientSecretJwt) {
-      vpBuilder.setProtectedHeader('typ', tokenParameters.mediaType.typ);
-
-      switch (tokenParameters.proofHeaderType) {
-        case ProofHeaderType.kid:
-          vpBuilder.setProtectedHeader(
-            'kid',
-            tokenParameters.kid ?? tokenParameters.thumbprint,
-          );
-
-        case ProofHeaderType.jwk:
-          vpBuilder.setProtectedHeader(
-            'jwk',
-            tokenParameters.publicJWK,
-          );
+      if (tokenParameters.privateKey['crv'] == 'secp256k1') {
+        privateKey['crv'] = 'P-256K';
       }
+
+      final key = JsonWebKey.fromJson(privateKey);
+
+      final vpBuilder = JsonWebSignatureBuilder()
+        // set the content
+        ..jsonContent = vpVerifierClaims.toJson()
+        ..setProtectedHeader('alg', tokenParameters.alg)
+
+        // add a key to sign, can only add one for JWT
+        ..addRecipient(key, algorithm: tokenParameters.alg);
+
+      if (!clientSecretJwt) {
+        vpBuilder.setProtectedHeader('typ', tokenParameters.mediaType.typ);
+
+        switch (tokenParameters.proofHeaderType) {
+          case ProofHeaderType.kid:
+            vpBuilder.setProtectedHeader(
+              'kid',
+              tokenParameters.kid ?? tokenParameters.thumbprint,
+            );
+
+          case ProofHeaderType.jwk:
+            vpBuilder.setProtectedHeader(
+              'jwk',
+              tokenParameters.publicJWK,
+            );
+        }
+      }
+
+      // build the jws
+      final vpJws = vpBuilder.build();
+
+      // output the compact serialization
+      final verifierVpJwt = vpJws.toCompactSerialization();
+      return verifierVpJwt;
     }
-
-    // build the jws
-    final vpJws = vpBuilder.build();
-
-    // output the compact serialization
-    final verifierVpJwt = vpJws.toCompactSerialization();
-    return verifierVpJwt;
   }
 
   @visibleForTesting
