@@ -3,7 +3,6 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -124,7 +123,22 @@ class SelectiveDisclosurePickView extends StatelessWidget {
                       child: Tooltip(
                         message: l10n.credentialPickPresent,
                         child: MyGradientButton(
-                          onPressed: () => (),
+                          // onPressed: !credentialManifestState.isButtonEnabled
+                          //     ? null
+                          //     : () => present(
+                          //           context: context,
+                          //           credentialManifestState:
+                          //               credentialManifestState,
+                          //           presentationDefinition:
+                          //               presentationDefinition,
+                          //           skip: false,
+                          //         ),
+                          onPressed: () => present(
+                            context: context,
+                            credentialManifestState: credentialManifestState,
+                            presentationDefinition: presentationDefinition,
+                            skip: false,
+                          ),
                           text: l10n.credentialPickPresent,
                         ),
                       ),
@@ -134,5 +148,42 @@ class SelectiveDisclosurePickView extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> present(
+      {required BuildContext context,
+      required CredentialManifestPickState credentialManifestState,
+      PresentationDefinition? presentationDefinition,
+      required bool skip}) async {
+    final bool userPINCodeForAuthentication = context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .profileSetting
+        .walletSecurityOptions
+        .secureSecurityAuthenticationWithPinCode;
+    if (userPINCodeForAuthentication) {
+      /// Authenticate
+      bool authenticated = false;
+      await securityCheck(
+        context: context,
+        localAuthApi: LocalAuthApi(),
+        onSuccess: () {
+          authenticated = true;
+        },
+      );
+
+      if (!authenticated) {
+        return;
+      }
+    }
+    await context.read<ScanCubit>().PresentSdJwt(
+          uri: uri,
+          credentialModel: credential,
+          keyId: SecureStorageKeys.ssiKey,
+          disclosuresToBePresented: [credentialToBePresented.jwt!],
+          issuer: issuer,
+          qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+        );
   }
 }

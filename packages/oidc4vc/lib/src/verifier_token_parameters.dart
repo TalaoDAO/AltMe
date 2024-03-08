@@ -31,16 +31,16 @@ class VerifierTokenParameters extends TokenParameters {
   /// [jsonIdOrJwtList] is list of jwt or jsonIds from the credentials
   ///  wich contains other credential's metadata
   List<dynamic> get jsonIdOrJwtList {
-    final list = <dynamic>[];
+    // final list = <dynamic>[];
 
-    for (final credential in credentials) {
-      final credentialJson = jsonDecode(credential) as Map<String, dynamic>;
-      if (credentialJson['jwt'] != null) {
-        list.add(credentialJson['jwt']);
-      } else {
-        list.add(credentialJson['data']);
-      }
-    }
-    return list;
+    // for (final credential in credentials) {
+    //   final credentialJson = jsonDecode(credential) as Map<String, dynamic>;
+    //   if (credentialJson['jwt'] != null) {
+    //     list.add(credentialJson['jwt']);
+    //   } else {
+    //     list.add(credentialJson['data']);
+    //   }
+    // }
+    return credentials;
   }
 }
