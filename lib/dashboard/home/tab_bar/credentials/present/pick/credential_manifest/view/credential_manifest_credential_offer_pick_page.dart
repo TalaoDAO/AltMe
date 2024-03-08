@@ -1,12 +1,14 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/credential_manifest/view/selective_disclosure_pick_page.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class CredentialManifestOfferPickPage extends StatelessWidget {
   const CredentialManifestOfferPickPage({
@@ -174,70 +176,84 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                         ),
                   navigation: credentialManifestState
                           .filteredCredentialList.isNotEmpty
-                      ? SafeArea(
-                          child: Container(
-                            padding: const EdgeInsets.all(16),
-                            child: Tooltip(
-                              message: l10n.credentialPickPresent,
-                              child: Builder(
-                                builder: (context) {
-                                  final inputDescriptor =
-                                      presentationDefinition!.inputDescriptors[
-                                          inputDescriptorIndex];
+                      ? context
+                                  .read<ProfileCubit>()
+                                  .state
+                                  .model
+                                  .profileSetting
+                                  .selfSovereignIdentityOptions
+                                  .customOidc4vcProfile
+                                  .vcFormatType ==
+                              VCFormatType.vcSdJWT
+                          ? vcSdJwtCredentialPickButton(
+                              context: context,
+                              credentialManifestState: credentialManifestState,
+                            )
+                          : SafeArea(
+                              child: Container(
+                                padding: const EdgeInsets.all(16),
+                                child: Tooltip(
+                                  message: l10n.credentialPickPresent,
+                                  child: Builder(
+                                    builder: (context) {
+                                      final inputDescriptor =
+                                          presentationDefinition!
+                                                  .inputDescriptors[
+                                              inputDescriptorIndex];
 
-                                  final bool isOptional = inputDescriptor
-                                          .constraints
-                                          ?.fields
-                                          ?.first
-                                          .optional ??
-                                      false;
+                                      final bool isOptional = inputDescriptor
+                                              .constraints
+                                              ?.fields
+                                              ?.first
+                                              .optional ??
+                                          false;
 
-                                  final bool isOngoingStep =
-                                      inputDescriptorIndex + 1 !=
-                                          presentationDefinition
-                                              .inputDescriptors.length;
+                                      final bool isOngoingStep =
+                                          inputDescriptorIndex + 1 !=
+                                              presentationDefinition
+                                                  .inputDescriptors.length;
 
-                                  if (isOptional) {
-                                    return MyGradientButton(
-                                      onPressed: () => present(
-                                        context: context,
-                                        credentialManifestState:
-                                            credentialManifestState,
-                                        presentationDefinition:
-                                            presentationDefinition,
-                                        skip: credentialManifestState
-                                            .selected.isEmpty,
-                                      ),
-                                      text: credentialManifestState
-                                              .selected.isEmpty
-                                          ? l10n.skip
-                                          : isOngoingStep
+                                      if (isOptional) {
+                                        return MyGradientButton(
+                                          onPressed: () => present(
+                                            context: context,
+                                            credentialManifestState:
+                                                credentialManifestState,
+                                            presentationDefinition:
+                                                presentationDefinition,
+                                            skip: credentialManifestState
+                                                .selected.isEmpty,
+                                          ),
+                                          text: credentialManifestState
+                                                  .selected.isEmpty
+                                              ? l10n.skip
+                                              : isOngoingStep
+                                                  ? l10n.next
+                                                  : l10n.credentialPickPresent,
+                                        );
+                                      } else {
+                                        return MyGradientButton(
+                                          onPressed: !credentialManifestState
+                                                  .isButtonEnabled
+                                              ? null
+                                              : () => present(
+                                                    context: context,
+                                                    credentialManifestState:
+                                                        credentialManifestState,
+                                                    presentationDefinition:
+                                                        presentationDefinition,
+                                                    skip: false,
+                                                  ),
+                                          text: isOngoingStep
                                               ? l10n.next
                                               : l10n.credentialPickPresent,
-                                    );
-                                  } else {
-                                    return MyGradientButton(
-                                      onPressed: !credentialManifestState
-                                              .isButtonEnabled
-                                          ? null
-                                          : () => present(
-                                                context: context,
-                                                credentialManifestState:
-                                                    credentialManifestState,
-                                                presentationDefinition:
-                                                    presentationDefinition,
-                                                skip: false,
-                                              ),
-                                      text: isOngoingStep
-                                          ? l10n.next
-                                          : l10n.credentialPickPresent,
-                                    );
-                                  }
-                                },
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        )
+                            )
                       : const SizedBox.shrink(),
                 ),
         );
@@ -316,5 +332,39 @@ class CredentialManifestOfferPickView extends StatelessWidget {
             qrCodeScanCubit: context.read<QRCodeScanCubit>(),
           );
     }
+  }
+
+  Widget vcSdJwtCredentialPickButton({
+    required BuildContext context,
+    required CredentialManifestPickState credentialManifestState,
+  }) {
+    final l10n = context.l10n;
+
+    final button = SafeArea(
+        child: Container(
+      padding: const EdgeInsets.all(16),
+      child: Tooltip(
+        message: l10n.credentialPickPresent,
+        child: MyGradientButton(
+          onPressed: !credentialManifestState.isButtonEnabled
+              ? null
+              : () => Navigator.of(context).pushReplacement<void, void>(
+                    SelectiveDisclosurePickPage.route(
+                      uri: uri,
+                      issuer: issuer,
+                      credential: credential,
+                      credentialToBePresented:
+                          credentialManifestState.filteredCredentialList[
+                              credentialManifestState.selected.first],
+                    ),
+                  ),
+
+          /// next button because we will now choose the claims we will present
+          /// from the selected credential
+          text: l10n.next,
+        ),
+      ),
+    ));
+    return button;
   }
 }
