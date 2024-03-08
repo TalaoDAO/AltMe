@@ -1047,6 +1047,7 @@
   "spanish": "Español",
   "catalan": "Català",
   "english": "English",
-  "phoneLanguage": "Phone language"
-
+  "phoneLanguage": "Phone language",
+  "pushAuthorizationRequestTitle": "The Push Authorization Request (PAR)",
+  "pushAuthorizationRequestSubTitle": "Default: false\nEnable to secure the authorization code flow" 
 }

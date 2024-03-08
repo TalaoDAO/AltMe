@@ -541,6 +541,7 @@ class CustomOidc4VcProfile extends Equatable {
     this.vcFormatType = VCFormatType.jwtVcJson,
     this.proofHeader = ProofHeaderType.kid,
     this.proofType = ProofType.jwt,
+    this.pushAuthorizationRequest = false,
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
@@ -574,6 +575,7 @@ class CustomOidc4VcProfile extends Equatable {
   final bool scope;
   final ProofHeaderType proofHeader;
   final bool securityLevel;
+  final bool pushAuthorizationRequest;
   final SIOPV2DraftType siopv2Draft;
   @JsonKey(name: 'subjectSyntaxeType')
   final ClientType clientType;
@@ -595,6 +597,7 @@ class CustomOidc4VcProfile extends Equatable {
     bool? scope,
     ProofHeaderType? proofHeader,
     bool? securityLevel,
+    bool? pushAuthorizationRequest,
     SIOPV2DraftType? siopv2Draft,
     ClientType? clientType,
     VCFormatType? vcFormatType,
@@ -611,6 +614,8 @@ class CustomOidc4VcProfile extends Equatable {
         scope: scope ?? this.scope,
         proofHeader: proofHeader ?? this.proofHeader,
         securityLevel: securityLevel ?? this.securityLevel,
+        pushAuthorizationRequest:
+            pushAuthorizationRequest ?? this.pushAuthorizationRequest,
         siopv2Draft: siopv2Draft ?? this.siopv2Draft,
         clientType: clientType ?? this.clientType,
         clientId: clientId ?? this.clientId,
@@ -632,6 +637,7 @@ class CustomOidc4VcProfile extends Equatable {
         scope,
         proofHeader,
         securityLevel,
+        pushAuthorizationRequest,
         siopv2Draft,
         clientType,
         vcFormatType,

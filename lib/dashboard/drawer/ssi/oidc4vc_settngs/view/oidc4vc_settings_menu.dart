@@ -51,6 +51,7 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           const VCFormatWidget(),
           const ProofTypeWidget(),
           const ProofHeaderWidget(),
+          const PushAuthorizationRequesWidget(),
           DrawerItem(
             title: l10n.clientMetadata,
             onTap: () {

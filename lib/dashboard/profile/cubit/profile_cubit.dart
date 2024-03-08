@@ -398,6 +398,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     VCFormatType? vcFormatType,
     ProofHeaderType? proofHeaderType,
     ProofType? proofType,
+    bool? pushAuthorizationRequest,
   }) async {
     final profileModel = state.model.copyWith(
       profileSetting: state.model.profileSetting.copyWith(
@@ -427,6 +428,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             clientType: clientType,
             vcFormatType: vcFormatType,
             proofType: proofType,
+            pushAuthorizationRequest: pushAuthorizationRequest,
           ),
         ),
       ),
