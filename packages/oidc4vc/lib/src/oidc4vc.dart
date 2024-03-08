@@ -126,8 +126,8 @@ class OIDC4VC {
   /// Received JWT is already filtered on required members
   /// Received JWT keys are already sorted in lexicographic order
 
-  /// getAuthorizationUriForIssuer
-  Future<Uri> getAuthorizationUriForIssuer({
+  /// authorization endpoint, authorizationRequestParemeters
+  Future<(String, Map<String, dynamic>)> getAuthorizationData({
     required List<dynamic> selectedCredentials,
     required String? clientId,
     required String? clientSecret,
@@ -176,10 +176,7 @@ class OIDC4VC {
         clientAssertion: clientAssertion,
       );
 
-      final url = Uri.parse(authorizationEndpoint);
-      final authorizationUri =
-          Uri.https(url.authority, url.path, authorizationRequestParemeters);
-      return authorizationUri;
+      return (authorizationEndpoint, authorizationRequestParemeters);
     } catch (e) {
       throw Exception('Not a valid openid url to initiate issuance');
     }

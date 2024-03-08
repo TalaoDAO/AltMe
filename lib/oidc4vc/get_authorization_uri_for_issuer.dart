@@ -23,6 +23,8 @@ Future<void> getAuthorizationUriForIssuer({
   required OIDC4VCIDraftType oidc4vciDraftType,
   required VCFormatType vcFormatType,
   required String? clientAssertion,
+  required bool secureAuthorizedFlow,
+  required DioClient client,
 }) async {
   /// this is first phase flow for authorization_code
 
@@ -63,8 +65,10 @@ Future<void> getAuthorizationUriForIssuer({
 
   final jwtToken = jwt.sign(SecretKey(authorizationUriSecretKey));
 
-  final Uri oidc4vcAuthenticationUri =
-      await oidc4vc.getAuthorizationUriForIssuer(
+  late Uri authorizationUri;
+
+  final (authorizationEndpoint, authorizationRequestParemeters) =
+      await oidc4vc.getAuthorizationData(
     selectedCredentials: selectedCredentials,
     clientId: clientId,
     clientSecret: clientSecret,
@@ -82,5 +86,30 @@ Future<void> getAuthorizationUriForIssuer({
     clientAssertion: clientAssertion,
   );
 
-  await LaunchUrl.launchUri(oidc4vcAuthenticationUri);
+  if (secureAuthorizedFlow) {
+    final headers = <String, dynamic>{
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    final response = await client.post(
+      '$authorizationEndpoint/par',
+      headers: headers,
+      data: authorizationRequestParemeters,
+    );
+
+    final requestUri = response['request_uri'];
+
+    if (requestUri == null) throw Exception();
+
+    final parameters = {'client_id': clientId, 'request_uri': requestUri};
+
+    final url = Uri.parse(authorizationEndpoint);
+    authorizationUri = Uri.https(url.authority, url.path, parameters);
+  } else {
+    final url = Uri.parse(authorizationEndpoint);
+    authorizationUri =
+        Uri.https(url.authority, url.path, authorizationRequestParemeters);
+  }
+
+  await LaunchUrl.launchUri(authorizationUri);
 }
