@@ -332,6 +332,8 @@ class OIDC4VC {
       case ClientAuthentication.clientSecretJwt:
         myRequest['client_id'] = clientId;
         myRequest['client_assertion'] = clientAssertion;
+        myRequest['client_assertion_type'] =
+            'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
     }
 
     if (scope) {
@@ -697,7 +699,7 @@ class OIDC4VC {
 
     if (clientAssertion != null) {
       tokenData['client_assertion_type'] =
-          'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
+          'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
       tokenData['client_assertion'] = clientAssertion;
       tokenData['client_id'] = clientId;
     }
