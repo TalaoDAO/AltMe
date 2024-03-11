@@ -966,8 +966,14 @@ class ScanCubit extends Cubit<ScanState> {
           in presentationDefinition.inputDescriptors) {
         final filterList = inputDescriptor.constraints?.fields ?? <Field>[];
 
+        /// There is issue in EBSI conformance test which for modification of filterList
+        /// We apply this rule only with EBSI v3 profile
+        final List<Field> compatibleFilterList =
+            profileCubit.state.model.profileType != ProfileType.ebsiV3
+                ? List.from(filterList)
+                : getEbsiV3CompatibleFilterList(filterList);
         final credential = getCredentialsFromFilterList(
-          filterList: filterList,
+          filterList: compatibleFilterList,
           credentialList: [credentialsToBePresented[i]],
         );
 
