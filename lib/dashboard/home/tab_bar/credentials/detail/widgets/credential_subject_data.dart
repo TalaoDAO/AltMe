@@ -58,17 +58,28 @@ class CredentialSubjectData extends StatelessWidget {
           final displays = value['display'];
           if (displays is! List<dynamic>) return Container();
 
-          final display = displays.where((element) {
-            if (element is Map<String, dynamic> &&
-                element.containsKey('locale')) {
-              if (element['locale'].toString().contains(languageCode)) {
-                return true;
-              } else if (element['locale'] == 'en-US') {
-                return true;
+          final display = displays.firstWhere(
+            (element) {
+              if (element is Map<String, dynamic> &&
+                  element.containsKey('locale')) {
+                if (element['locale'].toString().contains(languageCode)) {
+                  return true;
+                }
               }
-            }
-            return false;
-          }).firstOrNull;
+              return false;
+            },
+            orElse: () {
+              return displays.firstWhereOrNull((element) {
+                if (element is Map<String, dynamic> &&
+                    element.containsKey('locale')) {
+                  if (element['locale'].toString().contains('en-US')) {
+                    return true;
+                  }
+                }
+                return false;
+              });
+            },
+          );
 
           if (display == null) return Container();
 
