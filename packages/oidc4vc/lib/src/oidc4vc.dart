@@ -1122,13 +1122,21 @@ class OIDC4VC {
   String generateTokenEdDSA({
     required Map<String, dynamic> payload,
     required Map<String, dynamic> privateKey,
+    required String kid,
   }) {
     final d = base64Url.decode(privateKey['d'].toString());
     final x = base64Url.decode(privateKey['x'].toString());
 
     final secretKey = [...d, ...x];
 
-    final jwt = JWT(payload);
+    final jwt = JWT(
+      payload,
+      header: {
+        'typ': 'openid4vci-proof+jwt',
+        'alg': 'EdDSA',
+        'kid': kid,
+      },
+    );
 
     final token = jwt.sign(
       EdDSAPrivateKey(secretKey),
@@ -1144,7 +1152,11 @@ class OIDC4VC {
   }) {
     try {
       final x = base64Url.decode(publicKey['x'].toString());
-      JWT.verify(token, EdDSAPublicKey(x));
+      JWT.verify(
+        token,
+        EdDSAPublicKey(x),
+        checkHeaderType: false,
+      );
       return true;
     } on JWTExpiredException {
       return false;
@@ -1382,6 +1394,7 @@ class OIDC4VC {
       final jwt = generateTokenEdDSA(
         payload: payload,
         privateKey: tokenParameters.privateKey,
+        kid: tokenParameters.kid ?? tokenParameters.thumbprint,
       );
 
       return jwt;

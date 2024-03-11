@@ -149,12 +149,15 @@ void main() {
       'surname': 'Shrestha',
     };
 
+    const kid = '3623b877bbb24b08ba390f3585418f53';
+
     final oidc4vc = OIDC4VC();
 
     test('sign and verify with edDSA', () async {
       final token = oidc4vc.generateTokenEdDSA(
         payload: payload,
         privateKey: privateKey,
+        kid: kid,
       );
 
       final value = oidc4vc.verifyTokenEdDSA(
