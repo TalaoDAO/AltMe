@@ -1334,7 +1334,17 @@ String getUpdatedUrlForSIOPV2OIC4VP({
   return newUrl;
 }
 
-bool supportCryptoCredential(ProfileSetting profileSetting) {
+bool supportCryptoCredential(ProfileModel profileModel) {
+  final isEnterpriseProfile =
+      profileModel.profileType == ProfileType.enterprise;
+
+  if (isEnterpriseProfile &&
+      !Parameters.supportCryptoAccountOwnershipInDiscoverForEnterpriseMode) {
+    return false;
+  }
+
+  final profileSetting = profileModel.profileSetting;
+
   final customOidc4vcProfile =
       profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
 

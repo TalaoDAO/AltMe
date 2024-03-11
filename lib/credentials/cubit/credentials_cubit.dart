@@ -497,7 +497,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required CryptoAccountData cryptoAccountData,
   }) async {
     final supportAssociatedCredential =
-        supportCryptoCredential(profileCubit.state.model.profileSetting);
+        supportCryptoCredential(profileCubit.state.model);
 
     if (!supportAssociatedCredential) throw Exception();
 
@@ -855,7 +855,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         final isBlockchainAccount = subjectType.isBlockchainAccount;
 
         final supportAssociatedCredential =
-            supportCryptoCredential(profileCubit.state.model.profileSetting);
+            supportCryptoCredential(profileModel);
 
         /// remove if credential is blockchain account and
         /// profile do not support
