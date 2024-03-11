@@ -991,7 +991,7 @@
   "walletProfilesDescription": "Choose your SSI profile or customize your own",
   "profileCustom": "Custom",
   "profileEbsiV3": "European Blockchain Services Infrastructure",
-  "decentralizedIdentityInteropProfile": "Decentralized Identity Interop Profile",
+  "decentralizedIdentityInteropProfile": "Decentralized Identity Interop Profile (DIIP v2.1)",
   "protectYourWallet": "Protect your wallet",
   "protectYourWalletMessage": "Use your fingerprint, face, or device PIN to secure and unlock your wallet. Your data is securely encrypted on this device.",
   "pinUnlock": "PIN unlock",
