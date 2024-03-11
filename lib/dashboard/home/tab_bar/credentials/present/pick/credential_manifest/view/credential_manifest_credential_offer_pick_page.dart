@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/credential_manifest/view/selective_disclosure_pick_page.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/credential_manifest/widgets/vc_sd_jwt_credential_pick_button.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/theme/theme.dart';
@@ -188,6 +188,9 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                           ? vcSdJwtCredentialPickButton(
                               context: context,
                               credentialManifestState: credentialManifestState,
+                              uri: uri,
+                              credential: credential,
+                              issuer: issuer,
                             )
                           : SafeArea(
                               child: Container(
@@ -332,39 +335,5 @@ class CredentialManifestOfferPickView extends StatelessWidget {
             qrCodeScanCubit: context.read<QRCodeScanCubit>(),
           );
     }
-  }
-
-  Widget vcSdJwtCredentialPickButton({
-    required BuildContext context,
-    required CredentialManifestPickState credentialManifestState,
-  }) {
-    final l10n = context.l10n;
-
-    final button = SafeArea(
-        child: Container(
-      padding: const EdgeInsets.all(16),
-      child: Tooltip(
-        message: l10n.credentialPickPresent,
-        child: MyGradientButton(
-          onPressed: !credentialManifestState.isButtonEnabled
-              ? null
-              : () => Navigator.of(context).pushReplacement<void, void>(
-                    SelectiveDisclosurePickPage.route(
-                      uri: uri,
-                      issuer: issuer,
-                      credential: credential,
-                      credentialToBePresented:
-                          credentialManifestState.filteredCredentialList[
-                              credentialManifestState.selected.first],
-                    ),
-                  ),
-
-          /// next button because we will now choose the claims we will present
-          /// from the selected credential
-          text: l10n.next,
-        ),
-      ),
-    ));
-    return button;
   }
 }

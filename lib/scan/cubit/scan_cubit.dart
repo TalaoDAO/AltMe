@@ -316,7 +316,7 @@ class ScanCubit extends Cubit<ScanState> {
     required Issuer issuer,
     QRCodeScanCubit? qrCodeScanCubit,
   }) async {
-    final log = getLogger('ScanCubit - credentialOffer');
+    final log = getLogger('ScanCubit - PresentSdJwt');
 
     try {
       final didKeyType = profileCubit.state.model.profileSetting
@@ -334,9 +334,6 @@ class ScanCubit extends Cubit<ScanState> {
         secureStorage: secureStorageProvider,
         didKeyType: didKeyType,
       );
-
-      // final bool isEBSIV3 =
-      //     await isEBSIV3ForVerifier(client: client, uri: uri) ?? false;
 
       final responseType = uri.queryParameters['response_type'] ?? '';
       final stateValue = uri.queryParameters['state'];
@@ -741,6 +738,7 @@ class ScanCubit extends Cubit<ScanState> {
         );
       }
 
+      // ignore: unused_local_variable
       Map<String, dynamic>? clientMetaData;
 
       if (presentationDefinition.format == null) {
