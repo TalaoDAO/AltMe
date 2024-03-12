@@ -893,7 +893,14 @@ class OIDC4VC {
     final credentialData = <String, dynamic>{};
 
     if (cryptoHolderBinding) {
-      switch (proofType) {
+      var currentProofType = proofType;
+
+      /// Proof Type is ignored for clientSecretJwt
+      if (clientAuthentication == ClientAuthentication.clientSecretJwt) {
+        currentProofType = ProofType.jwt;
+      }
+
+      switch (currentProofType) {
         case ProofType.ldpVp:
           final options = <String, dynamic>{
             'verificationMethod': kid,
@@ -1425,6 +1432,7 @@ class OIDC4VC {
         ..addRecipient(key, algorithm: tokenParameters.alg);
 
       if (!clientSecretJwt) {
+        /// Proof Header Type is ignored for clientSecretJwt
         vpBuilder.setProtectedHeader('typ', tokenParameters.mediaType.typ);
 
         switch (tokenParameters.proofHeaderType) {

@@ -1424,7 +1424,6 @@ Future<(String?, String?, String?, String?)> getClientDetails({
         break;
       case ClientAuthentication.clientSecretPost:
       case ClientAuthentication.clientId:
-      case ClientAuthentication.clientSecretJwt:
         switch (customOidc4vcProfile.clientType) {
           case ClientType.jwkThumbprint:
             clientId = tokenParameters.thumbprint;
@@ -1433,6 +1432,9 @@ Future<(String?, String?, String?, String?)> getClientDetails({
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
         }
+      case ClientAuthentication.clientSecretJwt:
+        //  ClientType is ignored for clientSecretJwt
+        clientId = tokenParameters.thumbprint;
     }
 
     switch (customOidc4vcProfile.clientAuthentication) {
