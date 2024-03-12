@@ -28,19 +28,27 @@ class VerifierTokenParameters extends TokenParameters {
   /// [nonce] is a number given by verifier to handle request authentication
   final String? nonce;
 
-  /// [jsonIdOrJwtList] is list of jwt or jsonIds from the credentials
-  ///  wich contains other credential's metadata
+  /// [jsonIdOrJwtList] is list of jwt or jsonIds or selected disclosures
+  ///  from the credentials wich contains other credential's metadata
   List<dynamic> get jsonIdOrJwtList {
-    // final list = <dynamic>[];
-
-    // for (final credential in credentials) {
-    //   final credentialJson = jsonDecode(credential) as Map<String, dynamic>;
-    //   if (credentialJson['jwt'] != null) {
-    //     list.add(credentialJson['jwt']);
-    //   } else {
-    //     list.add(credentialJson['data']);
-    //   }
-    // }
-    return credentials;
+    final list = <dynamic>[];
+    for (final credential in credentials) {
+      try {
+        final credentialJson = jsonDecode(credential) as Map<String, dynamic>;
+        if (credentialJson['jwt'] != null) {
+          list.add(credentialJson['jwt']);
+        } else {
+          if (credentialJson['data'] != null) {
+            list.add(credentialJson['data']);
+          }
+        }
+      } catch (e) {
+        /// no 'data' or 'jwt'
+        /// Only known usecase is Selective disclosure
+        /// and we keep list as we got it
+        return credentials;
+      }
+    }
+    return list;
   }
 }
