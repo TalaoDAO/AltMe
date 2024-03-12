@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/profile/models/models.dart';
+import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
@@ -23,6 +24,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     required this.secureStorageProvider,
     required this.oidc4vc,
     required this.didKitProvider,
+    required this.langCubit,
   }) : super(ProfileState(model: ProfileModel.empty())) {
     load();
   }
@@ -30,6 +32,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   final SecureStorageProvider secureStorageProvider;
   final OIDC4VC oidc4vc;
   final DIDKitProvider didKitProvider;
+  final LangCubit langCubit;
 
   Timer? _timer;
 

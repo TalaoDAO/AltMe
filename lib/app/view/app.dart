@@ -51,6 +51,10 @@ class App extends StatelessWidget {
         BlocProvider<FlavorCubit>(
           create: (context) => FlavorCubit(flavorMode),
         ),
+        BlocProvider<LangCubit>(
+          create: (context) =>
+              LangCubit(secureStorageProvider: getSecureStorage),
+        ),
         BlocProvider<RouteCubit>(create: (context) => RouteCubit()),
         BlocProvider<BeaconCubit>(
           create: (context) => BeaconCubit(beacon: Beacon()),
@@ -72,6 +76,7 @@ class App extends StatelessWidget {
             secureStorageProvider: secureStorageProvider,
             oidc4vc: OIDC4VC(),
             didKitProvider: DIDKitProvider(),
+            langCubit: context.read<LangCubit>(),
           ),
         ),
         BlocProvider<AdvanceSettingsCubit>(
@@ -252,40 +257,35 @@ class MaterialAppDefinition extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isStaging =
         context.read<FlavorCubit>().flavorMode == FlavorMode.staging;
-    return BlocProvider(
-      create: (context) => LangCubit(
-        secureStorageProvider: getSecureStorage,
-      ),
-      child: BlocBuilder<LangCubit, LangState>(
-        builder: (context, state) {
-          if (isStaging) {
-            final locale = DevicePreview.locale(context);
-            if (locale != null) {
-              context.read<LangCubit>().setLocale(locale);
-            }
+    return BlocBuilder<LangCubit, LangState>(
+      builder: (context, state) {
+        if (isStaging) {
+          final locale = DevicePreview.locale(context);
+          if (locale != null) {
+            context.read<LangCubit>().setLocale(locale);
           }
-          if (state.locale == const Locale('en')) {
-            context.read<LangCubit>().checkLocale();
-          }
+        }
+        if (state.locale == const Locale('en')) {
+          context.read<LangCubit>().checkLocale();
+        }
 
-          return MaterialApp(
-            builder: isStaging ? DevicePreview.appBuilder : null,
-            locale: state.locale,
-            title: 'AltMe',
-            darkTheme: AppTheme.darkThemeData,
-            navigatorObservers: [MyRouteObserver(context)],
-            themeMode: ThemeMode.dark,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: const SplashPage(),
-          );
-        },
-      ),
+        return MaterialApp(
+          builder: isStaging ? DevicePreview.appBuilder : null,
+          locale: state.locale,
+          title: 'AltMe',
+          darkTheme: AppTheme.darkThemeData,
+          navigatorObservers: [MyRouteObserver(context)],
+          themeMode: ThemeMode.dark,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const SplashPage(),
+        );
+      },
     );
   }
 }

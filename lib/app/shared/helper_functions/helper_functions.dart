@@ -1498,3 +1498,69 @@ Future<(String?, String?, String?, String?)> getClientDetails({
     return (null, null, null, null);
   }
 }
+
+(Display?, dynamic) fetchDisplay({
+  required OpenIdConfiguration openIdConfiguration,
+  required String credentialType,
+  required String languageCode,
+}) {
+  Display? display;
+  dynamic credentialSupported;
+  if (openIdConfiguration.credentialsSupported != null) {
+    final credentialsSupported = openIdConfiguration.credentialsSupported!;
+    final CredentialsSupported? credSupported =
+        credentialsSupported.firstWhereOrNull(
+      (CredentialsSupported credentialsSupported) =>
+          credentialsSupported.id != null &&
+          credentialsSupported.id == credentialType,
+    );
+
+    if (credSupported != null) {
+      credentialSupported = credSupported.toJson();
+
+      if (credSupported.display != null) {
+        display = credSupported.display!.firstWhereOrNull(
+          (Display display) => display.locale.toString().contains(languageCode),
+        );
+
+        display ??= credSupported.display!.firstWhereOrNull(
+          (Display display) => display.locale.toString().contains('en'),
+        );
+      }
+    }
+  } else if (openIdConfiguration.credentialConfigurationsSupported != null) {
+    final credentialsSupported =
+        openIdConfiguration.credentialConfigurationsSupported;
+
+    if ((credentialsSupported is Map<String, dynamic>) &&
+        credentialsSupported.containsKey(credentialType)) {
+      /// credentialSupported
+      final credSupported = credentialsSupported[credentialType];
+
+      credentialSupported = credSupported;
+
+      if (credSupported is Map<String, dynamic>) {
+        /// display
+        if (credSupported.containsKey('display')) {
+          final displayData = credSupported['display'];
+
+          if (displayData is List<dynamic>) {
+            final displays = displayData
+                .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
+                .toList();
+
+            display = displays.firstWhereOrNull(
+              (Display display) =>
+                  display.locale.toString().contains(languageCode),
+            );
+
+            display ??= displays.firstWhereOrNull(
+              (Display display) => display.locale.toString().contains('en'),
+            );
+          }
+        }
+      }
+    }
+  }
+  return (display, credentialSupported);
+}

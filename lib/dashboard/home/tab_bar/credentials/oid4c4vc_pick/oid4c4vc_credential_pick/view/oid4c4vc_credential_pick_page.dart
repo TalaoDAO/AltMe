@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/lang/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -87,6 +88,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final languageCode = context.read<LangCubit>().state.locale.languageCode;
 
     return BlocListener<QRCodeScanCubit, QRCodeScanState>(
       listener: (context, state) {
@@ -120,28 +122,12 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                     final DiscoverDummyCredential discoverDummyCredential =
                         credentialSubjectType.dummyCredential(profileSetting);
 
-                    Display? display;
-
                     // fetch for displaying the image
-                    if (openIdConfiguration.credentialsSupported != null) {
-                      final credentialsSupported =
-                          openIdConfiguration.credentialsSupported!;
-                      final CredentialsSupported? credSupported =
-                          credentialsSupported.firstWhereOrNull(
-                        (CredentialsSupported credentialsSupported) =>
-                            credentialsSupported.id != null &&
-                            credentialsSupported.id == credential,
-                      );
-
-                      if (credSupported != null &&
-                          credSupported.display != null) {
-                        display = credSupported.display!.firstWhereOrNull(
-                          (Display display) =>
-                              display.locale == 'en-US' ||
-                              display.locale == 'en-GB',
-                        );
-                      }
-                    }
+                    final (Display? display, _) = fetchDisplay(
+                      openIdConfiguration: openIdConfiguration,
+                      credentialType: credential,
+                      languageCode: languageCode,
+                    );
 
                     return TransparentInkWell(
                       onTap: () => context
