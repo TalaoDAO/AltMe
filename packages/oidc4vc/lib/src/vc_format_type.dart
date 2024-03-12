@@ -25,7 +25,7 @@ extension VCFormatTypeX on VCFormatType {
       case VCFormatType.jwtVcJsonLd:
         return 'jwt_vc_json-ld';
       case VCFormatType.vcSdJWT:
-        return 'vc+sd-jwt (Experimental)';
+        return 'vc+sd-jwt';
     }
   }
 
