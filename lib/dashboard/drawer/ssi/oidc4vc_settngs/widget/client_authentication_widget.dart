@@ -27,7 +27,8 @@ class ClientAuthenticationWidget extends StatelessWidget {
                   ClientAuthentication.values[index];
 
               final isEnterPrise =
-                  state.model.profileType == ProfileType.enterprise;
+                  state.model.walletType == WalletType.enterprise;
+
               final isClientSecretJwt = clientAuthenticationType ==
                   ClientAuthentication.clientSecretJwt;
 

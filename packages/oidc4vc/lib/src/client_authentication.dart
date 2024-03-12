@@ -4,7 +4,6 @@ enum ClientAuthentication {
   none,
   @JsonValue('client_secret_basic')
   clientSecretBasic,
-
   @JsonValue('client_secret_post')
   clientSecretPost,
   @JsonValue('client_id')
