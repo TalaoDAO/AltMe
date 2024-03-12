@@ -389,11 +389,12 @@ class OIDC4VC {
   }
 
   /// Retreive credential_type from url
-  /// credentialResponseData, deferredCredentialEndpoint, format,
+  /// credentialResponseData, deferredCredentialEndpoint, format, updateNonce
   Future<
       (
         List<dynamic>,
         String?,
+        String,
         String,
       )> getCredential({
     required String issuer,
@@ -413,6 +414,8 @@ class OIDC4VC {
     required String cnonce,
     List<dynamic>? authorizationDetails,
   }) async {
+    var nonce = cnonce;
+
     final issuerTokenParameters = IssuerTokenParameters(
       privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
       did: did,
@@ -459,8 +462,6 @@ class OIDC4VC {
               .map((dynamic element) => element.toString())
               .toList();
 
-      var nonce = cnonce;
-
       for (final credentialIdentifier in credentialIdentifiers) {
         final (credentialResponseDataValue, updateNonce) =
             await getSingleCredential(
@@ -491,7 +492,8 @@ class OIDC4VC {
       }
 //
     } else {
-      final (credentialResponseDataValue, _) = await getSingleCredential(
+      final (credentialResponseDataValue, updateNonce) =
+          await getSingleCredential(
         issuerTokenParameters: issuerTokenParameters,
         openIdConfiguration: openIdConfiguration,
         credentialType: credentialType,
@@ -512,6 +514,9 @@ class OIDC4VC {
         nonce: cnonce,
       );
 
+      /// update nonce value
+      nonce = updateNonce;
+
       credentialResponseData.add(credentialResponseDataValue);
     }
 
@@ -519,6 +524,7 @@ class OIDC4VC {
       credentialResponseData,
       deferredCredentialEndpoint,
       format,
+      nonce,
     );
   }
 

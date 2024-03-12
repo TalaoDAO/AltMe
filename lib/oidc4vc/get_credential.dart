@@ -6,12 +6,13 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 /// Retreive credential_type from url
-/// credentialResponseData, deferredCredentialEndpoint, format,
-/// openIdConfiguration, tokenResponse
+// encodedCredentialOrFutureTokens,deferredCredentialEndpoint,
+// format, updatedNonce
 Future<
     (
       List<dynamic>,
       String?,
+      String,
       String,
     )> getCredential({
   required OIDC4VC oidc4vc,
@@ -51,6 +52,7 @@ Future<
     List<dynamic> encodedCredentialOrFutureTokens,
     String? deferredCredentialEndpoint,
     String format,
+    String updatedNonce,
   ) = await oidc4vc.getCredential(
     issuer: issuer,
     credential: credential,
@@ -74,5 +76,6 @@ Future<
     encodedCredentialOrFutureTokens,
     deferredCredentialEndpoint,
     format,
+    updatedNonce,
   );
 }

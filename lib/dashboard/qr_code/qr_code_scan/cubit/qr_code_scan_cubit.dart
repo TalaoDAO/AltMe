@@ -1303,6 +1303,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             List<dynamic> encodedCredentialOrFutureTokens,
             String? deferredCredentialEndpoint,
             String format,
+            String updateNonce,
           ) = await getCredential(
             oidc4vc: oidc4vc,
             isEBSIV3: isEBSIV3,
@@ -1319,6 +1320,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             authorizationDetails: savedAuthorizationDetails,
             openIdConfiguration: openIdConfiguration,
           );
+
+          savedNonce = updateNonce;
 
           if (profileCubit.state.model.isDeveloperMode) {
             completer = Completer<bool>();
