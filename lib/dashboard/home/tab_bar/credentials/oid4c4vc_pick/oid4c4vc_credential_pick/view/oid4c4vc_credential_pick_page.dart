@@ -135,7 +135,9 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                           .updateList(index),
                       child: Column(
                         children: [
-                          if (display != null)
+                          if (credentialSubjectType ==
+                                  CredentialSubjectType.defaultCredential &&
+                              display != null)
                             CredentialDisplay(
                               credentialModel: CredentialModel(
                                 id: '',
