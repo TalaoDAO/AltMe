@@ -83,17 +83,38 @@ class ClaimsData extends StatelessWidget {
           if (displays is! List<dynamic>) return Container();
           if (displays.isEmpty) return Container();
 
-          final display = displays.where((element) {
+          final displaySelectedLanguage = displays.where((element) {
             if (element is Map<String, dynamic> &&
                 element.containsKey('locale')) {
               if (element['locale'].toString().contains(languageCode)) {
                 return true;
-              } else if (element['locale'] == 'en-US') {
-                return true;
               }
+              return false;
             }
             return false;
           }).firstOrNull;
+
+          final displayEnglish = displays.where((element) {
+            if (element is Map<String, dynamic> &&
+                element.containsKey('locale')) {
+              if (element['locale'].toString().contains('en')) {
+                return true;
+              }
+              return false;
+            }
+            return false;
+          }).firstOrNull;
+
+          final displayFirst = displays.where((element) {
+            if (element is Map<String, dynamic> &&
+                element.containsKey('locale')) {
+              return true;
+            }
+            return false;
+          }).firstOrNull;
+
+          final display =
+              displaySelectedLanguage ?? displayEnglish ?? displayFirst;
 
           if (display == null) return Container();
 
