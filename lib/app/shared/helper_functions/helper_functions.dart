@@ -1449,14 +1449,21 @@ Future<(String?, String?, String?, String?)> getClientDetails({
 
       case ClientAuthentication.clientSecretJwt:
         if (profileCubit.state.model.walletType != WalletType.enterprise) {
-          throw Exception();
+          throw ResponseMessage(
+            data: {
+              'error': 'invalid_request',
+              'error_description': 'Please switch to enterprise account',
+            },
+          );
         }
+
         final walletAttestationData = await profileCubit.secureStorageProvider
             .get(SecureStorageKeys.walletAttestationData);
 
         if (walletAttestationData == null) {
           throw Exception();
         }
+
         final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
         final nbf = iat - 10;
 

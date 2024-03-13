@@ -908,11 +908,14 @@ class ScanCubit extends Cubit<ScanState> {
 
       final ldpVp = presentationDefinition.format?.ldpVp != null;
       final jwtVp = presentationDefinition.format?.jwtVp != null;
+      final vcSdJwt = presentationDefinition.format?.vcSdJwt != null;
 
       if (ldpVp) {
         vpFormat = 'ldp_vp';
       } else if (jwtVp) {
         vpFormat = 'jwt_vp';
+      } else if (vcSdJwt) {
+        vpFormat = 'vc+sd-jwt';
       }
     } else {
       if (clientMetaData == null) {
@@ -936,6 +939,8 @@ class ScanCubit extends Cubit<ScanState> {
         vpFormat = 'ldp_vp';
       } else if (vpFormats.containsKey('jwt_vp')) {
         vpFormat = 'jwt_vp';
+      } else if (vpFormats.containsKey('vc+sd-jwt')) {
+        vpFormat = 'vc+sd-jwt';
       }
     }
 
@@ -1057,6 +1062,7 @@ class ScanCubit extends Cubit<ScanState> {
 
     bool presentLdpVc = false;
     bool presentJwtVc = false;
+    bool presentVcSdJwt = false;
 
     if (presentationDefinition.format != null) {
       /// ldp_vc
@@ -1064,6 +1070,9 @@ class ScanCubit extends Cubit<ScanState> {
 
       /// jwt_vc
       presentJwtVc = presentationDefinition.format?.jwtVc != null;
+
+      /// vc+sd-jwt
+      presentVcSdJwt = presentationDefinition.format?.vcSdJwt != null;
     } else {
       if (clientMetaData == null) {
         throw ResponseMessage(
@@ -1081,6 +1090,9 @@ class ScanCubit extends Cubit<ScanState> {
 
       /// jwt_vc
       presentJwtVc = vpFormats.containsKey('jwt_vc');
+
+      /// vc+sd-jwt
+      presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
     }
 
     final customOidc4vcProfile =
@@ -1092,9 +1104,11 @@ class ScanCubit extends Cubit<ScanState> {
       presentLdpVc = true;
     } else if (!presentJwtVc && vcFormatType == VCFormatType.jwtVc) {
       presentJwtVc = true;
+    } else if (!presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
+      presentVcSdJwt = true;
     }
 
-    if (!presentLdpVc && !presentJwtVc) {
+    if (!presentLdpVc && !presentJwtVc && !presentVcSdJwt) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_request',
@@ -1125,7 +1139,7 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey,
       );
       return vpToken;
-    } else if (presentJwtVc) {
+    } else if (presentJwtVc || presentVcSdJwt) {
       final credentialList =
           credentialsToBePresented.map((e) => jsonEncode(e.toJson())).toList();
 
