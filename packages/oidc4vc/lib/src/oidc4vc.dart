@@ -143,6 +143,7 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required VCFormatType vcFormatType,
     required String? clientAssertion,
+    required bool secureAuthorizedFlow,
   }) async {
     try {
       final openIdConfiguration = await getOpenIdConfig(
@@ -174,6 +175,7 @@ class OIDC4VC {
         oidc4vciDraftType: oidc4vciDraftType,
         vcFormatType: vcFormatType,
         clientAssertion: clientAssertion,
+        secureAuthorizedFlow: secureAuthorizedFlow,
       );
 
       return (authorizationEndpoint, authorizationRequestParemeters);
@@ -200,6 +202,7 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required VCFormatType vcFormatType,
     required String? clientAssertion,
+    required bool secureAuthorizedFlow,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -312,11 +315,18 @@ class OIDC4VC {
       'nonce': nonce,
       'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
-      'client_metadata': getWalletClientMetadata(
-        authorizationEndPoint,
-        tokenEndpointAuthMethod,
-      ),
     };
+
+    final clientMetaData = getWalletClientMetadata(
+      authorizationEndPoint,
+      tokenEndpointAuthMethod,
+    );
+
+    if (secureAuthorizedFlow) {
+      myRequest['client_metadata'] = clientMetaData;
+    } else {
+      myRequest['client_metadata'] = jsonEncode(clientMetaData);
+    }
 
     switch (clientAuthentication) {
       case ClientAuthentication.none:
@@ -340,16 +350,21 @@ class OIDC4VC {
       myRequest['scope'] = listToString(credentials);
     } else {
       myRequest['scope'] = 'openid';
-      myRequest['authorization_details'] = jsonEncode(authorizationDetails);
+
+      if (secureAuthorizedFlow) {
+        myRequest['authorization_details'] = authorizationDetails;
+      } else {
+        myRequest['authorization_details'] = jsonEncode(authorizationDetails);
+      }
     }
     return myRequest;
   }
 
-  String getWalletClientMetadata(
+  Map<String, dynamic> getWalletClientMetadata(
     String authorizationEndPoint,
     String tokenEndpointAuthMethod,
   ) {
-    return jsonEncode({
+    return {
       'authorization_endpoint': authorizationEndPoint,
       'scopes_supported': ['openid'],
       'response_types_supported': ['vp_token', 'id_token'],
@@ -361,22 +376,22 @@ class OIDC4VC {
       'request_parameter_supported': true,
       'request_uri_parameter_supported': true,
       'request_authentication_methods_supported': {
-        'authorization_endpoint': ['request_object']
+        'authorization_endpoint': ['request_object'],
       },
       'vp_formats_supported': {
         'jwt_vp': {
-          'alg_values_supported': ['ES256', 'ES256K']
+          'alg_values_supported': ['ES256', 'ES256K'],
         },
         'jwt_vc': {
-          'alg_values_supported': ['ES256', 'ES256K']
-        }
+          'alg_values_supported': ['ES256', 'ES256K'],
+        },
       },
       'subject_syntax_types_supported': [
         'urn:ietf:params:oauth:jwk-thumbprint',
         'did:key',
         'did:pkh',
         'did:key',
-        'did:polygonid'
+        'did:polygonid',
       ],
       'subject_syntax_types_discriminations': [
         'did:key:jwk_jcs-pub',
@@ -385,7 +400,7 @@ class OIDC4VC {
       'subject_trust_frameworks_supported': ['ebsi'],
       'id_token_types_supported': ['subject_signed_id_token'],
       'token_endpoint_auth_method': tokenEndpointAuthMethod,
-    });
+    };
   }
 
   /// Retreive credential_type from url
