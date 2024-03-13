@@ -84,7 +84,6 @@ Future<void> getAuthorizationUriForIssuer({
     oidc4vciDraftType: oidc4vciDraftType,
     vcFormatType: vcFormatType,
     clientAssertion: clientAssertion,
-    secureAuthorizedFlow: secureAuthorizedFlow,
   );
 
   if (secureAuthorizedFlow) {
