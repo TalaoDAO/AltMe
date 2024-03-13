@@ -1413,16 +1413,25 @@ Future<(String?, String?, String?, String?)> getClientDetails({
       clientId: '', // just added as it is required field
     );
 
-    /// clientId fetching
     switch (customOidc4vcProfile.clientAuthentication) {
-      /// none
+      ///  none
       case ClientAuthentication.none:
         break;
 
-      ///  only secret
       case ClientAuthentication.clientSecretBasic:
-        break;
-      case ClientAuthentication.clientSecretPost:
+        authorization = base64UrlEncode(utf8.encode('$clientId:$clientSecret'))
+            .replaceAll('=', '');
+
+        switch (customOidc4vcProfile.clientType) {
+          case ClientType.jwkThumbprint:
+            clientId = tokenParameters.thumbprint;
+          case ClientType.did:
+            clientId = did;
+          case ClientType.confidential:
+            clientId = customOidc4vcProfile.clientId;
+        }
+
+      ///  only clientId
       case ClientAuthentication.clientId:
         switch (customOidc4vcProfile.clientType) {
           case ClientType.jwkThumbprint:
@@ -1432,23 +1441,10 @@ Future<(String?, String?, String?, String?)> getClientDetails({
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
         }
-      case ClientAuthentication.clientSecretJwt:
-        //  ClientType is ignored for clientSecretJwt
-        clientId = tokenParameters.thumbprint;
-    }
 
-    switch (customOidc4vcProfile.clientAuthentication) {
-      ///  none
-      case ClientAuthentication.none:
-
-      ///  only clientId
-      case ClientAuthentication.clientId:
-        break;
       case ClientAuthentication.clientSecretPost:
         clientSecret = customOidc4vcProfile.clientSecret;
-      case ClientAuthentication.clientSecretBasic:
-        authorization = base64UrlEncode(utf8.encode('$clientId:$clientSecret'))
-            .replaceAll('=', '');
+
       case ClientAuthentication.clientSecretJwt:
         if (profileCubit.state.model.walletType != WalletType.enterprise) {
           throw Exception();
@@ -1467,6 +1463,8 @@ Future<(String?, String?, String?, String?)> getClientDetails({
 
         final p256KeyForWallet =
             await getWalletP256Key(profileCubit.secureStorageProvider);
+
+        clientId = walletAttestationDataPayload['sub'].toString();
 
         final tokenParameter = TokenParameters(
           privateKey: jsonDecode(p256KeyForWallet) as Map<String, dynamic>,
