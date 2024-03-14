@@ -143,6 +143,7 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required VCFormatType vcFormatType,
     required String? clientAssertion,
+    required bool secureAuthorizedFlow,
   }) async {
     try {
       final openIdConfiguration = await getOpenIdConfig(
@@ -174,6 +175,7 @@ class OIDC4VC {
         oidc4vciDraftType: oidc4vciDraftType,
         vcFormatType: vcFormatType,
         clientAssertion: clientAssertion,
+        secureAuthorizedFlow: secureAuthorizedFlow,
       );
 
       return (authorizationEndpoint, authorizationRequestParemeters);
@@ -200,6 +202,7 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required VCFormatType vcFormatType,
     required String? clientAssertion,
+    required bool secureAuthorizedFlow,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -317,9 +320,14 @@ class OIDC4VC {
       'nonce': nonce,
       'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
-      'client_metadata': jsonEncode(clientMetaData),
     };
 
+    if (secureAuthorizedFlow) {
+      myRequest['client_metadata'] =
+          Uri.encodeComponent(jsonEncode(clientMetaData));
+    } else {
+      myRequest['client_metadata'] = jsonEncode(clientMetaData);
+    }
     switch (clientAuthentication) {
       case ClientAuthentication.none:
         break;
