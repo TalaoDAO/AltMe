@@ -540,7 +540,7 @@ Future<(String, String)> getDidAndKid({
           profileCubit.jwtDecode.parseJwt(walletAttestationData);
 
       did = walletAttestationDataPayload['cnf']['jwk']['kid'].toString();
-      kid = walletAttestationDataPayload['cnf']['jwk']['kid'].toString();
+      kid = did;
   }
 
   return (did, kid);
