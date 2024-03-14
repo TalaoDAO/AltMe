@@ -887,7 +887,7 @@
   "createWalletMessage": "Primero cree su cartera.",
   "successfullyGeneratingProof": "Prueba generada",
   "wouldYouLikeToAcceptThisCredentialsFromThisOrganisation": "¿Desea aceptar esta(s) credencial(es) de esta organización?",
-  "thisOrganisationRequestsThisInformation": "Esta organización solicita esta información",
+  "thisOrganisationRequestsThisInformation": "Esta organización solicita",
   "iS": "es",
   "isSmallerThan": "es menor que",
   "isBiggerThan": "es mayor que",

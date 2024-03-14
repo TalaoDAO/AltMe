@@ -3,6 +3,7 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
+import 'package:altme/selective_disclosure/widget/select_selective_disclosure.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -107,15 +108,16 @@ class SelectiveDisclosurePickView extends StatelessWidget {
           child: credentialManifestState.filteredCredentialList.isEmpty
               ? const RequiredCredentialNotFound()
               : BasePage(
-                  title: l10n.credentialPickTitle,
+                  title: l10n.thisOrganisationRequestsThisInformation,
                   titleAlignment: Alignment.topCenter,
                   titleTrailing: const WhiteCloseButton(),
                   padding: const EdgeInsets.symmetric(
                     vertical: 24,
                     horizontal: 16,
                   ),
-                  body: ClaimsData(
+                  body: SelectSelectiveDisclosure(
                     credentialModel: credentialToBePresented,
+                    claims: null,
                   ),
                   navigation: SafeArea(
                     child: Container(

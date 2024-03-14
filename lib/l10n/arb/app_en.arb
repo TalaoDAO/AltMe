@@ -886,7 +886,7 @@
   "createWalletMessage": "Please create your wallet first.",
   "successfullyGeneratingProof": "Successfully Generated Proof",
   "wouldYouLikeToAcceptThisCredentialsFromThisOrganisation": "Would you like to accept this credential(s) from this organisation?",
-  "thisOrganisationRequestsThisInformation": "This organisation requests this information",
+  "thisOrganisationRequestsThisInformation": "This organisation requests",
   "iS": "is",
   "isSmallerThan": "is smaller than",
   "isBiggerThan": "is bigger than",

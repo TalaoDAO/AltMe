@@ -16,29 +16,30 @@ Widget vcSdJwtCredentialPickButton({
   final l10n = context.l10n;
 
   final button = SafeArea(
-      child: Container(
-    padding: const EdgeInsets.all(16),
-    child: Tooltip(
-      message: l10n.credentialPickPresent,
-      child: MyGradientButton(
-        onPressed: !credentialManifestState.isButtonEnabled
-            ? null
-            : () => Navigator.of(context).pushReplacement<void, void>(
-                  SelectiveDisclosurePickPage.route(
-                    uri: uri,
-                    issuer: issuer,
-                    credential: credential,
-                    credentialToBePresented:
-                        credentialManifestState.filteredCredentialList[
-                            credentialManifestState.selected.first],
+    child: Container(
+      padding: const EdgeInsets.all(16),
+      child: Tooltip(
+        message: l10n.credentialPickPresent,
+        child: MyGradientButton(
+          onPressed: !credentialManifestState.isButtonEnabled
+              ? null
+              : () => Navigator.of(context).pushReplacement<void, void>(
+                    SelectiveDisclosurePickPage.route(
+                      uri: uri,
+                      issuer: issuer,
+                      credential: credential,
+                      credentialToBePresented:
+                          credentialManifestState.filteredCredentialList[
+                              credentialManifestState.selected.first],
+                    ),
                   ),
-                ),
 
-        /// next button because we will now choose the claims we will present
-        /// from the selected credential
-        text: l10n.next,
+          /// next button because we will now choose the claims we will present
+          /// from the selected credential
+          text: l10n.next,
+        ),
       ),
     ),
-  ));
+  );
   return button;
 }
