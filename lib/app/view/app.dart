@@ -77,6 +77,7 @@ class App extends StatelessWidget {
             oidc4vc: OIDC4VC(),
             didKitProvider: DIDKitProvider(),
             langCubit: context.read<LangCubit>(),
+            jwtDecode: JWTDecode(),
           ),
         ),
         BlocProvider<AdvanceSettingsCubit>(
@@ -89,9 +90,6 @@ class App extends StatelessWidget {
         BlocProvider(
           create: (context) => KycVerificationCubit(
             profileCubit: context.read<ProfileCubit>(),
-            didKitProvider: DIDKitProvider(),
-            oidc4vc: OIDC4VC(),
-            secureStorageProvider: getSecureStorage,
             client: DioClient(
               '',
               Dio(),
@@ -166,6 +164,7 @@ class App extends StatelessWidget {
             profileCubit: context.read<ProfileCubit>(),
             walletCubit: context.read<WalletCubit>(),
             oidc4vc: OIDC4VC(),
+            jwtDecode: JWTDecode(),
           ),
         ),
         BlocProvider<QRCodeScanCubit>(

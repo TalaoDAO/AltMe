@@ -24,6 +24,10 @@ class DidKeyTypeWidget extends StatelessWidget {
             padding: EdgeInsets.zero,
             itemBuilder: (context, index) {
               final didKeyType = DidKeyType.values[index];
+
+              if (didKeyType == DidKeyType.jwtClientAttestation) {
+                return Container();
+              }
               return Column(
                 children: [
                   if (index != 0)

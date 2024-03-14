@@ -1,9 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-
-import 'package:did_kit/did_kit.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 /// Retreive credential_type from url
 // encodedCredentialOrFutureTokens,deferredCredentialEndpoint,
@@ -15,9 +12,7 @@ Future<
       String,
       String,
     )> getCredential({
-  required OIDC4VC oidc4vc,
   required bool isEBSIV3,
-  required DIDKitProvider didKitProvider,
   required dynamic credential,
   required ProfileCubit profileCubit,
   required String issuer,
@@ -32,17 +27,15 @@ Future<
 }) async {
   final privateKey = await fetchPrivateKey(
     isEBSIV3: isEBSIV3,
-    oidc4vc: oidc4vc,
-    secureStorage: getSecureStorage,
     didKeyType: didKeyType,
+    profileCubit: profileCubit,
   );
 
   final (did, kid) = await fetchDidAndKid(
     isEBSIV3: isEBSIV3,
     privateKey: privateKey,
-    didKitProvider: didKitProvider,
-    secureStorage: getSecureStorage,
     didKeyType: didKeyType,
+    profileCubit: profileCubit,
   );
 
   final customOidc4vcProfile = profileCubit.state.model.profileSetting
@@ -53,7 +46,7 @@ Future<
     String? deferredCredentialEndpoint,
     String format,
     String updatedNonce,
-  ) = await oidc4vc.getCredential(
+  ) = await profileCubit.oidc4vc.getCredential(
     issuer: issuer,
     credential: credential,
     did: did,

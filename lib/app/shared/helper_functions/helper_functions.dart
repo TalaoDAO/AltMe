@@ -263,16 +263,17 @@ int getIndexValue({
       return 6;
 
     case DidKeyType.edDSA:
+    case DidKeyType.jwtClientAttestation:
       return 0; // it is not needed, just assigned
   }
 }
 
 Future<String> getPrivateKey({
-  required SecureStorageProvider secureStorage,
+  required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
-  required OIDC4VC oidc4vc,
 }) async {
-  final mnemonic = await secureStorage.get(SecureStorageKeys.ssiMnemonic);
+  final mnemonic = await profileCubit.secureStorageProvider
+      .get(SecureStorageKeys.ssiMnemonic);
 
   switch (didKeyType) {
     case DidKeyType.edDSA:
@@ -284,7 +285,7 @@ Future<String> getPrivateKey({
         isEBSIV3: true,
         didKeyType: didKeyType,
       );
-      final key = oidc4vc.privateKeyFromMnemonic(
+      final key = profileCubit.oidc4vc.privateKeyFromMnemonic(
         mnemonic: mnemonic!,
         indexValue: index,
       );
@@ -298,12 +299,34 @@ Future<String> getPrivateKey({
         didKeyType: didKeyType,
       );
 
-      final key = oidc4vc.p256PrivateKeyFromMnemonics(
+      final key = profileCubit.oidc4vc.p256PrivateKeyFromMnemonics(
         mnemonic: mnemonic!,
         indexValue: indexValue,
       );
 
       return key;
+
+    case DidKeyType.jwtClientAttestation:
+      if (profileCubit.state.model.walletType != WalletType.enterprise) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Please switch to enterprise account',
+          },
+        );
+      }
+
+      final walletAttestationData = await profileCubit.secureStorageProvider
+          .get(SecureStorageKeys.walletAttestationData);
+
+      if (walletAttestationData == null) {
+        throw Exception();
+      }
+
+      final p256KeyForWallet =
+          await getWalletP256Key(profileCubit.secureStorageProvider);
+
+      return p256KeyForWallet;
   }
 }
 
@@ -349,25 +372,22 @@ DidKeyType? getDidKeyFromString(String? didKeyTypeString) {
 }
 
 Future<String> fetchPrivateKey({
-  required SecureStorageProvider secureStorage,
+  required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
-  required OIDC4VC oidc4vc,
   bool? isEBSIV3,
 }) async {
   if (isEBSIV3 != null && isEBSIV3) {
     final privateKey = await getPrivateKey(
-      secureStorage: secureStorage,
+      profileCubit: profileCubit,
       didKeyType: DidKeyType.ebsiv3,
-      oidc4vc: oidc4vc,
     );
 
     return privateKey;
   }
 
   final privateKey = await getPrivateKey(
-    secureStorage: secureStorage,
+    profileCubit: profileCubit,
     didKeyType: didKeyType,
-    oidc4vc: oidc4vc,
   );
 
   return privateKey;
@@ -466,9 +486,8 @@ String getUtf8Message(String maybeHex) {
 
 Future<(String, String)> getDidAndKid({
   required String privateKey,
-  required SecureStorageProvider secureStorage,
+  required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
-  required DIDKitProvider? didKitProvider,
 }) async {
   late String did;
   late String kid;
@@ -496,11 +515,32 @@ Future<(String, String)> getDidAndKid({
     case DidKeyType.p256:
     case DidKeyType.secp256k1:
     case DidKeyType.edDSA:
-      if (didKitProvider == null) throw Exception();
-
       const didMethod = AltMeStrings.defaultDIDMethod;
-      did = didKitProvider.keyToDID(didMethod, privateKey);
-      kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
+      did = profileCubit.didKitProvider.keyToDID(didMethod, privateKey);
+      kid = await profileCubit.didKitProvider
+          .keyToVerificationMethod(didMethod, privateKey);
+    case DidKeyType.jwtClientAttestation:
+      if (profileCubit.state.model.walletType != WalletType.enterprise) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Please switch to enterprise account',
+          },
+        );
+      }
+
+      final walletAttestationData = await profileCubit.secureStorageProvider
+          .get(SecureStorageKeys.walletAttestationData);
+
+      if (walletAttestationData == null) {
+        throw Exception();
+      }
+
+      final walletAttestationDataPayload =
+          profileCubit.jwtDecode.parseJwt(walletAttestationData);
+
+      did = walletAttestationDataPayload['cnf']['jwk']['kid'].toString();
+      kid = walletAttestationDataPayload['cnf']['jwk']['kid'].toString();
   }
 
   return (did, kid);
@@ -509,16 +549,14 @@ Future<(String, String)> getDidAndKid({
 Future<(String, String)> fetchDidAndKid({
   required String privateKey,
   bool? isEBSIV3,
-  required SecureStorageProvider secureStorage,
+  required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
-  DIDKitProvider? didKitProvider,
 }) async {
   if (isEBSIV3 != null && isEBSIV3) {
     final (did, kid) = await getDidAndKid(
       didKeyType: DidKeyType.ebsiv3,
       privateKey: privateKey,
-      didKitProvider: DIDKitProvider(),
-      secureStorage: getSecureStorage,
+      profileCubit: profileCubit,
     );
 
     return (did, kid);
@@ -527,8 +565,7 @@ Future<(String, String)> fetchDidAndKid({
   final (did, kid) = await getDidAndKid(
     didKeyType: didKeyType,
     privateKey: privateKey,
-    didKitProvider: DIDKitProvider(),
-    secureStorage: getSecureStorage,
+    profileCubit: profileCubit,
   );
 
   return (did, kid);
@@ -1376,8 +1413,6 @@ Future<(String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
   required bool isEBSIV3,
   required String issuer,
-  required JWTDecode jwtDecode,
-  required OIDC4VC oidc4vc,
 }) async {
   try {
     String? clientId;
@@ -1391,8 +1426,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
     final didKeyType = customOidc4vcProfile.defaultDid;
 
     final privateKey = await fetchPrivateKey(
-      oidc4vc: profileCubit.oidc4vc,
-      secureStorage: profileCubit.secureStorageProvider,
+      profileCubit: profileCubit,
       isEBSIV3: isEBSIV3,
       didKeyType: didKeyType,
     );
@@ -1400,8 +1434,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
     final (did, _) = await fetchDidAndKid(
       privateKey: privateKey,
       isEBSIV3: isEBSIV3,
-      didKitProvider: profileCubit.didKitProvider,
-      secureStorage: profileCubit.secureStorageProvider,
+      profileCubit: profileCubit,
       didKeyType: didKeyType,
     );
 
@@ -1460,31 +1493,10 @@ Future<(String?, String?, String?, String?)> getClientDetails({
         final walletAttestationData = await profileCubit.secureStorageProvider
             .get(SecureStorageKeys.walletAttestationData);
 
-        if (walletAttestationData == null) {
-          throw Exception();
-        }
+        clientId = did;
 
         final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
         final nbf = iat - 10;
-
-        final walletAttestationDataPayload =
-            jwtDecode.parseJwt(walletAttestationData);
-
-        final p256KeyForWallet =
-            await getWalletP256Key(profileCubit.secureStorageProvider);
-
-        clientId = walletAttestationDataPayload['sub'].toString();
-
-        final tokenParameter = TokenParameters(
-          privateKey: jsonDecode(p256KeyForWallet) as Map<String, dynamic>,
-          kid: walletAttestationDataPayload['cnf']['jwk']['kid'].toString(),
-          did: '', // just added as it is required field
-          mediaType: MediaType.basic, // just added as it is required field
-          clientType:
-              ClientType.jwkThumbprint, // just added as it is required field
-          proofHeaderType: customOidc4vcProfile.proofHeader,
-          clientId: '', // just added as it is required field
-        );
 
         final payload = {
           'iss': clientId,
@@ -1493,9 +1505,9 @@ Future<(String?, String?, String?, String?)> getClientDetails({
           'exp': nbf + 60,
         };
 
-        final jwtProofOfPossession = oidc4vc.generateToken(
+        final jwtProofOfPossession = profileCubit.oidc4vc.generateToken(
           payload: payload,
-          tokenParameters: tokenParameter,
+          tokenParameters: tokenParameters,
           clientSecretJwt: true,
         );
 

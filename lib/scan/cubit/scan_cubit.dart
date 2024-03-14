@@ -12,6 +12,7 @@ import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 import 'package:secure_storage/secure_storage.dart';
@@ -40,6 +41,7 @@ class ScanCubit extends Cubit<ScanState> {
     required this.profileCubit,
     required this.walletCubit,
     required this.oidc4vc,
+    required this.jwtDecode,
   }) : super(const ScanState());
 
   final DioClient client;
@@ -49,6 +51,7 @@ class ScanCubit extends Cubit<ScanState> {
   final ProfileCubit profileCubit;
   final WalletCubit walletCubit;
   final OIDC4VC oidc4vc;
+  final JWTDecode jwtDecode;
 
   Future<void> credentialOfferOrPresent({
     required Uri uri,
@@ -67,15 +70,13 @@ class ScanCubit extends Cubit<ScanState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
       final privateKey = await fetchPrivateKey(
-        oidc4vc: oidc4vc,
-        secureStorage: secureStorageProvider,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
       );
 
       final (did, kid) = await fetchDidAndKid(
         privateKey: privateKey,
-        didKitProvider: didKitProvider,
-        secureStorage: secureStorageProvider,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
       );
 
@@ -140,16 +141,14 @@ class ScanCubit extends Cubit<ScanState> {
             .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
         final privateKey = await getPrivateKey(
-          secureStorage: getSecureStorage,
+          profileCubit: profileCubit,
           didKeyType: didKeyType,
-          oidc4vc: oidc4vc,
         );
 
         final (did, kid) = await getDidAndKid(
           didKeyType: didKeyType,
           privateKey: privateKey,
-          secureStorage: getSecureStorage,
-          didKitProvider: didKitProvider,
+          profileCubit: profileCubit,
         );
 
         List<String> presentations = <String>[];
@@ -385,15 +384,13 @@ class ScanCubit extends Cubit<ScanState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
       final privateKey = await fetchPrivateKey(
-        oidc4vc: oidc4vc,
-        secureStorage: secureStorageProvider,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
       );
 
       final (did, kid) = await fetchDidAndKid(
         privateKey: privateKey,
-        didKitProvider: didKitProvider,
-        secureStorage: secureStorageProvider,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
       );
 
@@ -481,15 +478,13 @@ class ScanCubit extends Cubit<ScanState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
       final privateKey = await fetchPrivateKey(
-        oidc4vc: oidc4vc,
-        secureStorage: secureStorageProvider,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
       );
 
       final (did, kid) = await fetchDidAndKid(
         privateKey: privateKey,
-        didKitProvider: didKitProvider,
-        secureStorage: secureStorageProvider,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
       );
 

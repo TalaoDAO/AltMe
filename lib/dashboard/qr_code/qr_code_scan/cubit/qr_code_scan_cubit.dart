@@ -1078,15 +1078,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
       final privateKey = await fetchPrivateKey(
-        oidc4vc: oidc4vc,
-        secureStorage: secureStorageProvider,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
       );
 
       final (did, kid) = await fetchDidAndKid(
         privateKey: privateKey,
-        didKitProvider: didKitProvider,
-        secureStorage: secureStorageProvider,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
       );
 
@@ -1152,8 +1150,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         profileCubit: profileCubit,
         isEBSIV3: isEBSIV3,
         issuer: issuer,
-        jwtDecode: jwtDecode,
-        oidc4vc: oidc4vc,
       );
 
       final customOidc4vcProfile = profileCubit.state.model.profileSetting
@@ -1305,9 +1301,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             String format,
             String updateNonce,
           ) = await getCredential(
-            oidc4vc: oidc4vc,
             isEBSIV3: isEBSIV3,
-            didKitProvider: didKitProvider,
             credential: selectedCredentials[i],
             issuer: issuer,
             cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,

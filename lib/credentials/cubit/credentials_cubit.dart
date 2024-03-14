@@ -505,16 +505,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
     final privateKey = await getPrivateKey(
-      secureStorage: getSecureStorage,
       didKeyType: didKeyType,
-      oidc4vc: oidc4vc,
+      profileCubit: profileCubit,
     );
 
     final (did, _) = await getDidAndKid(
       didKeyType: didKeyType,
       privateKey: privateKey,
-      secureStorage: getSecureStorage,
-      didKitProvider: didKitProvider,
+      profileCubit: profileCubit,
     );
 
     final private = jsonDecode(privateKey) as Map<String, dynamic>;
@@ -602,9 +600,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
       final privateKey = await getPrivateKey(
-        secureStorage: getSecureStorage,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
-        oidc4vc: oidc4vc,
       );
 
       final private = jsonDecode(privateKey) as Map<String, dynamic>;

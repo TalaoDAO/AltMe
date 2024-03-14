@@ -6,6 +6,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:crypto/crypto.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:matrix/matrix.dart' hide User;
 import 'package:mime/mime.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -60,16 +62,14 @@ class MatrixChatImpl extends MatrixChatInterface {
         .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
     final privateKey = await getPrivateKey(
-      secureStorage: getSecureStorage,
+      profileCubit: profileCubit,
       didKeyType: didKeyType,
-      oidc4vc: oidc4vc,
     );
 
     final (did, kid) = await getDidAndKid(
       didKeyType: didKeyType,
       privateKey: privateKey,
-      secureStorage: getSecureStorage,
-      didKitProvider: didKitProvider,
+      profileCubit: profileCubit,
     );
 
     final username = did.replaceAll(':', '-');
