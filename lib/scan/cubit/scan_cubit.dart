@@ -894,21 +894,27 @@ class ScanCubit extends Cubit<ScanState> {
     if (presentationDefinition.format != null) {
       final ldpVc = presentationDefinition.format?.ldpVc != null;
       final jwtVc = presentationDefinition.format?.jwtVc != null;
+      final jwtVcJson = presentationDefinition.format?.jwtVcJson != null;
 
       if (ldpVc) {
         vcFormat = 'ldp_vc';
       } else if (jwtVc) {
         vcFormat = 'jwt_vc';
+      } else if (jwtVcJson) {
+        vcFormat = 'jwt_vc_json';
       }
 
       final ldpVp = presentationDefinition.format?.ldpVp != null;
       final jwtVp = presentationDefinition.format?.jwtVp != null;
+      final jwtVpJson = presentationDefinition.format?.jwtVpJson != null;
       final vcSdJwt = presentationDefinition.format?.vcSdJwt != null;
 
       if (ldpVp) {
         vpFormat = 'ldp_vp';
       } else if (jwtVp) {
         vpFormat = 'jwt_vp';
+      } else if (jwtVpJson) {
+        vpFormat = 'jwt_vp_json';
       } else if (vcSdJwt) {
         vpFormat = 'vc+sd-jwt';
       }
@@ -928,12 +934,16 @@ class ScanCubit extends Cubit<ScanState> {
         vcFormat = 'ldp_vc';
       } else if (vpFormats.containsKey('jwt_vc')) {
         vcFormat = 'jwt_vc';
+      } else if (vpFormats.containsKey('jwt_vc_json')) {
+        vcFormat = 'jwt_vc_json';
       }
 
       if (vpFormats.containsKey('ldp_vp')) {
         vpFormat = 'ldp_vp';
       } else if (vpFormats.containsKey('jwt_vp')) {
         vpFormat = 'jwt_vp';
+      } else if (vpFormats.containsKey('jwt_vp_json')) {
+        vpFormat = 'jwt_vp_json';
       } else if (vpFormats.containsKey('vc+sd-jwt')) {
         vpFormat = 'vc+sd-jwt';
       }
@@ -947,6 +957,8 @@ class ScanCubit extends Cubit<ScanState> {
         vcFormat = 'ldp_vc';
       } else if (vcFormatType == VCFormatType.jwtVc) {
         vcFormat = 'jwt_vc';
+      } else if (vcFormatType == VCFormatType.jwtVcJson) {
+        vcFormat = 'jwt_vc_json';
       }
     }
 
@@ -1057,6 +1069,7 @@ class ScanCubit extends Cubit<ScanState> {
 
     bool presentLdpVc = false;
     bool presentJwtVc = false;
+    bool presentJwtVcJson = false;
     bool presentVcSdJwt = false;
 
     if (presentationDefinition.format != null) {
@@ -1065,6 +1078,9 @@ class ScanCubit extends Cubit<ScanState> {
 
       /// jwt_vc
       presentJwtVc = presentationDefinition.format?.jwtVc != null;
+
+      /// jwt_vc_json
+      presentJwtVcJson = presentationDefinition.format?.jwtVcJson != null;
 
       /// vc+sd-jwt
       presentVcSdJwt = presentationDefinition.format?.vcSdJwt != null;
@@ -1086,6 +1102,9 @@ class ScanCubit extends Cubit<ScanState> {
       /// jwt_vc
       presentJwtVc = vpFormats.containsKey('jwt_vc');
 
+      /// jwt_vc_json
+      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json');
+
       /// vc+sd-jwt
       presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
     }
@@ -1097,13 +1116,18 @@ class ScanCubit extends Cubit<ScanState> {
 
     if (!presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
       presentLdpVc = true;
-    } else if (!presentJwtVc && vcFormatType == VCFormatType.jwtVc) {
+    } else if (!presentJwtVc && (vcFormatType == VCFormatType.jwtVc)) {
       presentJwtVc = true;
+    } else if (!presentJwtVcJson && (vcFormatType == VCFormatType.jwtVcJson)) {
+      presentJwtVcJson = true;
     } else if (!presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
       presentVcSdJwt = true;
     }
 
-    if (!presentLdpVc && !presentJwtVc && !presentVcSdJwt) {
+    if (!presentLdpVc &&
+        !presentJwtVc &&
+        !presentJwtVcJson &&
+        !presentVcSdJwt) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_request',
@@ -1134,7 +1158,7 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey,
       );
       return vpToken;
-    } else if (presentJwtVc || presentVcSdJwt) {
+    } else if (presentJwtVc || presentJwtVcJson || presentVcSdJwt) {
       final credentialList =
           credentialsToBePresented.map((e) => jsonEncode(e.toJson())).toList();
 

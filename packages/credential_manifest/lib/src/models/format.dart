@@ -8,6 +8,8 @@ class Format {
   Format({
     this.jwtVp,
     this.jwtVc,
+    this.jwtVpJson,
+    this.jwtVcJson,
     this.ldpVp,
     this.ldpVc,
     this.vcSdJwt,
@@ -19,6 +21,10 @@ class Format {
   FormatType? jwtVp;
   @JsonKey(name: 'jwt_vc')
   FormatType? jwtVc;
+  @JsonKey(name: 'jwt_vp_json')
+  FormatType? jwtVpJson;
+  @JsonKey(name: 'jwt_vc_json')
+  FormatType? jwtVcJson;
   @JsonKey(name: 'ldp_vp')
   FormatType? ldpVp;
   @JsonKey(name: 'ldp_vc')
