@@ -9,7 +9,6 @@ import 'package:convert/convert.dart';
 
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 
 import 'package:fast_base58/fast_base58.dart';

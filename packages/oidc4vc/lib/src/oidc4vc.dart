@@ -453,7 +453,7 @@ class OIDC4VC {
     final credentialResponseData = <dynamic>[];
 
     if (authorizationDetails != null) {
-      final dynamic authDetailForCredential = authorizationDetails!
+      final dynamic authDetailForCredential = authorizationDetails
           .where(
             (dynamic ele) =>
                 ele is Map<String, dynamic> &&
