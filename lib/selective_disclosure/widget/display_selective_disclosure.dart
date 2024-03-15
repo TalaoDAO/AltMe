@@ -6,7 +6,6 @@ import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:json_path/json_path.dart';
 
 class DisplaySelectiveDisclosure extends StatelessWidget {
   const DisplaySelectiveDisclosure({
@@ -45,7 +44,8 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
 
           if (display == null) return Container();
           title = display['name'].toString();
-          data = getData(selectiveDisclosure.values, credentialModel, key);
+          data =
+              getClaimsData(selectiveDisclosure.values, credentialModel, key);
 
           if (data == null) return Container();
 
@@ -112,32 +112,5 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
     } else {
       return null;
     }
-  }
-
-  String? getData(
-    Map<String, dynamic> uncryptedDatas,
-    CredentialModel credentialModel,
-    String key,
-  ) {
-    String? data;
-
-    final JsonPath dataPath = JsonPath(
-      // ignore: prefer_interpolation_to_compose_strings
-      r'$..' + key,
-    );
-
-    try {
-      final uncryptedDataPath = dataPath.read(uncryptedDatas).first;
-      data = uncryptedDataPath.value.toString();
-    } catch (e) {
-      try {
-        final credentialModelPath = dataPath.read(credentialModel.data).first;
-        data = credentialModelPath.value.toString();
-      } catch (e) {
-        data = null;
-      }
-    }
-
-    return data;
   }
 }

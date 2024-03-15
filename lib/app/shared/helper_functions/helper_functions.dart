@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 
@@ -1590,4 +1591,68 @@ Future<(String?, String?, String?, String?)> getClientDetails({
     }
   }
   return (display, credentialSupported);
+}
+
+String? getClaimsData(
+  Map<String, dynamic> uncryptedDatas,
+  CredentialModel credentialModel,
+  String key,
+) {
+  String? data;
+
+  final JsonPath dataPath = JsonPath(
+    // ignore: prefer_interpolation_to_compose_strings
+    r'$..' + key,
+  );
+
+  try {
+    final uncryptedDataPath = dataPath.read(uncryptedDatas).first;
+    data = uncryptedDataPath.value.toString();
+  } catch (e) {
+    try {
+      final credentialModelPath = dataPath.read(credentialModel.data).first;
+      data = credentialModelPath.value.toString();
+    } catch (e) {
+      data = null;
+    }
+  }
+
+  return data;
+}
+
+String? getPicture({
+  required CredentialModel credentialModel,
+}) {
+  if (credentialModel.format.toString() != VCFormatType.vcSdJWT.value) {
+    return null;
+  }
+
+  final credentialSupported = credentialModel.credentialSupported;
+  if (credentialSupported == null) return null;
+
+  final claims = credentialSupported['claims'];
+  if (claims is! Map<String, dynamic>) return null;
+
+  final picture = claims['picture'];
+  if (picture == null) return null;
+  if (picture is! Map<String, dynamic>) return null;
+
+  if (picture.containsKey('mandatory')) {
+    final mandatory = picture['mandatory'];
+    if (mandatory is! bool) return null;
+  }
+
+  final valueType = picture['value_type'];
+  if (valueType == null) return null;
+
+  if (valueType == 'image/jpeg') {
+    final selectiveDisclosure = SelectiveDisclosure(credentialModel);
+
+    final data =
+        getClaimsData(selectiveDisclosure.values, credentialModel, 'picture');
+
+    return data;
+  } else {
+    return null;
+  }
 }

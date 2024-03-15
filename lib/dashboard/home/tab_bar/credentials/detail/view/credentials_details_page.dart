@@ -144,6 +144,17 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     final isSecure = profileData.profileSetting.selfSovereignIdentityOptions
         .customOidc4vcProfile.securityLevel;
 
+    final credentialSupported = widget.credentialModel.credentialSupported;
+
+    final claims = credentialSupported?['claims'];
+    final containClaims = claims != null;
+
+    String? credentialImage;
+
+    if (containClaims) {
+      credentialImage = getPicture(credentialModel: widget.credentialModel);
+    }
+
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -188,11 +199,30 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        CredentialDisplay(
-                          credentialModel: widget.credentialModel,
-                          credDisplayType: CredDisplayType.Detail,
-                          profileSetting: profileSetting,
-                        ),
+                        if (credentialImage != null)
+                          AspectRatio(
+                            aspectRatio: Sizes.credentialAspectRatio,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                Sizes.credentialBorderRadius,
+                              ),
+                              child: CachedImageFromNetwork(
+                                credentialImage,
+                                fit: BoxFit.contain,
+                                width: double.infinity,
+                                bgColor: Colors.transparent,
+                                height: double.infinity,
+                                errorMessage: '',
+                                showLoading: false,
+                              ),
+                            ),
+                          )
+                        else
+                          CredentialDisplay(
+                            credentialModel: widget.credentialModel,
+                            credDisplayType: CredDisplayType.Detail,
+                            profileSetting: profileSetting,
+                          ),
                         const SizedBox(height: 20),
                         Column(
                           children: [
@@ -304,10 +334,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
                           /// selective disclouse data - _sd
                           /// and normal data too
-                          if (widget.credentialModel.credentialSupported !=
-                                  null &&
-                              widget.credentialModel.credentialSupported!
-                                  .containsKey('claims')) ...[
+                          if (containClaims) ...[
                             DisplaySelectiveDisclosure(
                               credentialModel: widget.credentialModel,
                               claims: null,
