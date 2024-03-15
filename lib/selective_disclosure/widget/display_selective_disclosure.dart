@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/widget/base/credential_field.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
@@ -88,34 +89,26 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
       if (displays is! List<dynamic>) return null;
       if (displays.isEmpty) return null;
 
-      final displaySelectedLanguage = displays.where((element) {
-        if (element is Map<String, dynamic> && element.containsKey('locale')) {
-          if (element['locale'].toString().contains(languageCode)) {
-            return true;
-          }
-          return false;
-        }
-        return false;
-      }).firstOrNull;
+      final display = displays.firstWhere(
+        (element) =>
+            element is Map<String, dynamic> &&
+            element.containsKey('locale') &&
+            element['locale'].toString().contains(languageCode),
+        orElse: () => displays.firstWhere(
+          (element) =>
+              element is Map<String, dynamic> &&
+              element.containsKey('locale') &&
+              element['locale'].toString().contains('en'),
+          orElse: () => displays.firstWhere(
+            (element) =>
+                element is Map<String, dynamic> &&
+                element.containsKey('locale'),
+            orElse: () => null,
+          ),
+        ),
+      );
 
-      final displayEnglish = displays.where((element) {
-        if (element is Map<String, dynamic> && element.containsKey('locale')) {
-          if (element['locale'].toString().contains('en')) {
-            return true;
-          }
-          return false;
-        }
-        return false;
-      }).firstOrNull;
-
-      final displayFirst = displays.where((element) {
-        if (element is Map<String, dynamic> && element.containsKey('locale')) {
-          return true;
-        }
-        return false;
-      }).firstOrNull;
-
-      return displaySelectedLanguage ?? displayEnglish ?? displayFirst;
+      return display;
     } else {
       return null;
     }

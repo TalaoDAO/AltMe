@@ -1538,14 +1538,19 @@ Future<(String?, String?, String?, String?)> getClientDetails({
     if (credSupported != null) {
       credentialSupported = credSupported.toJson();
 
-      if (credSupported.display != null) {
-        display = credSupported.display!.firstWhereOrNull(
-          (Display display) => display.locale.toString().contains(languageCode),
-        );
+      final credSupportedDisplay = credSupported.display;
 
-        display ??= credSupported.display!.firstWhereOrNull(
-          (Display display) => display.locale.toString().contains('en'),
-        );
+      if (credSupportedDisplay != null) {
+        display = credSupportedDisplay.firstWhereOrNull(
+              (Display display) =>
+                  display.locale.toString().contains(languageCode),
+            ) ??
+            credSupportedDisplay.firstWhereOrNull(
+              (Display display) => display.locale.toString().contains('en'),
+            ) ??
+            credSupportedDisplay.firstWhereOrNull(
+              (Display display) => display.locale != null,
+            );
       }
     }
   } else if (openIdConfiguration.credentialConfigurationsSupported != null) {
@@ -1570,13 +1575,15 @@ Future<(String?, String?, String?, String?)> getClientDetails({
                 .toList();
 
             display = displays.firstWhereOrNull(
-              (Display display) =>
-                  display.locale.toString().contains(languageCode),
-            );
-
-            display ??= displays.firstWhereOrNull(
-              (Display display) => display.locale.toString().contains('en'),
-            );
+                  (Display display) =>
+                      display.locale.toString().contains(languageCode),
+                ) ??
+                displays.firstWhereOrNull(
+                  (Display display) => display.locale.toString().contains('en'),
+                ) ??
+                displays.firstWhereOrNull(
+                  (Display display) => display.locale != null,
+                );
           }
         }
       }
