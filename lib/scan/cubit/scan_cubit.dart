@@ -322,15 +322,13 @@ class ScanCubit extends Cubit<ScanState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
       final privateKey = await fetchPrivateKey(
-        oidc4vc: oidc4vc,
-        secureStorage: secureStorageProvider,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
       );
 
       final (did, kid) = await fetchDidAndKid(
         privateKey: privateKey,
-        didKitProvider: didKitProvider,
-        secureStorage: secureStorageProvider,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
       );
 
