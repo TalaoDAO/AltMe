@@ -152,11 +152,12 @@ class SelectiveDisclosurePickView extends StatelessWidget {
     );
   }
 
-  Future<void> present(
-      {required BuildContext context,
-      required CredentialManifestPickState credentialManifestState,
-      PresentationDefinition? presentationDefinition,
-      required bool skip}) async {
+  Future<void> present({
+    required BuildContext context,
+    required CredentialManifestPickState credentialManifestState,
+    PresentationDefinition? presentationDefinition,
+    required bool skip,
+  }) async {
     final bool userPINCodeForAuthentication = context
         .read<ProfileCubit>()
         .state
@@ -164,6 +165,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
         .profileSetting
         .walletSecurityOptions
         .secureSecurityAuthenticationWithPinCode;
+
     if (userPINCodeForAuthentication) {
       /// Authenticate
       bool authenticated = false;
@@ -179,7 +181,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
         return;
       }
     }
-    await context.read<ScanCubit>().PresentSdJwt(
+    await context.read<ScanCubit>().presentSdJwt(
           uri: uri,
           credentialModel: credential,
           keyId: SecureStorageKeys.ssiKey,

@@ -307,7 +307,7 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  Future<void> PresentSdJwt({
+  Future<void> presentSdJwt({
     required Uri uri,
     required CredentialModel credentialModel,
     required String keyId,
@@ -747,10 +747,11 @@ class ScanCubit extends Cubit<ScanState> {
         nonce: nonce,
         proofHeaderType: customOidc4vcProfile.proofHeader,
       );
+
       final pathNested = {
         'id': presentationDefinition.inputDescriptors[0].id,
         'format': 'vc+sd-jwt',
-        'path': r'$.vp.verifiableCredential[0]',
+        'path': r'$',
       };
 
       /// for the first version we consider just one inputDescriptor
@@ -761,15 +762,14 @@ class ScanCubit extends Cubit<ScanState> {
         'path': r'$',
         'path_nested': pathNested,
       });
-      final uuid1 = const Uuid().v4();
 
+      final uuid1 = const Uuid().v4();
       final Map<String, dynamic> presentationSubmission = {
         'id': uuid1,
         'definition_id': presentationDefinition.id,
       };
 
       presentationSubmission['descriptor_map'] = inputDescriptors;
-
       final presentationSubmissionString = jsonEncode(presentationSubmission);
 
       final responseData = <String, dynamic>{
@@ -985,6 +985,8 @@ class ScanCubit extends Cubit<ScanState> {
           if (credentialsToBePresented.length == 1) {
             if (vpFormat == 'ldp_vp') {
               pathNested['path'] = r'$.verifiableCredential';
+            } else if (vpFormat == 'vc+sd-jwt') {
+              pathNested['path'] = r'$';
             } else {
               pathNested['path'] = r'$.vp.verifiableCredential[0]';
             }
@@ -1000,6 +1002,8 @@ class ScanCubit extends Cubit<ScanState> {
               pathNested['path'] =
                   // ignore: prefer_interpolation_to_compose_strings
                   r'$.verifiableCredential[' + i.toString() + ']';
+            } else if (vpFormat == 'vc+sd-jwt') {
+              pathNested['path'] = r'$';
             } else {
               pathNested['path'] =
                   // ignore: prefer_interpolation_to_compose_strings
