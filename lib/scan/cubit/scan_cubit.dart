@@ -307,65 +307,6 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  Future<void> presentSdJwt({
-    required Uri uri,
-    required CredentialModel credentialModel,
-    required String keyId,
-    required List<String> disclosuresToBePresented,
-    required Issuer issuer,
-    QRCodeScanCubit? qrCodeScanCubit,
-  }) async {
-    final log = getLogger('ScanCubit - PresentSdJwt');
-
-    try {
-      final didKeyType = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
-
-      final privateKey = await fetchPrivateKey(
-        profileCubit: profileCubit,
-        didKeyType: didKeyType,
-      );
-
-      final (did, kid) = await fetchDidAndKid(
-        privateKey: privateKey,
-        profileCubit: profileCubit,
-        didKeyType: didKeyType,
-      );
-
-      final responseType = uri.queryParameters['response_type'] ?? '';
-      final stateValue = uri.queryParameters['state'];
-
-      await presentDisclosuresToOIDC4VPAndSIOPV2Request(
-        uri: uri,
-        issuer: issuer,
-        disclosuresToBePresented: disclosuresToBePresented,
-        presentationDefinition:
-            credentialModel.credentialManifest!.presentationDefinition!,
-        oidc4vc: oidc4vc,
-        did: did,
-        kid: kid,
-        privateKey: privateKey,
-        stateValue: stateValue,
-        idTokenNeeded: responseType.contains('id_token'),
-        qrCodeScanCubit: qrCodeScanCubit!,
-      );
-      return;
-    } catch (e) {
-      log.e('something went wrong - $e');
-      if (e is NetworkException &&
-          e.message == NetworkError.NETWORK_ERROR_PRECONDITION_FAILED) {
-        emitError(
-          ResponseMessage(
-            message: ResponseString.RESPONSE_STRING_userNotFitErrorMessage,
-            data: e.data?.toString(),
-          ),
-        );
-      } else {
-        emitError(e);
-      }
-    }
-  }
-
   Future<void> verifiablePresentationRequest({
     required String url,
     required List<CredentialModel> credentialsToBePresented,
@@ -688,189 +629,6 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  Future<dynamic> presentDisclosuresToOIDC4VPAndSIOPV2Request({
-    required List<String> disclosuresToBePresented,
-    required PresentationDefinition presentationDefinition,
-    required Issuer issuer,
-    required OIDC4VC oidc4vc,
-    required String privateKey,
-    required String did,
-    required String kid,
-    required Uri uri,
-    required String? stateValue,
-    required bool idTokenNeeded,
-    required QRCodeScanCubit qrCodeScanCubit,
-  }) async {
-    final log =
-        getLogger('ScanCubit - presentCredentialToOIDC4VPAndSIOPV2Request');
-    emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
-
-    try {
-      final String responseOrRedirectUri =
-          uri.queryParameters['redirect_uri'] ??
-              uri.queryParameters['response_uri']!;
-
-      final clientId = uri.queryParameters['client_id'] ?? '';
-      final nonce = uri.queryParameters['nonce'] ?? '';
-      final customOidc4vcProfile = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile;
-
-      String? idToken;
-
-      if (idTokenNeeded) {
-        idToken = await oidc4vc.extractIdToken(
-          clientId: clientId,
-          credentialsToBePresented: disclosuresToBePresented,
-          did: did,
-          kid: kid,
-          privateKey: privateKey,
-          nonce: nonce,
-          clientType: customOidc4vcProfile.clientType,
-          proofHeaderType: customOidc4vcProfile.proofHeader,
-        );
-      }
-
-      // ignore: unused_local_variable
-      Map<String, dynamic>? clientMetaData;
-
-      if (presentationDefinition.format == null) {
-        clientMetaData = await getClientMetada(client: client, uri: uri);
-      }
-
-      final vpToken = await oidc4vc.extractVpToken(
-        clientId: clientId,
-        credentialsToBePresented: disclosuresToBePresented,
-        did: did,
-        kid: kid,
-        privateKey: privateKey,
-        nonce: nonce,
-        proofHeaderType: customOidc4vcProfile.proofHeader,
-      );
-
-      final pathNested = {
-        'id': presentationDefinition.inputDescriptors[0].id,
-        'format': 'vc+sd-jwt',
-        'path': r'$',
-      };
-
-      /// for the first version we consider just one inputDescriptor
-      final inputDescriptors = <Map<String, dynamic>>[];
-      inputDescriptors.add({
-        'id': presentationDefinition.inputDescriptors[0].id,
-        'format': 'vc+sd-jwt',
-        'path': r'$',
-        'path_nested': pathNested,
-      });
-
-      final uuid1 = const Uuid().v4();
-      final Map<String, dynamic> presentationSubmission = {
-        'id': uuid1,
-        'definition_id': presentationDefinition.id,
-      };
-
-      presentationSubmission['descriptor_map'] = inputDescriptors;
-      final presentationSubmissionString = jsonEncode(presentationSubmission);
-
-      final responseData = <String, dynamic>{
-        'vp_token': vpToken,
-        'presentation_submission': presentationSubmissionString,
-      };
-
-      if (idTokenNeeded && idToken != null) {
-        responseData['id_token'] = idToken;
-      }
-
-      if (stateValue != null) {
-        responseData['state'] = stateValue;
-      }
-
-      await Future<void>.delayed(const Duration(seconds: 2));
-      final response = await client.dio.post<dynamic>(
-        responseOrRedirectUri,
-        data: responseData,
-        options: Options(
-          headers: <String, dynamic>{
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          followRedirects: false,
-          validateStatus: (status) {
-            return status != null && status < 400;
-          },
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        // await presentationActivity(
-        //   credentialModels: disclosuresToBePresented,
-        //   issuer: issuer,
-        // );
-        emit(
-          state.copyWith(
-            status: ScanStatus.success,
-            message: StateMessage.success(
-              messageHandler: ResponseMessage(
-                message: ResponseString
-                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
-              ),
-            ),
-          ),
-        );
-        final data = response.data;
-        if (data is Map) {
-          String url = '';
-          if (data.containsKey('redirect_uri')) {
-            url = data['redirect_uri'].toString();
-          }
-          if (url.isNotEmpty && data.containsKey('response_code')) {
-            url = '$url?response_code=${data['response_code']}';
-          }
-          if (url.isNotEmpty) {
-            await LaunchUrl.launch(
-              url,
-              launchMode: LaunchMode.inAppWebView,
-            );
-          }
-        }
-      } else if (response.statusCode == 302) {
-        // await presentationActivity(
-        //   credentialModels: disclosuresToBePresented,
-        //   issuer: issuer,
-        // );
-
-        String? url;
-
-        if (response.headers.map.containsKey('location') &&
-            response.headers.map['location'] != null &&
-            response.headers.map['location'] is List<dynamic> &&
-            (response.headers.map['location']!).isNotEmpty) {
-          url = response.headers.map['location']![0];
-        }
-
-        if (url != null) {
-          final uri = Uri.parse(url);
-          if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
-            emit(state.copyWith(status: ScanStatus.goBack));
-            await qrCodeScanCubit.authorizedFlowStart(uri);
-            return;
-          }
-        } else {
-          throw ResponseMessage(
-            message: ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
-          );
-        }
-      } else {
-        throw ResponseMessage(
-          message: ResponseString
-              .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-        );
-      }
-    } catch (e, s) {
-      log.e('something went wrong - $e', error: e, stackTrace: s);
-      emitError(e);
-    }
-  }
-
   Future<String> getPresentationSubmission({
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
@@ -1152,8 +910,10 @@ class ScanCubit extends Cubit<ScanState> {
       );
       return vpToken;
     } else if (presentJwtVc || presentJwtVcJson || presentVcSdJwt) {
-      final credentialList =
-          credentialsToBePresented.map((e) => jsonEncode(e.toJson())).toList();
+      final credentialList = getStringCredentialsForToken(
+        credentialsToBePresented: credentialsToBePresented,
+        profileCubit: profileCubit,
+      );
 
       final vpToken = await oidc4vc.extractVpToken(
         clientId: clientId,
@@ -1179,8 +939,10 @@ class ScanCubit extends Cubit<ScanState> {
     required String kid,
     required Uri uri,
   }) async {
-    final credentialList =
-        credentialsToBePresented.map((e) => jsonEncode(e.toJson())).toList();
+    final credentialList = getStringCredentialsForToken(
+      credentialsToBePresented: credentialsToBePresented,
+      profileCubit: profileCubit,
+    );
 
     final nonce = uri.queryParameters['nonce'] ?? '';
     final clientId = uri.queryParameters['client_id'] ?? '';

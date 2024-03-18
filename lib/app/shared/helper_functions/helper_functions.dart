@@ -1593,11 +1593,12 @@ Future<(String?, String?, String?, String?)> getClientDetails({
   return (display, credentialSupported);
 }
 
-String? getClaimsData(
-  Map<String, dynamic> uncryptedDatas,
-  CredentialModel credentialModel,
-  String key,
-) {
+String? getClaimsData({
+  required Map<String, dynamic> uncryptedDatas,
+  required CredentialModel credentialModel,
+  required String key,
+  required bool selectFromSelectiveDisclosure,
+}) {
   String? data;
 
   final JsonPath dataPath = JsonPath(
@@ -1609,11 +1610,13 @@ String? getClaimsData(
     final uncryptedDataPath = dataPath.read(uncryptedDatas).first;
     data = uncryptedDataPath.value.toString();
   } catch (e) {
-    try {
-      final credentialModelPath = dataPath.read(credentialModel.data).first;
-      data = credentialModelPath.value.toString();
-    } catch (e) {
-      data = null;
+    if (!selectFromSelectiveDisclosure) {
+      try {
+        final credentialModelPath = dataPath.read(credentialModel.data).first;
+        data = credentialModelPath.value.toString();
+      } catch (e) {
+        data = null;
+      }
     }
   }
 
@@ -1648,11 +1651,33 @@ String? getPicture({
   if (valueType == 'image/jpeg') {
     final selectiveDisclosure = SelectiveDisclosure(credentialModel);
 
-    final data =
-        getClaimsData(selectiveDisclosure.values, credentialModel, 'picture');
+    final data = getClaimsData(
+      uncryptedDatas: selectiveDisclosure.values,
+      credentialModel: credentialModel,
+      key: 'picture',
+      selectFromSelectiveDisclosure: false,
+    );
 
     return data;
   } else {
     return null;
   }
+}
+
+List<String> getStringCredentialsForToken({
+  required List<CredentialModel> credentialsToBePresented,
+  required ProfileCubit profileCubit,
+}) {
+  final credentialList = credentialsToBePresented.map((item) {
+    final isVcSdJWT = profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType ==
+        VCFormatType.vcSdJWT;
+    if (isVcSdJWT) {
+      return item.selectiveDisclosureJwt ?? jsonEncode(item.toJson());
+    }
+
+    return jsonEncode(item.toJson());
+  }).toList();
+
+  return credentialList;
 }
