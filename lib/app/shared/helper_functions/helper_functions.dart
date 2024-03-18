@@ -7,6 +7,7 @@ import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart';
 
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -1508,7 +1509,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
         final jwtProofOfPossession = profileCubit.oidc4vc.generateToken(
           payload: payload,
           tokenParameters: tokenParameters,
-          clientSecretJwt: true,
+          ignoreProofHeaderType: true,
         );
 
         clientAssertion = '$walletAttestationData~$jwtProofOfPossession';
@@ -1680,4 +1681,10 @@ List<String> getStringCredentialsForToken({
   }).toList();
 
   return credentialList;
+}
+
+String hash(String text) {
+  final bytes = utf8.encode(text);
+  final digest = sha256.convert(bytes);
+  return base64Url.encode(digest.bytes).replaceAll('=', '');
 }

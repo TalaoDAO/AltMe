@@ -909,7 +909,7 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey,
       );
       return vpToken;
-    } else if (presentJwtVc || presentJwtVcJson || presentVcSdJwt) {
+    } else if (presentJwtVc || presentJwtVcJson) {
       final credentialList = getStringCredentialsForToken(
         credentialsToBePresented: credentialsToBePresented,
         profileCubit: profileCubit,
@@ -924,6 +924,16 @@ class ScanCubit extends Cubit<ScanState> {
         nonce: nonce,
         proofHeaderType: customOidc4vcProfile.proofHeader,
       );
+
+      return vpToken;
+    } else if (presentVcSdJwt) {
+      final credentialList = getStringCredentialsForToken(
+        credentialsToBePresented: credentialsToBePresented,
+        profileCubit: profileCubit,
+      );
+
+      final vpToken = credentialList.first;
+      // considering only one
 
       return vpToken;
     } else {

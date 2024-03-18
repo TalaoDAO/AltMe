@@ -1409,7 +1409,7 @@ class OIDC4VC {
   String generateToken({
     required Map<String, dynamic> payload,
     required TokenParameters tokenParameters,
-    bool clientSecretJwt = false,
+    bool ignoreProofHeaderType = false,
   }) {
     final kty = tokenParameters.privateKey['kty'].toString();
 
@@ -1441,8 +1441,9 @@ class OIDC4VC {
         // add a key to sign, can only add one for JWT
         ..addRecipient(key, algorithm: tokenParameters.alg);
 
-      if (!clientSecretJwt) {
+      if (!ignoreProofHeaderType) {
         /// Proof Header Type is ignored for clientSecretJwt
+        //  also ignored for KB jwt
         vpBuilder.setProtectedHeader('typ', tokenParameters.mediaType.typ);
 
         switch (tokenParameters.proofHeaderType) {

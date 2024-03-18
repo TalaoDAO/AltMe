@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -5,6 +7,7 @@ import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class SelectiveDisclosurePickPage extends StatelessWidget {
   const SelectiveDisclosurePickPage({
@@ -112,7 +115,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
                         : () => present(
                               context: context,
                               selectedIndex: state.selected,
-                              skip: false,
+                              uri: uri,
                             ),
                     text: l10n.credentialPickPresent,
                   ),
@@ -128,7 +131,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
   Future<void> present({
     required BuildContext context,
     required List<int> selectedIndex,
-    required bool skip,
+    required Uri uri,
   }) async {
     final bool userPINCodeForAuthentication = context
         .read<ProfileCubit>()
@@ -164,6 +167,52 @@ class SelectiveDisclosurePickView extends StatelessWidget {
       for (final index in selectedIndex) {
         newJwt = '$newJwt${encryptedValues[index]}~';
       }
+
+      // Key Binding JWT
+
+      final profileCubit = context.read<ProfileCubit>();
+
+      final customOidc4vcProfile = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+      final didKeyType = customOidc4vcProfile.defaultDid;
+
+      final privateKey = await fetchPrivateKey(
+        profileCubit: profileCubit,
+        didKeyType: didKeyType,
+      );
+
+      final tokenParameters = TokenParameters(
+        privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
+        did: '', // just added as it is required field
+        mediaType: MediaType.selectiveDisclosure,
+        clientType:
+            ClientType.jwkThumbprint, // just added as it is required field
+        proofHeaderType: customOidc4vcProfile.proofHeader,
+        clientId: '', // just added as it is required field
+      );
+
+      final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+      final sdHash = hash(newJwt);
+
+      final nonce = uri.queryParameters['nonce'] ?? '';
+      final clientId = uri.queryParameters['client_id'] ?? '';
+
+      final payload = {
+        'nonce': nonce,
+        'aud': clientId,
+        'iat': iat,
+        'sd_hash': sdHash,
+      };
+
+      /// sign and get token
+      final jwtToken = profileCubit.oidc4vc.generateToken(
+        payload: payload,
+        tokenParameters: tokenParameters,
+        ignoreProofHeaderType: true,
+      );
+
+      newJwt = '$newJwt$jwtToken';
 
       final CredentialModel newModel =
           credentialToBePresented.copyWith(selectiveDisclosureJwt: newJwt);
