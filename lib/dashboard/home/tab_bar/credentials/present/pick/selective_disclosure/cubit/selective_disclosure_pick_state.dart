@@ -5,6 +5,7 @@ class SelectiveDisclosureState extends Equatable {
   const SelectiveDisclosureState({
     this.message,
     this.selected = const [],
+    this.selectedSDIndexInJWT = const [],
   });
 
   factory SelectiveDisclosureState.fromJson(Map<String, dynamic> json) =>
@@ -12,13 +13,16 @@ class SelectiveDisclosureState extends Equatable {
 
   final StateMessage? message;
   final List<int> selected;
+  final List<int> selectedSDIndexInJWT;
 
   SelectiveDisclosureState copyWith({
     List<int>? selected,
+    List<int>? selectedSDIndexInJWT,
     StateMessage? message,
   }) {
     return SelectiveDisclosureState(
       selected: selected ?? this.selected,
+      selectedSDIndexInJWT: selectedSDIndexInJWT ?? this.selectedSDIndexInJWT,
       message: message,
     );
   }
@@ -28,6 +32,7 @@ class SelectiveDisclosureState extends Equatable {
   @override
   List<Object?> get props => [
         selected,
+        selectedSDIndexInJWT,
         message,
       ];
 }

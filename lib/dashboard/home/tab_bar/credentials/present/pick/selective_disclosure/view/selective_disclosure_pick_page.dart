@@ -100,8 +100,11 @@ class SelectiveDisclosurePickView extends StatelessWidget {
               credentialModel: credentialToBePresented,
               claims: null,
               selectedIndex: state.selected,
-              onPressed: (index) {
-                context.read<SelectiveDisclosureCubit>().toggle(index);
+              onPressed: (claimIndex, sdIndexInJWT) {
+                context.read<SelectiveDisclosureCubit>().toggle(claimIndex);
+                context
+                    .read<SelectiveDisclosureCubit>()
+                    .saveIndexOfSDJWT(sdIndexInJWT);
               },
             ),
             navigation: SafeArea(
@@ -114,7 +117,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
                         ? null
                         : () => present(
                               context: context,
-                              selectedIndex: state.selected,
+                              selectedSDIndexInJWT: state.selectedSDIndexInJWT,
                               uri: uri,
                             ),
                     text: l10n.credentialPickPresent,
@@ -130,7 +133,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
 
   Future<void> present({
     required BuildContext context,
-    required List<int> selectedIndex,
+    required List<int> selectedSDIndexInJWT,
     required Uri uri,
   }) async {
     final bool userPINCodeForAuthentication = context
@@ -157,14 +160,17 @@ class SelectiveDisclosurePickView extends StatelessWidget {
       }
     }
 
-    final encryptedValues = credentialToBePresented.jwt?.split('~');
+    final encryptedValues = credentialToBePresented.jwt
+        ?.split('~')
+        .where((element) => element.isNotEmpty)
+        .toList();
 
     if (encryptedValues != null) {
       var newJwt = '${encryptedValues[0]}~';
 
       encryptedValues.removeAt(0);
 
-      for (final index in selectedIndex) {
+      for (final index in selectedSDIndexInJWT) {
         newJwt = '$newJwt${encryptedValues[index]}~';
       }
 

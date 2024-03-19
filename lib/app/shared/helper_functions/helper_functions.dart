@@ -1595,7 +1595,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
 }
 
 String? getClaimsData({
-  required Map<String, dynamic> uncryptedDatas,
+  required Map<String, dynamic> encryptedDatas,
   required CredentialModel credentialModel,
   required String key,
   required bool selectFromSelectiveDisclosure,
@@ -1608,7 +1608,7 @@ String? getClaimsData({
   );
 
   try {
-    final uncryptedDataPath = dataPath.read(uncryptedDatas).first;
+    final uncryptedDataPath = dataPath.read(encryptedDatas).first;
     data = uncryptedDataPath.value.toString();
   } catch (e) {
     if (!selectFromSelectiveDisclosure) {
@@ -1653,7 +1653,7 @@ String? getPicture({
     final selectiveDisclosure = SelectiveDisclosure(credentialModel);
 
     final data = getClaimsData(
-      uncryptedDatas: selectiveDisclosure.values,
+      encryptedDatas: selectiveDisclosure.extractedValuesFromJwt,
       credentialModel: credentialModel,
       key: 'picture',
       selectFromSelectiveDisclosure: false,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
@@ -14,9 +16,11 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
     this.onPressed,
     this.selectedIndex,
   });
+
   final CredentialModel credentialModel;
+
   final Map<String, dynamic>? claims;
-  final void Function(int)? onPressed;
+  final void Function(int, int)? onPressed;
   final List<int>? selectedIndex;
 
   @override
@@ -33,15 +37,19 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
         final key = map.key;
         final value = map.value;
 
-        final index = currentClaims.entries
+        final claimIndex = currentClaims.entries
             .toList()
-            .indexWhere((entry) => entry.key == map.key);
+            .indexWhere((entry) => entry.key == key);
+
+        final sdIndexInJWT = selectiveDisclosure.extractedValuesFromJwt.entries
+            .toList()
+            .indexWhere((entry) => entry.key == key);
 
         final bool hasChildren =
             !(value as Map<String, dynamic>).containsKey('display');
         if (hasChildren && value.isNotEmpty) {
           return TransparentInkWell(
-            onTap: () => onPressed?.call(index),
+            onTap: () => onPressed?.call(claimIndex, sdIndexInJWT),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -57,7 +65,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 15, right: 10),
                     child: Icon(
-                      selectedIndex!.contains(index)
+                      selectedIndex!.contains(claimIndex)
                           ? Icons.check_box
                           : Icons.check_box_outline_blank,
                       size: 25,
@@ -75,16 +83,16 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
           title = display['name'].toString();
 
           data = getClaimsData(
-            uncryptedDatas: selectiveDisclosure.values,
+            encryptedDatas: selectiveDisclosure.extractedValuesFromJwt,
             credentialModel: credentialModel,
             key: key,
-            selectFromSelectiveDisclosure: selectedIndex != null,
+            selectFromSelectiveDisclosure: true,
           );
 
           if (data == null) return Container();
 
           return TransparentInkWell(
-            onTap: () => onPressed?.call(index),
+            onTap: () => onPressed?.call(claimIndex, sdIndexInJWT),
             child: Row(
               children: [
                 Padding(
@@ -102,7 +110,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 15, right: 10),
                     child: Icon(
-                      selectedIndex!.contains(index)
+                      selectedIndex!.contains(claimIndex)
                           ? Icons.check_box
                           : Icons.check_box_outline_blank,
                       size: 25,

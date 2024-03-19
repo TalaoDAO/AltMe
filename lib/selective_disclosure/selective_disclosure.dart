@@ -18,8 +18,11 @@ class SelectiveDisclosure {
     return claims;
   }
 
-  Map<String, dynamic> get values {
-    final encryptedValues = credentialModel.jwt?.split('~');
+  Map<String, dynamic> get extractedValuesFromJwt {
+    final encryptedValues = credentialModel.jwt
+        ?.split('~')
+        .where((element) => element.isNotEmpty)
+        .toList();
     final extractedValues = <String, dynamic>{};
     if (encryptedValues != null) {
       encryptedValues.removeAt(0);
@@ -46,6 +49,5 @@ class SelectiveDisclosure {
       }
     }
     return extractedValues;
-
   }
 }
