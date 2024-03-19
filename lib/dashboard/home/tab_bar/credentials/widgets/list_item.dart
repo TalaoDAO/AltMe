@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
@@ -84,17 +85,13 @@ class CredentialsDisplayItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileSetting =
-        context.read<ProfileCubit>().state.model.profileSetting;
-
     return _BaseItem(
       enabled: true,
       onTap: onTap,
       child: selected == null
-          ? CredentialDisplay(
+          ? DisplayCard(
               credentialModel: credentialModel,
-              credDisplayType: CredDisplayType.List,
-              profileSetting: profileSetting,
+              selected: selected,
             )
           : DisplaySelectionElement(
               credentialModel: credentialModel,
@@ -116,17 +113,12 @@ class DisplaySelectionElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final credential = Credential.fromJsonOrDummy(credentialModel.data);
-    final profileSetting =
-        context.read<ProfileCubit>().state.model.profileSetting;
-
     return CredentialSelectionPadding(
       child: Column(
         children: <Widget>[
-          CredentialDisplay(
+          DisplayCard(
             credentialModel: credentialModel,
-            credDisplayType: CredDisplayType.List,
-            profileSetting: profileSetting,
+            selected: selected,
           ),
           Align(
             alignment: Alignment.centerRight,
@@ -145,24 +137,45 @@ class DisplaySelectionElement extends StatelessWidget {
   }
 }
 
-class CredentialIcon extends StatelessWidget {
-  const CredentialIcon({
+class DisplayCard extends StatelessWidget {
+  const DisplayCard({
     super.key,
-    required this.iconData,
-    this.color,
-    this.size = 24,
+    required this.credentialModel,
+    this.selected,
   });
 
-  final IconData iconData;
-  final Color? color;
-  final double size;
+  final CredentialModel credentialModel;
+  final bool? selected;
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      iconData,
-      size: size,
-      color: color ?? Theme.of(context).colorScheme.primaryContainer,
-    );
+    final profileSetting =
+        context.read<ProfileCubit>().state.model.profileSetting;
+
+    final credentialImage = SelectiveDisclosure(credentialModel).getPicture;
+
+    return selected != null && credentialImage != null
+        ? AspectRatio(
+            aspectRatio: Sizes.credentialAspectRatio,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(
+                Sizes.credentialBorderRadius,
+              ),
+              child: CachedImageFromNetwork(
+                credentialImage,
+                fit: BoxFit.contain,
+                width: double.infinity,
+                bgColor: Colors.transparent,
+                height: double.infinity,
+                errorMessage: '',
+                showLoading: false,
+              ),
+            ),
+          )
+        : CredentialDisplay(
+            credentialModel: credentialModel,
+            credDisplayType: CredDisplayType.List,
+            profileSetting: profileSetting,
+          );
   }
 }
