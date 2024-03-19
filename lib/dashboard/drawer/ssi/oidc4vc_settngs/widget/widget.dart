@@ -8,6 +8,7 @@ export 'draft_type_widget.dart';
 export 'option_container.dart';
 export 'proof_header_widget.dart';
 export 'proof_type_widget.dart';
+export 'push_authorization_request.dart';
 export 'scope_parameter.dart';
 export 'security_level_widget.dart';
 export 'vc_format_widget.dart';

@@ -887,7 +887,7 @@
   "createWalletMessage": "Crea una cartera primer.",
   "successfullyGeneratingProof": "Prova generada correctament",
   "wouldYouLikeToAcceptThisCredentialsFromThisOrganisation": "Vols acceptar aquesta/es credencial/s d’aquesta organització?",
-  "thisOrganisationRequestsThisInformation": "L’organització demana aquesta informació",
+  "thisOrganisationRequestsThisInformation": "L’organització demana",
   "iS": "és",
   "isSmallerThan": "és inferior a",
   "isBiggerThan": "és superior a",

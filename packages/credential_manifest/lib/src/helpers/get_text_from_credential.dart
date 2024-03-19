@@ -6,7 +6,7 @@ List<String> getTextsFromCredential(
 ) {
   final textList = <String>[];
   try {
-    final fieldsPath = JsonPath(jsonPath.replaceAll('.vc', ''));
+    final fieldsPath = JsonPath(jsonPath.replaceAll(RegExp(r'\.vc(?=\.)'), ''));
     fieldsPath.read(data).forEach((a) {
       final dynamic value = a.value;
       if (value is String) {

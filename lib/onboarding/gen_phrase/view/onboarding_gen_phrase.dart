@@ -157,9 +157,10 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  MyGradientButton(
+                  MyElevatedButton(
                     text: l10n.verifyLater,
                     verticalSpacing: 18,
+                    backgroundColor: Theme.of(context).colorScheme.blueColor,
                     onPressed: () async {
                       await context
                           .read<OnboardingCubit>()

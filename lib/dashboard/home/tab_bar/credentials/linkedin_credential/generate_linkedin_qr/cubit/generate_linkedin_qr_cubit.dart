@@ -46,16 +46,14 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
       final privateKey = await getPrivateKey(
-        secureStorage: getSecureStorage,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
-        oidc4vc: oidc4vc,
       );
 
       final (did, kid) = await getDidAndKid(
         didKeyType: didKeyType,
         privateKey: privateKey,
-        secureStorage: getSecureStorage,
-        didKitProvider: didKitProvider,
+        profileCubit: profileCubit,
       );
 
       final presentation = await didKitProvider.issuePresentation(

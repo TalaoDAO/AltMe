@@ -115,7 +115,7 @@ class TokenModel extends Equatable {
     if (iconUrl == null) {
       return null;
     } else {
-      return iconUrl.replaceFirst('ipfs://', Urls.talaoIpfsGateway);
+      return iconUrl.replaceFirst('ipfs://', Urls.ipfsGateway);
     }
   }
 

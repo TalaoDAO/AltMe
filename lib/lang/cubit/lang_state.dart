@@ -17,7 +17,8 @@ class LangState extends Equatable {
 
   LangState copyWith({Locale? locale, LanguageType? languageType}) {
     return LangState(
-        languageType: languageType ?? this.languageType,
-        locale: locale ?? this.locale);
+      languageType: languageType ?? this.languageType,
+      locale: locale ?? this.locale,
+    );
   }
 }
