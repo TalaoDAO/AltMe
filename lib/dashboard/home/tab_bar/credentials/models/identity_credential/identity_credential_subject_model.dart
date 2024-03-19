@@ -11,7 +11,7 @@ class IdentityCredentialSubjectModel extends CredentialSubjectModel {
     super.type,
     super.issuedBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.identityPass,
+          credentialSubjectType: CredentialSubjectType.identityCredential,
           credentialCategory: CredentialCategory.identityCards,
         );
 
