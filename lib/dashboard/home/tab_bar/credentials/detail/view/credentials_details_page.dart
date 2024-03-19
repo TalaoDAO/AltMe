@@ -7,6 +7,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -152,7 +153,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     String? credentialImage;
 
     if (containClaims) {
-      credentialImage = getPicture(credentialModel: widget.credentialModel);
+      credentialImage = SelectiveDisclosure(widget.credentialModel).getPicture;
     }
 
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(

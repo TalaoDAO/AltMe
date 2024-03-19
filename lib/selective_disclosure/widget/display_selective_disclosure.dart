@@ -82,11 +82,9 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
           if (display == null) return Container();
           title = display['name'].toString();
 
-          data = getClaimsData(
-            encryptedDatas: selectiveDisclosure.extractedValuesFromJwt,
-            credentialModel: credentialModel,
+          data = SelectiveDisclosure(credentialModel).getClaimsData(
             key: key,
-            selectFromSelectiveDisclosure: true,
+            chooseFromDisclosureFromJWTOnly: true,
           );
 
           if (data == null) return Container();
