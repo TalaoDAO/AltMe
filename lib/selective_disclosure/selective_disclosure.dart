@@ -107,7 +107,7 @@ class SelectiveDisclosure {
     if (valueType == 'image/jpeg') {
       final data = getClaimsData(
         key: 'picture',
-        chooseFromDisclosureFromJWTOnly: true,
+        chooseFromDisclosureFromJWTOnly: false,
       );
 
       return data;
