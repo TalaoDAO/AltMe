@@ -11,10 +11,37 @@ class SelectiveDisclosure {
   Map<String, dynamic> get claims {
     final credentialSupported = credentialModel.credentialSupported;
 
-    final claims = credentialSupported!['claims'];
+    var claims = credentialSupported?['claims'];
 
-    if (claims is! Map<String, dynamic>) {
+    if (claims == null || claims is! Map<String, dynamic>) {
       return <String, dynamic>{};
+    }
+
+    final order = credentialSupported?['order'];
+
+    if (order != null && order is List<dynamic>) {
+      final orderList = order.map((e) => e.toString()).toList();
+
+      final orderedClaims = <String, dynamic>{};
+      final remainingClaims = <String, dynamic>{};
+
+      // Order elements based on the order list
+      for (final key in orderList) {
+        if (claims.containsKey(key)) {
+          orderedClaims[key] = claims[key];
+        } else {}
+      }
+
+      // Add remaining elements to the end of the ordered map
+      claims.forEach((key, value) {
+        if (!orderedClaims.containsKey(key)) {
+          remainingClaims[key] = value;
+        }
+      });
+
+      orderedClaims.addAll(remainingClaims);
+
+      claims = orderedClaims;
     }
 
     return claims;
@@ -25,6 +52,7 @@ class SelectiveDisclosure {
         ?.split('~')
         .where((element) => element.isNotEmpty)
         .toList();
+
     final extractedValues = <String, dynamic>{};
     if (encryptedValues != null) {
       encryptedValues.removeAt(0);
