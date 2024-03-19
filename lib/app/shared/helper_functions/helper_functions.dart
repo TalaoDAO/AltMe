@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
-import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';

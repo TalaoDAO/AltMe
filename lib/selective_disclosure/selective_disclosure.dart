@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';

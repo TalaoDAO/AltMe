@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
