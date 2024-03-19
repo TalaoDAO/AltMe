@@ -1,7 +1,7 @@
 import 'package:altme/dashboard/home/tab_bar/credentials/credential.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 
-List<CredentialModel>  getCredentialsFromFilterList({
+List<CredentialModel> getCredentialsFromFilterList({
   required List<Field> filterList,
   required List<CredentialModel> credentialList,
 }) {

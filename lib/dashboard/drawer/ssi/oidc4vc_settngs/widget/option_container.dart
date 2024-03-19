@@ -17,6 +17,7 @@ class OptionContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(Sizes.spaceSmall),
       margin: const EdgeInsets.all(Sizes.spaceXSmall),
       decoration: BoxDecoration(

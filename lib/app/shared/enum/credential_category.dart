@@ -62,10 +62,10 @@ extension CredentialCategoryX on CredentialCategory {
 
   bool get showInHomeIfListEmpty {
     switch (this) {
-      case CredentialCategory.advantagesCards:
       case CredentialCategory.identityCards:
         return true;
       case CredentialCategory.professionalCards:
+      case CredentialCategory.advantagesCards:
       case CredentialCategory.contactInfoCredentials:
       case CredentialCategory.blockchainAccountsCards:
       case CredentialCategory.educationCards:
@@ -115,8 +115,8 @@ extension CredentialCategoryX on CredentialCategory {
         return CredentialCategoryConfig(
           homeTitle: '${l10n.my} ${l10n.blockchainAccounts.toLowerCase()}',
           homeSubTitle: l10n.blockchainAccountsCredentialHomeSubtitle,
-          discoverTitle: '${l10n.get} ${l10n.blockchainAccounts.toLowerCase()}',
-          discoverSubTitle: '',
+          discoverTitle: l10n.blockchainCardsDiscoverTitle,
+          discoverSubTitle: l10n.blockchainCardsDiscoverSubtitle,
         );
       case CredentialCategory.educationCards:
         return CredentialCategoryConfig(

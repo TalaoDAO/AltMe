@@ -24,6 +24,10 @@ class DidKeyTypeWidget extends StatelessWidget {
             padding: EdgeInsets.zero,
             itemBuilder: (context, index) {
               final didKeyType = DidKeyType.values[index];
+
+              if (didKeyType == DidKeyType.jwtClientAttestation) {
+                return Container();
+              }
               return Column(
                 children: [
                   if (index != 0)
@@ -54,22 +58,6 @@ class DidKeyTypeWidget extends StatelessWidget {
                           builder: (context) => ErrorDetailsDialog(
                             erroDescription:
                                 l10n.theLdpFormatIsNotSupportedByThisDIDMethod,
-                          ),
-                        );
-
-                        return;
-                      }
-
-                      ///if DID method is did eddsa then Cryrto Holder Binding
-                      ///must be Off -> display message "Switch off Crypto
-                      ///Holder Binding for that DID Method"
-                      if (didKeyType == DidKeyType.edDSA &&
-                          customOidc4vcProfile.cryptoHolderBinding) {
-                        showDialog<bool>(
-                          context: context,
-                          builder: (context) => ErrorDetailsDialog(
-                            erroDescription: l10n
-                                .switchOffCryptoHolderBindingForThatDIDMethod,
                           ),
                         );
 

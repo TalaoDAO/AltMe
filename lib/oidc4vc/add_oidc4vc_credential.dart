@@ -12,6 +12,7 @@ import 'package:uuid/uuid.dart';
 Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
   required CredentialsCubit credentialsCubit,
+  required BlockchainType blockchainType,
   required String credentialType,
   required bool isLastCall,
   required String format,
@@ -147,54 +148,15 @@ Future<void> addOIDC4VCCredential({
 
   Display? display;
 
-  if (openIdConfiguration?.credentialsSupported != null) {
-    final credentialsSupported = openIdConfiguration!.credentialsSupported!;
-    final CredentialsSupported? credSupported =
-        credentialsSupported.firstWhereOrNull(
-      (CredentialsSupported credentialsSupported) =>
-          credentialsSupported.id != null &&
-          credentialsSupported.id == credentialType,
+  if (openIdConfiguration != null) {
+    final (Display? displayData, dynamic credentialSupported) = fetchDisplay(
+      openIdConfiguration: openIdConfiguration,
+      credentialType: credentialType,
+      languageCode:
+          credentialsCubit.profileCubit.langCubit.state.locale.languageCode,
     );
-
-    if (credSupported != null) {
-      newCredential['credentialSupported'] = credSupported.toJson();
-
-      if (credSupported.display != null) {
-        display = credSupported.display!.firstWhereOrNull(
-          (Display display) =>
-              display.locale == 'en-US' || display.locale == 'en-GB',
-        );
-      }
-    }
-  } else if (openIdConfiguration?.credentialConfigurationsSupported != null) {
-    final credentialsSupported =
-        openIdConfiguration!.credentialConfigurationsSupported;
-
-    if ((credentialsSupported is Map<String, dynamic>) &&
-        credentialsSupported.containsKey(credentialType)) {
-      final credSupported = credentialsSupported[credentialType];
-
-      /// credentialSupported
-      newCredential['credentialSupported'] = credSupported;
-
-      if (credSupported is Map<String, dynamic>) {
-        /// display
-        if (credSupported.containsKey('display')) {
-          final displayData = credSupported['display'];
-
-          if (displayData is List<dynamic>) {
-            final displays = displayData
-                .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
-                .toList();
-
-            display = displays.firstWhereOrNull(
-              (Display display) =>
-                  display.locale == 'en-US' || display.locale == 'en-GB',
-            );
-          }
-        }
-      }
-    }
+    display = displayData;
+    newCredential['credentialSupported'] = credentialSupported;
   }
 
   final newCredentialModel = CredentialModel.fromJson(newCredential);
@@ -211,6 +173,7 @@ Future<void> addOIDC4VCCredential({
     await credentialsCubit.deleteById(
       id: credentialIdToBeDeleted,
       showMessage: false,
+      blockchainType: blockchainType,
     );
   }
 
@@ -219,5 +182,6 @@ Future<void> addOIDC4VCCredential({
     credential: credentialModel,
     showStatus: false,
     showMessage: isLastCall,
+    blockchainType: blockchainType,
   );
 }

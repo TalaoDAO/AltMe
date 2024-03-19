@@ -136,6 +136,39 @@ void main() {
     expect(jsonDecode(jwk), expectedP256Jwk);
   });
 
+  group('edSSA sign and verify test', () {
+    const privateKey = {
+      'kty': 'OKP',
+      'crv': 'Ed25519',
+      'd': 'lIxdBQu5EHleLsQRF8JOXAImgNu4FXrUs5SOcyrqvO0=',
+      'x': 'r_HVGgBwEcVShl1Xt0C_Anc7Qhs4mS5ZUxsR4kq7Qe4=',
+    };
+
+    const payload = {
+      'name': 'Bibash',
+      'surname': 'Shrestha',
+    };
+
+    const kid = '3623b877bbb24b08ba390f3585418f53';
+
+    final oidc4vc = OIDC4VC();
+
+    test('sign and verify with edDSA', () async {
+      final token = oidc4vc.generateTokenEdDSA(
+        payload: payload,
+        privateKey: privateKey,
+        kid: kid,
+      );
+
+      final value = oidc4vc.verifyTokenEdDSA(
+        token: token,
+        publicKey: privateKey, // public is private key with d
+      );
+
+      expect(value, true);
+    });
+  });
+
   group('EBSI: getAuthorizationUriForIssuer', () {
     const issuer = 'https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi';
 

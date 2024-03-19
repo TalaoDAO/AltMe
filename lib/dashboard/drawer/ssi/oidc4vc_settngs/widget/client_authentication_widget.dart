@@ -25,6 +25,10 @@ class ClientAuthenticationWidget extends StatelessWidget {
             itemBuilder: (context, index) {
               final clientAuthenticationType =
                   ClientAuthentication.values[index];
+
+              if (clientAuthenticationType ==
+                  ClientAuthentication.clientSecretJwt) return Container();
+
               return Column(
                 children: [
                   if (index != 0)

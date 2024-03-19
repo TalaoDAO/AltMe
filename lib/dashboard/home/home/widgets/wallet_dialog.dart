@@ -35,8 +35,9 @@ class WalletDialog extends StatelessWidget {
             Text(
               l10n.createTitle,
               style: Theme.of(context).textTheme.defaultDialogTitle.copyWith(
-                  fontSize: 18,
-                  color: Theme.of(context).colorScheme.dialogText),
+                    fontSize: 18,
+                    color: Theme.of(context).colorScheme.dialogText,
+                  ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 5),

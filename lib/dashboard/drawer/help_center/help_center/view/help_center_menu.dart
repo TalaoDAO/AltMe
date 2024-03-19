@@ -51,69 +51,59 @@ class HelpCenterView extends StatelessWidget {
       customChatSupportName = helpCenterOptions.customChatSupportName!;
     }
 
-    return Drawer(
+    return BasePage(
       backgroundColor: Theme.of(context).colorScheme.drawerBackground,
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                BackLeadingButton(
-                  padding: EdgeInsets.zero,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-                WalletLogo(
-                  profileModel: context.read<ProfileCubit>().state.model,
-                  height: 90,
-                  width: MediaQuery.of(context).size.shortestSide * 0.5,
-                  showPoweredBy: true,
-                ),
-                if (helpCenterOptions.displayChatSupport) ...[
-                  const SizedBox(height: Sizes.spaceSmall),
-                  DrawerItem(
-                    title: '${l10n.chatWith} $customChatSupportName',
-                    onTap: () {
-                      Navigator.of(context).push<void>(
-                        AltmeSupportChatPage.route(
-                          appBarTitle:
-                              '${l10n.chatWith} $customChatSupportName',
-                        ),
-                      );
-                    },
-                  ),
-                ],
-                if (helpCenterOptions.displayEmailSupport) ...[
-                  DrawerItem(
-                    title: l10n.sendAnEmail,
-                    onTap: () {
-                      Navigator.of(context).push<void>(
-                        ContactUsPage.route(
-                          email: email,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-                DrawerItem(
-                  title: l10n.faqs,
-                  onTap: () {
-                    Navigator.of(context).push<void>(FAQsPage.route());
-                  },
-                ),
-                DrawerItem(
-                  onTap: () {
-                    LaunchUrl.launch(
-                      'https://${AltMeStrings.appContactWebsiteName}',
-                    );
-                  },
-                  title: l10n.officialWebsite,
-                ),
-              ],
-            ),
+      useSafeArea: true,
+      scrollView: true,
+      titleAlignment: Alignment.topCenter,
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          BackLeadingButton(
+            padding: EdgeInsets.zero,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
-        ),
+          const DrawerLogo(),
+          if (helpCenterOptions.displayChatSupport) ...[
+            DrawerItem(
+              title: '${l10n.chatWith} $customChatSupportName',
+              onTap: () {
+                Navigator.of(context).push<void>(
+                  AltmeSupportChatPage.route(
+                    appBarTitle: '${l10n.chatWith} $customChatSupportName',
+                  ),
+                );
+              },
+            ),
+          ],
+          if (helpCenterOptions.displayEmailSupport) ...[
+            DrawerItem(
+              title: l10n.sendAnEmail,
+              onTap: () {
+                Navigator.of(context).push<void>(
+                  ContactUsPage.route(
+                    email: email,
+                  ),
+                );
+              },
+            ),
+          ],
+          DrawerItem(
+            title: l10n.faqs,
+            onTap: () {
+              Navigator.of(context).push<void>(FAQsPage.route());
+            },
+          ),
+          DrawerItem(
+            onTap: () {
+              LaunchUrl.launch(
+                'https://${AltMeStrings.appContactWebsiteName}',
+              );
+            },
+            title: l10n.officialWebsite,
+          ),
+        ],
       ),
     );
   }

@@ -98,6 +98,12 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="configuration" />
+			</intent-filter>
+            <intent-filter android:autoVerify="true">
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
 				<data android:scheme="iden3comm" />
 			</intent-filter>
             <intent-filter android:autoVerify="true">
@@ -123,6 +129,12 @@
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
 				<data android:scheme="openid-hedera" />
+			</intent-filter>
+            <intent-filter android:autoVerify="true">
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="haip" />
 			</intent-filter>
         </activity><meta-data
             android:name="flutterEmbedding"

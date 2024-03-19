@@ -49,7 +49,9 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           const ClientTypeWidget(),
           const ClientCredentialsWidget(),
           const VCFormatWidget(),
+          const ProofTypeWidget(),
           const ProofHeaderWidget(),
+          const PushAuthorizationRequesWidget(),
           DrawerItem(
             title: l10n.clientMetadata,
             onTap: () {
@@ -64,11 +66,9 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
                   .value;
               const authorizationEndPoint = Parameters.authorizeEndPoint;
               final value = const JsonEncoder.withIndent('  ').convert(
-                jsonDecode(
-                  OIDC4VC().getWalletClientMetadata(
-                    authorizationEndPoint,
-                    tokenEndpointAuthMethod,
-                  ),
+                OIDC4VC().getWalletClientMetadata(
+                  authorizationEndPoint,
+                  tokenEndpointAuthMethod,
                 ),
               );
               Navigator.of(context).push<void>(

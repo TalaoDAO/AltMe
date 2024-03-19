@@ -5,15 +5,12 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/self_issued_credential_button/models/self_issued_credential.dart';
-
+import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
-import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:oidc4vc/oidc4vc.dart';
-
-import 'package:secure_storage/secure_storage.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:uuid/uuid.dart';
 
 part 'self_issued_credential_button_cubit.g.dart';
@@ -22,18 +19,15 @@ part 'self_issued_credential_button_state.dart';
 class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
   SelfIssuedCredentialCubit({
     required this.credentialsCubit,
-    required this.secureStorageProvider,
-    required this.didKitProvider,
     required this.profileCubit,
-    required this.oidc4vc,
+    required this.walletCubit,
+    required this.jwtDecode,
   }) : super(const SelfIssuedCredentialButtonState());
 
   final CredentialsCubit credentialsCubit;
-
-  final SecureStorageProvider secureStorageProvider;
-  final DIDKitProvider didKitProvider;
   final ProfileCubit profileCubit;
-  final OIDC4VC oidc4vc;
+  final WalletCubit walletCubit;
+  final JWTDecode jwtDecode;
 
   Future<void> createSelfIssuedCredential({
     required SelfIssuedCredentialDataModel selfIssuedCredentialDataModel,
@@ -48,16 +42,14 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
       final privateKey = await getPrivateKey(
-        secureStorage: getSecureStorage,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
-        oidc4vc: oidc4vc,
       );
 
       final (did, kid) = await getDidAndKid(
         didKeyType: didKeyType,
         privateKey: privateKey,
-        secureStorage: getSecureStorage,
-        didKitProvider: didKitProvider,
+        profileCubit: profileCubit,
       );
 
       final options = {
@@ -90,13 +82,13 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       );
 
       await Future<void>.delayed(const Duration(milliseconds: 500));
-      final vc = await didKitProvider.issueCredential(
+      final vc = await profileCubit.didKitProvider.issueCredential(
         jsonEncode(selfIssuedCredential.toJson()),
         jsonEncode(options),
         privateKey,
       );
-      final result =
-          await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions));
+      final result = await profileCubit.didKitProvider
+          .verifyCredential(vc, jsonEncode(verifyOptions));
       final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
 
       log.i('vc: $vc');
@@ -155,7 +147,10 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       credentialPreview: Credential.fromJson(jsonCredential),
       activities: [Activity(acquisitionAt: DateTime.now())],
     );
-    await credentialsCubit.insertCredential(credential: credentialModel);
+    await credentialsCubit.insertCredential(
+      credential: credentialModel,
+      blockchainType: walletCubit.state.currentAccount!.blockchainType,
+    );
     emit(
       state.success(
         messageHandler: ResponseMessage(

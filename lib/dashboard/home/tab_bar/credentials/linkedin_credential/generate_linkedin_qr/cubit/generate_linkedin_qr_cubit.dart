@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/home.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_saver/file_saver.dart';
@@ -47,16 +46,14 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
       final privateKey = await getPrivateKey(
-        secureStorage: getSecureStorage,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
-        oidc4vc: oidc4vc,
       );
 
       final (did, kid) = await getDidAndKid(
         didKeyType: didKeyType,
         privateKey: privateKey,
-        secureStorage: getSecureStorage,
-        didKitProvider: didKitProvider,
+        profileCubit: profileCubit,
       );
 
       final presentation = await didKitProvider.issuePresentation(

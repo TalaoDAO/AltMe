@@ -34,11 +34,13 @@ class DiscoverCredentialItem extends StatelessWidget {
             dummyCredential: dummyCredential,
             buttonText: l10n.getThisCard,
             onCallBack: () async {
+              LoadingView().show(context: context);
               await discoverCredential(
                 dummyCredential: dummyCredential,
                 context: context,
               );
               Navigator.pop(context);
+              LoadingView().hide();
             },
           ),
         );

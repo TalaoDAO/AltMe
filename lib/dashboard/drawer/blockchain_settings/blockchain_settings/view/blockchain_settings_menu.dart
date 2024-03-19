@@ -28,58 +28,47 @@ class BlockchainSettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Drawer(
+    return BasePage(
       backgroundColor: Theme.of(context).colorScheme.drawerBackground,
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                BackLeadingButton(
-                  padding: EdgeInsets.zero,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-                WalletLogo(
-                  profileModel: context.read<ProfileCubit>().state.model,
-                  height: 90,
-                  width: MediaQuery.of(context).size.shortestSide * 0.5,
-                  showPoweredBy: true,
-                ),
-                const SizedBox(height: Sizes.spaceSmall),
-                DrawerItem(
-                  title: l10n.manageAccounts,
-                  onTap: () {
-                    Navigator.of(context)
-                        .push<void>(ManageAccountsPage.route());
-                  },
-                ),
-                DrawerItem(
-                  title: l10n.manageConnectedApps,
-                  onTap: () {
-                    Navigator.of(context).push<void>(
-                      ConnectedDappsPage.route(
-                        walletAddress: context
-                            .read<WalletCubit>()
-                            .state
-                            .currentAccount!
-                            .walletAddress,
-                      ),
-                    );
-                  },
-                ),
-                DrawerItem(
-                  title: l10n.blockchainNetwork,
-                  onTap: () async {
-                    await Navigator.of(context)
-                        .push<void>(ManageNetworkPage.route());
-                  },
-                ),
-              ],
-            ),
+      useSafeArea: true,
+      scrollView: true,
+      titleAlignment: Alignment.topCenter,
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          BackLeadingButton(
+            padding: EdgeInsets.zero,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
-        ),
+          const DrawerLogo(),
+          DrawerItem(
+            title: l10n.manageAccounts,
+            onTap: () {
+              Navigator.of(context).push<void>(ManageAccountsPage.route());
+            },
+          ),
+          DrawerItem(
+            title: l10n.manageConnectedApps,
+            onTap: () {
+              Navigator.of(context).push<void>(
+                ConnectedDappsPage.route(
+                  walletAddress: context
+                      .read<WalletCubit>()
+                      .state
+                      .currentAccount!
+                      .walletAddress,
+                ),
+              );
+            },
+          ),
+          DrawerItem(
+            title: l10n.blockchainNetwork,
+            onTap: () async {
+              await Navigator.of(context).push<void>(ManageNetworkPage.route());
+            },
+          ),
+        ],
       ),
     );
   }

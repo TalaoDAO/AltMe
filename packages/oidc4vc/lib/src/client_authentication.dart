@@ -4,12 +4,12 @@ enum ClientAuthentication {
   none,
   @JsonValue('client_secret_basic')
   clientSecretBasic,
-  // @JsonValue('client_secret_jwt')
-  // clientSecretJwt,
   @JsonValue('client_secret_post')
   clientSecretPost,
   @JsonValue('client_id')
   clientId,
+  @JsonValue('client_secret_jwt')
+  clientSecretJwt,
 }
 
 extension ClientAuthenticationX on ClientAuthentication {
@@ -23,6 +23,8 @@ extension ClientAuthenticationX on ClientAuthentication {
         return 'client_secret_post';
       case ClientAuthentication.clientId:
         return 'client_id';
+      case ClientAuthentication.clientSecretJwt:
+        return 'client_secret_jwt';
     }
   }
 }

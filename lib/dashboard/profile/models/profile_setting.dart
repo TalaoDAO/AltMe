@@ -181,6 +181,7 @@ class DiscoverCardsOptions extends Equatable {
     required this.displayExternalIssuer,
     this.displayOver18Jwt = false,
     this.displayVerifiableIdJwt = true,
+    this.displayVerifiableIdSdJwt = true,
     this.displayEmailPass = true,
     this.displayEmailPassJwt = true,
     this.displayPhonePass = true,
@@ -202,6 +203,7 @@ class DiscoverCardsOptions extends Equatable {
         displayOver21: false,
         displayOver50: false,
         displayVerifiableId: true,
+        displayVerifiableIdSdJwt: true,
         displayOver65: false,
         displayAgeRange: false,
         displayGender: false,
@@ -249,6 +251,7 @@ class DiscoverCardsOptions extends Equatable {
   final bool displayAgeRange;
   final bool displayVerifiableId;
   final bool displayVerifiableIdJwt;
+  final bool displayVerifiableIdSdJwt;
   final bool displayGender;
   final List<DisplayExternalIssuer> displayExternalIssuer;
   final bool displayChainborn;
@@ -537,6 +540,8 @@ class CustomOidc4VcProfile extends Equatable {
     this.clientSecret = 'FGbzMrvUpeFr',
     this.vcFormatType = VCFormatType.jwtVcJson,
     this.proofHeader = ProofHeaderType.kid,
+    this.proofType = ProofType.jwt,
+    this.pushAuthorizationRequest = false,
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
@@ -570,11 +575,13 @@ class CustomOidc4VcProfile extends Equatable {
   final bool scope;
   final ProofHeaderType proofHeader;
   final bool securityLevel;
+  final bool pushAuthorizationRequest;
   final SIOPV2DraftType siopv2Draft;
   @JsonKey(name: 'subjectSyntaxeType')
   final ClientType clientType;
   @JsonKey(name: 'vcFormat')
   final VCFormatType vcFormatType;
+  final ProofType proofType;
 
   Map<String, dynamic> toJson() => _$CustomOidc4VcProfileToJson(this);
 
@@ -590,9 +597,11 @@ class CustomOidc4VcProfile extends Equatable {
     bool? scope,
     ProofHeaderType? proofHeader,
     bool? securityLevel,
+    bool? pushAuthorizationRequest,
     SIOPV2DraftType? siopv2Draft,
     ClientType? clientType,
     VCFormatType? vcFormatType,
+    ProofType? proofType,
   }) =>
       CustomOidc4VcProfile(
         clientAuthentication: clientAuthentication ?? this.clientAuthentication,
@@ -605,11 +614,14 @@ class CustomOidc4VcProfile extends Equatable {
         scope: scope ?? this.scope,
         proofHeader: proofHeader ?? this.proofHeader,
         securityLevel: securityLevel ?? this.securityLevel,
+        pushAuthorizationRequest:
+            pushAuthorizationRequest ?? this.pushAuthorizationRequest,
         siopv2Draft: siopv2Draft ?? this.siopv2Draft,
         clientType: clientType ?? this.clientType,
         clientId: clientId ?? this.clientId,
         clientSecret: clientSecret ?? this.clientSecret,
         vcFormatType: vcFormatType ?? this.vcFormatType,
+        proofType: proofType ?? this.proofType,
       );
 
   @override
@@ -625,9 +637,11 @@ class CustomOidc4VcProfile extends Equatable {
         scope,
         proofHeader,
         securityLevel,
+        pushAuthorizationRequest,
         siopv2Draft,
         clientType,
         vcFormatType,
+        proofType,
       ];
 }
 

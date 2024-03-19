@@ -19,4 +19,16 @@ class Field {
   final bool optional;
 
   Map<String, dynamic> toJson() => _$FieldToJson(this);
+
+  Field copyWith({
+    List<String>? path,
+    Filter? filter,
+    bool? optional,
+  }) {
+    return Field(
+      path: path ?? this.path,
+      filter: filter ?? this.filter,
+      optional: optional ?? this.optional,
+    );
+  }
 }

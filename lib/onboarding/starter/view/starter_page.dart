@@ -61,7 +61,7 @@ class StarterPage extends StatelessWidget {
                         SubTitle(profileModel: state.model),
                         const Spacer(flex: 4),
                         MyGradientButton(
-                          text: l10n.createPersonalWallet,
+                          text: l10n.createAccount,
                           verticalSpacing: 15,
                           onPressed: () async {
                             await profileCubit.setWalletType(
@@ -71,25 +71,32 @@ class StarterPage extends StatelessWidget {
                               profileSetting: ProfileSetting.initial(),
                               profileType: ProfileType.defaultOne,
                             );
-                            await showDialog<void>(
-                              context: context,
-                              builder: (_) => const WalletDialog(),
+                            await Navigator.of(context).push(
+                              ProtectWalletPage.route(
+                                routeType: WalletRouteType.create,
+                              ),
                             );
                           },
                         ),
                         const Spacer(flex: 1),
                         MyOutlinedButton(
-                          text: l10n.createAnProfessionalWallet,
+                          text: l10n.importAccount,
                           textColor: Theme.of(context).colorScheme.lightPurple,
                           borderColor:
                               Theme.of(context).colorScheme.lightPurple,
                           backgroundColor: Colors.transparent,
                           onPressed: () async {
                             await profileCubit.setWalletType(
-                              walletType: WalletType.enterprise,
+                              walletType: WalletType.personal,
+                            );
+                            await profileCubit.setProfileSetting(
+                              profileSetting: ProfileSetting.initial(),
+                              profileType: ProfileType.defaultOne,
                             );
                             await Navigator.of(context).push(
-                              EnterpriseInitializationPage.route(),
+                              ProtectWalletPage.route(
+                                routeType: WalletRouteType.import,
+                              ),
                             );
                           },
                         ),

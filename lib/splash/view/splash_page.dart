@@ -5,6 +5,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
+import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
@@ -77,10 +78,23 @@ class _SplashViewState extends State<SplashView> {
 
   bool isPolygonFunctionCalled = false;
 
+  String? _deeplink;
+
   Future<void> processIncomingUri(Uri? uri, BuildContext context) async {
     final l10n = context.l10n;
     String beaconData = '';
     bool isBeaconRequest = false;
+
+    Timer.periodic(const Duration(seconds: 3), (timer) {
+      timer.cancel();
+      _deeplink = null;
+    });
+
+    if (_deeplink != null && _deeplink == uri.toString()) {
+      return;
+    }
+
+    _deeplink = uri.toString();
 
     if (uri.toString().startsWith('${Urls.appDeepLink}/dashboard')) {
       await Navigator.pushAndRemoveUntil<void>(
@@ -93,6 +107,11 @@ class _SplashViewState extends State<SplashView> {
 
     if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
       await context.read<QRCodeScanCubit>().authorizedFlowStart(uri!);
+      return;
+    }
+
+    if (uri.toString().startsWith('configuration://?')) {
+      await context.read<EnterpriseCubit>().requestTheConfiguration(uri!);
       return;
     }
 
@@ -223,6 +242,7 @@ class _SplashViewState extends State<SplashView> {
         beaconBlocListener,
         walletConnectBlocListener,
         polygonIdBlocListener,
+        enterpriseBlocListener,
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {

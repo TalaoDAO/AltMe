@@ -30,6 +30,7 @@ class CredentialModel extends Equatable {
     this.domain,
     this.activities = const [],
     this.jwt,
+    this.selectiveDisclosureJwt,
     this.pendingInfo,
     this.credentialSupported,
   });
@@ -75,6 +76,7 @@ class CredentialModel extends Equatable {
       domain: oldCredentialModel.domain,
       activities: activities,
       jwt: oldCredentialModel.jwt,
+      selectiveDisclosureJwt: oldCredentialModel.selectiveDisclosureJwt,
       format: oldCredentialModel.format,
       credentialSupported: oldCredentialModel.credentialSupported,
     );
@@ -98,6 +100,7 @@ class CredentialModel extends Equatable {
   final String? domain;
   final List<Activity> activities;
   final String? jwt;
+  final String? selectiveDisclosureJwt;
   final PendingInfo? pendingInfo;
   final String? format;
   final Map<String, dynamic>? credentialSupported;
@@ -118,9 +121,11 @@ class CredentialModel extends Equatable {
     String? domain,
     List<Activity>? activities,
     String? jwt,
+    String? selectiveDisclosureJwt,
     PendingInfo? pendingInfo,
     String? format,
     Map<String, dynamic>? claims,
+    Map<String, dynamic>? credentialSupported,
   }) {
     return CredentialModel(
       id: id ?? this.id,
@@ -136,6 +141,8 @@ class CredentialModel extends Equatable {
       domain: domain ?? this.domain,
       activities: activities ?? this.activities,
       jwt: jwt ?? this.jwt,
+      selectiveDisclosureJwt:
+          selectiveDisclosureJwt ?? this.selectiveDisclosureJwt,
       pendingInfo: pendingInfo ?? this.pendingInfo,
       format: format ?? this.format,
       credentialSupported: credentialSupported ?? this.credentialSupported,
@@ -235,11 +242,7 @@ class CredentialModel extends Equatable {
 
   bool get disAllowDelete =>
       credentialPreview.credentialSubjectModel.credentialSubjectType ==
-          CredentialSubjectType.walletCredential ||
-      (credentialPreview.credentialSubjectModel.credentialCategory ==
-              CredentialCategory.blockchainAccountsCards &&
-          credentialPreview.credentialSubjectModel.issuedBy?.name ==
-              'My wallet');
+      CredentialSubjectType.walletCredential;
 
   String get getFormat => format != null
       ? format!

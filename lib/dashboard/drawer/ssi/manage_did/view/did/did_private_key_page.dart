@@ -1,10 +1,10 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oidc4vc/oidc4vc.dart';
-import 'package:secure_storage/secure_storage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DidPrivateKeyPage extends StatefulWidget {
   const DidPrivateKeyPage({
@@ -36,9 +36,8 @@ class _DidPrivateKeyPageState extends State<DidPrivateKeyPage>
 
   Future<String> getKey() async {
     final privateKey = await getPrivateKey(
-      secureStorage: getSecureStorage,
+      profileCubit: context.read<ProfileCubit>(),
       didKeyType: widget.didKeyType,
-      oidc4vc: OIDC4VC(),
     );
     return privateKey;
   }

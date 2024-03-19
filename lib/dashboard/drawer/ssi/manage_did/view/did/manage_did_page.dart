@@ -1,10 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:oidc4vc/oidc4vc.dart';
-import 'package:secure_storage/secure_storage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ManageDidPage extends StatefulWidget {
   const ManageDidPage({
@@ -31,17 +29,17 @@ class ManageDidPage extends StatefulWidget {
 
 class _ManageDidEbsiPageState extends State<ManageDidPage> {
   Future<String> getDid() async {
+    final profileCubit = context.read<ProfileCubit>();
+
     final privateKey = await getPrivateKey(
-      secureStorage: getSecureStorage,
+      profileCubit: profileCubit,
       didKeyType: widget.didKeyType,
-      oidc4vc: OIDC4VC(),
     );
 
     final (did, _) = await getDidAndKid(
       didKeyType: widget.didKeyType,
       privateKey: privateKey,
-      secureStorage: getSecureStorage,
-      didKitProvider: DIDKitProvider(),
+      profileCubit: profileCubit,
     );
 
     return did;

@@ -34,100 +34,85 @@ class AboutAltmeView extends StatelessWidget {
         final profileModel = context.read<ProfileCubit>().state.model;
 
         final profileSetting = profileModel.profileSetting;
-        return Drawer(
+        return BasePage(
           backgroundColor: Theme.of(context).colorScheme.drawerBackground,
-          child: SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    BackLeadingButton(
-                      padding: EdgeInsets.zero,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    WalletLogo(
-                      profileModel: profileModel,
-                      height: 90,
-                      width: MediaQuery.of(context).size.shortestSide * 0.5,
-                      showPoweredBy: true,
-                    ),
-                    const SizedBox(height: Sizes.spaceSmall),
-                    const AppVersionDrawer(),
-                    if (profileModel.profileType == ProfileType.enterprise) ...[
-                      const SizedBox(height: Sizes.spaceLarge),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Sizes.spaceXSmall,
-                        ),
-                        child: Text(
-                          profileSetting.generalOptions.companyName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .drawerItemTitle
-                              .copyWith(
-                                fontSize: 18,
-                              ),
-                        ),
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      EnterpriseData(
-                        title: l10n.profileName,
-                        value: profileSetting.generalOptions.profileName,
-                      ),
-                      // EnterpriseData(
-                      //   title: l10n.companyName,
-                      //   value: profileSetting.generalOptions.companyName,
-                      // ),
-                      EnterpriseData(
-                        title: l10n.configFileIdentifier,
-                        value: profileSetting.generalOptions.profileId,
-                      ),
-                      const SizedBox(height: Sizes.spaceSmall),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Sizes.spaceXSmall,
-                        ),
-                        child: Text(
-                          l10n.about,
-                          style: Theme.of(context)
-                              .textTheme
-                              .drawerItemTitle
-                              .copyWith(
-                                fontSize: 18,
-                              ),
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: Sizes.spaceXSmall),
-                    FutureBuilder<PackageInfo>(
-                      future: PackageInfo.fromPlatform(),
-                      builder: (_, snapShot) {
-                        var appVersion = '...';
-                        if (snapShot.connectionState == ConnectionState.done) {
-                          appVersion = snapShot.data?.version ?? '0.1.0';
-                        }
-                        return DrawerItem(
-                          title: '${l10n.yourAppVersion} : $appVersion',
-                          trailing: const Center(),
-                        );
-                      },
-                    ),
-                    DrawerItem(
-                      title: l10n.termsOfUse,
-                      onTap: () =>
-                          Navigator.of(context).push<void>(TermsPage.route()),
-                    ),
-                    DrawerItem(
-                      title: l10n.softwareLicenses,
-                      onTap: () => Navigator.of(context)
-                          .push<void>(SoftwareLicensePage.route()),
-                    ),
-                  ],
-                ),
+          useSafeArea: true,
+          scrollView: true,
+          titleAlignment: Alignment.topCenter,
+          padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              BackLeadingButton(
+                padding: EdgeInsets.zero,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
-            ),
+              const DrawerLogo(),
+              const AppVersionDrawer(),
+              if (profileModel.profileType == ProfileType.enterprise) ...[
+                const SizedBox(height: Sizes.spaceLarge),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.spaceXSmall,
+                  ),
+                  child: Text(
+                    profileSetting.generalOptions.companyName,
+                    style: Theme.of(context).textTheme.drawerItemTitle.copyWith(
+                          fontSize: 18,
+                        ),
+                  ),
+                ),
+                const SizedBox(height: Sizes.spaceXSmall),
+                EnterpriseData(
+                  title: l10n.profileName,
+                  value: profileSetting.generalOptions.profileName,
+                ),
+                // EnterpriseData(
+                //   title: l10n.companyName,
+                //   value: profileSetting.generalOptions.companyName,
+                // ),
+                EnterpriseData(
+                  title: l10n.configFileIdentifier,
+                  value: profileSetting.generalOptions.profileId,
+                ),
+                const SizedBox(height: Sizes.spaceSmall),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.spaceXSmall,
+                  ),
+                  child: Text(
+                    l10n.about,
+                    style: Theme.of(context).textTheme.drawerItemTitle.copyWith(
+                          fontSize: 18,
+                        ),
+                  ),
+                ),
+              ],
+              const SizedBox(height: Sizes.spaceXSmall),
+              FutureBuilder<PackageInfo>(
+                future: PackageInfo.fromPlatform(),
+                builder: (_, snapShot) {
+                  var appVersion = '...';
+                  if (snapShot.connectionState == ConnectionState.done) {
+                    appVersion = snapShot.data?.version ?? '0.1.0';
+                  }
+                  return DrawerItem(
+                    title: '${l10n.yourAppVersion} : $appVersion',
+                    trailing: const Center(),
+                  );
+                },
+              ),
+              DrawerItem(
+                title: l10n.termsOfUse,
+                onTap: () =>
+                    Navigator.of(context).push<void>(TermsPage.route()),
+              ),
+              DrawerItem(
+                title: l10n.softwareLicenses,
+                onTap: () => Navigator.of(context)
+                    .push<void>(SoftwareLicensePage.route()),
+              ),
+            ],
           ),
         );
       },

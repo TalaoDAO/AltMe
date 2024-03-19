@@ -31,81 +31,72 @@ class WalletSecurityView extends StatelessWidget {
     final l10n = context.l10n;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return Drawer(
+        return BasePage(
           backgroundColor: Theme.of(context).colorScheme.drawerBackground,
-          child: SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    BackLeadingButton(
-                      padding: EdgeInsets.zero,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    WalletLogo(
-                      profileModel: context.read<ProfileCubit>().state.model,
-                      height: 90,
-                      width: MediaQuery.of(context).size.shortestSide * 0.5,
-                      showPoweredBy: true,
-                    ),
-                    const SizedBox(height: Sizes.spaceSmall),
-                    DrawerItem(
-                      title: l10n.protectYourWallet,
-                      subtitle: l10n.secureYourWalletWithPINCodeAndBiometrics,
-                      onTap: () async {
-                        await securityCheck(
-                          context: context,
-                          localAuthApi: LocalAuthApi(),
-                          onSuccess: () {
-                            Navigator.of(context)
-                                .push<void>(ProtectWalletPage.route());
-                          },
-                        );
-                      },
-                    ),
-                    DrawerItem(
-                      title: l10n.showWalletRecoveryPhrase,
-                      subtitle: l10n.showWalletRecoveryPhraseSubtitle,
-                      onTap: () async {
-                        final confirm = await showDialog<bool>(
-                              context: context,
-                              builder: (context) => ConfirmDialog(
-                                title: l10n.warningDialogTitle,
-                                subtitle: l10n.warningDialogSubtitle,
-                                yes: l10n.showDialogYes,
-                                no: l10n.showDialogNo,
-                              ),
-                            ) ??
-                            false;
-
-                        if (confirm) {
-                          await securityCheck(
-                            context: context,
-                            localAuthApi: LocalAuthApi(),
-                            onSuccess: () {
-                              Navigator.of(context)
-                                  .push<void>(RecoveryKeyPage.route());
-                            },
-                          );
-                        }
-                      },
-                    ),
-                    if (context.read<ProfileCubit>().state.model.profileType ==
-                        ProfileType.custom)
-                      DrawerItem(
-                        title: l10n.advancedSecuritySettings,
-                        onTap: () {
-                          Navigator.of(context).push<void>(
-                            AdvancedSecuritySettingsMenu.route(),
-                          );
-                        },
-                      ),
-                  ],
-                ),
+          useSafeArea: true,
+          scrollView: true,
+          titleAlignment: Alignment.topCenter,
+          padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              BackLeadingButton(
+                padding: EdgeInsets.zero,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
-            ),
+              const DrawerLogo(),
+              DrawerItem(
+                title: l10n.protectYourWallet,
+                subtitle: l10n.secureYourWalletWithPINCodeAndBiometrics,
+                onTap: () async {
+                  await securityCheck(
+                    context: context,
+                    localAuthApi: LocalAuthApi(),
+                    onSuccess: () {
+                      Navigator.of(context)
+                          .push<void>(ProtectWalletPage.route());
+                    },
+                  );
+                },
+              ),
+              DrawerItem(
+                title: l10n.showWalletRecoveryPhrase,
+                subtitle: l10n.showWalletRecoveryPhraseSubtitle,
+                onTap: () async {
+                  final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => ConfirmDialog(
+                          title: l10n.warningDialogTitle,
+                          subtitle: l10n.warningDialogSubtitle,
+                          yes: l10n.showDialogYes,
+                          no: l10n.showDialogNo,
+                        ),
+                      ) ??
+                      false;
+
+                  if (confirm) {
+                    await securityCheck(
+                      context: context,
+                      localAuthApi: LocalAuthApi(),
+                      onSuccess: () {
+                        Navigator.of(context)
+                            .push<void>(RecoveryKeyPage.route());
+                      },
+                    );
+                  }
+                },
+              ),
+              if (context.read<ProfileCubit>().state.model.profileType ==
+                  ProfileType.custom)
+                DrawerItem(
+                  title: l10n.advancedSecuritySettings,
+                  onTap: () {
+                    Navigator.of(context).push<void>(
+                      AdvancedSecuritySettingsMenu.route(),
+                    );
+                  },
+                ),
+            ],
           ),
         );
       },

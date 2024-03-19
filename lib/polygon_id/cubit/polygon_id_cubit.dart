@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
@@ -24,6 +25,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     required this.credentialsCubit,
     required this.client,
     required this.profileCubit,
+    required this.walletCubit,
   }) : super(const PolygonIdState());
 
   final SecureStorageProvider secureStorageProvider;
@@ -31,6 +33,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   final CredentialsCubit credentialsCubit;
   final DioClient client;
   final ProfileCubit profileCubit;
+  final WalletCubit walletCubit;
 
   final log = getLogger('PolygonIdCubit');
 
@@ -530,7 +533,10 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       activities: [Activity(acquisitionAt: DateTime.now())],
     );
     // insert the credential in the wallet
-    await credentialsCubit.insertCredential(credential: credentialModel);
+    await credentialsCubit.insertCredential(
+      credential: credentialModel,
+      blockchainType: walletCubit.state.currentAccount!.blockchainType,
+    );
   }
 
   /// getSchemas

@@ -68,6 +68,9 @@ class Parameters {
   static const int maxEntries = 3;
 
   static const String appName = 'Talao';
+  static const bool supportDefiCompliance = false;
+  static const bool supportCryptoAccountOwnershipInDiscoverForEnterpriseMode =
+      false;
 
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
   static const DidKeyType didKeyTypeForDefault = DidKeyType.edDSA;

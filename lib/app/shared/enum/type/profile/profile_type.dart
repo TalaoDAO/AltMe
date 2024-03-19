@@ -4,9 +4,9 @@ enum ProfileType {
   defaultOne,
   ebsiV3,
   dutch,
-  enterprise,
   owfBaselineProfile,
   custom,
+  enterprise,
 }
 
 extension ProfileTypeX on ProfileType {

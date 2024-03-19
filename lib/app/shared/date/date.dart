@@ -70,8 +70,8 @@ class UiDate {
               .toLocal(),
         );
       }
-    } catch (e, s) {
-      getLogger('date').e('e: $e, s: $s');
+    } catch (e) {
+      //getLogger('date').e('e: $e, s: $s');
       return '';
     }
   }

@@ -11,10 +11,12 @@ import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
+import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
+import 'package:altme/lang/cubit/lang_state.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
@@ -49,6 +51,10 @@ class App extends StatelessWidget {
         BlocProvider<FlavorCubit>(
           create: (context) => FlavorCubit(flavorMode),
         ),
+        BlocProvider<LangCubit>(
+          create: (context) =>
+              LangCubit(secureStorageProvider: getSecureStorage),
+        ),
         BlocProvider<RouteCubit>(create: (context) => RouteCubit()),
         BlocProvider<BeaconCubit>(
           create: (context) => BeaconCubit(beacon: Beacon()),
@@ -70,6 +76,8 @@ class App extends StatelessWidget {
             secureStorageProvider: secureStorageProvider,
             oidc4vc: OIDC4VC(),
             didKitProvider: DIDKitProvider(),
+            langCubit: context.read<LangCubit>(),
+            jwtDecode: JWTDecode(),
           ),
         ),
         BlocProvider<AdvanceSettingsCubit>(
@@ -82,9 +90,6 @@ class App extends StatelessWidget {
         BlocProvider(
           create: (context) => KycVerificationCubit(
             profileCubit: context.read<ProfileCubit>(),
-            didKitProvider: DIDKitProvider(),
-            oidc4vc: OIDC4VC(),
-            secureStorageProvider: getSecureStorage,
             client: DioClient(
               '',
               Dio(),
@@ -139,6 +144,15 @@ class App extends StatelessWidget {
             polygonId: PolygonId(),
             credentialsCubit: context.read<CredentialsCubit>(),
             profileCubit: context.read<ProfileCubit>(),
+            walletCubit: context.read<WalletCubit>(),
+          ),
+        ),
+        BlocProvider<EnterpriseCubit>(
+          create: (context) => EnterpriseCubit(
+            client: DioClient('', Dio()),
+            jwtDecode: JWTDecode(),
+            profileCubit: context.read<ProfileCubit>(),
+            walletCubit: context.read<WalletCubit>(),
           ),
         ),
         BlocProvider<ScanCubit>(
@@ -148,7 +162,9 @@ class App extends StatelessWidget {
             didKitProvider: DIDKitProvider(),
             secureStorageProvider: secureStorageProvider,
             profileCubit: context.read<ProfileCubit>(),
+            walletCubit: context.read<WalletCubit>(),
             oidc4vc: OIDC4VC(),
+            jwtDecode: JWTDecode(),
           ),
         ),
         BlocProvider<QRCodeScanCubit>(
@@ -167,6 +183,8 @@ class App extends StatelessWidget {
             polygonIdCubit: context.read<PolygonIdCubit>(),
             didKitProvider: DIDKitProvider(),
             oidc4vc: OIDC4VC(),
+            walletCubit: context.read<WalletCubit>(),
+            enterpriseCubit: context.read<EnterpriseCubit>(),
           ),
         ),
         BlocProvider(
@@ -238,37 +256,35 @@ class MaterialAppDefinition extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isStaging =
         context.read<FlavorCubit>().flavorMode == FlavorMode.staging;
-    return BlocProvider(
-      create: (context) => LangCubit(),
-      child: BlocBuilder<LangCubit, Locale>(
-        builder: (context, lang) {
-          if (isStaging) {
-            final locale = DevicePreview.locale(context);
-            if (locale != null) {
-              context.read<LangCubit>().setLocale(locale);
-            }
-          } else {
-            context.read<LangCubit>().fetchLocale();
+    return BlocBuilder<LangCubit, LangState>(
+      builder: (context, state) {
+        if (isStaging) {
+          final locale = DevicePreview.locale(context);
+          if (locale != null) {
+            context.read<LangCubit>().setLocale(locale);
           }
+        }
+        if (state.locale == const Locale('en')) {
+          context.read<LangCubit>().checkLocale();
+        }
 
-          return MaterialApp(
-            builder: isStaging ? DevicePreview.appBuilder : null,
-            locale: isStaging ? DevicePreview.locale(context) : lang,
-            title: 'Talao Wallet',
-            darkTheme: AppTheme.darkThemeData,
-            navigatorObservers: [MyRouteObserver(context)],
-            themeMode: ThemeMode.dark,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: const SplashPage(),
-          );
-        },
-      ),
+        return MaterialApp(
+          builder: isStaging ? DevicePreview.appBuilder : null,
+          locale: isStaging ? DevicePreview.locale(context) : state.locale,
+          title: 'Talao Wallet',
+          darkTheme: AppTheme.darkThemeData,
+          navigatorObservers: [MyRouteObserver(context)],
+          themeMode: ThemeMode.dark,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const SplashPage(),
+        );
+      },
     );
   }
 }

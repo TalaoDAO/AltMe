@@ -140,10 +140,30 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>configuration</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>configuration</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>tezos</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>tezos</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>haip</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>haip</string>
 			</array>
 		</dict>
 	</array>

@@ -155,4 +155,7 @@ enum ResponseString {
   RESPONSE_STRING_theCredentialOfferIsInvalid,
   RESPONSE_STRING_theServiceIsNotAvailable,
   RESPONSE_STRING_theIssuanceOfThisCredentialIsPending,
+  RESPONSE_STRING_successfullyAddedEnterpriseAccount,
+  RESPONSE_STRING_successfullyUpdatedEnterpriseAccount,
+  RESPONSE_STRING_thisWalleIsAlreadyConfigured,
 }

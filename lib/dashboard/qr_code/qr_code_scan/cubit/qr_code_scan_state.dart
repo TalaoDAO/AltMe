@@ -8,6 +8,7 @@ class QRCodeScanState extends Equatable {
     this.route,
     this.isScan = false,
     this.message,
+    this.dialogData,
   });
 
   factory QRCodeScanState.fromJson(Map<String, dynamic> json) =>
@@ -20,6 +21,7 @@ class QRCodeScanState extends Equatable {
   final bool isScan;
 
   final StateMessage? message;
+  final String? dialogData;
 
   Map<String, dynamic> toJson() => _$QRCodeScanStateToJson(this);
 
@@ -54,6 +56,7 @@ class QRCodeScanState extends Equatable {
     Route<dynamic>? route,
     Uri? uri,
     bool? isScan,
+    String? dialogData,
   }) {
     return QRCodeScanState(
       status: qrScanStatus,
@@ -61,9 +64,17 @@ class QRCodeScanState extends Equatable {
       isScan: isScan ?? this.isScan,
       uri: uri ?? this.uri,
       route: route, // route should be cleared when one route is done
+      dialogData: dialogData,
     );
   }
 
   @override
-  List<Object?> get props => [status, uri, route, isScan, message];
+  List<Object?> get props => [
+        status,
+        uri,
+        route,
+        isScan,
+        message,
+        dialogData,
+      ];
 }

@@ -33,6 +33,10 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
   Future<void> setCurrentWalletAccount(int index) async {
     emit(state.loading());
     await walletCubit.setCurrentWalletAccount(index);
+    await walletCubit.credentialsCubit.loadAllCredentials(
+      blockchainType:
+          walletCubit.state.cryptoAccount.data[index].blockchainType,
+    );
     emit(state.success(currentCryptoIndex: index));
   }
 

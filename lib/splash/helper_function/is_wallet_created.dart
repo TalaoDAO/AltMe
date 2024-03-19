@@ -27,14 +27,16 @@ Future<bool> isWalletCreated({
     return false;
   }
 
-  log.i('wallet initialisation');
-  await credentialsCubit.loadAllCredentials();
-
   log.i('blockchain initialisation');
   await blockchainInitialize(
     walletCubit: walletCubit,
     ssiMnemonic: ssiMnemonic,
     secureStorageProvider: secureStorageProvider,
+  );
+
+  log.i('wallet initialisation');
+  await credentialsCubit.loadAllCredentials(
+    blockchainType: walletCubit.state.currentAccount!.blockchainType,
   );
 
   return true;

@@ -7,7 +7,9 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
+import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -115,7 +117,11 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
     if (confirm) {
       final credentialsCubit = context.read<CredentialsCubit>();
-      await credentialsCubit.deleteById(id: widget.credentialModel.id);
+      await credentialsCubit.deleteById(
+        id: widget.credentialModel.id,
+        blockchainType:
+            context.read<WalletCubit>().state.currentAccount!.blockchainType,
+      );
     }
   }
 
@@ -137,6 +143,17 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
     final isSecure = profileData.profileSetting.selfSovereignIdentityOptions
         .customOidc4vcProfile.securityLevel;
+
+    final credentialSupported = widget.credentialModel.credentialSupported;
+
+    final claims = credentialSupported?['claims'];
+    final containClaims = claims != null;
+
+    String? credentialImage;
+
+    if (containClaims) {
+      credentialImage = getPicture(credentialModel: widget.credentialModel);
+    }
 
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
@@ -165,14 +182,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.removeLast();
         }
 
-        final vcFormatType = context
-            .read<ProfileCubit>()
-            .state
-            .model
-            .profileSetting
-            .selfSovereignIdentityOptions
-            .customOidc4vcProfile
-            .vcFormatType;
+        final profileSetting =
+            context.read<ProfileCubit>().state.model.profileSetting;
 
         return BasePage(
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
@@ -188,11 +199,30 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        CredentialDisplay(
-                          credentialModel: widget.credentialModel,
-                          credDisplayType: CredDisplayType.Detail,
-                          vcFormatType: vcFormatType,
-                        ),
+                        if (credentialImage != null)
+                          AspectRatio(
+                            aspectRatio: Sizes.credentialAspectRatio,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                Sizes.credentialBorderRadius,
+                              ),
+                              child: CachedImageFromNetwork(
+                                credentialImage,
+                                fit: BoxFit.contain,
+                                width: double.infinity,
+                                bgColor: Colors.transparent,
+                                height: double.infinity,
+                                errorMessage: '',
+                                showLoading: false,
+                              ),
+                            ),
+                          )
+                        else
+                          CredentialDisplay(
+                            credentialModel: widget.credentialModel,
+                            credDisplayType: CredDisplayType.Detail,
+                            profileSetting: profileSetting,
+                          ),
                         const SizedBox(height: 20),
                         Column(
                           children: [
@@ -304,12 +334,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
                           /// selective disclouse data - _sd
                           /// and normal data too
-                          if (widget.credentialModel.credentialSupported !=
-                                  null &&
-                              widget.credentialModel.credentialSupported!
-                                  .containsKey('claims')) ...[
-                            ClaimsData(
+                          if (containClaims) ...[
+                            DisplaySelectiveDisclosure(
                               credentialModel: widget.credentialModel,
+                              claims: null,
                             ),
                           ],
 

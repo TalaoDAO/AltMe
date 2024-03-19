@@ -146,7 +146,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                             return NavigationDecision.navigate;
                           }
                         },
-                      ),
+                      )
                     ],
                   ),
                 ),

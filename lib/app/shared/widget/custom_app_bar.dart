@@ -22,36 +22,39 @@ class CustomAppBar extends PreferredSize {
   final Alignment titleAlignment;
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (leading != null) leading!,
-                  if (trailing != null) trailing!,
-                ],
-              ),
-              Container(
-                alignment: titleAlignment,
-                padding: titleMargin.copyWith(
-                  top: titleMargin.top + 10,
-                  left: titleMargin.left + 38,
-                  right: titleMargin.right + 38,
-                  bottom: titleMargin.bottom + 6,
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).colorScheme.background,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (leading != null) leading!,
+                    if (trailing != null) trailing!,
+                  ],
                 ),
-                child: Text(
-                  title ?? '',
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.appBar,
+                Container(
+                  alignment: titleAlignment,
+                  padding: titleMargin.copyWith(
+                    top: titleMargin.top + 10,
+                    left: titleMargin.left + 38,
+                    right: titleMargin.right + 38,
+                    bottom: titleMargin.bottom + 6,
+                  ),
+                  child: Text(
+                    title ?? '',
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.appBar,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
