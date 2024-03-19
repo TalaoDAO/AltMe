@@ -148,6 +148,15 @@ class _DashboardViewState extends State<DashboardView> {
           if (state.selectedIndex == 3) {
             context.read<AltmeChatSupportCubit>().setMessagesAsRead();
           }
+
+          final displayChatSupport = context
+              .read<ProfileCubit>()
+              .state
+              .model
+              .profileSetting
+              .helpCenterOptions
+              .displayChatSupport;
+
           return WillPopScope(
             onWillPop: () async {
               if (scaffoldKey.currentState!.isDrawerOpen) {
@@ -187,17 +196,20 @@ class _DashboardViewState extends State<DashboardView> {
                           onPageChanged:
                               context.read<DashboardCubit>().onPageChanged,
                           physics: const NeverScrollableScrollPhysics(),
-                          children: const [
-                            HomePage(),
+                          children: [
+                            const HomePage(),
                             if (Parameters.walletHandlesCrypto)
-                              DiscoverTabPage()
+                              const DiscoverTabPage()
                             else
-                              DiscoverPage(),
+                              const DiscoverPage(),
                             if (Parameters.walletHandlesCrypto)
-                              WertPage()
+                              const WertPage()
                             else
-                              SearchPage(),
-                            AltmeSupportChatPage(),
+                              const SearchPage(),
+                            if (displayChatSupport)
+                              const AltmeSupportChatPage()
+                            else
+                              Container(),
                           ],
                         ),
                       ),
@@ -232,23 +244,33 @@ class _DashboardViewState extends State<DashboardView> {
                                 onTap: () => bottomTapped(2),
                                 isSelected: state.selectedIndex == 2,
                               ),
-                            StreamBuilder(
-                              initialData: context
-                                  .read<AltmeChatSupportCubit>()
-                                  .unreadMessageCount,
-                              stream: context
-                                  .read<AltmeChatSupportCubit>()
-                                  .unreadMessageCountStream,
-                              builder: (_, snapShot) {
-                                return BottomBarItem(
-                                  icon: IconStrings.messaging,
-                                  text: l10n.chat,
-                                  badgeCount: snapShot.data ?? 0,
-                                  onTap: () => bottomTapped(3),
-                                  isSelected: state.selectedIndex == 3,
-                                );
-                              },
-                            ),
+                            if (displayChatSupport) ...[
+                              StreamBuilder(
+                                initialData: context
+                                    .read<AltmeChatSupportCubit>()
+                                    .unreadMessageCount,
+                                stream: context
+                                    .read<AltmeChatSupportCubit>()
+                                    .unreadMessageCountStream,
+                                builder: (_, snapShot) {
+                                  return BottomBarItem(
+                                    icon: IconStrings.messaging,
+                                    text: l10n.chat,
+                                    badgeCount: snapShot.data ?? 0,
+                                    onTap: () => bottomTapped(3),
+                                    isSelected: state.selectedIndex == 3,
+                                  );
+                                },
+                              ),
+                            ] else ...[
+                              BottomBarItem(
+                                icon: IconStrings.settings,
+                                text: l10n.settings,
+                                onTap: () =>
+                                    scaffoldKey.currentState!.openDrawer(),
+                                isSelected: false,
+                              ),
+                            ],
                           ],
                         ),
                       ),

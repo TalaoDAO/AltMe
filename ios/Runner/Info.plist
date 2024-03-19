@@ -156,6 +156,16 @@
 				<string>tezos</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>haip</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>haip</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>

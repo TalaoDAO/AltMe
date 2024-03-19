@@ -63,7 +63,8 @@ class Urls {
   /// linkedin card
   static const String linkedinCardUrl =
       'https://issuer.talao.co/passbase/endpoint/linkedincard/';
-  static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
+  // static const String talaoIpfsGafteway = 'https://talao.mypinata.cloud/ipfs/';
+  static const String ipfsGateway = 'https://ipfs.io/ipfs/';
 
   /// main tezos rpc
   static const mainnetRPC = [

@@ -1,12 +1,9 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:oidc4vc/oidc4vc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 part 'kyc_verification_state.dart';
 part 'kyc_verification_cubit.g.dart';
@@ -15,16 +12,10 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
   KycVerificationCubit({
     required this.client,
     required this.profileCubit,
-    required this.secureStorageProvider,
-    required this.oidc4vc,
-    required this.didKitProvider,
   }) : super(const KycVerificationState());
 
   final DioClient client;
   final ProfileCubit profileCubit;
-  final SecureStorageProvider secureStorageProvider;
-  final OIDC4VC oidc4vc;
-  final DIDKitProvider didKitProvider;
 
   final logger = getLogger('KycVerificationCubit');
 
@@ -37,16 +28,14 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
       final privateKey = await getPrivateKey(
-        secureStorage: getSecureStorage,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
-        oidc4vc: oidc4vc,
       );
 
       final (did, _) = await getDidAndKid(
         didKeyType: didKeyType,
         privateKey: privateKey,
-        secureStorage: getSecureStorage,
-        didKitProvider: didKitProvider,
+        profileCubit: profileCubit,
       );
 
       final response = await client.get(

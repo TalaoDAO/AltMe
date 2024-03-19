@@ -447,7 +447,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         try {
           if (state.uri != null) {
             LoadingView().show(context: context);
-            final profileCubit = context.read<ProfileCubit>();
             final uri = state.uri!;
             final error = uri.queryParameters['error'];
             final errorDescription = uri.queryParameters['error_description'];

@@ -1,24 +1,18 @@
-import 'dart:convert';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-
-import 'package:did_kit/did_kit.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 /// Retreive credential_type from url
-/// credentialResponseData, deferredCredentialEndpoint, format,
-/// openIdConfiguration, tokenResponse
+// encodedCredentialOrFutureTokens,deferredCredentialEndpoint,
+// format, updatedNonce
 Future<
     (
       List<dynamic>,
       String?,
       String,
+      String,
     )> getCredential({
-  required OIDC4VC oidc4vc,
   required bool isEBSIV3,
-  required DIDKitProvider didKitProvider,
   required dynamic credential,
   required ProfileCubit profileCubit,
   required String issuer,
@@ -33,47 +27,26 @@ Future<
 }) async {
   final privateKey = await fetchPrivateKey(
     isEBSIV3: isEBSIV3,
-    oidc4vc: oidc4vc,
-    secureStorage: getSecureStorage,
     didKeyType: didKeyType,
+    profileCubit: profileCubit,
   );
 
   final (did, kid) = await fetchDidAndKid(
     isEBSIV3: isEBSIV3,
     privateKey: privateKey,
-    didKitProvider: didKitProvider,
-    secureStorage: getSecureStorage,
     didKeyType: didKeyType,
+    profileCubit: profileCubit,
   );
 
   final customOidc4vcProfile = profileCubit.state.model.profileSetting
       .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-  var iss = '';
-
-  switch (customOidc4vcProfile.clientType) {
-    case ClientType.jwkThumbprint:
-      final tokenParameters = TokenParameters(
-        privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
-        did: '', // just added as it is required field
-        mediaType: MediaType.basic, // just added as it is required field
-        clientType:
-            ClientType.jwkThumbprint, // just added as it is required field
-        proofHeaderType: customOidc4vcProfile.proofHeader,
-        clientId: '',
-      );
-      iss = tokenParameters.thumbprint;
-    case ClientType.did:
-      iss = did;
-    case ClientType.confidential:
-      iss = customOidc4vcProfile.clientId ?? '';
-  }
-
   final (
     List<dynamic> encodedCredentialOrFutureTokens,
     String? deferredCredentialEndpoint,
     String format,
-  ) = await oidc4vc.getCredential(
+    String updatedNonce,
+  ) = await profileCubit.oidc4vc.getCredential(
     issuer: issuer,
     credential: credential,
     did: did,
@@ -86,7 +59,6 @@ Future<
     proofHeaderType: customOidc4vcProfile.proofHeader,
     clientAuthentication: customOidc4vcProfile.clientAuthentication,
     proofType: customOidc4vcProfile.proofType,
-    iss: iss,
     accessToken: accessToken,
     cnonce: nonce,
     authorizationDetails: authorizationDetails,
@@ -97,5 +69,6 @@ Future<
     encodedCredentialOrFutureTokens,
     deferredCredentialEndpoint,
     format,
+    updatedNonce,
   );
 }

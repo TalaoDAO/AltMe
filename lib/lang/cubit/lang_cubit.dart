@@ -22,7 +22,18 @@ class LangCubit extends Cubit<LangState> {
   /// emit new state if language recorded is dufferent than english
   Future<void> checkLocale() async {
     final languageType = await getRecordedLanguage();
-    emit(state.copyWith(languageType: languageType));
+    if (languageType == LanguageType.phone) {
+      emit(state.copyWith(languageType: languageType));
+    } else {
+      emit(
+        state.copyWith(
+          languageType: languageType,
+          locale: Locale(
+            languageType.name,
+          ),
+        ),
+      );
+    }
   }
 
   Future<LanguageType> getRecordedLanguage() async {

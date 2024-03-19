@@ -26,7 +26,7 @@ class ContractModel extends Equatable {
   Map<String, dynamic> toJson() => _$ContractModelToJson(this);
 
   String? get iconUrl {
-    return image?.replaceFirst('ipfs://', Urls.talaoIpfsGateway);
+    return image?.replaceFirst('ipfs://', Urls.ipfsGateway);
   }
 
   @override

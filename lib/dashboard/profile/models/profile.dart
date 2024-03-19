@@ -174,7 +174,7 @@ class ProfileModel extends Equatable {
               credentialManifestSupport: false,
               cryptoHolderBinding: true,
               defaultDid: Parameters.didKeyTypeForDutch,
-              oidc4vciDraft: OIDC4VCIDraftType.draft11,
+              oidc4vciDraft: OIDC4VCIDraftType.draft13,
               oidc4vpDraft: OIDC4VPDraftType.draft10,
               scope: false,
               securityLevel: false,
