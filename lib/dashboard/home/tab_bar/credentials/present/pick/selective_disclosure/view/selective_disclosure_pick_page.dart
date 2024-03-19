@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,6 +89,12 @@ class SelectiveDisclosurePickView extends StatelessWidget {
       },
       child: BlocBuilder<SelectiveDisclosureCubit, SelectiveDisclosureState>(
         builder: (context, state) {
+          final profileSetting =
+              context.read<ProfileCubit>().state.model.profileSetting;
+
+          final credentialImage =
+              SelectiveDisclosure(credentialToBePresented).getPicture;
+
           return BasePage(
             title: l10n.thisOrganisationRequestsThisInformation,
             titleAlignment: Alignment.topCenter,
@@ -96,16 +103,26 @@ class SelectiveDisclosurePickView extends StatelessWidget {
               vertical: 24,
               horizontal: 16,
             ),
-            body: DisplaySelectiveDisclosure(
-              credentialModel: credentialToBePresented,
-              claims: null,
-              selectedIndex: state.selected,
-              onPressed: (claimIndex, sdIndexInJWT) {
-                context.read<SelectiveDisclosureCubit>().toggle(claimIndex);
-                context
-                    .read<SelectiveDisclosureCubit>()
-                    .saveIndexOfSDJWT(sdIndexInJWT);
-              },
+            body: Column(
+              children: [
+                if (credentialImage == null)
+                  CredentialDisplay(
+                    credentialModel: credentialToBePresented,
+                    credDisplayType: CredDisplayType.List,
+                    profileSetting: profileSetting,
+                  ),
+                DisplaySelectiveDisclosure(
+                  credentialModel: credentialToBePresented,
+                  claims: null,
+                  selectedIndex: state.selected,
+                  onPressed: (claimIndex, sdIndexInJWT) {
+                    context.read<SelectiveDisclosureCubit>().toggle(claimIndex);
+                    context
+                        .read<SelectiveDisclosureCubit>()
+                        .saveIndexOfSDJWT(sdIndexInJWT);
+                  },
+                ),
+              ],
             ),
             navigation: SafeArea(
               child: Container(

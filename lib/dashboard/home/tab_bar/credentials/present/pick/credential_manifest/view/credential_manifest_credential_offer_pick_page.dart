@@ -176,6 +176,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                               presentationDefinition
                                                       .inputDescriptors[
                                                   inputDescriptorIndex],
+                                          isVcSdJWT: isVcSdJWT,
                                         );
                                   },
                                 );

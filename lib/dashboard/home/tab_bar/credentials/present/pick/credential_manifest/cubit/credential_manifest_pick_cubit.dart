@@ -53,6 +53,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
   void toggle({
     required int index,
     required InputDescriptor inputDescriptor,
+    required bool isVcSdJWT,
   }) {
     final bool isSelected = state.selected.contains(index);
 
@@ -63,11 +64,16 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
       selected = List<int>.from(state.selected)
         ..removeWhere((element) => element == index);
     } else {
-      /// selecting the credential
-      selected = [
-        ...state.selected,
-        ...[index],
-      ];
+      if (isVcSdJWT) {
+        /// selecting one credential
+        selected = [index];
+      } else {
+        /// selecting multiple credential
+        selected = [
+          ...state.selected,
+          ...[index],
+        ];
+      }
     }
 
     bool isButtonEnabled = selected.isNotEmpty;
