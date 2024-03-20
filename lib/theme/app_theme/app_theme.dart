@@ -521,7 +521,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get credentialFieldTitle => GoogleFonts.roboto(
         color: const Color(0xff212121),
         fontSize: 14,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w400,
       );
 
   TextStyle get credentialFieldDescription => GoogleFonts.roboto(

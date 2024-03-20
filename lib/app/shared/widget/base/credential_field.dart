@@ -55,6 +55,8 @@ class DisplayCredentialField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Padding(
       padding: padding,
       child: SelectableText.rich(
@@ -64,25 +66,16 @@ class DisplayCredentialField extends StatelessWidget {
             if (title != null) ...[
               TextSpan(
                 text: showVertically ? title : '$title: ',
-                style: titleColor == null
-                    ? Theme.of(context).textTheme.credentialFieldTitle
-                    : Theme.of(context)
-                        .textTheme
-                        .credentialFieldTitle
-                        .copyWith(color: titleColor),
+                style: textTheme.credentialFieldTitle.copyWith(
+                  color: titleColor,
+                ),
               ),
-              if (showVertically) ...[
-                const TextSpan(text: ' \n'),
-              ],
+              if (showVertically) const TextSpan(text: ' \n'),
             ],
             TextSpan(
               text: value,
-              style: valueColor == null
-                  ? Theme.of(context).textTheme.credentialFieldDescription
-                  : Theme.of(context)
-                      .textTheme
-                      .credentialFieldDescription
-                      .copyWith(color: valueColor),
+              style: textTheme.credentialFieldDescription
+                  .copyWith(color: valueColor),
             ),
           ],
         ),
