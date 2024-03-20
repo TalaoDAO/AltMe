@@ -82,10 +82,12 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
           if (display == null) return Container();
           title = display['name'].toString();
 
-          data = SelectiveDisclosure(credentialModel).getClaimsData(
+          final (claimsData, isfromDisclosureOfJWT) =
+              SelectiveDisclosure(credentialModel).getClaimsData(
             key: key,
-            chooseFromDisclosureFromJWTOnly: selectedIndex != null,
           );
+
+          data = claimsData;
 
           if (data == null) return Container();
 
@@ -104,7 +106,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                     showVertically: showVertically,
                   ),
                 ),
-                if (selectedIndex != null) ...[
+                if (selectedIndex != null && isfromDisclosureOfJWT) ...[
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(top: 15, right: 10),

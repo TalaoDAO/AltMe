@@ -105,22 +105,19 @@ class SelectiveDisclosure {
     if (valueType == null) return null;
 
     if (valueType == 'image/jpeg') {
-      final data = getClaimsData(
-        key: 'picture',
-        chooseFromDisclosureFromJWTOnly: false,
-      );
-
+      final (data, _) = getClaimsData(key: 'picture');
       return data;
     } else {
       return null;
     }
   }
 
-  String? getClaimsData({
+  /// claimsdata, isfromDisclosureOfJWT
+  (String?, bool) getClaimsData({
     required String key,
-    required bool chooseFromDisclosureFromJWTOnly,
   }) {
     String? data;
+    bool isfromDisclosureOfJWT = false;
 
     final JsonPath dataPath = JsonPath(
       // ignore: prefer_interpolation_to_compose_strings
@@ -130,17 +127,17 @@ class SelectiveDisclosure {
     try {
       final uncryptedDataPath = dataPath.read(extractedValuesFromJwt).first;
       data = uncryptedDataPath.value.toString();
+      isfromDisclosureOfJWT = true;
     } catch (e) {
-      if (!chooseFromDisclosureFromJWTOnly) {
-        try {
-          final credentialModelPath = dataPath.read(credentialModel.data).first;
-          data = credentialModelPath.value.toString();
-        } catch (e) {
-          data = null;
-        }
+      try {
+        final credentialModelPath = dataPath.read(credentialModel.data).first;
+        data = credentialModelPath.value.toString();
+        isfromDisclosureOfJWT = false;
+      } catch (e) {
+        data = null;
       }
     }
 
-    return data;
+    return (data, isfromDisclosureOfJWT);
   }
 }
