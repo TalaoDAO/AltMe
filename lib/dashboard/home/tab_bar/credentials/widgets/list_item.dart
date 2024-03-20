@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
@@ -85,13 +84,16 @@ class CredentialsDisplayItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final profileSetting =
+        context.read<ProfileCubit>().state.model.profileSetting;
     return _BaseItem(
       enabled: true,
       onTap: onTap,
       child: selected == null
-          ? DisplayCard(
+          ? CredentialDisplay(
               credentialModel: credentialModel,
-              selected: selected,
+              credDisplayType: CredDisplayType.List,
+              profileSetting: profileSetting,
             )
           : DisplaySelectionElement(
               credentialModel: credentialModel,
@@ -113,12 +115,15 @@ class DisplaySelectionElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final profileSetting =
+        context.read<ProfileCubit>().state.model.profileSetting;
     return CredentialSelectionPadding(
       child: Column(
         children: <Widget>[
-          DisplayCard(
+          CredentialDisplay(
             credentialModel: credentialModel,
-            selected: selected,
+            credDisplayType: CredDisplayType.List,
+            profileSetting: profileSetting,
           ),
           Align(
             alignment: Alignment.centerRight,
@@ -134,32 +139,5 @@ class DisplaySelectionElement extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class DisplayCard extends StatelessWidget {
-  const DisplayCard({
-    super.key,
-    required this.credentialModel,
-    this.selected,
-  });
-
-  final CredentialModel credentialModel;
-  final bool? selected;
-
-  @override
-  Widget build(BuildContext context) {
-    final profileSetting =
-        context.read<ProfileCubit>().state.model.profileSetting;
-
-    final credentialImage = SelectiveDisclosure(credentialModel).getPicture;
-
-    return selected != null && credentialImage != null
-        ? PictureDisplay(credentialImage: credentialImage)
-        : CredentialDisplay(
-            credentialModel: credentialModel,
-            credDisplayType: CredDisplayType.List,
-            profileSetting: profileSetting,
-          );
   }
 }
