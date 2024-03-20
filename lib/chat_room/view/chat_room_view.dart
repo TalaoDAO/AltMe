@@ -35,8 +35,19 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
       (_) async {
         liveChatCubit = context.read<B>();
 
-        if (context.read<ProfileCubit>().state.model.walletType ==
-            WalletType.enterprise) {
+        final displayChatSupport = context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting
+            .helpCenterOptions
+            .displayChatSupport;
+
+        final isEnterprise =
+            context.read<ProfileCubit>().state.model.walletType ==
+                WalletType.enterprise;
+
+        if (displayChatSupport || isEnterprise) {
           // for enterprise we are initialisation at start
           await context.read<AltmeChatSupportCubit>().init();
         }
