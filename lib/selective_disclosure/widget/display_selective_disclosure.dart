@@ -50,7 +50,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
           return TransparentInkWell(
             onTap: () => onPressed?.call(claimIndex, sdIndexInJWT),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 10, top: 10),
@@ -94,6 +94,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
           return TransparentInkWell(
             onTap: () => onPressed?.call(claimIndex, sdIndexInJWT),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 10),

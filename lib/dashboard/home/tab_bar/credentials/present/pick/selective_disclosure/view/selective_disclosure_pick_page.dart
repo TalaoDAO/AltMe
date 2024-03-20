@@ -124,7 +124,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
                         .read<SelectiveDisclosureCubit>()
                         .saveIndexOfSDJWT(sdIndexInJWT);
                   },
-                  showVertically: false,
+                  showVertically: true,
                 ),
               ],
             ),
