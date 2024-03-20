@@ -201,23 +201,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         if (credentialImage != null)
-                          AspectRatio(
-                            aspectRatio: Sizes.credentialAspectRatio,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                Sizes.credentialBorderRadius,
-                              ),
-                              child: CachedImageFromNetwork(
-                                credentialImage,
-                                fit: BoxFit.contain,
-                                width: double.infinity,
-                                bgColor: Colors.transparent,
-                                height: double.infinity,
-                                errorMessage: '',
-                                showLoading: false,
-                              ),
-                            ),
-                          )
+                          PictureDisplay(credentialImage: credentialImage)
                         else
                           CredentialDisplay(
                             credentialModel: widget.credentialModel,

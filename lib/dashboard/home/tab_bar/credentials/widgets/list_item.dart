@@ -155,23 +155,7 @@ class DisplayCard extends StatelessWidget {
     final credentialImage = SelectiveDisclosure(credentialModel).getPicture;
 
     return selected != null && credentialImage != null
-        ? AspectRatio(
-            aspectRatio: Sizes.credentialAspectRatio,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(
-                Sizes.credentialBorderRadius,
-              ),
-              child: CachedImageFromNetwork(
-                credentialImage,
-                fit: BoxFit.contain,
-                width: double.infinity,
-                bgColor: Colors.transparent,
-                height: double.infinity,
-                errorMessage: '',
-                showLoading: false,
-              ),
-            ),
-          )
+        ? PictureDisplay(credentialImage: credentialImage)
         : CredentialDisplay(
             credentialModel: credentialModel,
             credDisplayType: CredDisplayType.List,

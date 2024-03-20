@@ -105,12 +105,15 @@ class SelectiveDisclosurePickView extends StatelessWidget {
             ),
             body: Column(
               children: [
-                if (credentialImage == null)
+                if (credentialImage != null)
+                  PictureDisplay(credentialImage: credentialImage)
+                else
                   CredentialDisplay(
                     credentialModel: credentialToBePresented,
                     credDisplayType: CredDisplayType.List,
                     profileSetting: profileSetting,
                   ),
+                const SizedBox(height: 20),
                 DisplaySelectiveDisclosure(
                   credentialModel: credentialToBePresented,
                   claims: null,
