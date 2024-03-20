@@ -8,9 +8,11 @@ class ActivityWidget extends StatelessWidget {
   const ActivityWidget({
     super.key,
     required this.activity,
+    required this.showVertically,
   });
 
   final Activity activity;
+  final bool showVertically;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class ActivityWidget extends StatelessWidget {
             titleColor: titleColor,
             valueColor: valueColor,
             padding: EdgeInsets.zero,
+            showVertically: showVertically,
           ),
           const SizedBox(height: 5),
           CredentialField(
@@ -36,6 +39,7 @@ class ActivityWidget extends StatelessWidget {
             titleColor: titleColor,
             valueColor: valueColor,
             padding: EdgeInsets.zero,
+            showVertically: showVertically,
           ),
           const SizedBox(height: 10),
           Text(
@@ -66,6 +70,7 @@ class ActivityWidget extends StatelessWidget {
             titleColor: titleColor,
             valueColor: valueColor,
             padding: EdgeInsets.zero,
+            showVertically: showVertically,
           ),
           const SizedBox(height: 5),
         ],

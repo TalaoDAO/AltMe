@@ -5,6 +5,7 @@ class CredentialField extends StatelessWidget {
   const CredentialField({
     super.key,
     required this.value,
+    required this.showVertically,
     this.title,
     this.titleColor,
     this.valueColor,
@@ -16,6 +17,7 @@ class CredentialField extends StatelessWidget {
   final Color? titleColor;
   final Color? valueColor;
   final EdgeInsetsGeometry padding;
+  final bool showVertically;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class CredentialField extends StatelessWidget {
         titleColor: titleColor,
         valueColor: valueColor,
         padding: padding,
+        showVertically: showVertically,
       ),
     );
   }
@@ -40,6 +43,7 @@ class DisplayCredentialField extends StatelessWidget {
     this.titleColor,
     this.valueColor,
     required this.padding,
+    required this.showVertically,
   });
 
   final String? title;
@@ -47,6 +51,7 @@ class DisplayCredentialField extends StatelessWidget {
   final Color? titleColor;
   final Color? valueColor;
   final EdgeInsetsGeometry padding;
+  final bool showVertically;
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +61,9 @@ class DisplayCredentialField extends StatelessWidget {
         textAlign: TextAlign.left,
         TextSpan(
           children: <InlineSpan>[
-            if (title != null)
+            if (title != null) ...[
               TextSpan(
-                text: '$title: ',
+                text: showVertically ? title : '$title: ',
                 style: titleColor == null
                     ? Theme.of(context).textTheme.credentialFieldTitle
                     : Theme.of(context)
@@ -66,6 +71,10 @@ class DisplayCredentialField extends StatelessWidget {
                         .credentialFieldTitle
                         .copyWith(color: titleColor),
               ),
+              if (showVertically) ...[
+                const TextSpan(text: ' \n'),
+              ],
+            ],
             TextSpan(
               text: value,
               style: valueColor == null

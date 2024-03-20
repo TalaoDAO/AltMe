@@ -10,13 +10,14 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
   const DisplaySelectiveDisclosure({
     super.key,
     required this.credentialModel,
+    required this.showVertically,
     this.claims,
     this.onPressed,
     this.selectedIndex,
   });
 
   final CredentialModel credentialModel;
-
+  final bool showVertically;
   final Map<String, dynamic>? claims;
   final void Function(int, int)? onPressed;
   final List<int>? selectedIndex;
@@ -56,6 +57,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                   child: DisplaySelectiveDisclosure(
                     credentialModel: credentialModel,
                     claims: value,
+                    showVertically: showVertically,
                   ),
                 ),
                 if (selectedIndex != null) ...[
@@ -99,6 +101,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                     value: data,
                     titleColor: Theme.of(context).colorScheme.titleColor,
                     valueColor: Theme.of(context).colorScheme.valueColor,
+                    showVertically: showVertically,
                   ),
                 ),
                 if (selectedIndex != null) ...[

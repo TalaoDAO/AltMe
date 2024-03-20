@@ -156,6 +156,14 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
       credentialImage = SelectiveDisclosure(widget.credentialModel).getPicture;
     }
 
+    final credentialSubjectType = widget.credentialModel.credentialPreview
+        .credentialSubjectModel.credentialSubjectType;
+
+    final showVerticalDescription =
+        credentialSubjectType == CredentialSubjectType.eudiPid ||
+            credentialSubjectType == CredentialSubjectType.identityCredential ||
+            credentialSubjectType == CredentialSubjectType.verifiableIdCard;
+
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -315,6 +323,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           /// credentialSubjectData
                           CredentialSubjectData(
                             credentialModel: widget.credentialModel,
+                            showVertically: showVerticalDescription,
                           ),
 
                           /// selective disclouse data - _sd
@@ -323,6 +332,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             DisplaySelectiveDisclosure(
                               credentialModel: widget.credentialModel,
                               claims: null,
+                              showVertically: showVerticalDescription,
                             ),
                           ],
 
@@ -350,6 +360,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               isDeveloperMode) ...[
                             DeveloperDetails(
                               credentialModel: widget.credentialModel,
+                              showVertically: showVerticalDescription,
                             ),
                           ],
 
@@ -357,6 +368,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           if (widget.credentialModel.pendingInfo != null) ...[
                             DeferredCredentialData(
                               credentialModel: widget.credentialModel,
+                              showVertically: showVerticalDescription,
                             ),
                           ],
                         ],
@@ -369,6 +381,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             itemBuilder: (context, index) {
                               return ActivityWidget(
                                 activity: reversedList[index],
+                                showVertically: showVerticalDescription,
                               );
                             },
                           ),
