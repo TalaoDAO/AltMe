@@ -8,9 +8,11 @@ class DeveloperDetails extends StatelessWidget {
   const DeveloperDetails({
     super.key,
     required this.credentialModel,
+    required this.showVertically,
   });
 
   final CredentialModel credentialModel;
+  final bool showVertically;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class DeveloperDetails extends StatelessWidget {
           value: credentialModel.getFormat,
           titleColor: Theme.of(context).colorScheme.titleColor,
           valueColor: Theme.of(context).colorScheme.valueColor,
+          showVertically: showVertically,
         ),
         const SizedBox(height: 10),
         CredentialField(
@@ -39,6 +42,7 @@ class DeveloperDetails extends StatelessWidget {
           value: issuerDid,
           titleColor: Theme.of(context).colorScheme.titleColor,
           valueColor: Theme.of(context).colorScheme.valueColor,
+          showVertically: showVertically,
         ),
         if (credentialModel.credentialPreview.credentialSubjectModel
                 is! WalletCredentialModel &&
@@ -50,6 +54,7 @@ class DeveloperDetails extends StatelessWidget {
             value: subjectDid,
             titleColor: Theme.of(context).colorScheme.titleColor,
             valueColor: Theme.of(context).colorScheme.valueColor,
+            showVertically: showVertically,
           ),
         ],
         const SizedBox(height: 10),
@@ -59,6 +64,7 @@ class DeveloperDetails extends StatelessWidget {
           value: type,
           titleColor: Theme.of(context).colorScheme.titleColor,
           valueColor: Theme.of(context).colorScheme.valueColor,
+          showVertically: showVertically,
         ),
       ],
     );

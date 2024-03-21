@@ -54,6 +54,10 @@ class DidView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final didKeyType = DidKeyType.values[index];
 
+                    if (didKeyType == DidKeyType.jwtClientAttestation) {
+                      return Container();
+                    }
+
                     final title = didKeyType.getTitle(l10n);
                     return DrawerItem(
                       title: title,

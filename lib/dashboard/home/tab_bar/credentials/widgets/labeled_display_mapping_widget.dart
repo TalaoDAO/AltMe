@@ -26,6 +26,7 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
         title: object.label,
         titleColor: titleColor,
         valueColor: valueColor,
+        showVertically: false,
       );
     }
 
@@ -62,6 +63,7 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
           value: fallback,
           titleColor: titleColor,
           valueColor: valueColor,
+          showVertically: false,
         );
       }
     }

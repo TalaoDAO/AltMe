@@ -25,6 +25,7 @@ class IdentityPassWidget extends StatelessWidget {
             CredentialField(
               title: l10n.expires,
               value: identityPassModel.expires!,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -32,6 +33,7 @@ class IdentityPassWidget extends StatelessWidget {
             CredentialField(
               title: l10n.jobTitle,
               value: identityPassModel.recipient!.jobTitle,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -39,6 +41,7 @@ class IdentityPassWidget extends StatelessWidget {
             CredentialField(
               title: l10n.firstName,
               value: identityPassModel.recipient!.familyName,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -46,6 +49,7 @@ class IdentityPassWidget extends StatelessWidget {
             CredentialField(
               title: l10n.lastName,
               value: identityPassModel.recipient!.givenName,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -60,6 +64,7 @@ class IdentityPassWidget extends StatelessWidget {
             CredentialField(
               title: l10n.address,
               value: identityPassModel.recipient!.address,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -69,6 +74,7 @@ class IdentityPassWidget extends StatelessWidget {
               value: UiDate.formatStringDate(
                 identityPassModel.recipient!.birthDate,
               ),
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -76,6 +82,7 @@ class IdentityPassWidget extends StatelessWidget {
             CredentialField(
               title: l10n.personalMail,
               value: identityPassModel.recipient!.email,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -83,6 +90,7 @@ class IdentityPassWidget extends StatelessWidget {
             CredentialField(
               title: l10n.gender,
               value: identityPassModel.recipient!.gender,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -90,6 +98,7 @@ class IdentityPassWidget extends StatelessWidget {
             CredentialField(
               title: l10n.personalPhone,
               value: identityPassModel.recipient!.telephone,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),

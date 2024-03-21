@@ -63,4 +63,6 @@ enum CredentialSubjectType {
   civicPassCredential,
   employeeCredential,
   legalPersonalCredential,
+  identityCredential,
+  eudiPid,
 }

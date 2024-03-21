@@ -24,6 +24,7 @@ export 'display_wiget.dart';
 export 'dummy_credential_image.dart';
 export 'labeled_display_mapping_widget.dart';
 export 'list_item.dart';
+export 'picture_display.dart';
 export 'skills_list_display.dart';
 export 'star_rating.dart';
 export 'white_close_button.dart';

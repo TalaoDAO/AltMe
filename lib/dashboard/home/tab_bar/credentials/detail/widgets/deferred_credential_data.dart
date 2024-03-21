@@ -8,9 +8,11 @@ class DeferredCredentialData extends StatelessWidget {
   const DeferredCredentialData({
     super.key,
     required this.credentialModel,
+    required this.showVertically,
   });
 
   final CredentialModel credentialModel;
+  final bool showVertically;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class DeferredCredentialData extends StatelessWidget {
           value: credentialModel.pendingInfo!.issuer ?? '',
           titleColor: Theme.of(context).colorScheme.titleColor,
           valueColor: Theme.of(context).colorScheme.valueColor,
+          showVertically: showVertically,
         ),
         const SizedBox(height: 10),
         CredentialField(
@@ -36,6 +39,7 @@ class DeferredCredentialData extends StatelessWidget {
           ),
           titleColor: Theme.of(context).colorScheme.titleColor,
           valueColor: Theme.of(context).colorScheme.valueColor,
+          showVertically: showVertically,
         ),
       ],
     );

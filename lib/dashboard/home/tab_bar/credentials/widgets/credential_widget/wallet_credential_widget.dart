@@ -57,6 +57,7 @@ class WalletCredentialetailsWidget extends StatelessWidget {
             value: walletCredential.publicKey ?? '',
             titleColor: titleColor,
             valueColor: valueColor,
+            showVertically: false,
           ),
           const SizedBox(height: 10),
         ] else ...[
@@ -68,6 +69,7 @@ class WalletCredentialetailsWidget extends StatelessWidget {
           value: walletCredential.walletInstanceKey ?? '',
           titleColor: titleColor,
           valueColor: valueColor,
+          showVertically: false,
         ),
         const SizedBox(height: 10),
         CredentialField(
@@ -78,6 +80,7 @@ class WalletCredentialetailsWidget extends StatelessWidget {
           ),
           titleColor: titleColor,
           valueColor: valueColor,
+          showVertically: false,
         ),
         const SizedBox(height: 10),
         CredentialField(
@@ -88,6 +91,7 @@ class WalletCredentialetailsWidget extends StatelessWidget {
           ),
           titleColor: titleColor,
           valueColor: valueColor,
+          showVertically: false,
         ),
       ],
     );

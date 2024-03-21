@@ -5,6 +5,7 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 part 'credential_manifest_pick_state.dart';
 
@@ -16,11 +17,13 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
     required List<CredentialModel> credentialList,
     required CredentialModel credential,
     required int inputDescriptorIndex,
+    required VCFormatType vcFormatType,
   }) : super(const CredentialManifestPickState(filteredCredentialList: [])) {
     filterList(
       credentialList: credentialList,
       credential: credential,
       inputDescriptorIndex: inputDescriptorIndex,
+      vcFormatType: vcFormatType,
     );
   }
 
@@ -28,6 +31,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
     required List<CredentialModel> credentialList,
     required CredentialModel credential,
     required int inputDescriptorIndex,
+    required VCFormatType vcFormatType,
   }) {
     var presentationDefinition =
         credential.credentialManifest!.presentationDefinition!;
@@ -40,6 +44,8 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
       presentationDefinition: presentationDefinition,
       credentialList: List.from(credentialList),
       inputDescriptorIndex: inputDescriptorIndex,
+      clientMetaData: null,
+      vcFormatType: vcFormatType,
     );
 
     emit(
@@ -53,6 +59,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
   void toggle({
     required int index,
     required InputDescriptor inputDescriptor,
+    required bool isVcSdJWT,
   }) {
     final bool isSelected = state.selected.contains(index);
 
@@ -63,11 +70,16 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
       selected = List<int>.from(state.selected)
         ..removeWhere((element) => element == index);
     } else {
-      /// selecting the credential
-      selected = [
-        ...state.selected,
-        ...[index],
-      ];
+      if (isVcSdJWT) {
+        /// selecting one credential
+        selected = [index];
+      } else {
+        /// selecting multiple credential
+        selected = [
+          ...state.selected,
+          ...[index],
+        ];
+      }
     }
 
     bool isButtonEnabled = selected.isNotEmpty;

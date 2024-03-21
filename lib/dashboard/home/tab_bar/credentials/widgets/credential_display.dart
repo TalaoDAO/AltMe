@@ -95,6 +95,23 @@ class CredentialDisplay extends StatelessWidget {
           }
         }
 
+      case CredentialSubjectType.identityCredential:
+      case CredentialSubjectType.eudiPid:
+        switch (credDisplayType) {
+          case CredDisplayType.List:
+            return DefaultCredentialWidget(
+              credentialModel: credentialModel,
+              showBgDecoration: false,
+              displyalDescription: displyalDescription,
+            );
+          case CredDisplayType.Detail:
+            return DefaultCredentialWidget(
+              credentialModel: credentialModel,
+              showBgDecoration: false,
+              descriptionMaxLine: 5,
+            );
+        }
+
       case CredentialSubjectType.emailPass:
         return EmailPassWidget(credentialModel: credentialModel);
 

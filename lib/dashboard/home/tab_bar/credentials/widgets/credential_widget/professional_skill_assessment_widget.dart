@@ -25,10 +25,12 @@ class ProfessionalSkillAssessmentWidget extends StatelessWidget {
           CredentialField(
             title: l10n.lastName,
             value: professionalSkillAssessmentModel.givenName!,
+            showVertically: false,
           ),
           CredentialField(
             title: l10n.firstName,
             value: professionalSkillAssessmentModel.familyName!,
+            showVertically: false,
           ),
           SkillsListDisplay(
             skillWidgetList: professionalSkillAssessmentModel.skills!,

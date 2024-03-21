@@ -85,6 +85,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.civicPassCredential:
       case CredentialSubjectType.employeeCredential:
       case CredentialSubjectType.legalPersonalCredential:
+      case CredentialSubjectType.identityCredential:
+      case CredentialSubjectType.eudiPid:
         return Colors.white;
     }
   }
@@ -203,6 +205,10 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'ProofOfTwitterStats';
       case CredentialSubjectType.civicPassCredential:
         return 'CivicPassCredential';
+      case CredentialSubjectType.identityCredential:
+        return 'IdentityCredential';
+      case CredentialSubjectType.eudiPid:
+        return 'EudiPid';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -240,8 +246,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return BinanceAssociatedAddressModel.fromJson(json);
       case CredentialSubjectType.certificateOfEmployment:
         return CertificateOfEmploymentModel.fromJson(json);
-      case CredentialSubjectType.defaultCredential:
-        return DefaultCredentialSubjectModel.fromJson(json);
       case CredentialSubjectType.emailPass:
         return EmailPassModel.fromJson(json);
       case CredentialSubjectType.identityPass:
@@ -324,6 +328,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return EmployeeCredentialModel.fromJson(json);
       case CredentialSubjectType.legalPersonalCredential:
         return LegalPersonCredentialModel.fromJson(json);
+      case CredentialSubjectType.defaultCredential:
+        return DefaultCredentialSubjectModel.fromJson(json);
+      case CredentialSubjectType.identityCredential:
+        return IdentityCredentialSubjectModel.fromJson(json);
+      case CredentialSubjectType.eudiPid:
+        return EudipidSubjectModel.fromJson(json);
     }
   }
 
@@ -555,6 +565,10 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Employee Credential';
       case CredentialSubjectType.legalPersonalCredential:
         return 'Legal Person Credential';
+      case CredentialSubjectType.identityCredential:
+        return 'Identity Credential';
+      case CredentialSubjectType.eudiPid:
+        return 'EudiPid';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -620,6 +634,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.civicPassCredential:
       case CredentialSubjectType.employeeCredential:
       case CredentialSubjectType.legalPersonalCredential:
+      case CredentialSubjectType.identityCredential:
+      case CredentialSubjectType.eudiPid:
         return false;
     }
   }
@@ -651,6 +667,10 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
           VCFormatType.jwtVcJson,
           VCFormatType.vcSdJWT,
         ];
+
+      case CredentialSubjectType.identityCredential:
+      case CredentialSubjectType.eudiPid:
+        return [VCFormatType.vcSdJWT];
 
       case CredentialSubjectType.over18:
       case CredentialSubjectType.phonePass:
@@ -996,6 +1016,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.civicPassCredential:
       case CredentialSubjectType.legalPersonalCredential:
       case CredentialSubjectType.walletCredential:
+      case CredentialSubjectType.identityCredential:
+      case CredentialSubjectType.eudiPid:
         break;
     }
 
@@ -1130,6 +1152,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.civicPassCredential:
       case CredentialSubjectType.employeeCredential:
       case CredentialSubjectType.legalPersonalCredential:
+      case CredentialSubjectType.identityCredential:
+      case CredentialSubjectType.eudiPid:
         return 0;
     }
   }

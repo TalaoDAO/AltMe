@@ -30,10 +30,12 @@ class ResidentCardWidget extends StatelessWidget {
               CredentialField(
                 title: l10n.lastName,
                 value: residentCardModel.familyName!,
+                showVertically: false,
               ),
               CredentialField(
                 title: l10n.firstName,
                 value: residentCardModel.givenName!,
+                showVertically: false,
               ),
               Padding(
                 padding: const EdgeInsets.all(8),
@@ -53,26 +55,32 @@ class ResidentCardWidget extends StatelessWidget {
               CredentialField(
                 title: l10n.birthdate,
                 value: UiDate.formatStringDate(residentCardModel.birthDate!),
+                showVertically: false,
               ),
               CredentialField(
                 title: l10n.birthplace,
                 value: residentCardModel.birthPlace!,
+                showVertically: false,
               ),
               CredentialField(
                 title: l10n.address,
                 value: residentCardModel.address!,
+                showVertically: false,
               ),
               CredentialField(
                 title: l10n.maritalStatus,
                 value: residentCardModel.maritalStatus!,
+                showVertically: false,
               ),
               CredentialField(
                 title: l10n.identifier,
                 value: residentCardModel.identifier!,
+                showVertically: false,
               ),
               CredentialField(
                 title: l10n.nationality,
                 value: residentCardModel.nationality!,
+                showVertically: false,
               ),
             ],
           ),
