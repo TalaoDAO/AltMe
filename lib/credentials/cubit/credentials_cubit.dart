@@ -390,67 +390,69 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final credentialSubjectModel =
         credential.credentialPreview.credentialSubjectModel;
 
-    /// Old EmailPass needs to be removed if currently adding new EmailPass
-    /// with same email address
-    if (credentialSubjectModel.credentialSubjectType ==
-        CredentialSubjectType.emailPass) {
-      final String? email = (credentialSubjectModel as EmailPassModel).email;
+    final List<CredentialModel> allCredentials =
+        await credentialsRepository.findAll();
 
-      final List<CredentialModel> allCredentials =
-          await credentialsRepository.findAll();
+    for (final storedCredential in allCredentials) {
+      final iteratedCredentialSubjectModel =
+          storedCredential.credentialPreview.credentialSubjectModel;
+      final iteratedCredentialFormat = storedCredential.format;
 
-      if (email != null) {
-        for (final storedCredential in allCredentials) {
-          final iteratedCredentialSubjectModel =
-              storedCredential.credentialPreview.credentialSubjectModel;
+      final isCredentialSubjectTypeMatched =
+          credentialSubjectModel.credentialSubjectType ==
+              iteratedCredentialSubjectModel.credentialSubjectType;
 
-          if (iteratedCredentialSubjectModel.credentialSubjectType ==
-              CredentialSubjectType.emailPass) {
+      final isFormatMatched = iteratedCredentialFormat == credential.format;
+
+      final isCredentialMatched =
+          isCredentialSubjectTypeMatched && isFormatMatched;
+
+      if (isCredentialMatched) {
+        // credential and format matches
+
+        /// Old EmailPass needs to be removed if currently adding new EmailPass
+        /// with same email address
+        if (credentialSubjectModel.credentialSubjectType ==
+            CredentialSubjectType.emailPass) {
+          final String? oldEmail =
+              (credentialSubjectModel as EmailPassModel).email;
+          final newEmail =
+              (iteratedCredentialSubjectModel as EmailPassModel).email;
+
+          if (oldEmail != null && oldEmail == newEmail) {
             /// check if email is same
-            if (email ==
-                (iteratedCredentialSubjectModel as EmailPassModel).email) {
-              /// format should be same ldp_vc or jwt_vc
-              if ((credential.jwt == null && storedCredential.jwt == null) ||
-                  (credential.jwt != null && storedCredential.jwt != null)) {
-                await deleteById(
-                  id: storedCredential.id,
-                  showMessage: false,
-                  blockchainType: blockchainType,
-                );
-                break;
-              }
-            }
-          }
-        }
-      }
-    }
 
-    final cardsToCheck = [
-      CredentialSubjectType.over13,
-      CredentialSubjectType.over15,
-      CredentialSubjectType.over18,
-      CredentialSubjectType.over21,
-      CredentialSubjectType.over50,
-      CredentialSubjectType.over65,
-      CredentialSubjectType.ageRange,
-    ];
-
-    ///remove old card added by YOTI
-
-    for (final card in cardsToCheck) {
-      if (credentialSubjectModel.credentialSubjectType == card) {
-        final List<CredentialModel> allCredentials =
-            await credentialsRepository.findAll();
-        for (final storedCredential in allCredentials) {
-          final credentialSubjectModel =
-              storedCredential.credentialPreview.credentialSubjectModel;
-          if (credentialSubjectModel.credentialSubjectType == card) {
             await deleteById(
               id: storedCredential.id,
               showMessage: false,
               blockchainType: blockchainType,
             );
             break;
+          } else {
+            /// other cards
+            if (credentialSubjectModel
+                .credentialSubjectType.supportSingleOnly) {
+              await deleteById(
+                id: storedCredential.id,
+                showMessage: false,
+                blockchainType: blockchainType,
+              );
+              break;
+            } else {
+              // don not remove if support multiple
+            }
+          }
+        } else {
+          /// other cards
+          if (credentialSubjectModel.credentialSubjectType.supportSingleOnly) {
+            await deleteById(
+              id: storedCredential.id,
+              showMessage: false,
+              blockchainType: blockchainType,
+            );
+            break;
+          } else {
+            // don not remove if support multiple
           }
         }
       }
