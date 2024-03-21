@@ -1540,8 +1540,10 @@ Future<(String?, String?, String?, String?)> getClientDetails({
     final CredentialsSupported? credSupported =
         credentialsSupported.firstWhereOrNull(
       (CredentialsSupported credentialsSupported) =>
-          credentialsSupported.id != null &&
-          credentialsSupported.id == credentialType,
+          (credentialsSupported.id != null &&
+              credentialsSupported.id == credentialType) ||
+          (credentialsSupported.types != null &&
+              credentialsSupported.types!.contains(credentialType)),
     );
 
     if (credSupported != null) {
