@@ -325,9 +325,18 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 continue;
               }
 
-              final isPresentable =
-                  await isCredentialPresentable(credentialName);
+              final credentialSubjectType = getCredTypeFromName(credentialName);
 
+              final isPresentable = await isCredentialPresentable(
+                credentialSubjectType: credentialSubjectType,
+                vcFormatType: profileCubit
+                    .state
+                    .model
+                    .profileSetting
+                    .selfSovereignIdentityOptions
+                    .customOidc4vcProfile
+                    .vcFormatType,
+              );
               if (!isPresentable) {
                 emit(
                   state.copyWith(
@@ -994,7 +1003,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       shareLink: 'shareLink',
       data: const {},
       jwt: null,
-      format: 'ldp_vc',
+      format: profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType.value,
       credentialManifest: credentialManifest,
     );
 

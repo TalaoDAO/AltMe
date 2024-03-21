@@ -169,22 +169,26 @@ CredentialSubjectType? getCredTypeFromName(String credentialName) {
   return null;
 }
 
-Future<bool> isCredentialPresentable(String credentialName) async {
-  final CredentialSubjectType? credentialSubjectType =
-      getCredTypeFromName(credentialName);
-
+Future<bool> isCredentialPresentable({
+  required CredentialSubjectType? credentialSubjectType,
+  required VCFormatType vcFormatType,
+}) async {
   if (credentialSubjectType == null) {
     return true;
   }
 
-  final isPresentable = await isCredentialAvaialble(credentialSubjectType);
+  final isPresentable = await isCredentialAvaialble(
+    credentialSubjectType: credentialSubjectType,
+    vcFormatType: vcFormatType,
+  );
 
   return isPresentable;
 }
 
-Future<bool> isCredentialAvaialble(
-  CredentialSubjectType credentialSubjectType,
-) async {
+Future<bool> isCredentialAvaialble({
+  required CredentialSubjectType credentialSubjectType,
+  required VCFormatType vcFormatType,
+}) async {
   /// fetching all the credentials
   final CredentialsRepository repository =
       CredentialsRepository(getSecureStorage);
@@ -192,9 +196,12 @@ Future<bool> isCredentialAvaialble(
   final List<CredentialModel> allCredentials = await repository.findAll();
 
   for (final credential in allCredentials) {
-    if (credentialSubjectType ==
+    final matchSubjectType = credentialSubjectType ==
         credential
-            .credentialPreview.credentialSubjectModel.credentialSubjectType) {
+            .credentialPreview.credentialSubjectModel.credentialSubjectType;
+
+    final matchFormat = vcFormatType.value == credential.format;
+    if (matchSubjectType && matchFormat) {
       return true;
     }
   }
