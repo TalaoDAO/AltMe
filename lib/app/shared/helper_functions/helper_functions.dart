@@ -1636,6 +1636,8 @@ String hash(String text) {
   bool presentJwtVcJson = false;
   bool presentVcSdJwt = false;
 
+  final supportingFormats = <String>[];
+
   if (presentationDefinition.format != null) {
     /// ldp_vc
     presentLdpVc = presentationDefinition.format?.ldpVc != null;
@@ -1681,7 +1683,7 @@ String hash(String text) {
       presentJwtVc = true;
     } else if (!presentJwtVcJson && vcFormatType == VCFormatType.jwtVcJson) {
       presentJwtVcJson = true;
-    } else if (!presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
+    } else if (!presentVcSdJwt && vcFormatType == VCFormatType.vcSdJWT) {
       presentVcSdJwt = true;
     }
   }
@@ -1695,15 +1697,44 @@ String hash(String text) {
     );
   }
 
+  /// create list of supported formats
+  if (presentLdpVc) supportingFormats.add(VCFormatType.ldpVc.value);
+  if (presentJwtVc) supportingFormats.add(VCFormatType.jwtVc.value);
+  if (presentJwtVcJson) supportingFormats.add(VCFormatType.jwtVcJson.value);
+  if (presentVcSdJwt) supportingFormats.add(VCFormatType.jwtVcJson.value);
+
+  /// make sure only one of all are true
+  if (presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
+    presentLdpVc = true;
+    presentJwtVc = false;
+    presentJwtVcJson = false;
+    presentVcSdJwt = false;
+  } else if (presentJwtVc && vcFormatType == VCFormatType.jwtVc) {
+    presentLdpVc = false;
+    presentJwtVc = true;
+    presentJwtVcJson = false;
+    presentVcSdJwt = false;
+  } else if (presentJwtVcJson && vcFormatType == VCFormatType.jwtVcJson) {
+    presentLdpVc = false;
+    presentJwtVc = false;
+    presentJwtVcJson = true;
+    presentVcSdJwt = false;
+  } else if (presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
+    presentLdpVc = false;
+    presentJwtVc = false;
+    presentJwtVcJson = false;
+    presentVcSdJwt = true;
+  }
+
   if ((presentLdpVc && vcFormatType != VCFormatType.ldpVc) ||
       (presentJwtVc && vcFormatType != VCFormatType.jwtVc) ||
       presentJwtVcJson && vcFormatType != VCFormatType.jwtVcJson ||
-      presentJwtVc && vcFormatType != VCFormatType.vcSdJWT) {
+      presentVcSdJwt && vcFormatType != VCFormatType.vcSdJWT) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_request',
-        'error_description':
-            'Please switch to profile that supports format ${vcFormatType.value}.',
+        'error_description': 'Please switch to profile that supports format '
+            '${supportingFormats.join('/')}.',
       },
     );
   }
