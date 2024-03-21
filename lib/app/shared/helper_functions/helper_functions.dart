@@ -1668,12 +1668,11 @@ String hash(String text) {
       /// vc+sd-jwt
       presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
     }
-
     if (!presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
       presentLdpVc = true;
-    } else if (!presentJwtVc && (vcFormatType == VCFormatType.jwtVc)) {
+    } else if (!presentJwtVc && vcFormatType == VCFormatType.jwtVc) {
       presentJwtVc = true;
-    } else if (!presentJwtVcJson && (vcFormatType == VCFormatType.jwtVcJson)) {
+    } else if (!presentJwtVcJson && vcFormatType == VCFormatType.jwtVcJson) {
       presentJwtVcJson = true;
     } else if (!presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
       presentVcSdJwt = true;
@@ -1685,6 +1684,19 @@ String hash(String text) {
       data: {
         'error': 'invalid_request',
         'error_description': 'VC format is missing',
+      },
+    );
+  }
+
+  if ((presentLdpVc && vcFormatType != VCFormatType.ldpVc) ||
+      (presentJwtVc && vcFormatType != VCFormatType.jwtVc) ||
+      presentJwtVcJson && vcFormatType != VCFormatType.jwtVcJson ||
+      presentJwtVc && vcFormatType != VCFormatType.vcSdJWT) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description':
+            'Please switch to profile that supports format ${vcFormatType.value}.',
       },
     );
   }
