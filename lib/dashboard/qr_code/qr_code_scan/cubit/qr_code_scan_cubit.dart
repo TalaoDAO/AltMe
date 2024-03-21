@@ -279,7 +279,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
         final PresentationDefinition? presentationDefinition =
             credentialManifest.presentationDefinition;
-        final isPresentable = await isVCPresentable(presentationDefinition);
+        final isPresentable = await isVCPresentable(
+          presentationDefinition: presentationDefinition,
+          clientMetaData: null,
+          vcFormatType: profileCubit.state.model.profileSetting
+              .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
+        );
 
         if (!isPresentable) {
           emit(
@@ -812,9 +817,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<bool> isVCPresentable(
-    PresentationDefinition? presentationDefinition,
-  ) async {
+  Future<bool> isVCPresentable({
+    required VCFormatType vcFormatType,
+    required PresentationDefinition? presentationDefinition,
+    required Map<String, dynamic>? clientMetaData,
+  }) async {
     if (presentationDefinition != null &&
         presentationDefinition.inputDescriptors.isNotEmpty) {
       final newPresentationDefinition =
@@ -828,6 +835,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           presentationDefinition: newPresentationDefinition,
           credentialList: List.from(credentialList),
           inputDescriptorIndex: index,
+          clientMetaData: clientMetaData,
+          vcFormatType: vcFormatType,
         );
         if (filteredCredentialList.isEmpty) {
           return false;
@@ -915,8 +924,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
     }
 
+    Map<String, dynamic>? clientMetaData;
+
     if (presentationDefinition.format == null) {
-      final Map<String, dynamic>? clientMetaData = await getClientMetada(
+      clientMetaData = await getClientMetada(
         client: client,
         uri: state.uri!,
       );
@@ -957,7 +968,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       presentationDefinition,
     );
 
-    final isPresentable = await isVCPresentable(presentationDefinition);
+    final isPresentable = await isVCPresentable(
+      presentationDefinition: presentationDefinition,
+      clientMetaData: clientMetaData,
+      vcFormatType: profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
+    );
 
     if (!isPresentable) {
       emit(
@@ -1350,7 +1366,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             credential: selectedCredentials[i],
             isLastCall: i + 1 == selectedCredentials.length,
             issuer: issuer,
-            profileCubit: profileCubit,
             jwtDecode: jwtDecode,
             blockchainType: walletCubit.state.currentAccount!.blockchainType,
             deferredCredentialEndpoint: deferredCredentialEndpoint,

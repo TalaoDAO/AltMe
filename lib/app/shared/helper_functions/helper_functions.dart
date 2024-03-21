@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
-import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';
 
 import 'package:dartez/dartez.dart';
@@ -1594,77 +1594,6 @@ Future<(String?, String?, String?, String?)> getClientDetails({
   return (display, credentialSupported);
 }
 
-String? getClaimsData({
-  required Map<String, dynamic> uncryptedDatas,
-  required CredentialModel credentialModel,
-  required String key,
-  required bool selectFromSelectiveDisclosure,
-}) {
-  String? data;
-
-  final JsonPath dataPath = JsonPath(
-    // ignore: prefer_interpolation_to_compose_strings
-    r'$..' + key,
-  );
-
-  try {
-    final uncryptedDataPath = dataPath.read(uncryptedDatas).first;
-    data = uncryptedDataPath.value.toString();
-  } catch (e) {
-    if (!selectFromSelectiveDisclosure) {
-      try {
-        final credentialModelPath = dataPath.read(credentialModel.data).first;
-        data = credentialModelPath.value.toString();
-      } catch (e) {
-        data = null;
-      }
-    }
-  }
-
-  return data;
-}
-
-String? getPicture({
-  required CredentialModel credentialModel,
-}) {
-  if (credentialModel.format.toString() != VCFormatType.vcSdJWT.value) {
-    return null;
-  }
-
-  final credentialSupported = credentialModel.credentialSupported;
-  if (credentialSupported == null) return null;
-
-  final claims = credentialSupported['claims'];
-  if (claims is! Map<String, dynamic>) return null;
-
-  final picture = claims['picture'];
-  if (picture == null) return null;
-  if (picture is! Map<String, dynamic>) return null;
-
-  if (picture.containsKey('mandatory')) {
-    final mandatory = picture['mandatory'];
-    if (mandatory is! bool) return null;
-  }
-
-  final valueType = picture['value_type'];
-  if (valueType == null) return null;
-
-  if (valueType == 'image/jpeg') {
-    final selectiveDisclosure = SelectiveDisclosure(credentialModel);
-
-    final data = getClaimsData(
-      uncryptedDatas: selectiveDisclosure.values,
-      credentialModel: credentialModel,
-      key: 'picture',
-      selectFromSelectiveDisclosure: false,
-    );
-
-    return data;
-  } else {
-    return null;
-  }
-}
-
 List<String> getStringCredentialsForToken({
   required List<CredentialModel> credentialsToBePresented,
   required ProfileCubit profileCubit,
@@ -1687,4 +1616,78 @@ String hash(String text) {
   final bytes = utf8.encode(text);
   final digest = sha256.convert(bytes);
   return base64Url.encode(digest.bytes).replaceAll('=', '');
+}
+
+//(presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt)
+(bool, bool, bool, bool) getPresentVCDetails({
+  required VCFormatType vcFormatType,
+  required PresentationDefinition presentationDefinition,
+  required Map<String, dynamic>? clientMetaData,
+}) {
+  bool presentLdpVc = false;
+  bool presentJwtVc = false;
+  bool presentJwtVcJson = false;
+  bool presentVcSdJwt = false;
+
+  if (presentationDefinition.format != null) {
+    /// ldp_vc
+    presentLdpVc = presentationDefinition.format?.ldpVc != null;
+
+    /// jwt_vc
+    presentJwtVc = presentationDefinition.format?.jwtVc != null;
+
+    /// jwt_vc_json
+    presentJwtVcJson = presentationDefinition.format?.jwtVcJson != null;
+
+    /// vc+sd-jwt
+    presentVcSdJwt = presentationDefinition.format?.vcSdJwt != null;
+  } else {
+    if (clientMetaData == null) {
+      /// credential manifest case
+      if (vcFormatType == VCFormatType.ldpVc) {
+        presentLdpVc = true;
+      } else if (vcFormatType == VCFormatType.jwtVc) {
+        presentJwtVc = true;
+      } else if (vcFormatType == VCFormatType.jwtVcJson) {
+        presentJwtVcJson = true;
+      } else if (vcFormatType == VCFormatType.vcSdJWT) {
+        presentVcSdJwt = true;
+      }
+    } else {
+      final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
+
+      /// ldp_vc
+      presentLdpVc = vpFormats.containsKey('ldp_vc');
+
+      /// jwt_vc
+      presentJwtVc = vpFormats.containsKey('jwt_vc');
+
+      /// jwt_vc_json
+      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json');
+
+      /// vc+sd-jwt
+      presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
+    }
+
+    if (!presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
+      presentLdpVc = true;
+    } else if (!presentJwtVc && (vcFormatType == VCFormatType.jwtVc)) {
+      presentJwtVc = true;
+    } else if (!presentJwtVcJson && (vcFormatType == VCFormatType.jwtVcJson)) {
+      presentJwtVcJson = true;
+    } else if (!presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
+      presentVcSdJwt = true;
+    }
+  }
+
+  if (!presentLdpVc && !presentJwtVc && !presentJwtVcJson && !presentVcSdJwt) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description': 'VC format is missing',
+      },
+    );
+  }
+
+  return (presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt);
 }

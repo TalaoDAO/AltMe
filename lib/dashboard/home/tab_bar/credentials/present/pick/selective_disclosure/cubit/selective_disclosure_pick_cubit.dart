@@ -27,4 +27,23 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     }
     emit(state.copyWith(selected: selected));
   }
+
+  void saveIndexOfSDJWT(int index) {
+    final bool isSelected = state.selectedSDIndexInJWT.contains(index);
+
+    late List<int> selected;
+
+    if (isSelected) {
+      /// deSelecting the credential
+      selected = List<int>.from(state.selectedSDIndexInJWT)
+        ..removeWhere((element) => element == index);
+    } else {
+      /// selecting the credential
+      selected = [
+        ...state.selectedSDIndexInJWT,
+        ...[index],
+      ];
+    }
+    emit(state.copyWith(selectedSDIndexInJWT: selected));
+  }
 }

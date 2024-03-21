@@ -28,14 +28,17 @@ class ProfessionalExperienceAssessmentWidget extends StatelessWidget {
           CredentialField(
             title: l10n.lastName,
             value: professionalExperienceAssessmentModel.givenName!,
+            showVertically: false,
           ),
           CredentialField(
             title: l10n.firstName,
             value: professionalExperienceAssessmentModel.familyName!,
+            showVertically: false,
           ),
           CredentialField(
             title: l10n.jobTitle,
             value: professionalExperienceAssessmentModel.title!,
+            showVertically: false,
           ),
           Padding(
             padding: const EdgeInsets.all(8),
@@ -66,6 +69,7 @@ class ProfessionalExperienceAssessmentWidget extends StatelessWidget {
           ),
           CredentialField(
             value: professionalExperienceAssessmentModel.description!,
+            showVertically: false,
           ),
           SkillsListDisplay(
             skillWidgetList: professionalExperienceAssessmentModel.skills!,

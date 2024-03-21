@@ -7,6 +7,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -152,8 +153,16 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     String? credentialImage;
 
     if (containClaims) {
-      credentialImage = getPicture(credentialModel: widget.credentialModel);
+      credentialImage = SelectiveDisclosure(widget.credentialModel).getPicture;
     }
+
+    final credentialSubjectType = widget.credentialModel.credentialPreview
+        .credentialSubjectModel.credentialSubjectType;
+
+    final showVerticalDescription =
+        credentialSubjectType == CredentialSubjectType.eudiPid ||
+            credentialSubjectType == CredentialSubjectType.identityCredential ||
+            credentialSubjectType == CredentialSubjectType.verifiableIdCard;
 
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
@@ -200,23 +209,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         if (credentialImage != null)
-                          AspectRatio(
-                            aspectRatio: Sizes.credentialAspectRatio,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                Sizes.credentialBorderRadius,
-                              ),
-                              child: CachedImageFromNetwork(
-                                credentialImage,
-                                fit: BoxFit.contain,
-                                width: double.infinity,
-                                bgColor: Colors.transparent,
-                                height: double.infinity,
-                                errorMessage: '',
-                                showLoading: false,
-                              ),
-                            ),
-                          )
+                          PictureDisplay(credentialImage: credentialImage)
                         else
                           CredentialDisplay(
                             credentialModel: widget.credentialModel,
@@ -330,6 +323,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           /// credentialSubjectData
                           CredentialSubjectData(
                             credentialModel: widget.credentialModel,
+                            showVertically: showVerticalDescription,
                           ),
 
                           /// selective disclouse data - _sd
@@ -338,6 +332,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             DisplaySelectiveDisclosure(
                               credentialModel: widget.credentialModel,
                               claims: null,
+                              showVertically: showVerticalDescription,
                             ),
                           ],
 
@@ -365,6 +360,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               isDeveloperMode) ...[
                             DeveloperDetails(
                               credentialModel: widget.credentialModel,
+                              showVertically: showVerticalDescription,
                             ),
                           ],
 
@@ -372,6 +368,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           if (widget.credentialModel.pendingInfo != null) ...[
                             DeferredCredentialData(
                               credentialModel: widget.credentialModel,
+                              showVertically: showVerticalDescription,
                             ),
                           ],
                         ],
@@ -384,6 +381,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             itemBuilder: (context, index) {
                               return ActivityWidget(
                                 activity: reversedList[index],
+                                showVertically: showVerticalDescription,
                               );
                             },
                           ),

@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,6 +89,12 @@ class SelectiveDisclosurePickView extends StatelessWidget {
       },
       child: BlocBuilder<SelectiveDisclosureCubit, SelectiveDisclosureState>(
         builder: (context, state) {
+          final profileSetting =
+              context.read<ProfileCubit>().state.model.profileSetting;
+
+          final credentialImage =
+              SelectiveDisclosure(credentialToBePresented).getPicture;
+
           return BasePage(
             title: l10n.thisOrganisationRequestsThisInformation,
             titleAlignment: Alignment.topCenter,
@@ -96,13 +103,30 @@ class SelectiveDisclosurePickView extends StatelessWidget {
               vertical: 24,
               horizontal: 16,
             ),
-            body: DisplaySelectiveDisclosure(
-              credentialModel: credentialToBePresented,
-              claims: null,
-              selectedIndex: state.selected,
-              onPressed: (index) {
-                context.read<SelectiveDisclosureCubit>().toggle(index);
-              },
+            body: Column(
+              children: [
+                if (credentialImage != null)
+                  PictureDisplay(credentialImage: credentialImage)
+                else
+                  CredentialDisplay(
+                    credentialModel: credentialToBePresented,
+                    credDisplayType: CredDisplayType.List,
+                    profileSetting: profileSetting,
+                  ),
+                const SizedBox(height: 20),
+                DisplaySelectiveDisclosure(
+                  credentialModel: credentialToBePresented,
+                  claims: null,
+                  selectedIndex: state.selected,
+                  onPressed: (claimIndex, sdIndexInJWT) {
+                    context.read<SelectiveDisclosureCubit>().toggle(claimIndex);
+                    context
+                        .read<SelectiveDisclosureCubit>()
+                        .saveIndexOfSDJWT(sdIndexInJWT);
+                  },
+                  showVertically: true,
+                ),
+              ],
             ),
             navigation: SafeArea(
               child: Container(
@@ -114,7 +138,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
                         ? null
                         : () => present(
                               context: context,
-                              selectedIndex: state.selected,
+                              selectedSDIndexInJWT: state.selectedSDIndexInJWT,
                               uri: uri,
                             ),
                     text: l10n.credentialPickPresent,
@@ -130,7 +154,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
 
   Future<void> present({
     required BuildContext context,
-    required List<int> selectedIndex,
+    required List<int> selectedSDIndexInJWT,
     required Uri uri,
   }) async {
     final bool userPINCodeForAuthentication = context
@@ -157,14 +181,17 @@ class SelectiveDisclosurePickView extends StatelessWidget {
       }
     }
 
-    final encryptedValues = credentialToBePresented.jwt?.split('~');
+    final encryptedValues = credentialToBePresented.jwt
+        ?.split('~')
+        .where((element) => element.isNotEmpty)
+        .toList();
 
     if (encryptedValues != null) {
       var newJwt = '${encryptedValues[0]}~';
 
       encryptedValues.removeAt(0);
 
-      for (final index in selectedIndex) {
+      for (final index in selectedSDIndexInJWT) {
         newJwt = '$newJwt${encryptedValues[index]}~';
       }
 

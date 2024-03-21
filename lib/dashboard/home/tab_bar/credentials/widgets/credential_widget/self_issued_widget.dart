@@ -26,6 +26,7 @@ class SelfIssuedWidget extends StatelessWidget {
             CredentialField(
               title: l10n.firstName,
               value: selfIssuedModel.givenName!,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -33,6 +34,7 @@ class SelfIssuedWidget extends StatelessWidget {
             CredentialField(
               title: l10n.lastName,
               value: selfIssuedModel.familyName!,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -40,6 +42,7 @@ class SelfIssuedWidget extends StatelessWidget {
             CredentialField(
               title: l10n.personalPhone,
               value: selfIssuedModel.telephone!,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -47,6 +50,7 @@ class SelfIssuedWidget extends StatelessWidget {
             CredentialField(
               title: l10n.address,
               value: selfIssuedModel.address!,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -54,6 +58,7 @@ class SelfIssuedWidget extends StatelessWidget {
             CredentialField(
               title: l10n.personalMail,
               value: selfIssuedModel.email!,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -61,6 +66,7 @@ class SelfIssuedWidget extends StatelessWidget {
             CredentialField(
               title: l10n.companyName,
               value: selfIssuedModel.workFor!,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -68,6 +74,7 @@ class SelfIssuedWidget extends StatelessWidget {
             CredentialField(
               title: l10n.companyWebsite,
               value: selfIssuedModel.companyWebsite!,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),
@@ -75,6 +82,7 @@ class SelfIssuedWidget extends StatelessWidget {
             CredentialField(
               title: l10n.jobTitle,
               value: selfIssuedModel.jobTitle!,
+              showVertically: false,
             )
           else
             const SizedBox.shrink(),

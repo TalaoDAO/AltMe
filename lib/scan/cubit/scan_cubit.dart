@@ -818,74 +818,17 @@ class ScanCubit extends Cubit<ScanState> {
     final nonce = uri.queryParameters['nonce'] ?? '';
     final clientId = uri.queryParameters['client_id'] ?? '';
 
-    bool presentLdpVc = false;
-    bool presentJwtVc = false;
-    bool presentJwtVcJson = false;
-    bool presentVcSdJwt = false;
-
-    if (presentationDefinition.format != null) {
-      /// ldp_vc
-      presentLdpVc = presentationDefinition.format?.ldpVc != null;
-
-      /// jwt_vc
-      presentJwtVc = presentationDefinition.format?.jwtVc != null;
-
-      /// jwt_vc_json
-      presentJwtVcJson = presentationDefinition.format?.jwtVcJson != null;
-
-      /// vc+sd-jwt
-      presentVcSdJwt = presentationDefinition.format?.vcSdJwt != null;
-    } else {
-      if (clientMetaData == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Client metaData is invalid',
-          },
-        );
-      }
-
-      final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
-
-      /// ldp_vc
-      presentLdpVc = vpFormats.containsKey('ldp_vc');
-
-      /// jwt_vc
-      presentJwtVc = vpFormats.containsKey('jwt_vc');
-
-      /// jwt_vc_json
-      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json');
-
-      /// vc+sd-jwt
-      presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
-    }
-
     final customOidc4vcProfile =
         profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
 
     final vcFormatType = customOidc4vcProfile.vcFormatType;
 
-    if (!presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
-      presentLdpVc = true;
-    } else if (!presentJwtVc && (vcFormatType == VCFormatType.jwtVc)) {
-      presentJwtVc = true;
-    } else if (!presentJwtVcJson && (vcFormatType == VCFormatType.jwtVcJson)) {
-      presentJwtVcJson = true;
-    } else if (!presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
-      presentVcSdJwt = true;
-    }
-
-    if (!presentLdpVc &&
-        !presentJwtVc &&
-        !presentJwtVcJson &&
-        !presentVcSdJwt) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'VC format is missing',
-        },
-      );
-    }
+    final (presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt) =
+        getPresentVCDetails(
+      clientMetaData: clientMetaData,
+      presentationDefinition: presentationDefinition,
+      vcFormatType: vcFormatType,
+    );
 
     if (presentLdpVc) {
       final options = jsonEncode({

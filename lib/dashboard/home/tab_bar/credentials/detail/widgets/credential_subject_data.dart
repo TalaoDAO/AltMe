@@ -10,9 +10,11 @@ class CredentialSubjectData extends StatelessWidget {
   const CredentialSubjectData({
     super.key,
     required this.credentialModel,
+    required this.showVertically,
   });
 
   final CredentialModel credentialModel;
+  final bool showVertically;
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +99,7 @@ class CredentialSubjectData extends StatelessWidget {
             value: data,
             titleColor: Theme.of(context).colorScheme.titleColor,
             valueColor: Theme.of(context).colorScheme.valueColor,
+            showVertically: showVertically,
           ),
         );
       }).toList(),

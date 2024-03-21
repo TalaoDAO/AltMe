@@ -18,7 +18,11 @@ class DisplaySignatures extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CredentialField(title: localizations.signedBy, value: signature.name),
+        CredentialField(
+          title: localizations.signedBy,
+          value: signature.name,
+          showVertically: false,
+        ),
         if (signature.image != '')
           Padding(
             padding: const EdgeInsets.all(8),
