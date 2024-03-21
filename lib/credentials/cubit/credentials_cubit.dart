@@ -497,7 +497,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required CryptoAccountData cryptoAccountData,
   }) async {
     final supportAssociatedCredential =
-        supportCryptoCredential(profileCubit.state.model.profileSetting);
+        supportCryptoCredential(profileCubit.state.model);
 
     if (!supportAssociatedCredential) throw Exception();
 
@@ -505,16 +505,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
     final privateKey = await getPrivateKey(
-      secureStorage: getSecureStorage,
       didKeyType: didKeyType,
-      oidc4vc: oidc4vc,
+      profileCubit: profileCubit,
     );
 
     final (did, _) = await getDidAndKid(
       didKeyType: didKeyType,
       privateKey: privateKey,
-      secureStorage: getSecureStorage,
-      didKitProvider: didKitProvider,
+      profileCubit: profileCubit,
     );
 
     final private = jsonDecode(privateKey) as Map<String, dynamic>;
@@ -602,9 +600,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
       final privateKey = await getPrivateKey(
-        secureStorage: getSecureStorage,
+        profileCubit: profileCubit,
         didKeyType: didKeyType,
-        oidc4vc: oidc4vc,
       );
 
       final private = jsonDecode(privateKey) as Map<String, dynamic>;
@@ -800,11 +797,13 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           case CredentialCategory.educationCards:
             break;
           case CredentialCategory.financeCards:
-            if (discoverCardsOptions.displayDefi &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.defiCompliance)) {
-              allSubjectTypeForCategory
-                  .add(CredentialSubjectType.defiCompliance);
+            if (Parameters.supportDefiCompliance) {
+              if (discoverCardsOptions.displayDefi &&
+                  !allSubjectTypeForCategory
+                      .contains(CredentialSubjectType.defiCompliance)) {
+                allSubjectTypeForCategory
+                    .add(CredentialSubjectType.defiCompliance);
+              }
             }
 
           case CredentialCategory.humanityProofCards:
@@ -853,7 +852,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         final isBlockchainAccount = subjectType.isBlockchainAccount;
 
         final supportAssociatedCredential =
-            supportCryptoCredential(profileCubit.state.model.profileSetting);
+            supportCryptoCredential(profileModel);
 
         /// remove if credential is blockchain account and
         /// profile do not support

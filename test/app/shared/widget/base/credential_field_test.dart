@@ -9,6 +9,7 @@ void main() {
         key: GlobalKey(),
         value: 'value',
         title: 'title',
+        showVertically: true,
       ),
     );
   }
@@ -19,6 +20,7 @@ void main() {
         key: GlobalKey(),
         value: '',
         title: 'title',
+        showVertically: true,
       ),
     );
   }

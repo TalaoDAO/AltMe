@@ -86,7 +86,6 @@ class CredentialsDisplayItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final profileSetting =
         context.read<ProfileCubit>().state.model.profileSetting;
-
     return _BaseItem(
       enabled: true,
       onTap: onTap,
@@ -116,10 +115,8 @@ class DisplaySelectionElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final credential = Credential.fromJsonOrDummy(credentialModel.data);
     final profileSetting =
         context.read<ProfileCubit>().state.model.profileSetting;
-
     return CredentialSelectionPadding(
       child: Column(
         children: <Widget>[
@@ -141,28 +138,6 @@ class DisplaySelectionElement extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class CredentialIcon extends StatelessWidget {
-  const CredentialIcon({
-    super.key,
-    required this.iconData,
-    this.color,
-    this.size = 24,
-  });
-
-  final IconData iconData;
-  final Color? color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Icon(
-      iconData,
-      size: size,
-      color: color ?? Theme.of(context).colorScheme.primaryContainer,
     );
   }
 }

@@ -11,12 +11,12 @@ dependencies:
   bip39: ^1.0.6
   credential_manifest:
     path: ../credential_manifest
+  crypto: ^3.0.3
+  dart_bip32_bip44: ^0.2.0
+  dart_jsonwebtoken: ^2.13.0
+  dart_web3: ^0.0.3
   did_kit:
     path: ../did_kit
-  crypto: ^3.0.3
-  cryptography: ^2.5.0
-  dart_bip32_bip44: ^0.2.0
-  dart_web3: ^0.0.3
   dio: ^5.3.2
   elliptic: ^0.3.10
   equatable: ^2.0.5

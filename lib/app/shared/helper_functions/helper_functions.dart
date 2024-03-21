@@ -6,10 +6,11 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
+import 'package:credential_manifest/credential_manifest.dart';
+import 'package:crypto/crypto.dart';
 
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 
 import 'package:fast_base58/fast_base58.dart';
@@ -263,16 +264,17 @@ int getIndexValue({
       return 6;
 
     case DidKeyType.edDSA:
+    case DidKeyType.jwtClientAttestation:
       return 0; // it is not needed, just assigned
   }
 }
 
 Future<String> getPrivateKey({
-  required SecureStorageProvider secureStorage,
+  required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
-  required OIDC4VC oidc4vc,
 }) async {
-  final mnemonic = await secureStorage.get(SecureStorageKeys.ssiMnemonic);
+  final mnemonic = await profileCubit.secureStorageProvider
+      .get(SecureStorageKeys.ssiMnemonic);
 
   switch (didKeyType) {
     case DidKeyType.edDSA:
@@ -284,7 +286,7 @@ Future<String> getPrivateKey({
         isEBSIV3: true,
         didKeyType: didKeyType,
       );
-      final key = oidc4vc.privateKeyFromMnemonic(
+      final key = profileCubit.oidc4vc.privateKeyFromMnemonic(
         mnemonic: mnemonic!,
         indexValue: index,
       );
@@ -298,12 +300,34 @@ Future<String> getPrivateKey({
         didKeyType: didKeyType,
       );
 
-      final key = oidc4vc.p256PrivateKeyFromMnemonics(
+      final key = profileCubit.oidc4vc.p256PrivateKeyFromMnemonics(
         mnemonic: mnemonic!,
         indexValue: indexValue,
       );
 
       return key;
+
+    case DidKeyType.jwtClientAttestation:
+      if (profileCubit.state.model.walletType != WalletType.enterprise) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Please switch to enterprise account',
+          },
+        );
+      }
+
+      final walletAttestationData = await profileCubit.secureStorageProvider
+          .get(SecureStorageKeys.walletAttestationData);
+
+      if (walletAttestationData == null) {
+        throw Exception();
+      }
+
+      final p256KeyForWallet =
+          await getWalletP256Key(profileCubit.secureStorageProvider);
+
+      return p256KeyForWallet;
   }
 }
 
@@ -349,25 +373,22 @@ DidKeyType? getDidKeyFromString(String? didKeyTypeString) {
 }
 
 Future<String> fetchPrivateKey({
-  required SecureStorageProvider secureStorage,
+  required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
-  required OIDC4VC oidc4vc,
   bool? isEBSIV3,
 }) async {
   if (isEBSIV3 != null && isEBSIV3) {
     final privateKey = await getPrivateKey(
-      secureStorage: secureStorage,
+      profileCubit: profileCubit,
       didKeyType: DidKeyType.ebsiv3,
-      oidc4vc: oidc4vc,
     );
 
     return privateKey;
   }
 
   final privateKey = await getPrivateKey(
-    secureStorage: secureStorage,
+    profileCubit: profileCubit,
     didKeyType: didKeyType,
-    oidc4vc: oidc4vc,
   );
 
   return privateKey;
@@ -466,9 +487,8 @@ String getUtf8Message(String maybeHex) {
 
 Future<(String, String)> getDidAndKid({
   required String privateKey,
-  required SecureStorageProvider secureStorage,
+  required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
-  required DIDKitProvider? didKitProvider,
 }) async {
   late String did;
   late String kid;
@@ -496,11 +516,32 @@ Future<(String, String)> getDidAndKid({
     case DidKeyType.p256:
     case DidKeyType.secp256k1:
     case DidKeyType.edDSA:
-      if (didKitProvider == null) throw Exception();
-
       const didMethod = AltMeStrings.defaultDIDMethod;
-      did = didKitProvider.keyToDID(didMethod, privateKey);
-      kid = await didKitProvider.keyToVerificationMethod(didMethod, privateKey);
+      did = profileCubit.didKitProvider.keyToDID(didMethod, privateKey);
+      kid = await profileCubit.didKitProvider
+          .keyToVerificationMethod(didMethod, privateKey);
+    case DidKeyType.jwtClientAttestation:
+      if (profileCubit.state.model.walletType != WalletType.enterprise) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Please switch to enterprise account',
+          },
+        );
+      }
+
+      final walletAttestationData = await profileCubit.secureStorageProvider
+          .get(SecureStorageKeys.walletAttestationData);
+
+      if (walletAttestationData == null) {
+        throw Exception();
+      }
+
+      final walletAttestationDataPayload =
+          profileCubit.jwtDecode.parseJwt(walletAttestationData);
+
+      did = walletAttestationDataPayload['cnf']['jwk']['kid'].toString();
+      kid = did;
   }
 
   return (did, kid);
@@ -509,16 +550,14 @@ Future<(String, String)> getDidAndKid({
 Future<(String, String)> fetchDidAndKid({
   required String privateKey,
   bool? isEBSIV3,
-  required SecureStorageProvider secureStorage,
+  required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
-  DIDKitProvider? didKitProvider,
 }) async {
   if (isEBSIV3 != null && isEBSIV3) {
     final (did, kid) = await getDidAndKid(
       didKeyType: DidKeyType.ebsiv3,
       privateKey: privateKey,
-      didKitProvider: DIDKitProvider(),
-      secureStorage: getSecureStorage,
+      profileCubit: profileCubit,
     );
 
     return (did, kid);
@@ -527,8 +566,7 @@ Future<(String, String)> fetchDidAndKid({
   final (did, kid) = await getDidAndKid(
     didKeyType: didKeyType,
     privateKey: privateKey,
-    didKitProvider: DIDKitProvider(),
-    secureStorage: getSecureStorage,
+    profileCubit: profileCubit,
   );
 
   return (did, kid);
@@ -567,13 +605,15 @@ bool isPolygonIdUrl(String url) =>
     url.startsWith('{"type":');
 
 bool isOIDC4VCIUrl(Uri uri) {
-  return uri.toString().startsWith('openid');
+  return uri.toString().startsWith('openid') ||
+      uri.toString().startsWith('haip');
 }
 
 bool isSIOPV2OROIDC4VPUrl(Uri uri) {
   final isOpenIdUrl = uri.toString().startsWith('openid://?') ||
       uri.toString().startsWith('openid-vc://?') ||
-      uri.toString().startsWith('openid-hedera://?');
+      uri.toString().startsWith('openid-hedera://?') ||
+      uri.toString().startsWith('haip://?');
 
   final isSiopv2Url = uri.toString().startsWith('siopv2://?');
   final isAuthorizeEndPoint =
@@ -1334,7 +1374,17 @@ String getUpdatedUrlForSIOPV2OIC4VP({
   return newUrl;
 }
 
-bool supportCryptoCredential(ProfileSetting profileSetting) {
+bool supportCryptoCredential(ProfileModel profileModel) {
+  final isEnterpriseProfile =
+      profileModel.profileType == ProfileType.enterprise;
+
+  if (isEnterpriseProfile &&
+      !Parameters.supportCryptoAccountOwnershipInDiscoverForEnterpriseMode) {
+    return false;
+  }
+
+  final profileSetting = profileModel.profileSetting;
+
   final customOidc4vcProfile =
       profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
 
@@ -1360,68 +1410,284 @@ bool supportCryptoCredential(ProfileSetting profileSetting) {
   return supportAssociatedCredential;
 }
 
-Future<(String?, String?, String?)> getClientDetails({
+Future<(String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
   required bool isEBSIV3,
+  required String issuer,
 }) async {
   try {
     String? clientId;
     String? clientSecret;
     String? authorization;
+    String? clientAssertion;
 
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
+    final didKeyType = customOidc4vcProfile.defaultDid;
+
+    final privateKey = await fetchPrivateKey(
+      profileCubit: profileCubit,
+      isEBSIV3: isEBSIV3,
+      didKeyType: didKeyType,
+    );
+
+    final (did, _) = await fetchDidAndKid(
+      privateKey: privateKey,
+      isEBSIV3: isEBSIV3,
+      profileCubit: profileCubit,
+      didKeyType: didKeyType,
+    );
+
+    final tokenParameters = TokenParameters(
+      privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
+      did: '', // just added as it is required field
+      mediaType: MediaType.basic, // just added as it is required field
+      clientType:
+          ClientType.jwkThumbprint, // just added as it is required field
+      proofHeaderType: customOidc4vcProfile.proofHeader,
+      clientId: '', // just added as it is required field
+    );
+
     switch (customOidc4vcProfile.clientAuthentication) {
+      ///  none
       case ClientAuthentication.none:
         break;
-      case ClientAuthentication.clientSecretPost:
-        clientId = customOidc4vcProfile.clientId;
-        clientSecret = customOidc4vcProfile.clientSecret;
+
       case ClientAuthentication.clientSecretBasic:
-        clientId = customOidc4vcProfile.clientId;
-        clientSecret = customOidc4vcProfile.clientSecret;
         authorization = base64UrlEncode(utf8.encode('$clientId:$clientSecret'))
             .replaceAll('=', '');
-      case ClientAuthentication.clientId:
-        final didKeyType = customOidc4vcProfile.defaultDid;
-
-        final privateKey = await fetchPrivateKey(
-          oidc4vc: profileCubit.oidc4vc,
-          secureStorage: profileCubit.secureStorageProvider,
-          isEBSIV3: isEBSIV3,
-          didKeyType: didKeyType,
-        );
-
-        final (did, _) = await fetchDidAndKid(
-          privateKey: privateKey,
-          isEBSIV3: isEBSIV3,
-          didKitProvider: profileCubit.didKitProvider,
-          secureStorage: profileCubit.secureStorageProvider,
-          didKeyType: didKeyType,
-        );
 
         switch (customOidc4vcProfile.clientType) {
           case ClientType.jwkThumbprint:
-            final tokenParameters = TokenParameters(
-              privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
-              did: '', // just added as it is required field
-              mediaType: MediaType.basic, // just added as it is required field
-              clientType: ClientType
-                  .jwkThumbprint, // just added as it is required field
-              proofHeaderType: customOidc4vcProfile.proofHeader,
-              clientId: '',
-            );
             clientId = tokenParameters.thumbprint;
           case ClientType.did:
             clientId = did;
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
         }
+
+      ///  only clientId
+      case ClientAuthentication.clientId:
+        switch (customOidc4vcProfile.clientType) {
+          case ClientType.jwkThumbprint:
+            clientId = tokenParameters.thumbprint;
+          case ClientType.did:
+            clientId = did;
+          case ClientType.confidential:
+            clientId = customOidc4vcProfile.clientId;
+        }
+
+      case ClientAuthentication.clientSecretPost:
+        clientSecret = customOidc4vcProfile.clientSecret;
+
+      case ClientAuthentication.clientSecretJwt:
+        if (profileCubit.state.model.walletType != WalletType.enterprise) {
+          throw ResponseMessage(
+            data: {
+              'error': 'invalid_request',
+              'error_description': 'Please switch to enterprise account',
+            },
+          );
+        }
+
+        final walletAttestationData = await profileCubit.secureStorageProvider
+            .get(SecureStorageKeys.walletAttestationData);
+
+        clientId = did;
+
+        final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+        final nbf = iat - 10;
+
+        final payload = {
+          'iss': clientId,
+          'aud': issuer,
+          'nbf': nbf,
+          'exp': nbf + 60,
+        };
+
+        final jwtProofOfPossession = profileCubit.oidc4vc.generateToken(
+          payload: payload,
+          tokenParameters: tokenParameters,
+          ignoreProofHeaderType: true,
+        );
+
+        clientAssertion = '$walletAttestationData~$jwtProofOfPossession';
     }
 
-    return (clientId, clientSecret, authorization);
+    return (clientId, clientSecret, authorization, clientAssertion);
   } catch (e) {
-    return (null, null, null);
+    return (null, null, null, null);
   }
+}
+
+(Display?, dynamic) fetchDisplay({
+  required OpenIdConfiguration openIdConfiguration,
+  required String credentialType,
+  required String languageCode,
+}) {
+  Display? display;
+  dynamic credentialSupported;
+  if (openIdConfiguration.credentialsSupported != null) {
+    final credentialsSupported = openIdConfiguration.credentialsSupported!;
+    final CredentialsSupported? credSupported =
+        credentialsSupported.firstWhereOrNull(
+      (CredentialsSupported credentialsSupported) =>
+          credentialsSupported.id != null &&
+          credentialsSupported.id == credentialType,
+    );
+
+    if (credSupported != null) {
+      credentialSupported = credSupported.toJson();
+
+      final credSupportedDisplay = credSupported.display;
+
+      if (credSupportedDisplay != null) {
+        display = credSupportedDisplay.firstWhereOrNull(
+              (Display display) =>
+                  display.locale.toString().contains(languageCode),
+            ) ??
+            credSupportedDisplay.firstWhereOrNull(
+              (Display display) => display.locale.toString().contains('en'),
+            ) ??
+            credSupportedDisplay.firstWhereOrNull(
+              (Display display) => display.locale != null,
+            );
+      }
+    }
+  } else if (openIdConfiguration.credentialConfigurationsSupported != null) {
+    final credentialsSupported =
+        openIdConfiguration.credentialConfigurationsSupported;
+
+    if ((credentialsSupported is Map<String, dynamic>) &&
+        credentialsSupported.containsKey(credentialType)) {
+      /// credentialSupported
+      final credSupported = credentialsSupported[credentialType];
+
+      credentialSupported = credSupported;
+
+      if (credSupported is Map<String, dynamic>) {
+        /// display
+        if (credSupported.containsKey('display')) {
+          final displayData = credSupported['display'];
+
+          if (displayData is List<dynamic>) {
+            final displays = displayData
+                .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
+                .toList();
+
+            display = displays.firstWhereOrNull(
+                  (Display display) =>
+                      display.locale.toString().contains(languageCode),
+                ) ??
+                displays.firstWhereOrNull(
+                  (Display display) => display.locale.toString().contains('en'),
+                ) ??
+                displays.firstWhereOrNull(
+                  (Display display) => display.locale != null,
+                );
+          }
+        }
+      }
+    }
+  }
+  return (display, credentialSupported);
+}
+
+List<String> getStringCredentialsForToken({
+  required List<CredentialModel> credentialsToBePresented,
+  required ProfileCubit profileCubit,
+}) {
+  final credentialList = credentialsToBePresented.map((item) {
+    final isVcSdJWT = profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType ==
+        VCFormatType.vcSdJWT;
+    if (isVcSdJWT) {
+      return item.selectiveDisclosureJwt ?? jsonEncode(item.toJson());
+    }
+
+    return jsonEncode(item.toJson());
+  }).toList();
+
+  return credentialList;
+}
+
+String hash(String text) {
+  final bytes = utf8.encode(text);
+  final digest = sha256.convert(bytes);
+  return base64Url.encode(digest.bytes).replaceAll('=', '');
+}
+
+//(presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt)
+(bool, bool, bool, bool) getPresentVCDetails({
+  required VCFormatType vcFormatType,
+  required PresentationDefinition presentationDefinition,
+  required Map<String, dynamic>? clientMetaData,
+}) {
+  bool presentLdpVc = false;
+  bool presentJwtVc = false;
+  bool presentJwtVcJson = false;
+  bool presentVcSdJwt = false;
+
+  if (presentationDefinition.format != null) {
+    /// ldp_vc
+    presentLdpVc = presentationDefinition.format?.ldpVc != null;
+
+    /// jwt_vc
+    presentJwtVc = presentationDefinition.format?.jwtVc != null;
+
+    /// jwt_vc_json
+    presentJwtVcJson = presentationDefinition.format?.jwtVcJson != null;
+
+    /// vc+sd-jwt
+    presentVcSdJwt = presentationDefinition.format?.vcSdJwt != null;
+  } else {
+    if (clientMetaData == null) {
+      /// credential manifest case
+      if (vcFormatType == VCFormatType.ldpVc) {
+        presentLdpVc = true;
+      } else if (vcFormatType == VCFormatType.jwtVc) {
+        presentJwtVc = true;
+      } else if (vcFormatType == VCFormatType.jwtVcJson) {
+        presentJwtVcJson = true;
+      } else if (vcFormatType == VCFormatType.vcSdJWT) {
+        presentVcSdJwt = true;
+      }
+    } else {
+      final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
+
+      /// ldp_vc
+      presentLdpVc = vpFormats.containsKey('ldp_vc');
+
+      /// jwt_vc
+      presentJwtVc = vpFormats.containsKey('jwt_vc');
+
+      /// jwt_vc_json
+      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json');
+
+      /// vc+sd-jwt
+      presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
+    }
+
+    if (!presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
+      presentLdpVc = true;
+    } else if (!presentJwtVc && (vcFormatType == VCFormatType.jwtVc)) {
+      presentJwtVc = true;
+    } else if (!presentJwtVcJson && (vcFormatType == VCFormatType.jwtVcJson)) {
+      presentJwtVcJson = true;
+    } else if (!presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
+      presentVcSdJwt = true;
+    }
+  }
+
+  if (!presentLdpVc && !presentJwtVc && !presentJwtVcJson && !presentVcSdJwt) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description': 'VC format is missing',
+      },
+    );
+  }
+
+  return (presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt);
 }

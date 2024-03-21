@@ -233,6 +233,8 @@ extension CustomColorScheme on ColorScheme {
 
   Color get deleteColor => const Color(0xff322643);
 
+  Color get blueColor => const Color(0xff322643);
+
   Color get titleColor => const Color(0xffD1CCE3);
 
   Color get valueColor => const Color(0xffFFFFFF);
@@ -519,7 +521,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get credentialFieldTitle => GoogleFonts.roboto(
         color: const Color(0xff212121),
         fontSize: 14,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w400,
       );
 
   TextStyle get credentialFieldDescription => GoogleFonts.roboto(

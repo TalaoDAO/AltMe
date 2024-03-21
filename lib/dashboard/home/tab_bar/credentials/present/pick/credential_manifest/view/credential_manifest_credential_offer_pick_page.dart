@@ -7,6 +7,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class CredentialManifestOfferPickPage extends StatelessWidget {
   const CredentialManifestOfferPickPage({
@@ -51,6 +52,14 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
           credential: credential,
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
+          vcFormatType: context
+              .read<ProfileCubit>()
+              .state
+              .model
+              .profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile
+              .vcFormatType,
         );
       },
       child: CredentialManifestOfferPickView(
@@ -83,6 +92,16 @@ class CredentialManifestOfferPickView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    final isVcSdJWT = context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .vcFormatType ==
+        VCFormatType.vcSdJWT;
 
     return BlocConsumer<CredentialManifestPickCubit,
         CredentialManifestPickState>(
@@ -165,6 +184,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                               presentationDefinition
                                                       .inputDescriptors[
                                                   inputDescriptorIndex],
+                                          isVcSdJWT: isVcSdJWT,
                                         );
                                   },
                                 );
@@ -177,65 +197,86 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                       ? SafeArea(
                           child: Container(
                             padding: const EdgeInsets.all(16),
-                            child: Tooltip(
-                              message: l10n.credentialPickPresent,
-                              child: Builder(
-                                builder: (context) {
-                                  final inputDescriptor =
-                                      presentationDefinition!.inputDescriptors[
-                                          inputDescriptorIndex];
+                            child: isVcSdJWT
+                                ? MyGradientButton(
+                                    onPressed: !credentialManifestState
+                                            .isButtonEnabled
+                                        ? null
+                                        : () => Navigator.of(context)
+                                                .pushReplacement<void, void>(
+                                              SelectiveDisclosurePickPage.route(
+                                                uri: uri,
+                                                issuer: issuer,
+                                                credential: credential,
+                                                credentialToBePresented:
+                                                    credentialManifestState
+                                                            .filteredCredentialList[
+                                                        credentialManifestState
+                                                            .selected.first],
+                                              ),
+                                            ),
 
-                                  final bool isOptional = inputDescriptor
-                                          .constraints
-                                          ?.fields
-                                          ?.first
-                                          .optional ??
-                                      false;
+                                    /// next button because we will now choose the claims we will present
+                                    /// from the selected credential
+                                    text: l10n.next,
+                                  )
+                                : Builder(
+                                    builder: (context) {
+                                      final inputDescriptor =
+                                          presentationDefinition!
+                                                  .inputDescriptors[
+                                              inputDescriptorIndex];
 
-                                  final bool isOngoingStep =
-                                      inputDescriptorIndex + 1 !=
-                                          presentationDefinition
-                                              .inputDescriptors.length;
+                                      final bool isOptional = inputDescriptor
+                                              .constraints
+                                              ?.fields
+                                              ?.first
+                                              .optional ??
+                                          false;
 
-                                  if (isOptional) {
-                                    return MyGradientButton(
-                                      onPressed: () => present(
-                                        context: context,
-                                        credentialManifestState:
-                                            credentialManifestState,
-                                        presentationDefinition:
-                                            presentationDefinition,
-                                        skip: credentialManifestState
-                                            .selected.isEmpty,
-                                      ),
-                                      text: credentialManifestState
-                                              .selected.isEmpty
-                                          ? l10n.skip
-                                          : isOngoingStep
+                                      final bool isOngoingStep =
+                                          inputDescriptorIndex + 1 !=
+                                              presentationDefinition
+                                                  .inputDescriptors.length;
+
+                                      if (isOptional) {
+                                        return MyGradientButton(
+                                          onPressed: () => present(
+                                            context: context,
+                                            credentialManifestState:
+                                                credentialManifestState,
+                                            presentationDefinition:
+                                                presentationDefinition,
+                                            skip: credentialManifestState
+                                                .selected.isEmpty,
+                                          ),
+                                          text: credentialManifestState
+                                                  .selected.isEmpty
+                                              ? l10n.skip
+                                              : isOngoingStep
+                                                  ? l10n.next
+                                                  : l10n.credentialPickPresent,
+                                        );
+                                      } else {
+                                        return MyGradientButton(
+                                          onPressed: !credentialManifestState
+                                                  .isButtonEnabled
+                                              ? null
+                                              : () => present(
+                                                    context: context,
+                                                    credentialManifestState:
+                                                        credentialManifestState,
+                                                    presentationDefinition:
+                                                        presentationDefinition,
+                                                    skip: false,
+                                                  ),
+                                          text: isOngoingStep
                                               ? l10n.next
                                               : l10n.credentialPickPresent,
-                                    );
-                                  } else {
-                                    return MyGradientButton(
-                                      onPressed: !credentialManifestState
-                                              .isButtonEnabled
-                                          ? null
-                                          : () => present(
-                                                context: context,
-                                                credentialManifestState:
-                                                    credentialManifestState,
-                                                presentationDefinition:
-                                                    presentationDefinition,
-                                                skip: false,
-                                              ),
-                                      text: isOngoingStep
-                                          ? l10n.next
-                                          : l10n.credentialPickPresent,
-                                    );
-                                  }
-                                },
-                              ),
-                            ),
+                                        );
+                                      }
+                                    },
+                                  ),
                           ),
                         )
                       : const SizedBox.shrink(),

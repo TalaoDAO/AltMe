@@ -10,9 +10,11 @@ class CredentialSubjectData extends StatelessWidget {
   const CredentialSubjectData({
     super.key,
     required this.credentialModel,
+    required this.showVertically,
   });
 
   final CredentialModel credentialModel;
+  final bool showVertically;
 
   @override
   Widget build(BuildContext context) {
@@ -58,17 +60,24 @@ class CredentialSubjectData extends StatelessWidget {
           final displays = value['display'];
           if (displays is! List<dynamic>) return Container();
 
-          final display = displays.where((element) {
-            if (element is Map<String, dynamic> &&
-                element.containsKey('locale')) {
-              if (element['locale'].toString().contains(languageCode)) {
-                return true;
-              } else if (element['locale'] == 'en-US') {
-                return true;
-              }
-            }
-            return false;
-          }).firstOrNull;
+          final display = displays.firstWhere(
+            (element) =>
+                element is Map<String, dynamic> &&
+                element.containsKey('locale') &&
+                element['locale'].toString().contains(languageCode),
+            orElse: () => displays.firstWhere(
+              (element) =>
+                  element is Map<String, dynamic> &&
+                  element.containsKey('locale') &&
+                  element['locale'].toString().contains('en'),
+              orElse: () => displays.firstWhere(
+                (element) =>
+                    element is Map<String, dynamic> &&
+                    element.containsKey('locale'),
+                orElse: () => null,
+              ),
+            ),
+          );
 
           if (display == null) return Container();
 
@@ -90,6 +99,7 @@ class CredentialSubjectData extends StatelessWidget {
             value: data,
             titleColor: Theme.of(context).colorScheme.titleColor,
             valueColor: Theme.of(context).colorScheme.valueColor,
+            showVertically: showVertically,
           ),
         );
       }).toList(),

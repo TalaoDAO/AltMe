@@ -22,6 +22,11 @@ enum OIDC4VCType {
   JWTVC(
     offerPrefix: '',
     presentationPrefix: 'openid-vc://',
+  ),
+
+  HAIP(
+    offerPrefix: 'haip',
+    presentationPrefix: 'haip://',
   );
 
   const OIDC4VCType({
@@ -34,27 +39,13 @@ enum OIDC4VCType {
 }
 
 extension OIDC4VCTypeX on OIDC4VCType {
-  String get rename {
-    switch (this) {
-      case OIDC4VCType.DEFAULT:
-        return 'DEFAULT';
-      case OIDC4VCType.GAIAX:
-        return 'GAIA-X';
-      case OIDC4VCType.EBSIV3:
-        return 'EBSI-V3';
-      case OIDC4VCType.GREENCYPHER:
-        return 'GREENCYPHER';
-      case OIDC4VCType.JWTVC:
-        return 'JWT-VC';
-    }
-  }
-
   bool get isEnabled {
     switch (this) {
       case OIDC4VCType.DEFAULT:
       case OIDC4VCType.GAIAX:
       case OIDC4VCType.GREENCYPHER:
       case OIDC4VCType.EBSIV3:
+      case OIDC4VCType.HAIP:
         return true;
       case OIDC4VCType.JWTVC:
         return false;

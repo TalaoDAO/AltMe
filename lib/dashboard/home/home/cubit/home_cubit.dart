@@ -52,16 +52,14 @@ class HomeCubit extends Cubit<HomeState> {
         .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
     final privateKey = await getPrivateKey(
-      secureStorage: getSecureStorage,
+      profileCubit: profileCubit,
       didKeyType: didKeyType,
-      oidc4vc: oidc4vc,
     );
 
     final (did, kid) = await getDidAndKid(
       didKeyType: didKeyType,
       privateKey: privateKey,
-      secureStorage: getSecureStorage,
-      didKitProvider: didKitProvider,
+      profileCubit: profileCubit,
     );
 
     final base64EncodedImage = base64Encode(imageBytes);

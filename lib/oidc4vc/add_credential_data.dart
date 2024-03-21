@@ -14,7 +14,6 @@ Future<void> addCredentialData({
   required String format,
   required OpenIdConfiguration? openIdConfiguration,
   required SecureStorageProvider secureStorageProvider,
-  required ProfileCubit profileCubit,
   required CredentialsCubit credentialsCubit,
   required String scannedResponse,
   required dynamic credential,
@@ -56,7 +55,7 @@ Future<void> addCredentialData({
         ),
         data: const {},
         jwt: null,
-        format: 'jwt_vc',
+        format: format,
         image: '',
         shareLink: '',
         pendingInfo: PendingInfo(

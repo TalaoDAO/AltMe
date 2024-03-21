@@ -4,11 +4,13 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/profile/models/models.dart';
+import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:random_string/random_string.dart';
 
@@ -23,6 +25,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     required this.secureStorageProvider,
     required this.oidc4vc,
     required this.didKitProvider,
+    required this.langCubit,
+    required this.jwtDecode,
   }) : super(ProfileState(model: ProfileModel.empty())) {
     load();
   }
@@ -30,6 +34,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   final SecureStorageProvider secureStorageProvider;
   final OIDC4VC oidc4vc;
   final DIDKitProvider didKitProvider;
+  final LangCubit langCubit;
+  final JWTDecode jwtDecode;
 
   Timer? _timer;
 
@@ -168,16 +174,14 @@ class ProfileCubit extends Cubit<ProfileState> {
 
         case ProfileType.defaultOne:
           final privateKey = await getPrivateKey(
-            secureStorage: secureStorageProvider,
             didKeyType: Parameters.didKeyTypeForDefault,
-            oidc4vc: oidc4vc,
+            profileCubit: this,
           );
 
           final (did, _) = await getDidAndKid(
             didKeyType: Parameters.didKeyTypeForDefault,
             privateKey: privateKey,
-            secureStorage: secureStorageProvider,
-            didKitProvider: didKitProvider,
+            profileCubit: this,
           );
 
           profileModel = ProfileModel.defaultOne(
@@ -191,16 +195,14 @@ class ProfileCubit extends Cubit<ProfileState> {
 
         case ProfileType.ebsiV3:
           final privateKey = await getPrivateKey(
-            secureStorage: secureStorageProvider,
             didKeyType: Parameters.didKeyTypeForEbsiV3,
-            oidc4vc: oidc4vc,
+            profileCubit: this,
           );
 
           final (did, _) = await getDidAndKid(
             didKeyType: Parameters.didKeyTypeForEbsiV3,
             privateKey: privateKey,
-            secureStorage: secureStorageProvider,
-            didKitProvider: didKitProvider,
+            profileCubit: this,
           );
 
           profileModel = ProfileModel.ebsiV3(
@@ -214,16 +216,14 @@ class ProfileCubit extends Cubit<ProfileState> {
 
         case ProfileType.dutch:
           final privateKey = await getPrivateKey(
-            secureStorage: secureStorageProvider,
             didKeyType: Parameters.didKeyTypeForDutch,
-            oidc4vc: oidc4vc,
+            profileCubit: this,
           );
 
           final (did, _) = await getDidAndKid(
             didKeyType: Parameters.didKeyTypeForDutch,
             privateKey: privateKey,
-            secureStorage: secureStorageProvider,
-            didKitProvider: didKitProvider,
+            profileCubit: this,
           );
 
           profileModel = ProfileModel.dutch(
@@ -237,16 +237,14 @@ class ProfileCubit extends Cubit<ProfileState> {
 
         case ProfileType.owfBaselineProfile:
           final privateKey = await getPrivateKey(
-            secureStorage: secureStorageProvider,
             didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
-            oidc4vc: oidc4vc,
+            profileCubit: this,
           );
 
           final (did, _) = await getDidAndKid(
             didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
             privateKey: privateKey,
-            secureStorage: secureStorageProvider,
-            didKitProvider: didKitProvider,
+            profileCubit: this,
           );
 
           profileModel = ProfileModel.owfBaselineProfile(
@@ -398,6 +396,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     VCFormatType? vcFormatType,
     ProofHeaderType? proofHeaderType,
     ProofType? proofType,
+    bool? pushAuthorizationRequest,
   }) async {
     final profileModel = state.model.copyWith(
       profileSetting: state.model.profileSetting.copyWith(
@@ -427,6 +426,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             clientType: clientType,
             vcFormatType: vcFormatType,
             proofType: proofType,
+            pushAuthorizationRequest: pushAuthorizationRequest,
           ),
         ),
       ),
