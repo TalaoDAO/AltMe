@@ -1366,7 +1366,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             credential: selectedCredentials[i],
             isLastCall: i + 1 == selectedCredentials.length,
             issuer: issuer,
-            profileCubit: profileCubit,
             jwtDecode: jwtDecode,
             blockchainType: walletCubit.state.currentAccount!.blockchainType,
             deferredCredentialEndpoint: deferredCredentialEndpoint,
