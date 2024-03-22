@@ -10,7 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:elliptic/elliptic.dart' as elliptic;
 import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
-import 'package:jose/jose.dart';
+import 'package:jose_plus/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:oidc4vc/src/helper_function.dart';
