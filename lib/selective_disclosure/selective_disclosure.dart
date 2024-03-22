@@ -29,7 +29,7 @@ class SelectiveDisclosure {
       for (final key in orderList) {
         if (claims.containsKey(key)) {
           orderedClaims[key] = claims[key];
-        } else {}
+        }
       }
 
       // Add remaining elements to the end of the ordered map
