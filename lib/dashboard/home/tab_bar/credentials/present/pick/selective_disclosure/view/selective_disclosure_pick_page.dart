@@ -134,13 +134,11 @@ class SelectiveDisclosurePickView extends StatelessWidget {
                 child: Tooltip(
                   message: l10n.credentialPickPresent,
                   child: MyGradientButton(
-                    onPressed: state.selected.isEmpty
-                        ? null
-                        : () => present(
-                              context: context,
-                              selectedSDIndexInJWT: state.selectedSDIndexInJWT,
-                              uri: uri,
-                            ),
+                    onPressed: () => present(
+                      context: context,
+                      selectedSDIndexInJWT: state.selectedSDIndexInJWT,
+                      uri: uri,
+                    ),
                     text: l10n.credentialPickPresent,
                   ),
                 ),
