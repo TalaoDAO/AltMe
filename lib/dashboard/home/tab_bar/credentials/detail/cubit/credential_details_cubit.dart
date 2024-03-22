@@ -44,16 +44,16 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       emit(state.copyWith(status: AppStatus.loading));
       await Future<void>.delayed(const Duration(milliseconds: 500));
 
-      // if (!profileCubit.state.model.profileSetting.selfSovereignIdentityOptions
-      //     .customOidc4vcProfile.securityLevel) {
-      //   emit(
-      //     state.copyWith(
-      //       credentialStatus: CredentialStatus.notVerified,
-      //       status: AppStatus.idle,
-      //     ),
-      //   );
-      //   return;
-      // }
+      if (!profileCubit.state.model.profileSetting.selfSovereignIdentityOptions
+          .customOidc4vcProfile.securityLevel) {
+        emit(
+          state.copyWith(
+            credentialStatus: CredentialStatus.notVerified,
+            status: AppStatus.idle,
+          ),
+        );
+        return;
+      }
 
       if (item.credentialPreview.credentialSubjectModel.credentialSubjectType ==
           CredentialSubjectType.walletCredential) {

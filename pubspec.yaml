@@ -66,7 +66,7 @@ dependencies:
   google_mlkit_barcode_scanning: ^0.10.0
   image: ^4.0.17
   image_picker: ^1.0.7
-  jose_plus: ^0.4.4
+  jose_plus: ^0.4.5
   json_annotation: ^4.8.1
   json_path: ^0.4.4 #latest version creates test issue
   jwt_decode:
