@@ -48,12 +48,29 @@ class SelectiveDisclosure {
   }
 
   Map<String, dynamic> get extractedValuesFromJwt {
+    final extractedValues = <String, dynamic>{};
+    for (final element in decryptedDatas) {
+      try {
+        final lisString = jsonDecode(element);
+        if (lisString is List) {
+          if (lisString.length == 3) {
+            extractedValues[lisString[1].toString()] = lisString[2];
+          }
+        }
+      } catch (e) {
+        //
+      }
+    }
+    return extractedValues;
+  }
+
+  List<String> get decryptedDatas {
     final encryptedValues = credentialModel.jwt
         ?.split('~')
         .where((element) => element.isNotEmpty)
         .toList();
 
-    final extractedValues = <String, dynamic>{};
+    final decryptedDatas = <String>[];
     if (encryptedValues != null) {
       encryptedValues.removeAt(0);
 
@@ -66,19 +83,14 @@ class SelectiveDisclosure {
           final decryptedData = utf8.decode(base64Decode(element));
 
           if (decryptedData.isNotEmpty) {
-            final lisString = jsonDecode(decryptedData);
-            if (lisString is List) {
-              if (lisString.length == 3) {
-                extractedValues[lisString[1].toString()] = lisString[2];
-              }
-            }
+            decryptedDatas.add(decryptedData);
           }
         } catch (e) {
           //
         }
       }
     }
-    return extractedValues;
+    return decryptedDatas;
   }
 
   String? get getPicture {

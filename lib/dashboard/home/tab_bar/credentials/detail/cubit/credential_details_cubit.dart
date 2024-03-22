@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/verify_encoded_data.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,16 +44,16 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       emit(state.copyWith(status: AppStatus.loading));
       await Future<void>.delayed(const Duration(milliseconds: 500));
 
-      if (!profileCubit.state.model.profileSetting.selfSovereignIdentityOptions
-          .customOidc4vcProfile.securityLevel) {
-        emit(
-          state.copyWith(
-            credentialStatus: CredentialStatus.notVerified,
-            status: AppStatus.idle,
-          ),
-        );
-        return;
-      }
+      // if (!profileCubit.state.model.profileSetting.selfSovereignIdentityOptions
+      //     .customOidc4vcProfile.securityLevel) {
+      //   emit(
+      //     state.copyWith(
+      //       credentialStatus: CredentialStatus.notVerified,
+      //       status: AppStatus.idle,
+      //     ),
+      //   );
+      //   return;
+      // }
 
       if (item.credentialPreview.credentialSubjectModel.credentialSubjectType ==
           CredentialSubjectType.walletCredential) {
@@ -78,6 +79,34 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           return;
         }
       }
+
+      // /// sd-jwt
+      // final credentialSupported = item.credentialSupported;
+      // final claims = credentialSupported?['claims'];
+      // final sd = item.data['_sd'];
+
+      // if (claims != null && sd != null && sd is List<dynamic>) {
+      //   final selectiveDisclosure = SelectiveDisclosure(item);
+      //   final decryptedDatas = selectiveDisclosure.decryptedDatas;
+
+      //   final data = [
+      //     ["nPuoQnkRFq3BIeAm7AnXFA", "DE"]
+      //   ];
+
+      //   for (final element in data) {
+      //     String jsonContent = jsonEncode(['nPuoQnkRFq3BIeAm7AnXFA', 'DE']);
+
+      //     print(jsonContent);
+
+      //     ///final content = jsonEncode(element);
+      //     final disclosure =
+      //         base64Url.encode(utf8.encode(jsonContent)).replaceAll('=', '');
+
+      //     print(disclosure);
+
+      //     final sh256Hash = hash(disclosure);
+      //   }
+      // }
 
       if (item.jwt != null) {
         /// issuer did
