@@ -900,10 +900,11 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         }
       }
 
-// Generate list of external issuer from the profile
+      /// Generate list of external issuer from the profile
       dummies[category] =
           getDummiesFromExternalIssuerList(category, externalIssuers ?? []);
-// add dummies from the category
+
+      /// add dummies from the category
       dummies[category]?.addAll(
         requiredDummySubjects
             .map((item) => item.dummyCredential(profileSetting))
