@@ -815,13 +815,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           case CredentialCategory.walletIntegrity:
             break;
           case CredentialCategory.blockchainAccountsCards:
-            allSubjectTypeForCategory.addAll([
-              CredentialSubjectType.tezosAssociatedWallet,
-              CredentialSubjectType.ethereumAssociatedWallet,
-              CredentialSubjectType.fantomAssociatedWallet,
-              CredentialSubjectType.binanceAssociatedWallet,
-              CredentialSubjectType.polygonAssociatedWallet,
-            ]);
+            if (Parameters.walletHandlesCrypto) {
+              allSubjectTypeForCategory.addAll([
+                CredentialSubjectType.tezosAssociatedWallet,
+                CredentialSubjectType.ethereumAssociatedWallet,
+                CredentialSubjectType.fantomAssociatedWallet,
+                CredentialSubjectType.binanceAssociatedWallet,
+                CredentialSubjectType.polygonAssociatedWallet,
+              ]);
+            }
 
           case CredentialCategory.othersCards:
             break;
