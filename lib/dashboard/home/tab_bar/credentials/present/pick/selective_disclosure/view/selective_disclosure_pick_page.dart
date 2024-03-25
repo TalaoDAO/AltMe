@@ -218,7 +218,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
       );
 
       final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-      final sdHash = hash(newJwt);
+      final sdHash = OIDC4VC().sh256Hash(newJwt);
 
       final nonce = uri.queryParameters['nonce'] ?? '';
       final clientId = uri.queryParameters['client_id'] ?? '';

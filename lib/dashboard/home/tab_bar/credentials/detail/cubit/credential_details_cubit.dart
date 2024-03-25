@@ -80,33 +80,29 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         }
       }
 
-      // /// sd-jwt
-      // final credentialSupported = item.credentialSupported;
-      // final claims = credentialSupported?['claims'];
-      // final sd = item.data['_sd'];
+      /// sd-jwt
+      final credentialSupported = item.credentialSupported;
+      final claims = credentialSupported?['claims'];
+      final sd = item.data['_sd'];
 
-      // if (claims != null && sd != null && sd is List<dynamic>) {
-      //   final selectiveDisclosure = SelectiveDisclosure(item);
-      //   final decryptedDatas = selectiveDisclosure.decryptedDatas;
+      if (claims != null && sd != null && sd is List<dynamic>) {
+        final selectiveDisclosure = SelectiveDisclosure(item);
+        final decryptedDatas = selectiveDisclosure.decryptedDatas;
 
-      //   final data = [
-      //     ["nPuoQnkRFq3BIeAm7AnXFA", "DE"]
-      //   ];
+        for (final element in decryptedDatas) {
+          final sh256Hash = profileCubit.oidc4vc.sh256HashOfContent(element);
 
-      //   for (final element in data) {
-      //     String jsonContent = jsonEncode(['nPuoQnkRFq3BIeAm7AnXFA', 'DE']);
-
-      //     print(jsonContent);
-
-      //     ///final content = jsonEncode(element);
-      //     final disclosure =
-      //         base64Url.encode(utf8.encode(jsonContent)).replaceAll('=', '');
-
-      //     print(disclosure);
-
-      //     final sh256Hash = hash(disclosure);
-      //   }
-      // }
+          if (!sd.contains(sh256Hash)) {
+            emit(
+              state.copyWith(
+                credentialStatus: CredentialStatus.notVerified,
+                status: AppStatus.idle,
+              ),
+            );
+            return;
+          }
+        }
+      }
 
       if (item.jwt != null) {
         /// issuer did

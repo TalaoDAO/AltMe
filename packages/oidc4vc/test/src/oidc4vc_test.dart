@@ -169,6 +169,28 @@ void main() {
     });
   });
 
+  group('selective disclosure', () {
+    final oidc4vc = OIDC4VC();
+
+    const content =
+        '["Qg_O64zqAxe412a108iroA", "phone_number", "+81-80-1234-5678"]';
+
+    const expectedDisclosure =
+        'WyJRZ19PNjR6cUF4ZTQxMmExMDhpcm9BIiwgInBob25lX251bWJlciIsICIrODEtODAtMTIzNC01Njc4Il0';
+
+    const expectedHash = 's0BKYsLWxQQeU8tVlltM7MKsIRTrEIa1PkJmqxBBf5U';
+
+    test('get disclosure', () {
+      final disclosure = oidc4vc.getDisclosure(content);
+      expect(disclosure, expectedDisclosure);
+    });
+
+    test('sh256 hash of Disclosure test', () {
+      final sha256Hash = oidc4vc.sh256HashOfContent(content);
+      expect(sha256Hash, expectedHash);
+    });
+  });
+
   group('EBSI: getAuthorizationUriForIssuer', () {
     const issuer = 'https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi';
 

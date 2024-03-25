@@ -1621,12 +1621,6 @@ List<String> getStringCredentialsForToken({
   return credentialList;
 }
 
-String hash(String text) {
-  final bytes = utf8.encode(text);
-  final digest = sha256.convert(bytes);
-  return base64Url.encode(digest.bytes).replaceAll('=', '');
-}
-
 //(presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt)
 (bool, bool, bool, bool) getPresentVCDetails({
   required VCFormatType vcFormatType,
