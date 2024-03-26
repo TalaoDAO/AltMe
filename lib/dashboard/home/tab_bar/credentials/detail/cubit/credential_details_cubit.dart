@@ -89,6 +89,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         final selectiveDisclosure = SelectiveDisclosure(item);
         final decryptedDatas = selectiveDisclosure.decryptedDatas;
 
+        /// check if sd already contain sh256 hash
         for (final element in decryptedDatas) {
           final sh256Hash = profileCubit.oidc4vc.sh256HashOfContent(element);
 
@@ -100,6 +101,36 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
               ),
             );
             return;
+          }
+        }
+
+        /// check the status
+        final status = item.data['status'];
+
+        if (status != null && status is Map<String, dynamic>) {
+          final statusList = status['status_list'];
+          if (statusList != null && statusList is Map<String, dynamic>) {
+            final idx = statusList['idx'];
+            if (idx is int) {
+              final posOfBit = profileCubit.oidc4vc.getPositionOfBit(idx);
+              final bytes = profileCubit.oidc4vc.getByte(idx);
+              final isActive = profileCubit.oidc4vc.isVCActive(
+                bitPosition: posOfBit,
+                byte: bytes,
+              );
+
+              if (isActive) {
+                // active
+              } else {
+                // revoked
+                emit(
+                  state.copyWith(
+                    credentialStatus: CredentialStatus.revoked,
+                    status: AppStatus.idle,
+                  ),
+                );
+              }
+            }
           }
         }
       }

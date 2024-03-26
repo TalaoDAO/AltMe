@@ -1613,4 +1613,18 @@ class OIDC4VC {
     final hash = sh256Hash(disclosure);
     return hash;
   }
+
+  int getPositionOfBit(int index) => index % 8;
+
+  int getByte(int index) => index ~/ 8;
+
+  bool isVCActive({
+    required int byte,
+    required int bitPosition,
+  }) {
+    //if bit = 0 the VC is active, if bit = 1 VC is revoked
+    final bit = byte & (1 << bitPosition);
+    final isActive = bit == 0;
+    return isActive;
+  }
 }
