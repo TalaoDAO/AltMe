@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_dynamic_calls, public_member_api_docs
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
@@ -1618,13 +1619,24 @@ class OIDC4VC {
 
   int getByte(int index) => index ~/ 8;
 
-  bool isVCActive({
+  int getBit({
     required int byte,
     required int bitPosition,
   }) {
-    //if bit = 0 the VC is active, if bit = 1 VC is revoked
-    final bit = byte & (1 << bitPosition);
-    final isActive = bit == 0;
-    return isActive;
+    // byte => 32 =0100000
+    // The bit in position 5 is set to 1 !!!
+    // so bit = 1
+    final bit = (byte & (1 << bitPosition)) != 0;
+    return bit ? 1 : 0;
+  }
+
+  List<int> decodeAndZlibDecompress(String lst) {
+    final paddedBase64 = lst.padRight((lst.length + 3) & ~3, '=');
+    final compressedBytes = base64Url.decode(paddedBase64);
+
+    final zlib = ZLibCodec();
+    final decompressedBytes = zlib.decode(compressedBytes);
+
+    return decompressedBytes;
   }
 }

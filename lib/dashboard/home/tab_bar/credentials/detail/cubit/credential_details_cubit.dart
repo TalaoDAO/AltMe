@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/verify_encoded_data.dart';
@@ -110,25 +109,78 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         if (status != null && status is Map<String, dynamic>) {
           final statusList = status['status_list'];
           if (statusList != null && statusList is Map<String, dynamic>) {
+            final uri = statusList['uri'];
             final idx = statusList['idx'];
-            if (idx is int) {
-              final posOfBit = profileCubit.oidc4vc.getPositionOfBit(idx);
-              final bytes = profileCubit.oidc4vc.getByte(idx);
-              final isActive = profileCubit.oidc4vc.isVCActive(
-                bitPosition: posOfBit,
-                byte: bytes,
+
+            if (idx != null && idx is int && uri != null && uri is String) {
+              final dynamic response = await client.get(
+                uri,
+                headers: {
+                  'Content-Type': 'application/json; charset=UTF-8',
+                  'accept': 'application/statuslist+jwt',
+                },
               );
 
-              if (isActive) {
-                // active
-              } else {
-                // revoked
-                emit(
-                  state.copyWith(
-                    credentialStatus: CredentialStatus.revoked,
-                    status: AppStatus.idle,
-                  ),
-                );
+              // /// verify the signature of the VC with the kid of the JWT
+
+              // /// issuer did
+              // final issuerDid = item.issuer;
+
+              // String? issuerKid;
+              // final String encodedData = response.toString();
+
+              // final Map<String, dynamic> header =
+              //     decodeHeader(jwtDecode: jwtDecode, token: encodedData);
+
+              // if (header.containsKey('kid')) {
+              //   issuerKid = header['kid'].toString();
+              // }
+
+              // final VerificationType isVerified = await verifyEncodedData(
+              //   issuerDid,
+              //   issuerKid,
+              //   encodedData,
+              // );
+
+              // if (isVerified != VerificationType.verified) {
+              //   emit(
+              //     state.copyWith(
+              //       credentialStatus: CredentialStatus.notVerified,
+              //       status: AppStatus.idle,
+              //     ),
+              //   );
+              //   return;
+              // }
+
+              final payload = jwtDecode.parseJwt(response.toString());
+              final newStatusList = payload['status_list'];
+              if (newStatusList != null &&
+                  newStatusList is Map<String, dynamic>) {
+                final lst = newStatusList['lst'].toString();
+
+                final bytes = profileCubit.oidc4vc.getByte(idx);
+
+                // '$idx = $bytes X 8 + $posOfBit'
+                final decompressedBytes =
+                    profileCubit.oidc4vc.decodeAndZlibDecompress(lst);
+                final byteToCheck = decompressedBytes[bytes];
+
+                final posOfBit = profileCubit.oidc4vc.getPositionOfBit(idx);
+                final bit = profileCubit.oidc4vc
+                    .getBit(byte: byteToCheck, bitPosition: posOfBit);
+
+                if (bit == 0) {
+                  // active
+                } else {
+                  // revoked
+                  emit(
+                    state.copyWith(
+                      credentialStatus: CredentialStatus.revoked,
+                      status: AppStatus.idle,
+                    ),
+                  );
+                  return;
+                }
               }
             }
           }
@@ -140,18 +192,13 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         final issuerDid = item.issuer;
 
         String? issuerKid;
-        late final String encodedData;
-        if (item.jwt == null) {
-          issuerKid = item.data['proof']['verificationMethod'] as String;
-        } else {
-          encodedData = item.jwt!;
+        final String encodedData = item.jwt!;
 
-          final Map<String, dynamic> header =
-              decodeHeader(jwtDecode: jwtDecode, token: encodedData);
+        final Map<String, dynamic> header =
+            decodeHeader(jwtDecode: jwtDecode, token: encodedData);
 
-          if (header.containsKey('kid')) {
-            issuerKid = header['kid'].toString();
-          }
+        if (header.containsKey('kid')) {
+          issuerKid = header['kid'].toString();
         }
 
         final VerificationType isVerified = await verifyEncodedData(
