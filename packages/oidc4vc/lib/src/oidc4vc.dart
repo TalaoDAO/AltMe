@@ -842,11 +842,13 @@ class OIDC4VC {
   }
 
   Map<String, dynamic> readPublicKeyJwk({
-    required String didKey,
+    required String issuer,
     required String? holderKid,
     required Response<Map<String, dynamic>> didDocumentResponse,
   }) {
-    if (isURL(didKey)) {
+    final isUrl = isURL(issuer);
+    // if it is not url then it is did
+    if (isUrl) {
       final jsonPath = JsonPath(r'$..keys');
       late dynamic data;
 
@@ -1099,18 +1101,25 @@ class OIDC4VC {
   }
 
   Future<VerificationType> verifyEncodedData({
-    required String issuerDid,
+    required String issuer,
     required String? issuerKid,
     required String jwt,
+    required Map<String, dynamic>? publicJwk,
   }) async {
     try {
-      final didDocument = await getDidDocument(issuerDid);
+      Map<String, dynamic>? publicKeyJwk;
 
-      final publicKeyJwk = readPublicKeyJwk(
-        didKey: issuerDid,
-        holderKid: issuerKid,
-        didDocumentResponse: didDocument,
-      );
+      if (publicJwk != null) {
+        publicKeyJwk = publicJwk;
+      } else {
+        final didDocument = await getDidDocument(issuer);
+
+        publicKeyJwk = readPublicKeyJwk(
+          issuer: issuer,
+          holderKid: issuerKid,
+          didDocumentResponse: didDocument,
+        );
+      }
 
       final kty = publicKeyJwk['kty'].toString();
 

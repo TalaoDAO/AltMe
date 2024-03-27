@@ -144,13 +144,13 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     /// parse
     final header = jwtDecode.parseJwtHeader(response as String);
     final issuerKid = header['kid'].toString();
-    final issuerDid = issuerKid.split('#')[0];
+    final did = issuerKid.split('#')[0];
 
     /// verify
     final VerificationType isVerified = await verifyEncodedData(
-      issuerDid,
-      issuerKid,
-      response,
+      issuer: did,
+      jwtDecode: jwtDecode,
+      jwt: response,
     );
 
     final profileSettingJson = jwtDecode.parseJwt(response);
@@ -279,13 +279,13 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     /// parse
     final header = jwtDecode.parseJwtHeader(jwtVc!);
     final issuerKid = header['kid'].toString();
-    final issuerDid = issuerKid.split('#')[0];
+    final did = issuerKid.split('#')[0];
 
     /// verify
     final VerificationType isVerified = await verifyEncodedData(
-      issuerDid,
-      issuerKid,
-      jwtVc,
+      issuer: did,
+      jwtDecode: jwtDecode,
+      jwt: jwtVc,
     );
 
     await profileCubit.secureStorageProvider.set(
@@ -350,13 +350,13 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       /// parse
       final header = jwtDecode.parseJwtHeader(response as String);
       final issuerKid = header['kid'].toString();
-      final issuerDid = issuerKid.split('#')[0];
+      final did = issuerKid.split('#')[0];
 
       /// verify
       final VerificationType isVerified = await verifyEncodedData(
-        issuerDid,
-        issuerKid,
-        response,
+        issuer: did,
+        jwtDecode: jwtDecode,
+        jwt: response,
       );
 
       final profileSettingJson = jwtDecode.parseJwt(response);

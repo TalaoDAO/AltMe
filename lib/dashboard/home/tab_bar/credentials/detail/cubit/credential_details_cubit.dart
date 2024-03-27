@@ -121,36 +121,22 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 },
               );
 
-              // /// verify the signature of the VC with the kid of the JWT
+              /// verify the signature of the VC with the kid of the JWT
+              final VerificationType isVerified = await verifyEncodedData(
+                issuer: item.issuer,
+                jwtDecode: jwtDecode,
+                jwt: response.toString(),
+              );
 
-              // /// issuer did
-              // final issuerDid = item.issuer;
-
-              // String? issuerKid;
-              // final String encodedData = response.toString();
-
-              // final Map<String, dynamic> header =
-              //     decodeHeader(jwtDecode: jwtDecode, token: encodedData);
-
-              // if (header.containsKey('kid')) {
-              //   issuerKid = header['kid'].toString();
-              // }
-
-              // final VerificationType isVerified = await verifyEncodedData(
-              //   issuerDid,
-              //   issuerKid,
-              //   encodedData,
-              // );
-
-              // if (isVerified != VerificationType.verified) {
-              //   emit(
-              //     state.copyWith(
-              //       credentialStatus: CredentialStatus.notVerified,
-              //       status: AppStatus.idle,
-              //     ),
-              //   );
-              //   return;
-              // }
+              if (isVerified != VerificationType.verified) {
+                emit(
+                  state.copyWith(
+                    credentialStatus: CredentialStatus.notVerified,
+                    status: AppStatus.idle,
+                  ),
+                );
+                return;
+              }
 
               final payload = jwtDecode.parseJwt(response.toString());
               final newStatusList = payload['status_list'];
@@ -188,23 +174,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       }
 
       if (item.jwt != null) {
-        /// issuer did
-        final issuerDid = item.issuer;
-
-        String? issuerKid;
-        final String encodedData = item.jwt!;
-
-        final Map<String, dynamic> header =
-            decodeHeader(jwtDecode: jwtDecode, token: encodedData);
-
-        if (header.containsKey('kid')) {
-          issuerKid = header['kid'].toString();
-        }
-
         final VerificationType isVerified = await verifyEncodedData(
-          issuerDid,
-          issuerKid,
-          encodedData,
+          issuer: item.issuer,
+          jwtDecode: jwtDecode,
+          jwt: item.jwt!,
         );
 
         late CredentialStatus credentialStatus;
