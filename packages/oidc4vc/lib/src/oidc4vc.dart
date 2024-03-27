@@ -1,16 +1,18 @@
 // ignore_for_file: avoid_dynamic_calls, public_member_api_docs
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
+import 'package:crypto/crypto.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:elliptic/elliptic.dart' as elliptic;
 import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
-import 'package:jose/jose.dart';
+import 'package:jose_plus/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:oidc4vc/src/helper_function.dart';
@@ -1002,91 +1004,93 @@ class OIDC4VC {
 
     if (credential is String) {
       credentialType = credential;
-
-      if (credentialType.startsWith('https://api.preprod.ebsi.eu')) {
-        format = 'jwt_vc';
-        types = [];
-      } else if (openIdConfiguration.credentialsSupported != null) {
-        final credentialsSupported = JsonPath(r'$..credentials_supported')
-            .read(jsonDecode(jsonEncode(openIdConfiguration)))
-            .first
-            .value;
-
-        if (credentialsSupported is! List<dynamic>) {
-          throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
-        }
-
-        final credentialSupported = credentialsSupported
-            .where(
-              (dynamic e) =>
-                  e is Map<String, dynamic> &&
-                  ((e.containsKey('scope') &&
-                          e['scope'].toString() == credential) ||
-                      (e.containsKey('id') &&
-                          e['id'].toString() == credential)),
-            )
-            .firstOrNull;
-
-        if (credentialSupported == null ||
-            credentialSupported is! Map<String, dynamic>) {
-          throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
-        }
-
-        types = (credentialSupported['types'] as List<dynamic>)
-            .map((e) => e.toString())
-            .toList();
-        format = credentialSupported['format'].toString();
-      } else if (openIdConfiguration.credentialConfigurationsSupported !=
-          null) {
-        // draft 13 case
-
-        final credentialsSupported =
-            JsonPath(r'$..credential_configurations_supported')
-                .read(jsonDecode(jsonEncode(openIdConfiguration)))
-                .first
-                .value;
-
-        if (credentialsSupported is! Map<String, dynamic>) {
-          throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
-        }
-
-        final credentialSupportedMapEntry = credentialsSupported.entries.where(
-          (entry) {
-            final dynamic ele = entry.key;
-
-            if (ele == credential) return true;
-
-            return false;
-          },
-        ).firstOrNull;
-
-        if (credentialSupportedMapEntry == null) {
-          throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
-        }
-
-        final credentialSupported = credentialSupportedMapEntry.value;
-
-        format = credentialSupported['format'].toString();
-
-        if (credentialSupported is Map<String, dynamic>) {
-          if (credentialSupported.containsKey('credential_definition')) {
-            credentialDefinition = credentialSupported['credential_definition']
-                as Map<String, dynamic>;
-          }
-
-          if (credentialSupported.containsKey('vct')) {
-            vct = credentialSupported['vct'].toString();
-          }
-        }
-      } else {
-        throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
-      }
     } else if (credential is Map<String, dynamic>) {
       types = (credential['types'] as List<dynamic>)
           .map((e) => e.toString())
           .toList();
       credentialType = types.last;
       format = credential['format'].toString();
+    } else {
+      throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+    }
+
+    if (credentialType.startsWith('https://api.preprod.ebsi.eu')) {
+      format = 'jwt_vc';
+      types = [];
+    } else if (openIdConfiguration.credentialsSupported != null) {
+      final credentialsSupported = JsonPath(r'$..credentials_supported')
+          .read(jsonDecode(jsonEncode(openIdConfiguration)))
+          .first
+          .value;
+
+      if (credentialsSupported is! List<dynamic>) {
+        throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+      }
+
+      final credentialSupported = credentialsSupported
+          .where(
+            (dynamic e) =>
+                e is Map<String, dynamic> &&
+                ((e.containsKey('scope') &&
+                        e['scope'].toString() == credentialType) ||
+                    (e.containsKey('id') &&
+                        e['id'].toString() == credentialType) ||
+                    e.containsKey('types') &&
+                        e['types'] is List<dynamic> &&
+                        (e['types'] as List<dynamic>).contains(credentialType)),
+          )
+          .firstOrNull;
+
+      if (credentialSupported == null ||
+          credentialSupported is! Map<String, dynamic>) {
+        throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+      }
+
+      types = (credentialSupported['types'] as List<dynamic>)
+          .map((e) => e.toString())
+          .toList();
+      format = credentialSupported['format'].toString();
+    } else if (openIdConfiguration.credentialConfigurationsSupported != null) {
+      // draft 13 case
+
+      final credentialsSupported =
+          JsonPath(r'$..credential_configurations_supported')
+              .read(jsonDecode(jsonEncode(openIdConfiguration)))
+              .first
+              .value;
+
+      if (credentialsSupported is! Map<String, dynamic>) {
+        throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+      }
+
+      final credentialSupportedMapEntry = credentialsSupported.entries.where(
+        (entry) {
+          final dynamic ele = entry.key;
+
+          if (ele == credentialType) return true;
+
+          return false;
+        },
+      ).firstOrNull;
+
+      if (credentialSupportedMapEntry == null) {
+        throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+      }
+
+      final credentialSupported = credentialSupportedMapEntry.value;
+
+      format = credentialSupported['format'].toString();
+
+      if (credentialSupported is Map<String, dynamic>) {
+        if (credentialSupported.containsKey('credential_definition')) {
+          credentialDefinition = credentialSupported['credential_definition']
+              as Map<String, dynamic>;
+        }
+
+        if (credentialSupported.containsKey('vct')) {
+          vct = credentialSupported['vct'].toString();
+        }
+      }
     } else {
       throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
     }
@@ -1591,5 +1595,48 @@ class OIDC4VC {
     } catch (e) {
       throw Exception('Openid-Configuration-Issue');
     }
+  }
+
+  String sh256Hash(String text) {
+    final bytes = utf8.encode(text);
+    final digest = sha256.convert(bytes);
+    return base64Url.encode(digest.bytes).replaceAll('=', '');
+  }
+
+  String getDisclosure(String content) {
+    final disclosure =
+        base64Url.encode(utf8.encode(content)).replaceAll('=', '');
+    return disclosure;
+  }
+
+  String sh256HashOfContent(String content) {
+    final disclosure = getDisclosure(content);
+    final hash = sh256Hash(disclosure);
+    return hash;
+  }
+
+  int getPositionOfBit(int index) => index % 8;
+
+  int getByte(int index) => index ~/ 8;
+
+  int getBit({
+    required int byte,
+    required int bitPosition,
+  }) {
+    // byte => 32 =0100000
+    // The bit in position 5 is set to 1 !!!
+    // so bit = 1
+    final bit = (byte & (1 << bitPosition)) != 0;
+    return bit ? 1 : 0;
+  }
+
+  List<int> decodeAndZlibDecompress(String lst) {
+    final paddedBase64 = lst.padRight((lst.length + 3) & ~3, '=');
+    final compressedBytes = base64Url.decode(paddedBase64);
+
+    final zlib = ZLibCodec();
+    final decompressedBytes = zlib.decode(compressedBytes);
+
+    return decompressedBytes;
   }
 }

@@ -134,13 +134,11 @@ class SelectiveDisclosurePickView extends StatelessWidget {
                 child: Tooltip(
                   message: l10n.credentialPickPresent,
                   child: MyGradientButton(
-                    onPressed: state.selected.isEmpty
-                        ? null
-                        : () => present(
-                              context: context,
-                              selectedSDIndexInJWT: state.selectedSDIndexInJWT,
-                              uri: uri,
-                            ),
+                    onPressed: () => present(
+                      context: context,
+                      selectedSDIndexInJWT: state.selectedSDIndexInJWT,
+                      uri: uri,
+                    ),
                     text: l10n.credentialPickPresent,
                   ),
                 ),
@@ -220,7 +218,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
       );
 
       final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-      final sdHash = hash(newJwt);
+      final sdHash = OIDC4VC().sh256Hash(newJwt);
 
       final nonce = uri.queryParameters['nonce'] ?? '';
       final clientId = uri.queryParameters['client_id'] ?? '';

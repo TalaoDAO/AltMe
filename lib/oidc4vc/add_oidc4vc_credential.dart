@@ -23,19 +23,21 @@ Future<void> addOIDC4VCCredential({
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
 
-  if (format == 'jwt_vc' || format == 'jwt_vc_json' || format == 'vc+sd-jwt') {
+  if (format == VCFormatType.jwtVc.value ||
+      format == VCFormatType.jwtVcJson.value ||
+      format == VCFormatType.vcSdJWT.value) {
     //jwt_vc
     final data = encodedCredentialFromOIDC4VC['credential'] as String;
 
     final jsonContent = jwtDecode.parseJwt(data);
 
-    if (format == 'vc+sd-jwt') {
+    if (format == VCFormatType.vcSdJWT.value) {
       credentialFromOIDC4VC = jsonContent;
     } else {
       credentialFromOIDC4VC = jsonContent['vc'] as Map<String, dynamic>;
     }
 
-    if (format == 'vc+sd-jwt') {
+    if (format == VCFormatType.vcSdJWT.value) {
       /// type
       if (!credentialFromOIDC4VC.containsKey('type')) {
         credentialFromOIDC4VC['type'] = [credentialType];
@@ -102,7 +104,7 @@ Future<void> addOIDC4VCCredential({
     // }
 
     credentialFromOIDC4VC['jwt'] = data;
-  } else if (format == 'ldp_vc') {
+  } else if (format == VCFormatType.ldpVc.value) {
     //ldp_vc
 
     final data = encodedCredentialFromOIDC4VC['credential'];

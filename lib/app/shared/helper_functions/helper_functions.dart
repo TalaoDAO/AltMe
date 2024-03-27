@@ -7,7 +7,6 @@ import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:crypto/crypto.dart';
 
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -16,7 +15,7 @@ import 'package:dio/dio.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
-import 'package:jose/jose.dart';
+import 'package:jose_plus/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
@@ -169,22 +168,26 @@ CredentialSubjectType? getCredTypeFromName(String credentialName) {
   return null;
 }
 
-Future<bool> isCredentialPresentable(String credentialName) async {
-  final CredentialSubjectType? credentialSubjectType =
-      getCredTypeFromName(credentialName);
-
+Future<bool> isCredentialPresentable({
+  required CredentialSubjectType? credentialSubjectType,
+  required VCFormatType vcFormatType,
+}) async {
   if (credentialSubjectType == null) {
     return true;
   }
 
-  final isPresentable = await isCredentialAvaialble(credentialSubjectType);
+  final isPresentable = await isCredentialAvaialble(
+    credentialSubjectType: credentialSubjectType,
+    vcFormatType: vcFormatType,
+  );
 
   return isPresentable;
 }
 
-Future<bool> isCredentialAvaialble(
-  CredentialSubjectType credentialSubjectType,
-) async {
+Future<bool> isCredentialAvaialble({
+  required CredentialSubjectType credentialSubjectType,
+  required VCFormatType vcFormatType,
+}) async {
   /// fetching all the credentials
   final CredentialsRepository repository =
       CredentialsRepository(getSecureStorage);
@@ -192,9 +195,12 @@ Future<bool> isCredentialAvaialble(
   final List<CredentialModel> allCredentials = await repository.findAll();
 
   for (final credential in allCredentials) {
-    if (credentialSubjectType ==
+    final matchSubjectType = credentialSubjectType ==
         credential
-            .credentialPreview.credentialSubjectModel.credentialSubjectType) {
+            .credentialPreview.credentialSubjectModel.credentialSubjectType;
+
+    final matchFormat = vcFormatType.value == credential.format;
+    if (matchSubjectType && matchFormat) {
       return true;
     }
   }
@@ -1533,8 +1539,10 @@ Future<(String?, String?, String?, String?)> getClientDetails({
     final CredentialsSupported? credSupported =
         credentialsSupported.firstWhereOrNull(
       (CredentialsSupported credentialsSupported) =>
-          credentialsSupported.id != null &&
-          credentialsSupported.id == credentialType,
+          (credentialsSupported.id != null &&
+              credentialsSupported.id == credentialType) ||
+          (credentialsSupported.types != null &&
+              credentialsSupported.types!.contains(credentialType)),
     );
 
     if (credSupported != null) {
@@ -1612,12 +1620,6 @@ List<String> getStringCredentialsForToken({
   return credentialList;
 }
 
-String hash(String text) {
-  final bytes = utf8.encode(text);
-  final digest = sha256.convert(bytes);
-  return base64Url.encode(digest.bytes).replaceAll('=', '');
-}
-
 //(presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt)
 (bool, bool, bool, bool) getPresentVCDetails({
   required VCFormatType vcFormatType,
@@ -1628,6 +1630,8 @@ String hash(String text) {
   bool presentJwtVc = false;
   bool presentJwtVcJson = false;
   bool presentVcSdJwt = false;
+
+  final supportingFormats = <String>[];
 
   if (presentationDefinition.format != null) {
     /// ldp_vc
@@ -1668,14 +1672,13 @@ String hash(String text) {
       /// vc+sd-jwt
       presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
     }
-
     if (!presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
       presentLdpVc = true;
-    } else if (!presentJwtVc && (vcFormatType == VCFormatType.jwtVc)) {
+    } else if (!presentJwtVc && vcFormatType == VCFormatType.jwtVc) {
       presentJwtVc = true;
-    } else if (!presentJwtVcJson && (vcFormatType == VCFormatType.jwtVcJson)) {
+    } else if (!presentJwtVcJson && vcFormatType == VCFormatType.jwtVcJson) {
       presentJwtVcJson = true;
-    } else if (!presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
+    } else if (!presentVcSdJwt && vcFormatType == VCFormatType.vcSdJWT) {
       presentVcSdJwt = true;
     }
   }
@@ -1685,6 +1688,48 @@ String hash(String text) {
       data: {
         'error': 'invalid_request',
         'error_description': 'VC format is missing',
+      },
+    );
+  }
+
+  /// create list of supported formats
+  if (presentLdpVc) supportingFormats.add(VCFormatType.ldpVc.value);
+  if (presentJwtVc) supportingFormats.add(VCFormatType.jwtVc.value);
+  if (presentJwtVcJson) supportingFormats.add(VCFormatType.jwtVcJson.value);
+  if (presentVcSdJwt) supportingFormats.add(VCFormatType.jwtVcJson.value);
+
+  /// make sure only one of all are true
+  if (presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
+    presentLdpVc = true;
+    presentJwtVc = false;
+    presentJwtVcJson = false;
+    presentVcSdJwt = false;
+  } else if (presentJwtVc && vcFormatType == VCFormatType.jwtVc) {
+    presentLdpVc = false;
+    presentJwtVc = true;
+    presentJwtVcJson = false;
+    presentVcSdJwt = false;
+  } else if (presentJwtVcJson && vcFormatType == VCFormatType.jwtVcJson) {
+    presentLdpVc = false;
+    presentJwtVc = false;
+    presentJwtVcJson = true;
+    presentVcSdJwt = false;
+  } else if (presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
+    presentLdpVc = false;
+    presentJwtVc = false;
+    presentJwtVcJson = false;
+    presentVcSdJwt = true;
+  }
+
+  if ((presentLdpVc && vcFormatType != VCFormatType.ldpVc) ||
+      (presentJwtVc && vcFormatType != VCFormatType.jwtVc) ||
+      presentJwtVcJson && vcFormatType != VCFormatType.jwtVcJson ||
+      presentVcSdJwt && vcFormatType != VCFormatType.vcSdJWT) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description': 'Please switch to profile that supports format '
+            '${supportingFormats.join('/')}.',
       },
     );
   }

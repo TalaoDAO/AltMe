@@ -61,11 +61,16 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
           final credentialName =
               filter.pattern ?? filter.contains!.containsConst;
 
-          final isPresentable = await isCredentialPresentable(credentialName);
+          final CredentialSubjectType? credentialSubjectType =
+              getCredTypeFromName(credentialName);
+
+          final isPresentable = await isCredentialPresentable(
+            credentialSubjectType: credentialSubjectType,
+            vcFormatType: profileSetting
+                .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
+          );
 
           if (!isPresentable) {
-            final credentialSubjectType = getCredTypeFromName(credentialName);
-
             if (credentialSubjectType != null) {
               dummyCredentials.add(
                 credentialSubjectType.dummyCredential(profileSetting),
@@ -84,11 +89,15 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
           continue;
         }
 
-        final isPresentable = await isCredentialPresentable(credentialName);
+        final credentialSubjectType = getCredTypeFromName(credentialName);
+
+        final isPresentable = await isCredentialPresentable(
+          credentialSubjectType: credentialSubjectType,
+          vcFormatType: profileSetting
+              .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
+        );
 
         if (!isPresentable) {
-          final credentialSubjectType = getCredTypeFromName(credentialName);
-
           if (credentialSubjectType != null) {
             dummyCredentials
                 .add(credentialSubjectType.dummyCredential(profileSetting));

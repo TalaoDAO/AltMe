@@ -33,11 +33,16 @@ class _DiscoverPageState extends State<DiscoverPage> {
       padding: EdgeInsets.zero,
       backgroundColor: Theme.of(context).colorScheme.transparent,
       body: BlocListener<ProfileCubit, ProfileState>(
-        listenWhen: (previous, current) =>
-            current.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.vcFormatType !=
-            previous.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.vcFormatType,
+        listenWhen: (previous, current) {
+          // if (current.model.profileSetting.selfSovereignIdentityOptions
+          //         .customOidc4vcProfile.vcFormatType !=
+          //     previous.model.profileSetting.selfSovereignIdentityOptions
+          //         .customOidc4vcProfile.vcFormatType) {
+          //   return true;
+          // }
+
+          return true;
+        },
         listener: (context, state) {
           onRefresh();
         },
