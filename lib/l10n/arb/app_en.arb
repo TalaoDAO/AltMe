@@ -920,8 +920,6 @@
   "developerModeSubtitle": "Enable developer mode to access advanced debugging tools",
   "confirmVerifierAccess": "Confirm verifier access",
   "confirmVerifierAccessSubtitle": "Default: On\nDisable to skip confirmation when you share your verifiable credentials.",
-  "credentialManifestSupport": "Credential Manifest Support",
-  "credentialManifestSupportSubtitle": "Default: Off\nUse DIF Wallet Rendering syntax instead of the 'display' attribute.",
   "secureAuthenticationWithPINCode": "Secure Authentication with PIN Code",
   "secureAuthenticationWithPINCodeSubtitle": "Default: On\nTurn off to skip PIN code for website authentication (not recommended).",
   "youcanSelectOnlyXCredential": "You can select only {count} credential(s).",
