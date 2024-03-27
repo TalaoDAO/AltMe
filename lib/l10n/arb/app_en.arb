@@ -275,8 +275,6 @@
   "credentialAlias": "Credential Alias",
   "verificationStatus": "Verification Status",
   "cardsPending": "Card pending",
-  "cardsActive": "Card active",
-  "cardsProblem": "Card problem",
   "unableToProcessTheData": "Unable to process the data",
   "unimplementedQueryType": "Unimplemented Query Type",
   "onSubmittedPassBasePopUp": "You will receive an email",
@@ -1049,5 +1047,9 @@
   "english": "English",
   "phoneLanguage": "Phone language",
   "pushAuthorizationRequestTitle": "Push Authorization Request (PAR)",
-  "pushAuthorizationRequestSubTitle": "Default: false\nEnable to secure the authorization code flow" 
+  "pushAuthorizationRequestSubTitle": "Default: false\nEnable to secure the authorization code flow",
+  "cardIsValid":"Card is valid",
+  "cardIsExpired":"Card is expired",
+  "signatureIsInvalid":"Signature is invalid",
+  "statusIsInvalid":"Status is invalid"
 }

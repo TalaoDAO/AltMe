@@ -47,7 +47,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           .customOidc4vcProfile.securityLevel) {
         emit(
           state.copyWith(
-            credentialStatus: CredentialStatus.notVerified,
+            credentialStatus: CredentialStatus.noStatus,
             status: AppStatus.idle,
           ),
         );
@@ -71,7 +71,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         if (!dateTimeExpirationDate.isAfter(DateTime.now())) {
           emit(
             state.copyWith(
-              credentialStatus: CredentialStatus.suspended,
+              credentialStatus: CredentialStatus.expired,
               status: AppStatus.idle,
             ),
           );
@@ -95,7 +95,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           if (!sd.contains(sh256Hash)) {
             emit(
               state.copyWith(
-                credentialStatus: CredentialStatus.notVerified,
+                credentialStatus: CredentialStatus.invalidSignature,
                 status: AppStatus.idle,
               ),
             );
@@ -131,7 +131,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
               if (isVerified != VerificationType.verified) {
                 emit(
                   state.copyWith(
-                    credentialStatus: CredentialStatus.notVerified,
+                    credentialStatus: CredentialStatus.invalidSignature,
                     status: AppStatus.idle,
                   ),
                 );
@@ -161,7 +161,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   // revoked
                   emit(
                     state.copyWith(
-                      credentialStatus: CredentialStatus.revoked,
+                      credentialStatus: CredentialStatus.invalidStatus,
                       status: AppStatus.idle,
                     ),
                   );
@@ -180,23 +180,15 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           jwt: item.jwt!,
         );
 
-        late CredentialStatus credentialStatus;
-
-        switch (isVerified) {
-          case VerificationType.verified:
-            credentialStatus = CredentialStatus.active;
-          case VerificationType.notVerified:
-            credentialStatus = CredentialStatus.notVerified;
-          case VerificationType.unKnown:
-            credentialStatus = CredentialStatus.suspended;
+        if (isVerified != VerificationType.verified) {
+          emit(
+            state.copyWith(
+              credentialStatus: CredentialStatus.invalidSignature,
+              status: AppStatus.idle,
+            ),
+          );
+          return;
         }
-
-        emit(
-          state.copyWith(
-            credentialStatus: credentialStatus,
-            status: AppStatus.idle,
-          ),
-        );
       } else if (item.isPolygonssuer) {
         final mnemonic =
             await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
@@ -220,7 +212,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         late CredentialStatus credentialStatus;
 
         if (claim.isEmpty) {
-          credentialStatus = CredentialStatus.suspended;
+          credentialStatus = CredentialStatus.invalidStatus;
         } else {
           switch (claim[0].state) {
             case ClaimState.active:
@@ -230,7 +222,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             case ClaimState.pending:
               credentialStatus = CredentialStatus.pending;
             case ClaimState.revoked:
-              credentialStatus = CredentialStatus.revoked;
+              credentialStatus = CredentialStatus.invalidStatus;
           }
         }
 
@@ -249,7 +241,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           } else {
             emit(
               state.copyWith(
-                credentialStatus: CredentialStatus.suspended,
+                credentialStatus: CredentialStatus.invalidStatus,
                 status: AppStatus.idle,
               ),
             );
@@ -261,7 +253,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     } catch (e) {
       emit(
         state.copyWith(
-          credentialStatus: CredentialStatus.notVerified,
+          credentialStatus: CredentialStatus.invalidStatus,
           status: AppStatus.idle,
         ),
       );
@@ -293,14 +285,14 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       if (jsonResult['errors'][0] == 'No applicable proof') {
         emit(
           state.copyWith(
-            credentialStatus: CredentialStatus.suspended,
+            credentialStatus: CredentialStatus.invalidStatus,
             status: AppStatus.idle,
           ),
         );
       } else {
         emit(
           state.copyWith(
-            credentialStatus: CredentialStatus.suspended,
+            credentialStatus: CredentialStatus.invalidStatus,
             status: AppStatus.idle,
           ),
         );
