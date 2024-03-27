@@ -967,15 +967,15 @@ class OIDC4VC {
         credentialData['types'] = types;
         credentialData['format'] = format;
 
-      case OIDC4VCIDraftType.draft12:
-        if (types == null) {
-          throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
-        }
+      // case OIDC4VCIDraftType.draft12:
+      //   if (types == null) {
+      //     throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+      //   }
 
-        credentialData['types'] = types;
-        if (credentialIdentifier != null) {
-          credentialData['credential_identifier'] = credentialIdentifier;
-        }
+      //   credentialData['types'] = types;
+      //   if (credentialIdentifier != null) {
+      //     credentialData['credential_identifier'] = credentialIdentifier;
+      //   }
 
       case OIDC4VCIDraftType.draft13:
         credentialData['format'] = format;
