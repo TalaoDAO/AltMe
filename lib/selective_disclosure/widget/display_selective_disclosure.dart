@@ -44,44 +44,84 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
             .toList()
             .indexWhere((entry) => entry.key == key);
 
-        final bool hasChildren =
-            !(value as Map<String, dynamic>).containsKey('display');
-        if (hasChildren && value.isNotEmpty) {
-          return TransparentInkWell(
-            onTap: () => onPressed?.call(claimIndex, sdIndexInJWT),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 10),
-                  child: DisplaySelectiveDisclosure(
-                    credentialModel: credentialModel,
-                    claims: value,
-                    showVertically: showVertically,
-                  ),
+        // "mandatory": True,
+        // "value_type": "string",
+        // "display": [
+        //     {"name": "Address", "locale": "en-US"},
+        //     {"name": "Adresse", "locale": "fr-FR"}
+        // ],
+        // "street_address": {
+        // "mandatory": True,
+        // "value_type": "string",
+        // "display": [
+        //     {"name": "Street address", "locale": "en-US"},
+        //     {"name": "Rue", "locale": "fr-FR"}],
+        // },
+        // "locality": {
+        // "mandatory": True,
+        // "value_type": "string",
+        // "display": [
+        //     {"name": "Locality", "locale": "en-US"},
+        //     {"name": "Ville", "locale": "fr-FR"}],
+        // },
+
+        /// nested day contains more data
+        if (value is! Map<String, dynamic>) return Container();
+
+        final display = getDisplay(key, value, languageCode);
+
+        if (display == null) return Container();
+        title = display['name'].toString();
+
+        final bool hasNestedData =
+            value.values.any((element) => element is Map<String, dynamic>);
+
+        if (hasNestedData) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Text(
+                  title,
+                  style:
+                      Theme.of(context).textTheme.credentialFieldTitle.copyWith(
+                            color: Theme.of(context).colorScheme.titleColor,
+                          ),
                 ),
-                if (selectedIndex != null) ...[
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15, right: 10),
-                    child: Icon(
-                      selectedIndex!.contains(claimIndex)
-                          ? Icons.check_box
-                          : Icons.check_box_outline_blank,
-                      size: 25,
-                      color: Theme.of(context).colorScheme.onPrimary,
+              ),
+              TransparentInkWell(
+                onTap: () => onPressed?.call(claimIndex, sdIndexInJWT),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: DisplaySelectiveDisclosure(
+                        credentialModel: credentialModel,
+                        claims: value,
+                        showVertically: showVertically,
+                      ),
                     ),
-                  ),
-                ],
-              ],
-            ),
+                    if (selectedIndex != null) ...[
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15, right: 10),
+                        child: Icon(
+                          selectedIndex!.contains(claimIndex)
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
+                          size: 25,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
           );
         } else {
-          final display = getDisplay(key, value, languageCode);
-
-          if (display == null) return Container();
-          title = display['name'].toString();
-
           final (claimsData, isfromDisclosureOfJWT) =
               SelectiveDisclosure(credentialModel).getClaimsData(
             key: key,
