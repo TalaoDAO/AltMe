@@ -180,14 +180,20 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           jwt: item.jwt!,
         );
 
-        if (isVerified != VerificationType.verified) {
+        if (isVerified == VerificationType.verified) {
+          emit(
+            state.copyWith(
+              credentialStatus: CredentialStatus.active,
+              status: AppStatus.idle,
+            ),
+          );
+        } else {
           emit(
             state.copyWith(
               credentialStatus: CredentialStatus.invalidSignature,
               status: AppStatus.idle,
             ),
           );
-          return;
         }
       } else if (item.isPolygonssuer) {
         final mnemonic =
