@@ -1653,17 +1653,20 @@ List<String> getStringCredentialsForToken({
   final supportingFormats = <String>[];
 
   if (presentationDefinition.format != null) {
+    final format = presentationDefinition.format;
+
     /// ldp_vc
-    presentLdpVc = presentationDefinition.format?.ldpVc != null;
+    presentLdpVc = format?.ldpVc != null || format?.ldpVp != null;
 
     /// jwt_vc
-    presentJwtVc = presentationDefinition.format?.jwtVc != null;
+    presentJwtVc = format?.jwtVc != null || format?.jwtVp != null;
+    ;
 
     /// jwt_vc_json
-    presentJwtVcJson = presentationDefinition.format?.jwtVcJson != null;
+    presentJwtVcJson = format?.jwtVcJson != null || format?.jwtVpJson != null;
 
     /// vc+sd-jwt
-    presentVcSdJwt = presentationDefinition.format?.vcSdJwt != null;
+    presentVcSdJwt = format?.vcSdJwt != null;
   } else {
     if (clientMetaData == null) {
       /// credential manifest case
