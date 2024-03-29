@@ -1504,6 +1504,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
         }
 
       case ClientAuthentication.clientSecretPost:
+        clientId = customOidc4vcProfile.clientId;
         clientSecret = customOidc4vcProfile.clientSecret;
 
       case ClientAuthentication.clientSecretJwt:
