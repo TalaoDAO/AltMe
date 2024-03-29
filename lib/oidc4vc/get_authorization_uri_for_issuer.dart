@@ -28,8 +28,18 @@ Future<void> getAuthorizationUriForIssuer({
 }) async {
   /// this is first phase flow for authorization_code
 
-  final issuerState = credentialOfferJson['grants']['authorization_code']
-      ['issuer_state'] as String;
+  String? issuerState;
+
+  final grants = credentialOfferJson['grants'];
+
+  if (grants != null && grants is Map) {
+    final dynamic authorizedCode = grants['authorization_code'];
+    if (authorizedCode != null &&
+        authorizedCode is Map &&
+        authorizedCode.containsKey('issuer_statee')) {
+      issuerState = authorizedCode['issuer_state'] as String;
+    }
+  }
 
   final String nonce = const Uuid().v4();
   final PkcePair pkcePair = PkcePair.generate();

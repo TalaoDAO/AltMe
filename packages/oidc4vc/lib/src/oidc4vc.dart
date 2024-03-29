@@ -135,7 +135,7 @@ class OIDC4VC {
     required String? clientSecret,
     required String redirectUri,
     required String issuer,
-    required String issuerState,
+    required String? issuerState,
     required String nonce,
     required PkcePair pkcePair,
     required String state,
@@ -192,7 +192,7 @@ class OIDC4VC {
     required String? clientId,
     required String? clientSecret,
     required String issuer,
-    required String issuerState,
+    required String? issuerState,
     required String nonce,
     required OpenIdConfiguration openIdConfiguration,
     required String redirectUri,
@@ -317,12 +317,15 @@ class OIDC4VC {
     final myRequest = <String, dynamic>{
       'response_type': 'code',
       'redirect_uri': redirectUri,
-      'issuer_state': issuerState,
       'state': state,
       'nonce': nonce,
       'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
     };
+
+    if (issuerState != null) {
+      myRequest['issuer_state'] = issuerState;
+    }
 
     if (secureAuthorizedFlow) {
       myRequest['client_metadata'] =

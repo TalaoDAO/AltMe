@@ -662,14 +662,19 @@ Future<
     );
 
     if (credentialOfferJson != null) {
-      final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
-          ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+      final grants = credentialOfferJson['grants'];
 
-      if (preAuthorizedCodeGrant != null &&
-          preAuthorizedCodeGrant is Map &&
-          preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
-        preAuthorizedCode =
-            preAuthorizedCodeGrant['pre-authorized_code'] as String;
+      if (grants != null && grants is Map) {
+        final dynamic preAuthorizedCodeGrant =
+            grants['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+        if (preAuthorizedCodeGrant != null &&
+            preAuthorizedCodeGrant is Map &&
+            preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
+          preAuthorizedCode =
+              preAuthorizedCodeGrant['pre-authorized_code'] as String;
+        }
+      } else {
+        ///
       }
 
       issuer = credentialOfferJson['credential_issuer'].toString();
@@ -693,6 +698,20 @@ Future<
     isAuthorizationServer: false,
     oidc4vciDraftType: oidc4vciDraftType,
   );
+
+  if (preAuthorizedCode == null) {
+    final grantTypesSupported = openIdConfiguration.grantTypesSupported;
+    if (grantTypesSupported != null && grantTypesSupported.isNotEmpty) {
+      if (!grantTypesSupported.contains('authorization_code')) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'No grant specified.',
+          },
+        );
+      }
+    }
+  }
 
   final authorizationServer = openIdConfiguration.authorizationServer;
 
