@@ -246,7 +246,7 @@ class ProfileModel extends Equatable {
               oidc4vciDraft: OIDC4VCIDraftType.draft13,
               oidc4vpDraft: OIDC4VPDraftType.draft18,
               scope: false,
-              securityLevel: false,
+              securityLevel: true,
               proofHeader: ProofHeaderType.kid,
               siopv2Draft: SIOPV2DraftType.draft12,
               clientType: ClientType.did,
