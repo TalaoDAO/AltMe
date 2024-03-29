@@ -36,7 +36,7 @@ Future<void> getAuthorizationUriForIssuer({
     final dynamic authorizedCode = grants['authorization_code'];
     if (authorizedCode != null &&
         authorizedCode is Map &&
-        authorizedCode.containsKey('issuer_statee')) {
+        authorizedCode.containsKey('issuer_state')) {
       issuerState = authorizedCode['issuer_state'] as String;
     }
   }
