@@ -1175,7 +1175,12 @@ class OIDC4VC {
     required Map<String, dynamic> publicKey,
   }) {
     try {
-      final x = base64Url.decode(publicKey['x'].toString());
+      var encoded = publicKey['x'].toString();
+      while (encoded.length % 4 != 0) {
+        // ignore: use_string_buffers
+        encoded += '=';
+      }
+      final x = base64Url.decode(encoded);
       JWT.verify(
         token,
         EdDSAPublicKey(x),
