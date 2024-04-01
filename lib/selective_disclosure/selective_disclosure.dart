@@ -128,7 +128,7 @@ class SelectiveDisclosure {
   (String?, bool) getClaimsData({
     required String key,
   }) {
-    String? data;
+    dynamic data;
     bool isfromDisclosureOfJWT = false;
 
     final JsonPath dataPath = JsonPath(
@@ -138,18 +138,37 @@ class SelectiveDisclosure {
 
     try {
       final uncryptedDataPath = dataPath.read(extractedValuesFromJwt).first;
-      data = uncryptedDataPath.value.toString();
+      data = uncryptedDataPath.value;
       isfromDisclosureOfJWT = true;
     } catch (e) {
       try {
         final credentialModelPath = dataPath.read(credentialModel.data).first;
-        data = credentialModelPath.value.toString();
+        data = credentialModelPath.value;
         isfromDisclosureOfJWT = false;
       } catch (e) {
         data = null;
       }
     }
 
-    return (data, isfromDisclosureOfJWT);
+    try {
+      if (data != null && data is List<dynamic>) {
+        final value = [];
+        for (final ele in data) {
+          if (ele is String) {
+            value.add(ele);
+          } else if (ele is Map) {
+            final threeDotValue = ele['...'];
+
+            if (threeDotValue != null) {
+              // what to do?
+            }
+          }
+        }
+        data = value.toString();
+      }
+      // ignore: empty_catches
+    } catch (e) {}
+
+    return (data.toString(), isfromDisclosureOfJWT);
   }
 }

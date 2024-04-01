@@ -1611,6 +1611,7 @@ class OIDC4VC {
   String getDisclosure(String content) {
     final disclosure =
         base64Url.encode(utf8.encode(content)).replaceAll('=', '');
+
     return disclosure;
   }
 

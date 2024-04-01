@@ -1759,3 +1759,39 @@ List<String> getStringCredentialsForToken({
 
   return (presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt);
 }
+
+List<dynamic> collectSdValues(Map<String, dynamic> data) {
+  final result = <dynamic>[];
+
+  if (data.containsKey('_sd') && data is List<dynamic>) {
+    final sd = data['_sd'];
+    if (sd is List<dynamic>) {
+      result.addAll(sd);
+    }
+  }
+
+  data.forEach((key, value) {
+    if (key == '_sd') {
+      final sd = data['_sd'];
+      if (sd is List<dynamic>) {
+        result.addAll(sd);
+      }
+    } else {
+      if (value is Map<String, dynamic>) {
+        result.addAll(collectSdValues(value));
+      } else if (value is List<dynamic>) {
+        for (final ele in value) {
+          if (ele is Map) {
+            final threeDotValue = ele['...'];
+
+            if (threeDotValue != null) {
+              result.add(threeDotValue);
+            }
+          }
+        }
+      }
+    }
+  });
+
+  return result;
+}

@@ -82,9 +82,12 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       /// sd-jwt
       final credentialSupported = item.credentialSupported;
       final claims = credentialSupported?['claims'];
-      final sd = item.data['_sd'];
 
-      if (claims != null && sd != null && sd is List<dynamic>) {
+      final data = item.data;
+
+      final listOfSd = collectSdValues(data);
+
+      if (claims != null && listOfSd.isNotEmpty) {
         final selectiveDisclosure = SelectiveDisclosure(item);
         final decryptedDatas = selectiveDisclosure.decryptedDatas;
 
@@ -92,7 +95,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         for (final element in decryptedDatas) {
           final sh256Hash = profileCubit.oidc4vc.sh256HashOfContent(element);
 
-          if (!sd.contains(sh256Hash)) {
+          if (!listOfSd.contains(sh256Hash)) {
             emit(
               state.copyWith(
                 credentialStatus: CredentialStatus.invalidSignature,
