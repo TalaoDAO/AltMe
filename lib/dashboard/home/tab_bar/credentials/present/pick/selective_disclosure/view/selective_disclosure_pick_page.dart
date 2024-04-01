@@ -117,12 +117,13 @@ class SelectiveDisclosurePickView extends StatelessWidget {
                 DisplaySelectiveDisclosure(
                   credentialModel: credentialToBePresented,
                   claims: null,
-                  selectedIndex: state.selected,
-                  onPressed: (claimIndex, sdIndexInJWT) {
-                    context.read<SelectiveDisclosureCubit>().toggle(claimIndex);
-                    context
-                        .read<SelectiveDisclosureCubit>()
-                        .saveIndexOfSDJWT(sdIndexInJWT);
+                  selectedClaimsKeyIds: state.selectedClaimsKeyIds,
+                  onPressed: (claimKey, claimKeyId) {
+                    context.read<SelectiveDisclosureCubit>().toggle(claimKeyId);
+                    context.read<SelectiveDisclosureCubit>().saveIndexOfSDJWT(
+                          claimsKey: claimKey,
+                          credentialModel: credentialToBePresented,
+                        );
                   },
                   showVertically: true,
                 ),

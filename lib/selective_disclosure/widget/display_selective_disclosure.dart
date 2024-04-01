@@ -13,20 +13,23 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
     required this.showVertically,
     this.claims,
     this.onPressed,
-    this.selectedIndex,
+    this.selectedClaimsKeyIds,
+    this.parentKeyId,
   });
 
   final CredentialModel credentialModel;
   final bool showVertically;
   final Map<String, dynamic>? claims;
-  final void Function(int, int)? onPressed;
-  final List<int>? selectedIndex;
+  final void Function(String, String)? onPressed;
+  final List<String>? selectedClaimsKeyIds;
+  final String? parentKeyId;
 
   @override
   Widget build(BuildContext context) {
     final selectiveDisclosure = SelectiveDisclosure(credentialModel);
     final currentClaims = claims ?? selectiveDisclosure.claims;
     final languageCode = context.read<LangCubit>().state.locale.languageCode;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: currentClaims.entries.map((MapEntry<String, dynamic> map) {
@@ -35,14 +38,6 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
 
         final key = map.key;
         final value = map.value;
-
-        final claimIndex = currentClaims.entries
-            .toList()
-            .indexWhere((entry) => entry.key == key);
-
-        final sdIndexInJWT = selectiveDisclosure.extractedValuesFromJwt.entries
-            .toList()
-            .indexWhere((entry) => entry.key == key);
 
         // "mandatory": True,
         // "value_type": "string",
@@ -76,7 +71,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
         final bool hasNestedData =
             value.values.any((element) => element is Map<String, dynamic>);
 
-        if (hasNestedData) {
+        if (hasNestedData && parentKeyId == null) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -90,33 +85,17 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                           ),
                 ),
               ),
-              TransparentInkWell(
-                onTap: () => onPressed?.call(claimIndex, sdIndexInJWT),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: DisplaySelectiveDisclosure(
-                        credentialModel: credentialModel,
-                        claims: value,
-                        showVertically: showVertically,
-                      ),
-                    ),
-                    if (selectedIndex != null) ...[
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15, right: 10),
-                        child: Icon(
-                          selectedIndex!.contains(claimIndex)
-                              ? Icons.check_box
-                              : Icons.check_box_outline_blank,
-                          size: 25,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                      ),
-                    ],
-                  ],
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: DisplaySelectiveDisclosure(
+                  credentialModel: credentialModel,
+                  claims: value,
+                  showVertically: showVertically,
+                  selectedClaimsKeyIds: selectedClaimsKeyIds,
+                  parentKeyId: key,
+                  onPressed: (nestedKey, _) {
+                    onPressed?.call(nestedKey, '$key-$nestedKey');
+                  },
                 ),
               ),
             ],
@@ -131,8 +110,14 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
 
           if (data == null) return Container();
 
+          var keyToCheck = key;
+
+          if (parentKeyId != null) {
+            keyToCheck = '$parentKeyId-$key';
+          }
+
           return TransparentInkWell(
-            onTap: () => onPressed?.call(claimIndex, sdIndexInJWT),
+            onTap: () => onPressed?.call(key, key),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -147,12 +132,12 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                     showVertically: showVertically,
                   ),
                 ),
-                if (selectedIndex != null && isfromDisclosureOfJWT) ...[
+                if (selectedClaimsKeyIds != null && isfromDisclosureOfJWT) ...[
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(top: 15, right: 10),
                     child: Icon(
-                      selectedIndex!.contains(claimIndex)
+                      selectedClaimsKeyIds!.contains(keyToCheck)
                           ? Icons.check_box
                           : Icons.check_box_outline_blank,
                       size: 25,
