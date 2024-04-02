@@ -152,7 +152,7 @@ class SelectiveDisclosure {
 
     try {
       if (data != null && data is List<dynamic>) {
-        final value = [];
+        final value = <dynamic>[];
         for (final ele in data) {
           if (ele is String) {
             value.add(ele);
@@ -160,15 +160,27 @@ class SelectiveDisclosure {
             final threeDotValue = ele['...'];
 
             if (threeDotValue != null) {
-              // what to do?
+              for (final element in decryptedDatas) {
+                final oidc4vc = OIDC4VC();
+                final sh256Hash = oidc4vc.sh256HashOfContent(element);
+
+                if (sh256Hash == threeDotValue) {
+                  if (element.startsWith('[') && element.endsWith(']')) {
+                    final trimmedElement =
+                        element.substring(1, element.length - 1).split(',');
+                    value.add(trimmedElement.last.replaceAll('"', ''));
+                  }
+                }
+              }
             }
           }
         }
-        data = value.toString();
+
+        data = value;
       }
       // ignore: empty_catches
     } catch (e) {}
 
-    return (data.toString(), isfromDisclosureOfJWT);
+    return (data?.toString(), isfromDisclosureOfJWT);
   }
 }
