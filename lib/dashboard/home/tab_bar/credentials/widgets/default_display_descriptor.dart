@@ -42,10 +42,15 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 child: AspectRatio(
                   aspectRatio: Sizes.credentialAspectRatio,
-                  child: DefaultCardBody(
-                    credentialModel: credentialModel,
-                    descriptionMaxLine: descriptionMaxLine,
-                    displyalDescription: displyalDescription,
+                  child: Stack(
+                    children: [
+                      DefaultCardBody(
+                        credentialModel: credentialModel,
+                        descriptionMaxLine: descriptionMaxLine,
+                        displyalDescription: displyalDescription,
+                      ),
+                      Image.asset(ImageStrings.blankGetCard),
+                    ],
                   ),
                 ),
               )

@@ -157,4 +157,7 @@ class ImageStrings {
   static const String receiveSqure = '$imagePath/receive-square.png';
 
   static const String linkedInBanner = '$imagePath/linkedin_banner.png';
+
+  static const String blankGetCard =
+      '$imagePath/blank_transparent_get_card.png';
 }
