@@ -108,11 +108,6 @@ class SelectiveDisclosure {
     if (picture == null) return null;
     if (picture is! Map<String, dynamic>) return null;
 
-    if (picture.containsKey('mandatory')) {
-      final mandatory = picture['mandatory'];
-      if (mandatory is! bool) return null;
-    }
-
     final valueType = picture['value_type'];
     if (valueType == null) return null;
 

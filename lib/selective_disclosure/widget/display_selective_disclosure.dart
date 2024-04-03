@@ -158,13 +158,6 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
 
     if (value.isEmpty) return null;
 
-    if (value.containsKey('mandatory')) {
-      final mandatory = value['mandatory'];
-      if (mandatory is! bool) return null;
-
-      // if (!mandatory) return null;
-    }
-
     if (value.containsKey('display')) {
       final displays = value['display'];
       if (displays is! List<dynamic>) return null;
