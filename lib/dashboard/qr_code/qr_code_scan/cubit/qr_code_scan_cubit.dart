@@ -13,11 +13,9 @@ import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:asn1lib/asn1lib.dart' as asn1lib;
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
@@ -25,9 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:pointycastle/pointycastle.dart' as pc;
 import 'package:secure_storage/secure_storage.dart';
-import 'package:x509/x509.dart' as x509;
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
 
@@ -1094,8 +1090,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         if (clientIdScheme != null) {
           if (clientIdScheme == 'x509_san_dns') {
-            publicKeyJwk =
-                await checkX509(clientId: clientId, encodedData: encodedData);
+            publicKeyJwk = await checkX509(
+              clientId: clientId,
+              encodedData: encodedData,
+              jwtDecode: jwtDecode,
+            );
           }
         }
 
@@ -1125,89 +1124,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     } else {
       emit(state.acceptHost());
     }
-  }
-
-  Future<Map<String, dynamic>?> checkX509({
-    required String encodedData,
-    required String clientId,
-  }) async {
-    final Map<String, dynamic> header =
-        decodeHeader(jwtDecode: jwtDecode, token: encodedData);
-
-    final x5c = header['x5c'];
-
-    if (x5c != null) {
-      if (x5c is! List) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_format',
-            'error_description': 'x509_san_dns scheme error',
-          },
-        );
-      }
-
-      //array x5c[0], it is a certificat in DER format (binary)
-      final certificate = x5c.firstOrNull;
-
-      if (certificate == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_format',
-            'error_description': 'x509_san_dns scheme error',
-          },
-        );
-      }
-
-      final decoded = base64Decode(certificate.toString());
-      final seq = asn1lib.ASN1Sequence.fromBytes(decoded);
-      final cert = x509.X509Certificate.fromAsn1(seq);
-
-      final subject = cert.tbsCertificate.subject;
-
-      if (subject == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_format',
-            'error_description': 'x509_san_dns scheme error',
-          },
-        );
-      }
-
-      final names = subject.names;
-
-      if (names.isEmpty) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_format',
-            'error_description': 'x509_san_dns scheme error',
-          },
-        );
-      }
-
-      final value = names[0].entries.map((element) => element.value).toList();
-
-      if (!value.contains(clientId)) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_format',
-            'error_description': 'x509_san_dns scheme error',
-          },
-        );
-      }
-
-      final publicKey = cert.publicKey;
-      if (publicKey is x509.RsaPublicKey) {
-        final BigInt modulus = BigInt.parse(publicKey.modulus.toString());
-        final n = base64Encode(modulus.toBytes);
-        final publicKeyJwk = {
-          'e': 'AQAB',
-          'kty': 'RSA',
-          'n': n.replaceAll('=', ''),
-        };
-        return publicKeyJwk;
-      }
-    }
-    return null;
   }
 
   /// complete SIOPV2 Flow

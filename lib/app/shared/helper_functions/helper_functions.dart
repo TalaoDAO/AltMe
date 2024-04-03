@@ -22,6 +22,9 @@ import 'package:key_generator/key_generator.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:pointycastle/pointycastle.dart' as pc;
+import 'package:asn1lib/asn1lib.dart' as asn1lib;
+import 'package:x509/x509.dart' as x509;
 
 String generateDefaultAccountName(
   int accountIndex,
@@ -81,21 +84,15 @@ String stringToHexPrefixedWith05({required String payload}) {
     payload,
   ].join(' ');
 
-  final String bytes = char2Bytes(formattedInput);
+  final String bytes = formattedInput.char2Bytes;
 
   const String prefix = '05';
   const String stringIsHex = '0100';
-  final String bytesOfByteLength = char2Bytes(bytes.length.toString());
+  final String bytesOfByteLength = bytes.length.toString().char2Bytes;
 
   final payloadBytes = '$prefix$stringIsHex$bytesOfByteLength$bytes';
 
   return payloadBytes;
-}
-
-String char2Bytes(String text) {
-  final List<int> encode = utf8.encode(text);
-  final String bytes = hex.encode(encode);
-  return bytes;
 }
 
 Future<bool> isConnected() async {
@@ -1794,4 +1791,88 @@ List<dynamic> collectSdValues(Map<String, dynamic> data) {
   });
 
   return result;
+}
+
+Future<Map<String, dynamic>?> checkX509({
+  required String encodedData,
+  required String clientId,
+  required JWTDecode jwtDecode,
+}) async {
+  final Map<String, dynamic> header =
+      decodeHeader(jwtDecode: jwtDecode, token: encodedData);
+
+  final x5c = header['x5c'];
+
+  if (x5c != null) {
+    if (x5c is! List) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'x509_san_dns scheme error',
+        },
+      );
+    }
+
+    //array x5c[0], it is a certificat in DER format (binary)
+    final certificate = x5c.firstOrNull;
+
+    if (certificate == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'x509_san_dns scheme error',
+        },
+      );
+    }
+
+    final decoded = base64Decode(certificate.toString());
+    final seq = asn1lib.ASN1Sequence.fromBytes(decoded);
+    final cert = x509.X509Certificate.fromAsn1(seq);
+
+    final subject = cert.tbsCertificate.subject;
+
+    if (subject == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'x509_san_dns scheme error',
+        },
+      );
+    }
+
+    final names = subject.names;
+
+    if (names.isEmpty) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'x509_san_dns scheme error',
+        },
+      );
+    }
+
+    final value = names[0].entries.map((element) => element.value).toList();
+
+    if (!value.contains(clientId)) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'x509_san_dns scheme error',
+        },
+      );
+    }
+
+    final publicKey = cert.publicKey;
+    if (publicKey is x509.RsaPublicKey) {
+      final BigInt modulus = BigInt.parse(publicKey.modulus.toString());
+      final n = base64Encode(modulus.toBytes);
+      final publicKeyJwk = {
+        'e': 'AQAB',
+        'kty': 'RSA',
+        'n': n.replaceAll('=', ''),
+      };
+      return publicKeyJwk;
+    }
+  }
+  return null;
 }
