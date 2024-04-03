@@ -7,6 +7,8 @@ enum OIDC4VPDraftType {
   draft13,
   @JsonValue('18')
   draft18,
+  @JsonValue('20')
+  draft20,
 }
 
 extension OIDC4VPDraftTypeX on OIDC4VPDraftType {
@@ -18,6 +20,8 @@ extension OIDC4VPDraftTypeX on OIDC4VPDraftType {
         return 'Draft 13';
       case OIDC4VPDraftType.draft18:
         return 'Draft 18';
+      case OIDC4VPDraftType.draft20:
+        return 'Draft 20';
     }
   }
 }

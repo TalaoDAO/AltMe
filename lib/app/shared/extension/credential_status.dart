@@ -8,16 +8,19 @@ extension CredentialStatusExtension on CredentialStatus {
     final l10n = context.l10n;
     switch (this) {
       case CredentialStatus.active:
-        return l10n.cardsActive;
-      case CredentialStatus.suspended:
-      case CredentialStatus.revoked:
+        return l10n.cardIsValid;
       case CredentialStatus.expired:
-      case CredentialStatus.notVerified:
-        return l10n.cardsProblem;
+        return l10n.cardIsExpired;
+      case CredentialStatus.invalidSignature:
+        return l10n.signatureIsInvalid;
       case CredentialStatus.pending:
         return l10n.cardsPending;
       case CredentialStatus.unknown:
         return l10n.unknown;
+      case CredentialStatus.invalidStatus:
+        return l10n.statusIsInvalid;
+      case CredentialStatus.noStatus:
+        return '';
     }
   }
 
@@ -25,13 +28,12 @@ extension CredentialStatusExtension on CredentialStatus {
     switch (this) {
       case CredentialStatus.active:
         return Icons.check_circle;
-      case CredentialStatus.suspended:
-      case CredentialStatus.revoked:
+      case CredentialStatus.invalidStatus:
       case CredentialStatus.expired:
-      case CredentialStatus.notVerified:
-        return Icons.error_rounded;
       case CredentialStatus.pending:
       case CredentialStatus.unknown:
+      case CredentialStatus.invalidSignature:
+      case CredentialStatus.noStatus:
         return Icons.circle_outlined;
     }
   }
@@ -40,32 +42,13 @@ extension CredentialStatusExtension on CredentialStatus {
     switch (this) {
       case CredentialStatus.active:
         return Theme.of(context).colorScheme.activeColor;
-      case CredentialStatus.suspended:
-      case CredentialStatus.revoked:
+      case CredentialStatus.invalidStatus:
       case CredentialStatus.expired:
-      case CredentialStatus.notVerified:
+      case CredentialStatus.pending:
+      case CredentialStatus.unknown:
+      case CredentialStatus.invalidSignature:
+      case CredentialStatus.noStatus:
         return Theme.of(context).colorScheme.inactiveColor;
-      case CredentialStatus.pending:
-        return Colors.orange;
-      case CredentialStatus.unknown:
-        return Colors.blue;
-    }
-  }
-
-  String info(BuildContext context) {
-    final l10n = context.l10n;
-    switch (this) {
-      case CredentialStatus.notVerified:
-        return l10n.incorrectSignature;
-      case CredentialStatus.suspended:
-      case CredentialStatus.revoked:
-        return l10n.revokedOrSuspendedCredential;
-      case CredentialStatus.expired:
-        return l10n.credentialExpired;
-      case CredentialStatus.unknown:
-      case CredentialStatus.pending:
-      case CredentialStatus.active:
-        return '';
     }
   }
 }

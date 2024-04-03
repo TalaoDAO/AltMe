@@ -570,6 +570,11 @@ class CustomOidc4VcProfile extends Equatable {
   final String? clientSecret;
   final bool cryptoHolderBinding;
   final DidKeyType defaultDid;
+  //TODO(bibash): temporary solution to avoid who have chosen 12
+  @JsonKey(
+    includeFromJson: true,
+    fromJson: oidc4vciDraftFromJson,
+  )
   final OIDC4VCIDraftType oidc4vciDraft;
   final OIDC4VPDraftType oidc4vpDraft;
   final bool scope;
@@ -584,6 +589,16 @@ class CustomOidc4VcProfile extends Equatable {
   final ProofType proofType;
 
   Map<String, dynamic> toJson() => _$CustomOidc4VcProfileToJson(this);
+
+  static OIDC4VCIDraftType oidc4vciDraftFromJson(dynamic value) {
+    if (value == '11') {
+      return OIDC4VCIDraftType.draft11;
+    } else if (value == '12' || value == '13') {
+      return OIDC4VCIDraftType.draft13;
+    } else {
+      throw Exception();
+    }
+  }
 
   CustomOidc4VcProfile copyWith({
     ClientAuthentication? clientAuthentication,

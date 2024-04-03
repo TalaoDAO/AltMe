@@ -1,11 +1,12 @@
 name: altme
 description: AltMe Flutter App
-version: 2.4.1+419
+version: 2.4.11+431
 
 environment:
   sdk: ">=3.1.0 <4.0.0"
 
 dependencies:
+  asn1lib: ^1.5.2
   async: ^2.11.0
   auto_size_text: ^3.0.0
   badges: ^3.1.1
@@ -66,7 +67,7 @@ dependencies:
   google_mlkit_barcode_scanning: ^0.10.0
   image: ^4.0.17
   image_picker: ^1.0.7
-  jose: ^0.3.4
+  jose_plus: ^0.4.5
   json_annotation: ^4.8.1
   json_path: ^0.4.4 #latest version creates test issue
   jwt_decode:
@@ -115,6 +116,7 @@ dependencies:
   webview_flutter: ^4.2.1
   webview_flutter_android: ^3.7.1
   webview_flutter_wkwebview: ^3.4.4
+  x509: ^0.2.4+2
 
 dependency_overrides:
   ffi: 2.1.0 #didkit from path which depends on ffi ^1.0.0

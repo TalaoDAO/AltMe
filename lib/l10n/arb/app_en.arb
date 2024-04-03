@@ -275,8 +275,6 @@
   "credentialAlias": "Credential Alias",
   "verificationStatus": "Verification Status",
   "cardsPending": "Card pending",
-  "cardsActive": "Card active",
-  "cardsProblem": "Card problem",
   "unableToProcessTheData": "Unable to process the data",
   "unimplementedQueryType": "Unimplemented Query Type",
   "onSubmittedPassBasePopUp": "You will receive an email",
@@ -922,8 +920,6 @@
   "developerModeSubtitle": "Enable developer mode to access advanced debugging tools",
   "confirmVerifierAccess": "Confirm verifier access",
   "confirmVerifierAccessSubtitle": "Default: On\nDisable to skip confirmation when you share your verifiable credentials.",
-  "credentialManifestSupport": "Credential Manifest Support",
-  "credentialManifestSupportSubtitle": "Default: Off\nUse DIF Wallet Rendering syntax instead of the 'display' attribute.",
   "secureAuthenticationWithPINCode": "Secure Authentication with PIN Code",
   "secureAuthenticationWithPINCodeSubtitle": "Default: On\nTurn off to skip PIN code for website authentication (not recommended).",
   "youcanSelectOnlyXCredential": "You can select only {count} credential(s).",
@@ -1049,5 +1045,9 @@
   "english": "English",
   "phoneLanguage": "Phone language",
   "pushAuthorizationRequestTitle": "Push Authorization Request (PAR)",
-  "pushAuthorizationRequestSubTitle": "Default: false\nEnable to secure the authorization code flow" 
+  "pushAuthorizationRequestSubTitle": "Default: false\nEnable to secure the authorization code flow",
+  "cardIsValid":"Card is valid",
+  "cardIsExpired":"Card is expired",
+  "signatureIsInvalid":"Signature is invalid",
+  "statusIsInvalid":"Status is invalid"
 }
