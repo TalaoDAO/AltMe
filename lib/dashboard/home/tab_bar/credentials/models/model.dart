@@ -52,6 +52,7 @@ export 'passport_footprint/passport_footprint_model.dart';
 export 'pcds_agent_certificate/pcds_agent_certificate_model.dart';
 export 'pending_info/pending_info.dart';
 export 'phone_pass/phone_pass_model.dart';
+export 'pid/pid_subject_model.dart';
 export 'polygon_associated_address/polygon_associated_address_credential.dart';
 export 'polygon_associated_address/polygon_associated_address_model.dart';
 export 'polygon_poo_address/polygon_poo_address_model.dart';

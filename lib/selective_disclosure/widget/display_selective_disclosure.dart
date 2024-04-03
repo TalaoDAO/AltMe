@@ -39,21 +39,18 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
         final key = map.key;
         final value = map.value;
 
-        // "mandatory": True,
         // "value_type": "string",
         // "display": [
         //     {"name": "Address", "locale": "en-US"},
         //     {"name": "Adresse", "locale": "fr-FR"}
         // ],
         // "street_address": {
-        // "mandatory": True,
         // "value_type": "string",
         // "display": [
         //     {"name": "Street address", "locale": "en-US"},
         //     {"name": "Rue", "locale": "fr-FR"}],
         // },
         // "locality": {
-        // "mandatory": True,
         // "value_type": "string",
         // "display": [
         //     {"name": "Locality", "locale": "en-US"},
