@@ -1042,6 +1042,11 @@ Future<String> getHost({
     ).host;
   } else {
     /// verification case
+    final clientId = uri.queryParameters['client_id'];
+
+    if (clientId != null) {
+      return clientId;
+    }
 
     final String? requestUri = uri.queryParameters['request_uri'];
 
