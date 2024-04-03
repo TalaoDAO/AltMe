@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -34,4 +37,10 @@ extension StringExtension on String {
   }
 
   Characters get characters => Characters(this);
+
+  String get char2Bytes {
+    final List<int> encode = utf8.encode(this);
+    final String bytes = hex.encode(encode);
+    return bytes;
+  }
 }

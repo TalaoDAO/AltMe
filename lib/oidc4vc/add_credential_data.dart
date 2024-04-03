@@ -10,6 +10,7 @@ import 'package:uuid/uuid.dart';
 
 Future<void> addCredentialData({
   required List<dynamic> encodedCredentialOrFutureTokens,
+  required String accessToken,
   required String? deferredCredentialEndpoint,
   required String format,
   required OpenIdConfiguration? openIdConfiguration,
@@ -25,11 +26,20 @@ Future<void> addCredentialData({
   for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {
     final data = encodedCredentialOrFutureTokens[i];
     final String credentialName = getCredentialData(credential);
+
     final acceptanceToken = data['acceptance_token'];
 
-    if (acceptanceToken != null && deferredCredentialEndpoint != null) {
+    /// trasanction_id is NEW for draft 13. it was acceptance_token for draft 11
+    final transactionId = data['transaction_id'];
+
+    if ((acceptanceToken != null || transactionId != null) &&
+        deferredCredentialEndpoint != null) {
       /// add deferred card
       final id = const Uuid().v4();
+
+      if (data is! Map<String, dynamic>) {
+        throw Exception();
+      }
 
       final credentialModel = CredentialModel(
         id: id,
@@ -59,7 +69,8 @@ Future<void> addCredentialData({
         image: '',
         shareLink: '',
         pendingInfo: PendingInfo(
-          acceptanceToken: acceptanceToken.toString(),
+          encodedCredentialFromOIDC4VC: data,
+          accessToken: accessToken,
           deferredCredentialEndpoint: deferredCredentialEndpoint,
           format: format,
           url: scannedResponse,

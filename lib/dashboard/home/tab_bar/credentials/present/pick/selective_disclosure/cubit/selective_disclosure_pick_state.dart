@@ -4,7 +4,7 @@ part of 'selective_disclosure_pick_cubit.dart';
 class SelectiveDisclosureState extends Equatable {
   const SelectiveDisclosureState({
     this.message,
-    this.selected = const [],
+    this.selectedClaimsKeyIds = const [],
     this.selectedSDIndexInJWT = const [],
   });
 
@@ -12,16 +12,16 @@ class SelectiveDisclosureState extends Equatable {
       _$SelectiveDisclosureStateFromJson(json);
 
   final StateMessage? message;
-  final List<int> selected;
+  final List<String> selectedClaimsKeyIds;
   final List<int> selectedSDIndexInJWT;
 
   SelectiveDisclosureState copyWith({
-    List<int>? selected,
+    List<String>? selectedClaimsKeyIds,
     List<int>? selectedSDIndexInJWT,
     StateMessage? message,
   }) {
     return SelectiveDisclosureState(
-      selected: selected ?? this.selected,
+      selectedClaimsKeyIds: selectedClaimsKeyIds ?? this.selectedClaimsKeyIds,
       selectedSDIndexInJWT: selectedSDIndexInJWT ?? this.selectedSDIndexInJWT,
       message: message,
     );
@@ -31,7 +31,7 @@ class SelectiveDisclosureState extends Equatable {
 
   @override
   List<Object?> get props => [
-        selected,
+        selectedClaimsKeyIds,
         selectedSDIndexInJWT,
         message,
       ];

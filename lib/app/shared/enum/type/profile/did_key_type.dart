@@ -59,8 +59,8 @@ extension DidKeyTypeX on DidKeyType {
       case DidKeyType.p256:
       case DidKeyType.jwkP256:
       case DidKeyType.jwtClientAttestation:
-        return true;
       case DidKeyType.edDSA:
+        return true;
       case DidKeyType.ebsiv3:
         return false;
     }

@@ -20,13 +20,47 @@ class CredentialSubjectData extends StatelessWidget {
   Widget build(BuildContext context) {
     final credentialSupported = credentialModel.credentialSupported;
 
-    final credentialSubjectReference = JsonPath(r'$..credentialSubject')
+    var credentialSubjectReference = JsonPath(r'$..credentialSubject')
         .read(credentialSupported)
         .firstOrNull
         ?.value;
 
     if (credentialSubjectReference == null) return Container();
     if (credentialSubjectReference is! Map<String, dynamic>) return Container();
+
+    if (credentialSupported == null) return Container();
+
+    final credentialDefinition = credentialSupported['credential_definition'];
+
+    if (credentialDefinition != null &&
+        credentialDefinition is Map<String, dynamic> &&
+        credentialDefinition.containsKey('order')) {
+      final order = credentialDefinition['order'];
+
+      if (order != null && order is List<dynamic>) {
+        final orderList = order.map((dynamic e) => e.toString()).toList();
+
+        final orderedData = <String, dynamic>{};
+        final remainingData = <String, dynamic>{};
+
+        // Order elements based on the order list
+        for (final key in orderList) {
+          if (credentialSubjectReference.containsKey(key)) {
+            orderedData[key] = credentialSubjectReference[key];
+          }
+        }
+
+        // Add remaining elements to the end of the ordered map
+        credentialSubjectReference.forEach((key, value) {
+          if (!orderedData.containsKey(key)) {
+            remainingData[key] = value;
+          }
+        });
+
+        orderedData.addAll(remainingData);
+        credentialSubjectReference = orderedData;
+      }
+    }
 
     final credentialSubjectData = credentialModel.data['credentialSubject'];
 
@@ -48,13 +82,6 @@ class CredentialSubjectData extends StatelessWidget {
         if (value is! Map<String, dynamic>) return Container();
 
         if (value.isEmpty) return Container();
-
-        if (value.containsKey('mandatory')) {
-          final mandatory = value['mandatory'];
-          if (mandatory is! bool) return Container();
-
-          if (!mandatory) return Container();
-        }
 
         if (value.containsKey('display')) {
           final displays = value['display'];

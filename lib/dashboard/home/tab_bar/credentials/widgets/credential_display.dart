@@ -97,6 +97,7 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
+      case CredentialSubjectType.pid:
         switch (credDisplayType) {
           case CredDisplayType.List:
             return DefaultCredentialWidget(

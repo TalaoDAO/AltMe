@@ -172,7 +172,7 @@ class CredentialModel extends Equatable {
       case RevocationStatus.active:
         return CredentialStatus.active;
       case RevocationStatus.revoked:
-        return CredentialStatus.suspended;
+        return CredentialStatus.noStatus;
     }
   }
 

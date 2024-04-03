@@ -59,6 +59,7 @@ class DummyCredentialImage extends StatelessWidget {
           ),
           data: const {},
           image: '',
+          display: displayExternalIssuer,
           shareLink: '',
           jwt: null,
           format: 'ldp_vc',

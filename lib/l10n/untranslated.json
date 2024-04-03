@@ -11,7 +11,11 @@
     "english",
     "phoneLanguage",
     "pushAuthorizationRequestTitle",
-    "pushAuthorizationRequestSubTitle"
+    "pushAuthorizationRequestSubTitle",
+    "cardIsValid",
+    "cardIsExpired",
+    "signatureIsInvalid",
+    "statusIsInvalid"
   ],
 
   "es": [
@@ -26,11 +30,19 @@
     "english",
     "phoneLanguage",
     "pushAuthorizationRequestTitle",
-    "pushAuthorizationRequestSubTitle"
+    "pushAuthorizationRequestSubTitle",
+    "cardIsValid",
+    "cardIsExpired",
+    "signatureIsInvalid",
+    "statusIsInvalid"
   ],
 
   "fr": [
     "pushAuthorizationRequestTitle",
-    "pushAuthorizationRequestSubTitle"
+    "pushAuthorizationRequestSubTitle",
+    "cardIsValid",
+    "cardIsExpired",
+    "signatureIsInvalid",
+    "statusIsInvalid"
   ]
 }

@@ -6,7 +6,8 @@ part 'pending_info.g.dart';
 @JsonSerializable()
 class PendingInfo extends Equatable {
   const PendingInfo({
-    required this.acceptanceToken,
+    required this.encodedCredentialFromOIDC4VC,
+    required this.accessToken,
     required this.deferredCredentialEndpoint,
     required this.format,
     required this.url,
@@ -17,7 +18,8 @@ class PendingInfo extends Equatable {
   factory PendingInfo.fromJson(Map<String, dynamic> json) =>
       _$PendingInfoFromJson(json);
 
-  final String acceptanceToken;
+  final Map<String, dynamic> encodedCredentialFromOIDC4VC;
+  final String accessToken;
   final String deferredCredentialEndpoint;
   final String format;
   final String url;
@@ -28,7 +30,8 @@ class PendingInfo extends Equatable {
 
   @override
   List<Object?> get props => [
-        acceptanceToken,
+        encodedCredentialFromOIDC4VC,
+        accessToken,
         deferredCredentialEndpoint,
         format,
         url,

@@ -246,7 +246,7 @@ class ProfileModel extends Equatable {
               oidc4vciDraft: OIDC4VCIDraftType.draft13,
               oidc4vpDraft: OIDC4VPDraftType.draft18,
               scope: false,
-              securityLevel: false,
+              securityLevel: true,
               proofHeader: ProofHeaderType.kid,
               siopv2Draft: SIOPV2DraftType.draft12,
               clientType: ClientType.did,
@@ -258,7 +258,12 @@ class ProfileModel extends Equatable {
           ),
           settingsMenu: SettingsMenu.initial(),
           version: '',
-          walletSecurityOptions: WalletSecurityOptions.initial(),
+          walletSecurityOptions: const WalletSecurityOptions(
+            confirmSecurityVerifierAccess: true,
+            displaySecurityAdvancedSettings: true,
+            secureSecurityAuthenticationWithPinCode: false,
+            verifySecurityIssuerWebsiteIdentity: false,
+          ),
         ),
       );
 

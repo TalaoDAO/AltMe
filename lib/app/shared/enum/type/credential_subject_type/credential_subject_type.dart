@@ -65,4 +65,5 @@ enum CredentialSubjectType {
   legalPersonalCredential,
   identityCredential,
   eudiPid,
+  pid,
 }

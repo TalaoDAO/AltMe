@@ -4,12 +4,11 @@ import 'package:oidc4vc/oidc4vc.dart';
 
 /// Retreive credential_type from url
 // encodedCredentialOrFutureTokens,deferredCredentialEndpoint,
-// format, updatedNonce
+// format
 Future<
     (
       List<dynamic>,
       String?,
-      String,
       String,
     )> getCredential({
   required bool isEBSIV3,
@@ -45,7 +44,6 @@ Future<
     List<dynamic> encodedCredentialOrFutureTokens,
     String? deferredCredentialEndpoint,
     String format,
-    String updatedNonce,
   ) = await profileCubit.oidc4vc.getCredential(
     issuer: issuer,
     credential: credential,
@@ -69,6 +67,5 @@ Future<
     encodedCredentialOrFutureTokens,
     deferredCredentialEndpoint,
     format,
-    updatedNonce,
   );
 }

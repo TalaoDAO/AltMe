@@ -24,7 +24,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
-
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
 
@@ -325,9 +324,18 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 continue;
               }
 
-              final isPresentable =
-                  await isCredentialPresentable(credentialName);
+              final credentialSubjectType = getCredTypeFromName(credentialName);
 
+              final isPresentable = await isCredentialPresentable(
+                credentialSubjectType: credentialSubjectType,
+                vcFormatType: profileCubit
+                    .state
+                    .model
+                    .profileSetting
+                    .selfSovereignIdentityOptions
+                    .customOidc4vcProfile
+                    .vcFormatType,
+              );
               if (!isPresentable) {
                 emit(
                   state.copyWith(
@@ -437,8 +445,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     if (keys.contains('credential_offer') ||
         keys.contains('credential_offer_uri')) {
       if (credentialOfferJson != null) {
-        final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
-            ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+        final grants = credentialOfferJson['grants'];
+
+        dynamic preAuthorizedCodeGrant;
+
+        if (grants != null && grants is Map) {
+          preAuthorizedCodeGrant =
+              grants['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+          if (preAuthorizedCodeGrant != null &&
+              preAuthorizedCodeGrant is Map &&
+              preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
+            preAuthorizedCode =
+                preAuthorizedCodeGrant['pre-authorized_code'] as String;
+          }
+        }
 
         bool? userPinRequired;
         TxCode? txCode;
@@ -781,6 +801,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       final url = credentialModel.pendingInfo!.url;
 
+      final customOidc4vcProfile = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile;
+
       final (
         _,
         OpenIdConfiguration? openIdConfiguration,
@@ -792,8 +815,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         url: url,
         client: client,
         oidc4vc: oidc4vc,
-        oidc4vciDraftType: profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.oidc4vciDraft,
+        oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
       );
 
       if (openIdConfiguration != null) {
@@ -811,6 +833,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         oidc4vc: oidc4vc,
         jwtDecode: jwtDecode,
         blockchainType: walletCubit.state.currentAccount!.blockchainType,
+        oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
       );
     } catch (e) {
       emitError(e);
@@ -994,7 +1017,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       shareLink: 'shareLink',
       data: const {},
       jwt: null,
-      format: 'ldp_vc',
+      format: profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType.value,
       credentialManifest: credentialManifest,
     );
 
@@ -1034,36 +1058,62 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
     final isSecurityEnabled = customOidc4vcProfile.securityLevel;
-    final enableJWKThumbprint =
-        customOidc4vcProfile.clientType == ClientType.jwkThumbprint;
 
-    if (isSecurityEnabled && enableJWKThumbprint) {
+    if (isSecurityEnabled) {
       final Map<String, dynamic> payload =
           decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
 
-      final Map<String, dynamic> header =
-          decodeHeader(jwtDecode: jwtDecode, token: encodedData);
-
-      final String issuerDid = jsonEncode(payload['client_id']);
-      final String issuerKid = jsonEncode(header['kid']);
+      final String clientId = payload['client_id'].toString();
 
       //check Signature
       try {
+        /// client_id_scheme = did, you need tio use the universal resolver
+        ///
+        /// client_id_scheme = redirect_uri
+        /// (default case if no client_id_scheme)c you need to use the jwks
+        ///
+        /// client_id_scheme =  x509_san_dns, you need the key from the
+        /// certificate
+        ///
+        /// client_id_scheme = verifier_attestation, the key will be in a
+        /// jwt inside teh header
+        ///
+        /// if client_id starts with "did:" lets consider it is
+        /// client_id_scheme n= did, universal resolver
+        ///
+        /// if client_id starts with http, lets consider it is
+        /// client_id_scheme = redirect_uri, fetch jwks
+
+        Map<String, dynamic>? publicKeyJwk;
+
+        final clientIdScheme = payload['client_id_scheme'];
+
+        if (clientIdScheme != null) {
+          if (clientIdScheme == 'x509_san_dns') {
+            publicKeyJwk = await checkX509(
+              clientId: clientId,
+              encodedData: encodedData,
+              jwtDecode: jwtDecode,
+            );
+          }
+        }
+
         final VerificationType isVerified = await verifyEncodedData(
-          issuerDid,
-          issuerKid,
-          encodedData,
+          issuer: clientId,
+          jwtDecode: jwtDecode,
+          jwt: encodedData,
+          publicKeyJwk: publicKeyJwk,
         );
 
-        if (isVerified == VerificationType.verified) {
-          emit(state.acceptHost());
-        } else {
-          emitError(
+        if (isVerified != VerificationType.verified) {
+          return emitError(
             ResponseMessage(
               message: ResponseString.RESPONSE_STRING_invalidRequest,
             ),
           );
         }
+
+        emit(state.acceptHost());
       } catch (e) {
         emitError(
           ResponseMessage(
@@ -1315,7 +1365,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             List<dynamic> encodedCredentialOrFutureTokens,
             String? deferredCredentialEndpoint,
             String format,
-            String updateNonce,
           ) = await getCredential(
             isEBSIV3: isEBSIV3,
             credential: selectedCredentials[i],
@@ -1331,7 +1380,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             openIdConfiguration: openIdConfiguration,
           );
 
-          savedNonce = updateNonce;
+          final lastElement = encodedCredentialOrFutureTokens.last;
+
+          /// update nonce value
+          if (lastElement is Map<String, dynamic>) {
+            if (lastElement.containsKey('c_nonce')) {
+              savedNonce = lastElement['c_nonce'].toString();
+            }
+          }
 
           if (profileCubit.state.model.isDeveloperMode) {
             completer = Completer<bool>();
@@ -1361,6 +1417,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           /// add credentials
           await addCredentialData(
             scannedResponse: state.uri.toString(),
+            accessToken: savedAccessToken!,
             credentialsCubit: credentialsCubit,
             secureStorageProvider: getSecureStorage,
             credential: selectedCredentials[i],
