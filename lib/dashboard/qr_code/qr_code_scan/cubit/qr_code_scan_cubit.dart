@@ -1088,11 +1088,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         /// if client_id starts with http, lets consider it is
         /// client_id_scheme = redirect_uri, fetch jwks
 
+        Map<String, dynamic>? publicKeyJwk;
+
         final clientIdScheme = payload['client_id_scheme'];
 
         if (clientIdScheme != null) {
           if (clientIdScheme == 'x509_san_dns') {
-            await checkX509(clientId: clientId, encodedData: encodedData);
+            publicKeyJwk =
+                await checkX509(clientId: clientId, encodedData: encodedData);
           }
         }
 
@@ -1100,6 +1103,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           issuer: clientId,
           jwtDecode: jwtDecode,
           jwt: encodedData,
+          publicKeyJwk: publicKeyJwk,
         );
 
         if (isVerified != VerificationType.verified) {
@@ -1123,7 +1127,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> checkX509({
+  Future<Map<String, dynamic>?> checkX509({
     required String encodedData,
     required String clientId,
   }) async {
@@ -1160,12 +1164,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       final subject = cert.tbsCertificate.subject;
 
-      // final publicKey = cert.publicKey as x509.PublicKey;
-      // if (publicKey is x509.RsaPublicKey) {
-      //   print(publicKey.modulus.toString());
-      //   print(publicKey.exponent);
-      // }
-
       if (subject == null) {
         throw ResponseMessage(
           data: {
@@ -1196,7 +1194,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           },
         );
       }
+
+      final publicKey = cert.publicKey;
+      if (publicKey is x509.RsaPublicKey) {
+        final BigInt modulus = BigInt.parse(publicKey.modulus.toString());
+        final n = base64Encode(modulus.toBytes);
+        final publicKeyJwk = {
+          'e': 'AQAB',
+          'kty': 'RSA',
+          'n': n.replaceAll('=', ''),
+        };
+        return publicKeyJwk;
+      }
     }
+    return null;
   }
 
   /// complete SIOPV2 Flow

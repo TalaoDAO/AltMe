@@ -6,6 +6,7 @@ Future<VerificationType> verifyEncodedData({
   required String issuer,
   required JWTDecode jwtDecode,
   required String jwt,
+  Map<String, dynamic>? publicKeyJwk,
 }) async {
   final OIDC4VC oidc4vc = OIDC4VC();
 
@@ -24,21 +25,11 @@ Future<VerificationType> verifyEncodedData({
     issuerKid = header['kid'].toString();
   }
 
-  Map<String, dynamic>? publicJwk;
-
-  if (header.containsKey('jwk')) {
-    final jwk = header['jwk'];
-
-    if (jwk is Map<String, dynamic>) {
-      publicJwk = jwk;
-    }
-  }
-
   final VerificationType verificationType = await oidc4vc.verifyEncodedData(
     issuer: issuer,
     jwt: updateJwt,
     issuerKid: issuerKid,
-    publicJwk: publicJwk,
+    publicJwk: publicKeyJwk,
   );
   return verificationType;
 }
