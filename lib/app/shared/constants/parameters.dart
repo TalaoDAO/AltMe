@@ -72,6 +72,9 @@ class Parameters {
   static const bool supportCryptoAccountOwnershipInDiscoverForEnterpriseMode =
       true;
 
+  static const bool showChainbornCard = false;
+  static const bool showTezotopiaCard = false;
+
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
   static const DidKeyType didKeyTypeForDefault = DidKeyType.edDSA;
   static const DidKeyType didKeyTypeForDutch = DidKeyType.jwkP256;

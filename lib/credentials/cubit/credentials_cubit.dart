@@ -751,19 +751,24 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               allSubjectTypeForCategory.add(CredentialSubjectType.gender);
             }
           case CredentialCategory.advantagesCards:
-            if (discoverCardsOptions.displayChainborn &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.chainbornMembership)) {
-              allSubjectTypeForCategory.add(
-                CredentialSubjectType.chainbornMembership,
-              );
+            if (Parameters.showChainbornCard) {
+              if (discoverCardsOptions.displayChainborn &&
+                  !allSubjectTypeForCategory
+                      .contains(CredentialSubjectType.chainbornMembership)) {
+                allSubjectTypeForCategory.add(
+                  CredentialSubjectType.chainbornMembership,
+                );
+              }
             }
-            if (discoverCardsOptions.displayTezotopia &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.tezotopiaMembership)) {
-              allSubjectTypeForCategory.add(
-                CredentialSubjectType.tezotopiaMembership,
-              );
+
+            if (Parameters.showTezotopiaCard) {
+              if (discoverCardsOptions.displayTezotopia &&
+                  !allSubjectTypeForCategory
+                      .contains(CredentialSubjectType.tezotopiaMembership)) {
+                allSubjectTypeForCategory.add(
+                  CredentialSubjectType.tezotopiaMembership,
+                );
+              }
             }
 
           case CredentialCategory.professionalCards:
