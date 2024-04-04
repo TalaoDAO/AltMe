@@ -22,6 +22,9 @@ import 'package:key_generator/key_generator.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:pointycastle/pointycastle.dart' as pc;
+import 'package:asn1lib/asn1lib.dart' as asn1lib;
+import 'package:x509/x509.dart' as x509;
 
 String generateDefaultAccountName(
   int accountIndex,
@@ -81,21 +84,15 @@ String stringToHexPrefixedWith05({required String payload}) {
     payload,
   ].join(' ');
 
-  final String bytes = char2Bytes(formattedInput);
+  final String bytes = formattedInput.char2Bytes;
 
   const String prefix = '05';
   const String stringIsHex = '0100';
-  final String bytesOfByteLength = char2Bytes(bytes.length.toString());
+  final String bytesOfByteLength = bytes.length.toString().char2Bytes;
 
   final payloadBytes = '$prefix$stringIsHex$bytesOfByteLength$bytes';
 
   return payloadBytes;
-}
-
-String char2Bytes(String text) {
-  final List<int> encode = utf8.encode(text);
-  final String bytes = hex.encode(encode);
-  return bytes;
 }
 
 Future<bool> isConnected() async {
@@ -662,14 +659,19 @@ Future<
     );
 
     if (credentialOfferJson != null) {
-      final dynamic preAuthorizedCodeGrant = credentialOfferJson['grants']
-          ['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+      final grants = credentialOfferJson['grants'];
 
-      if (preAuthorizedCodeGrant != null &&
-          preAuthorizedCodeGrant is Map &&
-          preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
-        preAuthorizedCode =
-            preAuthorizedCodeGrant['pre-authorized_code'] as String;
+      if (grants != null && grants is Map) {
+        final dynamic preAuthorizedCodeGrant =
+            grants['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+        if (preAuthorizedCodeGrant != null &&
+            preAuthorizedCodeGrant is Map &&
+            preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
+          preAuthorizedCode =
+              preAuthorizedCodeGrant['pre-authorized_code'] as String;
+        }
+      } else {
+        ///
       }
 
       issuer = credentialOfferJson['credential_issuer'].toString();
@@ -693,6 +695,20 @@ Future<
     isAuthorizationServer: false,
     oidc4vciDraftType: oidc4vciDraftType,
   );
+
+  if (preAuthorizedCode == null) {
+    final grantTypesSupported = openIdConfiguration.grantTypesSupported;
+    if (grantTypesSupported != null && grantTypesSupported.isNotEmpty) {
+      if (!grantTypesSupported.contains('authorization_code')) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'No grant specified.',
+          },
+        );
+      }
+    }
+  }
 
   final authorizationServer = openIdConfiguration.authorizationServer;
 
@@ -1026,6 +1042,11 @@ Future<String> getHost({
     ).host;
   } else {
     /// verification case
+    final clientId = uri.queryParameters['client_id'];
+
+    if (clientId != null) {
+      return clientId;
+    }
 
     final String? requestUri = uri.queryParameters['request_uri'];
 
@@ -1485,6 +1506,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
         }
 
       case ClientAuthentication.clientSecretPost:
+        clientId = customOidc4vcProfile.clientId;
         clientSecret = customOidc4vcProfile.clientSecret;
 
       case ClientAuthentication.clientSecretJwt:
@@ -1634,17 +1656,20 @@ List<String> getStringCredentialsForToken({
   final supportingFormats = <String>[];
 
   if (presentationDefinition.format != null) {
+    final format = presentationDefinition.format;
+
     /// ldp_vc
-    presentLdpVc = presentationDefinition.format?.ldpVc != null;
+    presentLdpVc = format?.ldpVc != null || format?.ldpVp != null;
 
     /// jwt_vc
-    presentJwtVc = presentationDefinition.format?.jwtVc != null;
+    presentJwtVc = format?.jwtVc != null || format?.jwtVp != null;
+    ;
 
     /// jwt_vc_json
-    presentJwtVcJson = presentationDefinition.format?.jwtVcJson != null;
+    presentJwtVcJson = format?.jwtVcJson != null || format?.jwtVpJson != null;
 
     /// vc+sd-jwt
-    presentVcSdJwt = presentationDefinition.format?.vcSdJwt != null;
+    presentVcSdJwt = format?.vcSdJwt != null;
   } else {
     if (clientMetaData == null) {
       /// credential manifest case
@@ -1735,4 +1760,124 @@ List<String> getStringCredentialsForToken({
   }
 
   return (presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt);
+}
+
+List<dynamic> collectSdValues(Map<String, dynamic> data) {
+  final result = <dynamic>[];
+
+  if (data.containsKey('_sd') && data is List<dynamic>) {
+    final sd = data['_sd'];
+    if (sd is List<dynamic>) {
+      result.addAll(sd);
+    }
+  }
+
+  data.forEach((key, value) {
+    if (key == '_sd') {
+      final sd = data['_sd'];
+      if (sd is List<dynamic>) {
+        result.addAll(sd);
+      }
+    } else {
+      if (value is Map<String, dynamic>) {
+        result.addAll(collectSdValues(value));
+      } else if (value is List<dynamic>) {
+        for (final ele in value) {
+          if (ele is Map) {
+            final threeDotValue = ele['...'];
+
+            if (threeDotValue != null) {
+              result.add(threeDotValue);
+            }
+          }
+        }
+      }
+    }
+  });
+
+  return result;
+}
+
+Future<Map<String, dynamic>?> checkX509({
+  required String encodedData,
+  required String clientId,
+  required JWTDecode jwtDecode,
+}) async {
+  final Map<String, dynamic> header =
+      decodeHeader(jwtDecode: jwtDecode, token: encodedData);
+
+  final x5c = header['x5c'];
+
+  if (x5c != null) {
+    if (x5c is! List) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'x509_san_dns scheme error',
+        },
+      );
+    }
+
+    //array x5c[0], it is a certificat in DER format (binary)
+    final certificate = x5c.firstOrNull;
+
+    if (certificate == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'x509_san_dns scheme error',
+        },
+      );
+    }
+
+    final decoded = base64Decode(certificate.toString());
+    final seq = asn1lib.ASN1Sequence.fromBytes(decoded);
+    final cert = x509.X509Certificate.fromAsn1(seq);
+
+    final subject = cert.tbsCertificate.subject;
+
+    if (subject == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'x509_san_dns scheme error',
+        },
+      );
+    }
+
+    final names = subject.names;
+
+    if (names.isEmpty) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'x509_san_dns scheme error',
+        },
+      );
+    }
+
+    final value = names[0].entries.map((element) => element.value).toList();
+
+    if (!value.contains(clientId)) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'x509_san_dns scheme error',
+        },
+      );
+    }
+
+    final publicKey = cert.publicKey;
+    if (publicKey is x509.RsaPublicKey) {
+      final BigInt modulus = BigInt.parse(publicKey.modulus.toString());
+      final n = base64Encode(modulus.toBytes);
+      final publicKeyJwk = {
+        'e': 'AQAB',
+        'kty': 'RSA',
+        'n': n.replaceAll('=', ''),
+      };
+      return publicKeyJwk;
+    }
+  }
+  return null;
 }

@@ -108,11 +108,6 @@ class SelectiveDisclosure {
     if (picture == null) return null;
     if (picture is! Map<String, dynamic>) return null;
 
-    if (picture.containsKey('mandatory')) {
-      final mandatory = picture['mandatory'];
-      if (mandatory is! bool) return null;
-    }
-
     final valueType = picture['value_type'];
     if (valueType == null) return null;
 
@@ -128,7 +123,7 @@ class SelectiveDisclosure {
   (String?, bool) getClaimsData({
     required String key,
   }) {
-    String? data;
+    dynamic data;
     bool isfromDisclosureOfJWT = false;
 
     final JsonPath dataPath = JsonPath(
@@ -138,18 +133,49 @@ class SelectiveDisclosure {
 
     try {
       final uncryptedDataPath = dataPath.read(extractedValuesFromJwt).first;
-      data = uncryptedDataPath.value.toString();
+      data = uncryptedDataPath.value;
       isfromDisclosureOfJWT = true;
     } catch (e) {
       try {
         final credentialModelPath = dataPath.read(credentialModel.data).first;
-        data = credentialModelPath.value.toString();
+        data = credentialModelPath.value;
         isfromDisclosureOfJWT = false;
       } catch (e) {
         data = null;
       }
     }
 
-    return (data, isfromDisclosureOfJWT);
+    try {
+      if (data != null && data is List<dynamic>) {
+        final value = <dynamic>[];
+        for (final ele in data) {
+          if (ele is String) {
+            value.add(ele);
+          } else if (ele is Map) {
+            final threeDotValue = ele['...'];
+
+            if (threeDotValue != null) {
+              for (final element in decryptedDatas) {
+                final oidc4vc = OIDC4VC();
+                final sh256Hash = oidc4vc.sh256HashOfContent(element);
+
+                if (sh256Hash == threeDotValue) {
+                  if (element.startsWith('[') && element.endsWith(']')) {
+                    final trimmedElement =
+                        element.substring(1, element.length - 1).split(',');
+                    value.add(trimmedElement.last.replaceAll('"', ''));
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        data = value;
+      }
+      // ignore: empty_catches
+    } catch (e) {}
+
+    return (data?.toString(), isfromDisclosureOfJWT);
   }
 }

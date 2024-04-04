@@ -135,7 +135,7 @@ class OIDC4VC {
     required String? clientSecret,
     required String redirectUri,
     required String issuer,
-    required String issuerState,
+    required String? issuerState,
     required String nonce,
     required PkcePair pkcePair,
     required String state,
@@ -192,7 +192,7 @@ class OIDC4VC {
     required String? clientId,
     required String? clientSecret,
     required String issuer,
-    required String issuerState,
+    required String? issuerState,
     required String nonce,
     required OpenIdConfiguration openIdConfiguration,
     required String redirectUri,
@@ -317,12 +317,15 @@ class OIDC4VC {
     final myRequest = <String, dynamic>{
       'response_type': 'code',
       'redirect_uri': redirectUri,
-      'issuer_state': issuerState,
       'state': state,
       'nonce': nonce,
       'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
     };
+
+    if (issuerState != null) {
+      myRequest['issuer_state'] = issuerState;
+    }
 
     if (secureAuthorizedFlow) {
       myRequest['client_metadata'] =
@@ -401,12 +404,12 @@ class OIDC4VC {
   }
 
   /// Retreive credential_type from url
-  /// credentialResponseData, deferredCredentialEndpoint, format, updateNonce
+  /// credentialResponseData, deferredCredentialEndpoint, format
+
   Future<
       (
         List<dynamic>,
         String?,
-        String,
         String,
       )> getCredential({
     required String issuer,
@@ -475,8 +478,7 @@ class OIDC4VC {
               .toList();
 
       for (final credentialIdentifier in credentialIdentifiers) {
-        final (credentialResponseDataValue, updateNonce) =
-            await getSingleCredential(
+        final credentialResponseDataValue = await getSingleCredential(
           issuerTokenParameters: issuerTokenParameters,
           openIdConfiguration: openIdConfiguration,
           credentialType: credentialType,
@@ -498,14 +500,17 @@ class OIDC4VC {
         );
 
         /// update nonce value
-        nonce = updateNonce;
+        if (credentialResponseDataValue is Map<String, dynamic>) {
+          if (credentialResponseDataValue.containsKey('c_nonce')) {
+            nonce = credentialResponseDataValue['c_nonce'].toString();
+          }
+        }
 
         credentialResponseData.add(credentialResponseDataValue);
       }
 //
     } else {
-      final (credentialResponseDataValue, updateNonce) =
-          await getSingleCredential(
+      final credentialResponseDataValue = await getSingleCredential(
         issuerTokenParameters: issuerTokenParameters,
         openIdConfiguration: openIdConfiguration,
         credentialType: credentialType,
@@ -526,9 +531,6 @@ class OIDC4VC {
         nonce: cnonce,
       );
 
-      /// update nonce value
-      nonce = updateNonce;
-
       credentialResponseData.add(credentialResponseDataValue);
     }
 
@@ -536,7 +538,6 @@ class OIDC4VC {
       credentialResponseData,
       deferredCredentialEndpoint,
       format,
-      nonce,
     );
   }
 
@@ -596,7 +597,7 @@ class OIDC4VC {
     return (tokenResponse, accessToken, cnonce, authorizationDetails);
   }
 
-  Future<(dynamic, String)> getSingleCredential({
+  Future<dynamic> getSingleCredential({
     required IssuerTokenParameters issuerTokenParameters,
     required OpenIdConfiguration openIdConfiguration,
     required String credentialType,
@@ -653,29 +654,19 @@ class OIDC4VC {
 
     final credentialResponseData = credentialResponse.data;
 
-    var cnonce = nonce;
-
-    if (credentialResponseData is Map<String, dynamic> &&
-        credentialResponseData.containsKey('c_nonce')) {
-      cnonce = credentialResponseData['c_nonce'].toString();
-    }
-
-    return (credentialResponseData, cnonce);
+    return credentialResponseData;
   }
 
   /// get Deferred credential from url
   Future<dynamic> getDeferredCredential({
-    required String acceptanceToken,
+    required Map<String, dynamic> credentialHeaders,
+    required Map<String, dynamic>? body,
     required String deferredCredentialEndpoint,
   }) async {
-    final credentialHeaders = <String, dynamic>{
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Bearer $acceptanceToken',
-    };
-
     final dynamic credentialResponse = await client.post<dynamic>(
       deferredCredentialEndpoint,
       options: Options(headers: credentialHeaders),
+      data: body,
     );
 
     return credentialResponse.data;
@@ -842,11 +833,13 @@ class OIDC4VC {
   }
 
   Map<String, dynamic> readPublicKeyJwk({
-    required String didKey,
+    required String issuer,
     required String? holderKid,
     required Response<Map<String, dynamic>> didDocumentResponse,
   }) {
-    if (isURL(didKey)) {
+    final isUrl = isURL(issuer);
+    // if it is not url then it is did
+    if (isUrl) {
       final jsonPath = JsonPath(r'$..keys');
       late dynamic data;
 
@@ -965,15 +958,15 @@ class OIDC4VC {
         credentialData['types'] = types;
         credentialData['format'] = format;
 
-      case OIDC4VCIDraftType.draft12:
-        if (types == null) {
-          throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
-        }
+      // case OIDC4VCIDraftType.draft12:
+      //   if (types == null) {
+      //     throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+      //   }
 
-        credentialData['types'] = types;
-        if (credentialIdentifier != null) {
-          credentialData['credential_identifier'] = credentialIdentifier;
-        }
+      //   credentialData['types'] = types;
+      //   if (credentialIdentifier != null) {
+      //     credentialData['credential_identifier'] = credentialIdentifier;
+      //   }
 
       case OIDC4VCIDraftType.draft13:
         credentialData['format'] = format;
@@ -1099,18 +1092,25 @@ class OIDC4VC {
   }
 
   Future<VerificationType> verifyEncodedData({
-    required String issuerDid,
+    required String issuer,
     required String? issuerKid,
     required String jwt,
+    required Map<String, dynamic>? publicJwk,
   }) async {
     try {
-      final didDocument = await getDidDocument(issuerDid);
+      Map<String, dynamic>? publicKeyJwk;
 
-      final publicKeyJwk = readPublicKeyJwk(
-        didKey: issuerDid,
-        holderKid: issuerKid,
-        didDocumentResponse: didDocument,
-      );
+      if (publicJwk != null) {
+        publicKeyJwk = publicJwk;
+      } else {
+        final didDocument = await getDidDocument(issuer);
+
+        publicKeyJwk = readPublicKeyJwk(
+          issuer: issuer,
+          holderKid: issuerKid,
+          didDocumentResponse: didDocument,
+        );
+      }
 
       final kty = publicKeyJwk['kty'].toString();
 
@@ -1178,7 +1178,12 @@ class OIDC4VC {
     required Map<String, dynamic> publicKey,
   }) {
     try {
-      final x = base64Url.decode(publicKey['x'].toString());
+      var encoded = publicKey['x'].toString();
+      while (encoded.length % 4 != 0) {
+        // ignore: use_string_buffers
+        encoded += '=';
+      }
+      final x = base64Url.decode(encoded);
       JWT.verify(
         token,
         EdDSAPublicKey(x),
@@ -1606,6 +1611,7 @@ class OIDC4VC {
   String getDisclosure(String content) {
     final disclosure =
         base64Url.encode(utf8.encode(content)).replaceAll('=', '');
+
     return disclosure;
   }
 

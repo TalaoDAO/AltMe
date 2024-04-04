@@ -83,13 +83,6 @@ class CredentialSubjectData extends StatelessWidget {
 
         if (value.isEmpty) return Container();
 
-        if (value.containsKey('mandatory')) {
-          final mandatory = value['mandatory'];
-          if (mandatory is! bool) return Container();
-
-          if (!mandatory) return Container();
-        }
-
         if (value.containsKey('display')) {
           final displays = value['display'];
           if (displays is! List<dynamic>) return Container();

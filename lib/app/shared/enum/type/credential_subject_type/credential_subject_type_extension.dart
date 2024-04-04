@@ -87,6 +87,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.legalPersonalCredential:
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
+      case CredentialSubjectType.pid:
         return Colors.white;
     }
   }
@@ -209,6 +210,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'IdentityCredential';
       case CredentialSubjectType.eudiPid:
         return 'EudiPid';
+      case CredentialSubjectType.pid:
+        return 'Pid';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -334,6 +337,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return IdentityCredentialSubjectModel.fromJson(json);
       case CredentialSubjectType.eudiPid:
         return EudipidSubjectModel.fromJson(json);
+      case CredentialSubjectType.pid:
+        return PidSubjectModel.fromJson(json);
     }
   }
 
@@ -569,6 +574,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Identity Credential';
       case CredentialSubjectType.eudiPid:
         return 'EudiPid';
+      case CredentialSubjectType.pid:
+        return 'Pid';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -636,6 +643,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.legalPersonalCredential:
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
+      case CredentialSubjectType.pid:
         return false;
     }
   }
@@ -670,6 +678,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
+      case CredentialSubjectType.pid:
         return [VCFormatType.vcSdJWT];
 
       case CredentialSubjectType.over18:
@@ -1018,6 +1027,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
+      case CredentialSubjectType.pid:
         break;
     }
 
@@ -1154,6 +1164,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.legalPersonalCredential:
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
+      case CredentialSubjectType.pid:
         return 0;
     }
   }
