@@ -89,7 +89,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
       if (claims != null && listOfSd.isNotEmpty) {
         final selectiveDisclosure = SelectiveDisclosure(item);
-        final decryptedDatas = selectiveDisclosure.decryptedDatas;
+        final decryptedDatas = selectiveDisclosure.contents;
 
         /// check if sd already contain sh256 hash
         for (final element in decryptedDatas) {

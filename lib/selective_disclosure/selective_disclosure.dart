@@ -49,12 +49,17 @@ class SelectiveDisclosure {
 
   Map<String, dynamic> get extractedValuesFromJwt {
     final extractedValues = <String, dynamic>{};
-    for (final element in decryptedDatas) {
+    for (final element in disclosureToContent.entries.toList()) {
       try {
-        final lisString = jsonDecode(element);
+        final lisString = jsonDecode(element.value.toString());
         if (lisString is List) {
           if (lisString.length == 3) {
+            /// '["Qg_O64zqAxe412a108iroA", "phone_number", "+81-80-1234-5678"]'
             extractedValues[lisString[1].toString()] = lisString[2];
+          } else if (lisString.length == 2) {
+            /// '["Qg_O64zqAxe412a108iroA", "DE']
+
+            extractedValues[lisString[0].toString()] = lisString[1];
           }
         }
       } catch (e) {
@@ -64,13 +69,13 @@ class SelectiveDisclosure {
     return extractedValues;
   }
 
-  List<String> get decryptedDatas {
+  Map<String, dynamic> get disclosureToContent {
     final encryptedValues = credentialModel.jwt
         ?.split('~')
         .where((element) => element.isNotEmpty)
         .toList();
 
-    final decryptedDatas = <String>[];
+    final data = <String, dynamic>{};
     if (encryptedValues != null) {
       encryptedValues.removeAt(0);
 
@@ -83,14 +88,22 @@ class SelectiveDisclosure {
           final decryptedData = utf8.decode(base64Decode(element));
 
           if (decryptedData.isNotEmpty) {
-            decryptedDatas.add(decryptedData);
+            data[element] = decryptedData;
           }
         } catch (e) {
           //
         }
       }
     }
-    return decryptedDatas;
+    return data;
+  }
+
+  List<String> get contents {
+    final contents = <String>[];
+    for (final element in disclosureToContent.entries.toList()) {
+      contents.add(element.value.toString());
+    }
+    return contents;
   }
 
   String? get getPicture {
@@ -112,7 +125,10 @@ class SelectiveDisclosure {
     if (valueType == null) return null;
 
     if (valueType == 'image/jpeg') {
-      final (data, _) = getClaimsData(key: 'picture');
+      final (
+        data,
+        _,
+      ) = getClaimsData(key: 'picture');
       return data;
     } else {
       return null;
@@ -155,7 +171,7 @@ class SelectiveDisclosure {
             final threeDotValue = ele['...'];
 
             if (threeDotValue != null) {
-              for (final element in decryptedDatas) {
+              for (final element in contents) {
                 final oidc4vc = OIDC4VC();
                 final sh256Hash = oidc4vc.sh256HashOfContent(element);
 
