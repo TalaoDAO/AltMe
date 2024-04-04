@@ -1089,11 +1089,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final clientIdScheme = payload['client_id_scheme'];
 
         if (clientIdScheme != null) {
+          final Map<String, dynamic> header =
+              decodeHeader(jwtDecode: jwtDecode, token: encodedData);
           if (clientIdScheme == 'x509_san_dns') {
             publicKeyJwk = await checkX509(
               clientId: clientId,
               encodedData: encodedData,
               jwtDecode: jwtDecode,
+              header: header,
+            );
+          } else if (clientIdScheme == 'verifier_attestation') {
+            publicKeyJwk = await checkVerifierAttestation(
+              clientId: clientId,
+              jwtDecode: jwtDecode,
+              header: header,
             );
           }
         }

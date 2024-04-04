@@ -1802,10 +1802,8 @@ Future<Map<String, dynamic>?> checkX509({
   required String encodedData,
   required String clientId,
   required JWTDecode jwtDecode,
+  required Map<String, dynamic> header,
 }) async {
-  final Map<String, dynamic> header =
-      decodeHeader(jwtDecode: jwtDecode, token: encodedData);
-
   final x5c = header['x5c'];
 
   if (x5c != null) {
@@ -1880,4 +1878,43 @@ Future<Map<String, dynamic>?> checkX509({
     }
   }
   return null;
+}
+
+Future<Map<String, dynamic>?> checkVerifierAttestation({
+  required String clientId,
+  required JWTDecode jwtDecode,
+  required Map<String, dynamic> header,
+}) async {
+  final jwt = header['jwt'];
+
+  if (jwt == null) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_format',
+        'error_description': 'verifier_attestation scheme error',
+      },
+    );
+  }
+
+  final Map<String, dynamic> verifierAttestationPayload =
+      decodePayload(jwtDecode: jwtDecode, token: jwt.toString());
+
+  final sub = verifierAttestationPayload['sub'];
+  final cnf = verifierAttestationPayload['cnf'];
+
+  if (sub == null ||
+      sub != clientId ||
+      cnf == null ||
+      cnf is! Map<String, dynamic> ||
+      !cnf.containsKey('jwk') ||
+      cnf['jwk'] is! Map<String, dynamic>) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_format',
+        'error_description': 'verifier_attestation scheme error',
+      },
+    );
+  }
+
+  return cnf['jwk'] as Map<String, dynamic>;
 }
