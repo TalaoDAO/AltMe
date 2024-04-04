@@ -124,22 +124,23 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 },
               );
 
-              // /// verify the signature of the VC with the kid of the JWT
-              // final VerificationType isVerified = await verifyEncodedData(
-              //   issuer: item.issuer,
-              //   jwtDecode: jwtDecode,
-              //   jwt: response.toString(),
-              // );
+              /// verify the signature of the VC with the kid of the JWT
+              final VerificationType isVerified = await verifyEncodedData(
+                issuer: item.issuer,
+                jwtDecode: jwtDecode,
+                jwt: response.toString(),
+              );
 
-              // if (isVerified != VerificationType.verified) {
-              //   emit(
-              //     state.copyWith(
-              //       credentialStatus: CredentialStatus.invalidSignature,
-              //       status: AppStatus.idle,
-              //     ),
-              //   );
-              //   return;
-              // }
+              if (isVerified != VerificationType.verified) {
+                emit(
+                  state.copyWith(
+                    credentialStatus:
+                        CredentialStatus.statusListInvalidSignature,
+                    status: AppStatus.idle,
+                  ),
+                );
+                return;
+              }
 
               final payload = jwtDecode.parseJwt(response.toString());
               final newStatusList = payload['status_list'];
@@ -164,8 +165,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   // revoked
                   emit(
                     state.copyWith(
-                      credentialStatus:
-                          CredentialStatus.statusListInvalidSignature,
+                      credentialStatus: CredentialStatus.invalidStatus,
                       status: AppStatus.idle,
                     ),
                   );
