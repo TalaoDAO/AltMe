@@ -15,7 +15,8 @@
     "cardIsValid",
     "cardIsExpired",
     "signatureIsInvalid",
-    "statusIsInvalid"
+    "statusIsInvalid",
+    "statuslListSignatureFailed"
   ],
 
   "es": [
@@ -34,7 +35,8 @@
     "cardIsValid",
     "cardIsExpired",
     "signatureIsInvalid",
-    "statusIsInvalid"
+    "statusIsInvalid",
+    "statuslListSignatureFailed"
   ],
 
   "fr": [
@@ -43,6 +45,7 @@
     "cardIsValid",
     "cardIsExpired",
     "signatureIsInvalid",
-    "statusIsInvalid"
+    "statusIsInvalid",
+    "statuslListSignatureFailed"
   ]
 }

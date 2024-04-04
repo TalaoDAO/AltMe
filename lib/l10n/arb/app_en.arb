@@ -1046,8 +1046,9 @@
   "phoneLanguage": "Phone language",
   "pushAuthorizationRequestTitle": "Push Authorization Request (PAR)",
   "pushAuthorizationRequestSubTitle": "Default: false\nEnable to secure the authorization code flow",
-  "cardIsValid":"Card is valid",
-  "cardIsExpired":"Card is expired",
-  "signatureIsInvalid":"Signature is invalid",
-  "statusIsInvalid":"Status is invalid"
+  "cardIsValid": "Card is valid",
+  "cardIsExpired": "Card is expired",
+  "signatureIsInvalid": "Signature is invalid",
+  "statusIsInvalid": "Status is invalid",
+  "statuslListSignatureFailed": "Status list signature failed"
 }
