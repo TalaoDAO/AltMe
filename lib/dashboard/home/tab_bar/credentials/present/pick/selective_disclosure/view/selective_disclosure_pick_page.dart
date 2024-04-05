@@ -114,6 +114,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
                     credentialModel: credentialToBePresented,
                     credDisplayType: CredDisplayType.List,
                     profileSetting: profileSetting,
+                    isDiscover: false,
                   ),
                 const SizedBox(height: 20),
                 DisplaySelectiveDisclosure(

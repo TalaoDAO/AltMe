@@ -8,6 +8,7 @@ class CredentialDisplay extends StatelessWidget {
     required this.credentialModel,
     required this.credDisplayType,
     required this.profileSetting,
+    required this.isDiscover,
     this.displyalDescription = true,
   });
 
@@ -15,6 +16,7 @@ class CredentialDisplay extends StatelessWidget {
   final CredDisplayType credDisplayType;
   final ProfileSetting profileSetting;
   final bool displyalDescription;
+  final bool isDiscover;
 
   @override
   Widget build(BuildContext context) {
@@ -85,12 +87,14 @@ class CredentialDisplay extends StatelessWidget {
                 credentialModel: credentialModel,
                 showBgDecoration: false,
                 displyalDescription: displyalDescription,
+                isDiscover: isDiscover,
               );
             case CredDisplayType.Detail:
               return DefaultCredentialWidget(
                 credentialModel: credentialModel,
                 showBgDecoration: false,
                 descriptionMaxLine: 5,
+                isDiscover: isDiscover,
               );
           }
         }
@@ -104,12 +108,14 @@ class CredentialDisplay extends StatelessWidget {
               credentialModel: credentialModel,
               showBgDecoration: false,
               displyalDescription: displyalDescription,
+              isDiscover: isDiscover,
             );
           case CredDisplayType.Detail:
             return DefaultCredentialWidget(
               credentialModel: credentialModel,
               showBgDecoration: false,
               descriptionMaxLine: 5,
+              isDiscover: isDiscover,
             );
         }
 
@@ -122,6 +128,7 @@ class CredentialDisplay extends StatelessWidget {
             return DefaultCredentialWidget(
               credentialModel: credentialModel,
               descriptionMaxLine: 4,
+              isDiscover: isDiscover,
             );
           case CredDisplayType.Detail:
             return IdentityPassWidget(credentialModel: credentialModel);
@@ -174,6 +181,7 @@ class CredentialDisplay extends StatelessWidget {
             return DefaultCredentialWidget(
               credentialModel: credentialModel,
               descriptionMaxLine: 3,
+              isDiscover: isDiscover,
             );
           case CredDisplayType.Detail:
             return ProfessionalExperienceAssessmentWidget(
@@ -187,6 +195,7 @@ class CredentialDisplay extends StatelessWidget {
             return DefaultCredentialWidget(
               credentialModel: credentialModel,
               descriptionMaxLine: 5,
+              isDiscover: isDiscover,
             );
           case CredDisplayType.Detail:
             return ProfessionalSkillAssessmentWidget(
@@ -199,6 +208,7 @@ class CredentialDisplay extends StatelessWidget {
           case CredDisplayType.List:
             return DefaultCredentialWidget(
               credentialModel: credentialModel,
+              isDiscover: isDiscover,
             );
           case CredDisplayType.Detail:
             return ProfessionalStudentCardWidget(
@@ -212,6 +222,7 @@ class CredentialDisplay extends StatelessWidget {
             return DefaultCredentialWidget(
               credentialModel: credentialModel,
               descriptionMaxLine: 3,
+              isDiscover: isDiscover,
             );
           case CredDisplayType.Detail:
             return ResidentCardWidget(credentialModel: credentialModel);
@@ -221,13 +232,17 @@ class CredentialDisplay extends StatelessWidget {
         return EmployeeCredentialWidget(credentialModel: credentialModel);
 
       case CredentialSubjectType.legalPersonalCredential:
-        return DefaultCredentialWidget(credentialModel: credentialModel);
+        return DefaultCredentialWidget(
+          credentialModel: credentialModel,
+          isDiscover: isDiscover,
+        );
 
       case CredentialSubjectType.selfIssued:
         switch (credDisplayType) {
           case CredDisplayType.List:
             return DefaultCredentialWidget(
               credentialModel: credentialModel,
+              isDiscover: isDiscover,
             );
           case CredDisplayType.Detail:
             return SelfIssuedWidget(credentialModel: credentialModel);

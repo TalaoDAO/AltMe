@@ -215,6 +215,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             credentialModel: widget.credentialModel,
                             credDisplayType: CredDisplayType.Detail,
                             profileSetting: profileSetting,
+                            isDiscover: false,
                           ),
                         const SizedBox(height: 20),
                         Column(
