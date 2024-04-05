@@ -178,10 +178,27 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       }
 
       if (item.jwt != null) {
+        final jwt = item.jwt!;
+        final Map<String, dynamic> payload = jwtDecode.parseJwt(jwt);
+        final Map<String, dynamic> header =
+            decodeHeader(jwtDecode: jwtDecode, token: jwt);
+
+        Map<String, dynamic>? publicKeyJwk;
+
+        final x5c = header['x5c'];
+        if (x5c != null && x5c is List) {
+          publicKeyJwk = await checkX509(
+            encodedData: jwt,
+            header: header,
+            clientId: payload['iss'].toString(),
+          );
+        }
+
         final VerificationType isVerified = await verifyEncodedData(
           issuer: item.issuer,
           jwtDecode: jwtDecode,
-          jwt: item.jwt!,
+          jwt: jwt,
+          publicKeyJwk: publicKeyJwk,
         );
 
         if (isVerified == VerificationType.verified) {

@@ -1061,7 +1061,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     if (isSecurityEnabled) {
       final Map<String, dynamic> payload =
-          decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
+          jwtDecode.parseJwt(encodedData as String);
 
       final String clientId = payload['client_id'].toString();
 
@@ -1091,17 +1091,28 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         if (clientIdScheme != null) {
           final Map<String, dynamic> header =
               decodeHeader(jwtDecode: jwtDecode, token: encodedData);
+
           if (clientIdScheme == 'x509_san_dns') {
             publicKeyJwk = await checkX509(
               clientId: clientId,
               encodedData: encodedData,
-              jwtDecode: jwtDecode,
               header: header,
             );
           } else if (clientIdScheme == 'verifier_attestation') {
+            final jwt = header['jwt'];
+
+            if (jwt == null) {
+              throw ResponseMessage(
+                data: {
+                  'error': 'invalid_format',
+                  'error_description': 'verifier_attestation scheme error',
+                },
+              );
+            }
+
             publicKeyJwk = await checkVerifierAttestation(
               clientId: clientId,
-              jwtDecode: jwtDecode,
+              payload: payload,
               header: header,
             );
           }

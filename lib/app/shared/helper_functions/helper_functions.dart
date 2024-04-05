@@ -1800,9 +1800,8 @@ List<dynamic> collectSdValues(Map<String, dynamic> data) {
 
 Future<Map<String, dynamic>?> checkX509({
   required String encodedData,
-  required String clientId,
-  required JWTDecode jwtDecode,
   required Map<String, dynamic> header,
+  required String clientId,
 }) async {
   final x5c = header['x5c'];
 
@@ -1882,25 +1881,11 @@ Future<Map<String, dynamic>?> checkX509({
 
 Future<Map<String, dynamic>?> checkVerifierAttestation({
   required String clientId,
-  required JWTDecode jwtDecode,
+  required Map<String, dynamic> payload,
   required Map<String, dynamic> header,
 }) async {
-  final jwt = header['jwt'];
-
-  if (jwt == null) {
-    throw ResponseMessage(
-      data: {
-        'error': 'invalid_format',
-        'error_description': 'verifier_attestation scheme error',
-      },
-    );
-  }
-
-  final Map<String, dynamic> verifierAttestationPayload =
-      decodePayload(jwtDecode: jwtDecode, token: jwt.toString());
-
-  final sub = verifierAttestationPayload['sub'];
-  final cnf = verifierAttestationPayload['cnf'];
+  final sub = payload['sub'];
+  final cnf = payload['cnf'];
 
   if (sub == null ||
       sub != clientId ||
