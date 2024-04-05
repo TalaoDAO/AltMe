@@ -70,8 +70,7 @@ class Credential {
   final CredentialSubjectModel credentialSubjectModel;
   @JsonKey(fromJson: _fromJsonEvidence)
   final List<Evidence> evidence;
-  @JsonKey(fromJson: _fromJsonCredentialStatus)
-  final CredentialStatusField credentialStatus;
+  final dynamic credentialStatus;
 
   Map<String, dynamic> toJson() => _$CredentialToJson(this);
 
@@ -127,13 +126,6 @@ class Credential {
           .toList();
     }
     return [Translation.fromJson(json as Map<String, dynamic>)];
-  }
-
-  static CredentialStatusField _fromJsonCredentialStatus(dynamic json) {
-    if (json == null || json == '') {
-      return CredentialStatusField.emptyCredentialStatusField();
-    }
-    return CredentialStatusField.fromJson(json as Map<String, dynamic>);
   }
 
   static List<Evidence> _fromJsonEvidence(dynamic json) {

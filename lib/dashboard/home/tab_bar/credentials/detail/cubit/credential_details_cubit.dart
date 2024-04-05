@@ -260,7 +260,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           ),
         );
       } else {
-        if (item.credentialPreview.credentialStatus.type != '') {
+        if (item.credentialPreview.credentialStatus != null) {
           final CredentialStatus credentialStatus =
               await item.checkRevocationStatus();
           if (credentialStatus == CredentialStatus.active) {
