@@ -1119,6 +1119,7 @@ class OIDC4VC {
       }
 
       late final bool isVerified;
+
       if (kty == 'OKP') {
         isVerified = verifyTokenEdDSA(
           publicKey: publicKeyJwk,
@@ -1621,7 +1622,9 @@ class OIDC4VC {
     return hash;
   }
 
-  int getPositionOfBit(int index) => index % 8;
+  int getPositionOfZlibBit(int index) => index % 8;
+
+  int getPositionOfGZipBit(int index) => 7 - (index % 8);
 
   int getByte(int index) => index ~/ 8;
 
@@ -1642,6 +1645,16 @@ class OIDC4VC {
 
     final zlib = ZLibCodec();
     final decompressedBytes = zlib.decode(compressedBytes);
+
+    return decompressedBytes;
+  }
+
+  List<int> decodeAndGzibDecompress(String lst) {
+    final paddedBase64 = lst.padRight((lst.length + 3) & ~3, '=');
+    final compressedBytes = base64Url.decode(paddedBase64);
+
+    final gzib = GZipCodec();
+    final decompressedBytes = gzib.decode(compressedBytes);
 
     return decompressedBytes;
   }

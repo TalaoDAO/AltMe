@@ -85,7 +85,7 @@ class Credential {
     CredentialSubjectModel? credentialSubjectModel,
     List<Translation>? description,
     List<Translation>? name,
-    CredentialStatusField? credentialStatus,
+    dynamic credentialStatus,
     List<Evidence>? evidence,
   }) {
     return Credential(

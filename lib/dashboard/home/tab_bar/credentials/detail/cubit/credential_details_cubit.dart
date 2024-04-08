@@ -123,10 +123,11 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   'accept': 'application/statuslist+jwt',
                 },
               );
+              final payload = jwtDecode.parseJwt(response.toString());
 
               /// verify the signature of the VC with the kid of the JWT
               final VerificationType isVerified = await verifyEncodedData(
-                issuer: item.issuer,
+                issuer: payload['iss']?.toString() ?? item.issuer,
                 jwtDecode: jwtDecode,
                 jwt: response.toString(),
               );
@@ -142,7 +143,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 return;
               }
 
-              final payload = jwtDecode.parseJwt(response.toString());
               final newStatusList = payload['status_list'];
               if (newStatusList != null &&
                   newStatusList is Map<String, dynamic>) {
@@ -155,7 +155,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                     profileCubit.oidc4vc.decodeAndZlibDecompress(lst);
                 final byteToCheck = decompressedBytes[bytes];
 
-                final posOfBit = profileCubit.oidc4vc.getPositionOfBit(idx);
+                final posOfBit = profileCubit.oidc4vc.getPositionOfZlibBit(idx);
                 final bit = profileCubit.oidc4vc
                     .getBit(byte: byteToCheck, bitPosition: posOfBit);
 
@@ -170,6 +170,84 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                     ),
                   );
                   return;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (item.format == VCFormatType.jwtVc.value ||
+          item.format == VCFormatType.jwtVcJson.value ||
+          item.format == VCFormatType.ldpVc.value) {
+        final credentialStatus = item.credentialPreview.credentialStatus;
+        if (credentialStatus != null) {
+          if (credentialStatus is List<dynamic>) {
+            for (final iteratedData in credentialStatus) {
+              if (iteratedData is Map<String, dynamic>) {
+                final data = CredentialStatusField.fromJson(iteratedData);
+
+                final dynamic response = await client.get(
+                  data.statusListCredential,
+                  headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'accept': 'application/statuslist+jwt',
+                  },
+                );
+
+                final payload = jwtDecode.parseJwt(response.toString());
+
+                // verify the signature of the VC with the kid of the JWT
+                final VerificationType isVerified = await verifyEncodedData(
+                  issuer: payload['iss']?.toString() ?? item.issuer,
+                  jwtDecode: jwtDecode,
+                  jwt: response.toString(),
+                );
+
+                if (isVerified != VerificationType.verified) {
+                  emit(
+                    state.copyWith(
+                      credentialStatus:
+                          CredentialStatus.statusListInvalidSignature,
+                      status: AppStatus.idle,
+                    ),
+                  );
+                  return;
+                }
+
+                final vc = payload['vc'];
+                if (vc != null && vc is Map<String, dynamic>) {
+                  final credentialSubject = vc['credentialSubject'];
+                  if (credentialSubject != null &&
+                      credentialSubject is Map<String, dynamic>) {
+                    final encodedList = credentialSubject['encodedList'];
+
+                    if (encodedList != null && encodedList is String) {
+                      final decompressedBytes = profileCubit.oidc4vc
+                          .decodeAndGzibDecompress(encodedList);
+
+                      final idx = int.parse(data.statusListIndex);
+                      final bytes = profileCubit.oidc4vc.getByte(idx);
+                      final byteToCheck = decompressedBytes[bytes];
+                      final posOfBit =
+                          profileCubit.oidc4vc.getPositionOfGZipBit(idx);
+                      final bit = profileCubit.oidc4vc
+                          .getBit(byte: byteToCheck, bitPosition: posOfBit);
+
+                      if (bit == 0) {
+                        // active
+                      } else {
+                        // revoked
+                        emit(
+                          state.copyWith(
+                            credentialStatus: CredentialStatus.invalidStatus,
+                            status: AppStatus.idle,
+                          ),
+                        );
+                        return;
+                      }
+                    }
+                  }
                 }
               }
             }
