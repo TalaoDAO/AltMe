@@ -3,12 +3,14 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:altme/dashboard/profile/models/models.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
+import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -454,8 +456,69 @@ class ProfileCubit extends Cubit<ProfileState> {
     required ProfileSetting profileSetting,
     required ProfileType profileType,
   }) async {
+    final externalIssuers =
+        profileSetting.discoverCardsOptions?.displayExternalIssuer;
+
+    final updatedExternalIssuer = <DisplayExternalIssuer>[];
+    if (externalIssuers != null) {
+      for (final data in externalIssuers) {
+        // background image
+        String? backgroundImage = data.background_url;
+        if (backgroundImage != null && isURL(backgroundImage)) {
+          try {
+            final http.Response response =
+                await http.get(Uri.parse(backgroundImage));
+            if (response.statusCode == 200) {
+              backgroundImage = base64Encode(response.bodyBytes);
+            }
+          } catch (e) {
+            //
+          }
+        }
+
+        // logo
+        String? logo = data.logo;
+        if (logo != null && isURL(logo)) {
+          try {
+            final http.Response response = await http.get(Uri.parse(logo));
+            if (response.statusCode == 200) {
+              logo = base64Encode(response.bodyBytes);
+            }
+          } catch (e) {
+            //
+          }
+        }
+
+        //created update external issuer
+        final issuer =
+            data.copyWith(background_url: backgroundImage, logo: logo);
+        updatedExternalIssuer.add(issuer);
+      }
+    }
+
+    String? companyLogo = profileSetting.generalOptions.companyLogo;
+
+    ///company logo
+
+    if (isURL(companyLogo)) {
+      try {
+        final http.Response response = await http.get(Uri.parse(companyLogo));
+        if (response.statusCode == 200) {
+          companyLogo = base64Encode(response.bodyBytes);
+        }
+      } catch (e) {
+        //
+      }
+    }
+
     final profileModel = state.model.copyWith(
-      profileSetting: profileSetting,
+      profileSetting: profileSetting.copyWith(
+        generalOptions:
+            profileSetting.generalOptions.copyWith(companyLogo: companyLogo),
+        discoverCardsOptions: profileSetting.discoverCardsOptions?.copyWith(
+          displayExternalIssuer: updatedExternalIssuer,
+        ),
+      ),
       profileType: profileType,
       enterpriseWalletName: profileSetting.generalOptions.profileName,
     );

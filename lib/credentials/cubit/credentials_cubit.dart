@@ -933,10 +933,10 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
         (e) => DiscoverDummyCredential(
           credentialSubjectType: CredentialSubjectType.defaultCredential,
           link: e.redirect,
-          image: e.background_image,
+          image: e.background_url,
           display: Display(
             backgroundColor: e.background_color,
-            backgroundImage: DisplayDetails(url: e.background_image),
+            backgroundImage: DisplayDetails(url: e.background_url),
             name: e.title,
             textColor: e.text_color,
             logo: DisplayDetails(url: e.logo),

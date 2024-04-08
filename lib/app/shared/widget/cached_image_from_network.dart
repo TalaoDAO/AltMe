@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -50,41 +52,50 @@ class CachedImageFromNetwork extends StatelessWidget {
                   color: Theme.of(context).colorScheme.lightGrey,
                 ),
               )
-            : CachedNetworkImage(
-                imageUrl: url,
-                fit: fit,
-                width: width,
-                height: height,
-                progressIndicatorBuilder: (context, child, downloadProgress) {
-                  return showLoading
-                      ? DecoratedBox(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Theme.of(context).colorScheme.primary,
-                                Theme.of(context).colorScheme.secondary,
-                              ],
-                              begin: Alignment.bottomLeft,
-                              end: Alignment.topRight,
-                              stops: const [0.3, 1.0],
-                            ),
-                          ),
-                        )
-                      : Container(
-                          color: bgColor ??
-                              Theme.of(context).colorScheme.lightGrey,
-                        );
-                },
-                errorWidget: (context, error, dynamic _) => errorMessage == null
-                    ? ColoredBox(
-                        color: Theme.of(context).colorScheme.lightGrey,
-                        child: Icon(
-                          Icons.error,
-                          color: Theme.of(context).colorScheme.darkGrey,
-                        ),
-                      )
-                    : ErrorWidget(errorMessage: errorMessage),
-              ),
+            : url.startsWith('http')
+                ? CachedNetworkImage(
+                    imageUrl: url,
+                    fit: fit,
+                    width: width,
+                    height: height,
+                    progressIndicatorBuilder:
+                        (context, child, downloadProgress) {
+                      return showLoading
+                          ? DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Theme.of(context).colorScheme.primary,
+                                    Theme.of(context).colorScheme.secondary,
+                                  ],
+                                  begin: Alignment.bottomLeft,
+                                  end: Alignment.topRight,
+                                  stops: const [0.3, 1.0],
+                                ),
+                              ),
+                            )
+                          : Container(
+                              color: bgColor ??
+                                  Theme.of(context).colorScheme.lightGrey,
+                            );
+                    },
+                    errorWidget: (context, error, dynamic _) =>
+                        errorMessage == null
+                            ? ColoredBox(
+                                color: Theme.of(context).colorScheme.lightGrey,
+                                child: Icon(
+                                  Icons.error,
+                                  color: Theme.of(context).colorScheme.darkGrey,
+                                ),
+                              )
+                            : ErrorWidget(errorMessage: errorMessage),
+                  )
+                : Image.memory(
+                    base64Decode(url),
+                    fit: fit,
+                    width: width,
+                    height: height,
+                  ),
       );
     }
   }
