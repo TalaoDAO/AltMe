@@ -865,6 +865,19 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           continue;
         }
 
+        final Map<BlockchainType, CredentialSubjectType>
+            blockchainToSubjectType = {
+          BlockchainType.tezos: CredentialSubjectType.tezosAssociatedWallet,
+          BlockchainType.fantom: CredentialSubjectType.fantomAssociatedWallet,
+          BlockchainType.binance: CredentialSubjectType.binanceAssociatedWallet,
+          BlockchainType.ethereum:
+              CredentialSubjectType.ethereumAssociatedWallet,
+          BlockchainType.polygon: CredentialSubjectType.polygonAssociatedWallet,
+        };
+
+        final isCurrentBlockchainAccount =
+            blockchainToSubjectType[blockchainType] == subjectType;
+
         final credentialsOfSameType = credentials
             .where(
               (element) =>
@@ -908,8 +921,11 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               /// if current blockchain card is not available in list of
               /// credentails then add in the discover list
               /// else do not add if it is blockchain
-              if (!availableWalletAddresses
-                  .contains(currentWalletAddress.toString())) {
+
+              final isBlockChainCardAvailable = availableWalletAddresses
+                  .contains(currentWalletAddress.toString());
+
+              if (!isBlockChainCardAvailable && isCurrentBlockchainAccount) {
                 requiredDummySubjects.add(subjectType);
               }
 
@@ -925,21 +941,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           }
         } else {
           /// credential not available case
-
-          final Map<BlockchainType, CredentialSubjectType>
-              blockchainToSubjectType = {
-            BlockchainType.tezos: CredentialSubjectType.tezosAssociatedWallet,
-            BlockchainType.fantom: CredentialSubjectType.fantomAssociatedWallet,
-            BlockchainType.binance:
-                CredentialSubjectType.binanceAssociatedWallet,
-            BlockchainType.ethereum:
-                CredentialSubjectType.ethereumAssociatedWallet,
-            BlockchainType.polygon:
-                CredentialSubjectType.polygonAssociatedWallet,
-          };
-
-          final isCurrentBlockchainAccount =
-              blockchainToSubjectType[blockchainType] == subjectType;
 
           if (isBlockchainAccount &&
               supportAssociatedCredential &&
