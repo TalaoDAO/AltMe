@@ -4,8 +4,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oidc4vc/oidc4vc.dart';
 
 class Oidc4vcSettingMenu extends StatelessWidget {
   const Oidc4vcSettingMenu({super.key});

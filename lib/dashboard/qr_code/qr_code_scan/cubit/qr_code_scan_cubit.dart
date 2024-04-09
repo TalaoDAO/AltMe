@@ -605,7 +605,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     final String? responseMode = state.uri!.queryParameters['response_mode'];
     final bool correctResponeMode = responseMode != null &&
-        (responseMode == 'post' || responseMode == 'direct_post');
+        (responseMode == 'post' ||
+            responseMode == 'direct_post' ||
+            responseMode == 'direct_post.jwt');
 
     /// check response mode value
     if (!correctResponeMode) {
