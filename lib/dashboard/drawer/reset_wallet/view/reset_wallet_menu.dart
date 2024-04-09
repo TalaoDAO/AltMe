@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
@@ -108,7 +109,9 @@ class ResetWalletView extends StatelessWidget {
                         localAuthApi: LocalAuthApi(),
                         onSuccess: () async {
                           await context.read<ProfileCubit>().resetProfile();
-                          await context.read<WalletCubit>().resetWallet();
+                          await context
+                              .read<WalletCubit>()
+                              .resetWallet(context.read<CredentialsCubit>());
                           await context.read<AltmeChatSupportCubit>().dispose();
                         },
                       );

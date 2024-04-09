@@ -1,13 +1,12 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/profile/profile.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,15 +17,13 @@ part 'enterprise_state.dart';
 class EnterpriseCubit extends Cubit<EnterpriseState> {
   EnterpriseCubit({
     required this.client,
-    required this.jwtDecode,
     required this.profileCubit,
-    required this.walletCubit,
+    required this.credentialsCubit,
   }) : super(const EnterpriseState());
 
   final DioClient client;
-  final JWTDecode jwtDecode;
   final ProfileCubit profileCubit;
-  final WalletCubit walletCubit;
+  final CredentialsCubit credentialsCubit;
 
   Future<void> requestTheConfiguration(Uri uri) async {
     try {
@@ -96,8 +93,9 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       );
 
       // if enterprise and walletAttestation data is available and added
-      await walletCubit.credentialsCubit.addWalletCredential(
-        blockchainType: walletCubit.state.currentAccount?.blockchainType,
+      await credentialsCubit.addWalletCredential(
+        blockchainType:
+            credentialsCubit.walletCubit.state.currentAccount?.blockchainType,
       );
 
       emit(
@@ -142,18 +140,18 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     );
 
     /// parse
-    final header = jwtDecode.parseJwtHeader(response as String);
+    final header = profileCubit.jwtDecode.parseJwtHeader(response as String);
     final issuerKid = header['kid'].toString();
     final did = issuerKid.split('#')[0];
 
     /// verify
     final VerificationType isVerified = await verifyEncodedData(
       issuer: did,
-      jwtDecode: jwtDecode,
+      jwtDecode: profileCubit.jwtDecode,
       jwt: response,
     );
 
-    final profileSettingJson = jwtDecode.parseJwt(response);
+    final profileSettingJson = profileCubit.jwtDecode.parseJwt(response);
 
     await profileCubit.secureStorageProvider.set(
       SecureStorageKeys.enterpriseProfileSetting,
@@ -277,14 +275,14 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     final jwtVc = response.toString();
 
     /// parse
-    final header = jwtDecode.parseJwtHeader(jwtVc!);
+    final header = profileCubit.jwtDecode.parseJwtHeader(jwtVc!);
     final issuerKid = header['kid'].toString();
     final did = issuerKid.split('#')[0];
 
     /// verify
     final VerificationType isVerified = await verifyEncodedData(
       issuer: did,
-      jwtDecode: jwtDecode,
+      jwtDecode: profileCubit.jwtDecode,
       jwt: jwtVc,
     );
 
@@ -348,18 +346,18 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       );
 
       /// parse
-      final header = jwtDecode.parseJwtHeader(response as String);
+      final header = profileCubit.jwtDecode.parseJwtHeader(response as String);
       final issuerKid = header['kid'].toString();
       final did = issuerKid.split('#')[0];
 
       /// verify
       final VerificationType isVerified = await verifyEncodedData(
         issuer: did,
-        jwtDecode: jwtDecode,
+        jwtDecode: profileCubit.jwtDecode,
         jwt: response,
       );
 
-      final profileSettingJson = jwtDecode.parseJwt(response);
+      final profileSettingJson = profileCubit.jwtDecode.parseJwt(response);
 
       await profileCubit.secureStorageProvider.set(
         SecureStorageKeys.enterpriseProfileSetting,

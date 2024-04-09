@@ -1903,3 +1903,18 @@ Future<Map<String, dynamic>?> checkVerifierAttestation({
 
   return cnf['jwk'] as Map<String, dynamic>;
 }
+
+String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
+  if (credentialSubjectModel is TezosAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is EthereumAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is PolygonAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is BinanceAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is FantomAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  }
+  return null;
+}
