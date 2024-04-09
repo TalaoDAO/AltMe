@@ -67,13 +67,29 @@ class Parameters {
   static const String clientId = 'urn:altme:0001';
   static const int maxEntries = 3;
 
+  // 'Talao'for talao
   static const String appName = 'Altme';
+
+  // false for talao
   static const bool supportDefiCompliance = true;
+  // false for talao
   static const bool supportCryptoAccountOwnershipInDiscoverForEnterpriseMode =
       true;
-
+  // false for talao
   static const bool showChainbornCard = false;
+  // false for talao
   static const bool showTezotopiaCard = false;
+
+  //'https://app.talao.co/app/download/authorize' for Talao
+  static const String redirectUri =
+      'https://app.altme.io/app/download/authorize';
+
+  //'https://app.talao.co/app/download/callback' for Talao
+  static const String authorizationEndPoint =
+      'https://app.altme.io/app/download/callback';
+
+  // 'talao_wallet'for talao
+  static const String walletName = 'altme_wallet';
 
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
   static const DidKeyType didKeyTypeForDefault = DidKeyType.edDSA;

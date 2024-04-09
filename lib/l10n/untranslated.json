@@ -16,7 +16,9 @@
     "cardIsExpired",
     "signatureIsInvalid",
     "statusIsInvalid",
-    "statuslListSignatureFailed"
+    "statuslListSignatureFailed",
+    "walletMetadataForIssuers",
+    "walletMetadataForVerifiers"
   ],
 
   "es": [
@@ -36,7 +38,9 @@
     "cardIsExpired",
     "signatureIsInvalid",
     "statusIsInvalid",
-    "statuslListSignatureFailed"
+    "statuslListSignatureFailed",
+    "walletMetadataForIssuers",
+    "walletMetadataForVerifiers"
   ],
 
   "fr": [
@@ -46,6 +50,8 @@
     "cardIsExpired",
     "signatureIsInvalid",
     "statusIsInvalid",
-    "statuslListSignatureFailed"
+    "statuslListSignatureFailed",
+    "walletMetadataForIssuers",
+    "walletMetadataForVerifiers"
   ]
 }

@@ -979,7 +979,6 @@
   "download": "Download",
   "successfullyDownloaded": "Successfully Downloaded",
   "advancedSecuritySettings": "Advanced Security Settings",
-  "clientMetadata": "Wallet metadata",
   "theIssuanceOfThisCredentialIsPending": "The issuance of this credential is pending",
   "clientId": "Client Id",
   "clientSecret": "Client Secret",
@@ -1050,5 +1049,7 @@
   "cardIsExpired": "Card is expired",
   "signatureIsInvalid": "Signature is invalid",
   "statusIsInvalid": "Status is invalid",
-  "statuslListSignatureFailed": "Status list signature failed"
+  "statuslListSignatureFailed": "Status list signature failed",
+  "walletMetadataForIssuers": "Wallet metadata for issuers",
+  "walletMetadataForVerifiers": "Wallet metadata for verifiers"
 }
