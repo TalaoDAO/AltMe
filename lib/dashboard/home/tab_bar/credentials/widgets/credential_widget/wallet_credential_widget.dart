@@ -4,6 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 
 class WalletCredentialWidget extends StatelessWidget {
   const WalletCredentialWidget({
@@ -43,37 +44,51 @@ class WalletCredentialetailsWidget extends StatelessWidget {
     final titleColor = Theme.of(context).colorScheme.titleColor;
     final valueColor = Theme.of(context).colorScheme.valueColor;
 
+    final isDeveloperMode =
+        context.read<ProfileCubit>().state.model.isDeveloperMode;
+
     final walletCredential = credentialModel
         .credentialPreview.credentialSubjectModel as WalletCredentialModel;
+
+    final walletAttestationData = credentialModel.jwt;
+
+    dynamic uri;
+    dynamic idx;
+
+    if (isDeveloperMode && walletAttestationData != null) {
+      final payload = JWTDecode().parseJwt(walletAttestationData);
+      final status = payload['status'];
+      if (status != null && status is Map<String, dynamic>) {
+        final statusList = status['status_list'];
+        if (statusList != null && statusList is Map<String, dynamic>) {
+          uri = statusList['uri'];
+          idx = statusList['idx'];
+        }
+      }
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (context.read<ProfileCubit>().state.model.isDeveloperMode) ...[
-          const SizedBox(height: 10),
+        if (isDeveloperMode)
           CredentialField(
-            padding: EdgeInsets.zero,
+            padding: const EdgeInsets.only(top: 10),
             title: l10n.publicKeyOfWalletInstance,
             value: walletCredential.publicKey ?? '',
             titleColor: titleColor,
             valueColor: valueColor,
             showVertically: false,
           ),
-          const SizedBox(height: 10),
-        ] else ...[
-          const SizedBox(height: 10),
-        ],
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.walletInstanceKey,
           value: walletCredential.walletInstanceKey ?? '',
           titleColor: titleColor,
           valueColor: valueColor,
           showVertically: false,
         ),
-        const SizedBox(height: 10),
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.issuanceDate,
           value: UiDate.formatDateForCredentialCard(
             credentialModel.credentialPreview.issuanceDate,
@@ -82,9 +97,8 @@ class WalletCredentialetailsWidget extends StatelessWidget {
           valueColor: valueColor,
           showVertically: false,
         ),
-        const SizedBox(height: 10),
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.expirationDate,
           value: UiDate.formatDateForCredentialCard(
             credentialModel.credentialPreview.expirationDate,
@@ -93,6 +107,28 @@ class WalletCredentialetailsWidget extends StatelessWidget {
           valueColor: valueColor,
           showVertically: false,
         ),
+        if (context.read<ProfileCubit>().state.model.isDeveloperMode) ...[
+          if (uri != null) ...[
+            CredentialField(
+              padding: const EdgeInsets.only(top: 10),
+              title: l10n.statusList,
+              value: uri.toString(),
+              titleColor: titleColor,
+              valueColor: valueColor,
+              showVertically: false,
+            ),
+          ],
+          if (idx != null) ...[
+            CredentialField(
+              padding: const EdgeInsets.only(top: 10),
+              title: l10n.statusListIndex,
+              value: idx.toString(),
+              titleColor: titleColor,
+              valueColor: valueColor,
+              showVertically: false,
+            ),
+          ],
+        ],
       ],
     );
   }

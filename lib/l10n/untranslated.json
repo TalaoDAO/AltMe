@@ -20,7 +20,9 @@
     "walletMetadataForIssuers",
     "walletMetadataForVerifiers",
     "statusListCachingTitle",
-    "statusListCachingSubTitle"
+    "statusListCachingSubTitle",
+    "statusList",
+    "statusListIndex"
   ],
 
   "es": [
@@ -44,7 +46,9 @@
     "walletMetadataForIssuers",
     "walletMetadataForVerifiers",
     "statusListCachingTitle",
-    "statusListCachingSubTitle"
+    "statusListCachingSubTitle",
+    "statusList",
+    "statusListIndex"
   ],
 
   "fr": [
@@ -58,6 +62,8 @@
     "walletMetadataForIssuers",
     "walletMetadataForVerifiers",
     "statusListCachingTitle",
-    "statusListCachingSubTitle"
+    "statusListCachingSubTitle",
+    "statusList",
+    "statusListIndex"
   ]
 }

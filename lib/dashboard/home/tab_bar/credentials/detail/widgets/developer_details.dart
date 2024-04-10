@@ -26,18 +26,16 @@ class DeveloperDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 10),
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.format,
           value: credentialModel.getFormat,
           titleColor: Theme.of(context).colorScheme.titleColor,
           valueColor: Theme.of(context).colorScheme.valueColor,
           showVertically: showVertically,
         ),
-        const SizedBox(height: 10),
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.issuerDID,
           value: issuerDid,
           titleColor: Theme.of(context).colorScheme.titleColor,
@@ -46,20 +44,17 @@ class DeveloperDetails extends StatelessWidget {
         ),
         if (credentialModel.credentialPreview.credentialSubjectModel
                 is! WalletCredentialModel &&
-            subjectDid.isNotEmpty) ...[
-          const SizedBox(height: 10),
+            subjectDid.isNotEmpty)
           CredentialField(
-            padding: EdgeInsets.zero,
+            padding: const EdgeInsets.only(top: 10),
             title: l10n.subjectDID,
             value: subjectDid,
             titleColor: Theme.of(context).colorScheme.titleColor,
             valueColor: Theme.of(context).colorScheme.valueColor,
             showVertically: showVertically,
           ),
-        ],
-        const SizedBox(height: 10),
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.type,
           value: type,
           titleColor: Theme.of(context).colorScheme.titleColor,

@@ -303,7 +303,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           /// credential manifest details
                           if (credentialManifestSupport &&
                               outputDescriptors != null) ...[
-                            const SizedBox(height: 10),
                             CredentialManifestDetails(
                               outputDescriptor: outputDescriptors.firstOrNull,
                               credentialModel: widget.credentialModel,

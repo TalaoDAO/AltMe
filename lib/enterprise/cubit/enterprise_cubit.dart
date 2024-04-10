@@ -362,10 +362,8 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       }
     }
 
-    await profileCubit.secureStorageProvider.set(
-      SecureStorageKeys.walletAttestationData,
-      jwtVc,
-    );
+    await profileCubit.secureStorageProvider
+        .set(SecureStorageKeys.walletAttestationData, jwtVc);
 
     return jwtVc;
   }
