@@ -5,7 +5,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
-import 'package:altme/wallet/model/model.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -926,7 +925,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                   .contains(currentWalletAddress.toString());
 
               if (!isBlockChainCardAvailable && isCurrentBlockchainAccount) {
-                requiredDummySubjects.add(subjectType);
+                /// if already added do not add
+                if (!requiredDummySubjects.contains(subjectType)) {
+                  requiredDummySubjects.add(subjectType);
+                }
               }
 
               //get current wallet address
