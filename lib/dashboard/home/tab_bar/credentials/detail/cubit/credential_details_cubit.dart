@@ -116,20 +116,25 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             final idx = statusList['idx'];
 
             if (idx != null && idx is int && uri != null && uri is String) {
-              final dynamic response = await client.get(
-                uri,
-                headers: {
-                  'Content-Type': 'application/json; charset=UTF-8',
-                  'accept': 'application/statuslist+jwt',
-                },
+              final headers = {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'accept': 'application/statuslist+jwt',
+              };
+
+              final String response = await getCatchedGetData(
+                secureStorageProvider: secureStorageProvider,
+                url: uri,
+                headers: headers,
+                client: client,
               );
-              final payload = jwtDecode.parseJwt(response.toString());
+
+              final payload = jwtDecode.parseJwt(response);
 
               /// verify the signature of the VC with the kid of the JWT
               final VerificationType isVerified = await verifyEncodedData(
                 issuer: payload['iss']?.toString() ?? item.issuer,
                 jwtDecode: jwtDecode,
-                jwt: response.toString(),
+                jwt: response,
               );
 
               if (isVerified != VerificationType.verified) {
@@ -187,21 +192,26 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
               if (iteratedData is Map<String, dynamic>) {
                 final data = CredentialStatusField.fromJson(iteratedData);
 
-                final dynamic response = await client.get(
-                  data.statusListCredential,
-                  headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'accept': 'application/statuslist+jwt',
-                  },
+                final url = data.statusListCredential;
+                final headers = {
+                  'Content-Type': 'application/json; charset=UTF-8',
+                  'accept': 'application/statuslist+jwt',
+                };
+
+                final String response = await getCatchedGetData(
+                  secureStorageProvider: secureStorageProvider,
+                  url: url,
+                  headers: headers,
+                  client: client,
                 );
 
-                final payload = jwtDecode.parseJwt(response.toString());
+                final payload = jwtDecode.parseJwt(response);
 
                 // verify the signature of the VC with the kid of the JWT
                 final VerificationType isVerified = await verifyEncodedData(
                   issuer: payload['iss']?.toString() ?? item.issuer,
                   jwtDecode: jwtDecode,
-                  jwt: response.toString(),
+                  jwt: response,
                 );
 
                 if (isVerified != VerificationType.verified) {

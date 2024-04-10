@@ -1051,5 +1051,7 @@
   "statusIsInvalid": "Status is invalid",
   "statuslListSignatureFailed": "Status list signature failed",
   "walletMetadataForIssuers": "Wallet metadata for issuers",
-  "walletMetadataForVerifiers": "Wallet metadata for verifiers"
+  "walletMetadataForVerifiers": "Wallet metadata for verifiers",
+  "statusListCachingTitle": "StatusList caching",
+  "statusListCachingSubTitle": "Default: On\nSwitch off to reload StatusList when needed"
 }
