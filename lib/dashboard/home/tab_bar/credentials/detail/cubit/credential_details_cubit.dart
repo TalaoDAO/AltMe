@@ -138,6 +138,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 issuer: payload['iss']?.toString() ?? item.issuer,
                 jwtDecode: jwtDecode,
                 jwt: response,
+                fromStatusList: true,
               );
 
               if (isVerified != VerificationType.verified) {
@@ -216,6 +217,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   issuer: payload['iss']?.toString() ?? item.issuer,
                   jwtDecode: jwtDecode,
                   jwt: response,
+                  fromStatusList: true,
                 );
 
                 if (isVerified != VerificationType.verified) {

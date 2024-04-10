@@ -325,6 +325,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
             issuer: payload['iss'].toString(),
             jwtDecode: profileCubit.jwtDecode,
             jwt: response,
+            fromStatusList: true,
           );
 
           if (isVerified != VerificationType.verified) {
