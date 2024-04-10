@@ -1101,21 +1101,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               header: header,
             );
           } else if (clientIdScheme == 'verifier_attestation') {
-            final jwt = header['jwt'];
-
-            if (jwt == null) {
-              throw ResponseMessage(
-                data: {
-                  'error': 'invalid_format',
-                  'error_description': 'verifier_attestation scheme error',
-                },
-              );
-            }
-
             publicKeyJwk = await checkVerifierAttestation(
               clientId: clientId,
-              payload: payload,
               header: header,
+              jwtDecode: jwtDecode,
             );
           }
         }

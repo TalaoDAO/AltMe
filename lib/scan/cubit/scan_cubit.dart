@@ -761,17 +761,9 @@ class ScanCubit extends Cubit<ScanState> {
     final vcFormatType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
-    if (vcFormat == null) {
-      if (vcFormatType == VCFormatType.ldpVc) {
-        vcFormat = 'ldp_vc';
-      } else if (vcFormatType == VCFormatType.jwtVc) {
-        vcFormat = 'jwt_vc';
-      } else if (vcFormatType == VCFormatType.jwtVcJson) {
-        vcFormat = 'jwt_vc_json';
-      }
-    }
+    vcFormat ??= vcFormatType.value;
 
-    if (vcFormat == null && vpFormat == null) {
+    if (vpFormat == null) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_request',

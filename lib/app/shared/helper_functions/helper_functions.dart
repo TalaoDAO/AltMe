@@ -1881,9 +1881,22 @@ Future<Map<String, dynamic>?> checkX509({
 
 Future<Map<String, dynamic>?> checkVerifierAttestation({
   required String clientId,
-  required Map<String, dynamic> payload,
   required Map<String, dynamic> header,
+  required JWTDecode jwtDecode,
 }) async {
+  final jwt = header['jwt'];
+
+  if (jwt == null) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_format',
+        'error_description': 'verifier_attestation scheme error',
+      },
+    );
+  }
+
+  final payload = jwtDecode.parseJwt(jwt.toString());
+
   final sub = payload['sub'];
   final cnf = payload['cnf'];
 
