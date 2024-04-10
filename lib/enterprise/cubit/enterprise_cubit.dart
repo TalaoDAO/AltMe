@@ -275,7 +275,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     final jwtVc = response.toString();
 
     /// parse
-    final header = profileCubit.jwtDecode.parseJwtHeader(jwtVc!);
+    final header = profileCubit.jwtDecode.parseJwtHeader(jwtVc);
     final issuerKid = header['kid'].toString();
     final did = issuerKid.split('#')[0];
 
@@ -285,6 +285,82 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       jwtDecode: profileCubit.jwtDecode,
       jwt: jwtVc,
     );
+
+    if (isVerified != VerificationType.verified) {
+      throw ResponseMessage(
+        message: ResponseString.RESPONSE_STRING_invalidStatus,
+      );
+    }
+
+    final payload = profileCubit.jwtDecode.parseJwt(jwtVc);
+    final status = payload['status'];
+
+    if (status != null && status is Map<String, dynamic>) {
+      final statusList = status['status_list'];
+      if (statusList != null && statusList is Map<String, dynamic>) {
+        final uri = statusList['uri'];
+        final idx = statusList['idx'];
+
+        if (idx != null && idx is int && uri != null && uri is String) {
+          final headers = {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'accept': 'application/statuslist+jwt',
+          };
+
+          final customOidc4vcProfile = profileCubit.state.model.profileSetting
+              .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+          final String response = await getCatchedGetData(
+            secureStorageProvider: profileCubit.secureStorageProvider,
+            url: uri,
+            headers: headers,
+            client: client,
+            isCachingEnabled: customOidc4vcProfile.statusListCache,
+          );
+
+          final payload = profileCubit.jwtDecode.parseJwt(response);
+
+          /// verify the signature of the VC with the kid of the JWT
+          final VerificationType isVerified = await verifyEncodedData(
+            issuer: payload['iss'].toString(),
+            jwtDecode: profileCubit.jwtDecode,
+            jwt: response,
+          );
+
+          if (isVerified != VerificationType.verified) {
+            throw ResponseMessage(
+              message:
+                  ResponseString.RESPONSE_STRING_statusListInvalidSignature,
+            );
+          }
+
+          final newStatusList = payload['status_list'];
+          if (newStatusList != null && newStatusList is Map<String, dynamic>) {
+            final lst = newStatusList['lst'].toString();
+
+            final bytes = profileCubit.oidc4vc.getByte(idx);
+
+            // '$idx = $bytes X 8 + $posOfBit'
+            final decompressedBytes =
+                profileCubit.oidc4vc.decodeAndZlibDecompress(lst);
+            final byteToCheck = decompressedBytes[bytes];
+
+            final posOfBit = profileCubit.oidc4vc.getPositionOfZlibBit(idx);
+            final bit = profileCubit.oidc4vc
+                .getBit(byte: byteToCheck, bitPosition: posOfBit);
+
+            if (bit == 0) {
+              // active
+            } else {
+              // revoked
+              throw ResponseMessage(
+                message: ResponseString.RESPONSE_STRING_invalidStatus,
+              );
+            }
+          }
+        }
+      }
+    }
 
     await profileCubit.secureStorageProvider.set(
       SecureStorageKeys.walletAttestationData,

@@ -771,6 +771,15 @@ class ResponseMessage with MessageHandler {
               .localise(
             context,
           );
+        case ResponseString.RESPONSE_STRING_invalidStatus:
+          return ResponseString.RESPONSE_STRING_invalidStatus.localise(
+            context,
+          );
+        case ResponseString.RESPONSE_STRING_statusListInvalidSignature:
+          return ResponseString.RESPONSE_STRING_statusListInvalidSignature
+              .localise(
+            context,
+          );
       }
     }
     return '';

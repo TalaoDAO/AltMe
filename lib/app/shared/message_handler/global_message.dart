@@ -390,4 +390,7 @@ class GlobalMessage {
       l10n.successfullyUpdatedEnterpriseAccount;
   String get RESPONSE_STRING_thisWalleIsAlreadyConfigured =>
       l10n.thisWalleIsAlreadyConfigured;
+  String get RESPONSE_STRING_invalidStatus => l10n.statusIsInvalid;
+  String get RESPONSE_STRING_statusListInvalidSignature =>
+      l10n.statuslListSignatureFailed;
 }
