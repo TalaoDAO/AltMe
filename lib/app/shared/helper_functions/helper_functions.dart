@@ -1924,12 +1924,15 @@ Future<String> getCatchedGetData({
   required String url,
   required Map<String, dynamic> headers,
   required DioClient client,
+  required bool isCachingEnabled,
 }) async {
   final cachedData = await secureStorageProvider.get(url);
 
   dynamic response;
 
-  if (cachedData == null) {
+  if (!isCachingEnabled) {
+    response = await client.get(url, headers: headers);
+  } else if (cachedData == null) {
     response = await client.get(url, headers: headers);
     final expiry =
         DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;

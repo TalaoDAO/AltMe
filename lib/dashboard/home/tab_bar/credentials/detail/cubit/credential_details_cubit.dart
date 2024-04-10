@@ -43,8 +43,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       emit(state.copyWith(status: AppStatus.loading));
       await Future<void>.delayed(const Duration(milliseconds: 500));
 
-      if (!profileCubit.state.model.profileSetting.selfSovereignIdentityOptions
-          .customOidc4vcProfile.securityLevel) {
+      final customOidc4vcProfile = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+      if (!customOidc4vcProfile.securityLevel) {
         emit(
           state.copyWith(
             credentialStatus: CredentialStatus.noStatus,
@@ -126,6 +128,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 url: uri,
                 headers: headers,
                 client: client,
+                isCachingEnabled: customOidc4vcProfile.statusListCache,
               );
 
               final payload = jwtDecode.parseJwt(response);
@@ -203,6 +206,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   url: url,
                   headers: headers,
                   client: client,
+                  isCachingEnabled: customOidc4vcProfile.statusListCache,
                 );
 
                 final payload = jwtDecode.parseJwt(response);
