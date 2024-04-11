@@ -352,9 +352,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
             if (bit == 0) {
               // active
-              throw ResponseMessage(
-                message: ResponseString.RESPONSE_STRING_theWalletIsSuspended,
-              );
             } else {
               // revoked
               throw ResponseMessage(
