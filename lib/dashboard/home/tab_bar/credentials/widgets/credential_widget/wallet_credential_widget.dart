@@ -4,7 +4,6 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 
 class WalletCredentialWidget extends StatelessWidget {
   const WalletCredentialWidget({
@@ -50,23 +49,6 @@ class WalletCredentialetailsWidget extends StatelessWidget {
     final walletCredential = credentialModel
         .credentialPreview.credentialSubjectModel as WalletCredentialModel;
 
-    final walletAttestationData = credentialModel.jwt;
-
-    dynamic uri;
-    dynamic idx;
-
-    if (isDeveloperMode && walletAttestationData != null) {
-      final payload = JWTDecode().parseJwt(walletAttestationData);
-      final status = payload['status'];
-      if (status != null && status is Map<String, dynamic>) {
-        final statusList = status['status_list'];
-        if (statusList != null && statusList is Map<String, dynamic>) {
-          uri = statusList['uri'];
-          idx = statusList['idx'];
-        }
-      }
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -107,28 +89,6 @@ class WalletCredentialetailsWidget extends StatelessWidget {
           valueColor: valueColor,
           showVertically: false,
         ),
-        if (context.read<ProfileCubit>().state.model.isDeveloperMode) ...[
-          if (uri != null) ...[
-            CredentialField(
-              padding: const EdgeInsets.only(top: 10),
-              title: l10n.statusList,
-              value: uri.toString(),
-              titleColor: titleColor,
-              valueColor: valueColor,
-              showVertically: false,
-            ),
-          ],
-          if (idx != null) ...[
-            CredentialField(
-              padding: const EdgeInsets.only(top: 10),
-              title: l10n.statusListIndex,
-              value: idx.toString(),
-              titleColor: titleColor,
-              valueColor: valueColor,
-              showVertically: false,
-            ),
-          ],
-        ],
       ],
     );
   }
