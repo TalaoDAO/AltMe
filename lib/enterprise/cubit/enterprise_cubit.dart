@@ -352,10 +352,13 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
             if (bit == 0) {
               // active
+              throw ResponseMessage(
+                message: ResponseString.RESPONSE_STRING_theWalletIsSuspended,
+              );
             } else {
               // revoked
               throw ResponseMessage(
-                message: ResponseString.RESPONSE_STRING_invalidStatus,
+                message: ResponseString.RESPONSE_STRING_theWalletIsSuspended,
               );
             }
           }
@@ -367,6 +370,27 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         .set(SecureStorageKeys.walletAttestationData, jwtVc);
 
     return jwtVc;
+  }
+
+  Future<void> getWalletAttestationStatus() async {
+    try {
+      final provider = await profileCubit.secureStorageProvider.get(
+        SecureStorageKeys.enterpriseWalletProvider,
+      );
+
+      if (provider == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The wallet is not configured yet.',
+          },
+        );
+      }
+
+      await getWalletAttestationData(provider);
+    } catch (e) {
+      emitError(e);
+    }
   }
 
   Future<void> updateTheConfiguration() async {

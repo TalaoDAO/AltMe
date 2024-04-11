@@ -1055,5 +1055,6 @@
   "statusListCachingTitle": "StatusList caching",
   "statusListCachingSubTitle": "Default: On\nSwitch off to reload StatusList when needed",
   "statusList": "Status list",
-  "statusListIndex": "Status list index"
+  "statusListIndex": "Status list index",
+  "theWalletIsSuspended": "The wallet is suspended."
 }

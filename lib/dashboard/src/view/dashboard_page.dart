@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
@@ -46,6 +49,14 @@ class _DashboardViewState extends State<DashboardView> {
         if (splashCubit.state.isNewVersion) {
           WhatIsNewDialog.show(context);
           splashCubit.disableWhatsNewPopUp();
+        }
+
+        // check if enterprise account is suspended or not
+        if (context.read<ProfileCubit>().state.model.profileType ==
+            ProfileType.enterprise) {
+          unawaited(
+            context.read<EnterpriseCubit>().getWalletAttestationStatus(),
+          );
         }
       });
     });

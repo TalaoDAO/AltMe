@@ -506,6 +506,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_statusListInvalidSignature:
         return globalMessage.RESPONSE_STRING_statusListInvalidSignature;
+
+      case ResponseString.RESPONSE_STRING_theWalletIsSuspended:
+        return globalMessage.RESPONSE_STRING_theWalletIsSuspended;
     }
   }
 }

@@ -22,7 +22,8 @@
     "statusListCachingTitle",
     "statusListCachingSubTitle",
     "statusList",
-    "statusListIndex"
+    "statusListIndex",
+    "theWalletIsSuspended"
   ],
 
   "es": [
@@ -48,7 +49,8 @@
     "statusListCachingTitle",
     "statusListCachingSubTitle",
     "statusList",
-    "statusListIndex"
+    "statusListIndex",
+    "theWalletIsSuspended"
   ],
 
   "fr": [
@@ -64,6 +66,7 @@
     "statusListCachingTitle",
     "statusListCachingSubTitle",
     "statusList",
-    "statusListIndex"
+    "statusListIndex",
+    "theWalletIsSuspended"
   ]
 }

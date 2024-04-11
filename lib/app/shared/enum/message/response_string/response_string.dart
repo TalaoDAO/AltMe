@@ -160,4 +160,5 @@ enum ResponseString {
   RESPONSE_STRING_thisWalleIsAlreadyConfigured,
   RESPONSE_STRING_invalidStatus,
   RESPONSE_STRING_statusListInvalidSignature,
+  RESPONSE_STRING_theWalletIsSuspended,
 }
