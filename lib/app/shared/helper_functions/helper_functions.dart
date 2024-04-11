@@ -1947,11 +1947,6 @@ Future<String> getCatchedGetData({
     response = await client.get(url, headers: headers);
   } else if (cachedData == null) {
     response = await client.get(url, headers: headers);
-    final expiry =
-        DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
-
-    final value = {'expiry': expiry, 'data': response};
-    await secureStorageProvider.set(url, jsonEncode(value));
   } else {
     final cachedDataJson = jsonDecode(cachedData);
     final expiry = int.parse(cachedDataJson['expiry'].toString());
@@ -1961,9 +1956,18 @@ Future<String> getCatchedGetData({
     if (isExpired) {
       response = await client.get(url, headers: headers);
     } else {
-      response = await cachedDataJson['data'];
+      /// directly return cached data
+      /// returned here to avoid the caching override everytime
+      final response = await cachedDataJson['data'];
+      return response.toString();
     }
   }
+
+  final expiry =
+      DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
+
+  final value = {'expiry': expiry, 'data': response};
+  await secureStorageProvider.set(url, jsonEncode(value));
 
   return response.toString();
 }
