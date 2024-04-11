@@ -151,7 +151,6 @@ class OIDC4VC {
       final openIdConfiguration = await getOpenIdConfig(
         baseUrl: issuer,
         isAuthorizationServer: false,
-        oidc4vciDraftType: oidc4vciDraftType,
       );
 
       final authorizationEndpoint = await readAuthorizationEndPoint(
@@ -793,7 +792,6 @@ class OIDC4VC {
       final authorizationServerConfiguration = await getOpenIdConfig(
         baseUrl: authorizationServer,
         isAuthorizationServer: true,
-        oidc4vciDraftType: oidc4vciDraftType,
       );
 
       if (authorizationServerConfiguration.tokenEndpoint != null) {
@@ -820,7 +818,6 @@ class OIDC4VC {
       final authorizationServerConfiguration = await getOpenIdConfig(
         baseUrl: authorizationServer,
         isAuthorizationServer: true,
-        oidc4vciDraftType: oidc4vciDraftType,
       );
 
       if (authorizationServerConfiguration.authorizationEndpoint != null) {
@@ -1579,8 +1576,14 @@ class OIDC4VC {
   Future<OpenIdConfiguration> getOpenIdConfig({
     required String baseUrl,
     required bool isAuthorizationServer,
-    OIDC4VCIDraftType? oidc4vciDraftType,
   }) async {
+    ///for OIDC4VCI, the server is an issuer the metadata are all in th
+    ////openid-issuer-configuration or some are in the /openid-configuration
+    ///(token endpoint etc,) and other are in the /openid-credential-issuer
+    ///(credential supported) for OIDC4VP and SIOPV2, the serve is a client,
+    ///the wallet is the suthorization server the verifier metadata are in
+    ////openid-configuration
+
     final url = '$baseUrl/.well-known/openid-configuration';
 
     if (!isAuthorizationServer) {
