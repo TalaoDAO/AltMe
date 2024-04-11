@@ -605,7 +605,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     final String? responseMode = state.uri!.queryParameters['response_mode'];
     final bool correctResponeMode = responseMode != null &&
-        (responseMode == 'post' || responseMode == 'direct_post');
+        (responseMode == 'post' ||
+            responseMode == 'direct_post' ||
+            responseMode == 'direct_post.jwt');
 
     /// check response mode value
     if (!correctResponeMode) {
@@ -1061,7 +1063,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     if (isSecurityEnabled) {
       final Map<String, dynamic> payload =
-          decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
+          jwtDecode.parseJwt(encodedData as String);
 
       final String clientId = payload['client_id'].toString();
 
@@ -1089,10 +1091,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final clientIdScheme = payload['client_id_scheme'];
 
         if (clientIdScheme != null) {
+          final Map<String, dynamic> header =
+              decodeHeader(jwtDecode: jwtDecode, token: encodedData);
+
           if (clientIdScheme == 'x509_san_dns') {
             publicKeyJwk = await checkX509(
               clientId: clientId,
               encodedData: encodedData,
+              header: header,
+            );
+          } else if (clientIdScheme == 'verifier_attestation') {
+            publicKeyJwk = await checkVerifierAttestation(
+              clientId: clientId,
+              header: header,
               jwtDecode: jwtDecode,
             );
           }

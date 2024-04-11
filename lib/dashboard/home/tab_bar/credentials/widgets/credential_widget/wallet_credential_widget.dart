@@ -43,37 +43,34 @@ class WalletCredentialetailsWidget extends StatelessWidget {
     final titleColor = Theme.of(context).colorScheme.titleColor;
     final valueColor = Theme.of(context).colorScheme.valueColor;
 
+    final isDeveloperMode =
+        context.read<ProfileCubit>().state.model.isDeveloperMode;
+
     final walletCredential = credentialModel
         .credentialPreview.credentialSubjectModel as WalletCredentialModel;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (context.read<ProfileCubit>().state.model.isDeveloperMode) ...[
-          const SizedBox(height: 10),
+        if (isDeveloperMode)
           CredentialField(
-            padding: EdgeInsets.zero,
+            padding: const EdgeInsets.only(top: 10),
             title: l10n.publicKeyOfWalletInstance,
             value: walletCredential.publicKey ?? '',
             titleColor: titleColor,
             valueColor: valueColor,
             showVertically: false,
           ),
-          const SizedBox(height: 10),
-        ] else ...[
-          const SizedBox(height: 10),
-        ],
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.walletInstanceKey,
           value: walletCredential.walletInstanceKey ?? '',
           titleColor: titleColor,
           valueColor: valueColor,
           showVertically: false,
         ),
-        const SizedBox(height: 10),
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.issuanceDate,
           value: UiDate.formatDateForCredentialCard(
             credentialModel.credentialPreview.issuanceDate,
@@ -82,9 +79,8 @@ class WalletCredentialetailsWidget extends StatelessWidget {
           valueColor: valueColor,
           showVertically: false,
         ),
-        const SizedBox(height: 10),
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.expirationDate,
           value: UiDate.formatDateForCredentialCard(
             credentialModel.credentialPreview.expirationDate,

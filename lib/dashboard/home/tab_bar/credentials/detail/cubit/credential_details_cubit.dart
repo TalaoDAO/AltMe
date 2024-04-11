@@ -43,8 +43,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       emit(state.copyWith(status: AppStatus.loading));
       await Future<void>.delayed(const Duration(milliseconds: 500));
 
-      if (!profileCubit.state.model.profileSetting.selfSovereignIdentityOptions
-          .customOidc4vcProfile.securityLevel) {
+      final customOidc4vcProfile = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+      if (!customOidc4vcProfile.securityLevel) {
         emit(
           state.copyWith(
             credentialStatus: CredentialStatus.noStatus,
@@ -89,7 +91,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
       if (claims != null && listOfSd.isNotEmpty) {
         final selectiveDisclosure = SelectiveDisclosure(item);
-        final decryptedDatas = selectiveDisclosure.decryptedDatas;
+        final decryptedDatas = selectiveDisclosure.contents;
 
         /// check if sd already contain sh256 hash
         for (final element in decryptedDatas) {
@@ -116,32 +118,40 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             final idx = statusList['idx'];
 
             if (idx != null && idx is int && uri != null && uri is String) {
-              final dynamic response = await client.get(
-                uri,
-                headers: {
-                  'Content-Type': 'application/json; charset=UTF-8',
-                  'accept': 'application/statuslist+jwt',
-                },
+              final headers = {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'accept': 'application/statuslist+jwt',
+              };
+
+              final String response = await getCatchedGetData(
+                secureStorageProvider: secureStorageProvider,
+                url: uri,
+                headers: headers,
+                client: client,
+                isCachingEnabled: customOidc4vcProfile.statusListCache,
               );
 
-              // /// verify the signature of the VC with the kid of the JWT
-              // final VerificationType isVerified = await verifyEncodedData(
-              //   issuer: item.issuer,
-              //   jwtDecode: jwtDecode,
-              //   jwt: response.toString(),
-              // );
+              final payload = jwtDecode.parseJwt(response);
 
-              // if (isVerified != VerificationType.verified) {
-              //   emit(
-              //     state.copyWith(
-              //       credentialStatus: CredentialStatus.invalidSignature,
-              //       status: AppStatus.idle,
-              //     ),
-              //   );
-              //   return;
-              // }
+              /// verify the signature of the VC with the kid of the JWT
+              final VerificationType isVerified = await verifyEncodedData(
+                issuer: payload['iss']?.toString() ?? item.issuer,
+                jwtDecode: jwtDecode,
+                jwt: response,
+                fromStatusList: true,
+              );
 
-              final payload = jwtDecode.parseJwt(response.toString());
+              if (isVerified != VerificationType.verified) {
+                emit(
+                  state.copyWith(
+                    credentialStatus:
+                        CredentialStatus.statusListInvalidSignature,
+                    status: AppStatus.idle,
+                  ),
+                );
+                return;
+              }
+
               final newStatusList = payload['status_list'];
               if (newStatusList != null &&
                   newStatusList is Map<String, dynamic>) {
@@ -154,7 +164,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                     profileCubit.oidc4vc.decodeAndZlibDecompress(lst);
                 final byteToCheck = decompressedBytes[bytes];
 
-                final posOfBit = profileCubit.oidc4vc.getPositionOfBit(idx);
+                final posOfBit = profileCubit.oidc4vc.getPositionOfZlibBit(idx);
                 final bit = profileCubit.oidc4vc
                     .getBit(byte: byteToCheck, bitPosition: posOfBit);
 
@@ -176,11 +186,113 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         }
       }
 
+      if (item.format == VCFormatType.jwtVc.value ||
+          item.format == VCFormatType.jwtVcJson.value ||
+          item.format == VCFormatType.ldpVc.value) {
+        final credentialStatus = item.credentialPreview.credentialStatus;
+        if (credentialStatus != null) {
+          if (credentialStatus is List<dynamic>) {
+            for (final iteratedData in credentialStatus) {
+              if (iteratedData is Map<String, dynamic>) {
+                final data = CredentialStatusField.fromJson(iteratedData);
+
+                final url = data.statusListCredential;
+                final headers = {
+                  'Content-Type': 'application/json; charset=UTF-8',
+                  'accept': 'application/statuslist+jwt',
+                };
+
+                final String response = await getCatchedGetData(
+                  secureStorageProvider: secureStorageProvider,
+                  url: url,
+                  headers: headers,
+                  client: client,
+                  isCachingEnabled: customOidc4vcProfile.statusListCache,
+                );
+
+                final payload = jwtDecode.parseJwt(response);
+
+                // verify the signature of the VC with the kid of the JWT
+                final VerificationType isVerified = await verifyEncodedData(
+                  issuer: payload['iss']?.toString() ?? item.issuer,
+                  jwtDecode: jwtDecode,
+                  jwt: response,
+                  fromStatusList: true,
+                );
+
+                if (isVerified != VerificationType.verified) {
+                  emit(
+                    state.copyWith(
+                      credentialStatus:
+                          CredentialStatus.statusListInvalidSignature,
+                      status: AppStatus.idle,
+                    ),
+                  );
+                  return;
+                }
+
+                final vc = payload['vc'];
+                if (vc != null && vc is Map<String, dynamic>) {
+                  final credentialSubject = vc['credentialSubject'];
+                  if (credentialSubject != null &&
+                      credentialSubject is Map<String, dynamic>) {
+                    final encodedList = credentialSubject['encodedList'];
+
+                    if (encodedList != null && encodedList is String) {
+                      final decompressedBytes = profileCubit.oidc4vc
+                          .decodeAndGzibDecompress(encodedList);
+
+                      final idx = int.parse(data.statusListIndex);
+                      final bytes = profileCubit.oidc4vc.getByte(idx);
+                      final byteToCheck = decompressedBytes[bytes];
+                      final posOfBit =
+                          profileCubit.oidc4vc.getPositionOfGZipBit(idx);
+                      final bit = profileCubit.oidc4vc
+                          .getBit(byte: byteToCheck, bitPosition: posOfBit);
+
+                      if (bit == 0) {
+                        // active
+                      } else {
+                        // revoked
+                        emit(
+                          state.copyWith(
+                            credentialStatus: CredentialStatus.invalidStatus,
+                            status: AppStatus.idle,
+                          ),
+                        );
+                        return;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
       if (item.jwt != null) {
+        final jwt = item.jwt!;
+        final Map<String, dynamic> payload = jwtDecode.parseJwt(jwt);
+        final Map<String, dynamic> header =
+            decodeHeader(jwtDecode: jwtDecode, token: jwt);
+
+        Map<String, dynamic>? publicKeyJwk;
+
+        final x5c = header['x5c'];
+        if (x5c != null && x5c is List) {
+          publicKeyJwk = await checkX509(
+            encodedData: jwt,
+            header: header,
+            clientId: payload['iss'].toString(),
+          );
+        }
+
         final VerificationType isVerified = await verifyEncodedData(
           issuer: item.issuer,
           jwtDecode: jwtDecode,
-          jwt: item.jwt!,
+          jwt: jwt,
+          publicKeyJwk: publicKeyJwk,
         );
 
         if (isVerified == VerificationType.verified) {
@@ -242,7 +354,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           ),
         );
       } else {
-        if (item.credentialPreview.credentialStatus.type != '') {
+        if (item.credentialPreview.credentialStatus != null) {
           final CredentialStatus credentialStatus =
               await item.checkRevocationStatus();
           if (credentialStatus == CredentialStatus.active) {

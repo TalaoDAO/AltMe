@@ -979,7 +979,6 @@
   "download": "Download",
   "successfullyDownloaded": "Successfully Downloaded",
   "advancedSecuritySettings": "Advanced Security Settings",
-  "clientMetadata": "Wallet metadata",
   "theIssuanceOfThisCredentialIsPending": "The issuance of this credential is pending",
   "clientId": "Client Id",
   "clientSecret": "Client Secret",
@@ -1046,8 +1045,16 @@
   "phoneLanguage": "Phone language",
   "pushAuthorizationRequestTitle": "Push Authorization Request (PAR)",
   "pushAuthorizationRequestSubTitle": "Default: false\nEnable to secure the authorization code flow",
-  "cardIsValid":"Card is valid",
-  "cardIsExpired":"Card is expired",
-  "signatureIsInvalid":"Signature is invalid",
-  "statusIsInvalid":"Status is invalid"
+  "cardIsValid": "Card is valid",
+  "cardIsExpired": "Card is expired",
+  "signatureIsInvalid": "Signature is invalid",
+  "statusIsInvalid": "Status is invalid",
+  "statuslListSignatureFailed": "Status list signature failed",
+  "walletMetadataForIssuers": "Wallet metadata for issuers",
+  "walletMetadataForVerifiers": "Wallet metadata for verifiers",
+  "statusListCachingTitle": "StatusList caching",
+  "statusListCachingSubTitle": "Default: On\nSwitch off to reload StatusList when needed",
+  "statusList": "Status list",
+  "statusListIndex": "Status list index",
+  "theWalletIsSuspended": "The wallet is suspended."
 }

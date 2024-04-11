@@ -10,6 +10,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
     this.showBgDecoration = true,
     required this.credentialModel,
     required this.descriptionMaxLine,
+    required this.isDiscover,
     this.displyalDescription = true,
   });
 
@@ -17,6 +18,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
   final int descriptionMaxLine;
   final bool showBgDecoration;
   final bool displyalDescription;
+  final bool isDiscover;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                         descriptionMaxLine: descriptionMaxLine,
                         displyalDescription: displyalDescription,
                       ),
-                      Image.asset(ImageStrings.blankGetCard),
+                      if (isDiscover) Image.asset(ImageStrings.blankGetCard),
                     ],
                   ),
                 ),

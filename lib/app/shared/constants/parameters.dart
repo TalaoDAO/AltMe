@@ -67,10 +67,29 @@ class Parameters {
   static const String clientId = 'urn:talao:0001';
   static const int maxEntries = 3;
 
+  // 'Talao'for talao
   static const String appName = 'Talao';
+
+  // false for talao
   static const bool supportDefiCompliance = false;
+  // false for talao
   static const bool supportCryptoAccountOwnershipInDiscoverForEnterpriseMode =
       false;
+  // false for talao
+  static const bool showChainbornCard = false;
+  // false for talao
+  static const bool showTezotopiaCard = false;
+
+  //'https://app.talao.co/app/download/authorize' for Talao
+  static const String redirectUri =
+      'https://app.talao.co/app/download/authorize';
+
+  //'https://app.talao.co/app/download/callback' for Talao
+  static const String authorizationEndPoint =
+      'https://app.talao.co/app/download/callback';
+
+  // 'talao_wallet'for talao
+  static const String walletName = 'talao_wallet';
 
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
   static const DidKeyType didKeyTypeForDefault = DidKeyType.edDSA;

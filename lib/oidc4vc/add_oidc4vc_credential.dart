@@ -32,6 +32,17 @@ Future<void> addOIDC4VCCredential({
     final jsonContent = jwtDecode.parseJwt(data);
 
     if (format == VCFormatType.vcSdJWT.value) {
+      final sdAlg = jsonContent['_sd_alg'];
+
+      if (sdAlg == null || sdAlg != 'sha-256') {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Only sha-256 is supported.',
+          },
+        );
+      }
+
       credentialFromOIDC4VC = jsonContent;
     } else {
       credentialFromOIDC4VC = jsonContent['vc'] as Map<String, dynamic>;

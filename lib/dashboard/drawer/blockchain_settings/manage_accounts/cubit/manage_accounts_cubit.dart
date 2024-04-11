@@ -1,9 +1,9 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 part 'manage_accounts_cubit.g.dart';
 
@@ -11,14 +11,14 @@ part 'manage_accounts_state.dart';
 
 class ManageAccountsCubit extends Cubit<ManageAccountsState> {
   ManageAccountsCubit({
-    required this.secureStorageProvider,
-    required this.walletCubit,
+    required this.credentialsCubit,
   }) : super(const ManageAccountsState()) {
     initialise();
   }
 
-  final SecureStorageProvider secureStorageProvider;
-  final WalletCubit walletCubit;
+  final CredentialsCubit credentialsCubit;
+
+  WalletCubit get walletCubit => credentialsCubit.walletCubit;
 
   Future<void> initialise() async {
     emit(state.loading());
@@ -46,6 +46,7 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
       newAccountName: newAccountName,
       index: index,
       blockchainType: blockchainType,
+      credentialsCubit: credentialsCubit,
       onComplete: (cryptoAccount) {
         emit(state.success(cryptoAccount: cryptoAccount));
       },

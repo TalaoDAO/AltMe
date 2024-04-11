@@ -20,7 +20,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
   final CredentialModel credentialModel;
   final bool showVertically;
   final Map<String, dynamic>? claims;
-  final void Function(String, String)? onPressed;
+  final void Function(String?, String, String?)? onPressed;
   final List<String>? selectedClaimsKeyIds;
   final String? parentKeyId;
 
@@ -34,7 +34,6 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: currentClaims.entries.map((MapEntry<String, dynamic> map) {
         String? title;
-        String? data;
 
         final key = map.key;
         final value = map.value;
@@ -90,60 +89,77 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                   showVertically: showVertically,
                   selectedClaimsKeyIds: selectedClaimsKeyIds,
                   parentKeyId: key,
-                  onPressed: (nestedKey, _) {
-                    onPressed?.call(nestedKey, '$key-$nestedKey');
+                  onPressed: (nestedKey, _, threeDotValue) {
+                    onPressed?.call(
+                      nestedKey,
+                      '$key-$nestedKey',
+                      threeDotValue,
+                    );
                   },
                 ),
               ),
             ],
           );
         } else {
-          final (claimsData, isfromDisclosureOfJWT) =
+          final List<ClaimsData> claimsData =
               SelectiveDisclosure(credentialModel).getClaimsData(
             key: key,
           );
 
-          data = claimsData;
+          if (claimsData.isEmpty) return Container();
 
-          if (data == null) return Container();
+          return Column(
+            children: claimsData.map(
+              (ClaimsData claims) {
+                final index = claimsData.indexOf(claims);
+                var keyToCheck = key;
+                var claimKey = key;
 
-          var keyToCheck = key;
+                if (parentKeyId != null) {
+                  keyToCheck = '$parentKeyId-$key';
+                }
 
-          if (parentKeyId != null) {
-            keyToCheck = '$parentKeyId-$key';
-          }
+                final isFirstElement = index == 0;
 
-          return TransparentInkWell(
-            onTap: () => onPressed?.call(key, key),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: CredentialField(
-                    padding: EdgeInsets.zero,
-                    title: title,
-                    value: data,
-                    titleColor: Theme.of(context).colorScheme.titleColor,
-                    valueColor: Theme.of(context).colorScheme.valueColor,
-                    showVertically: showVertically,
+                if (!isFirstElement) {
+                  title = null;
+                  keyToCheck = '$keyToCheck-$index';
+                  claimKey = '$claimKey-$index';
+                }
+
+                return TransparentInkWell(
+                  onTap: () =>
+                      onPressed?.call(key, claimKey, claims.threeDotValue),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      CredentialField(
+                        padding: EdgeInsets.only(top: isFirstElement ? 10 : 0),
+                        title: title,
+                        value: claims.data,
+                        titleColor: Theme.of(context).colorScheme.titleColor,
+                        valueColor: Theme.of(context).colorScheme.valueColor,
+                        showVertically: showVertically,
+                      ),
+                      if (selectedClaimsKeyIds != null &&
+                          claims.isfromDisclosureOfJWT) ...[
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 0, right: 10),
+                          child: Icon(
+                            selectedClaimsKeyIds!.contains(keyToCheck)
+                                ? Icons.check_box
+                                : Icons.check_box_outline_blank,
+                            size: 25,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                ),
-                if (selectedClaimsKeyIds != null && isfromDisclosureOfJWT) ...[
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15, right: 10),
-                    child: Icon(
-                      selectedClaimsKeyIds!.contains(keyToCheck)
-                          ? Icons.check_box
-                          : Icons.check_box_outline_blank,
-                      size: 25,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
-                ],
-              ],
-            ),
+                );
+              },
+            ).toList(),
           );
         }
       }).toList(),
