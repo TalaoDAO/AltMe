@@ -213,12 +213,7 @@ class ScanCubit extends Cubit<ScanState> {
 
         final dynamic credential = await client.post(
           uri.toString(),
-          data: {
-            'subject_id': did,
-            'presentation': presentations.length > 1
-                ? jsonEncode(presentations)
-                : presentations,
-          },
+          data: data,
         );
 
         final dynamic jsonCredential =
