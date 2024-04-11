@@ -1,11 +1,11 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class CryptoBottomSheetView extends StatelessWidget {
   const CryptoBottomSheetView({super.key});
@@ -14,8 +14,7 @@ class CryptoBottomSheetView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CryptoBottomSheetCubit(
-        secureStorageProvider: getSecureStorage,
-        walletCubit: context.read<WalletCubit>(),
+        credentialsCubit: context.read<CredentialsCubit>(),
       ),
       child: const CryptoBottomSheetPage(),
     );

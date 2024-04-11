@@ -542,6 +542,7 @@ class CustomOidc4VcProfile extends Equatable {
     this.proofHeader = ProofHeaderType.kid,
     this.proofType = ProofType.jwt,
     this.pushAuthorizationRequest = false,
+    this.statusListCache = true,
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
@@ -570,16 +571,12 @@ class CustomOidc4VcProfile extends Equatable {
   final String? clientSecret;
   final bool cryptoHolderBinding;
   final DidKeyType defaultDid;
-  //TODO(bibash): temporary solution to avoid who have chosen 12
-  @JsonKey(
-    includeFromJson: true,
-    fromJson: oidc4vciDraftFromJson,
-  )
   final OIDC4VCIDraftType oidc4vciDraft;
   final OIDC4VPDraftType oidc4vpDraft;
   final bool scope;
   final ProofHeaderType proofHeader;
   final bool securityLevel;
+  final bool statusListCache;
   final bool pushAuthorizationRequest;
   final SIOPV2DraftType siopv2Draft;
   @JsonKey(name: 'subjectSyntaxeType')
@@ -589,16 +586,6 @@ class CustomOidc4VcProfile extends Equatable {
   final ProofType proofType;
 
   Map<String, dynamic> toJson() => _$CustomOidc4VcProfileToJson(this);
-
-  static OIDC4VCIDraftType oidc4vciDraftFromJson(dynamic value) {
-    if (value == '11') {
-      return OIDC4VCIDraftType.draft11;
-    } else if (value == '12' || value == '13') {
-      return OIDC4VCIDraftType.draft13;
-    } else {
-      throw Exception();
-    }
-  }
 
   CustomOidc4VcProfile copyWith({
     ClientAuthentication? clientAuthentication,
@@ -612,6 +599,7 @@ class CustomOidc4VcProfile extends Equatable {
     bool? scope,
     ProofHeaderType? proofHeader,
     bool? securityLevel,
+    bool? statusListCache,
     bool? pushAuthorizationRequest,
     SIOPV2DraftType? siopv2Draft,
     ClientType? clientType,
@@ -629,6 +617,7 @@ class CustomOidc4VcProfile extends Equatable {
         scope: scope ?? this.scope,
         proofHeader: proofHeader ?? this.proofHeader,
         securityLevel: securityLevel ?? this.securityLevel,
+        statusListCache: statusListCache ?? this.statusListCache,
         pushAuthorizationRequest:
             pushAuthorizationRequest ?? this.pushAuthorizationRequest,
         siopv2Draft: siopv2Draft ?? this.siopv2Draft,
@@ -652,6 +641,7 @@ class CustomOidc4VcProfile extends Equatable {
         scope,
         proofHeader,
         securityLevel,
+        statusListCache,
         pushAuthorizationRequest,
         siopv2Draft,
         clientType,

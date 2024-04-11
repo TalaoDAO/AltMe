@@ -21,18 +21,16 @@ class DeferredCredentialData extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 10),
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.issuer,
           value: credentialModel.pendingInfo!.issuer ?? '',
           titleColor: Theme.of(context).colorScheme.titleColor,
           valueColor: Theme.of(context).colorScheme.valueColor,
           showVertically: showVertically,
         ),
-        const SizedBox(height: 10),
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.dateOfRequest,
           value: UiDate.formatDate(
             credentialModel.pendingInfo!.requestedAt,

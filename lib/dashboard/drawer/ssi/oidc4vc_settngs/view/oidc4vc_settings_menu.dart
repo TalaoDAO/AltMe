@@ -4,8 +4,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oidc4vc/oidc4vc.dart';
 
 class Oidc4vcSettingMenu extends StatelessWidget {
   const Oidc4vcSettingMenu({super.key});
@@ -51,28 +49,30 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           const ProofTypeWidget(),
           const ProofHeaderWidget(),
           const PushAuthorizationRequesWidget(),
+          const StatusListCachingWidget(),
           DrawerItem(
-            title: l10n.clientMetadata,
+            title: l10n.walletMetadataForIssuers,
             onTap: () {
-              final tokenEndpointAuthMethod = context
-                  .read<ProfileCubit>()
-                  .state
-                  .model
-                  .profileSetting
-                  .selfSovereignIdentityOptions
-                  .customOidc4vcProfile
-                  .clientAuthentication
-                  .value;
-              const authorizationEndPoint = Parameters.authorizeEndPoint;
               final value = const JsonEncoder.withIndent('  ').convert(
-                OIDC4VC().getWalletClientMetadata(
-                  authorizationEndPoint,
-                  tokenEndpointAuthMethod,
-                ),
+                ConstantsJson.walletMetadataForIssuers,
               );
               Navigator.of(context).push<void>(
                 JsonViewerPage.route(
-                  title: l10n.clientMetadata,
+                  title: l10n.walletMetadataForIssuers,
+                  data: value,
+                ),
+              );
+            },
+          ),
+          DrawerItem(
+            title: l10n.walletMetadataForVerifiers,
+            onTap: () {
+              final value = const JsonEncoder.withIndent('  ').convert(
+                ConstantsJson.walletMetadataForVerifiers,
+              );
+              Navigator.of(context).push<void>(
+                JsonViewerPage.route(
+                  title: l10n.walletMetadataForVerifiers,
                   data: value,
                 ),
               );

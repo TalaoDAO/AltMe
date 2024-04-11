@@ -65,6 +65,7 @@ class DummyCredentialImage extends StatelessWidget {
           format: 'ldp_vc',
         ),
         showBgDecoration: false,
+        isDiscover: true,
       );
     } else {
       if (image!.startsWith('assets')) {
@@ -133,6 +134,7 @@ class DummyCredentialImage extends StatelessWidget {
             format: 'ldp_vc',
           ),
           showBgDecoration: false,
+          isDiscover: true,
         );
       }
     }

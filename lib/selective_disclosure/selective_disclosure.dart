@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+export 'model/model.dart';
 
 class SelectiveDisclosure {
   SelectiveDisclosure(this.credentialModel);
@@ -49,48 +51,70 @@ class SelectiveDisclosure {
 
   Map<String, dynamic> get extractedValuesFromJwt {
     final extractedValues = <String, dynamic>{};
-    for (final element in decryptedDatas) {
+    for (final element in disclosureToContent.entries.toList()) {
       try {
-        final lisString = jsonDecode(element);
+        final lisString = jsonDecode(element.value.toString());
         if (lisString is List) {
           if (lisString.length == 3) {
+            /// '["Qg_O64zqAxe412a108iroA", "phone_number", "+81-80-1234-5678"]'
             extractedValues[lisString[1].toString()] = lisString[2];
+          } else if (lisString.length == 2) {
+            /// '["Qg_O64zqAxe412a108iroA", "DE']
+
+            extractedValues[lisString[0].toString()] = lisString[1];
+          } else {
+            throw Exception();
           }
         }
       } catch (e) {
-        //
+        throw Exception();
       }
     }
     return extractedValues;
   }
 
-  List<String> get decryptedDatas {
+  List<String> get disclosureFromJWT {
     final encryptedValues = credentialModel.jwt
         ?.split('~')
         .where((element) => element.isNotEmpty)
         .toList();
 
-    final decryptedDatas = <String>[];
     if (encryptedValues != null) {
       encryptedValues.removeAt(0);
 
-      for (var element in encryptedValues) {
-        try {
-          while (element.length % 4 != 0) {
-            element += '=';
-          }
+      return encryptedValues;
+    }
+    return [];
+  }
 
-          final decryptedData = utf8.decode(base64Decode(element));
+  Map<String, dynamic> get disclosureToContent {
+    final data = <String, dynamic>{};
 
-          if (decryptedData.isNotEmpty) {
-            decryptedDatas.add(decryptedData);
-          }
-        } catch (e) {
-          //
+    for (var element in disclosureFromJWT) {
+      try {
+        while (element.length % 4 != 0) {
+          element += '=';
         }
+
+        final decryptedData = utf8.decode(base64Decode(element));
+
+        if (decryptedData.isNotEmpty) {
+          data[element] = decryptedData;
+        }
+      } catch (e) {
+        //
       }
     }
-    return decryptedDatas;
+
+    return data;
+  }
+
+  List<String> get contents {
+    final contents = <String>[];
+    for (final element in disclosureToContent.entries.toList()) {
+      contents.add(element.value.toString());
+    }
+    return contents;
   }
 
   String? get getPicture {
@@ -112,20 +136,20 @@ class SelectiveDisclosure {
     if (valueType == null) return null;
 
     if (valueType == 'image/jpeg') {
-      final (data, _) = getClaimsData(key: 'picture');
-      return data;
+      final List<ClaimsData> claimsData = getClaimsData(key: 'picture');
+
+      if (claimsData.isEmpty) return null;
+      return claimsData[0].data;
     } else {
       return null;
     }
   }
 
-  /// claimsdata, isfromDisclosureOfJWT
-  (String?, bool) getClaimsData({
+  List<ClaimsData> getClaimsData({
     required String key,
   }) {
     dynamic data;
-    bool isfromDisclosureOfJWT = false;
-
+    final value = <ClaimsData>[];
     final JsonPath dataPath = JsonPath(
       // ignore: prefer_interpolation_to_compose_strings
       r'$..' + key,
@@ -134,12 +158,24 @@ class SelectiveDisclosure {
     try {
       final uncryptedDataPath = dataPath.read(extractedValuesFromJwt).first;
       data = uncryptedDataPath.value;
-      isfromDisclosureOfJWT = true;
+
+      value.add(
+        ClaimsData(
+          isfromDisclosureOfJWT: true,
+          data: data.toString(),
+        ),
+      );
     } catch (e) {
       try {
         final credentialModelPath = dataPath.read(credentialModel.data).first;
         data = credentialModelPath.value;
-        isfromDisclosureOfJWT = false;
+
+        value.add(
+          ClaimsData(
+            isfromDisclosureOfJWT: false,
+            data: data.toString(),
+          ),
+        );
       } catch (e) {
         data = null;
       }
@@ -147,15 +183,20 @@ class SelectiveDisclosure {
 
     try {
       if (data != null && data is List<dynamic>) {
-        final value = <dynamic>[];
+        value.clear();
         for (final ele in data) {
           if (ele is String) {
-            value.add(ele);
+            value.add(
+              ClaimsData(
+                isfromDisclosureOfJWT: false,
+                data: ele,
+              ),
+            );
           } else if (ele is Map) {
             final threeDotValue = ele['...'];
 
             if (threeDotValue != null) {
-              for (final element in decryptedDatas) {
+              for (final element in contents) {
                 final oidc4vc = OIDC4VC();
                 final sh256Hash = oidc4vc.sh256HashOfContent(element);
 
@@ -163,19 +204,26 @@ class SelectiveDisclosure {
                   if (element.startsWith('[') && element.endsWith(']')) {
                     final trimmedElement =
                         element.substring(1, element.length - 1).split(',');
-                    value.add(trimmedElement.last.replaceAll('"', ''));
+
+                    value.add(
+                      ClaimsData(
+                        isfromDisclosureOfJWT: true,
+                        data: trimmedElement.last.replaceAll('"', ''),
+                        threeDotValue: threeDotValue.toString(),
+                      ),
+                    );
                   }
                 }
               }
             }
           }
         }
-
-        data = value;
+        return value;
       }
-      // ignore: empty_catches
-    } catch (e) {}
+    } catch (e) {
+      return value;
+    }
 
-    return (data?.toString(), isfromDisclosureOfJWT);
+    return value;
   }
 }

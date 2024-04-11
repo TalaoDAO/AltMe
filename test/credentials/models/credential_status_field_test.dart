@@ -9,6 +9,9 @@ void main() {
         'type',
         'revocationListIndex',
         'revocationListCredential',
+        'statusListCredential',
+        'statusListIndex',
+        'statusPurpose',
       );
       expect(credentialStatusField.id, 'id');
       expect(credentialStatusField.type, 'type');

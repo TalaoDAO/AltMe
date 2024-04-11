@@ -723,14 +723,24 @@ class OIDC4VC {
     return tokenData;
   }
 
-  Future<Response<Map<String, dynamic>>> getDidDocument(String didKey) async {
+  Future<Response<Map<String, dynamic>>> getDidDocument({
+    required String didKey,
+    required bool fromStatusList,
+  }) async {
     try {
       if (isURL(didKey)) {
         OpenIdConfiguration openIdConfiguration;
 
+        var isAuthorizationServer = false;
+
+        if (fromStatusList) {
+          ///as this is not a VC issuer
+          isAuthorizationServer = true;
+        }
+
         openIdConfiguration = await getOpenIdConfig(
           baseUrl: didKey,
-          isAuthorizationServer: false,
+          isAuthorizationServer: isAuthorizationServer,
         );
 
         final authorizationServer = openIdConfiguration.authorizationServer;
@@ -1096,6 +1106,7 @@ class OIDC4VC {
     required String? issuerKid,
     required String jwt,
     required Map<String, dynamic>? publicJwk,
+    required bool fromStatusList,
   }) async {
     try {
       Map<String, dynamic>? publicKeyJwk;
@@ -1103,7 +1114,10 @@ class OIDC4VC {
       if (publicJwk != null) {
         publicKeyJwk = publicJwk;
       } else {
-        final didDocument = await getDidDocument(issuer);
+        final didDocument = await getDidDocument(
+          didKey: issuer,
+          fromStatusList: fromStatusList,
+        );
 
         publicKeyJwk = readPublicKeyJwk(
           issuer: issuer,
@@ -1119,6 +1133,7 @@ class OIDC4VC {
       }
 
       late final bool isVerified;
+
       if (kty == 'OKP') {
         isVerified = verifyTokenEdDSA(
           publicKey: publicKeyJwk,
@@ -1621,7 +1636,9 @@ class OIDC4VC {
     return hash;
   }
 
-  int getPositionOfBit(int index) => index % 8;
+  int getPositionOfZlibBit(int index) => index % 8;
+
+  int getPositionOfGZipBit(int index) => 7 - (index % 8);
 
   int getByte(int index) => index ~/ 8;
 
@@ -1642,6 +1659,16 @@ class OIDC4VC {
 
     final zlib = ZLibCodec();
     final decompressedBytes = zlib.decode(compressedBytes);
+
+    return decompressedBytes;
+  }
+
+  List<int> decodeAndGzibDecompress(String lst) {
+    final paddedBase64 = lst.padRight((lst.length + 3) & ~3, '=');
+    final compressedBytes = base64Url.decode(paddedBase64);
+
+    final gzib = GZipCodec();
+    final decompressedBytes = gzib.decode(compressedBytes);
 
     return decompressedBytes;
   }

@@ -44,7 +44,9 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SelectiveDisclosureCubit(),
+      create: (context) => SelectiveDisclosureCubit(
+        oidc4vc: OIDC4VC(),
+      ),
       child: SelectiveDisclosurePickView(
         uri: uri,
         credential: credential,
@@ -112,17 +114,19 @@ class SelectiveDisclosurePickView extends StatelessWidget {
                     credentialModel: credentialToBePresented,
                     credDisplayType: CredDisplayType.List,
                     profileSetting: profileSetting,
+                    isDiscover: false,
                   ),
                 const SizedBox(height: 20),
                 DisplaySelectiveDisclosure(
                   credentialModel: credentialToBePresented,
                   claims: null,
                   selectedClaimsKeyIds: state.selectedClaimsKeyIds,
-                  onPressed: (claimKey, claimKeyId) {
+                  onPressed: (claimKey, claimKeyId, threeDotValue) {
                     context.read<SelectiveDisclosureCubit>().toggle(claimKeyId);
                     context.read<SelectiveDisclosureCubit>().saveIndexOfSDJWT(
                           claimsKey: claimKey,
                           credentialModel: credentialToBePresented,
+                          threeDotValue: threeDotValue,
                         );
                   },
                   showVertically: true,

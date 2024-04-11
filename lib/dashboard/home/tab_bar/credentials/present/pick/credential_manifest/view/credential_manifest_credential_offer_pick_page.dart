@@ -175,6 +175,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                   credentialModel: credentialModel,
                                   selected: credentialManifestState.selected
                                       .contains(index),
+                                  isDiscover: false,
                                   onTap: () {
                                     context
                                         .read<CredentialManifestPickCubit>()

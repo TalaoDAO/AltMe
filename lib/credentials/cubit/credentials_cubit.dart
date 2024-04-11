@@ -5,7 +5,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
-import 'package:altme/wallet/model/model.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
@@ -35,6 +35,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required this.jwtDecode,
     required this.profileCubit,
     required this.oidc4vc,
+    required this.walletCubit,
   }) : super(const CredentialsState());
 
   final CredentialsRepository credentialsRepository;
@@ -46,6 +47,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   final JWTDecode jwtDecode;
   final ProfileCubit profileCubit;
   final OIDC4VC oidc4vc;
+  final WalletCubit walletCubit;
 
   final log = getLogger('CredentialsCubit');
 
@@ -445,11 +447,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         } else {
           /// other cards
           if (credentialSubjectModel.credentialSubjectType.supportSingleOnly) {
-            await deleteById(
-              id: storedCredential.id,
-              showMessage: false,
-              blockchainType: blockchainType,
-            );
+            if (!credentialSubjectModel
+                .credentialSubjectType.isBlockchainAccount) {
+              await deleteById(
+                id: storedCredential.id,
+                showMessage: false,
+                blockchainType: blockchainType,
+              );
+            }
+
             break;
           } else {
             // don not remove if support multiple
@@ -751,19 +757,24 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               allSubjectTypeForCategory.add(CredentialSubjectType.gender);
             }
           case CredentialCategory.advantagesCards:
-            if (discoverCardsOptions.displayChainborn &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.chainbornMembership)) {
-              allSubjectTypeForCategory.add(
-                CredentialSubjectType.chainbornMembership,
-              );
+            if (Parameters.showChainbornCard) {
+              if (discoverCardsOptions.displayChainborn &&
+                  !allSubjectTypeForCategory
+                      .contains(CredentialSubjectType.chainbornMembership)) {
+                allSubjectTypeForCategory.add(
+                  CredentialSubjectType.chainbornMembership,
+                );
+              }
             }
-            if (discoverCardsOptions.displayTezotopia &&
-                !allSubjectTypeForCategory
-                    .contains(CredentialSubjectType.tezotopiaMembership)) {
-              allSubjectTypeForCategory.add(
-                CredentialSubjectType.tezotopiaMembership,
-              );
+
+            if (Parameters.showTezotopiaCard) {
+              if (discoverCardsOptions.displayTezotopia &&
+                  !allSubjectTypeForCategory
+                      .contains(CredentialSubjectType.tezotopiaMembership)) {
+                allSubjectTypeForCategory.add(
+                  CredentialSubjectType.tezotopiaMembership,
+                );
+              }
             }
 
           case CredentialCategory.professionalCards:
@@ -842,17 +853,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           continue;
         }
 
-        final Map<BlockchainType, CredentialSubjectType>
-            blockchainToSubjectType = {
-          BlockchainType.tezos: CredentialSubjectType.tezosAssociatedWallet,
-          BlockchainType.fantom: CredentialSubjectType.fantomAssociatedWallet,
-          BlockchainType.binance: CredentialSubjectType.binanceAssociatedWallet,
-          BlockchainType.ethereum:
-              CredentialSubjectType.ethereumAssociatedWallet,
-          BlockchainType.polygon: CredentialSubjectType.polygonAssociatedWallet,
-        };
-        final isCurrentBlockchainAccount =
-            blockchainToSubjectType[blockchainType] == subjectType;
         final isBlockchainAccount = subjectType.isBlockchainAccount;
 
         final supportAssociatedCredential =
@@ -864,6 +864,19 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           continue;
         }
 
+        final Map<BlockchainType, CredentialSubjectType>
+            blockchainToSubjectType = {
+          BlockchainType.tezos: CredentialSubjectType.tezosAssociatedWallet,
+          BlockchainType.fantom: CredentialSubjectType.fantomAssociatedWallet,
+          BlockchainType.binance: CredentialSubjectType.binanceAssociatedWallet,
+          BlockchainType.ethereum:
+              CredentialSubjectType.ethereumAssociatedWallet,
+          BlockchainType.polygon: CredentialSubjectType.polygonAssociatedWallet,
+        };
+
+        final isCurrentBlockchainAccount =
+            blockchainToSubjectType[blockchainType] == subjectType;
+
         final credentialsOfSameType = credentials
             .where(
               (element) =>
@@ -874,10 +887,51 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             .toList();
 
         if (credentialsOfSameType.isNotEmpty && subjectType.supportSingleOnly) {
+          final availableWalletAddresses = <String>[];
+
+          if (isBlockchainAccount && supportAssociatedCredential) {
+            /// getting list of available wallet address of current
+            /// blockchain account
+            for (final credential in credentialsOfSameType) {
+              final String? walletAddress = getWalletAddress(
+                credential.credentialPreview.credentialSubjectModel,
+              );
+
+              if (walletAddress != null) {
+                availableWalletAddresses.add(walletAddress);
+              }
+            }
+          }
+
           /// credential available case
           for (final credential in credentialsOfSameType) {
             if (isBlockchainAccount && supportAssociatedCredential) {
-              /// do not add if it is blockchain
+              /// there can be multiple blockchain profiles
+              ///
+              /// each profiles should be allowed to add the respective cards
+              ///
+              /// so we have to check the current profile wallet address and
+              /// compare with existing blockchain card to add in discover or
+              /// not
+
+              final String? currentWalletAddress =
+                  walletCubit.state.currentAccount?.walletAddress;
+
+              /// if current blockchain card is not available in list of
+              /// credentails then add in the discover list
+              /// else do not add if it is blockchain
+
+              final isBlockChainCardAvailable = availableWalletAddresses
+                  .contains(currentWalletAddress.toString());
+
+              if (!isBlockChainCardAvailable && isCurrentBlockchainAccount) {
+                /// if already added do not add
+                if (!requiredDummySubjects.contains(subjectType)) {
+                  requiredDummySubjects.add(subjectType);
+                }
+              }
+
+              //get current wallet address
             } else {
               if (vcFormatType.value == credential.getFormat) {
                 /// do not add if format matched
@@ -928,10 +982,10 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
         (e) => DiscoverDummyCredential(
           credentialSubjectType: CredentialSubjectType.defaultCredential,
           link: e.redirect,
-          image: e.background_image,
+          image: e.background_url,
           display: Display(
             backgroundColor: e.background_color,
-            backgroundImage: DisplayDetails(url: e.background_image),
+            backgroundImage: DisplayDetails(url: e.background_url),
             name: e.title,
             textColor: e.text_color,
             logo: DisplayDetails(url: e.logo),

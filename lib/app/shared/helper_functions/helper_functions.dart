@@ -1800,12 +1800,9 @@ List<dynamic> collectSdValues(Map<String, dynamic> data) {
 
 Future<Map<String, dynamic>?> checkX509({
   required String encodedData,
+  required Map<String, dynamic> header,
   required String clientId,
-  required JWTDecode jwtDecode,
 }) async {
-  final Map<String, dynamic> header =
-      decodeHeader(jwtDecode: jwtDecode, token: encodedData);
-
   final x5c = header['x5c'];
 
   if (x5c != null) {
@@ -1880,4 +1877,97 @@ Future<Map<String, dynamic>?> checkX509({
     }
   }
   return null;
+}
+
+Future<Map<String, dynamic>?> checkVerifierAttestation({
+  required String clientId,
+  required Map<String, dynamic> header,
+  required JWTDecode jwtDecode,
+}) async {
+  final jwt = header['jwt'];
+
+  if (jwt == null) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_format',
+        'error_description': 'verifier_attestation scheme error',
+      },
+    );
+  }
+
+  final payload = jwtDecode.parseJwt(jwt.toString());
+
+  final sub = payload['sub'];
+  final cnf = payload['cnf'];
+
+  if (sub == null ||
+      sub != clientId ||
+      cnf == null ||
+      cnf is! Map<String, dynamic> ||
+      !cnf.containsKey('jwk') ||
+      cnf['jwk'] is! Map<String, dynamic>) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_format',
+        'error_description': 'verifier_attestation scheme error',
+      },
+    );
+  }
+
+  return cnf['jwk'] as Map<String, dynamic>;
+}
+
+String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
+  if (credentialSubjectModel is TezosAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is EthereumAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is PolygonAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is BinanceAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is FantomAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  }
+  return null;
+}
+
+Future<String> getCatchedGetData({
+  required SecureStorageProvider secureStorageProvider,
+  required String url,
+  required Map<String, dynamic> headers,
+  required DioClient client,
+  required bool isCachingEnabled,
+}) async {
+  final cachedData = await secureStorageProvider.get(url);
+
+  dynamic response;
+
+  if (!isCachingEnabled) {
+    response = await client.get(url, headers: headers);
+  } else if (cachedData == null) {
+    response = await client.get(url, headers: headers);
+  } else {
+    final cachedDataJson = jsonDecode(cachedData);
+    final expiry = int.parse(cachedDataJson['expiry'].toString());
+
+    final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
+
+    if (isExpired) {
+      response = await client.get(url, headers: headers);
+    } else {
+      /// directly return cached data
+      /// returned here to avoid the caching override everytime
+      final response = await cachedDataJson['data'];
+      return response.toString();
+    }
+  }
+
+  final expiry =
+      DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
+
+  final value = {'expiry': expiry, 'data': response};
+  await secureStorageProvider.set(url, jsonEncode(value));
+
+  return response.toString();
 }

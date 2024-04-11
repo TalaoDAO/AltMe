@@ -1,9 +1,9 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 part 'crypto_bottom_sheet_cubit.g.dart';
 
@@ -11,14 +11,14 @@ part 'crypto_bottom_sheet_state.dart';
 
 class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
   CryptoBottomSheetCubit({
-    required this.secureStorageProvider,
-    required this.walletCubit,
+    required this.credentialsCubit,
   }) : super(const CryptoBottomSheetState()) {
     initialise();
   }
 
-  final SecureStorageProvider secureStorageProvider;
-  final WalletCubit walletCubit;
+  final CredentialsCubit credentialsCubit;
+
+  WalletCubit get walletCubit => credentialsCubit.walletCubit;
 
   Future<void> initialise() async {
     emit(state.loading());
@@ -33,7 +33,7 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
   Future<void> setCurrentWalletAccount(int index) async {
     emit(state.loading());
     await walletCubit.setCurrentWalletAccount(index);
-    await walletCubit.credentialsCubit.loadAllCredentials(
+    await credentialsCubit.loadAllCredentials(
       blockchainType:
           walletCubit.state.cryptoAccount.data[index].blockchainType,
     );
@@ -50,6 +50,7 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
       newAccountName: newAccountName,
       blockchainType: blockchainType,
       index: index,
+      credentialsCubit: credentialsCubit,
       onComplete: (cryptoAccount) {
         emit(state.success(cryptoAccount: cryptoAccount));
       },

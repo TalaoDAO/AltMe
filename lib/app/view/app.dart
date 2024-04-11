@@ -108,6 +108,15 @@ class App extends StatelessWidget {
         BlocProvider<OnboardingCubit>(
           create: (context) => OnboardingCubit(),
         ),
+        BlocProvider<WalletCubit>(
+          lazy: false,
+          create: (context) => WalletCubit(
+            secureStorageProvider: secureStorageProvider,
+            homeCubit: context.read<HomeCubit>(),
+            keyGenerator: KeyGenerator(),
+            walletConnectCubit: context.read<WalletConnectCubit>(),
+          ),
+        ),
         BlocProvider<CredentialsCubit>(
           lazy: false,
           create: (context) => CredentialsCubit(
@@ -119,16 +128,7 @@ class App extends StatelessWidget {
             advanceSettingsCubit: context.read<AdvanceSettingsCubit>(),
             jwtDecode: JWTDecode(),
             profileCubit: context.read<ProfileCubit>(),
-          ),
-        ),
-        BlocProvider<WalletCubit>(
-          lazy: false,
-          create: (context) => WalletCubit(
-            secureStorageProvider: secureStorageProvider,
-            homeCubit: context.read<HomeCubit>(),
-            keyGenerator: KeyGenerator(),
-            credentialsCubit: context.read<CredentialsCubit>(),
-            walletConnectCubit: context.read<WalletConnectCubit>(),
+            walletCubit: context.read<WalletCubit>(),
           ),
         ),
         BlocProvider<ManageNetworkCubit>(
@@ -150,9 +150,8 @@ class App extends StatelessWidget {
         BlocProvider<EnterpriseCubit>(
           create: (context) => EnterpriseCubit(
             client: DioClient('', Dio()),
-            jwtDecode: JWTDecode(),
             profileCubit: context.read<ProfileCubit>(),
-            walletCubit: context.read<WalletCubit>(),
+            credentialsCubit: context.read<CredentialsCubit>(),
           ),
         ),
         BlocProvider<ScanCubit>(

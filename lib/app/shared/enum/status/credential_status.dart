@@ -3,6 +3,7 @@ enum CredentialStatus {
   active,
   expired,
   invalidSignature,
+  statusListInvalidSignature,
   invalidStatus,
   unknown,
   noStatus,

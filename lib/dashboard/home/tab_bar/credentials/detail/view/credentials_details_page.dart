@@ -215,6 +215,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             credentialModel: widget.credentialModel,
                             credDisplayType: CredDisplayType.Detail,
                             profileSetting: profileSetting,
+                            isDiscover: false,
                           ),
                         const SizedBox(height: 20),
                         Column(
@@ -302,7 +303,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           /// credential manifest details
                           if (credentialManifestSupport &&
                               outputDescriptors != null) ...[
-                            const SizedBox(height: 10),
                             CredentialManifestDetails(
                               outputDescriptor: outputDescriptors.firstOrNull,
                               credentialModel: widget.credentialModel,

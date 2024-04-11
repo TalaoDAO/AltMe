@@ -36,6 +36,7 @@ class CredentialsListPageItem extends StatelessWidget {
     super.key,
     required this.credentialModel,
     required this.onTap,
+    required this.isDiscover,
     this.selected,
     this.badgeCount = 0,
   });
@@ -44,6 +45,7 @@ class CredentialsListPageItem extends StatelessWidget {
   final VoidCallback onTap;
   final bool? selected;
   final int badgeCount;
+  final bool isDiscover;
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +62,14 @@ class CredentialsListPageItem extends StatelessWidget {
               credentialModel: credentialModel,
               onTap: onTap,
               selected: selected,
+              isDiscover: isDiscover,
             ),
           )
         : CredentialsDisplayItem(
             credentialModel: credentialModel,
             onTap: onTap,
             selected: selected,
+            isDiscover: isDiscover,
           );
   }
 }
@@ -75,12 +79,14 @@ class CredentialsDisplayItem extends StatelessWidget {
     super.key,
     required this.credentialModel,
     required this.onTap,
+    required this.isDiscover,
     this.selected,
   });
 
   final CredentialModel credentialModel;
   final VoidCallback onTap;
   final bool? selected;
+  final bool isDiscover;
 
   @override
   Widget build(BuildContext context) {
@@ -94,10 +100,12 @@ class CredentialsDisplayItem extends StatelessWidget {
               credentialModel: credentialModel,
               credDisplayType: CredDisplayType.List,
               profileSetting: profileSetting,
+              isDiscover: isDiscover,
             )
           : DisplaySelectionElement(
               credentialModel: credentialModel,
               selected: selected,
+              isDiscover: isDiscover,
             ),
     );
   }
@@ -107,11 +115,13 @@ class DisplaySelectionElement extends StatelessWidget {
   const DisplaySelectionElement({
     super.key,
     required this.credentialModel,
+    required this.isDiscover,
     this.selected,
   });
 
   final CredentialModel credentialModel;
   final bool? selected;
+  final bool isDiscover;
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +134,7 @@ class DisplaySelectionElement extends StatelessWidget {
             credentialModel: credentialModel,
             credDisplayType: CredDisplayType.List,
             profileSetting: profileSetting,
+            isDiscover: isDiscover,
           ),
           Align(
             alignment: Alignment.centerRight,

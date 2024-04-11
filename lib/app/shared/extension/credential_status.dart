@@ -19,6 +19,8 @@ extension CredentialStatusExtension on CredentialStatus {
         return l10n.unknown;
       case CredentialStatus.invalidStatus:
         return l10n.statusIsInvalid;
+      case CredentialStatus.statusListInvalidSignature:
+        return l10n.statuslListSignatureFailed;
       case CredentialStatus.noStatus:
         return '';
     }
@@ -33,6 +35,7 @@ extension CredentialStatusExtension on CredentialStatus {
       case CredentialStatus.pending:
       case CredentialStatus.unknown:
       case CredentialStatus.invalidSignature:
+      case CredentialStatus.statusListInvalidSignature:
       case CredentialStatus.noStatus:
         return Icons.circle_outlined;
     }
@@ -47,6 +50,7 @@ extension CredentialStatusExtension on CredentialStatus {
       case CredentialStatus.pending:
       case CredentialStatus.unknown:
       case CredentialStatus.invalidSignature:
+      case CredentialStatus.statusListInvalidSignature:
       case CredentialStatus.noStatus:
         return Theme.of(context).colorScheme.inactiveColor;
     }

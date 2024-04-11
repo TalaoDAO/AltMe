@@ -230,6 +230,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                         credentialModel:
                             queryState.filteredCredentialList[index],
                         selected: queryState.selected == index,
+                        isDiscover: false,
                         onTap: () => context
                             .read<QueryByExampleCredentialPickCubit>()
                             .toggle(index),

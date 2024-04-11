@@ -30,6 +30,7 @@ class HomeCredentialItem extends StatelessWidget {
             return CredentialsListPageItem(
               credentialModel: credentialModel,
               badgeCount: snapShot.data ?? 0,
+              isDiscover: false,
               onTap: () {
                 Navigator.of(context).push<void>(
                   CredentialsDetailsPage.route(
@@ -45,6 +46,7 @@ class HomeCredentialItem extends StatelessWidget {
     } else {
       return CredentialsListPageItem(
         credentialModel: credentialModel,
+        isDiscover: false,
         onTap: () {
           Navigator.of(context).push<void>(
             CredentialsDetailsPage.route(credentialModel: credentialModel),

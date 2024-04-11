@@ -448,8 +448,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       return const PolygonAssociatedAddressWidget();
     } else if (this == CredentialSubjectType.binanceAssociatedWallet) {
       return const BinanceAssociatedAddressWidget();
-    } else if (this == CredentialSubjectType.tezosAssociatedWallet) {
-      return const TezosAssociatedAddressWidget();
     } else if (this == CredentialSubjectType.fantomAssociatedWallet) {
       return const FantomAssociatedAddressWidget();
     }
