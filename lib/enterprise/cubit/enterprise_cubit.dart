@@ -307,13 +307,9 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
             'accept': 'application/statuslist+jwt',
           };
 
-          final customOidc4vcProfile = profileCubit.state.model.profileSetting
-              .selfSovereignIdentityOptions.customOidc4vcProfile;
-
           final response = await client.get(
             uri,
             headers: headers,
-            isCachingEnabled: customOidc4vcProfile.statusListCache,
           );
 
           final payload = profileCubit.jwtDecode.parseJwt(response.toString());
@@ -367,22 +363,66 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     return jwtVc;
   }
 
-  Future<void> getWalletAttestationStatus() async {
+  Future<void> getWalletAttestationBitStatus() async {
     try {
-      final provider = await profileCubit.secureStorageProvider.get(
-        SecureStorageKeys.enterpriseWalletProvider,
+      final walletAttestationData =
+          await profileCubit.secureStorageProvider.get(
+        SecureStorageKeys.walletAttestationData,
       );
 
-      if (provider == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'The wallet is not configured yet.',
-          },
-        );
-      }
+      final jwtVc = walletAttestationData.toString();
 
-      await getWalletAttestationData(provider);
+      final payload = profileCubit.jwtDecode.parseJwt(jwtVc);
+      final status = payload['status'];
+
+      if (status != null && status is Map<String, dynamic>) {
+        final statusList = status['status_list'];
+        if (statusList != null && statusList is Map<String, dynamic>) {
+          final uri = statusList['uri'];
+          final idx = statusList['idx'];
+
+          if (idx != null && idx is int && uri != null && uri is String) {
+            final headers = {
+              'Content-Type': 'application/json; charset=UTF-8',
+              'accept': 'application/statuslist+jwt',
+            };
+
+            final response = await client.get(
+              uri,
+              headers: headers,
+            );
+
+            final payload =
+                profileCubit.jwtDecode.parseJwt(response.toString());
+
+            final newStatusList = payload['status_list'];
+            if (newStatusList != null &&
+                newStatusList is Map<String, dynamic>) {
+              final lst = newStatusList['lst'].toString();
+
+              final bytes = profileCubit.oidc4vc.getByte(idx);
+
+              // '$idx = $bytes X 8 + $posOfBit'
+              final decompressedBytes =
+                  profileCubit.oidc4vc.decodeAndZlibDecompress(lst);
+              final byteToCheck = decompressedBytes[bytes];
+
+              final posOfBit = profileCubit.oidc4vc.getPositionOfZlibBit(idx);
+              final bit = profileCubit.oidc4vc
+                  .getBit(byte: byteToCheck, bitPosition: posOfBit);
+
+              if (bit == 0) {
+                // active
+              } else {
+                // revoked
+                throw ResponseMessage(
+                  message: ResponseString.RESPONSE_STRING_theWalletIsSuspended,
+                );
+              }
+            }
+          }
+        }
+      }
     } catch (e) {
       emitError(e);
     }
