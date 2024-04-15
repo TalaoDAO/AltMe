@@ -91,14 +91,18 @@ class App extends StatelessWidget {
           create: (context) => KycVerificationCubit(
             profileCubit: context.read<ProfileCubit>(),
             client: DioClient(
-              '',
-              Dio(),
+              secureStorageProvider: secureStorageProvider,
+              dio: Dio(),
             ),
           ),
         ),
         BlocProvider<HomeCubit>(
           create: (context) => HomeCubit(
-            client: DioClient(Urls.issuerBaseUrl, Dio()),
+            client: DioClient(
+              baseUrl: Urls.issuerBaseUrl,
+              secureStorageProvider: secureStorageProvider,
+              dio: Dio(),
+            ),
             secureStorageProvider: secureStorageProvider,
             oidc4vc: OIDC4VC(),
             didKitProvider: DIDKitProvider(),
@@ -139,7 +143,10 @@ class App extends StatelessWidget {
         ),
         BlocProvider<PolygonIdCubit>(
           create: (context) => PolygonIdCubit(
-            client: DioClient('', Dio()),
+            client: DioClient(
+              secureStorageProvider: secureStorageProvider,
+              dio: Dio(),
+            ),
             secureStorageProvider: secureStorageProvider,
             polygonId: PolygonId(),
             credentialsCubit: context.read<CredentialsCubit>(),
@@ -149,14 +156,21 @@ class App extends StatelessWidget {
         ),
         BlocProvider<EnterpriseCubit>(
           create: (context) => EnterpriseCubit(
-            client: DioClient('', Dio()),
+            client: DioClient(
+              secureStorageProvider: secureStorageProvider,
+              dio: Dio(),
+            ),
             profileCubit: context.read<ProfileCubit>(),
             credentialsCubit: context.read<CredentialsCubit>(),
           ),
         ),
         BlocProvider<ScanCubit>(
           create: (context) => ScanCubit(
-            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
+            client: DioClient(
+              baseUrl: Urls.checkIssuerTalaoUrl,
+              secureStorageProvider: secureStorageProvider,
+              dio: Dio(),
+            ),
             credentialsCubit: context.read<CredentialsCubit>(),
             didKitProvider: DIDKitProvider(),
             secureStorageProvider: secureStorageProvider,
@@ -168,8 +182,15 @@ class App extends StatelessWidget {
         ),
         BlocProvider<QRCodeScanCubit>(
           create: (context) => QRCodeScanCubit(
-            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            requestClient: DioClient('', Dio()),
+            client: DioClient(
+              baseUrl: Urls.checkIssuerTalaoUrl,
+              secureStorageProvider: secureStorageProvider,
+              dio: Dio(),
+            ),
+            requestClient: DioClient(
+              secureStorageProvider: secureStorageProvider,
+              dio: Dio(),
+            ),
             scanCubit: context.read<ScanCubit>(),
             queryByExampleCubit: context.read<QueryByExampleCubit>(),
             deepLinkCubit: context.read<DeepLinkCubit>(),
@@ -190,8 +211,9 @@ class App extends StatelessWidget {
           create: (context) => AllTokensCubit(
             secureStorageProvider: secureStorageProvider,
             client: DioClient(
-              Urls.coinGeckoBase,
-              Dio(),
+              baseUrl: Urls.coinGeckoBase,
+              secureStorageProvider: secureStorageProvider,
+              dio: Dio(),
             ),
           ),
         ),
@@ -206,8 +228,9 @@ class App extends StatelessWidget {
                 context.read<MnemonicNeedVerificationCubit>(),
             secureStorageProvider: secureStorageProvider,
             client: DioClient(
-              context.read<ManageNetworkCubit>().state.network.apiUrl,
-              Dio(),
+              baseUrl: context.read<ManageNetworkCubit>().state.network.apiUrl,
+              secureStorageProvider: secureStorageProvider,
+              dio: Dio(),
             ),
             walletCubit: context.read<WalletCubit>(),
           ),
@@ -215,8 +238,9 @@ class App extends StatelessWidget {
         BlocProvider<NftCubit>(
           create: (context) => NftCubit(
             client: DioClient(
-              context.read<ManageNetworkCubit>().state.network.apiUrl,
-              Dio(),
+              baseUrl: context.read<ManageNetworkCubit>().state.network.apiUrl,
+              secureStorageProvider: secureStorageProvider,
+              dio: Dio(),
             ),
             walletCubit: context.read<WalletCubit>(),
             manageNetworkCubit: context.read<ManageNetworkCubit>(),
@@ -236,7 +260,11 @@ class App extends StatelessWidget {
             homeCubit: context.read<HomeCubit>(),
             walletCubit: context.read<WalletCubit>(),
             credentialsCubit: context.read<CredentialsCubit>(),
-            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
+            client: DioClient(
+              baseUrl: Urls.checkIssuerTalaoUrl,
+              secureStorageProvider: secureStorageProvider,
+              dio: Dio(),
+            ),
             altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
             profileCubit: context.read<ProfileCubit>(),
           ),

@@ -123,22 +123,21 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 'accept': 'application/statuslist+jwt',
               };
 
-              final String response = await getCatchedGetData(
-                secureStorageProvider: secureStorageProvider,
-                url: uri,
+              final response = await client.get(
+                uri,
                 headers: headers,
-                client: client,
                 isCachingEnabled: customOidc4vcProfile.statusListCache,
               );
 
-              final payload = jwtDecode.parseJwt(response);
+              final payload = jwtDecode.parseJwt(response.toString());
 
               /// verify the signature of the VC with the kid of the JWT
               final VerificationType isVerified = await verifyEncodedData(
                 issuer: payload['iss']?.toString() ?? item.issuer,
                 jwtDecode: jwtDecode,
-                jwt: response,
+                jwt: response.toString(),
                 fromStatusList: true,
+                isCachingEnabled: customOidc4vcProfile.statusListCache,
               );
 
               if (isVerified != VerificationType.verified) {
@@ -202,22 +201,21 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   'accept': 'application/statuslist+jwt',
                 };
 
-                final String response = await getCatchedGetData(
-                  secureStorageProvider: secureStorageProvider,
-                  url: url,
+                final response = await client.get(
+                  url,
                   headers: headers,
-                  client: client,
                   isCachingEnabled: customOidc4vcProfile.statusListCache,
                 );
 
-                final payload = jwtDecode.parseJwt(response);
+                final payload = jwtDecode.parseJwt(response.toString());
 
                 // verify the signature of the VC with the kid of the JWT
                 final VerificationType isVerified = await verifyEncodedData(
                   issuer: payload['iss']?.toString() ?? item.issuer,
                   jwtDecode: jwtDecode,
-                  jwt: response,
+                  jwt: response.toString(),
                   fromStatusList: true,
+                  isCachingEnabled: customOidc4vcProfile.statusListCache,
                 );
 
                 if (isVerified != VerificationType.verified) {

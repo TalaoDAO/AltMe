@@ -8,6 +8,7 @@ Future<VerificationType> verifyEncodedData({
   required String jwt,
   Map<String, dynamic>? publicKeyJwk,
   bool fromStatusList = false,
+  bool isCachingEnabled = false,
 }) async {
   final OIDC4VC oidc4vc = OIDC4VC();
 
@@ -32,6 +33,7 @@ Future<VerificationType> verifyEncodedData({
     issuerKid: issuerKid,
     publicJwk: publicKeyJwk,
     fromStatusList: fromStatusList,
+    isCachingEnabled: isCachingEnabled,
   );
   return verificationType;
 }

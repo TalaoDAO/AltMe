@@ -310,21 +310,19 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
           final customOidc4vcProfile = profileCubit.state.model.profileSetting
               .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-          final String response = await getCatchedGetData(
-            secureStorageProvider: profileCubit.secureStorageProvider,
-            url: uri,
+          final response = await client.get(
+            uri,
             headers: headers,
-            client: client,
             isCachingEnabled: customOidc4vcProfile.statusListCache,
           );
 
-          final payload = profileCubit.jwtDecode.parseJwt(response);
+          final payload = profileCubit.jwtDecode.parseJwt(response.toString());
 
           /// verify the signature of the VC with the kid of the JWT
           final VerificationType isVerified = await verifyEncodedData(
             issuer: payload['iss'].toString(),
             jwtDecode: profileCubit.jwtDecode,
-            jwt: response,
+            jwt: response.toString(),
             fromStatusList: true,
           );
 

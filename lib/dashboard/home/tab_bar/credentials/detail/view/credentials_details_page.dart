@@ -55,7 +55,10 @@ class CredentialsDetailsPage extends StatelessWidget {
           create: (context) => CredentialDetailsCubit(
             didKitProvider: DIDKitProvider(),
             secureStorageProvider: getSecureStorage,
-            client: DioClient('', Dio()),
+            client: DioClient(
+              secureStorageProvider: getSecureStorage,
+              dio: Dio(),
+            ),
             jwtDecode: JWTDecode(),
             profileCubit: context.read<ProfileCubit>(),
             polygonIdCubit: context.read<PolygonIdCubit>(),

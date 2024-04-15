@@ -23,6 +23,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:polygonid/polygonid.dart';
+import 'package:secure_storage/secure_storage.dart';
 import 'package:share_plus/share_plus.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
@@ -194,7 +195,8 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
       final log = getLogger('qrCodeBlocListener');
 
       final l10n = context.l10n;
-      final client = DioClient('', Dio());
+      final client =
+          DioClient(secureStorageProvider: getSecureStorage, dio: Dio());
 
       if (state.status == QrScanStatus.loading) {
         LoadingView().show(context: context);

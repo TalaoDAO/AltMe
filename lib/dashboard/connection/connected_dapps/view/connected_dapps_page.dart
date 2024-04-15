@@ -7,7 +7,7 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart' as secure_storage;
+import 'package:secure_storage/secure_storage.dart';
 
 class ConnectedDappsPage extends StatelessWidget {
   const ConnectedDappsPage({
@@ -31,11 +31,11 @@ class ConnectedDappsPage extends StatelessWidget {
         beacon: Beacon(),
         networkCubit: context.read<ManageNetworkCubit>(),
         client: DioClient(
-          context.read<ManageNetworkCubit>().state.network.apiUrl,
-          Dio(),
+          secureStorageProvider: getSecureStorage,
+          dio: Dio(),
         ),
         connectedDappRepository: ConnectedDappRepository(
-          secure_storage.getSecureStorage,
+          getSecureStorage,
         ),
       ),
       child: ConnectedDappsView(walletAddress: walletAddress),
