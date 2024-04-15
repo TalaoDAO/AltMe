@@ -46,6 +46,9 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       final customOidc4vcProfile = profileCubit.state.model.profileSetting
           .selfSovereignIdentityOptions.customOidc4vcProfile;
 
+      String? statusListUri;
+      int? statusListIndex;
+
       if (!customOidc4vcProfile.securityLevel) {
         emit(
           state.copyWith(
@@ -62,6 +65,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           state.copyWith(
             credentialStatus: CredentialStatus.active,
             status: AppStatus.idle,
+            statusListIndex: statusListIndex,
+            statusListUrl: statusListUri,
           ),
         );
         return;
@@ -75,6 +80,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             state.copyWith(
               credentialStatus: CredentialStatus.expired,
               status: AppStatus.idle,
+              statusListIndex: statusListIndex,
+              statusListUrl: statusListUri,
             ),
           );
           return;
@@ -102,6 +109,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
               state.copyWith(
                 credentialStatus: CredentialStatus.invalidSignature,
                 status: AppStatus.idle,
+                statusListIndex: statusListIndex,
+                statusListUrl: statusListUri,
               ),
             );
             return;
@@ -114,17 +123,19 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         if (status != null && status is Map<String, dynamic>) {
           final statusList = status['status_list'];
           if (statusList != null && statusList is Map<String, dynamic>) {
-            final uri = statusList['uri'];
-            final idx = statusList['idx'];
+            statusListUri = statusList['uri']?.toString();
 
-            if (idx != null && idx is int && uri != null && uri is String) {
+            final idx = statusList['idx'];
+            statusListIndex = idx is int ? idx : null;
+
+            if (statusListUri != null && statusListIndex is int) {
               final headers = {
                 'Content-Type': 'application/json; charset=UTF-8',
                 'accept': 'application/statuslist+jwt',
               };
 
               final response = await client.get(
-                uri,
+                statusListUri,
                 headers: headers,
                 isCachingEnabled: customOidc4vcProfile.statusListCache,
               );
@@ -146,6 +157,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                     credentialStatus:
                         CredentialStatus.statusListInvalidSignature,
                     status: AppStatus.idle,
+                    statusListIndex: statusListIndex,
+                    statusListUrl: statusListUri,
                   ),
                 );
                 return;
@@ -156,14 +169,15 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   newStatusList is Map<String, dynamic>) {
                 final lst = newStatusList['lst'].toString();
 
-                final bytes = profileCubit.oidc4vc.getByte(idx);
+                final bytes = profileCubit.oidc4vc.getByte(statusListIndex);
 
                 // '$idx = $bytes X 8 + $posOfBit'
                 final decompressedBytes =
                     profileCubit.oidc4vc.decodeAndZlibDecompress(lst);
                 final byteToCheck = decompressedBytes[bytes];
 
-                final posOfBit = profileCubit.oidc4vc.getPositionOfZlibBit(idx);
+                final posOfBit =
+                    profileCubit.oidc4vc.getPositionOfZlibBit(statusListIndex);
                 final bit = profileCubit.oidc4vc
                     .getBit(byte: byteToCheck, bitPosition: posOfBit);
 
@@ -175,6 +189,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                     state.copyWith(
                       credentialStatus: CredentialStatus.invalidStatus,
                       status: AppStatus.idle,
+                      statusListIndex: statusListIndex,
+                      statusListUrl: statusListUri,
                     ),
                   );
                   return;
@@ -185,81 +201,82 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         }
       }
 
-      if (item.format == VCFormatType.jwtVc.value ||
-          item.format == VCFormatType.jwtVcJson.value ||
-          item.format == VCFormatType.ldpVc.value) {
-        final credentialStatus = item.credentialPreview.credentialStatus;
-        if (credentialStatus != null) {
-          if (credentialStatus is List<dynamic>) {
-            for (final iteratedData in credentialStatus) {
-              if (iteratedData is Map<String, dynamic>) {
-                final data = CredentialStatusField.fromJson(iteratedData);
+      final credentialStatus = item.credentialPreview.credentialStatus;
+      if (credentialStatus != null) {
+        if (credentialStatus is List<dynamic>) {
+          for (final iteratedData in credentialStatus) {
+            if (iteratedData is Map<String, dynamic>) {
+              final data = CredentialStatusField.fromJson(iteratedData);
 
-                final url = data.statusListCredential;
-                final headers = {
-                  'Content-Type': 'application/json; charset=UTF-8',
-                  'accept': 'application/statuslist+jwt',
-                };
+              statusListUri = data.statusListCredential;
+              final headers = {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'accept': 'application/statuslist+jwt',
+              };
 
-                final response = await client.get(
-                  url,
-                  headers: headers,
-                  isCachingEnabled: customOidc4vcProfile.statusListCache,
+              final response = await client.get(
+                statusListUri,
+                headers: headers,
+                isCachingEnabled: customOidc4vcProfile.statusListCache,
+              );
+
+              final payload = jwtDecode.parseJwt(response.toString());
+
+              // verify the signature of the VC with the kid of the JWT
+              final VerificationType isVerified = await verifyEncodedData(
+                issuer: payload['iss']?.toString() ?? item.issuer,
+                jwtDecode: jwtDecode,
+                jwt: response.toString(),
+                fromStatusList: true,
+                isCachingEnabled: customOidc4vcProfile.statusListCache,
+              );
+
+              if (isVerified != VerificationType.verified) {
+                emit(
+                  state.copyWith(
+                    credentialStatus:
+                        CredentialStatus.statusListInvalidSignature,
+                    status: AppStatus.idle,
+                    statusListIndex: statusListIndex,
+                    statusListUrl: statusListUri,
+                  ),
                 );
+                return;
+              }
 
-                final payload = jwtDecode.parseJwt(response.toString());
+              final vc = payload['vc'];
+              if (vc != null && vc is Map<String, dynamic>) {
+                final credentialSubject = vc['credentialSubject'];
+                if (credentialSubject != null &&
+                    credentialSubject is Map<String, dynamic>) {
+                  final encodedList = credentialSubject['encodedList'];
 
-                // verify the signature of the VC with the kid of the JWT
-                final VerificationType isVerified = await verifyEncodedData(
-                  issuer: payload['iss']?.toString() ?? item.issuer,
-                  jwtDecode: jwtDecode,
-                  jwt: response.toString(),
-                  fromStatusList: true,
-                  isCachingEnabled: customOidc4vcProfile.statusListCache,
-                );
+                  if (encodedList != null && encodedList is String) {
+                    final decompressedBytes = profileCubit.oidc4vc
+                        .decodeAndGzibDecompress(encodedList);
 
-                if (isVerified != VerificationType.verified) {
-                  emit(
-                    state.copyWith(
-                      credentialStatus:
-                          CredentialStatus.statusListInvalidSignature,
-                      status: AppStatus.idle,
-                    ),
-                  );
-                  return;
-                }
+                    statusListIndex = int.parse(data.statusListIndex);
 
-                final vc = payload['vc'];
-                if (vc != null && vc is Map<String, dynamic>) {
-                  final credentialSubject = vc['credentialSubject'];
-                  if (credentialSubject != null &&
-                      credentialSubject is Map<String, dynamic>) {
-                    final encodedList = credentialSubject['encodedList'];
+                    final bytes = profileCubit.oidc4vc.getByte(statusListIndex);
+                    final byteToCheck = decompressedBytes[bytes];
+                    final posOfBit = profileCubit.oidc4vc
+                        .getPositionOfGZipBit(statusListIndex);
+                    final bit = profileCubit.oidc4vc
+                        .getBit(byte: byteToCheck, bitPosition: posOfBit);
 
-                    if (encodedList != null && encodedList is String) {
-                      final decompressedBytes = profileCubit.oidc4vc
-                          .decodeAndGzibDecompress(encodedList);
-
-                      final idx = int.parse(data.statusListIndex);
-                      final bytes = profileCubit.oidc4vc.getByte(idx);
-                      final byteToCheck = decompressedBytes[bytes];
-                      final posOfBit =
-                          profileCubit.oidc4vc.getPositionOfGZipBit(idx);
-                      final bit = profileCubit.oidc4vc
-                          .getBit(byte: byteToCheck, bitPosition: posOfBit);
-
-                      if (bit == 0) {
-                        // active
-                      } else {
-                        // revoked
-                        emit(
-                          state.copyWith(
-                            credentialStatus: CredentialStatus.invalidStatus,
-                            status: AppStatus.idle,
-                          ),
-                        );
-                        return;
-                      }
+                    if (bit == 0) {
+                      // active
+                    } else {
+                      // revoked
+                      emit(
+                        state.copyWith(
+                          credentialStatus: CredentialStatus.invalidStatus,
+                          status: AppStatus.idle,
+                          statusListIndex: statusListIndex,
+                          statusListUrl: statusListUri,
+                        ),
+                      );
+                      return;
                     }
                   }
                 }
@@ -298,6 +315,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             state.copyWith(
               credentialStatus: CredentialStatus.active,
               status: AppStatus.idle,
+              statusListIndex: statusListIndex,
+              statusListUrl: statusListUri,
             ),
           );
         } else {
@@ -305,6 +324,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             state.copyWith(
               credentialStatus: CredentialStatus.invalidSignature,
               status: AppStatus.idle,
+              statusListIndex: statusListIndex,
+              statusListUrl: statusListUri,
             ),
           );
         }
@@ -349,6 +370,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           state.copyWith(
             credentialStatus: credentialStatus,
             status: AppStatus.idle,
+            statusListIndex: statusListIndex,
+            statusListUrl: statusListUri,
           ),
         );
       } else {
@@ -362,6 +385,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
               state.copyWith(
                 credentialStatus: CredentialStatus.invalidStatus,
                 status: AppStatus.idle,
+                statusListIndex: statusListIndex,
+                statusListUrl: statusListUri,
               ),
             );
           }

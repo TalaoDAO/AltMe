@@ -362,6 +362,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             DeveloperDetails(
                               credentialModel: widget.credentialModel,
                               showVertically: showVerticalDescription,
+                              statusListIndex: state.statusListIndex,
+                              statusListUri: state.statusListUrl,
                             ),
                           ],
 
