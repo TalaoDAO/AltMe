@@ -61,6 +61,21 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
       if (item.credentialPreview.credentialSubjectModel.credentialSubjectType ==
           CredentialSubjectType.walletCredential) {
+        final jwt = item.jwt;
+
+        if (jwt != null) {
+          final payload = JWTDecode().parseJwt(jwt);
+          final status = payload['status'];
+          if (status != null && status is Map<String, dynamic>) {
+            final statusList = status['status_list'];
+            if (statusList != null && statusList is Map<String, dynamic>) {
+              statusListUri = statusList['uri']?.toString();
+              final idx = statusList['idx'];
+              statusListIndex = idx is int ? idx : null;
+            }
+          }
+        }
+
         emit(
           state.copyWith(
             credentialStatus: CredentialStatus.active,
