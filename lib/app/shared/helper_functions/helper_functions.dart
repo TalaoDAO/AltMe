@@ -1802,14 +1802,16 @@ Map<String, dynamic> createJsonByDecryptingSDValues({
 }) {
   final json = <String, dynamic>{};
 
+  final sh256HashToContent = selectiveDisclosure.sh256HashToContent;
+
   encryptedJson.forEach((key, value) {
     if (key == '_sd') {
       final sd = encryptedJson['_sd'];
 
       if (sd is List<dynamic>) {
         for (final sdValue in sd) {
-          if (selectiveDisclosure.sh256HashToContent.containsKey(sdValue)) {
-            final content = selectiveDisclosure.sh256HashToContent[sdValue];
+          if (sh256HashToContent.containsKey(sdValue)) {
+            final content = sh256HashToContent[sdValue];
             if (content is Map) {
               content.forEach((key, value) {
                 json[key.toString()] = value;
@@ -1825,6 +1827,26 @@ Map<String, dynamic> createJsonByDecryptingSDValues({
           encryptedJson: value,
         );
         json[key] = nestedJson;
+      } else if (value is List<dynamic>) {
+        final list = <String>[];
+
+        for (final ele in value) {
+          if (ele is Map) {
+            final threeDotValue = ele['...'];
+            if (sh256HashToContent.containsKey(threeDotValue)) {
+              final content = sh256HashToContent[threeDotValue];
+              if (content is Map) {
+                content.forEach((key, value) {
+                  list.add(value.toString());
+                });
+              }
+            }
+          } else {
+            list.add(ele.toString());
+          }
+        }
+
+        json[key] = list;
       } else {
         json[key] = value;
       }

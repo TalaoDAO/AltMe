@@ -33,7 +33,7 @@ List<CredentialModel> getCredentialsFromFilterList({
                 } else if (field.filter?.contains?.containsConst != null) {
                   pattern = field.filter?.contains?.containsConst;
                 } else {
-                  /// sd-jwt vc case
+                  /// sd-jwt vc bool case
                   if (searchParameter == 'true') return false;
                 }
 
