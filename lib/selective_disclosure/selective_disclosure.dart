@@ -109,6 +109,29 @@ class SelectiveDisclosure {
     return data;
   }
 
+  Map<String, dynamic> get sh256HashToContent {
+    final data = <String, dynamic>{};
+
+    for (final element in contents) {
+      try {
+        final sh256Hash = OIDC4VC().sh256HashOfContent(element);
+        final lisString = jsonDecode(element);
+        if (lisString is List) {
+          if (lisString.length == 3) {
+            /// '["Qg_O64zqAxe412a108iroA", "phone_number", "+81-80-1234-5678"]'
+            data[sh256Hash] = {lisString[1]: lisString[2]};
+          } else if (lisString.length == 2) {
+            /// '["Qg_O64zqAxe412a108iroA", "DE']
+            data[sh256Hash] = {lisString[0]: lisString[1]};
+          }
+        }
+      } catch (e) {
+        //
+      }
+    }
+    return data;
+  }
+
   List<String> get contents {
     final contents = <String>[];
     for (final element in disclosureToContent.entries.toList()) {
