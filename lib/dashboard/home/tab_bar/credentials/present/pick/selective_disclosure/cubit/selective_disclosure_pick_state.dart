@@ -6,6 +6,8 @@ class SelectiveDisclosureState extends Equatable {
     this.message,
     this.selectedClaimsKeyIds = const [],
     this.selectedSDIndexInJWT = const [],
+    this.limitDisclosure,
+    this.filters,
   });
 
   factory SelectiveDisclosureState.fromJson(Map<String, dynamic> json) =>
@@ -14,15 +16,21 @@ class SelectiveDisclosureState extends Equatable {
   final StateMessage? message;
   final List<String> selectedClaimsKeyIds;
   final List<int> selectedSDIndexInJWT;
+  final String? limitDisclosure;
+  final Map<String, dynamic>? filters;
 
   SelectiveDisclosureState copyWith({
     List<String>? selectedClaimsKeyIds,
     List<int>? selectedSDIndexInJWT,
     StateMessage? message,
+    String? limitDisclosure,
+    Map<String, dynamic>? filters,
   }) {
     return SelectiveDisclosureState(
       selectedClaimsKeyIds: selectedClaimsKeyIds ?? this.selectedClaimsKeyIds,
       selectedSDIndexInJWT: selectedSDIndexInJWT ?? this.selectedSDIndexInJWT,
+      limitDisclosure: limitDisclosure ?? this.limitDisclosure,
+      filters: filters ?? this.filters,
       message: message,
     );
   }
@@ -34,5 +42,7 @@ class SelectiveDisclosureState extends Equatable {
         selectedClaimsKeyIds,
         selectedSDIndexInJWT,
         message,
+        limitDisclosure,
+        filters,
       ];
 }

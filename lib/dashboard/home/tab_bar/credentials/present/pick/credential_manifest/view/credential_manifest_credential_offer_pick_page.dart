@@ -214,10 +214,13 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                                             .filteredCredentialList[
                                                         credentialManifestState
                                                             .selected.first],
+                                                presentationDefinition:
+                                                    presentationDefinition,
                                               ),
                                             ),
 
-                                    /// next button because we will now choose the claims we will present
+                                    /// next button because we will now choose
+                                    /// the claims we will present
                                     /// from the selected credential
                                     text: l10n.next,
                                   )

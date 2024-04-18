@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/theme/theme.dart';
@@ -13,7 +13,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
     required this.showVertically,
     this.claims,
     this.onPressed,
-    this.selectedClaimsKeyIds,
+    this.selectiveDisclosureState,
     this.parentKeyId,
   });
 
@@ -21,7 +21,8 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
   final bool showVertically;
   final Map<String, dynamic>? claims;
   final void Function(String?, String, String?)? onPressed;
-  final List<String>? selectedClaimsKeyIds;
+  final SelectiveDisclosureState? selectiveDisclosureState;
+
   final String? parentKeyId;
 
   @override
@@ -87,7 +88,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                   credentialModel: credentialModel,
                   claims: value,
                   showVertically: showVertically,
-                  selectedClaimsKeyIds: selectedClaimsKeyIds,
+                  selectiveDisclosureState: selectiveDisclosureState,
                   parentKeyId: key,
                   onPressed: (nestedKey, _, threeDotValue) {
                     onPressed?.call(
@@ -127,9 +128,41 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                   claimKey = '$claimKey-$index';
                 }
 
+                bool? disable;
+
+                if (selectiveDisclosureState != null) {
+                  final limitDisclosure =
+                      selectiveDisclosureState!.limitDisclosure;
+
+                  if (limitDisclosure != null) {
+                    final filters = selectiveDisclosureState!.filters;
+                    if (filters != null) {
+                      if (limitDisclosure == 'required') {
+                        disable = true;
+
+                        filters.forEach((key, value) {
+                          if (claims.threeDotValue != null) {
+                            if (claimKey.contains(key) &&
+                                claims.data.replaceAll(' ', '') == value) {
+                              disable = false;
+                            }
+                          } else {
+                            if (claimKey == key && claims.data == value) {
+                              disable = false;
+                            }
+                          }
+                        });
+                      }
+                    }
+                  }
+                }
+
                 return TransparentInkWell(
-                  onTap: () =>
-                      onPressed?.call(key, claimKey, claims.threeDotValue),
+                  onTap: () {
+                    if (disable != null && disable!) return;
+
+                    onPressed?.call(key, claimKey, claims.threeDotValue);
+                  },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -141,17 +174,23 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                         valueColor: Theme.of(context).colorScheme.valueColor,
                         showVertically: showVertically,
                       ),
-                      if (selectedClaimsKeyIds != null &&
+                      if (selectiveDisclosureState != null &&
                           claims.isfromDisclosureOfJWT) ...[
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(top: 0, right: 10),
                           child: Icon(
-                            selectedClaimsKeyIds!.contains(keyToCheck)
+                            selectiveDisclosureState!.selectedClaimsKeyIds
+                                    .contains(keyToCheck)
                                 ? Icons.check_box
                                 : Icons.check_box_outline_blank,
                             size: 25,
-                            color: Theme.of(context).colorScheme.onPrimary,
+                            color: disable != null && disable!
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .lightGrey
+                                    .withOpacity(0.2)
+                                : Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
                       ],

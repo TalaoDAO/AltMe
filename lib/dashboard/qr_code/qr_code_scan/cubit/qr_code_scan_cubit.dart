@@ -1360,8 +1360,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             }
           }
 
-          if (savedAccessToken == null || savedNonce == null) {
-            throw Exception();
+          if (savedAccessToken == null) {
+            throw ResponseMessage(
+              data: {
+                'error': 'invalid_request',
+                'error_description': 'Access token is not provided.',
+              },
+            );
           }
 
           /// get credentials
@@ -1379,7 +1384,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             clientId: clientId,
             profileCubit: profileCubit,
             accessToken: savedAccessToken!,
-            nonce: savedNonce!,
+            nonce: savedNonce,
             authorizationDetails: savedAuthorizationDetails,
             openIdConfiguration: openIdConfiguration,
           );

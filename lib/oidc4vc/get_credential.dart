@@ -20,7 +20,7 @@ Future<
   required DidKeyType didKeyType,
   required String? clientId,
   required String accessToken,
-  required String nonce,
+  required String? nonce,
   required OpenIdConfiguration openIdConfiguration,
   required List<dynamic>? authorizationDetails,
 }) async {

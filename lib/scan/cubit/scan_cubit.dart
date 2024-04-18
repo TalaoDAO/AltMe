@@ -580,6 +580,9 @@ class ScanCubit extends Cubit<ScanState> {
         body = {'response': jwtProofOfPossession};
       } else {
         final presentationSubmissionString = jsonEncode(presentationSubmission);
+
+        ///it is required because of bad async handling with didKit presentation
+        await Future<void>.delayed(const Duration(seconds: 1));
         final responseData = <String, dynamic>{
           'vp_token': vpToken,
           'presentation_submission': presentationSubmissionString,
