@@ -11,7 +11,6 @@ Future<CredentialManifest> getCredentialManifestFromAltMe({
   final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
     baseUrl: 'https://issuer.talao.co',
     isAuthorizationServer: false,
-    oidc4vciDraftType: oidc4vciDraftType,
   );
   final JsonPath credentialManifetPath = JsonPath(r'$..credential_manifest');
   final credentialManifest = CredentialManifest.fromJson(

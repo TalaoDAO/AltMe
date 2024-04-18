@@ -5,12 +5,17 @@ part 'constraints.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Constraints {
-  Constraints(this.fields);
+  Constraints({
+    this.fields,
+    this.limitDisclosure,
+  });
 
   factory Constraints.fromJson(Map<String, dynamic> json) =>
       _$ConstraintsFromJson(json);
 
   final List<Field>? fields;
+  @JsonKey(name: 'limit_disclosure')
+  final String? limitDisclosure;
 
   Map<String, dynamic> toJson() => _$ConstraintsToJson(this);
 }

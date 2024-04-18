@@ -659,28 +659,21 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
 
     final redirectUri = state.uri!.queryParameters['redirect_uri'];
+    final responseUri = state.uri!.queryParameters['response_uri'];
     final clientId = state.uri!.queryParameters['client_id'];
     final isClientIdUrl = isURL(clientId.toString());
 
     /// id_token only
     if (isIDTokenOnly(responseType)) {
-      if (redirectUri == null) {
+      if (redirectUri == null && responseUri == null) {
         throw ResponseMessage(
           data: {
             'error': 'invalid_request',
-            'error_description': 'The redirect_uri is missing.',
+            'error_description':
+                'Only response_uri or redirect_uri is required.',
           },
         );
       }
-
-      // if (isUrl && redirectUri != clientId) {
-      //   throw ResponseMessage(
-      //     data: {
-      //       'error': 'invalid_request',
-      //  'error_description': 'The client_id must be equal to redirect_uri.',
-      //     },
-      //   );
-      // }
 
       if (isSecurityHigh && !keys.contains('nonce')) {
         throw ResponseMessage(
@@ -717,8 +710,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
 
-      final responseUri = state.uri!.queryParameters['response_uri'];
-
       if (responseMode == 'direct_post') {
         final bothPresent = redirectUri != null && responseUri != null;
         final bothAbsent = redirectUri == null && responseUri == null;
@@ -747,7 +738,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       if (isSecurityHigh &&
           responseUri != null &&
           isClientIdUrl &&
-          responseUri != clientId) {
+          !responseUri.contains(clientId.toString())) {
         throw ResponseMessage(
           data: {
             'error': 'invalid_request',
@@ -762,7 +753,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       if (isSecurityHigh &&
           redirectUri != null &&
           isClientIdUrl &&
-          redirectUri != clientId) {
+          !redirectUri.contains(clientId.toString())) {
         throw ResponseMessage(
           data: {
             'error': 'invalid_request',
@@ -1107,21 +1098,23 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               jwtDecode: jwtDecode,
             );
           }
-        }
 
-        final VerificationType isVerified = await verifyEncodedData(
-          issuer: clientId,
-          jwtDecode: jwtDecode,
-          jwt: encodedData,
-          publicKeyJwk: publicKeyJwk,
-        );
+          if (publicKeyJwk != null) {
+            final VerificationType isVerified = await verifyEncodedData(
+              issuer: clientId,
+              jwtDecode: jwtDecode,
+              jwt: encodedData,
+              publicKeyJwk: publicKeyJwk,
+            );
 
-        if (isVerified != VerificationType.verified) {
-          return emitError(
-            ResponseMessage(
-              message: ResponseString.RESPONSE_STRING_invalidRequest,
-            ),
-          );
+            if (isVerified != VerificationType.verified) {
+              return emitError(
+                ResponseMessage(
+                  message: ResponseString.RESPONSE_STRING_invalidRequest,
+                ),
+              );
+            }
+          }
         }
 
         emit(state.acceptHost());
@@ -1142,6 +1135,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     try {
       emit(state.loading());
       final redirectUri = state.uri!.queryParameters['redirect_uri'];
+      final responseUri = state.uri!.queryParameters['response_uri'];
 
       final clientId = state.uri!.queryParameters['client_id'] ?? '';
 
@@ -1173,7 +1167,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         privateKey: privateKey,
         did: did,
         kid: kid,
-        redirectUri: redirectUri!,
+        redirectUri: redirectUri ?? responseUri!,
         nonce: nonce,
         stateValue: stateValue,
         clientType: customOidc4vcProfile.clientType,
@@ -1313,7 +1307,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           final openIdConfiguration = await oidc4vc.getOpenIdConfig(
             baseUrl: issuer,
             isAuthorizationServer: false,
-            oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
           );
 
           if (savedAccessToken == null) {

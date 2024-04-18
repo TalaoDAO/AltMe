@@ -13,6 +13,12 @@ class ProfileSelectorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    final profile = context.read<ProfileCubit>().state.model;
+
+    final walletContainsEnterpriseProfile =
+        profile.walletType == WalletType.enterprise;
+
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return Column(
@@ -53,15 +59,11 @@ class ProfileSelectorWidget extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final profileType = ProfileType.values[index];
 
-                      final profile = context.read<ProfileCubit>().state.model;
-
-                      final isEnterprise =
-                          profile.walletType == WalletType.enterprise;
-
-                      if (!isEnterprise &&
+                      if (!walletContainsEnterpriseProfile &&
                           profileType == ProfileType.enterprise) {
                         return Container();
                       }
+
                       return Column(
                         children: [
                           if (index != 0)

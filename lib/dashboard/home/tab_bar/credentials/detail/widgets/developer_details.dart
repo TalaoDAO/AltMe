@@ -2,19 +2,21 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/material.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 
 class DeveloperDetails extends StatelessWidget {
   const DeveloperDetails({
     super.key,
     required this.credentialModel,
     required this.showVertically,
+    required this.statusListUri,
+    required this.statusListIndex,
   });
 
   final CredentialModel credentialModel;
   final bool showVertically;
+  final String? statusListUri;
+  final int? statusListIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -24,23 +26,6 @@ class DeveloperDetails extends StatelessWidget {
     final String subjectDid =
         credentialModel.credentialPreview.credentialSubjectModel.id ?? '';
     final String type = credentialModel.credentialPreview.type.toString();
-
-    final jwt = credentialModel.jwt;
-
-    dynamic uri;
-    dynamic idx;
-
-    if (jwt != null) {
-      final payload = JWTDecode().parseJwt(jwt);
-      final status = payload['status'];
-      if (status != null && status is Map<String, dynamic>) {
-        final statusList = status['status_list'];
-        if (statusList != null && statusList is Map<String, dynamic>) {
-          uri = statusList['uri'];
-          idx = statusList['idx'];
-        }
-      }
-    }
 
     final titleColor = Theme.of(context).colorScheme.titleColor;
     final valueColor = Theme.of(context).colorScheme.valueColor;
@@ -83,21 +68,21 @@ class DeveloperDetails extends StatelessWidget {
           valueColor: valueColor,
           showVertically: showVertically,
         ),
-        if (uri != null) ...[
+        if (statusListUri != null) ...[
           CredentialField(
             padding: const EdgeInsets.only(top: 10),
             title: l10n.statusList,
-            value: uri.toString(),
+            value: statusListUri.toString(),
             titleColor: titleColor,
             valueColor: valueColor,
             showVertically: false,
           ),
         ],
-        if (idx != null) ...[
+        if (statusListIndex != null) ...[
           CredentialField(
             padding: const EdgeInsets.only(top: 10),
             title: l10n.statusListIndex,
-            value: idx.toString(),
+            value: statusListIndex.toString(),
             titleColor: titleColor,
             valueColor: valueColor,
             showVertically: false,

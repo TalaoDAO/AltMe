@@ -37,7 +37,10 @@ class OperationPage extends StatelessWidget {
         beacon: Beacon(),
         beaconCubit: context.read<BeaconCubit>(),
         walletCubit: context.read<WalletCubit>(),
-        dioClient: DioClient('', Dio()),
+        dioClient: DioClient(
+          secureStorageProvider: getSecureStorage,
+          dio: Dio(),
+        ),
         keyGenerator: KeyGenerator(),
         nftCubit: context.read<NftCubit>(),
         tokensCubit: context.read<TokensCubit>(),

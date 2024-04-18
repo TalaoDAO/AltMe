@@ -66,7 +66,7 @@ Future<void> discoverCredential({
         return;
       }
 
-      if (profileCubit.state.model.walletType == WalletType.enterprise) {
+      if (profileCubit.state.model.profileType == ProfileType.enterprise) {
         final discoverCardsOptions =
             profileCubit.state.model.profileSetting.discoverCardsOptions;
 

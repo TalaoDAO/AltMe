@@ -7,6 +7,8 @@ class CredentialDetailsState extends Equatable {
     this.message,
     this.credentialStatus,
     this.credentialDetailTabStatus = CredentialDetailTabStatus.informations,
+    this.statusListUrl,
+    this.statusListIndex,
   });
 
   factory CredentialDetailsState.fromJson(Map<String, dynamic> json) =>
@@ -16,24 +18,17 @@ class CredentialDetailsState extends Equatable {
   final StateMessage? message;
   final CredentialStatus? credentialStatus;
   final CredentialDetailTabStatus credentialDetailTabStatus;
+  final String? statusListUrl;
+  final int? statusListIndex;
 
   CredentialDetailsState loading() {
-    return CredentialDetailsState(
-      status: AppStatus.loading,
-      credentialStatus: credentialStatus,
-      credentialDetailTabStatus: credentialDetailTabStatus,
-    );
+    return copyWith(status: AppStatus.loading);
   }
 
   CredentialDetailsState error({
     required StateMessage message,
   }) {
-    return CredentialDetailsState(
-      status: AppStatus.error,
-      credentialStatus: credentialStatus,
-      credentialDetailTabStatus: credentialDetailTabStatus,
-      message: message,
-    );
+    return copyWith(status: AppStatus.error, message: message);
   }
 
   CredentialDetailsState copyWith({
@@ -41,6 +36,8 @@ class CredentialDetailsState extends Equatable {
     StateMessage? message,
     CredentialStatus? credentialStatus,
     CredentialDetailTabStatus? credentialDetailTabStatus,
+    String? statusListUrl,
+    int? statusListIndex,
   }) {
     return CredentialDetailsState(
       status: status ?? this.status,
@@ -48,12 +45,20 @@ class CredentialDetailsState extends Equatable {
       credentialStatus: credentialStatus ?? this.credentialStatus,
       credentialDetailTabStatus:
           credentialDetailTabStatus ?? this.credentialDetailTabStatus,
+      statusListUrl: statusListUrl ?? this.statusListUrl,
+      statusListIndex: statusListIndex ?? this.statusListIndex,
     );
   }
 
   Map<String, dynamic> toJson() => _$CredentialDetailsStateToJson(this);
 
   @override
-  List<Object?> get props =>
-      [credentialStatus, message, status, credentialDetailTabStatus];
+  List<Object?> get props => [
+        credentialStatus,
+        message,
+        status,
+        credentialDetailTabStatus,
+        statusListUrl,
+        statusListIndex,
+      ];
 }

@@ -55,7 +55,7 @@ class _DashboardViewState extends State<DashboardView> {
         if (context.read<ProfileCubit>().state.model.profileType ==
             ProfileType.enterprise) {
           unawaited(
-            context.read<EnterpriseCubit>().getWalletAttestationStatus(),
+            context.read<EnterpriseCubit>().getWalletAttestationBitStatus(),
           );
         }
       });

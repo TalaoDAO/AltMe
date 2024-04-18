@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -693,7 +694,6 @@ Future<
   final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
     baseUrl: issuer,
     isAuthorizationServer: false,
-    oidc4vciDraftType: oidc4vciDraftType,
   );
 
   if (preAuthorizedCode == null) {
@@ -718,7 +718,6 @@ Future<
     authorizationServerConfiguration = await oidc4vc.getOpenIdConfig(
       baseUrl: authorizationServer,
       isAuthorizationServer: true,
-      oidc4vciDraftType: oidc4vciDraftType,
     );
   }
 
@@ -969,7 +968,6 @@ Future<bool?> isEBSIV3ForVerifiers({
         await oidc4vc.getOpenIdConfig(
       baseUrl: clientId,
       isAuthorizationServer: false,
-      oidc4vciDraftType: oidc4vciDraftType,
     );
 
     final subjectTrustFrameworksSupported =
@@ -1798,6 +1796,66 @@ List<dynamic> collectSdValues(Map<String, dynamic> data) {
   return result;
 }
 
+Map<String, dynamic> createJsonByDecryptingSDValues({
+  required Map<String, dynamic> encryptedJson,
+  required SelectiveDisclosure selectiveDisclosure,
+}) {
+  final json = <String, dynamic>{};
+
+  final sh256HashToContent = selectiveDisclosure.sh256HashToContent;
+
+  encryptedJson.forEach((key, value) {
+    if (key == '_sd') {
+      final sd = encryptedJson['_sd'];
+
+      if (sd is List<dynamic>) {
+        for (final sdValue in sd) {
+          if (sh256HashToContent.containsKey(sdValue)) {
+            final content = sh256HashToContent[sdValue];
+            if (content is Map) {
+              content.forEach((key, value) {
+                json[key.toString()] = value;
+              });
+            }
+          }
+        }
+      }
+    } else {
+      if (value is Map<String, dynamic>) {
+        final nestedJson = createJsonByDecryptingSDValues(
+          selectiveDisclosure: selectiveDisclosure,
+          encryptedJson: value,
+        );
+        json[key] = nestedJson;
+      } else if (value is List<dynamic>) {
+        final list = <String>[];
+
+        for (final ele in value) {
+          if (ele is Map) {
+            final threeDotValue = ele['...'];
+            if (sh256HashToContent.containsKey(threeDotValue)) {
+              final content = sh256HashToContent[threeDotValue];
+              if (content is Map) {
+                content.forEach((key, value) {
+                  list.add(value.toString());
+                });
+              }
+            }
+          } else {
+            list.add(ele.toString());
+          }
+        }
+
+        json[key] = list;
+      } else {
+        json[key] = value;
+      }
+    }
+  });
+
+  return json;
+}
+
 Future<Map<String, dynamic>?> checkX509({
   required String encodedData,
   required Map<String, dynamic> header,
@@ -1930,44 +1988,4 @@ String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
     return credentialSubjectModel.associatedAddress;
   }
   return null;
-}
-
-Future<String> getCatchedGetData({
-  required SecureStorageProvider secureStorageProvider,
-  required String url,
-  required Map<String, dynamic> headers,
-  required DioClient client,
-  required bool isCachingEnabled,
-}) async {
-  final cachedData = await secureStorageProvider.get(url);
-
-  dynamic response;
-
-  if (!isCachingEnabled) {
-    response = await client.get(url, headers: headers);
-  } else if (cachedData == null) {
-    response = await client.get(url, headers: headers);
-  } else {
-    final cachedDataJson = jsonDecode(cachedData);
-    final expiry = int.parse(cachedDataJson['expiry'].toString());
-
-    final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
-
-    if (isExpired) {
-      response = await client.get(url, headers: headers);
-    } else {
-      /// directly return cached data
-      /// returned here to avoid the caching override everytime
-      final response = await cachedDataJson['data'];
-      return response.toString();
-    }
-  }
-
-  final expiry =
-      DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
-
-  final value = {'expiry': expiry, 'data': response};
-  await secureStorageProvider.set(url, jsonEncode(value));
-
-  return response.toString();
 }

@@ -1,4 +1,6 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/credential.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 
 List<CredentialModel> getCredentialsFromFilterList({
@@ -14,28 +16,36 @@ List<CredentialModel> getCredentialsFromFilterList({
     for (final field in filterList) {
       for (final credential in credentialList) {
         for (final path in field.path) {
-          final searchList = getTextsFromCredential(path, credential.data);
+          final credentialData = createJsonByDecryptingSDValues(
+            encryptedJson: credential.data,
+            selectiveDisclosure: SelectiveDisclosure(credential),
+          );
+
+          final searchList = getTextsFromCredential(path, credentialData);
           if (searchList.isNotEmpty) {
             /// remove unmatched credential
             searchList.removeWhere(
-              (element) {
+              (searchParameter) {
                 String? pattern;
 
                 if (field.filter?.pattern != null) {
                   pattern = field.filter!.pattern;
                 } else if (field.filter?.contains?.containsConst != null) {
                   pattern = field.filter?.contains?.containsConst;
+                } else {
+                  /// sd-jwt vc bool case
+                  if (searchParameter == 'true') return false;
                 }
 
                 if (pattern == null) return true;
 
                 if (pattern.endsWith(r'$')) {
                   final RegExp regEx = RegExp(pattern);
-                  final Match? match = regEx.firstMatch(element);
+                  final Match? match = regEx.firstMatch(searchParameter);
 
                   if (match != null) return false;
                 } else {
-                  if (element == pattern) return false;
+                  if (searchParameter == pattern) return false;
                 }
 
                 return true;

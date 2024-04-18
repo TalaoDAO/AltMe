@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class ConfirmTokenTransactionPage extends StatelessWidget {
   const ConfirmTokenTransactionPage({
@@ -44,7 +45,10 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
     return BlocProvider<ConfirmTokenTransactionCubit>(
       create: (_) => ConfirmTokenTransactionCubit(
         manageNetworkCubit: context.read<ManageNetworkCubit>(),
-        client: DioClient('', Dio()),
+        client: DioClient(
+          secureStorageProvider: getSecureStorage,
+          dio: Dio(),
+        ),
         keyGenerator: KeyGenerator(),
         initialState: ConfirmTokenTransactionState(
           withdrawalAddress: withdrawalAddress,
