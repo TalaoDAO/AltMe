@@ -144,6 +144,23 @@ class ProfileCubit extends Cubit<ProfileState> {
         }
       }
 
+      String? enterpriseWalletName;
+
+      final enterpriseProfileSettingJsonString =
+          await secureStorageProvider.get(
+        SecureStorageKeys.enterpriseProfileSetting,
+      );
+
+      if (enterpriseProfileSettingJsonString != null) {
+        final ProfileSetting enterpriseProfileSetting = ProfileSetting.fromJson(
+          json.decode(enterpriseProfileSettingJsonString)
+              as Map<String, dynamic>,
+        );
+
+        enterpriseWalletName =
+            enterpriseProfileSetting.generalOptions.profileName;
+      }
+
       /// profileSetting
       late ProfileSetting profileSetting;
 
@@ -172,6 +189,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             isDeveloperMode: isDeveloperMode,
             profileType: profileType,
             profileSetting: profileSetting,
+            enterpriseWalletName: enterpriseWalletName,
           );
 
         case ProfileType.defaultOne:
@@ -193,6 +211,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             isDeveloperMode: isDeveloperMode,
             clientId: did,
             clientSecret: randomString(12),
+            enterpriseWalletName: enterpriseWalletName,
           );
 
         case ProfileType.ebsiV3:
@@ -214,6 +233,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             isDeveloperMode: isDeveloperMode,
             clientId: did,
             clientSecret: randomString(12),
+            enterpriseWalletName: enterpriseWalletName,
           );
 
         case ProfileType.dutch:
@@ -235,6 +255,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             isDeveloperMode: isDeveloperMode,
             clientId: did,
             clientSecret: randomString(12),
+            enterpriseWalletName: enterpriseWalletName,
           );
 
         case ProfileType.owfBaselineProfile:
@@ -256,14 +277,10 @@ class ProfileCubit extends Cubit<ProfileState> {
             isDeveloperMode: isDeveloperMode,
             clientId: did,
             clientSecret: randomString(12),
+            enterpriseWalletName: enterpriseWalletName,
           );
 
         case ProfileType.enterprise:
-          final enterpriseProfileSettingJsonString =
-              await secureStorageProvider.get(
-            SecureStorageKeys.enterpriseProfileSetting,
-          );
-
           if (enterpriseProfileSettingJsonString != null) {
             profileSetting = ProfileSetting.fromJson(
               json.decode(enterpriseProfileSettingJsonString)

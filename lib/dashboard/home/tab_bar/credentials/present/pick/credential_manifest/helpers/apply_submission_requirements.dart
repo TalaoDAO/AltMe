@@ -25,11 +25,13 @@ PresentationDefinition applySubmissionRequirements(
             currentFirst.name,
             ...descriptorsWithSameGroup.map((e) => e.name),
           ].where((e) => e != null).join(','),
-          constraints: Constraints([
-            ...?currentFirst.constraints?.fields,
-            for (final descriptor in descriptorsWithSameGroup)
-              ...?descriptor.constraints?.fields,
-          ]),
+          constraints: Constraints(
+            fields: [
+              ...?currentFirst.constraints?.fields,
+              for (final descriptor in descriptorsWithSameGroup)
+                ...?descriptor.constraints?.fields,
+            ],
+          ),
           group: currentFirst.group,
           purpose: [
             currentFirst.purpose,

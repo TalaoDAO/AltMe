@@ -3,15 +3,23 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:secure_storage/secure_storage.dart';
 part 'logging.dart';
 
 const _defaultConnectTimeout = Duration(minutes: 1);
 const _defaultReceiveTimeout = Duration(minutes: 1);
 
 class DioClient {
-  DioClient(this.baseUrl, this.dio) {
+  DioClient({
+    this.baseUrl,
+    required this.secureStorageProvider,
+    required this.dio,
+  }) {
+    if (baseUrl != null) {
+      dio.options.baseUrl = baseUrl!;
+    }
+
     dio
-      ..options.baseUrl = baseUrl
       ..options.connectTimeout = _defaultConnectTimeout
       ..options.receiveTimeout = _defaultReceiveTimeout
       ..httpClientAdapter
@@ -31,8 +39,9 @@ class DioClient {
 
   final log = getLogger('DioClient');
 
-  final String baseUrl;
+  final SecureStorageProvider secureStorageProvider;
   final Dio dio;
+  String? baseUrl;
 
   Future<dynamic> get(
     String uri, {
@@ -43,6 +52,7 @@ class DioClient {
     Map<String, dynamic> headers = const <String, dynamic>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
+    bool isCachingEnabled = false,
   }) async {
     try {
       final isInternetAvailable = await isConnected();
@@ -54,13 +64,47 @@ class DioClient {
 
       final stopwatch = Stopwatch()..start();
       await getSpecificHeader(uri, headers);
-      final response = await dio.get<dynamic>(
-        uri,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onReceiveProgress: onReceiveProgress,
-      );
+      log.i('uri - $uri');
+
+      final cachedData = await secureStorageProvider.get(uri);
+      dynamic response;
+
+      if (!isCachingEnabled || cachedData == null) {
+        response = await dio.get<dynamic>(
+          uri,
+          queryParameters: queryParameters,
+          options: options,
+          cancelToken: cancelToken,
+          onReceiveProgress: onReceiveProgress,
+        );
+      } else {
+        final cachedDataJson = jsonDecode(cachedData);
+        final expiry = int.parse(cachedDataJson['expiry'].toString());
+
+        final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
+
+        if (isExpired) {
+          response = await dio.get<dynamic>(
+            uri,
+            queryParameters: queryParameters,
+            options: options,
+            cancelToken: cancelToken,
+            onReceiveProgress: onReceiveProgress,
+          );
+        } else {
+          /// directly return cached data
+          /// returned here to avoid the caching override everytime
+          final response = await cachedDataJson['data'];
+          log.i('Time - ${stopwatch.elapsed}');
+          return response;
+        }
+      }
+      final expiry =
+          DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
+
+      final value = {'expiry': expiry, 'data': response.data};
+      await secureStorageProvider.set(uri, jsonEncode(value));
+
       log.i('Time - ${stopwatch.elapsed}');
       return response.data;
     } on FormatException catch (_) {
