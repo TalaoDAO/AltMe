@@ -6,6 +6,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -17,18 +18,21 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
     required this.credential,
     required this.issuer,
     required this.credentialToBePresented,
+    required this.presentationDefinition,
   });
 
   final Uri uri;
   final CredentialModel credential;
   final Issuer issuer;
   final CredentialModel credentialToBePresented;
+  final PresentationDefinition? presentationDefinition;
 
   static Route<dynamic> route({
     required Uri uri,
     required CredentialModel credential,
     required Issuer issuer,
     required CredentialModel credentialToBePresented,
+    required PresentationDefinition? presentationDefinition,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => SelectiveDisclosurePickPage(
@@ -36,6 +40,7 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
         credential: credential,
         issuer: issuer,
         credentialToBePresented: credentialToBePresented,
+        presentationDefinition: presentationDefinition,
       ),
       settings: const RouteSettings(name: '/SelectiveDisclosurePickPage'),
     );
@@ -52,24 +57,45 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
         credential: credential,
         issuer: issuer,
         credentialToBePresented: credentialToBePresented,
+        presentationDefinition: presentationDefinition,
       ),
     );
   }
 }
 
-class SelectiveDisclosurePickView extends StatelessWidget {
+class SelectiveDisclosurePickView extends StatefulWidget {
   const SelectiveDisclosurePickView({
     super.key,
     required this.uri,
     required this.credential,
     required this.issuer,
     required this.credentialToBePresented,
+    required this.presentationDefinition,
   });
 
   final Uri uri;
   final CredentialModel credential;
   final Issuer issuer;
   final CredentialModel credentialToBePresented;
+  final PresentationDefinition? presentationDefinition;
+
+  @override
+  State<SelectiveDisclosurePickView> createState() =>
+      _SelectiveDisclosurePickViewState();
+}
+
+class _SelectiveDisclosurePickViewState
+    extends State<SelectiveDisclosurePickView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      context.read<SelectiveDisclosureCubit>().dataFromPresentation(
+            credentialModel: widget.credentialToBePresented,
+            presentationDefinition: widget.presentationDefinition,
+          );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +121,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
               context.read<ProfileCubit>().state.model.profileSetting;
 
           final credentialImage =
-              SelectiveDisclosure(credentialToBePresented).getPicture;
+              SelectiveDisclosure(widget.credentialToBePresented).getPicture;
 
           return BasePage(
             title: l10n.thisOrganisationRequestsThisInformation,
@@ -111,22 +137,22 @@ class SelectiveDisclosurePickView extends StatelessWidget {
                   PictureDisplay(credentialImage: credentialImage)
                 else
                   CredentialDisplay(
-                    credentialModel: credentialToBePresented,
+                    credentialModel: widget.credentialToBePresented,
                     credDisplayType: CredDisplayType.List,
                     profileSetting: profileSetting,
                     isDiscover: false,
                   ),
                 const SizedBox(height: 20),
                 DisplaySelectiveDisclosure(
-                  credentialModel: credentialToBePresented,
+                  credentialModel: widget.credentialToBePresented,
                   claims: null,
-                  selectedClaimsKeyIds: state.selectedClaimsKeyIds,
+                  selectiveDisclosureState: state,
                   onPressed: (claimKey, claimKeyId, threeDotValue) {
-                    context.read<SelectiveDisclosureCubit>().toggle(claimKeyId);
-                    context.read<SelectiveDisclosureCubit>().saveIndexOfSDJWT(
+                    context.read<SelectiveDisclosureCubit>().disclosureAction(
                           claimsKey: claimKey,
-                          credentialModel: credentialToBePresented,
+                          credentialModel: widget.credentialToBePresented,
                           threeDotValue: threeDotValue,
+                          claimKeyId: claimKeyId,
                         );
                   },
                   showVertically: true,
@@ -142,7 +168,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
                     onPressed: () => present(
                       context: context,
                       selectedSDIndexInJWT: state.selectedSDIndexInJWT,
-                      uri: uri,
+                      uri: widget.uri,
                     ),
                     text: l10n.credentialPickPresent,
                   ),
@@ -184,7 +210,7 @@ class SelectiveDisclosurePickView extends StatelessWidget {
       }
     }
 
-    final encryptedValues = credentialToBePresented.jwt
+    final encryptedValues = widget.credentialToBePresented.jwt
         ?.split('~')
         .where((element) => element.isNotEmpty)
         .toList();
@@ -244,17 +270,17 @@ class SelectiveDisclosurePickView extends StatelessWidget {
 
       newJwt = '$newJwt$jwtToken';
 
-      final CredentialModel newModel =
-          credentialToBePresented.copyWith(selectiveDisclosureJwt: newJwt);
+      final CredentialModel newModel = widget.credentialToBePresented
+          .copyWith(selectiveDisclosureJwt: newJwt);
 
       final credToBePresented = [newModel];
 
       await context.read<ScanCubit>().credentialOfferOrPresent(
             uri: uri,
-            credentialModel: credential,
+            credentialModel: widget.credential,
             keyId: SecureStorageKeys.ssiKey,
             credentialsToBePresented: credToBePresented,
-            issuer: issuer,
+            issuer: widget.issuer,
             qrCodeScanCubit: context.read<QRCodeScanCubit>(),
           );
     } else {
