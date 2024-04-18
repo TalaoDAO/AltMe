@@ -40,7 +40,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
           //         .customOidc4vcProfile.vcFormatType) {
           //   return true;
           // }
-
           return true;
         },
         listener: (context, state) {

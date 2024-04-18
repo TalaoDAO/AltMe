@@ -28,7 +28,10 @@ class MatrixChatImpl extends MatrixChatInterface {
   factory MatrixChatImpl() {
     _instance ??= MatrixChatImpl._(
       didKitProvider: DIDKitProvider(),
-      dioClient: DioClient('', Dio()),
+      dioClient: DioClient(
+        secureStorageProvider: getSecureStorage,
+        dio: Dio(),
+      ),
       secureStorageProvider: getSecureStorage,
       oidc4vc: OIDC4VC(),
     );

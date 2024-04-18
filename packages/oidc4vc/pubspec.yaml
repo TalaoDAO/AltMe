@@ -29,6 +29,8 @@ dependencies:
   json_annotation: ^4.8.1
   json_path: ^0.4.4 #latest version creates test issue
   secp256k1: ^0.3.0
+  secure_storage:
+    path: ../secure_storage
   tezart:
     git:
       url: https://github.com/autonomy-system/tezart.git
@@ -36,6 +38,7 @@ dependencies:
   uuid: ^3.0.7
 
 dependency_overrides:
+  ffi: 2.1.0 #didkit from path which depends on ffi ^1.0.0
   pinenacl: ^0.5.1 # tezart from git depends on pinenacl ^0.3.3
 
 dev_dependencies:

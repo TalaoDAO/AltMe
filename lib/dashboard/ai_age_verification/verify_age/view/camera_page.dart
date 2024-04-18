@@ -108,24 +108,25 @@ class _CameraViewState extends State<CameraView> {
         listener: (_, state) async {
           if (state.status == CameraStatus.imageCaptured) {
             LoadingView().show(context: context);
+            final customOidc4vcProfile = context
+                .read<ProfileCubit>()
+                .state
+                .model
+                .profileSetting
+                .selfSovereignIdentityOptions
+                .customOidc4vcProfile;
             await context.read<HomeCubit>().aiSelfiValidation(
                   credentialType: widget.credentialSubjectType,
                   imageBytes: state.data!,
                   credentialsCubit: context.read<CredentialsCubit>(),
                   cameraCubit: context.read<CameraCubit>(),
-                  oidc4vciDraftType: context
-                      .read<ProfileCubit>()
-                      .state
-                      .model
-                      .profileSetting
-                      .selfSovereignIdentityOptions
-                      .customOidc4vcProfile
-                      .oidc4vciDraft,
+                  oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
                   blockchainType: context
                       .read<WalletCubit>()
                       .state
                       .currentAccount!
                       .blockchainType,
+                  vcFormatType: customOidc4vcProfile.vcFormatType,
                 );
             LoadingView().hide();
             await Navigator.pushReplacement<void, void>(

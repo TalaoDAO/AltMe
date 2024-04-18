@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -26,6 +27,7 @@ class HomeCredentialCategoryList extends StatelessWidget {
             .selfSovereignIdentityOptions
             .customOidc4vcProfile
             .vcFormatType;
+
         return RefreshIndicator(
           onRefresh: onRefresh,
           child: Padding(
@@ -54,11 +56,26 @@ class HomeCredentialCategoryList extends StatelessWidget {
                       return true;
                     }
 
-                    // /// crypto credential account to be shown always
-                    // if (element.credentialPreview.credentialSubjectModel
-                    //         .credentialSubjectType.isBlockchainAccount  ) {
-                    //   return true;
-                    // }
+                    /// crypto credential account to be shown always
+                    if (element.credentialPreview.credentialSubjectModel
+                        .credentialSubjectType.isBlockchainAccount) {
+                      /// only show crypto card with matches current account
+                      /// wallet address
+                      final String? currentWalletAddress = context
+                          .read<WalletCubit>()
+                          .state
+                          .currentAccount
+                          ?.walletAddress;
+
+                      final String? walletAddress = getWalletAddress(
+                        element.credentialPreview.credentialSubjectModel,
+                      );
+
+                      if (currentWalletAddress.toString() !=
+                          walletAddress.toString()) {
+                        return false;
+                      }
+                    }
 
                     /// do not load the credential if vc format is different
                     if (vcFormatType.value != element.getFormat) {

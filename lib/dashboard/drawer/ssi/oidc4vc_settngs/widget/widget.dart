@@ -10,4 +10,5 @@ export 'proof_type_widget.dart';
 export 'push_authorization_request.dart';
 export 'scope_parameter.dart';
 export 'security_level_widget.dart';
+export 'status_list_caching_widget.dart';
 export 'vc_format_widget.dart';

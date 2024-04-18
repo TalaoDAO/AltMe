@@ -15,7 +15,15 @@
     "cardIsValid",
     "cardIsExpired",
     "signatureIsInvalid",
-    "statusIsInvalid"
+    "statusIsInvalid",
+    "statuslListSignatureFailed",
+    "walletMetadataForIssuers",
+    "walletMetadataForVerifiers",
+    "statusListCachingTitle",
+    "statusListCachingSubTitle",
+    "statusList",
+    "statusListIndex",
+    "theWalletIsSuspended"
   ],
 
   "es": [
@@ -34,7 +42,15 @@
     "cardIsValid",
     "cardIsExpired",
     "signatureIsInvalid",
-    "statusIsInvalid"
+    "statusIsInvalid",
+    "statuslListSignatureFailed",
+    "walletMetadataForIssuers",
+    "walletMetadataForVerifiers",
+    "statusListCachingTitle",
+    "statusListCachingSubTitle",
+    "statusList",
+    "statusListIndex",
+    "theWalletIsSuspended"
   ],
 
   "fr": [
@@ -43,6 +59,14 @@
     "cardIsValid",
     "cardIsExpired",
     "signatureIsInvalid",
-    "statusIsInvalid"
+    "statusIsInvalid",
+    "statuslListSignatureFailed",
+    "walletMetadataForIssuers",
+    "walletMetadataForVerifiers",
+    "statusListCachingTitle",
+    "statusListCachingSubTitle",
+    "statusList",
+    "statusListIndex",
+    "theWalletIsSuspended"
   ]
 }

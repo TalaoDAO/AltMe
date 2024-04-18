@@ -523,31 +523,83 @@ class ScanCubit extends Cubit<ScanState> {
         profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
       );
 
-      final presentationSubmissionString = await getPresentationSubmission(
+      final presentationSubmission = await getPresentationSubmission(
         credentialsToBePresented: credentialsToBePresented,
         presentationDefinition: presentationDefinition,
         clientMetaData: clientMetaData,
         profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
       );
 
-      await Future<void>.delayed(const Duration(milliseconds: 1000));
-      final responseData = <String, dynamic>{
-        'vp_token': vpToken,
-        'presentation_submission': presentationSubmissionString,
-      };
+      Map<String, dynamic> body;
 
-      if (idTokenNeeded && idToken != null) {
-        responseData['id_token'] = idToken;
-      }
+      final String? responseMode = uri.queryParameters['response_mode'];
 
-      if (stateValue != null) {
-        responseData['state'] = stateValue;
+      if (responseMode == 'direct_post.jwt') {
+        final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+
+        final clientId = uri.queryParameters['client_id'] ?? '';
+
+        final customOidc4vcProfile = profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+        final didKeyType = customOidc4vcProfile.defaultDid;
+
+        final (did, _) = await getDidAndKid(
+          didKeyType: didKeyType,
+          privateKey: privateKey,
+          profileCubit: profileCubit,
+        );
+
+        final responseData = {
+          'iss': did,
+          'aud': clientId,
+          'exp': iat + 1000,
+          'vp_token': vpToken,
+          'presentation_submission': presentationSubmission,
+        };
+
+        if (idTokenNeeded && idToken != null) {
+          responseData['id_token'] = idToken;
+        }
+
+        final tokenParameters = TokenParameters(
+          privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
+          did: '', // just added as it is required field
+          mediaType: MediaType.basic, // just added as it is required field
+          clientType:
+              ClientType.jwkThumbprint, // just added as it is required field
+          proofHeaderType: customOidc4vcProfile.proofHeader,
+          clientId: '', // just added as it is required field
+        );
+
+        final jwtProofOfPossession = profileCubit.oidc4vc.generateToken(
+          payload: responseData,
+          tokenParameters: tokenParameters,
+        );
+
+        body = {'response': jwtProofOfPossession};
+      } else {
+        final presentationSubmissionString = jsonEncode(presentationSubmission);
+        final responseData = <String, dynamic>{
+          'vp_token': vpToken,
+          'presentation_submission': presentationSubmissionString,
+        };
+
+        if (idTokenNeeded && idToken != null) {
+          responseData['id_token'] = idToken;
+        }
+
+        if (stateValue != null) {
+          responseData['state'] = stateValue;
+        }
+
+        body = responseData;
       }
 
       await Future<void>.delayed(const Duration(seconds: 2));
       final response = await client.dio.post<dynamic>(
         responseOrRedirectUri,
-        data: responseData,
+        data: body,
         options: Options(
           headers: <String, dynamic>{
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -630,7 +682,7 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  Future<String> getPresentationSubmission({
+  Future<Map<String, dynamic>> getPresentationSubmission({
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
     required Map<String, dynamic>? clientMetaData,
@@ -709,17 +761,9 @@ class ScanCubit extends Cubit<ScanState> {
     final vcFormatType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
-    if (vcFormat == null) {
-      if (vcFormatType == VCFormatType.ldpVc) {
-        vcFormat = 'ldp_vc';
-      } else if (vcFormatType == VCFormatType.jwtVc) {
-        vcFormat = 'jwt_vc';
-      } else if (vcFormatType == VCFormatType.jwtVcJson) {
-        vcFormat = 'jwt_vc_json';
-      }
-    }
+    vcFormat ??= vcFormatType.value;
 
-    if (vcFormat == null && vpFormat == null) {
+    if (vpFormat == null) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_request',
@@ -782,9 +826,7 @@ class ScanCubit extends Cubit<ScanState> {
 
     presentationSubmission['descriptor_map'] = inputDescriptors;
 
-    final presentationSubmissionString = jsonEncode(presentationSubmission);
-
-    return presentationSubmissionString;
+    return presentationSubmission;
   }
 
   Future<void> askPermissionDIDAuthCHAPI({

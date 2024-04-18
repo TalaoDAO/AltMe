@@ -9,10 +9,14 @@ class DeveloperDetails extends StatelessWidget {
     super.key,
     required this.credentialModel,
     required this.showVertically,
+    required this.statusListUri,
+    required this.statusListIndex,
   });
 
   final CredentialModel credentialModel;
   final bool showVertically;
+  final String? statusListUri;
+  final int? statusListIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -23,49 +27,67 @@ class DeveloperDetails extends StatelessWidget {
         credentialModel.credentialPreview.credentialSubjectModel.id ?? '';
     final String type = credentialModel.credentialPreview.type.toString();
 
+    final titleColor = Theme.of(context).colorScheme.titleColor;
+    final valueColor = Theme.of(context).colorScheme.valueColor;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 10),
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.format,
           value: credentialModel.getFormat,
-          titleColor: Theme.of(context).colorScheme.titleColor,
-          valueColor: Theme.of(context).colorScheme.valueColor,
+          titleColor: titleColor,
+          valueColor: valueColor,
           showVertically: showVertically,
         ),
-        const SizedBox(height: 10),
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.issuerDID,
           value: issuerDid,
-          titleColor: Theme.of(context).colorScheme.titleColor,
-          valueColor: Theme.of(context).colorScheme.valueColor,
+          titleColor: titleColor,
+          valueColor: valueColor,
           showVertically: showVertically,
         ),
         if (credentialModel.credentialPreview.credentialSubjectModel
                 is! WalletCredentialModel &&
-            subjectDid.isNotEmpty) ...[
-          const SizedBox(height: 10),
+            subjectDid.isNotEmpty)
           CredentialField(
-            padding: EdgeInsets.zero,
+            padding: const EdgeInsets.only(top: 10),
             title: l10n.subjectDID,
             value: subjectDid,
-            titleColor: Theme.of(context).colorScheme.titleColor,
-            valueColor: Theme.of(context).colorScheme.valueColor,
+            titleColor: titleColor,
+            valueColor: valueColor,
             showVertically: showVertically,
           ),
-        ],
-        const SizedBox(height: 10),
         CredentialField(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top: 10),
           title: l10n.type,
           value: type,
-          titleColor: Theme.of(context).colorScheme.titleColor,
-          valueColor: Theme.of(context).colorScheme.valueColor,
+          titleColor: titleColor,
+          valueColor: valueColor,
           showVertically: showVertically,
         ),
+        if (statusListUri != null) ...[
+          CredentialField(
+            padding: const EdgeInsets.only(top: 10),
+            title: l10n.statusList,
+            value: statusListUri.toString(),
+            titleColor: titleColor,
+            valueColor: valueColor,
+            showVertically: false,
+          ),
+        ],
+        if (statusListIndex != null) ...[
+          CredentialField(
+            padding: const EdgeInsets.only(top: 10),
+            title: l10n.statusListIndex,
+            value: statusListIndex.toString(),
+            titleColor: titleColor,
+            valueColor: valueColor,
+            showVertically: false,
+          ),
+        ],
       ],
     );
   }

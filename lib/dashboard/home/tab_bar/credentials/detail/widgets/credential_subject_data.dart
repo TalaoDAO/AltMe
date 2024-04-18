@@ -118,16 +118,13 @@ class CredentialSubjectData extends StatelessWidget {
 
         if (title == null || data == null) return Container();
 
-        return Padding(
+        return CredentialField(
           padding: const EdgeInsets.only(top: 10),
-          child: CredentialField(
-            padding: EdgeInsets.zero,
-            title: title,
-            value: data,
-            titleColor: Theme.of(context).colorScheme.titleColor,
-            valueColor: Theme.of(context).colorScheme.valueColor,
-            showVertically: showVertically,
-          ),
+          title: title,
+          value: data,
+          titleColor: Theme.of(context).colorScheme.titleColor,
+          valueColor: Theme.of(context).colorScheme.valueColor,
+          showVertically: showVertically,
         );
       }).toList(),
     );

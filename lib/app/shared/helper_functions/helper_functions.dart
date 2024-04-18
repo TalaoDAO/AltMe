@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -693,7 +694,6 @@ Future<
   final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
     baseUrl: issuer,
     isAuthorizationServer: false,
-    oidc4vciDraftType: oidc4vciDraftType,
   );
 
   if (preAuthorizedCode == null) {
@@ -718,7 +718,6 @@ Future<
     authorizationServerConfiguration = await oidc4vc.getOpenIdConfig(
       baseUrl: authorizationServer,
       isAuthorizationServer: true,
-      oidc4vciDraftType: oidc4vciDraftType,
     );
   }
 
@@ -969,7 +968,6 @@ Future<bool?> isEBSIV3ForVerifiers({
         await oidc4vc.getOpenIdConfig(
       baseUrl: clientId,
       isAuthorizationServer: false,
-      oidc4vciDraftType: oidc4vciDraftType,
     );
 
     final subjectTrustFrameworksSupported =
@@ -1798,14 +1796,71 @@ List<dynamic> collectSdValues(Map<String, dynamic> data) {
   return result;
 }
 
+Map<String, dynamic> createJsonByDecryptingSDValues({
+  required Map<String, dynamic> encryptedJson,
+  required SelectiveDisclosure selectiveDisclosure,
+}) {
+  final json = <String, dynamic>{};
+
+  final sh256HashToContent = selectiveDisclosure.sh256HashToContent;
+
+  encryptedJson.forEach((key, value) {
+    if (key == '_sd') {
+      final sd = encryptedJson['_sd'];
+
+      if (sd is List<dynamic>) {
+        for (final sdValue in sd) {
+          if (sh256HashToContent.containsKey(sdValue)) {
+            final content = sh256HashToContent[sdValue];
+            if (content is Map) {
+              content.forEach((key, value) {
+                json[key.toString()] = value;
+              });
+            }
+          }
+        }
+      }
+    } else {
+      if (value is Map<String, dynamic>) {
+        final nestedJson = createJsonByDecryptingSDValues(
+          selectiveDisclosure: selectiveDisclosure,
+          encryptedJson: value,
+        );
+        json[key] = nestedJson;
+      } else if (value is List<dynamic>) {
+        final list = <String>[];
+
+        for (final ele in value) {
+          if (ele is Map) {
+            final threeDotValue = ele['...'];
+            if (sh256HashToContent.containsKey(threeDotValue)) {
+              final content = sh256HashToContent[threeDotValue];
+              if (content is Map) {
+                content.forEach((key, value) {
+                  list.add(value.toString());
+                });
+              }
+            }
+          } else {
+            list.add(ele.toString());
+          }
+        }
+
+        json[key] = list;
+      } else {
+        json[key] = value;
+      }
+    }
+  });
+
+  return json;
+}
+
 Future<Map<String, dynamic>?> checkX509({
   required String encodedData,
+  required Map<String, dynamic> header,
   required String clientId,
-  required JWTDecode jwtDecode,
 }) async {
-  final Map<String, dynamic> header =
-      decodeHeader(jwtDecode: jwtDecode, token: encodedData);
-
   final x5c = header['x5c'];
 
   if (x5c != null) {
@@ -1878,6 +1933,59 @@ Future<Map<String, dynamic>?> checkX509({
       };
       return publicKeyJwk;
     }
+  }
+  return null;
+}
+
+Future<Map<String, dynamic>?> checkVerifierAttestation({
+  required String clientId,
+  required Map<String, dynamic> header,
+  required JWTDecode jwtDecode,
+}) async {
+  final jwt = header['jwt'];
+
+  if (jwt == null) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_format',
+        'error_description': 'verifier_attestation scheme error',
+      },
+    );
+  }
+
+  final payload = jwtDecode.parseJwt(jwt.toString());
+
+  final sub = payload['sub'];
+  final cnf = payload['cnf'];
+
+  if (sub == null ||
+      sub != clientId ||
+      cnf == null ||
+      cnf is! Map<String, dynamic> ||
+      !cnf.containsKey('jwk') ||
+      cnf['jwk'] is! Map<String, dynamic>) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_format',
+        'error_description': 'verifier_attestation scheme error',
+      },
+    );
+  }
+
+  return cnf['jwk'] as Map<String, dynamic>;
+}
+
+String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
+  if (credentialSubjectModel is TezosAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is EthereumAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is PolygonAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is BinanceAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is FantomAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
   }
   return null;
 }

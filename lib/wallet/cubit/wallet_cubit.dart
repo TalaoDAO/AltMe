@@ -22,14 +22,12 @@ class WalletCubit extends Cubit<WalletState> {
     required this.secureStorageProvider,
     required this.homeCubit,
     required this.keyGenerator,
-    required this.credentialsCubit,
     required this.walletConnectCubit,
   }) : super(const WalletState());
 
   final SecureStorageProvider secureStorageProvider;
   final HomeCubit homeCubit;
   final KeyGenerator keyGenerator;
-  final CredentialsCubit credentialsCubit;
   final WalletConnectCubit walletConnectCubit;
 
   final log = getLogger('WalletCubit');
@@ -445,6 +443,7 @@ class WalletCubit extends Cubit<WalletState> {
     required int index,
     dynamic Function(CryptoAccount cryptoAccount)? onComplete,
     required BlockchainType blockchainType,
+    required CredentialsCubit credentialsCubit,
   }) async {
     final CryptoAccountData cryptoAccountData = state.cryptoAccount.data[index];
     cryptoAccountData.name = newAccountName;
@@ -482,7 +481,7 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future<void> resetWallet() async {
+  Future<void> resetWallet(CredentialsCubit credentialsCubit) async {
     await secureStorageProvider.deleteAllExceptsSomeKeys(
       [
         SecureStorageKeys.version,
