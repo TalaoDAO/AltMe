@@ -145,9 +145,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         .customOidc4vcProfile
         .credentialManifestSupport;
 
-    final isSecure = profileData.profileSetting.selfSovereignIdentityOptions
-        .customOidc4vcProfile.securityLevel;
-
     final credentialSupported = widget.credentialModel.credentialSupported;
 
     final claims = credentialSupported?['claims'];

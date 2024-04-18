@@ -5,14 +5,13 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
+import 'package:asn1lib/asn1lib.dart' as asn1lib;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
-
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
@@ -23,8 +22,6 @@ import 'package:key_generator/key_generator.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:pointycastle/pointycastle.dart' as pc;
-import 'package:asn1lib/asn1lib.dart' as asn1lib;
 import 'package:x509/x509.dart' as x509;
 
 String generateDefaultAccountName(
@@ -1107,6 +1104,13 @@ MessageHandler getMessageHandler(dynamic e) {
           'error_description': 'The credential support format has some issues.',
         },
       );
+    } else if (stringException == 'AUTHORIZATION_DETAIL_ERROR') {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'Invalid token response format.',
+        },
+      );
     } else {
       return ResponseMessage(
         message:
@@ -1661,7 +1665,6 @@ List<String> getStringCredentialsForToken({
 
     /// jwt_vc
     presentJwtVc = format?.jwtVc != null || format?.jwtVp != null;
-    ;
 
     /// jwt_vc_json
     presentJwtVcJson = format?.jwtVcJson != null || format?.jwtVpJson != null;

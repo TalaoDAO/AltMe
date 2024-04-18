@@ -168,9 +168,7 @@ class SelectiveDisclosure {
     }
   }
 
-  List<ClaimsData> getClaimsData({
-    required String key,
-  }) {
+  List<ClaimsData> getClaimsData({required String key}) {
     dynamic data;
     final value = <ClaimsData>[];
     final JsonPath dataPath = JsonPath(

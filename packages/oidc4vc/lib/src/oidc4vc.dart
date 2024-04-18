@@ -426,7 +426,7 @@ class OIDC4VC {
     required ProofType proofType,
     required OpenIdConfiguration openIdConfiguration,
     required String accessToken,
-    required String cnonce,
+    required String? cnonce,
     List<dynamic>? authorizationDetails,
   }) async {
     var nonce = cnonce;
@@ -470,7 +470,9 @@ class OIDC4VC {
           )
           .firstOrNull;
 
-      if (authDetailForCredential == null) throw Exception();
+      if (authDetailForCredential == null) {
+        throw Exception('AUTHORIZATION_DETAIL_ERROR');
+      }
 
       final credentialIdentifiers =
           (authDetailForCredential['credential_identifiers'] as List<dynamic>)
@@ -615,7 +617,7 @@ class OIDC4VC {
     required String kid,
     required String privateKey,
     required String accessToken,
-    required String nonce,
+    required String? nonce,
   }) async {
     final credentialData = await buildCredentialData(
       nonce: nonce,
