@@ -1104,6 +1104,13 @@ MessageHandler getMessageHandler(dynamic e) {
           'error_description': 'The credential support format has some issues.',
         },
       );
+    } else if (stringException == 'AUTHORIZATION_DETAIL_ERROR') {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'Invalid token response format.',
+        },
+      );
     } else {
       return ResponseMessage(
         message:

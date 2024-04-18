@@ -470,7 +470,9 @@ class OIDC4VC {
           )
           .firstOrNull;
 
-      if (authDetailForCredential == null) throw Exception();
+      if (authDetailForCredential == null) {
+        throw Exception('AUTHORIZATION_DETAIL_ERROR');
+      }
 
       final credentialIdentifiers =
           (authDetailForCredential['credential_identifiers'] as List<dynamic>)
