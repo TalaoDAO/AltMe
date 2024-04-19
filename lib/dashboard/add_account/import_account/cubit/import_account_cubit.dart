@@ -63,7 +63,14 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
       final String? mnemonicOrKey = await getSecureStorage
           .get(SecureStorageKeys.importAccountStep2Mnemonics);
 
-      if (mnemonicOrKey == null) throw Exception();
+      if (mnemonicOrKey == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Please provide the mnemonics or private key.',
+          },
+        );
+      }
 
       await walletCubit.createCryptoWallet(
         accountName: accountName,

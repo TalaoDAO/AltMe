@@ -350,7 +350,12 @@ class OperationCubit extends Cubit<OperationState> {
 
           switch (transactionAccountData.blockchainType) {
             case BlockchainType.tezos:
-              throw Exception();
+              throw ResponseMessage(
+                data: {
+                  'error': 'invalid_request',
+                  'error_description': 'Tezos does not support rpcNodeUrl.',
+                },
+              );
             case BlockchainType.ethereum:
               rpcUrl = await web3RpcMainnetInfuraURL();
             case BlockchainType.fantom:

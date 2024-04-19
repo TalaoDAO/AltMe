@@ -182,7 +182,7 @@ class OIDC4VC {
 
       return (authorizationEndpoint, authorizationRequestParemeters);
     } catch (e) {
-      throw Exception('Not a valid openid url to initiate issuance');
+      throw Exception('NOT_A_VALID_OPENID_URL');
     }
   }
 
@@ -300,7 +300,7 @@ class OIDC4VC {
         };
         credentials.add((credential['types'] as List<dynamic>).last);
       } else {
-        throw Exception();
+        throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
       }
 
       authorizationDetails.add(data);
@@ -700,7 +700,7 @@ class OIDC4VC {
         'redirect_uri': redirectUri,
       };
     } else {
-      throw Exception();
+      throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
     }
 
     if (authorization == null) {
@@ -758,7 +758,7 @@ class OIDC4VC {
         }
 
         if (openIdConfiguration.jwksUri == null) {
-          throw Exception();
+          throw Exception('JWKS_URI_IS_NULL');
         }
 
         final response = await dioGet(
@@ -1638,7 +1638,7 @@ class OIDC4VC {
           : response as Map<String, dynamic>;
       return OpenIdConfiguration.fromJson(data);
     } catch (e) {
-      throw Exception('Openid-Configuration-Issue');
+      throw Exception('OPENID-CONFIGURATION-ISSUE');
     }
   }
 
@@ -1736,11 +1736,9 @@ class OIDC4VC {
       await secureStorageProvider.set(uri, jsonEncode(value));
 
       return response.data;
-    } on FormatException catch (_) {
-      throw Exception();
     } catch (e) {
       if (e is DioException) {
-        throw Exception();
+        throw Exception('Issue while getting $uri');
       } else {
         rethrow;
       }

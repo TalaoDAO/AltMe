@@ -284,7 +284,12 @@ class _SelectiveDisclosurePickViewState
             qrCodeScanCubit: context.read<QRCodeScanCubit>(),
           );
     } else {
-      throw Exception();
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Issue with the disclosure encryption of jwt.',
+        },
+      );
     }
   }
 }

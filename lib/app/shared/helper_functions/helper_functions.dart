@@ -140,7 +140,12 @@ String getIssuersName(String constraints) {
 BlockchainType getBlockchainType(AccountType accountType) {
   switch (accountType) {
     case AccountType.ssi:
-      throw Exception();
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Invalid request.',
+        },
+      );
     case AccountType.tezos:
       return BlockchainType.tezos;
     case AccountType.ethereum:
@@ -322,7 +327,12 @@ Future<String> getPrivateKey({
           .get(SecureStorageKeys.walletAttestationData);
 
       if (walletAttestationData == null) {
-        throw Exception();
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The wallet attestation data has some issue.',
+          },
+        );
       }
 
       final p256KeyForWallet =
@@ -535,7 +545,12 @@ Future<(String, String)> getDidAndKid({
           .get(SecureStorageKeys.walletAttestationData);
 
       if (walletAttestationData == null) {
-        throw Exception();
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The wallet attestation data has some issue.',
+          },
+        );
       }
 
       final walletAttestationDataPayload =
@@ -1005,7 +1020,13 @@ String getCredentialData(dynamic credential) {
         .toList();
     cred = credentialSupported.last;
   } else {
-    throw Exception();
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description':
+            'The format of credentail should be either String or Map.',
+      },
+    );
   }
 
   return cred;
@@ -1030,7 +1051,14 @@ Future<String> getHost({
       scannedResponse: uri.toString(),
       dioClient: client,
     );
-    if (credentialOfferJson == null) throw Exception();
+    if (credentialOfferJson == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'The credential offer is required.',
+        },
+      );
+    }
 
     return Uri.parse(
       credentialOfferJson['credential_issuer'].toString(),
@@ -1097,18 +1125,95 @@ MessageHandler getMessageHandler(dynamic e) {
     );
   } else {
     final stringException = e.toString().replaceAll('Exception: ', '');
-    if (stringException == 'CREDENTIAL_SUPPORT_DATA_ERROR') {
+    if (stringException.contains('CREDENTIAL_SUPPORT_DATA_ERROR')) {
       return ResponseMessage(
         data: {
           'error': 'unsupported_credential_format',
           'error_description': 'The credential support format has some issues.',
         },
       );
-    } else if (stringException == 'AUTHORIZATION_DETAIL_ERROR') {
+    } else if (stringException.contains('AUTHORIZATION_DETAIL_ERROR')) {
       return ResponseMessage(
         data: {
           'error': 'unsupported_format',
           'error_description': 'Invalid token response format.',
+        },
+      );
+    } else if (stringException.contains('INVALID_TOKEN')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'Failed to extract header from jwt.',
+        },
+      );
+    } else if (stringException.contains('INVALID_TOKEN')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'Failed to extract payload from jwt.',
+        },
+      );
+    } else if (stringException.contains('SSI_ISSUE')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'SSI does not support this process.',
+        },
+      );
+    } else if (stringException.contains('OPENID-CONFIGURATION-ISSUE')) {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'Openid configuration response issue.',
+        },
+      );
+    } else if (stringException.contains('NOT_A_VALID_OPENID_URL')) {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'Not a valid openid url to initiate issuance.',
+        },
+      );
+    } else if (stringException.contains('JWKS_URI_IS_NULL')) {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'The jwks_uri is null.',
+        },
+      );
+    } else if (stringException.contains('Issue while getting')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': stringException,
+        },
+      );
+    } else if (stringException.contains('SECURE_STORAGE_ISSUE')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Secure Storage issue with this device',
+        },
+      );
+    } else if (stringException.contains('ISSUE_WHILE_ADDING_IDENTITY')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Issue while adding identity.',
+        },
+      );
+    } else if (stringException.contains('ISSUE_WHILE_GETTING_CLAIMS')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Issue while getting claims.',
+        },
+      );
+    } else if (stringException.contains('ISSUE_WHILE_RESTORING_CLAIMS')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Issue while restoring claims.',
         },
       );
     } else {

@@ -395,7 +395,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     } else if (this == CredentialSubjectType.ageRange) {
       return Urls.ageRangeAIValidationUrl;
     } else {
-      throw Exception();
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Url is not specified for $name.',
+        },
+      );
     }
   }
 

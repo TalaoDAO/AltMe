@@ -123,7 +123,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       );
     } catch (e) {
       emit(state.copyWith(status: AppStatus.error, isInitialised: false));
-      throw Exception('INIT_ISSUE - $e');
+      throw ResponseMessage(
+        message: ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage,
+      );
     }
   }
 
@@ -179,7 +181,13 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       );
     } catch (e) {
       emit(state.copyWith(status: AppStatus.error));
-      throw Exception('UPDATE_ISSUE - $e');
+
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'UPDATE_ISSUE - $e',
+        },
+      );
     }
   }
 
@@ -348,7 +356,14 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         }
 
         if (claims.length != credentialManifests.length) {
-          throw Exception();
+          throw ResponseMessage(
+            data: {
+              'error': 'invalid_format',
+              'error_description':
+                  'The claims length and crdential manifest length '
+                      "doesn't match.",
+            },
+          );
         }
 
         log.i('get claims');

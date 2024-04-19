@@ -125,7 +125,12 @@ Future<void> addOIDC4VCCredential({
         : jsonDecode(encodedCredentialFromOIDC4VC['credential'].toString())
             as Map<String, dynamic>;
   } else {
-    throw Exception();
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_format',
+        'error_description': 'The format of vc is incorrect.',
+      },
+    );
   }
 
   final Map<String, dynamic> newCredential =
