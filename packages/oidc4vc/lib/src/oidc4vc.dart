@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
+import 'package:bs58/bs58.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:did_kit/did_kit.dart';
@@ -300,7 +301,7 @@ class OIDC4VC {
         };
         credentials.add((credential['types'] as List<dynamic>).last);
       } else {
-        throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+        throw Exception();
       }
 
       authorizationDetails.add(data);
@@ -700,7 +701,7 @@ class OIDC4VC {
         'redirect_uri': redirectUri,
       };
     } else {
-      throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+      throw Exception();
     }
 
     if (authorization == null) {
@@ -758,7 +759,7 @@ class OIDC4VC {
         }
 
         if (openIdConfiguration.jwksUri == null) {
-          throw Exception('JWKS_URI_IS_NULL');
+          throw Exception();
         }
 
         final response = await dioGet(
@@ -1736,12 +1737,33 @@ class OIDC4VC {
       await secureStorageProvider.set(uri, jsonEncode(value));
 
       return response.data;
+    } on FormatException catch (_) {
+      throw Exception();
     } catch (e) {
       if (e is DioException) {
-        throw Exception('Issue while getting $uri');
+        throw Exception();
       } else {
         rethrow;
       }
     }
   }
+
+  Map<String, dynamic> publicKeyBase58ToPublicJwk(String publicKeyBase58) {
+    ///step 1 : change the publicKeyBase58 format from base58 to base64 :
+    ///decode base58 then encode in base64 urlsafe
+    final pubKey = base64Url
+        .encode(base58.decode(base58.encode(utf8.encode(publicKeyBase58))))
+        .replaceAll('=', '');
+
+    ///step 2 : create the JWK for the "type": "Ed
+    ///25519VerificationKey2018",
+    ///it is a edDSA key
+    final jwk = {
+      'crv': 'Ed25519',
+      'kty': 'OKP',
+      'x': pubKey,
+    };
+    return jwk;
+  }
 }
+///CsGY5ZB4ctkM3Xs4aDZGMNKd8uK6Pk79geUb6aDkDS4y

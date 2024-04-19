@@ -191,6 +191,24 @@ void main() {
     });
   });
 
+  group('publicKeyBase58ToPublicJwk', () {
+    final oidc4vc = OIDC4VC();
+
+    const publicKeyBase58 = '2S73k5pn5umfnaW31qx6dXFndEn6SmWw7LpgSjNNC5BF';
+
+    final expectedPublicJWK = {
+      'crv': 'Ed25519',
+      'kty': 'OKP',
+      'x': 'FUoLewH4w4-KdaPH2cjZbL--CKYxQRWR05Yd_bIbhQo',
+    };
+
+    test('convert publicKeyBase58 to PublicJwk', () {
+      final publicKey = oidc4vc.publicKeyBase58ToPublicJwk(publicKeyBase58);
+      print('actual - $publicKey');
+      print('expected - $expectedPublicJWK');
+    });
+  });
+
   group('EBSI: getAuthorizationUriForIssuer', () {
     const issuer = 'https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi';
 

@@ -9,6 +9,7 @@ environment:
 dependencies:
   bip32: ^2.0.0
   bip39: ^1.0.6
+  bs58: ^1.0.2
   credential_manifest:
     path: ../credential_manifest
   crypto: ^3.0.3
