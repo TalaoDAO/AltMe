@@ -24,7 +24,8 @@
     "statusList",
     "statusListIndex",
     "theWalletIsSuspended",
-    "clientTypeTitle"
+    "clientTypeTitle",
+    "confidentialClient"
   ],
 
   "es": [
@@ -52,7 +53,8 @@
     "statusList",
     "statusListIndex",
     "theWalletIsSuspended",
-    "clientTypeTitle"
+    "clientTypeTitle",
+    "confidentialClient"
   ],
 
   "fr": [
@@ -70,6 +72,7 @@
     "statusList",
     "statusListIndex",
     "theWalletIsSuspended",
-    "clientTypeTitle"
+    "clientTypeTitle",
+    "confidentialClient"
   ]
 }

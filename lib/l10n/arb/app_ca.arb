@@ -1020,7 +1020,6 @@
   "profileName": "Nom del perfil",
   "companyName": "Nom de l’empresa",
   "configFileIdentifier": "Identificador de l’arxiu de config",
-  "clientCredentials": "Credencials del client",
   "updateYourWalletConfigNow": "Actualitzar ara config de cartera",
   "updateConfigurationNow": "Actualitza la configuració ara",
   "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration": "Indica el correu electrònic i la contrasenya per actualitzar la configuració de la cartera de la teva organització.",

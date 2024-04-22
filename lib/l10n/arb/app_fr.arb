@@ -1021,7 +1021,6 @@
   "profileName": "Nom du profil",
   "companyName": "Nom de l'entreprise",
   "configFileIdentifier": "Identifiant du fichier de configuration",
-  "clientCredentials": "Informations d'Identification du Client",
   "updateYourWalletConfigNow": "Mettez à jour votre configuration maintenant",
   "updateConfigurationNow": "Mettre à jour la configuration maintenant",
   "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration": "Veuillez entrer votre email et votre mot de passe pour mettre à jour votre portefeuille",
