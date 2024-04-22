@@ -677,6 +677,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
           VCFormatType.ldpVc,
           VCFormatType.jwtVcJson,
           VCFormatType.vcSdJWT,
+          VCFormatType.jwtVc,
         ];
 
       case CredentialSubjectType.identityCredential:
@@ -899,6 +900,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         if (vcFormatType == VCFormatType.vcSdJWT) {
           type = 'identitycredential';
+        } else if (vcFormatType == VCFormatType.jwtVc) {
+          type = 'individualverifiableattestation';
         }
 
         link = '${Urls.id360Url}'
