@@ -13,7 +13,7 @@ extension ClientTypeX on ClientType {
   String get getTitle {
     switch (this) {
       case ClientType.jwkThumbprint:
-        return 'JWK Thumbprint';
+        return 'P-256 JWK Thumbprint';
       case ClientType.did:
         return 'DID';
       case ClientType.confidential:
