@@ -1216,6 +1216,13 @@ MessageHandler getMessageHandler(dynamic e) {
           'error_description': 'Issue while restoring claims.',
         },
       );
+    } else if (stringException.contains('PUBLICKEYJWK_EXTRACTION_ERROR')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Issue while restoring claims.',
+        },
+      );
     } else {
       return ResponseMessage(
         message:

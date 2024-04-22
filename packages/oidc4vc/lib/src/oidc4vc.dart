@@ -20,6 +20,7 @@ import 'package:oidc4vc/src/helper_function.dart';
 import 'package:secp256k1/secp256k1.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
+import 'package:pointycastle/src/utils.dart' as pointycastle_utils;
 
 /// {@template ebsi}
 /// EBSI wallet compliance
@@ -884,9 +885,20 @@ class OIDC4VC {
             .toList();
       }
 
-      final value = data.first['publicKeyJwk'];
+      final method = data.first as Map<String, dynamic>;
 
-      return jsonDecode(jsonEncode(value)) as Map<String, dynamic>;
+      dynamic publicKeyJwk;
+
+      if (method.containsKey('publicKeyJwk')) {
+        publicKeyJwk = method['publicKeyJwk'];
+      } else if (method.containsKey('publicKeyBase58')) {
+        publicKeyJwk =
+            publicKeyBase58ToPublicJwk(method['publicKeyBase58'].toString());
+      } else {
+        throw Exception('PUBLICKEYJWK_EXTRACTION_ERROR');
+      }
+
+      return jsonDecode(jsonEncode(publicKeyJwk)) as Map<String, dynamic>;
     }
   }
 
@@ -1751,9 +1763,9 @@ class OIDC4VC {
   Map<String, dynamic> publicKeyBase58ToPublicJwk(String publicKeyBase58) {
     ///step 1 : change the publicKeyBase58 format from base58 to base64 :
     ///decode base58 then encode in base64 urlsafe
-    final pubKey = base64Url
-        .encode(base58.decode(base58.encode(utf8.encode(publicKeyBase58))))
-        .replaceAll('=', '');
+
+    final pubKey =
+        base64UrlEncode(base58.decode(publicKeyBase58)).replaceAll('=', '');
 
     ///step 2 : create the JWK for the "type": "Ed
     ///25519VerificationKey2018",
@@ -1766,4 +1778,3 @@ class OIDC4VC {
     return jwk;
   }
 }
-///CsGY5ZB4ctkM3Xs4aDZGMNKd8uK6Pk79geUb6aDkDS4y

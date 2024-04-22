@@ -204,8 +204,7 @@ void main() {
 
     test('convert publicKeyBase58 to PublicJwk', () {
       final publicKey = oidc4vc.publicKeyBase58ToPublicJwk(publicKeyBase58);
-      print('actual - $publicKey');
-      print('expected - $expectedPublicJWK');
+      expect(publicKey, expectedPublicJWK);
     });
   });
 

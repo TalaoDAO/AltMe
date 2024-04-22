@@ -1087,21 +1087,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             );
           }
 
-          if (publicKeyJwk != null) {
-            final VerificationType isVerified = await verifyEncodedData(
-              issuer: clientId,
-              jwtDecode: jwtDecode,
-              jwt: encodedData,
-              publicKeyJwk: publicKeyJwk,
-            );
+          final VerificationType isVerified = await verifyEncodedData(
+            issuer: clientId,
+            jwtDecode: jwtDecode,
+            jwt: encodedData,
+            publicKeyJwk: publicKeyJwk,
+          );
 
-            if (isVerified != VerificationType.verified) {
-              return emitError(
-                ResponseMessage(
-                  message: ResponseString.RESPONSE_STRING_invalidRequest,
-                ),
-              );
-            }
+          if (isVerified != VerificationType.verified) {
+            return emitError(
+              ResponseMessage(
+                message: ResponseString.RESPONSE_STRING_invalidRequest,
+              ),
+            );
           }
         }
 
