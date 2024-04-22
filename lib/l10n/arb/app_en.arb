@@ -1019,7 +1019,6 @@
   "yourWalletConfigurationHasBeenSuccessfullyUpdated": "Your wallet configuration has been successfully updated",
   "continueString": "Continue",
   "walletProvider": "Wallet Provider",
-  "clientTypeTitle": "OIDC4VCI Client Type",
   "clientTypeSubtitle": "Default: DID\nSwitch to change the client type",
   "proofHeader": "Proof of Possession Header",
   "proofHeaderSubtitle": "Default: kid\nSwitch if jwk is needed in header.",
@@ -1056,5 +1055,6 @@
   "statusListCachingSubTitle": "Default: On\nSwitch off to reload StatusList when needed",
   "statusList": "Status list",
   "statusListIndex": "Status list index",
-  "theWalletIsSuspended": "The wallet is suspended."
+  "theWalletIsSuspended": "The wallet is suspended.",
+  "clientTypeTitle": "Wallet Client_id Scheme"
 }

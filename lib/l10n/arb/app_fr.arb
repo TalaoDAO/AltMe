@@ -965,7 +965,6 @@
   "jwkDecentralizedIDP256": "JWK d'Identité Décentralisée P-256",
   "defaultDid": "DID par Défaut",
   "selectOneOfTheDid": "Sélectionnez l'un des DIDs",
-  "clientTypeTitle": "Type de Client OIDC4VCI",
   "clientTypeSubtitle": "Par défaut : DID\nSwitch pour changer le type de client",
   "cryptographicHolderBinding": "Liaison du Titulaire Cryptographique",
   "cryptographicHolderBindingSubtitle": "Par défaut : On\nDisable cryptographic binding for claim based binding credentials.",

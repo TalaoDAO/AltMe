@@ -1028,7 +1028,6 @@
   "yourWalletConfigurationHasBeenSuccessfullyUpdated": "Configuración de cartera actualizada",
   "continueString": "Continuar",
   "walletProvider": "Proveedor de cartera",
-  "clientTypeTitle": "Tipo de Cliente OIDC4VCI",
   "clientTypeSubtitle" : "Predeterminado: DID\nDesplace para cambiar el tipo de cliente",
   "proofHeader" : "Encabezado de Prueba de Posesión",
   "proofHeaderSubtitle" : "Predeterminado: kid\nCambiar si necesita JWK en el encabezado.",
