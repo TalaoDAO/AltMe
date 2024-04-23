@@ -336,14 +336,33 @@ Future<String> getPrivateKey({
       }
 
       final p256KeyForWallet =
-          await getWalletP256Key(profileCubit.secureStorageProvider);
+          await getP256KeyToGetAndPresentVC(profileCubit.secureStorageProvider);
 
       return p256KeyForWallet;
   }
 }
 
-Future<String> getWalletP256Key(SecureStorageProvider secureStorage) async {
+Future<String> getWalletAttestationP256Key(
+  SecureStorageProvider secureStorage,
+) async {
   const storageKey = SecureStorageKeys.p256PrivateKeyForWallet;
+
+  /// return key if it is already created
+  final String? p256PrivateKey = await secureStorage.get(storageKey);
+  if (p256PrivateKey != null) return p256PrivateKey.replaceAll('=', '');
+
+  /// create key if it is not created
+  final newKey = generateRandomP256Key();
+
+  await secureStorage.set(storageKey, newKey);
+
+  return newKey;
+}
+
+Future<String> getP256KeyToGetAndPresentVC(
+  SecureStorageProvider secureStorage,
+) async {
+  const storageKey = SecureStorageKeys.p256PrivateKeyToGetAndPresentVC;
 
   /// return key if it is already created
   final String? p256PrivateKey = await secureStorage.get(storageKey);
