@@ -579,7 +579,7 @@ class ScanCubit extends Cubit<ScanState> {
           did: '', // just added as it is required field
           mediaType: MediaType.basic, // just added as it is required field
           clientType:
-              ClientType.jwkThumbprint, // just added as it is required field
+              ClientType.p256JWKThumprint, // just added as it is required field
           proofHeaderType: customOidc4vcProfile.proofHeader,
           clientId: '', // just added as it is required field
         );

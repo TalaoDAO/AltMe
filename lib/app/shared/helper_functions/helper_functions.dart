@@ -1604,7 +1604,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
       did: '', // just added as it is required field
       mediaType: MediaType.basic, // just added as it is required field
       clientType:
-          ClientType.jwkThumbprint, // just added as it is required field
+          ClientType.p256JWKThumprint, // just added as it is required field
       proofHeaderType: customOidc4vcProfile.proofHeader,
       clientId: '', // just added as it is required field
     );
@@ -1619,7 +1619,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
             .replaceAll('=', '');
 
         switch (customOidc4vcProfile.clientType) {
-          case ClientType.jwkThumbprint:
+          case ClientType.p256JWKThumprint:
             clientId = tokenParameters.thumbprint;
           case ClientType.did:
             clientId = did;
@@ -1630,7 +1630,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
       ///  only clientId
       case ClientAuthentication.clientId:
         switch (customOidc4vcProfile.clientType) {
-          case ClientType.jwkThumbprint:
+          case ClientType.p256JWKThumprint:
             clientId = tokenParameters.thumbprint;
           case ClientType.did:
             clientId = did;

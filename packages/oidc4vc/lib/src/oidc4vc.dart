@@ -1519,7 +1519,7 @@ class OIDC4VC {
     var issAndSub = tokenParameters.thumbprint;
 
     switch (tokenParameters.clientType) {
-      case ClientType.jwkThumbprint:
+      case ClientType.p256JWKThumprint:
         issAndSub = tokenParameters.thumbprint;
       case ClientType.did:
         issAndSub = tokenParameters.did;
@@ -1540,7 +1540,7 @@ class OIDC4VC {
       payload['nonce'] = tokenParameters.nonce!;
     }
 
-    if (tokenParameters.clientType == ClientType.jwkThumbprint) {
+    if (tokenParameters.clientType == ClientType.p256JWKThumprint) {
       payload['sub_jwk'] = tokenParameters.publicJWK;
     }
 
