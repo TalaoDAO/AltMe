@@ -23,14 +23,16 @@ class TokenItem extends StatelessWidget {
         child: ListTile(
           contentPadding: EdgeInsets.zero,
           minVerticalPadding: 0,
-          leading: CachedImageFromNetwork(
-            token.iconUrl ?? '',
-            width: Sizes.tokenLogoSize,
-            height: Sizes.tokenLogoSize,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(Sizes.tokenLogoSize),
-            ),
-          ),
+          leading: token.iconUrl == null
+              ? const CircleAvatar()
+              : CachedImageFromNetwork(
+                  token.iconUrl!,
+                  width: Sizes.tokenLogoSize,
+                  height: Sizes.tokenLogoSize,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(Sizes.tokenLogoSize),
+                  ),
+                ),
           title: MyText(
             token.name.isEmpty ? token.symbol : token.name,
             style: Theme.of(context).textTheme.listTileTitle,
