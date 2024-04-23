@@ -45,6 +45,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
     return BlocProvider<ConfirmTokenTransactionCubit>(
       create: (_) => ConfirmTokenTransactionCubit(
         manageNetworkCubit: context.read<ManageNetworkCubit>(),
+        walletCubit: context.read<WalletCubit>(),
         client: DioClient(
           secureStorageProvider: getSecureStorage,
           dio: Dio(),

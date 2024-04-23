@@ -244,13 +244,6 @@ String getDateTimeWithoutSpace() {
   return dateTime;
 }
 
-Future<String> web3RpcMainnetInfuraURL() async {
-  await dotenv.load();
-  final String infuraApiKey = dotenv.get('INFURA_API_KEY');
-  const String prefixUrl = Parameters.web3RpcMainnetUrl;
-  return '$prefixUrl$infuraApiKey';
-}
-
 int getIndexValue({
   required bool isEBSIV3,
   required DidKeyType didKeyType,
@@ -2122,4 +2115,25 @@ String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
     return credentialSubjectModel.associatedAddress;
   }
   return null;
+}
+
+Future<String> fetchRpcUrl(BlockchainNetwork blockchainNetwork) async {
+  String rpcUrl = '';
+
+  if (blockchainNetwork is PolygonNetwork ||
+      blockchainNetwork is BinanceNetwork ||
+      blockchainNetwork is FantomNetwork) {
+    rpcUrl = blockchainNetwork.rpcNodeUrl as String;
+  } else {
+    if (blockchainNetwork.networkname == 'Mainnet') {
+      await dotenv.load();
+      final String infuraApiKey = dotenv.get('INFURA_API_KEY');
+      const String prefixUrl = Parameters.web3RpcMainnetUrl;
+      return '$prefixUrl$infuraApiKey';
+    } else {
+      rpcUrl = blockchainNetwork.rpcNodeUrl as String;
+    }
+  }
+
+  return rpcUrl;
 }

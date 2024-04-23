@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
@@ -22,11 +23,13 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     required this.manageNetworkCubit,
     required this.client,
     required this.keyGenerator,
+    required this.walletCubit,
   }) : super(initialState);
 
   final ManageNetworkCubit manageNetworkCubit;
   final DioClient client;
   final KeyGenerator keyGenerator;
+  final WalletCubit walletCubit;
 
   final logger = getLogger('ConfirmWithdrawal');
 
@@ -57,10 +60,11 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     );
   }
 
-  Future<double?> getEthUSDPrice() async {
+  Future<double?> getEVMUSDPrice(BlockchainType blockchainType) async {
     try {
+      final symbol = blockchainType.symbol;
       final dynamic response = await client.get(
-        '${Urls.cryptoCompareBaseUrl}/data/price?fsym=ETH&tsyms=USD',
+        '${Urls.cryptoCompareBaseUrl}/data/price?fsym=$symbol&tsyms=USD',
       );
       if (response['USD'] != null) {
         final tokenUSDPrice = response['USD'] as double;
@@ -80,7 +84,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         await _calculateFeeTezos();
         unawaited(getXtzUSDPrice());
       } else {
-        await _calculateFeeEthereum();
+        await _calculateEVMFee();
       }
     } catch (e, s) {
       logger.i('error: $e , stack: $s');
@@ -89,8 +93,17 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     }
   }
 
-  Future<void> _calculateFeeEthereum() async {
-    final web3RpcURL = await web3RpcMainnetInfuraURL();
+  Future<void> _calculateEVMFee() async {
+    final blockchainType = walletCubit.state.currentAccount?.blockchainType;
+
+    if (blockchainType == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Please set the blockchain type first.',
+        },
+      );
+    }
 
     final amount = state.tokenAmount
         .toStringAsFixed(int.parse(state.selectedToken.decimals))
@@ -100,6 +113,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     final credentials = EthPrivateKey.fromHex(state.selectedAccountSecretKey);
     final sender = credentials.address;
     final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
+
+    final web3RpcURL = await fetchRpcUrl(manageNetworkCubit.state.network);
 
     final maxGas = await MWeb3Client.estimateEthereumFee(
       web3RpcURL: web3RpcURL,
@@ -113,12 +128,14 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     );
 
     final fee = EtherAmount.inWei(maxGas).getValueInUnit(EtherUnit.ether);
-    final etherUSDPrice = (await getEthUSDPrice()) ?? 0;
+
+    final etherUSDPrice = (await getEVMUSDPrice(blockchainType)) ?? 0;
     final double feeInUSD = etherUSDPrice * fee;
+
     final networkFee = NetworkFeeModel(
       fee: fee,
       networkSpeed: NetworkSpeed.average,
-      tokenSymbol: 'ETH',
+      tokenSymbol: blockchainType.symbol,
       feeInUSD: feeInUSD,
     );
 
@@ -337,7 +354,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       final rpcNodeUrl = selectedEthereumNetwork.rpcNodeUrl as String;
 
-      final amount = int.parse(
+      final amount = BigInt.parse(
         tokenAmount
             .toStringAsFixed(
               int.parse(selectedEthereumNetwork.mainTokenDecimal),
@@ -358,11 +375,11 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         privateKey: selectedAccountSecretKey,
         sender: sender,
         reciever: EthereumAddress.fromHex(state.withdrawalAddress),
-        amount: EtherAmount.inWei(BigInt.from(amount)),
+        amount: EtherAmount.inWei(amount),
       );
 
       logger.i(
-        'sending from: $sender to : ${state.withdrawalAddress},etherAmountInWei: ${EtherAmount.inWei(BigInt.from(amount))}',
+        'sending from: $sender to : ${state.withdrawalAddress},etherAmountInWei: ${EtherAmount.inWei(amount)}',
       );
 
       logger.i(
@@ -413,25 +430,15 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       } else {
         final selectedEthereumNetwork = manageNetworkCubit.state.network;
 
-        await dotenv.load();
-        final infuraApiKey = dotenv.get('INFURA_API_KEY');
-        final ethRpcUrl = Urls.infuraBaseUrl + infuraApiKey;
+        final chainRpcUrl = await fetchRpcUrl(manageNetworkCubit.state.network);
 
-        String chainRpcUrl = ethRpcUrl;
-        if (selectedEthereumNetwork is PolygonNetwork ||
-            selectedEthereumNetwork is BinanceNetwork ||
-            selectedEthereumNetwork is FantomNetwork) {
-          chainRpcUrl = selectedEthereumNetwork.rpcNodeUrl as String;
-        } else {
-          chainRpcUrl = ethRpcUrl;
-        }
         await _sendContractInvocationOperationEthereum(
           tokenAmount: state.totalAmount,
           selectedAccountSecretKey: state.selectedAccountSecretKey,
           token: state.selectedToken,
           chainId: (selectedEthereumNetwork as EthereumNetwork).chainId,
           chainRpcUrl: chainRpcUrl,
-          ethRpcUrl: ethRpcUrl,
+          rpcUrl: chainRpcUrl,
         );
       }
     } catch (e, s) {
@@ -546,12 +553,12 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     required TokenModel token,
     required int chainId,
     required String chainRpcUrl,
-    required String ethRpcUrl,
+    required String rpcUrl,
   }) async {
     try {
-      final ethBalance = await MWeb3Client.getETHBalance(
+      final ethBalance = await MWeb3Client.getEVMBalance(
         secretKey: state.selectedAccountSecretKey,
-        rpcUrl: ethRpcUrl,
+        rpcUrl: rpcUrl,
       );
 
       if ((state.networkFee?.fee ?? 0) > ethBalance) {

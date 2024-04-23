@@ -10,7 +10,7 @@ import 'package:web3dart/web3dart.dart';
 class MWeb3Client {
   static final log = getLogger('MWeb3Client');
 
-  static Future<double> getETHBalance({
+  static Future<double> getEVMBalance({
     required String secretKey,
     required String rpcUrl,
   }) async {

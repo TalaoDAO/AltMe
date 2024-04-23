@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:credential_manifest/credential_manifest.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:key_generator/key_generator.dart';
 
 enum BlockchainType { tezos, ethereum, fantom, polygon, binance }

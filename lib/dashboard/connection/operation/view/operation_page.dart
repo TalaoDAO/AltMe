@@ -46,6 +46,7 @@ class OperationPage extends StatelessWidget {
         tokensCubit: context.read<TokensCubit>(),
         walletConnectCubit: context.read<WalletConnectCubit>(),
         connectedDappRepository: ConnectedDappRepository(getSecureStorage),
+        manageNetworkCubit: context.read<ManageNetworkCubit>(),
       ),
       child: OperationView(connectionBridgeType: connectionBridgeType),
     );
