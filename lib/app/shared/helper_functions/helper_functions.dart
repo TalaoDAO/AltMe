@@ -1579,11 +1579,8 @@ Future<(String?, String?, String?, String?)> getClientDetails({
 
     final didKeyType = customOidc4vcProfile.defaultDid;
 
-    final privateKey = await fetchPrivateKey(
-      profileCubit: profileCubit,
-      isEBSIV3: isEBSIV3,
-      didKeyType: didKeyType,
-    );
+    final privateKey =
+        await getP256KeyToGetAndPresentVC(profileCubit.secureStorageProvider);
 
     final (did, _) = await fetchDidAndKid(
       privateKey: privateKey,
