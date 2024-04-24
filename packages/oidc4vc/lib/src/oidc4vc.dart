@@ -20,7 +20,6 @@ import 'package:oidc4vc/src/helper_function.dart';
 import 'package:secp256k1/secp256k1.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
-import 'package:pointycastle/src/utils.dart' as pointycastle_utils;
 
 /// {@template ebsi}
 /// EBSI wallet compliance
