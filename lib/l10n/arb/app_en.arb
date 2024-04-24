@@ -1056,5 +1056,6 @@
   "statusListIndex": "Status list index",
   "theWalletIsSuspended": "The wallet is suspended.",
   "clientTypeTitle": "Wallet Client_id Scheme",
-  "confidentialClient": "Confidential Client"
+  "confidentialClient": "Confidential Client",
+  "jwkThumbprintP256Key": "JWK Thumbprint P-256 Key"
 }
