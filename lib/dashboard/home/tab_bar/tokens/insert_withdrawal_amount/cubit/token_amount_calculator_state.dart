@@ -19,7 +19,6 @@ class TokenAmountCalculatorState extends Equatable {
     String? amount,
     double? validAmount,
     double? insertedAmount,
-    TokenModel? selectedToken,
   }) {
     return TokenAmountCalculatorState(
       amount: amount ?? this.amount,

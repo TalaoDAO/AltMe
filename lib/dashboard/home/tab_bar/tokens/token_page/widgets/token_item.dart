@@ -51,7 +51,7 @@ class TokenItem extends StatelessWidget {
                 child: MyText(
                   isSecure
                       ? '****'
-                      : ('''${token.calculatedBalanceInDouble.toStringAsFixed(token.decimalsToShow).formatNumber()} ${token.symbol}'''),
+                      : ('''${token.calculatedBalanceInDouble.decimalNumber(token.decimalsToShow).formatNumber} ${token.symbol}'''),
                   style: Theme.of(context)
                       .textTheme
                       .listTileTitle
@@ -63,7 +63,7 @@ class TokenItem extends StatelessWidget {
                   isSecure
                       ? '****'
                       : (r'$' +
-                          token.balanceInUSD.toStringAsFixed(2).formatNumber()),
+                          token.balanceInUSD.decimalNumber(2).formatNumber),
                   style: Theme.of(context).textTheme.listTileSubtitle,
                 ),
               ),

@@ -48,15 +48,15 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '''${isNFT ? grandTotal.toInt() : grandTotal.toStringAsFixed(getDecimalsToShow(grandTotal)).formatNumber()} $symbol''',
+                    '''${isNFT ? grandTotal.toInt() : grandTotal.decimalNumber(getDecimalsToShow(grandTotal)).formatNumber} $symbol''',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   if (tokenUSDRate > 0)
                     Text(
                       r'$' +
                           (grandTotal * tokenUSDRate)
-                              .toStringAsFixed(2)
-                              .formatNumber(),
+                              .decimalNumber(2)
+                              .formatNumber,
                       style: Theme.of(context).textTheme.bodySmall2,
                     ),
                 ],
@@ -83,15 +83,13 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '''${networkFee!.fee.toStringAsFixed(6).formatNumber()} ${networkFee!.tokenSymbol}''',
+                      '''${networkFee!.fee.decimalNumber(6).formatNumber} ${networkFee!.tokenSymbol}''',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     if (tokenUSDRate > 0 && networkFee?.tokenSymbol == symbol)
                       Text(
                         r'$' +
-                            networkFee!.feeInUSD
-                                .toStringAsFixed(2)
-                                .formatNumber(),
+                            networkFee!.feeInUSD.decimalNumber(2).formatNumber,
                         style: Theme.of(context).textTheme.bodySmall2,
                       ),
                   ],
@@ -111,15 +109,13 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '''${isNFT ? amount.toInt() : amount.toStringAsFixed(getDecimalsToShow(amount)).formatNumber()} $symbol''',
+                    '''${isNFT ? amount.toInt() : amount.decimalNumber(getDecimalsToShow(amount)).formatNumber} $symbol''',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   if (tokenUSDRate > 0)
                     Text(
                       r'$' +
-                          (amount * tokenUSDRate)
-                              .toStringAsFixed(2)
-                              .formatNumber(),
+                          (amount * tokenUSDRate).decimalNumber(2).formatNumber,
                       style: Theme.of(context).textTheme.bodySmall2,
                     ),
                 ],

@@ -180,7 +180,7 @@ class _OperationViewState extends State<OperationView> {
                             ),
                             const SizedBox(height: Sizes.spaceSmall),
                             MyText(
-                              '''${state.amount.toStringAsFixed(6).formatNumber()} ${symbol ?? ''}''',
+                              '''${state.amount.decimalNumber(6).formatNumber} ${symbol ?? ''}''',
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme

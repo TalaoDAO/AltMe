@@ -56,9 +56,7 @@ class TransactionItem extends StatelessWidget {
               ),
               Text(
                 tokenUsdPrice != null
-                    ? (tokenUsdPrice! * amount)
-                            .toStringAsFixed(2)
-                            .formatNumber() +
+                    ? (tokenUsdPrice! * amount).decimalNumber(2).formatNumber +
                         r'$'
                     : r'$--.--',
                 style: Theme.of(context).textTheme.bodySmall2,
@@ -122,7 +120,7 @@ class TransactionItem extends StatelessWidget {
               ),
               Expanded(
                 child: MyText(
-                  '''${amount.toStringAsFixed(amount < 1 ? 5 : 2).formatNumber()} '''
+                  '''${amount.decimalNumber(amount < 1 ? 5 : 2).formatNumber} '''
                   '$symbol',
                   minFontSize: 8,
                   textAlign: TextAlign.end,

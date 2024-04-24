@@ -12,9 +12,7 @@ class InsertWithdrawalPageCubit extends Cubit<InsertWithdrawalPageState> {
   InsertWithdrawalPageCubit({
     required this.defaultSelectedToken,
   }) : super(
-          InsertWithdrawalPageState(
-            selectedToken: defaultSelectedToken,
-          ),
+          InsertWithdrawalPageState(selectedToken: defaultSelectedToken),
         );
 
   final TokenModel defaultSelectedToken;

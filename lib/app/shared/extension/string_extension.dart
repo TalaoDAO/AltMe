@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 extension StringExtension on String {
-  String formatNumber() {
+  String get formatNumber {
     if (isEmpty || length < 3) return this;
     final formatter = NumberFormat('#,###');
     final value = this;

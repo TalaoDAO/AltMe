@@ -129,7 +129,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
         }
         if (state.status == AppStatus.success) {
           final amountAndSymbol =
-              '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(getDecimalsToShow(state.totalAmount)).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
+              '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.decimalNumber(getDecimalsToShow(state.totalAmount)).formatNumber} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
           TransactionDoneDialog.show(
             context: context,
             amountAndSymbol: amountAndSymbol,
@@ -151,7 +151,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
       },
       builder: (context, state) {
         final amountAndSymbol =
-            '''${widget.isNFT ? widget.amount.toInt() : state.tokenAmount.toStringAsFixed(getDecimalsToShow(state.tokenAmount)).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
+            '''${widget.isNFT ? widget.amount.toInt() : state.tokenAmount.decimalNumber(getDecimalsToShow(state.tokenAmount)).formatNumber} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
         return BasePage(
           scrollView: false,
           title: l10n.confirm,
