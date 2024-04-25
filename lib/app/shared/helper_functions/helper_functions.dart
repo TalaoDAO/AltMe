@@ -2117,15 +2117,22 @@ String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
 Future<String> fetchRpcUrl(BlockchainNetwork blockchainNetwork) async {
   String rpcUrl = '';
 
-  if (blockchainNetwork is PolygonNetwork ||
-      blockchainNetwork is BinanceNetwork ||
+  if (blockchainNetwork is BinanceNetwork ||
       blockchainNetwork is FantomNetwork) {
     rpcUrl = blockchainNetwork.rpcNodeUrl as String;
   } else {
     if (blockchainNetwork.networkname == 'Mainnet') {
       await dotenv.load();
       final String infuraApiKey = dotenv.get('INFURA_API_KEY');
-      const String prefixUrl = Parameters.web3RpcMainnetUrl;
+
+      late String prefixUrl;
+
+      if (blockchainNetwork is PolygonNetwork) {
+        prefixUrl = Parameters.POLYGON_INFURA_URL;
+      } else {
+        prefixUrl = Parameters.web3RpcMainnetUrl;
+      }
+
       return '$prefixUrl$infuraApiKey';
     } else {
       rpcUrl = blockchainNetwork.rpcNodeUrl as String;

@@ -87,7 +87,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         currentNetwork = PolygonIdNetwork.PolygonMainnet;
         await polygonId.init(
           network: network,
-          web3Url: Parameters.INFURA_URL,
+          web3Url: Parameters.POLYGON_INFURA_URL,
           web3RdpUrl: Parameters.INFURA_RDP_URL,
           web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.ID_STATE_CONTRACT_ADDR,
@@ -147,7 +147,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         network = Parameters.POLYGON_MAIN_NETWORK;
         await polygonId.setEnv(
           network: Parameters.POLYGON_MAIN_NETWORK,
-          web3Url: Parameters.INFURA_URL,
+          web3Url: Parameters.POLYGON_INFURA_URL,
           web3RdpUrl: Parameters.INFURA_RDP_URL,
           web3ApiKey: dotenv.get('INFURA_API_KEY'),
           idStateContract: Parameters.ID_STATE_CONTRACT_ADDR,
