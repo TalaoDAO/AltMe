@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/tokens.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmTransactionDetailsCard extends StatelessWidget {
@@ -17,14 +18,14 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
     this.isNFT = false,
   });
 
-  final double amount;
+  final String amount;
   final double tokenUSDRate;
   final String symbol;
   final NetworkFeeModel? networkFee;
   final List<NetworkFeeModel>? networkFees;
   final VoidCallback? onEditButtonPressed;
   final bool isNFT;
-  final double grandTotal;
+  final String grandTotal;
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +49,13 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '''${isNFT ? grandTotal.toInt() : grandTotal.decimalNumber(getDecimalsToShow(grandTotal)).formatNumber} $symbol''',
+                    '''${isNFT ? Decimal.parse(grandTotal).toBigInt() : double.parse(grandTotal).decimalNumber(getDecimalsToShow(double.parse(grandTotal))).formatNumber} $symbol''',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   if (tokenUSDRate > 0)
                     Text(
                       r'$' +
-                          (grandTotal * tokenUSDRate)
+                          (double.parse(grandTotal) * tokenUSDRate)
                               .decimalNumber(2)
                               .formatNumber,
                       style: Theme.of(context).textTheme.bodySmall2,
@@ -109,13 +110,15 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '''${isNFT ? amount.toInt() : amount.decimalNumber(getDecimalsToShow(amount)).formatNumber} $symbol''',
+                    '''${isNFT ? Decimal.parse(amount).toBigInt() : double.parse(amount).decimalNumber(getDecimalsToShow(double.parse(amount))).formatNumber} $symbol''',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   if (tokenUSDRate > 0)
                     Text(
                       r'$' +
-                          (amount * tokenUSDRate).decimalNumber(2).formatNumber,
+                          (double.parse(amount) * tokenUSDRate)
+                              .decimalNumber(2)
+                              .formatNumber,
                       style: Theme.of(context).textTheme.bodySmall2,
                     ),
                 ],

@@ -21,8 +21,8 @@ class ConfirmTokenTransactionState extends Equatable {
   final AppStatus status;
   final StateMessage? message;
   final String? transactionHash;
-  final double tokenAmount;
-  final double totalAmount;
+  final String tokenAmount;
+  final String totalAmount;
   final TokenModel selectedToken;
   final String selectedAccountSecretKey;
   final OperationsList? operationsList;
@@ -71,8 +71,8 @@ class ConfirmTokenTransactionState extends Equatable {
     AppStatus? status,
     StateMessage? message,
     String? transactionHash,
-    double? tokenAmount,
-    double? totalAmount,
+    String? tokenAmount,
+    String? totalAmount,
     TokenModel? selectedToken,
     String? selectedAccountSecretKey,
     OperationsList? operationsList,

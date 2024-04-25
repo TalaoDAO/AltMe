@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:web3dart/crypto.dart';
-import 'package:web3dart/json_rpc.dart';
 import 'package:web3dart/web3dart.dart';
 
 class MWeb3Client {
@@ -229,12 +228,12 @@ class MWeb3Client {
       return txId;
     } catch (e, s) {
       log.e('sendToken() error: $e , stack: $s');
-      if (e is RPCError) rethrow;
-      return null;
+      rethrow;
     }
   }
 
-  static Future<BigInt> estimateEthereumFee({
+  // maxGas, gasPrice, feeData
+  static Future<(BigInt, EtherAmount, BigInt)> estimateEVMFee({
     required String web3RpcURL,
     required EthereumAddress sender,
     required EthereumAddress reciever,
@@ -242,11 +241,9 @@ class MWeb3Client {
     String? data,
   }) async {
     log.i('estimateEthereumFee');
-    late EtherAmount gasPrice = EtherAmount.inWei(BigInt.one);
+    final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
+    final gasPrice = await web3Client.getGasPrice();
     try {
-      final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
-      gasPrice = await web3Client.getGasPrice();
-
       log.i('from: ${sender.hex}');
       log.i('to: ${reciever.hex}');
       log.i('gasPrice: ${gasPrice.getInWei}');
@@ -264,16 +261,18 @@ class MWeb3Client {
 
       final fee = maxGas * gasPrice.getInWei;
       log.i('maxGas * gasPrice.getInWei = $fee');
-      return fee;
+      return (maxGas, gasPrice, fee);
     } catch (e, s) {
       log.e('e: $e, s: $s');
-      final fee = BigInt.from(21000) * gasPrice.getInWei;
+      final maxGas = BigInt.from(21000);
+      final fee = maxGas * gasPrice.getInWei;
+      log.i('maxGas - $maxGas');
       log.i('2100 * gasPrice.getInWei = $fee');
-      return fee;
+      return (maxGas, gasPrice, fee);
     }
   }
 
-  static Future<String> sendEthereumTransaction({
+  static Future<String> sendEVMTransaction({
     required String web3RpcURL,
     required int chainId,
     required String privateKey,
@@ -281,14 +280,16 @@ class MWeb3Client {
     required EthereumAddress reciever,
     required EtherAmount amount,
     BigInt? gas,
+    EtherAmount? gasPrice,
     String? data,
   }) async {
     log.i('sendEthereumTransaction');
     final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
     final int nonce = await web3Client.getTransactionCount(sender);
-    final EtherAmount gasPrice = await web3Client.getGasPrice();
 
-    final maxGas = await web3Client.estimateGas(
+    gasPrice ??= await web3Client.getGasPrice();
+
+    gas ??= await web3Client.estimateGas(
       sender: sender,
       to: reciever,
       gasPrice: gasPrice,
@@ -305,12 +306,15 @@ class MWeb3Client {
       value: amount,
       data: data != null ? hexToBytes(data) : null,
       nonce: nonce,
-      maxGas: maxGas.toInt(),
+      maxGas: gas.toInt(),
     );
 
     log.i('nonce: $nonce');
-    log.i('maxGas: ${maxGas.toInt()}');
+    log.i('maxGas: ${gas.toInt()}');
     log.i('chainId: $chainId');
+    log.i('gasPrice: $gasPrice');
+    final fee = gas * gasPrice.getInWei;
+    log.i('$gas * gasPrice.getInWei = $fee');
 
     final transactionHash = await web3Client.sendTransaction(
       credentials,

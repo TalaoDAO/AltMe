@@ -212,7 +212,7 @@ class OperationCubit extends Cubit<OperationState> {
               await fetchRpcUrl(manageNetworkCubit.state.network);
           log.i('web3RpcURL - $web3RpcURL');
 
-          final feeData = await MWeb3Client.estimateEthereumFee(
+          final (_, _, feeData) = await MWeb3Client.estimateEVMFee(
             web3RpcURL: web3RpcURL,
             sender: walletConnectCubit.state.transaction!.from!,
             reciever: walletConnectCubit.state.transaction!.to!,
@@ -353,8 +353,7 @@ class OperationCubit extends Cubit<OperationState> {
 
           log.i('rpcUrl - $rpcUrl');
 
-          final String transactionHash =
-              await MWeb3Client.sendEthereumTransaction(
+          final String transactionHash = await MWeb3Client.sendEVMTransaction(
             chainId: transactionAccountData.blockchainType.chainId,
             web3RpcURL: rpcUrl,
             privateKey: transactionAccountData.secretKey,

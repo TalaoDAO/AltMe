@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:convert/convert.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -42,5 +43,27 @@ extension StringExtension on String {
     final List<int> encode = utf8.encode(this);
     final String bytes = hex.encode(encode);
     return bytes;
+  }
+
+  bool get isEVM {
+    if (this == 'ETH' || this == 'MATIC' || this == 'FTM' || this == 'BNB') {
+      return true;
+    }
+    return false;
+  }
+
+  String decimalNumber(int n) {
+    int number = 1;
+    for (int i = 0; i < n; i++) {
+      if (i > toString().split('.').toList().last.length) {
+        break;
+      }
+      number *= 10;
+    }
+
+    final twoDecimalNumber =
+        (Decimal.parse(this) * Decimal.parse(number.toString())).floor() /
+            Decimal.parse(number.toString());
+    return twoDecimalNumber.toDecimal().toString();
   }
 }

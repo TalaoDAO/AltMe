@@ -104,8 +104,8 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
           BlocBuilder<TokenAmountCalculatorCubit, TokenAmountCalculatorState>(
             builder: (context, state) {
               getLogger('_setAmountControllerText')
-                  .i('amount builder: ${state.amount}');
-              _setAmountControllerText(state.amount);
+                  .i('amount builder: ${state.insertedAmount}');
+              _setAmountControllerText(state.insertedAmount);
               return Column(
                 children: [
                   Form(
@@ -168,14 +168,17 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                     ),
                   ),
                   UsdValueText(
-                    usdValue: state.insertedAmount *
-                        widget.selectedToken.tokenUSDPrice,
+                    usdValue: state.insertedAmount.isEmpty
+                        ? 0
+                        : double.parse(state.insertedAmount) *
+                            widget.selectedToken.tokenUSDPrice,
                   ),
                   MaxButton(
                     onTap: () {
                       _setAmountControllerText(
                         widget.selectedToken.calculatedBalance,
                       );
+
                       context.read<TokenAmountCalculatorCubit>().setAmount(
                             amount: amountController.text,
                             selectedToken: widget.selectedToken,

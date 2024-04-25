@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:decimal/decimal.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +22,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
   static Route<dynamic> route({
     required TokenModel selectedToken,
     required String withdrawalAddress,
-    required double amount,
+    required String amount,
     bool isNFT = false,
   }) {
     return MaterialPageRoute<void>(
@@ -37,7 +38,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
 
   final TokenModel selectedToken;
   final String withdrawalAddress;
-  final double amount;
+  final String amount;
   final bool isNFT;
 
   @override
@@ -81,7 +82,7 @@ class ConfirmWithdrawalView extends StatefulWidget {
 
   final TokenModel selectedToken;
   final String withdrawalAddress;
-  final double amount;
+  final String amount;
   final bool isNFT;
 
   @override
@@ -129,7 +130,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
         }
         if (state.status == AppStatus.success) {
           final amountAndSymbol =
-              '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.decimalNumber(getDecimalsToShow(state.totalAmount)).formatNumber} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
+              '''${widget.isNFT ? Decimal.parse(widget.amount).toBigInt() : double.parse(state.totalAmount).decimalNumber(getDecimalsToShow(double.parse(state.totalAmount))).formatNumber} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
           TransactionDoneDialog.show(
             context: context,
             amountAndSymbol: amountAndSymbol,
@@ -151,7 +152,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
       },
       builder: (context, state) {
         final amountAndSymbol =
-            '''${widget.isNFT ? widget.amount.toInt() : state.tokenAmount.decimalNumber(getDecimalsToShow(state.tokenAmount)).formatNumber} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
+            '''${widget.isNFT ? Decimal.parse(widget.amount).toBigInt() : double.parse(state.tokenAmount).decimalNumber(18).formatNumber} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
         return BasePage(
           scrollView: false,
           title: l10n.confirm,
@@ -166,17 +167,13 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const SizedBox(
-                    height: Sizes.spaceSmall,
-                  ),
+                  const SizedBox(height: Sizes.spaceSmall),
                   Text(
                     l10n.amount,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  const SizedBox(
-                    height: Sizes.spaceSmall,
-                  ),
+                  const SizedBox(height: Sizes.spaceSmall),
                   MyText(
                     amountAndSymbol,
                     textAlign: TextAlign.center,
