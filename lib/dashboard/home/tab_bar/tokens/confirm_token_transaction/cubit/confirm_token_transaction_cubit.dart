@@ -560,16 +560,10 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         emit(state.success());
       }
     } catch (e, s) {
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            message: ResponseString
-                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          ),
-        ),
-      );
       getLogger(runtimeType.toString())
           .e('error in transferOperation , e: $e, s: $s');
+
+      rethrow;
     }
   }
 
