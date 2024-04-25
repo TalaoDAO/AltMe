@@ -597,10 +597,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         return;
       }
 
-      if (token.symbol == 'ETH' ||
-          token.symbol == 'MATIC' ||
-          token.symbol == 'FTM' ||
-          token.symbol == 'BNB') {
+      if (token.symbol.isEVM) {
         await _withdrawEthereumBaseTokenByChainId(
           tokenAmount: tokenAmount,
           selectedAccountSecretKey: selectedAccountSecretKey,
