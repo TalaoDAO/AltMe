@@ -507,7 +507,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final supportAssociatedCredential =
         supportCryptoCredential(profileCubit.state.model);
 
-    if (!supportAssociatedCredential) throw Exception();
+    if (!supportAssociatedCredential) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description':
+              'The crypto associated credential is not supported.',
+        },
+      );
+    }
 
     final didKeyType = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
@@ -601,7 +609,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       final did = oldCredential.credentialPreview.credentialSubjectModel.id;
 
       if (did == null) {
-        throw Exception();
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'DID is required.',
+          },
+        );
       }
 
       final didKeyType = profileCubit.state.model.profileSetting
@@ -711,7 +724,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               final displayVerifiableId = vcFormatType == VCFormatType.ldpVc &&
                   discoverCardsOptions.displayVerifiableId;
               final displayVerifiableIdJwt =
-                  vcFormatType == VCFormatType.jwtVcJson &&
+                  (vcFormatType == VCFormatType.jwtVc ||
+                          vcFormatType == VCFormatType.jwtVcJson) &&
                       discoverCardsOptions.displayVerifiableIdJwt;
               final displayVerifiableIdSdJwt =
                   vcFormatType == VCFormatType.vcSdJWT &&

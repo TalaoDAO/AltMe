@@ -1010,8 +1010,7 @@
   "organizationProfile": "Organization Profile",
   "profileName": "Profile Name",
   "companyName": "Company Name",
-  "configFileIdentifier": "Config file identifier",
-  "clientCredentials": "Client Credentials",
+  "configFileIdentifier": "Config file identifier", 
   "updateYourWalletConfigNow": "Update your wallet config now",
   "updateConfigurationNow": "Update configuration now",
   "pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration": "Please enter your email and password to update your organization wallet configuration",
@@ -1019,7 +1018,6 @@
   "yourWalletConfigurationHasBeenSuccessfullyUpdated": "Your wallet configuration has been successfully updated",
   "continueString": "Continue",
   "walletProvider": "Wallet Provider",
-  "clientTypeTitle": "OIDC4VCI Client Type",
   "clientTypeSubtitle": "Default: DID\nSwitch to change the client type",
   "proofHeader": "Proof of Possession Header",
   "proofHeaderSubtitle": "Default: kid\nSwitch if jwk is needed in header.",
@@ -1056,5 +1054,8 @@
   "statusListCachingSubTitle": "Default: On\nSwitch off to reload StatusList when needed",
   "statusList": "Status list",
   "statusListIndex": "Status list index",
-  "theWalletIsSuspended": "The wallet is suspended."
+  "theWalletIsSuspended": "The wallet is suspended.",
+  "clientTypeTitle": "Wallet Client_id Scheme",
+  "confidentialClient": "Confidential Client",
+  "jwkThumbprintP256Key": "JWK Thumbprint P-256 Key"
 }

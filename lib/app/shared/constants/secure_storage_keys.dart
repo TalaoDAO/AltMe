@@ -37,6 +37,8 @@ class SecureStorageKeys {
   static const String ssiKey = 'ssi/key';
 
   static const String p256PrivateKeyForWallet = 'p256PrivateKeyForWallet';
+  static const String p256PrivateKeyToGetAndPresentVC =
+      'p256PrivateKeyToGetAndPresentVC';
 
   static const String cryptoAccount = 'cryptoAccount';
   static const String cryptoAccounTrackingIndex = 'cryptoAccounTrackingIndex';

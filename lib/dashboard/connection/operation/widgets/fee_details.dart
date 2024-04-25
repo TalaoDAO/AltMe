@@ -36,7 +36,7 @@ class FeeDetails extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '${amount.toStringAsFixed(6).formatNumber()}  $symbol',
+                '${amount.decimalNumber(6).formatNumber}  $symbol',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
@@ -50,7 +50,7 @@ class FeeDetails extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '${fee.toStringAsFixed(6).formatNumber()} $symbol',
+                '${fee.decimalNumber(6).formatNumber} $symbol',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
@@ -69,15 +69,15 @@ class FeeDetails extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '''${grandTotal.toStringAsFixed(6).formatNumber()} $symbol''',
+                    '''${grandTotal.decimalNumber(6).formatNumber} $symbol''',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   if (tokenUSDRate > 0)
                     Text(
                       r'$' +
                           (grandTotal * tokenUSDRate)
-                              .toStringAsFixed(6)
-                              .formatNumber(),
+                              .decimalNumber(6)
+                              .formatNumber,
                       style: Theme.of(context).textTheme.bodySmall2,
                     ),
                 ],

@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
-import 'package:altme/dashboard/home/home.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
@@ -29,6 +29,7 @@ class OperationCubit extends Cubit<OperationState> {
     required this.tokensCubit,
     required this.walletConnectCubit,
     required this.connectedDappRepository,
+    required this.manageNetworkCubit,
   }) : super(const OperationState());
 
   final WalletCubit walletCubit;
@@ -40,6 +41,7 @@ class OperationCubit extends Cubit<OperationState> {
   final TokensCubit tokensCubit;
   final WalletConnectCubit walletConnectCubit;
   final ConnectedDappRepository connectedDappRepository;
+  final ManageNetworkCubit manageNetworkCubit;
 
   final log = getLogger('OperationCubit');
 
@@ -206,10 +208,11 @@ class OperationCubit extends Cubit<OperationState> {
               walletConnectCubit.state.transaction!.value!;
           amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
 
-          final String web3RpcURL = await web3RpcMainnetInfuraURL();
+          final web3RpcURL =
+              await fetchRpcUrl(manageNetworkCubit.state.network);
           log.i('web3RpcURL - $web3RpcURL');
 
-          final feeData = await MWeb3Client.estimateEthereumFee(
+          final (_, _, feeData) = await MWeb3Client.estimateEVMFee(
             web3RpcURL: web3RpcURL,
             sender: walletConnectCubit.state.transaction!.from!,
             reciever: walletConnectCubit.state.transaction!.to!,
@@ -346,25 +349,11 @@ class OperationCubit extends Cubit<OperationState> {
           final EtherAmount ethAmount =
               walletConnectCubit.state.transaction!.value!;
 
-          late String rpcUrl;
-
-          switch (transactionAccountData.blockchainType) {
-            case BlockchainType.tezos:
-              throw Exception();
-            case BlockchainType.ethereum:
-              rpcUrl = await web3RpcMainnetInfuraURL();
-            case BlockchainType.fantom:
-              rpcUrl = FantomNetwork.mainNet().rpcNodeUrl as String;
-            case BlockchainType.polygon:
-              rpcUrl = PolygonNetwork.mainNet().rpcNodeUrl as String;
-            case BlockchainType.binance:
-              rpcUrl = BinanceNetwork.mainNet().rpcNodeUrl as String;
-          }
+          final rpcUrl = await fetchRpcUrl(manageNetworkCubit.state.network);
 
           log.i('rpcUrl - $rpcUrl');
 
-          final String transactionHash =
-              await MWeb3Client.sendEthereumTransaction(
+          final String transactionHash = await MWeb3Client.sendEVMTransaction(
             chainId: transactionAccountData.blockchainType.chainId,
             web3RpcURL: rpcUrl,
             privateKey: transactionAccountData.secretKey,

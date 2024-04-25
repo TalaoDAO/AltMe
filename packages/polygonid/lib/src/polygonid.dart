@@ -133,7 +133,7 @@ class PolygonId {
         );
         return identity;
       } else {
-        throw Exception('STH_WENT_WRONG - $e');
+        throw Exception('ISSUE_WHILE_ADDING_IDENTITY');
       }
     }
   }
@@ -298,7 +298,7 @@ class PolygonId {
 
       return claimEntities;
     } catch (e) {
-      throw Exception();
+      throw Exception('ISSUE_WHILE_GETTING_CLAIMS');
     }
   }
 
@@ -410,7 +410,7 @@ class PolygonId {
 
       return claimEntities;
     } catch (e) {
-      throw Exception();
+      throw Exception('ISSUE_WHILE_RESTORING_CLAIMS');
     }
   }
 
@@ -458,7 +458,7 @@ class PolygonId {
 
       return claimEntities;
     } catch (e) {
-      throw Exception();
+      throw Exception('ISSUE_WHILE_GETTING_CLAIMS');
     }
   }
 
