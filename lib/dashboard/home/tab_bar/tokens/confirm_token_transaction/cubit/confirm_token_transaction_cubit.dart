@@ -5,8 +5,10 @@ import 'dart:math';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
+import 'package:decimal/decimal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:key_generator/key_generator.dart';
@@ -22,11 +24,13 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     required this.manageNetworkCubit,
     required this.client,
     required this.keyGenerator,
+    required this.walletCubit,
   }) : super(initialState);
 
   final ManageNetworkCubit manageNetworkCubit;
   final DioClient client;
   final KeyGenerator keyGenerator;
+  final WalletCubit walletCubit;
 
   final logger = getLogger('ConfirmWithdrawal');
 
@@ -57,10 +61,11 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     );
   }
 
-  Future<double?> getEthUSDPrice() async {
+  Future<double?> getEVMUSDPrice(BlockchainType blockchainType) async {
     try {
+      final symbol = blockchainType.symbol;
       final dynamic response = await client.get(
-        '${Urls.cryptoCompareBaseUrl}/data/price?fsym=ETH&tsyms=USD',
+        '${Urls.cryptoCompareBaseUrl}/data/price?fsym=$symbol&tsyms=USD',
       );
       if (response['USD'] != null) {
         final tokenUSDPrice = response['USD'] as double;
@@ -80,7 +85,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         await _calculateFeeTezos();
         unawaited(getXtzUSDPrice());
       } else {
-        await _calculateFeeEthereum();
+        await _calculateEVMFee();
       }
     } catch (e, s) {
       logger.i('error: $e , stack: $s');
@@ -89,36 +94,54 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     }
   }
 
-  Future<void> _calculateFeeEthereum() async {
-    final web3RpcURL = await web3RpcMainnetInfuraURL();
+  BigInt? gas;
+  EtherAmount? gasPrice;
 
-    final amount = state.tokenAmount
-        .toStringAsFixed(int.parse(state.selectedToken.decimals))
-        .replaceAll(',', '')
-        .replaceAll('.', '');
+  Future<void> _calculateEVMFee() async {
+    gas = null;
+    gasPrice = null;
+    final blockchainType = walletCubit.state.currentAccount?.blockchainType;
+
+    if (blockchainType == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Please set the blockchain type first.',
+        },
+      );
+    }
+
+    final amount =
+        Decimal.parse(state.tokenAmount.replaceAll('.', '').replaceAll(',', ''))
+            .toBigInt();
 
     final credentials = EthPrivateKey.fromHex(state.selectedAccountSecretKey);
     final sender = credentials.address;
     final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
 
-    final maxGas = await MWeb3Client.estimateEthereumFee(
+    final web3RpcURL = await fetchRpcUrl(manageNetworkCubit.state.network);
+
+    final (maxGas, priceOfGas, feeData) = await MWeb3Client.estimateEVMFee(
       web3RpcURL: web3RpcURL,
       sender: sender,
       reciever: reciever,
       amount: EtherAmount.inWei(
-        state.selectedToken.symbol == 'ETH'
-            ? BigInt.from(double.parse(amount))
-            : BigInt.zero,
+        state.selectedToken.symbol.isEVM ? amount : BigInt.zero,
       ),
     );
 
-    final fee = EtherAmount.inWei(maxGas).getValueInUnit(EtherUnit.ether);
-    final etherUSDPrice = (await getEthUSDPrice()) ?? 0;
+    gas = maxGas;
+    gasPrice = priceOfGas;
+
+    final fee = EtherAmount.inWei(feeData).getValueInUnit(EtherUnit.ether);
+
+    final etherUSDPrice = (await getEVMUSDPrice(blockchainType)) ?? 0;
     final double feeInUSD = etherUSDPrice * fee;
+
     final networkFee = NetworkFeeModel(
       fee: fee,
       networkSpeed: NetworkSpeed.average,
-      tokenSymbol: 'ETH',
+      tokenSymbol: blockchainType.symbol,
       feeInUSD: feeInUSD,
     );
 
@@ -127,7 +150,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         status: AppStatus.init,
         networkFee: networkFee,
         totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
-            ? state.tokenAmount - networkFee.fee
+            ? (Decimal.parse(state.tokenAmount) -
+                    Decimal.parse(networkFee.fee.toString()))
+                .toString()
             : state.tokenAmount,
       ),
     );
@@ -188,7 +213,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
             networkFees: tezosNetworkFees,
             status: AppStatus.init,
             totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
-                ? state.tokenAmount - networkFee.fee
+                ? (Decimal.parse(state.tokenAmount) -
+                        Decimal.parse(networkFee.fee.toString()))
+                    .toString()
                 : state.tokenAmount,
             operationsList: finalOperationList,
           ),
@@ -225,7 +252,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       contractAddress: state.selectedToken.contractAddress,
       rpcInterface: client.rpcInterface,
     );
-    final amount = (state.tokenAmount * 1000000).toInt();
+    final amount = (double.parse(state.tokenAmount) * 1000000).toInt();
     final parameters = state.selectedToken.isFA1
         ? '''(Pair "${keystore.publicKey}" (Pair "${state.withdrawalAddress}" $amount))'''
         : '''{Pair "${keystore.publicKey}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(state.selectedToken.tokenId ?? '0')} $amount)}}''';
@@ -246,7 +273,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   ) async {
     const minFeesWithStorage = 6526;
     var transactionAmount =
-        ((state.tokenAmount * 1000000).toInt()) - minFeesWithStorage;
+        ((double.parse(state.tokenAmount) * 1000000).toInt()) -
+            minFeesWithStorage;
     // Get fees
     final OperationsList estimationOperationList =
         await prepareTezosOperation(keystore, client, transactionAmount);
@@ -293,7 +321,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
   void setNetworkFee({required NetworkFeeModel networkFee}) {
     final totalAmount = state.selectedToken.symbol == networkFee.tokenSymbol
-        ? state.tokenAmount - networkFee.fee
+        ? (Decimal.parse(state.tokenAmount) -
+                Decimal.parse(networkFee.fee.toString()))
+            .toString()
         : state.tokenAmount;
 
     emit(
@@ -305,7 +335,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   }
 
   bool canConfirmTheWithdrawal() {
-    return state.totalAmount > 0.0 &&
+    return Decimal.parse(state.totalAmount) > Decimal.parse('0') &&
         state.withdrawalAddress.trim().isNotEmpty &&
         state.status != AppStatus.loading;
   }
@@ -327,49 +357,93 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   }
 
   Future<void> _withdrawEthereumBaseTokenByChainId({
-    required double tokenAmount,
+    required String tokenAmount,
     required String selectedAccountSecretKey,
   }) async {
+    emit(state.loading());
+    final selectedEthereumNetwork =
+        manageNetworkCubit.state.network as EthereumNetwork;
+
+    final rpcNodeUrl = selectedEthereumNetwork.rpcNodeUrl as String;
+
+    final amount = BigInt.parse(
+      tokenAmount
+          .decimalNumber(
+            int.parse(selectedEthereumNetwork.mainTokenDecimal),
+          )
+          .replaceAll('.', '')
+          .replaceAll(',', ''),
+    );
+
+    getLogger(toString())
+        .i('selected network node rpc: $rpcNodeUrl, amount: $tokenAmount');
+
+    final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
+    final sender = credentials.address;
+
+    final transactionHash = await MWeb3Client.sendEVMTransaction(
+      web3RpcURL: rpcNodeUrl,
+      chainId: selectedEthereumNetwork.chainId,
+      privateKey: selectedAccountSecretKey,
+      sender: sender,
+      reciever: EthereumAddress.fromHex(state.withdrawalAddress),
+      amount: EtherAmount.inWei(amount),
+      gas: gas,
+      gasPrice: gasPrice,
+    );
+
+    logger.i(
+      'sending from: $sender to : ${state.withdrawalAddress},etherAmountInWei: ${EtherAmount.inWei(amount)}',
+    );
+
+    logger.i(
+      'after withdrawal ETH execute => transactionHash: $transactionHash',
+    );
+    emit(state.success(transactionHash: transactionHash));
+  }
+
+  int transactionAttemptCount = 0;
+
+  void resetTransactionAttemptCount() {
+    transactionAttemptCount = 0;
+  }
+
+  Future<void> sendContractInvocationOperation() async {
     try {
+      transactionAttemptCount++;
+      logger.i('attempt $transactionAttemptCount');
       emit(state.loading());
-      final selectedEthereumNetwork =
-          manageNetworkCubit.state.network as EthereumNetwork;
 
-      final rpcNodeUrl = selectedEthereumNetwork.rpcNodeUrl as String;
+      if (manageNetworkCubit.state.network is TezosNetwork) {
+        await _sendContractInvocationOperationTezos(
+          tokenAmount: double.parse(state.totalAmount),
+          selectedAccountSecretKey: state.selectedAccountSecretKey,
+          token: state.selectedToken,
+          rpcNodeUrl: rpcNodeUrlForTransaction,
+        );
+      } else {
+        final selectedEthereumNetwork = manageNetworkCubit.state.network;
 
-      final amount = int.parse(
-        tokenAmount
-            .toStringAsFixed(
-              int.parse(selectedEthereumNetwork.mainTokenDecimal),
-            )
-            .replaceAll(',', '')
-            .replaceAll('.', ''),
-      );
+        final chainRpcUrl = await fetchRpcUrl(manageNetworkCubit.state.network);
 
-      getLogger(toString())
-          .i('selected network node rpc: $rpcNodeUrl, amount: $tokenAmount');
+        await _sendContractInvocationOperationEVM(
+          tokenAmount: state.totalAmount,
+          selectedAccountSecretKey: state.selectedAccountSecretKey,
+          token: state.selectedToken,
+          chainId: (selectedEthereumNetwork as EthereumNetwork).chainId,
+          chainRpcUrl: chainRpcUrl,
+          rpcUrl: chainRpcUrl,
+        );
 
-      final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
-      final sender = credentials.address;
-
-      final transactionHash = await MWeb3Client.sendEthereumTransaction(
-        web3RpcURL: rpcNodeUrl,
-        chainId: selectedEthereumNetwork.chainId,
-        privateKey: selectedAccountSecretKey,
-        sender: sender,
-        reciever: EthereumAddress.fromHex(state.withdrawalAddress),
-        amount: EtherAmount.inWei(BigInt.from(amount)),
-      );
-
-      logger.i(
-        'sending from: $sender to : ${state.withdrawalAddress},etherAmountInWei: ${EtherAmount.inWei(BigInt.from(amount))}',
-      );
-
-      logger.i(
-        'after withdrawal ETH execute => transactionHash: $transactionHash',
-      );
-      emit(state.success(transactionHash: transactionHash));
+        resetTransactionAttemptCount();
+      }
     } catch (e, s) {
+      if (transactionAttemptCount < 3) {
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        await sendContractInvocationOperation();
+        return;
+      }
+      resetTransactionAttemptCount();
       logger.e(
         'error after withdrawal execute: e: $e, stack: $s',
         error: e,
@@ -396,47 +470,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           ),
         );
       }
-    }
-  }
-
-  Future<void> sendContractInvocationOperation() async {
-    try {
-      emit(state.loading());
-
-      if (manageNetworkCubit.state.network is TezosNetwork) {
-        await _sendContractInvocationOperationTezos(
-          tokenAmount: state.totalAmount,
-          selectedAccountSecretKey: state.selectedAccountSecretKey,
-          token: state.selectedToken,
-          rpcNodeUrl: rpcNodeUrlForTransaction,
-        );
-      } else {
-        final selectedEthereumNetwork = manageNetworkCubit.state.network;
-
-        await dotenv.load();
-        final infuraApiKey = dotenv.get('INFURA_API_KEY');
-        final ethRpcUrl = Urls.infuraBaseUrl + infuraApiKey;
-
-        String chainRpcUrl = ethRpcUrl;
-        if (selectedEthereumNetwork is PolygonNetwork ||
-            selectedEthereumNetwork is BinanceNetwork ||
-            selectedEthereumNetwork is FantomNetwork) {
-          chainRpcUrl = selectedEthereumNetwork.rpcNodeUrl as String;
-        } else {
-          chainRpcUrl = ethRpcUrl;
-        }
-        await _sendContractInvocationOperationEthereum(
-          tokenAmount: state.totalAmount,
-          selectedAccountSecretKey: state.selectedAccountSecretKey,
-          token: state.selectedToken,
-          chainId: (selectedEthereumNetwork as EthereumNetwork).chainId,
-          chainRpcUrl: chainRpcUrl,
-          ethRpcUrl: ethRpcUrl,
-        );
-      }
-    } catch (e, s) {
-      logger.e('e: $e s: $s');
-      rethrow;
     }
   }
 
@@ -527,31 +560,25 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         emit(state.success());
       }
     } catch (e, s) {
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            message: ResponseString
-                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          ),
-        ),
-      );
       getLogger(runtimeType.toString())
           .e('error in transferOperation , e: $e, s: $s');
+
+      rethrow;
     }
   }
 
-  Future<void> _sendContractInvocationOperationEthereum({
-    required double tokenAmount,
+  Future<void> _sendContractInvocationOperationEVM({
+    required String tokenAmount,
     required String selectedAccountSecretKey,
     required TokenModel token,
     required int chainId,
     required String chainRpcUrl,
-    required String ethRpcUrl,
+    required String rpcUrl,
   }) async {
     try {
-      final ethBalance = await MWeb3Client.getETHBalance(
+      final ethBalance = await MWeb3Client.getEVMBalance(
         secretKey: state.selectedAccountSecretKey,
-        rpcUrl: ethRpcUrl,
+        rpcUrl: rpcUrl,
       );
 
       if ((state.networkFee?.fee ?? 0) > ethBalance) {
@@ -565,10 +592,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         return;
       }
 
-      if (token.symbol == 'ETH' ||
-          token.symbol == 'MATIC' ||
-          token.symbol == 'FTM' ||
-          token.symbol == 'BNB') {
+      if (token.symbol.isEVM) {
         await _withdrawEthereumBaseTokenByChainId(
           tokenAmount: tokenAmount,
           selectedAccountSecretKey: selectedAccountSecretKey,
@@ -581,7 +605,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       //final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
       //final rpcUrl = await web3RpcMainnetInfuraURL();
-      final amount = tokenAmount *
+      final amount = double.parse(tokenAmount) *
           double.parse(
             1.toStringAsFixed(int.parse(token.decimals)).replaceAll('.', ''),
           );
@@ -608,28 +632,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         );
       }
     } catch (e, s) {
-      if (e is RPCError) {
-        emit(
-          state.copyWith(
-            status: AppStatus.error,
-            message: StateMessage.error(
-              stringMessage: e.message,
-              showDialog: true,
-            ),
-          ),
-        );
-      } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              message: ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            ),
-          ),
-        );
-      }
       getLogger(runtimeType.toString())
           .e('error in transferOperation , e: $e, s: $s');
+      rethrow;
     }
   }
 

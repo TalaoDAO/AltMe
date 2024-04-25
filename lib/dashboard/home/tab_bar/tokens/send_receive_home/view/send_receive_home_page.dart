@@ -151,10 +151,10 @@ class _SendReceiveHomePageView extends StatelessWidget {
                       children: [
                         MyText(
                           state.selectedToken.calculatedBalanceInDouble
-                              .toStringAsFixed(
+                              .decimalNumber(
                                 state.selectedToken.decimalsToShow,
                               )
-                              .formatNumber(),
+                              .formatNumber,
                           style: Theme.of(context).textTheme.headlineMedium,
                           maxLength: 12,
                         ),
@@ -171,8 +171,8 @@ class _SendReceiveHomePageView extends StatelessWidget {
                     MyText(
                       r'$' +
                           state.selectedToken.balanceInUSD
-                              .toStringAsFixed(2)
-                              .formatNumber(),
+                              .decimalNumber(2)
+                              .formatNumber,
                       style: Theme.of(context).textTheme.normal,
                     ),
                     const SizedBox(

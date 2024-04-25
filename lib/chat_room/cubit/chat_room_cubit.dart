@@ -264,7 +264,8 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   Future<void> _checkIfRoomNotExistThenCreateIt() async {
     if (_roomId == null || _roomId!.isEmpty) {
-      final p256KeyForWallet = await getWalletP256Key(secureStorageProvider);
+      final p256KeyForWallet =
+          await getP256KeyToGetAndPresentVC(secureStorageProvider);
 
       final customOidc4vcProfile = profileCubit.state.model.profileSetting
           .selfSovereignIdentityOptions.customOidc4vcProfile;
@@ -274,7 +275,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
         did: '', // just added as it is required field
         mediaType: MediaType.basic, // just added as it is required field
         clientType:
-            ClientType.jwkThumbprint, // just added as it is required field
+            ClientType.p256JWKThumprint, // just added as it is required field
         proofHeaderType: customOidc4vcProfile.proofHeader,
         clientId: customOidc4vcProfile.clientId ?? '',
       );

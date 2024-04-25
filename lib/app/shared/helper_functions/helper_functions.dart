@@ -5,14 +5,13 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
+import 'package:asn1lib/asn1lib.dart' as asn1lib;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
-
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
@@ -23,8 +22,6 @@ import 'package:key_generator/key_generator.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:pointycastle/pointycastle.dart' as pc;
-import 'package:asn1lib/asn1lib.dart' as asn1lib;
 import 'package:x509/x509.dart' as x509;
 
 String generateDefaultAccountName(
@@ -143,7 +140,12 @@ String getIssuersName(String constraints) {
 BlockchainType getBlockchainType(AccountType accountType) {
   switch (accountType) {
     case AccountType.ssi:
-      throw Exception();
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Invalid request.',
+        },
+      );
     case AccountType.tezos:
       return BlockchainType.tezos;
     case AccountType.ethereum:
@@ -242,13 +244,6 @@ String getDateTimeWithoutSpace() {
   return dateTime;
 }
 
-Future<String> web3RpcMainnetInfuraURL() async {
-  await dotenv.load();
-  final String infuraApiKey = dotenv.get('INFURA_API_KEY');
-  const String prefixUrl = Parameters.web3RpcMainnetUrl;
-  return '$prefixUrl$infuraApiKey';
-}
-
 int getIndexValue({
   required bool isEBSIV3,
   required DidKeyType didKeyType,
@@ -325,18 +320,42 @@ Future<String> getPrivateKey({
           .get(SecureStorageKeys.walletAttestationData);
 
       if (walletAttestationData == null) {
-        throw Exception();
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The wallet attestation data has some issue.',
+          },
+        );
       }
 
       final p256KeyForWallet =
-          await getWalletP256Key(profileCubit.secureStorageProvider);
+          await getP256KeyToGetAndPresentVC(profileCubit.secureStorageProvider);
 
       return p256KeyForWallet;
   }
 }
 
-Future<String> getWalletP256Key(SecureStorageProvider secureStorage) async {
+Future<String> getWalletAttestationP256Key(
+  SecureStorageProvider secureStorage,
+) async {
   const storageKey = SecureStorageKeys.p256PrivateKeyForWallet;
+
+  /// return key if it is already created
+  final String? p256PrivateKey = await secureStorage.get(storageKey);
+  if (p256PrivateKey != null) return p256PrivateKey.replaceAll('=', '');
+
+  /// create key if it is not created
+  final newKey = generateRandomP256Key();
+
+  await secureStorage.set(storageKey, newKey);
+
+  return newKey;
+}
+
+Future<String> getP256KeyToGetAndPresentVC(
+  SecureStorageProvider secureStorage,
+) async {
+  const storageKey = SecureStorageKeys.p256PrivateKeyToGetAndPresentVC;
 
   /// return key if it is already created
   final String? p256PrivateKey = await secureStorage.get(storageKey);
@@ -538,7 +557,12 @@ Future<(String, String)> getDidAndKid({
           .get(SecureStorageKeys.walletAttestationData);
 
       if (walletAttestationData == null) {
-        throw Exception();
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'The wallet attestation data has some issue.',
+          },
+        );
       }
 
       final walletAttestationDataPayload =
@@ -1008,7 +1032,13 @@ String getCredentialData(dynamic credential) {
         .toList();
     cred = credentialSupported.last;
   } else {
-    throw Exception();
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description':
+            'The format of credentail should be either String or Map.',
+      },
+    );
   }
 
   return cred;
@@ -1033,7 +1063,14 @@ Future<String> getHost({
       scannedResponse: uri.toString(),
       dioClient: client,
     );
-    if (credentialOfferJson == null) throw Exception();
+    if (credentialOfferJson == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'The credential offer is required.',
+        },
+      );
+    }
 
     return Uri.parse(
       credentialOfferJson['credential_issuer'].toString(),
@@ -1100,11 +1137,102 @@ MessageHandler getMessageHandler(dynamic e) {
     );
   } else {
     final stringException = e.toString().replaceAll('Exception: ', '');
-    if (stringException == 'CREDENTIAL_SUPPORT_DATA_ERROR') {
+    if (stringException.contains('CREDENTIAL_SUPPORT_DATA_ERROR')) {
       return ResponseMessage(
         data: {
           'error': 'unsupported_credential_format',
           'error_description': 'The credential support format has some issues.',
+        },
+      );
+    } else if (stringException.contains('AUTHORIZATION_DETAIL_ERROR')) {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'Invalid token response format.',
+        },
+      );
+    } else if (stringException.contains('INVALID_TOKEN')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'Failed to extract header from jwt.',
+        },
+      );
+    } else if (stringException.contains('INVALID_TOKEN')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'Failed to extract payload from jwt.',
+        },
+      );
+    } else if (stringException.contains('SSI_ISSUE')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'SSI does not support this process.',
+        },
+      );
+    } else if (stringException.contains('OPENID-CONFIGURATION-ISSUE')) {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'Openid configuration response issue.',
+        },
+      );
+    } else if (stringException.contains('NOT_A_VALID_OPENID_URL')) {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'Not a valid openid url to initiate issuance.',
+        },
+      );
+    } else if (stringException.contains('JWKS_URI_IS_NULL')) {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'The jwks_uri is null.',
+        },
+      );
+    } else if (stringException.contains('Issue while getting')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': stringException,
+        },
+      );
+    } else if (stringException.contains('SECURE_STORAGE_ISSUE')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Secure Storage issue with this device',
+        },
+      );
+    } else if (stringException.contains('ISSUE_WHILE_ADDING_IDENTITY')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Issue while adding identity.',
+        },
+      );
+    } else if (stringException.contains('ISSUE_WHILE_GETTING_CLAIMS')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Issue while getting claims.',
+        },
+      );
+    } else if (stringException.contains('ISSUE_WHILE_RESTORING_CLAIMS')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Issue while restoring claims.',
+        },
+      );
+    } else if (stringException.contains('PUBLICKEYJWK_EXTRACTION_ERROR')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Issue while restoring claims.',
         },
       );
     } else {
@@ -1451,11 +1579,8 @@ Future<(String?, String?, String?, String?)> getClientDetails({
 
     final didKeyType = customOidc4vcProfile.defaultDid;
 
-    final privateKey = await fetchPrivateKey(
-      profileCubit: profileCubit,
-      isEBSIV3: isEBSIV3,
-      didKeyType: didKeyType,
-    );
+    final privateKey =
+        await getP256KeyToGetAndPresentVC(profileCubit.secureStorageProvider);
 
     final (did, _) = await fetchDidAndKid(
       privateKey: privateKey,
@@ -1469,7 +1594,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
       did: '', // just added as it is required field
       mediaType: MediaType.basic, // just added as it is required field
       clientType:
-          ClientType.jwkThumbprint, // just added as it is required field
+          ClientType.p256JWKThumprint, // just added as it is required field
       proofHeaderType: customOidc4vcProfile.proofHeader,
       clientId: '', // just added as it is required field
     );
@@ -1484,7 +1609,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
             .replaceAll('=', '');
 
         switch (customOidc4vcProfile.clientType) {
-          case ClientType.jwkThumbprint:
+          case ClientType.p256JWKThumprint:
             clientId = tokenParameters.thumbprint;
           case ClientType.did:
             clientId = did;
@@ -1495,7 +1620,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
       ///  only clientId
       case ClientAuthentication.clientId:
         switch (customOidc4vcProfile.clientType) {
-          case ClientType.jwkThumbprint:
+          case ClientType.p256JWKThumprint:
             clientId = tokenParameters.thumbprint;
           case ClientType.did:
             clientId = did;
@@ -1661,7 +1786,6 @@ List<String> getStringCredentialsForToken({
 
     /// jwt_vc
     presentJwtVc = format?.jwtVc != null || format?.jwtVp != null;
-    ;
 
     /// jwt_vc_json
     presentJwtVcJson = format?.jwtVcJson != null || format?.jwtVpJson != null;
@@ -1988,4 +2112,32 @@ String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
     return credentialSubjectModel.associatedAddress;
   }
   return null;
+}
+
+Future<String> fetchRpcUrl(BlockchainNetwork blockchainNetwork) async {
+  String rpcUrl = '';
+
+  if (blockchainNetwork is BinanceNetwork ||
+      blockchainNetwork is FantomNetwork) {
+    rpcUrl = blockchainNetwork.rpcNodeUrl as String;
+  } else {
+    if (blockchainNetwork.networkname == 'Mainnet') {
+      await dotenv.load();
+      final String infuraApiKey = dotenv.get('INFURA_API_KEY');
+
+      late String prefixUrl;
+
+      if (blockchainNetwork is PolygonNetwork) {
+        prefixUrl = Parameters.POLYGON_INFURA_URL;
+      } else {
+        prefixUrl = Parameters.web3RpcMainnetUrl;
+      }
+
+      return '$prefixUrl$infuraApiKey';
+    } else {
+      rpcUrl = blockchainNetwork.rpcNodeUrl as String;
+    }
+  }
+
+  return rpcUrl;
 }

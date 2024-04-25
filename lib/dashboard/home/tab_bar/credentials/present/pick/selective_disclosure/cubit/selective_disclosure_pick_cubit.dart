@@ -1,6 +1,7 @@
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -15,6 +16,41 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
   }) : super(const SelectiveDisclosureState());
 
   final OIDC4VC oidc4vc;
+
+  void dataFromPresentation({
+    required CredentialModel credentialModel,
+    required PresentationDefinition? presentationDefinition,
+  }) {
+    String? limitDisclosure;
+    final json = <String, dynamic>{};
+
+    if (presentationDefinition != null) {
+      final selectiveDisclosure = SelectiveDisclosure(credentialModel);
+
+      final credentialData = createJsonByDecryptingSDValues(
+        encryptedJson: credentialModel.data,
+        selectiveDisclosure: selectiveDisclosure,
+      );
+
+      for (final inputDescriptor in presentationDefinition.inputDescriptors) {
+        final filterList = inputDescriptor.constraints?.fields ?? <Field>[];
+
+        limitDisclosure = inputDescriptor.constraints?.limitDisclosure;
+
+        for (final field in filterList) {
+          for (final path in field.path) {
+            final searchList = getTextsFromCredential(path, credentialData);
+            for (final element in searchList) {
+              final key = path.split('.').toList().last;
+              json[key] = element;
+            }
+          }
+        }
+      }
+
+      emit(state.copyWith(limitDisclosure: limitDisclosure, filters: json));
+    }
+  }
 
   void toggle(String claimKeyId) {
     final List<String> selectedClaimsKeys = List.of(state.selectedClaimsKeyIds);
@@ -62,7 +98,12 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     }
 
     if (index == null) {
-      throw Exception();
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Issue with the dislosuer of jwt.',
+        },
+      );
     }
 
     final bool isSelected = state.selectedSDIndexInJWT.contains(index);
@@ -81,5 +122,19 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
       ];
     }
     emit(state.copyWith(selectedSDIndexInJWT: selected));
+  }
+
+  void disclosureAction({
+    required String claimKeyId,
+    required CredentialModel credentialModel,
+    String? threeDotValue,
+    String? claimsKey,
+  }) {
+    toggle(claimKeyId);
+    saveIndexOfSDJWT(
+      claimsKey: claimsKey,
+      credentialModel: credentialModel,
+      threeDotValue: threeDotValue,
+    );
   }
 }

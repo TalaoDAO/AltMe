@@ -598,7 +598,12 @@ class CustomOidc4VcProfile extends Equatable {
     } else if (value == '12' || value == '13') {
       return OIDC4VCIDraftType.draft13;
     } else {
-      throw Exception();
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'Error with oidc4vc draft type.',
+        },
+      );
     }
   }
 

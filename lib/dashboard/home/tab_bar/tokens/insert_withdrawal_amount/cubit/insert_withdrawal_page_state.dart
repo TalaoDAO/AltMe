@@ -13,7 +13,7 @@ class InsertWithdrawalPageState extends Equatable {
       standard: 'fa1.2',
       decimalsToShow: 2,
     ),
-    this.amount = 0.0,
+    this.amount = '0',
     this.isValidWithdrawal = false,
   });
 
@@ -21,11 +21,11 @@ class InsertWithdrawalPageState extends Equatable {
       _$InsertWithdrawalPageStateFromJson(json);
 
   final TokenModel selectedToken;
-  final double amount;
+  final String amount;
   final bool isValidWithdrawal;
 
   InsertWithdrawalPageState copyWith({
-    double? amount,
+    String? amount,
     bool? isValidWithdrawal,
     TokenModel? selectedToken,
   }) {

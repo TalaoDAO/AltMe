@@ -19,14 +19,10 @@ class HomeCredentialCategoryList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AdvanceSettingsCubit, AdvanceSettingsState>(
       builder: (context, advanceSettingsState) {
-        final vcFormatType = context
-            .read<ProfileCubit>()
-            .state
-            .model
-            .profileSetting
-            .selfSovereignIdentityOptions
-            .customOidc4vcProfile
-            .vcFormatType;
+        final profileModel = context.read<ProfileCubit>().state.model;
+
+        final customOidc4vcProfile = profileModel
+            .profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
 
         return RefreshIndicator(
           onRefresh: onRefresh,
@@ -53,7 +49,9 @@ class HomeCredentialCategoryList extends StatelessWidget {
                     if (element.credentialPreview.credentialSubjectModel
                             .credentialSubjectType ==
                         CredentialSubjectType.walletCredential) {
-                      return true;
+                      if (profileModel.isDeveloperMode) {
+                        return true;
+                      }
                     }
 
                     /// crypto credential account to be shown always
@@ -78,7 +76,8 @@ class HomeCredentialCategoryList extends StatelessWidget {
                     }
 
                     /// do not load the credential if vc format is different
-                    if (vcFormatType.value != element.getFormat) {
+                    if (customOidc4vcProfile.vcFormatType.value !=
+                        element.getFormat) {
                       return false;
                     }
 

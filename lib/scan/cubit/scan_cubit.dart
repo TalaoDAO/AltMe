@@ -89,7 +89,13 @@ class ScanCubit extends Cubit<ScanState> {
 
         if (isIDTokenOnly(responseType)) {
           /// verifier side (siopv2) with request uri as value
-          throw Exception();
+          throw ResponseMessage(
+            data: {
+              'error': 'invalid_request',
+              'error_description':
+                  'The verifier side must not contain id_token only.',
+            },
+          );
         } else if (isVPTokenOnly(responseType)) {
           /// verifier side (oidc4vp) with request uri as value
 
@@ -128,7 +134,13 @@ class ScanCubit extends Cubit<ScanState> {
 
           return;
         } else {
-          throw Exception();
+          throw ResponseMessage(
+            data: {
+              'error': 'invalid_request',
+              'error_description':
+                  'The response type should contain id_token, vp_token or both.',
+            },
+          );
         }
       } else {
         /// If credential manifest exist we follow instructions to present
@@ -567,7 +579,7 @@ class ScanCubit extends Cubit<ScanState> {
           did: '', // just added as it is required field
           mediaType: MediaType.basic, // just added as it is required field
           clientType:
-              ClientType.jwkThumbprint, // just added as it is required field
+              ClientType.p256JWKThumprint, // just added as it is required field
           proofHeaderType: customOidc4vcProfile.proofHeader,
           clientId: '', // just added as it is required field
         );
@@ -580,6 +592,9 @@ class ScanCubit extends Cubit<ScanState> {
         body = {'response': jwtProofOfPossession};
       } else {
         final presentationSubmissionString = jsonEncode(presentationSubmission);
+
+        ///it is required because of bad async handling with didKit presentation
+        await Future<void>.delayed(const Duration(seconds: 1));
         final responseData = <String, dynamic>{
           'vp_token': vpToken,
           'presentation_submission': presentationSubmissionString,
@@ -923,7 +938,13 @@ class ScanCubit extends Cubit<ScanState> {
 
       return vpToken;
     } else {
-      throw Exception();
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description':
+              'Please present ldp_vc, jwt_vc, jwt_vc_json or vc+sd-jwt.',
+        },
+      );
     }
   }
 

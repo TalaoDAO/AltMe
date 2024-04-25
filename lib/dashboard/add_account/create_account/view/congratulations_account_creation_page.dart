@@ -71,7 +71,12 @@ class _CongratulationsAccountCreationViewState
     String message = '';
     switch (widget.accountType) {
       case AccountType.ssi:
-        throw Exception();
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Invalid request.',
+          },
+        );
       case AccountType.tezos:
         message = l10n.tezosAccountCreationCongratulations;
 
