@@ -142,6 +142,11 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
               }
             },
             onDoneButtonClick: () {
+              if (widget.isNFT) {
+                context.read<NftCubit>().fetchFromZero();
+              } else {
+                context.read<TokensCubit>().fetchFromZero();
+              }
               Navigator.popUntil(
                 context,
                 (route) => route.settings.name == AltMeStrings.dashBoardPage,

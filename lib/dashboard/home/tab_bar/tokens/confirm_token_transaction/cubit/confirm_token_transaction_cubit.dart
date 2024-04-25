@@ -434,6 +434,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           chainRpcUrl: chainRpcUrl,
           rpcUrl: chainRpcUrl,
         );
+
         resetTransactionAttemptCount();
       }
     } catch (e, s) {
