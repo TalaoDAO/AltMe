@@ -49,8 +49,8 @@ class OperationState extends Equatable {
     return OperationState(
       status: status ?? this.status,
       message: message,
-      amount: amount ?? this.usdRate,
-      fee: fee ?? this.usdRate,
+      amount: amount ?? this.amount,
+      fee: fee ?? this.fee,
       usdRate: usdRate ?? this.usdRate,
       cryptoAccountData: cryptoAccountData ?? this.cryptoAccountData,
       dAppName: dAppName ?? this.dAppName,
