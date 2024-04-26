@@ -311,11 +311,18 @@ class OperationCubit extends Cubit<OperationState> {
     }
   }
 
+  int operationAttemptCount = 0;
+
+  void resetOperationAttemptCount() {
+    operationAttemptCount = 0;
+  }
+
   Future<void> sendOperataion(ConnectionBridgeType connectionBridgeType) async {
     if (isClosed) return;
     try {
       emit(state.loading());
-      log.i('sendOperataion');
+      operationAttemptCount++;
+      log.i('sendOperataion attempt $operationAttemptCount');
 
       final isInternetAvailable = await isConnected();
       if (!isInternetAvailable) {
@@ -384,12 +391,20 @@ class OperationCubit extends Cubit<OperationState> {
         );
         unawaited(nftCubit.fetchFromZero());
         unawaited(tokensCubit.fetchFromZero());
+        resetOperationAttemptCount();
       } else {
         throw ResponseMessage(
           message: ResponseString.RESPONSE_STRING_OPERATION_FAILED,
         );
       }
     } catch (e) {
+      if (operationAttemptCount < 3) {
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        await sendOperataion(connectionBridgeType);
+        return;
+      }
+      resetOperationAttemptCount();
+
       log.e('sendOperataion , e: $e');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
