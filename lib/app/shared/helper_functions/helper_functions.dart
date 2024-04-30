@@ -272,6 +272,16 @@ Future<String> getPrivateKey({
   required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
 }) async {
+  final customOidc4vcProfile = profileCubit.state.model.profileSetting
+      .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+  if (customOidc4vcProfile.clientType == ClientType.p256JWKThumprint) {
+    final privateKey =
+        await getP256KeyToGetAndPresentVC(profileCubit.secureStorageProvider);
+
+    return privateKey;
+  }
+
   final mnemonic = await profileCubit.secureStorageProvider
       .get(SecureStorageKeys.ssiMnemonic);
 
@@ -1579,8 +1589,11 @@ Future<(String?, String?, String?, String?)> getClientDetails({
 
     final didKeyType = customOidc4vcProfile.defaultDid;
 
-    final privateKey =
-        await getP256KeyToGetAndPresentVC(profileCubit.secureStorageProvider);
+    final String privateKey = await fetchPrivateKey(
+      profileCubit: profileCubit,
+      isEBSIV3: isEBSIV3,
+      didKeyType: didKeyType,
+    );
 
     final (did, _) = await fetchDidAndKid(
       privateKey: privateKey,
@@ -1594,7 +1607,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
       did: '', // just added as it is required field
       mediaType: MediaType.basic, // just added as it is required field
       clientType:
-          ClientType.p256JWKThumprint, // just added as it is required field
+          customOidc4vcProfile.clientType, // just added as it is required field
       proofHeaderType: customOidc4vcProfile.proofHeader,
       clientId: '', // just added as it is required field
     );
