@@ -19,6 +19,10 @@ on:
         required: false
         type: string
         default: "stable"
+      dart_sdk:
+        required: false
+        type: string
+        default: ""
       flutter_version:
         required: false
         type: string
