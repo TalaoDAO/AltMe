@@ -63,6 +63,10 @@ on:
         required: false
         type: string
         default: "!*"
+      build_runner:
+        required: false
+        type: boolean
+        default: true
     secrets:
       ssh_key:
         required: false
@@ -113,6 +117,7 @@ jobs:
           sdk: ${{inputs.dart_sdk}}
 
       - name: ⚙️ build with build_runner
+        if: ${{inputs.build_runner}}
         run: dart run build_runner build --delete-conflicting-outputs
 
       - name: 🕵️ Analyze

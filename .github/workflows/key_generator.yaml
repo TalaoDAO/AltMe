@@ -1,4 +1,4 @@
-name: altme
+name: key_generator
 
 on: [ pull_request, push ]
 
@@ -6,8 +6,9 @@ jobs:
   build:
     uses: TalaoDAO/AltMe/.github/workflows/flutter_package.yaml@main
     with:
-      coverage_excludes: "**/*_observer.dart **/change.dart"
       flutter_channel: stable
       flutter_version: 3.19.6
       min_coverage: 30
+      working_directory: packages/key_generator
       dart_sdk: 3.3.4
+      build_runner: false
