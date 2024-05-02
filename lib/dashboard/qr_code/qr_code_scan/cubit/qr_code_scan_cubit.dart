@@ -1140,6 +1140,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         stateValue: stateValue,
         clientType: customOidc4vcProfile.clientType,
         proofHeaderType: customOidc4vcProfile.proofHeader,
+        dio: client.dio,
       );
 
       String? url;
@@ -1275,6 +1276,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           final openIdConfiguration = await oidc4vc.getOpenIdConfig(
             baseUrl: issuer,
             isAuthorizationServer: false,
+            dio: client.dio,
           );
 
           if (savedAccessToken == null) {
@@ -1297,6 +1299,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               redirectUri: Parameters.oidc4vcUniversalLink,
               openIdConfiguration: openIdConfiguration,
               clientAssertion: clientAssertion,
+              dio: client.dio,
             );
 
             savedAccessToken = accessToken;

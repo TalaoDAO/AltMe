@@ -729,6 +729,7 @@ Future<
   final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
     baseUrl: issuer,
     isAuthorizationServer: false,
+    dio: client.dio,
   );
 
   if (preAuthorizedCode == null) {
@@ -753,6 +754,7 @@ Future<
     authorizationServerConfiguration = await oidc4vc.getOpenIdConfig(
       baseUrl: authorizationServer,
       isAuthorizationServer: true,
+      dio: client.dio,
     );
   }
 
@@ -1008,6 +1010,7 @@ Future<bool?> isEBSIV3ForVerifiers({
         await oidc4vc.getOpenIdConfig(
       baseUrl: clientId,
       isAuthorizationServer: false,
+      dio: Dio(),
     );
 
     final subjectTrustFrameworksSupported =
