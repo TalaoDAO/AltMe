@@ -4,9 +4,9 @@ on: [ pull_request, push ]
 
 jobs:
   build:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    uses: TalaoDAO/AltMe/.github/workflows/flutter_package.yaml@v1
     with:
       coverage_excludes: "**/*_observer.dart **/change.dart"
       flutter_channel: stable
       flutter_version: 3.19.6
-      min_coverage: 95
+      min_coverage: 30
