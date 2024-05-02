@@ -4,7 +4,7 @@ on: [ pull_request, push ]
 
 jobs:
   build:
-    uses: TalaoDAO/AltMe/.github/workflows/flutter_package.yaml@v1
+    uses: TalaoDAO/AltMe/.github/workflows/flutter_package.yaml@main
     with:
       coverage_excludes: "**/*_observer.dart **/change.dart"
       flutter_channel: stable
