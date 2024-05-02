@@ -276,6 +276,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     openIdConfiguration: openIdConfiguration,
                     issuer: issuer,
                     oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+                    dio: Dio(),
                   );
 
                   credentialEndpoint =
