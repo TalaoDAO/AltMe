@@ -23,19 +23,18 @@ void main() {
   final client = Dio();
   final dioAdapter =
       DioAdapter(dio: Dio(BaseOptions()), matcher: const UrlRequestMatcher());
+
   client.httpClientAdapter = dioAdapter;
 
   const mnemonic =
       'position taste mention august skin taste best air sure acoustic poet ritual';
 
+  final oidc4vc = OIDC4VC();
   test('OIDC4VC class can be instantiated', () {
-    final oidc4vc = OIDC4VC();
     expect(oidc4vc, isNotNull);
   });
 
-  group('EBSI DID and JWK', () {
-    final oidc4vc = OIDC4VC();
-
+  group('OIDC4VC DID and JWK', () {
     const seedBytes = [
       179,
       252,
@@ -80,38 +79,13 @@ void main() {
     };
 
     const index = 0;
-    test('JWK from mnemonic', () async {
-      final jwk = await oidc4vc.privateKeyFromMnemonic(
+    test('JWK from mnemonic', () {
+      final jwk = oidc4vc.privateKeyFromMnemonic(
         mnemonic: mnemonic,
         indexValue: index,
       );
       expect(jsonDecode(jwk), expectedECJwk);
     });
-
-    // group('getPrivateKey', () {
-    //   test('privateKey from mnemonic', () async {
-    //     final jwk = await oidc4vc.getPrivateKey(
-    //       mnemonic: mnemonic,
-    //       indexValue: index,
-    //     );
-    //     expect(jwk, expectedECJwk);
-    //   });
-
-    //   test('privateKey from key', () async {
-    //     const key = {
-    //       'crv': 'secp256k1',
-    //       'd': 's_wb6Ef1ardGsT5Il6WLRvQ9Zu0lp7I2OVwtzT5iQpo',
-    //       'kty': 'EC',
-    //       'x': 'qs4JLbsmA-7L-3o9V4BoNVrDtYoWE2OOZIvujoVJZ1U',
-    //       'y': '8PLGROkTALZP3YHY5pm0yrMVCjQoctHM3uaxug70mq8',
-    //     };
-    //     final jwk = await oidc4vc.getPrivateKey(
-    //       privateKey: jsonEncode(key),
-    //       indexValue: index,
-    //     );
-    //     expect(jwk, expectedECJwk);
-    //   });
-    // });
 
     test('JWK from seeds', () {
       final jwk = oidc4vc.jwkFromSeed(seedBytes: Uint8List.fromList(seedBytes));
@@ -120,7 +94,6 @@ void main() {
   });
 
   test('P256 JWK from mnemonics', () {
-    final oidc4vc = OIDC4VC();
     final jwk = oidc4vc.p256PrivateKeyFromMnemonics(
       mnemonic: mnemonic,
       indexValue: 0,
@@ -128,9 +101,9 @@ void main() {
     final expectedP256Jwk = {
       'kty': 'EC',
       'crv': 'P-256',
-      'd': 'cFCdgT569Shto8jEVbyKqdtEck0EcUSwGz_vqrclTC8',
-      'x': 'vhoSh07qpGqiCJNGQJmY8YaARnxuHUgv403c5TmrABQ',
-      'y': 'E04Ate9RceryoHlz1x3BVIbN9LZR74TWRCeeMNY-oew',
+      'd': 's_wb6Ef1ardGsT5Il6WLRvQ9Zu0lp7I2OVwtzT5iQpo',
+      'x': 'MZZjpNhZGGxqBcPXq499FVC2iu5FcZWwti5u8hgMUaI',
+      'y': 'KD4zffV54PZUsQzTzVgoVlWHwKqogRF3JpKQnIGwIRM',
     };
 
     expect(jsonDecode(jwk), expectedP256Jwk);
@@ -151,8 +124,6 @@ void main() {
 
     const kid = '3623b877bbb24b08ba390f3585418f53';
 
-    final oidc4vc = OIDC4VC();
-
     test('sign and verify with edDSA', () async {
       final token = oidc4vc.generateTokenEdDSA(
         payload: payload,
@@ -170,8 +141,6 @@ void main() {
   });
 
   group('selective disclosure', () {
-    final oidc4vc = OIDC4VC();
-
     const content =
         '["Qg_O64zqAxe412a108iroA", "phone_number", "+81-80-1234-5678"]';
 
@@ -192,8 +161,6 @@ void main() {
   });
 
   group('publicKeyBase58ToPublicJwk', () {
-    final oidc4vc = OIDC4VC();
-
     const publicKeyBase58 = '2S73k5pn5umfnaW31qx6dXFndEn6SmWw7LpgSjNNC5BF';
 
     final expectedPublicJWK = {
@@ -209,238 +176,296 @@ void main() {
   });
 
   group('EBSI: getAuthorizationUriForIssuer', () {
-    const issuer = 'https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi';
+    const selectedCredentials = ['EmailPass'];
+    const clientId =
+        'did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6IjZka1U2Wk1GSzc5V3dpY3dKNXJieEUxM3pTdWtCWTJPb0VpVlVFanFNRWMiLCJ5IjoiUm5Iem55VmxyUFNNVDdpckRzMTVEOXd4Z01vamlTREFRcGZGaHFUa0xSWSJ9';
+    const redirectUri = 'https://app.altme.io/app/download/oidc4vc';
+
+    const issuer = 'https://talao.co/issuer/mfyttabosy';
+
+    const issuerState = 'test7';
+    const nonce = '8b60e2fb-87f3-4401-8107-0f0128ea01ab';
+
+    const pkcePair = PkcePair(
+      'Pzy4U_sJ0J7VdIAR6JCwL5hbecv30egmJVP81VDFAnk',
+      '4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA',
+    );
+
+    const state =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiI0S29yQ3dtWXlPLV90NGlfaHZhN0YzYUhHcFRfMldxcURoNmVyaW1lcE9BIiwiY3JlZGVudGlhbHMiOlsiRW1haWxQYXNzIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL21meXR0YWJvc3kiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpRTFRJMU5pSXNJbXQwZVNJNklrVkRJaXdpZUNJNklqWmthMVUyV2sxR1N6YzVWM2RwWTNkS05YSmllRVV4TTNwVGRXdENXVEpQYjBWcFZsVkZhbkZOUldNaUxDSjVJam9pVW01SWVtNTVWbXh5VUZOTlZEZHBja1J6TVRWRU9YZDRaMDF2YW1sVFJFRlJjR1pHYUhGVWEweFNXU0o5IiwiaWF0IjoxNzE0NTQ5OTUxfQ.JJtv8H52NTvPzR3IPET1sXGALdt0yXaQBQbGvDLKNlM';
+
+    const authorizationEndPoint = 'https://app.altme.io/app/download/authorize';
 
     const openIdConfiguration =
-        '{"authorization_server":"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/authorize_server","credential_endpoint":"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/credential","credential_issuer":"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi","credential_supported":[{"display":[{"locale":"en-GB","name":"Verifiable diploma"}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableDiploma"]},{"display":[{"locale":"en-GB","name":"Email proof"}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","EmailPass"]},{"display":[{"locale":"en-GB","name":"Verifiable Id"}],"format":"jwt_vc","id":"VerifiableId","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableId"]}],"credentials_supported":[{"display":[{"locale":"en-GB","name":"Verifiable diploma"}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableDiploma"]},{"display":[{"locale":"en-GB","name":"Email proof"}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","EmailPass"]},{"display":[{"locale":"en-GB","name":"Verifiable Id"}],"format":"jwt_vc","id":"VerifiableId","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableId"]}],"deferred_credential_endpoint":"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/deferred","service_documentation":"New environment for V3 compliance test, use specific did:key"}';
+        '{"authorization_server":null,"credential_endpoint":"https://talao.co/issuer/mfyttabosy/credential","credential_issuer":"https://talao.co/issuer/mfyttabosy","subject_syntax_types_supported":["urn:ietf:params:oauth:jwk-thumbprint","did:key","did:ebsi","did:tz","did:pkh","did:hedera","did:key","did:ethr","did:web","did:jwk"],"token_endpoint":"https://talao.co/issuer/mfyttabosy/token","batch_endpoint":null,"authorization_endpoint":"https://talao.co/issuer/mfyttabosy/authorize","subject_trust_frameworks_supported":["ebsi"],"credentials_supported":null,"credential_configurations_supported":{"DBCGuest":{"credential_definition":{"type":["VerifiableCredential","DBCGuest"]},"display":[{"background_color":"#3B6F6D","background_image":{"alt_text":"Connected open cubes in blue with one orange cube as a background of the card","url":"https://i.ibb.co/CHqjxrJ/dbc-card-hig-res.png"},"description":"The DBC Guest credential is a DIIP example.","logo":{"alt_text":"An orange block shape, with the text Dutch Blockchain Coalition next to it, portraying the logo of the Dutch Blockchain Coalition.","url":"https://dutchblockchaincoalition.org/assets/images/icons/Logo-DBC.png"},"name":"DBC Guest (DIIP)","text_color":"#FFFFFF"},{"background_color":"#3B6F6D","background_image":{"alt_text":"Connected open cubes in blue with one orange cube as a background of the card","url":"https://i.ibb.co/CHqjxrJ/dbc-card-hig-res.png"},"description":"The DBC guest credential is a DIIP example.","locale":"en-US","logo":{"alt_text":"An orange block shape, with the text Dutch Blockchain Coalition next to it, portraying the logo of the Dutch Blockchain Coalition.","url":"https://dutchblockchaincoalition.org/assets/images/icons/Logo-DBC.png"},"name":"DBC Guest (DIIP)","text_color":"#FFFFFF"},{"background_color":"#3B6F6D","background_image":{"alt_text":"Connected open cubes in blue with one orange cube as a background of the card","url":"https://i.ibb.co/CHqjxrJ/dbc-card-hig-res.png"},"description":"De DBC gast credential is een DIIP voorbeeld.","locale":"nl-NL","logo":{"alt_text":"Aaneengesloten open blokken in de kleur blauw, met een blok in de kleur oranje, die tesamen de achtergrond van de kaart vormen.","url":"https://dutchblockchaincoalition.org/assets/images/icons/Logo-DBC.png"},"name":"DBC gast (DIIP)","text_color":"#FFFFFF"}],"format":"jwt_vc_json","scope":"DBCGuest_scope"},"EmailPass":{"credential_definition":{"type":["VerifiableCredential","EmailPass"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"locale":"en-GB","name":"Proof of Email"}],"format":"jwt_vc_json","scope":"EmailPass_scope"},"EmployeeCredential":{"credential_definition":{"type":["VerifiableCredential","EmployeeCredential"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"background_color":"#12107c","locale":"en-US","logo":{"alt_text":"a square logo of a university","url":"https://exampleuniversity.com/public/logo.png"},"name":"Employee Credential","text_color":"#FFFFFF"}],"format":"jwt_vc_json","scope":"EmployeeCredential_scope"},"Over18":{"credential_definition":{"type":["VerifiableCredential","Over18"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"locale":"en-GB","name":"Over 18yo proof"},{"locale":"fr-GB","name":"Preuve de majorité"}],"format":"jwt_vc_json","scope":"Over18_scope"},"PhoneProof":{"credential_definition":{"type":["VerifiableCredential","PhoneProof"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"locale":"en-GB","name":"Proof of phone number"}],"format":"jwt_vc_json","scope":"PhoneProof_scope"},"VerifiableId":{"credential_definition":{"credentialSubject":{"dateIssued":{"display":[{"locale":"en-US","name":"Issuance date"},{"locale":"fr-FR","name":"Délivré le"}],"mandatory":true},"dateOfBirth":{"display":[{"locale":"en-US","name":"Date of birth"},{"locale":"fr-FR","name":"Né(e) le"}],"mandatory":true},"email":{"display":[{"locale":"en-US","name":"Email"},{"locale":"fr-FR","name":"Email"}],"mandatory":true},"familyName":{"display":[{"locale":"en-US","name":"Family name"},{"locale":"fr-FR","name":"Nom"}],"mandatory":true},"firstName":{"display":[{"locale":"en-US","name":"First name"},{"locale":"fr-FR","name":"Prénom(s)"}],"mandatory":true},"gender":{"display":[{"locale":"en-US","name":"Gender"},{"locale":"fr-FR","name":"Sexe"}],"mandatory":true},"issuing_country":{"display":[{"locale":"en-US","name":"Issuing country"},{"locale":"fr-FR","name":"Délivré par"}],"mandatory":true},"phone_number":{"display":[{"locale":"en-US","name":"Phone number"},{"locale":"fr-FR","name":"Téléphone"}],"mandatory":true}},"order":["firstName","familyName","dateOfBirth","gender","dateIssued","issuing_country","email","phone_number"],"type":["VerifiableCredential","VerifiableId"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"background_color":"#12107c","locale":"en-US","name":"Verifiable Id","text_color":"#FFFFFF"}],"format":"jwt_vc_json","scope":"VerifiableId_scope"}},"deferred_credential_endpoint":"https://talao.co/issuer/mfyttabosy/deferred","service_documentation":null,"credential_manifest":null,"credential_manifests":null,"issuer":null,"jwks_uri":"https://talao.co/issuer/mfyttabosy/jwks","grant_types_supported":["authorization_code","urn:ietf:params:oauth:grant-type:pre-authorized_code"]}';
 
-    const selectedCredentials = [
-      {
-        'format': 'jwt_vc',
-        'types': [
-          'VerifiableCredential',
-          'VerifiableAttestation',
-          'VerifiableDiploma',
-        ],
-      }
-    ];
-    const clientId =
-        'did:key:zBhBLmYmyihtomRdJJNEKzbPj51o4a3GYFeZoRHSABKUwqdjiQPY2fjSoTWRD2nvVmaLnLHU8GXeGFmL1ed8ZAoPGoDeBMwcp4XFchNeTw917v2evpUjyst2gxZuRrVDSxDCb6G2Z1Tbz8kWHbjfUKgLVQd7CexS5GvPHfSQGdsLdjj4cNZvvZa';
-    const webLink = 'https://app.altme.io/app/download/oidc4vc';
-    const schema =
-        'openid-credential-offer://?credential_offer_uri=https://talao.co/sandbox/ebsi/issuer/credential_offer_uri/a572f0a6-56a9-11ee-ac4f-0a1628958560';
-    const issuerState = 'a53d709e-56a9-11ee-828d-0a1628958560';
-    const nonce = '6044cc7d-2bd9-4804-82ae-c9950d8eedd8';
-    const options = '[0]';
-    const state = '4eee52c0-e524-4b62-a005-629e97f82dc5';
-    const pkcePair = PkcePair(
-      'l-NEmG-JlH-VwUxNoNmv8NPD47K_2Pu0hEY6tAHg9pE',
-      'E0BAjRGdb3bspwyNsGnRDcV1zHp4CyCB7_2EQUsB4Ls',
+    test(
+      'given Url of openid request we return Uri for authentication endpoint',
+      () async {
+        const expectedAuthorizationEndpoint =
+            'https://talao.co/issuer/mfyttabosy/authorize';
+
+        const expectedAuthorizationRequestParemeters = {
+          'response_type': 'code',
+          'redirect_uri': 'https://app.altme.io/app/download/oidc4vc',
+          'state':
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiI0S29yQ3dtWXlPLV90NGlfaHZhN0YzYUhHcFRfMldxcURoNmVyaW1lcE9BIiwiY3JlZGVudGlhbHMiOlsiRW1haWxQYXNzIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL21meXR0YWJvc3kiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpRTFRJMU5pSXNJbXQwZVNJNklrVkRJaXdpZUNJNklqWmthMVUyV2sxR1N6YzVWM2RwWTNkS05YSmllRVV4TTNwVGRXdENXVEpQYjBWcFZsVkZhbkZOUldNaUxDSjVJam9pVW01SWVtNTVWbXh5VUZOTlZEZHBja1J6TVRWRU9YZDRaMDF2YW1sVFJFRlJjR1pHYUhGVWEweFNXU0o5IiwiaWF0IjoxNzE0NTQ5OTUxfQ.JJtv8H52NTvPzR3IPET1sXGALdt0yXaQBQbGvDLKNlM',
+          'nonce': '8b60e2fb-87f3-4401-8107-0f0128ea01ab',
+          'code_challenge': '4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA',
+          'code_challenge_method': 'S256',
+          'issuer_state': 'test7',
+          'client_metadata':
+              '{\"authorization_endpoint\":\"https://app.altme.io/app/download/authorize\",\"scopes_supported\":[\"openid\"],\"response_types_supported\":[\"vp_token\",\"id_token\"],\"client_id_schemes_supported\":[\"redirect_uri\",\"did\"],\"grant_types_supported\":[\"authorization_code\",\"pre-authorized_code\"],\"subject_types_supported\":[\"public\"],\"id_token_signing_alg_values_supported\":[\"ES256\",\"ES256K\"],\"request_object_signing_alg_values_supported\":[\"ES256\",\"ES256K\"],\"request_parameter_supported\":true,\"request_uri_parameter_supported\":true,\"request_authentication_methods_supported\":{\"authorization_endpoint\":[\"request_object\"]},\"vp_formats_supported\":{\"jwt_vp\":{\"alg_values_supported\":[\"ES256\",\"ES256K\"]},\"jwt_vc\":{\"alg_values_supported\":[\"ES256\",\"ES256K\"]}},\"subject_syntax_types_supported\":[\"urn:ietf:params:oauth:jwk-thumbprint\",\"did:key\",\"did:pkh\",\"did:key\",\"did:polygonid\"],\"subject_syntax_types_discriminations\":[\"did:key:jwk_jcs-pub\",\"did:ebsi:v1\"],\"subject_trust_frameworks_supported\":[\"ebsi\"],\"id_token_types_supported\":[\"subject_signed_id_token\"],\"token_endpoint_auth_method\":\"client_id\"}',
+          'client_id':
+              'did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6IjZka1U2Wk1GSzc5V3dpY3dKNXJieEUxM3pTdWtCWTJPb0VpVlVFanFNRWMiLCJ5IjoiUm5Iem55VmxyUFNNVDdpckRzMTVEOXd4Z01vamlTREFRcGZGaHFUa0xSWSJ9',
+          'scope': 'openid',
+          'authorization_details':
+              '[{\"type\":\"openid_credential\",\"credential_configuration_id\":\"EmailPass\"}]',
+        };
+
+        dioAdapter.onGet(
+          'https://talao.co/issuer/mfyttabosy/.well-known/openid-credential-issuer',
+          (request) => request.reply(200, jsonDecode(openIdConfiguration)),
+        );
+
+        final (authorizationEndpoint, authorizationRequestParemeters) =
+            await oidc4vc.getAuthorizationData(
+          selectedCredentials: selectedCredentials,
+          clientId: clientId,
+          clientSecret: null,
+          redirectUri: redirectUri,
+          issuerState: issuerState,
+          nonce: nonce,
+          pkcePair: pkcePair,
+          state: state,
+          authorizationEndPoint: authorizationEndPoint,
+          scope: false,
+          clientAuthentication: ClientAuthentication.clientId,
+          oidc4vciDraftType: OIDC4VCIDraftType.draft13,
+          vcFormatType: VCFormatType.jwtVcJson,
+          clientAssertion: null,
+          secureAuthorizedFlow: false,
+          issuer: issuer,
+          dio: client,
+        );
+
+        expect(authorizationEndpoint, expectedAuthorizationEndpoint);
+        expect(authorizationRequestParemeters,
+            expectedAuthorizationRequestParemeters);
+      },
     );
-    // test(
-    //   'given Url of openid request we return Uri for authentication endpoint',
-    //   () async {
-    //     final expectedAuthorizationEndpointdUri = Uri.parse(
-    //         'https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/authorize?response_type=code&client_id=did%3Akey%3AzBhBLmYmyihtomRdJJNEKzbPj51o4a3GYFeZoRHSABKUwqdjiQPY2fjSoTWRD2nvVmaLnLHU8GXeGFmL1ed8ZAoPGoDeBMwcp4XFchNeTw917v2evpUjyst2gxZuRrVDSxDCb6G2Z1Tbz8kWHbjfUKgLVQd7CexS5GvPHfSQGdsLdjj4cNZvvZa&redirect_uri=https%3A%2F%2Fapp.altme.io%2Fapp%2Fdownload%2Foidc4vc%3Furi%3Dopenid-credential-offer%3A%2F%2F%3Fcredential_offer_uri%3Dhttps%3A%2F%2Ftalao.co%2Fsandbox%2Febsi%2Fissuer%2Fcredential_offer_uri%2Fa572f0a6-56a9-11ee-ac4f-0a1628958560%26code_verifier%3Dl-NEmG-JlH-VwUxNoNmv8NPD47K_2Pu0hEY6tAHg9pE%26options%3D%5B0%5D&scope=openid&issuer_state=a53d709e-56a9-11ee-828d-0a1628958560&state=4eee52c0-e524-4b62-a005-629e97f82dc5&nonce=6044cc7d-2bd9-4804-82ae-c9950d8eedd8&code_challenge=E0BAjRGdb3bspwyNsGnRDcV1zHp4CyCB7_2EQUsB4Ls&code_challenge_method=S256&authorization_details=%5B%7B%22type%22%3A%22openid_credential%22%2C%22locations%22%3A%5B%22https%3A%2F%2Ftalao.co%2Fsandbox%2Febsi%2Fissuer%2Fpcbrwbvrsi%22%5D%2C%22format%22%3A%22jwt_vc%22%2C%22types%22%3A%5B%22VerifiableCredential%22%2C%22VerifiableAttestation%22%2C%22VerifiableDiploma%22%5D%7D%5D&client_metadata=%7B%22authorization_endpoint%22%3A%22https%3A%2F%2Ftalao.co%2Fsandbox%2Febsi%2Fissuer%2Fpcbrwbvrsi%2Fauthorize%22%2C%22scopes_supported%22%3A%5B%22openid%22%5D%2C%22response_types_supported%22%3A%5B%22vp_token%22%2C%22id_token%22%5D%2C%22subject_types_supported%22%3A%5B%22public%22%5D%2C%22id_token_signing_alg_values_supported%22%3A%5B%22ES256%22%5D%2C%22request_object_signing_alg_values_supported%22%3A%5B%22ES256%22%5D%2C%22vp_formats_supported%22%3A%7B%22jwt_vp%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%5D%7D%2C%22jwt_vc%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%5D%7D%7D%2C%22subject_syntax_types_supported%22%3A%5B%22urn%3Aietf%3Aparams%3Aoauth%3Ajwk-thumbprint%22%2C%22did%F0%9F%94%91jwk_jcs-pub%22%5D%2C%22id_token_types_supported%22%3A%5B%22subject_signed_id_token%22%5D%7D');
-
-    //     dioAdapter.onGet(
-    //       issuer,
-    //       (request) => request.reply(200, jsonDecode(openIdConfiguration)),
-    //     );
-
-    //     final oidc4vc = OIDC4VC();
-
-    //     final authorizationEndpointdUri =
-    //         await oidc4vc.getAuthorizationUriForIssuer(
-    //       selectedCredentials: selectedCredentials,
-    //       clientId: clientId,
-    //       webLink: webLink,
-    //       schema: schema,
-    //       issuer: issuer,
-    //       issuerState: issuerState,
-    //       nonce: nonce,
-    //       options: options,
-    //       state: state,
-    //       pkcePair: pkcePair,
-    //     );
-
-    //     expect(
-    //       authorizationEndpointdUri.toString(),
-    //       expectedAuthorizationEndpointdUri.toString(),
-    //     );
-    //   },
-    // );
 
     test(
       'throw Exception with when request is not valid',
       () async {
-        final oidc4vc = OIDC4VC();
-
-        // expect(
-        //   () async => oidc4vc.getAuthorizationUriForIssuer(
-        //     selectedCredentials: [],
-        //     clientId: '',
-        //     webLink: '',
-        //     schema: '',
-        //     issuer: '',
-        //     issuerState: '',
-        //     nonce: '',
-        //     options: '',
-        //     state: '',
-        //     pkcePair: const PkcePair(
-        //       '',
-        //       '',
-        //     ),
-        //   ),
-        //   throwsA(
-        //     isA<Exception>().having(
-        //       (p0) => p0.toString(),
-        //       'toString()',
-        //       'Exception: Not a valid openid url to initiate issuance',
-        //     ),
-        //   ),
-        // );
+        expect(
+          () async => oidc4vc.getAuthorizationData(
+            selectedCredentials: [],
+            clientId: '',
+            issuer: '',
+            issuerState: '',
+            nonce: '',
+            state: '',
+            pkcePair: const PkcePair(
+              '',
+              '',
+            ),
+            authorizationEndPoint: '',
+            clientAssertion: '',
+            clientAuthentication: ClientAuthentication.clientId,
+            clientSecret: '',
+            oidc4vciDraftType: OIDC4VCIDraftType.draft11,
+            redirectUri: '',
+            scope: false,
+            secureAuthorizedFlow: false,
+            vcFormatType: VCFormatType.jwtVc,
+            dio: client,
+          ),
+          throwsA(
+            isA<Exception>().having(
+              (p0) => p0.toString(),
+              'toString()',
+              'Exception: NOT_A_VALID_OPENID_URL',
+            ),
+          ),
+        );
       },
     );
 
     test(
       'given correct authorization request parameter',
       () async {
-        const openIdConfigurationResponse =
-            '{"authorization_server":"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/authorize_server","credential_endpoint":"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/credential","credential_issuer":"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi","credentials_supported":[{"display":[{"locale":"en-GB","name":"Verifiable diploma"}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableDiploma"]},{"display":[{"locale":"en-GB","name":"Email proof"}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","EmailPass"]},{"display":[{"locale":"en-GB","name":"Verifiable Id"}],"format":"jwt_vc","id":"VerifiableId","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableId"]}],"deferred_credential_endpoint":"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/deferred","service_documentation":"New environment for V3 compliance test, use specific did:key"}';
         const expectedAuthorizationRequestParemeters =
-            r'{"response_type":"code","client_id":"did:key:zBhBLmYmyihtomRdJJNEKzbPj51o4a3GYFeZoRHSABKUwqdjiQPY2fjSoTWRD2nvVmaLnLHU8GXeGFmL1ed8ZAoPGoDeBMwcp4XFchNeTw917v2evpUjyst2gxZuRrVDSxDCb6G2Z1Tbz8kWHbjfUKgLVQd7CexS5GvPHfSQGdsLdjj4cNZvvZa","redirect_uri":"https://app.altme.io/app/download/oidc4vc?uri=openid-credential-offer://?credential_offer_uri=https://talao.co/sandbox/ebsi/issuer/credential_offer_uri/a572f0a6-56a9-11ee-ac4f-0a1628958560&code_verifier=l-NEmG-JlH-VwUxNoNmv8NPD47K_2Pu0hEY6tAHg9pE&options=[0]","scope":"openid","issuer_state":"a53d709e-56a9-11ee-828d-0a1628958560","state":"4eee52c0-e524-4b62-a005-629e97f82dc5","nonce":"6044cc7d-2bd9-4804-82ae-c9950d8eedd8","code_challenge":"E0BAjRGdb3bspwyNsGnRDcV1zHp4CyCB7_2EQUsB4Ls","code_challenge_method":"S256","authorization_details":"[{\"type\":\"openid_credential\",\"locations\":[\"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi\"],\"format\":\"jwt_vc\",\"types\":[\"VerifiableCredential\",\"VerifiableAttestation\",\"VerifiableDiploma\"]}]","client_metadata":"{\"authorization_endpoint\":\"https://talao.co/sandbox/ebsi/issuer/pcbrwbvrsi/authorize\",\"scopes_supported\":[\"openid\"],\"response_types_supported\":[\"vp_token\",\"id_token\"],\"subject_types_supported\":[\"public\"],\"id_token_signing_alg_values_supported\":[\"ES256\"],\"request_object_signing_alg_values_supported\":[\"ES256\"],\"vp_formats_supported\":{\"jwt_vp\":{\"alg_values_supported\":[\"ES256\"]},\"jwt_vc\":{\"alg_values_supported\":[\"ES256\"]}},\"subject_syntax_types_supported\":[\"urn:ietf:params:oauth:jwk-thumbprint\",\"did🔑jwk_jcs-pub\"],\"id_token_types_supported\":[\"subject_signed_id_token\"]}"}';
-        final oidc4vc = OIDC4VC();
+            r'{"response_type":"code","redirect_uri":"https://app.altme.io/app/download/oidc4vc","state":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiI0S29yQ3dtWXlPLV90NGlfaHZhN0YzYUhHcFRfMldxcURoNmVyaW1lcE9BIiwiY3JlZGVudGlhbHMiOlsiRW1haWxQYXNzIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL21meXR0YWJvc3kiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpRTFRJMU5pSXNJbXQwZVNJNklrVkRJaXdpZUNJNklqWmthMVUyV2sxR1N6YzVWM2RwWTNkS05YSmllRVV4TTNwVGRXdENXVEpQYjBWcFZsVkZhbkZOUldNaUxDSjVJam9pVW01SWVtNTVWbXh5VUZOTlZEZHBja1J6TVRWRU9YZDRaMDF2YW1sVFJFRlJjR1pHYUhGVWEweFNXU0o5IiwiaWF0IjoxNzE0NTQ5OTUxfQ.JJtv8H52NTvPzR3IPET1sXGALdt0yXaQBQbGvDLKNlM","nonce":"8b60e2fb-87f3-4401-8107-0f0128ea01ab","code_challenge":"4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA","code_challenge_method":"S256","issuer_state":"test7","client_metadata":"{\"authorization_endpoint\":\"https://app.altme.io/app/download/authorize\",\"scopes_supported\":[\"openid\"],\"response_types_supported\":[\"vp_token\",\"id_token\"],\"client_id_schemes_supported\":[\"redirect_uri\",\"did\"],\"grant_types_supported\":[\"authorization_code\",\"pre-authorized_code\"],\"subject_types_supported\":[\"public\"],\"id_token_signing_alg_values_supported\":[\"ES256\",\"ES256K\"],\"request_object_signing_alg_values_supported\":[\"ES256\",\"ES256K\"],\"request_parameter_supported\":true,\"request_uri_parameter_supported\":true,\"request_authentication_methods_supported\":{\"authorization_endpoint\":[\"request_object\"]},\"vp_formats_supported\":{\"jwt_vp\":{\"alg_values_supported\":[\"ES256\",\"ES256K\"]},\"jwt_vc\":{\"alg_values_supported\":[\"ES256\",\"ES256K\"]}},\"subject_syntax_types_supported\":[\"urn:ietf:params:oauth:jwk-thumbprint\",\"did:key\",\"did:pkh\",\"did:key\",\"did:polygonid\"],\"subject_syntax_types_discriminations\":[\"did:key:jwk_jcs-pub\",\"did:ebsi:v1\"],\"subject_trust_frameworks_supported\":[\"ebsi\"],\"id_token_types_supported\":[\"subject_signed_id_token\"],\"token_endpoint_auth_method\":\"client_id\"}","client_id":"did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6IjZka1U2Wk1GSzc5V3dpY3dKNXJieEUxM3pTdWtCWTJPb0VpVlVFanFNRWMiLCJ5IjoiUm5Iem55VmxyUFNNVDdpckRzMTVEOXd4Z01vamlTREFRcGZGaHFUa0xSWSJ9","scope":"openid","authorization_details":"[{\"type\":\"openid_credential\",\"credential_configuration_id\":\"EmailPass\"}]"}';
 
-        // final authorizationRequestParemeters =
-        //     oidc4vc.getAuthorizationRequestParemeters(
-        //   selectedCredentials: selectedCredentials,
-        //   clientId: clientId,
-        //   webLink: webLink,
-        //   schema: schema,
-        //   issuer: issuer,
-        //   issuerState: issuerState,
-        //   nonce: nonce,
-        //   options: options,
-        //   state: state,
-        //   pkcePair: pkcePair,
-        //   openidConfigurationResponse:
-        //       jsonDecode(openIdConfigurationResponse) as Map<String, dynamic>,
-        // );
+        final authorizationRequestParemeters =
+            oidc4vc.getAuthorizationRequestParemeters(
+          selectedCredentials: selectedCredentials,
+          clientId: clientId,
+          authorizationEndPoint: authorizationEndPoint,
+          clientAssertion: null,
+          scope: false,
+          clientAuthentication: ClientAuthentication.clientId,
+          oidc4vciDraftType: OIDC4VCIDraftType.draft13,
+          vcFormatType: VCFormatType.jwtVcJson,
+          secureAuthorizedFlow: false,
+          issuer: issuer,
+          issuerState: issuerState,
+          nonce: nonce,
+          state: state,
+          pkcePair: pkcePair,
+          clientSecret: null,
+          openIdConfiguration: OpenIdConfiguration.fromJson(
+            jsonDecode(openIdConfiguration) as Map<String, dynamic>,
+          ),
+          redirectUri: redirectUri,
+        );
 
-        // expect(
-        //   jsonEncode(authorizationRequestParemeters),
-        //   expectedAuthorizationRequestParemeters,
-        // );
+        expect(
+          jsonEncode(authorizationRequestParemeters),
+          expectedAuthorizationRequestParemeters,
+        );
       },
     );
   });
-  //group('OIC4VC request credential', () {
-  // final credentialRequest = Uri.parse(
-  //   'https://app.altme.io/app/download?credential_type=https://api.preprod.oidc4vc.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd&issuer=https://talao.co/sandbox/ebsi/issuer/vgvghylozl?code=cb803d46-9c88-11ed-bdb3-0a1628958560&state=0d189873-9c87-11ed-8dbf-0a1628958560',
-  // );
 
-  // final credentialRequestWithPreAuthorizedCode = Uri.parse(
-  //   'openid://initiate_issuance?issuer=https%3A%2F%2Ftalao.co%2Fsandbox%2Febsi%2Fissuer%2Fvgvghylozl&credential_type=https%3A%2F%2Fapi.preprod.oidc4vc.eu%2Ftrusted-schemas-registry%2Fv1%2Fschemas%2F0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd&op_state=test&pre-authorized_code=ff8e73c5-ae07-11ed-b1f7-0a1628958560&user_pin_required=False',
-  // );
+  group('OIC4VC request credential', () {
+    const issuer = 'https://talao.co/issuer/zxhaokccsi';
 
-  // const issuerResponse =
-  //     r'{"authorization_endpoint":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl/authorize","batch_credential_endpoint":null,"credential_endpoint":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl/credential","credential_issuer":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl","credential_manifests":[{"id":"VerifiableDiploma_1","issuer":{"id":"did:ebsi:zhSw5rPXkcHjvquwnVcTzzB","name":"Test EBSILUX"},"output_descriptors":[{"display":{"description":{"fallback":"This card is a proof that you passed this diploma successfully. You can use this card  when you need to prove this information to services that have adopted EU EBSI framework.","path":[],"schema":{"type":"string"}},"properties":[{"fallback":"Unknown","label":"First name","path":["$.credentialSubject.firstName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Last name","path":["$.credentialSubject.familyName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Birth date","path":["$.credentialSubject.dateOfBirth"],"schema":{"format":"date","type":"string"}},{"fallback":"Unknown","label":"Grading scheme","path":["$.credentialSubject.gradingScheme.title"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Title","path":["$.credentialSubject.learningAchievement.title"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Description","path":["$.credentialSubject.learningAchievement.description"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"ECTS Points","path":["$.credentialSubject.learningSpecification.ectsCreditPoints"],"schema":{"type":"number"}},{"fallback":"Unknown","label":"Issue date","path":["$.issuanceDate"],"schema":{"format":"date","type":"string"}},{"fallback":"Unknown","label":"Issued by","path":["$.credentialSubject.awardingOpportunity.awardingBody.preferredName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Registration","path":["$.credentialSubject.awardingOpportunity.awardingBody.registration"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Website","path":["$.credentialSubject.awardingOpportunity.awardingBody.homepage"],"schema":{"format":"uri","type":"string"}}],"subtitle":{"fallback":"EBSI Verifiable diploma","path":[],"schema":{"type":"string"}},"title":{"fallback":"Diploma","path":[],"schema":{"type":"string"}}},"id":"diploma_01","schema":"https://api.preprod.oidc4vc.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd"}],"spec_version":"https://identity.foundation/credential-manifest/spec/v1.0.0/"}],"credential_supported":[{"cryptographic_binding_methods_supported":["did"],"cryptographic_suites_supported":["ES256K","ES256","ES384","ES512","RS256"],"display":[{"locale":"en-US","name":"Issuer Talao"}],"format":"jwt_vc","id":"VerifiableDiploma","types":"https://api.preprod.oidc4vc.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd"}],"pre-authorized_grant_anonymous_access_supported":true,"subject_syntax_types_supported":["did:ebsi"],"token_endpoint":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl/token"}';
+    const credential = {
+      'format': 'jwt_vc',
+      'types': [
+        'VerifiableCredential',
+        'VerifiableAttestation',
+        'VerifiableDiploma2',
+      ],
+    };
 
-  // const tokenResponse =
-  //     '{"access_token":"7a07dd19-a879-11ed-ad95-0a1628958560","c_nonce":"7a07de0f-a879-11ed-822b-0a1628958560","token_type":"Bearer","expires_in":1000}'; // ignore: lines_longer_than_80_chars
+    const did =
+        'did:key:z2dmzD81cgPx8Vki7JbuuMmFYrWPgYoytykUZ3eyqht1j9Kbrbpg5is8LfTLuQ1RsW5r7s7ZjbDDFbDgy1tLrdc7Bj3itBGQkuGUQyfzKhFqbUNW2PqJPMSSzWoF2DGSvDSijCtJtYCSRsjSVLrwu5oHNbnPFvSEC4iRZPpU6B6nExRBTa';
 
-  // const credentialRequestUrl =
-  //     'https://talao.co/sandbox/ebsi/issuer/vgvghylozl/credential';
+    const kid =
+        'did:key:z2dmzD81cgPx8Vki7JbuuMmFYrWPgYoytykUZ3eyqht1j9Kbrbpg5is8LfTLuQ1RsW5r7s7ZjbDDFbDgy1tLrdc7Bj3itBGQkuGUQyfzKhFqbUNW2PqJPMSSzWoF2DGSvDSijCtJtYCSRsjSVLrwu5oHNbnPFvSEC4iRZPpU6B6nExRBTa#z2dmzD81cgPx8Vki7JbuuMmFYrWPgYoytykUZ3eyqht1j9Kbrbpg5is8LfTLuQ1RsW5r7s7ZjbDDFbDgy1tLrdc7Bj3itBGQkuGUQyfzKhFqbUNW2PqJPMSSzWoF2DGSvDSijCtJtYCSRsjSVLrwu5oHNbnPFvSEC4iRZPpU6B6nExRBTa';
 
-  // const credentialRequestResponse =
-  //     '{"format":"jwt_vc","credential":"eyJhbGciOiJFUzI1NksiLCJraWQiOiJkaWQ6ZWJzaTp6aFN3NXJQWGtjSGp2cXV3blZjVHp6QiM1MTVhOWM0MzZjMGYyYWQzYWI2NWQ2Y2VmYzVjMWYwNmMwNWI4YWRmY2Y1NGVlMDZkYzgwNTQzMjA0NzBmZmFmIiwidHlwIjoiSldUIn0.eyJleHAiOjE2NzU5NDcwNTguODkyNzc4LCJpYXQiOjE2NzU5NDYwNTguODkyNzcxLCJpc3MiOiJkaWQ6ZWJzaTp6aFN3NXJQWGtjSGp2cXV3blZjVHp6QiIsImp0aSI6InVybjp1dWlkOjZiMWQ4NDExLTllZDUtNDU2Ni05YzdmLTRjMjQxNjVmZjIzNiIsIm5iZiI6MTY3NTk0NjA1OC44OTI3NzYsIm5vbmNlIjoiMTFmNWY2MDAtYTg3Ni0xMWVkLTkwZjItMGExNjI4OTU4NTYwIiwic3ViIjoiZGlkOmVic2k6em94UkdWWlFuZFRmUWs1NEI3dEtkd3dOZGhhaTVnbTlGOE5hdjhlY2VOQUJhIiwidmMiOnsiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXSwiY3JlZGVudGlhbFNjaGVtYSI6eyJpZCI6Imh0dHBzOi8vYXBpLnByZXByb2QuZWJzaS5ldS90cnVzdGVkLXNjaGVtYXMtcmVnaXN0cnkvdjEvc2NoZW1hcy8weGJmNzhmYzA4YTdhOWYyOGY1NDc5ZjU4ZGVhMjY5ZDM2NTdmNTRmMTNjYTM3ZDM4MGNkNGU5MjIzN2ZiNjkxZGQiLCJ0eXBlIjoiSnNvblNjaGVtYVZhbGlkYXRvcjIwMTgifSwiY3JlZGVudGlhbFN0YXR1cyI6eyJpZCI6Imh0dHBzOi8vZXNzaWYuZXVyb3BhLmV1L3N0YXR1cy9lZHVjYXRpb24jaGlnaGVyRWR1Y2F0aW9uIzM5MmFjN2Y2LTM5OWEtNDM3Yi1hMjY4LTQ2OTFlYWQ4ZjE3NiIsInR5cGUiOiJDcmVkZW50aWFsU3RhdHVzTGlzdDIwMjAifSwiY3JlZGVudGlhbFN1YmplY3QiOnsiYXdhcmRpbmdPcHBvcnR1bml0eSI6eyJhd2FyZGluZ0JvZHkiOnsiZWlkYXNMZWdhbElkZW50aWZpZXIiOiJVbmtub3duIiwiaG9tZXBhZ2UiOiJodHRwczovL2xlYXN0b24uYmNkaXBsb21hLmNvbS8iLCJpZCI6ImRpZDplYnNpOnpkUnZ2S2JYaFZWQnNYaGF0anVpQmhzIiwicHJlZmVycmVkTmFtZSI6IkxlYXN0b24gVW5pdmVyc2l0eSIsInJlZ2lzdHJhdGlvbiI6IjA1OTcwNjVKIn0sImVuZGVkQXRUaW1lIjoiMjAyMC0wNi0yNlQwMDowMDowMFoiLCJpZCI6Imh0dHBzOi8vbGVhc3Rvbi5iY2RpcGxvbWEuY29tL2xhdy1lY29ub21pY3MtbWFuYWdlbWVudCNBd2FyZGluZ09wcG9ydHVuaXR5IiwiaWRlbnRpZmllciI6Imh0dHBzOi8vY2VydGlmaWNhdGUtZGVtby5iY2RpcGxvbWEuY29tL2NoZWNrLzg3RUQyRjIyNzBFNkM0MTQ1NkU5NEI4NkI5RDkxMTVCNEUzNUJDQ0FEMjAwQTQ5Qjg0NjU5MkMxNEY3OUM4NkJWMUZuYmxsdGEwTlpUbkprUjNsRFdsUm1URGxTUlVKRVZGWklTbU5tWXpKaFVVNXNaVUo1WjJGSlNIcFdibVpaIiwibG9jYXRpb24iOiJGUkFOQ0UiLCJzdGFydGVkQXRUaW1lIjoiMjAxOS0wOS0wMlQwMDowMDowMFoifSwiZGF0ZU9mQmlydGgiOiIxOTkzLTA0LTA4IiwiZmFtaWx5TmFtZSI6IkRPRSIsImdpdmVuTmFtZXMiOiJKYW5lIiwiZ3JhZGluZ1NjaGVtZSI6eyJpZCI6Imh0dHBzOi8vbGVhc3Rvbi5iY2RpcGxvbWEuY29tL2xhdy1lY29ub21pY3MtbWFuYWdlbWVudCNHcmFkaW5nU2NoZW1lIiwidGl0bGUiOiIyIHllYXIgZnVsbC10aW1lIHByb2dyYW1tZSAvIDQgc2VtZXN0ZXJzIn0sImlkIjoiZGlkOmVic2k6em94UkdWWlFuZFRmUWs1NEI3dEtkd3dOZGhhaTVnbTlGOE5hdjhlY2VOQUJhIiwiaWRlbnRpZmllciI6IjA5MDQwMDgwODRIIiwibGVhcm5pbmdBY2hpZXZlbWVudCI6eyJhZGRpdGlvbmFsTm90ZSI6WyJESVNUUklCVVRJT04gTUFOQUdFTUVOVCJdLCJkZXNjcmlwdGlvbiI6IlRoZSBNYXN0ZXIgaW4gSW5mb3JtYXRpb24gYW5kIENvbXB1dGVyIFNjaWVuY2VzIChNSUNTKSBhdCB0aGUgVW5pdmVyc2l0eSBvZiBMdXhlbWJvdXJnIGVuYWJsZXMgc3R1ZGVudHMgdG8gYWNxdWlyZSBkZWVwZXIga25vd2xlZGdlIGluIGNvbXB1dGVyIHNjaWVuY2UgYnkgdW5kZXJzdGFuZGluZyBpdHMgYWJzdHJhY3QgYW5kIGludGVyZGlzY2lwbGluYXJ5IGZvdW5kYXRpb25zLCBmb2N1c2luZyBvbiBwcm9ibGVtIHNvbHZpbmcgYW5kIGRldmVsb3BpbmcgbGlmZWxvbmcgbGVhcm5pbmcgc2tpbGxzLiIsImlkIjoiaHR0cHM6Ly9sZWFzdG9uLmJjZGlwbG9tYS5jb20vbGF3LWVjb25vbWljcy1tYW5hZ2VtZW50I0xlYXJuaW5nQWNoaWV2bWVudCIsInRpdGxlIjoiTWFzdGVyIGluIEluZm9ybWF0aW9uIGFuZCBDb21wdXRlciBTY2llbmNlcyJ9LCJsZWFybmluZ1NwZWNpZmljYXRpb24iOnsiZWN0c0NyZWRpdFBvaW50cyI6MTIwLCJlcWZMZXZlbCI6NywiaWQiOiJodHRwczovL2xlYXN0b24uYmNkaXBsb21hLmNvbS9sYXctZWNvbm9taWNzLW1hbmFnZW1lbnQjTGVhcm5pbmdTcGVjaWZpY2F0aW9uIiwiaXNjZWRmQ29kZSI6WyI3Il0sIm5xZkxldmVsIjpbIjciXX19LCJldmlkZW5jZSI6eyJkb2N1bWVudFByZXNlbmNlIjpbIlBoeXNpY2FsIl0sImV2aWRlbmNlRG9jdW1lbnQiOlsiUGFzc3BvcnQiXSwiaWQiOiJodHRwczovL2Vzc2lmLmV1cm9wYS5ldS90c3ItdmEvZXZpZGVuY2UvZjJhZWVjOTctZmMwZC00MmJmLThjYTctMDU0ODE5MmQ1Njc4Iiwic3ViamVjdFByZXNlbmNlIjoiUGh5c2ljYWwiLCJ0eXBlIjpbIkRvY3VtZW50VmVyaWZpY2F0aW9uIl0sInZlcmlmaWVyIjoiZGlkOmVic2k6Mjk2MmZiNzg0ZGY2MWJhYTI2N2M4MTMyNDk3NTM5ZjhjNjc0YjM3YzEyNDRhN2EifSwiaWQiOiJ1cm46dXVpZDo2YjFkODQxMS05ZWQ1LTQ1NjYtOWM3Zi00YzI0MTY1ZmYyMzYiLCJpc3N1YW5jZURhdGUiOiIyMDIzLTAyLTA5VDEyOjM0OjE4WiIsImlzc3VlZCI6IjIwMjMtMDItMDlUMTI6MzQ6MThaIiwiaXNzdWVyIjoiZGlkOmVic2k6emhTdzVyUFhrY0hqdnF1d25WY1R6ekIiLCJwcm9vZiI6eyJjcmVhdGVkIjoiMjAyMi0wNC0yN1QxMjoyNTowN1oiLCJjcmVhdG9yIjoiZGlkOmVic2k6emRSdnZLYlhoVlZCc1hoYXRqdWlCaHMiLCJkb21haW4iOiJodHRwczovL2FwaS5wcmVwcm9kLmVic2kuZXUiLCJqd3MiOiJleUppTmpRaU9tWmhiSE5sTENKamNtbDBJanBiSW1JMk5DSmRMQ0poYkdjaU9pSkZVekkxTmtzaWZRLi5tSUJuTThYRFFxU1lLUU5YX0x2YUpobXNieUNyNU9aNWNVMlprLVJlcUxwcjRkb0ZzZ21vb2JrTzUxMjh0WnktOEtpbVZqSmtHdzB3TDF1QlduTUxXUSIsIm5vbmNlIjoiM2VhNjhkYWUtZDA3YS00ZGFhLTkzMmItZmJiNThmNWMyMGM0IiwidHlwZSI6IkVjZHNhU2VjcDI1NmsxU2lnbmF0dXJlMjAxOSJ9LCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiVmVyaWZpYWJsZUF0dGVzdGF0aW9uIiwiVmVyaWZpYWJsZURpcGxvbWEiXSwidmFsaWRGcm9tIjoiMjAyMy0wMi0wOVQxMjozNDoxOFoifX0.uQK9sK-VtqmKjLJIw_v5Ff5xAMDAosZCtl1LFYxZhUolReD6a7O-NI1f5lcswBCZPLfJ-HJyb5iShehHObzFDA","c_nonce":"128952c8-a876-11ed-bbc4-0a1628958560","c_nonce_expires_in":1000}'; // ignore: lines_longer_than_80_chars
+    const privateKey =
+        '{"kty":"EC","crv":"P-256","d":"amrwK13ZiYoJ5g0fc6MvXc86RB9ID8VuK_dMowU68FE","x":"fJQ2c9P_YDep3jzidwykcSlyoC4omqBvd9RHP1nz0cw","y":"K7VxrW-S1ONuX5cxrWIltF36ac1K8kj9as_o5cyc2zk"}';
 
-  // dioAdapter
-  //   ..onGet(
-  //     issuer,
-  //     (request) => request.reply(200, jsonDecode(issuerResponse)),
-  //   )
-  //   ..onPost(
-  //     'tokenUrl',
-  //     (request) => request.reply(
-  //       200,
-  //       jsonDecode(tokenResponse),
-  //     ),
-  //   )
-  //   ..onPost(
-  //     credentialRequestUrl,
-  //     (request) => request.reply(
-  //       200,
-  //       jsonDecode(credentialRequestResponse),
-  //     ),
-  //   );
+    const openIdConfiguration =
+        '{"authorization_server":"https://talao.co/issuer/zxhaokccsi","credential_endpoint":"https://talao.co/issuer/zxhaokccsi/credential","credential_issuer":"https://talao.co/issuer/zxhaokccsi","subject_syntax_types_supported":null,"token_endpoint":null,"batch_endpoint":null,"authorization_endpoint":null,"subject_trust_frameworks_supported":null,"credentials_supported":[{"display":[{"locale":"en-US","name":"EU Diploma","description":"This the official EBSI VC Diploma","text_color":"#FFFFFF","background_color":"#3B6F6D","background_image":{"url":"https://i.ibb.co/CHqjxrJ/dbc-card-hig-res.png","alt_text":"Connected open cubes in blue with one orange cube as a background of the card"},"logo":{"url":"https://dutchblockchaincoalition.org/assets/images/icons/Logo-DBC.png","alt_text":"An orange block shape, with the text Dutch Blockchain Coalition next to it, portraying the logo of the Dutch Blockchain Coalition."}}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableDiploma2"],"id":null,"scope":null,"credentialSubject":{"dateOfBirth":{"display":[{"locale":"en-US","name":"Birth Date"},{"locale":"fr-FR","name":"Date de naissance"}]},"familyName":{"display":[{"locale":"en-US","name":"Family Name"},{"locale":"fr-FR","name":"Nom"}]},"givenNames":{"display":[{"locale":"en-US","name":"First Name"},{"locale":"fr-FR","name":"Prénom"}]}}},{"display":[{"locale":"en-US","name":"Individual attestation","description":"This is the EBSI Individual Verifiable Attestation","text_color":"#FFFFFF","background_color":"#3B6F6D","background_image":null,"logo":null}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","IndividualVerifiableAttestation"],"id":null,"scope":null,"credentialSubject":{"dateOfBirth":{"display":[{"locale":"en-US","name":"Birth Date"},{"locale":"fr-FR","name":"Date de naissance"}]},"familyName":{"display":[{"locale":"en-US","name":"Family Name"},{"locale":"fr-FR","name":"Nom"}]},"firstName":{"display":[{"locale":"en-US","name":"First Name"},{"locale":"fr-FR","name":"Prénom"}]},"issuing_country":{"display":[{"locale":"en-US","name":"Issued by"},{"locale":"fr-FR","name":"Délivré par"}]},"placeOfBirth":{"display":[{"locale":"en-US","name":"Birth Place"},{"locale":"fr-FR","name":"Lieu de naissance"}]}}},{"display":[{"locale":"en-GB","name":"Email proof","description":"This is a verifiable credential","text_color":null,"background_color":null,"background_image":null,"logo":null}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","EmailPass"],"id":null,"scope":null,"credentialSubject":null},{"display":[{"locale":"en-GB","name":"Verifiable Id","description":"This is a verifiable credential","text_color":null,"background_color":null,"background_image":null,"logo":null}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableId"],"id":null,"scope":null,"credentialSubject":null}],"credential_configurations_supported":null,"deferred_credential_endpoint":"https://talao.co/issuer/zxhaokccsi/deferred","service_documentation":null,"credential_manifest":null,"credential_manifests":null,"issuer":null,"jwks_uri":null,"grant_types_supported":null}';
 
-  // test('When getCredentialType receive url it returns json response',
-  //     () async {
-  //   final oidc4vc = OIDC4VC(client);
-  //   final credential = await oidc4vc.getCredential(
-  //     credentialRequest,
-  //     mnemonic,
-  //     null,
-  //   );
-  //   expect(jsonEncode(credential), credentialRequestResponse);
-  // });
+    const accessToken = '0f0119c2-0867-11ef-8bfa-0a1628958560';
 
-  //});
-  // test('throw Exception when token is not verified', () {
-  //   const issuerDid = 'did:ebsi:zhSw5rPXkcHjvquwnVcTzzB';
+    const nonce = '0f011beb-0867-11ef-817f-0a1628958560';
 
-  //   const didDocumentUrl =
-  //       'https://api-pilot.oidc4vc.eu/did-registry/v3/identifiers/$issuerDid';
+    const credentialRequestUrl =
+        'https://talao.co/issuer/zxhaokccsi/credential';
 
-  //   const didDocumentResponse =
-  //       '{"assertionMethod":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"authentication":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"@context":"https://www.w3.org/ns/did/v1","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","verificationMethod":[{"controller":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53","publicKeyJwk":{"crv":"P-521","kty":"EC","x":"AekpBQ8ST8a8VcfVOTNl353vSrDCLLJXmPk06wTjxrrjcBpXp5EOnYG_NjFZ6OvLFV1jSfS9tsz4qUxcWceqwQGk","y":"ADSmRA43Z1DSNx_RvcLI87cdL07l6jQyyBXMoxVg_l2Th-x3S1WDhjDly79ajL4Kkd0AZMaZmh9ubmf63e3kyMj2"},"type":"Ed25519VerificationKey2019"}]}';
+    const expecedCredentialResponse =
+        '{"credential":"eyJhbGciOiJFUzI1NiIsImtpZCI6InFsM2g2Z3Jqem5iaGNSRzVPRWk3V1B6dHNkZ1FLaGhiLXBOU1laSWgtdk0iLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE3NDYxODE3NDYsImlhdCI6MTcxNDY0NTc0NiwiaXNzIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvenhoYW9rY2NzaSIsImp0aSI6InVybjp1dWlkOmNkZGE4MWYyLTA4NmUtMTFlZi05ODE3LTBhMTYyODk1ODU2MCIsIm5iZiI6MTcxNDY0NTc0Niwibm9uY2UiOiJjOWZkMzJiYS0wODZlLTExZWYtOTQ5Yi0wYTE2Mjg5NTg1NjAiLCJzdWIiOiJkaWQ6a2V5OnoyZG16RDgxY2dQeDhWa2k3SmJ1dU1tRllyV1BnWW95dHlrVVozZXlxaHQxajlLYnJicGc1aXM4TGZUTHVRMVJzVzVyN3M3WmpiRERGYkRneTF0THJkYzdCajNpdEJHUWt1R1VReWZ6S2hGcWJVTlcyUHFKUE1TU3pXb0YyREdTdkRTaWpDdEp0WUNTUnNqU1ZMcnd1NW9ITmJuUEZ2U0VDNGlSWlBwVTZCNm5FeFJCVGEiLCJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJjcmVkZW50aWFsU2NoZW1hIjp7ImlkIjoiaHR0cHM6Ly9hcGkucHJlcHJvZC5lYnNpLmV1L3RydXN0ZWQtc2NoZW1hcy1yZWdpc3RyeS92MS9zY2hlbWFzLzB4YmY3OGZjMDhhN2E5ZjI4ZjU0NzlmNThkZWEyNjlkMzY1N2Y1NGYxM2NhMzdkMzgwY2Q0ZTkyMjM3ZmI2OTFkZCIsInR5cGUiOiJKc29uU2NoZW1hVmFsaWRhdG9yMjAxOCJ9LCJjcmVkZW50aWFsU3RhdHVzIjpbeyJpZCI6Imh0dHBzOi8vdGFsYW8uY28vc2FuZGJveC9pc3N1ZXIvYml0c3RyaW5nc3RhdHVzbGlzdC8xIzczMDE5Iiwic3RhdHVzTGlzdENyZWRlbnRpYWwiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL2JpdHN0cmluZ3N0YXR1c2xpc3QvMSIsInN0YXR1c0xpc3RJbmRleCI6IjczMDE5Iiwic3RhdHVzUHVycG9zZSI6InJldm9jYXRpb24iLCJ0eXBlIjoiQml0c3RyaW5nU3RhdHVzTGlzdEVudHJ5In1dLCJjcmVkZW50aWFsU3ViamVjdCI6eyJhd2FyZGluZ09wcG9ydHVuaXR5Ijp7ImF3YXJkaW5nQm9keSI6eyJlaWRhc0xlZ2FsSWRlbnRpZmllciI6IlVua25vd24iLCJob21lcGFnZSI6Imh0dHBzOi8vbGVhc3Rvbi5iY2RpcGxvbWEuY29tLyIsImlkIjoiZGlkOmVic2k6emRSdnZLYlhoVlZCc1hoYXRqdWlCaHMiLCJwcmVmZXJyZWROYW1lIjoiTGVhc3RvbiBVbml2ZXJzaXR5IiwicmVnaXN0cmF0aW9uIjoiMDU5NzA2NUoifSwiZW5kZWRBdFRpbWUiOiIyMDIwLTA2LTI2VDAwOjAwOjAwWiIsImlkIjoiaHR0cHM6Ly9sZWFzdG9uLmJjZGlwbG9tYS5jb20vbGF3LWVjb25vbWljcy1tYW5hZ2VtZW50I0F3YXJkaW5nT3Bwb3J0dW5pdHkiLCJpZGVudGlmaWVyIjoiaHR0cHM6Ly9jZXJ0aWZpY2F0ZS1kZW1vLmJjZGlwbG9tYS5jb20vY2hlY2svODdFRDJGMjI3MEU2QzQxNDU2RTk0Qjg2QjlEOTExNUI0RTM1QkNDQUQyMDBBNDlCODQ2NTkyQzE0Rjc5Qzg2QlYxRm5ibGx0YTBOWlRuSmtSM2xEV2xSbVREbFNSVUpFVkZaSVNtTm1ZekpoVVU1c1pVSjVaMkZKU0hwV2JtWloiLCJsb2NhdGlvbiI6IkZSQU5DRSIsInN0YXJ0ZWRBdFRpbWUiOiIyMDE5LTA5LTAyVDAwOjAwOjAwWiJ9LCJkYXRlT2ZCaXJ0aCI6IjE5OTMtMDQtMDgiLCJmYW1pbHlOYW1lIjoiRE9FIiwiZ2l2ZW5OYW1lcyI6IkphbmUiLCJncmFkaW5nU2NoZW1lIjp7ImlkIjoiaHR0cHM6Ly9sZWFzdG9uLmJjZGlwbG9tYS5jb20vbGF3LWVjb25vbWljcy1tYW5hZ2VtZW50I0dyYWRpbmdTY2hlbWUiLCJ0aXRsZSI6IjIgeWVhciBmdWxsLXRpbWUgcHJvZ3JhbW1lIC8gNCBzZW1lc3RlcnMifSwiaWRlbnRpZmllciI6IjA5MDQwMDgwODRIIiwibGVhcm5pbmdBY2hpZXZlbWVudCI6eyJhZGRpdGlvbmFsTm90ZSI6WyJESVNUUklCVVRJT04gTUFOQUdFTUVOVCJdLCJkZXNjcmlwdGlvbiI6IlRoZSBNYXN0ZXIgaW4gSW5mb3JtYXRpb24gYW5kIENvbXB1dGVyIFNjaWVuY2VzIChNSUNTKSBhdCB0aGUgVW5pdmVyc2l0eSBvZiBMdXhlbWJvdXJnIGVuYWJsZXMgc3R1ZGVudHMgdG8gYWNxdWlyZSBkZWVwZXIga25vd2xlZGdlIGluIGNvbXB1dGVyIHNjaWVuY2UgYnkgdW5kZXJzdGFuZGluZyBpdHMgYWJzdHJhY3QgYW5kIGludGVyZGlzY2lwbGluYXJ5IGZvdW5kYXRpb25zLCBmb2N1c2luZyBvbiBwcm9ibGVtIHNvbHZpbmcgYW5kIGRldmVsb3BpbmcgbGlmZWxvbmcgbGVhcm5pbmcgc2tpbGxzLiIsImlkIjoiaHR0cHM6Ly9sZWFzdG9uLmJjZGlwbG9tYS5jb20vbGF3LWVjb25vbWljcy1tYW5hZ2VtZW50I0xlYXJuaW5nQWNoaWV2bWVudCIsInRpdGxlIjoiTWFzdGVyIGluIEluZm9ybWF0aW9uIGFuZCBDb21wdXRlciBTY2llbmNlcyJ9LCJsZWFybmluZ1NwZWNpZmljYXRpb24iOnsiZWN0c0NyZWRpdFBvaW50cyI6MTIwLCJlcWZMZXZlbCI6NywiaWQiOiJodHRwczovL2xlYXN0b24uYmNkaXBsb21hLmNvbS9sYXctZWNvbm9taWNzLW1hbmFnZW1lbnQjTGVhcm5pbmdTcGVjaWZpY2F0aW9uIiwiaXNjZWRmQ29kZSI6WyI3Il0sIm5xZkxldmVsIjpbIjciXX0sInR5cGUiOiJWZXJpZmlhYmxlRGlwbG9tYTIifSwiZXZpZGVuY2UiOnsiZG9jdW1lbnRQcmVzZW5jZSI6WyJQaHlzaWNhbCJdLCJldmlkZW5jZURvY3VtZW50IjpbIlBhc3Nwb3J0Il0sImlkIjoiaHR0cHM6Ly9lc3NpZi5ldXJvcGEuZXUvdHNyLXZhL2V2aWRlbmNlL2YyYWVlYzk3LWZjMGQtNDJiZi04Y2E3LTA1NDgxOTJkNTY3OCIsInN1YmplY3RQcmVzZW5jZSI6IlBoeXNpY2FsIiwidHlwZSI6WyJEb2N1bWVudFZlcmlmaWNhdGlvbiJdLCJ2ZXJpZmllciI6ImRpZDplYnNpOjI5NjJmYjc4NGRmNjFiYWEyNjdjODEzMjQ5NzUzOWY4YzY3NGIzN2MxMjQ0YTdhIn0sInR5cGUiOlsiVmVyaWZpYWJsZUNyZWRlbnRpYWwiLCJWZXJpZmlhYmxlQXR0ZXN0YXRpb24iLCJWZXJpZmlhYmxlRGlwbG9tYSJdfX0.eU1nRdOMklOK6kKvJk-0iCdng5gXZ7quZV1ob_kr2c3_7wSsOEhlgikZzTkkZAOuxmkkdSnWRsGMoA0M4YEi1Q","c_nonce":"cddafe06-086e-11ef-b80b-0a1628958560","c_nonce_expires_in":5000,"format":"jwt_vc"}';
+    dioAdapter.onPost(
+      credentialRequestUrl,
+      (request) => request.reply(
+        200,
+        expecedCredentialResponse,
+      ),
+    );
 
-  //   dioAdapter.onGet(
-  //     didDocumentUrl,
-  //     (request) => request.reply(200, jsonDecode(didDocumentResponse)),
-  //   );
+    test('When getCredentialType receive url it returns json response',
+        () async {
+      final (credentialResponseData, deferredCredentialEndpoint, format) =
+          await oidc4vc.getCredential(
+        issuer: issuer,
+        credential: credential,
+        did: did,
+        clientId: did,
+        kid: kid,
+        privateKey: privateKey,
+        cryptoHolderBinding: true,
+        clientType: ClientType.did,
+        proofHeaderType: ProofHeaderType.kid,
+        oidc4vciDraftType: OIDC4VCIDraftType.draft11,
+        clientAuthentication: ClientAuthentication.clientId,
+        proofType: ProofType.jwt,
+        openIdConfiguration: OpenIdConfiguration.fromJson(
+          jsonDecode(openIdConfiguration) as Map<String, dynamic>,
+        ),
+        accessToken: accessToken,
+        cnonce: nonce,
+        dio: client,
+      );
 
-  //   final oidc4vc = OIDC4VC(client);
+      expect(credentialResponseData, [expecedCredentialResponse]);
+      expect(
+        deferredCredentialEndpoint,
+        'https://talao.co/issuer/zxhaokccsi/deferred',
+      );
+      expect(format, 'jwt_vc');
+    });
 
-  //   expect(
-  //     () async {
-  //       await oidc4vc.getCredential(
-  //         credentialRequest,
-  //         mnemonic,
-  //         null,
-  //       );
-  //     },
-  //     throwsA(
-  //       isA<Exception>().having(
-  //         (p0) => p0.toString(),
-  //         'toString()',
-  //         'Exception: VERIFICATION_ISSUE',
-  //       ),
-  //     ),
-  //   );
-  // });
+    test('throw Exception when token is not verified', () {
+      expect(
+        () async {
+          await oidc4vc.getCredential(
+            issuer: '',
+            credential: null,
+            did: '',
+            clientId: null,
+            kid: '',
+            privateKey: '',
+            cryptoHolderBinding: true,
+            clientType: ClientType.did,
+            proofHeaderType: ProofHeaderType.kid,
+            oidc4vciDraftType: OIDC4VCIDraftType.draft11,
+            clientAuthentication: ClientAuthentication.clientId,
+            proofType: ProofType.jwt,
+            openIdConfiguration: OpenIdConfiguration.fromJson(
+              jsonDecode(openIdConfiguration) as Map<String, dynamic>,
+            ),
+            accessToken: '',
+            cnonce: null,
+            dio: client,
+          );
+        },
+        throwsA(isA<FormatException>()),
+      );
+    });
+  });
 
-  // group('build token data', () {
-  //   final oidc4vc = OIDC4VC(client);
-  //   test('get token data with credentialRequestUri', () async {
-  //     const expectedTokenData =
-  //         '{"code":"cb803d46-9c88-11ed-bdb3-0a1628958560","grant_type":"authorization_code"}'; // ignore: lines_longer_than_80_chars
-  //     final tokenData = oidc4vc.buildTokenData(
-  //       credentialRequest,
-  //     );
-  //     expect(jsonEncode(tokenData), expectedTokenData);
-  //   });
+  group('build token data', () {
+    const redirectUri = 'https://app.altme.io/app/download/callback';
+    const preAuthorizedCode =
+        'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDplYnNpOjEyMzQja2V5LTEiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvZWJzaS9pc3N1ZXIvenhoYW9rY2NzaSIsImNsaWVudF9pZCI6Imh0dHBzOi8vc2VsZi1pc3N1ZWQubWUvdjIiLCJleHAiOjE3MTQ2MzU4NDIsImlhdCI6MTcxNDYzNDg0MiwiaXNzIjoiaHR0cHM6Ly90YWxhby5jby9zYW5kYm94L2Vic2kvaXNzdWVyL3p4aGFva2Njc2kiLCJub25jZSI6IjZhMGJkZWUxLTA4NTUtMTFlZi04MzJlLTBhMTYyODk1ODU2MCIsInN1YiI6Imh0dHBzOi8vc2VsZi1pc3N1ZWQubWUvdjIifQ.ViX87lulUM6WZ0lNj5XMEz-Ty5q8nIcI7b-bIYa7VRsqo1wcR_en-8hzN_Q_sp8hqi8lKX80n4jM-DqXqvJk5g';
 
-  //   test('get token data with credentialRequestUri', () {
-  //     const expectedTokenData =
-  //         '{"pre-authorized_code":"ff8e73c5-ae07-11ed-b1f7-0a1628958560","grant_type":"urn:ietf:params:oauth:grant-type:pre-authorized_code"}'; // ignore: lines_longer_than_80_chars
-  //     final tokenData =
-  //         oidc4vc.buildTokenData(credentialRequestWithPreAuthorizedCode);
-  //     expect(jsonEncode(tokenData), expectedTokenData);
-  //   });
-  // });
+    test('get token data with credentialRequestUri for preAuthorizedCode',
+        () async {
+      const clientId =
+          'did:key:z2dmzD81cgPx8Vki7JbuuMmFYrWPgYoytykUZ3eyqht1j9Kbpog7BZb9wdCJCjHfWMTpjcviuoFJ2fd9AiwsWGMFvhNJ5gVMA2mzHSFqkrLMXdHNeePjiaTP15sw8uaWDfyAxehGHKj7YsxymgVnEhcEJgKsLRJHgJZXAiXJGyRxWPGEYC';
+
+      const expectedTokenData =
+          '{"pre-authorized_code":"eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDplYnNpOjEyMzQja2V5LTEiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvZWJzaS9pc3N1ZXIvenhoYW9rY2NzaSIsImNsaWVudF9pZCI6Imh0dHBzOi8vc2VsZi1pc3N1ZWQubWUvdjIiLCJleHAiOjE3MTQ2MzU4NDIsImlhdCI6MTcxNDYzNDg0MiwiaXNzIjoiaHR0cHM6Ly90YWxhby5jby9zYW5kYm94L2Vic2kvaXNzdWVyL3p4aGFva2Njc2kiLCJub25jZSI6IjZhMGJkZWUxLTA4NTUtMTFlZi04MzJlLTBhMTYyODk1ODU2MCIsInN1YiI6Imh0dHBzOi8vc2VsZi1pc3N1ZWQubWUvdjIifQ.ViX87lulUM6WZ0lNj5XMEz-Ty5q8nIcI7b-bIYa7VRsqo1wcR_en-8hzN_Q_sp8hqi8lKX80n4jM-DqXqvJk5g","grant_type":"urn:ietf:params:oauth:grant-type:pre-authorized_code","client_id":"did:key:z2dmzD81cgPx8Vki7JbuuMmFYrWPgYoytykUZ3eyqht1j9Kbpog7BZb9wdCJCjHfWMTpjcviuoFJ2fd9AiwsWGMFvhNJ5gVMA2mzHSFqkrLMXdHNeePjiaTP15sw8uaWDfyAxehGHKj7YsxymgVnEhcEJgKsLRJHgJZXAiXJGyRxWPGEYC"}'; // ignore: lines_longer_than_80_chars
+      final tokenData = oidc4vc.buildTokenData(
+        redirectUri: redirectUri,
+        preAuthorizedCode: preAuthorizedCode,
+        clientId: clientId,
+      );
+
+      expect(jsonEncode(tokenData), expectedTokenData);
+    });
+
+    test('get token data with credentialRequestUri - authorization flow', () {
+      const clientId =
+          'did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6IjZka1U2Wk1GSzc5V3dpY3dKNXJieEUxM3pTdWtCWTJPb0VpVlVFanFNRWMiLCJ5IjoiUm5Iem55VmxyUFNNVDdpckRzMTVEOXd4Z01vamlTREFRcGZGaHFUa0xSWSJ9';
+      const expectedTokenData =
+          '{"code":"6486b7c9-0858-11ef-a82c-0a1628958560","grant_type":"authorization_code","code_verifier":"qZNF2gMjTQf7pJN2NMai1TS9Y81z8xzfPQtbmyVG-Gk","redirect_uri":"https://app.altme.io/app/download/callback","client_id":"did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6IjZka1U2Wk1GSzc5V3dpY3dKNXJieEUxM3pTdWtCWTJPb0VpVlVFanFNRWMiLCJ5IjoiUm5Iem55VmxyUFNNVDdpckRzMTVEOXd4Z01vamlTREFRcGZGaHFUa0xSWSJ9"}';
+      final tokenData = oidc4vc.buildTokenData(
+        redirectUri: redirectUri,
+        clientId: clientId,
+        code: '6486b7c9-0858-11ef-a82c-0a1628958560',
+        codeVerifier: 'qZNF2gMjTQf7pJN2NMai1TS9Y81z8xzfPQtbmyVG-Gk',
+      );
+      expect(jsonEncode(tokenData), expectedTokenData);
+    });
+  });
 
   // group('getIssuer', () {
   //   final oidc4vc = OIDC4VC(client);
