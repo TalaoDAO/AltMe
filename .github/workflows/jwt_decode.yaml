@@ -10,3 +10,4 @@ jobs:
       flutter_version: 3.19.6
       min_coverage: 95
       working_directory: packages/jwt_decode
+      dart_sdk: 3.3.4

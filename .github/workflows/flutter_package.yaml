@@ -103,6 +103,11 @@ jobs:
       - name: ✨ Check Formatting
         run: dart format --line-length ${{inputs.format_line_length}} --set-exit-if-changed ${{inputs.format_directories}}
 
+      - name: 🎯 Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{inputs.dart_sdk}}
+
       - name: ⚙️ build with build_runner
         run: dart run build_runner build --delete-conflicting-outputs
 
