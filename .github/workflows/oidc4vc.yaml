@@ -1,4 +1,4 @@
-name: key_generator
+name: oidc4vc
 
 on: [pull_request, push]
 
