@@ -1169,7 +1169,6 @@ class OIDC4VC {
       }
 
       late final bool isVerified;
-
       if (kty == 'OKP') {
         isVerified = verifyTokenEdDSA(
           publicKey: publicKeyJwk,
