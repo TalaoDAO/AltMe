@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,21 +15,21 @@ class MockDio extends Mock implements Dio {}
 
 void main() {
   late MockSecureStorageProvider mockSecureStorageProvider;
-  late DioClient service;
+
+  final client = Dio();
+
   late DioAdapter dioAdapter;
-
-  const baseUrl = 'https://example.com';
-
-  final dio = Dio(BaseOptions(baseUrl: baseUrl));
+  late DioClient service;
 
   setUp(() {
-    dioAdapter = DioAdapter(dio: dio, matcher: const UrlRequestMatcher());
-    dio.httpClientAdapter = dioAdapter;
+    dioAdapter =
+        DioAdapter(dio: Dio(BaseOptions()), matcher: const UrlRequestMatcher());
+    client.httpClientAdapter = dioAdapter;
     mockSecureStorageProvider = MockSecureStorageProvider();
     service = DioClient(
       baseUrl: baseUrl,
       secureStorageProvider: mockSecureStorageProvider,
-      dio: dio,
+      dio: client,
     );
   });
 
@@ -69,42 +71,40 @@ void main() {
     });
 
     group('Get Method', () {
-      // test('Get Method Success test', () async {
-      //   dioAdapter.onGet(
-      //     baseUrl + testPath,
-      //     (request) {
-      //       return request.reply(200, successMessage);
-      //     },
-      //   );
+      test('Get Method Success test', () async {
+        dioAdapter.onGet(
+          baseUrl + testPath,
+          (request) {
+            return request.reply(200, successMessage);
+          },
+        );
 
-      //   final dynamic response = await service.get(baseUrl + testPath);
+        final dynamic response = await service.get(baseUrl + testPath);
 
-      //   expect(response, successMessage);
-      // });
+        expect(response, successMessage);
+      });
     });
 
     group('Post Method', () {
-      // final service = DioClient(baseUrl, dio);
+      test('Post Method Success test', () async {
+        dioAdapter.onPost(
+          baseUrl + testPath,
+          (request) {
+            return request.reply(201, successMessage);
+          },
+          data: json.encode(testData),
+          queryParameters: <String, dynamic>{},
+          headers: header,
+        );
 
-      // test('Post Method Success test', () async {
-      //   dioAdapter.onPost(
-      //     baseUrl + testPath,
-      //     (request) {
-      //       return request.reply(201, successMessage);
-      //     },
-      //     data: json.encode(testData),
-      //     queryParameters: <String, dynamic>{},
-      //     headers: header,
-      //   );
+        final dynamic response = await service.post(
+          baseUrl + testPath,
+          data: json.encode(testData),
+          options: Options(headers: header),
+        );
 
-      //   final dynamic response = await service.post(
-      //     baseUrl + testPath,
-      //     data: json.encode(testData),
-      //     options: Options(headers: header),
-      //   );
-
-      //   expect(response, successMessage);
-      // });
+        expect(response, successMessage);
+      });
     });
   });
 }
