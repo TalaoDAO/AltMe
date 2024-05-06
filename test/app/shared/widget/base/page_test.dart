@@ -7,15 +7,17 @@ import '../../../../helpers/helpers.dart';
 void main() {
   group('BasePage', () {
     group('CustomAppBar', () {
-      testWidgets('does not renders CustomAppBar when title is null',
-          (tester) async {
-        await tester.pumpApp(BasePage(body: Container(), title: ''));
-        expect(find.byType(CustomAppBar), findsNothing);
-      });
-
-      testWidgets('does not renders CustomAppBar when title is empty',
-          (tester) async {
-        await tester.pumpApp(BasePage(body: Container(), title: ''));
+      testWidgets(
+          'does not renders CustomAppBar when title, titleTrailing and'
+          ' titleLeading are null', (tester) async {
+        await tester.pumpApp(
+          BasePage(
+            body: Container(),
+            title: null,
+            titleTrailing: null,
+            titleLeading: null,
+          ),
+        );
         expect(find.byType(CustomAppBar), findsNothing);
       });
 
