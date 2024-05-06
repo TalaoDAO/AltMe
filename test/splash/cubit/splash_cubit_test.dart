@@ -6,6 +6,7 @@ import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -34,6 +35,7 @@ void main() {
   late ProfileCubit profileCubit;
 
   setUp(() {
+    WidgetsFlutterBinding.ensureInitialized();
     mockSecureStorage = MockSecureStorage();
     homeCubit = MockHomeCubit();
     credentialsCubit = MockCredentialsCubit();
@@ -58,7 +60,13 @@ void main() {
           altmeChatSupportCubit: altmeChatSupportCubit,
           profileCubit: profileCubit,
         ).state,
-        SplashStatus.init,
+        const SplashState(
+          status: SplashStatus.init,
+          versionNumber: '',
+          buildNumber: '',
+          isNewVersion: false,
+          loadedValue: 0,
+        ),
       );
     });
 
