@@ -182,7 +182,19 @@ class ScanCubit extends Cubit<ScanState> {
         } else {
           for (final item in credentialsToBePresented) {
             final presentationId = 'urn:uuid:${const Uuid().v4()}';
+      /// proof is done with a creation date 20 seconds in the past to avoid
+      /// proof check to fail because of time difference on server 
 
+            final options = jsonEncode({
+              'verificationMethod': kid,
+              'proofPurpose': 'assertionMethod',
+              'challenge': credentialModel.challenge,
+              'domain': credentialModel.domain,
+              'created': DateTime.now()
+                  .subtract(const Duration(seconds: 20))
+                  .toUtc()
+                  .toIso8601String(),
+            });
             final presentation = await didKitProvider.issuePresentation(
               jsonEncode({
                 '@context': ['https://www.w3.org/2018/credentials/v1'],
@@ -191,12 +203,7 @@ class ScanCubit extends Cubit<ScanState> {
                 'holder': did,
                 'verifiableCredential': item.data,
               }),
-              jsonEncode({
-                'verificationMethod': kid,
-                'proofPurpose': 'assertionMethod',
-                'challenge': credentialModel.challenge,
-                'domain': credentialModel.domain,
-              }),
+              options,
               privateKey,
             );
             presentations = List.of(presentations)..add(presentation);
@@ -346,6 +353,20 @@ class ScanCubit extends Cubit<ScanState> {
       );
 
       final presentationId = 'urn:uuid:${const Uuid().v4()}';
+
+      /// proof is done with a creation date 20 seconds in the past to avoid
+      /// proof check to fail because of time difference on server 
+      final options = jsonEncode({
+        'verificationMethod': kid,
+        'proofPurpose': 'assertionMethod',
+        'challenge': challenge,
+        'domain': domain,
+        'created': DateTime.now()
+            .subtract(const Duration(seconds: 20))
+            .toUtc()
+            .toIso8601String(),
+      });
+
       final presentation = await didKitProvider.issuePresentation(
         jsonEncode({
           '@context': ['https://www.w3.org/2018/credentials/v1'],
@@ -356,12 +377,7 @@ class ScanCubit extends Cubit<ScanState> {
               ? credentialsToBePresented.first.data
               : credentialsToBePresented.map((c) => c.data).toList(),
         }),
-        jsonEncode({
-          'verificationMethod': kid,
-          'proofPurpose': 'assertionMethod',
-          'challenge': challenge,
-          'domain': domain,
-        }),
+        options,
         privateKey,
       );
 
@@ -889,12 +905,20 @@ class ScanCubit extends Cubit<ScanState> {
     );
 
     if (presentLdpVc) {
+
+      /// proof is done with a creation date 20 seconds in the past to avoid
+      /// proof check to fail because of time difference on server 
       final options = jsonEncode({
         'verificationMethod': kid,
         'proofPurpose': 'assertionMethod',
         'challenge': nonce,
         'domain': clientId,
+        'created': DateTime.now()
+            .subtract(const Duration(seconds: 20))
+            .toUtc()
+            .toIso8601String(),
       });
+
       final presentationId = 'urn:uuid:${const Uuid().v4()}';
       final vpToken = await didKitProvider.issuePresentation(
         jsonEncode({
