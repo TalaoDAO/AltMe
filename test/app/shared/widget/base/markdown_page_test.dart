@@ -13,7 +13,7 @@ void main() {
     return MaterialApp(
       home: MarkdownPage(
         title: 'title',
-        file: 'assets/notices.md',
+        file: 'assets/notices/notices_en.md',
         key: GlobalKey(),
       ),
     );
@@ -45,16 +45,18 @@ void main() {
 
     testWidgets('verify property set correctly', (WidgetTester tester) async {
       await tester.pumpWidget(widget);
+      await tester.pumpAndSettle();
       expect(find.byType(MarkdownPage), findsOneWidget);
       final markdownWidget =
           tester.widget<MarkdownPage>(find.byType(MarkdownPage));
-      expect(markdownWidget.file, 'assets/notices.md');
+      expect(markdownWidget.file, 'assets/notices/notices_en.md');
       expect(markdownWidget.title, 'title');
       expect(markdownWidget.key, isA<GlobalKey>());
     });
 
     testWidgets('sub widget founded', (WidgetTester tester) async {
       await tester.pumpWidget(widget);
+      await tester.pumpAndSettle();
       expect(find.byType(MarkdownPage), findsOneWidget);
       expect(find.byType(BasePage), findsOneWidget);
       expect(find.byType(BackLeadingButton), findsOneWidget);
@@ -94,7 +96,7 @@ void main() {
     final widget = MaterialApp(
       home: MarkdownPage(
         title: 'title',
-        file: 'assets1/notices.md',
+        file: 'assets/notices/notices_en.md',
       ),
     );
 
