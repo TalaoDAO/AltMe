@@ -45,9 +45,10 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
 
   @override
   void initState() {
-    Future.microtask(
-      sendReceiveHomeCubit.init,
-    );
+    Future.delayed(Duration.zero, () {
+      sendReceiveHomeCubit.init(
+          baseUrl: context.read<ManageNetworkCubit>().state.network.apiUrl);
+    });
     super.initState();
   }
 

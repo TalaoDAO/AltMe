@@ -358,7 +358,7 @@ class ScanCubit extends Cubit<ScanState> {
         }),
         jsonEncode({
           'verificationMethod': kid,
-          'proofPurpose': 'authentication',
+          'proofPurpose': 'assertionMethod',
           'challenge': challenge,
           'domain': domain,
         }),
@@ -891,7 +891,7 @@ class ScanCubit extends Cubit<ScanState> {
     if (presentLdpVc) {
       final options = jsonEncode({
         'verificationMethod': kid,
-        'proofPurpose': 'authentication',
+        'proofPurpose': 'assertionMethod',
         'challenge': nonce,
         'domain': clientId,
       });
