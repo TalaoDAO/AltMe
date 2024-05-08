@@ -16,12 +16,16 @@ void main() {
 
   setUpAll(() async {
     mockFlutterSecureStorage = MockFlutterSecureStorage();
-    secureStorageProvider = SecureStorageProvider();
+    secureStorageProvider =
+        SecureStorageProvider(storage: mockFlutterSecureStorage);
   });
 
   group('SecureStorage', () {
     test('can be instantiated', () {
-      expect(getSecureStorage, isNotNull);
+      expect(secureStorageProvider, isNotNull);
+    });
+    test('getSecureStorage returns SecureStorageProvider instance', () {
+      expect(getSecureStorage, isA<SecureStorageProvider>());
     });
 
     test('get method works correctly', () async {
@@ -96,6 +100,48 @@ void main() {
 
       await secureStorageProvider.deleteAll();
       verify(mockFlutterSecureStorage.deleteAll).called(1);
+    });
+
+    group('deleteAllExceptsSomeKeys method', () {
+      test('delete all when list is null', () async {
+        when(mockFlutterSecureStorage.deleteAll)
+            .thenAnswer((invocation) async {});
+
+        await secureStorageProvider.deleteAllExceptsSomeKeys(null);
+        verify(mockFlutterSecureStorage.deleteAll).called(1);
+      });
+
+      test('delete all when list is empty', () async {
+        when(mockFlutterSecureStorage.deleteAll)
+            .thenAnswer((invocation) async {});
+
+        await secureStorageProvider.deleteAllExceptsSomeKeys([]);
+        verify(mockFlutterSecureStorage.deleteAll).called(1);
+      });
+
+      test('delete all except sent in the list', () async {
+        when(
+          () => mockFlutterSecureStorage.readAll(
+            iOptions: any(named: 'iOptions'),
+          ),
+        ).thenAnswer((invocation) async {
+          return {
+            'key1': '1',
+            'key2': '2',
+          };
+        });
+
+        when(
+          () => mockFlutterSecureStorage.delete(
+            key: 'key1',
+            iOptions: any(named: 'iOptions'),
+          ),
+        ).thenAnswer((_) async {});
+
+        await secureStorageProvider.deleteAllExceptsSomeKeys(['key2']);
+        verify(() => mockFlutterSecureStorage.delete(key: 'key1')).called(1);
+        verifyNever(() => mockFlutterSecureStorage.delete(key: 'key2'));
+      });
     });
   });
 }
