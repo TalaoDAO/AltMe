@@ -951,12 +951,6 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get discoverOverlayDescription => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
-        fontSize: 11,
-        fontWeight: FontWeight.w600,
-      );
-
   TextStyle get faqQue => GoogleFonts.roboto(
         color: const Color(0xffFFFFFF),
         fontSize: 16,
