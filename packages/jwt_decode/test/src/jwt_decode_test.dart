@@ -123,5 +123,31 @@ void main() {
         ),
       );
     });
+
+    test('parseJwtHeader throws exception for invalid token', () {
+      expect(
+        () => jwtDecode.parseJwtHeader('invalid.token'),
+        throwsA(
+          isA<Exception>().having(
+            (p0) => p0.toString(),
+            'toString()',
+            'Exception: INVALID_TOKEN',
+          ),
+        ),
+      );
+    });
+
+    test('parseJwtHeader returns header for valid token', () {
+      final header = jwtDecode.parseJwtHeader(validJwtToken);
+      expect(header['alg'], 'RS256');
+      expect(header['typ'], 'JWT');
+    });
+
+    test('parsePolygonIdJwtHeader throws exception for invalid token', () {
+      expect(
+        () => jwtDecode.parsePolygonIdJwtHeader('invalid.token'),
+        throwsException,
+      );
+    });
   });
 }
