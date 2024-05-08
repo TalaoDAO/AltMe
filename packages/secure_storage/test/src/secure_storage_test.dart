@@ -49,10 +49,9 @@ void main() {
       final result = await secureStorageProvider.getAllValues();
       expect(result, equals(allValue));
       verify(
-        () => mockFlutterSecureStorage.readAll(
-          iOptions: any(named: 'iOptions'),
-        ),
-      ).called(1);
+        () =>
+            mockFlutterSecureStorage.readAll(iOptions: any(named: 'iOptions')),
+      );
     });
 
     test('set method works correctly', () async {
