@@ -23,6 +23,7 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:x509/x509.dart' as x509;
+import 'package:x509/x509.dart';
 
 String generateDefaultAccountName(
   int accountIndex,
@@ -2029,9 +2030,9 @@ Future<Map<String, dynamic>?> checkX509({
     final seq = asn1lib.ASN1Sequence.fromBytes(decoded);
     final cert = x509.X509Certificate.fromAsn1(seq);
 
-    final subject = cert.tbsCertificate.subject;
+    final extensions = cert.tbsCertificate.extensions;
 
-    if (subject == null) {
+    if (extensions == null) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_format',
@@ -2040,9 +2041,11 @@ Future<Map<String, dynamic>?> checkX509({
       );
     }
 
-    final names = subject.names;
+    final extension = extensions
+        .where((Extension element) => element.extnId.name == 'subjectAltName')
+        .firstOrNull;
 
-    if (names.isEmpty) {
+    if (extension == null) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_format',
@@ -2051,9 +2054,9 @@ Future<Map<String, dynamic>?> checkX509({
       );
     }
 
-    final value = names[0].entries.map((element) => element.value).toList();
+    final extnValue = extension.extnValue.toString();
 
-    if (!value.contains(clientId)) {
+    if (!extnValue.contains(clientId)) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_format',
@@ -2070,6 +2073,18 @@ Future<Map<String, dynamic>?> checkX509({
         'e': 'AQAB',
         'kty': 'RSA',
         'n': n.replaceAll('=', ''),
+      };
+      return publicKeyJwk;
+    } else if (publicKey is x509.EcPublicKey) {
+      final BigInt xModulus = BigInt.parse(publicKey.xCoordinate.toString());
+      final BigInt yModulus = BigInt.parse(publicKey.yCoordinate.toString());
+      final x = base64Encode(xModulus.toBytes);
+      final y = base64Encode(yModulus.toBytes);
+      final publicKeyJwk = {
+        'kty': 'EC',
+        'crv': 'P-256',
+        'x': x.replaceAll('=', ''),
+        'y': y.replaceAll('=', ''),
       };
       return publicKeyJwk;
     }
