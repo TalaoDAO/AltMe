@@ -200,7 +200,7 @@ Future<bool> isCredentialAvaialble({
         credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
 
-    final matchFormat = vcFormatType.value == credential.format;
+    final matchFormat = vcFormatType.vcValue == credential.format;
     if (matchSubjectType && matchFormat) {
       return true;
     }
@@ -984,7 +984,12 @@ Future<Map<String, dynamic>?> getClientMetada({
       return null;
     }
   } catch (e) {
-    return null;
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description': 'Client metaData is invalid',
+      },
+    );
   }
 }
 
@@ -1857,10 +1862,10 @@ List<String> getStringCredentialsForToken({
   }
 
   /// create list of supported formats
-  if (presentLdpVc) supportingFormats.add(VCFormatType.ldpVc.value);
-  if (presentJwtVc) supportingFormats.add(VCFormatType.jwtVc.value);
-  if (presentJwtVcJson) supportingFormats.add(VCFormatType.jwtVcJson.value);
-  if (presentVcSdJwt) supportingFormats.add(VCFormatType.jwtVcJson.value);
+  if (presentLdpVc) supportingFormats.add(VCFormatType.ldpVc.vcValue);
+  if (presentJwtVc) supportingFormats.add(VCFormatType.jwtVc.vcValue);
+  if (presentJwtVcJson) supportingFormats.add(VCFormatType.jwtVcJson.vcValue);
+  if (presentVcSdJwt) supportingFormats.add(VCFormatType.jwtVcJson.vcValue);
 
   /// make sure only one of all are true
   if (presentLdpVc && vcFormatType == VCFormatType.ldpVc) {

@@ -182,8 +182,9 @@ class ScanCubit extends Cubit<ScanState> {
         } else {
           for (final item in credentialsToBePresented) {
             final presentationId = 'urn:uuid:${const Uuid().v4()}';
-      /// proof is done with a creation date 20 seconds in the past to avoid
-      /// proof check to fail because of time difference on server 
+
+            /// proof is done with a creation date 20 seconds in the past to avoid
+            /// proof check to fail because of time difference on server
 
             final options = jsonEncode({
               'verificationMethod': kid,
@@ -355,7 +356,7 @@ class ScanCubit extends Cubit<ScanState> {
       final presentationId = 'urn:uuid:${const Uuid().v4()}';
 
       /// proof is done with a creation date 20 seconds in the past to avoid
-      /// proof check to fail because of time difference on server 
+      /// proof check to fail because of time difference on server
       final options = jsonEncode({
         'verificationMethod': kid,
         'proofPurpose': 'assertionMethod',
@@ -613,7 +614,8 @@ class ScanCubit extends Cubit<ScanState> {
         await Future<void>.delayed(const Duration(seconds: 1));
         final responseData = <String, dynamic>{
           'vp_token': vpToken,
-          'presentation_submission': presentationSubmissionString,
+          'presentation_submission':
+              Uri.encodeQueryComponent(jsonEncode(presentationSubmission)),
         };
 
         if (idTokenNeeded && idToken != null) {
@@ -760,47 +762,31 @@ class ScanCubit extends Cubit<ScanState> {
       }
     } else {
       if (clientMetaData == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Client metaData is invalid',
-          },
-        );
+        final vcFormatType = profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+        vcFormat = vcFormatType.vcValue;
+        vpFormat = vcFormatType.vpValue;
+      } else {
+        final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
+
+        if (vpFormats.containsKey('ldp_vc')) {
+          vcFormat = 'ldp_vc';
+        } else if (vpFormats.containsKey('jwt_vc')) {
+          vcFormat = 'jwt_vc';
+        } else if (vpFormats.containsKey('jwt_vc_json')) {
+          vcFormat = 'jwt_vc_json';
+        }
+
+        if (vpFormats.containsKey('ldp_vp')) {
+          vpFormat = 'ldp_vp';
+        } else if (vpFormats.containsKey('jwt_vp')) {
+          vpFormat = 'jwt_vp';
+        } else if (vpFormats.containsKey('jwt_vp_json')) {
+          vpFormat = 'jwt_vp_json';
+        } else if (vpFormats.containsKey('vc+sd-jwt')) {
+          vpFormat = 'vc+sd-jwt';
+        }
       }
-
-      final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
-
-      if (vpFormats.containsKey('ldp_vc')) {
-        vcFormat = 'ldp_vc';
-      } else if (vpFormats.containsKey('jwt_vc')) {
-        vcFormat = 'jwt_vc';
-      } else if (vpFormats.containsKey('jwt_vc_json')) {
-        vcFormat = 'jwt_vc_json';
-      }
-
-      if (vpFormats.containsKey('ldp_vp')) {
-        vpFormat = 'ldp_vp';
-      } else if (vpFormats.containsKey('jwt_vp')) {
-        vpFormat = 'jwt_vp';
-      } else if (vpFormats.containsKey('jwt_vp_json')) {
-        vpFormat = 'jwt_vp_json';
-      } else if (vpFormats.containsKey('vc+sd-jwt')) {
-        vpFormat = 'vc+sd-jwt';
-      }
-    }
-
-    final vcFormatType = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
-
-    vcFormat ??= vcFormatType.value;
-
-    if (vpFormat == null) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'VC format is missing.',
-        },
-      );
     }
 
     for (int i = 0; i < credentialsToBePresented.length; i++) {
@@ -905,9 +891,8 @@ class ScanCubit extends Cubit<ScanState> {
     );
 
     if (presentLdpVc) {
-
       /// proof is done with a creation date 20 seconds in the past to avoid
-      /// proof check to fail because of time difference on server 
+      /// proof check to fail because of time difference on server
       final options = jsonEncode({
         'verificationMethod': kid,
         'proofPurpose': 'assertionMethod',
