@@ -4,19 +4,19 @@ import 'package:oidc4vc/oidc4vc.dart';
 void main() {
   group('VCFormatTypeX', () {
     test('formattedString', () {
-      expect(VCFormatType.ldpVc.formattedString, 'ldp_vc');
-      expect(VCFormatType.jwtVc.formattedString, 'jwt_vc');
-      expect(VCFormatType.jwtVcJson.formattedString, 'jwt_vc_json');
-      expect(VCFormatType.jwtVcJsonLd.formattedString, 'jwt_vc_json-ld');
-      expect(VCFormatType.vcSdJWT.formattedString, 'vc+sd-jwt');
+      expect(VCFormatType.ldpVc.vcValue, 'ldp_vc');
+      expect(VCFormatType.jwtVc.vcValue, 'jwt_vc');
+      expect(VCFormatType.jwtVcJson.vcValue, 'jwt_vc_json');
+      expect(VCFormatType.jwtVcJsonLd.vcValue, 'jwt_vc_json-ld');
+      expect(VCFormatType.vcSdJWT.vcValue, 'vc+sd-jwt');
     });
 
     test('value', () {
-      expect(VCFormatType.ldpVc.value, 'ldp_vc');
-      expect(VCFormatType.jwtVc.value, 'jwt_vc');
-      expect(VCFormatType.jwtVcJson.value, 'jwt_vc_json');
-      expect(VCFormatType.jwtVcJsonLd.value, 'jwt_vc_json-ld');
-      expect(VCFormatType.vcSdJWT.value, 'vc+sd-jwt');
+      expect(VCFormatType.ldpVc.vpValue, 'ldp_vp');
+      expect(VCFormatType.jwtVc.vpValue, 'jwt_vp');
+      expect(VCFormatType.jwtVcJson.vpValue, 'jwt_vp_json');
+      expect(VCFormatType.jwtVcJsonLd.vpValue, 'jwt_vp_json-ld');
+      expect(VCFormatType.vcSdJWT.vpValue, 'vc+sd-jwt');
     });
 
     test('urlValue', () {
