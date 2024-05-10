@@ -80,8 +80,7 @@ extension CredentialCategoryX on CredentialCategory {
     }
   }
 
-  CredentialCategoryConfig config(BuildContext context) {
-    final l10n = context.l10n;
+  CredentialCategoryConfig config(AppLocalizations l10n) {
     switch (this) {
       case CredentialCategory.advantagesCards:
         return CredentialCategoryConfig(

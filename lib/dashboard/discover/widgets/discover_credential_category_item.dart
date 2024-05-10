@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final credentialCategoryConfig = credentialCategory.config(context);
+    final credentialCategoryConfig = credentialCategory.config(context.l10n);
     //sort credentials by order
     dummyCredentials.sort(
       (a, b) =>
