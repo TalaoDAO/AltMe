@@ -901,44 +901,18 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             .toList();
 
         if (credentialsOfSameType.isNotEmpty && subjectType.supportSingleOnly) {
-          final availableWalletAddresses = <String>[];
-
-          if (isBlockchainAccount && supportAssociatedCredential) {
-            /// getting list of available wallet address of current
-            /// blockchain account
-            for (final credential in credentialsOfSameType) {
-              final String? walletAddress = getWalletAddress(
-                credential.credentialPreview.credentialSubjectModel,
-              );
-
-              if (walletAddress != null) {
-                availableWalletAddresses.add(walletAddress);
-              }
-            }
-          }
-
           /// credential available case
           for (final credential in credentialsOfSameType) {
             if (isBlockchainAccount && supportAssociatedCredential) {
               /// there can be multiple blockchain profiles
               ///
               /// each profiles should be allowed to add the respective cards
-              ///
-              /// so we have to check the current profile wallet address and
-              /// compare with existing blockchain card to add in discover or
-              /// not
 
-              final String? currentWalletAddress =
-                  walletCubit.state.currentAccount?.walletAddress;
+              /// We always have the associated Adress credential
+              /// in the discover since "Do not remove the GET a crypto account
+              ///  in the Discover #2649"
 
-              /// if current blockchain card is not available in list of
-              /// credentails then add in the discover list
-              /// else do not add if it is blockchain
-
-              final isBlockChainCardAvailable = availableWalletAddresses
-                  .contains(currentWalletAddress.toString());
-
-              if (!isBlockChainCardAvailable && isCurrentBlockchainAccount) {
+              if (isCurrentBlockchainAccount) {
                 /// if already added do not add
                 if (!requiredDummySubjects.contains(subjectType)) {
                   requiredDummySubjects.add(subjectType);
