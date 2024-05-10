@@ -14,22 +14,7 @@ enum VCFormatType {
 }
 
 extension VCFormatTypeX on VCFormatType {
-  String get formattedString {
-    switch (this) {
-      case VCFormatType.ldpVc:
-        return 'ldp_vc';
-      case VCFormatType.jwtVc:
-        return 'jwt_vc';
-      case VCFormatType.jwtVcJson:
-        return 'jwt_vc_json';
-      case VCFormatType.jwtVcJsonLd:
-        return 'jwt_vc_json-ld';
-      case VCFormatType.vcSdJWT:
-        return 'vc+sd-jwt';
-    }
-  }
-
-  String get value {
+  String get vcValue {
     switch (this) {
       case VCFormatType.ldpVc:
         return 'ldp_vc';
@@ -68,6 +53,21 @@ extension VCFormatTypeX on VCFormatType {
       case VCFormatType.jwtVcJsonLd:
       case VCFormatType.vcSdJWT:
         return false;
+    }
+  }
+
+  String get vpValue {
+    switch (this) {
+      case VCFormatType.ldpVc:
+        return 'ldp_vp';
+      case VCFormatType.jwtVc:
+        return 'jwt_vp';
+      case VCFormatType.jwtVcJson:
+        return 'jwt_vp_json';
+      case VCFormatType.jwtVcJsonLd:
+        return 'jwt_vp_json-ld';
+      case VCFormatType.vcSdJWT:
+        return 'vc+sd-jwt';
     }
   }
 }

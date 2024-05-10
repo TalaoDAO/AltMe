@@ -23,15 +23,15 @@ Future<void> addOIDC4VCCredential({
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
 
-  if (format == VCFormatType.jwtVc.value ||
-      format == VCFormatType.jwtVcJson.value ||
-      format == VCFormatType.vcSdJWT.value) {
+  if (format == VCFormatType.jwtVc.vcValue ||
+      format == VCFormatType.jwtVcJson.vcValue ||
+      format == VCFormatType.vcSdJWT.vcValue) {
     //jwt_vc
     final data = encodedCredentialFromOIDC4VC['credential'] as String;
 
     final jsonContent = jwtDecode.parseJwt(data);
 
-    if (format == VCFormatType.vcSdJWT.value) {
+    if (format == VCFormatType.vcSdJWT.vcValue) {
       final sdAlg = jsonContent['_sd_alg'];
 
       if (sdAlg == null || sdAlg != 'sha-256') {
@@ -48,7 +48,7 @@ Future<void> addOIDC4VCCredential({
       credentialFromOIDC4VC = jsonContent['vc'] as Map<String, dynamic>;
     }
 
-    if (format == VCFormatType.vcSdJWT.value) {
+    if (format == VCFormatType.vcSdJWT.vcValue) {
       /// type
       if (!credentialFromOIDC4VC.containsKey('type')) {
         credentialFromOIDC4VC['type'] = [credentialType];
@@ -115,7 +115,7 @@ Future<void> addOIDC4VCCredential({
     // }
 
     credentialFromOIDC4VC['jwt'] = data;
-  } else if (format == VCFormatType.ldpVc.value) {
+  } else if (format == VCFormatType.ldpVc.vcValue) {
     //ldp_vc
 
     final data = encodedCredentialFromOIDC4VC['credential'];

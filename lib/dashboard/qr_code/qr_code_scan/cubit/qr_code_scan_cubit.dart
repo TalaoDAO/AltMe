@@ -935,22 +935,16 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         client: client,
         uri: state.uri!,
       );
-      if (clientMetaData == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Client metaData is invalid',
-          },
-        );
-      }
 
-      if (!clientMetaData.containsKey('vp_formats')) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Format is missing.',
-          },
-        );
+      if (clientMetaData != null) {
+        if (!clientMetaData.containsKey('vp_formats')) {
+          throw ResponseMessage(
+            data: {
+              'error': 'invalid_request',
+              'error_description': 'Format is missing.',
+            },
+          );
+        }
       }
     }
 
@@ -998,8 +992,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       shareLink: 'shareLink',
       data: const {},
       jwt: null,
-      format: profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType.value,
+      format: profileCubit
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile
+          .vcFormatType
+          .vcValue,
       credentialManifest: credentialManifest,
     );
 
