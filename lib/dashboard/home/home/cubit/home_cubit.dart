@@ -187,7 +187,7 @@ class HomeCubit extends Cubit<HomeState> {
         final Map<String, dynamic> newCredential =
             Map<String, dynamic>.from(credential);
         newCredential['credentialPreview'] = credential;
-        newCredential['format'] = vcFormatType.value;
+        newCredential['format'] = vcFormatType.vcValue;
         final CredentialManifest credentialManifest =
             await getCredentialManifestFromAltMe(
           oidc4vc: oidc4vc,

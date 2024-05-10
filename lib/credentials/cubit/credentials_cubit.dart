@@ -921,7 +921,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
               //get current wallet address
             } else {
-              if (vcFormatType.value == credential.getFormat) {
+              if (vcFormatType.vcValue == credential.getFormat) {
                 /// do not add if format matched
                 /// there can be same credentials with different format
               } else {
