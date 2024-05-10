@@ -570,6 +570,37 @@ void main() {
           NetworkError.NETWORK_ERROR_NOT_FOUND.localise(context),
         );
       });
+
+      testWidgets(
+          'returns NetworkError.NETWORK_ERROR_PRECONDITION_FAILED for '
+          'NetworkException(message: NetworkError.NETWORK_ERROR_PRECONDITION_FAILED)',
+          (tester) async {
+        final MessageHandler messageHandler = NetworkException(
+          message: NetworkError.NETWORK_ERROR_PRECONDITION_FAILED,
+        );
+        await tester.pumpApp(Container());
+        final BuildContext context = tester.element(find.byType(Container));
+        final String text = messageHandler.getMessage(context, messageHandler);
+        expect(
+          text,
+          NetworkError.NETWORK_ERROR_PRECONDITION_FAILED.localise(context),
+        );
+      });
+
+      testWidgets(
+          'returns NetworkError.NETWORK_ERROR_NOT_READY for '
+          'NetworkException(message: NetworkError.NETWORK_ERROR_NOT_READY)',
+          (tester) async {
+        final MessageHandler messageHandler =
+            NetworkException(message: NetworkError.NETWORK_ERROR_NOT_READY);
+        await tester.pumpApp(Container());
+        final BuildContext context = tester.element(find.byType(Container));
+        final String text = messageHandler.getMessage(context, messageHandler);
+        expect(
+          text,
+          NetworkError.NETWORK_ERROR_NOT_READY.localise(context),
+        );
+      });
     });
   });
 }

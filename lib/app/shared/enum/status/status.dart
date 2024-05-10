@@ -2,6 +2,7 @@ export 'app_status.dart';
 export 'beacon_status.dart';
 export 'credential_detail_tab_status.dart';
 export 'credential_status.dart';
+export 'credential_status_extension.dart';
 export 'credentials_status.dart';
 export 'home_status.dart';
 export 'kyc_verification_status.dart';
