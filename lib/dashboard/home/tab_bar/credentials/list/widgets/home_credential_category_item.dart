@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,7 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             ? 1
             : 0,
       );
-    final credentialCategoryConfig = credentialCategory.config(context);
+    final credentialCategoryConfig = credentialCategory.config(context.l10n);
     return Padding(
       padding: margin,
       child: Column(
