@@ -614,8 +614,7 @@ class ScanCubit extends Cubit<ScanState> {
         await Future<void>.delayed(const Duration(seconds: 1));
         final responseData = <String, dynamic>{
           'vp_token': vpToken,
-          'presentation_submission':
-              Uri.encodeQueryComponent(jsonEncode(presentationSubmission)),
+          'presentation_submission': presentationSubmissionString,
         };
 
         if (idTokenNeeded && idToken != null) {
