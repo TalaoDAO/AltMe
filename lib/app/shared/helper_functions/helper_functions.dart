@@ -75,11 +75,15 @@ KeyStoreModel getKeysFromSecretKey({required String secretKey}) {
   );
 }
 
-String stringToHexPrefixedWith05({required String payload}) {
+String stringToHexPrefixedWith05({
+  required String payload,
+  DateTime? dateTime,
+}) {
+  dateTime ??= DateTime.now();
   final String formattedInput = <String>[
     'Tezos Signed Message:',
     'altme.io',
-    DateTime.now().toString(),
+    dateTime.toString(),
     payload,
   ].join(' ');
 
@@ -238,11 +242,13 @@ Future<bool> getStoragePermission() async {
   return false;
 }
 
-String getDateTimeWithoutSpace() {
-  final dateTime = DateTime.fromMicrosecondsSinceEpoch(
-    DateTime.now().microsecondsSinceEpoch,
+String getDateTimeWithoutSpace({DateTime? dateTime}) {
+  dateTime ??= DateTime.now();
+
+  final dateTimeString = DateTime.fromMicrosecondsSinceEpoch(
+    dateTime.microsecondsSinceEpoch,
   ).toString().replaceAll(' ', '-');
-  return dateTime;
+  return dateTimeString;
 }
 
 int getIndexValue({
@@ -1177,7 +1183,7 @@ MessageHandler getMessageHandler(dynamic e) {
           'error_description': 'Failed to extract header from jwt.',
         },
       );
-    } else if (stringException.contains('INVALID_TOKEN')) {
+    } else if (stringException.contains('INVALID_PAYLOAD')) {
       return ResponseMessage(
         data: {
           'error': 'invalid_format',

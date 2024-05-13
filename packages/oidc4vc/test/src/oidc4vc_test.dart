@@ -15,8 +15,6 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
-class MockDio extends Mock implements Dio {}
-
 class MockPkcePair extends Mock implements PkcePair {}
 
 void main() {
