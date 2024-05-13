@@ -9,14 +9,10 @@
 
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 import 'token_parameters_class.dart';
-
-class MockDio extends Mock implements Dio {}
 
 void main() {
   group('TokenParameters', () {
