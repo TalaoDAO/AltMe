@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/home/home.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -12,6 +14,8 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class MockSecureStorage extends Mock implements SecureStorageProvider {}
+
+class MockDotenv extends Mock implements DotEnv {}
 
 void main() {
   late SecureStorageProvider mockSecureStorage;
@@ -913,6 +917,7 @@ void main() {
           expect(hasIDTokenOrVPToken('id_token vp_token'), true);
           expect(hasIDTokenOrVPToken(''), false);
         });
+
         test('getUpdatedUrlForSIOPV2OIC4VP', () {
           final uri = Uri.parse('https://example.com');
           final response = {
@@ -988,6 +993,7 @@ void main() {
               (true, false, false, false),
             );
           });
+
           test(
               'throws ResponseMessage when presentationDefinition has no formats',
               () {
@@ -1045,6 +1051,361 @@ void main() {
               ),
               (false, false, true, false),
             );
+          });
+        });
+
+        group('checkX509', () {
+          test('throws error for x5c is null', () async {
+            final result = await checkX509(
+              clientId: '',
+              header: {},
+              encodedData: '',
+            );
+            expect(result, isNull);
+          });
+
+          test('throws error for invalid x5c format', () async {
+            expect(
+              () => checkX509(
+                clientId: '',
+                header: {
+                  'x5c': 'i am not list',
+                },
+                encodedData: '',
+              ),
+              throwsA(
+                isA<ResponseMessage>().having((e) => e.data, '', {
+                  'error': 'invalid_format',
+                  'error_description': 'x509_san_dns scheme error',
+                }),
+              ),
+            );
+          });
+
+          test('throws error for invalid x5c is empty', () async {
+            expect(
+              () => checkX509(
+                clientId: '',
+                header: {
+                  'x5c': [],
+                },
+                encodedData: '',
+              ),
+              throwsA(
+                isA<ResponseMessage>().having((e) => e.data, '', {
+                  'error': 'invalid_format',
+                  'error_description': 'x509_san_dns scheme error',
+                }),
+              ),
+            );
+          });
+        });
+
+        group('checkVerifierAttestation', () {
+          final jwtDecode = JWTDecode();
+          test('throws error if JWT is missing', () async {
+            expect(
+              () => checkVerifierAttestation(
+                clientId: '',
+                header: {},
+                jwtDecode: jwtDecode,
+              ),
+              throwsA(
+                isA<ResponseMessage>().having((e) => e.data, '', {
+                  'error': 'invalid_format',
+                  'error_description': 'verifier_attestation scheme error',
+                }),
+              ),
+            );
+          });
+
+          test('throws error when sub is null', () async {
+            expect(
+              () => checkVerifierAttestation(
+                clientId: '',
+                header: {
+                  'jwt':
+                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.hqWGSaFpvbrXkOWc6lrnffhNWR19W_S1YKFBx2arWBk',
+                },
+                jwtDecode: jwtDecode,
+              ),
+              throwsA(
+                isA<ResponseMessage>().having((e) => e.data, '', {
+                  'error': 'invalid_format',
+                  'error_description': 'verifier_attestation scheme error',
+                }),
+              ),
+            );
+          });
+
+          test('throws error when sub is not equal to clientId', () async {
+            expect(
+              () => checkVerifierAttestation(
+                clientId: 'random',
+                header: {
+                  'jwt':
+                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjQiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.EyF5bWaxNMFda_CRAOHu3aagShvHlGpnSWK7uFsj23Q',
+                },
+                jwtDecode: jwtDecode,
+              ),
+              throwsA(
+                isA<ResponseMessage>().having((e) => e.data, '', {
+                  'error': 'invalid_format',
+                  'error_description': 'verifier_attestation scheme error',
+                }),
+              ),
+            );
+          });
+
+          test('throws error when sub cnf is null', () async {
+            expect(
+              () => checkVerifierAttestation(
+                clientId: '124',
+                header: {
+                  'jwt':
+                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjQiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.EyF5bWaxNMFda_CRAOHu3aagShvHlGpnSWK7uFsj23Q',
+                },
+                jwtDecode: jwtDecode,
+              ),
+              throwsA(
+                isA<ResponseMessage>().having((e) => e.data, '', {
+                  'error': 'invalid_format',
+                  'error_description': 'verifier_attestation scheme error',
+                }),
+              ),
+            );
+          });
+
+          test('throws error when cnf is not Map', () async {
+            expect(
+              () => checkVerifierAttestation(
+                clientId: '124',
+                header: {
+                  'jwt':
+                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjQiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjIsImNuZiI6IjEyMyJ9.xZYbK4Oe2jGyQwyOiK5Zv0sHDtfjgY-sdS7WKs-aZYQ',
+                },
+                jwtDecode: jwtDecode,
+              ),
+              throwsA(
+                isA<ResponseMessage>().having((e) => e.data, '', {
+                  'error': 'invalid_format',
+                  'error_description': 'verifier_attestation scheme error',
+                }),
+              ),
+            );
+          });
+
+          test('throws error when cnf does not contain jwk', () async {
+            expect(
+              () => checkVerifierAttestation(
+                clientId: '124',
+                header: {
+                  'jwt':
+                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjQiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjIsImNuZiI6eyJ0ZXN0IjoidGVzdCJ9fQ.tnYvd00vYuDxjTtC7goSB5EQUNGtSFR1JBpY1CTRzD0',
+                },
+                jwtDecode: jwtDecode,
+              ),
+              throwsA(
+                isA<ResponseMessage>().having((e) => e.data, '', {
+                  'error': 'invalid_format',
+                  'error_description': 'verifier_attestation scheme error',
+                }),
+              ),
+            );
+          });
+
+          test('throws error when jwk is not Map', () async {
+            expect(
+              () => checkVerifierAttestation(
+                clientId: '124',
+                header: {
+                  'jwt':
+                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjQiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjIsImNuZiI6eyJqd2siOiJ0ZXN0In19.qjqntbtQTnRcR60UvveWyv8t3Y1dFMI0DLSyB_pwqBk',
+                },
+                jwtDecode: jwtDecode,
+              ),
+              throwsA(
+                isA<ResponseMessage>().having((e) => e.data, '', {
+                  'error': 'invalid_format',
+                  'error_description': 'verifier_attestation scheme error',
+                }),
+              ),
+            );
+          });
+
+          test('return correct jwk', () async {
+            final result = await checkVerifierAttestation(
+              clientId: '124',
+              header: {
+                'jwt':
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjQiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjIsImNuZiI6eyJqd2siOnsibmFtZSI6IkJpYmFzaCJ9fX0.daqYrO5JtoW9o0ZEDlG2a6ctAgQxaNxTT0iYyVBIIkY',
+              },
+              jwtDecode: jwtDecode,
+            );
+
+            expect(result, {'name': 'Bibash'});
+          });
+        });
+
+        test('returns correct wallet Address', () {
+          expect(
+            getWalletAddress(
+              TezosAssociatedAddressModel(
+                id: 'id',
+                type: 'type',
+                issuedBy: const Author('name'),
+                associatedAddress: 'tezosAddress',
+              ),
+            ),
+            'tezosAddress',
+          );
+          expect(
+            getWalletAddress(
+              EthereumAssociatedAddressModel(
+                id: 'id',
+                type: 'type',
+                issuedBy: const Author('name'),
+                associatedAddress: 'ethereumAddress',
+              ),
+            ),
+            'ethereumAddress',
+          );
+          expect(
+            getWalletAddress(
+              PolygonAssociatedAddressModel(
+                id: 'id',
+                type: 'type',
+                issuedBy: const Author('name'),
+                associatedAddress: 'polygonAddress',
+              ),
+            ),
+            'polygonAddress',
+          );
+          expect(
+            getWalletAddress(
+              BinanceAssociatedAddressModel(
+                id: 'id',
+                type: 'type',
+                issuedBy: const Author('name'),
+                associatedAddress: 'address',
+              ),
+            ),
+            'address',
+          );
+          expect(
+            getWalletAddress(
+              FantomAssociatedAddressModel(
+                id: 'id',
+                type: 'type',
+                issuedBy: const Author('name'),
+                associatedAddress: 'fantomAddress',
+              ),
+            ),
+            'fantomAddress',
+          );
+          expect(
+            getWalletAddress(
+              AgeRangeModel(
+                id: 'id',
+                type: 'type',
+                issuedBy: const Author('name'),
+              ),
+            ),
+            isNull,
+          );
+        });
+
+        group('fetchRpcUrl', () {
+          late DotEnv mockDotenv;
+
+          setUpAll(() {
+            mockDotenv = MockDotenv();
+          });
+
+          test('returns rpcNodeUrl for BinanceNetwork.mainNet()', () async {
+            final result = await fetchRpcUrl(
+              blockchainNetwork: BinanceNetwork.mainNet(),
+              dotEnv: mockDotenv,
+            );
+            expect(result, 'https://bsc-dataseed.binance.org/');
+          });
+
+          test('returns rpcNodeUrl for BinanceNetwork.testNet()', () async {
+            final result = await fetchRpcUrl(
+              blockchainNetwork: BinanceNetwork.testNet(),
+              dotEnv: mockDotenv,
+            );
+            expect(result, 'https://bsc-testnet.public.blastapi.io');
+          });
+
+          test('returns rpcNodeUrl for  FantomNetwork.mainNet()', () async {
+            final result = await fetchRpcUrl(
+              blockchainNetwork: FantomNetwork.mainNet(),
+              dotEnv: mockDotenv,
+            );
+            expect(result, 'https://rpcapi.fantom.network/');
+          });
+
+          test('returns rpcNodeUrl for  FantomNetwork.testNet()', () async {
+            final result = await fetchRpcUrl(
+              blockchainNetwork: FantomNetwork.testNet(),
+              dotEnv: mockDotenv,
+            );
+            expect(result, 'https://rpc.testnet.fantom.network');
+          });
+
+          test('returns infura URL for PolygonNetwork.mainNet()', () async {
+            when(() => mockDotenv.load()).thenAnswer((_) async => {});
+            when(() => mockDotenv.get('INFURA_API_KEY')).thenReturn('123');
+            final result = await fetchRpcUrl(
+              blockchainNetwork: PolygonNetwork.mainNet(),
+              dotEnv: mockDotenv,
+            );
+            expect(result, '${Parameters.POLYGON_INFURA_URL}123');
+          });
+
+          test('returns infura URL for PolygonNetwork on Testnet', () async {
+            final result = await fetchRpcUrl(
+              blockchainNetwork: PolygonNetwork.testNet(),
+              dotEnv: mockDotenv,
+            );
+            expect(result, 'https://rpc-mumbai.maticvigil.com');
+          });
+
+          test('returns infura URL for EthereumNetwork.mainNet()', () async {
+            when(() => mockDotenv.load()).thenAnswer((_) async => {});
+            when(() => mockDotenv.get('INFURA_API_KEY')).thenReturn('123');
+            final result = await fetchRpcUrl(
+              blockchainNetwork: EthereumNetwork.mainNet(),
+              dotEnv: mockDotenv,
+            );
+            expect(result, '${Parameters.web3RpcMainnetUrl}123');
+          });
+
+          test('returns infura URL for EthereumNetwork.testNet()', () async {
+            final result = await fetchRpcUrl(
+              blockchainNetwork: EthereumNetwork.testNet(),
+              dotEnv: mockDotenv,
+            );
+            expect(result, 'https://rpc.sepolia.dev');
+          });
+
+          test('returns infura URL for TezosNetwork.mainNet()', () async {
+            when(() => mockDotenv.load()).thenAnswer((_) async => {});
+            when(() => mockDotenv.get('INFURA_API_KEY')).thenReturn('123');
+            final result = await fetchRpcUrl(
+              blockchainNetwork: TezosNetwork.mainNet(),
+              dotEnv: mockDotenv,
+            );
+            expect(result, '${Parameters.web3RpcMainnetUrl}123');
+          });
+
+          test('returns infura URL for TezosNetwork.ghostnet()', () async {
+            final result = await fetchRpcUrl(
+              blockchainNetwork: TezosNetwork.ghostnet(),
+              dotEnv: mockDotenv,
+            );
+            expect(result, 'https://rpc.tzkt.io/ghostnet');
           });
         });
       });
