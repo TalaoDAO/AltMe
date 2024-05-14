@@ -2156,7 +2156,10 @@ String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
   return null;
 }
 
-Future<String> fetchRpcUrl(BlockchainNetwork blockchainNetwork) async {
+Future<String> fetchRpcUrl({
+  required BlockchainNetwork blockchainNetwork,
+  required DotEnv dotEnv,
+}) async {
   String rpcUrl = '';
 
   if (blockchainNetwork is BinanceNetwork ||
@@ -2164,8 +2167,8 @@ Future<String> fetchRpcUrl(BlockchainNetwork blockchainNetwork) async {
     rpcUrl = blockchainNetwork.rpcNodeUrl as String;
   } else {
     if (blockchainNetwork.networkname == 'Mainnet') {
-      await dotenv.load();
-      final String infuraApiKey = dotenv.get('INFURA_API_KEY');
+      await dotEnv.load();
+      final String infuraApiKey = dotEnv.get('INFURA_API_KEY');
 
       late String prefixUrl;
 
