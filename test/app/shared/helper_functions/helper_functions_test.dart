@@ -1018,7 +1018,8 @@ void main() {
           });
 
           test(
-              'returns correct value  when presentationDefinition.format'
+              'returns correct value(VCFormatType.jwtVc) when'
+              ' presentationDefinition.format'
               ' and clientMetaData are null', () {
             expect(
               getPresentVCDetails(
@@ -1034,7 +1035,42 @@ void main() {
           });
 
           test(
-              'returns correct value  when presentationDefinition.format is null'
+              'returns correct value(VCFormatType.jwtVcJson) when'
+              ' presentationDefinition.format'
+              ' and clientMetaData are null', () {
+            expect(
+              getPresentVCDetails(
+                vcFormatType: VCFormatType.jwtVcJson,
+                presentationDefinition: PresentationDefinition(
+                  inputDescriptors: [],
+                  format: null,
+                ),
+                clientMetaData: null,
+              ),
+              (false, false, true, false),
+            );
+          });
+
+          test(
+              'returns correct value(VCFormatType.vcSdJWT) when'
+              ' presentationDefinition.format'
+              ' and clientMetaData are null', () {
+            expect(
+              getPresentVCDetails(
+                vcFormatType: VCFormatType.vcSdJWT,
+                presentationDefinition: PresentationDefinition(
+                  inputDescriptors: [],
+                  format: null,
+                ),
+                clientMetaData: null,
+              ),
+              (false, false, false, true),
+            );
+          });
+
+          test(
+              'returns correct value(VCFormatType.jwtVcJson) when'
+              ' presentationDefinition.format is null'
               ' and clientMetaData is provided', () {
             expect(
               getPresentVCDetails(
@@ -1051,6 +1087,113 @@ void main() {
               ),
               (false, false, true, false),
             );
+          });
+
+          test(
+              'returns correct value(VCFormatType.vc+sd-jwt) when'
+              ' presentationDefinition.format is null'
+              ' and clientMetaData is provided', () {
+            expect(
+              getPresentVCDetails(
+                vcFormatType: VCFormatType.vcSdJWT,
+                presentationDefinition: PresentationDefinition(
+                  inputDescriptors: [],
+                  format: null,
+                ),
+                clientMetaData: {
+                  'vp_formats': {
+                    'vc+sd-jwt': 'here',
+                  },
+                },
+              ),
+              (false, false, false, true),
+            );
+          });
+        });
+
+        group('collectSdValues', () {
+          test('returns an empty list when no _sd key is present', () {
+            final data = {
+              'a': 1,
+              'b': {
+                'c': 2,
+              },
+            };
+            final result = collectSdValues(data);
+            expect(result, isEmpty);
+          });
+
+          test('collects values from _sd keys', () {
+            final data = {
+              '_sd': [1, 2, 3],
+              'a': {
+                '_sd': [4, 5],
+              },
+              'b': {
+                'c': {
+                  '_sd': [6, 7],
+                },
+              },
+            };
+            final result = collectSdValues(data);
+            expect(result, [1, 2, 3, 4, 5, 6, 7]);
+          });
+
+          test('collects values from ... keys within lists', () {
+            final data = {
+              'a': [
+                {
+                  '...': 1,
+                },
+                {
+                  '...': 2,
+                },
+              ],
+              'c': [
+                {
+                  '...': 3,
+                },
+              ],
+            };
+            final result = collectSdValues(data);
+            expect(result, [1, 2, 3]);
+          });
+
+          test('handles complex nested structures', () {
+            final data = {
+              '_sd': [1],
+              'a': {
+                '_sd': [2],
+                'b': [
+                  {
+                    '...': 3,
+                  },
+                ],
+              },
+              'd': [
+                {
+                  '...': 5,
+                },
+              ],
+            };
+            final result = collectSdValues(data);
+            expect(result, [1, 2, 3, 5]);
+          });
+
+          test('does not collect non-_sd or non-... values', () {
+            final data = {
+              'a': 1,
+              'b': {
+                'c': 2,
+                'd': [
+                  {
+                    'e': 3,
+                  },
+                ],
+              },
+            };
+            final result = collectSdValues(data);
+            expect(result, isEmpty);
           });
         });
 
