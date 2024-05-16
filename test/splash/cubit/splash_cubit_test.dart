@@ -12,6 +12,7 @@ import 'package:fake_async/fake_async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class MockSecureStorage extends Mock implements SecureStorageProvider {}
@@ -77,6 +78,13 @@ void main() {
   late AltmeChatSupportCubit altmeChatSupportCubit;
   late ProfileCubit profileCubit;
 
+  final packageInfo = PackageInfo(
+    appName: 'testApp',
+    packageName: 'com.example.test',
+    version: '1.0.0',
+    buildNumber: '1',
+  );
+
   setUp(() {
     WidgetsFlutterBinding.ensureInitialized();
     mockSecureStorage = MockSecureStorage();
@@ -85,6 +93,15 @@ void main() {
     walletCubit = MockWalletCubit();
     altmeChatSupportCubit = MockAltmeChatSupportCubit();
     profileCubit = MockProfileCubit();
+
+    when(() => mockSecureStorage.get(SecureStorageKeys.version))
+        .thenAnswer((_) async => '1.0.0');
+    when(() => mockSecureStorage.get(SecureStorageKeys.buildNumber))
+        .thenAnswer((_) async => '1');
+    when(() => mockSecureStorage.set(SecureStorageKeys.version, '1.0.0'))
+        .thenAnswer((_) async => {});
+    when(() => mockSecureStorage.set(SecureStorageKeys.buildNumber, '1'))
+        .thenAnswer((_) async => {});
   });
 
   group('Splash Cubit', () {
@@ -102,6 +119,7 @@ void main() {
           ),
           altmeChatSupportCubit: altmeChatSupportCubit,
           profileCubit: profileCubit,
+          packageInfo: packageInfo,
         ).state,
         const SplashState(
           status: SplashStatus.init,
@@ -127,6 +145,7 @@ void main() {
           ),
           altmeChatSupportCubit: altmeChatSupportCubit,
           profileCubit: profileCubit,
+          packageInfo: packageInfo,
         );
         fakeAsync((async) {
           splashCubit.initialiseApp();
@@ -173,6 +192,7 @@ void main() {
             ),
             altmeChatSupportCubit: altmeChatSupportCubit,
             profileCubit: profileCubit,
+            packageInfo: packageInfo,
           );
           fakeAsync((async) {
             splashCubit.initialiseApp();
@@ -201,6 +221,7 @@ void main() {
             ),
             altmeChatSupportCubit: altmeChatSupportCubit,
             profileCubit: profileCubit,
+            packageInfo: packageInfo,
           );
           fakeAsync((async) {
             splashCubit.initialiseApp();
@@ -229,6 +250,7 @@ void main() {
             ),
             altmeChatSupportCubit: altmeChatSupportCubit,
             profileCubit: profileCubit,
+            packageInfo: packageInfo,
           );
           fakeAsync((async) {
             splashCubit.initialiseApp();
