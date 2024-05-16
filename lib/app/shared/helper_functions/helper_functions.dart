@@ -1889,7 +1889,7 @@ List<String> getStringCredentialsForToken({
     presentJwtVc = false;
     presentJwtVcJson = true;
     presentVcSdJwt = false;
-  } else if (presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
+  } else if (presentVcSdJwt && vcFormatType == VCFormatType.vcSdJWT) {
     presentLdpVc = false;
     presentJwtVc = false;
     presentJwtVcJson = false;
