@@ -1747,11 +1747,13 @@ class OIDC4VC {
           return response;
         }
       }
-      final expiry =
-          DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
+      // temporary deactiviting this caching du to issue with
+      // flutter_secure_storage on ios #2657
+      // final expiry =
+      //     DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
 
-      final value = {'expiry': expiry, 'data': response.data};
-      await secureStorageProvider.set(uri, jsonEncode(value));
+      // final value = {'expiry': expiry, 'data': response.data};
+      // await secureStorageProvider.set(uri, jsonEncode(value));
 
       return response.data;
     } on FormatException catch (_) {
