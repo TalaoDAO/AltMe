@@ -1723,7 +1723,7 @@ class OIDC4VC {
       // TODO(hawkbee): To be removed.
       /// temporary solution to purge faulty stored data
       /// Will be removed in the future
-      await purgeFaultyStorageEntries(secureStorageProvider, uri);
+      await secureStorageProvider.delete(uri);
 
       /// end of temporary solution
       dynamic response;
@@ -1761,20 +1761,6 @@ class OIDC4VC {
         throw Exception();
       } else {
         rethrow;
-      }
-    }
-  }
-
-// TODO(hawkbee): To be removed.
-  Future<void> purgeFaultyStorageEntries(
-      SecureStorageProvider secureStorageProvider, String uri) async {
-    // get all entries from the storage
-    final entries = await secureStorageProvider.getAllValues();
-    // remove all entries that do not start with the https://
-    for (final entry in entries.entries) {
-      if (!entry.key.startsWith('https://')) {
-        await secureStorageProvider.delete(entry.key);
-        print(entry.key + ' deleted');
       }
     }
   }
