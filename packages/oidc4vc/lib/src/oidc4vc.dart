@@ -1720,10 +1720,13 @@ class OIDC4VC {
     try {
       final secureStorageProvider = getSecureStorage;
       final cachedData = await secureStorageProvider.get(uri);
+      print('cachedData: $cachedData');
       // TODO(hawkbee): To be removed.
       /// temporary solution to purge faulty stored data
       /// Will be removed in the future
       await secureStorageProvider.delete(uri);
+      final testCachedData = await secureStorageProvider.get(uri);
+      print('testCachedData: $testCachedData');
 
       /// end of temporary solution
       dynamic response;
