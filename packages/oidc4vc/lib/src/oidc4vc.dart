@@ -1720,6 +1720,12 @@ class OIDC4VC {
     try {
       final secureStorageProvider = getSecureStorage;
       final cachedData = await secureStorageProvider.get(uri);
+      // TODO(hawkbee): To be removed.
+      /// temporary solution to purge faulty stored data
+      /// Will be removed in the future
+      await secureStorageProvider.delete(uri);
+
+      /// end of temporary solution
       dynamic response;
 
       dio.options.headers = headers;
@@ -1741,11 +1747,13 @@ class OIDC4VC {
           return response;
         }
       }
-      final expiry =
-          DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
+      // temporary deactiviting this caching du to issue with
+      // flutter_secure_storage on ios #2657
+      // final expiry =
+      //     DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
 
-      final value = {'expiry': expiry, 'data': response.data};
-      await secureStorageProvider.set(uri, jsonEncode(value));
+      // final value = {'expiry': expiry, 'data': response.data};
+      // await secureStorageProvider.set(uri, jsonEncode(value));
 
       return response.data;
     } on FormatException catch (_) {
