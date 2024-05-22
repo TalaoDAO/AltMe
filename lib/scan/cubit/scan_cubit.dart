@@ -798,44 +798,51 @@ class ScanCubit extends Cubit<ScanState> {
           credentialList: [credentialsToBePresented[i]],
         );
 
-        final pathNested = {'id': inputDescriptor.id, 'format': vcFormat};
+        Map<String, dynamic>? pathNested;
+
+        if (!(inputDescriptor.id == null || vcFormat == null)) {
+          pathNested = {
+            'id': inputDescriptor.id,
+            'format': vcFormat,
+          };
+        }
 
         if (credential.isNotEmpty) {
-          if (credentialsToBePresented.length == 1) {
-            if (vpFormat == 'ldp_vp') {
-              pathNested['path'] = r'$.verifiableCredential';
-            } else if (vpFormat == 'vc+sd-jwt') {
-              pathNested['path'] = r'$';
-            } else {
-              pathNested['path'] = r'$.vp.verifiableCredential[0]';
-            }
+          final Map<String, dynamic> descriptor = {
+            'id': inputDescriptor.id,
+            'format': vpFormat,
+            'path': r'$',
+          };
 
-            inputDescriptors.add({
-              'id': inputDescriptor.id,
-              'format': vpFormat,
-              'path': r'$',
-              'path_nested': pathNested,
-            });
-          } else {
-            if (vpFormat == 'ldp_vp') {
-              pathNested['path'] =
-                  // ignore: prefer_interpolation_to_compose_strings
-                  r'$.verifiableCredential[' + i.toString() + ']';
-            } else if (vpFormat == 'vc+sd-jwt') {
-              pathNested['path'] = r'$';
+          if (pathNested != null) {
+            if (credentialsToBePresented.length == 1) {
+              if (vpFormat == 'ldp_vp') {
+                pathNested['path'] = r'$.verifiableCredential';
+              } else if (vpFormat == 'vc+sd-jwt') {
+                pathNested['path'] = r'$';
+              } else {
+                pathNested['path'] = r'$.vp.verifiableCredential[0]';
+              }
             } else {
-              pathNested['path'] =
-                  // ignore: prefer_interpolation_to_compose_strings
-                  r'$.vp.verifiableCredential[' + i.toString() + ']';
+              if (vpFormat == 'ldp_vp') {
+                pathNested['path'] =
+                    // ignore: prefer_interpolation_to_compose_strings
+                    r'$.verifiableCredential[' + i.toString() + ']';
+              } else if (vpFormat == 'vc+sd-jwt') {
+                pathNested['path'] = r'$';
+              } else {
+                pathNested['path'] =
+                    // ignore: prefer_interpolation_to_compose_strings
+                    r'$.vp.verifiableCredential[' + i.toString() + ']';
+              }
             }
-
-            inputDescriptors.add({
-              'id': inputDescriptor.id,
-              'format': vpFormat,
-              'path': r'$',
-              'path_nested': pathNested,
-            });
           }
+
+          if (pathNested != null) {
+            descriptor['path_nested'] = pathNested;
+          }
+
+          inputDescriptors.add(descriptor);
         }
       }
     }
