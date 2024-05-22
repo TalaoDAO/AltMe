@@ -175,7 +175,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                     text: l10n.verifyNow,
                     verticalSpacing: 18,
                     onPressed: () {
-                      Navigator.of(context).push(
+                      Navigator.of(context).push<void>(
                         OnBoardingVerifyPhrasePage.route(
                           mnemonic: mnemonic!,
                           isFromOnboarding: true,
