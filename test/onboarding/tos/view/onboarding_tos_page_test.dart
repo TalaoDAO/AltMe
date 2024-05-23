@@ -69,6 +69,7 @@ void main() {
     //     ),
     //   );
 
+    // ignore: lines_longer_than_80_chars
     //   final agreeCheckbox = find.text('I agree to the terms and conditions.');
     //   final readCheckbox = find.text('I have read the terms of use.');
 

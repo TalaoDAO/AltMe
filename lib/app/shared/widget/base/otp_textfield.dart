@@ -32,21 +32,21 @@ class OtpTextField extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
               width: 1,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
               width: 1,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
               width: 1.5,
             ),
           ),
@@ -67,7 +67,7 @@ class OtpTextField extends StatelessWidget {
           }
         },
         onTap: () {
-          // Move the cursor to the end of the text when the TextField gains focus
+          // Move the cursor to the end of the text when TextField get focus
           controllers[index].selection = TextSelection.fromPosition(
             TextPosition(offset: controllers[index].text.length),
           );

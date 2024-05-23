@@ -1,7 +1,7 @@
 name: altme
 description: AltMe Flutter App
 version: 0.0.1+1
-
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 environment:
   sdk: ">=3.1.0 <4.0.0"
 
@@ -35,7 +35,6 @@ dependencies:
       ref: main
   decimal: ^2.3.3
   device_info_plus: ^9.0.1
-  device_preview: ^1.1.0
   devicelocale: ^0.7.0
   did_kit:
     path: packages/did_kit
@@ -95,7 +94,7 @@ dependencies:
   pretty_qr_code: ^3.1.0
   qr_flutter: ^4.1.0
   random_string: ^2.3.1
-  screenshot: ^2.1.0
+  screenshot: ^3.0.0
   secure_application: ^3.8.0
   secure_storage:
     path: packages/secure_storage

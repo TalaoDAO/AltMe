@@ -138,6 +138,7 @@ class ScanCubit extends Cubit<ScanState> {
             data: {
               'error': 'invalid_request',
               'error_description':
+                  // ignore: lines_longer_than_80_chars
                   'The response type should contain id_token, vp_token or both.',
             },
           );
@@ -183,8 +184,8 @@ class ScanCubit extends Cubit<ScanState> {
           for (final item in credentialsToBePresented) {
             final presentationId = 'urn:uuid:${const Uuid().v4()}';
 
-            /// proof is done with a creation date 20 seconds in the past to avoid
-            /// proof check to fail because of time difference on server
+            /// proof is done with a creation date 20 seconds in the past to
+            /// avoid proof check to fail because of time difference on server
 
             final options = jsonEncode({
               'verificationMethod': kid,

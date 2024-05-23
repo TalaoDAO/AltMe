@@ -243,6 +243,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                                       stateMessage: StateMessage.success(
                                         showDialog: true,
                                         stringMessage: l10n
+                                            // ignore: lines_longer_than_80_chars
                                             .twoFactorAuthenticationHasBeenEnabled,
                                       ),
                                     );

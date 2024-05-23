@@ -77,7 +77,7 @@ class MyGradientButton extends StatelessWidget {
                 ),
               )
             : ElevatedButton.icon(
-                icon: icon!,
+                icon: icon,
                 style: gradientStyleFrom(
                   elevation: elevation,
                   verticalSpacing: verticalSpacing,

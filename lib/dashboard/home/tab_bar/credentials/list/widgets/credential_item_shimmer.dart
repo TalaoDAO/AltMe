@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CredentialItemShimmer extends StatelessWidget {

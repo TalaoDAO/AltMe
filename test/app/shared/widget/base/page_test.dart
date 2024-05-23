@@ -37,7 +37,7 @@ void main() {
       });
 
       testWidgets(
-          'renders CustomAppBar when title is provided and secure screen is true',
+          'renders CustomAppBar when title is provided & secure screen is true',
           (tester) async {
         await tester.pumpApp(
           BasePage(

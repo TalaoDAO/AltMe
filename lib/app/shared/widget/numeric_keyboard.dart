@@ -164,7 +164,7 @@ class KeyboardButton extends StatelessWidget {
                       : Theme.of(context).colorScheme.background,
                   splashColor: allowAction
                       ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.background,
+                      : Theme.of(context).colorScheme.surface,
                   onLongPress: () {
                     if (!allowAction) return;
                     onLongPress?.call(semanticsLabel);

@@ -911,8 +911,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         data: {
           'error': 'invalid_request',
           'error_description':
-              'The input_descriptors is required in the presentation_definition '
-                  'object',
+              'The input_descriptors is required in the presentation_definition'
+                  ' object',
         },
       );
     }

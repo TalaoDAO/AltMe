@@ -61,7 +61,7 @@ class MyElevatedButton extends StatelessWidget {
               ),
             )
           : ElevatedButton.icon(
-              icon: icon!,
+              icon: icon,
               style: elevatedStyleFrom(
                 borderRadius: borderRadius,
                 context: context,

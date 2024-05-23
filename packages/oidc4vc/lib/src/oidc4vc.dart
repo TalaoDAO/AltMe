@@ -350,6 +350,7 @@ class OIDC4VC {
         myRequest['client_id'] = clientId;
         myRequest['client_assertion'] = clientAssertion;
         myRequest['client_assertion_type'] =
+            // ignore: lines_longer_than_80_chars
             'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
     }
 

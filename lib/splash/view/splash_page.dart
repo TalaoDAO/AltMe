@@ -249,7 +249,7 @@ class _SplashViewState extends State<SplashView> {
           if (state.status != AppStatus.success) return Container();
 
           return BasePage(
-            backgroundColor: Theme.of(context).colorScheme.background,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             scrollView: false,
             body: SafeArea(
               child: Padding(

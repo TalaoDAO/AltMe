@@ -571,7 +571,8 @@ class CustomOidc4VcProfile extends Equatable {
   final String? clientSecret;
   final bool cryptoHolderBinding;
   final DidKeyType
-      defaultDid; //TODO(bibash): temporary solution to avoid who have chosen 12
+      defaultDid; 
+      // TODO(bibash): temporary solution to avoid who have chosen 12
   @JsonKey(
     includeFromJson: true,
     fromJson: oidc4vciDraftFromJson,

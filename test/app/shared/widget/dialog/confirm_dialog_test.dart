@@ -141,7 +141,7 @@ void main() {
         yes: yesText,
         no: noText,
         showNoButton: false,
-      ));
+      ),);
 
       expect(find.text(yesText.toUpperCase()), findsOneWidget);
       expect(find.text(noText.toUpperCase()), findsNothing);

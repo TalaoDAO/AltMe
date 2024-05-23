@@ -28,7 +28,7 @@ void main() {
       mockSecureStorage = MockSecureStorage();
 
       dioAdapter = DioAdapter(
-          dio: Dio(BaseOptions()), matcher: const UrlRequestMatcher());
+          dio: Dio(BaseOptions()), matcher: const UrlRequestMatcher(),);
       client.httpClientAdapter = dioAdapter;
       mockClient = DioClient(
         baseUrl: 'https://example.com/',
@@ -133,6 +133,7 @@ void main() {
     });
 
     test(
+        // ignore: lines_longer_than_80_chars
         'should return empty issuer if organizationInfo.issuerDomain does not contain uriToCheck.host',
         () async {
       final response = {
@@ -157,7 +158,7 @@ void main() {
       final result = await checkIssuer.isIssuerInApprovedList();
 
       expect(jsonEncode(result),
-          equals(jsonEncode(Issuer.emptyIssuer(uriToCheck.host))));
+          equals(jsonEncode(Issuer.emptyIssuer(uriToCheck.host))),);
     });
 
     test('should throw exception when an error occurs', () async {

@@ -136,7 +136,7 @@ void main() {
     });
 
     testWidgets(
-        'displays correct image for ProfileType.owfBaselineProfile in development',
+        'displays correct image for ProfileType.owfBaselineProfile in dev',
         (WidgetTester tester) async {
       await tester.pumpApp(
         Scaffold(

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('OrganizationInfo', () {
     test(
+        // ignore: lines_longer_than_80_chars
         'OrganizationInfo fromJson should return a valid OrganizationInfo object',
         () {
       final json = {
@@ -42,6 +43,7 @@ void main() {
     });
 
     test(
+        // ignore: lines_longer_than_80_chars
         'OrganizationInfo.emptyOrganizationInfo should return an OrganizationInfo with default values',
         () {
       final organizationInfo =

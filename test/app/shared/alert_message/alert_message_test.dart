@@ -163,6 +163,7 @@ void main() {
                   stateMessage: StateMessage(
                     messageHandler: ResponseMessage(
                       message: ResponseString
+                          // ignore: lines_longer_than_80_chars
                           .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER,
                     ),
                     injectedMessage: null,

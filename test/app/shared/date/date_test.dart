@@ -47,6 +47,7 @@ void main() {
     });
 
     test(
+        // ignore: lines_longer_than_80_chars
         'formatDateForCredentialCard returns formatted date for credential card',
         () {
       const timestamp = '1643738400';
