@@ -121,7 +121,7 @@ dependencies:
 dependency_overrides:
   ffi: 2.1.0 #didkit from path which depends on ffi ^1.0.0
   http: ^1.0.0 #web3dart ^2.6.1 reqgetuires http ^0.13.5
-  # intl: ^0.18.1 #flutter_localizations from sdk which depends on intl 0.18.0
+  intl: ^0.19.0 #force pinned version of intl because polygonID use older version
   # logger: ^2.0.1
   # path_provider: ^2.0.15 #polygonid_flutter_sdk from git which depends on path_provider 2.0.1
   # web3dart: ^2.6.1 #polygonid depends on 2.3.5
