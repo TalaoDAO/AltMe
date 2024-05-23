@@ -727,6 +727,9 @@ class ScanCubit extends Cubit<ScanState> {
       'definition_id': presentationDefinition.id,
     };
 
+    final vcFormatType = profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+
     final inputDescriptors = <Map<String, dynamic>>[];
 
     String? vcFormat;
@@ -761,8 +764,6 @@ class ScanCubit extends Cubit<ScanState> {
       }
     } else {
       if (clientMetaData == null) {
-        final vcFormatType = profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
         vcFormat = vcFormatType.vcValue;
         vpFormat = vcFormatType.vpValue;
       } else {
@@ -800,7 +801,7 @@ class ScanCubit extends Cubit<ScanState> {
 
         Map<String, dynamic>? pathNested;
 
-        if (!(inputDescriptor.id == null || vcFormat == null)) {
+        if (vcFormatType != VCFormatType.vcSdJWT) {
           pathNested = {
             'id': inputDescriptor.id,
             'format': vcFormat,
@@ -814,7 +815,7 @@ class ScanCubit extends Cubit<ScanState> {
             'path': r'$',
           };
 
-          if (pathNested != null) {
+          if (vcFormatType != VCFormatType.vcSdJWT && pathNested != null) {
             if (credentialsToBePresented.length == 1) {
               if (vpFormat == 'ldp_vp') {
                 pathNested['path'] = r'$.verifiableCredential';
@@ -836,9 +837,6 @@ class ScanCubit extends Cubit<ScanState> {
                     r'$.vp.verifiableCredential[' + i.toString() + ']';
               }
             }
-          }
-
-          if (pathNested != null) {
             descriptor['path_nested'] = pathNested;
           }
 
