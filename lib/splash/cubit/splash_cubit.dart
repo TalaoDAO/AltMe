@@ -23,8 +23,9 @@ class SplashCubit extends Cubit<SplashState> {
     required this.altmeChatSupportCubit,
     required this.client,
     required this.profileCubit,
+    this.packageInfo,
   }) : super(const SplashState()) {
-    _getAppVersion();
+    _getAppVersion(packageInfo);
   }
 
   final SecureStorageProvider secureStorageProvider;
@@ -34,6 +35,7 @@ class SplashCubit extends Cubit<SplashState> {
   final AltmeChatSupportCubit altmeChatSupportCubit;
   final DioClient client;
   final ProfileCubit profileCubit;
+  final PackageInfo? packageInfo;
 
   Future<void> initialiseApp() async {
     double counter = 0;
@@ -71,8 +73,14 @@ class SplashCubit extends Cubit<SplashState> {
     });
   }
 
-  Future<void> _getAppVersion() async {
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  Future<void> _getAppVersion(PackageInfo? packageInformation) async {
+    late PackageInfo packageInfo;
+    if (packageInformation == null) {
+      packageInfo = await PackageInfo.fromPlatform();
+    } else {
+      packageInfo = packageInformation;
+    }
+
     final String? savedVersion = await secureStorageProvider.get(
       SecureStorageKeys.version,
     );

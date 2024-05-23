@@ -208,8 +208,10 @@ class OperationCubit extends Cubit<OperationState> {
               walletConnectCubit.state.transaction!.value!;
           amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
 
-          final web3RpcURL =
-              await fetchRpcUrl(manageNetworkCubit.state.network);
+          final web3RpcURL = await fetchRpcUrl(
+            blockchainNetwork: manageNetworkCubit.state.network,
+            dotEnv: dotenv,
+          );
           log.i('web3RpcURL - $web3RpcURL');
 
           final (_, _, feeData) = await MWeb3Client.estimateEVMFee(
@@ -356,7 +358,10 @@ class OperationCubit extends Cubit<OperationState> {
           final EtherAmount ethAmount =
               walletConnectCubit.state.transaction!.value!;
 
-          final rpcUrl = await fetchRpcUrl(manageNetworkCubit.state.network);
+          final rpcUrl = await fetchRpcUrl(
+            blockchainNetwork: manageNetworkCubit.state.network,
+            dotEnv: dotenv,
+          );
 
           log.i('rpcUrl - $rpcUrl');
 

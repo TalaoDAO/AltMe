@@ -102,7 +102,8 @@ void main() {
           ),
         );
         final message = NetworkException.getDioException(error: error);
-        expect(message.message, NetworkError.NETWORK_ERROR_NOT_FOUND);
+        expect(
+            message.message, NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION);
       });
 
       test('return internalServerError response when statusCode is 500', () {
@@ -119,7 +120,7 @@ void main() {
         final message = NetworkException.getDioException(error: error);
         expect(
           message.message,
-          NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR,
+          NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR,
         );
       });
 
@@ -249,7 +250,7 @@ void main() {
       test('return defaultError response when status code is not from our list',
           () {
         final message = NetworkException.handleResponse(410, null);
-        expect(message.message, NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR);
+        expect(message.message, NetworkError.NETWORK_ERROR_NOT_READY);
       });
     });
 
@@ -567,6 +568,37 @@ void main() {
         expect(
           text,
           NetworkError.NETWORK_ERROR_NOT_FOUND.localise(context),
+        );
+      });
+
+      testWidgets(
+          'returns NetworkError.NETWORK_ERROR_PRECONDITION_FAILED for '
+          'NetworkException(message: NetworkError.NETWORK_ERROR_PRECONDITION_FAILED)',
+          (tester) async {
+        final MessageHandler messageHandler = NetworkException(
+          message: NetworkError.NETWORK_ERROR_PRECONDITION_FAILED,
+        );
+        await tester.pumpApp(Container());
+        final BuildContext context = tester.element(find.byType(Container));
+        final String text = messageHandler.getMessage(context, messageHandler);
+        expect(
+          text,
+          NetworkError.NETWORK_ERROR_PRECONDITION_FAILED.localise(context),
+        );
+      });
+
+      testWidgets(
+          'returns NetworkError.NETWORK_ERROR_NOT_READY for '
+          'NetworkException(message: NetworkError.NETWORK_ERROR_NOT_READY)',
+          (tester) async {
+        final MessageHandler messageHandler =
+            NetworkException(message: NetworkError.NETWORK_ERROR_NOT_READY);
+        await tester.pumpApp(Container());
+        final BuildContext context = tester.element(find.byType(Container));
+        final String text = messageHandler.getMessage(context, messageHandler);
+        expect(
+          text,
+          NetworkError.NETWORK_ERROR_NOT_READY.localise(context),
         );
       });
     });

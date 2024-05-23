@@ -23,6 +23,7 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:x509/x509.dart' as x509;
+import 'package:x509/x509.dart';
 
 String generateDefaultAccountName(
   int accountIndex,
@@ -74,11 +75,15 @@ KeyStoreModel getKeysFromSecretKey({required String secretKey}) {
   );
 }
 
-String stringToHexPrefixedWith05({required String payload}) {
+String stringToHexPrefixedWith05({
+  required String payload,
+  DateTime? dateTime,
+}) {
+  dateTime ??= DateTime.now();
   final String formattedInput = <String>[
     'Tezos Signed Message:',
     'altme.io',
-    DateTime.now().toString(),
+    dateTime.toString(),
     payload,
   ].join(' ');
 
@@ -199,7 +204,7 @@ Future<bool> isCredentialAvaialble({
         credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
 
-    final matchFormat = vcFormatType.value == credential.format;
+    final matchFormat = vcFormatType.vcValue == credential.format;
     if (matchSubjectType && matchFormat) {
       return true;
     }
@@ -237,11 +242,13 @@ Future<bool> getStoragePermission() async {
   return false;
 }
 
-String getDateTimeWithoutSpace() {
-  final dateTime = DateTime.fromMicrosecondsSinceEpoch(
-    DateTime.now().microsecondsSinceEpoch,
+String getDateTimeWithoutSpace({DateTime? dateTime}) {
+  dateTime ??= DateTime.now();
+
+  final dateTimeString = DateTime.fromMicrosecondsSinceEpoch(
+    dateTime.microsecondsSinceEpoch,
   ).toString().replaceAll(' ', '-');
-  return dateTime;
+  return dateTimeString;
 }
 
 int getIndexValue({
@@ -272,6 +279,16 @@ Future<String> getPrivateKey({
   required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
 }) async {
+  final customOidc4vcProfile = profileCubit.state.model.profileSetting
+      .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+  if (customOidc4vcProfile.clientType == ClientType.p256JWKThumprint) {
+    final privateKey =
+        await getP256KeyToGetAndPresentVC(profileCubit.secureStorageProvider);
+
+    return privateKey;
+  }
+
   final mnemonic = await profileCubit.secureStorageProvider
       .get(SecureStorageKeys.ssiMnemonic);
 
@@ -718,6 +735,7 @@ Future<
   final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
     baseUrl: issuer,
     isAuthorizationServer: false,
+    dio: client.dio,
   );
 
   if (preAuthorizedCode == null) {
@@ -742,6 +760,7 @@ Future<
     authorizationServerConfiguration = await oidc4vc.getOpenIdConfig(
       baseUrl: authorizationServer,
       isAuthorizationServer: true,
+      dio: client.dio,
     );
   }
 
@@ -971,7 +990,12 @@ Future<Map<String, dynamic>?> getClientMetada({
       return null;
     }
   } catch (e) {
-    return null;
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description': 'Client metaData is invalid',
+      },
+    );
   }
 }
 
@@ -992,6 +1016,7 @@ Future<bool?> isEBSIV3ForVerifiers({
         await oidc4vc.getOpenIdConfig(
       baseUrl: clientId,
       isAuthorizationServer: false,
+      dio: Dio(),
     );
 
     final subjectTrustFrameworksSupported =
@@ -1158,7 +1183,7 @@ MessageHandler getMessageHandler(dynamic e) {
           'error_description': 'Failed to extract header from jwt.',
         },
       );
-    } else if (stringException.contains('INVALID_TOKEN')) {
+    } else if (stringException.contains('INVALID_PAYLOAD')) {
       return ResponseMessage(
         data: {
           'error': 'invalid_format',
@@ -1579,8 +1604,11 @@ Future<(String?, String?, String?, String?)> getClientDetails({
 
     final didKeyType = customOidc4vcProfile.defaultDid;
 
-    final privateKey =
-        await getP256KeyToGetAndPresentVC(profileCubit.secureStorageProvider);
+    final String privateKey = await fetchPrivateKey(
+      profileCubit: profileCubit,
+      isEBSIV3: isEBSIV3,
+      didKeyType: didKeyType,
+    );
 
     final (did, _) = await fetchDidAndKid(
       privateKey: privateKey,
@@ -1594,7 +1622,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
       did: '', // just added as it is required field
       mediaType: MediaType.basic, // just added as it is required field
       clientType:
-          ClientType.p256JWKThumprint, // just added as it is required field
+          customOidc4vcProfile.clientType, // just added as it is required field
       proofHeaderType: customOidc4vcProfile.proofHeader,
       clientId: '', // just added as it is required field
     );
@@ -1840,10 +1868,10 @@ List<String> getStringCredentialsForToken({
   }
 
   /// create list of supported formats
-  if (presentLdpVc) supportingFormats.add(VCFormatType.ldpVc.value);
-  if (presentJwtVc) supportingFormats.add(VCFormatType.jwtVc.value);
-  if (presentJwtVcJson) supportingFormats.add(VCFormatType.jwtVcJson.value);
-  if (presentVcSdJwt) supportingFormats.add(VCFormatType.jwtVcJson.value);
+  if (presentLdpVc) supportingFormats.add(VCFormatType.ldpVc.vcValue);
+  if (presentJwtVc) supportingFormats.add(VCFormatType.jwtVc.vcValue);
+  if (presentJwtVcJson) supportingFormats.add(VCFormatType.jwtVcJson.vcValue);
+  if (presentVcSdJwt) supportingFormats.add(VCFormatType.jwtVcJson.vcValue);
 
   /// make sure only one of all are true
   if (presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
@@ -1861,7 +1889,7 @@ List<String> getStringCredentialsForToken({
     presentJwtVc = false;
     presentJwtVcJson = true;
     presentVcSdJwt = false;
-  } else if (presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
+  } else if (presentVcSdJwt && vcFormatType == VCFormatType.vcSdJWT) {
     presentLdpVc = false;
     presentJwtVc = false;
     presentJwtVcJson = false;
@@ -2013,9 +2041,9 @@ Future<Map<String, dynamic>?> checkX509({
     final seq = asn1lib.ASN1Sequence.fromBytes(decoded);
     final cert = x509.X509Certificate.fromAsn1(seq);
 
-    final subject = cert.tbsCertificate.subject;
+    final extensions = cert.tbsCertificate.extensions;
 
-    if (subject == null) {
+    if (extensions == null) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_format',
@@ -2024,9 +2052,11 @@ Future<Map<String, dynamic>?> checkX509({
       );
     }
 
-    final names = subject.names;
+    final extension = extensions
+        .where((Extension element) => element.extnId.name == 'subjectAltName')
+        .firstOrNull;
 
-    if (names.isEmpty) {
+    if (extension == null) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_format',
@@ -2035,9 +2065,9 @@ Future<Map<String, dynamic>?> checkX509({
       );
     }
 
-    final value = names[0].entries.map((element) => element.value).toList();
+    final extnValue = extension.extnValue.toString();
 
-    if (!value.contains(clientId)) {
+    if (!extnValue.contains(clientId)) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_format',
@@ -2054,6 +2084,18 @@ Future<Map<String, dynamic>?> checkX509({
         'e': 'AQAB',
         'kty': 'RSA',
         'n': n.replaceAll('=', ''),
+      };
+      return publicKeyJwk;
+    } else if (publicKey is x509.EcPublicKey) {
+      final BigInt xModulus = BigInt.parse(publicKey.xCoordinate.toString());
+      final BigInt yModulus = BigInt.parse(publicKey.yCoordinate.toString());
+      final x = base64Encode(xModulus.toBytes);
+      final y = base64Encode(yModulus.toBytes);
+      final publicKeyJwk = {
+        'kty': 'EC',
+        'crv': 'P-256',
+        'x': x.replaceAll('=', ''),
+        'y': y.replaceAll('=', ''),
       };
       return publicKeyJwk;
     }
@@ -2114,7 +2156,10 @@ String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
   return null;
 }
 
-Future<String> fetchRpcUrl(BlockchainNetwork blockchainNetwork) async {
+Future<String> fetchRpcUrl({
+  required BlockchainNetwork blockchainNetwork,
+  required DotEnv dotEnv,
+}) async {
   String rpcUrl = '';
 
   if (blockchainNetwork is BinanceNetwork ||
@@ -2122,8 +2167,8 @@ Future<String> fetchRpcUrl(BlockchainNetwork blockchainNetwork) async {
     rpcUrl = blockchainNetwork.rpcNodeUrl as String;
   } else {
     if (blockchainNetwork.networkname == 'Mainnet') {
-      await dotenv.load();
-      final String infuraApiKey = dotenv.get('INFURA_API_KEY');
+      await dotEnv.load();
+      final String infuraApiKey = dotEnv.get('INFURA_API_KEY');
 
       late String prefixUrl;
 

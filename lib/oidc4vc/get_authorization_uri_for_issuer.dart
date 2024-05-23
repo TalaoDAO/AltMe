@@ -95,6 +95,7 @@ Future<void> getAuthorizationUriForIssuer({
     vcFormatType: vcFormatType,
     clientAssertion: clientAssertion,
     secureAuthorizedFlow: secureAuthorizedFlow,
+    dio: client.dio,
   );
 
   if (secureAuthorizedFlow) {
