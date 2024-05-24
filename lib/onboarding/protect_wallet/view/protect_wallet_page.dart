@@ -186,6 +186,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                     Navigator.of(context).push<void>(
                       ActiviateBiometricsPage.route(
                         isFromOnboarding: isFromOnboarding,
+                        localAuthApi: LocalAuthApi(),
                         onAction: ({required bool isEnabled}) async {
                           if (isEnabled) {
                             await context
@@ -226,6 +227,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                           Navigator.of(context).pushReplacement<void, void>(
                             ActiviateBiometricsPage.route(
                               isFromOnboarding: isFromOnboarding,
+                              localAuthApi: LocalAuthApi(),
                               onAction: ({required bool isEnabled}) async {
                                 if (isEnabled) {
                                   await context
