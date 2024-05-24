@@ -11,19 +11,23 @@ class ActiviateBiometricsPage extends StatelessWidget {
     super.key,
     required this.isFromOnboarding,
     required this.onAction,
+    required this.localAuthApi,
   });
 
   final bool isFromOnboarding;
   final void Function({required bool isEnabled}) onAction;
+  final LocalAuthApi localAuthApi;
 
   static Route<dynamic> route({
     required void Function({required bool isEnabled}) onAction,
     required bool isFromOnboarding,
+    required LocalAuthApi localAuthApi,
   }) =>
       RightToLeftRoute<void>(
         builder: (context) => ActiviateBiometricsPage(
           onAction: onAction,
           isFromOnboarding: isFromOnboarding,
+          localAuthApi: localAuthApi,
         ),
         settings: const RouteSettings(name: '/activiateBiometricsPage'),
       );
@@ -37,6 +41,7 @@ class ActiviateBiometricsPage extends StatelessWidget {
       child: ActivateBiometricsView(
         isFromOnboarding: isFromOnboarding,
         onAction: onAction,
+        localAuthApi: localAuthApi,
       ),
     );
   }
@@ -47,18 +52,18 @@ class ActivateBiometricsView extends StatefulWidget {
     super.key,
     required this.isFromOnboarding,
     required this.onAction,
+    required this.localAuthApi,
   });
 
   final bool isFromOnboarding;
   final void Function({required bool isEnabled}) onAction;
+  final LocalAuthApi localAuthApi;
 
   @override
   State<ActivateBiometricsView> createState() => _ActivateBiometricsViewState();
 }
 
 class _ActivateBiometricsViewState extends State<ActivateBiometricsView> {
-  final localAuthApi = LocalAuthApi();
-
   @override
   void initState() {
     context.read<ActiveBiometricsCubit>().load();
@@ -104,11 +109,14 @@ class _ActivateBiometricsViewState extends State<ActivateBiometricsView> {
               BiometricsSwitch(
                 value: isEnabled,
                 onChange: (value) async {
-                  final hasBiometrics = await localAuthApi.hasBiometrics();
+                  final hasBiometrics =
+                      await widget.localAuthApi.hasBiometrics();
+
                   if (hasBiometrics) {
-                    final result = await localAuthApi.authenticate(
+                    final result = await widget.localAuthApi.authenticate(
                       localizedReason: l10n.scanFingerprintToAuthenticate,
                     );
+
                     if (result) {
                       context
                           .read<ActiveBiometricsCubit>()
