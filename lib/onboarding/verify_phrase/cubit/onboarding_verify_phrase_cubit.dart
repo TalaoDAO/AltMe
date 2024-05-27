@@ -116,7 +116,6 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
       if (isFromOnboarding) {
         await generateAccount(
           mnemonic: mnemonic,
-          secureStorageProvider: secureStorageProvider,
           keyGenerator: keyGenerator,
           didKitProvider: didKitProvider,
           homeCubit: homeCubit,
