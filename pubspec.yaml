@@ -1,6 +1,6 @@
 name: altme
 description: AltMe Flutter App
-version: 2.4.22+442
+version: 2.5.6+456
 
 environment:
   sdk: ">=3.1.0 <4.0.0"
@@ -33,6 +33,7 @@ dependencies:
     git:
       url: https://github.com/TalebRafiepour/Dartez.git
       ref: main
+  decimal: ^2.3.3
   device_info_plus: ^9.0.1
   device_preview: ^1.1.0
   devicelocale: ^0.7.0
@@ -79,6 +80,7 @@ dependencies:
   matrix: ^0.25.5
   mime: ^1.0.4
   mobile_scanner: ^3.2.0
+  model_viewer_plus: ^1.7.0
   network_image_mock: ^2.1.1
   no_screenshot: ^0.0.1+6
   oidc4vc:

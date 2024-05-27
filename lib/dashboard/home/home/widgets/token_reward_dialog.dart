@@ -59,7 +59,7 @@ class TokenRewardDialog extends StatelessWidget {
                 children: [
                   TextSpan(
                     text:
-                        ''' ${tokenReward.amount.toString().formatNumber()} ${tokenReward.symbol} ''',
+                        ''' ${tokenReward.amount.toString().formatNumber} ${tokenReward.symbol} ''',
                     style:
                         Theme.of(context).textTheme.defaultDialogBody.copyWith(
                               fontWeight: FontWeight.w900,

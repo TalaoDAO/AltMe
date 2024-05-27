@@ -24,7 +24,7 @@ class UsdValueText extends StatelessWidget {
             width: Sizes.spaceXSmall,
           ),
           Text(
-            r'$' + usdValue.toStringAsFixed(2).formatNumber(),
+            r'$' + usdValue.decimalNumber(2).formatNumber,
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],

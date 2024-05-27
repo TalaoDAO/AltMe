@@ -165,7 +165,7 @@ class KeyGenerator {
         return '0x$epk';
 
       case AccountType.ssi:
-        throw Exception();
+        throw Exception('SSI_ISSUE');
     }
   }
 
@@ -214,7 +214,7 @@ class KeyGenerator {
         return walletAddress.hex;
 
       case AccountType.ssi:
-        throw Exception();
+        throw Exception('SSI_ISSUE');
     }
   }
 
@@ -237,7 +237,7 @@ class KeyGenerator {
         return walletAddress.hex;
 
       case AccountType.ssi:
-        throw Exception();
+        throw Exception('SSI_ISSUE');
     }
   }
 

@@ -46,6 +46,7 @@ class OperationPage extends StatelessWidget {
         tokensCubit: context.read<TokensCubit>(),
         walletConnectCubit: context.read<WalletConnectCubit>(),
         connectedDappRepository: ConnectedDappRepository(getSecureStorage),
+        manageNetworkCubit: context.read<ManageNetworkCubit>(),
       ),
       child: OperationView(connectionBridgeType: connectionBridgeType),
     );
@@ -179,7 +180,7 @@ class _OperationViewState extends State<OperationView> {
                             ),
                             const SizedBox(height: Sizes.spaceSmall),
                             MyText(
-                              '''${state.amount.toStringAsFixed(6).formatNumber()} ${symbol ?? ''}''',
+                              '''${state.amount.decimalNumber(6).formatNumber} ${symbol ?? ''}''',
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme

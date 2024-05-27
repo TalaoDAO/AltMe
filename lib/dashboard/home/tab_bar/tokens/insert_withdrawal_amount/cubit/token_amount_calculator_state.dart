@@ -3,26 +3,21 @@ part of 'token_amount_calculator_cubit.dart';
 @JsonSerializable()
 class TokenAmountCalculatorState extends Equatable {
   const TokenAmountCalculatorState({
-    this.amount = '',
-    this.validAmount = 0.0,
-    this.insertedAmount = 0.0,
+    this.validAmount = '0',
+    this.insertedAmount = '',
   });
 
   factory TokenAmountCalculatorState.fromJson(Map<String, dynamic> json) =>
       _$TokenAmountCalculatorStateFromJson(json);
 
-  final String amount;
-  final double validAmount;
-  final double insertedAmount;
+  final String validAmount;
+  final String insertedAmount;
 
   TokenAmountCalculatorState copyWith({
-    String? amount,
-    double? validAmount,
-    double? insertedAmount,
-    TokenModel? selectedToken,
+    String? validAmount,
+    String? insertedAmount,
   }) {
     return TokenAmountCalculatorState(
-      amount: amount ?? this.amount,
       insertedAmount: insertedAmount ?? this.insertedAmount,
       validAmount: validAmount ?? this.validAmount,
     );
@@ -32,7 +27,6 @@ class TokenAmountCalculatorState extends Equatable {
 
   @override
   List<Object?> get props => [
-        amount,
         validAmount,
         insertedAmount,
       ];

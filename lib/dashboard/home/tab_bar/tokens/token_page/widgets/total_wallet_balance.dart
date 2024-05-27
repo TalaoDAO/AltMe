@@ -26,7 +26,7 @@ class TotalWalletBalance extends StatelessWidget {
                 child: MyText(
                   state.isSecure
                       ? '****'
-                      : '''${state.totalBalanceInUSD.toStringAsFixed(2).formatNumber()} \$''',
+                      : '''${state.totalBalanceInUSD.decimalNumber(2).formatNumber} \$''',
                   minFontSize: 8,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),

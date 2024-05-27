@@ -243,7 +243,7 @@ class _SelectiveDisclosurePickViewState
         did: '', // just added as it is required field
         mediaType: MediaType.selectiveDisclosure,
         clientType:
-            ClientType.jwkThumbprint, // just added as it is required field
+            ClientType.p256JWKThumprint, // just added as it is required field
         proofHeaderType: customOidc4vcProfile.proofHeader,
         clientId: '', // just added as it is required field
       );
@@ -284,7 +284,12 @@ class _SelectiveDisclosurePickViewState
             qrCodeScanCubit: context.read<QRCodeScanCubit>(),
           );
     } else {
-      throw Exception();
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Issue with the disclosure encryption of jwt.',
+        },
+      );
     }
   }
 }

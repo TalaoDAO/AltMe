@@ -98,7 +98,12 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     }
 
     if (index == null) {
-      throw Exception();
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Issue with the dislosuer of jwt.',
+        },
+      );
     }
 
     final bool isSelected = state.selectedSDIndexInJWT.contains(index);

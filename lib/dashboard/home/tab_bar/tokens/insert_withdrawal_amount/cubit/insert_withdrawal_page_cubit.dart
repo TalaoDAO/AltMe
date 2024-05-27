@@ -1,6 +1,7 @@
 import 'package:altme/app/logger/logger.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/token_page/models/token_model.dart';
 import 'package:bloc/bloc.dart';
+import 'package:decimal/decimal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -12,21 +13,20 @@ class InsertWithdrawalPageCubit extends Cubit<InsertWithdrawalPageState> {
   InsertWithdrawalPageCubit({
     required this.defaultSelectedToken,
   }) : super(
-          InsertWithdrawalPageState(
-            selectedToken: defaultSelectedToken,
-          ),
+          InsertWithdrawalPageState(selectedToken: defaultSelectedToken),
         );
 
   final TokenModel defaultSelectedToken;
 
   final log = getLogger('InsertWithdrawalPageCubit');
 
-  void setAmount({required double amount}) {
+  void setAmount({required String amount}) {
     emit(
       state.copyWith(
         amount: amount,
-        isValidWithdrawal: amount > 0 &&
-            amount <= state.selectedToken.calculatedBalanceInDouble,
+        isValidWithdrawal: double.parse(amount) > 0 &&
+            Decimal.parse(amount) <=
+                Decimal.parse(state.selectedToken.calculatedBalance),
       ),
     );
   }
@@ -35,8 +35,9 @@ class InsertWithdrawalPageCubit extends Cubit<InsertWithdrawalPageState> {
     emit(
       state.copyWith(
         selectedToken: selectedToken,
-        isValidWithdrawal: state.amount > 0 &&
-            state.amount <= selectedToken.calculatedBalanceInDouble,
+        isValidWithdrawal: double.parse(state.amount) > 0 &&
+            Decimal.parse(state.amount) <=
+                Decimal.parse(state.selectedToken.calculatedBalance),
       ),
     );
   }

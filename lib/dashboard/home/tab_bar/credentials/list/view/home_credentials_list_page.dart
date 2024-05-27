@@ -45,11 +45,20 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
       padding: EdgeInsets.zero,
       backgroundColor: Theme.of(context).colorScheme.transparent,
       body: BlocListener<ProfileCubit, ProfileState>(
-        listenWhen: (previous, current) =>
-            current.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.vcFormatType !=
-            previous.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.vcFormatType,
+        listenWhen: (previous, current) {
+          if (current.model.profileSetting.selfSovereignIdentityOptions
+                  .customOidc4vcProfile.vcFormatType !=
+              previous.model.profileSetting.selfSovereignIdentityOptions
+                  .customOidc4vcProfile.vcFormatType) {
+            return true;
+          }
+
+          if (current.model.isDeveloperMode != previous.model.isDeveloperMode) {
+            return true;
+          }
+
+          return false;
+        },
         listener: (context, state) {
           onRefresh();
         },

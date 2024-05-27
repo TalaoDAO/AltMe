@@ -38,7 +38,12 @@ Future<void> addCredentialData({
       final id = const Uuid().v4();
 
       if (data is! Map<String, dynamic>) {
-        throw Exception();
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_format',
+            'error_description': 'The format of credential data should be Map.',
+          },
+        );
       }
 
       final credentialModel = CredentialModel(

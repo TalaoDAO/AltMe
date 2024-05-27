@@ -119,9 +119,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                             size: Sizes.icon,
                             color: Theme.of(context).colorScheme.inversePrimary,
                           ),
-                          const Spacer(
-                            flex: 1,
-                          ),
+                          const Spacer(flex: 1),
                           MyText(
                             tokenModel.calculatedBalance,
                             minFontSize: 10,
@@ -130,6 +128,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                             style: Theme.of(context).textTheme.bodySmall,
                             overflow: TextOverflow.ellipsis,
                           ),
+                          const SizedBox(width: 5),
                           MyText(
                             tokenModel.symbol,
                             minFontSize: 10,
@@ -143,8 +142,8 @@ class _TokenSelectBoxItem extends StatelessWidget {
                       MyText(
                         r'$' +
                             selectedToken.balanceInUSD
-                                .toStringAsFixed(2)
-                                .formatNumber(),
+                                .decimalNumber(2)
+                                .formatNumber,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Theme.of(context).colorScheme.greyText,
                             ),

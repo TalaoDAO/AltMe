@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
+import 'package:bs58/bs58.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:did_kit/did_kit.dart';
@@ -182,7 +183,7 @@ class OIDC4VC {
 
       return (authorizationEndpoint, authorizationRequestParemeters);
     } catch (e) {
-      throw Exception('Not a valid openid url to initiate issuance');
+      throw Exception('NOT_A_VALID_OPENID_URL');
     }
   }
 
@@ -883,9 +884,20 @@ class OIDC4VC {
             .toList();
       }
 
-      final value = data.first['publicKeyJwk'];
+      final method = data.first as Map<String, dynamic>;
 
-      return jsonDecode(jsonEncode(value)) as Map<String, dynamic>;
+      dynamic publicKeyJwk;
+
+      if (method.containsKey('publicKeyJwk')) {
+        publicKeyJwk = method['publicKeyJwk'];
+      } else if (method.containsKey('publicKeyBase58')) {
+        publicKeyJwk =
+            publicKeyBase58ToPublicJwk(method['publicKeyBase58'].toString());
+      } else {
+        throw Exception('PUBLICKEYJWK_EXTRACTION_ERROR');
+      }
+
+      return jsonDecode(jsonEncode(publicKeyJwk)) as Map<String, dynamic>;
     }
   }
 
@@ -1506,7 +1518,7 @@ class OIDC4VC {
     var issAndSub = tokenParameters.thumbprint;
 
     switch (tokenParameters.clientType) {
-      case ClientType.jwkThumbprint:
+      case ClientType.p256JWKThumprint:
         issAndSub = tokenParameters.thumbprint;
       case ClientType.did:
         issAndSub = tokenParameters.did;
@@ -1527,7 +1539,7 @@ class OIDC4VC {
       payload['nonce'] = tokenParameters.nonce!;
     }
 
-    if (tokenParameters.clientType == ClientType.jwkThumbprint) {
+    if (tokenParameters.clientType == ClientType.p256JWKThumprint) {
       payload['sub_jwk'] = tokenParameters.publicJWK;
     }
 
@@ -1638,7 +1650,7 @@ class OIDC4VC {
           : response as Map<String, dynamic>;
       return OpenIdConfiguration.fromJson(data);
     } catch (e) {
-      throw Exception('Openid-Configuration-Issue');
+      throw Exception('OPENID-CONFIGURATION-ISSUE');
     }
   }
 
@@ -1708,6 +1720,12 @@ class OIDC4VC {
     try {
       final secureStorageProvider = getSecureStorage;
       final cachedData = await secureStorageProvider.get(uri);
+      // TODO(hawkbee): To be removed.
+      /// temporary solution to purge faulty stored data
+      /// Will be removed in the future
+      await secureStorageProvider.delete(uri);
+
+      /// end of temporary solution
       dynamic response;
 
       dio.options.headers = headers;
@@ -1729,11 +1747,13 @@ class OIDC4VC {
           return response;
         }
       }
-      final expiry =
-          DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
+      // temporary deactiviting this caching du to issue with
+      // flutter_secure_storage on ios #2657
+      // final expiry =
+      //     DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
 
-      final value = {'expiry': expiry, 'data': response.data};
-      await secureStorageProvider.set(uri, jsonEncode(value));
+      // final value = {'expiry': expiry, 'data': response.data};
+      // await secureStorageProvider.set(uri, jsonEncode(value));
 
       return response.data;
     } on FormatException catch (_) {
@@ -1745,5 +1765,23 @@ class OIDC4VC {
         rethrow;
       }
     }
+  }
+
+  Map<String, dynamic> publicKeyBase58ToPublicJwk(String publicKeyBase58) {
+    ///step 1 : change the publicKeyBase58 format from base58 to base64 :
+    ///decode base58 then encode in base64 urlsafe
+
+    final pubKey =
+        base64UrlEncode(base58.decode(publicKeyBase58)).replaceAll('=', '');
+
+    ///step 2 : create the JWK for the "type": "Ed
+    ///25519VerificationKey2018",
+    ///it is a edDSA key
+    final jwk = {
+      'crv': 'Ed25519',
+      'kty': 'OKP',
+      'x': pubKey,
+    };
+    return jwk;
   }
 }

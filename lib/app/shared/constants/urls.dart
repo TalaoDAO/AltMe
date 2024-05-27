@@ -1,5 +1,5 @@
 class Urls {
-  static const String appContactWebsiteUrl = 'https://altme.io';
+  static const String appContactWebsiteUrl = 'https://talao.co';
   static const String checkIssuerTalaoUrl =
       'https://talao.co/trusted-issuers-registry/v1/issuers';
 

@@ -8,14 +8,14 @@ class JWTDecode {
   Map<String, dynamic> parseJwt(String token) {
     final parts = token.split('.');
     if (parts.length != 3) {
-      throw Exception('Invalid Token');
+      throw Exception('INVALID_TOKEN');
     }
 
     final payload = _decodeBase64(parts[1]);
 
     final dynamic payloadMap = json.decode(payload);
     if (payloadMap is! Map<String, dynamic>) {
-      throw Exception('Invalid Payload');
+      throw Exception('INVALID_PAYLOAD');
     }
     return payloadMap;
   }
@@ -24,14 +24,14 @@ class JWTDecode {
   Map<String, dynamic> parseJwtHeader(String token) {
     final parts = token.split('.');
     if (parts.length != 3) {
-      throw Exception('Invalid Token');
+      throw Exception('INVALID_TOKEN');
     }
 
     final header = _decodeBase64(parts[0]);
 
     final dynamic headerMap = json.decode(header);
     if (headerMap is! Map<String, dynamic>) {
-      throw Exception('Invalid Payload');
+      throw Exception('INVALID_PAYLOAD');
     }
     return headerMap;
   }
@@ -42,7 +42,7 @@ class JWTDecode {
 
     final dynamic headerMap = json.decode(header);
     if (headerMap is! Map<String, dynamic>) {
-      throw Exception('Invalid Payload');
+      throw Exception('INVALID_PAYLOAD');
     }
     return headerMap;
   }

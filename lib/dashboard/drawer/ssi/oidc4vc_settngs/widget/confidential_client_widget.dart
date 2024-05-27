@@ -5,8 +5,8 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ClientCredentialsWidget extends StatelessWidget {
-  const ClientCredentialsWidget({super.key});
+class ConfidentialClientWidget extends StatelessWidget {
+  const ConfidentialClientWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class ClientCredentialsWidget extends StatelessWidget {
         );
 
         return OptionContainer(
-          title: l10n.clientCredentials,
+          title: l10n.confidentialClient,
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(

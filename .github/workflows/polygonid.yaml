@@ -1,4 +1,4 @@
-name: credential_manifest
+name: polygonid
 
 on: [ pull_request, push ]
 
@@ -9,5 +9,6 @@ jobs:
       flutter_channel: stable
       flutter_version: 3.19.6
       min_coverage: 30
-      working_directory: packages/credential_manifest
+      working_directory: packages/polygonid
       dart_sdk: 3.3.4
+      build_runner: false

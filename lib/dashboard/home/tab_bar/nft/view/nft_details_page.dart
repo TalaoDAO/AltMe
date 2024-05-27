@@ -6,7 +6,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-// import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 class NftDetailsPage extends StatelessWidget {
   const NftDetailsPage({
@@ -363,17 +363,17 @@ class NftPicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (AltMeStrings.contractDontSendAddress
-    //     .contains(widget.nftModel.contractAddress)) {
-    //   return ModelViewer(
-    //     src: widget.nftModel.artifactUrl!,
-    //     poster: widget.nftModel.thumbnailUrl,
-    //     alt: '',
-    //     ar: false,
-    //     autoRotate: false,
-    //     disableZoom: true,
-    //   );
-    // }
+    if (AltMeStrings.contractDontSendAddress
+        .contains(widget.nftModel.contractAddress)) {
+      return ModelViewer(
+        src: widget.nftModel.artifactUrl!,
+        poster: widget.nftModel.thumbnailUrl,
+        alt: '',
+        ar: false,
+        autoRotate: false,
+        disableZoom: true,
+      );
+    }
     return CachedImageFromNetwork(
       widget.nftModel.displayUrl ?? (widget.nftModel.thumbnailUrl ?? ''),
       fit: BoxFit.contain,
@@ -411,7 +411,7 @@ class SendButton extends StatelessWidget {
                     ? (widget.nftModel as TezosNftModel).getToken()
                     : (widget.nftModel as EthereumNftModel).getToken(),
                 withdrawalAddress: '',
-                amount: 1,
+                amount: '1',
                 isNFT: true,
               ),
             );

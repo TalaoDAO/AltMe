@@ -268,7 +268,7 @@ Future<CredentialModel> _createCredential({
     data: jsonLd,
     shareLink: '',
     jwt: jwt,
-    format: customOidc4vcProfile.vcFormatType.value,
+    format: customOidc4vcProfile.vcFormatType.vcValue,
     credentialPreview: Credential.fromJson(jsonLd),
     credentialManifest: credentialManifest,
     activities: [Activity(acquisitionAt: dateTime)],

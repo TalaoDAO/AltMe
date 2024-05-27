@@ -1,6 +1,7 @@
 import 'package:altme/app/logger/logger.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
+import 'package:decimal/decimal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -19,17 +20,22 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     required String amount,
     required TokenModel selectedToken,
   }) {
-    double validAmount = 0;
-    double insertedAmount = 0;
+    Decimal validAmount = Decimal.parse('0');
+    String insertedAmount = '';
     try {
-      if (amount.isEmpty || amount == '0' || amount == '0.0') {
-        insertedAmount = 0;
-        validAmount = 0;
+      if (amount.isEmpty ||
+          amount == '0' ||
+          amount == '0.0' ||
+          amount == '00') {
+        validAmount = Decimal.parse('0');
+        insertedAmount = '';
       } else {
-        insertedAmount = double.parse(amount.replaceAll(',', ''));
+        insertedAmount = amount.replaceAll(',', '');
         final bool isValid =
             isValidateAmount(amount: amount, selectedToken: selectedToken);
-        validAmount = isValid ? double.parse(amount.replaceAll(',', '')) : 0.0;
+        validAmount = isValid
+            ? Decimal.parse(amount.replaceAll(',', ''))
+            : Decimal.parse('0');
       }
     } catch (e, s) {
       getLogger(runtimeType.toString())
@@ -38,13 +44,12 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
 
     emit(
       state.copyWith(
-        amount: amount,
-        validAmount: validAmount,
+        validAmount: validAmount.toString(),
         insertedAmount: insertedAmount,
       ),
     );
 
-    insertWithdrawalPageCubit.setAmount(amount: validAmount);
+    insertWithdrawalPageCubit.setAmount(amount: validAmount.toString());
   }
 
   bool isValidateAmount({
@@ -53,11 +58,9 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
   }) {
     if (amount == null) return false;
     try {
-      final insertedAmount = double.parse(amount.replaceAll(',', ''));
-      if (insertedAmount <= 0.0) return false;
-      final maxAmount = double.parse(
-        selectedToken.calculatedBalance.replaceAll(',', ''),
-      );
+      final insertedAmount = Decimal.parse(amount.replaceAll(',', ''));
+      if (insertedAmount <= Decimal.parse('0.0')) return false;
+      final maxAmount = Decimal.parse(selectedToken.calculatedBalance);
       if (insertedAmount > maxAmount) {
         return false;
       } else {

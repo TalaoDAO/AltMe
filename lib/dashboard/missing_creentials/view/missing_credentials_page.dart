@@ -118,25 +118,20 @@ class MissingCredentialsView extends StatelessWidget {
               MyGradientButton(
                 onPressed: () async {
                   for (final credentials in state.dummyCredentials) {
-                    if (credentials.credentialSubjectType.isBlockchainAccount) {
-                      await Navigator.of(context)
-                          .push<void>(ChooseAddAccountMethodPage.route());
-                    } else {
-                      await Navigator.push<void>(
-                        context,
-                        DiscoverDetailsPage.route(
-                          dummyCredential: credentials,
-                          buttonText: l10n.getThisCard,
-                          onCallBack: () async {
-                            await discoverCredential(
-                              dummyCredential: credentials,
-                              context: context,
-                            );
-                            Navigator.pop(context);
-                          },
-                        ),
-                      );
-                    }
+                    await Navigator.push<void>(
+                      context,
+                      DiscoverDetailsPage.route(
+                        dummyCredential: credentials,
+                        buttonText: l10n.getThisCard,
+                        onCallBack: () async {
+                          await discoverCredential(
+                            dummyCredential: credentials,
+                            context: context,
+                          );
+                          Navigator.pop(context);
+                        },
+                      ),
+                    );
                   }
                   Navigator.pop(context);
                 },

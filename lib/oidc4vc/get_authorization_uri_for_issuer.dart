@@ -110,7 +110,14 @@ Future<void> getAuthorizationUriForIssuer({
 
     final requestUri = response['request_uri'];
 
-    if (requestUri == null) throw Exception();
+    if (requestUri == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': 'The request_uri should be provided.',
+        },
+      );
+    }
 
     final parameters = {'client_id': clientId, 'request_uri': requestUri};
 

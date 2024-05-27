@@ -110,7 +110,12 @@ class _PinCodeViewState extends State<PinCodeView> {
                     Navigator.pop(context);
                     widget.isValidCallback.call();
                   case WalletProtectionType.biometrics:
-                    throw Exception();
+                    throw ResponseMessage(
+                      data: {
+                        'error': 'invalid_format',
+                        'error_description': 'The biomertics is not supported.',
+                      },
+                    );
                   case WalletProtectionType.FA2:
                     final LocalAuthApi localAuthApi = LocalAuthApi();
                     final authenticated = await localAuthApi.authenticate(

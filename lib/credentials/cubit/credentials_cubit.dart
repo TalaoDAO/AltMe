@@ -507,7 +507,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final supportAssociatedCredential =
         supportCryptoCredential(profileCubit.state.model);
 
-    if (!supportAssociatedCredential) throw Exception();
+    if (!supportAssociatedCredential) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description':
+              'The crypto associated credential is not supported.',
+        },
+      );
+    }
 
     final didKeyType = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
@@ -601,7 +609,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       final did = oldCredential.credentialPreview.credentialSubjectModel.id;
 
       if (did == null) {
-        throw Exception();
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'DID is required.',
+          },
+        );
       }
 
       final didKeyType = profileCubit.state.model.profileSetting
@@ -711,7 +724,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               final displayVerifiableId = vcFormatType == VCFormatType.ldpVc &&
                   discoverCardsOptions.displayVerifiableId;
               final displayVerifiableIdJwt =
-                  vcFormatType == VCFormatType.jwtVcJson &&
+                  (vcFormatType == VCFormatType.jwtVc ||
+                          vcFormatType == VCFormatType.jwtVcJson) &&
                       discoverCardsOptions.displayVerifiableIdJwt;
               final displayVerifiableIdSdJwt =
                   vcFormatType == VCFormatType.vcSdJWT &&
@@ -887,44 +901,18 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             .toList();
 
         if (credentialsOfSameType.isNotEmpty && subjectType.supportSingleOnly) {
-          final availableWalletAddresses = <String>[];
-
-          if (isBlockchainAccount && supportAssociatedCredential) {
-            /// getting list of available wallet address of current
-            /// blockchain account
-            for (final credential in credentialsOfSameType) {
-              final String? walletAddress = getWalletAddress(
-                credential.credentialPreview.credentialSubjectModel,
-              );
-
-              if (walletAddress != null) {
-                availableWalletAddresses.add(walletAddress);
-              }
-            }
-          }
-
           /// credential available case
           for (final credential in credentialsOfSameType) {
             if (isBlockchainAccount && supportAssociatedCredential) {
               /// there can be multiple blockchain profiles
               ///
               /// each profiles should be allowed to add the respective cards
-              ///
-              /// so we have to check the current profile wallet address and
-              /// compare with existing blockchain card to add in discover or
-              /// not
 
-              final String? currentWalletAddress =
-                  walletCubit.state.currentAccount?.walletAddress;
+              /// We always have the associated Adress credential
+              /// in the discover since "Do not remove the GET a crypto account
+              ///  in the Discover #2649"
 
-              /// if current blockchain card is not available in list of
-              /// credentails then add in the discover list
-              /// else do not add if it is blockchain
-
-              final isBlockChainCardAvailable = availableWalletAddresses
-                  .contains(currentWalletAddress.toString());
-
-              if (!isBlockChainCardAvailable && isCurrentBlockchainAccount) {
+              if (isCurrentBlockchainAccount) {
                 /// if already added do not add
                 if (!requiredDummySubjects.contains(subjectType)) {
                   requiredDummySubjects.add(subjectType);
@@ -933,7 +921,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
               //get current wallet address
             } else {
-              if (vcFormatType.value == credential.getFormat) {
+              if (vcFormatType.vcValue == credential.getFormat) {
                 /// do not add if format matched
                 /// there can be same credentials with different format
               } else {
