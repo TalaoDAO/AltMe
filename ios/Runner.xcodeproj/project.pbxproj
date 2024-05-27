@@ -398,9 +398,9 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = FH3A3ZJ2YU;
 				ENABLE_BITCODE = NO;
-				FLAVOR_APP_NAME = Altme;
+				FLAVOR_APP_NAME = "TALAO Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Talao Wallet";
+				INFOPLIST_KEY_CFBundleDisplayName = "TALAO Wallet";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -539,9 +539,9 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = FH3A3ZJ2YU;
 				ENABLE_BITCODE = NO;
-				FLAVOR_APP_NAME = Altme;
+				FLAVOR_APP_NAME = "TALAO Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Talao Wallet";
+				INFOPLIST_KEY_CFBundleDisplayName = "TALAO Wallet";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -569,9 +569,9 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = FH3A3ZJ2YU;
 				ENABLE_BITCODE = NO;
-				FLAVOR_APP_NAME = Altme;
+				FLAVOR_APP_NAME = "TALAO Wallet"; 
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Talao Wallet";
+				INFOPLIST_KEY_CFBundleDisplayName = "TALAO Wallet";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
