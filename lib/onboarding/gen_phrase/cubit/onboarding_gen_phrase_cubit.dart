@@ -8,7 +8,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 part 'onboarding_gen_phrase_cubit.g.dart';
 
@@ -16,7 +15,6 @@ part 'onboarding_gen_phrase_state.dart';
 
 class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
   OnBoardingGenPhraseCubit({
-    required this.secureStorageProvider,
     required this.keyGenerator,
     required this.didKitProvider,
     required this.homeCubit,
@@ -26,7 +24,6 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     required this.profileCubit,
   }) : super(const OnBoardingGenPhraseState());
 
-  final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;
   final DIDKitProvider didKitProvider;
 
@@ -43,7 +40,6 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     try {
       await generateAccount(
         mnemonic: mnemonic,
-        secureStorageProvider: secureStorageProvider,
         keyGenerator: keyGenerator,
         didKitProvider: didKitProvider,
         homeCubit: homeCubit,
@@ -52,7 +48,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         altmeChatSupportCubit: altmeChatSupportCubit,
         profileCubit: profileCubit,
       );
-      await secureStorageProvider.set(
+      await profileCubit.secureStorageProvider.set(
         SecureStorageKeys.hasVerifiedMnemonics,
         'no',
       );

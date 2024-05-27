@@ -38,7 +38,6 @@ class ProtectWalletPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => OnBoardingGenPhraseCubit(
-        secureStorageProvider: getSecureStorage,
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),

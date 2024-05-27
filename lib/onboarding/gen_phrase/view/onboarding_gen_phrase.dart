@@ -12,8 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 
-import 'package:secure_storage/secure_storage.dart';
-
 class OnBoardingGenPhrasePage extends StatelessWidget {
   const OnBoardingGenPhrasePage({super.key});
 
@@ -26,7 +24,6 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => OnBoardingGenPhraseCubit(
-        secureStorageProvider: getSecureStorage,
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),

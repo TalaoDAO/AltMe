@@ -15,8 +15,6 @@ import 'package:secure_storage/secure_storage.dart';
 
 import '../../../helpers/helpers.dart';
 
-class MockSecureStorage extends Mock implements SecureStorageProvider {}
-
 class MockDIDKitProvider extends Mock implements DIDKitProvider {}
 
 class MockKeyGenerator extends Mock implements KeyGenerator {}
@@ -78,7 +76,6 @@ void main() {
 
   setUpAll(() {
     WidgetsFlutterBinding.ensureInitialized();
-    mockSecureStorage = MockSecureStorage();
     didKitProvider = MockDIDKitProvider();
     keyGenerator = MockKeyGenerator();
     homeCubit = MockHomeCubit();
@@ -86,9 +83,6 @@ void main() {
     walletCubit = MockWalletCubit();
     altmeChatSupportCubit = MockAltmeChatSupportCubit();
     profileCubit = MockProfileCubit();
-
-    when(() => mockSecureStorage.set(any(), any())).thenAnswer((_) async {});
-    when(() => mockSecureStorage.get(any())).thenAnswer((_) async {});
   });
 
   group('OnBoarding GenPhrase Page', () {
@@ -98,7 +92,6 @@ void main() {
 
     setUpAll(() {
       onBoardingGenPhraseCubit = OnBoardingGenPhraseCubit(
-        secureStorageProvider: mockSecureStorage,
         didKitProvider: didKitProvider,
         keyGenerator: keyGenerator,
         homeCubit: homeCubit,
@@ -121,11 +114,9 @@ void main() {
             builder: (context) => Scaffold(
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  Navigator.of(context)
-                      .push<void>(OnBoardingVerifyPhrasePage.route(
-                    isFromOnboarding: true,
-                    mnemonic: [],
-                  ));
+                  Navigator.of(context).push<void>(
+                    OnBoardingGenPhrasePage.route(),
+                  );
                 },
               ),
             ),
@@ -139,11 +130,32 @@ void main() {
         () => navigator.push<void>(
           any(
             that: isRoute<void>(
-              whereName: equals('/OnBoardingVerifyPhrasePage'),
+              whereName: equals('/onBoardingGenPhrasePage'),
             ),
           ),
         ),
       ).called(1);
+    });
+
+    testWidgets('renders OnBoardingGenPhraseView', (tester) async {
+      await tester.pumpApp(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: onBoardingGenPhraseCubit,
+            ),
+            BlocProvider<HomeCubit>.value(value: homeCubit),
+            BlocProvider<WalletCubit>.value(value: walletCubit),
+            BlocProvider<SplashCubit>.value(value: splashCubit),
+            BlocProvider<AltmeChatSupportCubit>.value(
+                value: altmeChatSupportCubit),
+            BlocProvider<ProfileCubit>.value(value: profileCubit),
+          ],
+          child: const OnBoardingGenPhrasePage(),
+        ),
+      );
+
+      expect(find.byType(OnBoardingGenPhraseView), findsOneWidget);
     });
 
     testWidgets('renders UI correctly', (tester) async {
@@ -186,5 +198,20 @@ void main() {
         ),
       ).called(1);
     });
+
+    // testWidgets('Verify Later button triggers onboarding processing',
+    //     (WidgetTester tester) async {
+    //   await tester.pumpApp(
+    //     BlocProvider.value(
+    //       value: onBoardingGenPhraseCubit,
+    //       child: const OnBoardingGenPhraseView(),
+    //     ),
+    //   );
+    //   await tester.tap(find.text('Verify Later'.toUpperCase()));
+    //   await tester.pumpAndSettle();
+
+    //   // verify(() => onBoardingGenPhraseCubit.generateSSIAndCryptoAccount(any()))
+    //   //     .called(1);
+    // });
   });
 }
