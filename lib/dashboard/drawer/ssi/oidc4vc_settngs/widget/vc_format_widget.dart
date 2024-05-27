@@ -47,7 +47,7 @@ class VCFormatWidget extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                      vcFormatType.formattedString,
+                      vcFormatType.vcValue,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),

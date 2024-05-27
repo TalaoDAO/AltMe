@@ -66,7 +66,12 @@ extension BlockchainTypeX on BlockchainType {
     String name = '';
     switch (this) {
       case BlockchainType.tezos:
-        throw Exception();
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Chain is not supported for tezos.',
+          },
+        );
 
       case BlockchainType.ethereum:
         name = '1';
@@ -87,7 +92,12 @@ extension BlockchainTypeX on BlockchainType {
   int get chainId {
     switch (this) {
       case BlockchainType.tezos:
-        throw Exception();
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description': 'Chain is not supported for tezos.',
+          },
+        );
 
       case BlockchainType.ethereum:
         return 1;

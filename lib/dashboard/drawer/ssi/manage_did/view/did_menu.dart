@@ -97,6 +97,14 @@ class DidView extends StatelessWidget {
                     }
                   },
                 ),
+                DrawerItem(
+                  title: l10n.jwkThumbprintP256Key,
+                  onTap: () {
+                    Navigator.of(context).push<void>(
+                      JWKThumbprintP256KeyPage.route(),
+                    );
+                  },
+                ),
               ],
             ),
           ),

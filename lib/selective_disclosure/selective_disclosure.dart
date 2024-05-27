@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:json_path/json_path.dart';
@@ -63,11 +64,23 @@ class SelectiveDisclosure {
 
             extractedValues[lisString[0].toString()] = lisString[1];
           } else {
-            throw Exception();
+            throw ResponseMessage(
+              data: {
+                'error': 'invalid_format',
+                'error_description':
+                    'The disclosure content should contain 2 or 3 elements.',
+              },
+            );
           }
         }
       } catch (e) {
-        throw Exception();
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_format',
+            'error_description':
+                'Something went wrong when extracting content from disclosure.',
+          },
+        );
       }
     }
     return extractedValues;
@@ -141,7 +154,7 @@ class SelectiveDisclosure {
   }
 
   String? get getPicture {
-    if (credentialModel.format.toString() != VCFormatType.vcSdJWT.value) {
+    if (credentialModel.format.toString() != VCFormatType.vcSdJWT.vcValue) {
       return null;
     }
 

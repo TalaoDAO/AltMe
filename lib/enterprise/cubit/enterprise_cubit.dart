@@ -205,7 +205,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
   Future<Map<String, dynamic>> getDataForRequest(String nonce) async {
     /// get private key
     final p256KeyForWallet =
-        await getWalletP256Key(profileCubit.secureStorageProvider);
+        await getWalletAttestationP256Key(profileCubit.secureStorageProvider);
     final privateKey = jsonDecode(p256KeyForWallet) as Map<String, dynamic>;
 
     final customOidc4vcProfile = profileCubit.state.model.profileSetting

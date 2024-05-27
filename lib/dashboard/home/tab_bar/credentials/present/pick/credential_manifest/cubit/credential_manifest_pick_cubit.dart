@@ -117,10 +117,24 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
         } else if (atLeast != null) {
           isButtonEnabled = selected.length >= atLeast;
         } else {
-          throw Exception();
+          throw ResponseMessage(
+            data: {
+              'error': 'invalid_format',
+              'error_description':
+                  'The count or min parameter should be provided in the '
+                      'submissionRequirements of presentation_definition.',
+            },
+          );
         }
       } else {
-        throw Exception();
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_format',
+            'error_description':
+                'The submissionRequirements should be provided in the '
+                    'presentation_definition.',
+          },
+        );
       }
     } else {
       /// normal case

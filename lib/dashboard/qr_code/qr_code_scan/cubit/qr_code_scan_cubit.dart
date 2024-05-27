@@ -128,19 +128,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
     } catch (e, s) {
       log.e('Error -$e, stack: $s');
-      if (e is MessageHandler) {
-        emitError(e);
-      } else {
-        var message =
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER;
-
-        if (e.toString().startsWith('Exception: VERIFICATION_ISSUE')) {
-          message = ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL;
-        } else if (e.toString().startsWith('Exception: INIT_ISSUE')) {
-          message = ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage;
-        }
-        emitError(ResponseMessage(message: message));
-      }
+      emitError(e);
     }
   }
 
@@ -947,22 +935,16 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         client: client,
         uri: state.uri!,
       );
-      if (clientMetaData == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Client metaData is invalid',
-          },
-        );
-      }
 
-      if (!clientMetaData.containsKey('vp_formats')) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Format is missing.',
-          },
-        );
+      if (clientMetaData != null) {
+        if (!clientMetaData.containsKey('vp_formats')) {
+          throw ResponseMessage(
+            data: {
+              'error': 'invalid_request',
+              'error_description': 'Format is missing.',
+            },
+          );
+        }
       }
     }
 
@@ -1010,8 +992,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       shareLink: 'shareLink',
       data: const {},
       jwt: null,
-      format: profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType.value,
+      format: profileCubit
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile
+          .vcFormatType
+          .vcValue,
       credentialManifest: credentialManifest,
     );
 
@@ -1099,21 +1087,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             );
           }
 
-          if (publicKeyJwk != null) {
-            final VerificationType isVerified = await verifyEncodedData(
-              issuer: clientId,
-              jwtDecode: jwtDecode,
-              jwt: encodedData,
-              publicKeyJwk: publicKeyJwk,
-            );
+          final VerificationType isVerified = await verifyEncodedData(
+            issuer: clientId,
+            jwtDecode: jwtDecode,
+            jwt: encodedData,
+            publicKeyJwk: publicKeyJwk,
+          );
 
-            if (isVerified != VerificationType.verified) {
-              return emitError(
-                ResponseMessage(
-                  message: ResponseString.RESPONSE_STRING_invalidRequest,
-                ),
-              );
-            }
+          if (isVerified != VerificationType.verified) {
+            return emitError(
+              ResponseMessage(
+                message: ResponseString.RESPONSE_STRING_invalidRequest,
+              ),
+            );
           }
         }
 
@@ -1440,7 +1426,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             openIdConfiguration: openIdConfiguration,
           );
         } else {
-          throw Exception();
+          throw ResponseMessage(
+            data: {
+              'error': 'invalid_format',
+              'error_description': 'Some issue with pre-authorization or '
+                  'authorization flow parameters.',
+            },
+          );
         }
       }
 

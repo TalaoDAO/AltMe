@@ -23,7 +23,10 @@
     "statusListCachingSubTitle",
     "statusList",
     "statusListIndex",
-    "theWalletIsSuspended"
+    "theWalletIsSuspended",
+    "clientTypeTitle",
+    "confidentialClient",
+    "jwkThumbprintP256Key"
   ],
 
   "es": [
@@ -50,7 +53,10 @@
     "statusListCachingSubTitle",
     "statusList",
     "statusListIndex",
-    "theWalletIsSuspended"
+    "theWalletIsSuspended",
+    "clientTypeTitle",
+    "confidentialClient",
+    "jwkThumbprintP256Key"
   ],
 
   "fr": [
@@ -67,6 +73,9 @@
     "statusListCachingSubTitle",
     "statusList",
     "statusListIndex",
-    "theWalletIsSuspended"
+    "theWalletIsSuspended",
+    "clientTypeTitle",
+    "confidentialClient",
+    "jwkThumbprintP256Key"
   ]
 }

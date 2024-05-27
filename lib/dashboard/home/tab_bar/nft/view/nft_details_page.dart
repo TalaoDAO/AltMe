@@ -411,7 +411,7 @@ class SendButton extends StatelessWidget {
                     ? (widget.nftModel as TezosNftModel).getToken()
                     : (widget.nftModel as EthereumNftModel).getToken(),
                 withdrawalAddress: '',
-                amount: 1,
+                amount: '1',
                 isNFT: true,
               ),
             );
