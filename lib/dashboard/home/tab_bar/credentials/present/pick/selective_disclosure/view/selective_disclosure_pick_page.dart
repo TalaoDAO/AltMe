@@ -210,6 +210,9 @@ class _SelectiveDisclosurePickViewState
       }
     }
 
+    final selectiveDisclosure =
+        SelectiveDisclosure(widget.credentialToBePresented);
+
     final encryptedValues = widget.credentialToBePresented.jwt
         ?.split('~')
         .where((element) => element.isNotEmpty)
@@ -218,10 +221,16 @@ class _SelectiveDisclosurePickViewState
     if (encryptedValues != null) {
       var newJwt = '${encryptedValues[0]}~';
 
-      encryptedValues.removeAt(0);
+      // encryptedValues.removeAt(0);
+
+      final organizedDisclosure = selectiveDisclosure
+          .disclosureToContent.entries
+          .toList()
+          .map((element) => element.key)
+          .toList();
 
       for (final index in selectedSDIndexInJWT) {
-        newJwt = '$newJwt${encryptedValues[index]}~';
+        newJwt = '$newJwt${organizedDisclosure[index]}~';
       }
 
       // Key Binding JWT

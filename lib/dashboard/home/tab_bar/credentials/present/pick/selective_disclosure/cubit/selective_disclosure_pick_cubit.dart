@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
@@ -81,20 +83,24 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     int? index;
 
     if (threeDotValue != null) {
-      for (final element
-          in selectiveDisclosure.disclosureToContent.entries.toList()) {
+      final disclosureToContentEntries =
+          selectiveDisclosure.disclosureToContent.entries.toList();
+
+      for (final element in disclosureToContentEntries) {
         final sh256Hash = oidc4vc.sh256HashOfContent(element.value.toString());
+
         if (sh256Hash == threeDotValue) {
           final disclosure = element.key.replaceAll('=', '');
-
-          index = selectiveDisclosure.disclosureFromJWT
-              .indexWhere((element) => element == disclosure);
+          index = disclosureToContentEntries
+              .indexWhere((entry) => entry.key == disclosure);
+          break;
         }
       }
     } else if (claimsKey != null) {
-      index = selectiveDisclosure.extractedValuesFromJwt.entries
-          .toList()
-          .indexWhere((entry) => entry.key == claimsKey);
+      index =
+          selectiveDisclosure.disclosureToContent.entries.toList().indexWhere(
+                (entry) => entry.value.toString().contains(claimsKey),
+              );
     }
 
     if (index == null) {
