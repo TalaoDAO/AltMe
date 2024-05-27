@@ -58,8 +58,18 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
             credentialField['filter'] as Map<String, dynamic>,
           );
 
-          final credentialName =
-              filter.pattern ?? filter.contains!.containsConst;
+          final credentialName = filter.pattern ??
+              filter.contains?.containsConst ??
+              filter.containsConst;
+
+          if (credentialName == null) {
+            throw ResponseMessage(
+              data: {
+                'error': 'invalid_request',
+                'error_description': 'Invalid presentatoin Definition.',
+              },
+            );
+          }
 
           final CredentialSubjectType? credentialSubjectType =
               getCredTypeFromName(credentialName);
