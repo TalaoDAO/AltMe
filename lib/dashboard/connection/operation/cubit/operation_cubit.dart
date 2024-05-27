@@ -326,7 +326,7 @@ class OperationCubit extends Cubit<OperationState> {
       operationAttemptCount++;
       log.i('sendOperataion attempt $operationAttemptCount');
 
-      final isInternetAvailable = await isConnected();
+      final isInternetAvailable = await isConnectedToInternet();
       if (!isInternetAvailable) {
         throw NetworkException(
           message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,

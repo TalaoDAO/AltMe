@@ -1,16 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:asn1lib/asn1lib.dart' as asn1lib;
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dartez/dartez.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -25,6 +22,9 @@ import 'package:secure_storage/secure_storage.dart';
 import 'package:x509/x509.dart' as x509;
 import 'package:x509/x509.dart';
 
+export 'is_connected_to_internet.dart';
+export 'test_platform.dart';
+
 String generateDefaultAccountName(
   int accountIndex,
   List<String> accountNameList,
@@ -37,10 +37,6 @@ String generateDefaultAccountName(
     return defaultAccountName;
   }
 }
-
-bool get isAndroid => Platform.isAndroid;
-
-bool get isIOS => Platform.isIOS;
 
 String getIssuerDid({required Uri uriToCheck}) {
   String did = '';
@@ -96,23 +92,6 @@ String stringToHexPrefixedWith05({
   final payloadBytes = '$prefix$stringIsHex$bytesOfByteLength$bytes';
 
   return payloadBytes;
-}
-
-Future<bool> isConnected() async {
-  final log = getLogger('Check Internet Connection');
-
-  if (!isAndroid) {
-    if (!(await DeviceInfoPlugin().iosInfo).isPhysicalDevice) {
-      return true;
-    }
-  }
-  final connectivityResult = await Connectivity().checkConnectivity();
-  if (connectivityResult == ConnectivityResult.mobile ||
-      connectivityResult == ConnectivityResult.wifi) {
-    return true;
-  }
-  log.e('No Internet Connection');
-  return false;
 }
 
 String getCredentialName(String constraints) {

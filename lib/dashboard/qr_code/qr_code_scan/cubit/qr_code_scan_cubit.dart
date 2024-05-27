@@ -78,7 +78,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     await Future<void>.delayed(const Duration(milliseconds: 1000));
     emit(state.loading(isScan: true));
     try {
-      final isInternetAvailable = await isConnected();
+      final isInternetAvailable = await isConnectedToInternet();
       if (!isInternetAvailable) {
         throw NetworkException(
           message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
