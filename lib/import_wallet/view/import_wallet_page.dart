@@ -29,7 +29,7 @@ class ImportWalletPage extends StatelessWidget {
           accountName: accountName,
           isFromOnboarding: isFromOnboarding,
         ),
-        settings: const RouteSettings(name: '/onBoardingRecoveryPage'),
+        settings: const RouteSettings(name: '/ImportWalletPage'),
       );
 
   final String? accountName;

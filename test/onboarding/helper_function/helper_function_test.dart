@@ -72,7 +72,7 @@ void main() {
     late ProfileCubit profileCubit;
     late MockSecureStorageProvider secureStorageProvider;
 
-    setUpAll(() {
+    setUp(() {
       keyGenerator = KeyGenerator();
       didKitProvider = MockDIDKitProvider();
       homeCubit = MockHomeCubit();

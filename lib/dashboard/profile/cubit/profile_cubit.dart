@@ -67,6 +67,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> load() async {
     final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+
     if (ssiKey == null) {
       return emit(state.copyWith(status: AppStatus.success));
     }
@@ -300,6 +301,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             enterpriseWalletName: profileSetting.generalOptions.profileName,
           );
       }
+
       await update(profileModel);
     } catch (e, s) {
       log.e(

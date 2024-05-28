@@ -294,7 +294,8 @@ Future<String> getPrivateKey({
 
   switch (didKeyType) {
     case DidKeyType.edDSA:
-      final ssiKey = await getSecureStorage.get(SecureStorageKeys.ssiKey);
+      final ssiKey = await profileCubit.secureStorageProvider
+          .get(SecureStorageKeys.ssiKey);
       return ssiKey.toString();
 
     case DidKeyType.secp256k1:

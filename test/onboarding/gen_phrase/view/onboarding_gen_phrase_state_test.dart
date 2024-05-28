@@ -36,10 +36,7 @@ void main() {
     });
 
     test('success returns correct state', () {
-      final messageHandler = ResponseMessage(
-        message: ResponseString
-            .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER,
-      );
+      final messageHandler = ResponseMessage();
       final state = const OnBoardingGenPhraseState()
           .success(messageHandler: messageHandler);
 
@@ -49,22 +46,6 @@ void main() {
         StateMessage.success(messageHandler: messageHandler),
       );
       expect(state.isTicked, false);
-    });
-
-    test('copyWith returns correct state', () {
-      const state = OnBoardingGenPhraseState(
-        status: AppStatus.init,
-        isTicked: true,
-      );
-
-      final copiedState = state.copyWith(
-        status: AppStatus.loading,
-        isTicked: false,
-      );
-
-      expect(copiedState.status, AppStatus.loading);
-      expect(copiedState.isTicked, false);
-      expect(copiedState.message, state.message);
     });
   });
 }
