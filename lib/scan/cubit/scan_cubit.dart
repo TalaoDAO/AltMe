@@ -81,9 +81,6 @@ class ScanCubit extends Cubit<ScanState> {
       );
 
       if (isSIOPV2OROIDC4VPUrl(uri)) {
-        // final bool isEBSIV3 =
-        //     await isEBSIV3ForVerifier(client: client, uri: uri) ?? false;
-
         final responseType = uri.queryParameters['response_type'] ?? '';
         final stateValue = uri.queryParameters['state'];
 
@@ -96,7 +93,9 @@ class ScanCubit extends Cubit<ScanState> {
                   'The verifier side must not contain id_token only.',
             },
           );
-        } else if (isVPTokenOnly(responseType)) {
+        }
+
+        if (hasVPToken(responseType)) {
           /// verifier side (oidc4vp) with request uri as value
 
           await presentCredentialToOIDC4VPAndSIOPV2Request(
@@ -110,28 +109,9 @@ class ScanCubit extends Cubit<ScanState> {
             kid: kid,
             privateKey: privateKey,
             stateValue: stateValue,
-            idTokenNeeded: false,
+            idTokenNeeded: hasIDToken(responseType),
             qrCodeScanCubit: qrCodeScanCubit!,
           );
-          return;
-        } else if (isIDTokenAndVPToken(responseType)) {
-          /// verifier side (oidc4vp and siopv2) with request uri as value
-
-          await presentCredentialToOIDC4VPAndSIOPV2Request(
-            uri: uri,
-            issuer: issuer,
-            credentialsToBePresented: credentialsToBePresented!,
-            presentationDefinition:
-                credentialModel.credentialManifest!.presentationDefinition!,
-            oidc4vc: oidc4vc,
-            did: did,
-            kid: kid,
-            privateKey: privateKey,
-            stateValue: stateValue,
-            idTokenNeeded: true,
-            qrCodeScanCubit: qrCodeScanCubit!,
-          );
-
           return;
         } else {
           throw ResponseMessage(
