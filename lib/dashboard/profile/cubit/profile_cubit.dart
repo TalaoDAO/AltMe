@@ -66,7 +66,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> load() async {
-    final ssiKey = await getSecureStorage.get(SecureStorageKeys.ssiKey);
+    final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
     if (ssiKey == null) {
       return emit(state.copyWith(status: AppStatus.success));
     }
