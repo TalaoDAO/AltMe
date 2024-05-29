@@ -19,9 +19,21 @@ class StarterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
+    return StarterView(profileCubit: context.read<ProfileCubit>());
+  }
+}
 
-    final profileCubit = context.read<ProfileCubit>();
+class StarterView extends StatelessWidget {
+  const StarterView({
+    super.key,
+    required this.profileCubit,
+  });
+
+  final ProfileCubit profileCubit;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
 
     return WillPopScope(
       onWillPop: () async {
@@ -67,11 +79,13 @@ class StarterPage extends StatelessWidget {
                             await profileCubit.setWalletType(
                               walletType: WalletType.personal,
                             );
+
                             await profileCubit.setProfileSetting(
                               profileSetting: ProfileSetting.initial(),
                               profileType: ProfileType.defaultOne,
                             );
-                            await Navigator.of(context).push(
+
+                            await Navigator.of(context).push<void>(
                               ProtectWalletPage.route(
                                 routeType: WalletRouteType.create,
                               ),
@@ -93,7 +107,7 @@ class StarterPage extends StatelessWidget {
                               profileSetting: ProfileSetting.initial(),
                               profileType: ProfileType.defaultOne,
                             );
-                            await Navigator.of(context).push(
+                            await Navigator.of(context).push<void>(
                               ProtectWalletPage.route(
                                 routeType: WalletRouteType.import,
                               ),

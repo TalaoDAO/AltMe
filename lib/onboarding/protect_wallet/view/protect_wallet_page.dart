@@ -83,6 +83,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
       if (byPassScreen) {
         await widget.onboardingCubit.emitOnboardingProcessing();
         final mnemonic = bip39.generateMnemonic().split(' ');
+
         await widget.onBoardingGenPhraseCubit
             .generateSSIAndCryptoAccount(mnemonic);
       } else {

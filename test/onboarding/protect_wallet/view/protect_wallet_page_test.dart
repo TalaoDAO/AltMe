@@ -140,6 +140,7 @@ void main() {
 
     setUpAll(() {
       navigator = MockNavigator();
+
       when(navigator.canPop).thenReturn(true);
 
       when(() => navigator.push<void>(any())).thenAnswer((_) async {});
@@ -647,6 +648,51 @@ void main() {
           ),
         ),
       ).called(1);
+    });
+
+    testWidgets('correct value of byPassscreen', (WidgetTester tester) async {
+      final profileCubit = ProfileCubit(
+        didKitProvider: didKitProvider,
+        jwtDecode: JWTDecode(),
+        oidc4vc: oidc4vc,
+        secureStorageProvider: secureStorageProvider,
+        langCubit: MockLangCubit(),
+      );
+
+      final onBoardingGenPhraseCubit = OnBoardingGenPhraseCubit(
+        didKitProvider: didKitProvider,
+        keyGenerator: keyGenerator,
+        homeCubit: homeCubit,
+        walletCubit: walletCubit,
+        splashCubit: splashCubit,
+        altmeChatSupportCubit: altmeChatSupportCubit,
+        profileCubit: profileCubit,
+      );
+
+      await tester.pumpApp(
+        MockNavigatorProvider(
+          navigator: navigator,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: onBoardingGenPhraseCubit,
+              ),
+              BlocProvider(
+                create: (context) => profileCubit,
+              ),
+            ],
+            child: ProtectWalletView(
+              profileCubit: profileCubit,
+              onBoardingGenPhraseCubit: onBoardingGenPhraseCubit,
+              onboardingCubit: onboardingCubit,
+              routeType: WalletRouteType.import,
+            ),
+          ),
+        ),
+      );
+
+      final dynamic state = tester.state(find.byType(ProtectWalletView));
+      expect(state.byPassScreen, !Parameters.walletHandlesCrypto);
     });
   });
 }
