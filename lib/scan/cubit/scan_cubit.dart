@@ -359,7 +359,7 @@ class ScanCubit extends Cubit<ScanState> {
       /// proof check to fail because of time difference on server
       final options = jsonEncode({
         'verificationMethod': kid,
-        'proofPurpose': 'assertionMethod',
+        'proofPurpose': 'authentication',
         'challenge': challenge,
         'domain': domain,
         'created': DateTime.now()
@@ -894,7 +894,7 @@ class ScanCubit extends Cubit<ScanState> {
       /// proof check to fail because of time difference on server
       final options = jsonEncode({
         'verificationMethod': kid,
-        'proofPurpose': 'assertionMethod',
+        'proofPurpose': 'authentication',
         'challenge': nonce,
         'domain': clientId,
         'created': DateTime.now()
