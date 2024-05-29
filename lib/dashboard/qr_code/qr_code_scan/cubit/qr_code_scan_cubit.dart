@@ -628,7 +628,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
     }
 
-
     final redirectUri = state.uri!.queryParameters['redirect_uri'];
     final responseUri = state.uri!.queryParameters['response_uri'];
     final clientId = state.uri!.queryParameters['client_id'];
