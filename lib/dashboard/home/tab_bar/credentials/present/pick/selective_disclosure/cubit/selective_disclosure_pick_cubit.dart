@@ -42,7 +42,10 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
             final searchList = getTextsFromCredential(path, credentialData);
             for (final element in searchList) {
               final key = path.split('.').toList().last;
-              json[key] = element;
+              json[key] = {
+                'element': element,
+                'optional': field.optional,
+              };
             }
           }
         }
