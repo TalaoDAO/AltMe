@@ -627,29 +627,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         }
       }
     }
-    final clientType = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.clientType;
-
-    if (clientType != ClientType.p256JWKThumprint) {
-      final clientMetadata = state.uri!.queryParameters['client_metadata'];
-      if (clientMetadata != null) {
-        final clientMetadataMap =
-            jsonDecode(clientMetadata) as Map<String, dynamic>;
-        final data = clientMetadataMap['subject_syntax_types_supported']
-            as List<dynamic>;
-        if (!data.contains('did:key')) {
-          if (isSecurityHigh) {
-            throw ResponseMessage(
-              data: {
-                'error': 'unsupported_response_type',
-                'error_description':
-                    'The subject syntax type is not supported.',
-              },
-            );
-          }
-        }
-      }
-    }
 
     final redirectUri = state.uri!.queryParameters['redirect_uri'];
     final responseUri = state.uri!.queryParameters['response_uri'];
