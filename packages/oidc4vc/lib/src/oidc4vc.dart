@@ -1480,12 +1480,11 @@ class OIDC4VC {
         ..setProtectedHeader('alg', tokenParameters.alg)
 
         // add a key to sign, can only add one for JWT
-        ..addRecipient(key, algorithm: tokenParameters.alg);
+        ..addRecipient(key, algorithm: tokenParameters.alg)
+        ..setProtectedHeader('typ', tokenParameters.mediaType.typ);
 
       if (!ignoreProofHeaderType) {
-        /// Proof Header Type is ignored for clientSecretJwt
-        //  also ignored for KB jwt
-        vpBuilder.setProtectedHeader('typ', tokenParameters.mediaType.typ);
+        /// Proof Header Type is ignored for KB jwt
 
         switch (tokenParameters.proofHeaderType) {
           case ProofHeaderType.kid:

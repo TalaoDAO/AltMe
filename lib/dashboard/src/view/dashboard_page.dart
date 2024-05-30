@@ -45,12 +45,6 @@ class _DashboardViewState extends State<DashboardView> {
         context.read<QRCodeScanCubit>().deepLink();
         context.read<BeaconCubit>().startBeacon();
 
-        final splashCubit = context.read<SplashCubit>();
-        if (splashCubit.state.isNewVersion) {
-          WhatIsNewDialog.show(context);
-          splashCubit.disableWhatsNewPopUp();
-        }
-
         // check if enterprise account is suspended or not
         if (context.read<ProfileCubit>().state.model.profileType ==
             ProfileType.enterprise) {
