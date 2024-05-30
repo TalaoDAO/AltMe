@@ -243,7 +243,7 @@ class SelectiveDisclosure {
                       ClaimsData(
                         isfromDisclosureOfJWT: true,
                         data: trimmedElement.last.replaceAll('"', ''),
-                        threeDotValue: threeDotValue.toString(),
+                        threeDotValue: oidc4vc.getDisclosure(element),
                       ),
                     );
                   }
