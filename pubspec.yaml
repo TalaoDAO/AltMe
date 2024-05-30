@@ -80,7 +80,6 @@ dependencies:
   matrix: ^0.25.5
   mime: ^1.0.4
   mobile_scanner: ^3.2.0
-  model_viewer_plus: ^1.7.0
   network_image_mock: ^2.1.1
   no_screenshot: ^0.0.1+6
   oidc4vc:
