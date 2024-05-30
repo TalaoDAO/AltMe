@@ -224,16 +224,8 @@ class _SelectiveDisclosurePickViewState
     if (encryptedValues != null) {
       var newJwt = '${encryptedValues[0]}~';
 
-      // encryptedValues.removeAt(0);
-
-      final organizedDisclosure = selectiveDisclosure
-          .disclosureToContent.entries
-          .toList()
-          .map((element) => element.key)
-          .toList();
-
       for (final index in selectedSDIndexInJWT) {
-        newJwt = '$newJwt${organizedDisclosure[index]}~';
+        newJwt = '$newJwt${encryptedValues[index + 1]}~';
       }
 
       // Key Binding JWT
