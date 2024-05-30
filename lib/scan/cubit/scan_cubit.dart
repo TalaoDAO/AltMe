@@ -671,7 +671,7 @@ class ScanCubit extends Cubit<ScanState> {
           if (url.isNotEmpty) {
             await LaunchUrl.launch(
               url,
-              launchMode: LaunchMode.inAppWebView,
+              launchMode: LaunchMode.externalApplication,
             );
           }
         }
