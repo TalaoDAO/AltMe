@@ -213,9 +213,6 @@ class _SelectiveDisclosurePickViewState
       }
     }
 
-    final selectiveDisclosure =
-        SelectiveDisclosure(widget.credentialToBePresented);
-
     final encryptedValues = widget.credentialToBePresented.jwt
         ?.split('~')
         .where((element) => element.isNotEmpty)

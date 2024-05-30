@@ -84,19 +84,8 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     int? index;
 
     if (threeDotValue != null) {
-      final disclosureToContentEntries =
-          selectiveDisclosure.disclosureToContent.entries.toList();
-
-      for (final element in disclosureToContentEntries) {
-        final sh256Hash = oidc4vc.sh256HashOfContent(element.value.toString());
-
-        if (sh256Hash == threeDotValue) {
-          final disclosure = element.key.replaceAll('=', '');
-          index = disclosureToContentEntries
-              .indexWhere((entry) => entry.key == disclosure);
-          break;
-        }
-      }
+      index = selectiveDisclosure.disclosureFromJWT
+          .indexWhere((entry) => entry == threeDotValue);
     } else if (claimsKey != null) {
       index =
           selectiveDisclosure.disclosureToContent.entries.toList().indexWhere(
@@ -104,11 +93,11 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
               );
     }
 
-    if (index == null) {
+    if (index == null || index == -1) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_request',
-          'error_description': 'Issue with the dislosuer of jwt.',
+          'error_description': 'Issue with the dislosure of jwt.',
         },
       );
     }
