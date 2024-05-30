@@ -109,13 +109,4 @@ class SplashCubit extends Cubit<SplashState> {
       ),
     );
   }
-
-  void disableWhatsNewPopUp() {
-    emit(
-      state.copyWith(
-        isNewVersion: false,
-        status: SplashStatus.idle,
-      ),
-    );
-  }
 }
