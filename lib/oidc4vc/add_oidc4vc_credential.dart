@@ -32,9 +32,9 @@ Future<void> addOIDC4VCCredential({
     final jsonContent = jwtDecode.parseJwt(data);
 
     if (format == VCFormatType.vcSdJWT.vcValue) {
-      final sdAlg = jsonContent['_sd_alg'];
+      final sdAlg = jsonContent['_sd_alg']??'sha-256';
 
-      if (sdAlg == null || sdAlg != 'sha-256') {
+      if (sdAlg != 'sha-256') {
         throw ResponseMessage(
           data: {
             'error': 'invalid_request',

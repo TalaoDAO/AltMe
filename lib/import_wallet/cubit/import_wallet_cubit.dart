@@ -89,9 +89,6 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
       }
 
-      /// what's new popup disabled
-      splashCubit.disableWhatsNewPopUp();
-
       /// crypto wallet with unknown blockchain type
       await walletCubit.createCryptoWallet(
         accountName: accountName,
