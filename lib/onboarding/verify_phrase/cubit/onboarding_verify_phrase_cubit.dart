@@ -10,15 +10,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 
-import 'package:secure_storage/secure_storage.dart';
-
 part 'onboarding_verify_phrase_cubit.g.dart';
 
 part 'onboarding_verify_phrase_state.dart';
 
 class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
   OnBoardingVerifyPhraseCubit({
-    required this.secureStorageProvider,
     required this.keyGenerator,
     required this.didKitProvider,
     required this.homeCubit,
@@ -29,7 +26,6 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     required this.profileCubit,
   }) : super(OnBoardingVerifyPhraseState());
 
-  final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;
   final DIDKitProvider didKitProvider;
 
@@ -125,7 +121,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
           profileCubit: profileCubit,
         );
       }
-      await secureStorageProvider.set(
+      await profileCubit.secureStorageProvider.set(
         SecureStorageKeys.hasVerifiedMnemonics,
         'yes',
       );
