@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/pin_code/pin_code.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DeleteButton extends StatelessWidget {
@@ -22,12 +22,12 @@ class DeleteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final PinCodeViewCubit pinCodeViewCubit = context.read<PinCodeViewCubit>();
     final passCode = pinCodeViewCubit.state.enteredPasscode;
-    return CupertinoButton(
+    return TextButton(
       onPressed: () => context
           .read<PinCodeViewCubit>()
           .onDeleteCancelButtonPressed(cancelCallback),
       child: Container(
-        margin: keyboardUIConfig.digitInnerMargin,
+        // margin: keyboardUIConfig.digitInnerMargin,
         child: passCode.isEmpty ? cancelButton : deleteButton,
       ),
     );
