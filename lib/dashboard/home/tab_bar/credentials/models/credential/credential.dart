@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'credential.g.dart';
 
@@ -50,7 +51,7 @@ class Credential {
       [Evidence.emptyEvidence()],
     );
   }
-
+  @JsonKey(fromJson: fromJsonId)
   final String id;
   @JsonKey(name: '@context')
   final List<dynamic>? context;
@@ -145,6 +146,14 @@ class Credential {
       return Credential.fromJson(data);
     } catch (e) {
       return Credential.dummy();
+    }
+  }
+
+  static String fromJsonId(dynamic json) {
+    if (json == null || json == '') {
+      return const Uuid().v4();
+    } else {
+      return json.toString();
     }
   }
 }
