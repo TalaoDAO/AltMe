@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/helpers.dart';
 
@@ -71,7 +72,7 @@ void main() {
       expect(controllers[1].text, '1');
       expect(
           FocusScope.of(tester.element(find.byType(TextField).at(1))).hasFocus,
-          true,);
+          true);
     });
 
     testWidgets('onTap moves cursor to end of text', (tester) async {
@@ -90,7 +91,7 @@ void main() {
       expect(
         controllers[0].selection,
         TextSelection.fromPosition(
-            TextPosition(offset: controllers[0].text.length),),
+            TextPosition(offset: controllers[0].text.length)),
       );
     });
   });

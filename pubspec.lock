@@ -779,10 +779,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_saver
-      sha256: bdebc720e17b3e01aba59da69b6d47020a7e5ba7d5c75bd9194f9618d5f16ef4
+      sha256: d375b351e3331663abbaf99747abd72f159260c58fbbdbca9f926f02c01bdc48
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.12"
+    version: "0.2.13"
   file_selector_linux:
     dependency: transitive
     description:
@@ -1005,10 +1005,17 @@ packages:
     dependency: transitive
     description:
       name: flutter_secure_storage
+<<<<<<< HEAD
       sha256: "165164745e6afb5c0e3e3fcc72a012fb9e58496fb26ffb92cf22e16a821e85d0"
       url: "https://pub.dev"
     source: hosted
     version: "9.2.2"
+=======
+      sha256: ffdbb60130e4665d2af814a0267c481bcf522c41ae2e43caf69fa0146876d685
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.0.0"
+>>>>>>> october
   flutter_secure_storage_linux:
     dependency: transitive
     description:
@@ -1373,26 +1380,47 @@ packages:
     dependency: transitive
     description:
       name: leak_tracker
+<<<<<<< HEAD
       sha256: "7f0df31977cb2c0b88585095d168e689669a2cc9b97c309665e3386f3e9d341a"
       url: "https://pub.dev"
     source: hosted
     version: "10.0.4"
+=======
+      sha256: "78eb209deea09858f5269f5a5b02be4049535f568c07b275096836f01ea323fa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.0.0"
+>>>>>>> october
   leak_tracker_flutter_testing:
     dependency: transitive
     description:
       name: leak_tracker_flutter_testing
+<<<<<<< HEAD
       sha256: "06e98f569d004c1315b991ded39924b21af84cf14cc94791b8aea337d25b57f8"
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+=======
+      sha256: b46c5e37c19120a8a01918cfaf293547f47269f7cb4b0058f21531c2465d6ef0
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
+>>>>>>> october
   leak_tracker_testing:
     dependency: transitive
     description:
       name: leak_tracker_testing
+<<<<<<< HEAD
       sha256: "6ba465d5d76e67ddf503e1161d1f4a6bc42306f9d66ca1e8f079a47290fb06d3"
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+=======
+      sha256: a597f72a664dbd293f3bfc51f9ba69816f84dcd403cdac7066cb3f6003f3ab47
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
+>>>>>>> october
   linkify:
     dependency: transitive
     description:
@@ -1517,10 +1545,17 @@ packages:
     dependency: transitive
     description:
       name: meta
+<<<<<<< HEAD
       sha256: "7687075e408b093f36e6bbf6c91878cc0d4cd10f409506f7bc996f68220b9136"
       url: "https://pub.dev"
     source: hosted
     version: "1.12.0"
+=======
+      sha256: d584fa6707a52763a52446f02cc621b077888fb63b93bbcb1143a7be5a0c0c04
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.11.0"
+>>>>>>> october
   mime:
     dependency: "direct main"
     description:
@@ -1940,10 +1975,10 @@ packages:
     dependency: transitive
     description:
       name: pubspec_parse
-      sha256: c63b2876e58e194e4b0828fcb080ad0e06d051cb607a6be51a9e084f47cb9367
+      sha256: c799b721d79eb6ee6fa56f00c04b472dcd44a30d258fac2174a6ec57302678f8
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.3"
+    version: "1.3.0"
   qr:
     dependency: transitive
     description:
@@ -2012,10 +2047,17 @@ packages:
     dependency: "direct main"
     description:
       name: screenshot
+<<<<<<< HEAD
       sha256: "63817697a7835e6ce82add4228e15d233b74d42975c143ad8cfe07009fab866b"
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+=======
+      sha256: d448f43130f49bc7eead1b267b3ea0291cb2450f037bb0a0ecce7aa4c65e2aee
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.0"
+>>>>>>> october
   scroll_to_index:
     dependency: transitive
     description:
@@ -2609,18 +2651,25 @@ packages:
     dependency: "direct main"
     description:
       name: webview_flutter
-      sha256: "25e1b6e839e8cbfbd708abc6f85ed09d1727e24e08e08c6b8590d7c65c9a8932"
+      sha256: "6869c8786d179f929144b4a1f86e09ac0eddfe475984951ea6c634774c16b522"
       url: "https://pub.dev"
     source: hosted
-    version: "4.7.0"
+    version: "4.8.0"
   webview_flutter_android:
     dependency: "direct main"
     description:
       name: webview_flutter_android
+<<<<<<< HEAD
       sha256: "2282ba2320af34b2bd5320156c664d73f3f022341ed78847bc87723bf88c142f"
       url: "https://pub.dev"
     source: hosted
     version: "3.16.2"
+=======
+      sha256: "0d21cfc3bfdd2e30ab2ebeced66512b91134b39e72e97b43db2d47dda1c4e53a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.16.3"
+>>>>>>> october
   webview_flutter_platform_interface:
     dependency: transitive
     description:
@@ -2641,10 +2690,17 @@ packages:
     dependency: transitive
     description:
       name: win32
+<<<<<<< HEAD
       sha256: a79dbe579cb51ecd6d30b17e0cae4e0ea15e2c0e66f69ad4198f22a6789e94f4
       url: "https://pub.dev"
     source: hosted
     version: "5.5.1"
+=======
+      sha256: "0eaf06e3446824099858367950a813472af675116bf63f008a4c2a75ae13e9cb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.5.0"
+>>>>>>> october
   win32_registry:
     dependency: transitive
     description:
@@ -2710,5 +2766,10 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
+<<<<<<< HEAD
   dart: ">=3.4.0 <4.0.0"
   flutter: ">=3.22.0"
+=======
+  dart: ">=3.3.0 <4.0.0"
+  flutter: ">=3.19.0"
+>>>>>>> october

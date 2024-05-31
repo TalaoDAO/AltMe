@@ -340,7 +340,7 @@ class ScanCubit extends Cubit<ScanState> {
       /// proof check to fail because of time difference on server
       final options = jsonEncode({
         'verificationMethod': kid,
-        'proofPurpose': 'assertionMethod',
+        'proofPurpose': 'authentication',
         'challenge': challenge,
         'domain': domain,
         'created': DateTime.now()
@@ -652,7 +652,7 @@ class ScanCubit extends Cubit<ScanState> {
           if (url.isNotEmpty) {
             await LaunchUrl.launch(
               url,
-              launchMode: LaunchMode.inAppWebView,
+              launchMode: LaunchMode.externalApplication,
             );
           }
         }
@@ -708,6 +708,9 @@ class ScanCubit extends Cubit<ScanState> {
       'definition_id': presentationDefinition.id,
     };
 
+    final vcFormatType = profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+
     final inputDescriptors = <Map<String, dynamic>>[];
 
     String? vcFormat;
@@ -742,8 +745,6 @@ class ScanCubit extends Cubit<ScanState> {
       }
     } else {
       if (clientMetaData == null) {
-        final vcFormatType = profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
         vcFormat = vcFormatType.vcValue;
         vpFormat = vcFormatType.vpValue;
       } else {
@@ -779,44 +780,48 @@ class ScanCubit extends Cubit<ScanState> {
           credentialList: [credentialsToBePresented[i]],
         );
 
-        final pathNested = {'id': inputDescriptor.id, 'format': vcFormat};
+        Map<String, dynamic>? pathNested;
+
+        if (vcFormatType != VCFormatType.vcSdJWT) {
+          pathNested = {
+            'id': inputDescriptor.id,
+            'format': vcFormat,
+          };
+        }
 
         if (credential.isNotEmpty) {
-          if (credentialsToBePresented.length == 1) {
-            if (vpFormat == 'ldp_vp') {
-              pathNested['path'] = r'$.verifiableCredential';
-            } else if (vpFormat == 'vc+sd-jwt') {
-              pathNested['path'] = r'$';
-            } else {
-              pathNested['path'] = r'$.vp.verifiableCredential[0]';
-            }
+          final Map<String, dynamic> descriptor = {
+            'id': inputDescriptor.id,
+            'format': vpFormat,
+            'path': r'$',
+          };
 
-            inputDescriptors.add({
-              'id': inputDescriptor.id,
-              'format': vpFormat,
-              'path': r'$',
-              'path_nested': pathNested,
-            });
-          } else {
-            if (vpFormat == 'ldp_vp') {
-              pathNested['path'] =
-                  // ignore: prefer_interpolation_to_compose_strings
-                  r'$.verifiableCredential[' + i.toString() + ']';
-            } else if (vpFormat == 'vc+sd-jwt') {
-              pathNested['path'] = r'$';
+          if (vcFormatType != VCFormatType.vcSdJWT && pathNested != null) {
+            if (credentialsToBePresented.length == 1) {
+              if (vpFormat == 'ldp_vp') {
+                pathNested['path'] = r'$.verifiableCredential';
+              } else if (vpFormat == 'vc+sd-jwt') {
+                pathNested['path'] = r'$';
+              } else {
+                pathNested['path'] = r'$.vp.verifiableCredential[0]';
+              }
             } else {
-              pathNested['path'] =
-                  // ignore: prefer_interpolation_to_compose_strings
-                  r'$.vp.verifiableCredential[' + i.toString() + ']';
+              if (vpFormat == 'ldp_vp') {
+                pathNested['path'] =
+                    // ignore: prefer_interpolation_to_compose_strings
+                    r'$.verifiableCredential[' + i.toString() + ']';
+              } else if (vpFormat == 'vc+sd-jwt') {
+                pathNested['path'] = r'$';
+              } else {
+                pathNested['path'] =
+                    // ignore: prefer_interpolation_to_compose_strings
+                    r'$.vp.verifiableCredential[' + i.toString() + ']';
+              }
             }
-
-            inputDescriptors.add({
-              'id': inputDescriptor.id,
-              'format': vpFormat,
-              'path': r'$',
-              'path_nested': pathNested,
-            });
+            descriptor['path_nested'] = pathNested;
           }
+
+          inputDescriptors.add(descriptor);
         }
       }
     }
@@ -875,7 +880,7 @@ class ScanCubit extends Cubit<ScanState> {
       /// proof check to fail because of time difference on server
       final options = jsonEncode({
         'verificationMethod': kid,
-        'proofPurpose': 'assertionMethod',
+        'proofPurpose': 'authentication',
         'challenge': nonce,
         'domain': clientId,
         'created': DateTime.now()

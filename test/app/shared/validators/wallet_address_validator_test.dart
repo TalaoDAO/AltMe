@@ -22,8 +22,8 @@ void main() {
     test('returns true for valid Ethereum address', () {
       expect(
           validator.validateWalletAddress(
-              '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',),
-          isTrue,);
+              '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'),
+          isTrue);
     });
 
     test('returns false for invalid Ethereum address', () {
@@ -34,7 +34,7 @@ void main() {
       expect(
           validator
               .validateWalletAddress('tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb'),
-          isTrue,);
+          isTrue);
     });
 
     test('returns false for invalid Tezos address', () {

@@ -5,7 +5,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
-import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
+import 'package:altme/selective_disclosure/widget/inject_selective_disclosure_state.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -115,8 +115,8 @@ class _SelectiveDisclosurePickViewState
           );
         }
       },
-      child: BlocBuilder<SelectiveDisclosureCubit, SelectiveDisclosureState>(
-        builder: (context, state) {
+      child: Builder(
+        builder: (BuildContext context) {
           final profileSetting =
               context.read<ProfileCubit>().state.model.profileSetting;
 
@@ -143,10 +143,8 @@ class _SelectiveDisclosurePickViewState
                     isDiscover: false,
                   ),
                 const SizedBox(height: 20),
-                DisplaySelectiveDisclosure(
+                ConsumeSelectiveDisclosureCubit(
                   credentialModel: widget.credentialToBePresented,
-                  claims: null,
-                  selectiveDisclosureState: state,
                   onPressed: (claimKey, claimKeyId, threeDotValue) {
                     context.read<SelectiveDisclosureCubit>().disclosureAction(
                           claimsKey: claimKey,
@@ -164,13 +162,18 @@ class _SelectiveDisclosurePickViewState
                 padding: const EdgeInsets.all(16),
                 child: Tooltip(
                   message: l10n.credentialPickPresent,
-                  child: MyGradientButton(
-                    onPressed: () => present(
-                      context: context,
-                      selectedSDIndexInJWT: state.selectedSDIndexInJWT,
-                      uri: widget.uri,
-                    ),
-                    text: l10n.credentialPickPresent,
+                  child: BlocBuilder<SelectiveDisclosureCubit,
+                      SelectiveDisclosureState>(
+                    builder: (context, state) {
+                      return MyGradientButton(
+                        onPressed: () => present(
+                          context: context,
+                          selectedSDIndexInJWT: state.selectedSDIndexInJWT,
+                          uri: widget.uri,
+                        ),
+                        text: l10n.credentialPickPresent,
+                      );
+                    },
                   ),
                 ),
               ),
@@ -218,10 +221,8 @@ class _SelectiveDisclosurePickViewState
     if (encryptedValues != null) {
       var newJwt = '${encryptedValues[0]}~';
 
-      encryptedValues.removeAt(0);
-
       for (final index in selectedSDIndexInJWT) {
-        newJwt = '$newJwt${encryptedValues[index]}~';
+        newJwt = '$newJwt${encryptedValues[index + 1]}~';
       }
 
       // Key Binding JWT

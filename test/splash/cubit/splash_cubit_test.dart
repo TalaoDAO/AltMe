@@ -68,8 +68,6 @@ class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
   final state = ProfileState(model: ProfileModel.empty());
 }
 
-class MockTimer extends Mock implements Timer {}
-
 void main() {
   late SecureStorageProvider mockSecureStorage;
   late HomeCubit homeCubit;

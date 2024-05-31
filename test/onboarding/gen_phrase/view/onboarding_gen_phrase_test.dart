@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -11,7 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:mockingjay/mockingjay.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 import '../../../helpers/helpers.dart';
 
@@ -65,7 +65,6 @@ class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
 }
 
 void main() {
-  late SecureStorageProvider mockSecureStorage;
   late DIDKitProvider didKitProvider;
   late KeyGenerator keyGenerator;
   late HomeCubit homeCubit;
@@ -73,6 +72,7 @@ void main() {
   late SplashCubit splashCubit;
   late AltmeChatSupportCubit altmeChatSupportCubit;
   late ProfileCubit profileCubit;
+  late OnboardingCubit onboardingCubit;
 
   setUpAll(() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -83,6 +83,7 @@ void main() {
     walletCubit = MockWalletCubit();
     altmeChatSupportCubit = MockAltmeChatSupportCubit();
     profileCubit = MockProfileCubit();
+    onboardingCubit = OnboardingCubit();
   });
 
   group('OnBoarding GenPhrase Page', () {
@@ -199,19 +200,26 @@ void main() {
       ).called(1);
     });
 
-    // testWidgets('Verify Later button triggers onboarding processing',
-    //     (WidgetTester tester) async {
-    //   await tester.pumpApp(
-    //     BlocProvider.value(
-    //       value: onBoardingGenPhraseCubit,
-    //       child: const OnBoardingGenPhraseView(),
-    //     ),
-    //   );
-    //   await tester.tap(find.text('Verify Later'.toUpperCase()));
-    //   await tester.pumpAndSettle();
+    testWidgets('Verify Later button triggers onboarding processing',
+        (WidgetTester tester) async {
+      await tester.pumpApp(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: onboardingCubit,
+            ),
+            BlocProvider.value(
+              value: onBoardingGenPhraseCubit,
+            ),
+          ],
+          child: const OnBoardingGenPhraseView(),
+        ),
+      );
+      await tester.tap(find.text('Verify Later'.toUpperCase()));
 
-    //   // verify(() => onBoardingGenPhraseCubit.generateSSIAndCryptoAccount(any()))
-    //   //     .called(1);
-    // });
+      // Verify the real Cubit method call
+      expect(onBoardingGenPhraseCubit.state.message, isNotNull);
+      expect(onboardingCubit.state.status, AppStatus.loading);
+    });
   });
 }

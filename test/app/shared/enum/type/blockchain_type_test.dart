@@ -34,28 +34,18 @@ void main() {
     test('BlockchainType chain returns correct value', () {
       expect(() => BlockchainType.tezos.chain, throwsA(isA<ResponseMessage>()));
       expect(
-        BlockchainType.ethereum.chain,
-        equals('${Parameters.NAMESPACE}:1'),
-      );
+          BlockchainType.ethereum.chain, equals('${Parameters.NAMESPACE}:1'));
       expect(
-        BlockchainType.fantom.chain,
-        equals('${Parameters.NAMESPACE}:250'),
-      );
+          BlockchainType.fantom.chain, equals('${Parameters.NAMESPACE}:250'));
       expect(
-        BlockchainType.polygon.chain,
-        equals('${Parameters.NAMESPACE}:137'),
-      );
+          BlockchainType.polygon.chain, equals('${Parameters.NAMESPACE}:137'));
       expect(
-        BlockchainType.binance.chain,
-        equals('${Parameters.NAMESPACE}:56'),
-      );
+          BlockchainType.binance.chain, equals('${Parameters.NAMESPACE}:56'));
     });
 
     test('BlockchainType chainId returns correct value', () {
       expect(
-        () => BlockchainType.tezos.chainId,
-        throwsA(isA<ResponseMessage>()),
-      );
+          () => BlockchainType.tezos.chainId, throwsA(isA<ResponseMessage>()));
       expect(BlockchainType.ethereum.chainId, equals(1));
       expect(BlockchainType.fantom.chainId, equals(250));
       expect(BlockchainType.polygon.chainId, equals(137));
@@ -63,171 +53,93 @@ void main() {
     });
 
     test('BlockchainType derivePathIndexKey returns correct value', () {
-      expect(
-        BlockchainType.tezos.derivePathIndexKey,
-        equals(SecureStorageKeys.tezosDerivePathIndex),
-      );
-      expect(
-        BlockchainType.ethereum.derivePathIndexKey,
-        equals(SecureStorageKeys.ethereumDerivePathIndex),
-      );
-      expect(
-        BlockchainType.fantom.derivePathIndexKey,
-        equals(SecureStorageKeys.fantomDerivePathIndex),
-      );
-      expect(
-        BlockchainType.polygon.derivePathIndexKey,
-        equals(SecureStorageKeys.polygonDerivePathIndex),
-      );
-      expect(
-        BlockchainType.binance.derivePathIndexKey,
-        equals(SecureStorageKeys.binanceDerivePathIndex),
-      );
+      expect(BlockchainType.tezos.derivePathIndexKey,
+          equals(SecureStorageKeys.tezosDerivePathIndex));
+      expect(BlockchainType.ethereum.derivePathIndexKey,
+          equals(SecureStorageKeys.ethereumDerivePathIndex));
+      expect(BlockchainType.fantom.derivePathIndexKey,
+          equals(SecureStorageKeys.fantomDerivePathIndex));
+      expect(BlockchainType.polygon.derivePathIndexKey,
+          equals(SecureStorageKeys.polygonDerivePathIndex));
+      expect(BlockchainType.binance.derivePathIndexKey,
+          equals(SecureStorageKeys.binanceDerivePathIndex));
     });
 
     test('BlockchainType credentialManifest returns correct value', () {
       expect(
-        jsonEncode(BlockchainType.tezos.credentialManifest),
-        equals(
-          jsonEncode(
-            CredentialManifest.fromJson(
-              ConstantsJson.tezosAssociatedAddressCredentialManifestJson,
-            ),
-          ),
-        ),
-      );
+          jsonEncode(BlockchainType.tezos.credentialManifest),
+          equals(jsonEncode(CredentialManifest.fromJson(
+              ConstantsJson.tezosAssociatedAddressCredentialManifestJson))));
       expect(
-        jsonEncode(BlockchainType.ethereum.credentialManifest),
-        equals(
-          jsonEncode(
-            CredentialManifest.fromJson(
-              ConstantsJson.ethereumAssociatedAddressCredentialManifestJson,
-            ),
-          ),
-        ),
-      );
+          jsonEncode(BlockchainType.ethereum.credentialManifest),
+          equals(jsonEncode(CredentialManifest.fromJson(
+              ConstantsJson.ethereumAssociatedAddressCredentialManifestJson))));
       expect(
-        jsonEncode(BlockchainType.fantom.credentialManifest),
-        equals(
-          jsonEncode(
-            CredentialManifest.fromJson(
-              ConstantsJson.fantomAssociatedAddressCredentialManifestJson,
-            ),
-          ),
-        ),
-      );
+          jsonEncode(BlockchainType.fantom.credentialManifest),
+          equals(jsonEncode(CredentialManifest.fromJson(
+              ConstantsJson.fantomAssociatedAddressCredentialManifestJson))));
       expect(
-        jsonEncode(BlockchainType.polygon.credentialManifest),
-        equals(
-          jsonEncode(
-            CredentialManifest.fromJson(
-              ConstantsJson.polygonAssociatedAddressCredentialManifestJson,
-            ),
-          ),
-        ),
-      );
+          jsonEncode(BlockchainType.polygon.credentialManifest),
+          equals(jsonEncode(CredentialManifest.fromJson(
+              ConstantsJson.polygonAssociatedAddressCredentialManifestJson))));
       expect(
-        jsonEncode(BlockchainType.binance.credentialManifest),
-        equals(
-          jsonEncode(
-            CredentialManifest.fromJson(
-              ConstantsJson.binanceAssociatedAddressCredentialManifestJson,
-            ),
-          ),
-        ),
-      );
+          jsonEncode(BlockchainType.binance.credentialManifest),
+          equals(jsonEncode(CredentialManifest.fromJson(
+              ConstantsJson.binanceAssociatedAddressCredentialManifestJson))));
     });
 
     test('BlockchainType filter returns correct value', () {
       expect(
-        jsonEncode(BlockchainType.tezos.filter.toJson()),
-        equals(
-          jsonEncode(
-            Filter(type: 'String', pattern: 'TezosAssociatedAddress').toJson(),
-          ),
-        ),
-      );
+          jsonEncode(BlockchainType.tezos.filter.toJson()),
+          equals(jsonEncode(
+              Filter(type: 'String', pattern: 'TezosAssociatedAddress')
+                  .toJson())));
       expect(
-        jsonEncode(BlockchainType.ethereum.filter.toJson()),
-        equals(
-          jsonEncode(
-            Filter(type: 'String', pattern: 'EthereumAssociatedAddress')
-                .toJson(),
-          ),
-        ),
-      );
+          jsonEncode(BlockchainType.ethereum.filter.toJson()),
+          equals(jsonEncode(
+              Filter(type: 'String', pattern: 'EthereumAssociatedAddress')
+                  .toJson())));
       expect(
-        jsonEncode(BlockchainType.fantom.filter.toJson()),
-        equals(
-          jsonEncode(
-            Filter(type: 'String', pattern: 'FantomAssociatedAddress').toJson(),
-          ),
-        ),
-      );
+          jsonEncode(BlockchainType.fantom.filter.toJson()),
+          equals(jsonEncode(
+              Filter(type: 'String', pattern: 'FantomAssociatedAddress')
+                  .toJson())));
       expect(
-        jsonEncode(BlockchainType.polygon.filter.toJson()),
-        equals(
-          jsonEncode(
-            Filter(type: 'String', pattern: 'PolygonAssociatedAddress')
-                .toJson(),
-          ),
-        ),
-      );
+          jsonEncode(BlockchainType.polygon.filter.toJson()),
+          equals(jsonEncode(
+              Filter(type: 'String', pattern: 'PolygonAssociatedAddress')
+                  .toJson())));
       expect(
-        jsonEncode(BlockchainType.binance.filter.toJson()),
-        equals(
-          jsonEncode(
-            Filter(type: 'String', pattern: 'BinanceAssociatedAddress')
-                .toJson(),
-          ),
-        ),
-      );
+          jsonEncode(BlockchainType.binance.filter.toJson()),
+          equals(jsonEncode(
+              Filter(type: 'String', pattern: 'BinanceAssociatedAddress')
+                  .toJson())));
     });
 
     test('BlockchainType connectionBridge returns correct value', () {
-      expect(
-        BlockchainType.tezos.connectionBridge,
-        equals(ConnectionBridgeType.beacon),
-      );
-      expect(
-        BlockchainType.ethereum.connectionBridge,
-        equals(ConnectionBridgeType.walletconnect),
-      );
-      expect(
-        BlockchainType.fantom.connectionBridge,
-        equals(ConnectionBridgeType.walletconnect),
-      );
-      expect(
-        BlockchainType.polygon.connectionBridge,
-        equals(ConnectionBridgeType.walletconnect),
-      );
-      expect(
-        BlockchainType.binance.connectionBridge,
-        equals(ConnectionBridgeType.walletconnect),
-      );
+      expect(BlockchainType.tezos.connectionBridge,
+          equals(ConnectionBridgeType.beacon));
+      expect(BlockchainType.ethereum.connectionBridge,
+          equals(ConnectionBridgeType.walletconnect));
+      expect(BlockchainType.fantom.connectionBridge,
+          equals(ConnectionBridgeType.walletconnect));
+      expect(BlockchainType.polygon.connectionBridge,
+          equals(ConnectionBridgeType.walletconnect));
+      expect(BlockchainType.binance.connectionBridge,
+          equals(ConnectionBridgeType.walletconnect));
     });
 
     test('BlockchainType networks returns correct value', () {
-      expect(
-        BlockchainType.tezos.networks,
-        equals([TezosNetwork.mainNet(), TezosNetwork.ghostnet()]),
-      );
-      expect(
-        BlockchainType.ethereum.networks,
-        equals([EthereumNetwork.mainNet(), EthereumNetwork.testNet()]),
-      );
-      expect(
-        BlockchainType.fantom.networks,
-        equals([FantomNetwork.mainNet(), FantomNetwork.testNet()]),
-      );
-      expect(
-        BlockchainType.polygon.networks,
-        equals([PolygonNetwork.mainNet(), PolygonNetwork.testNet()]),
-      );
-      expect(
-        BlockchainType.binance.networks,
-        equals([BinanceNetwork.mainNet(), BinanceNetwork.testNet()]),
-      );
+      expect(BlockchainType.tezos.networks,
+          equals([TezosNetwork.mainNet(), TezosNetwork.ghostnet()]));
+      expect(BlockchainType.ethereum.networks,
+          equals([EthereumNetwork.mainNet(), EthereumNetwork.testNet()]));
+      expect(BlockchainType.fantom.networks,
+          equals([FantomNetwork.mainNet(), FantomNetwork.testNet()]));
+      expect(BlockchainType.polygon.networks,
+          equals([PolygonNetwork.mainNet(), PolygonNetwork.testNet()]));
+      expect(BlockchainType.binance.networks,
+          equals([BinanceNetwork.mainNet(), BinanceNetwork.testNet()]));
     });
 
     test('BlockchainType isDisabled returns correct value', () {

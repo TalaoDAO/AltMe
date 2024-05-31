@@ -1,15 +1,15 @@
 import 'package:altme/app/app.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('StringExtension', () {
     test('formatNumber formats numbers correctly', () {
-      expect('1000'.formatNumber, equals('1,000'));
-      expect('123456789'.formatNumber, equals('123,456,789'));
-      expect('12345.6789'.formatNumber, equals('12,345.6789'));
-      expect('0.12345'.formatNumber, equals('0.12345'));
-      expect('123'.formatNumber, equals('123'));
-      expect('abc'.formatNumber, equals('abc'));
+      expect('1000'.formatNumber, '1,000');
+      expect('123456789'.formatNumber, '123,456,789');
+      expect('12345.6789'.formatNumber, '12,345.6789');
+      expect('0.12345'.formatNumber, '0.12345');
+      expect('123'.formatNumber, '123');
+      expect('abc'.formatNumber, 'abc');
     });
 
     test('isValidEmail validates email addresses', () {

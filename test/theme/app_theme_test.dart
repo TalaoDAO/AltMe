@@ -36,11 +36,9 @@ void main() {
     expect(colorScheme.onOutlineButton, const Color(0xFF6600FF));
     expect(colorScheme.onElevatedButton, equals(Colors.white));
     expect(colorScheme.appBarUpperLayer, const Color(0xff25095B));
-    expect(colorScheme.appBarLowerLayer, equals(colorScheme.surface));
-    expect(
-      colorScheme.surfaceContainer,
-      equals(const Color(0xff707070).withOpacity(0.07)),
-    );
+    expect(colorScheme.appBarLowerLayer, equals(colorScheme.background));
+    expect(colorScheme.surfaceContainer,
+        equals(const Color(0xff707070).withOpacity(0.07)));
     expect(colorScheme.drawerSurface, const Color(0xff232630));
     expect(colorScheme.label, equals(Colors.white));
     expect(colorScheme.unSelectedLabel, const Color(0xff86809D));
@@ -48,10 +46,8 @@ void main() {
     expect(colorScheme.selectedBottomBar, equals(colorScheme.surface));
     expect(colorScheme.drawerBackground, const Color(0xff0B0514));
     expect(colorScheme.borderColor, const Color(0xFFDDCEF4));
-    expect(
-      colorScheme.defualtDialogCancelButtonBorderColor,
-      const Color(0xFFFFFFFF).withOpacity(0.2),
-    );
+    expect(colorScheme.defualtDialogCancelButtonBorderColor,
+        const Color(0xFFFFFFFF).withOpacity(0.2));
     expect(colorScheme.markDownH1, equals(Colors.white));
     expect(colorScheme.markDownH2, equals(Colors.white));
     expect(colorScheme.markDownP, const Color(0xFFD1CCE3));
@@ -60,10 +56,8 @@ void main() {
     expect(colorScheme.subtitle2, const Color(0xFF8B8C92));
     expect(colorScheme.profileDummy, const Color(0xFF212121));
     expect(colorScheme.documentShadow, const Color(0xFF424242));
-    expect(
-      colorScheme.documentShape,
-      equals(const Color(0xff3700b3).withOpacity(0.05)),
-    );
+    expect(colorScheme.documentShape,
+        equals(const Color(0xff3700b3).withOpacity(0.05)));
     expect(colorScheme.star, const Color(0xFFFFB83D));
     expect(colorScheme.genderIcon, const Color(0xFF212121));
     expect(colorScheme.activeCredential, equals(Colors.green));
@@ -75,18 +69,14 @@ void main() {
     expect(colorScheme.alertInfoMessage, equals(Colors.cyan));
     expect(colorScheme.alertSuccessMessage, equals(Colors.green));
     expect(colorScheme.qrScanBackground, const Color(0xff2B1C48));
-    expect(
-      colorScheme.qrScanInnerShadow,
-      const Color(0xff000000).withOpacity(0.16),
-    );
+    expect(colorScheme.qrScanInnerShadow,
+        const Color(0xff000000).withOpacity(0.16));
     expect(colorScheme.qrScanOuterShadow, const Color(0xff430F91));
     expect(colorScheme.dialogText, const Color(0xffF5F5F5));
     expect(colorScheme.tabBarNotSelected, const Color(0xFF280164));
     expect(colorScheme.credentialBackground, const Color(0xFF211F33));
-    expect(
-      colorScheme.cryptoAccountNotSelected,
-      equals(Colors.grey.withOpacity(0.15)),
-    );
+    expect(colorScheme.cryptoAccountNotSelected,
+        equals(Colors.grey.withOpacity(0.15)));
     expect(colorScheme.startButtonColorA, const Color(0xff18ACFF));
     expect(colorScheme.startButtonColorB, const Color(0xff6600FF));
     expect(colorScheme.associatedWalletBorder, const Color(0xff524B67));
@@ -147,9 +137,7 @@ void main() {
     expect(textTheme.customListTileTitleStyle.fontWeight, FontWeight.w800);
 
     expect(
-      textTheme.customListTileSubTitleStyle.color,
-      const Color(0xFF86809D),
-    );
+        textTheme.customListTileSubTitleStyle.color, const Color(0xFF86809D));
     expect(textTheme.customListTileSubTitleStyle.fontSize, 16);
     expect(textTheme.customListTileSubTitleStyle.fontWeight, FontWeight.w400);
 
@@ -322,9 +310,7 @@ void main() {
     );
     expect(textTheme.learningAchievementDescription.fontSize, 12);
     expect(
-      textTheme.learningAchievementDescription.fontWeight,
-      FontWeight.w400,
-    );
+        textTheme.learningAchievementDescription.fontWeight, FontWeight.w400);
 
     expect(textTheme.credentialIssuer.color, const Color(0xff212121));
     expect(textTheme.credentialIssuer.fontSize, 13);
@@ -387,25 +373,17 @@ void main() {
     expect(textTheme.tezosAssociatedAddressData.fontSize, 17);
     expect(textTheme.tezosAssociatedAddressData.fontWeight, FontWeight.normal);
 
-    expect(
-      textTheme.tezosAssociatedAddressTitleCard.color,
-      const Color(0xffFAFDFF),
-    );
+    expect(textTheme.tezosAssociatedAddressTitleCard.color,
+        const Color(0xffFAFDFF));
     expect(textTheme.tezosAssociatedAddressTitleCard.fontSize, 20);
     expect(
-      textTheme.tezosAssociatedAddressTitleCard.fontWeight,
-      FontWeight.w700,
-    );
+        textTheme.tezosAssociatedAddressTitleCard.fontWeight, FontWeight.w700);
 
     expect(
-      textTheme.credentialStudentCardTextCard.color,
-      const Color(0xffffffff),
-    );
+        textTheme.credentialStudentCardTextCard.color, const Color(0xffffffff));
     expect(textTheme.credentialStudentCardTextCard.fontSize, 14);
     expect(
-      textTheme.credentialStudentCardTextCard.fontWeight,
-      FontWeight.normal,
-    );
+        textTheme.credentialStudentCardTextCard.fontWeight, FontWeight.normal);
 
     expect(textTheme.over18.color, const Color(0xffffffff));
     expect(textTheme.over18.fontSize, 20);
@@ -568,9 +546,7 @@ void main() {
     expect(textTheme.credentialManifestTitle1.fontWeight, FontWeight.w700);
 
     expect(
-      textTheme.credentialManifestDescription.color,
-      const Color(0xffFFFFFF),
-    );
+        textTheme.credentialManifestDescription.color, const Color(0xffFFFFFF));
     expect(textTheme.credentialManifestDescription.fontSize, 16);
     expect(textTheme.credentialManifestDescription.fontWeight, FontWeight.w400);
 

@@ -129,6 +129,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                 }
 
                 bool? disable;
+                bool selected = false;
 
                 if (selectiveDisclosureState != null) {
                   final limitDisclosure =
@@ -143,12 +144,42 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                         filters.forEach((key, value) {
                           if (claims.threeDotValue != null) {
                             if (claimKey.contains(key) &&
-                                claims.data.replaceAll(' ', '') == value) {
+                                claims.data.replaceAll(' ', '') ==
+                                    value['element']) {
                               disable = false;
+                              selected = value['optional'] as bool;
+                              if (!selectiveDisclosureState!
+                                      .selectedClaimsKeyIds
+                                      .contains(keyToCheck) &&
+                                  selected == true) {
+                                context
+                                    .read<SelectiveDisclosureCubit>()
+                                    .disclosureAction(
+                                      claimsKey: key,
+                                      credentialModel: credentialModel,
+                                      threeDotValue: claims.threeDotValue,
+                                      claimKeyId: claimKey,
+                                    );
+                              }
                             }
                           } else {
-                            if (claimKey == key && claims.data == value) {
+                            if (claimKey == key &&
+                                claims.data == value['element']) {
                               disable = false;
+                              selected = !(value['optional'] as bool);
+                              if (!selectiveDisclosureState!
+                                      .selectedClaimsKeyIds
+                                      .contains(keyToCheck) &&
+                                  selected == true) {
+                                context
+                                    .read<SelectiveDisclosureCubit>()
+                                    .disclosureAction(
+                                      claimsKey: key,
+                                      credentialModel: credentialModel,
+                                      threeDotValue: claims.threeDotValue,
+                                      claimKeyId: claimKey,
+                                    );
+                              }
                             }
                           }
                         });
@@ -159,7 +190,9 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
 
                 return TransparentInkWell(
                   onTap: () {
-                    if (disable != null && disable!) return;
+                    if ((disable != null && disable!) || selected == true) {
+                      return;
+                    }
 
                     onPressed?.call(key, claimKey, claims.threeDotValue);
                   },

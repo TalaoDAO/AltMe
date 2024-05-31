@@ -48,6 +48,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         altmeChatSupportCubit: altmeChatSupportCubit,
         profileCubit: profileCubit,
       );
+
       await profileCubit.secureStorageProvider.set(
         SecureStorageKeys.hasVerifiedMnemonics,
         'no',

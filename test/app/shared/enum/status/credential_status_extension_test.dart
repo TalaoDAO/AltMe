@@ -12,7 +12,7 @@ void main() {
       expect(CredentialStatus.unknown.icon, Icons.circle_outlined);
       expect(CredentialStatus.invalidSignature.icon, Icons.circle_outlined);
       expect(CredentialStatus.statusListInvalidSignature.icon,
-          Icons.circle_outlined,);
+          Icons.circle_outlined);
       expect(CredentialStatus.noStatus.icon, Icons.circle_outlined);
     });
   });

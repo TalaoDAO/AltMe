@@ -63,7 +63,7 @@ List<CredentialModel> getCredentialsFromFilterList({
         }
       }
     }
-    return selectedCredential;
+    return selectedCredential.toSet().toList();
   }
   return credentialList;
 }

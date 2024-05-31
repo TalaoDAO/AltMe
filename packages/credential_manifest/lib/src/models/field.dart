@@ -15,6 +15,13 @@ class Field {
 
   final List<String> path;
   final Filter? filter;
+
+  // The fields object MAY contain an optional property.
+  // The value of this property MUST be a boolean, wherein true indicates
+  // the field is optional, and false or non-presence of the property indicates
+  // the field is required. Even when the optional property is present,
+  // the value located at the indicated path of the field MUST validate against
+  // the JSON Schema filter, if a filter is present.
   @JsonKey(defaultValue: false)
   final bool optional;
 

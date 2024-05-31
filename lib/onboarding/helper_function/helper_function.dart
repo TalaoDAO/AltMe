@@ -35,9 +35,6 @@ Future<void> generateAccount({
   /// create profile
   await profileCubit.load();
 
-  /// what's new popup disabled
-  splashCubit.disableWhatsNewPopUp();
-
   /// crypto wallet
   await walletCubit.createCryptoWallet(
     mnemonicOrKey: mnemonicFormatted,

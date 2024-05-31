@@ -42,7 +42,10 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
             final searchList = getTextsFromCredential(path, credentialData);
             for (final element in searchList) {
               final key = path.split('.').toList().last;
-              json[key] = element;
+              json[key] = {
+                'element': element,
+                'optional': field.optional,
+              };
             }
           }
         }
@@ -81,27 +84,20 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     int? index;
 
     if (threeDotValue != null) {
-      for (final element
-          in selectiveDisclosure.disclosureToContent.entries.toList()) {
-        final sh256Hash = oidc4vc.sh256HashOfContent(element.value.toString());
-        if (sh256Hash == threeDotValue) {
-          final disclosure = element.key.replaceAll('=', '');
-
-          index = selectiveDisclosure.disclosureFromJWT
-              .indexWhere((element) => element == disclosure);
-        }
-      }
+      index = selectiveDisclosure.disclosureFromJWT
+          .indexWhere((entry) => entry == threeDotValue);
     } else if (claimsKey != null) {
-      index = selectiveDisclosure.extractedValuesFromJwt.entries
-          .toList()
-          .indexWhere((entry) => entry.key == claimsKey);
+      index =
+          selectiveDisclosure.disclosureToContent.entries.toList().indexWhere(
+                (entry) => entry.value.toString().contains(claimsKey),
+              );
     }
 
-    if (index == null) {
+    if (index == null || index == -1) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_request',
-          'error_description': 'Issue with the dislosuer of jwt.',
+          'error_description': 'Issue with the dislosure of jwt.',
         },
       );
     }

@@ -22,36 +22,46 @@ class WalletReadyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => WalletReadyCubit(),
-      child: const WalletReadyView(),
+      child: WalletReadyView(
+        profileCubit: context.read<ProfileCubit>(),
+        walletReadyCubit: context.read<WalletReadyCubit>(),
+        confettiController: ConfettiController(),
+      ),
     );
   }
 }
 
 class WalletReadyView extends StatefulWidget {
-  const WalletReadyView({super.key});
+  const WalletReadyView({
+    super.key,
+    required this.walletReadyCubit,
+    required this.profileCubit,
+    required this.confettiController,
+  });
+
+  final WalletReadyCubit walletReadyCubit;
+  final ProfileCubit profileCubit;
+  final ConfettiController confettiController;
 
   @override
   State<WalletReadyView> createState() => _WalletReadyViewState();
 }
 
 class _WalletReadyViewState extends State<WalletReadyView> {
-  late final ConfettiController confettiController;
-
   @override
   void initState() {
-    confettiController = ConfettiController();
-    Future<void>.delayed(Duration.zero).then((value) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<OnboardingCubit>().emitOnboardingDone();
-
-      confettiController.play();
+      widget.confettiController.play();
     });
+
     super.initState();
   }
 
   @override
   void dispose() {
-    confettiController.stop();
-    confettiController.dispose();
+    widget.confettiController.stop();
+    widget.confettiController.dispose();
     super.dispose();
   }
 
@@ -75,7 +85,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       WalletLogo(
-                        profileModel: context.read<ProfileCubit>().state.model,
+                        profileModel: widget.profileCubit.state.model,
                         height: 90,
                         width: MediaQuery.of(context).size.shortestSide * 0.5,
                         showPoweredBy: true,
@@ -134,9 +144,8 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                                     Radius.circular(6),
                                   ),
                                 ),
-                                onChanged: (newValue) => context
-                                    .read<WalletReadyCubit>()
-                                    .toggleAgreement(),
+                                onChanged: (newValue) =>
+                                    widget.walletReadyCubit.toggleAgreement(),
                               ),
                             ),
                             Expanded(
@@ -145,9 +154,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      context
-                                          .read<WalletReadyCubit>()
-                                          .toggleAgreement();
+                                      widget.walletReadyCubit.toggleAgreement();
                                     },
                                     child: MyText(
                                       l10n.iAgreeToThe,
@@ -210,7 +217,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                 ),
               ),
               ConfettiWidget(
-                confettiController: confettiController,
+                confettiController: widget.confettiController,
                 canvas: Size.infinite,
                 shouldLoop: true,
                 blastDirectionality: BlastDirectionality.explosive,

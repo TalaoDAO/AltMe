@@ -1501,12 +1501,11 @@ class OIDC4VC {
         ..setProtectedHeader('alg', tokenParameters.alg)
 
         // add a key to sign, can only add one for JWT
-        ..addRecipient(key, algorithm: tokenParameters.alg);
+        ..addRecipient(key, algorithm: tokenParameters.alg)
+        ..setProtectedHeader('typ', tokenParameters.mediaType.typ);
 
       if (!ignoreProofHeaderType) {
-        /// Proof Header Type is ignored for clientSecretJwt
-        //  also ignored for KB jwt
-        vpBuilder.setProtectedHeader('typ', tokenParameters.mediaType.typ);
+        /// Proof Header Type is ignored for KB jwt
 
         switch (tokenParameters.proofHeaderType) {
           case ProofHeaderType.kid:
@@ -1747,6 +1746,14 @@ class OIDC4VC {
     bool isCachingEnabled = false,
   }) async {
     try {
+      final secureStorageProvider = getSecureStorage;
+      final cachedData = await secureStorageProvider.get(uri);
+      // TODO(hawkbee): To be removed.
+      /// temporary solution to purge faulty stored data
+      /// Will be removed in the future
+      await secureStorageProvider.delete(uri);
+
+      /// end of temporary solution
       dynamic response;
 
       dio.options.headers = headers;
@@ -1771,17 +1778,17 @@ class OIDC4VC {
             return response;
           }
         }
-        final expiry =
-            DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
-
-        final value = {'expiry': expiry, 'data': response.data};
-        await secureStorageProvider.set(uri, jsonEncode(value));
-      } else {
-        response = await dio.get<dynamic>(uri);
       }
+      // temporary deactiviting this caching du to issue with
+      // flutter_secure_storage on ios #2657
+      // final expiry =
+      //     DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
+
+      // final value = {'expiry': expiry, 'data': response.data};
+      // await secureStorageProvider.set(uri, jsonEncode(value));
 
       return response.data;
-    } on FormatException catch (_) {
+    } on FormatException {
       throw Exception();
     } catch (e) {
       if (e is DioException) {
