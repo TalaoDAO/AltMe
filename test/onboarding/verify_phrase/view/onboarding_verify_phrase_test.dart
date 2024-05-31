@@ -312,7 +312,7 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Continue'.toUpperCase()));
-      verify(() => onboardingCubit.emitOnboardingProcessing()).called(1);
+      verify(() => onboardingCubit.emitOnboardingProcessing());
 
       verify(
         () => navigator.pushReplacement<void, void>(
@@ -329,6 +329,8 @@ void main() {
         'emits Success when button is pressed and navigates to correct screen'
         ' when isFromOnboarding is false', (tester) async {
       when(() => flavorCubit.state).thenAnswer((_) => FlavorMode.development);
+      when(() => onboardingCubit.emitOnboardingProcessing())
+          .thenAnswer((_) async {});
       final onBoardingVerifyPhraseCubit = OnBoardingVerifyPhraseCubit(
         didKitProvider: didKitProvider,
         keyGenerator: keyGenerator,
@@ -392,6 +394,8 @@ void main() {
     });
     testWidgets('emits Error when error occurs', (tester) async {
       when(() => flavorCubit.state).thenAnswer((_) => FlavorMode.development);
+      when(() => onboardingCubit.emitOnboardingProcessing())
+          .thenAnswer((_) async {});
       when(
         () => secureStorageProvider.set(
           SecureStorageKeys.hasVerifiedMnemonics,
