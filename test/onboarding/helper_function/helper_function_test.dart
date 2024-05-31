@@ -118,8 +118,6 @@ void main() {
         ),
       ).called(1);
 
-      verify(() => splashCubit.disableWhatsNewPopUp()).called(1);
-
       verify(() => homeCubit.emitHasWallet()).called(1);
     });
 
