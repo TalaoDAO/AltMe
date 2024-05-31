@@ -87,7 +87,7 @@ class _PinCodeViewState extends State<PinCodeView> {
     return WillPopScope(
       onWillPop: () async => !widget.restrictToBack,
       child: BasePage(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         scrollView: false,
         body: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {

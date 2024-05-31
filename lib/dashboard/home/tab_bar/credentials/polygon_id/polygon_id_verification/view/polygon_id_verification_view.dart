@@ -68,7 +68,6 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final body = widget.iden3MessageEntity.body as AuthBodyRequest;
-    // TODO(all): change UI
     return BlocConsumer<PolygonIdVerificationCubit, PolygonIdVerificationState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {

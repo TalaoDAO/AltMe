@@ -23,7 +23,7 @@ class CustomAppBar extends PreferredSize {
 
   @override
   Widget build(BuildContext context) => ColoredBox(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),

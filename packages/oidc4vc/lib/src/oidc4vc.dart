@@ -350,6 +350,7 @@ class OIDC4VC {
         myRequest['client_id'] = clientId;
         myRequest['client_assertion'] = clientAssertion;
         myRequest['client_assertion_type'] =
+            // ignore: lines_longer_than_80_chars
             'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
     }
 
@@ -1757,21 +1758,25 @@ class OIDC4VC {
 
       dio.options.headers = headers;
 
-      if (!isCachingEnabled || cachedData == null) {
-        response = await dio.get<dynamic>(uri);
-      } else {
-        final cachedDataJson = jsonDecode(cachedData);
-        final expiry = int.parse(cachedDataJson['expiry'].toString());
-
-        final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
-
-        if (isExpired) {
+      if (isCachingEnabled) {
+        final secureStorageProvider = getSecureStorage;
+        final cachedData = await secureStorageProvider.get(uri);
+        if (cachedData == null) {
           response = await dio.get<dynamic>(uri);
         } else {
-          /// directly return cached data
-          /// returned here to avoid the caching override everytime
-          final response = await cachedDataJson['data'];
-          return response;
+          final cachedDataJson = jsonDecode(cachedData);
+          final expiry = int.parse(cachedDataJson['expiry'].toString());
+
+          final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
+
+          if (isExpired) {
+            response = await dio.get<dynamic>(uri);
+          } else {
+            /// directly return cached data
+            /// returned here to avoid the caching override everytime
+            final response = await cachedDataJson['data'];
+            return response;
+          }
         }
       }
       // temporary deactiviting this caching du to issue with
@@ -1783,7 +1788,7 @@ class OIDC4VC {
       // await secureStorageProvider.set(uri, jsonEncode(value));
 
       return response.data;
-    } on FormatException catch (_) {
+    } on FormatException {
       throw Exception();
     } catch (e) {
       if (e is DioException) {

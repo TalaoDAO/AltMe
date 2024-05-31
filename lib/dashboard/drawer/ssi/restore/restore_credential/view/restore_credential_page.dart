@@ -158,8 +158,8 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
 
   Future<void> _pickRestoreFile() async {
     final l10n = context.l10n;
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
 
     /// storage permission has changed with android 13
     late final PermissionStatus storagePermission;

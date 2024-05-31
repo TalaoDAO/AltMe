@@ -63,8 +63,6 @@ abstract class AppTheme {
           onTertiary: darkOnTertiary,
           surface: darkSurface,
           onSurface: darkOnSurface,
-          background: darkBackground,
-          onBackground: darkOnBackground,
           error: darkError,
           onError: darkOnError,
           shadow: darkShadow,
@@ -152,7 +150,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get appBarUpperLayer => const Color(0xff25095B);
 
-  Color get appBarLowerLayer => background;
+  Color get appBarLowerLayer => surface;
 
   Color get surfaceContainer => const Color(0xff707070).withOpacity(0.07);
 

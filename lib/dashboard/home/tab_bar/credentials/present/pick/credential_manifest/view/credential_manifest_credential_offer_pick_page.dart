@@ -203,21 +203,26 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                     onPressed: !credentialManifestState
                                             .isButtonEnabled
                                         ? null
-                                        : () => Navigator.of(context)
+                                        : () {
+                                            final credentialToBePresented =
+                                                credentialManifestState
+                                                        .filteredCredentialList[
+                                                    credentialManifestState
+                                                        .selected.first];
+
+                                            Navigator.of(context)
                                                 .pushReplacement<void, void>(
                                               SelectiveDisclosurePickPage.route(
                                                 uri: uri,
                                                 issuer: issuer,
                                                 credential: credential,
                                                 credentialToBePresented:
-                                                    credentialManifestState
-                                                            .filteredCredentialList[
-                                                        credentialManifestState
-                                                            .selected.first],
+                                                    credentialToBePresented,
                                                 presentationDefinition:
                                                     presentationDefinition,
                                               ),
-                                            ),
+                                            );
+                                          },
 
                                     /// next button because we will now choose
                                     /// the claims we will present

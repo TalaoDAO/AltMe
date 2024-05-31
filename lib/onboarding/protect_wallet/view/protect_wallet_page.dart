@@ -45,11 +45,15 @@ class ProtectWalletPage extends StatelessWidget {
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
         profileCubit: context.read<ProfileCubit>(),
       ),
-      child: ProtectWalletView(
-        routeType: routeType,
-        profileCubit: context.read<ProfileCubit>(),
-        onBoardingGenPhraseCubit: context.read<OnBoardingGenPhraseCubit>(),
-        onboardingCubit: context.read<OnboardingCubit>(),
+      child: Builder(
+        builder: (context) {
+          return ProtectWalletView(
+            routeType: routeType,
+            profileCubit: context.read<ProfileCubit>(),
+            onBoardingGenPhraseCubit: context.read<OnBoardingGenPhraseCubit>(),
+            onboardingCubit: context.read<OnboardingCubit>(),
+          );
+        },
       ),
     );
   }
@@ -250,6 +254,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                                       stateMessage: StateMessage.success(
                                         showDialog: true,
                                         stringMessage: l10n
+                                            // ignore: lines_longer_than_80_chars
                                             .twoFactorAuthenticationHasBeenEnabled,
                                       ),
                                     );

@@ -25,7 +25,10 @@ class ConfidentialClientWidget extends StatelessWidget {
           text: state.model.profileSetting.selfSovereignIdentityOptions
               .customOidc4vcProfile.clientSecret,
         );
-
+        final clientId = state.model.profileSetting.selfSovereignIdentityOptions
+            .customOidc4vcProfile.clientId;
+        final clientSecret = state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret;
         return OptionContainer(
           title: l10n.confidentialClient,
           body: Padding(
@@ -128,7 +131,7 @@ class ConfidentialClientWidget extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            '${l10n.clientId}: ${state.model.profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile.clientId}',
+                            '${l10n.clientId}: $clientId',
                             style:
                                 Theme.of(context).textTheme.drawerItemSubtitle,
                           ),
@@ -226,7 +229,7 @@ class ConfidentialClientWidget extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(
@@ -240,7 +243,7 @@ class ConfidentialClientWidget extends StatelessWidget {
                         Expanded(
                           child: Text(
                             '${l10n.clientSecret}: '
-                            '${state.model.profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret}',
+                            '$clientSecret',
                             style:
                                 Theme.of(context).textTheme.drawerItemSubtitle,
                           ),

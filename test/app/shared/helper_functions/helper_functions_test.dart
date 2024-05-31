@@ -55,7 +55,7 @@ void main() {
         final accountNameList = [
           'My account 1',
           'My account 2',
-          'My account 3'
+          'My account 3',
         ];
         expect(generateDefaultAccountName(0, accountNameList), 'My account 4');
       });
@@ -84,7 +84,7 @@ void main() {
 
       test('Should return last issuer DID if multiple issuers in URI', () {
         final uri = Uri.parse(
-            'https://example.com?issuer=did:example1&issuer=did:example2');
+            'https://example.com?issuer=did:example1&issuer=did:example2',);
         expect(getIssuerDid(uriToCheck: uri), 'did:example2');
       });
     });
@@ -115,7 +115,7 @@ void main() {
             payload: payload,
             dateTime: DateTime(2022, 1, 1, 0, 0, 0, 0),
           ),
-          '05010031323254657a6f73205369676e6564204d6573736167653a20616c746d652e696f20323032322d30312d30312030303a30303a30302e30303020426962617368');
+          '05010031323254657a6f73205369676e6564204d6573736167653a20616c746d652e696f20323032322d30312d30312030303a30303a30302e30303020426962617368',);
     });
 
     test('getCredentialName returns correct credential name', () {
@@ -123,7 +123,7 @@ void main() {
         'fields': [
           {
             'path': r'[$.credentialSubject.type]',
-            'filter': {'pattern': 'Bibash'}
+            'filter': {'pattern': 'Bibash'},
           },
         ],
       };
@@ -137,7 +137,7 @@ void main() {
         'fields': [
           {
             'path': r'[$.issuer]',
-            'filter': {'pattern': 'Bibash'}
+            'filter': {'pattern': 'Bibash'},
           },
         ],
       };
@@ -148,17 +148,17 @@ void main() {
 
     test('getBlockchainType returns correct issuer name', () {
       expect(
-          getBlockchainType(AccountType.tezos), equals(BlockchainType.tezos));
+          getBlockchainType(AccountType.tezos), equals(BlockchainType.tezos),);
       expect(getBlockchainType(AccountType.ethereum),
-          equals(BlockchainType.ethereum));
+          equals(BlockchainType.ethereum),);
       expect(
-          getBlockchainType(AccountType.fantom), equals(BlockchainType.fantom));
+          getBlockchainType(AccountType.fantom), equals(BlockchainType.fantom),);
       expect(getBlockchainType(AccountType.polygon),
-          equals(BlockchainType.polygon));
+          equals(BlockchainType.polygon),);
       expect(getBlockchainType(AccountType.binance),
-          equals(BlockchainType.binance));
+          equals(BlockchainType.binance),);
       expect(() => getBlockchainType(AccountType.ssi),
-          throwsA(isA<ResponseMessage>()));
+          throwsA(isA<ResponseMessage>()),);
     });
 
     test('getCredTypeFromName returns correct type', () {
@@ -199,8 +199,8 @@ void main() {
             'word9',
             'word10',
             'word11',
-            'word12'
-          ]));
+            'word12',
+          ]),);
     });
 
     test('getDateTimeWithoutSpace replaces spaces with dashes', () {
@@ -211,9 +211,9 @@ void main() {
 
     test('getIndexValue returns correct index for each DidKeyType', () {
       expect(
-          getIndexValue(isEBSIV3: true, didKeyType: DidKeyType.secp256k1), 3);
+          getIndexValue(isEBSIV3: true, didKeyType: DidKeyType.secp256k1), 3,);
       expect(
-          getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.secp256k1), 1);
+          getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.secp256k1), 1,);
 
       expect(getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.p256), 4);
       expect(getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.ebsiv3), 5);
@@ -221,15 +221,15 @@ void main() {
       expect(getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.edDSA), 0);
       expect(
           getIndexValue(
-              isEBSIV3: false, didKeyType: DidKeyType.jwtClientAttestation),
-          0);
+              isEBSIV3: false, didKeyType: DidKeyType.jwtClientAttestation,),
+          0,);
     });
 
     group('getWalletAttestationP256Key', () {
       test('returns existing key', () async {
         const existingKey = 'existing_key';
         when(() => mockSecureStorage
-                .get(SecureStorageKeys.p256PrivateKeyForWallet))
+                .get(SecureStorageKeys.p256PrivateKeyForWallet),)
             .thenAnswer((_) => Future.value(existingKey));
 
         final result = await getWalletAttestationP256Key(mockSecureStorage);
@@ -240,7 +240,7 @@ void main() {
       test('generates and returns new key', () async {
         const newKey = 'new_key';
         when(() => mockSecureStorage
-                .get(SecureStorageKeys.p256PrivateKeyForWallet))
+                .get(SecureStorageKeys.p256PrivateKeyForWallet),)
             .thenAnswer((_) => Future.value(null));
 
         when(() => mockSecureStorage.set(any(), any()))
@@ -263,7 +263,7 @@ void main() {
       test('returns existing key', () async {
         const existingKey = 'existing_key';
         when(() => mockSecureStorage
-                .get(SecureStorageKeys.p256PrivateKeyToGetAndPresentVC))
+                .get(SecureStorageKeys.p256PrivateKeyToGetAndPresentVC),)
             .thenAnswer((_) => Future.value(existingKey));
 
         final result = await getP256KeyToGetAndPresentVC(mockSecureStorage);
@@ -274,7 +274,7 @@ void main() {
       test('generates and returns new key', () async {
         const newKey = 'new_key';
         when(() => mockSecureStorage
-                .get(SecureStorageKeys.p256PrivateKeyToGetAndPresentVC))
+                .get(SecureStorageKeys.p256PrivateKeyToGetAndPresentVC),)
             .thenAnswer((_) => Future.value(null));
 
         when(() => mockSecureStorage.set(any(), any()))
@@ -314,7 +314,7 @@ void main() {
       expect(getDidKeyFromString('DidKeyType.ebsiv3'), DidKeyType.ebsiv3);
       expect(getDidKeyFromString('DidKeyType.jwkP256'), DidKeyType.jwkP256);
       expect(getDidKeyFromString('DidKeyType.jwtClientAttestation'),
-          DidKeyType.jwtClientAttestation);
+          DidKeyType.jwtClientAttestation,);
       expect(getDidKeyFromString('InvalidKeyType'), null);
       expect(getDidKeyFromString(null), null);
     });
@@ -356,10 +356,10 @@ void main() {
       test('getSignatureType returns correct signature type for circuitId', () {
         expect(getSignatureType('credentialAtomicQuerySigV2'), 'BJJ Signature');
         expect(getSignatureType('credentialAtomicQuerySigV2OnChain'),
-            'BJJ Signature');
+            'BJJ Signature',);
         expect(getSignatureType('credentialAtomicQueryMTPV2'), 'SMT Signature');
         expect(getSignatureType('credentialAtomicQueryMTPV2OnChain'),
-            'SMT Signature');
+            'SMT Signature',);
         expect(getSignatureType('unknownCircuitId'), '');
       });
 
@@ -375,7 +375,7 @@ void main() {
             'https://example.com?uri_list=https%3A%2F%2Fexample.com%2Fpath1&uri_list=https%3A%2F%2Fexample.com%2Fpath2';
         final result = generateUriList(url);
         expect(
-            result, ['https://example.com/path1', 'https://example.com/path2']);
+            result, ['https://example.com/path1', 'https://example.com/path2'],);
       });
 
       test('sortedPublcJwk returns sorted public JWK without private key', () {
@@ -385,7 +385,7 @@ void main() {
           'crv': 'P-256K',
           'kid': '1234567890',
           'x': 'SjTww7i4eF-JKBYlShJqJ3lWQIVJF5y1g5uHY3gfAro',
-          'y': '1bNb6uA0gKClEFhodSfgcW8FvfSHTgxE8WyFvSZ8bxc'
+          'y': '1bNb6uA0gKClEFhodSfgcW8FvfSHTgxE8WyFvSZ8bxc',
         };
         final result = sortedPublcJwk(jsonEncode(privateKey));
         const expected =
@@ -540,7 +540,7 @@ void main() {
       group('getPresentationDefinition', () {
         test('returns presentation definition from URI', () async {
           final uri = Uri.parse(
-              "https://example.com?presentation_definition={'title':'Test'}");
+              "https://example.com?presentation_definition={'title':'Test'}",);
           final presentationDefinition =
               await getPresentationDefinition(uri: uri, client: mockClient);
 
@@ -559,7 +559,7 @@ void main() {
             'returns presentation definition from URI with '
             'presentation_definition_uri', () async {
           final uri = Uri.parse(
-              'https://example.com?presentation_definition_uri=https://example.com/presentation.com');
+              'https://example.com?presentation_definition_uri=https://example.com/presentation.com',);
 
           dioAdapter.onGet(
             'https://example.com/presentation.com',
@@ -574,7 +574,7 @@ void main() {
 
         test('returns null for invalid presentation_definition_uri', () async {
           final uri = Uri.parse(
-              'https://example.com?presentation_definition_uri=https://example.com/presentation.com');
+              'https://example.com?presentation_definition_uri=https://example.com/presentation.com',);
 
           dioAdapter.onGet(
             'https://example.com/presentation.com',
@@ -610,7 +610,7 @@ void main() {
             'returns client metadata from URI with '
             'client_metadata_uri', () async {
           final uri = Uri.parse(
-              'https://example.com?client_metadata_uri=https://example.com.com');
+              'https://example.com?client_metadata_uri=https://example.com.com',);
 
           dioAdapter.onGet(
             'https://example.com.com',
@@ -625,7 +625,7 @@ void main() {
 
         test('returns null for invalid client_metadata_uri', () async {
           final uri = Uri.parse(
-              'https://example.com?client_metadata_uri=https://example.com.com');
+              'https://example.com?client_metadata_uri=https://example.com.com',);
 
           dioAdapter.onGet(
             'https://example.com.com',
@@ -809,71 +809,71 @@ void main() {
 
         test('getErrorResponseString returns correct ResponseString', () {
           expect(getErrorResponseString('invalid_request'),
-              ResponseString.RESPONSE_STRING_invalidRequest);
+              ResponseString.RESPONSE_STRING_invalidRequest,);
           expect(getErrorResponseString('invalid_request_uri'),
-              ResponseString.RESPONSE_STRING_invalidRequest);
+              ResponseString.RESPONSE_STRING_invalidRequest,);
           expect(getErrorResponseString('invalid_request_object'),
-              ResponseString.RESPONSE_STRING_invalidRequest);
+              ResponseString.RESPONSE_STRING_invalidRequest,);
 
           expect(getErrorResponseString('unauthorized_client'),
-              ResponseString.RESPONSE_STRING_accessDenied);
+              ResponseString.RESPONSE_STRING_accessDenied,);
           expect(getErrorResponseString('access_denied'),
-              ResponseString.RESPONSE_STRING_accessDenied);
+              ResponseString.RESPONSE_STRING_accessDenied,);
           expect(getErrorResponseString('invalid_or_missing_proof'),
-              ResponseString.RESPONSE_STRING_accessDenied);
+              ResponseString.RESPONSE_STRING_accessDenied,);
           expect(getErrorResponseString('interaction_required'),
-              ResponseString.RESPONSE_STRING_accessDenied);
+              ResponseString.RESPONSE_STRING_accessDenied,);
 
           expect(getErrorResponseString('unsupported_response_type'),
-              ResponseString.RESPONSE_STRING_thisRequestIsNotSupported);
+              ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,);
           expect(getErrorResponseString('invalid_scope'),
-              ResponseString.RESPONSE_STRING_thisRequestIsNotSupported);
+              ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,);
           expect(getErrorResponseString('request_not_supported'),
-              ResponseString.RESPONSE_STRING_thisRequestIsNotSupported);
+              ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,);
           expect(getErrorResponseString('request_uri_not_supported'),
-              ResponseString.RESPONSE_STRING_thisRequestIsNotSupported);
+              ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,);
 
           expect(getErrorResponseString('unsupported_credential_type'),
-              ResponseString.RESPONSE_STRING_unsupportedCredential);
+              ResponseString.RESPONSE_STRING_unsupportedCredential,);
           expect(getErrorResponseString('login_required'),
-              ResponseString.RESPONSE_STRING_aloginIsRequired);
+              ResponseString.RESPONSE_STRING_aloginIsRequired,);
           expect(getErrorResponseString('account_selection_required'),
-              ResponseString.RESPONSE_STRING_aloginIsRequired);
+              ResponseString.RESPONSE_STRING_aloginIsRequired,);
 
           expect(getErrorResponseString('consent_required'),
-              ResponseString.RESPONSE_STRING_userConsentIsRequired);
+              ResponseString.RESPONSE_STRING_userConsentIsRequired,);
 
           expect(getErrorResponseString('registration_not_supported'),
-              ResponseString.RESPONSE_STRING_theWalletIsNotRegistered);
+              ResponseString.RESPONSE_STRING_theWalletIsNotRegistered,);
 
           expect(getErrorResponseString('invalid_grant'),
-              ResponseString.RESPONSE_STRING_credentialIssuanceDenied);
+              ResponseString.RESPONSE_STRING_credentialIssuanceDenied,);
           expect(getErrorResponseString('invalid_client'),
-              ResponseString.RESPONSE_STRING_credentialIssuanceDenied);
+              ResponseString.RESPONSE_STRING_credentialIssuanceDenied,);
           expect(getErrorResponseString('invalid_token'),
-              ResponseString.RESPONSE_STRING_credentialIssuanceDenied);
+              ResponseString.RESPONSE_STRING_credentialIssuanceDenied,);
 
           expect(
               getErrorResponseString('unsupported_credential_format'),
               ResponseString
-                  .RESPONSE_STRING_thisCredentialFormatIsNotSupported);
+                  .RESPONSE_STRING_thisCredentialFormatIsNotSupported,);
 
           expect(getErrorResponseString('unsupported_format'),
-              ResponseString.RESPONSE_STRING_thisFormatIsNotSupported);
+              ResponseString.RESPONSE_STRING_thisFormatIsNotSupported,);
 
           expect(getErrorResponseString('invalid_issuer_metadata'),
-              ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid);
+              ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid,);
 
           expect(getErrorResponseString('server_error'),
-              ResponseString.RESPONSE_STRING_theServiceIsNotAvailable);
+              ResponseString.RESPONSE_STRING_theServiceIsNotAvailable,);
 
           expect(
               getErrorResponseString('issuance_pending'),
               ResponseString
-                  .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending);
+                  .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending,);
 
           expect(getErrorResponseString('random'),
-              ResponseString.RESPONSE_STRING_thisRequestIsNotSupported);
+              ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,);
         });
 
         test('isIDTokenOnly', () {
@@ -930,21 +930,21 @@ void main() {
             'client_id': 'client123',
             'claims': {
               'id_token': {
-                'email': {'essential': true}
-              }
+                'email': {'essential': true},
+              },
             },
             'state': 'state123',
             'presentation_definition': {
               'id': 'cred-123',
               'format': 'vp',
-              'input_descriptors': []
+              'input_descriptors': [],
             },
             'presentation_definition_uri': 'https://example.com/presentation',
             'registration': {
-              'token_endpoint_auth_method': 'client_secret_basic'
+              'token_endpoint_auth_method': 'client_secret_basic',
             },
             'client_metadata': {'example_key': 'example_value'},
-            'client_metadata_uri': 'https://example.com/client_metadata'
+            'client_metadata_uri': 'https://example.com/client_metadata',
           };
 
           final updatedUrl =
@@ -966,7 +966,7 @@ void main() {
               'presentation_definition_uri=https%3A%2F%2Fexample.com%2Fpresentation',
               'registration=%7B%22token_endpoint_auth_method%22%3A%22client_secret_basic%22%7D',
               'client_metadata=%7B%22example_key%22%3A%22example_value%22%7D',
-              'client_metadata_uri=https%3A%2F%2Fexample.com%2Fclient_metadata'
+              'client_metadata_uri=https%3A%2F%2Fexample.com%2Fclient_metadata',
             ]),
           );
         });

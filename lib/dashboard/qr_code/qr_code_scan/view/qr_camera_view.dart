@@ -34,13 +34,17 @@ class _QrCameraViewState extends State<QrCameraView> {
   static List<CameraDescription> _cameras = [];
   CameraController? _controller;
   int _cameraIndex = -1;
-  double _currentZoomLevel = 1.0;
-  double _minAvailableZoom = 1.0;
-  double _maxAvailableZoom = 1.0;
-  double _minAvailableExposureOffset = 0.0;
-  double _maxAvailableExposureOffset = 0.0;
-  double _currentExposureOffset = 0.0;
-  bool _changingCameraLens = false;
+  double _currentZoomLevel = 1;
+  double _minAvailableZoom = 1;
+  // ignore: unused_field
+  double _maxAvailableZoom = 1;
+  // ignore: unused_field
+  double _minAvailableExposureOffset = 0;
+  // ignore: unused_field
+  double _maxAvailableExposureOffset = 0;
+  // ignore: unused_field
+  double _currentExposureOffset = 0;
+  final bool _changingCameraLens = false;
 
   @override
   void initState() {
@@ -48,7 +52,7 @@ class _QrCameraViewState extends State<QrCameraView> {
     _initialize();
   }
 
-  void _initialize() async {
+  Future<void> _initialize() async {
     if (_cameras.isEmpty) {
       _cameras = await availableCameras();
     }
@@ -75,7 +79,7 @@ class _QrCameraViewState extends State<QrCameraView> {
     if (_controller == null) return Container();
     if (_controller?.value.isInitialized == false) return Container();
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: Text(
           widget.title,
@@ -83,10 +87,10 @@ class _QrCameraViewState extends State<QrCameraView> {
           style: Theme.of(context).textTheme.appBar,
         ),
         leading: const BackLeadingButton(),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
       ),
       body: ColoredBox(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         child: Center(
           child: _changingCameraLens
               ? Container()
@@ -106,7 +110,8 @@ class _QrCameraViewState extends State<QrCameraView> {
     final camera = _cameras[_cameraIndex];
     _controller = CameraController(
       camera,
-      // Set to ResolutionPreset.high. Do NOT set it to ResolutionPreset.max because for some phones does NOT work.
+      // Set to ResolutionPreset.high. Do NOT set it to ResolutionPreset.max
+      // because for some phones does NOT work.
       ResolutionPreset.high,
       enableAudio: false,
       imageFormatGroup: Platform.isAndroid
@@ -133,9 +138,11 @@ class _QrCameraViewState extends State<QrCameraView> {
       });
       _controller?.startImageStream(_processCameraImage).then((value) {
         if (widget.onCameraFeedReady != null) {
+          // ignore: prefer_null_aware_method_calls
           widget.onCameraFeedReady!();
         }
         if (widget.onCameraLensDirectionChanged != null) {
+          // ignore: prefer_null_aware_method_calls
           widget.onCameraLensDirectionChanged!(camera.lensDirection);
         }
       });
@@ -171,8 +178,6 @@ class _QrCameraViewState extends State<QrCameraView> {
     // in both platforms `rotation` and `camera.lensDirection` can be used to compensate `x` and `y` coordinates on a canvas: https://github.com/flutter-ml/google_ml_kit_flutter/blob/master/packages/example/lib/vision_detector_views/painters/coordinates_translator.dart
     final camera = _cameras[_cameraIndex];
     final sensorOrientation = camera.sensorOrientation;
-    // print(
-    //     'lensDirection: ${camera.lensDirection}, sensorOrientation: $sensorOrientation, ${_controller?.value.deviceOrientation} ${_controller?.value.lockedCaptureOrientation} ${_controller?.value.isCaptureOrientationLocked}');
     InputImageRotation? rotation;
     if (Platform.isIOS) {
       rotation = InputImageRotationValue.fromRawValue(sensorOrientation);

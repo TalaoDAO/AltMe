@@ -44,7 +44,7 @@ class DescriptionDialog extends StatelessWidget {
                   width: 20,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: colorScheme.background,
+                    color: colorScheme.surface,
                   ),
                   child: Icon(
                     Icons.clear_rounded,

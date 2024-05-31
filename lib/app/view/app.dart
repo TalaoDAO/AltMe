@@ -26,7 +26,6 @@ import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -281,22 +280,13 @@ class MaterialAppDefinition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isStaging =
-        context.read<FlavorCubit>().flavorMode == FlavorMode.staging;
     return BlocBuilder<LangCubit, LangState>(
       builder: (context, state) {
-        if (isStaging) {
-          final locale = DevicePreview.locale(context);
-          if (locale != null) {
-            context.read<LangCubit>().setLocale(locale);
-          }
-        }
         if (state.locale == const Locale('en')) {
           context.read<LangCubit>().checkLocale();
         }
 
         return MaterialApp(
-          builder: isStaging ? DevicePreview.appBuilder : null,
           locale: state.locale,
           title: 'AltMe',
           darkTheme: AppTheme.darkThemeData,

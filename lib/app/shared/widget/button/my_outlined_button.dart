@@ -65,7 +65,7 @@ class MyOutlinedButton extends StatelessWidget {
               ),
             )
           : OutlinedButton.icon(
-              icon: icon!,
+              icon: icon,
               style: outlinedStyleFrom(
                 borderRadius: borderRadius,
                 context: context,
@@ -100,7 +100,7 @@ ButtonStyle outlinedStyleFrom({
     padding: EdgeInsets.symmetric(vertical: verticalSpacing),
     elevation: elevation,
     backgroundColor:
-        backgroundColor ?? Theme.of(context).colorScheme.background,
+        backgroundColor ?? Theme.of(context).colorScheme.surface,
     side: BorderSide(
       color: onPressed == null
           ? Theme.of(context).colorScheme.disabledBgColor

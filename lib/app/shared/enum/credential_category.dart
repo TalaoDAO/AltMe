@@ -1,6 +1,5 @@
 import 'package:altme/l10n/l10n.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 enum CredentialCategory {
   advantagesCards,

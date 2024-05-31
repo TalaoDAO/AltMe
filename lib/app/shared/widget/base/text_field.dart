@@ -98,7 +98,7 @@ class BaseTextField extends StatelessWidget {
               width: 1.5,
             ),
           ),
-          fillColor: fillColor ?? Theme.of(context).colorScheme.background,
+          fillColor: fillColor ?? Theme.of(context).colorScheme.surface,
           filled: true,
           errorText: error,
           labelText: label,
