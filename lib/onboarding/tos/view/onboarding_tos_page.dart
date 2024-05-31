@@ -18,8 +18,12 @@ class OnBoardingTosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<OnBoardingTosCubit>(
       create: (_) => OnBoardingTosCubit(),
-      child: OnBoardingTosView(
-        onBoardingTosCubit: context.read<OnBoardingTosCubit>(),
+      child: Builder(
+        builder: (context) {
+          return OnBoardingTosView(
+            onBoardingTosCubit: context.read<OnBoardingTosCubit>(),
+          );
+        },
       ),
     );
   }
