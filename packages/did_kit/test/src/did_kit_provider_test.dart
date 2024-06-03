@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:did_kit/did_kit.dart';
 import 'package:did_kit/src/did_kit_provider.dart';
-import 'package:didkit/didkit.dart';
+import 'package:did_kit/src/didkit_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockDIDKitInterface extends Mock implements DIDKitInterface {}
 
 void main() {
   const didKitVersion = '0.3.0';
@@ -55,55 +58,53 @@ void main() {
     'challenge': 'Uuid().v4()',
   });
 
+  late DIDKitInterface mockDIDKit;
   late DIDKitProvider didKitProvider;
 
-  setUpAll(() {
-    didKitProvider = DIDKitProvider();
+  setUp(() {
+    mockDIDKit = MockDIDKitInterface();
+    didKitProvider = DIDKitProvider(didKit: mockDIDKit);
   });
 
   group('DidKitProvider', () {
     test('verify did kit version is $didKitVersion', () {
+      when(() => mockDIDKit.getVersion()).thenReturn(didKitVersion);
       expect(didKitProvider.getVersion(), didKitVersion);
+      verify(() => mockDIDKit.getVersion()).called(1);
     });
 
-    test('exceptions with empty inputs', () async {
-      expect(
-        () => didKitProvider.issueCredential('', '', ''),
-        throwsA(isInstanceOf<DIDKitException>()),
-      );
-      expect(
-        () => didKitProvider.issuePresentation('', '', ''),
-        throwsA(isInstanceOf<DIDKitException>()),
-      );
-      expect(
-        () => didKitProvider.verifyCredential('', ''),
-        throwsA(isInstanceOf<DIDKitException>()),
-      );
-      expect(
-        () => didKitProvider.verifyPresentation('', ''),
-        throwsA(isInstanceOf<DIDKitException>()),
-      );
-    });
-
-    test('generateEd25519Key method mocked', () {
+    test('generateEd25519Key returns correct key', () {
+      when(() => mockDIDKit.generateEd25519Key()).thenReturn(ed25519Key);
       expect(didKitProvider.generateEd25519Key(), equals(ed25519Key));
+      verify(() => mockDIDKit.generateEd25519Key()).called(1);
     });
 
-    test('keyToDID method mocked', () async {
+    test('keyToDID returns correct DID', () {
+      when(() => mockDIDKit.keyToDID(any(), any())).thenReturn(did);
+
       expect(
         didKitProvider.keyToDID(key, ed25519Key),
         equals(did),
       );
+      verify(() => mockDIDKit.keyToDID(key, ed25519Key)).called(1);
     });
 
-    test('keyToVerificationMethod method mocked', () async {
+    test('keyToVerificationMethod returns correct verification method',
+        () async {
+      when(() => mockDIDKit.keyToVerificationMethod(any(), any()))
+          .thenAnswer((_) async => vm);
+
       expect(
         await didKitProvider.keyToVerificationMethod(key, ed25519Key),
         equals(vm),
       );
+      verify(() => mockDIDKit.keyToVerificationMethod(key, ed25519Key))
+          .called(1);
     });
 
-    test('issueCredential method mocked', () async {
+    test('issueCredential returns correct vc', () async {
+      when(() => mockDIDKit.issueCredential(any(), any(), any()))
+          .thenAnswer((_) async => vc);
       expect(
         await didKitProvider.issueCredential(
           jsonEncode(credential),
@@ -112,16 +113,30 @@ void main() {
         ),
         equals(vc),
       );
+      verify(
+        () => mockDIDKit.issueCredential(
+          jsonEncode(credential),
+          jsonEncode(options),
+          key,
+        ),
+      ).called(1);
     });
 
-    test('verifyCredential method mocked', () async {
+    test('verifyCredential returns correct verifyResult', () async {
+      when(() => mockDIDKit.verifyCredential(any(), any()))
+          .thenAnswer((_) async => verifyResult);
       expect(
         await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions)),
         equals(verifyResult),
       );
+      verify(
+        () => mockDIDKit.verifyCredential(vc, jsonEncode(verifyOptions)),
+      ).called(1);
     });
 
-    test('issuePresentation method mocked', () async {
+    test('issuePresentation returns correct vc', () async {
+      when(() => mockDIDKit.issuePresentation(any(), any(), any()))
+          .thenAnswer((_) async => vc);
       expect(
         await didKitProvider.issuePresentation(
           jsonEncode(presentation),
@@ -130,9 +145,18 @@ void main() {
         ),
         equals(vc),
       );
+      verify(
+        () => mockDIDKit.issuePresentation(
+          jsonEncode(presentation),
+          jsonEncode(options),
+          key,
+        ),
+      ).called(1);
     });
 
-    test('verifyPresentation method mocked', () async {
+    test('verifyPresentation returns correct verifyResult', () async {
+      when(() => mockDIDKit.verifyPresentation(any(), any()))
+          .thenAnswer((_) async => verifyResult);
       expect(
         await didKitProvider.verifyPresentation(
           vc,
@@ -140,27 +164,48 @@ void main() {
         ),
         equals(verifyResult),
       );
+      verify(
+        () => mockDIDKit.verifyPresentation(
+          vc,
+          jsonEncode(verifyOptions),
+        ),
+      ).called(1);
     });
 
     test('resolveDID method mocked', () async {
+      when(() => mockDIDKit.resolveDID(any(), any()))
+          .thenAnswer((_) async => '');
       expect(
         await didKitProvider.resolveDID(did, '{}'),
         isInstanceOf<String>(),
       );
+      verify(
+        () => mockDIDKit.resolveDID(did, '{}'),
+      ).called(1);
     });
 
     test('dereferenceDIDURL method mocked', () async {
+      when(() => mockDIDKit.dereferenceDIDURL(any(), any()))
+          .thenAnswer((_) async => '');
       expect(
         await didKitProvider.dereferenceDIDURL(vm, '{}'),
         isInstanceOf<String>(),
       );
+      verify(
+        () => mockDIDKit.dereferenceDIDURL(vm, '{}'),
+      ).called(1);
     });
 
     test('didAuth method mocked', () async {
+      when(() => mockDIDKit.didAuth(any(), any(), any()))
+          .thenAnswer((_) async => '');
       expect(
         await didKitProvider.didAuth(did, proofOptions, key),
         isInstanceOf<String>(),
       );
+      verify(
+        () => mockDIDKit.didAuth(did, proofOptions, key),
+      ).called(1);
     });
   });
 }

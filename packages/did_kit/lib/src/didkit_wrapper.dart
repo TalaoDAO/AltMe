@@ -1,77 +1,83 @@
 import 'package:did_kit/src/didkit_interface.dart';
-import 'package:did_kit/src/didkit_wrapper.dart';
+import 'package:didkit/didkit.dart';
 
-class DIDKitProvider {
-  DIDKitProvider({DIDKitInterface? didKit})
-      : didKit = didKit ?? DIDKitWrapper();
-
-  final DIDKitInterface didKit;
-
+class DIDKitWrapper implements DIDKitInterface {
+  @override
   String getVersion() {
-    return didKit.getVersion();
+    return DIDKit.getVersion();
   }
 
+  @override
   String generateEd25519Key() {
-    return didKit.generateEd25519Key();
+    return DIDKit.generateEd25519Key();
   }
 
+  @override
   String keyToDID(String methodName, String key) {
-    return didKit.keyToDID(methodName, key);
+    return DIDKit.keyToDID(methodName, key);
   }
 
+  @override
   Future<String> keyToVerificationMethod(String methodName, String key) async {
-    return didKit.keyToVerificationMethod(methodName, key);
+    return DIDKit.keyToVerificationMethod(methodName, key);
   }
 
+  @override
   Future<String> issueCredential(
     String credential,
     String options,
     String key,
   ) async {
-    return didKit.issueCredential(credential, options, key);
+    return DIDKit.issueCredential(credential, options, key);
   }
 
+  @override
   Future<String> verifyCredential(
     String credential,
     String options,
   ) async {
-    return didKit.verifyCredential(credential, options);
+    return DIDKit.verifyCredential(credential, options);
   }
 
+  @override
   Future<String> issuePresentation(
     String presentation,
     String options,
     String key,
   ) async {
-    return didKit.issuePresentation(presentation, options, key);
+    return DIDKit.issuePresentation(presentation, options, key);
   }
 
+  @override
   Future<String> verifyPresentation(
     String presentation,
     String options,
   ) async {
-    return didKit.verifyPresentation(presentation, options);
+    return DIDKit.verifyPresentation(presentation, options);
   }
 
+  @override
   Future<String> resolveDID(
     String did,
     String inputMetadata,
   ) async {
-    return didKit.resolveDID(did, inputMetadata);
+    return DIDKit.resolveDID(did, inputMetadata);
   }
 
+  @override
   Future<String> dereferenceDIDURL(
     String didUrl,
     String inputMetadata,
   ) async {
-    return didKit.dereferenceDIDURL(didUrl, inputMetadata);
+    return DIDKit.dereferenceDIDURL(didUrl, inputMetadata);
   }
 
+  @override
   Future<String> didAuth(
     String did,
     String options,
     String key,
   ) async {
-    return didKit.didAuth(did, options, key);
+    return DIDKit.DIDAuth(did, options, key);
   }
 }
