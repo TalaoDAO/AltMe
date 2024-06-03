@@ -1057,5 +1057,23 @@
   "theWalletIsSuspended": "The wallet is suspended.",
   "clientTypeTitle": "Wallet Client_id Scheme",
   "confidentialClient": "Confidential Client",
-  "jwkThumbprintP256Key": "JWK Thumbprint P-256 Key"
+  "jwkThumbprintP256Key": "JWK Thumbprint P-256 Key",
+  "walletBlockedPopupTitle": "Blockerd 10 minutes",
+  "walletBlockedPopupDescription": "Too many failed attempts, your wallet is blocked for your security.\nYou can reset your wallet in order to use servives again.",
+  "deleteMyWalletForWrontPincodeTitle": "Account blocked after 3 unsuccessful attempts",
+  "deleteMyWalletForWrontPincodeDescription": "For your security you must reset you wallet to use our services again.",
+  "walletBloced": "Account blocked",
+  "deleteMyWallet": "Delete my account",
+  "pincodeRules": "Your secret code can't be a sequence or have 4 identical digit.",
+  "pincodeSerie": "You can't have 4 identical digits.",
+  "pincodeSequence": "You can't have a sequence of 4 digits.",
+  "pincodeDifferent": "Incorrect code.\nBoth codes are not the same.",
+  "codeSecretIncorrectDescription": "Be carreful, {count} attempt{plural} left.",
+  "@codeSecretIncorrectDescription": {
+    "description": "",
+    "placeholders": {
+      "count": {},
+      "plural": {}
+    }
+  }
 }

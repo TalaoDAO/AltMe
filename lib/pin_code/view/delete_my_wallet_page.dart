@@ -2,6 +2,7 @@ import 'package:altme/app/shared/constants/image_strings.dart';
 import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
+import 'package:altme/dashboard/drawer/reset_wallet/helper_functions/reset_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,7 +41,7 @@ class DeleteMyWalletView extends StatelessWidget {
           ),
           Image.asset(
             ImageStrings.cardMissing,
-            width: Sizes.icon80,
+            width: Sizes.icon,
           ),
           const SizedBox(
             height: Sizes.spaceLarge,
@@ -63,9 +64,8 @@ class DeleteMyWalletView extends StatelessWidget {
           ),
           MyElevatedButton(
             text: l10n.deleteMyWallet,
-            onPressed: () {
-              Navigator.of(context).pop();
-              context.read<CredentialsCubit>().reset();
+            onPressed: () async {
+              await resetWallet(context);
             },
           ),
         ],
