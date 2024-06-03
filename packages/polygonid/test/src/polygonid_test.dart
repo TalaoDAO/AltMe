@@ -221,7 +221,7 @@ class MockPolygonIdSdk extends Mock implements PolygonIdSdk {}
 
 void main() {
   final MockPolygonIdSdk polygonIdSdk = MockPolygonIdSdk();
-  final PolygonId polygonId = PolygonId(polygonIdSdk: polygonIdSdk);
+  final PolygonId polygonId = PolygonId(sdk: polygonIdSdk);
 
   final proof = MockProof();
   final identity = MockIdentity();
