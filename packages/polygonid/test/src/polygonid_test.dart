@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
-import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/proof/response/iden3comm_proof_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
 import 'package:polygonid_flutter_sdk/sdk/credential.dart';
 import 'package:polygonid_flutter_sdk/sdk/iden3comm.dart';
@@ -177,8 +176,9 @@ class MockIden3comm extends Mock implements Iden3comm {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> getSchemas(
-      {required Iden3MessageEntity message}) {
+  Future<List<Map<String, dynamic>>> getSchemas({
+    required Iden3MessageEntity message,
+  }) {
     return Future.value([]);
   }
 
