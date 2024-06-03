@@ -6,7 +6,10 @@ abstract class DIDKitInterface {
   Future<String> issueCredential(String credential, String options, String key);
   Future<String> verifyCredential(String credential, String options);
   Future<String> issuePresentation(
-      String presentation, String options, String key);
+    String presentation,
+    String options,
+    String key,
+  );
   Future<String> verifyPresentation(String presentation, String options);
   Future<String> resolveDID(String did, String inputMetadata);
   Future<String> dereferenceDIDURL(String didUrl, String inputMetadata);
