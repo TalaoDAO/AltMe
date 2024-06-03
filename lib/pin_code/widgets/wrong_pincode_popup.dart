@@ -16,19 +16,18 @@ class WrongPinCodePopUp extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    /// be careful, BaseBottomSheet is a custom widget from jeprouvemonage 
-    return BaseBottomSheet(
+    return BasePage(
       body: Column(
         children: [
           Image.asset(
-            ImageStrings.warningCircle,
-            width: Sizes.icon80,
+            ImageStrings.cardMissing,
+            width: Sizes.icon,
           ),
           const SizedBox(
             height: Sizes.spaceLarge,
           ),
           Text(
-            l10n.codeSecretIncorrect,
+            l10n.userPinIsIncorrect,
             style: Theme.of(context).textTheme.displaySmall,
           ),
           const SizedBox(

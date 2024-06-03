@@ -21,10 +21,10 @@ function buildRunner {
     (
       echo "$d"
       cd "packages/$d"
-      dart run build_runner build --delete-conflicting-outputs
+      dart pub run build_runner build --delete-conflicting-outputs
     )
   done 
-  dart run build_runner build --delete-conflicting-outputs
+  dart pub run build_runner build --delete-conflicting-outputs
 }
 
 function podUpdate {

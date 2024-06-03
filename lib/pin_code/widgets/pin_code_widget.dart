@@ -120,7 +120,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                         0.5,
                                     showPoweredBy: true,
                                   ),
-                                const SizedBox(height: Sizes.spaceNormal),
+                                const SizedBox(height: Sizes.spaceSmall),
                                 PinCodeTitle(
                                   title: widget.title,
                                   subTitle: state.allowAction
@@ -134,11 +134,11 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                   height: 40,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                        children: List.generate(
-                                          widget.passwordDigits,
-                                          (index) => Container(
-                                            margin: const EdgeInsets.all(8),
-                                            child: Circle(
+                                    children: List.generate(
+                                      widget.passwordDigits,
+                                      (index) => Container(
+                                        margin: const EdgeInsets.all(8),
+                                        child: Circle(
                                           allowAction: state.allowAction,
                                           filled:
                                               index < enteredPasscode.length,
@@ -152,13 +152,13 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                                       .error,
                                                 )
                                               : widget.circleUIConfig,
-                                            ),
-                                          ),
                                         ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
-                                  height: Sizes.space2XLarge,
+                                  height: Sizes.spaceSmall,
                                   child: isPincodeDifferent
                                       ? Text(
                                           l10n.pincodeDifferent,
@@ -246,24 +246,24 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                                 const EdgeInsets.only(top: 20),
                                             height: 40,
                                             child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: List.generate(
-                                                    widget.passwordDigits,
-                                                    (index) => Container(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: List.generate(
+                                                widget.passwordDigits,
+                                                (index) => Container(
                                                   margin: const EdgeInsets.all(
-                                                        8,
-                                                      ),
-                                                      child: Circle(
-                                                        allowAction:
+                                                    8,
+                                                  ),
+                                                  child: Circle(
+                                                    allowAction:
                                                         state.allowAction,
-                                                        filled: index <
+                                                    filled: index <
                                                         enteredPasscode.length,
                                                     circleUIConfig:
                                                         widget.circleUIConfig,
-                                                      ),
-                                                    ),
                                                   ),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ],

@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -69,8 +68,6 @@ class PinCodeView extends StatefulWidget {
 
 class _PinCodeViewState extends State<PinCodeView> {
   final totalPermitedLoginAttempt = 3;
-  final StreamController<bool> _verificationNotifier =
-      StreamController<bool>.broadcast();
 
   @override
   void initState() {
@@ -79,7 +76,6 @@ class _PinCodeViewState extends State<PinCodeView> {
 
   @override
   void dispose() {
-    _verificationNotifier.close();
     super.dispose();
   }
 

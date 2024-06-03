@@ -91,7 +91,8 @@ class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
           style: Theme.of(context).textTheme.labelLarge,
         ),
         cancelCallback: _onPasscodeCancelled,
-          isNewCode: true,
+        isNewCode: true,
+        isValidCallback: _isValidCallback,
       ),
     );
   }

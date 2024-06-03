@@ -38,7 +38,7 @@ class UserPinPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          PinCodeViewCubit(profileCubit: context.read<ProfileCubit>()),
+          PinCodeViewCubit(),
       child: UserPinView(
         onCancel: onCancel,
         onProceed: onProceed,
@@ -89,7 +89,6 @@ class _UserPinViewState extends State<UserPinView> {
             body: PinCodeWidget(
               title: widget.txCode?.description ??
                   l10n.pleaseInsertTheSecredCodeReceived,
-              passwordEnteredCallback: _onPasscodeEntered,
               passwordDigits: widget.txCode?.length ?? 4,
               deleteButton: Text(
                 l10n.delete,
@@ -104,7 +103,6 @@ class _UserPinViewState extends State<UserPinView> {
                 Navigator.pop(context);
                 widget.onProceed.call(pinCodeValue!);
               },
-              shouldTriggerVerification: _verificationNotifier.stream,
             ),
           ),
         );
