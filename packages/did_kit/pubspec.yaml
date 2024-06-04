@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   didkit:
-    path: ../../didkit/lib/flutter
+    path: ../../../didkit/lib/flutter
   flutter:
     sdk: flutter
   mocktail: ^1.0.2
