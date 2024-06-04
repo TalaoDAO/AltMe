@@ -1,0 +1,14 @@
+name: oidc4vc
+
+on: [pull_request, push]
+
+jobs:
+  build:
+    uses: TalaoDAO/AltMe/.github/workflows/flutter_package.yaml@october
+    with:
+      flutter_channel: stable
+      flutter_version: 3.22.1
+      min_coverage: 30
+      working_directory: packages/oidc4vc
+      dart_sdk: 3.4.1
+      build_runner: false
