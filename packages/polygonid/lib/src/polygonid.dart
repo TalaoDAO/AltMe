@@ -20,11 +20,18 @@ import 'package:web3dart/web3dart.dart';
 /// A Very Good Project created by Very Good CLI.
 /// {@endtemplate}
 class PolygonId {
-  PolygonId({this.sdk});
+  factory PolygonId({PolygonIdSdk? sdk}) {
+    if (sdk != null) {
+      _instance.polygonIdSdk = sdk;
+    }
+    return _instance;
+  }
 
-  final PolygonIdSdk? sdk;
+  PolygonId._internal();
 
   late PolygonIdSdk polygonIdSdk;
+
+  static final PolygonId _instance = PolygonId._internal();
 
   /// blockchain
   static const blockchain = 'polygon';
@@ -58,7 +65,7 @@ class PolygonId {
       ),
     );
 
-    polygonIdSdk = sdk ?? PolygonIdSdk.I;
+    polygonIdSdk = PolygonIdSdk.I;
     isInitialized = true;
   }
 
