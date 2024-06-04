@@ -101,8 +101,8 @@ jobs:
 
       - name: 📦 Install Dependencies
         run: |
-          if grep -q 'path: ../../../didkit/lib/flutter' pubspec.yaml; then 
-            sed -i 's|path: ../../../didkit/lib/flutter|git:\n      url: https://github.com/spruceid/didkit.git\n      path: lib/flutter|' pubspec.yaml
+          if grep -q 'path: ../../../didkit/lib/flutter' ../did_kit/pubspec.yaml; then 
+            sed -i 's|path: ../../../didkit/lib/flutter|git:\n      url: https://github.com/spruceid/didkit.git\n      path: lib/flutter|' ../did_kit/pubspec.yaml
           fi  
           flutter pub global activate very_good_cli
           very_good packages get --recursive --ignore=${{inputs.package_get_excludes}}
