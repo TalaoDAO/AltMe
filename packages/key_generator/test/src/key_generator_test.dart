@@ -1,5 +1,5 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:test/test.dart';
 
 void main() {
   const mnemonics =
