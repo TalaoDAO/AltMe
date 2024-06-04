@@ -4,7 +4,7 @@ on: [pull_request, push]
 
 jobs:
   build:
-    uses: TalaoDAO/AltMe/.github/workflows/flutter_package.yaml@october
+    uses: TalaoDAO/AltMe/.github/workflows/flutter_package.yaml@main
     with:
       flutter_channel: stable
       flutter_version: 3.22.1
