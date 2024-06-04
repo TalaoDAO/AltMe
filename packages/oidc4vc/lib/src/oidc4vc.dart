@@ -1747,7 +1747,7 @@ class OIDC4VC {
   }) async {
     try {
       final secureStorageProvider = getSecureStorage;
-      final cachedData = await secureStorageProvider.get(uri);
+      // final cachedData = await secureStorageProvider.get(uri);
       // TODO(hawkbee): To be removed.
       /// temporary solution to purge faulty stored data
       /// Will be removed in the future
