@@ -8,9 +8,7 @@ environment:
 
 dependencies:
   didkit:
-    git:
-      url: https://github.com/spruceid/didkit.git
-      path: lib/flutter
+    path: ../../../didkit/lib/flutter
   flutter:
     sdk: flutter
   mocktail: ^1.0.2
