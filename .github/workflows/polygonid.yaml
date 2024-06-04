@@ -7,8 +7,8 @@ jobs:
     uses: TalaoDAO/AltMe/.github/workflows/flutter_package.yaml@main
     with:
       flutter_channel: stable
-      flutter_version: 3.19.6
+      flutter_version: 3.22.1
       min_coverage: 30
       working_directory: packages/polygonid
-      dart_sdk: 3.3.4
+      dart_sdk: 3.4.1
       build_runner: false

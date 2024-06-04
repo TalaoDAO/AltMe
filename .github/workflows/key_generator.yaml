@@ -1,4 +1,4 @@
-name: did_kit
+name: key_generator
 
 on: [pull_request, push]
 
@@ -9,6 +9,6 @@ jobs:
       flutter_channel: stable
       flutter_version: 3.22.1
       min_coverage: 30
-      working_directory: packages/did_kit
+      working_directory: packages/key_generator
       dart_sdk: 3.4.1
       build_runner: false
