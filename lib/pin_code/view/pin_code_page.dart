@@ -1,13 +1,8 @@
-import 'dart:async';
-
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/cubit/pin_code_view_cubit.dart';
-import 'package:altme/pin_code/widgets/widgets.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class PinCodePage extends StatelessWidget {
   const PinCodePage({
@@ -41,8 +36,7 @@ class PinCodePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          PinCodeViewCubit(profileCubit: context.read<ProfileCubit>()),
+      create: (context) => PinCodeViewCubit(totalPermitedLoginAttempt: 3),
       child: PinCodeView(
         isValidCallback: isValidCallback,
         restrictToBack: restrictToBack,
@@ -72,94 +66,89 @@ class PinCodeView extends StatefulWidget {
 }
 
 class _PinCodeViewState extends State<PinCodeView> {
-  final StreamController<bool> _verificationNotifier =
-      StreamController<bool>.broadcast();
+  final totalPermitedLoginAttempt = 3;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
-    _verificationNotifier.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return WillPopScope(
-      onWillPop: () async => !widget.restrictToBack,
+    return PopScope(
+      canPop: !widget.restrictToBack,
       child: BasePage(
         backgroundColor: Theme.of(context).colorScheme.surface,
+        title: '',
+        titleAlignment: Alignment.topCenter,
+        titleLeading: widget.restrictToBack ? null : const BackLeadingButton(),
         scrollView: false,
-        body: BlocBuilder<ProfileCubit, ProfileState>(
-          builder: (context, state) {
-            return PinCodeWidget(
-              title: l10n.enterYourPinCode,
-              subTitle: l10n.pinCodeMessage,
-              passwordEnteredCallback: _onPasscodeEntered,
-              deleteButton: Text(
-                l10n.delete,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              cancelButton: Text(
-                l10n.cancel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              cancelCallback: _onPasscodeCancelled,
-              isValidCallback: () async {
-                switch (widget.walletProtectionType) {
-                  case WalletProtectionType.pinCode:
-                    Navigator.pop(context);
-                    widget.isValidCallback.call();
-                  case WalletProtectionType.biometrics:
-                    throw ResponseMessage(
-                      data: {
-                        'error': 'invalid_format',
-                        'error_description': 'The biomertics is not supported.',
-                      },
-                    );
-                  case WalletProtectionType.FA2:
-                    final LocalAuthApi localAuthApi = LocalAuthApi();
-                    final authenticated = await localAuthApi.authenticate(
-                      localizedReason: l10n.scanFingerprintToAuthenticate,
-                    );
-                    if (authenticated) {
-                      Navigator.pop(context);
-                      widget.isValidCallback.call();
-                    } else {
-                      Navigator.pop(context);
-                      AlertMessage.showStateMessage(
-                        context: context,
-                        stateMessage: StateMessage.success(
-                          showDialog: false,
-                          stringMessage: l10n.authenticationFailed,
-                        ),
-                      );
-                    }
+        body: PinCodeWidget(
+          title: l10n.enterYourPinCode,
+          subTitle: l10n.pinCodeMessage,
+          deleteButton: Text(
+            l10n.delete,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          cancelButton: Text(
+            l10n.cancel,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          cancelCallback: _onPasscodeCancelled,
+          isValidCallback: () async {
+            switch (widget.walletProtectionType) {
+              case WalletProtectionType.pinCode:
+                Navigator.pop(context);
+                widget.isValidCallback.call();
+              case WalletProtectionType.biometrics:
+                throw ResponseMessage(
+                  data: {
+                    'error': 'invalid_format',
+                    'error_description': 'The biomertics is not supported.',
+                  },
+                );
+              case WalletProtectionType.FA2:
+                final LocalAuthApi localAuthApi = LocalAuthApi();
+                final authenticated = await localAuthApi.authenticate(
+                  localizedReason: l10n.scanFingerprintToAuthenticate,
+                );
+                if (authenticated) {
+                  Navigator.pop(context);
+                  widget.isValidCallback.call();
+                } else {
+                  Navigator.pop(context);
+                  AlertMessage.showStateMessage(
+                    context: context,
+                    stateMessage: StateMessage.success(
+                      showDialog: false,
+                      stringMessage: l10n.authenticationFailed,
+                    ),
+                  );
                 }
-              },
-              shouldTriggerVerification: _verificationNotifier.stream,
-              allowAction: state.allowLogin,
-            );
+            }
+          },
+          // shouldTriggerVerification: _verificationNotifier.stream,
+          onLoginAttempt: (loginAttempt, loginAttemptsRemaining) {
+            if (loginAttemptsRemaining > 0) {
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (_) => WrongPinCodePopUp(
+                  loginAttemptsRemaining: loginAttemptsRemaining,
+                ),
+              );
+            } else {
+              Navigator.of(context).push(DeleteMyWalletPage.route());
+            }
           },
         ),
       ),
     );
-  }
-
-  Future<void> _onPasscodeEntered(String enteredPasscode) async {
-    final profileCubit = context.read<ProfileCubit>();
-
-    profileCubit.passcodeEntered();
-
-    bool isValid = false;
-
-    if (profileCubit.state.allowLogin) {
-      isValid = (await getSecureStorage.get(SecureStorageKeys.pinCode)) ==
-          enteredPasscode;
-      if (isValid) {
-        profileCubit.resetloginAttemptCount();
-      }
-    }
-    _verificationNotifier.add(isValid);
   }
 
   void _onPasscodeCancelled() {

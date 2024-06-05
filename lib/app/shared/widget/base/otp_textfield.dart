@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class OtpTextField extends StatelessWidget {
@@ -27,7 +26,7 @@ class OtpTextField extends StatelessWidget {
         style: Theme.of(context).textTheme.labelLarge,
         cursorColor: Theme.of(context).colorScheme.onPrimary,
         decoration: InputDecoration(
-          fillColor: Theme.of(context).colorScheme.lightPurple,
+          fillColor: Theme.of(context).colorScheme.secondary,
           filled: true,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),

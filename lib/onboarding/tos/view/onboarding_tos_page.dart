@@ -18,8 +18,12 @@ class OnBoardingTosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<OnBoardingTosCubit>(
       create: (_) => OnBoardingTosCubit(),
-      child: OnBoardingTosView(
-        onBoardingTosCubit: context.read<OnBoardingTosCubit>(),
+      child: Builder(
+        builder: (context) {
+          return OnBoardingTosView(
+            onBoardingTosCubit: context.read<OnBoardingTosCubit>(),
+          );
+        },
       ),
     );
   }
@@ -66,7 +70,7 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
             return false;
           },
           child: BasePage(
-            backgroundColor: Theme.of(context).colorScheme.background,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             title: l10n.termsOfUse,
             scrollView: false,
             padding: const EdgeInsets.symmetric(horizontal: 10),

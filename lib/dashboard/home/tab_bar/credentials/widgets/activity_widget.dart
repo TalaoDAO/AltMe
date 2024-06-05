@@ -17,8 +17,8 @@ class ActivityWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final titleColor = Theme.of(context).colorScheme.titleColor;
-    final valueColor = Theme.of(context).colorScheme.valueColor;
+    final titleColor = Theme.of(context).colorScheme.onSurface;
+    final valueColor = Theme.of(context).colorScheme.onSurface;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -74,7 +74,7 @@ class ActivityWidget extends StatelessWidget {
           ),
           const SizedBox(height: 5),
         ],
-        Divider(color: Theme.of(context).colorScheme.surfaceContainer),
+        Divider(color: Theme.of(context).colorScheme.surface.withOpacity(0.07)),
       ],
     );
   }

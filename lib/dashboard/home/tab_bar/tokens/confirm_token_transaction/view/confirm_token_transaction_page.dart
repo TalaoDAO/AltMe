@@ -192,7 +192,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                   const FromAccountWidget(isEnabled: false),
                   const SizedBox(height: Sizes.spaceNormal),
                   BackgroundCard(
-                    color: Theme.of(context).colorScheme.cardBackground,
+                    color: Theme.of(context).colorScheme.surface,
                     child: SizedBox(
                       width: double.infinity,
                       child: Column(

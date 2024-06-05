@@ -29,7 +29,7 @@ class ErrorView extends StatelessWidget {
           width: MediaQuery.of(context).size.width / 2.5,
           child: MyOutlinedButton(
             text: l10n.tryAgain,
-            backgroundColor: Theme.of(context).colorScheme.transparent,
+            backgroundColor: Colors.transparent,
             onPressed: onTap,
             fontSize: 14,
             verticalSpacing: 10,

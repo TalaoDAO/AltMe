@@ -23,7 +23,7 @@ class LanguageSelectorWidget extends StatelessWidget {
               padding: const EdgeInsets.all(Sizes.spaceSmall),
               margin: const EdgeInsets.all(Sizes.spaceXSmall),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.drawerSurface,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Sizes.largeRadius),
                 ),
@@ -62,7 +62,7 @@ class LanguageSelectorWidget extends StatelessWidget {
                               child: Divider(
                                 height: 0,
                                 color:
-                                    Theme.of(context).colorScheme.borderColor,
+                                    Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
                               ),
                             ),
                           ListTile(

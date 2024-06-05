@@ -76,7 +76,7 @@ class TrustFrameworkPage extends StatelessWidget {
                       horizontal: Sizes.spaceSmall,
                     ),
                     child: Divider(
-                      color: Theme.of(context).colorScheme.borderColor,
+                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
                     ),
                   ),
                   IssuerVerifierSelector(

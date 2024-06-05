@@ -12,7 +12,7 @@ class Permissions extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-          color: Theme.of(context).colorScheme.beaconBorder,
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
           width: 1.5,
         ),
         borderRadius: BorderRadius.circular(15),

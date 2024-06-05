@@ -99,7 +99,7 @@ class _VerifyAgeViewState extends State<VerifyAgeView> {
           MyElevatedButton(
             text: l10n.decline,
             verticalSpacing: 16,
-            backgroundColor: Theme.of(context).colorScheme.cardHighlighted,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             borderRadius: Sizes.largeRadius,
             onPressed: () {
               Navigator.of(context).pop();

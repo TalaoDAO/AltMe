@@ -98,7 +98,7 @@ class ProfessionalExperienceAssessmentWidget extends StatelessWidget {
                       StarRating(
                         starCount: 5,
                         rating: double.parse(item.reviewRating.ratingValue),
-                        color: Theme.of(context).colorScheme.star,
+                        color: Theme.of(context).colorScheme.onErrorContainer,
                       ),
                     ],
                   ),

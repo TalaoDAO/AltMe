@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -90,16 +89,16 @@ ButtonStyle elevatedStyleFrom({
   GestureTapCallback? onPressed,
 }) {
   return ButtonStyle(
-    elevation: MaterialStateProperty.all(elevation),
-    padding: MaterialStateProperty.all(
+    elevation: WidgetStateProperty.all(elevation),
+    padding: WidgetStateProperty.all(
       EdgeInsets.symmetric(vertical: verticalSpacing),
     ),
-    backgroundColor: MaterialStateProperty.all(
+    backgroundColor: WidgetStateProperty.all(
       onPressed == null
-          ? Theme.of(context).colorScheme.disabledBgColor
+          ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
           : backgroundColor ?? Theme.of(context).colorScheme.primary,
     ),
-    shape: MaterialStateProperty.all(
+    shape: WidgetStateProperty.all(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius),
       ),
@@ -124,7 +123,7 @@ class ElevatedButtonText extends StatelessWidget {
     return Text(
       text.toUpperCase(),
       style: GoogleFonts.nunito(
-        color: textColor ?? Theme.of(context).colorScheme.onElevatedButton,
+        color: textColor ?? Theme.of(context).colorScheme.onPrimary,
         fontSize: fontSize,
         fontWeight: FontWeight.w700,
       ),

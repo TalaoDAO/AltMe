@@ -3,7 +3,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -45,8 +44,8 @@ class StarterView extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Theme.of(context).colorScheme.darkGradientStartColor,
-                Theme.of(context).colorScheme.darkGradientEndColor,
+                Theme.of(context).colorScheme.surface,
+                Theme.of(context).colorScheme.surface,
               ],
               end: Alignment.topCenter,
               begin: Alignment.bottomCenter,
@@ -95,9 +94,9 @@ class StarterView extends StatelessWidget {
                         const Spacer(flex: 1),
                         MyOutlinedButton(
                           text: l10n.importAccount,
-                          textColor: Theme.of(context).colorScheme.lightPurple,
+                          textColor: Theme.of(context).colorScheme.secondary,
                           borderColor:
-                              Theme.of(context).colorScheme.lightPurple,
+                              Theme.of(context).colorScheme.secondary,
                           backgroundColor: Colors.transparent,
                           onPressed: () async {
                             await profileCubit.setWalletType(

@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -33,13 +32,17 @@ class MarkdownPage extends StatelessWidget {
                 data: snapshot.data!,
                 styleSheet: MarkdownStyleSheet(
                   h1: TextStyle(
-                    color: Theme.of(context).colorScheme.markDownH1,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                   h2: TextStyle(
-                    color: Theme.of(context).colorScheme.markDownH2,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
-                  a: TextStyle(color: Theme.of(context).colorScheme.markDownA),
-                  p: TextStyle(color: Theme.of(context).colorScheme.markDownP),
+                  a: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  p: TextStyle(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.6),),
                 ),
                 onTapLink: (text, href, title) => _onTapLink(href),
               );

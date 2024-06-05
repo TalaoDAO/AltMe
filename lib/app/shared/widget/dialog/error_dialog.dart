@@ -24,9 +24,9 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background = bgColor ?? Theme.of(context).colorScheme.popupBackground;
+    final background = bgColor ?? Theme.of(context).colorScheme.surface;
     final textColor =
-        this.textColor ?? Theme.of(context).colorScheme.dialogText;
+        this.textColor ?? Theme.of(context).colorScheme.onSurface;
 
     final l10n = context.l10n;
     return AlertDialog(
@@ -61,7 +61,7 @@ class ErrorDialog extends StatelessWidget {
               fontSize: 15,
               borderColor: Theme.of(context)
                   .colorScheme
-                  .defualtDialogCancelButtonBorderColor,
+                  .onSurface.withOpacity(0.2),
               backgroundColor: background,
               textColor: textColor,
               borderRadius: Sizes.smallRadius,

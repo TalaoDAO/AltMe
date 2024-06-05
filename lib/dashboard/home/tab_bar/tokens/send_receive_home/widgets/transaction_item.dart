@@ -103,15 +103,15 @@ class TransactionItem extends StatelessWidget {
                 operationModel.status,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       color: operationModel.status.toLowerCase() == 'applied'
-                          ? Theme.of(context).colorScheme.transactionApplied
+                          ? Theme.of(context).colorScheme.onTertiary
                           : operationModel.status.toLowerCase() == 'failed' ||
                                   operationModel.status.toLowerCase() ==
                                       'backtracked'
-                              ? Theme.of(context).colorScheme.transactionFailed
+                              ? Theme.of(context).colorScheme.error
                               : operationModel.status.toLowerCase() == 'skipped'
                                   ? Theme.of(context)
                                       .colorScheme
-                                      .transactionSkipped
+                                      .error
                                   : null,
                     ),
               ),

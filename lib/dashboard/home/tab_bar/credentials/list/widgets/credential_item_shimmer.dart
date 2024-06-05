@@ -7,7 +7,7 @@ class CredentialItemShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackgroundCard(
-      color: Theme.of(context).colorScheme.surfaceContainer,
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
       padding: EdgeInsets.zero,
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,

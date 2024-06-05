@@ -24,7 +24,7 @@ class AccountItem extends StatelessWidget {
         vertical: Sizes.spaceSmall,
       ),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.cardHighlighted,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.all(
           Radius.circular(
             Sizes.smallRadius,

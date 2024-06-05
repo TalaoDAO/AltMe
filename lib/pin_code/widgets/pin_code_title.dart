@@ -25,7 +25,7 @@ class PinCodeTitle extends StatelessWidget {
               : Theme.of(context)
                   .textTheme
                   .pinCodeTitle
-                  .copyWith(color: Theme.of(context).colorScheme.redColor),
+                  .copyWith(color: Theme.of(context).colorScheme.error),
         ),
         if (subTitle != null) ...[
           const SizedBox(height: 10),
@@ -36,7 +36,7 @@ class PinCodeTitle extends StatelessWidget {
                 : Theme.of(context)
                     .textTheme
                     .pinCodeMessage
-                    .copyWith(color: Theme.of(context).colorScheme.redColor),
+                    .copyWith(color: Theme.of(context).colorScheme.error),
             textAlign: TextAlign.center,
           ),
         ],

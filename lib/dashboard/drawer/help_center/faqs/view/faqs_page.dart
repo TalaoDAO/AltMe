@@ -65,7 +65,7 @@ class FAQsView extends StatelessWidget {
                                       decoration: TextDecoration.underline,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .markDownA,
+                                          .primary,
                                     )
                                 : Theme.of(context).textTheme.faqAns,
                             textAlign: TextAlign.justify,

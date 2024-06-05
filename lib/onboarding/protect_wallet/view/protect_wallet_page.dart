@@ -45,11 +45,15 @@ class ProtectWalletPage extends StatelessWidget {
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
         profileCubit: context.read<ProfileCubit>(),
       ),
-      child: ProtectWalletView(
-        routeType: routeType,
-        profileCubit: context.read<ProfileCubit>(),
-        onBoardingGenPhraseCubit: context.read<OnBoardingGenPhraseCubit>(),
-        onboardingCubit: context.read<OnboardingCubit>(),
+      child: Builder(
+        builder: (context) {
+          return ProtectWalletView(
+            routeType: routeType,
+            profileCubit: context.read<ProfileCubit>(),
+            onBoardingGenPhraseCubit: context.read<OnBoardingGenPhraseCubit>(),
+            onboardingCubit: context.read<OnboardingCubit>(),
+          );
+        },
       ),
     );
   }
@@ -129,7 +133,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
         useSafeArea: true,
         padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
         titleLeading: const BackLeadingButton(),
-        backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: l10n.protectYourWallet,
         titleAlignment: Alignment.topCenter,
         body: BlocBuilder<ProfileCubit, ProfileState>(

@@ -10,7 +10,7 @@ abstract class AppTheme {
 
   /// An accent color used for less prominent components in the UI, such as
   /// filter chips, while expanding the opportunity for color expression.
-  static Color darkSecondary = const Color(0xff00A1FF);
+  static Color darkSecondary = const Color(0xff18ACFF);
 
   /// A color that's clearly legible when drawn on secondary
   static Color darkOnSecondary = const Color(0xffFFFFFF);
@@ -18,13 +18,13 @@ abstract class AppTheme {
   /// A color used as a contrasting accent that can balance primary
   /// and secondary colors or bring heightened attention to an element,
   /// such as an input field.
-  static Color darkTertiary = const Color(0xffFFFFFF);
+  static Color darkTertiary = const Color(0xFF280164);
 
   /// A color that's clearly legible when drawn on tertiary.
   static Color darkOnTertiary = const Color(0xffD1CCE3);
 
   /// The background color for widgets like Card.
-  static Color darkSurface = const Color(0xff1A182D);
+  static Color darkSurface = const Color(0xff0B0514);
 
   /// A color that's clearly legible when drawn on surface.
   static Color darkOnSurface = const Color(0xffEDEAF5);
@@ -55,17 +55,19 @@ abstract class AppTheme {
         dividerColor: dividerColor,
         highlightColor: highlightColor,
         colorScheme: ColorScheme(
-          primary: darkPrimary,
+          primary: const Color(0xff6600FF),
           onPrimary: darkOnPrimary,
           secondary: darkSecondary,
           onSecondary: darkOnSecondary,
           tertiary: darkTertiary,
           onTertiary: darkOnTertiary,
-          surface: darkSurface,
+          surface: const Color(0xff0B0514),
           onSurface: darkOnSurface,
           error: darkError,
           onError: darkOnError,
           shadow: darkShadow,
+          surfaceBright: const Color(0xff232630),
+          surfaceDim: const Color(0xff271C38),
           brightness: Brightness.dark,
         ),
         textTheme: TextTheme(
@@ -101,153 +103,6 @@ abstract class AppTheme {
         ),
         tabBarTheme: const TabBarTheme(dividerColor: Colors.transparent),
       );
-}
-
-extension CustomColorScheme on ColorScheme {
-  Color get redColor => const Color(0xFFFF0045);
-  Color get transactionApplied => const Color(0xFF00B267);
-  Color get transactionFailed => const Color(0xFFFF0045);
-  Color get transactionSkipped => const Color(0xFFFF5F0A);
-  Color get activeColorOfNetwork => const Color(0xFF2C7DF7);
-
-  Color get greyText => const Color(0xFFD1CCE3);
-
-  Color get kycKeyIconColor => const Color(0xFF86809D);
-
-  Color get lightPurple => const Color(0xFF5F556F);
-
-  Color get popupBackground => const Color(0xff271C38);
-
-  Color get cardHighlighted => const Color(0xFF251F38);
-
-  Color get defaultDialogDark => const Color(0xFF322643);
-
-  Color get closeIconColor => const Color(0xFFA79ABA);
-
-  Color get kycVerifyButton => const Color(0xFF0045FF);
-
-  Color get checkMarkColor => const Color(0xFF00B267);
-
-  Color get accountBottomSheetBorder => Colors.grey[200]!;
-
-  Color get digitPrimaryColor => Colors.white;
-
-  Color get digitFillColor => Colors.transparent;
-
-  Color get disabledBgColor => const Color(0xFF6A5F7B);
-
-  Color get disabledTextColor => const Color(0xFF000000);
-
-  Color get darkGradientStartColor => const Color(0xff0A0F19);
-
-  Color get darkGradientEndColor => const Color(0xff25095B);
-
-  Color get transparent => Colors.transparent;
-
-  Color get onOutlineButton => const Color(0xFF6600FF);
-
-  Color get onElevatedButton => const Color(0xFFFFFFFF);
-
-  Color get appBarUpperLayer => const Color(0xff25095B);
-
-  Color get appBarLowerLayer => surface;
-
-  Color get surfaceContainer => const Color(0xff707070).withOpacity(0.07);
-
-  Color get drawerSurface => const Color(0xff232630);
-
-  Color get label => Colors.white;
-
-  Color get unSelectedLabel => const Color(0xff86809D);
-
-  Color get leadingButton => const Color(0xffF1EFF8);
-
-  Color get selectedBottomBar => surface;
-
-  Color get drawerBackground => const Color(0xff0B0514);
-
-  Color get borderColor => const Color(0xFFDDCEF4);
-
-  Color get defualtDialogCancelButtonBorderColor =>
-      const Color(0xFFFFFFFF).withOpacity(0.2);
-
-  Color get markDownH1 => const Color(0xFFFFFFFF);
-
-  Color get markDownH2 => const Color(0xFFFFFFFF);
-
-  Color get markDownP => const Color(0xFFD1CCE3);
-
-  Color get markDownA => const Color(0xff517bff);
-
-  Color get subtitle1 => const Color(0xFFFFFFFF);
-
-  Color get subtitle2 => const Color(0xFF8B8C92);
-
-  Color get profileDummy => const Color(0xFF212121);
-
-  Color get documentShadow => const Color(0xFF424242);
-
-  Color get documentShape => const Color(0xff3700b3).withOpacity(0.05);
-
-  Color get star => const Color(0xFFFFB83D);
-
-  Color get genderIcon => const Color(0xFF212121);
-
-  Color get activeCredential => Colors.green;
-
-  Color get expiredCredential => Colors.orange;
-
-  Color get revokedCredential => Colors.red;
-
-  Color get buttonDisabled => const Color(0xFF424242);
-
-  Color get alertErrorMessage => Colors.red;
-
-  Color get alertWarningMessage => Colors.yellow;
-
-  Color get alertInfoMessage => Colors.cyan;
-
-  Color get alertSuccessMessage => Colors.green;
-
-  Color get qrScanBackground => const Color(0xff2B1C48);
-
-  Color get qrScanInnerShadow => const Color(0xff000000).withOpacity(0.16);
-
-  Color get qrScanOuterShadow => const Color(0xff430F91);
-
-  Color get dialogText => const Color(0xffF5F5F5);
-
-  Color get tabBarNotSelected => const Color(0xFF280164);
-
-  Color get credentialBackground => const Color(0xFF211F33);
-
-  Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
-
-  Color get startButtonColorA => const Color(0xff18ACFF);
-
-  Color get startButtonColorB => const Color(0xff6600FF);
-
-  Color get associatedWalletBorder => const Color(0xff524B67);
-
-  Color get deleteColor => const Color(0xff322643);
-
-  Color get blueColor => const Color(0xff322643);
-
-  Color get titleColor => const Color(0xffD1CCE3);
-
-  Color get valueColor => const Color(0xffFFFFFF);
-
-  Color get lightGrey => const Color(0xFF616161);
-
-  Color get darkGrey => const Color(0xFF212121);
-
-  Color get activeColor => const Color(0xFF08B530);
-
-  Color get inactiveColor => const Color(0xFFFF0045);
-
-  Color get beaconBorder => const Color(0xff86809D);
-
-  Color get cardBackground => const Color(0xFF211F33);
 }
 
 extension CustomTextTheme on TextTheme {

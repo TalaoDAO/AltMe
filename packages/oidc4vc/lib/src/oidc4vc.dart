@@ -147,12 +147,14 @@ class OIDC4VC {
     required String? clientAssertion,
     required bool secureAuthorizedFlow,
     required Dio dio,
+    SecureStorageProvider? secureStorage,
   }) async {
     try {
       final openIdConfiguration = await getOpenIdConfig(
         baseUrl: issuer,
         isAuthorizationServer: false,
         dio: dio,
+        secureStorage: secureStorage,
       );
 
       final authorizationEndpoint = await readAuthorizationEndPoint(
@@ -160,6 +162,7 @@ class OIDC4VC {
         issuer: issuer,
         oidc4vciDraftType: oidc4vciDraftType,
         dio: dio,
+        secureStorage: secureStorage,
       );
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
@@ -741,6 +744,7 @@ class OIDC4VC {
     required bool fromStatusList,
     required bool isCachingEnabled,
     required Dio dio,
+    SecureStorageProvider? secureStorage,
   }) async {
     try {
       if (isURL(didKey)) {
@@ -758,6 +762,7 @@ class OIDC4VC {
           isAuthorizationServer: isAuthorizationServer,
           isCachingEnabled: isCachingEnabled,
           dio: dio,
+          secureStorage: secureStorage,
         );
 
         final authorizationServer = openIdConfiguration.authorizationServer;
@@ -768,6 +773,7 @@ class OIDC4VC {
             isAuthorizationServer: true,
             isCachingEnabled: isCachingEnabled,
             dio: dio,
+            secureStorage: secureStorage,
           );
         }
 
@@ -779,15 +785,26 @@ class OIDC4VC {
           openIdConfiguration.jwksUri!,
           isCachingEnabled: isCachingEnabled,
           dio: dio,
+          secureStorage: secureStorage,
         );
 
         return response as Map<String, dynamic>;
       } else {
-        final didDocument = await dio.get<dynamic>(
-          'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
-        );
-
-        return didDocument.data as Map<String, dynamic>;
+        try {
+          final didDocument = await dio.get<dynamic>(
+            'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
+          );
+          return didDocument.data as Map<String, dynamic>;
+        } catch (e) {
+          try {
+            final didDocument = await dio.get<dynamic>(
+              'https://dev.uniresolver.io/1.0/identifiers/$didKey',
+            );
+            return didDocument.data as Map<String, dynamic>;
+          } catch (e) {
+            rethrow;
+          }
+        }
       }
     } catch (e) {
       rethrow;
@@ -804,6 +821,7 @@ class OIDC4VC {
     required String issuer,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required Dio dio,
+    SecureStorageProvider? secureStorage,
   }) async {
     var tokenEndPoint = '$issuer/token';
 
@@ -817,6 +835,7 @@ class OIDC4VC {
         baseUrl: authorizationServer,
         isAuthorizationServer: true,
         dio: dio,
+        secureStorage: secureStorage,
       );
 
       if (authorizationServerConfiguration.tokenEndpoint != null) {
@@ -832,6 +851,7 @@ class OIDC4VC {
     required String issuer,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required Dio dio,
+    SecureStorageProvider? secureStorage,
   }) async {
     var authorizationEndpoint = '$issuer/authorize';
 
@@ -845,6 +865,7 @@ class OIDC4VC {
         baseUrl: authorizationServer,
         isAuthorizationServer: true,
         dio: dio,
+        secureStorage: secureStorage,
       );
 
       if (authorizationServerConfiguration.authorizationEndpoint != null) {
@@ -1618,6 +1639,7 @@ class OIDC4VC {
     required bool isAuthorizationServer,
     required Dio dio,
     bool isCachingEnabled = false,
+    SecureStorageProvider? secureStorage,
   }) async {
     ///for OIDC4VCI, the server is an issuer the metadata are all in th
     ////openid-issuer-configuration or some are in the /openid-configuration
@@ -1633,6 +1655,7 @@ class OIDC4VC {
         baseUrl,
         isCachingEnabled: isCachingEnabled,
         dio: dio,
+        secureStorage: secureStorage,
       );
       return data;
     }
@@ -1642,6 +1665,7 @@ class OIDC4VC {
         url,
         isCachingEnabled: isCachingEnabled,
         dio: dio,
+        secureStorage: secureStorage,
       );
       final data = response is String
           ? jsonDecode(response) as Map<String, dynamic>
@@ -1662,6 +1686,7 @@ class OIDC4VC {
     String baseUrl, {
     required bool isCachingEnabled,
     required Dio dio,
+    SecureStorageProvider? secureStorage,
   }) async {
     final url = '$baseUrl/.well-known/openid-credential-issuer';
 
@@ -1670,6 +1695,7 @@ class OIDC4VC {
         url,
         isCachingEnabled: isCachingEnabled,
         dio: dio,
+        secureStorage: secureStorage,
       );
       final data = response is String
           ? jsonDecode(response) as Map<String, dynamic>
@@ -1744,10 +1770,11 @@ class OIDC4VC {
       'Content-Type': 'application/json; charset=UTF-8',
     },
     bool isCachingEnabled = false,
+    SecureStorageProvider? secureStorage,
   }) async {
     try {
-      final secureStorageProvider = getSecureStorage;
-      final cachedData = await secureStorageProvider.get(uri);
+      final secureStorageProvider = secureStorage ?? getSecureStorage;
+      // final cachedData = await secureStorageProvider.get(uri);
       // TODO(hawkbee): To be removed.
       /// temporary solution to purge faulty stored data
       /// Will be removed in the future
@@ -1758,27 +1785,27 @@ class OIDC4VC {
 
       dio.options.headers = headers;
 
-      if (isCachingEnabled) {
-        final secureStorageProvider = getSecureStorage;
-        final cachedData = await secureStorageProvider.get(uri);
-        if (cachedData == null) {
-          response = await dio.get<dynamic>(uri);
-        } else {
-          final cachedDataJson = jsonDecode(cachedData);
-          final expiry = int.parse(cachedDataJson['expiry'].toString());
+      // if (isCachingEnabled) {
+      //   final secureStorageProvider = getSecureStorage;
+      //   final cachedData = await secureStorageProvider.get(uri);
+      //   if (cachedData == null) {
+      //     response = await dio.get<dynamic>(uri);
+      //   } else {
+      //     final cachedDataJson = jsonDecode(cachedData);
+      //     final expiry = int.parse(cachedDataJson['expiry'].toString());
 
-          final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
+      //     final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
 
-          if (isExpired) {
-            response = await dio.get<dynamic>(uri);
-          } else {
-            /// directly return cached data
-            /// returned here to avoid the caching override everytime
-            final response = await cachedDataJson['data'];
-            return response;
-          }
-        }
-      }
+      //     if (isExpired) {
+      //       response = await dio.get<dynamic>(uri);
+      //     } else {
+      //       /// directly return cached data
+      //       /// returned here to avoid the caching override everytime
+      //       final response = await cachedDataJson['data'];
+      //       return response;
+      //     }
+      //   }
+      // }
       // temporary deactiviting this caching du to issue with
       // flutter_secure_storage on ios #2657
       // final expiry =
@@ -1786,6 +1813,7 @@ class OIDC4VC {
 
       // final value = {'expiry': expiry, 'data': response.data};
       // await secureStorageProvider.set(uri, jsonEncode(value));
+      response = await dio.get<dynamic>(uri);
 
       return response.data;
     } on FormatException {

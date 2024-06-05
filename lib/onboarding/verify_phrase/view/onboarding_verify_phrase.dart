@@ -47,12 +47,16 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
         profileCubit: context.read<ProfileCubit>(),
       ),
-      child: OnBoardingVerifyPhraseView(
-        mnemonic: mnemonic,
-        isFromOnboarding: isFromOnboarding,
-        onBoardingVerifyPhraseCubit:
-            context.read<OnBoardingVerifyPhraseCubit>(),
-        onboardingCubit: context.read<OnboardingCubit>(),
+      child: Builder(
+        builder: (context) {
+          return OnBoardingVerifyPhraseView(
+            mnemonic: mnemonic,
+            isFromOnboarding: isFromOnboarding,
+            onBoardingVerifyPhraseCubit:
+                context.read<OnBoardingVerifyPhraseCubit>(),
+            onboardingCubit: context.read<OnboardingCubit>(),
+          );
+        },
       ),
     );
   }

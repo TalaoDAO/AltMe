@@ -14,8 +14,8 @@ class DisplayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleColor = Theme.of(context).colorScheme.titleColor;
-    final valueColor = Theme.of(context).colorScheme.valueColor;
+    final titleColor = Theme.of(context).colorScheme.onSurface;
+    final valueColor = Theme.of(context).colorScheme.onSurface;
 
     final textTheme = Theme.of(context).textTheme;
     final titleTheme =

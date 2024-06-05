@@ -97,7 +97,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                   textAlign: TextAlign.center,
                   style:
                       Theme.of(context).textTheme.credentialSubtitle.copyWith(
-                            color: Theme.of(context).colorScheme.lightPurple,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                 ),
                 const SizedBox(height: 10),

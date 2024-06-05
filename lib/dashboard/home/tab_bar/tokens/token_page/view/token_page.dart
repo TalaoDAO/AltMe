@@ -80,7 +80,7 @@ class _TokensViewState extends State<TokensView> {
       child: BasePage(
         scrollView: false,
         padding: EdgeInsets.zero,
-        backgroundColor: Theme.of(context).colorScheme.transparent,
+        backgroundColor: Colors.transparent,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -35,7 +35,7 @@ class AboutAltmeView extends StatelessWidget {
 
         final profileSetting = profileModel.profileSetting;
         return BasePage(
-          backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           useSafeArea: true,
           scrollView: true,
           titleAlignment: Alignment.topCenter,

@@ -13,17 +13,15 @@ dependencies:
   dart_web3: ^0.0.3
   ed25519_hd_key: ^2.2.0
   hex: ^0.2.0
+  pinenacl: ^0.3.3
   secp256k1: ^0.3.0
   tezart:
     git:
       url: https://github.com/autonomy-system/tezart.git
       ref: e53e4ab9eaabea53cbf70e814efd2245b4659f48
 
-dependency_overrides:
-  pinenacl: ^0.5.1 # tezart from git depends on pinenacl ^0.3.3
-
 dev_dependencies:
-  coverage: ^1.6.3
-  mocktail: ^0.3.0
-  test: ^1.24.3
+  flutter_test:
+    sdk: flutter
+  mocktail: ^1.0.2
   very_good_analysis: ^5.0.0+1

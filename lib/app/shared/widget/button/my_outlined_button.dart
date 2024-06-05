@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class MyOutlinedButton extends StatelessWidget {
@@ -103,7 +102,7 @@ ButtonStyle outlinedStyleFrom({
         backgroundColor ?? Theme.of(context).colorScheme.surface,
     side: BorderSide(
       color: onPressed == null
-          ? Theme.of(context).colorScheme.disabledBgColor
+          ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
           : borderColor ?? Theme.of(context).colorScheme.primary,
       width: 2,
     ),
@@ -133,8 +132,8 @@ class OutlinedButtonText extends StatelessWidget {
       text.toUpperCase(),
       style: TextStyle(
         color: onPressed == null
-            ? Theme.of(context).colorScheme.disabledBgColor
-            : textColor ?? Theme.of(context).colorScheme.onOutlineButton,
+            ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
+            : textColor ?? Theme.of(context).colorScheme.primary,
         fontSize: fontSize,
         fontWeight: FontWeight.w700,
       ),

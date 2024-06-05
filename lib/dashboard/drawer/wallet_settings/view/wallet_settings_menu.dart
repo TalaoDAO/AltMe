@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class WalletSettingsMenu extends StatelessWidget {
@@ -25,7 +24,7 @@ class WalletSettingsMenuView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       useSafeArea: true,
       scrollView: true,
       titleAlignment: Alignment.topCenter,

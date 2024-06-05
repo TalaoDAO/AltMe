@@ -198,7 +198,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                                 shape: BoxShape.circle,
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .checkMarkColor,
+                                    .onTertiary,
                               ),
                               child: const Icon(
                                 Icons.check,

@@ -26,7 +26,7 @@ class DrawerItem2 extends StatelessWidget {
         padding: const EdgeInsets.all(Sizes.spaceNormal),
         margin: const EdgeInsets.all(Sizes.spaceXSmall),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.drawerSurface,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: const BorderRadius.all(
             Radius.circular(
               Sizes.normalRadius,
@@ -47,7 +47,10 @@ class DrawerItem2 extends StatelessWidget {
                       style:
                           Theme.of(context).textTheme.drawerItemTitle.copyWith(
                                 color: isDisabled
-                                    ? Theme.of(context).colorScheme.lightGrey
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withOpacity(0.6)
                                     : null,
                               ),
                     ),
@@ -60,7 +63,10 @@ class DrawerItem2 extends StatelessWidget {
                             .drawerItemSubtitle
                             .copyWith(
                               color: isDisabled
-                                  ? Theme.of(context).colorScheme.lightGrey
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.6)
                                   : null,
                             ),
                       ),
@@ -77,8 +83,11 @@ class DrawerItem2 extends StatelessWidget {
                   Icons.chevron_right,
                   size: 26,
                   color: isDisabled
-                      ? Theme.of(context).colorScheme.lightGrey
-                      : Theme.of(context).colorScheme.unSelectedLabel,
+                      ? Theme.of(context).colorScheme.onSurface.withOpacity(0.6)
+                      : Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.6),
                 ),
               ],
             ],

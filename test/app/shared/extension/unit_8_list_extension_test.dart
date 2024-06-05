@@ -5,9 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Uint8ListExtension', () {
     test(
-        // ignore: lines_longer_than_80_chars
-        'filterPayload returns the original list if length is less than or equal to 6',
-        () {
+        'filterPayload returns the original list '
+        'if length is less than or equal to 6', () {
       final list = Uint8List.fromList([1, 2, 3]);
       expect(list.filterPayload, list);
 
@@ -16,9 +15,8 @@ void main() {
     });
 
     test(
-        // ignore: lines_longer_than_80_chars
-        'filterPayload returns the original list if the first two elements do not match the test list',
-        () {
+        'filterPayload returns the original list '
+        'if the first two elements do not match the test list', () {
       final list = Uint8List.fromList([1, 2, 3, 4, 5, 6, 7, 8, 9]);
       expect(list.filterPayload, list);
 
@@ -32,9 +30,8 @@ void main() {
     });
 
     test(
-        // ignore: lines_longer_than_80_chars
-        'filterPayload returns a sublist starting from index 6 if the first two elements match the test list',
-        () {
+        'filterPayload returns a sublist starting from index 6 '
+        'if the first two elements match the test list', () {
       final list = Uint8List.fromList([5, 1, 3, 4, 5, 6, 7, 8, 9]);
       final expected = Uint8List.fromList([7, 8, 9]);
       expect(list.filterPayload, expected);

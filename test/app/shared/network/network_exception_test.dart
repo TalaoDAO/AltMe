@@ -103,7 +103,9 @@ void main() {
         );
         final message = NetworkException.getDioException(error: error);
         expect(
-            message.message, NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION);
+          message.message,
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
       });
 
       test('return internalServerError response when statusCode is 500', () {

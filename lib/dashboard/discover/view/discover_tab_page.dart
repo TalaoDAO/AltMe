@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -44,7 +43,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
     return BasePage(
       scrollView: false,
       padding: EdgeInsets.zero,
-      backgroundColor: Theme.of(context).colorScheme.transparent,
+      backgroundColor: Colors.transparent,
       body: BlocBuilder<HomeTabbarCubit, int>(
         builder: (context, tabState) {
           _tabController.index = tabState;

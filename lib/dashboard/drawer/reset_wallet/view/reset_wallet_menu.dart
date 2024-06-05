@@ -1,9 +1,8 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/drawer/reset_wallet/helper_functions/reset_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,7 +38,7 @@ class ResetWalletView extends StatelessWidget {
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
       titleLeading: const BackLeadingButton(),
-      backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: BlocBuilder<ResetWalletCubit, ResetWalletState>(
         builder: (context, state) {
           return Column(
@@ -101,22 +100,18 @@ class ResetWalletView extends StatelessWidget {
             padding: const EdgeInsets.all(Sizes.spaceSmall),
             child: MyElevatedButton(
               text: l10n.resetWallet,
-              onPressed: state.isBackupCredentialSaved &&
-                      state.isRecoveryPhraseWritten
-                  ? () async {
-                      await securityCheck(
-                        context: context,
-                        localAuthApi: LocalAuthApi(),
-                        onSuccess: () async {
-                          await context.read<ProfileCubit>().resetProfile();
-                          await context
-                              .read<WalletCubit>()
-                              .resetWallet(context.read<CredentialsCubit>());
-                          await context.read<AltmeChatSupportCubit>().dispose();
-                        },
-                      );
-                    }
-                  : null,
+              onPressed:
+                  state.isBackupCredentialSaved && state.isRecoveryPhraseWritten
+                      ? () async {
+                          await securityCheck(
+                            context: context,
+                            localAuthApi: LocalAuthApi(),
+                            onSuccess: () async {
+                              await resetWallet(context);
+                            },
+                          );
+                        }
+                      : null,
             ),
           );
         },

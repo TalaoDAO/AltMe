@@ -44,7 +44,7 @@ class CredentialQrPage extends StatelessWidget {
               child: QrImageView(
                 data: data,
                 size: 200,
-                foregroundColor: Theme.of(context).colorScheme.onBackground,
+                foregroundColor: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 10),

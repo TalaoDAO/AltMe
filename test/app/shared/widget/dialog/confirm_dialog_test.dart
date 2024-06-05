@@ -136,12 +136,14 @@ void main() {
       const yesText = 'Yes';
       const noText = 'No';
 
-      await tester.pumpApp(const ConfirmDialog(
-        title: title,
-        yes: yesText,
-        no: noText,
-        showNoButton: false,
-      ));
+      await tester.pumpApp(
+        const ConfirmDialog(
+          title: title,
+          yes: yesText,
+          no: noText,
+          showNoButton: false,
+        ),
+      );
 
       expect(find.text(yesText.toUpperCase()), findsOneWidget);
       expect(find.text(noText.toUpperCase()), findsNothing);

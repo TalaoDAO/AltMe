@@ -25,7 +25,7 @@ class DrawerCategoryItem extends StatelessWidget {
       child: Container(
         padding: padding,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.drawerSurface,
+          color: Theme.of(context).colorScheme.surfaceBright,
           borderRadius: const BorderRadius.all(
             Radius.circular(Sizes.normalRadius),
           ),
@@ -58,7 +58,7 @@ class DrawerCategoryItem extends StatelessWidget {
               Icon(
                 Icons.chevron_right,
                 size: Sizes.icon2x,
-                color: Theme.of(context).colorScheme.unSelectedLabel,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ],
           ],

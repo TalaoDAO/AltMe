@@ -22,10 +22,14 @@ class WalletReadyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => WalletReadyCubit(),
-      child: WalletReadyView(
-        profileCubit: context.read<ProfileCubit>(),
-        walletReadyCubit: context.read<WalletReadyCubit>(),
-        confettiController: ConfettiController(),
+      child: Builder(
+        builder: (context) {
+          return WalletReadyView(
+            profileCubit: context.read<ProfileCubit>(),
+            walletReadyCubit: context.read<WalletReadyCubit>(),
+            confettiController: ConfettiController(),
+          );
+        },
       ),
     );
   }
@@ -134,7 +138,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                               scale: 1.3,
                               child: Checkbox(
                                 value: state.isAgreeWithTerms,
-                                fillColor: MaterialStateProperty.all(
+                                fillColor: WidgetStateProperty.all(
                                   Theme.of(context).colorScheme.primary,
                                 ),
                                 materialTapTargetSize:

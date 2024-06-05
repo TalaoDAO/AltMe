@@ -60,7 +60,7 @@ class ReceivePage extends StatelessWidget {
                 ),
                 BackgroundCard(
                   padding: const EdgeInsets.all(Sizes.spaceNormal),
-                  color: Theme.of(context).colorScheme.cardBackground,
+                  color: Theme.of(context).colorScheme.surface,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

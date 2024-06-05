@@ -60,7 +60,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
         final outputDescriptors =
             credentialModel.credentialManifest?.outputDescriptors;
 
-        final textColor = Theme.of(context).colorScheme.valueColor;
+        final textColor = Theme.of(context).colorScheme.onSurface;
 
         final profileSetting =
             context.read<ProfileCubit>().state.model.profileSetting;

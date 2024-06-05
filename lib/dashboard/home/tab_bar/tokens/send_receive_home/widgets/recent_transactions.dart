@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,7 +25,7 @@ class RecentTransactions extends StatelessWidget {
     final l10n = context.l10n;
     return Expanded(
       child: BackgroundCard(
-        color: Theme.of(context).colorScheme.cardBackground,
+        color: Theme.of(context).colorScheme.surface,
         margin: const EdgeInsets.all(Sizes.spaceSmall),
         padding: const EdgeInsets.all(Sizes.spaceSmall),
         child: Column(
@@ -66,7 +65,10 @@ class RecentTransactions extends StatelessWidget {
                             ),
                             child: Divider(
                               height: 0.2,
-                              color: Theme.of(context).colorScheme.borderColor,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.12),
                             ),
                           );
                         },

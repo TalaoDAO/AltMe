@@ -1,20 +1,26 @@
-import 'package:didkit/didkit.dart';
+import 'package:did_kit/src/didkit_interface.dart';
+import 'package:did_kit/src/didkit_wrapper.dart';
 
 class DIDKitProvider {
+  DIDKitProvider({DIDKitInterface? didKit})
+      : didKit = didKit ?? DIDKitWrapper();
+
+  final DIDKitInterface didKit;
+
   String getVersion() {
-    return DIDKit.getVersion();
+    return didKit.getVersion();
   }
 
   String generateEd25519Key() {
-    return DIDKit.generateEd25519Key();
+    return didKit.generateEd25519Key();
   }
 
   String keyToDID(String methodName, String key) {
-    return DIDKit.keyToDID(methodName, key);
+    return didKit.keyToDID(methodName, key);
   }
 
   Future<String> keyToVerificationMethod(String methodName, String key) async {
-    return DIDKit.keyToVerificationMethod(methodName, key);
+    return didKit.keyToVerificationMethod(methodName, key);
   }
 
   Future<String> issueCredential(
@@ -22,14 +28,14 @@ class DIDKitProvider {
     String options,
     String key,
   ) async {
-    return DIDKit.issueCredential(credential, options, key);
+    return didKit.issueCredential(credential, options, key);
   }
 
   Future<String> verifyCredential(
     String credential,
     String options,
   ) async {
-    return DIDKit.verifyCredential(credential, options);
+    return didKit.verifyCredential(credential, options);
   }
 
   Future<String> issuePresentation(
@@ -37,28 +43,28 @@ class DIDKitProvider {
     String options,
     String key,
   ) async {
-    return DIDKit.issuePresentation(presentation, options, key);
+    return didKit.issuePresentation(presentation, options, key);
   }
 
   Future<String> verifyPresentation(
     String presentation,
     String options,
   ) async {
-    return DIDKit.verifyPresentation(presentation, options);
+    return didKit.verifyPresentation(presentation, options);
   }
 
   Future<String> resolveDID(
     String did,
     String inputMetadata,
   ) async {
-    return DIDKit.resolveDID(did, inputMetadata);
+    return didKit.resolveDID(did, inputMetadata);
   }
 
   Future<String> dereferenceDIDURL(
     String didUrl,
     String inputMetadata,
   ) async {
-    return DIDKit.dereferenceDIDURL(didUrl, inputMetadata);
+    return didKit.dereferenceDIDURL(didUrl, inputMetadata);
   }
 
   Future<String> didAuth(
@@ -66,6 +72,6 @@ class DIDKitProvider {
     String options,
     String key,
   ) async {
-    return DIDKit.DIDAuth(did, options, key);
+    return didKit.didAuth(did, options, key);
   }
 }

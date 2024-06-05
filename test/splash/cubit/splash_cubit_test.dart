@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/credentials/credentials.dart';

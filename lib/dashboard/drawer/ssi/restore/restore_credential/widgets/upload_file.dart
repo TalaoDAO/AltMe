@@ -22,7 +22,7 @@ class UploadFile extends StatelessWidget {
     return DottedBorder(
       borderType: BorderType.RRect,
       radius: const Radius.circular(Sizes.smallRadius),
-      color: Theme.of(context).colorScheme.cardHighlighted,
+      color: Theme.of(context).colorScheme.surface,
       child: InkWell(
         onTap: onTap,
         child: Container(
@@ -30,7 +30,7 @@ class UploadFile extends StatelessWidget {
           height: 85,
           decoration: BoxDecoration(
             color: filePath != null
-                ? Theme.of(context).colorScheme.cardHighlighted
+                ? Theme.of(context).colorScheme.surface
                 : null,
             borderRadius: const BorderRadius.all(
               Radius.circular(Sizes.smallRadius),

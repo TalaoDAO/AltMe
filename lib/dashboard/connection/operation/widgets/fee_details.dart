@@ -23,7 +23,7 @@ class FeeDetails extends StatelessWidget {
 
     final double grandTotal = amount + fee;
     return BackgroundCard(
-      color: Theme.of(context).colorScheme.cardBackground,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -96,7 +96,7 @@ class FeeDetails extends StatelessWidget {
       ),
       child: Divider(
         height: 0.1,
-        color: Theme.of(context).colorScheme.borderColor,
+        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
       ),
     );
   }

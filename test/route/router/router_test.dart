@@ -6,8 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('RightToLeftRoute transition test', (WidgetTester tester) async {
-    final fromWidget = Scaffold(body: Center(child: Text('From Screen')));
-    final toWidget = Scaffold(body: Center(child: Text('To Screen')));
+    const fromWidget = Scaffold(body: Center(child: Text('From Screen')));
+    const toWidget = Scaffold(body: Center(child: Text('To Screen')));
 
     final navigatorKey = GlobalKey<NavigatorState>();
 

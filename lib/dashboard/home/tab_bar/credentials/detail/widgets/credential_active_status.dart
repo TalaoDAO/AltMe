@@ -23,7 +23,7 @@ class CredentialActiveStatus extends StatelessWidget {
                   .textTheme
                   .credentialFieldDescription
                   .copyWith(
-                    color: Theme.of(context).colorScheme.valueColor,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
             ),
             const SizedBox(width: 5),

@@ -35,7 +35,7 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
               l10n.wouldYouLikeToAcceptThisCredentialsFromThisOrganisation,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.credentialSubtitle.copyWith(
-                    color: Theme.of(context).colorScheme.lightPurple,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
             ),
             const SizedBox(height: 30),

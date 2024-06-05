@@ -61,7 +61,7 @@ class _SoftwareLicenseViewState extends State<SoftwareLicenseView> {
             physics: const ScrollPhysics(),
             itemBuilder: (context, index) {
               return BackgroundCard(
-                color: Theme.of(context).colorScheme.surfaceContainer,
+                color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 margin: const EdgeInsets.only(bottom: 8),
                 child: TransparentInkWell(
@@ -98,7 +98,7 @@ class _SoftwareLicenseViewState extends State<SoftwareLicenseView> {
                         const SizedBox(width: 10),
                         Icon(
                           Icons.chevron_right,
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ],
                     ),
