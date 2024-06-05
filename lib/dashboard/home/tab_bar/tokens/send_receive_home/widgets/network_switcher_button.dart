@@ -20,7 +20,7 @@ class NetworkSwitcherButton extends StatelessWidget {
             width: 6,
             height: 6,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.activeColorOfNetwork,
+              color: Theme.of(context).colorScheme.primary,
               shape: BoxShape.circle,
             ),
           ),

@@ -11,12 +11,12 @@ void main() {
   test('CustomColorScheme Test', () {
     const colorScheme = ColorScheme.dark();
 
-    expect(colorScheme.redColor, const Color(0xFFFF0045));
-    expect(colorScheme.transactionApplied, const Color(0xFF00B267));
-    expect(colorScheme.transactionFailed, const Color(0xFFFF0045));
-    expect(colorScheme.transactionSkipped, const Color(0xFFFF5F0A));
-    expect(colorScheme.activeColorOfNetwork, const Color(0xFF2C7DF7));
-    expect(colorScheme.greyText, const Color(0xFFD1CCE3));
+    expect(colorScheme.error, const Color(0xFFFF0045));
+    expect(colorScheme.onTertiary, const Color(0xFF00B267));
+    expect(colorScheme.error, const Color(0xFFFF0045));
+    expect(colorScheme.onErrorContainer, const Color(0xFFFF5F0A));
+    expect(colorScheme.primary, const Color(0xFF2C7DF7));
+    expect(colorScheme.onSurface.withOpacity(0.6), const Color(0xFFD1CCE3));
     expect(colorScheme.kycKeyIconColor, const Color(0xFF86809D));
     expect(colorScheme.lightPurple, const Color(0xFF5F556F));
     expect(colorScheme.popupBackground, const Color(0xff271C38));

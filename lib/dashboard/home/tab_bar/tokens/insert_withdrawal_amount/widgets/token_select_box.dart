@@ -145,7 +145,10 @@ class _TokenSelectBoxItem extends StatelessWidget {
                                 .decimalNumber(2)
                                 .formatNumber,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.greyText,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.6),
                             ),
                       ),
                     ],

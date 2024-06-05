@@ -105,149 +105,73 @@ abstract class AppTheme {
 
 
 extension CustomColorScheme on ColorScheme {
-  Color get redColor => error;
-  Color get transactionApplied => onTertiary;
-  Color get transactionFailed => error;
-  Color get transactionSkipped => onErrorContainer;
-  Color get activeColorOfNetwork => primary;
-
-  Color get greyText => onSurface.withOpacity(0.6);
-
   Color get kycKeyIconColor => onSurface.withOpacity(0.6);
-
   Color get lightPurple => secondary;
-
   Color get popupBackground => surface;
-
   Color get cardHighlighted => surface;
-
   Color get defaultDialogDark => surface;
-
   Color get closeIconColor => onSurface.withOpacity(0.6);
-
   Color get kycVerifyButton => primary;
-
   Color get checkMarkColor => onTertiary;
-
   Color get accountBottomSheetBorder => onSurface.withOpacity(0.12);
-
   Color get digitPrimaryColor => onSurface;
-
   Color get digitFillColor => Colors.transparent;
-
   Color get disabledBgColor => onSurface.withOpacity(0.12);
-
   Color get disabledTextColor => onSurface.withOpacity(0.38);
-
   Color get darkGradientStartColor => surface;
-
   Color get darkGradientEndColor => surface;
-
   Color get transparent => Colors.transparent;
-
   Color get onOutlineButton => primary;
-
   Color get onElevatedButton => onPrimary;
-
   Color get appBarUpperLayer => surface;
-
   Color get appBarLowerLayer => surface;
-
   Color get surfaceContainer => surface.withOpacity(0.07);
-
   Color get drawerSurface => surface;
-
   Color get label => onSurface;
-
   Color get unSelectedLabel => onSurface.withOpacity(0.6);
-
   Color get leadingButton => onSurface;
-
   Color get selectedBottomBar => surface;
-
   Color get drawerBackground => surface;
-
   Color get borderColor => onSurface.withOpacity(0.12);
-
-  Color get defualtDialogCancelButtonBorderColor =>
-      onSurface.withOpacity(0.2);
-
+  Color get defualtDialogCancelButtonBorderColor => onSurface.withOpacity(0.2);
   Color get markDownH1 => onSurface;
-
   Color get markDownH2 => onSurface;
-
   Color get markDownP => onSurface.withOpacity(0.6);
-
   Color get markDownA => primary;
-
   Color get subtitle1 => onSurface;
-
   Color get subtitle2 => onSurface.withOpacity(0.6);
-
   Color get profileDummy => onSurface;
-
   Color get documentShadow => onSurface.withOpacity(0.12);
-
   Color get documentShape => primary.withOpacity(0.05);
-
   Color get star => onErrorContainer;
-
   Color get genderIcon => onSurface;
-
   Color get activeCredential => onTertiary;
-
   Color get expiredCredential => onErrorContainer;
-
   Color get revokedCredential => error;
-
   Color get buttonDisabled => onSurface.withOpacity(0.38);
-
   Color get alertErrorMessage => error;
-
   Color get alertWarningMessage => onErrorContainer;
-
   Color get alertInfoMessage => outline;
-
   Color get alertSuccessMessage => onTertiary;
-
   Color get qrScanBackground => surface;
-
   Color get qrScanInnerShadow => shadow.withOpacity(0.16);
-
   Color get qrScanOuterShadow => primary;
-
   Color get dialogText => onSurface;
-
   Color get tabBarNotSelected => secondaryContainer;
-
   Color get credentialBackground => surface;
-
   Color get cryptoAccountNotSelected => onSurface.withOpacity(0.15);
-
   Color get startButtonColorA => primary;
-
   Color get startButtonColorB => primaryContainer;
-
   Color get associatedWalletBorder => onSurface.withOpacity(0.12);
-
   Color get deleteColor => surface;
-
   Color get blueColor => surface;
-
   Color get titleColor => onSurface;
-
   Color get valueColor => onSurface;
-
   Color get lightGrey => onSurface.withOpacity(0.6);
-
   Color get darkGrey => onSurface;
-
   Color get activeColor => onTertiary;
-
   Color get inactiveColor => error;
-
   Color get beaconBorder => onSurface.withOpacity(0.6);
-
   Color get cardBackground => surface;
 }
 
