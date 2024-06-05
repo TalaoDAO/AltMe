@@ -16,7 +16,8 @@ void main() {
           no: 'No',
         ),
       );
-      // Verify that the title, label, subtitle, and initial value are displayed.
+      // Verify that the title, label, subtitle,
+      // and initial value are displayed.
       expect(find.text('Title'), findsOneWidget);
       expect(find.text('Label'), findsOneWidget);
       expect(find.text('Subtitle'), findsOneWidget);

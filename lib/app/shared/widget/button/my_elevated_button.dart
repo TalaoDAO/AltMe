@@ -90,16 +90,16 @@ ButtonStyle elevatedStyleFrom({
   GestureTapCallback? onPressed,
 }) {
   return ButtonStyle(
-    elevation: MaterialStateProperty.all(elevation),
-    padding: MaterialStateProperty.all(
+    elevation: WidgetStateProperty.all(elevation),
+    padding: WidgetStateProperty.all(
       EdgeInsets.symmetric(vertical: verticalSpacing),
     ),
-    backgroundColor: MaterialStateProperty.all(
+    backgroundColor: WidgetStateProperty.all(
       onPressed == null
           ? Theme.of(context).colorScheme.disabledBgColor
           : backgroundColor ?? Theme.of(context).colorScheme.primary,
     ),
-    shape: MaterialStateProperty.all(
+    shape: WidgetStateProperty.all(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius),
       ),

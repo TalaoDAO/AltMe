@@ -25,7 +25,9 @@ void main() {
     test('LanguageType getTitle returns correct value', () {
       final l10n = MockAppLocalizations();
       expect(
-          LanguageType.phone.getTitle(l10n: l10n, name: ''), equals('Phone'));
+        LanguageType.phone.getTitle(l10n: l10n, name: ''),
+        equals('Phone'),
+      );
       expect(LanguageType.ca.getTitle(l10n: l10n, name: ''), equals('Catalan'));
       expect(LanguageType.en.getTitle(l10n: l10n, name: ''), equals('English'));
       expect(LanguageType.es.getTitle(l10n: l10n, name: ''), equals('Spanish'));

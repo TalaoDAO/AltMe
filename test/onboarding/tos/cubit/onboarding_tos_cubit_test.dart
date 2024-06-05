@@ -40,7 +40,8 @@ void main() {
     );
 
     blocTest<OnBoardingTosCubit, OnBoardingTosState>(
-      'emits [acceptanceButtonEnabled] when setAcceptanceButtonEnabled is called',
+      'emits [acceptanceButtonEnabled] '
+      'when setAcceptanceButtonEnabled is called',
       build: () => onBoardingTosCubit,
       act: (cubit) =>
           cubit.setAcceptanceButtonEnabled(acceptanceButtonEnabled: true),

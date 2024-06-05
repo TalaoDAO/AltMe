@@ -23,8 +23,8 @@ void main() {
     });
 
     test(
-        'toJson and fromJson methods should serialize and deserialize correctly',
-        () {
+        'toJson and fromJson methods should serialize '
+        'and deserialize correctly', () {
       const state = OnBoardingTosState(
         agreeTerms: true,
         scrollIsOver: false,

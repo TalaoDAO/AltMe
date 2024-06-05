@@ -1,5 +1,5 @@
-import 'package:test/test.dart';
 import 'package:altme/app/app.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('StateMessage', () {

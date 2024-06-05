@@ -11,4 +11,4 @@ jobs:
       min_coverage: 30
       working_directory: packages/oidc4vc
       dart_sdk: 3.4.1
-      build_runner: false
+      build_runner: true

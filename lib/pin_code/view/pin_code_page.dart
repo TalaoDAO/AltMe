@@ -1,4 +1,3 @@
-
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
@@ -82,8 +81,8 @@ class _PinCodeViewState extends State<PinCodeView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return WillPopScope(
-      onWillPop: () async => !widget.restrictToBack,
+    return PopScope(
+      canPop: !widget.restrictToBack,
       child: BasePage(
         backgroundColor: Theme.of(context).colorScheme.background,
         title: '',

@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('OrganizationInfo', () {
     test(
-        'OrganizationInfo fromJson should return a valid OrganizationInfo object',
-        () {
+        'OrganizationInfo fromJson should '
+        'return a valid OrganizationInfo object', () {
       final json = {
         'id': 'org-123',
         'legalName': 'Example Org',
@@ -42,8 +42,8 @@ void main() {
     });
 
     test(
-        'OrganizationInfo.emptyOrganizationInfo should return an OrganizationInfo with default values',
-        () {
+        'OrganizationInfo.emptyOrganizationInfo '
+        'should return an OrganizationInfo with default values', () {
       final organizationInfo =
           OrganizationInfo.emptyOrganizationInfo('example.com');
 

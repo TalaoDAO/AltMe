@@ -88,17 +88,17 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
         backgroundColor: Theme.of(context).colorScheme.background,
         body: PinCodeWidget(
           title: l10n.confirmYourPinCode,
-        header: widget.isFromOnboarding
-            ? MStepper(
-                step: 1,
-                totalStep: byPassScreen ? 2 : 3,
-              )
-            : null,
-        deleteButton: Text(
-          l10n.delete,
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-        cancelButton: Text(
+          header: widget.isFromOnboarding
+              ? MStepper(
+                  step: 1,
+                  totalStep: byPassScreen ? 2 : 3,
+                )
+              : null,
+          deleteButton: Text(
+            l10n.delete,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          cancelButton: Text(
             l10n.cancel,
             style: Theme.of(context).textTheme.labelLarge,
           ),
