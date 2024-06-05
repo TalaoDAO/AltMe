@@ -7,7 +7,7 @@ class NftItemShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackgroundCard(
-      color: Theme.of(context).colorScheme.surfaceContainer,
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
       padding: const EdgeInsets.all(10),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,

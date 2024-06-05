@@ -49,7 +49,8 @@ class CachedImageFromNetwork extends StatelessWidget {
                 placeholderBuilder: (_) => Container(
                   width: width,
                   height: height,
-                  color: Theme.of(context).colorScheme.lightGrey,
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 ),
               )
             : url.startsWith('http')
@@ -76,19 +77,25 @@ class CachedImageFromNetwork extends StatelessWidget {
                             )
                           : Container(
                               color: bgColor ??
-                                  Theme.of(context).colorScheme.lightGrey,
+                                  Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.6),
                             );
                     },
-                    errorWidget: (context, error, dynamic _) =>
-                        errorMessage == null
-                            ? ColoredBox(
-                                color: Theme.of(context).colorScheme.lightGrey,
-                                child: Icon(
-                                  Icons.error,
-                                  color: Theme.of(context).colorScheme.darkGrey,
-                                ),
-                              )
-                            : ErrorWidget(errorMessage: errorMessage),
+                    errorWidget: (context, error, dynamic _) => errorMessage ==
+                            null
+                        ? ColoredBox(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withOpacity(0.6),
+                            child: Icon(
+                              Icons.error,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          )
+                        : ErrorWidget(errorMessage: errorMessage),
                   )
                 : Image.memory(
                     base64Decode(url),

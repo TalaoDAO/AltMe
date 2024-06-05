@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 extension CredentialStatusExtension on CredentialStatus {
@@ -44,7 +43,7 @@ extension CredentialStatusExtension on CredentialStatus {
   Color color(BuildContext context) {
     switch (this) {
       case CredentialStatus.active:
-        return Theme.of(context).colorScheme.activeColor;
+        return Theme.of(context).colorScheme.onTertiary;
       case CredentialStatus.invalidStatus:
       case CredentialStatus.expired:
       case CredentialStatus.pending:
@@ -52,7 +51,7 @@ extension CredentialStatusExtension on CredentialStatus {
       case CredentialStatus.invalidSignature:
       case CredentialStatus.statusListInvalidSignature:
       case CredentialStatus.noStatus:
-        return Theme.of(context).colorScheme.inactiveColor;
+        return Theme.of(context).colorScheme.error;
     }
   }
 }

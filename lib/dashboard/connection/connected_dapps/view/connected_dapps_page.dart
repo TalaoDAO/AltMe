@@ -193,7 +193,7 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                               separatorBuilder: (_, __) => Divider(
                                 height: 0.1,
                                 color:
-                                    Theme.of(context).colorScheme.borderColor,
+                                    Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
                               ),
                             ),
                         ],

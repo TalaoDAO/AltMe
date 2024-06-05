@@ -133,7 +133,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
         useSafeArea: true,
         padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
         titleLeading: const BackLeadingButton(),
-        backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: l10n.protectYourWallet,
         titleAlignment: Alignment.topCenter,
         body: BlocBuilder<ProfileCubit, ProfileState>(

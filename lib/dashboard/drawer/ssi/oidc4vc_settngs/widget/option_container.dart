@@ -21,7 +21,7 @@ class OptionContainer extends StatelessWidget {
       padding: const EdgeInsets.all(Sizes.spaceSmall),
       margin: const EdgeInsets.all(Sizes.spaceXSmall),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.drawerSurface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.all(
           Radius.circular(Sizes.largeRadius),
         ),

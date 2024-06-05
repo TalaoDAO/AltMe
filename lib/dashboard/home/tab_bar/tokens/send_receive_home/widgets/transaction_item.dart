@@ -111,7 +111,7 @@ class TransactionItem extends StatelessWidget {
                               : operationModel.status.toLowerCase() == 'skipped'
                                   ? Theme.of(context)
                                       .colorScheme
-                                      .transactionSkipped
+                                      .error
                                   : null,
                     ),
               ),

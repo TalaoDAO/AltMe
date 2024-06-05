@@ -78,7 +78,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                   title,
                   style:
                       Theme.of(context).textTheme.credentialFieldTitle.copyWith(
-                            color: Theme.of(context).colorScheme.titleColor,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                 ),
               ),
@@ -203,8 +203,8 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                         padding: EdgeInsets.only(top: isFirstElement ? 10 : 0),
                         title: title,
                         value: claims.data,
-                        titleColor: Theme.of(context).colorScheme.titleColor,
-                        valueColor: Theme.of(context).colorScheme.valueColor,
+                        titleColor: Theme.of(context).colorScheme.onSurface,
+                        valueColor: Theme.of(context).colorScheme.onSurface,
                         showVertically: showVertically,
                       ),
                       if (selectiveDisclosureState != null &&
@@ -221,8 +221,8 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                             color: disable != null && disable!
                                 ? Theme.of(context)
                                     .colorScheme
-                                    .lightGrey
-                                    .withOpacity(0.2)
+                                    .onSurface
+                                    .withOpacity(0.7)
                                 : Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),

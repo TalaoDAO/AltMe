@@ -18,7 +18,7 @@ class BiometricsSwitch extends StatelessWidget {
     final l10n = context.l10n;
     return BackgroundCard(
       padding: const EdgeInsets.all(Sizes.spaceSmall),
-      color: Theme.of(context).colorScheme.cardHighlighted,
+      color: Theme.of(context).colorScheme.surface,
       child: Row(
         children: [
           Image.asset(

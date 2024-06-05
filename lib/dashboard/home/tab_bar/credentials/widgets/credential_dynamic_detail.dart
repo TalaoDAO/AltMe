@@ -68,7 +68,7 @@ class CredentialDynamicDetial extends StatelessWidget {
                       (format == AltMeStrings.uri ||
                           format == AltMeStrings.email))
                   ? valueTheme.copyWith(
-                      color: Theme.of(context).colorScheme.markDownA,
+                      color: Theme.of(context).colorScheme.primary,
                     )
                   : valueTheme,
               recognizer: TapGestureRecognizer()
@@ -90,7 +90,7 @@ class CredentialDynamicDetial extends StatelessWidget {
                   },
                   child: ImageIcon(
                     const AssetImage(IconStrings.link),
-                    color: Theme.of(context).colorScheme.markDownA,
+                    color: Theme.of(context).colorScheme.primary,
                     size: 17,
                   ),
                 ),

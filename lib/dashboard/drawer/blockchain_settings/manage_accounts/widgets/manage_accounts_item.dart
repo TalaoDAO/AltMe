@@ -35,12 +35,12 @@ class ManageAccountsItem extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: Sizes.spaceSmall),
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.cardHighlighted,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.all(
           Radius.circular(Sizes.normalRadius),
         ),
         border: Border.all(
-          color: Theme.of(context).colorScheme.borderColor,
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
           width: 0.25,
         ),
       ),

@@ -3,7 +3,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/drawer/profile/view/pick_profile_menu.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,7 +28,7 @@ class DrawerView extends StatelessWidget {
         return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Drawer(
-            backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),

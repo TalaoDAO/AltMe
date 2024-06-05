@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -250,7 +249,7 @@ class FailureWidget extends StatelessWidget {
           text: l10n.decline,
           verticalSpacing: 16,
           borderRadius: Sizes.largeRadius,
-          backgroundColor: Theme.of(context).colorScheme.cardHighlighted,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           onPressed: () {
             Navigator.pushAndRemoveUntil<void>(
               context,

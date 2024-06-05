@@ -43,7 +43,7 @@ class BeCarefulDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.popupBackground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: Sizes.spaceNormal,
@@ -57,7 +57,7 @@ class BeCarefulDialog extends StatelessWidget {
         children: [
           DialogCloseButton(
             showText: false,
-            color: Theme.of(context).colorScheme.defaultDialogDark,
+            color: Theme.of(context).colorScheme.surface,
           ),
           Image.asset(
             IconStrings.alert,
@@ -94,7 +94,7 @@ class BeCarefulDialog extends StatelessWidget {
                     fontSize: 15,
                     borderColor: Theme.of(context)
                         .colorScheme
-                        .defualtDialogCancelButtonBorderColor,
+                        .onSurface.withOpacity(0.2),
                     borderRadius: 12,
                     onPressed: () {
                       Navigator.of(context).pop();

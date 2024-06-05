@@ -182,10 +182,10 @@ class KeyboardButton extends StatelessWidget {
                               color: allowAction
                                   ? Theme.of(context)
                                       .colorScheme
-                                      .digitPrimaryColor
+                                      .onSurface
                                   : Theme.of(context)
                                       .colorScheme
-                                      .digitPrimaryColor
+                                      .onSurface
                                       .withOpacity(0.1),
                               width: digitBorderWidth,
                             )
@@ -193,9 +193,9 @@ class KeyboardButton extends StatelessWidget {
                     ),
                     child: Container(
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Theme.of(context).colorScheme.digitFillColor,
+                        color: Colors.transparent,
                       ),
                       child: label != null
                           ? Text(
@@ -206,7 +206,7 @@ class KeyboardButton extends StatelessWidget {
                                       : digitTextStyle!.copyWith(
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .digitPrimaryColor
+                                              .onSurface
                                               .withOpacity(0.1),
                                         )
                                   : allowAction
@@ -219,7 +219,7 @@ class KeyboardButton extends StatelessWidget {
                                           .copyWith(
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .digitPrimaryColor
+                                                .onSurface
                                                 .withOpacity(0.1),
                                           ),
                               semanticsLabel: semanticsLabel,
@@ -246,16 +246,16 @@ class KeyboardButton extends StatelessWidget {
                           ? Border.all(
                               color: Theme.of(context)
                                   .colorScheme
-                                  .digitPrimaryColor,
+                                  .onSurface,
                               width: digitBorderWidth,
                             )
                           : null,
                     ),
                     child: Container(
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Theme.of(context).colorScheme.digitFillColor,
+                        color: Colors.transparent,
                       ),
                       child: label != null
                           ? Text(

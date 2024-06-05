@@ -12,8 +12,8 @@ class ConfidentialClientWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final color = Theme.of(context).colorScheme.primary;
-    final background = Theme.of(context).colorScheme.popupBackground;
-    final textColor = Theme.of(context).colorScheme.dialogText;
+    final background = Theme.of(context).colorScheme.surface;
+    final textColor = Theme.of(context).colorScheme.onSurface;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final clientIdController = TextEditingController(

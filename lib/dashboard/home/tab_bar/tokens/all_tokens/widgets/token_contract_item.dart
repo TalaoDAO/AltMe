@@ -44,7 +44,7 @@ class TokenContractItem extends StatelessWidget {
         trailing: Switcher(
           size: SwitcherSize.small,
           colorOn: Theme.of(context).colorScheme.primary,
-          colorOff: Theme.of(context).colorScheme.cardBackground,
+          colorOff: Theme.of(context).colorScheme.surface,
           onChanged: onChange,
           value: isOn,
         ),

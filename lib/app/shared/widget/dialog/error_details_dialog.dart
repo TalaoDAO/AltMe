@@ -23,9 +23,9 @@ class ErrorDetailsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background = bgColor ?? Theme.of(context).colorScheme.popupBackground;
+    final background = bgColor ?? Theme.of(context).colorScheme.surface;
     final textColor =
-        this.textColor ?? Theme.of(context).colorScheme.dialogText;
+        this.textColor ?? Theme.of(context).colorScheme.onSurface;
 
     final l10n = context.l10n;
     return AlertDialog(
@@ -62,10 +62,10 @@ class ErrorDetailsDialog extends StatelessWidget {
                 child: Text(
                   l10n.moreDetails,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.markDownA,
+                        color: Theme.of(context).colorScheme.primary,
                         decoration: TextDecoration.underline,
                         decorationColor:
-                            Theme.of(context).colorScheme.markDownA,
+                            Theme.of(context).colorScheme.primary,
                       ),
                   textAlign: TextAlign.center,
                 ),

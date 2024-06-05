@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_path/json_path.dart';
@@ -122,8 +121,8 @@ class CredentialSubjectData extends StatelessWidget {
           padding: const EdgeInsets.only(top: 10),
           title: title,
           value: data,
-          titleColor: Theme.of(context).colorScheme.titleColor,
-          valueColor: Theme.of(context).colorScheme.valueColor,
+          titleColor: Theme.of(context).colorScheme.onSurface,
+          valueColor: Theme.of(context).colorScheme.onSurface,
           showVertically: showVertically,
         );
       }).toList(),

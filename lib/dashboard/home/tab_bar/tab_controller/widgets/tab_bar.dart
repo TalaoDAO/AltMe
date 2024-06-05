@@ -42,7 +42,7 @@ class MyTab extends StatelessWidget {
               : null,
           color: isSelected
               ? null
-              : AppTheme.darkThemeData.colorScheme.tabBarNotSelected,
+              : AppTheme.darkThemeData.colorScheme.secondaryContainer,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -4,13 +4,13 @@ extension MessageTypeX on MessageType {
   Color getColor(BuildContext context) {
     switch (this) {
       case MessageType.error:
-        return Theme.of(context).colorScheme.alertErrorMessage;
+        return Theme.of(context).colorScheme.error;
       case MessageType.warning:
-        return Theme.of(context).colorScheme.alertWarningMessage;
+        return Theme.of(context).colorScheme.onErrorContainer;
       case MessageType.info:
-        return Theme.of(context).colorScheme.alertInfoMessage;
+        return Theme.of(context).colorScheme.outline;
       case MessageType.success:
-        return Theme.of(context).colorScheme.alertSuccessMessage;
+        return Theme.of(context).colorScheme.onTertiary;
     }
   }
 

@@ -30,7 +30,8 @@ class DialogCloseButton extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(0.5),
             decoration: BoxDecoration(
-              color: color ?? Theme.of(context).colorScheme.closeIconColor,
+              color: color ??
+                  Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               shape: BoxShape.circle,
             ),
             child: const Icon(

@@ -87,7 +87,8 @@ class _ChangeNetworkBottomSheetPageState
                       border: Border.all(
                         color: Theme.of(context)
                             .colorScheme
-                            .accountBottomSheetBorder,
+                            .onSurface
+                            .withOpacity(0.12),
                         width: 0.2,
                       ),
                       borderRadius: const BorderRadius.all(
@@ -108,7 +109,10 @@ class _ChangeNetworkBottomSheetPageState
                         ),
                         child: Divider(
                           height: 0.2,
-                          color: Theme.of(context).colorScheme.borderColor,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.12),
                         ),
                       ),
                     ),

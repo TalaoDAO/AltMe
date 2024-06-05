@@ -39,7 +39,7 @@ class CredentialDetailTabbar extends StatelessWidget {
           ),
           decoration: isSelected
               ? BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainer,
+                  color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(Sizes.smallRadius),
                     topRight: Radius.circular(Sizes.smallRadius),

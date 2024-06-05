@@ -49,7 +49,7 @@ class _NftViewState extends State<NftView> {
     return BasePage(
       scrollView: false,
       padding: EdgeInsets.zero,
-      backgroundColor: Theme.of(context).colorScheme.transparent,
+      backgroundColor: Colors.transparent,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

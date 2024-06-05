@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class KYCButton extends StatelessWidget {
@@ -17,7 +16,7 @@ class KYCButton extends StatelessWidget {
         await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            backgroundColor: Theme.of(context).colorScheme.popupBackground,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             surfaceTintColor: Colors.transparent,
             contentPadding: const EdgeInsets.only(
               top: 24,

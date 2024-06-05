@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/drawer/ssi/manage_did/view/did_menu.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,7 +36,7 @@ class SSIView extends StatelessWidget {
         .selfSovereignIdentityOptions
         .displayManageDecentralizedId;
     return BasePage(
-      backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       useSafeArea: true,
       scrollView: true,
       titleAlignment: Alignment.topCenter,

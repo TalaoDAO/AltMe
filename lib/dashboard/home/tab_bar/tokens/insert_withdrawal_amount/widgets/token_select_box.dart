@@ -82,7 +82,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                   }
                 },
                 child: BackgroundCard(
-                  color: Theme.of(context).colorScheme.cardBackground,
+                  color: Theme.of(context).colorScheme.surface,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,

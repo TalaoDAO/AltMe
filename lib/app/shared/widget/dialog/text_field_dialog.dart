@@ -54,8 +54,8 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
 
     final color = widget.dialogColor ?? Theme.of(context).colorScheme.primary;
     final background =
-        widget.bgColor ?? Theme.of(context).colorScheme.popupBackground;
-    final text = widget.textColor ?? Theme.of(context).colorScheme.label;
+        widget.bgColor ?? Theme.of(context).colorScheme.surface;
+    final text = widget.textColor ?? Theme.of(context).colorScheme.onSurface;
 
     return AlertDialog(
       backgroundColor: background,
@@ -108,7 +108,7 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
             elevation: 10,
             borderRadius: Sizes.smallRadius,
             backgroundColor: color,
-            textColor: Theme.of(context).colorScheme.label,
+            textColor: Theme.of(context).colorScheme.onSurface,
             fontSize: 15,
             onPressed: () {
               Navigator.of(context).pop(controller.text);
@@ -123,9 +123,9 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
             borderRadius: Sizes.smallRadius,
             borderColor: Theme.of(context)
                 .colorScheme
-                .defualtDialogCancelButtonBorderColor,
+                .onSurface.withOpacity(0.2),
             backgroundColor: background,
-            textColor: Theme.of(context).colorScheme.dialogText,
+            textColor: Theme.of(context).colorScheme.onSurface,
             onPressed: () {
               Navigator.of(context).pop('');
             },

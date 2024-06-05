@@ -62,7 +62,7 @@ class SelectAccount extends StatelessWidget {
                 ),
                 child: Divider(
                   height: 0.2,
-                  color: Theme.of(context).colorScheme.borderColor,
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
                 ),
               ),
             );

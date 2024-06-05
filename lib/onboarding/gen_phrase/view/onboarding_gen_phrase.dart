@@ -157,7 +157,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                   MyElevatedButton(
                     text: l10n.verifyLater,
                     verticalSpacing: 18,
-                    backgroundColor: Theme.of(context).colorScheme.blueColor,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                     onPressed: () async {
                       await context
                           .read<OnboardingCubit>()

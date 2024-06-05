@@ -15,7 +15,7 @@ class KycDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.popupBackground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       shape: const RoundedRectangleBorder(
@@ -91,7 +91,7 @@ class KycDialog extends StatelessWidget {
               verticalSpacing: 18,
               fontSize: 18,
               borderRadius: 20,
-              backgroundColor: Theme.of(context).colorScheme.kycVerifyButton,
+              backgroundColor: Theme.of(context).colorScheme.primary,
               onPressed: () {
                 Navigator.of(context).pop();
                 startVerificationPressed.call();
@@ -108,7 +108,8 @@ class KycDialog extends StatelessWidget {
                 Image.asset(
                   IconStrings.lockCircle,
                   width: Sizes.icon,
-                  color: Theme.of(context).colorScheme.kycKeyIconColor,
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 ),
                 Expanded(
                   child: Text(

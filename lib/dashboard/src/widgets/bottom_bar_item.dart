@@ -41,7 +41,10 @@ class BottomBarItem extends StatelessWidget {
                   AssetImage(icon),
                   color: isSelected
                       ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.unSelectedLabel,
+                      : Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.6),
                   size: 20,
                 ),
               ),
@@ -53,7 +56,10 @@ class BottomBarItem extends StatelessWidget {
               style: Theme.of(context).textTheme.bottomBar.copyWith(
                     color: isSelected
                         ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.unSelectedLabel,
+                        : Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.6),
                   ),
             ),
           ],

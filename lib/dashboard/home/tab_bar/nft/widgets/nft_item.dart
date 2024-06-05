@@ -24,7 +24,7 @@ class NftItem extends StatelessWidget {
     return InkWell(
       onTap: onClick,
       child: BackgroundCard(
-        color: Theme.of(context).colorScheme.surfaceContainer,
+        color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
         padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

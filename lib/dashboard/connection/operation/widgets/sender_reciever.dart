@@ -41,7 +41,7 @@ class SenderReceiverCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackgroundCard(
-      color: Theme.of(context).colorScheme.cardBackground,
+      color: Theme.of(context).colorScheme.surface,
       child: SizedBox(
         width: double.infinity,
         child: Column(

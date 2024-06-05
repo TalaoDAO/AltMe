@@ -54,7 +54,7 @@ class DiscoverDynamicDetial extends StatelessWidget {
                   },
                   child: ImageIcon(
                     const AssetImage(IconStrings.link),
-                    color: Theme.of(context).colorScheme.markDownA,
+                    color: Theme.of(context).colorScheme.primary,
                     size: 17,
                   ),
                 ),

@@ -205,7 +205,7 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
                         margin: const EdgeInsets.all(Sizes.spaceNormal),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Theme.of(context).colorScheme.checkMarkColor,
+                          color: Theme.of(context).colorScheme.onTertiary,
                         ),
                         child: const Icon(
                           Icons.check,

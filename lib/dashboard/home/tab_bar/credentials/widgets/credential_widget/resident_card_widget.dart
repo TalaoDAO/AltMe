@@ -104,14 +104,14 @@ class GenderDisplay extends StatelessWidget {
     switch (residentCardModel.gender) {
       case 'male':
         genderIcon =
-            Icon(Icons.male, color: Theme.of(context).colorScheme.genderIcon);
+            Icon(Icons.male, color: Theme.of(context).colorScheme.onSurface);
       case 'female':
         genderIcon =
-            Icon(Icons.female, color: Theme.of(context).colorScheme.genderIcon);
+            Icon(Icons.female, color: Theme.of(context).colorScheme.onSurface);
       default:
         genderIcon = Icon(
           Icons.transgender,
-          color: Theme.of(context).colorScheme.genderIcon,
+          color: Theme.of(context).colorScheme.onSurface,
         );
     }
     return genderIcon;

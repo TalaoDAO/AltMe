@@ -38,7 +38,7 @@ class ResetWalletView extends StatelessWidget {
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
       titleLeading: const BackLeadingButton(),
-      backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: BlocBuilder<ResetWalletCubit, ResetWalletState>(
         builder: (context, state) {
           return Column(

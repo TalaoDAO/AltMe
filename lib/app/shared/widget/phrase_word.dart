@@ -29,7 +29,7 @@ class PhraseWord extends StatelessWidget {
           vertical: Sizes.spaceSmall,
         ),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.transparent,
+          color: Colors.transparent,
           border: Border.all(
             width: 1.5,
             color: color,
