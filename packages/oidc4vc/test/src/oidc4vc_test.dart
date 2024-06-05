@@ -697,7 +697,8 @@ void main() {
               (request) => request.throws(
                 401,
                 DioException(
-                    requestOptions: RequestOptions(path: tokenEndPoint)),
+                  requestOptions: RequestOptions(path: tokenEndPoint),
+                ),
               ),
             );
 
