@@ -15,7 +15,9 @@ void main() {
 
     test('oppositeNetwork should return correct opposite network', () {
       expect(
-          PolygonIdNetwork.PolygonMainnet.oppositeNetwork, 'mumbai(testnet)');
+        PolygonIdNetwork.PolygonMainnet.oppositeNetwork,
+        'mumbai(testnet)',
+      );
       expect(PolygonIdNetwork.PolygonMumbai.oppositeNetwork, 'mainnet');
     });
   });

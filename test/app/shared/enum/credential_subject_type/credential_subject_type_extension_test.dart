@@ -24,10 +24,14 @@ void main() {
       );
 
       for (final value in CredentialSubjectType.values) {
-        expect(value.backgroundColor(credentialModel),
-            equals(const Color(0xFFFFFFFF)));
-        expect(value.backgroundColor(credentialModel2),
-            equals(value.defaultBackgroundColor));
+        expect(
+          value.backgroundColor(credentialModel),
+          equals(const Color(0xFFFFFFFF)),
+        );
+        expect(
+          value.backgroundColor(credentialModel2),
+          equals(value.defaultBackgroundColor),
+        );
       }
     });
 
@@ -338,102 +342,174 @@ void main() {
 
     test('CredentialSubjectType name returns correct value', () {
       expect(
-          CredentialSubjectType.defiCompliance.name, equals('DefiCompliance'));
+        CredentialSubjectType.defiCompliance.name,
+        equals('DefiCompliance'),
+      );
       expect(CredentialSubjectType.livenessCard.name, equals('Liveness'));
-      expect(CredentialSubjectType.tezotopiaMembership.name,
-          equals('MembershipCard_1'));
-      expect(CredentialSubjectType.chainbornMembership.name,
-          equals('Chainborn_MembershipCard'));
-      expect(CredentialSubjectType.twitterCard.name,
-          equals('TwitterAccountProof'));
+      expect(
+        CredentialSubjectType.tezotopiaMembership.name,
+        equals('MembershipCard_1'),
+      );
+      expect(
+        CredentialSubjectType.chainbornMembership.name,
+        equals('Chainborn_MembershipCard'),
+      );
+      expect(
+        CredentialSubjectType.twitterCard.name,
+        equals('TwitterAccountProof'),
+      );
       expect(CredentialSubjectType.ageRange.name, equals('AgeRange'));
       expect(CredentialSubjectType.nationality.name, equals('Nationality'));
       expect(CredentialSubjectType.gender.name, equals('Gender'));
-      expect(CredentialSubjectType.walletCredential.name,
-          equals('WalletCredential'));
-      expect(CredentialSubjectType.tezosAssociatedWallet.name,
-          equals('TezosAssociatedAddress'));
-      expect(CredentialSubjectType.ethereumAssociatedWallet.name,
-          equals('EthereumAssociatedAddress'));
-      expect(CredentialSubjectType.fantomAssociatedWallet.name,
-          equals('FantomAssociatedAddress'));
-      expect(CredentialSubjectType.polygonAssociatedWallet.name,
-          equals('PolygonAssociatedAddress'));
-      expect(CredentialSubjectType.binanceAssociatedWallet.name,
-          equals('BinanceAssociatedAddress'));
-      expect(CredentialSubjectType.ethereumPooAddress.name,
-          equals('EthereumPooAddress'));
-      expect(CredentialSubjectType.fantomPooAddress.name,
-          equals('FantomPooAddress'));
-      expect(CredentialSubjectType.polygonPooAddress.name,
-          equals('PolygonPooAddress'));
-      expect(CredentialSubjectType.binancePooAddress.name,
-          equals('BinancePooAddress'));
-      expect(CredentialSubjectType.tezosPooAddress.name,
-          equals('TezosPooAddress'));
-      expect(CredentialSubjectType.certificateOfEmployment.name,
-          equals('CertificateOfEmployment'));
+      expect(
+        CredentialSubjectType.walletCredential.name,
+        equals('WalletCredential'),
+      );
+      expect(
+        CredentialSubjectType.tezosAssociatedWallet.name,
+        equals('TezosAssociatedAddress'),
+      );
+      expect(
+        CredentialSubjectType.ethereumAssociatedWallet.name,
+        equals('EthereumAssociatedAddress'),
+      );
+      expect(
+        CredentialSubjectType.fantomAssociatedWallet.name,
+        equals('FantomAssociatedAddress'),
+      );
+      expect(
+        CredentialSubjectType.polygonAssociatedWallet.name,
+        equals('PolygonAssociatedAddress'),
+      );
+      expect(
+        CredentialSubjectType.binanceAssociatedWallet.name,
+        equals('BinanceAssociatedAddress'),
+      );
+      expect(
+        CredentialSubjectType.ethereumPooAddress.name,
+        equals('EthereumPooAddress'),
+      );
+      expect(
+        CredentialSubjectType.fantomPooAddress.name,
+        equals('FantomPooAddress'),
+      );
+      expect(
+        CredentialSubjectType.polygonPooAddress.name,
+        equals('PolygonPooAddress'),
+      );
+      expect(
+        CredentialSubjectType.binancePooAddress.name,
+        equals('BinancePooAddress'),
+      );
+      expect(
+        CredentialSubjectType.tezosPooAddress.name,
+        equals('TezosPooAddress'),
+      );
+      expect(
+        CredentialSubjectType.certificateOfEmployment.name,
+        equals('CertificateOfEmployment'),
+      );
       expect(CredentialSubjectType.emailPass.name, equals('EmailPass'));
       expect(CredentialSubjectType.identityPass.name, equals('IdentityPass'));
       expect(
-          CredentialSubjectType.verifiableIdCard.name, equals('VerifiableId'));
+        CredentialSubjectType.verifiableIdCard.name,
+        equals('VerifiableId'),
+      );
       expect(CredentialSubjectType.linkedInCard.name, equals('LinkedinCard'));
-      expect(CredentialSubjectType.learningAchievement.name,
-          equals('LearningAchievement'));
+      expect(
+        CredentialSubjectType.learningAchievement.name,
+        equals('LearningAchievement'),
+      );
       expect(CredentialSubjectType.over13.name, equals('Over13'));
       expect(CredentialSubjectType.over15.name, equals('Over15'));
       expect(CredentialSubjectType.over18.name, equals('Over18'));
       expect(CredentialSubjectType.over21.name, equals('Over21'));
       expect(CredentialSubjectType.over50.name, equals('Over50'));
       expect(CredentialSubjectType.over65.name, equals('Over65'));
-      expect(CredentialSubjectType.passportFootprint.name,
-          equals('PassportNumber'));
+      expect(
+        CredentialSubjectType.passportFootprint.name,
+        equals('PassportNumber'),
+      );
       expect(CredentialSubjectType.phonePass.name, equals('PhoneProof'));
-      expect(CredentialSubjectType.professionalExperienceAssessment.name,
-          equals('ProfessionalExperienceAssessment'));
-      expect(CredentialSubjectType.professionalSkillAssessment.name,
-          equals('ProfessionalSkillAssessment'));
-      expect(CredentialSubjectType.professionalStudentCard.name,
-          equals('ProfessionalStudentCard'));
+      expect(
+        CredentialSubjectType.professionalExperienceAssessment.name,
+        equals('ProfessionalExperienceAssessment'),
+      );
+      expect(
+        CredentialSubjectType.professionalSkillAssessment.name,
+        equals('ProfessionalSkillAssessment'),
+      );
+      expect(
+        CredentialSubjectType.professionalStudentCard.name,
+        equals('ProfessionalStudentCard'),
+      );
       expect(CredentialSubjectType.residentCard.name, equals('ResidentCard'));
-      expect(CredentialSubjectType.employeeCredential.name,
-          equals('EmployeeCredential'));
-      expect(CredentialSubjectType.legalPersonalCredential.name,
-          equals('LegalPersonCredential'));
+      expect(
+        CredentialSubjectType.employeeCredential.name,
+        equals('EmployeeCredential'),
+      );
+      expect(
+        CredentialSubjectType.legalPersonalCredential.name,
+        equals('LegalPersonCredential'),
+      );
       expect(CredentialSubjectType.selfIssued.name, equals('SelfIssued'));
       expect(CredentialSubjectType.studentCard.name, equals('StudentCard'));
       expect(CredentialSubjectType.voucher.name, equals('Voucher'));
       expect(CredentialSubjectType.tezVoucher.name, equals('TezVoucher_1'));
       expect(
-          CredentialSubjectType.diplomaCard.name, equals('VerifiableDiploma'));
+        CredentialSubjectType.diplomaCard.name,
+        equals('VerifiableDiploma'),
+      );
       expect(CredentialSubjectType.aragoPass.name, equals('AragoPass'));
       expect(
-          CredentialSubjectType.aragoEmailPass.name, equals('AragoEmailPass'));
+        CredentialSubjectType.aragoEmailPass.name,
+        equals('AragoEmailPass'),
+      );
       expect(
-          CredentialSubjectType.aragoIdentityCard.name, equals('AragoIdCard'));
-      expect(CredentialSubjectType.aragoLearningAchievement.name,
-          equals('AragoLearningAchievement'));
+        CredentialSubjectType.aragoIdentityCard.name,
+        equals('AragoIdCard'),
+      );
+      expect(
+        CredentialSubjectType.aragoLearningAchievement.name,
+        equals('AragoLearningAchievement'),
+      );
       expect(CredentialSubjectType.aragoOver18.name, equals('AragoOver18'));
-      expect(CredentialSubjectType.pcdsAgentCertificate.name,
-          equals('PCDSAgentCertificate'));
       expect(
-          CredentialSubjectType.euDiplomaCard.name,
-          equals(
-              'https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd'));
+        CredentialSubjectType.pcdsAgentCertificate.name,
+        equals('PCDSAgentCertificate'),
+      );
       expect(
-          CredentialSubjectType.euVerifiableId.name,
-          equals(
-              'https://api-conformance.ebsi.eu/trusted-schemas-registry/v2/schemas/z22ZAMdQtNLwi51T2vdZXGGZaYyjrsuP1yzWyXZirCAHv'));
-      expect(CredentialSubjectType.kycAgeCredential.name,
-          equals('KYCAgeCredential'));
-      expect(CredentialSubjectType.kycCountryOfResidence.name,
-          equals('KYCCountryOfResidenceCredential'));
-      expect(CredentialSubjectType.proofOfTwitterStats.name,
-          equals('ProofOfTwitterStats'));
-      expect(CredentialSubjectType.civicPassCredential.name,
-          equals('CivicPassCredential'));
-      expect(CredentialSubjectType.identityCredential.name,
-          equals('IdentityCredential'));
+        CredentialSubjectType.euDiplomaCard.name,
+        equals(
+          'https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd',
+        ),
+      );
+      expect(
+        CredentialSubjectType.euVerifiableId.name,
+        equals(
+          'https://api-conformance.ebsi.eu/trusted-schemas-registry/v2/schemas/z22ZAMdQtNLwi51T2vdZXGGZaYyjrsuP1yzWyXZirCAHv',
+        ),
+      );
+      expect(
+        CredentialSubjectType.kycAgeCredential.name,
+        equals('KYCAgeCredential'),
+      );
+      expect(
+        CredentialSubjectType.kycCountryOfResidence.name,
+        equals('KYCCountryOfResidenceCredential'),
+      );
+      expect(
+        CredentialSubjectType.proofOfTwitterStats.name,
+        equals('ProofOfTwitterStats'),
+      );
+      expect(
+        CredentialSubjectType.civicPassCredential.name,
+        equals('CivicPassCredential'),
+      );
+      expect(
+        CredentialSubjectType.identityCredential.name,
+        equals('IdentityCredential'),
+      );
       expect(CredentialSubjectType.eudiPid.name, equals('EudiPid'));
       expect(CredentialSubjectType.pid.name, equals('Pid'));
       expect(CredentialSubjectType.defaultCredential.name, equals(''));
@@ -567,7 +643,9 @@ void main() {
           expect(value.blockchainWidget, isA<TezosAssociatedAddressWidget>());
         } else if (value == CredentialSubjectType.ethereumAssociatedWallet) {
           expect(
-              value.blockchainWidget, isA<EthereumAssociatedAddressWidget>());
+            value.blockchainWidget,
+            isA<EthereumAssociatedAddressWidget>(),
+          );
         } else if (value == CredentialSubjectType.polygonAssociatedWallet) {
           expect(value.blockchainWidget, isA<PolygonAssociatedAddressWidget>());
         } else if (value == CredentialSubjectType.binanceAssociatedWallet) {
@@ -584,40 +662,64 @@ void main() {
       expect(CredentialSubjectType.defiCompliance.title, 'Defi Compliance');
       expect(CredentialSubjectType.livenessCard.title, 'Liveness');
       expect(
-          CredentialSubjectType.tezotopiaMembership.title, 'Membership Card');
+        CredentialSubjectType.tezotopiaMembership.title,
+        'Membership Card',
+      );
       expect(CredentialSubjectType.chainbornMembership.title, 'Chainborn');
       expect(CredentialSubjectType.twitterCard.title, 'Twitter Account Proof');
       expect(CredentialSubjectType.ageRange.title, 'Age Range');
       expect(CredentialSubjectType.nationality.title, 'Nationality');
       expect(CredentialSubjectType.gender.title, 'Gender');
       expect(CredentialSubjectType.walletCredential.title, 'Wallet Credential');
-      expect(CredentialSubjectType.tezosAssociatedWallet.title,
-          'Tezos Associated Address');
-      expect(CredentialSubjectType.ethereumAssociatedWallet.title,
-          'Ethereum Associated Address');
-      expect(CredentialSubjectType.fantomAssociatedWallet.title,
-          'Fantom Associated Address');
-      expect(CredentialSubjectType.polygonAssociatedWallet.title,
-          'Polygon Associated Address');
-      expect(CredentialSubjectType.binanceAssociatedWallet.title,
-          'BNB Chain Associated Address');
-      expect(CredentialSubjectType.ethereumPooAddress.title,
-          'Ethereum Poo Address');
       expect(
-          CredentialSubjectType.fantomPooAddress.title, 'Fantom Poo Address');
+        CredentialSubjectType.tezosAssociatedWallet.title,
+        'Tezos Associated Address',
+      );
       expect(
-          CredentialSubjectType.polygonPooAddress.title, 'Polygon Poo Address');
-      expect(CredentialSubjectType.binancePooAddress.title,
-          'BNB Chain Poo Address');
+        CredentialSubjectType.ethereumAssociatedWallet.title,
+        'Ethereum Associated Address',
+      );
+      expect(
+        CredentialSubjectType.fantomAssociatedWallet.title,
+        'Fantom Associated Address',
+      );
+      expect(
+        CredentialSubjectType.polygonAssociatedWallet.title,
+        'Polygon Associated Address',
+      );
+      expect(
+        CredentialSubjectType.binanceAssociatedWallet.title,
+        'BNB Chain Associated Address',
+      );
+      expect(
+        CredentialSubjectType.ethereumPooAddress.title,
+        'Ethereum Poo Address',
+      );
+      expect(
+        CredentialSubjectType.fantomPooAddress.title,
+        'Fantom Poo Address',
+      );
+      expect(
+        CredentialSubjectType.polygonPooAddress.title,
+        'Polygon Poo Address',
+      );
+      expect(
+        CredentialSubjectType.binancePooAddress.title,
+        'BNB Chain Poo Address',
+      );
       expect(CredentialSubjectType.tezosPooAddress.title, 'Tezos Poo Address');
-      expect(CredentialSubjectType.certificateOfEmployment.title,
-          'Certificate of Employment');
+      expect(
+        CredentialSubjectType.certificateOfEmployment.title,
+        'Certificate of Employment',
+      );
       expect(CredentialSubjectType.emailPass.title, 'Email Pass');
       expect(CredentialSubjectType.identityPass.title, 'Identity Pass');
       expect(CredentialSubjectType.verifiableIdCard.title, 'VerifiableId');
       expect(CredentialSubjectType.linkedInCard.title, 'Linkedin Card');
-      expect(CredentialSubjectType.learningAchievement.title,
-          'Learning Achievement');
+      expect(
+        CredentialSubjectType.learningAchievement.title,
+        'Learning Achievement',
+      );
       expect(CredentialSubjectType.over13.title, 'Over13');
       expect(CredentialSubjectType.over15.title, 'Over15');
       expect(CredentialSubjectType.over18.title, 'Over18');
@@ -626,12 +728,18 @@ void main() {
       expect(CredentialSubjectType.over65.title, 'Over18');
       expect(CredentialSubjectType.passportFootprint.title, 'Passport Number');
       expect(CredentialSubjectType.phonePass.title, 'Phone Proof');
-      expect(CredentialSubjectType.professionalExperienceAssessment.title,
-          'Professional Experience Assessment');
-      expect(CredentialSubjectType.professionalSkillAssessment.title,
-          'Professional Skill Assessment');
-      expect(CredentialSubjectType.professionalStudentCard.title,
-          'Professional Student Card');
+      expect(
+        CredentialSubjectType.professionalExperienceAssessment.title,
+        'Professional Experience Assessment',
+      );
+      expect(
+        CredentialSubjectType.professionalSkillAssessment.title,
+        'Professional Skill Assessment',
+      );
+      expect(
+        CredentialSubjectType.professionalStudentCard.title,
+        'Professional Student Card',
+      );
       expect(CredentialSubjectType.residentCard.title, 'Resident Card');
       expect(CredentialSubjectType.selfIssued.title, 'Self Issued');
       expect(CredentialSubjectType.studentCard.title, 'Student Card');
@@ -641,27 +749,45 @@ void main() {
       expect(CredentialSubjectType.aragoPass.title, 'Arago Pass');
       expect(CredentialSubjectType.aragoEmailPass.title, 'Arago Email Pass');
       expect(CredentialSubjectType.aragoIdentityCard.title, 'Arago Id Card');
-      expect(CredentialSubjectType.aragoLearningAchievement.title,
-          'Arago Learning Achievement');
+      expect(
+        CredentialSubjectType.aragoLearningAchievement.title,
+        'Arago Learning Achievement',
+      );
       expect(CredentialSubjectType.aragoOver18.title, 'Arago Over18');
-      expect(CredentialSubjectType.pcdsAgentCertificate.title,
-          'PCDS Agent Certificate');
+      expect(
+        CredentialSubjectType.pcdsAgentCertificate.title,
+        'PCDS Agent Certificate',
+      );
       expect(CredentialSubjectType.euDiplomaCard.title, 'EU Diploma');
       expect(CredentialSubjectType.euVerifiableId.title, 'EU VerifiableID');
       expect(
-          CredentialSubjectType.kycAgeCredential.title, 'KYC Age Credential');
-      expect(CredentialSubjectType.kycCountryOfResidence.title,
-          'KYC Country of Residence');
-      expect(CredentialSubjectType.proofOfTwitterStats.title,
-          'Proof Of Twitter Stats');
-      expect(CredentialSubjectType.civicPassCredential.title,
-          'Civic Pass Credential');
-      expect(CredentialSubjectType.employeeCredential.title,
-          'Employee Credential');
-      expect(CredentialSubjectType.legalPersonalCredential.title,
-          'Legal Person Credential');
-      expect(CredentialSubjectType.identityCredential.title,
-          'Identity Credential');
+        CredentialSubjectType.kycAgeCredential.title,
+        'KYC Age Credential',
+      );
+      expect(
+        CredentialSubjectType.kycCountryOfResidence.title,
+        'KYC Country of Residence',
+      );
+      expect(
+        CredentialSubjectType.proofOfTwitterStats.title,
+        'Proof Of Twitter Stats',
+      );
+      expect(
+        CredentialSubjectType.civicPassCredential.title,
+        'Civic Pass Credential',
+      );
+      expect(
+        CredentialSubjectType.employeeCredential.title,
+        'Employee Credential',
+      );
+      expect(
+        CredentialSubjectType.legalPersonalCredential.title,
+        'Legal Person Credential',
+      );
+      expect(
+        CredentialSubjectType.identityCredential.title,
+        'Identity Credential',
+      );
       expect(CredentialSubjectType.eudiPid.title, 'EudiPid');
       expect(CredentialSubjectType.pid.title, 'Pid');
       expect(CredentialSubjectType.defaultCredential.title, '');
@@ -690,15 +816,25 @@ void main() {
       expect(CredentialSubjectType.diplomaCard.supportSingleOnly, true);
       expect(CredentialSubjectType.twitterCard.supportSingleOnly, true);
       expect(
-          CredentialSubjectType.tezosAssociatedWallet.supportSingleOnly, true);
-      expect(CredentialSubjectType.ethereumAssociatedWallet.supportSingleOnly,
-          true);
+        CredentialSubjectType.tezosAssociatedWallet.supportSingleOnly,
+        true,
+      );
       expect(
-          CredentialSubjectType.fantomAssociatedWallet.supportSingleOnly, true);
-      expect(CredentialSubjectType.polygonAssociatedWallet.supportSingleOnly,
-          true);
-      expect(CredentialSubjectType.binanceAssociatedWallet.supportSingleOnly,
-          true);
+        CredentialSubjectType.ethereumAssociatedWallet.supportSingleOnly,
+        true,
+      );
+      expect(
+        CredentialSubjectType.fantomAssociatedWallet.supportSingleOnly,
+        true,
+      );
+      expect(
+        CredentialSubjectType.polygonAssociatedWallet.supportSingleOnly,
+        true,
+      );
+      expect(
+        CredentialSubjectType.binanceAssociatedWallet.supportSingleOnly,
+        true,
+      );
 
       expect(CredentialSubjectType.walletCredential.supportSingleOnly, false);
       expect(CredentialSubjectType.tezosPooAddress.supportSingleOnly, false);
@@ -706,82 +842,132 @@ void main() {
       expect(CredentialSubjectType.fantomPooAddress.supportSingleOnly, false);
       expect(CredentialSubjectType.polygonPooAddress.supportSingleOnly, false);
       expect(CredentialSubjectType.binancePooAddress.supportSingleOnly, false);
-      expect(CredentialSubjectType.certificateOfEmployment.supportSingleOnly,
-          false);
+      expect(
+        CredentialSubjectType.certificateOfEmployment.supportSingleOnly,
+        false,
+      );
       expect(CredentialSubjectType.defaultCredential.supportSingleOnly, false);
       expect(CredentialSubjectType.emailPass.supportSingleOnly, false);
       expect(CredentialSubjectType.linkedInCard.supportSingleOnly, false);
       expect(
-          CredentialSubjectType.learningAchievement.supportSingleOnly, false);
+        CredentialSubjectType.learningAchievement.supportSingleOnly,
+        false,
+      );
       expect(CredentialSubjectType.phonePass.supportSingleOnly, false);
       expect(
-          CredentialSubjectType
-              .professionalExperienceAssessment.supportSingleOnly,
-          false);
+        CredentialSubjectType
+            .professionalExperienceAssessment.supportSingleOnly,
+        false,
+      );
       expect(
-          CredentialSubjectType.professionalSkillAssessment.supportSingleOnly,
-          false);
-      expect(CredentialSubjectType.professionalStudentCard.supportSingleOnly,
-          false);
+        CredentialSubjectType.professionalSkillAssessment.supportSingleOnly,
+        false,
+      );
+      expect(
+        CredentialSubjectType.professionalStudentCard.supportSingleOnly,
+        false,
+      );
       expect(CredentialSubjectType.selfIssued.supportSingleOnly, false);
       expect(CredentialSubjectType.studentCard.supportSingleOnly, false);
       expect(CredentialSubjectType.aragoPass.supportSingleOnly, false);
       expect(CredentialSubjectType.aragoEmailPass.supportSingleOnly, false);
       expect(CredentialSubjectType.aragoIdentityCard.supportSingleOnly, false);
-      expect(CredentialSubjectType.aragoLearningAchievement.supportSingleOnly,
-          false);
+      expect(
+        CredentialSubjectType.aragoLearningAchievement.supportSingleOnly,
+        false,
+      );
       expect(CredentialSubjectType.aragoOver18.supportSingleOnly, false);
       expect(
-          CredentialSubjectType.pcdsAgentCertificate.supportSingleOnly, false);
+        CredentialSubjectType.pcdsAgentCertificate.supportSingleOnly,
+        false,
+      );
       expect(CredentialSubjectType.euDiplomaCard.supportSingleOnly, false);
       expect(CredentialSubjectType.euVerifiableId.supportSingleOnly, false);
       expect(CredentialSubjectType.kycAgeCredential.supportSingleOnly, false);
       expect(
-          CredentialSubjectType.kycCountryOfResidence.supportSingleOnly, false);
+        CredentialSubjectType.kycCountryOfResidence.supportSingleOnly,
+        false,
+      );
       expect(
-          CredentialSubjectType.proofOfTwitterStats.supportSingleOnly, false);
+        CredentialSubjectType.proofOfTwitterStats.supportSingleOnly,
+        false,
+      );
       expect(
-          CredentialSubjectType.civicPassCredential.supportSingleOnly, false);
+        CredentialSubjectType.civicPassCredential.supportSingleOnly,
+        false,
+      );
       expect(CredentialSubjectType.employeeCredential.supportSingleOnly, false);
-      expect(CredentialSubjectType.legalPersonalCredential.supportSingleOnly,
-          false);
+      expect(
+        CredentialSubjectType.legalPersonalCredential.supportSingleOnly,
+        false,
+      );
       expect(CredentialSubjectType.identityCredential.supportSingleOnly, false);
       expect(CredentialSubjectType.eudiPid.supportSingleOnly, false);
       expect(CredentialSubjectType.pid.supportSingleOnly, false);
     });
 
     test('CredentialSubjectType getVCFormatType returns correct value', () {
-      expect(CredentialSubjectType.ethereumAssociatedWallet.getVCFormatType,
-          VCFormatType.values);
-      expect(CredentialSubjectType.fantomAssociatedWallet.getVCFormatType,
-          VCFormatType.values);
-      expect(CredentialSubjectType.polygonAssociatedWallet.getVCFormatType,
-          VCFormatType.values);
-      expect(CredentialSubjectType.binanceAssociatedWallet.getVCFormatType,
-          VCFormatType.values);
-      expect(CredentialSubjectType.tezosAssociatedWallet.getVCFormatType,
-          VCFormatType.values);
+      expect(
+        CredentialSubjectType.ethereumAssociatedWallet.getVCFormatType,
+        VCFormatType.values,
+      );
+      expect(
+        CredentialSubjectType.fantomAssociatedWallet.getVCFormatType,
+        VCFormatType.values,
+      );
+      expect(
+        CredentialSubjectType.polygonAssociatedWallet.getVCFormatType,
+        VCFormatType.values,
+      );
+      expect(
+        CredentialSubjectType.binanceAssociatedWallet.getVCFormatType,
+        VCFormatType.values,
+      );
+      expect(
+        CredentialSubjectType.tezosAssociatedWallet.getVCFormatType,
+        VCFormatType.values,
+      );
 
       expect(
-          CredentialSubjectType.over13.getVCFormatType, [VCFormatType.ldpVc]);
+        CredentialSubjectType.over13.getVCFormatType,
+        [VCFormatType.ldpVc],
+      );
       expect(
-          CredentialSubjectType.over15.getVCFormatType, [VCFormatType.ldpVc]);
+        CredentialSubjectType.over15.getVCFormatType,
+        [VCFormatType.ldpVc],
+      );
       expect(
-          CredentialSubjectType.over21.getVCFormatType, [VCFormatType.ldpVc]);
+        CredentialSubjectType.over21.getVCFormatType,
+        [VCFormatType.ldpVc],
+      );
       expect(
-          CredentialSubjectType.over50.getVCFormatType, [VCFormatType.ldpVc]);
+        CredentialSubjectType.over50.getVCFormatType,
+        [VCFormatType.ldpVc],
+      );
       expect(
-          CredentialSubjectType.over65.getVCFormatType, [VCFormatType.ldpVc]);
+        CredentialSubjectType.over65.getVCFormatType,
+        [VCFormatType.ldpVc],
+      );
       expect(
-          CredentialSubjectType.gender.getVCFormatType, [VCFormatType.ldpVc]);
+        CredentialSubjectType.gender.getVCFormatType,
+        [VCFormatType.ldpVc],
+      );
       expect(
-          CredentialSubjectType.ageRange.getVCFormatType, [VCFormatType.ldpVc]);
-      expect(CredentialSubjectType.defiCompliance.getVCFormatType,
-          [VCFormatType.ldpVc]);
-      expect(CredentialSubjectType.tezotopiaMembership.getVCFormatType,
-          [VCFormatType.ldpVc]);
-      expect(CredentialSubjectType.chainbornMembership.getVCFormatType,
-          [VCFormatType.ldpVc]);
+        CredentialSubjectType.ageRange.getVCFormatType,
+        [VCFormatType.ldpVc],
+      );
+      expect(
+        CredentialSubjectType.defiCompliance.getVCFormatType,
+        [VCFormatType.ldpVc],
+      );
+      expect(
+        CredentialSubjectType.tezotopiaMembership.getVCFormatType,
+        [VCFormatType.ldpVc],
+      );
+      expect(
+        CredentialSubjectType.chainbornMembership.getVCFormatType,
+        [VCFormatType.ldpVc],
+      );
 
       expect(CredentialSubjectType.verifiableIdCard.getVCFormatType, [
         VCFormatType.ldpVc,
@@ -790,10 +976,14 @@ void main() {
         VCFormatType.jwtVc,
       ]);
 
-      expect(CredentialSubjectType.identityCredential.getVCFormatType,
-          [VCFormatType.vcSdJWT]);
-      expect(CredentialSubjectType.eudiPid.getVCFormatType,
-          [VCFormatType.vcSdJWT]);
+      expect(
+        CredentialSubjectType.identityCredential.getVCFormatType,
+        [VCFormatType.vcSdJWT],
+      );
+      expect(
+        CredentialSubjectType.eudiPid.getVCFormatType,
+        [VCFormatType.vcSdJWT],
+      );
       expect(CredentialSubjectType.pid.getVCFormatType, [VCFormatType.vcSdJWT]);
 
       expect(CredentialSubjectType.over18.getVCFormatType, [
@@ -801,89 +991,167 @@ void main() {
         VCFormatType.jwtVcJson,
       ]);
 
-      expect(CredentialSubjectType.phonePass.getVCFormatType,
-          [VCFormatType.ldpVc, VCFormatType.jwtVcJson]);
-      expect(CredentialSubjectType.livenessCard.getVCFormatType,
-          [VCFormatType.ldpVc, VCFormatType.jwtVcJson]);
-      expect(CredentialSubjectType.emailPass.getVCFormatType,
-          [VCFormatType.ldpVc, VCFormatType.jwtVcJson]);
+      expect(
+        CredentialSubjectType.phonePass.getVCFormatType,
+        [VCFormatType.ldpVc, VCFormatType.jwtVcJson],
+      );
+      expect(
+        CredentialSubjectType.livenessCard.getVCFormatType,
+        [VCFormatType.ldpVc, VCFormatType.jwtVcJson],
+      );
+      expect(
+        CredentialSubjectType.emailPass.getVCFormatType,
+        [VCFormatType.ldpVc, VCFormatType.jwtVcJson],
+      );
 
-      expect(CredentialSubjectType.nationality.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.identityPass.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.passportFootprint.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.residentCard.getVCFormatType,
-          [VCFormatType.jwtVc]);
       expect(
-          CredentialSubjectType.voucher.getVCFormatType, [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.tezVoucher.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.diplomaCard.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.twitterCard.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.walletCredential.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.tezosPooAddress.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.ethereumPooAddress.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.fantomPooAddress.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.polygonPooAddress.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.binancePooAddress.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.certificateOfEmployment.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.defaultCredential.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.linkedInCard.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.learningAchievement.getVCFormatType,
-          [VCFormatType.jwtVc]);
+        CredentialSubjectType.nationality.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
       expect(
-          CredentialSubjectType
-              .professionalExperienceAssessment.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.professionalSkillAssessment.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.professionalStudentCard.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.selfIssued.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.studentCard.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.aragoPass.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.aragoEmailPass.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.aragoIdentityCard.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.aragoLearningAchievement.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.aragoOver18.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.pcdsAgentCertificate.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.euDiplomaCard.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.euVerifiableId.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.kycAgeCredential.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.kycCountryOfResidence.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.proofOfTwitterStats.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.civicPassCredential.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.employeeCredential.getVCFormatType,
-          [VCFormatType.jwtVc]);
-      expect(CredentialSubjectType.legalPersonalCredential.getVCFormatType,
-          [VCFormatType.jwtVc]);
+        CredentialSubjectType.identityPass.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.passportFootprint.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.residentCard.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.voucher.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.tezVoucher.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.diplomaCard.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.twitterCard.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.walletCredential.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.tezosPooAddress.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.ethereumPooAddress.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.fantomPooAddress.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.polygonPooAddress.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.binancePooAddress.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.certificateOfEmployment.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.defaultCredential.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.linkedInCard.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.learningAchievement.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.professionalExperienceAssessment.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.professionalSkillAssessment.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.professionalStudentCard.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.selfIssued.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.studentCard.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.aragoPass.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.aragoEmailPass.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.aragoIdentityCard.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.aragoLearningAchievement.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.aragoOver18.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.pcdsAgentCertificate.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.euDiplomaCard.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.euVerifiableId.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.kycAgeCredential.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.kycCountryOfResidence.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.proofOfTwitterStats.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.civicPassCredential.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.employeeCredential.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
+      expect(
+        CredentialSubjectType.legalPersonalCredential.getVCFormatType,
+        [VCFormatType.jwtVc],
+      );
     });
 
     test('CredentialSubjectType order returns correct value', () {

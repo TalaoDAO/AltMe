@@ -20,10 +20,11 @@ class QrCameraView extends StatefulWidget {
   });
 
   final String title;
-  final Function(InputImage inputImage) onImage;
+  final dynamic Function(InputImage inputImage) onImage;
   final VoidCallback? onCameraFeedReady;
   final VoidCallback? onDetectorViewModeChanged;
-  final Function(CameraLensDirection direction)? onCameraLensDirectionChanged;
+  final dynamic Function(CameraLensDirection direction)?
+      onCameraLensDirectionChanged;
   final CameraLensDirection initialCameraLensDirection;
 
   @override
@@ -34,7 +35,9 @@ class _QrCameraViewState extends State<QrCameraView> {
   static List<CameraDescription> _cameras = [];
   CameraController? _controller;
   int _cameraIndex = -1;
+  // ignore: unused_field
   double _currentZoomLevel = 1;
+  // ignore: unused_field
   double _minAvailableZoom = 1;
   // ignore: unused_field
   double _maxAvailableZoom = 1;

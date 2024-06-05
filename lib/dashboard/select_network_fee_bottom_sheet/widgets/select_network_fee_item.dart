@@ -25,7 +25,7 @@ class SelectNetworkFeeItem extends StatelessWidget {
       horizontalTitleGap: 0,
       leading: Checkbox(
         value: isSelected,
-        fillColor: MaterialStateProperty.all(
+        fillColor: WidgetStateProperty.all(
           Theme.of(context).colorScheme.inversePrimary,
         ),
         checkColor: Theme.of(context).colorScheme.primary,

@@ -95,8 +95,8 @@ void main() {
       );
     });
 
-    const mnemonicString =
-        'notice photo opera keen climb agent soft parrot best joke field devote';
+    const mnemonicString = 'notice photo opera keen climb'
+        ' agent soft parrot best joke field devote';
 
     test('should generate account correctly', () async {
       when(() => homeCubit.emitHasWallet()).thenAnswer((_) async => {});

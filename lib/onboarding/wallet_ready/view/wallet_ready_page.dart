@@ -138,7 +138,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                               scale: 1.3,
                               child: Checkbox(
                                 value: state.isAgreeWithTerms,
-                                fillColor: MaterialStateProperty.all(
+                                fillColor: WidgetStateProperty.all(
                                   Theme.of(context).colorScheme.primary,
                                 ),
                                 materialTapTargetSize:

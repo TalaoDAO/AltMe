@@ -19,7 +19,7 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
     final loginAttemptCount = state.loginAttemptCount + 1;
     final loginAttemptsRemaining =
         totalPermitedLoginAttempt - state.loginAttemptCount - 1;
-    bool allowAction = true;
+    const allowAction = true;
     // if (loginAttemptCount >= totalPermitedLoginAttempt) {
     //   allowAction = false;
     //   _startLockTimer();
@@ -124,10 +124,12 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
             return;
           }
         }
-        emit(state.copyWith(
-          isPinCodeValid: true,
-          enteredPasscode: passCode,
-        ));
+        emit(
+          state.copyWith(
+            isPinCodeValid: true,
+            enteredPasscode: passCode,
+          ),
+        );
 
 // on new pincode
         // void _onPasscodeEntered(String enteredPasscode) {

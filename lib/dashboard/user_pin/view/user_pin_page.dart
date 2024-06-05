@@ -37,8 +37,7 @@ class UserPinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          PinCodeViewCubit(),
+      create: (context) => PinCodeViewCubit(),
       child: UserPinView(
         onCancel: onCancel,
         onProceed: onProceed,
@@ -81,8 +80,8 @@ class _UserPinViewState extends State<UserPinView> {
     final l10n = context.l10n;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return WillPopScope(
-          onWillPop: () async => false,
+        return PopScope(
+          canPop: false,
           child: BasePage(
             backgroundColor: Theme.of(context).colorScheme.background,
             scrollView: false,

@@ -149,7 +149,8 @@ void main() {
             BlocProvider<WalletCubit>.value(value: walletCubit),
             BlocProvider<SplashCubit>.value(value: splashCubit),
             BlocProvider<AltmeChatSupportCubit>.value(
-                value: altmeChatSupportCubit),
+              value: altmeChatSupportCubit,
+            ),
             BlocProvider<ProfileCubit>.value(value: profileCubit),
           ],
           child: const OnBoardingGenPhrasePage(),
