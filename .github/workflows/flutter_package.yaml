@@ -107,6 +107,17 @@ jobs:
           flutter pub global activate very_good_cli
           very_good packages get --recursive --ignore=${{inputs.package_get_excludes}}
 
+      - name: 📦 Run build_runner for nested package if necessary
+        run: |
+          if grep -q 'path: ../credential_manifest' pubspec.yaml; then
+            initial_dir=$(pwd)
+            echo initial_dir
+            cd ../credential_manifest
+            flutter pub get
+            dart pub run build_runner build --delete-conflicting-outputs
+            cd initial_dir
+          fi
+
       - name: ⚙️ Run Setup
         if: "${{inputs.setup != ''}}"
         run: ${{inputs.setup}}
