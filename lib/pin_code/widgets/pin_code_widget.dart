@@ -24,6 +24,7 @@ class PinCodeWidget extends StatefulWidget {
     this.header,
     this.onLoginAttempt,
     this.isNewCode = false,
+    this.isUserPin = false,
   })  : circleUIConfig = circleUIConfig ?? const CircleUIConfig(),
         keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
 
@@ -33,6 +34,8 @@ class PinCodeWidget extends StatefulWidget {
   final String? subTitle;
   final int passwordDigits;
   final bool isNewCode;
+  // When a specific pin is requested to get a credential
+  final bool isUserPin;
 
   // Cancel button and delete button will be switched based on the screen state
   final Widget cancelButton;
@@ -74,7 +77,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
           });
         }
         if (current.enteredPasscode.length == widget.passwordDigits) {
-          if (current.isPinCodeValid) {
+          if (current.isPinCodeValid || widget.isUserPin) {
             _validationCallback();
           } else {
             if (widget.title == l10n.confirmYourPinCode) {
@@ -89,6 +92,10 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
       listener: (context, state) {
         widget.onLoginAttempt
             ?.call(state.loginAttemptCount, state.loginAttemptsRemaining);
+        // if (state.enteredPasscode.length == widget.passwordDigits &&
+        //     widget.isUserPin) {
+        //   _validationCallback();
+        // }
       },
       builder: (context, state) {
         final enteredPasscode = state.enteredPasscode;
