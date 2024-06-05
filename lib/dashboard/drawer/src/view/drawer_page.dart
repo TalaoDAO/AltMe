@@ -120,8 +120,7 @@ class DrawerView extends StatelessWidget {
                     ],
 
                     if (profileModel
-                            .profileSetting.settingsMenu.displayDeveloperMode &&
-                        profileModel.profileType != ProfileType.defaultOne) ...[
+                        .profileSetting.settingsMenu.displayDeveloperMode) ...[
                       DrawerCategoryItem(
                         title: l10n.developerMode,
                         subTitle: l10n.developerModeSubtitle,
