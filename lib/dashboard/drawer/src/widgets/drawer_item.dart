@@ -26,7 +26,7 @@ class DrawerItem extends StatelessWidget {
         padding: const EdgeInsets.all(Sizes.spaceNormal),
         margin: const EdgeInsets.all(Sizes.spaceXSmall),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: Theme.of(context).colorScheme.surfaceBright,
           borderRadius: const BorderRadius.all(
             Radius.circular(
               Sizes.normalRadius,

@@ -10,7 +10,7 @@ abstract class AppTheme {
 
   /// An accent color used for less prominent components in the UI, such as
   /// filter chips, while expanding the opportunity for color expression.
-  static Color darkSecondary = const Color(0xff00A1FF);
+  static Color darkSecondary = const Color(0xff18ACFF);
 
   /// A color that's clearly legible when drawn on secondary
   static Color darkOnSecondary = const Color(0xffFFFFFF);
@@ -18,13 +18,13 @@ abstract class AppTheme {
   /// A color used as a contrasting accent that can balance primary
   /// and secondary colors or bring heightened attention to an element,
   /// such as an input field.
-  static Color darkTertiary = const Color(0xffFFFFFF);
+  static Color darkTertiary = const Color(0xFF280164);
 
   /// A color that's clearly legible when drawn on tertiary.
   static Color darkOnTertiary = const Color(0xffD1CCE3);
 
   /// The background color for widgets like Card.
-  static Color darkSurface = const Color(0xff1A182D);
+  static Color darkSurface = const Color(0xff0B0514);
 
   /// A color that's clearly legible when drawn on surface.
   static Color darkOnSurface = const Color(0xffEDEAF5);
@@ -55,17 +55,19 @@ abstract class AppTheme {
         dividerColor: dividerColor,
         highlightColor: highlightColor,
         colorScheme: ColorScheme(
-          primary: darkPrimary,
+          primary: const Color(0xff6600FF),
           onPrimary: darkOnPrimary,
           secondary: darkSecondary,
           onSecondary: darkOnSecondary,
           tertiary: darkTertiary,
           onTertiary: darkOnTertiary,
-          surface: darkSurface,
+          surface: const Color(0xff0B0514),
           onSurface: darkOnSurface,
           error: darkError,
           onError: darkOnError,
           shadow: darkShadow,
+          surfaceBright: const Color(0xff232630),
+          surfaceDim: const Color(0xff271C38),
           brightness: Brightness.dark,
         ),
         textTheme: TextTheme(

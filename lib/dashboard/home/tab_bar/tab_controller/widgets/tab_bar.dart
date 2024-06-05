@@ -28,22 +28,21 @@ class MyTab extends StatelessWidget {
           vertical: Sizes.spaceSmall,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Sizes.normalRadius),
-          gradient: isSelected
-              ? LinearGradient(
-                  colors: [
-                    AppTheme.darkThemeData.colorScheme.primary,
-                    AppTheme.darkThemeData.colorScheme.secondary,
-                  ],
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  stops: const [0.3, 1.0],
-                )
-              : null,
-          color: isSelected
-              ? null
-              : AppTheme.darkThemeData.colorScheme.secondaryContainer,
-        ),
+            borderRadius: BorderRadius.circular(Sizes.normalRadius),
+            gradient: isSelected
+                ? LinearGradient(
+                    colors: [
+                      AppTheme.darkThemeData.colorScheme.primary,
+                      AppTheme.darkThemeData.colorScheme.secondary,
+                    ],
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
+                    stops: const [0.3, 1.0],
+                  )
+                : null,
+            color: isSelected
+                ? null
+                : AppTheme.darkThemeData.colorScheme.tertiary),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

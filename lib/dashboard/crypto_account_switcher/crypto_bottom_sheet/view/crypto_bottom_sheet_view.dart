@@ -95,7 +95,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
           backgroundColor: Colors.transparent,
           body: DecoratedBox(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
+              color: Theme.of(context).colorScheme.surfaceDim,
               boxShadow: [
                 BoxShadow(
                   color: Theme.of(context).colorScheme.inversePrimary,

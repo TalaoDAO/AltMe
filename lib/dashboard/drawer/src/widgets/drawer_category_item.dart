@@ -25,7 +25,7 @@ class DrawerCategoryItem extends StatelessWidget {
       child: Container(
         padding: padding,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: Theme.of(context).colorScheme.surfaceBright,
           borderRadius: const BorderRadius.all(
             Radius.circular(Sizes.normalRadius),
           ),
