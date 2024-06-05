@@ -103,151 +103,152 @@ abstract class AppTheme {
       );
 }
 
+
 extension CustomColorScheme on ColorScheme {
-  Color get redColor => const Color(0xFFFF0045);
-  Color get transactionApplied => const Color(0xFF00B267);
-  Color get transactionFailed => const Color(0xFFFF0045);
-  Color get transactionSkipped => const Color(0xFFFF5F0A);
-  Color get activeColorOfNetwork => const Color(0xFF2C7DF7);
+  Color get redColor => error;
+  Color get transactionApplied => onTertiary;
+  Color get transactionFailed => error;
+  Color get transactionSkipped => onErrorContainer;
+  Color get activeColorOfNetwork => primary;
 
-  Color get greyText => const Color(0xFFD1CCE3);
+  Color get greyText => onSurface.withOpacity(0.6);
 
-  Color get kycKeyIconColor => const Color(0xFF86809D);
+  Color get kycKeyIconColor => onSurface.withOpacity(0.6);
 
-  Color get lightPurple => const Color(0xFF5F556F);
+  Color get lightPurple => secondary;
 
-  Color get popupBackground => const Color(0xff271C38);
+  Color get popupBackground => surface;
 
-  Color get cardHighlighted => const Color(0xFF251F38);
+  Color get cardHighlighted => surface;
 
-  Color get defaultDialogDark => const Color(0xFF322643);
+  Color get defaultDialogDark => surface;
 
-  Color get closeIconColor => const Color(0xFFA79ABA);
+  Color get closeIconColor => onSurface.withOpacity(0.6);
 
-  Color get kycVerifyButton => const Color(0xFF0045FF);
+  Color get kycVerifyButton => primary;
 
-  Color get checkMarkColor => const Color(0xFF00B267);
+  Color get checkMarkColor => onTertiary;
 
-  Color get accountBottomSheetBorder => Colors.grey[200]!;
+  Color get accountBottomSheetBorder => onSurface.withOpacity(0.12);
 
-  Color get digitPrimaryColor => Colors.white;
+  Color get digitPrimaryColor => onSurface;
 
   Color get digitFillColor => Colors.transparent;
 
-  Color get disabledBgColor => const Color(0xFF6A5F7B);
+  Color get disabledBgColor => onSurface.withOpacity(0.12);
 
-  Color get disabledTextColor => const Color(0xFF000000);
+  Color get disabledTextColor => onSurface.withOpacity(0.38);
 
-  Color get darkGradientStartColor => const Color(0xff0A0F19);
+  Color get darkGradientStartColor => surface;
 
-  Color get darkGradientEndColor => const Color(0xff25095B);
+  Color get darkGradientEndColor => surface;
 
   Color get transparent => Colors.transparent;
 
-  Color get onOutlineButton => const Color(0xFF6600FF);
+  Color get onOutlineButton => primary;
 
-  Color get onElevatedButton => const Color(0xFFFFFFFF);
+  Color get onElevatedButton => onPrimary;
 
-  Color get appBarUpperLayer => const Color(0xff25095B);
+  Color get appBarUpperLayer => surface;
 
   Color get appBarLowerLayer => surface;
 
-  Color get surfaceContainer => const Color(0xff707070).withOpacity(0.07);
+  Color get surfaceContainer => surface.withOpacity(0.07);
 
-  Color get drawerSurface => const Color(0xff232630);
+  Color get drawerSurface => surface;
 
-  Color get label => Colors.white;
+  Color get label => onSurface;
 
-  Color get unSelectedLabel => const Color(0xff86809D);
+  Color get unSelectedLabel => onSurface.withOpacity(0.6);
 
-  Color get leadingButton => const Color(0xffF1EFF8);
+  Color get leadingButton => onSurface;
 
   Color get selectedBottomBar => surface;
 
-  Color get drawerBackground => const Color(0xff0B0514);
+  Color get drawerBackground => surface;
 
-  Color get borderColor => const Color(0xFFDDCEF4);
+  Color get borderColor => onSurface.withOpacity(0.12);
 
   Color get defualtDialogCancelButtonBorderColor =>
-      const Color(0xFFFFFFFF).withOpacity(0.2);
+      onSurface.withOpacity(0.2);
 
-  Color get markDownH1 => const Color(0xFFFFFFFF);
+  Color get markDownH1 => onSurface;
 
-  Color get markDownH2 => const Color(0xFFFFFFFF);
+  Color get markDownH2 => onSurface;
 
-  Color get markDownP => const Color(0xFFD1CCE3);
+  Color get markDownP => onSurface.withOpacity(0.6);
 
-  Color get markDownA => const Color(0xff517bff);
+  Color get markDownA => primary;
 
-  Color get subtitle1 => const Color(0xFFFFFFFF);
+  Color get subtitle1 => onSurface;
 
-  Color get subtitle2 => const Color(0xFF8B8C92);
+  Color get subtitle2 => onSurface.withOpacity(0.6);
 
-  Color get profileDummy => const Color(0xFF212121);
+  Color get profileDummy => onSurface;
 
-  Color get documentShadow => const Color(0xFF424242);
+  Color get documentShadow => onSurface.withOpacity(0.12);
 
-  Color get documentShape => const Color(0xff3700b3).withOpacity(0.05);
+  Color get documentShape => primary.withOpacity(0.05);
 
-  Color get star => const Color(0xFFFFB83D);
+  Color get star => onErrorContainer;
 
-  Color get genderIcon => const Color(0xFF212121);
+  Color get genderIcon => onSurface;
 
-  Color get activeCredential => Colors.green;
+  Color get activeCredential => onTertiary;
 
-  Color get expiredCredential => Colors.orange;
+  Color get expiredCredential => onErrorContainer;
 
-  Color get revokedCredential => Colors.red;
+  Color get revokedCredential => error;
 
-  Color get buttonDisabled => const Color(0xFF424242);
+  Color get buttonDisabled => onSurface.withOpacity(0.38);
 
-  Color get alertErrorMessage => Colors.red;
+  Color get alertErrorMessage => error;
 
-  Color get alertWarningMessage => Colors.yellow;
+  Color get alertWarningMessage => onErrorContainer;
 
-  Color get alertInfoMessage => Colors.cyan;
+  Color get alertInfoMessage => outline;
 
-  Color get alertSuccessMessage => Colors.green;
+  Color get alertSuccessMessage => onTertiary;
 
-  Color get qrScanBackground => const Color(0xff2B1C48);
+  Color get qrScanBackground => surface;
 
-  Color get qrScanInnerShadow => const Color(0xff000000).withOpacity(0.16);
+  Color get qrScanInnerShadow => shadow.withOpacity(0.16);
 
-  Color get qrScanOuterShadow => const Color(0xff430F91);
+  Color get qrScanOuterShadow => primary;
 
-  Color get dialogText => const Color(0xffF5F5F5);
+  Color get dialogText => onSurface;
 
-  Color get tabBarNotSelected => const Color(0xFF280164);
+  Color get tabBarNotSelected => secondaryContainer;
 
-  Color get credentialBackground => const Color(0xFF211F33);
+  Color get credentialBackground => surface;
 
-  Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
+  Color get cryptoAccountNotSelected => onSurface.withOpacity(0.15);
 
-  Color get startButtonColorA => const Color(0xff18ACFF);
+  Color get startButtonColorA => primary;
 
-  Color get startButtonColorB => const Color(0xff6600FF);
+  Color get startButtonColorB => primaryContainer;
 
-  Color get associatedWalletBorder => const Color(0xff524B67);
+  Color get associatedWalletBorder => onSurface.withOpacity(0.12);
 
-  Color get deleteColor => const Color(0xff322643);
+  Color get deleteColor => surface;
 
-  Color get blueColor => const Color(0xff322643);
+  Color get blueColor => surface;
 
-  Color get titleColor => const Color(0xffD1CCE3);
+  Color get titleColor => onSurface;
 
-  Color get valueColor => const Color(0xffFFFFFF);
+  Color get valueColor => onSurface;
 
-  Color get lightGrey => const Color(0xFF616161);
+  Color get lightGrey => onSurface.withOpacity(0.6);
 
-  Color get darkGrey => const Color(0xFF212121);
+  Color get darkGrey => onSurface;
 
-  Color get activeColor => const Color(0xFF08B530);
+  Color get activeColor => onTertiary;
 
-  Color get inactiveColor => const Color(0xFFFF0045);
+  Color get inactiveColor => error;
 
-  Color get beaconBorder => const Color(0xff86809D);
+  Color get beaconBorder => onSurface.withOpacity(0.6);
 
-  Color get cardBackground => const Color(0xFF211F33);
+  Color get cardBackground => surface;
 }
 
 extension CustomTextTheme on TextTheme {
