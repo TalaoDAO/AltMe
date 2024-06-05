@@ -111,11 +111,11 @@ jobs:
         run: |
           if grep -q 'path: ../credential_manifest' pubspec.yaml; then
             initial_dir=$(pwd)
-            echo initial_dir
+            echo $initial_dir
             cd ../credential_manifest
             flutter pub get
             dart pub run build_runner build --delete-conflicting-outputs
-            cd initial_dir
+            cd $initial_dir
           fi
 
       - name: ⚙️ Run Setup
