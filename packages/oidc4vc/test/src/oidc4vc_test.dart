@@ -740,6 +740,43 @@ void main() {
           expect(value, jsonDecode(didDocument));
         });
 
+        test(
+            'use public resolver as fallback and get corresponding did document',
+            () async {
+          const issuer = 'did:web:talao.co';
+          const universal =
+              'https://unires:test@unires.talao.co/1.0/identifiers';
+
+          const public = 'https://dev.uniresolver.io/1.0/identifiers';
+
+          const didDocument =
+              r'{"@context":"https://w3id.org/did-resolution/v1","didDocument":{"@context":["https://www.w3.org/ns/did/v1",{"@id":"https://w3id.org/security#publicKeyJwk","@type":"@json"}],"id":"did:web:talao.co","verificationMethod":[{"id":"did:web:talao.co#key-1","type":"JwsVerificationKey2020","controller":"did:web:talao.co","publicKeyJwk":{"e":"AQAB","kid":"did:web:talao.co#key-1","kty":"RSA","n":"pPocyKreTAn3YrmGyPYXHklYqUiSSQirGACwJSYYs-ksfw4brtA3SZCmA2sdAO8a2DXfqADwFgVSxJFtJ3GkHLV2ZvOIOnZCX6MF6NIWHB9c64ydrYNJbEy72oyG_-v-sE6rb0x-D-uJe9DFYIURzisyBlNA7imsiZPQniOjPLv0BUgED0vdO5HijFe7XbpVhoU-2oTkHHQ4CadmBZhelCczACkXpOU7mwcImGj9h1__PsyT5VBLi_92-93NimZjechPaaTYEU2u0rfnfVW5eGDYNAynO4Q2bhpFPRTXWZ5Lhnhnq7M76T6DGA3GeAu_MOzB0l4dxpFMJ6wHnekdkQ"}},{"id":"did:web:talao.co#key-2","type":"JwsVerificationKey2020","controller":"did:web:talao.co","publicKeyJwk":{"crv":"P-256","kty":"EC","x":"Bls7WaGu_jsharYBAzakvuSERIV_IFR2tS64e5p_Y_Q","y":"haeKjXQ9uzyK4Ind1W4SBUkR_9udjjx1OmKK4vl1jko"}},{"id":"did:web:talao.co#key-21","type":"JwsVerificationKey2020","controller":"did:web:talao.co","publicKeyJwk":{"crv":"P-256","kty":"EC","x":"J4vQtLUyrVUiFIXRrtEq4xurmBZp2eq9wJmXkIA_stI","y":"HNh3aF4zQsnf_sFXUVaSzrQF85veDoVxhPQ-163wUYM"}},{"id":"did:web:talao.co#key-3","type":"JwsVerificationKey2020","controller":"did:web:talao.co","publicKeyJwk":{"crv":"Ed25519","kty":"OKP","x":"FUoLewH4w4-KdaPH2cjZbL--CKYxQRWR05Yd_bIbhQo"}},{"id":"did:web:talao.co#key-4","type":"Ed25519VerificationKey2018","controller":"did:web:talao.co","publicKeyBase58":"2S73k5pn5umfnaW31qx6dXFndEn6SmWw7LpgSjNNC5BF"}],"authentication":["did:web:talao.co#key-1","did:web:talao.co#key-2","did:web:talao.co#key-3","did:web:talao.co#key-4"],"assertionMethod":["did:web:talao.co#key-1","did:web:talao.co#key-2","did:web:talao.co#key-3","did:web:talao.co#key-4"],"keyAgreement":["did:web:talao.co#key-3","did:web:talao.co#key-4"],"capabilityInvocation":["did:web:talao.co#key-1","did:web:talao.co#key-4"],"service":[{"id":"did:web:talao.co#domain-1","type":"LinkedDomains","serviceEndpoint":"https://talao.co"}]},"didResolutionMetadata":{"contentType":"application/did+ld+json","pattern":"^(did:web:.+)$","driverUrl":"http://uni-resolver-driver-did-uport:8081/1.0/identifiers/","duration":42,"did":{"didString":"did:web:talao.co","methodSpecificId":"talao.co","method":"web"}},"didDocumentMetadata":{}}';
+
+          dioAdapter
+            ..onGet(
+              '$universal/$issuer',
+              (request) => request.throws(
+                500,
+                DioException.connectionError(
+                  requestOptions: RequestOptions(path: '$universal/$issuer'),
+                  reason: 'Internal Server Error',
+                ),
+              ),
+            )
+            ..onGet(
+              '$public/$issuer',
+              (request) => request.reply(200, jsonDecode(didDocument)),
+            );
+
+          final value = await oidc4vc.getDidDocument(
+            didKey: issuer,
+            fromStatusList: false,
+            isCachingEnabled: false,
+            dio: client,
+          );
+
+          expect(value, jsonDecode(didDocument));
+        });
         test('get corresponding did document', () async {
           const issuer = 'https://talao.co/issuer/zxhaokccsi';
           const openidConfigurationResponse1 =
