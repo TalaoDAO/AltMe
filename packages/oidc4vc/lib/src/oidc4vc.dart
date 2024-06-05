@@ -769,11 +769,21 @@ class OIDC4VC {
 
         return response as Map<String, dynamic>;
       } else {
-        final didDocument = await dio.get<dynamic>(
-          'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
-        );
-
-        return didDocument.data as Map<String, dynamic>;
+        try {
+          final didDocument = await dio.get<dynamic>(
+            'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
+          );
+          return didDocument.data as Map<String, dynamic>;
+        } catch (e) {
+          try {
+            final didDocument = await dio.get<dynamic>(
+              'https://dev.uniresolver.io/1.0/identifiers/$didKey',
+            );
+            return didDocument.data as Map<String, dynamic>;
+          } catch (e) {
+            rethrow;
+          }
+        }
       }
     } catch (e) {
       rethrow;
