@@ -118,7 +118,7 @@ class ConfidentialClientWidget extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(

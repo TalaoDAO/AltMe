@@ -161,7 +161,7 @@ class KeyboardButton extends StatelessWidget {
                 child: InkWell(
                   highlightColor: allowAction
                       ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.background,
+                      : Theme.of(context).colorScheme.surface,
                   splashColor: allowAction
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.surface,

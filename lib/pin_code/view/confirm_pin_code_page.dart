@@ -85,7 +85,7 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
         titleAlignment: Alignment.topCenter,
         titleLeading: const BackLeadingButton(),
         padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: PinCodeWidget(
           title: l10n.confirmYourPinCode,
           header: widget.isFromOnboarding

@@ -76,7 +76,7 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
         },
         icon: Icon(
           Icons.qr_code,
-          color: Theme.of(context).colorScheme.onBackground,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
       ),
       body: BackgroundCard(

@@ -73,7 +73,7 @@ class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
       scrollView: false,
       titleLeading: const BackLeadingButton(),
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: PinCodeWidget(
         title: l10n.enterNewPinCode,
         header: widget.isFromOnboarding

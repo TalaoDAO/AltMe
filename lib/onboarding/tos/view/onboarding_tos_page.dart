@@ -70,7 +70,7 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
             return false;
           },
           child: BasePage(
-            backgroundColor: Theme.of(context).colorScheme.background,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             title: l10n.termsOfUse,
             scrollView: false,
             padding: const EdgeInsets.symmetric(horizontal: 10),

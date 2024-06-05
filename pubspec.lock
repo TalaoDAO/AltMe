@@ -595,7 +595,7 @@ packages:
   didkit:
     dependency: transitive
     description:
-      path: "didkit/lib/flutter"
+      path: "../didkit/lib/flutter"
       relative: true
     source: path
     version: "0.0.2"

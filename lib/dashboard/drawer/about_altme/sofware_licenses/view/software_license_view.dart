@@ -98,7 +98,7 @@ class _SoftwareLicenseViewState extends State<SoftwareLicenseView> {
                         const SizedBox(width: 10),
                         Icon(
                           Icons.chevron_right,
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ],
                     ),

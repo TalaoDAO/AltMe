@@ -36,7 +36,7 @@ void main() {
     expect(colorScheme.onOutlineButton, const Color(0xFF6600FF));
     expect(colorScheme.onElevatedButton, equals(Colors.white));
     expect(colorScheme.appBarUpperLayer, const Color(0xff25095B));
-    expect(colorScheme.appBarLowerLayer, equals(colorScheme.background));
+    expect(colorScheme.appBarLowerLayer, equals(colorScheme.surface));
     expect(
       colorScheme.surfaceContainer,
       equals(const Color(0xff707070).withOpacity(0.07)),
