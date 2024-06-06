@@ -62,6 +62,7 @@ then
   buildRunner
   echo "deploy android"
   echo "Make sure you are in right branch"
+  flutter pub get
   flutter build appbundle --flavor "production" --target "lib/main_production.dart"
   # cd android 
   # fastlane deploy
@@ -73,7 +74,7 @@ then
   buildRunner
   podUpdate
   echo "deploy ios"
-  echo "Make sure you are in right branch"
+  flutter pub get
   flutter build ios --release --flavor "production" --target "lib/main_production.dart"
   cd ios 
   fastlane beta
