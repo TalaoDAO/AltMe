@@ -1,17 +1,17 @@
 
 function pub {
-  flutter clean
+  fvm flutter clean
   for d in `ls packages`;
   do
     (
       cd "packages/$d"
-      flutter clean
-      flutter pub get
-      flutter pub upgrade
+      fvm flutter clean
+      fvm flutter pub get
+      fvm flutter pub upgrade
     )
   done 
-  flutter pub get
-  flutter pub upgrade
+  fvm flutter pub get
+  fvm flutter pub upgrade
 }
 
 function buildRunner {
@@ -21,10 +21,10 @@ function buildRunner {
     (
       echo "$d"
       cd "packages/$d"
-      dart pub run build_runner build --delete-conflicting-outputs
+      fvm flutter packages pub run build_runner build --delete-conflicting-outputs
     )
   done 
-  dart pub run build_runner build --delete-conflicting-outputs
+  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
 }
 
 function podUpdate {
@@ -41,17 +41,17 @@ function podUpdate {
 if [[ "$*" == *-runDev* ]]; 
 then
   echo "flutter run development"
-  flutter run --flavor development --target lib/main_development.dart
+  fvm flutter run --flavor development --target lib/main_development.dart
 
 elif [[ "$*" == *-runstage* ]]; 
 then
   echo "flutter run staging"
-  flutter run --flavor staging --target lib/main_staging.dart
+  fvm flutter run --flavor staging --target lib/main_staging.dart
 
 elif [[ "$*" == *-run* ]]; 
 then
   echo "flutter run production"
-  flutter run --flavor production --target lib/main_production.dart
+  fvm flutter run --flavor production --target lib/main_production.dart
 
 elif [[ "$*" == *-pod* ]]; 
 then 
@@ -62,7 +62,7 @@ then
   buildRunner
   echo "deploy android"
   echo "Make sure you are in right branch"
-  flutter build appbundle --flavor "production" --target "lib/main_production.dart"
+  fvm flutter build appbundle --flavor "production" --target "lib/main_production.dart"
   # cd android 
   # fastlane deploy
   echo "app bundle deployed on internal testing track"
@@ -74,7 +74,7 @@ then
   podUpdate
   echo "deploy ios"
   echo "Make sure you are in right branch"
-  flutter build ios --release --flavor "production" --target "lib/main_production.dart"
+  fvm flutter build ios --release --flavor "production" --target "lib/main_production.dart"
   cd ios 
   fastlane beta
 elif [[ "$*" == *-pub* ]];
