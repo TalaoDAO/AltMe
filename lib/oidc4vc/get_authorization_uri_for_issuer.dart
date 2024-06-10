@@ -77,8 +77,11 @@ Future<void> getAuthorizationUriForIssuer({
 
   late Uri authorizationUri;
 
-  final (authorizationEndpoint, authorizationRequestParemeters) =
-      await oidc4vc.getAuthorizationData(
+  final (
+    authorizationEndpoint,
+    authorizationRequestParemeters,
+    openIdConfiguration
+  ) = await oidc4vc.getAuthorizationData(
     selectedCredentials: selectedCredentials,
     clientId: clientId,
     clientSecret: clientSecret,
@@ -97,7 +100,12 @@ Future<void> getAuthorizationUriForIssuer({
     secureAuthorizedFlow: secureAuthorizedFlow,
   );
 
-  if (secureAuthorizedFlow) {
+  final requirePushedAuthorizationRequests =
+      openIdConfiguration.requirePushedAuthorizationRequests;
+
+  if ((requirePushedAuthorizationRequests != null &&
+          requirePushedAuthorizationRequests) ||
+      (requirePushedAuthorizationRequests == null && secureAuthorizedFlow)) {
     final headers = <String, dynamic>{
       'Content-Type': 'application/x-www-form-urlencoded',
     };
