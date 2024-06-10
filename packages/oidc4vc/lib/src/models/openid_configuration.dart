@@ -61,8 +61,8 @@ class OpenIdConfiguration extends Equatable {
   final String? issuer;
   @JsonKey(name: 'jwks_uri')
   final String? jwksUri;
-  @JsonKey(name: 'require_pushed_authorization_requests')
-  final bool? requirePushedAuthorizationRequests;
+  @JsonKey(name: 'require_pushed_authorization_requests', defaultValue: false)
+  final bool requirePushedAuthorizationRequests;
   @JsonKey(name: 'grant_types_supported')
   final List<String>? grantTypesSupported;
 
