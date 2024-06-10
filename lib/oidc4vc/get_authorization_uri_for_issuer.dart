@@ -103,9 +103,7 @@ Future<void> getAuthorizationUriForIssuer({
   final requirePushedAuthorizationRequests =
       openIdConfiguration.requirePushedAuthorizationRequests;
 
-  if ((requirePushedAuthorizationRequests != null &&
-          requirePushedAuthorizationRequests) ||
-      (requirePushedAuthorizationRequests == null && secureAuthorizedFlow)) {
+  if (requirePushedAuthorizationRequests || secureAuthorizedFlow) {
     final headers = <String, dynamic>{
       'Content-Type': 'application/x-www-form-urlencoded',
     };
