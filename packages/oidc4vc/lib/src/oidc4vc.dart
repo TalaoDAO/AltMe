@@ -337,8 +337,9 @@ class OIDC4VC {
     if (secureAuthorizedFlow) {
       myRequest['client_metadata'] =
           Uri.encodeComponent(jsonEncode(clientMetaData));
-    } else {
+    } else if (clientAuthentication != ClientAuthentication.clientSecretJwt) {
       myRequest['client_metadata'] = jsonEncode(clientMetaData);
+      // paramètre config du portail, on ne met pas si : client authentication :
     }
     switch (clientAuthentication) {
       case ClientAuthentication.none:
@@ -353,9 +354,13 @@ class OIDC4VC {
         myRequest['client_id'] = clientId;
       case ClientAuthentication.clientSecretJwt:
         myRequest['client_id'] = clientId;
-        myRequest['client_assertion'] = clientAssertion;
-        myRequest['client_assertion_type'] =
-            'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
+        if (secureAuthorizedFlow ||
+            openIdConfiguration.requirePushedAuthorizationRequests) {
+          myRequest['client_assertion'] = clientAssertion;
+          myRequest['client_assertion_type'] =
+              // ignore: lines_longer_than_80_chars
+              'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
+        }
     }
 
     if (scope) {
