@@ -128,8 +128,10 @@ class OIDC4VC {
   /// Received JWT is already filtered on required members
   /// Received JWT keys are already sorted in lexicographic order
 
-  /// authorization endpoint, authorizationRequestParemeters
-  Future<(String, Map<String, dynamic>)> getAuthorizationData({
+  /// authorization endpoint, authorizationRequestParemeters,
+  /// OpenIdConfiguration
+  Future<(String, Map<String, dynamic>, OpenIdConfiguration)>
+      getAuthorizationData({
     required List<dynamic> selectedCredentials,
     required String? clientId,
     required String? clientSecret,
@@ -185,7 +187,11 @@ class OIDC4VC {
         secureAuthorizedFlow: secureAuthorizedFlow,
       );
 
-      return (authorizationEndpoint, authorizationRequestParemeters);
+      return (
+        authorizationEndpoint,
+        authorizationRequestParemeters,
+        openIdConfiguration,
+      );
     } catch (e) {
       throw Exception('NOT_A_VALID_OPENID_URL');
     }
