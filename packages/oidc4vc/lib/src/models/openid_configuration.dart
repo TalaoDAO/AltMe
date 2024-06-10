@@ -7,6 +7,7 @@ part 'openid_configuration.g.dart';
 @JsonSerializable()
 class OpenIdConfiguration extends Equatable {
   const OpenIdConfiguration({
+    required this.requirePushedAuthorizationRequests,
     this.authorizationServer,
     this.credentialsSupported,
     this.credentialConfigurationsSupported,
@@ -60,6 +61,8 @@ class OpenIdConfiguration extends Equatable {
   final String? issuer;
   @JsonKey(name: 'jwks_uri')
   final String? jwksUri;
+  @JsonKey(name: 'require_pushed_authorization_requests', defaultValue: false)
+  final bool requirePushedAuthorizationRequests;
   @JsonKey(name: 'grant_types_supported')
   final List<String>? grantTypesSupported;
 
@@ -83,6 +86,7 @@ class OpenIdConfiguration extends Equatable {
         credentialManifests,
         issuer,
         jwksUri,
+        requirePushedAuthorizationRequests,
         grantTypesSupported,
       ];
 }

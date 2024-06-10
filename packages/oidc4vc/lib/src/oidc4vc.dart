@@ -130,8 +130,10 @@ class OIDC4VC {
   /// Received JWT is already filtered on required members
   /// Received JWT keys are already sorted in lexicographic order
 
-  /// authorization endpoint, authorizationRequestParemeters
-  Future<(String, Map<String, dynamic>)> getAuthorizationData({
+  /// authorization endpoint, authorizationRequestParemeters,
+  /// OpenIdConfiguration
+  Future<(String, Map<String, dynamic>, OpenIdConfiguration)>
+      getAuthorizationData({
     required List<dynamic> selectedCredentials,
     required String? clientId,
     required String? clientSecret,
@@ -181,7 +183,11 @@ class OIDC4VC {
         secureAuthorizedFlow: secureAuthorizedFlow,
       );
 
-      return (authorizationEndpoint, authorizationRequestParemeters);
+      return (
+        authorizationEndpoint,
+        authorizationRequestParemeters,
+        openIdConfiguration,
+      );
     } catch (e) {
       throw Exception('NOT_A_VALID_OPENID_URL');
     }
@@ -331,8 +337,9 @@ class OIDC4VC {
     if (secureAuthorizedFlow) {
       myRequest['client_metadata'] =
           Uri.encodeComponent(jsonEncode(clientMetaData));
-    } else {
+    } else if (clientAuthentication != ClientAuthentication.clientSecretJwt) {
       myRequest['client_metadata'] = jsonEncode(clientMetaData);
+      // paramètre config du portail, on ne met pas si : client authentication :
     }
     switch (clientAuthentication) {
       case ClientAuthentication.none:
@@ -347,9 +354,13 @@ class OIDC4VC {
         myRequest['client_id'] = clientId;
       case ClientAuthentication.clientSecretJwt:
         myRequest['client_id'] = clientId;
-        myRequest['client_assertion'] = clientAssertion;
-        myRequest['client_assertion_type'] =
-            'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
+        if (secureAuthorizedFlow ||
+            openIdConfiguration.requirePushedAuthorizationRequests) {
+          myRequest['client_assertion'] = clientAssertion;
+          myRequest['client_assertion_type'] =
+              // ignore: lines_longer_than_80_chars
+              'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
+        }
     }
 
     if (scope) {
@@ -769,11 +780,21 @@ class OIDC4VC {
 
         return response as Map<String, dynamic>;
       } else {
-        final didDocument = await dio.get<dynamic>(
-          'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
-        );
-
-        return didDocument.data as Map<String, dynamic>;
+        try {
+          final didDocument = await dio.get<dynamic>(
+            'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
+          );
+          return didDocument.data as Map<String, dynamic>;
+        } catch (e) {
+          try {
+            final didDocument = await dio.get<dynamic>(
+              'https://dev.uniresolver.io/1.0/identifiers/$didKey',
+            );
+            return didDocument.data as Map<String, dynamic>;
+          } catch (e) {
+            rethrow;
+          }
+        }
       }
     } catch (e) {
       rethrow;
