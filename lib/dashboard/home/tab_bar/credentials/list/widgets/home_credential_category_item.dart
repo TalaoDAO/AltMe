@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class HomeCredentialCategoryItem extends StatelessWidget {
@@ -41,7 +41,7 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             child: Text(
               credentialCategoryConfig.homeTitle,
-              style: Theme.of(context).textTheme.credentialCategoryTitle,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           Padding(
@@ -49,7 +49,7 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             child: Text(
               credentialCategoryConfig.homeSubTitle,
               maxLines: 3,
-              style: Theme.of(context).textTheme.credentialCategorySubTitle,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           const SizedBox(height: 14),

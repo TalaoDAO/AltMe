@@ -2,7 +2,7 @@ import 'package:altme/app/shared/constants/image_strings.dart';
 import 'package:altme/app/shared/enum/type/type.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class ChooseVerificationMethodPage extends StatelessWidget {
@@ -65,7 +65,7 @@ class ChooseVerificationMethodPage extends StatelessWidget {
         children: [
           Text(
             l10n.chooseMethodPageSubtitle,
-            style: Theme.of(context).textTheme.customListTileSubTitleStyle,
+            style: Theme.of(context).textTheme.labelMedium,
             textAlign: TextAlign.justify,
           ),
           const SizedBox(height: 20),

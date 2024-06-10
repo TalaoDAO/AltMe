@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class PhraseWord extends StatelessWidget {
@@ -42,7 +42,7 @@ class PhraseWord extends StatelessWidget {
             child: MyText(
               showOrder ? '$order. $word' : word,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.passPhraseText,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
         ),

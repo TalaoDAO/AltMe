@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,7 +49,7 @@ class FAQsView extends StatelessWidget {
                   tilePadding: const EdgeInsets.symmetric(horizontal: 8),
                   title: Text(
                     faqElement.que,
-                    style: Theme.of(context).textTheme.faqQue,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   children: <Widget>[
                     Padding(
@@ -61,13 +61,15 @@ class FAQsView extends StatelessWidget {
                           child: Text(
                             faqElement.ans,
                             style: faqElement.href != null
-                                ? Theme.of(context).textTheme.faqAns.copyWith(
+                                ? Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
                                       decoration: TextDecoration.underline,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     )
-                                : Theme.of(context).textTheme.faqAns,
+                                : Theme.of(context).textTheme.bodyMedium!,
                             textAlign: TextAlign.justify,
                           ),
                         ),

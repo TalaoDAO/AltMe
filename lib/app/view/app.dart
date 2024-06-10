@@ -23,7 +23,8 @@ import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:altme/theme/app_theme/app_theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:did_kit/did_kit.dart';

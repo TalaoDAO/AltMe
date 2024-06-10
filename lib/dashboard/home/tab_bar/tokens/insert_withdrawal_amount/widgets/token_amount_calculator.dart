@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -206,9 +206,8 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                           digitInnerMargin: EdgeInsets.zero,
                           keyboardRowMargin: EdgeInsets.zero,
                           digitBorderWidth: 0,
-                          digitTextStyle: Theme.of(context)
-                              .textTheme
-                              .calculatorKeyboardDigitTextStyle,
+                          digitTextStyle:
+                              Theme.of(context).textTheme.headlineMedium,
                           keyboardSize: constraint.biggest,
                         ),
                         leadingButton: KeyboardButton(

@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
@@ -161,7 +161,8 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                                   l10n.e2eEncyptedChat,
                                   maxLines: 1,
                                   minFontSize: 8,
-                                  style: Theme.of(context).textTheme.subtitle4,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
                                 ),
                               ),
                             ],

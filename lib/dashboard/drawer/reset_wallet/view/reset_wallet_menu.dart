@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/drawer/reset_wallet/helper_functions/reset_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -48,7 +48,7 @@ class ResetWalletView extends StatelessWidget {
               Text(
                 l10n.resetWalletTitle,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.resetWalletTitle,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(
                 height: Sizes.spaceNormal,
@@ -56,7 +56,7 @@ class ResetWalletView extends StatelessWidget {
               Text(
                 l10n.resetWalletSubtitle,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.resetWalletSubtitle,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(
                 height: Sizes.spaceLarge,
@@ -64,13 +64,13 @@ class ResetWalletView extends StatelessWidget {
               Text(
                 l10n.resetWalletSubtitle2,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.subtitle4,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               const Spacer(),
               CheckboxItem(
                 value: state.isRecoveryPhraseWritten,
                 text: l10n.resetWalletCheckBox1,
-                textStyle: Theme.of(context).textTheme.resetWalletTitle,
+                textStyle: Theme.of(context).textTheme.titleLarge,
                 onChange: (_) {
                   context
                       .read<ResetWalletCubit>()
@@ -83,7 +83,7 @@ class ResetWalletView extends StatelessWidget {
               CheckboxItem(
                 value: state.isBackupCredentialSaved,
                 text: l10n.resetWalletCheckBox2,
-                textStyle: Theme.of(context).textTheme.resetWalletTitle,
+                textStyle: Theme.of(context).textTheme.titleLarge,
                 onChange: (_) {
                   context
                       .read<ResetWalletCubit>()

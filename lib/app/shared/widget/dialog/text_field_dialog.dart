@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class TextFieldDialog extends StatefulWidget {
@@ -53,8 +53,7 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
     final no = widget.no ?? l10n.no;
 
     final color = widget.dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background =
-        widget.bgColor ?? Theme.of(context).colorScheme.surface;
+    final background = widget.bgColor ?? Theme.of(context).colorScheme.surface;
     final text = widget.textColor ?? Theme.of(context).colorScheme.onSurface;
 
     return AlertDialog(
@@ -75,17 +74,15 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
             widget.title,
             style: Theme.of(context)
                 .textTheme
-                .defaultDialogTitle
+                .headlineMedium!
                 .copyWith(color: text),
             textAlign: TextAlign.center,
           ),
           if (widget.subtitle != null)
             Text(
               widget.subtitle!,
-              style: Theme.of(context)
-                  .textTheme
-                  .defaultDialogSubtitle
-                  .copyWith(color: text),
+              style:
+                  Theme.of(context).textTheme.titleLarge!.copyWith(color: text),
               textAlign: TextAlign.center,
             ),
           const SizedBox(height: 24),
@@ -121,9 +118,8 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
             fontSize: 12,
             elevation: 0,
             borderRadius: Sizes.smallRadius,
-            borderColor: Theme.of(context)
-                .colorScheme
-                .onSurface.withOpacity(0.2),
+            borderColor:
+                Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
             backgroundColor: background,
             textColor: Theme.of(context).colorScheme.onSurface,
             onPressed: () {

@@ -5,7 +5,7 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -119,7 +119,7 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
               Text(
                 l10n.restoreCredentialStep2Title,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.subtitle3,
+                style: Theme.of(context).textTheme.labelMedium,
               ),
               const SizedBox(
                 height: Sizes.spaceNormal,

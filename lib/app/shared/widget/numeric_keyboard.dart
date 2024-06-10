@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -180,9 +179,7 @@ class KeyboardButton extends StatelessWidget {
                       border: digitBorderWidth > 0.0
                           ? Border.all(
                               color: allowAction
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
+                                  ? Theme.of(context).colorScheme.onSurface
                                   : Theme.of(context)
                                       .colorScheme
                                       .onSurface
@@ -212,10 +209,10 @@ class KeyboardButton extends StatelessWidget {
                                   : allowAction
                                       ? Theme.of(context)
                                           .textTheme
-                                          .keyboardDigitTextStyle
+                                          .headlineMedium
                                       : Theme.of(context)
                                           .textTheme
-                                          .keyboardDigitTextStyle
+                                          .headlineMedium!
                                           .copyWith(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -244,9 +241,7 @@ class KeyboardButton extends StatelessWidget {
                       color: Colors.transparent,
                       border: digitBorderWidth > 0.0
                           ? Border.all(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface,
+                              color: Theme.of(context).colorScheme.onSurface,
                               width: digitBorderWidth,
                             )
                           : null,
@@ -261,9 +256,7 @@ class KeyboardButton extends StatelessWidget {
                           ? Text(
                               label!,
                               style: digitTextStyle ??
-                                  Theme.of(context)
-                                      .textTheme
-                                      .keyboardDigitTextStyle,
+                                  Theme.of(context).textTheme.headlineMedium,
                               semanticsLabel: semanticsLabel,
                             )
                           : icon,

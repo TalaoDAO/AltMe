@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
@@ -111,7 +111,7 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
                       state.accountType == AccountType.tezos ? 54 : 64,
                     ),
                     fillColor: Colors.transparent,
-                    hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
+                    hintStyle: Theme.of(context).textTheme.bodyMedium,
                     maxLines: 10,
                     borderRadius: Sizes.normalRadius,
                     controller: mnemonicController,
@@ -144,14 +144,14 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
           const SizedBox(height: Sizes.spaceSmall),
           Text(
             l10n.recoveryPhraseDescriptions,
-            style: Theme.of(context).textTheme.infoSubtitle.copyWith(
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   fontSize: 12,
                 ),
           ),
           const SizedBox(height: Sizes.spaceLarge),
           Text(
             l10n.privateKeyDescriptions,
-            style: Theme.of(context).textTheme.infoSubtitle.copyWith(
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   fontSize: 12,
                 ),
           ),

@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:altme/theme/app_theme/app_theme.dart';
+
 import 'package:flutter/material.dart';
 
 class MyTab extends StatelessWidget {
@@ -42,7 +43,7 @@ class MyTab extends StatelessWidget {
                 : null,
             color: isSelected
                 ? null
-                : AppTheme.darkThemeData.colorScheme.tertiary),
+                : AppTheme.darkThemeData.colorScheme.tertiary,),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,7 +56,7 @@ class MyTab extends StatelessWidget {
               text,
               maxLines: 1,
               minFontSize: 12,
-              style: AppTheme.darkThemeData.textTheme.title.copyWith(
+              style: AppTheme.darkThemeData.textTheme.headlineSmall!.copyWith(
                 color: isSelected ? null : Colors.grey[400],
               ),
               overflow: TextOverflow.fade,

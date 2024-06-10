@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -44,14 +44,11 @@ class CredentialDynamicDetial extends StatelessWidget {
 
     final textTheme = Theme.of(context).textTheme;
     final titleTheme = titleColor == null
-        ? textTheme.credentialFieldTitle
-        : textTheme.credentialFieldTitle.copyWith(color: titleColor);
+        ? textTheme.bodyMedium
+        : textTheme.bodyMedium!.copyWith(color: titleColor);
     final valueTheme = valueColor == null
-        ? Theme.of(context).textTheme.credentialFieldDescription
-        : Theme.of(context)
-            .textTheme
-            .credentialFieldDescription
-            .copyWith(color: valueColor);
+        ? Theme.of(context).textTheme.bodyMedium
+        : Theme.of(context).textTheme.bodyMedium!.copyWith(color: valueColor);
 
     return Padding(
       padding: padding,
@@ -67,7 +64,7 @@ class CredentialDynamicDetial extends StatelessWidget {
               style: (format != null &&
                       (format == AltMeStrings.uri ||
                           format == AltMeStrings.email))
-                  ? valueTheme.copyWith(
+                  ? valueTheme!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     )
                   : valueTheme,

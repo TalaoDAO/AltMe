@@ -3,7 +3,7 @@ import 'package:altme/app/shared/enum/type/language_type.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,7 +39,7 @@ class LanguageSelectorWidget extends StatelessWidget {
                       children: [
                         Text(
                           l10n.walletSettingsDescription,
-                          style: Theme.of(context).textTheme.drawerItemSubtitle,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),
@@ -61,8 +61,10 @@ class LanguageSelectorWidget extends StatelessWidget {
                                   const EdgeInsets.symmetric(horizontal: 8),
                               child: Divider(
                                 height: 0,
-                                color:
-                                    Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.12),
                               ),
                             ),
                           ListTile(

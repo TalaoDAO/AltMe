@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class ProfessionalExperienceAssessmentWidget extends StatelessWidget {
@@ -46,23 +46,23 @@ class ProfessionalExperienceAssessmentWidget extends StatelessWidget {
               children: [
                 Text(
                   '${l10n.from.toLowerCase()} ',
-                  style: Theme.of(context).textTheme.credentialFieldTitle,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
                   UiDate.formatStringDate(
                     professionalExperienceAssessmentModel.startDate!,
                   ),
-                  style: Theme.of(context).textTheme.credentialFieldDescription,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
                   ' ${l10n.to.toLowerCase()} ',
-                  style: Theme.of(context).textTheme.credentialFieldTitle,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
                   UiDate.formatStringDate(
                     professionalExperienceAssessmentModel.endDate!,
                   ),
-                  style: Theme.of(context).textTheme.credentialFieldDescription,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
             ),
@@ -93,7 +93,7 @@ class ProfessionalExperienceAssessmentWidget extends StatelessWidget {
                         ),
                         style: Theme.of(context)
                             .textTheme
-                            .professionalExperienceAssessmentRating,
+                            .bodyMedium,
                       ),
                       StarRating(
                         starCount: 5,

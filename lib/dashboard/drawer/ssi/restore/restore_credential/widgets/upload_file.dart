@@ -2,7 +2,7 @@ import 'package:altme/app/shared/constants/icon_strings.dart';
 import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
@@ -29,9 +29,8 @@ class UploadFile extends StatelessWidget {
           alignment: Alignment.center,
           height: 85,
           decoration: BoxDecoration(
-            color: filePath != null
-                ? Theme.of(context).colorScheme.surface
-                : null,
+            color:
+                filePath != null ? Theme.of(context).colorScheme.surface : null,
             borderRadius: const BorderRadius.all(
               Radius.circular(Sizes.smallRadius),
             ),
@@ -57,7 +56,7 @@ class UploadFile extends StatelessWidget {
               MyText(
                 filePath == null ? l10n.uploadFile : filePath!.split('/').last,
                 minFontSize: 12,
-                style: Theme.of(context).textTheme.uploadFileTitle,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ],
           ),

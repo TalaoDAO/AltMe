@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:altme/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -140,7 +139,7 @@ class ErrorWidget extends StatelessWidget {
           padding: const EdgeInsets.all(25),
           child: Text(
             errorMessage!,
-            style: Theme.of(context).textTheme.cacheErrorMessage,
+            style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
         ),

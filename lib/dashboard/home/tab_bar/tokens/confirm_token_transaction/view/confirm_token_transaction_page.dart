@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:decimal/decimal.dart';
 import 'package:dio/dio.dart';
@@ -213,7 +213,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                           MyText(
                             widget.withdrawalAddress,
                             maxLines: 2,
-                            style: Theme.of(context).textTheme.walletAddress,
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
                       ),

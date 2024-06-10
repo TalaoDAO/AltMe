@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -87,7 +87,7 @@ class _QrCameraViewState extends State<QrCameraView> {
         title: Text(
           widget.title,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.appBar,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         leading: const BackLeadingButton(),
         backgroundColor: Theme.of(context).colorScheme.surface,

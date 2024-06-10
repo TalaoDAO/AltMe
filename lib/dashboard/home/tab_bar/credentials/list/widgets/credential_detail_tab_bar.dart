@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 
@@ -28,10 +28,10 @@ class CredentialDetailTabbar extends StatelessWidget {
         showBadge: badgeCount > 0,
         badgeContent: Text(
           badgeCount.toString(),
-          style: Theme.of(context).textTheme.badgeStyle,
+          style: Theme.of(context).textTheme.bodySmall,
           textAlign: TextAlign.center,
         ),
-        position: badges.BadgePosition.topEnd(end: 5,top: 15),
+        position: badges.BadgePosition.topEnd(end: 5, top: 15),
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(
@@ -39,7 +39,8 @@ class CredentialDetailTabbar extends StatelessWidget {
           ),
           decoration: isSelected
               ? BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
+                  color:
+                      Theme.of(context).colorScheme.surface.withOpacity(0.07),
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(Sizes.smallRadius),
                     topRight: Radius.circular(Sizes.smallRadius),
@@ -50,9 +51,8 @@ class CredentialDetailTabbar extends StatelessWidget {
             child: Text(
               title,
               style: isSelected
-                  ? textTheme.credentialManifestDescription
-                      .copyWith(fontWeight: FontWeight.bold)
-                  : textTheme.credentialManifestDescription
+                  ? textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold)
+                  : textTheme.bodyMedium!
                       .copyWith(color: colorScheme.onTertiary),
             ),
           ),

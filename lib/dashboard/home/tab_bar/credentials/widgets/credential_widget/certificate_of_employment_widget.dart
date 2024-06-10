@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/credential.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class CertificateOfEmploymentWidget extends StatelessWidget {
@@ -52,16 +52,14 @@ class CertificateOfEmploymentRecto extends Recto {
                 id: 'name',
                 child: DisplayNameCard(
                   credentialModel: credentialModel,
-                  style: Theme.of(context)
-                      .textTheme
-                      .certificateOfEmploymentTitleCard,
+                  style: Theme.of(context).textTheme.bodyMedium!,
                 ),
               ),
               LayoutId(
                 id: 'description',
                 child: DisplayDescriptionCard(
                   credentialModel: credentialModel,
-                  style: Theme.of(context).textTheme.credentialDescription,
+                  style: Theme.of(context).textTheme.bodyMedium!,
                   maxLines: 4,
                 ),
               ),
@@ -102,9 +100,7 @@ class CertificateOfEmploymentVerso extends Verso {
                 widthFactor: 0.7,
                 child: DisplayNameCard(
                   credentialModel: credentialModel,
-                  style: Theme.of(context)
-                      .textTheme
-                      .certificateOfEmploymentTitleCard,
+                  style: Theme.of(context).textTheme.bodyMedium!,
                 ),
               ),
             ),
@@ -116,13 +112,12 @@ class CertificateOfEmploymentVerso extends Verso {
                     text: '${l10n.personalLastName}: ',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .certificateOfEmploymentData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
                     text: certificateOfEmploymentModel.familyName!,
-                    textStyle:
-                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -135,13 +130,12 @@ class CertificateOfEmploymentVerso extends Verso {
                     text: '${l10n.personalFirstName}: ',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .certificateOfEmploymentData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
                     text: certificateOfEmploymentModel.givenName!,
-                    textStyle:
-                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -154,13 +148,12 @@ class CertificateOfEmploymentVerso extends Verso {
                     text: '${l10n.workFor}: ',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .certificateOfEmploymentData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
                     text: certificateOfEmploymentModel.workFor!.name,
-                    textStyle:
-                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(width: 20),
                   if (certificateOfEmploymentModel.workFor!.logo != '')
@@ -183,15 +176,14 @@ class CertificateOfEmploymentVerso extends Verso {
                     text: '${l10n.startDate}: ',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .certificateOfEmploymentData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
                     text: UiDate.formatStringDate(
                       certificateOfEmploymentModel.startDate!,
                     ),
-                    textStyle:
-                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -204,13 +196,12 @@ class CertificateOfEmploymentVerso extends Verso {
                     text: '${l10n.jobTitle}: ',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .certificateOfEmploymentData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
                     text: certificateOfEmploymentModel.jobTitle!,
-                    textStyle:
-                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -223,13 +214,12 @@ class CertificateOfEmploymentVerso extends Verso {
                     text: '${l10n.employmentType}: ',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .certificateOfEmploymentData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
                     text: certificateOfEmploymentModel.employmentType!,
-                    textStyle:
-                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -242,13 +232,12 @@ class CertificateOfEmploymentVerso extends Verso {
                     text: '${l10n.baseSalary}: ',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .certificateOfEmploymentData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
                     text: certificateOfEmploymentModel.baseSalary!,
-                    textStyle:
-                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -261,15 +250,14 @@ class CertificateOfEmploymentVerso extends Verso {
                     text: '${l10n.issuanceDate}: ',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .certificateOfEmploymentData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
                     text: UiDate.formatStringDate(
                       credentialModel.credentialPreview.issuanceDate,
                     ),
-                    textStyle:
-                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),

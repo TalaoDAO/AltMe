@@ -5,7 +5,7 @@ import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/route/route.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:flutter/material.dart';
@@ -178,7 +178,7 @@ class _SignPayloadViewState extends State<SignPayloadView> {
                         MyText(
                           beaconRequest!.request!.sourceAddress!,
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.beaconPayload,
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         const SizedBox(height: Sizes.spaceXLarge),
                       ],
@@ -191,7 +191,7 @@ class _SignPayloadViewState extends State<SignPayloadView> {
                       Text(
                         message,
                         textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.beaconPayload,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(height: Sizes.spaceNormal),
                     ],

@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class TokenItem extends StatelessWidget {
@@ -35,12 +35,12 @@ class TokenItem extends StatelessWidget {
                 ),
           title: MyText(
             token.name.isEmpty ? token.symbol : token.name,
-            style: Theme.of(context).textTheme.listTileTitle,
+            style: Theme.of(context).textTheme.titleMedium,
             maxLength: 10,
           ),
           subtitle: MyText(
             token.symbol,
-            style: Theme.of(context).textTheme.listTileSubtitle,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           trailing: Column(
             mainAxisSize: MainAxisSize.max,
@@ -54,7 +54,7 @@ class TokenItem extends StatelessWidget {
                       : ('''${token.calculatedBalanceInDouble.decimalNumber(token.decimalsToShow).formatNumber} ${token.symbol}'''),
                   style: Theme.of(context)
                       .textTheme
-                      .listTileTitle
+                      .titleMedium!
                       .copyWith(fontSize: 13),
                 ),
               ),
@@ -64,7 +64,7 @@ class TokenItem extends StatelessWidget {
                       ? '****'
                       : (r'$' +
                           token.balanceInUSD.decimalNumber(2).formatNumber),
-                  style: Theme.of(context).textTheme.listTileSubtitle,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
             ],

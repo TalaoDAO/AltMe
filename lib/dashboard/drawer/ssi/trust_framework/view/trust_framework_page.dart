@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,7 +47,7 @@ class TrustFrameworkPage extends StatelessWidget {
                 child: Text(
                   l10n.trustFrameworkDescription,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall3,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
               const SizedBox(height: 15),
@@ -55,7 +55,7 @@ class TrustFrameworkPage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: Sizes.spaceSmall),
                 child: Text(
                   l10n.polygon,
-                  style: Theme.of(context).textTheme.subtitle3,
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
               ),
               GroupedSection(
@@ -76,7 +76,10 @@ class TrustFrameworkPage extends StatelessWidget {
                       horizontal: Sizes.spaceSmall,
                     ),
                     child: Divider(
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.12),
                     ),
                   ),
                   IssuerVerifierSelector(
@@ -96,7 +99,7 @@ class TrustFrameworkPage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: Sizes.spaceSmall),
                 child: Text(
                   l10n.ebsi,
-                  style: Theme.of(context).textTheme.subtitle3,
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
               ),
               const GroupedSection(

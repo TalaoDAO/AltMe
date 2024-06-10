@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class BaseTextField extends StatelessWidget {
@@ -57,7 +56,7 @@ class BaseTextField extends StatelessWidget {
         maxLines: maxLines,
         enableInteractiveSelection: true,
         textCapitalization: textCapitalization,
-        style: Theme.of(context).textTheme.normal,
+        style: Theme.of(context).textTheme.bodyMedium,
         validator: validator,
         obscureText: obscureText,
         decoration: InputDecoration(
@@ -102,7 +101,7 @@ class BaseTextField extends StatelessWidget {
           filled: true,
           errorText: error,
           labelText: label,
-          labelStyle: Theme.of(context).textTheme.normal,
+          labelStyle: Theme.of(context).textTheme.bodyMedium,
           prefixIcon: prefixIcon,
           prefixIconConstraints: const BoxConstraints(minWidth: 60),
           suffixIcon: suffixIcon,

@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:switcher/core/switcher_size.dart';
 import 'package:switcher/switcher.dart';
@@ -34,12 +34,12 @@ class TokenContractItem extends StatelessWidget {
         ),
         title: MyText(
           tokenContractModel.name ?? tokenContractModel.symbol,
-          style: Theme.of(context).textTheme.listTileTitle,
+          style: Theme.of(context).textTheme.titleMedium,
           maxLength: 10,
         ),
         subtitle: MyText(
           tokenContractModel.symbol,
-          style: Theme.of(context).textTheme.listTileSubtitle,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
         trailing: Switcher(
           size: SwitcherSize.small,

@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class FinishKycDialog extends StatelessWidget {
@@ -32,13 +32,13 @@ class FinishKycDialog extends StatelessWidget {
             const SizedBox(height: Sizes.spaceSmall),
             Text(
               l10n.finishedVerificationTitle,
-              style: Theme.of(context).textTheme.defaultDialogTitle,
+              style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceSmall),
             Text(
               l10n.finishedVerificationDescription,
-              style: Theme.of(context).textTheme.defaultDialogBody,
+              style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceSmall),

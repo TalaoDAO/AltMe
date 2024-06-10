@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class VerifyAgePage extends StatelessWidget {
@@ -59,7 +59,7 @@ class _VerifyAgeViewState extends State<VerifyAgeView> {
             child: Text(
               l10n.verifyYourAgeSubtitle,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.subtitle3,
+              style: Theme.of(context).textTheme.labelMedium,
             ),
           ),
           const Spacer(),
@@ -71,7 +71,7 @@ class _VerifyAgeViewState extends State<VerifyAgeView> {
           Text(
             l10n.verifyYourAgeDescription,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subtitle3,
+            style: Theme.of(context).textTheme.labelMedium,
           ),
           const Spacer(),
           MyElevatedButton(

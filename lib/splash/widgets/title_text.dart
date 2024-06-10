@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/profile/profile.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class TitleText extends StatelessWidget {
@@ -26,7 +26,7 @@ class TitleText extends StatelessWidget {
       isEnterprise ? splashScreenTitle : '${Parameters.appName} ${l10n.wallet}',
       maxLines: 1,
       textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.starterTitleStyle,
+      style: Theme.of(context).textTheme.headlineLarge,
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class KycDialog extends StatelessWidget {
@@ -29,13 +29,13 @@ class KycDialog extends StatelessWidget {
             const SizedBox(height: 15),
             Text(
               l10n.kycDialogTitle,
-              style: Theme.of(context).textTheme.kycDialogTitle,
+              style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceLarge),
             Text(
               l10n.idVerificationProcess,
-              style: Theme.of(context).textTheme.kycDialogBodySmall,
+              style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
             Padding(
@@ -61,7 +61,7 @@ class KycDialog extends StatelessWidget {
                     ),
                     Text(
                       l10n.idCheck,
-                      style: Theme.of(context).textTheme.kycDialogBody,
+                      style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -76,7 +76,7 @@ class KycDialog extends StatelessWidget {
                     ),
                     Text(
                       l10n.facialRecognition,
-                      style: Theme.of(context).textTheme.kycDialogBody,
+                      style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -114,7 +114,7 @@ class KycDialog extends StatelessWidget {
                 Expanded(
                   child: Text(
                     l10n.kycDialogFooter,
-                    style: Theme.of(context).textTheme.kycDialogFooter,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
               ],

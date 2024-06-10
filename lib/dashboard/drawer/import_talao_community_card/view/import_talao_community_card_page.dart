@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,7 +88,7 @@ class _ImportTalaoCommunityCardViewState
                             Text(
                               l10n.drawerTalaoCommunityCardTitle,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.infoTitle,
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
                             const SizedBox(height: 15),
                             Text(
@@ -96,7 +96,7 @@ class _ImportTalaoCommunityCardViewState
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
-                                  .infoSubtitle
+                                  .titleMedium!
                                   .copyWith(fontSize: 13),
                             ),
                           ],
@@ -109,9 +109,7 @@ class _ImportTalaoCommunityCardViewState
                             BaseTextField(
                               hint: l10n.drawerTalaoCommunityCardTextBoxMessage,
                               fillColor: Colors.transparent,
-                              hintStyle: Theme.of(context)
-                                  .textTheme
-                                  .hintTextFieldStyle,
+                              hintStyle: Theme.of(context).textTheme.bodyMedium,
                               controller: privateKeyController,
                               error: state.isTextFieldEdited &&
                                       !state.isPrivateKeyValid
@@ -130,9 +128,8 @@ class _ImportTalaoCommunityCardViewState
                                 margin: const EdgeInsets.all(Sizes.spaceNormal),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onTertiary,
+                                  color:
+                                      Theme.of(context).colorScheme.onTertiary,
                                 ),
                                 child: const Icon(
                                   Icons.check,
@@ -148,7 +145,7 @@ class _ImportTalaoCommunityCardViewState
                           textAlign: TextAlign.center,
                           style: Theme.of(context)
                               .textTheme
-                              .infoSubtitle
+                              .titleMedium!
                               .copyWith(fontSize: 13),
                         ),
                       ],

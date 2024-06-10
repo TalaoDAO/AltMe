@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends PreferredSize {
@@ -50,7 +50,7 @@ class CustomAppBar extends PreferredSize {
                     title ?? '',
                     maxLines: 2,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.appBar,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
               ],

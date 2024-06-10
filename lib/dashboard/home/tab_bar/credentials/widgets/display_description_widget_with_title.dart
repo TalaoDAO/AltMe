@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/widget/transparent_ink_well.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
@@ -25,21 +25,18 @@ class DisplayDescriptionWidgetWithTitle extends StatelessWidget {
 
     final textTheme = Theme.of(context).textTheme;
     final titleTheme = titleColor == null
-        ? textTheme.credentialFieldTitle
-        : textTheme.credentialFieldTitle.copyWith(color: titleColor);
+        ? textTheme.bodyMedium
+        : textTheme.bodyMedium!.copyWith(color: titleColor);
     final valueTheme = valueColor == null
-        ? Theme.of(context).textTheme.credentialFieldDescription
-        : Theme.of(context)
-            .textTheme
-            .credentialFieldDescription
-            .copyWith(color: valueColor);
+        ? Theme.of(context).textTheme.bodyMedium
+        : Theme.of(context).textTheme.bodyMedium!.copyWith(color: valueColor);
 
     if (object is DisplayMappingText) {
       return DescriptionText(
         //padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
         text: object.text,
-        titleTheme: titleTheme,
-        valueTheme: valueTheme,
+        titleTheme: titleTheme!,
+        valueTheme: valueTheme!,
       );
     }
 
@@ -51,15 +48,15 @@ class DisplayDescriptionWidgetWithTitle extends StatelessWidget {
       if (textList.isNotEmpty) {
         return DescriptionText(
           text: textList.first,
-          titleTheme: titleTheme,
-          valueTheme: valueTheme,
+          titleTheme: titleTheme!,
+          valueTheme: valueTheme!,
         );
       }
       if (object.fallback != null) {
         return DescriptionText(
           text: object.fallback ?? '',
-          titleTheme: titleTheme,
-          valueTheme: valueTheme,
+          titleTheme: titleTheme!,
+          valueTheme: valueTheme!,
         );
       }
     }

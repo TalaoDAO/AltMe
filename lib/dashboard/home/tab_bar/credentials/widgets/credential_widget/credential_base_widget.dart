@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class CredentialBaseWidget extends StatelessWidget {
@@ -44,8 +44,7 @@ class CredentialBaseWidget extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: MyText(
                       title!,
-                      style:
-                          Theme.of(context).textTheme.credentialBaseTitleText,
+                      style: Theme.of(context).textTheme.displayLarge,
                     ),
                   ),
                 ),
@@ -61,15 +60,11 @@ class CredentialBaseWidget extends StatelessWidget {
                       children: <InlineSpan>[
                         TextSpan(
                           text: '${l10n.providedBy} ',
-                          style: Theme.of(context)
-                              .textTheme
-                              .credentialBaseLightText,
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         TextSpan(
                           text: issuerName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .credentialBaseBoldText,
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
                     ),
@@ -86,7 +81,7 @@ class CredentialBaseWidget extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: MyText(
                       value!,
-                      style: Theme.of(context).textTheme.credentialBaseBoldText,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ),
@@ -99,7 +94,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.issuedOn,
-                    style: Theme.of(context).textTheme.credentialBaseBoldText,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
               ),
@@ -111,7 +106,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     issuanceDate!,
-                    style: Theme.of(context).textTheme.credentialBaseLightText,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
               ),
@@ -123,7 +118,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.expirationDate,
-                    style: Theme.of(context).textTheme.credentialBaseBoldText,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
               ),
@@ -135,7 +130,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     expirationDate!,
-                    style: Theme.of(context).textTheme.credentialBaseLightText,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
               ),

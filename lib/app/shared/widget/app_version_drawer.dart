@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -25,7 +24,7 @@ class AppVersionDrawer extends StatelessWidget {
                 isShortForm ? 'V $version' : 'Version $version ($buildNumber)',
                 style: Theme.of(context)
                     .textTheme
-                    .bodySmall2
+                    .bodyMedium!
                     .copyWith(fontWeight: FontWeight.w800),
               );
             case ConnectionState.waiting:

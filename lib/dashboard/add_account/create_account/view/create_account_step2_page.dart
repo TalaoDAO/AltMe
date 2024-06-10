@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/widgets/m_stepper.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -115,7 +115,7 @@ class _CreateAccountStep2ViewState extends State<CreateAccountStep2View> {
             Text(
               l10n.setAccountNameDescription,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodySmall3,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(
               height: Sizes.spaceNormal,

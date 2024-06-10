@@ -6,7 +6,7 @@ import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
@@ -147,7 +147,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                 Text(
                   l10n.protectYourWalletMessage,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall3,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: Sizes.spaceNormal),
                 ProtectWidget(

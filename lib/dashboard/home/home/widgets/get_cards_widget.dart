@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,7 +39,7 @@ class GetCardsWidget extends StatelessWidget {
           children: [
             Text(
               l10n.getCards.toUpperCase(),
-              style: Theme.of(context).textTheme.getCardsButton,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(width: 8),
             Image.asset(

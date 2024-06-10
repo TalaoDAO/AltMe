@@ -3,7 +3,7 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -147,8 +147,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               '${inputDescriptorIndex + 1}/${presentationDefinition.inputDescriptors.length}',
-                              style:
-                                  Theme.of(context).textTheme.credentialSteps,
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
                             const SizedBox(height: 10),
                             Padding(
@@ -158,9 +157,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                         .inputDescriptors[inputDescriptorIndex]
                                         .purpose ??
                                     l10n.credentialPickSelect,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .credentialSubtitle,
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
                             ),
                             const SizedBox(height: 12),

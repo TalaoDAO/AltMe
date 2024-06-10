@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class OptionContainer extends StatelessWidget {
@@ -37,13 +37,13 @@ class OptionContainer extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.drawerItemTitle,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 if (subtitle != null) ...[
                   const SizedBox(height: 10),
                   Text(
                     subtitle!,
-                    style: Theme.of(context).textTheme.drawerItemSubtitle,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
               ],

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -58,7 +58,7 @@ class CredentialQrPage extends StatelessWidget {
                     },
                     child: Text(
                       l10n.copyToClipboard,
-                      style: Theme.of(context).textTheme.copyToClipBoard,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                   const SizedBox(height: Sizes.spaceSmall),
