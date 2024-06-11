@@ -242,7 +242,7 @@ void main() {
             (request) => request.reply(200, jsonDecode(openIdConfiguration)),
           );
 
-          final (authorizationEndpoint, authorizationRequestParemeters) =
+          final (authorizationEndpoint, authorizationRequestParemeters, _) =
               await oidc4vc.getAuthorizationData(
             selectedCredentials: selectedCredentials,
             clientId: clientId,
