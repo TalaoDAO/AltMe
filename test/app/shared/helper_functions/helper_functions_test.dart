@@ -449,10 +449,12 @@ void main() {
             () async => handleErrorForOID4VCI(
               url: 'example',
               openIdConfiguration: const OpenIdConfiguration(
+                requirePushedAuthorizationRequests: false,
                 authorizationServer: 'example',
                 tokenEndpoint: null,
               ),
               authorizationServerConfiguration: const OpenIdConfiguration(
+                requirePushedAuthorizationRequests: false,
                 tokenEndpoint: null,
               ),
             ),
@@ -471,12 +473,14 @@ void main() {
             () async => handleErrorForOID4VCI(
               url: 'example',
               openIdConfiguration: const OpenIdConfiguration(
+                requirePushedAuthorizationRequests: false,
                 authorizationServer: 'example',
                 tokenEndpoint: null,
                 credentialEndpoint: null,
               ),
               authorizationServerConfiguration: const OpenIdConfiguration(
                 tokenEndpoint: 'https://example.com/token',
+                requirePushedAuthorizationRequests: false,
               ),
             ),
             throwsA(
@@ -494,12 +498,14 @@ void main() {
             () async => handleErrorForOID4VCI(
               url: 'example',
               openIdConfiguration: const OpenIdConfiguration(
+                requirePushedAuthorizationRequests: false,
                 authorizationServer: 'example',
                 tokenEndpoint: null,
                 credentialEndpoint: 'https://example.com/cred',
                 credentialIssuer: null,
               ),
               authorizationServerConfiguration: const OpenIdConfiguration(
+                requirePushedAuthorizationRequests: false,
                 tokenEndpoint: 'https://example.com/token',
               ),
             ),
@@ -520,6 +526,7 @@ void main() {
             () async => handleErrorForOID4VCI(
               url: 'example',
               openIdConfiguration: const OpenIdConfiguration(
+                requirePushedAuthorizationRequests: false,
                 authorizationServer: 'example',
                 tokenEndpoint: null,
                 credentialEndpoint: 'https://example.com/cred',
@@ -528,6 +535,7 @@ void main() {
                 credentialConfigurationsSupported: null,
               ),
               authorizationServerConfiguration: const OpenIdConfiguration(
+                requirePushedAuthorizationRequests: false,
                 tokenEndpoint: 'https://example.com/token',
               ),
             ),
@@ -548,6 +556,7 @@ void main() {
             () async => handleErrorForOID4VCI(
               url: 'example',
               openIdConfiguration: const OpenIdConfiguration(
+                requirePushedAuthorizationRequests: false,
                 authorizationServer: 'example',
                 tokenEndpoint: null,
                 credentialEndpoint: 'https://example.com/cred',
@@ -557,6 +566,7 @@ void main() {
                 subjectSyntaxTypesSupported: ['asd'],
               ),
               authorizationServerConfiguration: const OpenIdConfiguration(
+                requirePushedAuthorizationRequests: false,
                 tokenEndpoint: 'https://example.com/token',
               ),
             ),

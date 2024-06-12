@@ -5,7 +5,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
@@ -158,7 +158,7 @@ class _OnBoardingVerifyPhraseViewState
                     Text(
                       l10n.onboardingVerifyPhraseMessageDetails,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.pheaseVerifySubmessage,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const SizedBox(height: Sizes.spaceNormal),
                     ListView.builder(

@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 /// This widget is used to adapt text size on image card when user change
@@ -15,7 +14,7 @@ class ImageCardText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = this.textStyle ?? Theme.of(context).textTheme.imageCard;
+    final textStyle = this.textStyle ?? Theme.of(context).textTheme.bodyMedium!;
     return Text(
       text,
       style: MediaQuery.of(context).orientation == Orientation.landscape

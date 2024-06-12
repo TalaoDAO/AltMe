@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class Permissions extends StatelessWidget {
@@ -23,7 +23,7 @@ class Permissions extends StatelessWidget {
         children: [
           Text(
             l10n.requestPersmissionTo,
-            style: Theme.of(context).textTheme.beaconRequestPermission,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 5),
           PermissionText(text: l10n.viewAccountBalanceAndNFTs),
@@ -54,7 +54,7 @@ class PermissionText extends StatelessWidget {
           Expanded(
             child: MyText(
               text,
-              style: Theme.of(context).textTheme.beaconPermissions,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
         ],

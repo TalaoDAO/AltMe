@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class BeCarefulDialog extends StatelessWidget {
@@ -65,19 +65,19 @@ class BeCarefulDialog extends StatelessWidget {
           ),
           Text(
             l10n.beCareful,
-            style: Theme.of(context).textTheme.bodySmall2,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: Sizes.spaceSmall),
           Text(
             title,
-            style: Theme.of(context).textTheme.defaultDialogTitle,
+            style: Theme.of(context).textTheme.headlineMedium,
             textAlign: TextAlign.center,
           ),
           if (subtitle != null) ...[
             const SizedBox(height: Sizes.spaceSmall),
             Text(
               subtitle!,
-              style: Theme.of(context).textTheme.defaultDialogBody,
+              style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
           ],
@@ -94,7 +94,8 @@ class BeCarefulDialog extends StatelessWidget {
                     fontSize: 15,
                     borderColor: Theme.of(context)
                         .colorScheme
-                        .onSurface.withOpacity(0.2),
+                        .onSurface
+                        .withOpacity(0.2),
                     borderRadius: 12,
                     onPressed: () {
                       Navigator.of(context).pop();

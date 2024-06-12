@@ -4,7 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
@@ -130,14 +130,17 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                       //   },
                       //   child: Text(
                       //     l10n.copyToClipboard,
-                      //     style: Theme.of(context).textTheme.copyToClipBoard,
+                      //     style: Theme.of(context).textTheme.bodyMedium!,
                       //   ),
                       // ),
                       const SizedBox(height: Sizes.spaceLarge),
                       Text(
                         l10n.onboardingAltmeMessage,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.genPhraseSubmessage,
+                        style:
+                            Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
                       ),
                     ],
                   ),
@@ -157,7 +160,8 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                   MyElevatedButton(
                     text: l10n.verifyLater,
                     verticalSpacing: 18,
-                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
                     onPressed: () async {
                       await context
                           .read<OnboardingCubit>()

@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class ProtectWidget extends StatelessWidget {
@@ -31,7 +31,7 @@ class ProtectWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.surface,
+              : Theme.of(context).colorScheme.surfaceBright,
           borderRadius: const BorderRadius.all(
             Radius.circular(
               Sizes.normalRadius,
@@ -57,11 +57,11 @@ class ProtectWidget extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.drawerItemTitle,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Text(
                       subtitle,
-                      style: Theme.of(context).textTheme.drawerItemSubtitle,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
                 ),

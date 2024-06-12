@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,24 +39,6 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
         final key = map.key;
         final value = map.value;
 
-        // "value_type": "string",
-        // "display": [
-        //     {"name": "Address", "locale": "en-US"},
-        //     {"name": "Adresse", "locale": "fr-FR"}
-        // ],
-        // "street_address": {
-        // "value_type": "string",
-        // "display": [
-        //     {"name": "Street address", "locale": "en-US"},
-        //     {"name": "Rue", "locale": "fr-FR"}],
-        // },
-        // "locality": {
-        // "value_type": "string",
-        // "display": [
-        //     {"name": "Locality", "locale": "en-US"},
-        //     {"name": "Ville", "locale": "fr-FR"}],
-        // },
-
         /// nested day contains more data
         if (value is! Map<String, dynamic>) return Container();
 
@@ -76,10 +58,9 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
                   title,
-                  style:
-                      Theme.of(context).textTheme.credentialFieldTitle.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                 ),
               ),
               Padding(
@@ -222,7 +203,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                                 ? Theme.of(context)
                                     .colorScheme
                                     .onSurface
-                                    .withOpacity(0.7)
+                                    .withOpacity(0.3)
                                 : Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),

@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,12 +44,12 @@ class TransactionItem extends StatelessWidget {
             children: [
               Text(
                 operationModel.formatedDateTime,
-                style: Theme.of(context).textTheme.bodySmall2,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               const Spacer(),
               Text(
                 l10n.seeTransaction,
-                style: Theme.of(context).textTheme.bodySmall2,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(
                 width: Sizes.spaceSmall,
@@ -59,7 +59,7 @@ class TransactionItem extends StatelessWidget {
                     ? (tokenUsdPrice! * amount).decimalNumber(2).formatNumber +
                         r'$'
                     : r'$--.--',
-                style: Theme.of(context).textTheme.bodySmall2,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
           ),
@@ -109,9 +109,7 @@ class TransactionItem extends StatelessWidget {
                                       'backtracked'
                               ? Theme.of(context).colorScheme.error
                               : operationModel.status.toLowerCase() == 'skipped'
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .error
+                                  ? Theme.of(context).colorScheme.error
                                   : null,
                     ),
               ),

@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class WalletDialog extends StatelessWidget {
@@ -34,7 +34,7 @@ class WalletDialog extends StatelessWidget {
             const SizedBox(height: 30),
             Text(
               l10n.createTitle,
-              style: Theme.of(context).textTheme.defaultDialogTitle.copyWith(
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     fontSize: 18,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
@@ -45,7 +45,7 @@ class WalletDialog extends StatelessWidget {
               l10n.createSubtitle,
               style: Theme.of(context)
                   .textTheme
-                  .defaultDialogSubtitle
+                  .titleLarge!
                   .copyWith(color: Theme.of(context).colorScheme.onSurface),
               textAlign: TextAlign.center,
             ),

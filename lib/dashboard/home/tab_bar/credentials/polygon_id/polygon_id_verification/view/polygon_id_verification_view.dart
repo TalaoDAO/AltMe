@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
@@ -95,10 +95,9 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                 Text(
                   l10n.thisOrganisationRequestsThisInformation,
                   textAlign: TextAlign.center,
-                  style:
-                      Theme.of(context).textTheme.credentialSubtitle.copyWith(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                 ),
                 const SizedBox(height: 10),
                 if (body.scope != null)

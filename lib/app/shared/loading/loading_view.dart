@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -54,7 +54,7 @@ class LoadingView {
                 minWidth: size.width * 0.5,
               ),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
+                color: Theme.of(context).colorScheme.surfaceDim,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
@@ -80,7 +80,7 @@ class LoadingView {
                             return Text(
                               snapshopt.data.toString(),
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.loadingText,
+                              style: Theme.of(context).textTheme.titleMedium,
                             );
                           } else {
                             return Container();

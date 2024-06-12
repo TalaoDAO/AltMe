@@ -25,6 +25,7 @@ function buildRunner {
     )
   done 
   dart pub run build_runner build --delete-conflicting-outputs
+  flutter pub get
 }
 
 function podUpdate {

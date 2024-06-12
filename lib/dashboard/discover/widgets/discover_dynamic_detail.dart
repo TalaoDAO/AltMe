@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -22,8 +22,8 @@ class DiscoverDynamicDetial extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    final titleTheme = textTheme.discoverFieldTitle;
-    final valueTheme = textTheme.discoverFieldDescription;
+    final titleTheme = textTheme.titleLarge!;
+    final valueTheme = textTheme.bodyMedium!;
 
     return Padding(
       padding: padding,

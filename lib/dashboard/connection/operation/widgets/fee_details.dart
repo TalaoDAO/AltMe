@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class FeeDetails extends StatelessWidget {
@@ -78,7 +78,7 @@ class FeeDetails extends StatelessWidget {
                           (grandTotal * tokenUSDRate)
                               .decimalNumber(6)
                               .formatNumber,
-                      style: Theme.of(context).textTheme.bodySmall2,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                 ],
               ),

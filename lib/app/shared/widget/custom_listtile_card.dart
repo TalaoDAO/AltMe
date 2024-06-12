@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class CustomListTileCard extends StatelessWidget {
@@ -34,7 +34,7 @@ class CustomListTileCard extends StatelessWidget {
           Expanded(
             child: MyText(
               title,
-              style: Theme.of(context).textTheme.customListTileTitleStyle,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           const SizedBox(width: 10),
@@ -50,7 +50,7 @@ class CustomListTileCard extends StatelessWidget {
       ),
       subtitle: Text(
         subTitle,
-        style: Theme.of(context).textTheme.customListTileSubTitleStyle,
+        style: Theme.of(context).textTheme.labelMedium,
       ),
       minVerticalPadding: 0,
       trailing: Image.asset(

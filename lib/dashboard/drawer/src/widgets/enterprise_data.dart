@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class EnterpriseData extends StatelessWidget {
@@ -14,7 +14,7 @@ class EnterpriseData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.drawerItemTitle;
+    final textStyle = Theme.of(context).textTheme.titleLarge!;
     return Container(
       padding: const EdgeInsets.all(Sizes.spaceNormal),
       margin: const EdgeInsets.all(Sizes.spaceXSmall),

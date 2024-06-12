@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -95,7 +95,7 @@ class _GetLinkedinInfoViewState extends State<GetLinkedinInfoView> {
                     height: 100,
                     hint: 'e.g. https://www.linkedin.com/john.doe',
                     fillColor: Colors.transparent,
-                    hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
+                    hintStyle: Theme.of(context).textTheme.bodyMedium,
                     maxLines: 3,
                     borderRadius: Sizes.normalRadius,
                     controller: linkedInUrlController,

@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/tokens.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class SelectNetworkFeeItem extends StatelessWidget {
@@ -53,7 +53,7 @@ class SelectNetworkFeeItem extends StatelessWidget {
           ),
           MyText(
             '''\$${networkFeeModel.feeInUSD == 0.0 ? '--.--' : networkFeeModel.feeInUSD.decimalNumber(4).formatNumber}''',
-            style: Theme.of(context).textTheme.bodySmall2,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
       ),

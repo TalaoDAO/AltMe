@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class RequiredCredentialNotFound extends StatelessWidget {
@@ -26,7 +25,7 @@ class RequiredCredentialNotFound extends StatelessWidget {
           Text(
             l10n.requiredCredentialNotFoundTitle,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.infoSubtitle,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           const Spacer(
             flex: 3,
@@ -42,7 +41,7 @@ class RequiredCredentialNotFound extends StatelessWidget {
           Text(
             l10n.requiredCredentialNotFoundSubTitle,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.title,
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
           const Spacer(
             flex: 1,
@@ -50,12 +49,12 @@ class RequiredCredentialNotFound extends StatelessWidget {
           Text(
             l10n.requiredCredentialNotFoundDescription,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.infoSubtitle,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           Text(
             AltMeStrings.appSupportMail,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.title,
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
           const Spacer(
             flex: 3,

@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -127,8 +127,7 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                           const SizedBox(height: Sizes.spaceXSmall),
                           MyText(
                             widget.walletAddress,
-                            style:
-                                Theme.of(context).textTheme.beaconWalletAddress,
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           const SizedBox(height: Sizes.spaceXLarge),
                           Text(
@@ -166,7 +165,7 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                                                     .peer.metadata.name,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .dappName,
+                                                .bodyMedium,
                                           ),
                                         ),
                                         Icon(
@@ -192,8 +191,10 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                               },
                               separatorBuilder: (_, __) => Divider(
                                 height: 0.1,
-                                color:
-                                    Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.12),
                               ),
                             ),
                         ],

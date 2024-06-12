@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -96,7 +96,7 @@ class ReceivePage extends StatelessWidget {
                 Text(
                   description,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(
                   height: Sizes.spaceXLarge,

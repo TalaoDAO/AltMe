@@ -6,7 +6,7 @@ class MyGradientButton extends StatelessWidget {
     super.key,
     required this.text,
     this.icon,
-    this.borderRadius = 18,
+    this.borderRadius = 8,
     this.verticalSpacing = 20,
     this.elevation = 2,
     this.fontSize = 18,
@@ -45,8 +45,8 @@ class MyGradientButton extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
+            Theme.of(context).colorScheme.tertiary,
             Theme.of(context).colorScheme.primary,
-            Theme.of(context).colorScheme.primaryContainer,
           ],
         );
     return SizedBox(

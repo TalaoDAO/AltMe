@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/scan.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -102,8 +102,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                     tilePadding: const EdgeInsets.symmetric(horizontal: 8),
                     title: Text(
                       l10n.credentialManifestDescription,
-                      style:
-                          Theme.of(context).textTheme.credentialManifestTitle2,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     children: <Widget>[
                       Padding(

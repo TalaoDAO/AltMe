@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class TezotopiaVoucherWidget extends StatelessWidget {
@@ -33,7 +33,7 @@ class TezotopiaVoucherWidget extends StatelessWidget {
                 child: MyText(
                   '${l10n.voucher}'
                   ' ${tezotopiaVoucherModel.offers?.benefit!.discount ?? ''}',
-                  style: Theme.of(context).textTheme.title,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ),
             ),
@@ -44,7 +44,7 @@ class TezotopiaVoucherWidget extends StatelessWidget {
                 heightFactor: 0.14,
                 child: MyText(
                   l10n.tezotopia,
-                  style: Theme.of(context).textTheme.subMessage.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),

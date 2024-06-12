@@ -5,7 +5,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
@@ -177,8 +177,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                                 ? l10n.importWalletHintText(54)
                                 : l10n.importWalletHintTextRecoveryPhraseOnly,
                             fillColor: Colors.transparent,
-                            hintStyle:
-                                Theme.of(context).textTheme.hintTextFieldStyle,
+                            hintStyle: Theme.of(context).textTheme.bodyMedium,
                             maxLines: 10,
                             borderRadius: Sizes.normalRadius,
                             controller: mnemonicController,
@@ -196,9 +195,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                               margin: const EdgeInsets.all(Sizes.spaceNormal),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onTertiary,
+                                color: Theme.of(context).colorScheme.onTertiary,
                               ),
                               child: const Icon(
                                 Icons.check,
@@ -236,7 +233,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                 const SizedBox(height: Sizes.spaceLarge),
                 Text(
                   l10n.recoveryPhraseDescriptions,
-                  style: Theme.of(context).textTheme.infoSubtitle.copyWith(
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         fontSize: 12,
                       ),
                 ),
@@ -244,7 +241,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                   const SizedBox(height: Sizes.spaceLarge),
                   Text(
                     l10n.privateKeyDescriptions,
-                    style: Theme.of(context).textTheme.infoSubtitle.copyWith(
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           fontSize: 12,
                         ),
                   ),

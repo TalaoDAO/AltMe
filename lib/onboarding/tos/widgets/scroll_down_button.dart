@@ -1,5 +1,5 @@
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class ScrollDownButton extends StatelessWidget {
@@ -20,7 +20,7 @@ class ScrollDownButton extends StatelessWidget {
           children: [
             Text(
               l10n.scroll,
-              style: Theme.of(context).textTheme.scrollText,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             const Icon(
               Icons.keyboard_arrow_down_rounded,

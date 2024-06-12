@@ -1,7 +1,7 @@
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -132,8 +132,7 @@ class ConfidentialClientWidget extends StatelessWidget {
                         Expanded(
                           child: Text(
                             '${l10n.clientId}: $clientId',
-                            style:
-                                Theme.of(context).textTheme.drawerItemSubtitle,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -244,8 +243,7 @@ class ConfidentialClientWidget extends StatelessWidget {
                           child: Text(
                             '${l10n.clientSecret}: '
                             '$clientSecret',
-                            style:
-                                Theme.of(context).textTheme.drawerItemSubtitle,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),
                         const SizedBox(width: 8),

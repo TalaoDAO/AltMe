@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class ErrorDialog extends StatelessWidget {
@@ -24,9 +24,9 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background = bgColor ?? Theme.of(context).colorScheme.surface;
-    final textColor =
-        this.textColor ?? Theme.of(context).colorScheme.onSurface;
+    final background =
+        bgColor ?? Theme.of(context).colorScheme.primaryContainer;
+    final textColor = this.textColor ?? Theme.of(context).colorScheme.onSurface;
 
     final l10n = context.l10n;
     return AlertDialog(
@@ -49,7 +49,7 @@ class ErrorDialog extends StatelessWidget {
             title,
             style: Theme.of(context)
                 .textTheme
-                .defaultDialogTitle
+                .headlineMedium!
                 .copyWith(color: textColor),
             textAlign: TextAlign.center,
           ),
@@ -59,9 +59,8 @@ class ErrorDialog extends StatelessWidget {
               text: l10n.moreDetails,
               verticalSpacing: 14,
               fontSize: 15,
-              borderColor: Theme.of(context)
-                  .colorScheme
-                  .onSurface.withOpacity(0.2),
+              borderColor:
+                  Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
               backgroundColor: background,
               textColor: textColor,
               borderRadius: Sizes.smallRadius,

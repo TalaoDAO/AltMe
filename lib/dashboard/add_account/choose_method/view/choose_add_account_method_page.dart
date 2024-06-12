@@ -3,7 +3,7 @@ import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class ChooseAddAccountMethodPage extends StatelessWidget {
@@ -38,7 +38,7 @@ class ChooseAddAccountMethodView extends StatelessWidget {
           Text(
             l10n.selectAMethodToAddAccount,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall3,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: Sizes.spaceXLarge),
           CustomListTileCard(
