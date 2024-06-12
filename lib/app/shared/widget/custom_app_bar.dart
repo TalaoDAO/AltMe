@@ -50,7 +50,7 @@ class CustomAppBar extends PreferredSize {
                     title ?? '',
                     maxLines: 2,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
               ],

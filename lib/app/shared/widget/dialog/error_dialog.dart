@@ -24,7 +24,8 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background = bgColor ?? Theme.of(context).colorScheme.surface;
+    final background =
+        bgColor ?? Theme.of(context).colorScheme.primaryContainer;
     final textColor = this.textColor ?? Theme.of(context).colorScheme.onSurface;
 
     final l10n = context.l10n;

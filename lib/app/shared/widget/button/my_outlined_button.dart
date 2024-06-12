@@ -9,7 +9,7 @@ class MyOutlinedButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.borderColor,
-    this.borderRadius = 18,
+    this.borderRadius = 8,
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,
@@ -98,8 +98,7 @@ ButtonStyle outlinedStyleFrom({
   return OutlinedButton.styleFrom(
     padding: EdgeInsets.symmetric(vertical: verticalSpacing),
     elevation: elevation,
-    backgroundColor:
-        backgroundColor ?? Theme.of(context).colorScheme.surface,
+    backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.surface,
     side: BorderSide(
       color: onPressed == null
           ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)

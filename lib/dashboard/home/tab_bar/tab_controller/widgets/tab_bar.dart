@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/app_theme/app_theme.dart';
 
 import 'package:flutter/material.dart';
 
@@ -29,21 +28,22 @@ class MyTab extends StatelessWidget {
           vertical: Sizes.spaceSmall,
         ),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Sizes.normalRadius),
-            gradient: isSelected
-                ? LinearGradient(
-                    colors: [
-                      AppTheme.darkThemeData.colorScheme.primary,
-                      AppTheme.darkThemeData.colorScheme.secondary,
-                    ],
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                    stops: const [0.3, 1.0],
-                  )
-                : null,
-            color: isSelected
-                ? null
-                : AppTheme.darkThemeData.colorScheme.tertiary,),
+          borderRadius: BorderRadius.circular(Sizes.normalRadius),
+          gradient: isSelected
+              ? LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.tertiary,
+                  ],
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
+                  stops: const [0.3, 1.0],
+                )
+              : null,
+          color: isSelected
+              ? null
+              : Theme.of(context).colorScheme.onPrimaryContainer,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,13 +52,12 @@ class MyTab extends StatelessWidget {
             const SizedBox(
               width: Sizes.spaceXSmall,
             ),
-            MyText(
+            Text(
               text,
               maxLines: 1,
-              minFontSize: 12,
-              style: AppTheme.darkThemeData.textTheme.headlineSmall!.copyWith(
-                color: isSelected ? null : Colors.grey[400],
-              ),
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                    color: isSelected ? null : Colors.grey[400],
+                  ),
               overflow: TextOverflow.fade,
             ),
           ],

@@ -53,7 +53,7 @@ class CredentialDetailTabbar extends StatelessWidget {
               style: isSelected
                   ? textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold)
                   : textTheme.bodyMedium!
-                      .copyWith(color: colorScheme.onTertiary),
+                      .copyWith(color: colorScheme.secondaryContainer),
             ),
           ),
         ),

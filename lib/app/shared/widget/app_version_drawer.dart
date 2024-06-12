@@ -22,10 +22,7 @@ class AppVersionDrawer extends StatelessWidget {
 
               return Text(
                 isShortForm ? 'V $version' : 'Version $version ($buildNumber)',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontWeight: FontWeight.w800),
+                style: Theme.of(context).textTheme.bodyMedium,
               );
             case ConnectionState.waiting:
             case ConnectionState.none:

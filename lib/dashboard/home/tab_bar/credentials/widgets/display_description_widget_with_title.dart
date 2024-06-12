@@ -25,7 +25,9 @@ class DisplayDescriptionWidgetWithTitle extends StatelessWidget {
 
     final textTheme = Theme.of(context).textTheme;
     final titleTheme = titleColor == null
-        ? textTheme.bodyMedium
+        ? textTheme.bodyMedium!.copyWith(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+          )
         : textTheme.bodyMedium!.copyWith(color: titleColor);
     final valueTheme = valueColor == null
         ? Theme.of(context).textTheme.bodyMedium
@@ -35,7 +37,7 @@ class DisplayDescriptionWidgetWithTitle extends StatelessWidget {
       return DescriptionText(
         //padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
         text: object.text,
-        titleTheme: titleTheme!,
+        titleTheme: titleTheme,
         valueTheme: valueTheme!,
       );
     }
@@ -48,14 +50,14 @@ class DisplayDescriptionWidgetWithTitle extends StatelessWidget {
       if (textList.isNotEmpty) {
         return DescriptionText(
           text: textList.first,
-          titleTheme: titleTheme!,
+          titleTheme: titleTheme,
           valueTheme: valueTheme!,
         );
       }
       if (object.fallback != null) {
         return DescriptionText(
           text: object.fallback ?? '',
-          titleTheme: titleTheme!,
+          titleTheme: titleTheme,
           valueTheme: valueTheme!,
         );
       }

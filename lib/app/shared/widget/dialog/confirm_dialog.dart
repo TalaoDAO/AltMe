@@ -30,7 +30,7 @@ class ConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background = bgColor ?? Theme.of(context).colorScheme.surface;
+    final background = bgColor ?? Theme.of(context).colorScheme.surfaceDim;
     final textColor = this.textColor ?? Theme.of(context).colorScheme.onSurface;
 
     final l10n = context.l10n;
@@ -48,7 +48,7 @@ class ConfirmDialog extends StatelessWidget {
             icon,
             width: 50,
             height: 50,
-            color: textColor,
+            color: icon == IconStrings.cardReceive ? textColor : null,
             fit: BoxFit.fill,
           ),
           const SizedBox(height: 10),

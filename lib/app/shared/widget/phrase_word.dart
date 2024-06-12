@@ -42,7 +42,6 @@ class PhraseWord extends StatelessWidget {
             child: MyText(
               showOrder ? '$order. $word' : word,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
         ),

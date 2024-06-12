@@ -39,24 +39,6 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
         final key = map.key;
         final value = map.value;
 
-        // "value_type": "string",
-        // "display": [
-        //     {"name": "Address", "locale": "en-US"},
-        //     {"name": "Adresse", "locale": "fr-FR"}
-        // ],
-        // "street_address": {
-        // "value_type": "string",
-        // "display": [
-        //     {"name": "Street address", "locale": "en-US"},
-        //     {"name": "Rue", "locale": "fr-FR"}],
-        // },
-        // "locality": {
-        // "value_type": "string",
-        // "display": [
-        //     {"name": "Locality", "locale": "en-US"},
-        //     {"name": "Ville", "locale": "fr-FR"}],
-        // },
-
         /// nested day contains more data
         if (value is! Map<String, dynamic>) return Container();
 
@@ -221,7 +203,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                                 ? Theme.of(context)
                                     .colorScheme
                                     .onSurface
-                                    .withOpacity(0.7)
+                                    .withOpacity(0.3)
                                 : Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),

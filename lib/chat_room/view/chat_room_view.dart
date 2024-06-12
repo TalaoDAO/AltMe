@@ -161,8 +161,14 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                                   l10n.e2eEncyptedChat,
                                   maxLines: 1,
                                   minFontSize: 8,
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary,
+                                      ),
                                 ),
                               ),
                             ],

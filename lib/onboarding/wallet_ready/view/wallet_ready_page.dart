@@ -181,7 +181,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                                         l10n.termsAndConditions.toLowerCase(),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .titleLarge
+                                            .titleMedium
                                             ?.copyWith(
                                               fontWeight: FontWeight.bold,
                                               color: Theme.of(context)

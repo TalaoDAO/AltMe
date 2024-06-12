@@ -45,7 +45,8 @@ class BaseTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final border = borderColor ?? Theme.of(context).colorScheme.tertiary;
+    final border =
+        borderColor ?? Theme.of(context).colorScheme.onPrimaryContainer;
     return SizedBox(
       height: height,
       child: TextFormField(

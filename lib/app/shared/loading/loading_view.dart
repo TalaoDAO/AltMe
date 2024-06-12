@@ -54,7 +54,7 @@ class LoadingView {
                 minWidth: size.width * 0.5,
               ),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
+                color: Theme.of(context).colorScheme.surfaceDim,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(

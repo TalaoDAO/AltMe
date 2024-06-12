@@ -49,7 +49,9 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             child: Text(
               credentialCategoryConfig.homeSubTitle,
               maxLines: 3,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                  ),
             ),
           ),
           const SizedBox(height: 14),

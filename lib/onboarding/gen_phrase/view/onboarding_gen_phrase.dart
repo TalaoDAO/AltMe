@@ -137,7 +137,10 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                       Text(
                         l10n.onboardingAltmeMessage,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style:
+                            Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
                       ),
                     ],
                   ),
@@ -157,7 +160,8 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                   MyElevatedButton(
                     text: l10n.verifyLater,
                     verticalSpacing: 18,
-                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
                     onPressed: () async {
                       await context
                           .read<OnboardingCubit>()
