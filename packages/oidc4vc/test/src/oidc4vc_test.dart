@@ -213,6 +213,19 @@ void main() {
       const openIdConfiguration =
           '{"authorization_server":null,"credential_endpoint":"https://talao.co/issuer/mfyttabosy/credential","credential_issuer":"https://talao.co/issuer/mfyttabosy","subject_syntax_types_supported":["urn:ietf:params:oauth:jwk-thumbprint","did:key","did:ebsi","did:tz","did:pkh","did:hedera","did:key","did:ethr","did:web","did:jwk"],"token_endpoint":"https://talao.co/issuer/mfyttabosy/token","batch_endpoint":null,"authorization_endpoint":"https://talao.co/issuer/mfyttabosy/authorize","subject_trust_frameworks_supported":["ebsi"],"credentials_supported":null,"credential_configurations_supported":{"DBCGuest":{"credential_definition":{"type":["VerifiableCredential","DBCGuest"]},"display":[{"background_color":"#3B6F6D","background_image":{"alt_text":"Connected open cubes in blue with one orange cube as a background of the card","url":"https://i.ibb.co/CHqjxrJ/dbc-card-hig-res.png"},"description":"The DBC Guest credential is a DIIP example.","logo":{"alt_text":"An orange block shape, with the text Dutch Blockchain Coalition next to it, portraying the logo of the Dutch Blockchain Coalition.","url":"https://dutchblockchaincoalition.org/assets/images/icons/Logo-DBC.png"},"name":"DBC Guest (DIIP)","text_color":"#FFFFFF"},{"background_color":"#3B6F6D","background_image":{"alt_text":"Connected open cubes in blue with one orange cube as a background of the card","url":"https://i.ibb.co/CHqjxrJ/dbc-card-hig-res.png"},"description":"The DBC guest credential is a DIIP example.","locale":"en-US","logo":{"alt_text":"An orange block shape, with the text Dutch Blockchain Coalition next to it, portraying the logo of the Dutch Blockchain Coalition.","url":"https://dutchblockchaincoalition.org/assets/images/icons/Logo-DBC.png"},"name":"DBC Guest (DIIP)","text_color":"#FFFFFF"},{"background_color":"#3B6F6D","background_image":{"alt_text":"Connected open cubes in blue with one orange cube as a background of the card","url":"https://i.ibb.co/CHqjxrJ/dbc-card-hig-res.png"},"description":"De DBC gast credential is een DIIP voorbeeld.","locale":"nl-NL","logo":{"alt_text":"Aaneengesloten open blokken in de kleur blauw, met een blok in de kleur oranje, die tesamen de achtergrond van de kaart vormen.","url":"https://dutchblockchaincoalition.org/assets/images/icons/Logo-DBC.png"},"name":"DBC gast (DIIP)","text_color":"#FFFFFF"}],"format":"jwt_vc_json","scope":"DBCGuest_scope"},"EmailPass":{"credential_definition":{"type":["VerifiableCredential","EmailPass"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"locale":"en-GB","name":"Proof of Email"}],"format":"jwt_vc_json","scope":"EmailPass_scope"},"EmployeeCredential":{"credential_definition":{"type":["VerifiableCredential","EmployeeCredential"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"background_color":"#12107c","locale":"en-US","logo":{"alt_text":"a square logo of a university","url":"https://exampleuniversity.com/public/logo.png"},"name":"Employee Credential","text_color":"#FFFFFF"}],"format":"jwt_vc_json","scope":"EmployeeCredential_scope"},"Over18":{"credential_definition":{"type":["VerifiableCredential","Over18"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"locale":"en-GB","name":"Over 18yo proof"},{"locale":"fr-GB","name":"Preuve de majorité"}],"format":"jwt_vc_json","scope":"Over18_scope"},"PhoneProof":{"credential_definition":{"type":["VerifiableCredential","PhoneProof"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"locale":"en-GB","name":"Proof of phone number"}],"format":"jwt_vc_json","scope":"PhoneProof_scope"},"VerifiableId":{"credential_definition":{"credentialSubject":{"dateIssued":{"display":[{"locale":"en-US","name":"Issuance date"},{"locale":"fr-FR","name":"Délivré le"}],"mandatory":true},"dateOfBirth":{"display":[{"locale":"en-US","name":"Date of birth"},{"locale":"fr-FR","name":"Né(e) le"}],"mandatory":true},"email":{"display":[{"locale":"en-US","name":"Email"},{"locale":"fr-FR","name":"Email"}],"mandatory":true},"familyName":{"display":[{"locale":"en-US","name":"Family name"},{"locale":"fr-FR","name":"Nom"}],"mandatory":true},"firstName":{"display":[{"locale":"en-US","name":"First name"},{"locale":"fr-FR","name":"Prénom(s)"}],"mandatory":true},"gender":{"display":[{"locale":"en-US","name":"Gender"},{"locale":"fr-FR","name":"Sexe"}],"mandatory":true},"issuing_country":{"display":[{"locale":"en-US","name":"Issuing country"},{"locale":"fr-FR","name":"Délivré par"}],"mandatory":true},"phone_number":{"display":[{"locale":"en-US","name":"Phone number"},{"locale":"fr-FR","name":"Téléphone"}],"mandatory":true}},"order":["firstName","familyName","dateOfBirth","gender","dateIssued","issuing_country","email","phone_number"],"type":["VerifiableCredential","VerifiableId"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"background_color":"#12107c","locale":"en-US","name":"Verifiable Id","text_color":"#FFFFFF"}],"format":"jwt_vc_json","scope":"VerifiableId_scope"}},"deferred_credential_endpoint":"https://talao.co/issuer/mfyttabosy/deferred","service_documentation":null,"credential_manifest":null,"credential_manifests":null,"issuer":null,"jwks_uri":"https://talao.co/issuer/mfyttabosy/jwks","grant_types_supported":["authorization_code","urn:ietf:params:oauth:grant-type:pre-authorized_code"]}';
 
+      const credentialOfferJson = {
+        'credential_offer': {
+          'credential_issuer': 'https://talao.co/issuer/pcbrwbvrsi',
+          'credential_configuration_ids': ['Pid'],
+          'grants': {
+            'authorization_code': {
+              'issuer_state': 'test11',
+              'authorization_server': 'https://talao.co/issuer/pcbrwbvrsi',
+            },
+          },
+        },
+      };
+
       test(
         'given Url of openid request we return Uri for authentication endpoint',
         () async {
@@ -241,7 +254,6 @@ void main() {
             'https://talao.co/issuer/mfyttabosy/.well-known/openid-credential-issuer',
             (request) => request.reply(200, jsonDecode(openIdConfiguration)),
           );
-
           final (authorizationEndpoint, authorizationRequestParemeters, _) =
               await oidc4vc.getAuthorizationData(
             selectedCredentials: selectedCredentials,
@@ -261,6 +273,7 @@ void main() {
             secureAuthorizedFlow: false,
             issuer: issuer,
             dio: client,
+            credentialOfferJson: credentialOfferJson,
             secureStorage: mockSecureStorage,
           );
 
@@ -296,6 +309,7 @@ void main() {
               scope: false,
               secureAuthorizedFlow: false,
               vcFormatType: VCFormatType.jwtVc,
+              credentialOfferJson: credentialOfferJson,
               dio: client,
             ),
             throwsA(
@@ -340,6 +354,103 @@ void main() {
 
           expect(
             jsonEncode(authorizationRequestParemeters),
+            expectedAuthorizationRequestParemeters,
+          );
+        },
+      );
+    });
+
+    group('draft 13: getAuthorizationUriForIssuer', () {
+      const selectedCredentials = ['EmailPass'];
+      const clientId =
+          'did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6IjZka1U2Wk1GSzc5V3dpY3dKNXJieEUxM3pTdWtCWTJPb0VpVlVFanFNRWMiLCJ5IjoiUm5Iem55VmxyUFNNVDdpckRzMTVEOXd4Z01vamlTREFRcGZGaHFUa0xSWSJ9';
+      const redirectUri = 'https://app.altme.io/app/download/oidc4vc';
+
+      const issuer = 'https://talao.co/issuer/mfyttabosy';
+
+      const issuerState = 'test7';
+      const nonce = '8b60e2fb-87f3-4401-8107-0f0128ea01ab';
+
+      const pkcePair = PkcePair(
+        'Pzy4U_sJ0J7VdIAR6JCwL5hbecv30egmJVP81VDFAnk',
+        '4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA',
+      );
+
+      const state =
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiI0S29yQ3dtWXlPLV90NGlfaHZhN0YzYUhHcFRfMldxcURoNmVyaW1lcE9BIiwiY3JlZGVudGlhbHMiOlsiRW1haWxQYXNzIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL21meXR0YWJvc3kiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpRTFRJMU5pSXNJbXQwZVNJNklrVkRJaXdpZUNJNklqWmthMVUyV2sxR1N6YzVWM2RwWTNkS05YSmllRVV4TTNwVGRXdENXVEpQYjBWcFZsVkZhbkZOUldNaUxDSjVJam9pVW01SWVtNTVWbXh5VUZOTlZEZHBja1J6TVRWRU9YZDRaMDF2YW1sVFJFRlJjR1pHYUhGVWEweFNXU0o5IiwiaWF0IjoxNzE0NTQ5OTUxfQ.JJtv8H52NTvPzR3IPET1sXGALdt0yXaQBQbGvDLKNlM';
+
+      const authorizationEndPoint =
+          'https://app.altme.io/app/download/authorize';
+
+      const openIdConfiguration =
+          '{"authorization_server":null,"credential_endpoint":"https://talao.co/issuer/mfyttabosy/credential","credential_issuer":"https://talao.co/issuer/mfyttabosy","subject_syntax_types_supported":["urn:ietf:params:oauth:jwk-thumbprint","did:key","did:ebsi","did:tz","did:pkh","did:hedera","did:key","did:ethr","did:web","did:jwk"],"token_endpoint":"https://talao.co/issuer/mfyttabosy/token","batch_endpoint":null,"authorization_endpoint":"https://talao.co/issuer/mfyttabosy/authorize","subject_trust_frameworks_supported":["ebsi"],"credentials_supported":null,"credential_configurations_supported":{"DBCGuest":{"credential_definition":{"type":["VerifiableCredential","DBCGuest"]},"display":[{"background_color":"#3B6F6D","background_image":{"alt_text":"Connected open cubes in blue with one orange cube as a background of the card","url":"https://i.ibb.co/CHqjxrJ/dbc-card-hig-res.png"},"description":"The DBC Guest credential is a DIIP example.","logo":{"alt_text":"An orange block shape, with the text Dutch Blockchain Coalition next to it, portraying the logo of the Dutch Blockchain Coalition.","url":"https://dutchblockchaincoalition.org/assets/images/icons/Logo-DBC.png"},"name":"DBC Guest (DIIP)","text_color":"#FFFFFF"},{"background_color":"#3B6F6D","background_image":{"alt_text":"Connected open cubes in blue with one orange cube as a background of the card","url":"https://i.ibb.co/CHqjxrJ/dbc-card-hig-res.png"},"description":"The DBC guest credential is a DIIP example.","locale":"en-US","logo":{"alt_text":"An orange block shape, with the text Dutch Blockchain Coalition next to it, portraying the logo of the Dutch Blockchain Coalition.","url":"https://dutchblockchaincoalition.org/assets/images/icons/Logo-DBC.png"},"name":"DBC Guest (DIIP)","text_color":"#FFFFFF"},{"background_color":"#3B6F6D","background_image":{"alt_text":"Connected open cubes in blue with one orange cube as a background of the card","url":"https://i.ibb.co/CHqjxrJ/dbc-card-hig-res.png"},"description":"De DBC gast credential is een DIIP voorbeeld.","locale":"nl-NL","logo":{"alt_text":"Aaneengesloten open blokken in de kleur blauw, met een blok in de kleur oranje, die tesamen de achtergrond van de kaart vormen.","url":"https://dutchblockchaincoalition.org/assets/images/icons/Logo-DBC.png"},"name":"DBC gast (DIIP)","text_color":"#FFFFFF"}],"format":"jwt_vc_json","scope":"DBCGuest_scope"},"EmailPass":{"credential_definition":{"type":["VerifiableCredential","EmailPass"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"locale":"en-GB","name":"Proof of Email"}],"format":"jwt_vc_json","scope":"EmailPass_scope"},"EmployeeCredential":{"credential_definition":{"type":["VerifiableCredential","EmployeeCredential"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"background_color":"#12107c","locale":"en-US","logo":{"alt_text":"a square logo of a university","url":"https://exampleuniversity.com/public/logo.png"},"name":"Employee Credential","text_color":"#FFFFFF"}],"format":"jwt_vc_json","scope":"EmployeeCredential_scope"},"Over18":{"credential_definition":{"type":["VerifiableCredential","Over18"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"locale":"en-GB","name":"Over 18yo proof"},{"locale":"fr-GB","name":"Preuve de majorité"}],"format":"jwt_vc_json","scope":"Over18_scope"},"PhoneProof":{"credential_definition":{"type":["VerifiableCredential","PhoneProof"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"locale":"en-GB","name":"Proof of phone number"}],"format":"jwt_vc_json","scope":"PhoneProof_scope"},"VerifiableId":{"credential_definition":{"credentialSubject":{"dateIssued":{"display":[{"locale":"en-US","name":"Issuance date"},{"locale":"fr-FR","name":"Délivré le"}],"mandatory":true},"dateOfBirth":{"display":[{"locale":"en-US","name":"Date of birth"},{"locale":"fr-FR","name":"Né(e) le"}],"mandatory":true},"email":{"display":[{"locale":"en-US","name":"Email"},{"locale":"fr-FR","name":"Email"}],"mandatory":true},"familyName":{"display":[{"locale":"en-US","name":"Family name"},{"locale":"fr-FR","name":"Nom"}],"mandatory":true},"firstName":{"display":[{"locale":"en-US","name":"First name"},{"locale":"fr-FR","name":"Prénom(s)"}],"mandatory":true},"gender":{"display":[{"locale":"en-US","name":"Gender"},{"locale":"fr-FR","name":"Sexe"}],"mandatory":true},"issuing_country":{"display":[{"locale":"en-US","name":"Issuing country"},{"locale":"fr-FR","name":"Délivré par"}],"mandatory":true},"phone_number":{"display":[{"locale":"en-US","name":"Phone number"},{"locale":"fr-FR","name":"Téléphone"}],"mandatory":true}},"order":["firstName","familyName","dateOfBirth","gender","dateIssued","issuing_country","email","phone_number"],"type":["VerifiableCredential","VerifiableId"]},"credential_signing_alg_values_supported":["ES256K","ES256","ES384","RS256"],"cryptographic_binding_methods_supported":["DID","jwk"],"display":[{"background_color":"#12107c","locale":"en-US","name":"Verifiable Id","text_color":"#FFFFFF"}],"format":"jwt_vc_json","scope":"VerifiableId_scope"}},"deferred_credential_endpoint":"https://talao.co/issuer/mfyttabosy/deferred","service_documentation":null,"credential_manifest":null,"credential_manifests":null,"issuer":null,"jwks_uri":"https://talao.co/issuer/mfyttabosy/jwks","grant_types_supported":["authorization_code","urn:ietf:params:oauth:grant-type:pre-authorized_code"]}';
+
+      const credentialOfferJson = {
+        'credential_offer': {
+          'credential_issuer': 'https://talao.co/issuer/pcbrwbvrsi',
+          'credential_configuration_ids': ['Pid'],
+          'grants': {
+            'authorization_code': {
+              'issuer_state': 'test11',
+              'authorization_server': 'https://talao.co/issuer/pcbrwbvrsi',
+            },
+          },
+        },
+      };
+      test(
+        'given Url of openid request we return Uri for authentication endpoint',
+        () async {
+          const expectedAuthorizationEndpoint =
+              'https://talao.co/issuer/mfyttabosy/authorize';
+
+          const expectedAuthorizationRequestParemeters = {
+            'response_type': 'code',
+            'redirect_uri': 'https://app.altme.io/app/download/oidc4vc',
+            'state':
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiI0S29yQ3dtWXlPLV90NGlfaHZhN0YzYUhHcFRfMldxcURoNmVyaW1lcE9BIiwiY3JlZGVudGlhbHMiOlsiRW1haWxQYXNzIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL21meXR0YWJvc3kiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpRTFRJMU5pSXNJbXQwZVNJNklrVkRJaXdpZUNJNklqWmthMVUyV2sxR1N6YzVWM2RwWTNkS05YSmllRVV4TTNwVGRXdENXVEpQYjBWcFZsVkZhbkZOUldNaUxDSjVJam9pVW01SWVtNTVWbXh5VUZOTlZEZHBja1J6TVRWRU9YZDRaMDF2YW1sVFJFRlJjR1pHYUhGVWEweFNXU0o5IiwiaWF0IjoxNzE0NTQ5OTUxfQ.JJtv8H52NTvPzR3IPET1sXGALdt0yXaQBQbGvDLKNlM',
+            'nonce': '8b60e2fb-87f3-4401-8107-0f0128ea01ab',
+            'code_challenge': '4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA',
+            'code_challenge_method': 'S256',
+            'issuer_state': 'test7',
+            'client_metadata':
+                '{\"authorization_endpoint\":\"https://app.altme.io/app/download/authorize\",\"scopes_supported\":[\"openid\"],\"response_types_supported\":[\"vp_token\",\"id_token\"],\"client_id_schemes_supported\":[\"redirect_uri\",\"did\"],\"grant_types_supported\":[\"authorization_code\",\"pre-authorized_code\"],\"subject_types_supported\":[\"public\"],\"id_token_signing_alg_values_supported\":[\"ES256\",\"ES256K\"],\"request_object_signing_alg_values_supported\":[\"ES256\",\"ES256K\"],\"request_parameter_supported\":true,\"request_uri_parameter_supported\":true,\"request_authentication_methods_supported\":{\"authorization_endpoint\":[\"request_object\"]},\"vp_formats_supported\":{\"jwt_vp\":{\"alg_values_supported\":[\"ES256\",\"ES256K\"]},\"jwt_vc\":{\"alg_values_supported\":[\"ES256\",\"ES256K\"]}},\"subject_syntax_types_supported\":[\"urn:ietf:params:oauth:jwk-thumbprint\",\"did:key\",\"did:pkh\",\"did:key\",\"did:polygonid\"],\"subject_syntax_types_discriminations\":[\"did:key:jwk_jcs-pub\",\"did:ebsi:v1\"],\"subject_trust_frameworks_supported\":[\"ebsi\"],\"id_token_types_supported\":[\"subject_signed_id_token\"],\"token_endpoint_auth_method\":\"client_id\"}',
+            'client_id':
+                'did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6IjZka1U2Wk1GSzc5V3dpY3dKNXJieEUxM3pTdWtCWTJPb0VpVlVFanFNRWMiLCJ5IjoiUm5Iem55VmxyUFNNVDdpckRzMTVEOXd4Z01vamlTREFRcGZGaHFUa0xSWSJ9',
+            'scope': 'openid',
+            'authorization_details':
+                '[{\"type\":\"openid_credential\",\"credential_configuration_id\":\"EmailPass\"}]',
+          };
+
+          dioAdapter.onGet(
+            'https://talao.co/issuer/mfyttabosy/.well-known/openid-credential-issuer',
+            (request) => request.reply(200, jsonDecode(openIdConfiguration)),
+          );
+          final (authorizationEndpoint, authorizationRequestParemeters, _) =
+              await oidc4vc.getAuthorizationData(
+            selectedCredentials: selectedCredentials,
+            clientId: clientId,
+            clientSecret: null,
+            redirectUri: redirectUri,
+            issuerState: issuerState,
+            nonce: nonce,
+            pkcePair: pkcePair,
+            state: state,
+            authorizationEndPoint: authorizationEndPoint,
+            scope: false,
+            clientAuthentication: ClientAuthentication.clientId,
+            oidc4vciDraftType: OIDC4VCIDraftType.draft13,
+            vcFormatType: VCFormatType.jwtVcJson,
+            clientAssertion: null,
+            secureAuthorizedFlow: false,
+            issuer: issuer,
+            dio: client,
+            credentialOfferJson: credentialOfferJson,
+            secureStorage: mockSecureStorage,
+          );
+
+          expect(authorizationEndpoint,   expectedAuthorizationEndpoint);
+          expect(
+            authorizationRequestParemeters,
             expectedAuthorizationRequestParemeters,
           );
         },

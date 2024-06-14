@@ -9,6 +9,7 @@ class OpenIdConfiguration extends Equatable {
   const OpenIdConfiguration({
     required this.requirePushedAuthorizationRequests,
     this.authorizationServer,
+    this.authorizationServers,
     this.credentialsSupported,
     this.credentialConfigurationsSupported,
     this.credentialEndpoint,
@@ -32,6 +33,8 @@ class OpenIdConfiguration extends Equatable {
 
   @JsonKey(name: 'authorization_server')
   final String? authorizationServer;
+  @JsonKey(name: 'authorization_servers')
+  final List<String>? authorizationServers;
   @JsonKey(name: 'credential_endpoint')
   final String? credentialEndpoint;
   @JsonKey(name: 'credential_issuer')
@@ -71,6 +74,7 @@ class OpenIdConfiguration extends Equatable {
   @override
   List<Object?> get props => [
         authorizationServer,
+        authorizationServers,
         credentialEndpoint,
         credentialIssuer,
         subjectSyntaxTypesSupported,
