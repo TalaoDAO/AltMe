@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,7 +75,7 @@ class _ChangeNetworkBottomSheetPageState
                     const SizedBox(width: Sizes.spaceXSmall),
                     Text(
                       l10n.chooseNetWork,
-                      style: Theme.of(context).textTheme.accountsText,
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ],
                 ),
@@ -87,7 +87,8 @@ class _ChangeNetworkBottomSheetPageState
                       border: Border.all(
                         color: Theme.of(context)
                             .colorScheme
-                            .accountBottomSheetBorderColor,
+                            .onSurface
+                            .withOpacity(0.12),
                         width: 0.2,
                       ),
                       borderRadius: const BorderRadius.all(
@@ -108,7 +109,10 @@ class _ChangeNetworkBottomSheetPageState
                         ),
                         child: Divider(
                           height: 0.2,
-                          color: Theme.of(context).colorScheme.borderColor,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.12),
                         ),
                       ),
                     ),

@@ -1,7 +1,7 @@
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,8 +12,8 @@ class ConfidentialClientWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final color = Theme.of(context).colorScheme.primary;
-    final background = Theme.of(context).colorScheme.popupBackground;
-    final textColor = Theme.of(context).colorScheme.dialogText;
+    final background = Theme.of(context).colorScheme.surface;
+    final textColor = Theme.of(context).colorScheme.onSurface;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final clientIdController = TextEditingController(
@@ -25,7 +25,10 @@ class ConfidentialClientWidget extends StatelessWidget {
           text: state.model.profileSetting.selfSovereignIdentityOptions
               .customOidc4vcProfile.clientSecret,
         );
-
+        final clientId = state.model.profileSetting.selfSovereignIdentityOptions
+            .customOidc4vcProfile.clientId;
+        final clientSecret = state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret;
         return OptionContainer(
           title: l10n.confidentialClient,
           body: Padding(
@@ -115,7 +118,7 @@ class ConfidentialClientWidget extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(
@@ -128,9 +131,8 @@ class ConfidentialClientWidget extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            '${l10n.clientId}: ${state.model.profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile.clientId}',
-                            style:
-                                Theme.of(context).textTheme.drawerItemSubtitle,
+                            '${l10n.clientId}: $clientId',
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -226,7 +228,7 @@ class ConfidentialClientWidget extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(
@@ -240,9 +242,8 @@ class ConfidentialClientWidget extends StatelessWidget {
                         Expanded(
                           child: Text(
                             '${l10n.clientSecret}: '
-                            '${state.model.profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret}',
-                            style:
-                                Theme.of(context).textTheme.drawerItemSubtitle,
+                            '$clientSecret',
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),
                         const SizedBox(width: 8),

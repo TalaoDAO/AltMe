@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/query_by_example/model/query.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -85,7 +85,7 @@ class MissingCredentialsView extends StatelessWidget {
             children: [
               Text(
                 '''${l10n.youAreMissing} ${state.dummyCredentials.length} ${l10n.credentialsRequestedBy} $issuerName.''',
-                style: Theme.of(context).textTheme.discoverFieldDescription,
+                style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),

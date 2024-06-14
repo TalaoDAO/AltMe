@@ -26,7 +26,7 @@ class CheckboxItem extends StatelessWidget {
         children: [
           Checkbox(
             value: value,
-            fillColor: MaterialStateProperty.all(
+            fillColor: WidgetStateProperty.all(
               Theme.of(context).colorScheme.primary,
             ),
             shape: const RoundedRectangleBorder(

@@ -31,16 +31,21 @@ void main() {
     });
 
     test('toJson constructor work correctly', () {
-      final json = <String, dynamic>{
-        'type': 'type',
-        'proofPurpose': 'proofPurpose',
-        'verificationMethod': 'verificationMethod',
-        'created': 'created',
-        'jws': 'jws',
-      };
-      final proof = Proof.fromJson(json);
+      final proof = Proof(
+        'type',
+        'proofPurpose',
+        'verificationMethod',
+        'created',
+        'jws',
+      );
 
-      expect(proof.toJson(), json);
+      final json = proof.toJson();
+
+      expect(json['type'], 'type');
+      expect(json['proofPurpose'], 'proofPurpose');
+      expect(json['verificationMethod'], 'verificationMethod');
+      expect(json['created'], 'created');
+      expect(json['jws'], 'jws');
     });
 
     test('dummy constructor work properly', () {

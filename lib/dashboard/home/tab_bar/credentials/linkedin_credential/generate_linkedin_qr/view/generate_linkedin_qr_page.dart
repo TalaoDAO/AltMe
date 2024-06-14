@@ -133,12 +133,9 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
                             : FractionallySizedBox(
                                 heightFactor: 0.48,
                                 widthFactor: 0.12,
-                                child: PrettyQr(
-                                  size: 300,
+                                child: PrettyQrView.data(
                                   data: state.qrValue!,
                                   errorCorrectLevel: QrErrorCorrectLevel.M,
-                                  typeNumber: null,
-                                  roundEdges: true,
                                 ),
                               ),
                       ),

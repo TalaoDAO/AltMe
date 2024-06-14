@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 
@@ -32,7 +31,7 @@ class BottomBarItem extends StatelessWidget {
               showBadge: badgeCount > 0,
               badgeContent: Text(
                 badgeCount.toString(),
-                style: Theme.of(context).textTheme.badgeStyle,
+                style: Theme.of(context).textTheme.bodySmall,
                 textAlign: TextAlign.center,
               ),
               child: Container(
@@ -41,7 +40,10 @@ class BottomBarItem extends StatelessWidget {
                   AssetImage(icon),
                   color: isSelected
                       ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.unSelectedLabel,
+                      : Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.6),
                   size: 20,
                 ),
               ),
@@ -50,10 +52,13 @@ class BottomBarItem extends StatelessWidget {
               text.toUpperCase(),
               softWrap: false,
               overflow: TextOverflow.fade,
-              style: Theme.of(context).textTheme.bottomBar.copyWith(
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
                     color: isSelected
                         ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.unSelectedLabel,
+                        : Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.6),
                   ),
             ),
           ],

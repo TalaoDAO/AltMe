@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class GroupedSection extends StatelessWidget {
@@ -16,7 +15,7 @@ class GroupedSection extends StatelessWidget {
       padding: const EdgeInsets.all(Sizes.spaceSmall),
       margin: const EdgeInsets.all(Sizes.spaceXSmall),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.drawerSurface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.all(
           Radius.circular(Sizes.largeRadius),
         ),

@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -74,7 +74,7 @@ class BackupMnemonicView extends StatelessWidget {
               Text(
                 l10n.backupCredentialPhraseExplanation,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.messageTitle,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
           ),

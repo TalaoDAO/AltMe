@@ -6,14 +6,13 @@ import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class ProtectWalletPage extends StatelessWidget {
   const ProtectWalletPage({
@@ -38,7 +37,6 @@ class ProtectWalletPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => OnBoardingGenPhraseCubit(
-        secureStorageProvider: getSecureStorage,
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),
@@ -47,8 +45,15 @@ class ProtectWalletPage extends StatelessWidget {
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
         profileCubit: context.read<ProfileCubit>(),
       ),
-      child: ProtectWalletView(
-        routeType: routeType,
+      child: Builder(
+        builder: (context) {
+          return ProtectWalletView(
+            routeType: routeType,
+            profileCubit: context.read<ProfileCubit>(),
+            onBoardingGenPhraseCubit: context.read<OnBoardingGenPhraseCubit>(),
+            onboardingCubit: context.read<OnboardingCubit>(),
+          );
+        },
       ),
     );
   }
@@ -57,30 +62,33 @@ class ProtectWalletPage extends StatelessWidget {
 class ProtectWalletView extends StatefulWidget {
   const ProtectWalletView({
     super.key,
+    required this.profileCubit,
+    required this.onBoardingGenPhraseCubit,
+    required this.onboardingCubit,
     this.routeType,
   });
 
   final WalletRouteType? routeType;
+  final ProfileCubit profileCubit;
+  final OnBoardingGenPhraseCubit onBoardingGenPhraseCubit;
+  final OnboardingCubit onboardingCubit;
 
   @override
   State<ProtectWalletView> createState() => _ProtectWalletViewState();
 }
 
 class _ProtectWalletViewState extends State<ProtectWalletView> {
-  final localAuthApi = LocalAuthApi();
-
   bool get byPassScreen => !Parameters.walletHandlesCrypto;
 
   bool get isFromOnboarding => widget.routeType != null;
 
-  Future<void> createImportAccount() async {
+  Future<void> createImportAccount({required bool byPassScreen}) async {
     if (widget.routeType == WalletRouteType.create) {
       if (byPassScreen) {
-        await context.read<OnboardingCubit>().emitOnboardingProcessing();
-
+        await widget.onboardingCubit.emitOnboardingProcessing();
         final mnemonic = bip39.generateMnemonic().split(' ');
-        await context
-            .read<OnBoardingGenPhraseCubit>()
+
+        await widget.onBoardingGenPhraseCubit
             .generateSSIAndCryptoAccount(mnemonic);
       } else {
         await Navigator.of(context).push<void>(OnBoardingGenPhrasePage.route());
@@ -125,20 +133,21 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
         useSafeArea: true,
         padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
         titleLeading: const BackLeadingButton(),
-        backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: l10n.protectYourWallet,
         titleAlignment: Alignment.topCenter,
         body: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, profileState) {
             final walletProtectionType =
                 profileState.model.walletProtectionType;
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   l10n.protectYourWalletMessage,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall3,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: Sizes.spaceNormal),
                 ProtectWidget(
@@ -152,15 +161,14 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                       EnterNewPinCodePage.route(
                         isFromOnboarding: isFromOnboarding,
                         isValidCallback: () async {
-                          await context
-                              .read<ProfileCubit>()
-                              .setWalletProtectionType(
-                                walletProtectionType:
-                                    WalletProtectionType.pinCode,
-                              );
+                          await widget.profileCubit.setWalletProtectionType(
+                            walletProtectionType: WalletProtectionType.pinCode,
+                          );
                           Navigator.of(context).pop();
                           if (isFromOnboarding) {
-                            await createImportAccount();
+                            await createImportAccount(
+                              byPassScreen: byPassScreen,
+                            );
                           } else {
                             AlertMessage.showStateMessage(
                               context: context,
@@ -186,17 +194,18 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                     Navigator.of(context).push<void>(
                       ActiviateBiometricsPage.route(
                         isFromOnboarding: isFromOnboarding,
+                        localAuthApi: LocalAuthApi(),
                         onAction: ({required bool isEnabled}) async {
                           if (isEnabled) {
-                            await context
-                                .read<ProfileCubit>()
-                                .setWalletProtectionType(
-                                  walletProtectionType:
-                                      WalletProtectionType.biometrics,
-                                );
+                            await widget.profileCubit.setWalletProtectionType(
+                              walletProtectionType:
+                                  WalletProtectionType.biometrics,
+                            );
                             Navigator.of(context).pop();
                             if (isFromOnboarding) {
-                              await createImportAccount();
+                              await createImportAccount(
+                                byPassScreen: byPassScreen,
+                              );
                             } else {
                               AlertMessage.showStateMessage(
                                 context: context,
@@ -226,23 +235,26 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                           Navigator.of(context).pushReplacement<void, void>(
                             ActiviateBiometricsPage.route(
                               isFromOnboarding: isFromOnboarding,
+                              localAuthApi: LocalAuthApi(),
                               onAction: ({required bool isEnabled}) async {
                                 if (isEnabled) {
-                                  await context
-                                      .read<ProfileCubit>()
+                                  await widget.profileCubit
                                       .setWalletProtectionType(
-                                        walletProtectionType:
-                                            WalletProtectionType.FA2,
-                                      );
+                                    walletProtectionType:
+                                        WalletProtectionType.FA2,
+                                  );
                                   Navigator.of(context).pop();
                                   if (isFromOnboarding) {
-                                    await createImportAccount();
+                                    await createImportAccount(
+                                      byPassScreen: byPassScreen,
+                                    );
                                   } else {
                                     AlertMessage.showStateMessage(
                                       context: context,
                                       stateMessage: StateMessage.success(
                                         showDialog: true,
                                         stringMessage: l10n
+                                            // ignore: lines_longer_than_80_chars
                                             .twoFactorAuthenticationHasBeenEnabled,
                                       ),
                                     );

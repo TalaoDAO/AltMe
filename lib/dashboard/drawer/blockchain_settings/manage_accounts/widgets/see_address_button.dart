@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class SeeAddressButton extends StatelessWidget {
@@ -36,7 +36,7 @@ class SeeAddressButton extends StatelessWidget {
             ),
             Text(
               l10n.seeAddress.toUpperCase(),
-              style: Theme.of(context).textTheme.miniButton,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),

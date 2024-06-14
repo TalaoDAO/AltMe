@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class DrawerItemDivider extends StatelessWidget {
@@ -11,7 +10,7 @@ class DrawerItemDivider extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: Theme.of(context).colorScheme.borderColor,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
             width: 0.2,
           ),
         ),

@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/tokens.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +31,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BackgroundCard(
-      color: Theme.of(context).colorScheme.cardBackground,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -58,7 +58,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                           (double.parse(grandTotal) * tokenUSDRate)
                               .decimalNumber(2)
                               .formatNumber,
-                      style: Theme.of(context).textTheme.bodySmall2,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                 ],
               ),
@@ -91,7 +91,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                       Text(
                         r'$' +
                             networkFee!.feeInUSD.decimalNumber(2).formatNumber,
-                        style: Theme.of(context).textTheme.bodySmall2,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                   ],
                 ),
@@ -119,7 +119,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                           (double.parse(amount) * tokenUSDRate)
                               .decimalNumber(2)
                               .formatNumber,
-                      style: Theme.of(context).textTheme.bodySmall2,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                 ],
               ),
@@ -137,7 +137,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
       ),
       child: Divider(
         height: 0.1,
-        color: Theme.of(context).colorScheme.borderColor,
+        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
       ),
     );
   }

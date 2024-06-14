@@ -1,5 +1,4 @@
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
@@ -19,14 +18,14 @@ class DisplayDescriptionWidget extends StatelessWidget {
     final object = displayMapping;
 
     final style = textColor == null
-        ? Theme.of(context).textTheme.credentialDescription
+        ? Theme.of(context).textTheme.bodyMedium
         : Theme.of(context)
             .textTheme
-            .credentialDescription
+            .bodyMedium!
             .copyWith(color: textColor);
 
     if (object is DisplayMappingText) {
-      return ManifestText(text: object.text, style: style);
+      return ManifestText(text: object.text, style: style!);
     }
 
     if (object is DisplayMappingPath) {
@@ -35,10 +34,10 @@ class DisplayDescriptionWidget extends StatelessWidget {
         textList.addAll(getTextsFromCredential(e, credentialModel.data));
       }
       if (textList.isNotEmpty) {
-        return ManifestText(text: textList.first, style: style);
+        return ManifestText(text: textList.first, style: style!);
       }
       if (object.fallback != null) {
-        return ManifestText(text: object.fallback ?? '', style: style);
+        return ManifestText(text: object.fallback ?? '', style: style!);
       }
     }
 

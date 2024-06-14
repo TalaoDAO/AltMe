@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/model/model.dart';
 import 'package:flutter/material.dart';
 
@@ -43,14 +43,14 @@ class SelectedAccountItem extends StatelessWidget {
             maxLines: 1,
             minFontSize: 12,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.title,
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: Sizes.spaceXSmall),
             child: MyText(
               cryptoAccountData.walletAddress,
               maxLines: 2,
-              style: Theme.of(context).textTheme.walletAddress,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           trailing: onPressed == null

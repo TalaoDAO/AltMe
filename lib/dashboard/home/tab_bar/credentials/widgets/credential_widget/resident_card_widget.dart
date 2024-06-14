@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class ResidentCardWidget extends StatelessWidget {
@@ -43,7 +43,7 @@ class ResidentCardWidget extends StatelessWidget {
                   children: [
                     Text(
                       '${l10n.gender}: ',
-                      style: Theme.of(context).textTheme.credentialFieldTitle,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Flexible(
                       child:
@@ -104,14 +104,14 @@ class GenderDisplay extends StatelessWidget {
     switch (residentCardModel.gender) {
       case 'male':
         genderIcon =
-            Icon(Icons.male, color: Theme.of(context).colorScheme.genderIcon);
+            Icon(Icons.male, color: Theme.of(context).colorScheme.onSurface);
       case 'female':
         genderIcon =
-            Icon(Icons.female, color: Theme.of(context).colorScheme.genderIcon);
+            Icon(Icons.female, color: Theme.of(context).colorScheme.onSurface);
       default:
         genderIcon = Icon(
           Icons.transgender,
-          color: Theme.of(context).colorScheme.genderIcon,
+          color: Theme.of(context).colorScheme.onSurface,
         );
     }
     return genderIcon;

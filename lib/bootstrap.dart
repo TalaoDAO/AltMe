@@ -8,7 +8,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:altme/app/app.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:flutter/widgets.dart';
@@ -37,7 +36,6 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
 
-      await LocalNotification().init();
       await initSecureStorage;
 
       /// Disable Http google font

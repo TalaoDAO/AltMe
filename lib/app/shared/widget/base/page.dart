@@ -129,7 +129,7 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
                         widget.floatingActionButtonLocation,
                     extendBody: widget.extendBelow ?? false,
                     backgroundColor: widget.backgroundColor ??
-                        Theme.of(context).colorScheme.background,
+                        Theme.of(context).colorScheme.surface,
                     appBar: (widget.title == null &&
                             widget.titleLeading == null &&
                             widget.titleTrailing == null)
@@ -172,7 +172,7 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
             floatingActionButtonLocation: widget.floatingActionButtonLocation,
             extendBody: widget.extendBelow ?? false,
             backgroundColor: widget.backgroundColor ??
-                Theme.of(context).colorScheme.background,
+                Theme.of(context).colorScheme.surface,
             appBar: (widget.title == null &&
                     widget.titleLeading == null &&
                     widget.titleTrailing == null)

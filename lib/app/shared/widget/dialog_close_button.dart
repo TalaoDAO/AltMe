@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class DialogCloseButton extends StatelessWidget {
@@ -22,7 +21,7 @@ class DialogCloseButton extends StatelessWidget {
           if (showText)
             Text(
               l10n.close,
-              style: Theme.of(context).textTheme.dialogClose.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: color,
                   ),
             ),
@@ -30,7 +29,8 @@ class DialogCloseButton extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(0.5),
             decoration: BoxDecoration(
-              color: color ?? Theme.of(context).colorScheme.closeIconColor,
+              color: color ??
+                  Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               shape: BoxShape.circle,
             ),
             child: const Icon(

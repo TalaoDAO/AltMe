@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class NftUrlWidget extends StatelessWidget {
@@ -32,7 +31,7 @@ class NftUrlWidget extends StatelessWidget {
             end: Alignment.topRight,
             stops: const [0.3, 1.0],
           ),
-          color: Theme.of(context).colorScheme.tabBarNotSelected,
+          color: Theme.of(context).colorScheme.secondaryContainer,
         ),
         child: Center(
           child: Text(

@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class DefaultDisplayDescriptor extends StatelessWidget {
@@ -133,7 +133,7 @@ class DefaultCardBody extends StatelessWidget {
                       credentialModel: credentialModel,
                       style: Theme.of(context)
                           .textTheme
-                          .credentialBaseTitleText
+                          .displayLarge!
                           .copyWith(color: textColor),
                     ),
                   ),
@@ -159,7 +159,7 @@ class DefaultCardBody extends StatelessWidget {
                       text: '${l10n.providedBy} ',
                       style: Theme.of(context)
                           .textTheme
-                          .credentialBaseLightText
+                          .bodyMedium!
                           .copyWith(color: textColor),
                     ),
                     TextSpan(
@@ -167,7 +167,7 @@ class DefaultCardBody extends StatelessWidget {
                           .credentialSubjectModel.issuedBy?.name,
                       style: Theme.of(context)
                           .textTheme
-                          .credentialBaseBoldText
+                          .bodyMedium!
                           .copyWith(color: textColor),
                     ),
                   ],
@@ -187,7 +187,7 @@ class DefaultCardBody extends StatelessWidget {
                   credentialModel: credentialModel,
                   style: Theme.of(context)
                       .textTheme
-                      .credentialBaseBoldText
+                      .bodyMedium!
                       .copyWith(color: textColor),
                   maxLines: descriptionMaxLine,
                 ),
@@ -204,7 +204,7 @@ class DefaultCardBody extends StatelessWidget {
                 l10n.issuedOn,
                 style: Theme.of(context)
                     .textTheme
-                    .credentialBaseBoldText
+                    .bodyMedium!
                     .copyWith(color: textColor),
               ),
             ),
@@ -221,7 +221,7 @@ class DefaultCardBody extends StatelessWidget {
                 ),
                 style: Theme.of(context)
                     .textTheme
-                    .credentialBaseLightText
+                    .bodyMedium!
                     .copyWith(color: textColor),
               ),
             ),
@@ -236,7 +236,7 @@ class DefaultCardBody extends StatelessWidget {
                 l10n.expirationDate,
                 style: Theme.of(context)
                     .textTheme
-                    .credentialBaseBoldText
+                    .bodyMedium!
                     .copyWith(color: textColor),
               ),
             ),
@@ -253,7 +253,7 @@ class DefaultCardBody extends StatelessWidget {
                 ),
                 style: Theme.of(context)
                     .textTheme
-                    .credentialBaseLightText
+                    .bodyMedium!
                     .copyWith(color: textColor),
               ),
             ),

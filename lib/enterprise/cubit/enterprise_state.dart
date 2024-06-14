@@ -30,7 +30,6 @@ class EnterpriseState extends Equatable {
   EnterpriseState copyWith({
     required StateMessage? message,
     AppStatus? status,
-    WalletProviderType? walletProviderType,
   }) {
     return EnterpriseState(
       status: status ?? this.status,

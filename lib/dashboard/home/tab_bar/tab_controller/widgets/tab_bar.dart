@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class MyTab extends StatelessWidget {
@@ -32,8 +32,8 @@ class MyTab extends StatelessWidget {
           gradient: isSelected
               ? LinearGradient(
                   colors: [
-                    AppTheme.darkThemeData.colorScheme.primary,
-                    AppTheme.darkThemeData.colorScheme.secondary,
+                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.tertiary,
                   ],
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
@@ -42,7 +42,7 @@ class MyTab extends StatelessWidget {
               : null,
           color: isSelected
               ? null
-              : AppTheme.darkThemeData.colorScheme.tabBarNotSelected,
+              : Theme.of(context).colorScheme.onPrimaryContainer,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -52,13 +52,12 @@ class MyTab extends StatelessWidget {
             const SizedBox(
               width: Sizes.spaceXSmall,
             ),
-            MyText(
+            Text(
               text,
               maxLines: 1,
-              minFontSize: 12,
-              style: AppTheme.darkThemeData.textTheme.title.copyWith(
-                color: isSelected ? null : Colors.grey[400],
-              ),
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                    color: isSelected ? null : Colors.grey[400],
+                  ),
               overflow: TextOverflow.fade,
             ),
           ],

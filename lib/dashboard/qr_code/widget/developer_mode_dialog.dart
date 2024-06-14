@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class DeveloperModeDialog extends StatelessWidget {
@@ -18,8 +17,8 @@ class DeveloperModeDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme.primary;
-    final background = Theme.of(context).colorScheme.popupBackground;
-    final textColor = Theme.of(context).colorScheme.dialogText;
+    final background = Theme.of(context).colorScheme.surface;
+    final textColor = Theme.of(context).colorScheme.onSurface;
 
     final l10n = context.l10n;
     return AlertDialog(

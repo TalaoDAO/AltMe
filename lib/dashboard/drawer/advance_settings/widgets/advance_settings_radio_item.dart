@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class AdvanceSettingsRadioItem extends StatelessWidget {
@@ -22,7 +22,7 @@ class AdvanceSettingsRadioItem extends StatelessWidget {
       horizontalTitleGap: 0,
       leading: Checkbox(
         value: isSelected,
-        fillColor: MaterialStateProperty.all(
+        fillColor: WidgetStateProperty.all(
           Theme.of(context).colorScheme.inversePrimary,
         ),
         checkColor: Theme.of(context).colorScheme.primary,
@@ -34,7 +34,7 @@ class AdvanceSettingsRadioItem extends StatelessWidget {
         maxLines: 1,
         minFontSize: 12,
         overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.title,
+        style: Theme.of(context).textTheme.headlineSmall,
       ),
     );
   }

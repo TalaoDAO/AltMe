@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class NftItem extends StatelessWidget {
@@ -25,7 +24,7 @@ class NftItem extends StatelessWidget {
     return InkWell(
       onTap: onClick,
       child: BackgroundCard(
-        color: Theme.of(context).colorScheme.surfaceContainer,
+        color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
         padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

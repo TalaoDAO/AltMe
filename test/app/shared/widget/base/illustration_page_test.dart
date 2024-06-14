@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,6 +27,11 @@ class FakeAssetBundle extends Fake implements AssetBundle {
 ''';
 
   @override
+  Future<ByteData> load(String key) async {
+    return ByteData.sublistView(Uint8List.fromList(svgStr.codeUnits));
+  }
+
+  @override
   Future<String> loadString(String key, {bool cache = true}) async {
     return svgStr;
   }
@@ -41,27 +48,27 @@ void main() {
           description: 'description',
           backgroundColor: Colors.blueGrey,
           onPressed: () {},
+          key: GlobalKey(),
         ),
       ),
     );
   }
 
   group('IllustrationPage widget', () {
-    testWidgets('all sub widgets founded', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        makeTestableWidget(),
-      );
+    testWidgets('all sub widgets found', (WidgetTester tester) async {
+      await tester.pumpWidget(makeTestableWidget());
+      await tester.pumpAndSettle();
+
       expect(find.byType(BaseIllustrationPage), findsOneWidget);
       expect(find.byType(BasePage), findsOneWidget);
-      expect(find.byType(MyElevatedButton), findsOneWidget);
+      expect(find.byType(MyOutlinedButton), findsOneWidget);
       expect(find.byType(SvgPicture), findsOneWidget);
     });
 
     testWidgets('verify property of widget set correctly',
         (WidgetTester tester) async {
-      await tester.pumpWidget(
-        makeTestableWidget(),
-      );
+      await tester.pumpWidget(makeTestableWidget());
+      await tester.pumpAndSettle();
       expect(find.byType(BaseIllustrationPage), findsOneWidget);
       final baseIllustrationPage = tester
           .widget<BaseIllustrationPage>(find.byType(BaseIllustrationPage));

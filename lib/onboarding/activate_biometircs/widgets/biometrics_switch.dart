@@ -1,6 +1,6 @@
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +18,7 @@ class BiometricsSwitch extends StatelessWidget {
     final l10n = context.l10n;
     return BackgroundCard(
       padding: const EdgeInsets.all(Sizes.spaceSmall),
-      color: Theme.of(context).colorScheme.cardHighlighted,
+      color: Theme.of(context).colorScheme.surface,
       child: Row(
         children: [
           Image.asset(
@@ -39,7 +39,7 @@ class BiometricsSwitch extends StatelessWidget {
             ' (${l10n.option})',
             maxLines: 1,
             minFontSize: 10,
-            style: Theme.of(context).textTheme.bodySmall2,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const Spacer(),
           CupertinoSwitch(

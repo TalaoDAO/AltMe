@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class MyBlockchainAccountBaseWidget extends StatelessWidget {
@@ -32,7 +32,7 @@ class MyBlockchainAccountBaseWidget extends StatelessWidget {
                 heightFactor: 0.14,
                 child: MyText(
                   proofMessage,
-                  style: Theme.of(context).textTheme.subMessage.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontWeight: FontWeight.w600,
                       ),
@@ -48,7 +48,7 @@ class MyBlockchainAccountBaseWidget extends StatelessWidget {
                   alignment: Alignment.bottomLeft,
                   child: MyText(
                     walletAddress,
-                    style: Theme.of(context).textTheme.subMessage.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
                     minFontSize: 8,

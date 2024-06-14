@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
@@ -92,9 +92,7 @@ class DummyCredentialImage extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: MyText(
                             title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .credentialBaseTitleText,
+                            style: Theme.of(context).textTheme.displayLarge,
                           ),
                         ),
                       ),

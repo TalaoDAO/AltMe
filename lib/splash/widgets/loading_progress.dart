@@ -24,7 +24,7 @@ class LoadingProgress extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border.all(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             width: 1.5,
           ),
           borderRadius: BorderRadius.circular(borderRadius),

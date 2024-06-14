@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -41,8 +41,7 @@ class BaseIllustrationPage extends StatelessWidget {
                 Text(
                   description!,
                   textAlign: TextAlign.center,
-                  style:
-                      Theme.of(context).textTheme.illustrationPageDescription,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               Expanded(child: Container()),
               MyOutlinedButton(

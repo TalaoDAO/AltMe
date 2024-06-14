@@ -1,5 +1,5 @@
 import 'package:altme/app/shared/constants/sizes.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class DrawerCategoryItem extends StatelessWidget {
@@ -25,7 +25,7 @@ class DrawerCategoryItem extends StatelessWidget {
       child: Container(
         padding: padding,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.drawerSurface,
+          color: Theme.of(context).colorScheme.surfaceBright,
           borderRadius: const BorderRadius.all(
             Radius.circular(Sizes.normalRadius),
           ),
@@ -39,13 +39,13 @@ class DrawerCategoryItem extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.drawerCategoryTitle,
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   if (subTitle != null) ...[
                     const SizedBox(height: Sizes.space2XSmall),
                     Text(
                       subTitle!,
-                      style: Theme.of(context).textTheme.drawerCategorySubTitle,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
                 ],
@@ -58,7 +58,7 @@ class DrawerCategoryItem extends StatelessWidget {
               Icon(
                 Icons.chevron_right,
                 size: Sizes.icon2x,
-                color: Theme.of(context).colorScheme.unSelectedLabel,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ],
           ],

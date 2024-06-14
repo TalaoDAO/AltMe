@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class DrawerItem2 extends StatelessWidget {
@@ -26,7 +26,7 @@ class DrawerItem2 extends StatelessWidget {
         padding: const EdgeInsets.all(Sizes.spaceNormal),
         margin: const EdgeInsets.all(Sizes.spaceXSmall),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.drawerSurface,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: const BorderRadius.all(
             Radius.circular(
               Sizes.normalRadius,
@@ -44,25 +44,28 @@ class DrawerItem2 extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style:
-                          Theme.of(context).textTheme.drawerItemTitle.copyWith(
-                                color: isDisabled
-                                    ? Theme.of(context).colorScheme.lightGrey
-                                    : null,
-                              ),
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: isDisabled
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.6)
+                                : null,
+                          ),
                     ),
                     if (subtitle != null) ...[
                       const SizedBox(height: 10),
                       Text(
                         subtitle!,
-                        style: Theme.of(context)
-                            .textTheme
-                            .drawerItemSubtitle
-                            .copyWith(
-                              color: isDisabled
-                                  ? Theme.of(context).colorScheme.lightGrey
-                                  : null,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  color: isDisabled
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withOpacity(0.6)
+                                      : null,
+                                ),
                       ),
                       const SizedBox(height: 20),
                     ],
@@ -77,8 +80,11 @@ class DrawerItem2 extends StatelessWidget {
                   Icons.chevron_right,
                   size: 26,
                   color: isDisabled
-                      ? Theme.of(context).colorScheme.lightGrey
-                      : Theme.of(context).colorScheme.unSelectedLabel,
+                      ? Theme.of(context).colorScheme.onSurface.withOpacity(0.6)
+                      : Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.6),
                 ),
               ],
             ],

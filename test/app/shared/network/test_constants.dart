@@ -2,7 +2,7 @@
 const baseUrl = 'https://example.com/';
 const successMessage = {'response': 'Success'};
 const errorMessage = {'response': 'message'};
-const testPath = 'test';
+const testPath = '/test';
 const testData = {'data': 'sample data'};
 const header = {
   'Content-Type': 'application/json',

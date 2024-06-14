@@ -54,7 +54,6 @@ class _CardAnimationState extends State<CardAnimation>
       onTap: () async {
         await _animationController.reverse();
 
-        // TODO(all): remove setstate
         setState(() {
           if (_card is Recto) {
             _card = widget.verso;

@@ -28,8 +28,6 @@ class CheckIssuer {
 
     try {
       log.i('fetching issuer data');
-      final dynamic response =
-          await client.get('$checkIssuerServerUrl/$didToTest');
       if (checkIssuerServerUrl == Urls.checkIssuerEbsiUrl) {
         return Issuer(
           preferredName: '',
@@ -44,6 +42,8 @@ class CheckIssuer {
         );
       }
 
+      final dynamic response =
+          await client.get('$checkIssuerServerUrl/$didToTest');
       final issuer =
           Issuer.fromJson(response['issuer'] as Map<String, dynamic>);
 

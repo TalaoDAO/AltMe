@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class ImportedTag extends StatelessWidget {
@@ -14,7 +13,7 @@ class ImportedTag extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).highlightColor,
         border: Border.all(
-          color: Theme.of(context).colorScheme.borderColor,
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
           width: 0.35,
         ),
         borderRadius:

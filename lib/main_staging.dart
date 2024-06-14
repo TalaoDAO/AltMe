@@ -7,14 +7,11 @@
 
 import 'package:altme/app/app.dart';
 import 'package:altme/bootstrap.dart';
-import 'package:device_preview/device_preview.dart';
 
 void main() {
   bootstrap(
-    () => DevicePreview(
-      builder: (context) => const App(
-        flavorMode: FlavorMode.staging,
-      ),
+    () => const App(
+      flavorMode: FlavorMode.staging,
     ),
   );
 }

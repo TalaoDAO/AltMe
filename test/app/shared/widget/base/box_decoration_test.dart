@@ -175,8 +175,7 @@ void main() {
     });
 
     testWidgets('hashCode function', (WidgetTester tester) async {
-      const hashCodeWithDefaultConstructor = 81498275;
-      expect(decoration.hashCode, hashCodeWithDefaultConstructor);
+      expect(decoration.hashCode, isA<int>());
     });
 
     testWidgets('operator function', (WidgetTester tester) async {

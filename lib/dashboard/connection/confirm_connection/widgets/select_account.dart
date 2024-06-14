@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +22,7 @@ class SelectAccount extends StatelessWidget {
       children: [
         Text(
           l10n.selectAccountToGrantAccess,
-          style: Theme.of(context).textTheme.beaconSelectAccont,
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
         BlocBuilder<WalletCubit, WalletState>(
           builder: (context, walletState) {
@@ -62,7 +62,8 @@ class SelectAccount extends StatelessWidget {
                 ),
                 child: Divider(
                   height: 0.2,
-                  color: Theme.of(context).colorScheme.borderColor,
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
                 ),
               ),
             );

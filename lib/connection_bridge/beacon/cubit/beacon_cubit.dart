@@ -25,7 +25,7 @@ class BeaconCubit extends Cubit<BeaconState> {
   }
 
   Future<void> peerFromDeepLink(String beaconData) async {
-    final isInternetAvailable = await isConnected();
+    final isInternetAvailable = await isConnectedToInternet();
     if (isInternetAvailable) {
       await beacon.pair(pairingRequest: beaconData);
     }

@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +24,7 @@ class AccountSelectBoxView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackgroundCard(
-      color: Theme.of(context).colorScheme.cardBackground,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -41,9 +40,9 @@ class AccountSelectBoxView extends StatelessWidget {
             Theme(
               data: Theme.of(context).copyWith(
                 unselectedWidgetColor: Theme.of(context).colorScheme.onPrimary,
-                dividerColor: Theme.of(context).colorScheme.cardBackground,
-                splashColor: Theme.of(context).colorScheme.transparent,
-                highlightColor: Theme.of(context).colorScheme.transparent,
+                dividerColor: Theme.of(context).colorScheme.surface,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
                 colorScheme: ColorScheme.dark(
                   primary: Theme.of(context).colorScheme.onPrimary,
                 ),
@@ -79,7 +78,10 @@ class AccountSelectBoxView extends StatelessWidget {
                       ),
                       child: Divider(
                         height: 0.2,
-                        color: Theme.of(context).colorScheme.borderColor,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.12),
                       ),
                     ),
                   ),

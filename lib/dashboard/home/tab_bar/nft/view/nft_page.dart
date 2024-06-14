@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/nft/widgets/widgets.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,7 +49,7 @@ class _NftViewState extends State<NftView> {
     return BasePage(
       scrollView: false,
       padding: EdgeInsets.zero,
-      backgroundColor: Theme.of(context).colorScheme.transparent,
+      backgroundColor: Colors.transparent,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +61,7 @@ class _NftViewState extends State<NftView> {
             child: MyText(
               l10n.nftListSubtitle,
               maxLines: 3,
-              style: Theme.of(context).textTheme.credentialCategorySubTitle,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           const SizedBox(height: Sizes.spaceXSmall),

@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -16,7 +16,7 @@ class Did extends StatelessWidget {
       children: [
         Text(
           l10n.did,
-          style: Theme.of(context).textTheme.title,
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(
           height: Sizes.spaceNormal,

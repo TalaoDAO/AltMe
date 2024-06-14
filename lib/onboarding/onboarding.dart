@@ -3,7 +3,6 @@ export 'gen_phrase/onboarding_gen_phrase.dart';
 export 'helper_function/helper_function.dart';
 export 'protect_wallet/protect_wallet.dart';
 export 'starter/starter.dart';
-export 'third/onboarding_third.dart';
 export 'tos/onboarding_terms.dart';
 export 'verify_phrase/onboarding_verify_phrase.dart';
 export 'wallet_ready/wallet_ready.dart';

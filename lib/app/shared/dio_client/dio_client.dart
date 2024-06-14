@@ -55,35 +55,14 @@ class DioClient {
     bool isCachingEnabled = false,
   }) async {
     try {
-      final isInternetAvailable = await isConnected();
-      if (!isInternetAvailable) {
-        throw NetworkException(
-          message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
-        );
-      }
-
       final stopwatch = Stopwatch()..start();
       await getSpecificHeader(uri, headers);
       log.i('uri - $uri');
-
-      final cachedData = await secureStorageProvider.get(uri);
       dynamic response;
 
-      if (!isCachingEnabled || cachedData == null) {
-        response = await dio.get<dynamic>(
-          uri,
-          queryParameters: queryParameters,
-          options: options,
-          cancelToken: cancelToken,
-          onReceiveProgress: onReceiveProgress,
-        );
-      } else {
-        final cachedDataJson = jsonDecode(cachedData);
-        final expiry = int.parse(cachedDataJson['expiry'].toString());
-
-        final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
-
-        if (isExpired) {
+      if (isCachingEnabled) {
+        final cachedData = await secureStorageProvider.get(uri);
+        if (cachedData == null) {
           response = await dio.get<dynamic>(
             uri,
             queryParameters: queryParameters,
@@ -92,18 +71,34 @@ class DioClient {
             onReceiveProgress: onReceiveProgress,
           );
         } else {
-          /// directly return cached data
-          /// returned here to avoid the caching override everytime
-          final response = await cachedDataJson['data'];
-          log.i('Time - ${stopwatch.elapsed}');
-          return response;
-        }
-      }
-      final expiry =
-          DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
+          final cachedDataJson = jsonDecode(cachedData);
+          final expiry = int.parse(cachedDataJson['expiry'].toString());
 
-      final value = {'expiry': expiry, 'data': response.data};
-      await secureStorageProvider.set(uri, jsonEncode(value));
+          final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
+          if (isExpired) {
+            response = await dio.get<dynamic>(
+              uri,
+              queryParameters: queryParameters,
+              options: options,
+              cancelToken: cancelToken,
+              onReceiveProgress: onReceiveProgress,
+            );
+          } else {
+            /// directly return cached data
+            /// returned here to avoid the caching override everytime
+            final response = await cachedDataJson['data'];
+            return response;
+          }
+        }
+      } else {
+        response = await dio.get<dynamic>(
+          uri,
+          queryParameters: queryParameters,
+          options: options,
+          cancelToken: cancelToken,
+          onReceiveProgress: onReceiveProgress,
+        );
+      }
 
       log.i('Time - ${stopwatch.elapsed}');
       return response.data;
@@ -153,13 +148,6 @@ class DioClient {
     },
   }) async {
     try {
-      final isInternetAvailable = await isConnected();
-      if (!isInternetAvailable) {
-        throw NetworkException(
-          message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
-        );
-      }
-
       final stopwatch = Stopwatch()..start();
       await getSpecificHeader(uri, headers);
       final response = await dio.post<dynamic>(

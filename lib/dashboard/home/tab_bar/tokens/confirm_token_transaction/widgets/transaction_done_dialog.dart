@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -40,7 +40,7 @@ class TransactionDoneDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.popupBackground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: Sizes.spaceNormal,
@@ -63,13 +63,13 @@ class TransactionDoneDialog extends StatelessWidget {
             const SizedBox(height: Sizes.spaceNormal),
             Text(
               '$amountAndSymbol ${l10n.sent.toLowerCase()}',
-              style: Theme.of(context).textTheme.defaultDialogTitle,
+              style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceSmall),
             Text(
               l10n.operationCompleted,
-              style: Theme.of(context).textTheme.defaultDialogBody,
+              style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
             if (transactionHash != null) ...[
@@ -91,7 +91,7 @@ class TransactionDoneDialog extends StatelessWidget {
                 },
                 child: Text(
                   transactionHash!,
-                  style: Theme.of(context).textTheme.defaultDialogBody.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontWeight: FontWeight.bold,
                         decoration: TextDecoration.underline,
                       ),

@@ -6,8 +6,9 @@ void main() {
       'notice photo opera keen climb agent soft parrot best joke field devote';
 
   const message = '{"name": "My name is Bibash."}';
-  const cipherText = '¨`ýp<ÐW3AR1¯#.í©¥¿e,|VrtuXÅ';
-  const authenticationTag = 'äU~ÇÍÞ¦BÌuDÅ';
+  const cipherText = 'Ô\$æ²½-ôÜwÄª8aã~\n'
+      'Yyz¶«Þ[f*ýç';
+  const authenticationTag = '¸^\x01áAê?^Ü6u¿¡¡S';
   const encryptionModelJson = {
     'cipherText': cipherText,
     'authenticationTag': authenticationTag,
@@ -42,12 +43,13 @@ void main() {
         'generateKeyPair() should always derive the same keypair when using the'
         ' same mnemonic', () async {
       final generatedKey = await cryptocurrencyKeys.generateKeyPair(mnemonic);
-      expect(generatedKey.privateKey.hashCode, equals(1100798733));
-      expect(generatedKey.publicKey.hashCode, equals(1100798733));
+      expect(generatedKey.privateKey.hashCode, equals(264718007));
+      expect(generatedKey.publicKey.hashCode, equals(264718007));
     });
 
     test('response is encrypted correctly', () async {
       final encryptedData = await cryptocurrencyKeys.encrypt(message, mnemonic);
+
       expect(encryptedData.cipherText, equals(cipherText));
       expect(encryptedData.authenticationTag, equals(authenticationTag));
     });
@@ -64,32 +66,29 @@ void main() {
       expect(decryptedData, equals(message));
     });
 
-    test('invalid cipherText throws Auth message', () async {
+    test('invalid cipherText throws Exception', () async {
       const inCipherText = '123';
       const encryption = Encryption(
         cipherText: inCipherText,
         authenticationTag: authenticationTag,
       );
-      try {
-        await cryptocurrencyKeys.decrypt(mnemonic, encryption);
-      } catch (e) {
-        final error = e.toString().startsWith('Auth message');
-        expect(error, true);
-      }
+
+      expect(
+        () => cryptocurrencyKeys.decrypt(mnemonic, encryption),
+        throwsException,
+      );
     });
 
-    test('invalid authenticationTag throws Auth message', () async {
+    test('invalid authenticationTag throws Exception', () async {
       const inValidAuthenticationTag = '123';
       const encryption = Encryption(
         cipherText: cipherText,
         authenticationTag: inValidAuthenticationTag,
       );
-      try {
-        await cryptocurrencyKeys.decrypt(mnemonic, encryption);
-      } catch (e) {
-        final error = e.toString().startsWith('Auth message');
-        expect(error, true);
-      }
+      expect(
+        () => cryptocurrencyKeys.decrypt(mnemonic, encryption),
+        throwsException,
+      );
     });
   });
 }

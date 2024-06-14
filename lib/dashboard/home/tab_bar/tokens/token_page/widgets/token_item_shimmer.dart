@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class TokenItemShimmer extends StatelessWidget {
@@ -10,7 +9,7 @@ class TokenItemShimmer extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: BackgroundCard(
-        color: Theme.of(context).colorScheme.surfaceContainer,
+        color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: const ListTile(
           minVerticalPadding: 0,

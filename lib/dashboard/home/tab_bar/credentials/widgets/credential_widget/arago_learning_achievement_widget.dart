@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class AragoLearningAchievementWidget extends StatelessWidget {
@@ -51,7 +51,7 @@ class AragoLearningAchievementRecto extends Recto {
                 id: 'name',
                 child: DisplayNameCard(
                   credentialModel: credentialModel,
-                  style: Theme.of(context).textTheme.credentialTitleCard,
+                  style: Theme.of(context).textTheme.titleLarge!,
                 ),
               ),
               LayoutId(
@@ -59,15 +59,14 @@ class AragoLearningAchievementRecto extends Recto {
                 child: MyText(
                   credentialModel
                       .credentialPreview.credentialSubjectModel.issuedBy!.name,
-                  style: Theme.of(context).textTheme.studentCardSchool,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
               LayoutId(
                 id: 'description',
                 child: DisplayDescriptionCard(
                   credentialModel: credentialModel,
-                  style:
-                      Theme.of(context).textTheme.credentialStudentCardTextCard,
+                  style: Theme.of(context).textTheme.bodyMedium!,
                 ),
               ),
             ],

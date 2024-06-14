@@ -1,5 +1,5 @@
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class MyCollectionText extends StatelessWidget {
@@ -12,7 +12,7 @@ class MyCollectionText extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Text(
         l10n.myCollection,
-        style: Theme.of(context).textTheme.infoTitle,
+        style: Theme.of(context).textTheme.titleLarge,
       ),
     );
   }

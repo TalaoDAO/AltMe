@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class DeveloperDetails extends StatelessWidget {
@@ -27,8 +26,8 @@ class DeveloperDetails extends StatelessWidget {
         credentialModel.credentialPreview.credentialSubjectModel.id ?? '';
     final String type = credentialModel.credentialPreview.type.toString();
 
-    final titleColor = Theme.of(context).colorScheme.titleColor;
-    final valueColor = Theme.of(context).colorScheme.valueColor;
+    final titleColor = Theme.of(context).colorScheme.onSurface;
+    final valueColor = Theme.of(context).colorScheme.onSurface;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

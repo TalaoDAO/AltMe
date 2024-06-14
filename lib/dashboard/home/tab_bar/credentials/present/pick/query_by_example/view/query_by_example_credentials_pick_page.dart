@@ -4,7 +4,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -215,13 +215,13 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                     if (credentialQueryList.isNotEmpty) ...[
                       Text(
                         '${credentialQueryIndex + 1}/${queryByExampleCubit.credentialQuery.length}',
-                        style: Theme.of(context).textTheme.credentialSteps,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 10),
                     ],
                     Text(
                       reason.trim() == '' ? l10n.credentialPickSelect : reason,
-                      style: Theme.of(context).textTheme.credentialSubtitle,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 12),
                     ...List.generate(

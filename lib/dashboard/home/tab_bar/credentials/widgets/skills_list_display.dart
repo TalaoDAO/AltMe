@@ -1,5 +1,5 @@
 import 'package:altme/dashboard/home/tab_bar/credentials/models/professional_experience_assessment/skill.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class SkillsListDisplay extends StatelessWidget {
@@ -16,7 +16,7 @@ class SkillsListDisplay extends StatelessWidget {
               const Icon(Icons.arrow_right_alt_sharp),
               Text(
                 skill.description,
-                style: Theme.of(context).textTheme.credentialFieldDescription,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
           ),

@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class ErrorView extends StatelessWidget {
@@ -21,7 +21,7 @@ class ErrorView extends StatelessWidget {
         Center(
           child: Text(
             message,
-            style: Theme.of(context).textTheme.errorMessage,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
         const SizedBox(height: Sizes.spaceSmall),
@@ -29,7 +29,7 @@ class ErrorView extends StatelessWidget {
           width: MediaQuery.of(context).size.width / 2.5,
           child: MyOutlinedButton(
             text: l10n.tryAgain,
-            backgroundColor: Theme.of(context).colorScheme.transparent,
+            backgroundColor: Colors.transparent,
             onPressed: onTap,
             fontSize: 14,
             verticalSpacing: 10,

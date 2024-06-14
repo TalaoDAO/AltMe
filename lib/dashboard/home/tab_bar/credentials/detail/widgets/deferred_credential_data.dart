@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class DeferredCredentialData extends StatelessWidget {
@@ -25,8 +24,8 @@ class DeferredCredentialData extends StatelessWidget {
           padding: const EdgeInsets.only(top: 10),
           title: l10n.issuer,
           value: credentialModel.pendingInfo!.issuer ?? '',
-          titleColor: Theme.of(context).colorScheme.titleColor,
-          valueColor: Theme.of(context).colorScheme.valueColor,
+          titleColor: Theme.of(context).colorScheme.onSurface,
+          valueColor: Theme.of(context).colorScheme.onSurface,
           showVertically: showVertically,
         ),
         CredentialField(
@@ -35,8 +34,8 @@ class DeferredCredentialData extends StatelessWidget {
           value: UiDate.formatDate(
             credentialModel.pendingInfo!.requestedAt,
           ),
-          titleColor: Theme.of(context).colorScheme.titleColor,
-          valueColor: Theme.of(context).colorScheme.valueColor,
+          titleColor: Theme.of(context).colorScheme.onSurface,
+          valueColor: Theme.of(context).colorScheme.onSurface,
           showVertically: showVertically,
         ),
       ],

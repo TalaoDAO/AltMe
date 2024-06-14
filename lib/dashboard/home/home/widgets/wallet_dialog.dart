@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class WalletDialog extends StatelessWidget {
@@ -13,7 +13,7 @@ class WalletDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.popupBackground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       shape: const RoundedRectangleBorder(
@@ -29,14 +29,14 @@ class WalletDialog extends StatelessWidget {
               IconStrings.cardSend,
               width: 50,
               height: 50,
-              color: Theme.of(context).colorScheme.dialogText,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
             const SizedBox(height: 30),
             Text(
               l10n.createTitle,
-              style: Theme.of(context).textTheme.defaultDialogTitle.copyWith(
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     fontSize: 18,
-                    color: Theme.of(context).colorScheme.dialogText,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
               textAlign: TextAlign.center,
             ),
@@ -45,8 +45,8 @@ class WalletDialog extends StatelessWidget {
               l10n.createSubtitle,
               style: Theme.of(context)
                   .textTheme
-                  .defaultDialogSubtitle
-                  .copyWith(color: Theme.of(context).colorScheme.dialogText),
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
@@ -76,12 +76,12 @@ class WalletDialog extends StatelessWidget {
                     verticalSpacing: 12,
                     fontSize: 13,
                     borderRadius: 8,
-                    textColor: Theme.of(context).colorScheme.lightPurple,
+                    textColor: Theme.of(context).colorScheme.secondary,
                     borderColor: Theme.of(context)
                         .colorScheme
-                        .defualtDialogCancelButtonBorderColor,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.popupBackground,
+                        .onSurface
+                        .withOpacity(0.2),
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                     onPressed: () {
                       Navigator.pop(context);
                       Navigator.of(context).push(

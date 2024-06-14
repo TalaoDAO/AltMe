@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class PinCodeTitle extends StatelessWidget {
@@ -21,22 +20,22 @@ class PinCodeTitle extends StatelessWidget {
           title,
           textAlign: TextAlign.center,
           style: allowAction
-              ? Theme.of(context).textTheme.pinCodeTitle
+              ? Theme.of(context).textTheme.titleLarge
               : Theme.of(context)
                   .textTheme
-                  .pinCodeTitle
-                  .copyWith(color: Theme.of(context).colorScheme.redColor),
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.error),
         ),
         if (subTitle != null) ...[
           const SizedBox(height: 10),
           Text(
             subTitle!,
             style: allowAction
-                ? Theme.of(context).textTheme.pinCodeMessage
+                ? Theme.of(context).textTheme.bodyMedium
                 : Theme.of(context)
                     .textTheme
-                    .pinCodeMessage
-                    .copyWith(color: Theme.of(context).colorScheme.redColor),
+                    .bodyMedium!
+                    .copyWith(color: Theme.of(context).colorScheme.error),
             textAlign: TextAlign.center,
           ),
         ],

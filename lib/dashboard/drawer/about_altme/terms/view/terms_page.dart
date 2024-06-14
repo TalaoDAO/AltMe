@@ -14,7 +14,7 @@ class TermsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       title: l10n.termsOfUse,
       titleLeading: const BackLeadingButton(),
       scrollView: false,

@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class CredentialActiveStatus extends StatelessWidget {
@@ -19,11 +19,8 @@ class CredentialActiveStatus extends StatelessWidget {
           children: [
             Text(
               credentialStatus?.message(context) ?? '',
-              style: Theme.of(context)
-                  .textTheme
-                  .credentialFieldDescription
-                  .copyWith(
-                    color: Theme.of(context).colorScheme.valueColor,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
             ),
             const SizedBox(width: 5),

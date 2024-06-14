@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class PooAddressBaseWidget extends StatelessWidget {
@@ -35,7 +35,7 @@ class PooAddressBaseWidget extends StatelessWidget {
                 heightFactor: 0.14,
                 child: MyText(
                   name,
-                  style: Theme.of(context).textTheme.subMessage.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -48,7 +48,7 @@ class PooAddressBaseWidget extends StatelessWidget {
             //     heightFactor: 0.16,
             //     child: MyText(
             //       accountName,
-            //       style: Theme.of(context).textTheme.title,
+            //       style: Theme.of(context).textTheme.headlineSmall!,
             //     ),
             //   ),
             // ),
@@ -69,7 +69,7 @@ class PooAddressBaseWidget extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: MyText(
                     walletAddress,
-                    style: Theme.of(context).textTheme.subMessage.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
                     minFontSize: 8,
@@ -87,7 +87,7 @@ class PooAddressBaseWidget extends StatelessWidget {
                   alignment: Alignment.bottomLeft,
                   child: MyText(
                     issuerName,
-                    style: Theme.of(context).textTheme.proofCardDetail,
+                    style: Theme.of(context).textTheme.bodyMedium,
                     minFontSize: 8,
                   ),
                 ),
@@ -102,7 +102,7 @@ class PooAddressBaseWidget extends StatelessWidget {
                   alignment: Alignment.bottomLeft,
                   child: MyText(
                     issuedOn,
-                    style: Theme.of(context).textTheme.proofCardDetail,
+                    style: Theme.of(context).textTheme.bodyMedium,
                     minFontSize: 8,
                   ),
                 ),

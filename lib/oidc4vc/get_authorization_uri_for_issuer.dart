@@ -98,6 +98,8 @@ Future<void> getAuthorizationUriForIssuer({
     vcFormatType: vcFormatType,
     clientAssertion: clientAssertion,
     secureAuthorizedFlow: secureAuthorizedFlow,
+    credentialOfferJson: credentialOfferJson,
+    dio: client.dio,
   );
 
   final requirePushedAuthorizationRequests =
@@ -108,6 +110,7 @@ Future<void> getAuthorizationUriForIssuer({
       'Content-Type': 'application/x-www-form-urlencoded',
     };
 
+    /// error we shuld get it from
     final response = await client.post(
       '$authorizationEndpoint/par',
       headers: headers,

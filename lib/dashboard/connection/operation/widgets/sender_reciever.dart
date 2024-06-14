@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class SenderReceiver extends StatelessWidget {
@@ -41,7 +41,7 @@ class SenderReceiverCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackgroundCard(
-      color: Theme.of(context).colorScheme.cardBackground,
+      color: Theme.of(context).colorScheme.surface,
       child: SizedBox(
         width: double.infinity,
         child: Column(
@@ -53,7 +53,7 @@ class SenderReceiverCard extends StatelessWidget {
             ),
             MyText(
               value,
-              style: Theme.of(context).textTheme.walletAddress,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),

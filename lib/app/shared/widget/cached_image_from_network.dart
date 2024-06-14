@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:altme/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -49,7 +48,8 @@ class CachedImageFromNetwork extends StatelessWidget {
                 placeholderBuilder: (_) => Container(
                   width: width,
                   height: height,
-                  color: Theme.of(context).colorScheme.lightGrey,
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 ),
               )
             : url.startsWith('http')
@@ -76,19 +76,25 @@ class CachedImageFromNetwork extends StatelessWidget {
                             )
                           : Container(
                               color: bgColor ??
-                                  Theme.of(context).colorScheme.lightGrey,
+                                  Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.6),
                             );
                     },
-                    errorWidget: (context, error, dynamic _) =>
-                        errorMessage == null
-                            ? ColoredBox(
-                                color: Theme.of(context).colorScheme.lightGrey,
-                                child: Icon(
-                                  Icons.error,
-                                  color: Theme.of(context).colorScheme.darkGrey,
-                                ),
-                              )
-                            : ErrorWidget(errorMessage: errorMessage),
+                    errorWidget: (context, error, dynamic _) => errorMessage ==
+                            null
+                        ? ColoredBox(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withOpacity(0.6),
+                            child: Icon(
+                              Icons.error,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          )
+                        : ErrorWidget(errorMessage: errorMessage),
                   )
                 : Image.memory(
                     base64Decode(url),
@@ -133,7 +139,7 @@ class ErrorWidget extends StatelessWidget {
           padding: const EdgeInsets.all(25),
           child: Text(
             errorMessage!,
-            style: Theme.of(context).textTheme.cacheErrorMessage,
+            style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
         ),

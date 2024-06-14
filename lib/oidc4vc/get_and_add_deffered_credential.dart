@@ -3,6 +3,7 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 
 import 'package:altme/oidc4vc/oidc4vc.dart';
+import 'package:dio/dio.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
@@ -53,6 +54,7 @@ Future<void> getAndAddDefferedCredential({
     deferredCredentialEndpoint:
         credentialModel.pendingInfo!.deferredCredentialEndpoint,
     body: body,
+    dio: Dio(),
   );
 
   await addOIDC4VCCredential(

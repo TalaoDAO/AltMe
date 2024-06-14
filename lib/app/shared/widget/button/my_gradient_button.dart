@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -8,7 +7,7 @@ class MyGradientButton extends StatelessWidget {
     super.key,
     required this.text,
     this.icon,
-    this.borderRadius = 16,
+    this.borderRadius = 8,
     this.verticalSpacing = 20,
     this.elevation = 2,
     this.fontSize = 18,
@@ -47,8 +46,8 @@ class MyGradientButton extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Theme.of(context).colorScheme.startButtonColorA,
-            Theme.of(context).colorScheme.startButtonColorB,
+            Theme.of(context).colorScheme.tertiary,
+            Theme.of(context).colorScheme.primary,
           ],
         );
     return SizedBox(
@@ -58,7 +57,7 @@ class MyGradientButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius),
           gradient: onPressed == null ? null : gradientValue,
           color: onPressed == null
-              ? Theme.of(context).colorScheme.disabledBgColor
+              ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
               : null,
         ),
         child: icon == null
@@ -78,7 +77,7 @@ class MyGradientButton extends StatelessWidget {
                 ),
               )
             : ElevatedButton.icon(
-                icon: icon!,
+                icon: icon,
                 style: gradientStyleFrom(
                   elevation: elevation,
                   verticalSpacing: verticalSpacing,
@@ -107,8 +106,8 @@ ButtonStyle gradientStyleFrom({
   return ElevatedButton.styleFrom(
     elevation: elevation,
     padding: EdgeInsets.symmetric(vertical: verticalSpacing),
-    backgroundColor: Theme.of(context).colorScheme.transparent,
-    shadowColor: Theme.of(context).colorScheme.transparent,
+    backgroundColor: Colors.transparent,
+    shadowColor: Colors.transparent,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(borderRadius),
     ),
@@ -137,8 +136,8 @@ class GradientButtonText extends StatelessWidget {
         upperCase ? text.toUpperCase() : text,
         style: GoogleFonts.poppins(
           color: onPressed != null
-              ? Theme.of(context).colorScheme.onElevatedButton
-              : Theme.of(context).colorScheme.disabledTextColor,
+              ? Theme.of(context).colorScheme.onPrimary
+              : Theme.of(context).colorScheme.onSurface.withOpacity(0.38),
           fontSize: fontSize,
           fontWeight: FontWeight.w700,
         ),

@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -35,7 +34,10 @@ class DidKeyTypeWidget extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Divider(
                         height: 0,
-                        color: Theme.of(context).colorScheme.borderColor,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.12),
                       ),
                     ),
                   ListTile(

@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class ActivityWidget extends StatelessWidget {
@@ -17,8 +17,8 @@ class ActivityWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final titleColor = Theme.of(context).colorScheme.titleColor;
-    final valueColor = Theme.of(context).colorScheme.valueColor;
+    final titleColor = Theme.of(context).colorScheme.onSurface;
+    final valueColor = Theme.of(context).colorScheme.onSurface;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -46,7 +46,7 @@ class ActivityWidget extends StatelessWidget {
             l10n.credentialDetailsOrganisationDetail,
             style: Theme.of(context)
                 .textTheme
-                .credentialFieldTitle
+                .bodyMedium!
                 .copyWith(color: titleColor),
           ),
           const SizedBox(height: 5),
@@ -57,7 +57,7 @@ class ActivityWidget extends StatelessWidget {
                 : activity.presentation!.issuer.organizationInfo.website,
             style: Theme.of(context)
                 .textTheme
-                .credentialFieldDescription
+                .bodyMedium!
                 .copyWith(color: valueColor),
             maxLines: 5,
             overflow: TextOverflow.ellipsis,
@@ -74,7 +74,7 @@ class ActivityWidget extends StatelessWidget {
           ),
           const SizedBox(height: 5),
         ],
-        Divider(color: Theme.of(context).colorScheme.surfaceContainer),
+        Divider(color: Theme.of(context).colorScheme.surface.withOpacity(0.07)),
       ],
     );
   }

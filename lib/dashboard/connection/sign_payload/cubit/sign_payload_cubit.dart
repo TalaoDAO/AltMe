@@ -155,7 +155,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
       log.i('Started signing');
       emit(state.loading());
 
-      final isInternetAvailable = await isConnected();
+      final isInternetAvailable = await isConnectedToInternet();
       if (!isInternetAvailable) {
         throw NetworkException(
           message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,

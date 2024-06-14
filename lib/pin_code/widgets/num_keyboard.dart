@@ -8,31 +8,33 @@ class NumKeyboard extends StatelessWidget {
     super.key,
     KeyboardUIConfig? keyboardUIConfig,
     this.passwordDigits = 4,
-    required this.passwordEnteredCallback,
     this.cancelCallback,
     required this.allowAction,
+    this.isNewCode = false,
+    required this.keyboardButton,
   }) : keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
 
   final KeyboardUIConfig keyboardUIConfig;
   final int passwordDigits;
-  final PasswordEnteredCallback passwordEnteredCallback;
   final CancelCallback? cancelCallback;
   final bool allowAction;
-
+  final bool isNewCode;
+  final Widget keyboardButton;
   @override
   Widget build(BuildContext context) {
     return NumericKeyboard(
-      allowAction: allowAction,
+      allowAction: true,
       onKeyboardTap: (text) {
         if (!allowAction) return;
         context.read<PinCodeViewCubit>().onKeyboardButtonPressed(
               passwordDigits: passwordDigits,
-              passwordEnteredCallback: passwordEnteredCallback,
               text: text,
               cancelCallback: cancelCallback,
+              isNewCode: isNewCode,
             );
       },
       keyboardUIConfig: keyboardUIConfig,
+      trailingButton: keyboardButton,
     );
   }
 }

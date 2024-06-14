@@ -1,12 +1,11 @@
-import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 @immutable
 class CircleUIConfig {
   const CircleUIConfig({
-    this.borderColor = pinCodeMiniCircle,
+    this.borderColor = Colors.white,
     this.borderWidth = 1.5,
-    this.fillColor = primary,
+    this.fillColor = const Color(0xff1EAADC),
     this.defaultColor = Colors.white,
     this.circleSize = 22,
   });

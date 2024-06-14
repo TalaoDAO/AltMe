@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:dio/dio.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 /// Retreive credential_type from url
@@ -61,6 +62,7 @@ Future<
     cnonce: nonce,
     authorizationDetails: authorizationDetails,
     openIdConfiguration: openIdConfiguration,
+    dio: Dio(),
   );
 
   return (

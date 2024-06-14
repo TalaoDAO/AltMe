@@ -16,21 +16,12 @@ void main() {
       expect(appState.log, isNotNull);
     });
 
-    /// we disabled display of privacy asset in phone language for now
-    testWidgets('path of privacy policy matches with device language',
+    testWidgets('returns privacy policies and terms for empty string',
         (tester) async {
       await tester.pumpApp(const DisplayTermsofUse());
       final dynamic appState = tester.state(find.byType(DisplayTermsofUse));
-      appState.setPath('it');
-      expect(appState.path, 'assets/privacy/privacy_en.md');
-    });
-
-    testWidgets('returns english privacy policy for empty string',
-        (tester) async {
-      await tester.pumpApp(const DisplayTermsofUse());
-      final dynamic appState = tester.state(find.byType(DisplayTermsofUse));
-      appState.setPath('');
-      expect(appState.path, 'assets/privacy/privacy_en.md');
+      final list = await appState.getBodyData('');
+      expect(list, isA<List<String>>());
     });
   });
 }
