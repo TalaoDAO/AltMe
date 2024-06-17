@@ -24,7 +24,6 @@ class OpenIdConfiguration extends Equatable {
     this.credentialManifests,
     this.issuer,
     this.jwksUri,
-    required this.requirePushedAuthorizationRequests,
     this.grantTypesSupported,
   });
 
