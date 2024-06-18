@@ -18,6 +18,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
+import '../configuration/configuration.dart';
+
 class MockPkcePair extends Mock implements PkcePair {}
 
 class MockSecureStorage extends Mock implements SecureStorageProvider {}
@@ -360,7 +362,7 @@ void main() {
       );
     });
 
-    group('draft 13: getAuthorizationUriForIssuer', () {
+    group('Draft 13: getAuthorizationUriForIssuer', () {
       const selectedCredentials = ['Pid'];
       const clientId = '8b6pHEkmIcSvpmh3LPEM7djHQvLeFYxFkaTxb1DbfZQ';
       const redirectUri = 'https://app.altme.io/app/download/callback';
@@ -380,692 +382,128 @@ void main() {
 
       const authorizationEndPoint =
           'https://app.altme.io/app/download/authorize';
-      const openIdCredentialIssuerConfiguration = {
-        'credential_issuer': 'https://talao.co/issuer/grlvzckofy',
-        'credential_endpoint': 'https://talao.co/issuer/grlvzckofy/credential',
-        'deferred_credential_endpoint':
-            'https://talao.co/issuer/grlvzckofy/deferred',
-        'authorization_servers': [
-          'https://talao.co/issuer/grlvzckofy',
-          'https://fake.com/as',
-        ],
-        'credential_configurations_supported': {
-          'EudiPid': {
-            'format': 'vc+sd-jwt',
-            'scope': 'EudiPid_scope',
-            'order': [
-              'given_name',
-              'family_name',
-              'birth_date',
-              'birth_place',
-              'nationalities',
-              'address',
-              'age_equal_or_over',
-              'age_birth_year',
-              'issuing_country',
-              'issuing_authority',
-              'dateIssued',
-            ],
-            'claims': {
-              'given_name': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'First Name', 'locale': 'en-US'},
-                  {'name': 'Pr\u00e9nom', 'locale': 'fr-FR'},
-                ],
-              },
-              'family_name': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Family Name', 'locale': 'en-US'},
-                  {'name': 'Nom', 'locale': 'fr-FR'},
-                ],
-              },
-              'birth_date': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Birth date', 'locale': 'en-US'},
-                  {'name': 'Date de naissance', 'locale': 'fr-FR'},
-                ],
-              },
-              'birth_place': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Birth place', 'locale': 'en-US'},
-                  {'name': 'Lieu de naissance', 'locale': 'fr-FR'},
-                ],
-              },
-              'nationalities': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Nationalities', 'locale': 'en-US'},
-                  {'name': 'Nationalit\u00e9s', 'locale': 'fr-FR'},
-                ],
-              },
-              'age_equal_or_over': {
-                'mandatory': true,
-                'value_type': 'bool',
-                'display': [
-                  {'name': 'Age', 'locale': 'en-US'},
-                  {'name': 'Age', 'locale': 'fr-FR'},
-                ],
-                '12': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Over 12', 'locale': 'en-US'},
-                    {'name': 'Plus de 12 ans', 'locale': 'fr-FR'},
-                  ],
-                },
-                '14': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Over 14', 'locale': 'en-US'},
-                    {'name': 'Plus de 14 ans', 'locale': 'fr-FR'},
-                  ],
-                },
-                '16': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Over 16', 'locale': 'en-US'},
-                    {'name': 'Plus de 16 ans', 'locale': 'fr-FR'},
-                  ],
-                },
-                '18': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Over 18', 'locale': 'en-US'},
-                    {'name': 'Plus de 18 ans', 'locale': 'fr-FR'},
-                  ],
-                },
-                '21': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Over 21', 'locale': 'en-US'},
-                    {'name': 'Plus de 21 ans', 'locale': 'fr-FR'},
-                  ],
-                },
-                '65': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Senior', 'locale': 'en-US'},
-                    {'name': 'Senior', 'locale': 'fr-FR'},
-                  ],
-                },
-              },
-              'address': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Address', 'locale': 'en-US'},
-                  {'name': 'Adresse', 'locale': 'fr-FR'},
-                ],
-                'street_address': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Street address', 'locale': 'en-US'},
-                    {'name': 'Rue', 'locale': 'fr-FR'},
-                  ],
-                },
-                'locality': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Locality', 'locale': 'en-US'},
-                    {'name': 'Ville', 'locale': 'fr-FR'},
-                  ],
-                },
-                'region': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Region', 'locale': 'en-US'},
-                    {'name': 'R\u00e9gion', 'locale': 'fr-FR'},
-                  ],
-                },
-                'country': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Country', 'locale': 'en-US'},
-                    {'name': 'Pays', 'locale': 'fr-FR'},
-                  ],
-                },
-              },
-              'picture': {
-                'mandatory': true,
-                'value_type': 'image/jpeg',
-                'display': [
-                  {'name': 'Picture', 'locale': 'en-US'},
-                  {'name': 'Portrait', 'locale': 'fr-FR'},
-                ],
-              },
-              'age_birth_year': {
-                'mandatory': true,
-                'value_type': 'integer',
-                'display': [
-                  {'name': 'Age birth year', 'locale': 'en-US'},
-                  {'name': 'Ann\u00e9e de naissance', 'locale': 'fr-FR'},
-                ],
-              },
-              'dateIssued': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Issuance date', 'locale': 'en-US'},
-                  {'name': 'D\u00e9livr\u00e9 le', 'locale': 'fr-FR'},
-                ],
-              },
-              'expiry_date': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Expiry date', 'locale': 'en-US'},
-                  {'name': "Date d'expiration", 'locale': 'fr-FR'},
-                ],
-              },
-              'issuing_country': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Issuing country', 'locale': 'en-US'},
-                  {'name': "Pays d'emission", 'locale': 'fr-FR'},
-                ],
-              },
-              'issuing_authority': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Issuing autority', 'locale': 'en-US'},
-                  {'name': "Authorit\u00e9 d'emission", 'locale': 'fr-FR'},
-                ],
-              },
-            },
-            'cryptographic_binding_methods_supported': ['DID', 'jwk'],
-            'credential_signing_alg_values_supported': [
-              'ES256K',
-              'ES256',
-              'ES384',
-              'RS256',
-            ],
-            'vct': 'EUDI_PID_rule_book_1_0_0',
-            'display': [
-              {
-                'name': 'EUDI PID',
-                'locale': 'en-US',
-                'background_color': '#14107c',
-                'text_color': '#FFFFFF',
-              }
-            ],
+
+      group('test 10: LSP Potential Interop Event', () {
+        test(
+          'authentication code flow we return Uri for authentication endpoint',
+          () async {
+            const expectedAuthorizationEndpoint =
+                'https://talao.co/issuer/grlvzckofy/authorize';
+
+            const expectedAuthorizationRequestParemeters = {
+              'response_type': 'code',
+              'redirect_uri': 'https://app.altme.io/app/download/callback',
+              'state':
+                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiJrZFFvY1hkSzg5eEFDMTd6eFFaVjg3Q3h5eU84X25OY1oxbDF4UUpnTEI0IiwiY3JlZGVudGlhbHMiOlsiUGlkIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL2dybHZ6Y2tvZnkiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6IjhiNnBIRWttSWNTdnBtaDNMUEVNN2RqSFF2TGVGWXhGa2FUeGIxRGJmWlEiLCJjbGllbnRfYXNzZXJ0aW9uIjoiZXlKaGJHY2lPaUpGVXpJMU5pSXNJbXRwWkNJNkltUnBaRHAzWldJNmRHRnNZVzh1WTI4amEyVjVMVElpTENKMGVYQWlPaUozWVd4c1pYUXRZWFIwWlhOMFlYUnBiMjRyYW5kMEluMC5leUpoZFhSb2IzSnBlbUYwYVc5dVgyVnVaSEJ2YVc1MElqb2lhSFIwY0hNNkx5OWhjSEF1WVd4MGJXVXVhVzh2WVhCd0wyUnZkMjVzYjJGa0wyRjFkR2h2Y21sNlpTSXNJbU5zYVdWdWRGOXBaRjl6WTJobGJXVnpYM04xY0hCdmNuUmxaQ0k2V3lKa2FXUWlMQ0p5WldScGNtVmpkRjkxY21raUxDSjROVEE1WDNOaGJsOWtibk1pTENKMlpYSnBabWxsY2w5aGRIUmxjM1JoZEdsdmJpSmRMQ0pqYm1ZaU9uc2lhbmRySWpwN0ltTnlkaUk2SWxBdE1qVTJJaXdpYTJsa0lqb2lPR0kyY0VoRmEyMUpZMU4yY0cxb00weFFSVTAzWkdwSVVYWk1aVVpaZUVacllWUjRZakZFWW1aYVVTSXNJbXQwZVNJNklrVkRJaXdpZUNJNklrVlFiMTk0VmtoRmFpMVFZekIxZUdKdFkzaE5hakpNTmpaUWIwZG9MWFZ2V1VkQmVtZEhTMDEyVDFFaUxDSjVJam9pUm5kR1NERjJTMVpIWDJjM1FrZGlUME5JWTNkWmNuRktkRkpJTm5WRFRGVTVhVWxpVUdGNFMxZFdRU0o5ZlN3aVpYaHdJam94TnpRNU9URXlOall3TENKbmNtRnVkRjkwZVhCbGMxOXpkWEJ3YjNKMFpXUWlPbHNpWVhWMGFHOXlhWHBoZEdsdmJsOWpiMlJsSWl3aWNISmxMV0YxZEdodmNtbDZaV1JmWTI5a1pTSmRMQ0pwWVhRaU9qRTNNVGd6TnpZMk5qQXNJbWx6Y3lJNkltUnBaRHAzWldJNmRHRnNZVzh1WTI4aUxDSnFkR2tpT2lJNFl6WmtaakZsTmkweVlUVmtMVEV4WldZdFlqUXdZeTB3WVRFMk1qZzVOVGcxTmpBaUxDSnJaWGxmZEhsd1pTSTZJbk52Wm5SM1lYSmxJaXdpYm05dVkyVWlPaUk0WXpSa05EZzJZUzB5WVRWa0xURXhaV1l0WWpRd1l5MHdZVEUyTWpnNU5UZzFOakFpTENKd2NtVnpaVzUwWVhScGIyNWZaR1ZtYVc1cGRHbHZibDkxY21sZmMzVndjRzl5ZEdWa0lqcDBjblZsTENKeVpYRjFaWE4wWDI5aWFtVmpkRjl6YVdkdWFXNW5YMkZzWjE5MllXeDFaWE5mYzNWd2NHOXlkR1ZrSWpwYklrVlRNalUySWl3aVJWTXlOVFpMSWwwc0luSmxjM0J2Ym5ObFgzUjVjR1Z6WDNOMWNIQnZjblJsWkNJNld5SjJjRjkwYjJ0bGJpSXNJbWxrWDNSdmEyVnVJbDBzSW5OMFlYUjFjeUk2ZXlKemRHRjBkWE5mYkdsemRDSTZleUpwWkhnaU9qYzFOek13TENKMWNta2lPaUpvZEhSd2N6b3ZMM1JoYkdGdkxtTnZMM05oYm1SaWIzZ3ZhWE56ZFdWeUwzTjBZWFIxYzJ4cGMzUXZNU0o5ZlN3aWMzVmlJam9pT0dJMmNFaEZhMjFKWTFOMmNHMW9NMHhRUlUwM1pHcElVWFpNWlVaWmVFWnJZVlI0WWpGRVltWmFVU0lzSW5WelpYSmZZWFYwYUdWdWRHbGpZWFJwYjI0aU9pSnplWE4wWlcxZlltbHZiV1YwY25raUxDSjJjRjltYjNKdFlYUnpYM04xY0hCdmNuUmxaQ0k2ZXlKcWQzUmZkbU5mYW5OdmJpSTZleUpoYkdkZmRtRnNkV1Z6WDNOMWNIQnZjblJsWkNJNld5SkZVekkxTmlJc0lrVlRNalUyU3lJc0lrVmtSRk5CSWwxOUxDSnFkM1JmZG5CZmFuTnZiaUk2ZXlKaGJHZGZkbUZzZFdWelgzTjFjSEJ2Y25SbFpDSTZXeUpGVXpJMU5pSXNJa1ZUTWpVMlN5SXNJa1ZrUkZOQklsMTlMQ0oyWXl0elpDMXFkM1FpT25zaVlXeG5YM1poYkhWbGMxOXpkWEJ3YjNKMFpXUWlPbHNpUlZNeU5UWWlMQ0pGVXpJMU5rc2lMQ0pGWkVSVFFTSmRmWDBzSW5kaGJHeGxkRjl1WVcxbElqb2lkR0ZzWVc5ZmQyRnNiR1YwSW4wLkdjNkJUdzFwcHF2U3VLdHhiZi1saHhoamIxSGFhQnZuV0hrMUowWk1OYWg2RDBVY3IxV3pvZlhZUGJKa2tzejNBd0xya0F4NUh5QmR0NE5QMGFuSVVBfmV5SmhiR2NpT2lKRlV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwYzNNaU9pSTRZalp3U0VWcmJVbGpVM1p3YldnelRGQkZUVGRrYWtoUmRreGxSbGw0Um10aFZIaGlNVVJpWmxwUklpd2lZWFZrSWpvaWFIUjBjSE02THk5MFlXeGhieTVqYnk5cGMzTjFaWEl2WjNKc2RucGphMjltZVNJc0ltNWlaaUk2TVRjeE9EWXlPVGM0TXl3aVpYaHdJam94TnpFNE5qSTVPRFF6ZlEuRC1pX3V6S3BlWE1XMXY0N0thVWxaYl9qazNMTFN1eEQ4bVRYVnMyektka00zR3V1dEtxc2NGSEkzbjZRYUYyc2EzY29RaWhnZ1I5bGJxUFpwZGN1SXciLCJpYXQiOjE3MTg2Mjk3OTJ9.lJ3ez1qV4_gUVcpMZg-agMCgwoaaLkC8yxj5R6F-ICU',
+              'nonce': 'de208cc1-1c17-4123-b52e-67321ef55aa1',
+              'code_challenge': '4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA',
+              'code_challenge_method': 'S256',
+              'issuer_state': 'test10',
+              'client_metadata':
+                  '%7B%22authorization_endpoint%22%3A%22https%3A%2F%2Fapp.altme.io%2Fapp%2Fdownload%2Fauthorize%22%2C%22scopes_supported%22%3A%5B%22openid%22%5D%2C%22response_types_supported%22%3A%5B%22vp_token%22%2C%22id_token%22%5D%2C%22client_id_schemes_supported%22%3A%5B%22redirect_uri%22%2C%22did%22%5D%2C%22grant_types_supported%22%3A%5B%22authorization_code%22%2C%22pre-authorized_code%22%5D%2C%22subject_types_supported%22%3A%5B%22public%22%5D%2C%22id_token_signing_alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%2C%22request_object_signing_alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%2C%22request_parameter_supported%22%3Atrue%2C%22request_uri_parameter_supported%22%3Atrue%2C%22request_authentication_methods_supported%22%3A%7B%22authorization_endpoint%22%3A%5B%22request_object%22%5D%7D%2C%22vp_formats_supported%22%3A%7B%22jwt_vp%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%7D%2C%22jwt_vc%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%7D%7D%2C%22subject_syntax_types_supported%22%3A%5B%22urn%3Aietf%3Aparams%3Aoauth%3Ajwk-thumbprint%22%2C%22did%3Akey%22%2C%22did%3Apkh%22%2C%22did%3Akey%22%2C%22did%3Apolygonid%22%5D%2C%22subject_syntax_types_discriminations%22%3A%5B%22did%3Akey%3Ajwk_jcs-pub%22%2C%22did%3Aebsi%3Av1%22%5D%2C%22subject_trust_frameworks_supported%22%3A%5B%22ebsi%22%5D%2C%22id_token_types_supported%22%3A%5B%22subject_signed_id_token%22%5D%2C%22token_endpoint_auth_method%22%3A%22client_id%22%7D',
+              'client_id': '8b6pHEkmIcSvpmh3LPEM7djHQvLeFYxFkaTxb1DbfZQ',
+              'scope': 'openid',
+              'authorization_details':
+                  '[{"type":"openid_credential","credential_configuration_id":"Pid"}]',
+            };
+
+            dioAdapter.onGet(
+              'https://talao.co/issuer/grlvzckofy/.well-known/openid-credential-issuer',
+              (request) =>
+                  request.reply(200, openIdCredentialIssuerConfigurationTest10),
+            );
+            final (authorizationEndpoint, authorizationRequestParemeters, _) =
+                await oidc4vc.getAuthorizationData(
+              selectedCredentials: selectedCredentials,
+              clientId: clientId,
+              clientSecret: null,
+              redirectUri: redirectUri,
+              issuerState: issuerState,
+              nonce: nonce,
+              pkcePair: pkcePair,
+              state: state,
+              authorizationEndPoint: authorizationEndPoint,
+              scope: false,
+              clientAuthentication: ClientAuthentication.clientId,
+              oidc4vciDraftType: OIDC4VCIDraftType.draft13,
+              vcFormatType: VCFormatType.jwtVcJson,
+              clientAssertion:
+                  'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA~eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4YjZwSEVrbUljU3ZwbWgzTFBFTTdkakhRdkxlRll4RmthVHhiMURiZlpRIiwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvZ3Jsdnpja29meSIsIm5iZiI6MTcxODYzMDkwNCwiZXhwIjoxNzE4NjMwOTY0fQ.versm2Ejz9W5uVbejGiOl1ytAoAHSeo5zZLer-hhiWBm8y1QgCmFB5xay4xWi3Nlx2KC2f1wsZ6tMVsrfZD2rg',
+              secureAuthorizedFlow: true,
+              issuer: issuer,
+              dio: client,
+              credentialOfferJson: credentialOfferJsonAuthorizedTest10,
+              secureStorage: mockSecureStorage,
+            );
+
+            expect(authorizationEndpoint, expectedAuthorizationEndpoint);
+            expect(
+              authorizationRequestParemeters,
+              expectedAuthorizationRequestParemeters,
+            );
           },
-          'Pid': {
-            'format': 'vc+sd-jwt',
-            'scope': 'Pid_scope',
-            'order': [
-              'given_name',
-              'family_name',
-              'birthdate',
-              'address',
-              'gender',
-              'place_of_birth',
-              'nationalities',
-              'age_equal_or_over',
-              'issuing_country',
-              'issuing_authority',
-            ],
-            'claims': {
-              'given_name': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'First Name', 'locale': 'en-US'},
-                  {'name': 'Pr\u00e9nom', 'locale': 'fr-FR'},
-                ],
-              },
-              'family_name': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Family Name', 'locale': 'en-US'},
-                  {'name': 'Nom', 'locale': 'fr-FR'},
-                ],
-              },
-              'birthdate': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Birth date', 'locale': 'en-US'},
-                  {'name': 'Date de naissance', 'locale': 'fr-FR'},
-                ],
-              },
-              'place_of_birth': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Birth place', 'locale': 'en-US'},
-                  {'name': 'Lieu de naissance', 'locale': 'fr-FR'},
-                ],
-                'locality': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Locality', 'locale': 'en-US'},
-                    {'name': 'Ville', 'locale': 'fr-FR'},
-                  ],
-                },
-                'region': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Region', 'locale': 'en-US'},
-                    {'name': 'R\u00e9gion', 'locale': 'fr-FR'},
-                  ],
-                },
-                'country': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Country', 'locale': 'en-US'},
-                    {'name': 'Pays', 'locale': 'fr-FR'},
-                  ],
-                },
-              },
-              'nationalities': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Nationalities', 'locale': 'en-US'},
-                  {'name': 'Nationalit\u00e9s', 'locale': 'fr-FR'},
-                ],
-              },
-              'gender': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Gender', 'locale': 'en-US'},
-                  {'name': 'Sexe', 'locale': 'fr-FR'},
-                ],
-              },
-              'address': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Address', 'locale': 'en-US'},
-                  {'name': 'Adresse', 'locale': 'fr-FR'},
-                ],
-                'formatted': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Formatted', 'locale': 'en-US'},
-                    {'name': 'Complete', 'locale': 'fr-FR'},
-                  ],
-                },
-                'street_address': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Street address', 'locale': 'en-US'},
-                    {'name': 'Rue', 'locale': 'fr-FR'},
-                  ],
-                },
-                'locality': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Locality', 'locale': 'en-US'},
-                    {'name': 'Ville', 'locale': 'fr-FR'},
-                  ],
-                },
-                'region': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Region', 'locale': 'en-US'},
-                    {'name': 'R\u00e9gion', 'locale': 'fr-FR'},
-                  ],
-                },
-                'country': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Country', 'locale': 'en-US'},
-                    {'name': 'Pays', 'locale': 'fr-FR'},
-                  ],
-                },
-              },
-              'age_equal_or_over': {
-                'mandatory': true,
-                'value_type': 'bool',
-                'display': [
-                  {'name': 'Age', 'locale': 'en-US'},
-                  {'name': 'Age', 'locale': 'fr-FR'},
-                ],
-                '12': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Over 12', 'locale': 'en-US'},
-                    {'name': 'Plus de 12 ans', 'locale': 'fr-FR'},
-                  ],
-                },
-                '14': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Over 14', 'locale': 'en-US'},
-                    {'name': 'Plus de 14 ans', 'locale': 'fr-FR'},
-                  ],
-                },
-                '16': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Over 16', 'locale': 'en-US'},
-                    {'name': 'Plus de 16 ans', 'locale': 'fr-FR'},
-                  ],
-                },
-                '18': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Over 18', 'locale': 'en-US'},
-                    {'name': 'Plus de 18 ans', 'locale': 'fr-FR'},
-                  ],
-                },
-                '21': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Over 21', 'locale': 'en-US'},
-                    {'name': 'Plus de 21 ans', 'locale': 'fr-FR'},
-                  ],
-                },
-                '65': {
-                  'mandatory': true,
-                  'value_type': 'string',
-                  'display': [
-                    {'name': 'Senior', 'locale': 'en-US'},
-                    {'name': 'Senior', 'locale': 'fr-FR'},
-                  ],
-                },
-              },
-              'picture': {
-                'mandatory': true,
-                'value_type': 'image/jpeg',
-                'display': [
-                  {'name': 'Picture', 'locale': 'en-US'},
-                  {'name': 'Portrait', 'locale': 'fr-FR'},
-                ],
-              },
-              'dateIssued': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Issuance date', 'locale': 'en-US'},
-                  {'name': 'D\u00e9livr\u00e9 le', 'locale': 'fr-FR'},
-                ],
-              },
-              'expiry_date': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Expiry date', 'locale': 'en-US'},
-                  {'name': "Date d'expiration", 'locale': 'fr-FR'},
-                ],
-              },
-              'issuing_country': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Issuing country', 'locale': 'en-US'},
-                  {'name': "Pays d'emission", 'locale': 'fr-FR'},
-                ],
-              },
-              'issuing_authority': {
-                'mandatory': true,
-                'value_type': 'string',
-                'display': [
-                  {'name': 'Issuing autority', 'locale': 'en-US'},
-                  {'name': "Authorit\u00e9 d'emission", 'locale': 'fr-FR'},
-                ],
-              },
-            },
-            'cryptographic_binding_methods_supported': ['DID', 'jwk'],
-            'credential_signing_alg_values_supported': [
-              'ES256K',
-              'ES256',
-              'ES384',
-              'RS256',
-            ],
-            'vct': 'urn:eu.europa.ec.eudi:pid:1',
-            'display': [
-              {
-                'name': 'PID',
-                'locale': 'en-US',
-                'background_color': '#14107c',
-                'text_color': '#FFFFFF',
-              },
-              {
-                'name': 'PID',
-                'locale': 'fr-FR',
-                'background_color': '#14107c',
-                'text_color': '#FFFFFF',
-              }
-            ],
+        );
+
+        test(
+          'pre-authorized code flow  we return Uri for authentication endpoint',
+          () async {
+            const expectedAuthorizationEndpoint =
+                'https://talao.co/issuer/grlvzckofy/authorize';
+
+            const expectedAuthorizationRequestParemeters = {
+              'response_type': 'code',
+              'redirect_uri': 'https://app.altme.io/app/download/callback',
+              'state':
+                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiJrZFFvY1hkSzg5eEFDMTd6eFFaVjg3Q3h5eU84X25OY1oxbDF4UUpnTEI0IiwiY3JlZGVudGlhbHMiOlsiUGlkIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL2dybHZ6Y2tvZnkiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6IjhiNnBIRWttSWNTdnBtaDNMUEVNN2RqSFF2TGVGWXhGa2FUeGIxRGJmWlEiLCJjbGllbnRfYXNzZXJ0aW9uIjoiZXlKaGJHY2lPaUpGVXpJMU5pSXNJbXRwWkNJNkltUnBaRHAzWldJNmRHRnNZVzh1WTI4amEyVjVMVElpTENKMGVYQWlPaUozWVd4c1pYUXRZWFIwWlhOMFlYUnBiMjRyYW5kMEluMC5leUpoZFhSb2IzSnBlbUYwYVc5dVgyVnVaSEJ2YVc1MElqb2lhSFIwY0hNNkx5OWhjSEF1WVd4MGJXVXVhVzh2WVhCd0wyUnZkMjVzYjJGa0wyRjFkR2h2Y21sNlpTSXNJbU5zYVdWdWRGOXBaRjl6WTJobGJXVnpYM04xY0hCdmNuUmxaQ0k2V3lKa2FXUWlMQ0p5WldScGNtVmpkRjkxY21raUxDSjROVEE1WDNOaGJsOWtibk1pTENKMlpYSnBabWxsY2w5aGRIUmxjM1JoZEdsdmJpSmRMQ0pqYm1ZaU9uc2lhbmRySWpwN0ltTnlkaUk2SWxBdE1qVTJJaXdpYTJsa0lqb2lPR0kyY0VoRmEyMUpZMU4yY0cxb00weFFSVTAzWkdwSVVYWk1aVVpaZUVacllWUjRZakZFWW1aYVVTSXNJbXQwZVNJNklrVkRJaXdpZUNJNklrVlFiMTk0VmtoRmFpMVFZekIxZUdKdFkzaE5hakpNTmpaUWIwZG9MWFZ2V1VkQmVtZEhTMDEyVDFFaUxDSjVJam9pUm5kR1NERjJTMVpIWDJjM1FrZGlUME5JWTNkWmNuRktkRkpJTm5WRFRGVTVhVWxpVUdGNFMxZFdRU0o5ZlN3aVpYaHdJam94TnpRNU9URXlOall3TENKbmNtRnVkRjkwZVhCbGMxOXpkWEJ3YjNKMFpXUWlPbHNpWVhWMGFHOXlhWHBoZEdsdmJsOWpiMlJsSWl3aWNISmxMV0YxZEdodmNtbDZaV1JmWTI5a1pTSmRMQ0pwWVhRaU9qRTNNVGd6TnpZMk5qQXNJbWx6Y3lJNkltUnBaRHAzWldJNmRHRnNZVzh1WTI4aUxDSnFkR2tpT2lJNFl6WmtaakZsTmkweVlUVmtMVEV4WldZdFlqUXdZeTB3WVRFMk1qZzVOVGcxTmpBaUxDSnJaWGxmZEhsd1pTSTZJbk52Wm5SM1lYSmxJaXdpYm05dVkyVWlPaUk0WXpSa05EZzJZUzB5WVRWa0xURXhaV1l0WWpRd1l5MHdZVEUyTWpnNU5UZzFOakFpTENKd2NtVnpaVzUwWVhScGIyNWZaR1ZtYVc1cGRHbHZibDkxY21sZmMzVndjRzl5ZEdWa0lqcDBjblZsTENKeVpYRjFaWE4wWDI5aWFtVmpkRjl6YVdkdWFXNW5YMkZzWjE5MllXeDFaWE5mYzNWd2NHOXlkR1ZrSWpwYklrVlRNalUySWl3aVJWTXlOVFpMSWwwc0luSmxjM0J2Ym5ObFgzUjVjR1Z6WDNOMWNIQnZjblJsWkNJNld5SjJjRjkwYjJ0bGJpSXNJbWxrWDNSdmEyVnVJbDBzSW5OMFlYUjFjeUk2ZXlKemRHRjBkWE5mYkdsemRDSTZleUpwWkhnaU9qYzFOek13TENKMWNta2lPaUpvZEhSd2N6b3ZMM1JoYkdGdkxtTnZMM05oYm1SaWIzZ3ZhWE56ZFdWeUwzTjBZWFIxYzJ4cGMzUXZNU0o5ZlN3aWMzVmlJam9pT0dJMmNFaEZhMjFKWTFOMmNHMW9NMHhRUlUwM1pHcElVWFpNWlVaWmVFWnJZVlI0WWpGRVltWmFVU0lzSW5WelpYSmZZWFYwYUdWdWRHbGpZWFJwYjI0aU9pSnplWE4wWlcxZlltbHZiV1YwY25raUxDSjJjRjltYjNKdFlYUnpYM04xY0hCdmNuUmxaQ0k2ZXlKcWQzUmZkbU5mYW5OdmJpSTZleUpoYkdkZmRtRnNkV1Z6WDNOMWNIQnZjblJsWkNJNld5SkZVekkxTmlJc0lrVlRNalUyU3lJc0lrVmtSRk5CSWwxOUxDSnFkM1JmZG5CZmFuTnZiaUk2ZXlKaGJHZGZkbUZzZFdWelgzTjFjSEJ2Y25SbFpDSTZXeUpGVXpJMU5pSXNJa1ZUTWpVMlN5SXNJa1ZrUkZOQklsMTlMQ0oyWXl0elpDMXFkM1FpT25zaVlXeG5YM1poYkhWbGMxOXpkWEJ3YjNKMFpXUWlPbHNpUlZNeU5UWWlMQ0pGVXpJMU5rc2lMQ0pGWkVSVFFTSmRmWDBzSW5kaGJHeGxkRjl1WVcxbElqb2lkR0ZzWVc5ZmQyRnNiR1YwSW4wLkdjNkJUdzFwcHF2U3VLdHhiZi1saHhoamIxSGFhQnZuV0hrMUowWk1OYWg2RDBVY3IxV3pvZlhZUGJKa2tzejNBd0xya0F4NUh5QmR0NE5QMGFuSVVBfmV5SmhiR2NpT2lKRlV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwYzNNaU9pSTRZalp3U0VWcmJVbGpVM1p3YldnelRGQkZUVGRrYWtoUmRreGxSbGw0Um10aFZIaGlNVVJpWmxwUklpd2lZWFZrSWpvaWFIUjBjSE02THk5MFlXeGhieTVqYnk5cGMzTjFaWEl2WjNKc2RucGphMjltZVNJc0ltNWlaaUk2TVRjeE9EWXlPVGM0TXl3aVpYaHdJam94TnpFNE5qSTVPRFF6ZlEuRC1pX3V6S3BlWE1XMXY0N0thVWxaYl9qazNMTFN1eEQ4bVRYVnMyektka00zR3V1dEtxc2NGSEkzbjZRYUYyc2EzY29RaWhnZ1I5bGJxUFpwZGN1SXciLCJpYXQiOjE3MTg2Mjk3OTJ9.lJ3ez1qV4_gUVcpMZg-agMCgwoaaLkC8yxj5R6F-ICU',
+              'nonce': 'de208cc1-1c17-4123-b52e-67321ef55aa1',
+              'code_challenge': '4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA',
+              'code_challenge_method': 'S256',
+              'issuer_state': 'test10',
+              'client_metadata':
+                  '%7B%22authorization_endpoint%22%3A%22https%3A%2F%2Fapp.altme.io%2Fapp%2Fdownload%2Fauthorize%22%2C%22scopes_supported%22%3A%5B%22openid%22%5D%2C%22response_types_supported%22%3A%5B%22vp_token%22%2C%22id_token%22%5D%2C%22client_id_schemes_supported%22%3A%5B%22redirect_uri%22%2C%22did%22%5D%2C%22grant_types_supported%22%3A%5B%22authorization_code%22%2C%22pre-authorized_code%22%5D%2C%22subject_types_supported%22%3A%5B%22public%22%5D%2C%22id_token_signing_alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%2C%22request_object_signing_alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%2C%22request_parameter_supported%22%3Atrue%2C%22request_uri_parameter_supported%22%3Atrue%2C%22request_authentication_methods_supported%22%3A%7B%22authorization_endpoint%22%3A%5B%22request_object%22%5D%7D%2C%22vp_formats_supported%22%3A%7B%22jwt_vp%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%7D%2C%22jwt_vc%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%7D%7D%2C%22subject_syntax_types_supported%22%3A%5B%22urn%3Aietf%3Aparams%3Aoauth%3Ajwk-thumbprint%22%2C%22did%3Akey%22%2C%22did%3Apkh%22%2C%22did%3Akey%22%2C%22did%3Apolygonid%22%5D%2C%22subject_syntax_types_discriminations%22%3A%5B%22did%3Akey%3Ajwk_jcs-pub%22%2C%22did%3Aebsi%3Av1%22%5D%2C%22subject_trust_frameworks_supported%22%3A%5B%22ebsi%22%5D%2C%22id_token_types_supported%22%3A%5B%22subject_signed_id_token%22%5D%2C%22token_endpoint_auth_method%22%3A%22client_id%22%7D',
+              'client_id': '8b6pHEkmIcSvpmh3LPEM7djHQvLeFYxFkaTxb1DbfZQ',
+              'scope': 'openid',
+              'authorization_details':
+                  '[{"type":"openid_credential","credential_configuration_id":"Pid"}]',
+            };
+
+            dioAdapter.onGet(
+              'https://talao.co/issuer/grlvzckofy/.well-known/openid-credential-issuer',
+              (request) =>
+                  request.reply(200, openIdCredentialIssuerConfigurationTest10),
+            );
+            final (authorizationEndpoint, authorizationRequestParemeters, _) =
+                await oidc4vc.getAuthorizationData(
+              selectedCredentials: selectedCredentials,
+              clientId: clientId,
+              clientSecret: null,
+              redirectUri: redirectUri,
+              issuerState: issuerState,
+              nonce: nonce,
+              pkcePair: pkcePair,
+              state: state,
+              authorizationEndPoint: authorizationEndPoint,
+              scope: false,
+              clientAuthentication: ClientAuthentication.clientId,
+              oidc4vciDraftType: OIDC4VCIDraftType.draft13,
+              vcFormatType: VCFormatType.jwtVcJson,
+              clientAssertion:
+                  'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA~eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4YjZwSEVrbUljU3ZwbWgzTFBFTTdkakhRdkxlRll4RmthVHhiMURiZlpRIiwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvZ3Jsdnpja29meSIsIm5iZiI6MTcxODYzMDkwNCwiZXhwIjoxNzE4NjMwOTY0fQ.versm2Ejz9W5uVbejGiOl1ytAoAHSeo5zZLer-hhiWBm8y1QgCmFB5xay4xWi3Nlx2KC2f1wsZ6tMVsrfZD2rg',
+              secureAuthorizedFlow: true,
+              issuer: issuer,
+              dio: client,
+              credentialOfferJson: credentialOfferJsonPreAuthorizedTest10,
+              secureStorage: mockSecureStorage,
+            );
+
+            expect(authorizationEndpoint, expectedAuthorizationEndpoint);
+            expect(
+              authorizationRequestParemeters,
+              expectedAuthorizationRequestParemeters,
+            );
           },
-        },
-      };
-      const openIdConfiguration = {
-        'authorization_endpoint':
-            'https://talao.co/issuer/grlvzckofy/authorize',
-        'token_endpoint': 'https://talao.co/issuer/grlvzckofy/token',
-        'jwks_uri': 'https://talao.co/issuer/grlvzckofy/jwks',
-        'pushed_authorization_request_endpoint':
-            'https://talao.co/issuer/grlvzckofy/authorize/par',
-        'require_pushed_authorization_requests': true,
-        'scopes_supported': ['openid'],
-        'response_types_supported': ['vp_token', 'id_token'],
-        'response_modes_supported': ['query'],
-        'grant_types_supported': [
-          'authorization_code',
-          'urn:ietf:params:oauth:grant-type:pre-authorized_code',
-        ],
-        'subject_types_supported': ['public', 'pairwise'],
-        'id_token_signing_alg_values_supported': [
-          'ES256',
-          'ES256K',
-          'EdDSA',
-          'RS256',
-        ],
-        'request_object_signing_alg_values_supported': [
-          'ES256',
-          'ES256K',
-          'EdDSA',
-          'RS256',
-        ],
-        'request_parameter_supported': true,
-        'request_uri_parameter_supported': true,
-        'token_endpoint_auth_methods_supported': [
-          'client_secret_basic',
-          'client_secret_post',
-          'client_secret_jwt',
-          'none',
-        ],
-        'request_authentication_methods_supported': {
-          'authorization_endpoint': ['request_object'],
-        },
-        'subject_syntax_types_supported': [
-          'urn:ietf:params:oauth:jwk-thumbprint',
-          'did:key',
-          'did:ebsi',
-          'did:tz',
-          'did:pkh',
-          'did:hedera',
-          'did:key',
-          'did:ethr',
-          'did:web',
-          'did:jwk',
-        ],
-        'subject_syntax_types_discriminations': [
-          'did:key:jwk_jcs-pub',
-          'did:ebsi:v1',
-        ],
-        'subject_trust_frameworks_supported': ['ebsi'],
-        'id_token_types_supported': ['subject_signed_id_token'],
-      };
-
-      test(
-        'authentication code flow we return Uri for authentication endpoint',
-        () async {
-          const credentialOfferJson = {
-            'credential_issuer': 'https://talao.co/issuer/grlvzckofy',
-            'credential_configuration_ids': ['Pid'],
-            'grants': {
-              'authorization_code': {
-                'issuer_state': 'test10',
-                'authorization_server': 'https://talao.co/issuer/grlvzckofy',
-              },
-            },
-          };
-          const expectedAuthorizationEndpoint =
-              'https://talao.co/issuer/grlvzckofy/authorize';
-
-          const expectedAuthorizationRequestParemeters = {
-            'response_type': 'code',
-            'redirect_uri': 'https://app.altme.io/app/download/callback',
-            'state':
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiJrZFFvY1hkSzg5eEFDMTd6eFFaVjg3Q3h5eU84X25OY1oxbDF4UUpnTEI0IiwiY3JlZGVudGlhbHMiOlsiUGlkIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL2dybHZ6Y2tvZnkiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6IjhiNnBIRWttSWNTdnBtaDNMUEVNN2RqSFF2TGVGWXhGa2FUeGIxRGJmWlEiLCJjbGllbnRfYXNzZXJ0aW9uIjoiZXlKaGJHY2lPaUpGVXpJMU5pSXNJbXRwWkNJNkltUnBaRHAzWldJNmRHRnNZVzh1WTI4amEyVjVMVElpTENKMGVYQWlPaUozWVd4c1pYUXRZWFIwWlhOMFlYUnBiMjRyYW5kMEluMC5leUpoZFhSb2IzSnBlbUYwYVc5dVgyVnVaSEJ2YVc1MElqb2lhSFIwY0hNNkx5OWhjSEF1WVd4MGJXVXVhVzh2WVhCd0wyUnZkMjVzYjJGa0wyRjFkR2h2Y21sNlpTSXNJbU5zYVdWdWRGOXBaRjl6WTJobGJXVnpYM04xY0hCdmNuUmxaQ0k2V3lKa2FXUWlMQ0p5WldScGNtVmpkRjkxY21raUxDSjROVEE1WDNOaGJsOWtibk1pTENKMlpYSnBabWxsY2w5aGRIUmxjM1JoZEdsdmJpSmRMQ0pqYm1ZaU9uc2lhbmRySWpwN0ltTnlkaUk2SWxBdE1qVTJJaXdpYTJsa0lqb2lPR0kyY0VoRmEyMUpZMU4yY0cxb00weFFSVTAzWkdwSVVYWk1aVVpaZUVacllWUjRZakZFWW1aYVVTSXNJbXQwZVNJNklrVkRJaXdpZUNJNklrVlFiMTk0VmtoRmFpMVFZekIxZUdKdFkzaE5hakpNTmpaUWIwZG9MWFZ2V1VkQmVtZEhTMDEyVDFFaUxDSjVJam9pUm5kR1NERjJTMVpIWDJjM1FrZGlUME5JWTNkWmNuRktkRkpJTm5WRFRGVTVhVWxpVUdGNFMxZFdRU0o5ZlN3aVpYaHdJam94TnpRNU9URXlOall3TENKbmNtRnVkRjkwZVhCbGMxOXpkWEJ3YjNKMFpXUWlPbHNpWVhWMGFHOXlhWHBoZEdsdmJsOWpiMlJsSWl3aWNISmxMV0YxZEdodmNtbDZaV1JmWTI5a1pTSmRMQ0pwWVhRaU9qRTNNVGd6TnpZMk5qQXNJbWx6Y3lJNkltUnBaRHAzWldJNmRHRnNZVzh1WTI4aUxDSnFkR2tpT2lJNFl6WmtaakZsTmkweVlUVmtMVEV4WldZdFlqUXdZeTB3WVRFMk1qZzVOVGcxTmpBaUxDSnJaWGxmZEhsd1pTSTZJbk52Wm5SM1lYSmxJaXdpYm05dVkyVWlPaUk0WXpSa05EZzJZUzB5WVRWa0xURXhaV1l0WWpRd1l5MHdZVEUyTWpnNU5UZzFOakFpTENKd2NtVnpaVzUwWVhScGIyNWZaR1ZtYVc1cGRHbHZibDkxY21sZmMzVndjRzl5ZEdWa0lqcDBjblZsTENKeVpYRjFaWE4wWDI5aWFtVmpkRjl6YVdkdWFXNW5YMkZzWjE5MllXeDFaWE5mYzNWd2NHOXlkR1ZrSWpwYklrVlRNalUySWl3aVJWTXlOVFpMSWwwc0luSmxjM0J2Ym5ObFgzUjVjR1Z6WDNOMWNIQnZjblJsWkNJNld5SjJjRjkwYjJ0bGJpSXNJbWxrWDNSdmEyVnVJbDBzSW5OMFlYUjFjeUk2ZXlKemRHRjBkWE5mYkdsemRDSTZleUpwWkhnaU9qYzFOek13TENKMWNta2lPaUpvZEhSd2N6b3ZMM1JoYkdGdkxtTnZMM05oYm1SaWIzZ3ZhWE56ZFdWeUwzTjBZWFIxYzJ4cGMzUXZNU0o5ZlN3aWMzVmlJam9pT0dJMmNFaEZhMjFKWTFOMmNHMW9NMHhRUlUwM1pHcElVWFpNWlVaWmVFWnJZVlI0WWpGRVltWmFVU0lzSW5WelpYSmZZWFYwYUdWdWRHbGpZWFJwYjI0aU9pSnplWE4wWlcxZlltbHZiV1YwY25raUxDSjJjRjltYjNKdFlYUnpYM04xY0hCdmNuUmxaQ0k2ZXlKcWQzUmZkbU5mYW5OdmJpSTZleUpoYkdkZmRtRnNkV1Z6WDNOMWNIQnZjblJsWkNJNld5SkZVekkxTmlJc0lrVlRNalUyU3lJc0lrVmtSRk5CSWwxOUxDSnFkM1JmZG5CZmFuTnZiaUk2ZXlKaGJHZGZkbUZzZFdWelgzTjFjSEJ2Y25SbFpDSTZXeUpGVXpJMU5pSXNJa1ZUTWpVMlN5SXNJa1ZrUkZOQklsMTlMQ0oyWXl0elpDMXFkM1FpT25zaVlXeG5YM1poYkhWbGMxOXpkWEJ3YjNKMFpXUWlPbHNpUlZNeU5UWWlMQ0pGVXpJMU5rc2lMQ0pGWkVSVFFTSmRmWDBzSW5kaGJHeGxkRjl1WVcxbElqb2lkR0ZzWVc5ZmQyRnNiR1YwSW4wLkdjNkJUdzFwcHF2U3VLdHhiZi1saHhoamIxSGFhQnZuV0hrMUowWk1OYWg2RDBVY3IxV3pvZlhZUGJKa2tzejNBd0xya0F4NUh5QmR0NE5QMGFuSVVBfmV5SmhiR2NpT2lKRlV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwYzNNaU9pSTRZalp3U0VWcmJVbGpVM1p3YldnelRGQkZUVGRrYWtoUmRreGxSbGw0Um10aFZIaGlNVVJpWmxwUklpd2lZWFZrSWpvaWFIUjBjSE02THk5MFlXeGhieTVqYnk5cGMzTjFaWEl2WjNKc2RucGphMjltZVNJc0ltNWlaaUk2TVRjeE9EWXlPVGM0TXl3aVpYaHdJam94TnpFNE5qSTVPRFF6ZlEuRC1pX3V6S3BlWE1XMXY0N0thVWxaYl9qazNMTFN1eEQ4bVRYVnMyektka00zR3V1dEtxc2NGSEkzbjZRYUYyc2EzY29RaWhnZ1I5bGJxUFpwZGN1SXciLCJpYXQiOjE3MTg2Mjk3OTJ9.lJ3ez1qV4_gUVcpMZg-agMCgwoaaLkC8yxj5R6F-ICU',
-            'nonce': 'de208cc1-1c17-4123-b52e-67321ef55aa1',
-            'code_challenge': '4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA',
-            'code_challenge_method': 'S256',
-            'issuer_state': 'test10',
-            'client_metadata':
-                '%7B%22authorization_endpoint%22%3A%22https%3A%2F%2Fapp.altme.io%2Fapp%2Fdownload%2Fauthorize%22%2C%22scopes_supported%22%3A%5B%22openid%22%5D%2C%22response_types_supported%22%3A%5B%22vp_token%22%2C%22id_token%22%5D%2C%22client_id_schemes_supported%22%3A%5B%22redirect_uri%22%2C%22did%22%5D%2C%22grant_types_supported%22%3A%5B%22authorization_code%22%2C%22pre-authorized_code%22%5D%2C%22subject_types_supported%22%3A%5B%22public%22%5D%2C%22id_token_signing_alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%2C%22request_object_signing_alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%2C%22request_parameter_supported%22%3Atrue%2C%22request_uri_parameter_supported%22%3Atrue%2C%22request_authentication_methods_supported%22%3A%7B%22authorization_endpoint%22%3A%5B%22request_object%22%5D%7D%2C%22vp_formats_supported%22%3A%7B%22jwt_vp%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%7D%2C%22jwt_vc%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%7D%7D%2C%22subject_syntax_types_supported%22%3A%5B%22urn%3Aietf%3Aparams%3Aoauth%3Ajwk-thumbprint%22%2C%22did%3Akey%22%2C%22did%3Apkh%22%2C%22did%3Akey%22%2C%22did%3Apolygonid%22%5D%2C%22subject_syntax_types_discriminations%22%3A%5B%22did%3Akey%3Ajwk_jcs-pub%22%2C%22did%3Aebsi%3Av1%22%5D%2C%22subject_trust_frameworks_supported%22%3A%5B%22ebsi%22%5D%2C%22id_token_types_supported%22%3A%5B%22subject_signed_id_token%22%5D%2C%22token_endpoint_auth_method%22%3A%22client_id%22%7D',
-            'client_id': '8b6pHEkmIcSvpmh3LPEM7djHQvLeFYxFkaTxb1DbfZQ',
-            'scope': 'openid',
-            'authorization_details':
-                '[{"type":"openid_credential","credential_configuration_id":"Pid"}]',
-          };
-
-          dioAdapter.onGet(
-            'https://talao.co/issuer/grlvzckofy/.well-known/openid-credential-issuer',
-            (request) =>
-                request.reply(200, openIdCredentialIssuerConfiguration),
-          );
-          final (authorizationEndpoint, authorizationRequestParemeters, _) =
-              await oidc4vc.getAuthorizationData(
-            selectedCredentials: selectedCredentials,
-            clientId: clientId,
-            clientSecret: null,
-            redirectUri: redirectUri,
-            issuerState: issuerState,
-            nonce: nonce,
-            pkcePair: pkcePair,
-            state: state,
-            authorizationEndPoint: authorizationEndPoint,
-            scope: false,
-            clientAuthentication: ClientAuthentication.clientId,
-            oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-            vcFormatType: VCFormatType.jwtVcJson,
-            clientAssertion:
-                'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA~eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4YjZwSEVrbUljU3ZwbWgzTFBFTTdkakhRdkxlRll4RmthVHhiMURiZlpRIiwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvZ3Jsdnpja29meSIsIm5iZiI6MTcxODYzMDkwNCwiZXhwIjoxNzE4NjMwOTY0fQ.versm2Ejz9W5uVbejGiOl1ytAoAHSeo5zZLer-hhiWBm8y1QgCmFB5xay4xWi3Nlx2KC2f1wsZ6tMVsrfZD2rg',
-            secureAuthorizedFlow: true,
-            issuer: issuer,
-            dio: client,
-            credentialOfferJson: credentialOfferJson,
-            secureStorage: mockSecureStorage,
-          );
-
-          expect(authorizationEndpoint, expectedAuthorizationEndpoint);
-          expect(
-            authorizationRequestParemeters,
-            expectedAuthorizationRequestParemeters,
-          );
-        },
-      );
-
-      test(
-        'pre-authorized code flow  we return Uri for authentication endpoint',
-        () async {
-          const credentialOfferJson = {
-            'credential_issuer': 'https://talao.co/issuer/grlvzckofy',
-            'credential_configuration_ids': ['Pid'],
-            'grants': {
-              'urn:ietf:params:oauth:grant-type:pre-authorized_code': {
-                'issuer_state': 'test10',
-                'authorization_server': 'https://talao.co/issuer/grlvzckofy',
-              },
-            },
-          };
-
-          const expectedAuthorizationEndpoint =
-              'https://talao.co/issuer/grlvzckofy/authorize';
-
-          const expectedAuthorizationRequestParemeters = {
-            'response_type': 'code',
-            'redirect_uri': 'https://app.altme.io/app/download/callback',
-            'state':
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiJrZFFvY1hkSzg5eEFDMTd6eFFaVjg3Q3h5eU84X25OY1oxbDF4UUpnTEI0IiwiY3JlZGVudGlhbHMiOlsiUGlkIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL2dybHZ6Y2tvZnkiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6IjhiNnBIRWttSWNTdnBtaDNMUEVNN2RqSFF2TGVGWXhGa2FUeGIxRGJmWlEiLCJjbGllbnRfYXNzZXJ0aW9uIjoiZXlKaGJHY2lPaUpGVXpJMU5pSXNJbXRwWkNJNkltUnBaRHAzWldJNmRHRnNZVzh1WTI4amEyVjVMVElpTENKMGVYQWlPaUozWVd4c1pYUXRZWFIwWlhOMFlYUnBiMjRyYW5kMEluMC5leUpoZFhSb2IzSnBlbUYwYVc5dVgyVnVaSEJ2YVc1MElqb2lhSFIwY0hNNkx5OWhjSEF1WVd4MGJXVXVhVzh2WVhCd0wyUnZkMjVzYjJGa0wyRjFkR2h2Y21sNlpTSXNJbU5zYVdWdWRGOXBaRjl6WTJobGJXVnpYM04xY0hCdmNuUmxaQ0k2V3lKa2FXUWlMQ0p5WldScGNtVmpkRjkxY21raUxDSjROVEE1WDNOaGJsOWtibk1pTENKMlpYSnBabWxsY2w5aGRIUmxjM1JoZEdsdmJpSmRMQ0pqYm1ZaU9uc2lhbmRySWpwN0ltTnlkaUk2SWxBdE1qVTJJaXdpYTJsa0lqb2lPR0kyY0VoRmEyMUpZMU4yY0cxb00weFFSVTAzWkdwSVVYWk1aVVpaZUVacllWUjRZakZFWW1aYVVTSXNJbXQwZVNJNklrVkRJaXdpZUNJNklrVlFiMTk0VmtoRmFpMVFZekIxZUdKdFkzaE5hakpNTmpaUWIwZG9MWFZ2V1VkQmVtZEhTMDEyVDFFaUxDSjVJam9pUm5kR1NERjJTMVpIWDJjM1FrZGlUME5JWTNkWmNuRktkRkpJTm5WRFRGVTVhVWxpVUdGNFMxZFdRU0o5ZlN3aVpYaHdJam94TnpRNU9URXlOall3TENKbmNtRnVkRjkwZVhCbGMxOXpkWEJ3YjNKMFpXUWlPbHNpWVhWMGFHOXlhWHBoZEdsdmJsOWpiMlJsSWl3aWNISmxMV0YxZEdodmNtbDZaV1JmWTI5a1pTSmRMQ0pwWVhRaU9qRTNNVGd6TnpZMk5qQXNJbWx6Y3lJNkltUnBaRHAzWldJNmRHRnNZVzh1WTI4aUxDSnFkR2tpT2lJNFl6WmtaakZsTmkweVlUVmtMVEV4WldZdFlqUXdZeTB3WVRFMk1qZzVOVGcxTmpBaUxDSnJaWGxmZEhsd1pTSTZJbk52Wm5SM1lYSmxJaXdpYm05dVkyVWlPaUk0WXpSa05EZzJZUzB5WVRWa0xURXhaV1l0WWpRd1l5MHdZVEUyTWpnNU5UZzFOakFpTENKd2NtVnpaVzUwWVhScGIyNWZaR1ZtYVc1cGRHbHZibDkxY21sZmMzVndjRzl5ZEdWa0lqcDBjblZsTENKeVpYRjFaWE4wWDI5aWFtVmpkRjl6YVdkdWFXNW5YMkZzWjE5MllXeDFaWE5mYzNWd2NHOXlkR1ZrSWpwYklrVlRNalUySWl3aVJWTXlOVFpMSWwwc0luSmxjM0J2Ym5ObFgzUjVjR1Z6WDNOMWNIQnZjblJsWkNJNld5SjJjRjkwYjJ0bGJpSXNJbWxrWDNSdmEyVnVJbDBzSW5OMFlYUjFjeUk2ZXlKemRHRjBkWE5mYkdsemRDSTZleUpwWkhnaU9qYzFOek13TENKMWNta2lPaUpvZEhSd2N6b3ZMM1JoYkdGdkxtTnZMM05oYm1SaWIzZ3ZhWE56ZFdWeUwzTjBZWFIxYzJ4cGMzUXZNU0o5ZlN3aWMzVmlJam9pT0dJMmNFaEZhMjFKWTFOMmNHMW9NMHhRUlUwM1pHcElVWFpNWlVaWmVFWnJZVlI0WWpGRVltWmFVU0lzSW5WelpYSmZZWFYwYUdWdWRHbGpZWFJwYjI0aU9pSnplWE4wWlcxZlltbHZiV1YwY25raUxDSjJjRjltYjNKdFlYUnpYM04xY0hCdmNuUmxaQ0k2ZXlKcWQzUmZkbU5mYW5OdmJpSTZleUpoYkdkZmRtRnNkV1Z6WDNOMWNIQnZjblJsWkNJNld5SkZVekkxTmlJc0lrVlRNalUyU3lJc0lrVmtSRk5CSWwxOUxDSnFkM1JmZG5CZmFuTnZiaUk2ZXlKaGJHZGZkbUZzZFdWelgzTjFjSEJ2Y25SbFpDSTZXeUpGVXpJMU5pSXNJa1ZUTWpVMlN5SXNJa1ZrUkZOQklsMTlMQ0oyWXl0elpDMXFkM1FpT25zaVlXeG5YM1poYkhWbGMxOXpkWEJ3YjNKMFpXUWlPbHNpUlZNeU5UWWlMQ0pGVXpJMU5rc2lMQ0pGWkVSVFFTSmRmWDBzSW5kaGJHeGxkRjl1WVcxbElqb2lkR0ZzWVc5ZmQyRnNiR1YwSW4wLkdjNkJUdzFwcHF2U3VLdHhiZi1saHhoamIxSGFhQnZuV0hrMUowWk1OYWg2RDBVY3IxV3pvZlhZUGJKa2tzejNBd0xya0F4NUh5QmR0NE5QMGFuSVVBfmV5SmhiR2NpT2lKRlV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwYzNNaU9pSTRZalp3U0VWcmJVbGpVM1p3YldnelRGQkZUVGRrYWtoUmRreGxSbGw0Um10aFZIaGlNVVJpWmxwUklpd2lZWFZrSWpvaWFIUjBjSE02THk5MFlXeGhieTVqYnk5cGMzTjFaWEl2WjNKc2RucGphMjltZVNJc0ltNWlaaUk2TVRjeE9EWXlPVGM0TXl3aVpYaHdJam94TnpFNE5qSTVPRFF6ZlEuRC1pX3V6S3BlWE1XMXY0N0thVWxaYl9qazNMTFN1eEQ4bVRYVnMyektka00zR3V1dEtxc2NGSEkzbjZRYUYyc2EzY29RaWhnZ1I5bGJxUFpwZGN1SXciLCJpYXQiOjE3MTg2Mjk3OTJ9.lJ3ez1qV4_gUVcpMZg-agMCgwoaaLkC8yxj5R6F-ICU',
-            'nonce': 'de208cc1-1c17-4123-b52e-67321ef55aa1',
-            'code_challenge': '4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA',
-            'code_challenge_method': 'S256',
-            'issuer_state': 'test10',
-            'client_metadata':
-                '%7B%22authorization_endpoint%22%3A%22https%3A%2F%2Fapp.altme.io%2Fapp%2Fdownload%2Fauthorize%22%2C%22scopes_supported%22%3A%5B%22openid%22%5D%2C%22response_types_supported%22%3A%5B%22vp_token%22%2C%22id_token%22%5D%2C%22client_id_schemes_supported%22%3A%5B%22redirect_uri%22%2C%22did%22%5D%2C%22grant_types_supported%22%3A%5B%22authorization_code%22%2C%22pre-authorized_code%22%5D%2C%22subject_types_supported%22%3A%5B%22public%22%5D%2C%22id_token_signing_alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%2C%22request_object_signing_alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%2C%22request_parameter_supported%22%3Atrue%2C%22request_uri_parameter_supported%22%3Atrue%2C%22request_authentication_methods_supported%22%3A%7B%22authorization_endpoint%22%3A%5B%22request_object%22%5D%7D%2C%22vp_formats_supported%22%3A%7B%22jwt_vp%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%7D%2C%22jwt_vc%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%7D%7D%2C%22subject_syntax_types_supported%22%3A%5B%22urn%3Aietf%3Aparams%3Aoauth%3Ajwk-thumbprint%22%2C%22did%3Akey%22%2C%22did%3Apkh%22%2C%22did%3Akey%22%2C%22did%3Apolygonid%22%5D%2C%22subject_syntax_types_discriminations%22%3A%5B%22did%3Akey%3Ajwk_jcs-pub%22%2C%22did%3Aebsi%3Av1%22%5D%2C%22subject_trust_frameworks_supported%22%3A%5B%22ebsi%22%5D%2C%22id_token_types_supported%22%3A%5B%22subject_signed_id_token%22%5D%2C%22token_endpoint_auth_method%22%3A%22client_id%22%7D',
-            'client_id': '8b6pHEkmIcSvpmh3LPEM7djHQvLeFYxFkaTxb1DbfZQ',
-            'scope': 'openid',
-            'authorization_details':
-                '[{"type":"openid_credential","credential_configuration_id":"Pid"}]',
-          };
-
-          dioAdapter.onGet(
-            'https://talao.co/issuer/grlvzckofy/.well-known/openid-credential-issuer',
-            (request) =>
-                request.reply(200, openIdCredentialIssuerConfiguration),
-          );
-          final (authorizationEndpoint, authorizationRequestParemeters, _) =
-              await oidc4vc.getAuthorizationData(
-            selectedCredentials: selectedCredentials,
-            clientId: clientId,
-            clientSecret: null,
-            redirectUri: redirectUri,
-            issuerState: issuerState,
-            nonce: nonce,
-            pkcePair: pkcePair,
-            state: state,
-            authorizationEndPoint: authorizationEndPoint,
-            scope: false,
-            clientAuthentication: ClientAuthentication.clientId,
-            oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-            vcFormatType: VCFormatType.jwtVcJson,
-            clientAssertion:
-                'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA~eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4YjZwSEVrbUljU3ZwbWgzTFBFTTdkakhRdkxlRll4RmthVHhiMURiZlpRIiwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvZ3Jsdnpja29meSIsIm5iZiI6MTcxODYzMDkwNCwiZXhwIjoxNzE4NjMwOTY0fQ.versm2Ejz9W5uVbejGiOl1ytAoAHSeo5zZLer-hhiWBm8y1QgCmFB5xay4xWi3Nlx2KC2f1wsZ6tMVsrfZD2rg',
-            secureAuthorizedFlow: true,
-            issuer: issuer,
-            dio: client,
-            credentialOfferJson: credentialOfferJson,
-            secureStorage: mockSecureStorage,
-          );
-
-          expect(authorizationEndpoint, expectedAuthorizationEndpoint);
-          expect(
-            authorizationRequestParemeters,
-            expectedAuthorizationRequestParemeters,
-          );
-        },
-      );
+        );
+      });
     });
 
     group('OIC4VC request credential', () {
