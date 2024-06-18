@@ -904,7 +904,7 @@ class OIDC4VC {
               /// authorization_server in credentialOfferJson
               final jsonPathCredentialOffer = JsonPath(
                 // ignore: lines_longer_than_80_chars
-                r'$..authorized_code.authorization_server',
+                r'$..["urn:ietf:params:oauth:grant-type:pre-authorized_code"].authorization_server',
               );
               final data = jsonPathCredentialOffer
                   .read(credentialOfferJson)
@@ -915,7 +915,6 @@ class OIDC4VC {
               }
             } catch (e) {
               final jsonPathCredentialOffer = JsonPath(
-                // ignore: lines_longer_than_80_chars
                 r'$..authorization_code.authorization_server',
               );
               final data = jsonPathCredentialOffer
