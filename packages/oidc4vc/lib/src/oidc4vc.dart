@@ -899,21 +899,21 @@ class OIDC4VC {
             authorizationEndpoint =
                 '${listOpenIDConfiguration.first}/authorize';
           } else {
-            /// Extract the authorization endpoint from from
-            /// authorization_server in credentialOfferJson
-            final jsonPathCredentialOffer = JsonPath(
-              // ignore: lines_longer_than_80_chars
-              r'$..urn:ietf:params:oauth:grant-type:pre-authorized_code.authorization_server',
-            );
-            final data = jsonPathCredentialOffer
-                .read(credentialOfferJson)
-                .first
-                .value as List<String>;
-            if (data.isNotEmpty &&
-                listOpenIDConfiguration.contains(data.first)) {
-              authorizationEndpoint = '${data.first}/authorize';
-            }
-            if (authorizationEndpoint == null) {
+            try {
+              /// Extract the authorization endpoint from from
+              /// authorization_server in credentialOfferJson
+              final jsonPathCredentialOffer = JsonPath(
+                // ignore: lines_longer_than_80_chars
+                r'$..authorized_code.authorization_server',
+              );
+              final data = jsonPathCredentialOffer
+                  .read(credentialOfferJson)
+                  .first
+                  .value! as String;
+              if (listOpenIDConfiguration.contains(data)) {
+                authorizationEndpoint = '$data/authorize';
+              }
+            } catch (e) {
               final jsonPathCredentialOffer = JsonPath(
                 // ignore: lines_longer_than_80_chars
                 r'$..authorization_code.authorization_server',
@@ -921,10 +921,9 @@ class OIDC4VC {
               final data = jsonPathCredentialOffer
                   .read(credentialOfferJson)
                   .first
-                  .value as List<String>;
-              if (data.isNotEmpty &&
-                  listOpenIDConfiguration.contains(data.first)) {
-                authorizationEndpoint = '${data.first}/authorize';
+                  .value! as String;
+              if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
+                authorizationEndpoint = '$data/authorize';
               }
             }
           }
