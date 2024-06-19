@@ -244,11 +244,7 @@ class CredentialModel extends Equatable {
       credentialPreview.credentialSubjectModel.credentialSubjectType ==
       CredentialSubjectType.walletCredential;
 
-  String get getFormat => format != null
-      ? format!
-      : jwt != null
-          ? 'jwt_vc_json-ld'
-          : 'ldp_vc';
+  String get getFormat => format != null ? format! : 'ldp_vc';
 
   @override
   List<Object?> get props => [
