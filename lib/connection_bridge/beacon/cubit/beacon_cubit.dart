@@ -51,7 +51,7 @@ class BeaconCubit extends Cubit<BeaconState> {
           /// cancel previous timer if exists
           if (debounce?.isActive ?? false) {
             log.w('cancelled bombarded request');
-            debounce!.cancel();
+            debounce?.cancel();
           }
 
           debounce = Timer(const Duration(seconds: 1), () {
@@ -92,12 +92,12 @@ class BeaconCubit extends Cubit<BeaconState> {
               default:
                 break;
             }
-            debounce!.cancel();
+            debounce?.cancel();
           });
         },
       );
     } catch (e) {
-      debounce!.cancel();
+      debounce?.cancel();
       log.e('beacon listening error - $e');
     }
   }
