@@ -28,7 +28,7 @@ dependencies:
   http_mock_adapter: ^0.6.0
   jose_plus: ^0.4.5
   json_annotation: ^4.8.1
-  json_path: ^0.4.4 #latest version creates test issue
+  json_path: ^0.7.2 #latest version creates test issue
   secp256k1: ^0.3.0
   secure_storage:
     path: ../secure_storage

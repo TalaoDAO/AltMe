@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   json_annotation: ^4.8.1
-  json_path: ^0.4.4 #latest version creates test issue
+  json_path: ^0.7.2 #latest version creates test issue
 
 dev_dependencies:
   build_runner: ^2.4.4
