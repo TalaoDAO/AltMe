@@ -99,6 +99,7 @@ dependencies:
   secure_storage:
     path: packages/secure_storage
   share_plus: ^7.0.2
+  shared_preferences: ^2.2.3
   shimmer: ^3.0.0
   stream_channel: ^2.1.1
   switcher: ^1.0.0

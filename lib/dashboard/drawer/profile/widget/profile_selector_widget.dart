@@ -104,20 +104,14 @@ class ProfileSelectorWidget extends StatelessWidget {
                                 l10n: l10n,
                                 name: profile.enterpriseWalletName ?? '',
                               ),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  ),
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             trailing: Icon(
                               state.model.profileType == profileType
                                   ? Icons.radio_button_checked
                                   : Icons.radio_button_unchecked,
                               size: Sizes.icon2x,
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],

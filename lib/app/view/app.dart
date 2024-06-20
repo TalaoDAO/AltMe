@@ -24,6 +24,8 @@ import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
+import 'package:altme/theme/theme_cubit.dart';
+import 'package:altme/theme/theme_repository.dart';
 
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
@@ -39,239 +41,255 @@ import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class App extends StatelessWidget {
-  const App({super.key, this.flavorMode = FlavorMode.production});
+  const App({
+    super.key,
+    this.flavorMode = FlavorMode.production,
+    required this.themeRepository,
+  });
 
   final FlavorMode flavorMode;
+  final ThemeRepository themeRepository;
 
   @override
   Widget build(BuildContext context) {
     final secureStorageProvider = getSecureStorage;
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<FlavorCubit>(
-          create: (context) => FlavorCubit(flavorMode),
-        ),
-        BlocProvider<LangCubit>(
-          create: (context) =>
-              LangCubit(secureStorageProvider: getSecureStorage),
-        ),
-        BlocProvider<RouteCubit>(create: (context) => RouteCubit()),
-        BlocProvider<BeaconCubit>(
-          create: (context) => BeaconCubit(beacon: Beacon()),
-        ),
-        BlocProvider<WalletConnectCubit>(
-          create: (context) => WalletConnectCubit(
-            secureStorageProvider: secureStorageProvider,
-            connectedDappRepository:
-                ConnectedDappRepository(secureStorageProvider),
-            routeCubit: context.read<RouteCubit>(),
+    return RepositoryProvider.value(
+      value: themeRepository,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => ThemeCubit(
+              themeRepository: context.read<ThemeRepository>(),
+            )..getCurrentTheme(),
           ),
-        ),
-        BlocProvider<DeepLinkCubit>(create: (context) => DeepLinkCubit()),
-        BlocProvider<QueryByExampleCubit>(
-          create: (context) => QueryByExampleCubit(),
-        ),
-        BlocProvider<ProfileCubit>(
-          create: (context) => ProfileCubit(
-            secureStorageProvider: secureStorageProvider,
-            oidc4vc: OIDC4VC(),
-            didKitProvider: DIDKitProvider(),
-            langCubit: context.read<LangCubit>(),
-            jwtDecode: JWTDecode(),
+          BlocProvider<FlavorCubit>(
+            create: (context) => FlavorCubit(flavorMode),
           ),
-        ),
-        BlocProvider<AdvanceSettingsCubit>(
-          create: (context) {
-            return AdvanceSettingsCubit(
+          BlocProvider<LangCubit>(
+            create: (context) =>
+                LangCubit(secureStorageProvider: getSecureStorage),
+          ),
+          BlocProvider<RouteCubit>(create: (context) => RouteCubit()),
+          BlocProvider<BeaconCubit>(
+            create: (context) => BeaconCubit(beacon: Beacon()),
+          ),
+          BlocProvider<WalletConnectCubit>(
+            create: (context) => WalletConnectCubit(
+              secureStorageProvider: secureStorageProvider,
+              connectedDappRepository:
+                  ConnectedDappRepository(secureStorageProvider),
+              routeCubit: context.read<RouteCubit>(),
+            ),
+          ),
+          BlocProvider<DeepLinkCubit>(create: (context) => DeepLinkCubit()),
+          BlocProvider<QueryByExampleCubit>(
+            create: (context) => QueryByExampleCubit(),
+          ),
+          BlocProvider<ProfileCubit>(
+            create: (context) => ProfileCubit(
+              secureStorageProvider: secureStorageProvider,
+              oidc4vc: OIDC4VC(),
+              didKitProvider: DIDKitProvider(),
+              langCubit: context.read<LangCubit>(),
+              jwtDecode: JWTDecode(),
+            ),
+          ),
+          BlocProvider<AdvanceSettingsCubit>(
+            create: (context) {
+              return AdvanceSettingsCubit(
+                secureStorageProvider: getSecureStorage,
+              );
+            },
+          ),
+          BlocProvider(
+            create: (context) => KycVerificationCubit(
+              profileCubit: context.read<ProfileCubit>(),
+              client: DioClient(
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+            ),
+          ),
+          BlocProvider<HomeCubit>(
+            create: (context) => HomeCubit(
+              client: DioClient(
+                baseUrl: Urls.issuerBaseUrl,
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+              secureStorageProvider: secureStorageProvider,
+              oidc4vc: OIDC4VC(),
+              didKitProvider: DIDKitProvider(),
+              profileCubit: context.read<ProfileCubit>(),
+            ),
+          ),
+          BlocProvider<OnboardingCubit>(
+            create: (context) => OnboardingCubit(),
+          ),
+          BlocProvider<WalletCubit>(
+            lazy: false,
+            create: (context) => WalletCubit(
+              secureStorageProvider: secureStorageProvider,
+              homeCubit: context.read<HomeCubit>(),
+              keyGenerator: KeyGenerator(),
+              walletConnectCubit: context.read<WalletConnectCubit>(),
+            ),
+          ),
+          BlocProvider<CredentialsCubit>(
+            lazy: false,
+            create: (context) => CredentialsCubit(
+              credentialsRepository:
+                  CredentialsRepository(secureStorageProvider),
+              secureStorageProvider: secureStorageProvider,
+              keyGenerator: KeyGenerator(),
+              didKitProvider: DIDKitProvider(),
+              oidc4vc: OIDC4VC(),
+              advanceSettingsCubit: context.read<AdvanceSettingsCubit>(),
+              jwtDecode: JWTDecode(),
+              profileCubit: context.read<ProfileCubit>(),
+              walletCubit: context.read<WalletCubit>(),
+            ),
+          ),
+          BlocProvider<ManageNetworkCubit>(
+            create: (context) => ManageNetworkCubit(
+              secureStorageProvider: secureStorageProvider,
+              walletCubit: context.read<WalletCubit>(),
+            ),
+          ),
+          BlocProvider<PolygonIdCubit>(
+            create: (context) => PolygonIdCubit(
+              client: DioClient(
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+              secureStorageProvider: secureStorageProvider,
+              polygonId: PolygonId(),
+              credentialsCubit: context.read<CredentialsCubit>(),
+              profileCubit: context.read<ProfileCubit>(),
+              walletCubit: context.read<WalletCubit>(),
+            ),
+          ),
+          BlocProvider<EnterpriseCubit>(
+            create: (context) => EnterpriseCubit(
+              client: DioClient(
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+              profileCubit: context.read<ProfileCubit>(),
+              credentialsCubit: context.read<CredentialsCubit>(),
+            ),
+          ),
+          BlocProvider<ScanCubit>(
+            create: (context) => ScanCubit(
+              client: DioClient(
+                baseUrl: Urls.checkIssuerTalaoUrl,
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+              credentialsCubit: context.read<CredentialsCubit>(),
+              didKitProvider: DIDKitProvider(),
+              secureStorageProvider: secureStorageProvider,
+              profileCubit: context.read<ProfileCubit>(),
+              walletCubit: context.read<WalletCubit>(),
+              oidc4vc: OIDC4VC(),
+              jwtDecode: JWTDecode(),
+            ),
+          ),
+          BlocProvider<QRCodeScanCubit>(
+            create: (context) => QRCodeScanCubit(
+              client: DioClient(
+                baseUrl: Urls.checkIssuerTalaoUrl,
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+              requestClient: DioClient(
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+              scanCubit: context.read<ScanCubit>(),
+              queryByExampleCubit: context.read<QueryByExampleCubit>(),
+              deepLinkCubit: context.read<DeepLinkCubit>(),
+              jwtDecode: JWTDecode(),
+              profileCubit: context.read<ProfileCubit>(),
+              credentialsCubit: context.read<CredentialsCubit>(),
+              beacon: Beacon(),
+              walletConnectCubit: context.read<WalletConnectCubit>(),
+              secureStorageProvider: secureStorageProvider,
+              polygonIdCubit: context.read<PolygonIdCubit>(),
+              didKitProvider: DIDKitProvider(),
+              oidc4vc: OIDC4VC(),
+              walletCubit: context.read<WalletCubit>(),
+              enterpriseCubit: context.read<EnterpriseCubit>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => AllTokensCubit(
+              secureStorageProvider: secureStorageProvider,
+              client: DioClient(
+                baseUrl: Urls.coinGeckoBase,
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+            ),
+          ),
+          BlocProvider(
+            create: (_) => MnemonicNeedVerificationCubit(),
+          ),
+          BlocProvider<TokensCubit>(
+            create: (context) => TokensCubit(
+              allTokensCubit: context.read<AllTokensCubit>(),
+              networkCubit: context.read<ManageNetworkCubit>(),
+              mnemonicNeedVerificationCubit:
+                  context.read<MnemonicNeedVerificationCubit>(),
+              secureStorageProvider: secureStorageProvider,
+              client: DioClient(
+                baseUrl:
+                    context.read<ManageNetworkCubit>().state.network.apiUrl,
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+              walletCubit: context.read<WalletCubit>(),
+            ),
+          ),
+          BlocProvider<NftCubit>(
+            create: (context) => NftCubit(
+              client: DioClient(
+                baseUrl:
+                    context.read<ManageNetworkCubit>().state.network.apiUrl,
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+              walletCubit: context.read<WalletCubit>(),
+              manageNetworkCubit: context.read<ManageNetworkCubit>(),
+            ),
+          ),
+          BlocProvider<AltmeChatSupportCubit>(
+            lazy: false,
+            create: (context) => AltmeChatSupportCubit(
               secureStorageProvider: getSecureStorage,
-            );
-          },
-        ),
-        BlocProvider(
-          create: (context) => KycVerificationCubit(
-            profileCubit: context.read<ProfileCubit>(),
-            client: DioClient(
-              secureStorageProvider: secureStorageProvider,
-              dio: Dio(),
+              matrixChat: MatrixChatImpl(),
+              profileCubit: context.read<ProfileCubit>(),
             ),
           ),
-        ),
-        BlocProvider<HomeCubit>(
-          create: (context) => HomeCubit(
-            client: DioClient(
-              baseUrl: Urls.issuerBaseUrl,
+          BlocProvider(
+            create: (context) => SplashCubit(
               secureStorageProvider: secureStorageProvider,
-              dio: Dio(),
-            ),
-            secureStorageProvider: secureStorageProvider,
-            oidc4vc: OIDC4VC(),
-            didKitProvider: DIDKitProvider(),
-            profileCubit: context.read<ProfileCubit>(),
-          ),
-        ),
-        BlocProvider<OnboardingCubit>(
-          create: (context) => OnboardingCubit(),
-        ),
-        BlocProvider<WalletCubit>(
-          lazy: false,
-          create: (context) => WalletCubit(
-            secureStorageProvider: secureStorageProvider,
-            homeCubit: context.read<HomeCubit>(),
-            keyGenerator: KeyGenerator(),
-            walletConnectCubit: context.read<WalletConnectCubit>(),
-          ),
-        ),
-        BlocProvider<CredentialsCubit>(
-          lazy: false,
-          create: (context) => CredentialsCubit(
-            credentialsRepository: CredentialsRepository(secureStorageProvider),
-            secureStorageProvider: secureStorageProvider,
-            keyGenerator: KeyGenerator(),
-            didKitProvider: DIDKitProvider(),
-            oidc4vc: OIDC4VC(),
-            advanceSettingsCubit: context.read<AdvanceSettingsCubit>(),
-            jwtDecode: JWTDecode(),
-            profileCubit: context.read<ProfileCubit>(),
-            walletCubit: context.read<WalletCubit>(),
-          ),
-        ),
-        BlocProvider<ManageNetworkCubit>(
-          create: (context) => ManageNetworkCubit(
-            secureStorageProvider: secureStorageProvider,
-            walletCubit: context.read<WalletCubit>(),
-          ),
-        ),
-        BlocProvider<PolygonIdCubit>(
-          create: (context) => PolygonIdCubit(
-            client: DioClient(
-              secureStorageProvider: secureStorageProvider,
-              dio: Dio(),
-            ),
-            secureStorageProvider: secureStorageProvider,
-            polygonId: PolygonId(),
-            credentialsCubit: context.read<CredentialsCubit>(),
-            profileCubit: context.read<ProfileCubit>(),
-            walletCubit: context.read<WalletCubit>(),
-          ),
-        ),
-        BlocProvider<EnterpriseCubit>(
-          create: (context) => EnterpriseCubit(
-            client: DioClient(
-              secureStorageProvider: secureStorageProvider,
-              dio: Dio(),
-            ),
-            profileCubit: context.read<ProfileCubit>(),
-            credentialsCubit: context.read<CredentialsCubit>(),
-          ),
-        ),
-        BlocProvider<ScanCubit>(
-          create: (context) => ScanCubit(
-            client: DioClient(
-              baseUrl: Urls.checkIssuerTalaoUrl,
-              secureStorageProvider: secureStorageProvider,
-              dio: Dio(),
-            ),
-            credentialsCubit: context.read<CredentialsCubit>(),
-            didKitProvider: DIDKitProvider(),
-            secureStorageProvider: secureStorageProvider,
-            profileCubit: context.read<ProfileCubit>(),
-            walletCubit: context.read<WalletCubit>(),
-            oidc4vc: OIDC4VC(),
-            jwtDecode: JWTDecode(),
-          ),
-        ),
-        BlocProvider<QRCodeScanCubit>(
-          create: (context) => QRCodeScanCubit(
-            client: DioClient(
-              baseUrl: Urls.checkIssuerTalaoUrl,
-              secureStorageProvider: secureStorageProvider,
-              dio: Dio(),
-            ),
-            requestClient: DioClient(
-              secureStorageProvider: secureStorageProvider,
-              dio: Dio(),
-            ),
-            scanCubit: context.read<ScanCubit>(),
-            queryByExampleCubit: context.read<QueryByExampleCubit>(),
-            deepLinkCubit: context.read<DeepLinkCubit>(),
-            jwtDecode: JWTDecode(),
-            profileCubit: context.read<ProfileCubit>(),
-            credentialsCubit: context.read<CredentialsCubit>(),
-            beacon: Beacon(),
-            walletConnectCubit: context.read<WalletConnectCubit>(),
-            secureStorageProvider: secureStorageProvider,
-            polygonIdCubit: context.read<PolygonIdCubit>(),
-            didKitProvider: DIDKitProvider(),
-            oidc4vc: OIDC4VC(),
-            walletCubit: context.read<WalletCubit>(),
-            enterpriseCubit: context.read<EnterpriseCubit>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => AllTokensCubit(
-            secureStorageProvider: secureStorageProvider,
-            client: DioClient(
-              baseUrl: Urls.coinGeckoBase,
-              secureStorageProvider: secureStorageProvider,
-              dio: Dio(),
+              homeCubit: context.read<HomeCubit>(),
+              walletCubit: context.read<WalletCubit>(),
+              credentialsCubit: context.read<CredentialsCubit>(),
+              client: DioClient(
+                baseUrl: Urls.checkIssuerTalaoUrl,
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+              altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
+              profileCubit: context.read<ProfileCubit>(),
             ),
           ),
-        ),
-        BlocProvider(
-          create: (_) => MnemonicNeedVerificationCubit(),
-        ),
-        BlocProvider<TokensCubit>(
-          create: (context) => TokensCubit(
-            allTokensCubit: context.read<AllTokensCubit>(),
-            networkCubit: context.read<ManageNetworkCubit>(),
-            mnemonicNeedVerificationCubit:
-                context.read<MnemonicNeedVerificationCubit>(),
-            secureStorageProvider: secureStorageProvider,
-            client: DioClient(
-              baseUrl: context.read<ManageNetworkCubit>().state.network.apiUrl,
-              secureStorageProvider: secureStorageProvider,
-              dio: Dio(),
-            ),
-            walletCubit: context.read<WalletCubit>(),
-          ),
-        ),
-        BlocProvider<NftCubit>(
-          create: (context) => NftCubit(
-            client: DioClient(
-              baseUrl: context.read<ManageNetworkCubit>().state.network.apiUrl,
-              secureStorageProvider: secureStorageProvider,
-              dio: Dio(),
-            ),
-            walletCubit: context.read<WalletCubit>(),
-            manageNetworkCubit: context.read<ManageNetworkCubit>(),
-          ),
-        ),
-        BlocProvider<AltmeChatSupportCubit>(
-          lazy: false,
-          create: (context) => AltmeChatSupportCubit(
-            secureStorageProvider: getSecureStorage,
-            matrixChat: MatrixChatImpl(),
-            profileCubit: context.read<ProfileCubit>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => SplashCubit(
-            secureStorageProvider: secureStorageProvider,
-            homeCubit: context.read<HomeCubit>(),
-            walletCubit: context.read<WalletCubit>(),
-            credentialsCubit: context.read<CredentialsCubit>(),
-            client: DioClient(
-              baseUrl: Urls.checkIssuerTalaoUrl,
-              secureStorageProvider: secureStorageProvider,
-              dio: Dio(),
-            ),
-            altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
-            profileCubit: context.read<ProfileCubit>(),
-          ),
-        ),
-        BlocProvider(create: (context) => HomeTabbarCubit()),
-      ],
-      child: const MaterialAppDefinition(),
+          BlocProvider(create: (context) => HomeTabbarCubit()),
+        ],
+        child: const MaterialAppDefinition(),
+      ),
     );
   }
 }
@@ -287,20 +305,37 @@ class MaterialAppDefinition extends StatelessWidget {
           context.read<LangCubit>().checkLocale();
         }
 
-        return MaterialApp(
-          locale: state.locale,
-          title: 'AltMe',
-          darkTheme: AppTheme.darkThemeData,
-          navigatorObservers: [MyRouteObserver(context)],
-          themeMode: ThemeMode.dark,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const SplashPage(),
+        return BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (themeContext, themeState) {
+            return BlocBuilder<ProfileCubit, ProfileState>(
+              builder: (profileContext, profileState) {
+                return MaterialApp(
+                  locale: state.locale,
+                  title: 'AltMe',
+                  theme: AppTheme.seedThemeData(
+                    Brightness.light,
+                    profileState
+                        .model.profileSetting.generalOptions.primaryColor,
+                  ),
+                  darkTheme: AppTheme.seedThemeData(
+                    Brightness.dark,
+                    profileState
+                        .model.profileSetting.generalOptions.primaryColor,
+                  ),
+                  navigatorObservers: [MyRouteObserver(context)],
+                  themeMode: themeState.themeMode,
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  home: const SplashPage(),
+                );
+              },
+            );
+          },
         );
       },
     );

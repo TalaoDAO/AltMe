@@ -184,7 +184,8 @@ class _OnBoardingVerifyPhraseViewState
                                       widget.mnemonic[col1Mnemonics.order - 1],
                                   showOrder:
                                       col1Mnemonics.mnemonicStatus.showOrder,
-                                  color: col1Mnemonics.mnemonicStatus.color,
+                                  color: col1Mnemonics.mnemonicStatus
+                                      .color(context),
                                   onTap: () {
                                     widget.onBoardingVerifyPhraseCubit.verify(
                                       mnemonic: widget.mnemonic,
@@ -202,7 +203,8 @@ class _OnBoardingVerifyPhraseViewState
                                       widget.mnemonic[col2Mnemonics.order - 1],
                                   showOrder:
                                       col2Mnemonics.mnemonicStatus.showOrder,
-                                  color: col2Mnemonics.mnemonicStatus.color,
+                                  color: col2Mnemonics.mnemonicStatus
+                                      .color(context),
                                   onTap: () {
                                     widget.onBoardingVerifyPhraseCubit.verify(
                                       mnemonic: widget.mnemonic,
@@ -220,7 +222,8 @@ class _OnBoardingVerifyPhraseViewState
                                       widget.mnemonic[col3Mnemonics.order - 1],
                                   showOrder:
                                       col3Mnemonics.mnemonicStatus.showOrder,
-                                  color: col3Mnemonics.mnemonicStatus.color,
+                                  color: col3Mnemonics.mnemonicStatus
+                                      .color(context),
                                   onTap: () {
                                     widget.onBoardingVerifyPhraseCubit.verify(
                                       mnemonic: widget.mnemonic,

@@ -34,11 +34,10 @@ class DrawerView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: ListView(
                   children: <Widget>[
-                    Align(
+                    const Align(
                       alignment: Alignment.topLeft,
                       child: BackLeadingButton(
                         padding: EdgeInsets.zero,
-                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
                     ),
 

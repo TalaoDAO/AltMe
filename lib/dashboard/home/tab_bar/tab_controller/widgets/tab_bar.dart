@@ -48,7 +48,16 @@ class MyTab extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset(icon, height: Sizes.icon),
+            if (isSelected)
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.primary,
+                  BlendMode.color,
+                ),
+                child: Image.asset(icon, height: Sizes.icon),
+              )
+            else
+              Image.asset(icon, height: Sizes.icon),
             const SizedBox(
               width: Sizes.spaceXSmall,
             ),

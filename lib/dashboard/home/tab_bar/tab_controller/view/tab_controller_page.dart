@@ -50,6 +50,7 @@ class _TabControllerViewState extends State<TabControllerView>
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
               child: TabBar(
+                dividerColor: Colors.transparent,
                 controller: _tabController,
                 padding: const EdgeInsets.symmetric(
                   horizontal: Sizes.space2XSmall,

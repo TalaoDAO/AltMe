@@ -14,7 +14,11 @@
     "pincodeSerie",
     "pincodeSequence",
     "pincodeDifferent",
-    "codeSecretIncorrectDescription"
+    "codeSecretIncorrectDescription",
+    "languageSettings",
+    "languageSettingsDescription",
+    "themeSettings",
+    "themeSettingsDescription"
   ],
 
   "es": [
@@ -32,7 +36,11 @@
     "pincodeSerie",
     "pincodeSequence",
     "pincodeDifferent",
-    "codeSecretIncorrectDescription"
+    "codeSecretIncorrectDescription",
+    "languageSettings",
+    "languageSettingsDescription",
+    "themeSettings",
+    "themeSettingsDescription"
   ],
 
   "fr": [
@@ -63,6 +71,10 @@
     "pincodeSerie",
     "pincodeSequence",
     "pincodeDifferent",
-    "codeSecretIncorrectDescription"
+    "codeSecretIncorrectDescription",
+    "languageSettings",
+    "languageSettingsDescription",
+    "themeSettings",
+    "themeSettingsDescription"
   ]
 }

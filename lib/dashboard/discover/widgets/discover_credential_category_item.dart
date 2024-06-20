@@ -48,7 +48,7 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
               credentialCategoryConfig.discoverSubTitle,
               maxLines: 3,
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
             ),
           ),
