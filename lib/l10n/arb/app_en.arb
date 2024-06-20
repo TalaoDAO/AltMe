@@ -1034,7 +1034,7 @@
   "proofTypeSubtitle": "Default: jwt\nSelect one of the proof type.",
   "thisWalleIsAlreadyConfigured": "This wallet is already configured",
   "walletSettings": "Wallet Settings",
-  "walletSettingsDescription": "Choose your language",
+  "walletSettingsDescription": "Choose your language and theme",
   "languageSelectorTitle": "Language",
   "french": "Français",
   "spanish": "Español",
@@ -1075,5 +1075,13 @@
       "count": {},
       "plural": {}
     }
-  }
+  },
+  "languageSettings": "Language Settings",
+  "languageSettingsDescription": "Choose your language",
+  "themeSettings": "Theme Settings",
+  "themeSettingsDescription": "Choose your theme",
+  "darkThemeText": "Dark Theme",
+  "lightThemeText": "Light Theme",
+  "systemThemeText": "Phone Theme"
+
 }

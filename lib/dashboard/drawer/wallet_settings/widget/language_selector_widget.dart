@@ -38,7 +38,7 @@ class LanguageSelectorWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          l10n.walletSettingsDescription,
+                          l10n.languageSettingsDescription,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
@@ -87,17 +87,13 @@ class LanguageSelectorWidget extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge
-                                  ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  ),
                             ),
                             trailing: Icon(
                               state.languageType == languageType
                                   ? Icons.radio_button_checked
                                   : Icons.radio_button_unchecked,
                               size: Sizes.icon2x,
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],

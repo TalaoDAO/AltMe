@@ -200,6 +200,7 @@ void main() {
                         published: DateTime.now(),
                         profileId: '',
                         customerPlan: '',
+                        primaryColor: '',
                       ),
                       helpCenterOptions: HelpCenterOptions.initial(),
                       selfSovereignIdentityOptions:

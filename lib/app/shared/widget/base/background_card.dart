@@ -26,7 +26,7 @@ class BackgroundCard extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        color: color ?? Theme.of(context).colorScheme.surfaceBright,
+        color: color ?? Theme.of(context).colorScheme.secondaryContainer,
         borderRadius: const BorderRadius.all(Radius.circular(15)),
       ),
       child: child,

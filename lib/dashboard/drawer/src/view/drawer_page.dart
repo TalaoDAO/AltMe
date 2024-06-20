@@ -11,12 +11,23 @@ class DrawerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DrawerView();
+    return Builder(
+      builder: (context) {
+        return DrawerView(
+          profileCubit: context.read<ProfileCubit>(),
+        );
+      },
+    );
   }
 }
 
 class DrawerView extends StatelessWidget {
-  const DrawerView({super.key});
+  const DrawerView({
+    super.key,
+    required this.profileCubit,
+  });
+
+  final ProfileCubit profileCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +45,10 @@ class DrawerView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: ListView(
                   children: <Widget>[
-                    Align(
+                    const Align(
                       alignment: Alignment.topLeft,
                       child: BackLeadingButton(
                         padding: EdgeInsets.zero,
-                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
                     ),
 
@@ -71,6 +81,7 @@ class DrawerView extends StatelessWidget {
                       ),
                       const SizedBox(height: Sizes.spaceSmall),
                     ],
+
                     DrawerCategoryItem(
                       title: l10n.walletSecurity,
                       subTitle: l10n.walletSecurityDescription,
@@ -128,10 +139,11 @@ class DrawerView extends StatelessWidget {
                           child: BlocBuilder<ProfileCubit, ProfileState>(
                             builder: (context, state) {
                               return Switch(
+                                key: const Key('developerMode'),
                                 onChanged: (value) async {
-                                  await context
-                                      .read<ProfileCubit>()
-                                      .setDeveloperModeStatus(enabled: value);
+                                  await profileCubit.setDeveloperModeStatus(
+                                    enabled: value,
+                                  );
                                 },
                                 value: state.model.isDeveloperMode,
                                 activeColor:
@@ -155,8 +167,7 @@ class DrawerView extends StatelessWidget {
                     //const SizedBox(height: Sizes.spaceSmall),
 
                     if (profileModel
-                            .profileSetting.settingsMenu.displayHelpCenter &&
-                        profileModel.profileType != ProfileType.defaultOne) ...[
+                        .profileSetting.settingsMenu.displayHelpCenter) ...[
                       DrawerCategoryItem(
                         title: l10n.helpCenter,
                         subTitle: l10n.helpCenterDescription,
@@ -185,9 +196,7 @@ class DrawerView extends StatelessWidget {
                             .push<void>(ResetWalletMenu.route());
                       },
                     ),
-                    const SizedBox(
-                      height: Sizes.spaceNormal,
-                    ),
+                    const SizedBox(height: Sizes.spaceNormal),
                   ],
                 ),
               ),

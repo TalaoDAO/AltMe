@@ -16,23 +16,30 @@ class HelpCenterMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const HelpCenterView();
+    return Builder(
+      builder: (context) {
+        return HelpCenterView(
+          profileCubit: context.read<ProfileCubit>(),
+        );
+      },
+    );
   }
 }
 
 class HelpCenterView extends StatelessWidget {
-  const HelpCenterView({super.key});
+  const HelpCenterView({
+    super.key,
+    required this.profileCubit,
+  });
+
+  final ProfileCubit profileCubit;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final helpCenterOptions = context
-        .read<ProfileCubit>()
-        .state
-        .model
-        .profileSetting
-        .helpCenterOptions;
+    final helpCenterOptions =
+        profileCubit.state.model.profileSetting.helpCenterOptions;
 
     var email = AltMeStrings.appSupportMail;
 
@@ -59,9 +66,8 @@ class HelpCenterView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          BackLeadingButton(
+          const BackLeadingButton(
             padding: EdgeInsets.zero,
-            color: Theme.of(context).colorScheme.onPrimary,
           ),
           const DrawerLogo(),
           if (helpCenterOptions.displayChatSupport) ...[
@@ -80,11 +86,8 @@ class HelpCenterView extends StatelessWidget {
             DrawerItem(
               title: l10n.sendAnEmail,
               onTap: () {
-                Navigator.of(context).push<void>(
-                  ContactUsPage.route(
-                    email: email,
-                  ),
-                );
+                Navigator.of(context)
+                    .push<void>(ContactUsPage.route(email: email));
               },
             ),
           ],
@@ -96,9 +99,7 @@ class HelpCenterView extends StatelessWidget {
           ),
           DrawerItem(
             onTap: () {
-              LaunchUrl.launch(
-                'https://${AltMeStrings.appContactWebsiteName}',
-              );
+              LaunchUrl.launch('https://${AltMeStrings.appContactWebsiteName}');
             },
             title: l10n.officialWebsite,
           ),

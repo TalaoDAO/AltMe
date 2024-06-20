@@ -68,7 +68,7 @@ dependencies:
   image_picker: ^1.0.7
   jose_plus: ^0.4.5
   json_annotation: ^4.8.1
-  json_path: ^0.4.4 #latest version creates test issue
+  json_path: ^0.7.2 #latest version creates test issue
   jwt_decode:
     path: packages/jwt_decode
   key_generator:
@@ -99,6 +99,7 @@ dependencies:
   secure_storage:
     path: packages/secure_storage
   share_plus: ^7.0.2
+  shared_preferences: ^2.2.3
   shimmer: ^3.0.0
   stream_channel: ^2.1.1
   switcher: ^1.0.0

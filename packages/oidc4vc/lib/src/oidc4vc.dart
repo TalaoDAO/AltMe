@@ -149,6 +149,7 @@ class OIDC4VC {
     required String? clientAssertion,
     required bool secureAuthorizedFlow,
     required Dio dio,
+    required dynamic credentialOfferJson,
     SecureStorageProvider? secureStorage,
   }) async {
     try {
@@ -159,11 +160,12 @@ class OIDC4VC {
         secureStorage: secureStorage,
       );
 
-      final authorizationEndpoint = await readAuthorizationEndPoint(
+      final credentialAuthorizationEndpoint = await readAuthorizationEndPoint(
         openIdConfiguration: openIdConfiguration,
         issuer: issuer,
         oidc4vciDraftType: oidc4vciDraftType,
         dio: dio,
+        credentialOfferJson: credentialOfferJson,
         secureStorage: secureStorage,
       );
 
@@ -188,7 +190,7 @@ class OIDC4VC {
       );
 
       return (
-        authorizationEndpoint,
+        credentialAuthorizationEndpoint,
         authorizationRequestParemeters,
         openIdConfiguration,
       );
@@ -861,29 +863,75 @@ class OIDC4VC {
     required String issuer,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required Dio dio,
+    required dynamic credentialOfferJson,
     SecureStorageProvider? secureStorage,
   }) async {
-    var authorizationEndpoint = '$issuer/authorize';
+    String? authorizationEndpoint;
 
-    if (openIdConfiguration.authorizationEndpoint != null) {
-      authorizationEndpoint = openIdConfiguration.authorizationEndpoint!;
-    } else {
-      final authorizationServer =
-          openIdConfiguration.authorizationServer ?? issuer;
+    switch (oidc4vciDraftType) {
+      case OIDC4VCIDraftType.draft11:
+        if (openIdConfiguration.authorizationEndpoint != null) {
+          authorizationEndpoint = openIdConfiguration.authorizationEndpoint;
+        } else {
+          final authorizationServer =
+              openIdConfiguration.authorizationServer ?? issuer;
 
-      final authorizationServerConfiguration = await getOpenIdConfig(
-        baseUrl: authorizationServer,
-        isAuthorizationServer: true,
-        dio: dio,
-        secureStorage: secureStorage,
-      );
+          final authorizationServerConfiguration = await getOpenIdConfig(
+            baseUrl: authorizationServer,
+            isAuthorizationServer: true,
+            dio: dio,
+            secureStorage: secureStorage,
+          );
 
-      if (authorizationServerConfiguration.authorizationEndpoint != null) {
-        authorizationEndpoint =
-            authorizationServerConfiguration.authorizationEndpoint!;
-      }
+          if (authorizationServerConfiguration.authorizationEndpoint != null) {
+            authorizationEndpoint =
+                authorizationServerConfiguration.authorizationEndpoint;
+          }
+        }
+      case OIDC4VCIDraftType.draft13:
+
+        /// Extract the authorization endpoint from from first element of
+        /// authorization_servers in opentIdConfiguration.authorizationServers
+        final listOpenIDConfiguration =
+            openIdConfiguration.authorizationServers ?? [];
+        if (listOpenIDConfiguration.isNotEmpty) {
+          if (listOpenIDConfiguration.length == 1) {
+            authorizationEndpoint =
+                '${listOpenIDConfiguration.first}/authorize';
+          } else {
+            try {
+              /// Extract the authorization endpoint from from
+              /// authorization_server in credentialOfferJson
+              final jsonPathCredentialOffer = JsonPath(
+                // ignore: lines_longer_than_80_chars
+                r'$..["urn:ietf:params:oauth:grant-type:pre-authorized_code"].authorization_server',
+              );
+              final data = jsonPathCredentialOffer
+                  .read(credentialOfferJson)
+                  .first
+                  .value! as String;
+              if (listOpenIDConfiguration.contains(data)) {
+                authorizationEndpoint = '$data/authorize';
+              }
+            } catch (e) {
+              final jsonPathCredentialOffer = JsonPath(
+                r'$..authorization_code.authorization_server',
+              );
+              final data = jsonPathCredentialOffer
+                  .read(credentialOfferJson)
+                  .first
+                  .value! as String;
+              if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
+                authorizationEndpoint = '$data/authorize';
+              }
+            }
+          }
+        }
     }
-    return authorizationEndpoint;
+    // If authorizationEndpoint is null, we consider the issuer
+    // as the authorizationEndpoint
+
+    return authorizationEndpoint ??= '$issuer/authorize';
   }
 
   String readIssuerDid(
@@ -1655,7 +1703,7 @@ class OIDC4VC {
     ////openid-issuer-configuration or some are in the /openid-configuration
     ///(token endpoint etc,) and other are in the /openid-credential-issuer
     ///(credential supported) for OIDC4VP and SIOPV2, the serve is a client,
-    ///the wallet is the suthorization server the verifier metadata are in
+    ///the wallet is the authorization server the verifier metadata are in
     ////openid-configuration
 
     final url = '$baseUrl/.well-known/openid-configuration';

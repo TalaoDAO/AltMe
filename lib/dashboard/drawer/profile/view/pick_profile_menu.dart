@@ -31,15 +31,14 @@ class PickProfileMenuView extends StatelessWidget {
       scrollView: true,
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-      body: Column(
+      body: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           BackLeadingButton(
             padding: EdgeInsets.zero,
-            color: Theme.of(context).colorScheme.onPrimary,
           ),
-          const DrawerLogo(),
-          const ProfileSelectorWidget(),
+          DrawerLogo(),
+          ProfileSelectorWidget(),
         ],
       ),
     );
