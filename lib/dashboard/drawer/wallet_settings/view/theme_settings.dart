@@ -1,27 +1,26 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/drawer/profile/widget/profile_selector_widget.dart';
-
+import 'package:altme/dashboard/drawer/wallet_settings/widget/theme_selector_widget.dart';
 import 'package:flutter/material.dart';
 
-class PickProfileMenu extends StatelessWidget {
-  const PickProfileMenu({super.key});
+class ThemeSettings extends StatelessWidget {
+  const ThemeSettings({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: '/PickProfileMenu'),
-      builder: (_) => const PickProfileMenu(),
+      settings: const RouteSettings(name: '/ThemeSettings'),
+      builder: (_) => const ThemeSettings(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return const PickProfileMenuView();
+    return const WalletSettingsMenuView();
   }
 }
 
-class PickProfileMenuView extends StatelessWidget {
-  const PickProfileMenuView({super.key});
+class WalletSettingsMenuView extends StatelessWidget {
+  const WalletSettingsMenuView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,7 @@ class PickProfileMenuView extends StatelessWidget {
             padding: EdgeInsets.zero,
           ),
           DrawerLogo(),
-          ProfileSelectorWidget(),
+          ThemeSelectorWidget(),
         ],
       ),
     );

@@ -35,9 +35,8 @@ class BackupView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                BackLeadingButton(
+                const BackLeadingButton(
                   padding: EdgeInsets.zero,
-                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
                 WalletLogo(
                   profileModel: context.read<ProfileCubit>().state.model,

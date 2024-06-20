@@ -66,9 +66,8 @@ class HelpCenterView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          BackLeadingButton(
+          const BackLeadingButton(
             padding: EdgeInsets.zero,
-            color: Theme.of(context).colorScheme.onPrimary,
           ),
           const DrawerLogo(),
           if (helpCenterOptions.displayChatSupport) ...[

@@ -43,25 +43,33 @@ class WalletLogo extends StatelessWidget {
     return Column(
       children: [
         Center(
-          child: SizedBox(
-            width: width,
-            height: height,
-            child: profileModel.profileType == ProfileType.enterprise
-                ? CachedImageFromNetwork(
-                    image,
-                    fit: BoxFit.contain,
-                    width: width,
-                    bgColor: Colors.transparent,
-                    height: height,
-                    errorMessage: '',
-                    showLoading: false,
-                  )
-                : Image.asset(
-                    image,
-                    fit: BoxFit.contain,
-                    width: width,
-                    height: height,
-                  ),
+          child: ColorFiltered(
+            colorFilter: ColorFilter.mode(
+              profileModel.profileType == ProfileType.enterprise
+                  ? Colors.transparent
+                  : Theme.of(context).colorScheme.primary,
+              BlendMode.srcIn,
+            ),
+            child: SizedBox(
+              width: width,
+              height: height,
+              child: profileModel.profileType == ProfileType.enterprise
+                  ? CachedImageFromNetwork(
+                      image,
+                      fit: BoxFit.contain,
+                      width: width,
+                      bgColor: Colors.transparent,
+                      height: height,
+                      errorMessage: '',
+                      showLoading: false,
+                    )
+                  : Image.asset(
+                      image,
+                      fit: BoxFit.contain,
+                      width: width,
+                      height: height,
+                    ),
+            ),
           ),
         ),
         // if (showPoweredBy &&

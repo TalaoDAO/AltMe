@@ -25,7 +25,7 @@ class DrawerCategoryItem extends StatelessWidget {
       child: Container(
         padding: padding,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceBright,
+          color: Theme.of(context).colorScheme.secondaryContainer,
           borderRadius: const BorderRadius.all(
             Radius.circular(Sizes.normalRadius),
           ),
@@ -39,7 +39,7 @@ class DrawerCategoryItem extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   if (subTitle != null) ...[
                     const SizedBox(height: Sizes.space2XSmall),

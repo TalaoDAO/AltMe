@@ -165,7 +165,7 @@ class _DashboardViewState extends State<DashboardView> {
             canPop: false,
             onPopInvoked: (_) async {
               if (scaffoldKey.currentState!.isDrawerOpen) {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
               }
             },
             child: BasePage(

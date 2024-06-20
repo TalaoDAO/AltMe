@@ -43,15 +43,12 @@ class DrawerView extends StatelessWidget {
             child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: BackLeadingButton(
-                          padding: EdgeInsets.zero,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
+                child: ListView(
+                  children: <Widget>[
+                    const Align(
+                      alignment: Alignment.topLeft,
+                      child: BackLeadingButton(
+                        padding: EdgeInsets.zero,
                       ),
 
                       const DrawerLogo(),
