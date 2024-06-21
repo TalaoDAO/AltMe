@@ -31,7 +31,7 @@ class RevealPrivateKeyButton extends StatelessWidget {
               width: Sizes.icon,
               color: Colors.white,
             ),
-            Text(
+            MyText(
               l10n.revealPrivateKey.toUpperCase(),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
