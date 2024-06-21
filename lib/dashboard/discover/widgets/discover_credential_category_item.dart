@@ -39,7 +39,9 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             child: Text(
               credentialCategoryConfig.discoverTitle,
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ),
           Padding(
@@ -47,8 +49,8 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
             child: Text(
               credentialCategoryConfig.discoverSubTitle,
               maxLines: 3,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.secondary,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.w100,
                   ),
             ),
           ),

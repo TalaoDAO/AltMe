@@ -29,20 +29,9 @@ class MyTab extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Sizes.normalRadius),
-          gradient: isSelected
-              ? LinearGradient(
-                  colors: [
-                    Theme.of(context).colorScheme.primary,
-                    Theme.of(context).colorScheme.tertiary,
-                  ],
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  stops: const [0.3, 1.0],
-                )
-              : null,
           color: isSelected
-              ? null
-              : Theme.of(context).colorScheme.onPrimaryContainer,
+              ? Theme.of(context).colorScheme.primaryFixedDim
+              : Theme.of(context).colorScheme.primaryContainer,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +40,7 @@ class MyTab extends StatelessWidget {
             if (isSelected)
               ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.primaryFixedDim,
                   BlendMode.color,
                 ),
                 child: Image.asset(icon, height: Sizes.icon),
@@ -64,8 +53,10 @@ class MyTab extends StatelessWidget {
             Text(
               text,
               maxLines: 1,
-              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                    color: isSelected ? null : Colors.grey[400],
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.onPrimaryFixedVariant
+                        : Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
               overflow: TextOverflow.fade,
             ),

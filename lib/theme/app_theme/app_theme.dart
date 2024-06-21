@@ -49,11 +49,9 @@ class AppTheme {
   }
 
   static ThemeData seedThemeData(Brightness brightness, String primaryColor) {
-    if (primaryColor.startsWith('#')) {
-      final seedColor = Color(
-        int.parse(primaryColor.substring(1, 7), radix: 16) + 0xFF000000,
-      );
-      final theme = ThemeData(
+    // final seedColor = Colors.red;
+    final seedColor = const Color(0xff6600FF);
+    final theme = ThemeData(
         useMaterial3: true,
         brightness: brightness,
         snackBarTheme: SnackBarThemeData(
@@ -63,15 +61,18 @@ class AppTheme {
           ),
         ),
         tabBarTheme: const TabBarTheme(dividerColor: Colors.transparent),
-      );
-      return theme.copyWith(
-        textTheme: GoogleFonts.robotoTextTheme(theme.textTheme),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: seedColor,
-          brightness: brightness,
-        ),
-      );
-    }
-    return defaultThemeData(brightness);
+        textTheme: TextTheme(
+          titleLarge: GoogleFonts.roboto(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ));
+    return theme.copyWith(
+      textTheme: GoogleFonts.robotoTextTheme(theme.textTheme),
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: seedColor,
+        brightness: brightness,
+      ),
+    );
   }
 }
