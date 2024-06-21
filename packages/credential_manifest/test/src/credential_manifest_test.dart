@@ -188,7 +188,7 @@ void main() {
     final credentialManifestMap = credentialManifestPath
         .read(jsonDecode(openIdConf))
         .first
-        .value as Map<String, dynamic>;
+        .value! as Map<String, dynamic>;
 
     /// create credentialManisfest object
     final credentialManifest = CredentialManifest.fromJson(
@@ -205,7 +205,7 @@ void main() {
     final Map<String, dynamic> outputDescriptorMap = outputDescriptorPath
         .read(jsonDecode(openIdConf))
         .first
-        .value as Map<String, dynamic>;
+        .value! as Map<String, dynamic>;
     final OutputDescriptor outputDescriptor =
         OutputDescriptor.fromJson(outputDescriptorMap);
 

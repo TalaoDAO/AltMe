@@ -4,6 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 
 import 'package:altme/wallet/model/model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ManageAccountsItem extends StatelessWidget {
   const ManageAccountsItem({
@@ -83,9 +84,37 @@ class ManageAccountsItem extends StatelessWidget {
             ),
             subtitle: Padding(
               padding: const EdgeInsets.symmetric(vertical: Sizes.spaceXSmall),
-              child: MyText(
-                walletAddressExtracted,
-                style: Theme.of(context).textTheme.bodyMedium,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: MyText(
+                      walletAddressExtracted,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                  const SizedBox(width: Sizes.spaceSmall),
+                  InkWell(
+                    onTap: () async {
+                      await Clipboard.setData(
+                        ClipboardData(
+                          text: walletAddressExtracted,
+                        ),
+                      );
+                      AlertMessage.showStateMessage(
+                        context: context,
+                        stateMessage: StateMessage.success(
+                          stringMessage: l10n.copiedToClipboard,
+                        ),
+                      );
+                    },
+                    child: Image.asset(
+                      IconStrings.copy,
+                      width: Sizes.icon,
+                      height: Sizes.icon,
+                    ),
+                  ),
+                  const SizedBox(width: Sizes.spaceSmall),
+                ],
               ),
             ),
           ),
@@ -102,9 +131,7 @@ class ManageAccountsItem extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(
-                width: Sizes.spaceSmall,
-              ),
+              const SizedBox(width: Sizes.spaceSmall),
               RevealPrivateKeyButton(
                 onTap: () async {
                   final confirm = await showDialog<bool>(

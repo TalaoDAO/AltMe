@@ -161,6 +161,10 @@ class _DashboardViewState extends State<DashboardView> {
               .helpCenterOptions
               .displayChatSupport;
 
+          final isEnterprise =
+              context.read<ProfileCubit>().state.model.walletType ==
+                  WalletType.enterprise;
+
           return PopScope(
             canPop: false,
             onPopInvoked: (_) async {
@@ -210,7 +214,7 @@ class _DashboardViewState extends State<DashboardView> {
                               const WertPage()
                             else
                               const SearchPage(),
-                            if (displayChatSupport)
+                            if (displayChatSupport && isEnterprise)
                               const AltmeSupportChatPage()
                             else
                               Container(),
@@ -248,7 +252,7 @@ class _DashboardViewState extends State<DashboardView> {
                                 onTap: () => bottomTapped(2),
                                 isSelected: state.selectedIndex == 2,
                               ),
-                            if (displayChatSupport) ...[
+                            if (displayChatSupport && isEnterprise) ...[
                               StreamBuilder(
                                 initialData: context
                                     .read<AltmeChatSupportCubit>()

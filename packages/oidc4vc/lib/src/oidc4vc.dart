@@ -939,7 +939,7 @@ class OIDC4VC {
   ) {
     final jsonPath = JsonPath(r'$..issuer');
 
-    final data = jsonPath.read(openidConfigurationResponse.data).first.value
+    final data = jsonPath.read(openidConfigurationResponse.data).first.value!
         as Map<String, dynamic>;
 
     return data['id'] as String;
@@ -957,9 +957,9 @@ class OIDC4VC {
       late dynamic data;
 
       if (holderKid == null) {
-        data = (jsonPath.read(didDocument).first.value as List).first;
+        data = (jsonPath.read(didDocument).first.value! as List).first;
       } else {
-        data = (jsonPath.read(didDocument).first.value as List)
+        data = (jsonPath.read(didDocument).first.value! as List)
             .where(
               (dynamic e) => e['kid'].toString() == holderKid,
             )
@@ -972,9 +972,9 @@ class OIDC4VC {
       late List<dynamic> data;
 
       if (holderKid == null) {
-        data = (jsonPath.read(didDocument).first.value as List).toList();
+        data = (jsonPath.read(didDocument).first.value! as List).toList();
       } else {
-        data = (jsonPath.read(didDocument).first.value as List)
+        data = (jsonPath.read(didDocument).first.value! as List)
             .where(
               (dynamic e) => e['id'].toString() == holderKid,
             )
@@ -1334,7 +1334,7 @@ class OIDC4VC {
 
     final credentialEndpoint = jsonPathCredential
         .readValues(jsonDecode(jsonEncode(openIdConfiguration)))
-        .first as String;
+        .first! as String;
     return credentialEndpoint;
   }
 
