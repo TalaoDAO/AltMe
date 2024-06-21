@@ -124,7 +124,7 @@ void main() {
       );
 
       expect(find.text('Wallet Settings'), findsOneWidget);
-      expect(find.text('Choose your language'), findsOneWidget);
+      expect(find.text('Choose your language and theme'), findsOneWidget);
 
       await tester.tap(find.text('Wallet Settings'));
       await tester.pumpAndSettle();
