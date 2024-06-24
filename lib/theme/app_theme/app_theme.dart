@@ -48,8 +48,10 @@ class AppTheme {
     );
   }
 
-  static ThemeData seedThemeData(Brightness brightness, String primaryColor) {
-    if (primaryColor.startsWith('#')) {
+  static ThemeData seedThemeData(Brightness brightness, String? primaryColor) {
+    if (primaryColor == null) {
+      return defaultThemeData(brightness);
+    } else if (primaryColor.startsWith('#')) {
       final seedColor = Color(
         int.parse(primaryColor.substring(1, 7), radix: 16) + 0xFF000000,
       );
