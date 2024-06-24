@@ -43,7 +43,7 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-          ),
+          ), 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             child: Text(

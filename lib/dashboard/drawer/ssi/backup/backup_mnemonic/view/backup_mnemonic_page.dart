@@ -97,7 +97,7 @@ class BackupMnemonicView extends StatelessWidget {
       ),
       navigation: Padding(
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: MyGradientButton(
+        child: MyElevatedButton(
           onPressed: isValidCallback.call,
           text: l10n.next,
         ),

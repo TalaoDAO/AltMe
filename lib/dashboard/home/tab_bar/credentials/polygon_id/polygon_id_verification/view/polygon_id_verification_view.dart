@@ -271,7 +271,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      MyGradientButton(
+                      MyElevatedButton(
                         text: l10n.approve,
                         onPressed: state.canGenerateProof
                             ? () async {

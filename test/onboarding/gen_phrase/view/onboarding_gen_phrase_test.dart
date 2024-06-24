@@ -172,7 +172,7 @@ void main() {
       expect(find.byType(MStepper), findsOneWidget);
       expect(find.byType(MnemonicDisplay), findsOneWidget);
       expect(find.byType(MyElevatedButton), findsOneWidget);
-      expect(find.byType(MyGradientButton), findsOneWidget);
+      expect(find.byType(MyElevatedButton), findsOneWidget);
     });
 
     testWidgets(

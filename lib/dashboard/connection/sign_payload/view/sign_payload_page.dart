@@ -209,7 +209,7 @@ class _SignPayloadViewState extends State<SignPayloadView> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    MyGradientButton(
+                    MyElevatedButton(
                       verticalSpacing: 15,
                       borderRadius: Sizes.normalRadius,
                       text: l10n.sign,

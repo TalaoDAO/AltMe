@@ -172,7 +172,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  MyGradientButton(
+                  MyElevatedButton(
                     text: l10n.verifyNow,
                     verticalSpacing: 18,
                     onPressed: () {

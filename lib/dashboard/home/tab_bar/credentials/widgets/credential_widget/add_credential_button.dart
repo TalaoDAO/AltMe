@@ -35,10 +35,10 @@ class AddCredentialButton extends StatelessWidget {
               width: Sizes.icon2x,
               height: Sizes.icon3x,
             ),
-            Text(
-              l10n.addCards,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
+            Text(l10n.addCards,
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    )),
           ],
         ),
       ),

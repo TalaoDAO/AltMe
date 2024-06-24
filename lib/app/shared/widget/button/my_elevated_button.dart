@@ -95,7 +95,7 @@ ButtonStyle elevatedStyleFrom({
     ),
     backgroundColor: WidgetStateProperty.all(
       onPressed == null
-          ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
+          ? Theme.of(context).colorScheme.outline
           : backgroundColor ?? Theme.of(context).colorScheme.primary,
     ),
     shape: WidgetStateProperty.all(

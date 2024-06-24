@@ -181,7 +181,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
             navigation: SafeArea(
               child: Container(
                 padding: const EdgeInsets.all(16),
-                child: MyGradientButton(
+                child: MyElevatedButton(
                   onPressed: state.isEmpty
                       ? null
                       : () async {

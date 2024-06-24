@@ -56,21 +56,22 @@ class AppTheme {
     // final seedColor = const Color(0xff1EAADC);
 
     final theme = ThemeData(
-        useMaterial3: true,
-        brightness: brightness,
-        snackBarTheme: SnackBarThemeData(
-          contentTextStyle: GoogleFonts.poppins(
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-          ),
+      useMaterial3: true,
+      brightness: brightness,
+      snackBarTheme: SnackBarThemeData(
+        contentTextStyle: GoogleFonts.poppins(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
         ),
-        tabBarTheme: const TabBarTheme(dividerColor: Colors.transparent),
-        textTheme: TextTheme(
-          titleLarge: GoogleFonts.roboto(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
-        ));
+      ),
+      tabBarTheme: const TabBarTheme(dividerColor: Colors.transparent),
+      textTheme: TextTheme(
+        titleLarge: GoogleFonts.roboto(
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
     return theme.copyWith(
       textTheme: GoogleFonts.poppinsTextTheme(theme.textTheme),
       colorScheme: ColorScheme.fromSeed(

@@ -158,7 +158,7 @@ class _ImportTalaoCommunityCardViewState
           navigation: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(Sizes.spaceSmall),
-              child: MyGradientButton(
+              child: MyElevatedButton(
                 onPressed: !state.isPrivateKeyValid ? null : () async {},
                 text: l10n.import,
               ),

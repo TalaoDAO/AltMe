@@ -202,7 +202,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                           horizontal: Sizes.spaceSmall,
                           vertical: Sizes.space2XSmall,
                         ),
-                        child: MyGradientButton(
+                        child: MyElevatedButton(
                           text: l10n.start,
                           verticalSpacing: 18,
                           onPressed: state.isAgreeWithTerms

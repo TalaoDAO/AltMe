@@ -66,7 +66,7 @@ class KeyVerifiedView extends StatelessWidget {
               horizontal: Sizes.spaceSmall,
               vertical: Sizes.space2XSmall,
             ),
-            child: MyGradientButton(
+            child: MyElevatedButton(
               text: l10n.letsGo,
               verticalSpacing: 18,
               onPressed: () {

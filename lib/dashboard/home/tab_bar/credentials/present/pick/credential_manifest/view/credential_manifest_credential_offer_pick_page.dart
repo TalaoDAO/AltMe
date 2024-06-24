@@ -196,7 +196,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             child: isVcSdJWT
-                                ? MyGradientButton(
+                                ? MyElevatedButton(
                                     onPressed: !credentialManifestState
                                             .isButtonEnabled
                                         ? null
@@ -246,7 +246,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                                   .inputDescriptors.length;
 
                                       if (isOptional) {
-                                        return MyGradientButton(
+                                        return MyElevatedButton(
                                           onPressed: () => present(
                                             context: context,
                                             credentialManifestState:
@@ -264,7 +264,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                                   : l10n.credentialPickPresent,
                                         );
                                       } else {
-                                        return MyGradientButton(
+                                        return MyElevatedButton(
                                           onPressed: !credentialManifestState
                                                   .isButtonEnabled
                                               ? null
