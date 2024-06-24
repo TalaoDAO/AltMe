@@ -22,11 +22,14 @@ class TitleText extends StatelessWidget {
         profileModel.profileSetting.generalOptions.splashScreenTitle ??
             '${l10n.professional} ${l10n.wallet}';
 
-    return MyText(
+    return Text(
       isEnterprise ? splashScreenTitle : '${Parameters.appName} ${l10n.wallet}',
       maxLines: 1,
       textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.headlineLarge,
+      style: Theme.of(context)
+          .textTheme
+          .headlineLarge!
+          .copyWith(fontWeight: FontWeight.bold),
     );
   }
 }

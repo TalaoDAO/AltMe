@@ -34,7 +34,7 @@ class PinCodeWidget extends StatefulWidget {
   final String? subTitle;
   final int passwordDigits;
   final bool isNewCode;
-  // When a specific pin is requested to get a credential
+  // When a specific PIN is requested to get a credential
   final bool isUserPin;
 
   // Cancel button and delete button will be switched based on the screen state

@@ -173,7 +173,7 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
     if (digit.length == passwordDigits) {
       bool isValidDesc = false;
       bool isValidAsc = false;
-      // test if pin code is a serie asc or desc
+      // test if PIN code is a serie asc or desc
       for (int i = 1; i < digit.length; i++) {
         if (i > 0) {
           if (int.parse(digit[i]) != (int.parse(digit[i - 1]) + 1)) {

@@ -54,10 +54,9 @@ class MyGradientButton extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
-          gradient: onPressed == null ? null : gradientValue,
           color: onPressed == null
               ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
-              : null,
+              : Theme.of(context).colorScheme.onPrimaryContainer,
         ),
         child: icon == null
             ? ElevatedButton(

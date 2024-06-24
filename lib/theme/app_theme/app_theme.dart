@@ -72,6 +72,7 @@ class AppTheme {
       colorScheme: ColorScheme.fromSeed(
         seedColor: seedColor,
         brightness: brightness,
+        dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
       ),
     );
   }

@@ -12,7 +12,7 @@ class KeyboardUIConfig {
     this.spacing = 4,
     this.digitShape = BoxShape.circle,
     this.keyboardRowMargin = const EdgeInsets.only(top: 15, left: 4, right: 4),
-    this.digitInnerMargin = const EdgeInsets.all(24),
+    this.digitInnerMargin = const EdgeInsets.all(20),
     this.keyboardSize,
     this.digitTextStyle,
   });

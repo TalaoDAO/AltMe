@@ -39,8 +39,8 @@ class BottomBarItem extends StatelessWidget {
                 child: ImageIcon(
                   AssetImage(icon),
                   color: isSelected
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.onPrimaryContainer,
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.primaryContainer,
                   size: 20,
                 ),
               ),
@@ -53,8 +53,8 @@ class BottomBarItem extends StatelessWidget {
                     fontWeight:
                         isSelected ? FontWeight.bold : FontWeight.normal,
                     color: isSelected
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onPrimaryContainer,
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : Theme.of(context).colorScheme.primaryContainer,
                   ),
             ),
           ],
