@@ -286,10 +286,13 @@ class AlignedGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const heightAdjustment = 50;
     final itemWidth =
         (keyboardSize.width - (spacing * (columns - 1))) / columns;
     final rows = children.length / columns;
-    final itemHeight = (keyboardSize.height - (runSpacing * (rows - 1))) / rows;
+    final itemHeight =
+        (keyboardSize.height - (runSpacing * (rows - 1)) - heightAdjustment) /
+            rows;
     final itemSize = min(itemHeight, itemWidth);
     return Wrap(
       runSpacing: runSpacing,

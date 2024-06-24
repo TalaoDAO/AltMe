@@ -50,12 +50,16 @@ class AppTheme {
 
   static ThemeData seedThemeData(Brightness brightness, String primaryColor) {
     // final seedColor = Colors.red;
+    // altme
     final seedColor = const Color(0xff6600FF);
+    // talao
+    // final seedColor = const Color(0xff1EAADC);
+
     final theme = ThemeData(
         useMaterial3: true,
         brightness: brightness,
         snackBarTheme: SnackBarThemeData(
-          contentTextStyle: GoogleFonts.roboto(
+          contentTextStyle: GoogleFonts.poppins(
             fontSize: 12,
             fontWeight: FontWeight.w400,
           ),
@@ -68,7 +72,7 @@ class AppTheme {
           ),
         ));
     return theme.copyWith(
-      textTheme: GoogleFonts.robotoTextTheme(theme.textTheme),
+      textTheme: GoogleFonts.poppinsTextTheme(theme.textTheme),
       colorScheme: ColorScheme.fromSeed(
         seedColor: seedColor,
         brightness: brightness,
