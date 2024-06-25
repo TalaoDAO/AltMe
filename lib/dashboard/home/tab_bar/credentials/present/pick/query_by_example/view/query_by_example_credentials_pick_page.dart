@@ -136,7 +136,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                             message: l10n.credentialPickPresent,
                             child: Builder(
                               builder: (context) {
-                                return MyGradientButton(
+                                return MyElevatedButton(
                                   onPressed: queryState.selected == null
                                       ? null
                                       : () async {

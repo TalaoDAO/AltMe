@@ -231,7 +231,7 @@ class _OperationViewState extends State<OperationView> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    MyGradientButton(
+                    MyElevatedButton(
                       verticalSpacing: 15,
                       borderRadius: Sizes.normalRadius,
                       text: l10n.send,

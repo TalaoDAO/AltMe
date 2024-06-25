@@ -22,7 +22,9 @@ class DiscoverDynamicDetial extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    final titleTheme = textTheme.titleLarge!;
+    final titleTheme = textTheme.bodyMedium!.copyWith(
+      fontWeight: FontWeight.bold,
+    );
     final valueTheme = textTheme.bodyMedium!;
 
     return Padding(

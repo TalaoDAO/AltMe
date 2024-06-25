@@ -47,7 +47,7 @@ class WalletLogo extends StatelessWidget {
             colorFilter: ColorFilter.mode(
               profileModel.profileType == ProfileType.enterprise
                   ? Colors.transparent
-                  : Theme.of(context).colorScheme.primary,
+                  : Theme.of(context).colorScheme.primaryContainer,
               BlendMode.srcIn,
             ),
             child: SizedBox(

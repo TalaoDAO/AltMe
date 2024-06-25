@@ -23,10 +23,8 @@ class ErrorDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background =
-        bgColor ?? Theme.of(context).colorScheme.primaryContainer;
-    final textColor = this.textColor ?? Theme.of(context).colorScheme.onSurface;
+    final background = bgColor ?? Theme.of(context).colorScheme.onSurface;
+    final textColor = this.textColor ?? Theme.of(context).colorScheme.surface;
 
     final l10n = context.l10n;
     return AlertDialog(
@@ -39,11 +37,6 @@ class ErrorDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Image.asset(
-          //   icon,
-          //   width: 50,
-          //   height: 50,
-          // ),
           const SizedBox(height: 25),
           Text(
             title,
@@ -80,9 +73,7 @@ class ErrorDialog extends StatelessWidget {
           MyElevatedButton(
             text: l10n.ok,
             verticalSpacing: 14,
-            backgroundColor: color,
             borderRadius: Sizes.smallRadius,
-            fontSize: 15,
             elevation: 0,
             onPressed: () {
               Navigator.of(context).pop(true);

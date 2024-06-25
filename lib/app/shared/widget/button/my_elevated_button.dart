@@ -22,7 +22,7 @@ class MyElevatedButton extends StatelessWidget {
     required this.icon,
     this.backgroundColor,
     this.textColor,
-    this.borderRadius = 40,
+    this.borderRadius = 8,
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,
@@ -53,14 +53,21 @@ class MyElevatedButton extends StatelessWidget {
                 onPressed: onPressed,
               ),
               onPressed: onPressed,
-              child: ElevatedButtonText(
-                text: text,
-                fontSize: fontSize,
-                textColor: textColor,
+              child: Text(
+                text.toUpperCase(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             )
           : ElevatedButton.icon(
-              icon: icon,
+              icon: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  textColor ?? Theme.of(context).textTheme.titleLarge!.color!,
+                  BlendMode.srcIn,
+                ),
+                child: icon,
+              ),
               style: elevatedStyleFrom(
                 borderRadius: borderRadius,
                 context: context,
@@ -70,10 +77,11 @@ class MyElevatedButton extends StatelessWidget {
                 onPressed: onPressed,
               ),
               onPressed: onPressed,
-              label: ElevatedButtonText(
-                text: text,
-                fontSize: fontSize,
-                textColor: textColor,
+              label: Text(
+                text.toUpperCase(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ),
     );
@@ -95,8 +103,8 @@ ButtonStyle elevatedStyleFrom({
     ),
     backgroundColor: WidgetStateProperty.all(
       onPressed == null
-          ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
-          : backgroundColor ?? Theme.of(context).colorScheme.primary,
+          ? Theme.of(context).colorScheme.outline
+          : backgroundColor ?? Theme.of(context).colorScheme.secondaryContainer,
     ),
     shape: WidgetStateProperty.all(
       RoundedRectangleBorder(
@@ -106,6 +114,7 @@ ButtonStyle elevatedStyleFrom({
   );
 }
 
+// @TODO: remove if buttons OK
 class ElevatedButtonText extends StatelessWidget {
   const ElevatedButtonText({
     super.key,

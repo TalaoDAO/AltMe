@@ -126,7 +126,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                MyGradientButton(
+                MyElevatedButton(
                   text: l10n.credentialAddThisCard,
                   onPressed: () {
                     if (credentialModel

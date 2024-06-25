@@ -28,13 +28,15 @@ class CustomListTileCard extends StatelessWidget {
         ),
       ),
       contentPadding: const EdgeInsets.all(Sizes.spaceNormal),
-      tileColor: Theme.of(context).colorScheme.surface,
+      tileColor: Theme.of(context).colorScheme.secondaryContainer,
       title: Row(
         children: [
           Expanded(
-            child: MyText(
+            child: Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ),
           const SizedBox(width: 10),
@@ -50,7 +52,7 @@ class CustomListTileCard extends StatelessWidget {
       ),
       subtitle: Text(
         subTitle,
-        style: Theme.of(context).textTheme.labelMedium,
+        style: Theme.of(context).textTheme.bodyMedium,
       ),
       minVerticalPadding: 0,
       trailing: Image.asset(

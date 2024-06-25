@@ -118,7 +118,7 @@ class BackupPolygonIdIdentityView extends StatelessWidget {
       ),
       navigation: Padding(
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: MyGradientButton(
+        child: MyElevatedButton(
           onPressed: () async {
             await context
                 .read<BackupPolygonIdIdentityCubit>()

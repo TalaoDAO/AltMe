@@ -12,7 +12,7 @@ class KeyboardUIConfig {
     this.spacing = 4,
     this.digitShape = BoxShape.circle,
     this.keyboardRowMargin = const EdgeInsets.only(top: 15, left: 4, right: 4),
-    this.digitInnerMargin = const EdgeInsets.all(24),
+    this.digitInnerMargin = const EdgeInsets.all(20),
     this.keyboardSize,
     this.digitTextStyle,
   });
@@ -159,10 +159,10 @@ class KeyboardButton extends StatelessWidget {
                 color: Colors.transparent,
                 child: InkWell(
                   highlightColor: allowAction
-                      ? Theme.of(context).colorScheme.primary
+                      ? Theme.of(context).colorScheme.primaryContainer
                       : Theme.of(context).colorScheme.surface,
                   splashColor: allowAction
-                      ? Theme.of(context).colorScheme.primary
+                      ? Theme.of(context).colorScheme.primaryContainer
                       : Theme.of(context).colorScheme.surface,
                   onLongPress: () {
                     if (!allowAction) return;
@@ -286,10 +286,13 @@ class AlignedGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const heightAdjustment = 30;
     final itemWidth =
         (keyboardSize.width - (spacing * (columns - 1))) / columns;
     final rows = children.length / columns;
-    final itemHeight = (keyboardSize.height - (runSpacing * (rows - 1))) / rows;
+    final itemHeight =
+        (keyboardSize.height - (runSpacing * (rows - 1)) - heightAdjustment) /
+            rows;
     final itemSize = min(itemHeight, itemWidth);
     return Wrap(
       runSpacing: runSpacing,

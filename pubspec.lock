@@ -302,10 +302,10 @@ packages:
     dependency: transitive
     description:
       name: camera_android
-      sha256: ca42d500c1b58c1ab90ef819909b4de769bcb388a643b692a639c36954a3dc78
+      sha256: "4ef97ae90dab306a4ed8d5eee14c85fd8daf403ae22488b5617c848774396d72"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.9+5"
+    version: "0.10.9+6"
   camera_avfoundation:
     dependency: transitive
     description:
@@ -2272,10 +2272,10 @@ packages:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: b384f598b813b347c5a7e5ffad82cbaff1bec3d1561af267041e66f6f0899295
+      sha256: "6d17989c0b06a5870b2190d391925186f944cb943e5262d0d3f778fcfca3bc6e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.3"
+    version: "2.4.4"
   stack_trace:
     dependency: transitive
     description:

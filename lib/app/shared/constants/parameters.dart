@@ -1,5 +1,6 @@
 import 'package:altme/app/shared/enum/enum.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:flutter/material.dart';
 
 class Parameters {
   static const int multipleCredentialsProcessDelay = 1;
@@ -95,4 +96,10 @@ class Parameters {
   static const DidKeyType didKeyTypeForDefault = DidKeyType.edDSA;
   static const DidKeyType didKeyTypeForDutch = DidKeyType.jwkP256;
   static const DidKeyType didKeyTypeForOwfBaselineProfile = DidKeyType.jwkP256;
+
+  // seed color for the app Theme
+  // Altme
+  static const Color seedColor = Color(0xff6600FF);
+  // Talao
+  // static const Color seedColor = Color(0xff1EAADC);
 }

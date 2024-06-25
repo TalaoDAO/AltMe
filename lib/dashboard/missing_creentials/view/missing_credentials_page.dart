@@ -115,7 +115,7 @@ class MissingCredentialsView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              MyGradientButton(
+              MyElevatedButton(
                 onPressed: () async {
                   for (final credentials in state.dummyCredentials) {
                     await Navigator.push<void>(

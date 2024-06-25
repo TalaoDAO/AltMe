@@ -349,7 +349,7 @@ class GeneralOptions extends Equatable {
     required this.published,
     required this.profileId,
     required this.customerPlan,
-    required this.primaryColor,
+    this.primaryColor,
   });
 
   factory GeneralOptions.fromJson(Map<String, dynamic> json) =>
@@ -381,7 +381,7 @@ class GeneralOptions extends Equatable {
   final DateTime published;
   final String profileId;
   final String customerPlan;
-  final String primaryColor;
+  final String? primaryColor;
 
   Map<String, dynamic> toJson() => _$GeneralOptionsToJson(this);
 

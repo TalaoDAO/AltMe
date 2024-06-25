@@ -402,7 +402,7 @@ class SendButton extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: MyGradientButton(
+        child: MyElevatedButton(
           text: l10n.send,
           onPressed: () {
             Navigator.of(context).push<void>(
@@ -437,7 +437,7 @@ class BurnButton extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: MyGradientButton(
+        child: MyElevatedButton(
           text: l10n.burn,
           onPressed: () async {
             final confirmed = await showDialog<bool>(

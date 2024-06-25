@@ -125,7 +125,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                         const SizedBox(width: Sizes.spaceXSmall),
                         Text(
                           l10n.selectAccount,
-                          style: Theme.of(context).textTheme.headlineMedium,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),

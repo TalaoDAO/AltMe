@@ -11,19 +11,18 @@ part 'pin_code_view_state.dart';
 class PinCodeViewCubit extends Cubit<PinCodeViewState> {
   PinCodeViewCubit({
     this.totalPermitedLoginAttempt = 3,
+    this.isUserPin = false,
   }) : super(const PinCodeViewState());
 
   final int totalPermitedLoginAttempt;
+  final bool isUserPin;
 
   void loginAttempt() {
     final loginAttemptCount = state.loginAttemptCount + 1;
     final loginAttemptsRemaining =
         totalPermitedLoginAttempt - state.loginAttemptCount - 1;
     const allowAction = true;
-    // if (loginAttemptCount >= totalPermitedLoginAttempt) {
-    //   allowAction = false;
-    //   _startLockTimer();
-    // }
+
     emit(
       state.copyWith(
         loginAttemptCount: loginAttemptCount,
@@ -33,30 +32,11 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
     );
   }
 
-  Timer? _timer;
-
-  void _startLockTimer() {
-    _timer = Timer.periodic(const Duration(minutes: 10), (timer) {
-      _resetloginAttemptCount();
-      _timer?.cancel();
-    });
-  }
-
-  void _resetloginAttemptCount() {
+  void setEnteredPasscode(
+      String enteredPasscode, PinCodeErrors newPinCodeError) {
     emit(
       state.copyWith(
-        loginAttemptCount: 0,
-        allowAction: true,
-        loginAttemptsRemaining: totalPermitedLoginAttempt,
-      ),
-    );
-  }
-
-  void setEnteredPasscode(String enteredPasscode) {
-    emit(
-      state.copyWith(
-        enteredPasscode: enteredPasscode,
-      ),
+          enteredPasscode: enteredPasscode, pinCodeError: newPinCodeError),
     );
   }
 
@@ -65,6 +45,7 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
     if (enteredPasscode.isNotEmpty) {
       setEnteredPasscode(
         enteredPasscode.substring(0, enteredPasscode.length - 1),
+        PinCodeErrors.none,
       );
     } else {
       if (cancelCallback != null) {
@@ -93,11 +74,9 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
             digit: passCode,
             passwordDigits: passwordDigits,
           )) {
-            emit(
-              state.copyWith(
-                isPincodeSeries: true,
-                enteredPasscode: passCode,
-              ),
+            setEnteredPasscode(
+              '',
+              PinCodeErrors.errorSerie,
             );
             return;
           }
@@ -105,53 +84,47 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
             digit: passCode,
             passwordDigits: passwordDigits,
           )) {
-            emit(
-              state.copyWith(
-                isPincodeSequence: true,
-                enteredPasscode: passCode,
-              ),
+            setEnteredPasscode(
+              '',
+              PinCodeErrors.errorSequence,
             );
             return;
           }
           await getSecureStorage.set(SecureStorageKeys.pinCode, passCode);
         } else {
-          final isValid =
-              (await getSecureStorage.get(SecureStorageKeys.pinCode)) ==
-                  passCode;
-          if (!isValid) {
-            setEnteredPasscode(passCode);
-            loginAttempt();
-            return;
+          if (!isUserPin) {
+            final isValid =
+                (await getSecureStorage.get(SecureStorageKeys.pinCode)) ==
+                    passCode;
+            if (!isValid) {
+              emit(
+                state.copyWith(
+                  enteredPasscode: '',
+                  pinCodeError: PinCodeErrors.errorPinCode,
+                ),
+              );
+
+              loginAttempt();
+              return;
+            }
           }
         }
         emit(
           state.copyWith(
-            isPinCodeValid: true,
+            pinCodeError: PinCodeErrors.none,
             enteredPasscode: passCode,
           ),
         );
-
-// on new pincode
-        // void _onPasscodeEntered(String enteredPasscode) {
-        //   Navigator.pushReplacement<dynamic, dynamic>(
-        //     context,
-        //     ConfirmPinCodePage.route(
-        //       storedPassword: enteredPasscode,
-        //       isValidCallback: widget.isValidCallback,
-        //       isFromOnboarding: widget.isFromOnboarding,
-        //     ),
-        //   );
-        // }
       } else {
-        setEnteredPasscode(passCode);
+        setEnteredPasscode(
+          passCode,
+          PinCodeErrors.none,
+        );
       }
     } else {
-      emit(
-        state.copyWith(
-          enteredPasscode: text,
-          isPincodeSequence: false,
-          isPincodeSeries: false,
-        ),
+      setEnteredPasscode(
+        text,
+        PinCodeErrors.none,
       );
     }
   }
@@ -173,7 +146,7 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
     if (digit.length == passwordDigits) {
       bool isValidDesc = false;
       bool isValidAsc = false;
-      // test if pin code is a serie asc or desc
+      // test if PIN code is a serie asc or desc
       for (int i = 1; i < digit.length; i++) {
         if (i > 0) {
           if (int.parse(digit[i]) != (int.parse(digit[i - 1]) + 1)) {

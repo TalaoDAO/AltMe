@@ -80,7 +80,7 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(MyGradientButton));
+      await tester.tap(find.byType(MyElevatedButton));
       await tester.pumpAndSettle();
       expect(find.byType(OnBoardingTosView), findsOneWidget);
     });
@@ -141,7 +141,7 @@ void main() {
     });
 
     testWidgets(
-      'MyGradientButton press calls onAcceptancePressed',
+      'MyElevatedButton press calls onAcceptancePressed',
       (WidgetTester tester) async {
         when(() => onBoardingTosCubit.state)
             .thenReturn(const OnBoardingTosState());

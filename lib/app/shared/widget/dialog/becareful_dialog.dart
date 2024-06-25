@@ -92,11 +92,6 @@ class BeCarefulDialog extends StatelessWidget {
                     text: no ?? l10n.no,
                     verticalSpacing: 15,
                     fontSize: 15,
-                    borderColor: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withOpacity(0.2),
-                    borderRadius: 12,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -109,9 +104,6 @@ class BeCarefulDialog extends StatelessWidget {
                   child: MyElevatedButton(
                     text: yes ?? l10n.yes,
                     verticalSpacing: 15,
-                    fontSize: 15,
-                    borderRadius: 12,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
                     onPressed: () {
                       Navigator.of(context).pop();
                       onContinueClick?.call();

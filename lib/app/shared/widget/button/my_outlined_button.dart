@@ -23,7 +23,7 @@ class MyOutlinedButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.borderColor,
-    this.borderRadius = 50,
+    this.borderRadius = 8,
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,
@@ -56,15 +56,28 @@ class MyOutlinedButton extends StatelessWidget {
                 onPressed: onPressed,
               ),
               onPressed: onPressed,
-              child: OutlinedButtonText(
-                text: text,
-                fontSize: fontSize,
-                textColor: textColor,
-                onPressed: onPressed,
+              child: Text(
+                text.toUpperCase(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: onPressed == null
+                          ? Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.12)
+                          : textColor ??
+                              Theme.of(context).colorScheme.secondaryContainer,
+                    ),
               ),
             )
           : OutlinedButton.icon(
-              icon: icon,
+              icon: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  textColor ?? Theme.of(context).colorScheme.secondaryContainer,
+                  BlendMode.srcIn,
+                ),
+                child: icon,
+              ),
               style: outlinedStyleFrom(
                 borderRadius: borderRadius,
                 context: context,
@@ -75,11 +88,18 @@ class MyOutlinedButton extends StatelessWidget {
                 onPressed: onPressed,
               ),
               onPressed: onPressed,
-              label: OutlinedButtonText(
-                text: text,
-                fontSize: fontSize,
-                textColor: textColor,
-                onPressed: onPressed,
+              label: Text(
+                text.toUpperCase(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: onPressed == null
+                          ? Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.12)
+                          : textColor ??
+                              Theme.of(context).colorScheme.secondaryContainer,
+                    ),
               ),
             ),
     );
@@ -102,7 +122,7 @@ ButtonStyle outlinedStyleFrom({
     side: BorderSide(
       color: onPressed == null
           ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
-          : borderColor ?? Theme.of(context).colorScheme.primary,
+          : borderColor ?? Theme.of(context).colorScheme.secondaryContainer,
       width: 2,
     ),
     shape: RoundedRectangleBorder(
@@ -132,7 +152,7 @@ class OutlinedButtonText extends StatelessWidget {
       style: TextStyle(
         color: onPressed == null
             ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
-            : textColor ?? Theme.of(context).colorScheme.primary,
+            : textColor ?? Theme.of(context).colorScheme.secondaryContainer,
         fontSize: fontSize,
         fontWeight: FontWeight.w700,
       ),

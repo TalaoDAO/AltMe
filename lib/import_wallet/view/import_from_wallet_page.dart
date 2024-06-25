@@ -235,7 +235,7 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
           navigation: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(Sizes.spaceSmall),
-              child: MyGradientButton(
+              child: MyElevatedButton(
                 text: l10n.import,
                 onPressed: !state.isMnemonicOrKeyValid
                     ? null

@@ -245,7 +245,7 @@ class _OnBoardingVerifyPhraseViewState
                 horizontal: Sizes.spaceSmall,
                 vertical: Sizes.spaceSmall,
               ),
-              child: MyGradientButton(
+              child: MyElevatedButton(
                 text: l10n.onBoardingGenPhraseButton,
                 verticalSpacing: 18,
                 onPressed: state.isVerified

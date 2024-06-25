@@ -111,7 +111,7 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  MyGradientButton(
+                  MyElevatedButton(
                     text: l10n.start,
                     onPressed: (state.agreeTerms && state.readTerms)
                         ? () async => onAcceptancePressed(context)

@@ -188,8 +188,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Flexible(
-                            child: MyGradientButton(
-                              upperCase: false,
+                            child: MyElevatedButton(
                               text: l10n.send,
                               verticalSpacing: 0,
                               fontSize: 16,
@@ -211,8 +210,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                             width: Sizes.spaceNormal,
                           ),
                           Flexible(
-                            child: MyGradientButton(
-                              upperCase: false,
+                            child: MyElevatedButton(
                               text: l10n.receive,
                               verticalSpacing: 0,
                               fontSize: 16,

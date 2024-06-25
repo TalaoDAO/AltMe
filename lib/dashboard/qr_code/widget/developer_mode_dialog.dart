@@ -41,8 +41,6 @@ class DeveloperModeDialog extends StatelessWidget {
           MyElevatedButton(
             text: l10n.display,
             verticalSpacing: 14,
-            backgroundColor: color,
-            borderRadius: Sizes.smallRadius,
             fontSize: 15,
             elevation: 0,
             onPressed: onDisplay,
@@ -51,8 +49,6 @@ class DeveloperModeDialog extends StatelessWidget {
           MyElevatedButton(
             text: l10n.download,
             verticalSpacing: 14,
-            backgroundColor: color,
-            borderRadius: Sizes.smallRadius,
             fontSize: 15,
             elevation: 0,
             onPressed: onDownload,
@@ -61,8 +57,6 @@ class DeveloperModeDialog extends StatelessWidget {
           MyElevatedButton(
             text: l10n.skip,
             verticalSpacing: 14,
-            backgroundColor: color,
-            borderRadius: Sizes.smallRadius,
             fontSize: 15,
             elevation: 0,
             onPressed: onSkip,

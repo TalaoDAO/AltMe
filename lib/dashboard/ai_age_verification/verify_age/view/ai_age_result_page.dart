@@ -147,7 +147,7 @@ class SuccessWidget extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        MyGradientButton(
+        MyElevatedButton(
           text: l10n.ok,
           verticalSpacing: 18,
           onPressed: () {

@@ -61,9 +61,15 @@ class CryptoAccountSwitcherButton extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 5),
-                      Image.asset(
-                        IconStrings.arrowSquareDown,
-                        width: Sizes.icon,
+                      ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.onSurface,
+                          BlendMode.srcIn,
+                        ),
+                        child: Image.asset(
+                          IconStrings.arrowSquareDown,
+                          width: Sizes.icon,
+                        ),
                       ),
                     ],
                   ),

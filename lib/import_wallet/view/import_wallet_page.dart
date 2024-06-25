@@ -254,7 +254,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
               ? SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(Sizes.spaceSmall),
-                    child: MyGradientButton(
+                    child: MyElevatedButton(
                       text: l10n.import,
                       onPressed: !state.isMnemonicOrKeyValid
                           ? null

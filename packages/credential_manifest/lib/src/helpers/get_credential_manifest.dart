@@ -16,7 +16,7 @@ Future<CredentialManifest?> getCredentialManifest({
     final credentialManifestMap = credentialManifestPath
         .read(openidConfigurationJson)
         .first
-        .value as Map<String, dynamic>;
+        .value! as Map<String, dynamic>;
 
     /// create credentialManisfest object
     final credentialManifest = CredentialManifest.fromJson(

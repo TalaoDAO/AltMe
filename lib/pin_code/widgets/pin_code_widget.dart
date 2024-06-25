@@ -34,7 +34,7 @@ class PinCodeWidget extends StatefulWidget {
   final String? subTitle;
   final int passwordDigits;
   final bool isNewCode;
-  // When a specific pin is requested to get a credential
+  // When a specific PIN is requested to get a credential
   final bool isUserPin;
 
   // Cancel button and delete button will be switched based on the screen state
@@ -56,14 +56,21 @@ class PinCodeWidget extends StatefulWidget {
 
 class _PinCodeWidgetState extends State<PinCodeWidget>
     with SingleTickerProviderStateMixin {
-  late bool isPincodeDifferent;
+  bool isConfirmationPage = false;
 
   final log = getLogger('PinCodeWidget');
 
   @override
   void initState() {
     super.initState();
-    isPincodeDifferent = false;
+    Future.delayed(Duration.zero, () {
+      final l10n = context.l10n;
+      if (widget.title == l10n.confirmYourPinCode) {
+        setState(() {
+          isConfirmationPage = true;
+        });
+      }
+    });
   }
 
   @override
@@ -71,20 +78,9 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
     final l10n = context.l10n;
     return BlocConsumer<PinCodeViewCubit, PinCodeViewState>(
       listenWhen: (previous, current) {
-        if (current.enteredPasscode.length < widget.passwordDigits) {
-          setState(() {
-            isPincodeDifferent = false;
-          });
-        }
         if (current.enteredPasscode.length == widget.passwordDigits) {
-          if (current.isPinCodeValid || widget.isUserPin) {
+          if (current.pinCodeError == PinCodeErrors.none || widget.isUserPin) {
             _validationCallback();
-          } else {
-            if (widget.title == l10n.confirmYourPinCode) {
-              setState(() {
-                isPincodeDifferent = true;
-              });
-            }
           }
         }
         return previous.loginAttemptCount != current.loginAttemptCount;
@@ -92,14 +88,9 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
       listener: (context, state) {
         widget.onLoginAttempt
             ?.call(state.loginAttemptCount, state.loginAttemptsRemaining);
-        // if (state.enteredPasscode.length == widget.passwordDigits &&
-        //     widget.isUserPin) {
-        //   _validationCallback();
-        // }
       },
       builder: (context, state) {
         final enteredPasscode = state.enteredPasscode;
-        final titleStyle = Theme.of(context).textTheme.labelMedium;
 
         return OrientationBuilder(
           builder: (context, orientation) {
@@ -135,9 +126,8 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                       : l10n.pincodeAttemptMessage,
                                   allowAction: state.allowAction,
                                 ),
-                                const SizedBox(height: Sizes.spaceXSmall),
                                 Container(
-                                  margin: const EdgeInsets.only(top: 16),
+                                  margin: const EdgeInsets.only(top: 8),
                                   height: 40,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -149,10 +139,8 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                           allowAction: state.allowAction,
                                           filled:
                                               index < enteredPasscode.length,
-                                          circleUIConfig: (state
-                                                      .isPincodeSequence ||
-                                                  state.isPincodeSeries ||
-                                                  isPincodeDifferent)
+                                          circleUIConfig: (state.pinCodeError !=
+                                                  PinCodeErrors.none)
                                               ? CircleUIConfig(
                                                   fillColor: Theme.of(context)
                                                       .colorScheme
@@ -164,39 +152,8 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: Sizes.spaceSmall,
-                                  child: isPincodeDifferent
-                                      ? Text(
-                                          l10n.pincodeDifferent,
-                                          style: titleStyle?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .error,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        )
-                                      : state.isPincodeSeries
-                                          ? Text(
-                                              l10n.pincodeSerie,
-                                              style: titleStyle?.copyWith(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .error,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            )
-                                          : state.isPincodeSequence
-                                              ? Text(
-                                                  l10n.pincodeSequence,
-                                                  style: titleStyle?.copyWith(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .error,
-                                                  ),
-                                                  textAlign: TextAlign.center,
-                                                )
-                                              : const SizedBox.shrink(),
+                                PinCodeErrorMessage(
+                                  isConfirmationPage: isConfirmationPage,
                                 ),
                                 NumKeyboard(
                                   keyboardUIConfig: widget.keyboardUIConfig,
@@ -318,6 +275,67 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
         '''You didn't implement validation callback. Please handle a state by yourself then.''',
       );
     }
+  }
+}
+
+class PinCodeErrorMessage extends StatelessWidget {
+  const PinCodeErrorMessage({
+    required this.isConfirmationPage,
+    super.key,
+  });
+
+  final bool isConfirmationPage;
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return BlocBuilder<PinCodeViewCubit, PinCodeViewState>(
+      builder: (context, state) {
+        Widget errorWidget = const SizedBox.shrink();
+        switch (state.pinCodeError) {
+          case PinCodeErrors.none:
+            errorWidget = const SizedBox.shrink();
+          case PinCodeErrors.errorSerie:
+            errorWidget = PinCodeErrorText(l10n.pincodeSerie);
+          case PinCodeErrors.errorSequence:
+            errorWidget = PinCodeErrorText(l10n.pincodeSequence);
+          case PinCodeErrors.errorConfirmation:
+          case PinCodeErrors.errorPinCode:
+            if (isConfirmationPage) {
+              errorWidget = PinCodeErrorText(l10n.pincodeDifferent);
+            } else {
+              errorWidget = PinCodeErrorText(
+                // ignore: lines_longer_than_80_chars
+                '${l10n.userPinIsIncorrect}\n${l10n.codeSecretIncorrectDescription(
+                  state.loginAttemptsRemaining,
+                  state.loginAttemptsRemaining == 1 ? '' : 's',
+                )}',
+              );
+            }
+        }
+        return errorWidget;
+      },
+    );
+  }
+}
+
+class PinCodeErrorText extends StatelessWidget {
+  const PinCodeErrorText(
+    this.errorText, {
+    super.key,
+  });
+
+  final String errorText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      errorText,
+      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: Theme.of(context).colorScheme.error,
+          ),
+      textAlign: TextAlign.center,
+    );
   }
 }
 

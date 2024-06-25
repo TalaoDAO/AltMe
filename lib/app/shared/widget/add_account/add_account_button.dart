@@ -31,14 +31,14 @@ class AddAccountButton extends StatelessWidget {
                 ),
                 Text(
                   l10n.cryptoAddAccount,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
             ),
             const SizedBox(height: 3),
             Text(
               l10n.createOrImportNewAccount,
-              style: Theme.of(context).textTheme.titleSmall,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),
