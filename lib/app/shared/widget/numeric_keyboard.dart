@@ -159,10 +159,10 @@ class KeyboardButton extends StatelessWidget {
                 color: Colors.transparent,
                 child: InkWell(
                   highlightColor: allowAction
-                      ? Theme.of(context).colorScheme.primary
+                      ? Theme.of(context).colorScheme.primaryContainer
                       : Theme.of(context).colorScheme.surface,
                   splashColor: allowAction
-                      ? Theme.of(context).colorScheme.primary
+                      ? Theme.of(context).colorScheme.primaryContainer
                       : Theme.of(context).colorScheme.surface,
                   onLongPress: () {
                     if (!allowAction) return;
@@ -286,7 +286,7 @@ class AlignedGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const heightAdjustment = 50;
+    const heightAdjustment = 30;
     final itemWidth =
         (keyboardSize.width - (spacing * (columns - 1))) / columns;
     final rows = children.length / columns;

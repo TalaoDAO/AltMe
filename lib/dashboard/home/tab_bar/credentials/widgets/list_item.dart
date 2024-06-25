@@ -143,7 +143,7 @@ class DisplaySelectionElement extends StatelessWidget {
               child: Icon(
                 selected! ? Icons.check_box : Icons.check_box_outline_blank,
                 size: 25,
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),

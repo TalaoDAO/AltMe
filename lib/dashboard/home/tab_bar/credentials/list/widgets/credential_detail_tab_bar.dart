@@ -39,8 +39,7 @@ class CredentialDetailTabbar extends StatelessWidget {
           ),
           decoration: isSelected
               ? BoxDecoration(
-                  color:
-                      Theme.of(context).colorScheme.surface.withOpacity(0.07),
+                  color: Theme.of(context).colorScheme.surfaceContainerHigh,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(Sizes.smallRadius),
                     topRight: Radius.circular(Sizes.smallRadius),
@@ -53,7 +52,7 @@ class CredentialDetailTabbar extends StatelessWidget {
               style: isSelected
                   ? textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold)
                   : textTheme.bodyMedium!
-                      .copyWith(color: colorScheme.secondaryContainer),
+                      .copyWith(color: colorScheme.onSurface),
             ),
           ),
         ),

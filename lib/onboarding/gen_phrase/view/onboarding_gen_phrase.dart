@@ -137,10 +137,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                       Text(
                         l10n.onboardingAltmeMessage,
                         textAlign: TextAlign.center,
-                        style:
-                            Theme.of(context).textTheme.headlineSmall!.copyWith(
-                                  color: Theme.of(context).colorScheme.tertiary,
-                                ),
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ],
                   ),
@@ -157,11 +154,9 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  MyElevatedButton(
+                  MyOutlinedButton(
                     text: l10n.verifyLater,
                     verticalSpacing: 18,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.primaryContainer,
                     onPressed: () async {
                       await context
                           .read<OnboardingCubit>()

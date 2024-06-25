@@ -121,14 +121,9 @@ class _CongratulationsAccountCreationViewState
                 const SizedBox(
                   height: Sizes.spaceNormal,
                 ),
-                Text(
-                  message,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.normal,
-                        color: Theme.of(context).colorScheme.onTertiary,
-                      ),
-                ),
+                Text(message,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headlineSmall),
                 const SizedBox(
                   height: Sizes.space3XLarge,
                 ),

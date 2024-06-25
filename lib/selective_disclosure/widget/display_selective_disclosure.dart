@@ -204,7 +204,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                                     .colorScheme
                                     .onSurface
                                     .withOpacity(0.3)
-                                : Theme.of(context).colorScheme.onPrimary,
+                                : Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                       ],

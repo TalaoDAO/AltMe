@@ -49,15 +49,13 @@ class CryptoAccountItem extends StatelessWidget {
           ),
           const SizedBox(width: Sizes.spaceXSmall),
           Flexible(
-            child: MyText(
+            child: Text(
               cryptoAccountData.name.trim().isEmpty
                   ? l10n.unknown
                   : cryptoAccountData.name,
-              maxLength: 30,
               maxLines: 1,
-              minFontSize: 14,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           const SizedBox(width: Sizes.spaceXSmall),
@@ -75,9 +73,9 @@ class CryptoAccountItem extends StatelessWidget {
       ),
       subtitle: Padding(
         padding: const EdgeInsets.symmetric(vertical: Sizes.spaceXSmall),
-        child: MyText(
+        child: Text(
           walletAddressExtracted,
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       ),
     );

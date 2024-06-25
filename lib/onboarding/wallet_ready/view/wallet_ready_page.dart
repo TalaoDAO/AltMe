@@ -107,13 +107,10 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                       Text(
                         l10n.walletReadySubtitle,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall
-                            ?.copyWith(
-                              fontWeight: FontWeight.normal,
-                              color: Theme.of(context).colorScheme.onTertiary,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.normal,
+                                ),
                       ),
                       const SizedBox(
                         height: Sizes.space3XLarge,

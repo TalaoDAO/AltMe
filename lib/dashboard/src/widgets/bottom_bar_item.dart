@@ -38,9 +38,7 @@ class BottomBarItem extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 5),
                 child: ImageIcon(
                   AssetImage(icon),
-                  color: isSelected
-                      ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.primaryContainer,
+                  color: bottomBarItemColor(context),
                   size: 20,
                 ),
               ),
@@ -52,14 +50,27 @@ class BottomBarItem extends StatelessWidget {
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
                     fontWeight:
                         isSelected ? FontWeight.bold : FontWeight.normal,
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.primaryContainer,
+                    color: bottomBarItemColor(context),
                   ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Color bottomBarItemColor(BuildContext context) {
+    final Color one = Theme.of(context).colorScheme.onPrimaryFixedVariant;
+    final Color two = Theme.of(context).colorScheme.primaryFixedDim;
+    late Color selectedColor;
+    late Color unselectedColor;
+    if (Theme.of(context).brightness == Brightness.light) {
+      selectedColor = one;
+      unselectedColor = two;
+    } else {
+      selectedColor = two;
+      unselectedColor = one;
+    }
+    return isSelected ? selectedColor : unselectedColor;
   }
 }

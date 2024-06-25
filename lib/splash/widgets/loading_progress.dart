@@ -31,7 +31,10 @@ class LoadingProgress extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(borderRadius),
-          child: LinearProgressIndicator(value: value),
+          child: LinearProgressIndicator(
+            value: value,
+            color: Theme.of(context).colorScheme.primaryContainer,
+          ),
         ),
       ),
     );

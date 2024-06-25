@@ -1,32 +1,34 @@
 part of 'pin_code_view_cubit.dart';
 
+enum PinCodeErrors {
+  none,
+  errorConfirmation,
+  errorSequence,
+  errorSerie,
+  errorPinCode,
+}
+
 class PinCodeViewState extends Equatable {
   const PinCodeViewState({
     this.enteredPasscode = '',
     this.loginAttemptCount = 0,
     this.loginAttemptsRemaining = 3,
     this.allowAction = true,
-    this.isPincodeSequence = false,
-    this.isPincodeSeries = false,
-    this.isPinCodeValid = false,
+    this.pinCodeError = PinCodeErrors.none,
   });
 
   final String enteredPasscode;
   final int loginAttemptCount;
   final int loginAttemptsRemaining;
+  final PinCodeErrors pinCodeError;
   final bool allowAction;
-  final bool isPincodeSeries;
-  final bool isPincodeSequence;
-  final bool isPinCodeValid;
 
   PinCodeViewState copyWith({
     String? enteredPasscode,
     int? loginAttemptCount,
     int? loginAttemptsRemaining,
+    PinCodeErrors? pinCodeError,
     bool? allowAction,
-    bool? isPincodeSequence,
-    bool? isPincodeSeries,
-    bool? isPinCodeValid,
   }) {
     return PinCodeViewState(
       enteredPasscode: enteredPasscode ?? this.enteredPasscode,
@@ -34,9 +36,7 @@ class PinCodeViewState extends Equatable {
       loginAttemptsRemaining:
           loginAttemptsRemaining ?? this.loginAttemptsRemaining,
       allowAction: allowAction ?? this.allowAction,
-      isPincodeSequence: isPincodeSequence ?? this.isPincodeSequence,
-      isPincodeSeries: isPincodeSeries ?? this.isPincodeSeries,
-      isPinCodeValid: isPinCodeValid ?? this.isPinCodeValid,
+      pinCodeError: pinCodeError ?? this.pinCodeError,
     );
   }
 
@@ -46,8 +46,6 @@ class PinCodeViewState extends Equatable {
         loginAttemptCount,
         allowAction,
         loginAttemptsRemaining,
-        isPincodeSequence,
-        isPincodeSeries,
-        isPinCodeValid,
+        pinCodeError,
       ];
 }
