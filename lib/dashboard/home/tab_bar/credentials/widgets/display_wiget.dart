@@ -13,13 +13,7 @@ class DisplayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleColor = Theme.of(context).colorScheme.secondaryContainer;
-    final valueColor = Theme.of(context).colorScheme.onSurface;
-
-    final textTheme = Theme.of(context).textTheme;
-    final titleTheme = textTheme.bodyMedium!.copyWith(color: titleColor);
-    final valueTheme =
-        Theme.of(context).textTheme.bodyMedium!.copyWith(color: valueColor);
+    final textTheme = Theme.of(context).textTheme.bodyMedium;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,8 +21,8 @@ class DisplayWidget extends StatelessWidget {
         if (display.description != null)
           DescriptionText(
             text: display.description!,
-            titleTheme: titleTheme,
-            valueTheme: valueTheme,
+            titleTheme: textTheme!.copyWith(fontWeight: FontWeight.bold),
+            valueTheme: textTheme,
           ),
       ],
     );

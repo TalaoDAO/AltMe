@@ -186,7 +186,7 @@ class SelectiveDisclosure {
     final value = <ClaimsData>[];
     final JsonPath dataPath = JsonPath(
       // ignore: prefer_interpolation_to_compose_strings
-      r'$..' + key,
+      r'$..["' + key + '"]',
     );
 
     try {

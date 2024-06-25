@@ -11,9 +11,11 @@ part 'pin_code_view_state.dart';
 class PinCodeViewCubit extends Cubit<PinCodeViewState> {
   PinCodeViewCubit({
     this.totalPermitedLoginAttempt = 3,
+    this.isUserPin = false,
   }) : super(const PinCodeViewState());
 
   final int totalPermitedLoginAttempt;
+  final bool isUserPin;
 
   void loginAttempt() {
     final loginAttemptCount = state.loginAttemptCount + 1;
@@ -90,19 +92,21 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
           }
           await getSecureStorage.set(SecureStorageKeys.pinCode, passCode);
         } else {
-          final isValid =
-              (await getSecureStorage.get(SecureStorageKeys.pinCode)) ==
-                  passCode;
-          if (!isValid) {
-            emit(
-              state.copyWith(
-                enteredPasscode: '',
-                pinCodeError: PinCodeErrors.errorPinCode,
-              ),
-            );
+          if (!isUserPin) {
+            final isValid =
+                (await getSecureStorage.get(SecureStorageKeys.pinCode)) ==
+                    passCode;
+            if (!isValid) {
+              emit(
+                state.copyWith(
+                  enteredPasscode: '',
+                  pinCodeError: PinCodeErrors.errorPinCode,
+                ),
+              );
 
-            loginAttempt();
-            return;
+              loginAttempt();
+              return;
+            }
           }
         }
         emit(

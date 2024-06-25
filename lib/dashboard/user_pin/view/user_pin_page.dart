@@ -37,7 +37,7 @@ class UserPinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PinCodeViewCubit(),
+      create: (context) => PinCodeViewCubit(isUserPin: true),
       child: UserPinView(
         onCancel: onCancel,
         onProceed: onProceed,

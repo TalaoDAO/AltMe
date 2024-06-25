@@ -1,13 +1,18 @@
+import 'package:altme/app/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static ThemeData seedThemeData(Brightness brightness, String primaryColor) {
-    // final seedColor = Colors.blue;
-    // altme
-    final seedColor = const Color(0xff6600FF);
-    // talao
-    // final seedColor = const Color(0xff1EAADC);
+  static ThemeData seedThemeData(Brightness brightness, String? primaryColor) {
+    late Color seedColor;
+
+    try {
+      seedColor = Color(
+        int.parse(primaryColor!.substring(1, 7), radix: 16) + 0xFF000000,
+      );
+    } catch (e) {
+      seedColor = Parameters.seedColor;
+    }
 
     final theme = ThemeData(
       useMaterial3: true,

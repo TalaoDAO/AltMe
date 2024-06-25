@@ -133,7 +133,7 @@ class DefaultCardBody extends StatelessWidget {
                       credentialModel: credentialModel,
                       style: Theme.of(context)
                           .textTheme
-                          .displayLarge!
+                          .headlineMedium!
                           .copyWith(color: textColor),
                     ),
                   ),
