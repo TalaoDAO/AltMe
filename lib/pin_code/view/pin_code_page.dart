@@ -133,16 +133,8 @@ class _PinCodeViewState extends State<PinCodeView> {
                 }
             }
           },
-          // shouldTriggerVerification: _verificationNotifier.stream,
           onLoginAttempt: (loginAttempt, loginAttemptsRemaining) {
-            if (loginAttemptsRemaining > 0) {
-              showModalBottomSheet<void>(
-                context: context,
-                builder: (_) => WrongPinCodePopUp(
-                  loginAttemptsRemaining: loginAttemptsRemaining,
-                ),
-              );
-            } else {
+            if (loginAttemptsRemaining == 0) {
               Navigator.of(context).push(DeleteMyWalletPage.route());
             }
           },

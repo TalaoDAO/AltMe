@@ -70,7 +70,6 @@ class ResetWalletView extends StatelessWidget {
               CheckboxItem(
                 value: state.isRecoveryPhraseWritten,
                 text: l10n.resetWalletCheckBox1,
-                textStyle: Theme.of(context).textTheme.titleLarge,
                 onChange: (_) {
                   context
                       .read<ResetWalletCubit>()
@@ -83,7 +82,6 @@ class ResetWalletView extends StatelessWidget {
               CheckboxItem(
                 value: state.isBackupCredentialSaved,
                 text: l10n.resetWalletCheckBox2,
-                textStyle: Theme.of(context).textTheme.titleLarge,
                 onChange: (_) {
                   context
                       .read<ResetWalletCubit>()

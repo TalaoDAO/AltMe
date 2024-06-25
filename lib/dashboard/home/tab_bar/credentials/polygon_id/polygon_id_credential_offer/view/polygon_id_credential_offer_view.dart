@@ -139,7 +139,7 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            MyGradientButton(
+            MyElevatedButton(
               text: l10n.accept,
               onPressed: () async {
                 await securityCheck(

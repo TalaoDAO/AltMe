@@ -139,7 +139,7 @@ class _RestoreCredentialMnemonicViewState
         child: BlocBuilder<RestoreCredentialMnemonicCubit,
             RestoreCredentialMnemonicState>(
           builder: (context, state) {
-            return MyGradientButton(
+            return MyElevatedButton(
               onPressed: !state.isMnemonicValid
                   ? null
                   : () async {

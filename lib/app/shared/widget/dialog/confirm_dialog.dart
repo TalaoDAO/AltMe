@@ -30,7 +30,8 @@ class ConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background = bgColor ?? Theme.of(context).colorScheme.surfaceDim;
+    final background =
+        bgColor ?? Theme.of(context).colorScheme.surfaceContainerHighest;
     final textColor = this.textColor ?? Theme.of(context).colorScheme.onSurface;
 
     final l10n = context.l10n;
@@ -85,8 +86,6 @@ class ConfirmDialog extends StatelessWidget {
                         .colorScheme
                         .onSurface
                         .withOpacity(0.2),
-                    backgroundColor: background,
-                    textColor: textColor,
                     borderRadius: Sizes.smallRadius,
                     elevation: 0,
                     onPressed: () {
@@ -100,7 +99,6 @@ class ConfirmDialog extends StatelessWidget {
                 child: MyElevatedButton(
                   text: yes ?? l10n.yes,
                   verticalSpacing: 14,
-                  backgroundColor: color,
                   borderRadius: Sizes.smallRadius,
                   fontSize: 15,
                   elevation: 0,

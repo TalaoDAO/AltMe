@@ -31,10 +31,10 @@ class Circle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fillColor =
-        circleUIConfig.fillColor ?? Theme.of(context).colorScheme.primary;
+    final fillColor = circleUIConfig.fillColor ??
+        Theme.of(context).colorScheme.primaryContainer;
     final borderColor =
-        circleUIConfig.borderColor ?? Theme.of(context).colorScheme.onPrimary;
+        circleUIConfig.borderColor ?? Theme.of(context).colorScheme.onSurface;
     return Container(
       margin: EdgeInsets.only(bottom: extraSize),
       width: circleUIConfig.circleSize,

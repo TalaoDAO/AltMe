@@ -36,7 +36,7 @@ class CheckboxItem extends StatelessWidget {
           ),
           Text(
             text,
-            style: textStyle ?? Theme.of(context).textTheme.labelLarge,
+            style: textStyle ?? Theme.of(context).textTheme.bodyLarge,
           ),
         ],
       ),

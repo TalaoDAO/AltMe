@@ -25,9 +25,7 @@ class DisplayDescriptionWidgetWithTitle extends StatelessWidget {
 
     final textTheme = Theme.of(context).textTheme;
     final titleTheme = titleColor == null
-        ? textTheme.bodyMedium!.copyWith(
-            color: Theme.of(context).colorScheme.secondaryContainer,
-          )
+        ? textTheme.bodyMedium!
         : textTheme.bodyMedium!.copyWith(color: titleColor);
     final valueTheme = valueColor == null
         ? Theme.of(context).textTheme.bodyMedium

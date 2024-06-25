@@ -283,7 +283,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               height: 0,
                               color: Theme.of(context)
                                   .colorScheme
-                                  .surfaceContainer,
+                                  .surfaceContainerHigh,
                             ),
                           ],
                         ),

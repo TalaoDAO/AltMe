@@ -41,7 +41,9 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             child: Text(
               credentialCategoryConfig.homeTitle,
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ),
           Padding(
@@ -49,8 +51,8 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             child: Text(
               credentialCategoryConfig.homeSubTitle,
               maxLines: 3,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.w100,
                   ),
             ),
           ),

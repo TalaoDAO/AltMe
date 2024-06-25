@@ -20,7 +20,7 @@ class PinCodeTitle extends StatelessWidget {
           title,
           textAlign: TextAlign.center,
           style: allowAction
-              ? Theme.of(context).textTheme.titleLarge
+              ? Theme.of(context).textTheme.headlineSmall
               : Theme.of(context)
                   .textTheme
                   .titleLarge!
@@ -31,10 +31,10 @@ class PinCodeTitle extends StatelessWidget {
           Text(
             subTitle!,
             style: allowAction
-                ? Theme.of(context).textTheme.bodyMedium
+                ? Theme.of(context).textTheme.bodyLarge
                 : Theme.of(context)
                     .textTheme
-                    .bodyMedium!
+                    .bodyLarge!
                     .copyWith(color: Theme.of(context).colorScheme.error),
             textAlign: TextAlign.center,
           ),

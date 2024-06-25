@@ -63,7 +63,7 @@ class RequiredCredentialNotFound extends StatelessWidget {
       ),
       navigation: Padding(
         padding: const EdgeInsets.all(Sizes.spaceXSmall),
-        child: MyGradientButton(
+        child: MyElevatedButton(
           text: l10n.backToHome,
           onPressed: () {
             Navigator.popUntil(

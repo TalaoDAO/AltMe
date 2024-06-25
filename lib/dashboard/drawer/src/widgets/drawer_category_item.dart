@@ -39,13 +39,16 @@ class DrawerCategoryItem extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                   if (subTitle != null) ...[
                     const SizedBox(height: Sizes.space2XSmall),
                     Text(
                       subTitle!,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
                 ],

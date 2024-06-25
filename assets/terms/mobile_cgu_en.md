@@ -79,7 +79,7 @@ When creating a wallet, we strongly recommend taking precautionary measures to p
 
 
 
-* Creating a strong and unique PIN Code, distinct from pin code used for other purposes (e.g., different from your phone PIN Code or pin code used on websites or online services), and utilizing biometric authentication if available.
+* Creating a strong and unique PIN Code, distinct from PIN Code used for other purposes (e.g., different from your phone PIN Code or PIN Code used on websites or online services), and utilizing biometric authentication if available.
 * Avoiding the storage of private keys and the Recovery Phrase in plain text online or in insecure physical locations.
 * Restricting access to your devices and wallet.
 * Taking necessary precautions against malware on your devices and networks.
@@ -259,7 +259,7 @@ User Obligations:
 
 
 * Users commit to refraining from engaging in illegal or harmful use of the service and promptly reporting errors.
-* Users are also required to select a pin code in line with policy guidelines.
+* Users are also required to select a PIN Code in line with policy guidelines.
 * Users must securely store their electronic identification means and refrain from sharing them with third parties.
 
 Prohibited actions: 

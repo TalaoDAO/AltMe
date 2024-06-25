@@ -71,7 +71,7 @@ class StarterView extends StatelessWidget {
                         const Spacer(flex: 1),
                         SubTitle(profileModel: state.model),
                         const Spacer(flex: 4),
-                        MyGradientButton(
+                        MyElevatedButton(
                           text: l10n.createAccount,
                           verticalSpacing: 15,
                           onPressed: () async {
@@ -94,10 +94,6 @@ class StarterView extends StatelessWidget {
                         const Spacer(flex: 1),
                         MyOutlinedButton(
                           text: l10n.importAccount,
-                          textColor: Theme.of(context).colorScheme.secondary,
-                          borderColor:
-                              Theme.of(context).colorScheme.secondary,
-                          backgroundColor: Colors.transparent,
                           onPressed: () async {
                             await profileCubit.setWalletType(
                               walletType: WalletType.personal,

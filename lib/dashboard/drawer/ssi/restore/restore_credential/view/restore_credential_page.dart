@@ -142,7 +142,7 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
         padding: const EdgeInsets.all(Sizes.spaceSmall),
         child: BlocBuilder<RestoreCredentialCubit, RestoreCredentialState>(
           builder: (context, state) {
-            return MyGradientButton(
+            return MyElevatedButton(
               onPressed: state.backupFilePath == null
                   ? null
                   : () => context.read<RestoreCredentialCubit>().recoverWallet(

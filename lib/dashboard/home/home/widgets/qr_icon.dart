@@ -67,7 +67,7 @@ class QRIcon extends StatelessWidget {
               height: 60,
               width: 60,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.primaryFixedDim,
                 borderRadius: BorderRadius.circular(50),
               ),
             ),
@@ -76,7 +76,7 @@ class QRIcon extends StatelessWidget {
               width: 40,
               child: ImageIcon(
                 const AssetImage(IconStrings.scan),
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: Theme.of(context).colorScheme.onPrimaryFixedVariant,
               ),
             ),
           ],
