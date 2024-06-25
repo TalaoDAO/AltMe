@@ -10,7 +10,7 @@ class WalletSettingsMenu extends StatelessWidget {
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: '/LanguageSettings'),
+      settings: const RouteSettings(name: '/WalletSettingsMenu'),
       builder: (_) => const WalletSettingsMenu(),
     );
   }

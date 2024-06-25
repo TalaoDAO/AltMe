@@ -3,6 +3,7 @@ import 'package:altme/l10n/l10n.dart';
 
 import 'package:altme/wallet/model/model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CryptoAccountItem extends StatelessWidget {
   const CryptoAccountItem({
@@ -73,9 +74,37 @@ class CryptoAccountItem extends StatelessWidget {
       ),
       subtitle: Padding(
         padding: const EdgeInsets.symmetric(vertical: Sizes.spaceXSmall),
-        child: Text(
-          walletAddressExtracted,
-          style: Theme.of(context).textTheme.bodySmall,
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                walletAddressExtracted,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+            const SizedBox(width: Sizes.spaceSmall),
+            InkWell(
+              onTap: () async {
+                await Clipboard.setData(
+                  ClipboardData(
+                    text: walletAddressExtracted,
+                  ),
+                );
+                AlertMessage.showStateMessage(
+                  context: context,
+                  stateMessage: StateMessage.success(
+                    stringMessage: l10n.copiedToClipboard,
+                  ),
+                );
+              },
+              child: Image.asset(
+                IconStrings.copy,
+                width: Sizes.icon,
+                height: Sizes.icon,
+              ),
+            ),
+            const SizedBox(width: Sizes.spaceSmall),
+          ],
         ),
       ),
     );
