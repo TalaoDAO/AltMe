@@ -965,10 +965,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_olm
-      sha256: "9233fd8699e1dec0e4d5cfb9b0d0f7293db3308daf412c57093b69b461bb4a18"
+      sha256: f98cafb434b3858d46446a93eb269a8e97eb38ccc5f8e0281b167d66d95c15dc
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.2"
+    version: "1.4.1"
   flutter_openssl_crypto:
     dependency: "direct main"
     description:
@@ -1568,19 +1568,7 @@ packages:
       sha256: "890df3f9688106f25755f26b1c60589a92b3ab91a22b8b224947ad041bf172d8"
       url: "https://pub.dev"
     source: hosted
-<<<<<<< HEAD
-    version: "1.0.3"
-=======
     version: "1.0.4"
-  model_viewer_plus:
-    dependency: "direct main"
-    description:
-      name: model_viewer_plus
-      sha256: ad1a349510e199eb40d5da5c9f8fb1f63442f07842f7544a31d9d38ba9658c0d
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.8.0"
->>>>>>> main
   nested:
     dependency: transitive
     description:
