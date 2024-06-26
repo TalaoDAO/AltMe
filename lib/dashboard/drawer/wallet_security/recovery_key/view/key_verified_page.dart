@@ -17,12 +17,12 @@ class KeyVerifiedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const WalletReadyView();
+    return const KeyVerifiedView();
   }
 }
 
-class WalletReadyView extends StatelessWidget {
-  const WalletReadyView({super.key});
+class KeyVerifiedView extends StatelessWidget {
+  const KeyVerifiedView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class WalletReadyView extends StatelessWidget {
               horizontal: Sizes.spaceSmall,
               vertical: Sizes.space2XSmall,
             ),
-            child: MyGradientButton(
+            child: MyElevatedButton(
               text: l10n.letsGo,
               verticalSpacing: 18,
               onPressed: () {

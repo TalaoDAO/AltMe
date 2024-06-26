@@ -3,7 +3,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,9 +18,21 @@ class StarterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
+    return StarterView(profileCubit: context.read<ProfileCubit>());
+  }
+}
 
-    final profileCubit = context.read<ProfileCubit>();
+class StarterView extends StatelessWidget {
+  const StarterView({
+    super.key,
+    required this.profileCubit,
+  });
+
+  final ProfileCubit profileCubit;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
 
     return WillPopScope(
       onWillPop: () async {
@@ -33,8 +44,8 @@ class StarterPage extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Theme.of(context).colorScheme.darkGradientStartColor,
-                Theme.of(context).colorScheme.darkGradientEndColor,
+                Theme.of(context).colorScheme.surface,
+                Theme.of(context).colorScheme.surface,
               ],
               end: Alignment.topCenter,
               begin: Alignment.bottomCenter,
@@ -60,18 +71,20 @@ class StarterPage extends StatelessWidget {
                         const Spacer(flex: 1),
                         SubTitle(profileModel: state.model),
                         const Spacer(flex: 4),
-                        MyGradientButton(
+                        MyElevatedButton(
                           text: l10n.createAccount,
                           verticalSpacing: 15,
                           onPressed: () async {
                             await profileCubit.setWalletType(
                               walletType: WalletType.personal,
                             );
+
                             await profileCubit.setProfileSetting(
                               profileSetting: ProfileSetting.initial(),
                               profileType: ProfileType.defaultOne,
                             );
-                            await Navigator.of(context).push(
+
+                            await Navigator.of(context).push<void>(
                               ProtectWalletPage.route(
                                 routeType: WalletRouteType.create,
                               ),
@@ -81,10 +94,6 @@ class StarterPage extends StatelessWidget {
                         const Spacer(flex: 1),
                         MyOutlinedButton(
                           text: l10n.importAccount,
-                          textColor: Theme.of(context).colorScheme.lightPurple,
-                          borderColor:
-                              Theme.of(context).colorScheme.lightPurple,
-                          backgroundColor: Colors.transparent,
                           onPressed: () async {
                             await profileCubit.setWalletType(
                               walletType: WalletType.personal,
@@ -93,7 +102,7 @@ class StarterPage extends StatelessWidget {
                               profileSetting: ProfileSetting.initial(),
                               profileType: ProfileType.defaultOne,
                             );
-                            await Navigator.of(context).push(
+                            await Navigator.of(context).push<void>(
                               ProtectWalletPage.route(
                                 routeType: WalletRouteType.import,
                               ),

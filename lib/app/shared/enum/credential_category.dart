@@ -1,6 +1,5 @@
 import 'package:altme/l10n/l10n.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 enum CredentialCategory {
   advantagesCards,
@@ -80,8 +79,7 @@ extension CredentialCategoryX on CredentialCategory {
     }
   }
 
-  CredentialCategoryConfig config(BuildContext context) {
-    final l10n = context.l10n;
+  CredentialCategoryConfig config(AppLocalizations l10n) {
     switch (this) {
       case CredentialCategory.advantagesCards:
         return CredentialCategoryConfig(

@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:altme/l10n/l10n.dart';
+
 import 'package:flutter/material.dart';
 
 class HomeCredentialCategoryItem extends StatelessWidget {
@@ -29,7 +30,7 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             ? 1
             : 0,
       );
-    final credentialCategoryConfig = credentialCategory.config(context);
+    final credentialCategoryConfig = credentialCategory.config(context.l10n);
     return Padding(
       padding: margin,
       child: Column(
@@ -40,7 +41,9 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             child: Text(
               credentialCategoryConfig.homeTitle,
-              style: Theme.of(context).textTheme.credentialCategoryTitle,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ),
           Padding(
@@ -48,7 +51,9 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             child: Text(
               credentialCategoryConfig.homeSubTitle,
               maxLines: 3,
-              style: Theme.of(context).textTheme.credentialCategorySubTitle,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.w100,
+                  ),
             ),
           ),
           const SizedBox(height: 14),

@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -22,8 +22,10 @@ class DiscoverDynamicDetial extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    final titleTheme = textTheme.discoverFieldTitle;
-    final valueTheme = textTheme.discoverFieldDescription;
+    final titleTheme = textTheme.bodyMedium!.copyWith(
+      fontWeight: FontWeight.bold,
+    );
+    final valueTheme = textTheme.bodyMedium!;
 
     return Padding(
       padding: padding,
@@ -54,7 +56,7 @@ class DiscoverDynamicDetial extends StatelessWidget {
                   },
                   child: ImageIcon(
                     const AssetImage(IconStrings.link),
-                    color: Theme.of(context).colorScheme.markDownA,
+                    color: Theme.of(context).colorScheme.primary,
                     size: 17,
                   ),
                 ),

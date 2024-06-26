@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,7 +54,7 @@ class CredentialsListPageItem extends StatelessWidget {
             stackFit: StackFit.expand,
             badgeContent: Text(
               badgeCount.toString(),
-              style: Theme.of(context).textTheme.badgeStyle,
+              style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
             position: badges.BadgePosition.topEnd(end: 10, top: 30),
@@ -143,7 +143,7 @@ class DisplaySelectionElement extends StatelessWidget {
               child: Icon(
                 selected! ? Icons.check_box : Icons.check_box_outline_blank,
                 size: 25,
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),

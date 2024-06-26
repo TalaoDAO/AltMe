@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -95,7 +95,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
           backgroundColor: Colors.transparent,
           body: DecoratedBox(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
+              color: Theme.of(context).colorScheme.surfaceDim,
               boxShadow: [
                 BoxShadow(
                   color: Theme.of(context).colorScheme.inversePrimary,
@@ -125,7 +125,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                         const SizedBox(width: Sizes.spaceXSmall),
                         Text(
                           l10n.selectAccount,
-                          style: Theme.of(context).textTheme.accountsText,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),
@@ -140,7 +140,8 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                 border: Border.all(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .accountBottomSheetBorder,
+                                      .onSurface
+                                      .withOpacity(0.12),
                                   width: 0.2,
                                 ),
                                 borderRadius: const BorderRadius.all(
@@ -173,7 +174,8 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                     height: 0.2,
                                     color: Theme.of(context)
                                         .colorScheme
-                                        .borderColor,
+                                        .onSurface
+                                        .withOpacity(0.12),
                                   ),
                                 ),
                               ),

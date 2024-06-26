@@ -165,7 +165,7 @@ class _SelectiveDisclosurePickViewState
                   child: BlocBuilder<SelectiveDisclosureCubit,
                       SelectiveDisclosureState>(
                     builder: (context, state) {
-                      return MyGradientButton(
+                      return MyElevatedButton(
                         onPressed: () => present(
                           context: context,
                           selectedSDIndexInJWT: state.selectedSDIndexInJWT,

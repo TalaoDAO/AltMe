@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 
@@ -32,16 +31,14 @@ class BottomBarItem extends StatelessWidget {
               showBadge: badgeCount > 0,
               badgeContent: Text(
                 badgeCount.toString(),
-                style: Theme.of(context).textTheme.badgeStyle,
+                style: Theme.of(context).textTheme.bodySmall,
                 textAlign: TextAlign.center,
               ),
               child: Container(
                 margin: const EdgeInsets.only(bottom: 5),
                 child: ImageIcon(
                   AssetImage(icon),
-                  color: isSelected
-                      ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.unSelectedLabel,
+                  color: bottomBarItemColor(context),
                   size: 20,
                 ),
               ),
@@ -50,15 +47,30 @@ class BottomBarItem extends StatelessWidget {
               text.toUpperCase(),
               softWrap: false,
               overflow: TextOverflow.fade,
-              style: Theme.of(context).textTheme.bottomBar.copyWith(
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.unSelectedLabel,
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: bottomBarItemColor(context),
                   ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Color bottomBarItemColor(BuildContext context) {
+    final Color one = Theme.of(context).colorScheme.onPrimaryFixedVariant;
+    final Color two = Theme.of(context).colorScheme.primaryFixedDim;
+    late Color selectedColor;
+    late Color unselectedColor;
+    if (Theme.of(context).brightness == Brightness.light) {
+      selectedColor = one;
+      unselectedColor = two;
+    } else {
+      selectedColor = two;
+      unselectedColor = one;
+    }
+    return isSelected ? selectedColor : unselectedColor;
   }
 }

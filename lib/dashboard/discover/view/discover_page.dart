@@ -1,7 +1,6 @@
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +30,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
     return BasePage(
       scrollView: false,
       padding: EdgeInsets.zero,
-      backgroundColor: Theme.of(context).colorScheme.transparent,
+      backgroundColor: Colors.transparent,
       body: BlocListener<ProfileCubit, ProfileState>(
         listenWhen: (previous, current) {
           // if (current.model.profileSetting.selfSovereignIdentityOptions

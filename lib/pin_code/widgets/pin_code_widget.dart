@@ -1,22 +1,19 @@
-import 'dart:async';
-
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+typedef OnLoginAttempt = void Function(int, int);
 
 class PinCodeWidget extends StatefulWidget {
   const PinCodeWidget({
     super.key,
     required this.title,
     this.passwordDigits = 4,
-    required this.passwordEnteredCallback,
     required this.cancelButton,
     required this.deleteButton,
-    this.shouldTriggerVerification,
     this.isValidCallback,
     CircleUIConfig? circleUIConfig,
     KeyboardUIConfig? keyboardUIConfig,
@@ -25,21 +22,24 @@ class PinCodeWidget extends StatefulWidget {
     this.cancelCallback,
     this.subTitle,
     this.header,
-    this.allowAction = true,
+    this.onLoginAttempt,
+    this.isNewCode = false,
+    this.isUserPin = false,
   })  : circleUIConfig = circleUIConfig ?? const CircleUIConfig(),
         keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
 
+  final OnLoginAttempt? onLoginAttempt;
   final Widget? header;
   final String title;
   final String? subTitle;
   final int passwordDigits;
-  final PasswordEnteredCallback passwordEnteredCallback;
-  final bool allowAction;
+  final bool isNewCode;
+  // When a specific PIN is requested to get a credential
+  final bool isUserPin;
 
   // Cancel button and delete button will be switched based on the screen state
   final Widget cancelButton;
   final Widget deleteButton;
-  final Stream<bool>? shouldTriggerVerification;
   final CircleUIConfig circleUIConfig;
   final KeyboardUIConfig keyboardUIConfig;
 
@@ -56,40 +56,41 @@ class PinCodeWidget extends StatefulWidget {
 
 class _PinCodeWidgetState extends State<PinCodeWidget>
     with SingleTickerProviderStateMixin {
-  late StreamSubscription<bool>? streamSubscription;
-  late AnimationController controller;
-  late Animation<double> animation;
+  bool isConfirmationPage = false;
 
   final log = getLogger('PinCodeWidget');
 
   @override
   void initState() {
     super.initState();
-    streamSubscription =
-        widget.shouldTriggerVerification?.listen(_showValidation);
-    controller = AnimationController(
-      duration: const Duration(milliseconds: 400),
-      vsync: this,
-    );
-    final Animation<double> curve =
-        CurvedAnimation(parent: controller, curve: ShakeCurve());
-    animation = Tween<double>(begin: 0, end: 10).animate(curve)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          context.read<PinCodeViewCubit>().setEnteredPasscode('');
-          controller.value = 0;
-        }
-      });
+    Future.delayed(Duration.zero, () {
+      final l10n = context.l10n;
+      if (widget.title == l10n.confirmYourPinCode) {
+        setState(() {
+          isConfirmationPage = true;
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocBuilder<PinCodeViewCubit, PinCodeViewState>(
+    return BlocConsumer<PinCodeViewCubit, PinCodeViewState>(
+      listenWhen: (previous, current) {
+        if (current.enteredPasscode.length == widget.passwordDigits) {
+          if (current.pinCodeError == PinCodeErrors.none || widget.isUserPin) {
+            _validationCallback();
+          }
+        }
+        return previous.loginAttemptCount != current.loginAttemptCount;
+      },
+      listener: (context, state) {
+        widget.onLoginAttempt
+            ?.call(state.loginAttemptCount, state.loginAttemptsRemaining);
+      },
       builder: (context, state) {
-        final PinCodeViewCubit pinCodeViewCubit =
-            context.read<PinCodeViewCubit>();
-        final enteredPasscode = pinCodeViewCubit.state.enteredPasscode;
+        final enteredPasscode = state.enteredPasscode;
 
         return OrientationBuilder(
           builder: (context, orientation) {
@@ -117,61 +118,54 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                         0.5,
                                     showPoweredBy: true,
                                   ),
-                                const SizedBox(height: Sizes.spaceNormal),
+                                const SizedBox(height: Sizes.spaceSmall),
                                 PinCodeTitle(
                                   title: widget.title,
-                                  subTitle: widget.allowAction
+                                  subTitle: state.allowAction
                                       ? widget.subTitle
                                       : l10n.pincodeAttemptMessage,
-                                  allowAction: widget.allowAction,
+                                  allowAction: state.allowAction,
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.only(top: 16),
+                                  margin: const EdgeInsets.only(top: 8),
                                   height: 40,
-                                  child: AnimatedBuilder(
-                                    animation: animation,
-                                    builder: (_, __) {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: List.generate(
-                                          widget.passwordDigits,
-                                          (index) => Container(
-                                            margin: const EdgeInsets.all(8),
-                                            child: Circle(
-                                              allowAction: widget.allowAction,
-                                              filled: index <
-                                                  enteredPasscode.length,
-                                              circleUIConfig:
-                                                  widget.circleUIConfig,
-                                              extraSize: animation.value,
-                                            ),
-                                          ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: List.generate(
+                                      widget.passwordDigits,
+                                      (index) => Container(
+                                        margin: const EdgeInsets.all(8),
+                                        child: Circle(
+                                          allowAction: state.allowAction,
+                                          filled:
+                                              index < enteredPasscode.length,
+                                          circleUIConfig: (state.pinCodeError !=
+                                                  PinCodeErrors.none)
+                                              ? CircleUIConfig(
+                                                  fillColor: Theme.of(context)
+                                                      .colorScheme
+                                                      .error,
+                                                )
+                                              : widget.circleUIConfig,
                                         ),
-                                      );
-                                    },
+                                      ),
+                                    ),
                                   ),
                                 ),
+                                PinCodeErrorMessage(
+                                  isConfirmationPage: isConfirmationPage,
+                                ),
                                 NumKeyboard(
-                                  passwordEnteredCallback:
-                                      widget.passwordEnteredCallback,
                                   keyboardUIConfig: widget.keyboardUIConfig,
                                   passwordDigits: widget.passwordDigits,
                                   cancelCallback: widget.cancelCallback,
-                                  allowAction: widget.allowAction,
+                                  allowAction: true,
+                                  isNewCode: widget.isNewCode,
+                                  keyboardButton:
+                                      KeyboardButton(widget: widget),
                                 ),
                                 widget.bottomWidget ?? Container(),
                               ],
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: DeleteButton(
-                                cancelButton: widget.cancelButton,
-                                deleteButton: widget.deleteButton,
-                                cancelCallback: widget.cancelCallback,
-                                keyboardUIConfig: widget.keyboardUIConfig,
-                              ),
                             ),
                           ],
                         ),
@@ -199,58 +193,41 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                           if (widget.header != null)
                                             widget.header!
                                           else
-                                            WalletLogo(
-                                              profileModel: context
-                                                  .read<ProfileCubit>()
-                                                  .state
-                                                  .model,
-                                              height: 90,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .shortestSide *
-                                                  0.5,
-                                              showPoweredBy: true,
-                                            ),
+                                            // const AltMeLogo(
+                                            //   size: Sizes.logoLarge,
+                                            // ),
+                                            const Center(),
                                           const SizedBox(
                                             height: Sizes.spaceNormal,
                                           ),
                                           PinCodeTitle(
                                             title: widget.title,
                                             subTitle: widget.subTitle,
-                                            allowAction: widget.allowAction,
+                                            allowAction: state.allowAction,
                                           ),
                                           Container(
                                             margin:
                                                 const EdgeInsets.only(top: 20),
                                             height: 40,
-                                            child: AnimatedBuilder(
-                                              animation: animation,
-                                              builder: (_, __) {
-                                                return Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: List.generate(
-                                                    widget.passwordDigits,
-                                                    (index) => Container(
-                                                      margin:
-                                                          const EdgeInsets.all(
-                                                        8,
-                                                      ),
-                                                      child: Circle(
-                                                        allowAction:
-                                                            widget.allowAction,
-                                                        filled: index <
-                                                            enteredPasscode
-                                                                .length,
-                                                        circleUIConfig: widget
-                                                            .circleUIConfig,
-                                                        extraSize:
-                                                            animation.value,
-                                                      ),
-                                                    ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: List.generate(
+                                                widget.passwordDigits,
+                                                (index) => Container(
+                                                  margin: const EdgeInsets.all(
+                                                    8,
                                                   ),
-                                                );
-                                              },
+                                                  child: Circle(
+                                                    allowAction:
+                                                        state.allowAction,
+                                                    filled: index <
+                                                        enteredPasscode.length,
+                                                    circleUIConfig:
+                                                        widget.circleUIConfig,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -271,28 +248,14 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                             ),
                             Expanded(
                               child: NumKeyboard(
-                                passwordEnteredCallback:
-                                    widget.passwordEnteredCallback,
                                 keyboardUIConfig: widget.keyboardUIConfig,
                                 passwordDigits: widget.passwordDigits,
                                 cancelCallback: widget.cancelCallback,
-                                allowAction: widget.allowAction,
+                                allowAction: true,
+                                keyboardButton: KeyboardButton(widget: widget),
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: DeleteButton(
-                            cancelButton: widget.cancelButton,
-                            deleteButton: widget.deleteButton,
-                            cancelCallback: widget.cancelCallback,
-                            keyboardUIConfig: widget.keyboardUIConfig,
-                          ),
                         ),
                       ),
                     ],
@@ -301,32 +264,6 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
         );
       },
     );
-  }
-
-  @override
-  void didUpdateWidget(PinCodeWidget old) {
-    super.didUpdateWidget(old);
-    // in case the stream instance changed, subscribe to the new one
-    if (widget.shouldTriggerVerification != old.shouldTriggerVerification) {
-      streamSubscription?.cancel();
-      streamSubscription =
-          widget.shouldTriggerVerification?.listen(_showValidation);
-    }
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    streamSubscription?.cancel();
-    super.dispose();
-  }
-
-  void _showValidation(bool isValid) {
-    if (isValid) {
-      _validationCallback();
-    } else {
-      controller.forward();
-    }
   }
 
   void _validationCallback() {
@@ -338,5 +275,85 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
         '''You didn't implement validation callback. Please handle a state by yourself then.''',
       );
     }
+  }
+}
+
+class PinCodeErrorMessage extends StatelessWidget {
+  const PinCodeErrorMessage({
+    required this.isConfirmationPage,
+    super.key,
+  });
+
+  final bool isConfirmationPage;
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return BlocBuilder<PinCodeViewCubit, PinCodeViewState>(
+      builder: (context, state) {
+        Widget errorWidget = const SizedBox.shrink();
+        switch (state.pinCodeError) {
+          case PinCodeErrors.none:
+            errorWidget = const SizedBox.shrink();
+          case PinCodeErrors.errorSerie:
+            errorWidget = PinCodeErrorText(l10n.pincodeSerie);
+          case PinCodeErrors.errorSequence:
+            errorWidget = PinCodeErrorText(l10n.pincodeSequence);
+          case PinCodeErrors.errorConfirmation:
+          case PinCodeErrors.errorPinCode:
+            if (isConfirmationPage) {
+              errorWidget = PinCodeErrorText(l10n.pincodeDifferent);
+            } else {
+              errorWidget = PinCodeErrorText(
+                // ignore: lines_longer_than_80_chars
+                '${l10n.userPinIsIncorrect}\n${l10n.codeSecretIncorrectDescription(
+                  state.loginAttemptsRemaining,
+                  state.loginAttemptsRemaining == 1 ? '' : 's',
+                )}',
+              );
+            }
+        }
+        return errorWidget;
+      },
+    );
+  }
+}
+
+class PinCodeErrorText extends StatelessWidget {
+  const PinCodeErrorText(
+    this.errorText, {
+    super.key,
+  });
+
+  final String errorText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      errorText,
+      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: Theme.of(context).colorScheme.error,
+          ),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
+class KeyboardButton extends StatelessWidget {
+  const KeyboardButton({
+    super.key,
+    required this.widget,
+  });
+
+  final PinCodeWidget widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return DeleteButton(
+      cancelButton: widget.cancelButton,
+      deleteButton: widget.deleteButton,
+      cancelCallback: widget.cancelCallback,
+      keyboardUIConfig: widget.keyboardUIConfig,
+    );
   }
 }

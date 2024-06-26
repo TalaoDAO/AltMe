@@ -18,13 +18,24 @@ class OnBoardingTosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<OnBoardingTosCubit>(
       create: (_) => OnBoardingTosCubit(),
-      child: const OnBoardingTosView(),
+      child: Builder(
+        builder: (context) {
+          return OnBoardingTosView(
+            onBoardingTosCubit: context.read<OnBoardingTosCubit>(),
+          );
+        },
+      ),
     );
   }
 }
 
 class OnBoardingTosView extends StatefulWidget {
-  const OnBoardingTosView({super.key});
+  const OnBoardingTosView({
+    super.key,
+    required this.onBoardingTosCubit,
+  });
+
+  final OnBoardingTosCubit onBoardingTosCubit;
 
   @override
   State<OnBoardingTosView> createState() => _OnBoardingTosViewState();
@@ -41,13 +52,9 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
       final double currentScroll = _scrollController.position.pixels;
 
       if (maxScroll - currentScroll <= 200) {
-        context
-            .read<OnBoardingTosCubit>()
-            .setScrolledIsOver(scrollIsOver: true);
+        widget.onBoardingTosCubit.setScrolledIsOver(scrollIsOver: true);
       } else {
-        context
-            .read<OnBoardingTosCubit>()
-            .setScrolledIsOver(scrollIsOver: false);
+        widget.onBoardingTosCubit.setScrolledIsOver(scrollIsOver: false);
       }
     });
     super.initState();
@@ -63,7 +70,7 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
             return false;
           },
           child: BasePage(
-            backgroundColor: Theme.of(context).colorScheme.background,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             title: l10n.termsOfUse,
             scrollView: false,
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -87,8 +94,7 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
                           value: state.agreeTerms,
                           text: l10n.agreeTermsAndConditionCheckBox,
                           onChange: (value) {
-                            context
-                                .read<OnBoardingTosCubit>()
+                            widget.onBoardingTosCubit
                                 .setAgreeTerms(agreeTerms: value);
                           },
                         ),
@@ -96,8 +102,7 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
                           value: state.readTerms,
                           text: l10n.readTermsOfUseCheckBox,
                           onChange: (value) {
-                            context
-                                .read<OnBoardingTosCubit>()
+                            widget.onBoardingTosCubit
                                 .setReadTerms(readTerms: value);
                           },
                         ),
@@ -106,7 +111,7 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  MyGradientButton(
+                  MyElevatedButton(
                     text: l10n.start,
                     onPressed: (state.agreeTerms && state.readTerms)
                         ? () async => onAcceptancePressed(context)

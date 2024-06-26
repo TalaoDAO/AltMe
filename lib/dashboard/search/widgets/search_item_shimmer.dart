@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class SearchItemShimmer extends StatelessWidget {
@@ -11,7 +10,7 @@ class SearchItemShimmer extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: BackgroundCard(
         padding: EdgeInsets.zero,
-        color: Theme.of(context).colorScheme.surfaceContainer,
+        color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
         child: const AspectRatio(
           aspectRatio: Sizes.credentialAspectRatio,
           child: ShimmerWidget.rectangular(

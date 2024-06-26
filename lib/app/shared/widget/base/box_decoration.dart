@@ -116,7 +116,7 @@ class BaseBoxDecoration extends Decoration {
       color,
       shapeColor,
       borderRadius,
-      Object.hashAll(boxShadow!),
+      boxShadow != null ? Object.hashAll(boxShadow!) : null,
       gradient,
     );
   }

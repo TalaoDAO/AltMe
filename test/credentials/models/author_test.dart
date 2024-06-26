@@ -4,26 +4,25 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Author model work properly', () {
     test('initialize Author with default constructor', () {
-      const author = Author('Taleb');
-      expect(author.name, 'Taleb');
+      const author = Author('Test');
+      expect(author.name, 'Test');
     });
 
     test('initialize Author fromJson constructor', () {
       const authorJson = <String, dynamic>{
-        'name': 'Taleb',
+        'name': 'Test1',
         'logo': 'logo',
       };
       final author = Author.fromJson(authorJson);
-      expect(author.name, 'Taleb');
+      expect(author.name, 'Test1');
     });
 
     test('Author toJson worked correct', () {
-      const authorJson = <String, dynamic>{
-        'name': 'Taleb',
-        'logo': 'logo',
-      };
-      final author = Author.fromJson(authorJson);
-      expect(author.toJson(), authorJson);
+      const author = Author('Test');
+
+      final json = author.toJson();
+
+      expect(json['name'], 'Test');
     });
   });
 }

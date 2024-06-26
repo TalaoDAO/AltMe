@@ -139,19 +139,8 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       data: data,
     );
 
-    /// parse
-    final header = profileCubit.jwtDecode.parseJwtHeader(response as String);
-    final issuerKid = header['kid'].toString();
-    final did = issuerKid.split('#')[0];
-
-    /// verify
-    final VerificationType isVerified = await verifyEncodedData(
-      issuer: did,
-      jwtDecode: profileCubit.jwtDecode,
-      jwt: response,
-    );
-
-    final profileSettingJson = profileCubit.jwtDecode.parseJwt(response);
+    final profileSettingJson =
+        profileCubit.jwtDecode.parseJwt(response as String);
 
     await profileCubit.secureStorageProvider.set(
       SecureStorageKeys.enterpriseProfileSetting,
@@ -165,28 +154,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       profileSetting: profileSetting,
       profileType: ProfileType.enterprise,
     );
-
-    // if (isVerified == VerificationType.verified) {
-    //   emit(
-    //     state.copyWith(
-    //       status: AppStatus.idle,
-    //       message: const StateMessage.info(
-    //         showDialog: true,
-    //         stringMessage: 'Verfied',
-    //       ),
-    //     ),
-    //   );
-    // } else {
-    //   emit(
-    //     state.copyWith(
-    //       status: AppStatus.idle,
-    //       message: const StateMessage.info(
-    //         showDialog: true,
-    //         stringMessage: 'Not Verfied',
-    //       ),
-    //     ),
-    //   );
-    // }
 
     emit(
       state.copyWith(
@@ -479,19 +446,8 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         data: data,
       );
 
-      /// parse
-      final header = profileCubit.jwtDecode.parseJwtHeader(response as String);
-      final issuerKid = header['kid'].toString();
-      final did = issuerKid.split('#')[0];
-
-      /// verify
-      final VerificationType isVerified = await verifyEncodedData(
-        issuer: did,
-        jwtDecode: profileCubit.jwtDecode,
-        jwt: response,
-      );
-
-      final profileSettingJson = profileCubit.jwtDecode.parseJwt(response);
+      final profileSettingJson =
+          profileCubit.jwtDecode.parseJwt(response as String);
 
       await profileCubit.secureStorageProvider.set(
         SecureStorageKeys.enterpriseProfileSetting,

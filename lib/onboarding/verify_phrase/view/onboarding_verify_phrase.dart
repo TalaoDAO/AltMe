@@ -5,13 +5,12 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingVerifyPhrasePage extends StatelessWidget {
   const OnBoardingVerifyPhrasePage({
@@ -39,7 +38,6 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => OnBoardingVerifyPhraseCubit(
-        secureStorageProvider: getSecureStorage,
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),
@@ -49,9 +47,16 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
         profileCubit: context.read<ProfileCubit>(),
       ),
-      child: OnBoardingVerifyPhraseView(
-        mnemonic: mnemonic,
-        isFromOnboarding: isFromOnboarding,
+      child: Builder(
+        builder: (context) {
+          return OnBoardingVerifyPhraseView(
+            mnemonic: mnemonic,
+            isFromOnboarding: isFromOnboarding,
+            onBoardingVerifyPhraseCubit:
+                context.read<OnBoardingVerifyPhraseCubit>(),
+            onboardingCubit: context.read<OnboardingCubit>(),
+          );
+        },
       ),
     );
   }
@@ -61,11 +66,15 @@ class OnBoardingVerifyPhraseView extends StatefulWidget {
   const OnBoardingVerifyPhraseView({
     required this.mnemonic,
     required this.isFromOnboarding,
+    required this.onBoardingVerifyPhraseCubit,
+    required this.onboardingCubit,
     super.key,
   });
 
   final List<String> mnemonic;
   final bool isFromOnboarding;
+  final OnBoardingVerifyPhraseCubit onBoardingVerifyPhraseCubit;
+  final OnboardingCubit onboardingCubit;
 
   @override
   State<OnBoardingVerifyPhraseView> createState() =>
@@ -77,7 +86,7 @@ class _OnBoardingVerifyPhraseViewState
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<OnBoardingVerifyPhraseCubit>().orderMnemonics();
+      widget.onBoardingVerifyPhraseCubit.orderMnemonics();
     });
     super.initState();
   }
@@ -149,7 +158,7 @@ class _OnBoardingVerifyPhraseViewState
                     Text(
                       l10n.onboardingVerifyPhraseMessageDetails,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.pheaseVerifySubmessage,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const SizedBox(height: Sizes.spaceNormal),
                     ListView.builder(
@@ -169,57 +178,57 @@ class _OnBoardingVerifyPhraseViewState
                             children: <Widget>[
                               Expanded(
                                 child: PhraseWord(
+                                  key: Key(col1Mnemonics.order.toString()),
                                   order: col1Mnemonics.order,
                                   word:
                                       widget.mnemonic[col1Mnemonics.order - 1],
                                   showOrder:
                                       col1Mnemonics.mnemonicStatus.showOrder,
-                                  color: col1Mnemonics.mnemonicStatus.color,
+                                  color: col1Mnemonics.mnemonicStatus
+                                      .color(context),
                                   onTap: () {
-                                    context
-                                        .read<OnBoardingVerifyPhraseCubit>()
-                                        .verify(
-                                          mnemonic: widget.mnemonic,
-                                          index: j,
-                                        );
+                                    widget.onBoardingVerifyPhraseCubit.verify(
+                                      mnemonic: widget.mnemonic,
+                                      index: j,
+                                    );
                                   },
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: PhraseWord(
+                                  key: Key(col2Mnemonics.order.toString()),
                                   order: col2Mnemonics.order,
                                   word:
                                       widget.mnemonic[col2Mnemonics.order - 1],
                                   showOrder:
                                       col2Mnemonics.mnemonicStatus.showOrder,
-                                  color: col2Mnemonics.mnemonicStatus.color,
+                                  color: col2Mnemonics.mnemonicStatus
+                                      .color(context),
                                   onTap: () {
-                                    context
-                                        .read<OnBoardingVerifyPhraseCubit>()
-                                        .verify(
-                                          mnemonic: widget.mnemonic,
-                                          index: j + 1,
-                                        );
+                                    widget.onBoardingVerifyPhraseCubit.verify(
+                                      mnemonic: widget.mnemonic,
+                                      index: j + 1,
+                                    );
                                   },
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: PhraseWord(
+                                  key: Key(col3Mnemonics.order.toString()),
                                   order: col3Mnemonics.order,
                                   word:
                                       widget.mnemonic[col3Mnemonics.order - 1],
                                   showOrder:
                                       col3Mnemonics.mnemonicStatus.showOrder,
-                                  color: col3Mnemonics.mnemonicStatus.color,
+                                  color: col3Mnemonics.mnemonicStatus
+                                      .color(context),
                                   onTap: () {
-                                    context
-                                        .read<OnBoardingVerifyPhraseCubit>()
-                                        .verify(
-                                          mnemonic: widget.mnemonic,
-                                          index: j + 2,
-                                        );
+                                    widget.onBoardingVerifyPhraseCubit.verify(
+                                      mnemonic: widget.mnemonic,
+                                      index: j + 2,
+                                    );
                                   },
                                 ),
                               ),
@@ -236,20 +245,17 @@ class _OnBoardingVerifyPhraseViewState
                 horizontal: Sizes.spaceSmall,
                 vertical: Sizes.spaceSmall,
               ),
-              child: MyGradientButton(
+              child: MyElevatedButton(
                 text: l10n.onBoardingGenPhraseButton,
                 verticalSpacing: 18,
                 onPressed: state.isVerified
                     ? () async {
-                        await context
-                            .read<OnboardingCubit>()
-                            .emitOnboardingProcessing();
-                        await context
-                            .read<OnBoardingVerifyPhraseCubit>()
+                        await widget.onboardingCubit.emitOnboardingProcessing();
+                        await widget.onBoardingVerifyPhraseCubit
                             .generateSSIAndCryptoAccount(
-                              mnemonic: widget.mnemonic,
-                              isFromOnboarding: widget.isFromOnboarding,
-                            );
+                          mnemonic: widget.mnemonic,
+                          isFromOnboarding: widget.isFromOnboarding,
+                        );
                       }
                     : null,
               ),

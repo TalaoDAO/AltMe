@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -35,7 +35,7 @@ class AboutAltmeView extends StatelessWidget {
 
         final profileSetting = profileModel.profileSetting;
         return BasePage(
-          backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           useSafeArea: true,
           scrollView: true,
           titleAlignment: Alignment.topCenter,
@@ -43,9 +43,8 @@ class AboutAltmeView extends StatelessWidget {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              BackLeadingButton(
+              const BackLeadingButton(
                 padding: EdgeInsets.zero,
-                color: Theme.of(context).colorScheme.onPrimary,
               ),
               const DrawerLogo(),
               const AppVersionDrawer(),
@@ -57,7 +56,7 @@ class AboutAltmeView extends StatelessWidget {
                   ),
                   child: Text(
                     profileSetting.generalOptions.companyName,
-                    style: Theme.of(context).textTheme.drawerItemTitle.copyWith(
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontSize: 18,
                         ),
                   ),
@@ -82,7 +81,7 @@ class AboutAltmeView extends StatelessWidget {
                   ),
                   child: Text(
                     l10n.about,
-                    style: Theme.of(context).textTheme.drawerItemTitle.copyWith(
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontSize: 18,
                         ),
                   ),

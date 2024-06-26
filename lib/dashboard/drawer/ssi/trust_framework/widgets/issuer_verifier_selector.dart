@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,7 +27,7 @@ class IssuerVerifierSelector extends StatelessWidget {
           onTap: onTap,
           title: Text(
             title,
-            style: Theme.of(context).textTheme.radioOption,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           trailing: Icon(
             isChecked ? Icons.check_circle : Icons.circle_outlined,

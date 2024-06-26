@@ -1,4 +1,5 @@
-import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 enum MnemonicStatus {
   unselected,
@@ -17,14 +18,14 @@ extension MnemonicStatusX on MnemonicStatus {
     }
   }
 
-  Color get color {
+  Color color(BuildContext context) {
     switch (this) {
       case MnemonicStatus.unselected:
-        return const Color(0xff86809D);
+        return Theme.of(context).colorScheme.secondaryContainer;
       case MnemonicStatus.wrongSelection:
-        return const Color(0xffFF0045);
+        return Theme.of(context).colorScheme.error;
       case MnemonicStatus.selected:
-        return const Color(0xff6600FF);
+        return Theme.of(context).colorScheme.primary;
     }
   }
 }

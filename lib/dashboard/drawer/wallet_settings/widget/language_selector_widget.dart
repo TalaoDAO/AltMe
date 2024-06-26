@@ -3,7 +3,7 @@ import 'package:altme/app/shared/enum/type/language_type.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +23,7 @@ class LanguageSelectorWidget extends StatelessWidget {
               padding: const EdgeInsets.all(Sizes.spaceSmall),
               margin: const EdgeInsets.all(Sizes.spaceXSmall),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.drawerSurface,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Sizes.largeRadius),
                 ),
@@ -38,8 +38,8 @@ class LanguageSelectorWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          l10n.walletSettingsDescription,
-                          style: Theme.of(context).textTheme.drawerItemSubtitle,
+                          l10n.languageSettingsDescription,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),
@@ -61,8 +61,10 @@ class LanguageSelectorWidget extends StatelessWidget {
                                   const EdgeInsets.symmetric(horizontal: 8),
                               child: Divider(
                                 height: 0,
-                                color:
-                                    Theme.of(context).colorScheme.borderColor,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.12),
                               ),
                             ),
                           ListTile(
@@ -85,17 +87,13 @@ class LanguageSelectorWidget extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge
-                                  ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  ),
                             ),
                             trailing: Icon(
                               state.languageType == languageType
                                   ? Icons.radio_button_checked
                                   : Icons.radio_button_unchecked,
                               size: Sizes.icon2x,
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],

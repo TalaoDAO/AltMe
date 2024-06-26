@@ -24,14 +24,17 @@ class LoadingProgress extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border.all(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             width: 1.5,
           ),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(borderRadius),
-          child: LinearProgressIndicator(value: value),
+          child: LinearProgressIndicator(
+            value: value,
+            color: Theme.of(context).colorScheme.primaryContainer,
+          ),
         ),
       ),
     );

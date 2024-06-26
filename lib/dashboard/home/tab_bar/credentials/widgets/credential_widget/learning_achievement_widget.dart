@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class LearningAchievementDisplayDetail extends StatelessWidget {
@@ -45,7 +45,7 @@ class LearningAchievementRecto extends Recto {
                 id: 'name',
                 child: DisplayNameCard(
                   credentialModel: credentialModel,
-                  style: Theme.of(context).textTheme.credentialTitleCard,
+                  style: Theme.of(context).textTheme.titleLarge!,
                 ),
               ),
               LayoutId(
@@ -53,15 +53,14 @@ class LearningAchievementRecto extends Recto {
                 child: MyText(
                   credentialModel
                       .credentialPreview.credentialSubjectModel.issuedBy!.name,
-                  style: Theme.of(context).textTheme.studentCardSchool,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
               LayoutId(
                 id: 'description',
                 child: DisplayDescriptionCard(
                   credentialModel: credentialModel,
-                  style:
-                      Theme.of(context).textTheme.credentialStudentCardTextCard,
+                  style: Theme.of(context).textTheme.bodyMedium!,
                 ),
               ),
             ],
@@ -94,7 +93,7 @@ class LearningAchievementVerso extends Verso {
               id: 'name',
               child: DisplayNameCard(
                 credentialModel: credentialModel,
-                style: Theme.of(context).textTheme.credentialTitleCard,
+                style: Theme.of(context).textTheme.titleLarge!,
               ),
             ),
             LayoutId(
@@ -102,7 +101,7 @@ class LearningAchievementVerso extends Verso {
               child: MyText(
                 learningAchievementModel.issuedBy!.name,
                 overflow: TextOverflow.fade,
-                style: Theme.of(context).textTheme.studentCardSchool,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
             LayoutId(
@@ -113,12 +112,12 @@ class LearningAchievementVerso extends Verso {
                     text: '${l10n.personalLastName}: ',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .studentCardData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
                     text: learningAchievementModel.familyName!,
-                    textStyle: Theme.of(context).textTheme.studentCardData,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -131,12 +130,12 @@ class LearningAchievementVerso extends Verso {
                     text: '${l10n.personalFirstName}: ',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .studentCardData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
                     text: learningAchievementModel.givenName!,
-                    textStyle: Theme.of(context).textTheme.studentCardData,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -149,14 +148,14 @@ class LearningAchievementVerso extends Verso {
                     text: '${l10n.birthdate}: ',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .studentCardData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
                     text: UiDate.formatStringDate(
                       learningAchievementModel.birthDate!,
                     ),
-                    textStyle: Theme.of(context).textTheme.studentCardData,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -170,12 +169,12 @@ class LearningAchievementVerso extends Verso {
                         '''${learningAchievementModel.hasCredential!.title}: ''',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .studentCardData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
                     text: learningAchievementModel.hasCredential!.description,
-                    textStyle: Theme.of(context).textTheme.studentCardData,
+                    textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -188,7 +187,7 @@ class LearningAchievementVerso extends Verso {
                     text: '${l10n.proof}: ',
                     textStyle: Theme.of(context)
                         .textTheme
-                        .studentCardData
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   InkWell(
@@ -199,7 +198,7 @@ class LearningAchievementVerso extends Verso {
                     },
                     child: ImageCardText(
                       text: credentialModel.credentialPreview.evidence.first.id,
-                      textStyle: Theme.of(context).textTheme.studentCardData,
+                      textStyle: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ],

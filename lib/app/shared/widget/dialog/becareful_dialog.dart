@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class BeCarefulDialog extends StatelessWidget {
@@ -43,7 +43,7 @@ class BeCarefulDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.popupBackground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: Sizes.spaceNormal,
@@ -57,7 +57,7 @@ class BeCarefulDialog extends StatelessWidget {
         children: [
           DialogCloseButton(
             showText: false,
-            color: Theme.of(context).colorScheme.defaultDialogDark,
+            color: Theme.of(context).colorScheme.surface,
           ),
           Image.asset(
             IconStrings.alert,
@@ -65,19 +65,19 @@ class BeCarefulDialog extends StatelessWidget {
           ),
           Text(
             l10n.beCareful,
-            style: Theme.of(context).textTheme.bodySmall2,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: Sizes.spaceSmall),
           Text(
             title,
-            style: Theme.of(context).textTheme.defaultDialogTitle,
+            style: Theme.of(context).textTheme.headlineMedium,
             textAlign: TextAlign.center,
           ),
           if (subtitle != null) ...[
             const SizedBox(height: Sizes.spaceSmall),
             Text(
               subtitle!,
-              style: Theme.of(context).textTheme.defaultDialogBody,
+              style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
           ],
@@ -92,10 +92,6 @@ class BeCarefulDialog extends StatelessWidget {
                     text: no ?? l10n.no,
                     verticalSpacing: 15,
                     fontSize: 15,
-                    borderColor: Theme.of(context)
-                        .colorScheme
-                        .defualtDialogCancelButtonBorderColor,
-                    borderRadius: 12,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -108,9 +104,6 @@ class BeCarefulDialog extends StatelessWidget {
                   child: MyElevatedButton(
                     text: yes ?? l10n.yes,
                     verticalSpacing: 15,
-                    fontSize: 15,
-                    borderRadius: 12,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
                     onPressed: () {
                       Navigator.of(context).pop();
                       onContinueClick?.call();

@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -101,7 +101,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 ),
                 MyText(
                   widget.nftModel.symbol ?? '--',
-                  style: Theme.of(context).textTheme.bodySmall2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   maxLines: 1,
                   minFontSize: 12,
                 ),
@@ -145,7 +145,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               Flexible(
                 child: Text(
                   nftModel.contractAddress,
-                  style: Theme.of(context).textTheme.bodySmall3,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
               IconButton(
@@ -176,7 +176,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
             Text(
               nftModel.identifier ?? '?',
-              style: Theme.of(context).textTheme.bodySmall3,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),
@@ -194,7 +194,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             Flexible(
               child: Text(
                 nftModel.creators?.join(', ') ?? '?',
-                style: Theme.of(context).textTheme.bodySmall3,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
             IconButton(
@@ -226,7 +226,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             Flexible(
               child: Text(
                 nftModel.publishers?.join(', ') ?? '?',
-                style: Theme.of(context).textTheme.bodySmall3,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
             IconButton(
@@ -258,7 +258,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
             Text(
               UiDate.normalFormat(nftModel.firstTime ?? nftModel.date) ?? '?',
-              style: Theme.of(context).textTheme.bodySmall3,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),
@@ -279,7 +279,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
           Flexible(
             child: Text(
               nftModel.contractAddress,
-              style: Theme.of(context).textTheme.bodySmall3,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           IconButton(
@@ -310,7 +310,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             Flexible(
               child: Text(
                 nftModel.minterAddress ?? '?',
-                style: Theme.of(context).textTheme.bodySmall3,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
             IconButton(
@@ -342,7 +342,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
             Text(
               UiDate.normalFormat(nftModel.lastMetadataSync) ?? '?',
-              style: Theme.of(context).textTheme.bodySmall3,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),
@@ -402,7 +402,7 @@ class SendButton extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: MyGradientButton(
+        child: MyElevatedButton(
           text: l10n.send,
           onPressed: () {
             Navigator.of(context).push<void>(
@@ -437,7 +437,7 @@ class BurnButton extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: MyGradientButton(
+        child: MyElevatedButton(
           text: l10n.burn,
           onPressed: () async {
             final confirmed = await showDialog<bool>(

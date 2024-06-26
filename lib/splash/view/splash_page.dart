@@ -7,6 +7,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/view/pin_code_page.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:flutter/foundation.dart';
@@ -42,7 +43,28 @@ class _SplashViewState extends State<SplashView> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
+        final Uri? initialUri = await _handleInitialUri(context);
+
         await context.read<SplashCubit>().initialiseApp();
+
+        /// In case app is opened through deeplink we need to handle
+        /// incoming request.
+        if (initialUri != null) {
+          await Navigator.of(context).push<void>(
+            PinCodePage.route(
+              restrictToBack: true,
+              isValidCallback: () {
+                Navigator.of(context).push<void>(DashboardPage.route());
+              },
+              walletProtectionType: WalletProtectionType.pinCode,
+            ),
+          );
+
+          await processIncomingUri(
+            initialUri,
+            context,
+          );
+        }
       },
     );
     super.initState();
@@ -198,12 +220,12 @@ class _SplashViewState extends State<SplashView> {
   /// throughout your app's life.
   ///
   /// We handle all exceptions, since it is called from initState.
-  Future<void> _handleInitialUri(BuildContext context) async {
+  Future<Uri?> _handleInitialUri(BuildContext context) async {
     // In this example app this is an almost useless guard, but it is here to
     // show we are not going to call getInitialUri multiple times, even if this
     // was a widget that will be disposed of (ex. a navigation route change).
     final log = getLogger('DeepLink - _handleInitialUri');
-    if (!mounted) return;
+    if (!mounted) return null;
     if (!_initialUriIsHandled) {
       _initialUriIsHandled = true;
 
@@ -213,18 +235,19 @@ class _SplashViewState extends State<SplashView> {
           log.i('no initial uri');
         } else {
           log.i('got initial uri: $uri');
-          if (!mounted) return;
+          if (!mounted) return null;
           log.i('got uri: $uri');
-          await processIncomingUri(uri, context);
+          return uri;
         }
       } on services.PlatformException {
         // Platform messages may fail but we ignore the exception
         log.e('falied to get initial uri');
       } on FormatException catch (err) {
-        if (!mounted) return;
+        if (!mounted) return null;
         log.e('malformed initial uri: $err');
       }
     }
+    return null;
   }
 
   @override
@@ -249,7 +272,7 @@ class _SplashViewState extends State<SplashView> {
           if (state.status != AppStatus.success) return Container();
 
           return BasePage(
-            backgroundColor: Theme.of(context).colorScheme.background,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             scrollView: false,
             body: SafeArea(
               child: Padding(

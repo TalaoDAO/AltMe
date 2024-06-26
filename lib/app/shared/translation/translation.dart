@@ -9,6 +9,7 @@ class GetTranslation {
     String translation;
     final translated =
         translations.where((element) => element.language == l10n.localeName);
+
     if (translated.isEmpty) {
       final List<Translation> translationList =
           translations.where((element) => element.language == 'en').toList();

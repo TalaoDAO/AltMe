@@ -98,6 +98,8 @@ Future<void> getAuthorizationUriForIssuer({
     vcFormatType: vcFormatType,
     clientAssertion: clientAssertion,
     secureAuthorizedFlow: secureAuthorizedFlow,
+    credentialOfferJson: credentialOfferJson,
+    dio: client.dio,
   );
 
   final requirePushedAuthorizationRequests =
@@ -107,9 +109,12 @@ Future<void> getAuthorizationUriForIssuer({
     final headers = <String, dynamic>{
       'Content-Type': 'application/x-www-form-urlencoded',
     };
+    final parUrl = openIdConfiguration.pushedAuthorizationRequestEndpoint ??
+        '$authorizationEndpoint/par';
 
+    /// error we shuld get it from
     final response = await client.post(
-      '$authorizationEndpoint/par',
+      parUrl,
       headers: headers,
       data: authorizationRequestParemeters,
     );

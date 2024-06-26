@@ -3,14 +3,44 @@
     "french",
     "spanish",
     "catalan",
-    "english"
+    "english",
+    "walletBlockedPopupTitle",
+    "walletBlockedPopupDescription",
+    "deleteMyWalletForWrontPincodeTitle",
+    "deleteMyWalletForWrontPincodeDescription",
+    "walletBloced",
+    "deleteMyWallet",
+    "pincodeRules",
+    "pincodeSerie",
+    "pincodeSequence",
+    "pincodeDifferent",
+    "codeSecretIncorrectDescription",
+    "languageSettings",
+    "languageSettingsDescription",
+    "themeSettings",
+    "themeSettingsDescription"
   ],
 
   "es": [
     "french",
     "spanish",
     "catalan",
-    "english"
+    "english",
+    "walletBlockedPopupTitle",
+    "walletBlockedPopupDescription",
+    "deleteMyWalletForWrontPincodeTitle",
+    "deleteMyWalletForWrontPincodeDescription",
+    "walletBloced",
+    "deleteMyWallet",
+    "pincodeRules",
+    "pincodeSerie",
+    "pincodeSequence",
+    "pincodeDifferent",
+    "codeSecretIncorrectDescription",
+    "languageSettings",
+    "languageSettingsDescription",
+    "themeSettings",
+    "themeSettingsDescription"
   ],
 
   "fr": [
@@ -30,6 +60,21 @@
     "theWalletIsSuspended",
     "clientTypeTitle",
     "confidentialClient",
-    "jwkThumbprintP256Key"
+    "jwkThumbprintP256Key",
+    "walletBlockedPopupTitle",
+    "walletBlockedPopupDescription",
+    "deleteMyWalletForWrontPincodeTitle",
+    "deleteMyWalletForWrontPincodeDescription",
+    "walletBloced",
+    "deleteMyWallet",
+    "pincodeRules",
+    "pincodeSerie",
+    "pincodeSequence",
+    "pincodeDifferent",
+    "codeSecretIncorrectDescription",
+    "languageSettings",
+    "languageSettingsDescription",
+    "themeSettings",
+    "themeSettingsDescription"
   ]
 }

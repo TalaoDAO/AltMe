@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -82,7 +82,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                   }
                 },
                 child: BackgroundCard(
-                  color: Theme.of(context).colorScheme.cardBackground,
+                  color: Theme.of(context).colorScheme.surface,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
@@ -106,7 +106,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                                 ? tokenModel.symbol
                                 : tokenModel.name,
                             maxLength: 10,
-                            style: Theme.of(context).textTheme.listTileTitle,
+                            style: Theme.of(context).textTheme.titleMedium,
                             minFontSize: 10,
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
@@ -145,7 +145,10 @@ class _TokenSelectBoxItem extends StatelessWidget {
                                 .decimalNumber(2)
                                 .formatNumber,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.greyText,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.6),
                             ),
                       ),
                     ],

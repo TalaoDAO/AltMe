@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,8 +34,8 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
             Text(
               l10n.wouldYouLikeToAcceptThisCredentialsFromThisOrganisation,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.credentialSubtitle.copyWith(
-                    color: Theme.of(context).colorScheme.lightPurple,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
             ),
             const SizedBox(height: 30),
@@ -139,7 +139,7 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            MyGradientButton(
+            MyElevatedButton(
               text: l10n.accept,
               onPressed: () async {
                 await securityCheck(

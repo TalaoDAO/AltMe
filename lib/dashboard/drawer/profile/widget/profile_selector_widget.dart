@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/profile/profile.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +29,7 @@ class ProfileSelectorWidget extends StatelessWidget {
               padding: const EdgeInsets.all(Sizes.spaceSmall),
               margin: const EdgeInsets.all(Sizes.spaceXSmall),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.drawerSurface,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Sizes.largeRadius),
                 ),
@@ -45,7 +45,7 @@ class ProfileSelectorWidget extends StatelessWidget {
                       children: [
                         Text(
                           l10n.walletProfilesDescription,
-                          style: Theme.of(context).textTheme.drawerItemSubtitle,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),
@@ -72,8 +72,10 @@ class ProfileSelectorWidget extends StatelessWidget {
                                   const EdgeInsets.symmetric(horizontal: 8),
                               child: Divider(
                                 height: 0,
-                                color:
-                                    Theme.of(context).colorScheme.borderColor,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.12),
                               ),
                             ),
                           ListTile(
@@ -102,20 +104,14 @@ class ProfileSelectorWidget extends StatelessWidget {
                                 l10n: l10n,
                                 name: profile.enterpriseWalletName ?? '',
                               ),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  ),
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             trailing: Icon(
                               state.model.profileType == profileType
                                   ? Icons.radio_button_checked
                                   : Icons.radio_button_unchecked,
                               size: Sizes.icon2x,
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],

@@ -1,105 +1,110 @@
-// import 'dart:convert';
+import 'dart:convert';
 
-// import 'package:altme/app/app.dart';
-// import 'package:dio/dio.dart';
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:altme/app/app.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:secure_storage/secure_storage.dart';
 
-// import 'test_constants.dart';
+import 'test_constants.dart';
 
-// void main() {
-//   group('DioClient Class', () {
-//     // test('can be instantiated', () {
-//     //   expect(getDioClient(baseUrl: baseUrl), isNotNull);
-//     // });
+class MockSecureStorageProvider extends Mock implements SecureStorageProvider {}
 
-//     group('interceptors', () {
-//       final dio = Dio(BaseOptions(baseUrl: baseUrl));
-//       final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
-//       dio.httpClientAdapter = dioAdapter;
-//       // final interceptor = DioInterceptor(dio: dio);
-//       //final service = DioClient(baseUrl, dio, interceptors: [interceptor]);
+class MockDio extends Mock implements Dio {}
 
-//       // test('set interceptors', () {
-//       //   expect(service.interceptors?.length, greaterThan(0));
-//       // });
-//     });
+void main() {
+  late MockSecureStorageProvider mockSecureStorageProvider;
 
-//     group('exceptions', () {
-//       final dio = Dio(BaseOptions(baseUrl: 'http://no.domain.com'));
-//       final service = DioClient('http://no.domain.com', dio);
-//       test('socket exception in get method', () async {
-//         try {
-//           await service.get('/path');
-//         } catch (e) {
-//           if (e is NetworkException) {
-//             expect(
-//               e.message,
-//               NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
-//             );
-//           }
-//         }
-//       });
+  final client = Dio();
 
-//       test('socket exception in post method', () async {
-//         try {
-//           await service.post('/path');
-//         } catch (e) {
-//           if (e is NetworkException) {
-//             expect(
-//               e.message,
-//               NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
-//             );
-//           }
-//         }
-//       });
-//     });
+  late DioAdapter dioAdapter;
+  late DioClient service;
 
-//     group('Get Method', () {
-//       final dio = Dio(BaseOptions(baseUrl: baseUrl));
-//       final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
-//       dio.httpClientAdapter = dioAdapter;
-//       final service = DioClient(baseUrl, dio);
+  setUp(() {
+    dioAdapter =
+        DioAdapter(dio: Dio(BaseOptions()), matcher: const UrlRequestMatcher());
+    client.httpClientAdapter = dioAdapter;
+    mockSecureStorageProvider = MockSecureStorageProvider();
+    service = DioClient(
+      baseUrl: baseUrl,
+      secureStorageProvider: mockSecureStorageProvider,
+      dio: client,
+    );
+  });
 
-//       test('Get Method Success test', () async {
-//         dioAdapter.onGet(
-//           baseUrl + testPath,
-//           (request) {
-//             return request.reply(200, successMessage);
-//           },
-//         );
+  group('DioClient Class', () {
+    test('can be instantiated', () {
+      expect(service, isNotNull);
+    });
 
-//         final dynamic response = await service.get(baseUrl + testPath);
+    test('set interceptors', () {
+      expect(service.dio.interceptors.length, greaterThan(0));
+    });
 
-//         expect(response, successMessage);
-//       });
-//     });
+    group('exceptions', () {
+      test('socket exception in get method', () async {
+        try {
+          await service.get('/path');
+        } catch (e) {
+          if (e is NetworkException) {
+            expect(
+              e.message,
+              NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+            );
+          }
+        }
+      });
 
-//     group('Post Method', () {
-//       final dio = Dio(BaseOptions(baseUrl: baseUrl));
-//       final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
-//       dio.httpClientAdapter = dioAdapter;
-//       final service = DioClient(baseUrl, dio);
+      test('socket exception in post method', () async {
+        try {
+          await service.post('/path');
+        } catch (e) {
+          if (e is NetworkException) {
+            expect(
+              e.message,
+              NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+            );
+          }
+        }
+      });
+    });
 
-//       test('Post Method Success test', () async {
-//         dioAdapter.onPost(
-//           baseUrl + testPath,
-//           (request) {
-//             return request.reply(201, successMessage);
-//           },
-//           data: json.encode(testData),
-//           queryParameters: <String, dynamic>{},
-//           headers: header,
-//         );
+    group('Get Method', () {
+      test('Get Method Success test', () async {
+        dioAdapter.onGet(
+          baseUrl + testPath,
+          (request) {
+            return request.reply(200, successMessage);
+          },
+        );
 
-//         final dynamic response = await service.post(
-//           baseUrl + testPath,
-//           data: json.encode(testData),
-//           options: Options(headers: header),
-//         );
+        final dynamic response = await service.get(baseUrl + testPath);
 
-//         expect(response, successMessage);
-//       });
-//     });
-//   });
-// }
+        expect(response, successMessage);
+      });
+    });
+
+    group('Post Method', () {
+      test('Post Method Success test', () async {
+        dioAdapter.onPost(
+          baseUrl + testPath,
+          (request) {
+            return request.reply(201, successMessage);
+          },
+          data: json.encode(testData),
+          queryParameters: <String, dynamic>{},
+          headers: header,
+        );
+
+        final dynamic response = await service.post(
+          baseUrl + testPath,
+          data: json.encode(testData),
+          options: Options(headers: header),
+        );
+
+        expect(response, successMessage);
+      });
+    });
+  });
+}

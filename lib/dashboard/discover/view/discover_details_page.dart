@@ -90,7 +90,7 @@ class DiscoverDetailsView extends StatelessWidget {
         padding: const EdgeInsets.all(
           Sizes.spaceSmall,
         ),
-        child: MyGradientButton(
+        child: MyElevatedButton(
           onPressed: onCallBack,
           text: buttonText,
         ),

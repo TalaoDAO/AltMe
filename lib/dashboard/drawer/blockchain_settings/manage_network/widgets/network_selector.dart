@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,11 +27,11 @@ class NetworkSelector extends StatelessWidget {
           visualDensity: VisualDensity.compact,
           title: Text(
             network.title!,
-            style: Theme.of(context).textTheme.radioOption,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           subtitle: Text(
             network.subTitle!,
-            style: Theme.of(context).textTheme.bodySmall2,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           onChanged: (BlockchainNetwork? value) async {
             if (value != null) {

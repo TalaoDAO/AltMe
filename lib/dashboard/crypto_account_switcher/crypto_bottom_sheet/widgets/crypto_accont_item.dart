@@ -1,8 +1,9 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/model/model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CryptoAccountItem extends StatelessWidget {
   const CryptoAccountItem({
@@ -34,7 +35,7 @@ class CryptoAccountItem extends StatelessWidget {
       horizontalTitleGap: 0,
       leading: Checkbox(
         value: isSelected,
-        fillColor: MaterialStateProperty.all(
+        fillColor: WidgetStateProperty.all(
           Theme.of(context).colorScheme.inversePrimary,
         ),
         checkColor: Theme.of(context).colorScheme.primary,
@@ -49,15 +50,13 @@ class CryptoAccountItem extends StatelessWidget {
           ),
           const SizedBox(width: Sizes.spaceXSmall),
           Flexible(
-            child: MyText(
+            child: Text(
               cryptoAccountData.name.trim().isEmpty
                   ? l10n.unknown
                   : cryptoAccountData.name,
-              maxLength: 30,
               maxLines: 1,
-              minFontSize: 14,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.title,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           const SizedBox(width: Sizes.spaceXSmall),
@@ -75,9 +74,37 @@ class CryptoAccountItem extends StatelessWidget {
       ),
       subtitle: Padding(
         padding: const EdgeInsets.symmetric(vertical: Sizes.spaceXSmall),
-        child: MyText(
-          walletAddressExtracted,
-          style: Theme.of(context).textTheme.walletAddress,
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                walletAddressExtracted,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+            const SizedBox(width: Sizes.spaceSmall),
+            InkWell(
+              onTap: () async {
+                await Clipboard.setData(
+                  ClipboardData(
+                    text: walletAddressExtracted,
+                  ),
+                );
+                AlertMessage.showStateMessage(
+                  context: context,
+                  stateMessage: StateMessage.success(
+                    stringMessage: l10n.copiedToClipboard,
+                  ),
+                );
+              },
+              child: Image.asset(
+                IconStrings.copy,
+                width: Sizes.icon,
+                height: Sizes.icon,
+              ),
+            ),
+            const SizedBox(width: Sizes.spaceSmall),
+          ],
         ),
       ),
     );

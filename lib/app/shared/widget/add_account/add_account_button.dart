@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class AddAccountButton extends StatelessWidget {
@@ -31,14 +31,14 @@ class AddAccountButton extends StatelessWidget {
                 ),
                 Text(
                   l10n.cryptoAddAccount,
-                  style: Theme.of(context).textTheme.title,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
             ),
             const SizedBox(height: 3),
             Text(
               l10n.createOrImportNewAccount,
-              style: Theme.of(context).textTheme.listSubtitle,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),

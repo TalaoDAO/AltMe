@@ -349,6 +349,7 @@ class GeneralOptions extends Equatable {
     required this.published,
     required this.profileId,
     required this.customerPlan,
+    this.primaryColor,
   });
 
   factory GeneralOptions.fromJson(Map<String, dynamic> json) =>
@@ -366,6 +367,7 @@ class GeneralOptions extends Equatable {
         published: DateTime.now(),
         profileId: '',
         customerPlan: '',
+        primaryColor: '',
       );
 
   final WalletAppType walletType;
@@ -379,6 +381,7 @@ class GeneralOptions extends Equatable {
   final DateTime published;
   final String profileId;
   final String customerPlan;
+  final String? primaryColor;
 
   Map<String, dynamic> toJson() => _$GeneralOptionsToJson(this);
 
@@ -394,6 +397,7 @@ class GeneralOptions extends Equatable {
     DateTime? published,
     String? profileId,
     String? customerPlan,
+    String? primaryColor,
   }) {
     return GeneralOptions(
       walletType: walletType ?? this.walletType,
@@ -407,6 +411,7 @@ class GeneralOptions extends Equatable {
       published: published ?? this.published,
       profileId: profileId ?? this.profileId,
       customerPlan: customerPlan ?? this.customerPlan,
+      primaryColor: primaryColor ?? this.primaryColor,
     );
   }
 
@@ -423,6 +428,7 @@ class GeneralOptions extends Equatable {
         published,
         profileId,
         customerPlan,
+        primaryColor,
       ];
 }
 
@@ -570,8 +576,8 @@ class CustomOidc4VcProfile extends Equatable {
   @JsonKey(name: 'client_secret')
   final String? clientSecret;
   final bool cryptoHolderBinding;
-  final DidKeyType
-      defaultDid; //TODO(bibash): temporary solution to avoid who have chosen 12
+  final DidKeyType defaultDid;
+  // TODO(bibash): temporary solution to avoid who have chosen 12
   @JsonKey(
     includeFromJson: true,
     fromJson: oidc4vciDraftFromJson,

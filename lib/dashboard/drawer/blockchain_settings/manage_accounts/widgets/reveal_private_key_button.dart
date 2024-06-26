@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class RevealPrivateKeyButton extends StatelessWidget {
@@ -31,9 +31,9 @@ class RevealPrivateKeyButton extends StatelessWidget {
               width: Sizes.icon,
               color: Colors.white,
             ),
-            Text(
+            MyText(
               l10n.revealPrivateKey.toUpperCase(),
-              style: Theme.of(context).textTheme.miniButton,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),

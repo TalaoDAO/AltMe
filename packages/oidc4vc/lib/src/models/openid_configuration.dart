@@ -7,10 +7,13 @@ part 'openid_configuration.g.dart';
 @JsonSerializable()
 class OpenIdConfiguration extends Equatable {
   const OpenIdConfiguration({
+    required this.requirePushedAuthorizationRequests,
     this.authorizationServer,
+    this.authorizationServers,
     this.credentialsSupported,
     this.credentialConfigurationsSupported,
     this.credentialEndpoint,
+    this.pushedAuthorizationRequestEndpoint,
     this.credentialIssuer,
     this.subjectSyntaxTypesSupported,
     this.tokenEndpoint,
@@ -32,6 +35,8 @@ class OpenIdConfiguration extends Equatable {
 
   @JsonKey(name: 'authorization_server')
   final String? authorizationServer;
+  @JsonKey(name: 'authorization_servers')
+  final List<String>? authorizationServers;
   @JsonKey(name: 'credential_endpoint')
   final String? credentialEndpoint;
   @JsonKey(name: 'credential_issuer')
@@ -44,6 +49,8 @@ class OpenIdConfiguration extends Equatable {
   final String? batchEndpoint;
   @JsonKey(name: 'authorization_endpoint')
   final String? authorizationEndpoint;
+  @JsonKey(name: 'pushed_authorization_request_endpoint')
+  final String? pushedAuthorizationRequestEndpoint;
   @JsonKey(name: 'subject_trust_frameworks_supported')
   final List<dynamic>? subjectTrustFrameworksSupported;
   @JsonKey(name: 'credentials_supported')
@@ -71,6 +78,7 @@ class OpenIdConfiguration extends Equatable {
   @override
   List<Object?> get props => [
         authorizationServer,
+        authorizationServers,
         credentialEndpoint,
         credentialIssuer,
         subjectSyntaxTypesSupported,

@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,23 +16,30 @@ class HelpCenterMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const HelpCenterView();
+    return Builder(
+      builder: (context) {
+        return HelpCenterView(
+          profileCubit: context.read<ProfileCubit>(),
+        );
+      },
+    );
   }
 }
 
 class HelpCenterView extends StatelessWidget {
-  const HelpCenterView({super.key});
+  const HelpCenterView({
+    super.key,
+    required this.profileCubit,
+  });
+
+  final ProfileCubit profileCubit;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final helpCenterOptions = context
-        .read<ProfileCubit>()
-        .state
-        .model
-        .profileSetting
-        .helpCenterOptions;
+    final helpCenterOptions =
+        profileCubit.state.model.profileSetting.helpCenterOptions;
 
     var email = AltMeStrings.appSupportMail;
 
@@ -51,8 +57,11 @@ class HelpCenterView extends StatelessWidget {
       customChatSupportName = helpCenterOptions.customChatSupportName!;
     }
 
+    final isEnterprise = context.read<ProfileCubit>().state.model.walletType ==
+        WalletType.enterprise;
+
     return BasePage(
-      backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       useSafeArea: true,
       scrollView: true,
       titleAlignment: Alignment.topCenter,
@@ -60,12 +69,11 @@ class HelpCenterView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          BackLeadingButton(
+          const BackLeadingButton(
             padding: EdgeInsets.zero,
-            color: Theme.of(context).colorScheme.onPrimary,
           ),
           const DrawerLogo(),
-          if (helpCenterOptions.displayChatSupport) ...[
+          if (helpCenterOptions.displayChatSupport && isEnterprise) ...[
             DrawerItem(
               title: '${l10n.chatWith} $customChatSupportName',
               onTap: () {
@@ -81,11 +89,8 @@ class HelpCenterView extends StatelessWidget {
             DrawerItem(
               title: l10n.sendAnEmail,
               onTap: () {
-                Navigator.of(context).push<void>(
-                  ContactUsPage.route(
-                    email: email,
-                  ),
-                );
+                Navigator.of(context)
+                    .push<void>(ContactUsPage.route(email: email));
               },
             ),
           ],
@@ -97,9 +102,7 @@ class HelpCenterView extends StatelessWidget {
           ),
           DrawerItem(
             onTap: () {
-              LaunchUrl.launch(
-                'https://${AltMeStrings.appContactWebsiteName}',
-              );
+              LaunchUrl.launch('https://${AltMeStrings.appContactWebsiteName}');
             },
             title: l10n.officialWebsite,
           ),

@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class TextFieldDialog extends StatefulWidget {
@@ -53,9 +53,8 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
     final no = widget.no ?? l10n.no;
 
     final color = widget.dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background =
-        widget.bgColor ?? Theme.of(context).colorScheme.popupBackground;
-    final text = widget.textColor ?? Theme.of(context).colorScheme.label;
+    final background = widget.bgColor ?? Theme.of(context).colorScheme.surface;
+    final text = widget.textColor ?? Theme.of(context).colorScheme.onSurface;
 
     return AlertDialog(
       backgroundColor: background,
@@ -75,17 +74,15 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
             widget.title,
             style: Theme.of(context)
                 .textTheme
-                .defaultDialogTitle
+                .headlineMedium!
                 .copyWith(color: text),
             textAlign: TextAlign.center,
           ),
           if (widget.subtitle != null)
             Text(
               widget.subtitle!,
-              style: Theme.of(context)
-                  .textTheme
-                  .defaultDialogSubtitle
-                  .copyWith(color: text),
+              style:
+                  Theme.of(context).textTheme.titleLarge!.copyWith(color: text),
               textAlign: TextAlign.center,
             ),
           const SizedBox(height: 24),
@@ -108,7 +105,7 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
             elevation: 10,
             borderRadius: Sizes.smallRadius,
             backgroundColor: color,
-            textColor: Theme.of(context).colorScheme.label,
+            textColor: Theme.of(context).colorScheme.onSurface,
             fontSize: 15,
             onPressed: () {
               Navigator.of(context).pop(controller.text);
@@ -121,11 +118,10 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
             fontSize: 12,
             elevation: 0,
             borderRadius: Sizes.smallRadius,
-            borderColor: Theme.of(context)
-                .colorScheme
-                .defualtDialogCancelButtonBorderColor,
+            borderColor:
+                Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
             backgroundColor: background,
-            textColor: Theme.of(context).colorScheme.dialogText,
+            textColor: Theme.of(context).colorScheme.onSurface,
             onPressed: () {
               Navigator.of(context).pop('');
             },

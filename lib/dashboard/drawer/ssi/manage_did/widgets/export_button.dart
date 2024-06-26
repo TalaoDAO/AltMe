@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class ExportButton extends StatelessWidget {
@@ -26,7 +26,7 @@ class ExportButton extends StatelessWidget {
           ),
           Text(
             l10n.export,
-            style: Theme.of(context).textTheme.title,
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
         ],
       ),

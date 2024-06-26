@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CredentialBackground extends StatelessWidget {
@@ -28,7 +27,7 @@ class CredentialBackground extends StatelessWidget {
               credentialModel.credentialPreview.credentialSubjectModel
                   .credentialSubjectType
                   .backgroundColor(credentialModel),
-          shapeColor: Theme.of(context).colorScheme.documentShape,
+          shapeColor: Theme.of(context).colorScheme.primary.withOpacity(0.05),
           value: 0,
           shapeSize: 256,
           anchors: showBgDecoration

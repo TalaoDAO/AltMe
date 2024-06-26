@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class DefaultDialog extends StatelessWidget {
@@ -19,8 +19,8 @@ class DefaultDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        backgroundColor: Theme.of(context).colorScheme.popupBackground,
-        surfaceTintColor: Colors.transparent,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      surfaceTintColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: Sizes.spaceNormal,
         vertical: Sizes.spaceSmall,
@@ -36,13 +36,13 @@ class DefaultDialog extends StatelessWidget {
             const SizedBox(height: Sizes.spaceSmall),
             Text(
               title,
-              style: Theme.of(context).textTheme.defaultDialogTitle,
+              style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceSmall),
             Text(
               description,
-              style: Theme.of(context).textTheme.defaultDialogBody,
+              style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceSmall),

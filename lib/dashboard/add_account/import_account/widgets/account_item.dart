@@ -1,5 +1,5 @@
 import 'package:altme/app/shared/constants/sizes.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -24,7 +24,7 @@ class AccountItem extends StatelessWidget {
         vertical: Sizes.spaceSmall,
       ),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.cardHighlighted,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.all(
           Radius.circular(
             Sizes.smallRadius,
@@ -39,7 +39,7 @@ class AccountItem extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.title,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
             Container(
               width: Sizes.icon3x,

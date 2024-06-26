@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,10 +22,9 @@ class ErrorDetailsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background = bgColor ?? Theme.of(context).colorScheme.popupBackground;
-    final textColor =
-        this.textColor ?? Theme.of(context).colorScheme.dialogText;
+    final background =
+        bgColor ?? Theme.of(context).colorScheme.surfaceContainerHighest;
+    final textColor = this.textColor ?? Theme.of(context).colorScheme.onSurface;
 
     final l10n = context.l10n;
     return AlertDialog(
@@ -45,7 +44,7 @@ class ErrorDetailsDialog extends StatelessWidget {
                 erroDescription!,
                 style: Theme.of(context)
                     .textTheme
-                    .defaultDialogSubtitle
+                    .titleLarge!
                     .copyWith(color: textColor),
                 textAlign: TextAlign.center,
               ),
@@ -62,10 +61,9 @@ class ErrorDetailsDialog extends StatelessWidget {
                 child: Text(
                   l10n.moreDetails,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.markDownA,
+                        color: Theme.of(context).colorScheme.primary,
                         decoration: TextDecoration.underline,
-                        decorationColor:
-                            Theme.of(context).colorScheme.markDownA,
+                        decorationColor: Theme.of(context).colorScheme.primary,
                       ),
                   textAlign: TextAlign.center,
                 ),
@@ -75,8 +73,6 @@ class ErrorDetailsDialog extends StatelessWidget {
             MyElevatedButton(
               text: l10n.ok,
               verticalSpacing: 14,
-              backgroundColor: color,
-              borderRadius: Sizes.smallRadius,
               fontSize: 15,
               elevation: 0,
               onPressed: () {

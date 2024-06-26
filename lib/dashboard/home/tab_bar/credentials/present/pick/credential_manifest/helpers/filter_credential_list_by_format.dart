@@ -31,22 +31,22 @@ List<CredentialModel> filterCredenialListByFormat({
       (CredentialModel credentialModel) {
         /// remove ldpVc
         if (presentLdpVc) {
-          return credentialModel.format != VCFormatType.ldpVc.vcValue;
+          return credentialModel.getFormat != VCFormatType.ldpVc.vcValue;
         }
 
         /// remove jwtVc
         if (presentJwtVc) {
-          return credentialModel.format != VCFormatType.jwtVc.vcValue;
+          return credentialModel.getFormat != VCFormatType.jwtVc.vcValue;
         }
 
         /// remove JwtVcJson
         if (presentJwtVcJson) {
-          return credentialModel.format != VCFormatType.jwtVcJson.vcValue;
+          return credentialModel.getFormat != VCFormatType.jwtVcJson.vcValue;
         }
 
         /// remove vcSdJwt
         if (presentVcSdJwt) {
-          return credentialModel.format != VCFormatType.vcSdJWT.vcValue;
+          return credentialModel.getFormat != VCFormatType.vcSdJWT.vcValue;
         }
 
         return false;

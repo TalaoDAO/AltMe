@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,7 +80,7 @@ class _TokensViewState extends State<TokensView> {
       child: BasePage(
         scrollView: false,
         padding: EdgeInsets.zero,
-        backgroundColor: Theme.of(context).colorScheme.transparent,
+        backgroundColor: Colors.transparent,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +92,7 @@ class _TokensViewState extends State<TokensView> {
               child: MyText(
                 l10n.tokenListSubtitle,
                 maxLines: 3,
-                style: Theme.of(context).textTheme.credentialCategorySubTitle,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
             const SizedBox(height: Sizes.spaceXSmall),

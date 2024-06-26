@@ -14,7 +14,7 @@ class BackLeadingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorValue = color ?? Theme.of(context).colorScheme.onPrimary;
+    final colorValue = color ?? Theme.of(context).colorScheme.onSurface;
     return IconButton(
       padding: padding,
       onPressed: onPressed ?? () => Navigator.of(context).pop(),

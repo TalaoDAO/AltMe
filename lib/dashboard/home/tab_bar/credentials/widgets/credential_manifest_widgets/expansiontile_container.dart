@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class ExpansionTileContainer extends StatelessWidget {
@@ -13,15 +12,15 @@ class ExpansionTileContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackgroundCard(
-      color: Theme.of(context).colorScheme.surfaceContainer,
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
       padding: const EdgeInsets.symmetric(horizontal: 8),
       margin: const EdgeInsets.only(bottom: 8),
       child: Theme(
         data: Theme.of(context).copyWith(
           unselectedWidgetColor: Theme.of(context).colorScheme.onPrimary,
-          dividerColor: Theme.of(context).colorScheme.surfaceContainer,
-          splashColor: Theme.of(context).colorScheme.transparent,
-          highlightColor: Theme.of(context).colorScheme.transparent,
+          dividerColor: Theme.of(context).colorScheme.surface.withOpacity(0.07),
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           colorScheme: ColorScheme.dark(
             primary: Theme.of(context).colorScheme.onPrimary,
           ),

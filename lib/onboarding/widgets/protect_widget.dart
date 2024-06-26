@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class ProtectWidget extends StatelessWidget {
@@ -31,7 +31,7 @@ class ProtectWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.drawerSurface,
+              : Theme.of(context).colorScheme.secondaryContainer,
           borderRadius: const BorderRadius.all(
             Radius.circular(
               Sizes.normalRadius,
@@ -46,8 +46,16 @@ class ProtectWidget extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: Image.asset(
-                  image,
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    isSelected
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : Theme.of(context).colorScheme.onSurface,
+                    BlendMode.srcIn,
+                  ),
+                  child: Image.asset(
+                    image,
+                  ),
                 ),
               ),
               const SizedBox(width: 15),
@@ -57,11 +65,19 @@ class ProtectWidget extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.drawerItemTitle,
+                      style: isSelected
+                          ? Theme.of(context).textTheme.titleLarge!.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              )
+                          : Theme.of(context).textTheme.titleLarge,
                     ),
                     Text(
                       subtitle,
-                      style: Theme.of(context).textTheme.drawerItemSubtitle,
+                      style: isSelected
+                          ? Theme.of(context).textTheme.titleMedium!.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              )
+                          : Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
                 ),

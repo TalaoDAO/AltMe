@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class MyTab extends StatelessWidget {
@@ -29,36 +29,35 @@ class MyTab extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Sizes.normalRadius),
-          gradient: isSelected
-              ? LinearGradient(
-                  colors: [
-                    AppTheme.darkThemeData.colorScheme.primary,
-                    AppTheme.darkThemeData.colorScheme.secondary,
-                  ],
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  stops: const [0.3, 1.0],
-                )
-              : null,
           color: isSelected
-              ? null
-              : AppTheme.darkThemeData.colorScheme.tabBarNotSelected,
+              ? Theme.of(context).colorScheme.primaryFixedDim
+              : Theme.of(context).colorScheme.primaryContainer,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset(icon, height: Sizes.icon),
+            if (isSelected)
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.primaryFixedDim,
+                  BlendMode.color,
+                ),
+                child: Image.asset(icon, height: Sizes.icon),
+              )
+            else
+              Image.asset(icon, height: Sizes.icon),
             const SizedBox(
               width: Sizes.spaceXSmall,
             ),
-            MyText(
+            Text(
               text,
               maxLines: 1,
-              minFontSize: 12,
-              style: AppTheme.darkThemeData.textTheme.title.copyWith(
-                color: isSelected ? null : Colors.grey[400],
-              ),
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.onPrimaryFixedVariant
+                        : Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
               overflow: TextOverflow.fade,
             ),
           ],

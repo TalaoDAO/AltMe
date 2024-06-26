@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/model/model.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +32,7 @@ class SelectBoxAccountItem extends StatelessWidget {
       horizontalTitleGap: 0,
       leading: Checkbox(
         value: isSelected,
-        fillColor: MaterialStateProperty.all(
+        fillColor: WidgetStateProperty.all(
           Theme.of(context).colorScheme.primary,
         ),
         checkColor: Theme.of(context).colorScheme.onPrimary,
@@ -54,7 +54,7 @@ class SelectBoxAccountItem extends StatelessWidget {
               maxLines: 1,
               minFontSize: 12,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.title,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
         ],
@@ -63,7 +63,7 @@ class SelectBoxAccountItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: Sizes.spaceXSmall),
         child: MyText(
           walletAddressExtracted,
-          style: Theme.of(context).textTheme.walletAddress,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );

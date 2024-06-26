@@ -34,12 +34,12 @@ void main() {
       final imageFromNetwork = tester
           .widget<CachedImageFromNetwork>(find.byType(CachedImageFromNetwork));
       expect(imageFromNetwork.url, networkImageUrl);
-      expect(imageFromNetwork.fit, null);
+      expect(imageFromNetwork.fit, BoxFit.cover);
       expect(imageFromNetwork.key, widgetKey);
     });
   });
 
-  testWidgets('get SizedBox on errorBuilder', (tester) async {
+  testWidgets('get ColoredBox on errorBuilder', (tester) async {
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(makeTestableWidget());
       final image = tester.widget<Image>(find.byType(Image));
@@ -49,7 +49,7 @@ void main() {
         Object(),
         StackTrace.fromString('stackTraceString'),
       );
-      expect(result, isA<SizedBox>());
+      expect(result, isA<ColoredBox>());
     });
   });
 }

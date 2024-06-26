@@ -28,8 +28,6 @@ class OIDC4VC {
   /// {@macro ebsi}
   OIDC4VC();
 
-  final Dio dio = Dio();
-
   /// create JWK from mnemonic
   String privateKeyFromMnemonic({
     required String mnemonic,
@@ -150,17 +148,25 @@ class OIDC4VC {
     required VCFormatType vcFormatType,
     required String? clientAssertion,
     required bool secureAuthorizedFlow,
+    required Dio dio,
+    required dynamic credentialOfferJson,
+    SecureStorageProvider? secureStorage,
   }) async {
     try {
       final openIdConfiguration = await getOpenIdConfig(
         baseUrl: issuer,
         isAuthorizationServer: false,
+        dio: dio,
+        secureStorage: secureStorage,
       );
 
-      final authorizationEndpoint = await readAuthorizationEndPoint(
+      final credentialAuthorizationEndpoint = await readAuthorizationEndPoint(
         openIdConfiguration: openIdConfiguration,
         issuer: issuer,
         oidc4vciDraftType: oidc4vciDraftType,
+        dio: dio,
+        credentialOfferJson: credentialOfferJson,
+        secureStorage: secureStorage,
       );
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
@@ -184,7 +190,7 @@ class OIDC4VC {
       );
 
       return (
-        authorizationEndpoint,
+        credentialAuthorizationEndpoint,
         authorizationRequestParemeters,
         openIdConfiguration,
       );
@@ -439,6 +445,7 @@ class OIDC4VC {
     required OpenIdConfiguration openIdConfiguration,
     required String accessToken,
     required String? cnonce,
+    required Dio dio,
     List<dynamic>? authorizationDetails,
   }) async {
     var nonce = cnonce;
@@ -511,6 +518,7 @@ class OIDC4VC {
           privateKey: privateKey,
           accessToken: accessToken,
           nonce: nonce,
+          dio: dio,
         );
 
         /// update nonce value
@@ -543,6 +551,7 @@ class OIDC4VC {
         privateKey: privateKey,
         accessToken: accessToken,
         nonce: cnonce,
+        dio: dio,
       );
 
       credentialResponseData.add(credentialResponseDataValue);
@@ -564,6 +573,7 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required String redirectUri,
     required OpenIdConfiguration openIdConfiguration,
+    required Dio dio,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -575,6 +585,7 @@ class OIDC4VC {
       openIdConfiguration: openIdConfiguration,
       issuer: issuer,
       oidc4vciDraftType: oidc4vciDraftType,
+      dio: dio,
     );
 
     Map<String, dynamic>? tokenResponse;
@@ -598,6 +609,7 @@ class OIDC4VC {
       tokenEndPoint: tokenEndPoint,
       tokenData: tokenData,
       authorization: authorization,
+      dio: dio,
     );
 
     if (tokenResponse.containsKey('c_nonce')) {
@@ -630,6 +642,7 @@ class OIDC4VC {
     required String privateKey,
     required String accessToken,
     required String? nonce,
+    required Dio dio,
   }) async {
     final credentialData = await buildCredentialData(
       nonce: nonce,
@@ -676,6 +689,7 @@ class OIDC4VC {
     required Map<String, dynamic> credentialHeaders,
     required Map<String, dynamic>? body,
     required String deferredCredentialEndpoint,
+    required Dio dio,
   }) async {
     final dynamic credentialResponse = await dio.post<dynamic>(
       deferredCredentialEndpoint,
@@ -741,6 +755,8 @@ class OIDC4VC {
     required String didKey,
     required bool fromStatusList,
     required bool isCachingEnabled,
+    required Dio dio,
+    SecureStorageProvider? secureStorage,
   }) async {
     try {
       if (isURL(didKey)) {
@@ -757,6 +773,8 @@ class OIDC4VC {
           baseUrl: didKey,
           isAuthorizationServer: isAuthorizationServer,
           isCachingEnabled: isCachingEnabled,
+          dio: dio,
+          secureStorage: secureStorage,
         );
 
         final authorizationServer = openIdConfiguration.authorizationServer;
@@ -766,6 +784,8 @@ class OIDC4VC {
             baseUrl: authorizationServer,
             isAuthorizationServer: true,
             isCachingEnabled: isCachingEnabled,
+            dio: dio,
+            secureStorage: secureStorage,
           );
         }
 
@@ -776,6 +796,8 @@ class OIDC4VC {
         final response = await dioGet(
           openIdConfiguration.jwksUri!,
           isCachingEnabled: isCachingEnabled,
+          dio: dio,
+          secureStorage: secureStorage,
         );
 
         return response as Map<String, dynamic>;
@@ -810,6 +832,8 @@ class OIDC4VC {
     required OpenIdConfiguration openIdConfiguration,
     required String issuer,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required Dio dio,
+    SecureStorageProvider? secureStorage,
   }) async {
     var tokenEndPoint = '$issuer/token';
 
@@ -822,6 +846,8 @@ class OIDC4VC {
       final authorizationServerConfiguration = await getOpenIdConfig(
         baseUrl: authorizationServer,
         isAuthorizationServer: true,
+        dio: dio,
+        secureStorage: secureStorage,
       );
 
       if (authorizationServerConfiguration.tokenEndpoint != null) {
@@ -836,26 +862,76 @@ class OIDC4VC {
     required OpenIdConfiguration openIdConfiguration,
     required String issuer,
     required OIDC4VCIDraftType oidc4vciDraftType,
+    required Dio dio,
+    required dynamic credentialOfferJson,
+    SecureStorageProvider? secureStorage,
   }) async {
-    var authorizationEndpoint = '$issuer/authorize';
+    String? authorizationEndpoint;
 
-    if (openIdConfiguration.authorizationEndpoint != null) {
-      authorizationEndpoint = openIdConfiguration.authorizationEndpoint!;
-    } else {
-      final authorizationServer =
-          openIdConfiguration.authorizationServer ?? issuer;
+    switch (oidc4vciDraftType) {
+      case OIDC4VCIDraftType.draft11:
+        if (openIdConfiguration.authorizationEndpoint != null) {
+          authorizationEndpoint = openIdConfiguration.authorizationEndpoint;
+        } else {
+          final authorizationServer =
+              openIdConfiguration.authorizationServer ?? issuer;
 
-      final authorizationServerConfiguration = await getOpenIdConfig(
-        baseUrl: authorizationServer,
-        isAuthorizationServer: true,
-      );
+          final authorizationServerConfiguration = await getOpenIdConfig(
+            baseUrl: authorizationServer,
+            isAuthorizationServer: true,
+            dio: dio,
+            secureStorage: secureStorage,
+          );
 
-      if (authorizationServerConfiguration.authorizationEndpoint != null) {
-        authorizationEndpoint =
-            authorizationServerConfiguration.authorizationEndpoint!;
-      }
+          if (authorizationServerConfiguration.authorizationEndpoint != null) {
+            authorizationEndpoint =
+                authorizationServerConfiguration.authorizationEndpoint;
+          }
+        }
+      case OIDC4VCIDraftType.draft13:
+
+        /// Extract the authorization endpoint from from first element of
+        /// authorization_servers in opentIdConfiguration.authorizationServers
+        final listOpenIDConfiguration =
+            openIdConfiguration.authorizationServers ?? [];
+        if (listOpenIDConfiguration.isNotEmpty) {
+          if (listOpenIDConfiguration.length == 1) {
+            authorizationEndpoint =
+                '${listOpenIDConfiguration.first}/authorize';
+          } else {
+            try {
+              /// Extract the authorization endpoint from from
+              /// authorization_server in credentialOfferJson
+              final jsonPathCredentialOffer = JsonPath(
+                // ignore: lines_longer_than_80_chars
+                r'$..["urn:ietf:params:oauth:grant-type:pre-authorized_code"].authorization_server',
+              );
+              final data = jsonPathCredentialOffer
+                  .read(credentialOfferJson)
+                  .first
+                  .value! as String;
+              if (listOpenIDConfiguration.contains(data)) {
+                authorizationEndpoint = '$data/authorize';
+              }
+            } catch (e) {
+              final jsonPathCredentialOffer = JsonPath(
+                r'$..authorization_code.authorization_server',
+              );
+              final data = jsonPathCredentialOffer
+                  .read(credentialOfferJson)
+                  .first
+                  .value! as String;
+              if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
+                authorizationEndpoint = '$data/authorize';
+              }
+            }
+          }
+        }
     }
-    return authorizationEndpoint;
+    // If authorizationEndpoint is null, we consider the issuer
+    // as the authorizationEndpoint
+
+    return authorizationEndpoint ??= '$issuer/authorize';
   }
 
   String readIssuerDid(
@@ -863,7 +939,7 @@ class OIDC4VC {
   ) {
     final jsonPath = JsonPath(r'$..issuer');
 
-    final data = jsonPath.read(openidConfigurationResponse.data).first.value
+    final data = jsonPath.read(openidConfigurationResponse.data).first.value!
         as Map<String, dynamic>;
 
     return data['id'] as String;
@@ -881,9 +957,9 @@ class OIDC4VC {
       late dynamic data;
 
       if (holderKid == null) {
-        data = (jsonPath.read(didDocument).first.value as List).first;
+        data = (jsonPath.read(didDocument).first.value! as List).first;
       } else {
-        data = (jsonPath.read(didDocument).first.value as List)
+        data = (jsonPath.read(didDocument).first.value! as List)
             .where(
               (dynamic e) => e['kid'].toString() == holderKid,
             )
@@ -896,9 +972,9 @@ class OIDC4VC {
       late List<dynamic> data;
 
       if (holderKid == null) {
-        data = (jsonPath.read(didDocument).first.value as List).toList();
+        data = (jsonPath.read(didDocument).first.value! as List).toList();
       } else {
-        data = (jsonPath.read(didDocument).first.value as List)
+        data = (jsonPath.read(didDocument).first.value! as List)
             .where(
               (dynamic e) => e['id'].toString() == holderKid,
             )
@@ -1144,6 +1220,7 @@ class OIDC4VC {
     required Map<String, dynamic>? publicJwk,
     required bool fromStatusList,
     required bool isCachingEnabled,
+    required Dio dio,
   }) async {
     try {
       Map<String, dynamic>? publicKeyJwk;
@@ -1155,6 +1232,7 @@ class OIDC4VC {
           didKey: issuer,
           fromStatusList: fromStatusList,
           isCachingEnabled: isCachingEnabled,
+          dio: dio,
         );
 
         publicKeyJwk = readPublicKeyJwk(
@@ -1171,7 +1249,6 @@ class OIDC4VC {
       }
 
       late final bool isVerified;
-
       if (kty == 'OKP') {
         isVerified = verifyTokenEdDSA(
           publicKey: publicKeyJwk,
@@ -1257,7 +1334,7 @@ class OIDC4VC {
 
     final credentialEndpoint = jsonPathCredential
         .readValues(jsonDecode(jsonEncode(openIdConfiguration)))
-        .first as String;
+        .first! as String;
     return credentialEndpoint;
   }
 
@@ -1292,6 +1369,7 @@ class OIDC4VC {
     required String tokenEndPoint,
     required Map<String, dynamic> tokenData,
     required String? authorization,
+    required Dio dio,
   }) async {
     /// getting token
     final tokenHeaders = <String, dynamic>{
@@ -1386,6 +1464,7 @@ class OIDC4VC {
     required String? stateValue,
     required ClientType clientType,
     required ProofHeaderType proofHeaderType,
+    required Dio dio,
   }) async {
     try {
       final private = jsonDecode(privateKey) as Map<String, dynamic>;
@@ -1616,13 +1695,15 @@ class OIDC4VC {
   Future<OpenIdConfiguration> getOpenIdConfig({
     required String baseUrl,
     required bool isAuthorizationServer,
+    required Dio dio,
     bool isCachingEnabled = false,
+    SecureStorageProvider? secureStorage,
   }) async {
     ///for OIDC4VCI, the server is an issuer the metadata are all in th
     ////openid-issuer-configuration or some are in the /openid-configuration
     ///(token endpoint etc,) and other are in the /openid-credential-issuer
     ///(credential supported) for OIDC4VP and SIOPV2, the serve is a client,
-    ///the wallet is the suthorization server the verifier metadata are in
+    ///the wallet is the authorization server the verifier metadata are in
     ////openid-configuration
 
     final url = '$baseUrl/.well-known/openid-configuration';
@@ -1631,6 +1712,8 @@ class OIDC4VC {
       final data = await getOpenIdConfigSecondMethod(
         baseUrl,
         isCachingEnabled: isCachingEnabled,
+        dio: dio,
+        secureStorage: secureStorage,
       );
       return data;
     }
@@ -1639,6 +1722,8 @@ class OIDC4VC {
       final response = await dioGet(
         url,
         isCachingEnabled: isCachingEnabled,
+        dio: dio,
+        secureStorage: secureStorage,
       );
       final data = response is String
           ? jsonDecode(response) as Map<String, dynamic>
@@ -1649,6 +1734,7 @@ class OIDC4VC {
       final data = await getOpenIdConfigSecondMethod(
         baseUrl,
         isCachingEnabled: isCachingEnabled,
+        dio: dio,
       );
       return data;
     }
@@ -1657,6 +1743,8 @@ class OIDC4VC {
   Future<OpenIdConfiguration> getOpenIdConfigSecondMethod(
     String baseUrl, {
     required bool isCachingEnabled,
+    required Dio dio,
+    SecureStorageProvider? secureStorage,
   }) async {
     final url = '$baseUrl/.well-known/openid-credential-issuer';
 
@@ -1664,10 +1752,13 @@ class OIDC4VC {
       final response = await dioGet(
         url,
         isCachingEnabled: isCachingEnabled,
+        dio: dio,
+        secureStorage: secureStorage,
       );
       final data = response is String
           ? jsonDecode(response) as Map<String, dynamic>
           : response as Map<String, dynamic>;
+
       return OpenIdConfiguration.fromJson(data);
     } catch (e) {
       throw Exception('OPENID-CONFIGURATION-ISSUE');
@@ -1732,14 +1823,16 @@ class OIDC4VC {
 
   Future<dynamic> dioGet(
     String uri, {
+    required Dio dio,
     Map<String, dynamic> headers = const <String, dynamic>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     bool isCachingEnabled = false,
+    SecureStorageProvider? secureStorage,
   }) async {
     try {
-      final secureStorageProvider = getSecureStorage;
-      final cachedData = await secureStorageProvider.get(uri);
+      final secureStorageProvider = secureStorage ?? getSecureStorage;
+      // final cachedData = await secureStorageProvider.get(uri);
       // TODO(hawkbee): To be removed.
       /// temporary solution to purge faulty stored data
       /// Will be removed in the future
@@ -1750,23 +1843,27 @@ class OIDC4VC {
 
       dio.options.headers = headers;
 
-      if (!isCachingEnabled || cachedData == null) {
-        response = await dio.get<dynamic>(uri);
-      } else {
-        final cachedDataJson = jsonDecode(cachedData);
-        final expiry = int.parse(cachedDataJson['expiry'].toString());
+      // if (isCachingEnabled) {
+      //   final secureStorageProvider = getSecureStorage;
+      //   final cachedData = await secureStorageProvider.get(uri);
+      //   if (cachedData == null) {
+      //     response = await dio.get<dynamic>(uri);
+      //   } else {
+      //     final cachedDataJson = jsonDecode(cachedData);
+      //     final expiry = int.parse(cachedDataJson['expiry'].toString());
 
-        final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
+      //     final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
 
-        if (isExpired) {
-          response = await dio.get<dynamic>(uri);
-        } else {
-          /// directly return cached data
-          /// returned here to avoid the caching override everytime
-          final response = await cachedDataJson['data'];
-          return response;
-        }
-      }
+      //     if (isExpired) {
+      //       response = await dio.get<dynamic>(uri);
+      //     } else {
+      //       /// directly return cached data
+      //       /// returned here to avoid the caching override everytime
+      //       final response = await cachedDataJson['data'];
+      //       return response;
+      //     }
+      //   }
+      // }
       // temporary deactiviting this caching du to issue with
       // flutter_secure_storage on ios #2657
       // final expiry =
@@ -1774,9 +1871,10 @@ class OIDC4VC {
 
       // final value = {'expiry': expiry, 'data': response.data};
       // await secureStorageProvider.set(uri, jsonEncode(value));
+      response = await dio.get<dynamic>(uri);
 
       return response.data;
-    } on FormatException catch (_) {
+    } on FormatException {
       throw Exception();
     } catch (e) {
       if (e is DioException) {
