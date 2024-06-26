@@ -99,7 +99,7 @@ class Parameters {
 
   // seed color for the app Theme
   // Altme
-  static const Color seedColor = Color(0xff6600FF);
+  // static const Color seedColor = Color(0xff6600FF);
   // Talao
-  // static const Color seedColor = Color(0xff1EAADC);
+  static const Color seedColor = Color(0xff1EAADC);
 }
