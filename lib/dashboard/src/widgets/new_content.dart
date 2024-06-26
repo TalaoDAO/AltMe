@@ -38,7 +38,7 @@ class NewContent extends StatelessWidget {
                     padding: EdgeInsets.only(top: 3),
                     child: Icon(
                       Icons.check_circle,
-                      color: background,
+                      color: Colors.white,
                       size: 18,
                     ),
                   ),

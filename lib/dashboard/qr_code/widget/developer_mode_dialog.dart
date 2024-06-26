@@ -16,7 +16,6 @@ class DeveloperModeDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.primary;
     final background = Theme.of(context).colorScheme.surface;
     final textColor = Theme.of(context).colorScheme.onSurface;
 

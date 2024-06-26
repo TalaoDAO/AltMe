@@ -31,10 +31,7 @@ class DescriptionDialog extends StatelessWidget {
             children: [
               Text(
                 '${context.l10n.credentialManifestDescription}:',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.dialogText),
+                style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.left,
               ),
               TransparentInkWell(
@@ -60,10 +57,7 @@ class DescriptionDialog extends StatelessWidget {
           const SizedBox(height: 5),
           Text(
             text,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: Theme.of(context).colorScheme.dialogText),
+            style: Theme.of(context).textTheme.bodySmall,
             textAlign: TextAlign.left,
           ),
         ],

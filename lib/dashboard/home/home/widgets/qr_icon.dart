@@ -69,14 +69,6 @@ class QRIcon extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primaryFixedDim,
                 borderRadius: BorderRadius.circular(50),
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).colorScheme.qrScanInnerShadow,
-                    blurRadius: 25,
-                    spreadRadius: 5,
-                    offset: const Offset(0, 10),
-                  )
-                ],
               ),
             ),
             SizedBox(
