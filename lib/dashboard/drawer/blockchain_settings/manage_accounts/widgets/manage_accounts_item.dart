@@ -1,9 +1,10 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/model/model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ManageAccountsItem extends StatelessWidget {
   const ManageAccountsItem({
@@ -35,12 +36,12 @@ class ManageAccountsItem extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: Sizes.spaceSmall),
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.cardHighlighted,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.all(
           Radius.circular(Sizes.normalRadius),
         ),
         border: Border.all(
-          color: Theme.of(context).colorScheme.borderColor,
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
           width: 0.25,
         ),
       ),
@@ -65,7 +66,7 @@ class ManageAccountsItem extends StatelessWidget {
                     maxLines: 1,
                     minFontSize: 12,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
                 const SizedBox(width: Sizes.spaceXSmall),
@@ -83,9 +84,37 @@ class ManageAccountsItem extends StatelessWidget {
             ),
             subtitle: Padding(
               padding: const EdgeInsets.symmetric(vertical: Sizes.spaceXSmall),
-              child: MyText(
-                walletAddressExtracted,
-                style: Theme.of(context).textTheme.walletAddress,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: MyText(
+                      walletAddressExtracted,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                  const SizedBox(width: Sizes.spaceSmall),
+                  InkWell(
+                    onTap: () async {
+                      await Clipboard.setData(
+                        ClipboardData(
+                          text: walletAddressExtracted,
+                        ),
+                      );
+                      AlertMessage.showStateMessage(
+                        context: context,
+                        stateMessage: StateMessage.success(
+                          stringMessage: l10n.copiedToClipboard,
+                        ),
+                      );
+                    },
+                    child: Image.asset(
+                      IconStrings.copy,
+                      width: Sizes.icon,
+                      height: Sizes.icon,
+                    ),
+                  ),
+                  const SizedBox(width: Sizes.spaceSmall),
+                ],
               ),
             ),
           ),
@@ -102,9 +131,7 @@ class ManageAccountsItem extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(
-                width: Sizes.spaceSmall,
-              ),
+              const SizedBox(width: Sizes.spaceSmall),
               RevealPrivateKeyButton(
                 onTap: () async {
                   final confirm = await showDialog<bool>(

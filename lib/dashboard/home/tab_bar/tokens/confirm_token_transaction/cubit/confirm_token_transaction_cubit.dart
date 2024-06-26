@@ -119,7 +119,10 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     final sender = credentials.address;
     final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
 
-    final web3RpcURL = await fetchRpcUrl(manageNetworkCubit.state.network);
+    final web3RpcURL = await fetchRpcUrl(
+      blockchainNetwork: manageNetworkCubit.state.network,
+      dotEnv: dotenv,
+    );
 
     final (maxGas, priceOfGas, feeData) = await MWeb3Client.estimateEVMFee(
       web3RpcURL: web3RpcURL,
@@ -424,7 +427,10 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       } else {
         final selectedEthereumNetwork = manageNetworkCubit.state.network;
 
-        final chainRpcUrl = await fetchRpcUrl(manageNetworkCubit.state.network);
+        final chainRpcUrl = await fetchRpcUrl(
+          blockchainNetwork: manageNetworkCubit.state.network,
+          dotEnv: dotenv,
+        );
 
         await _sendContractInvocationOperationEVM(
           tokenAmount: state.totalAmount,

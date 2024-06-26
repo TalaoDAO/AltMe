@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/drawer/drawer.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,7 +19,7 @@ class NetworkSwitcherButton extends StatelessWidget {
             width: 6,
             height: 6,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.activeColorOfNetwork,
+              color: Theme.of(context).colorScheme.primary,
               shape: BoxShape.circle,
             ),
           ),

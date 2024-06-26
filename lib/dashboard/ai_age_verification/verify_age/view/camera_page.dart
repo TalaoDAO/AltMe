@@ -143,7 +143,7 @@ class _CameraViewState extends State<CameraView> {
         padding: const EdgeInsets.all(Sizes.spaceNormal),
         child: BlocBuilder<CameraCubit, CameraState>(
           builder: (context, state) {
-            return MyGradientButton(
+            return MyElevatedButton(
               borderRadius: Sizes.smallRadius,
               verticalSpacing: 16,
               text: l10n.takePicture,

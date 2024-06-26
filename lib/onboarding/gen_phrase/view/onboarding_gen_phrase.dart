@@ -4,15 +4,13 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
-
-import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingGenPhrasePage extends StatelessWidget {
   const OnBoardingGenPhrasePage({super.key});
@@ -26,7 +24,6 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => OnBoardingGenPhraseCubit(
-        secureStorageProvider: getSecureStorage,
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),
@@ -133,14 +130,14 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                       //   },
                       //   child: Text(
                       //     l10n.copyToClipboard,
-                      //     style: Theme.of(context).textTheme.copyToClipBoard,
+                      //     style: Theme.of(context).textTheme.bodyMedium!,
                       //   ),
                       // ),
                       const SizedBox(height: Sizes.spaceLarge),
                       Text(
                         l10n.onboardingAltmeMessage,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.genPhraseSubmessage,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ],
                   ),
@@ -157,11 +154,9 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  MyElevatedButton(
+                  MyOutlinedButton(
                     text: l10n.verifyLater,
                     verticalSpacing: 18,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.defaultDialogDark,
                     onPressed: () async {
                       await context
                           .read<OnboardingCubit>()
@@ -172,11 +167,11 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  MyGradientButton(
+                  MyElevatedButton(
                     text: l10n.verifyNow,
                     verticalSpacing: 18,
                     onPressed: () {
-                      Navigator.of(context).push(
+                      Navigator.of(context).push<void>(
                         OnBoardingVerifyPhrasePage.route(
                           mnemonic: mnemonic!,
                           isFromOnboarding: true,

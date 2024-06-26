@@ -1,6 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:altme/dashboard/drawer/wallet_settings/view/language_settings.dart';
+import 'package:altme/dashboard/drawer/wallet_settings/view/theme_settings.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class WalletSettingsMenu extends StatelessWidget {
@@ -24,8 +26,10 @@ class WalletSettingsMenuView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return BasePage(
-      backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       useSafeArea: true,
       scrollView: true,
       titleAlignment: Alignment.topCenter,
@@ -33,12 +37,24 @@ class WalletSettingsMenuView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BackLeadingButton(
+          const BackLeadingButton(
             padding: EdgeInsets.zero,
-            color: Theme.of(context).colorScheme.onPrimary,
           ),
           const DrawerLogo(),
-          const LanguageSelectorWidget(),
+          DrawerItem(
+            title: l10n.languageSettings,
+            subtitle: l10n.languageSettingsDescription,
+            onTap: () async {
+              await Navigator.of(context).push<void>(LanguageSettings.route());
+            },
+          ),
+          DrawerItem(
+            title: l10n.themeSettings,
+            subtitle: l10n.themeSettingsDescription,
+            onTap: () async {
+              await Navigator.of(context).push<void>(ThemeSettings.route());
+            },
+          ),
         ],
       ),
     );

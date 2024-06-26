@@ -78,7 +78,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     await Future<void>.delayed(const Duration(milliseconds: 1000));
     emit(state.loading(isScan: true));
     try {
-      final isInternetAvailable = await isConnected();
+      final isInternetAvailable = await isConnectedToInternet();
       if (!isInternetAvailable) {
         throw NetworkException(
           message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
@@ -893,8 +893,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         data: {
           'error': 'invalid_request',
           'error_description':
-              'The input_descriptors is required in the presentation_definition '
-                  'object',
+              'The input_descriptors is required in the presentation_definition'
+                  ' object',
         },
       );
     }
@@ -1140,6 +1140,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         stateValue: stateValue,
         clientType: customOidc4vcProfile.clientType,
         proofHeaderType: customOidc4vcProfile.proofHeader,
+        dio: client.dio,
       );
 
       String? url;
@@ -1275,6 +1276,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           final openIdConfiguration = await oidc4vc.getOpenIdConfig(
             baseUrl: issuer,
             isAuthorizationServer: false,
+            dio: client.dio,
           );
 
           if (savedAccessToken == null) {
@@ -1297,6 +1299,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               redirectUri: Parameters.oidc4vcUniversalLink,
               openIdConfiguration: openIdConfiguration,
               clientAssertion: clientAssertion,
+              dio: client.dio,
             );
 
             savedAccessToken = accessToken;

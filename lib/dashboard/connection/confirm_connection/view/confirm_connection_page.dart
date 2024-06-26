@@ -161,7 +161,7 @@ class ConfirmConnectionView extends StatelessWidget {
                         return Container();
                       }
 
-                      return MyGradientButton(
+                      return MyElevatedButton(
                         verticalSpacing: 15,
                         borderRadius: Sizes.normalRadius,
                         text: l10n.connect,

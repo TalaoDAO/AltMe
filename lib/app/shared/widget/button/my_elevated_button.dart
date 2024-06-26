@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,7 +9,7 @@ class MyElevatedButton extends StatelessWidget {
     this.icon,
     this.backgroundColor,
     this.textColor,
-    this.borderRadius = 18,
+    this.borderRadius = 8,
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,
@@ -23,7 +22,7 @@ class MyElevatedButton extends StatelessWidget {
     required this.icon,
     this.backgroundColor,
     this.textColor,
-    this.borderRadius = 40,
+    this.borderRadius = 8,
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,
@@ -54,14 +53,21 @@ class MyElevatedButton extends StatelessWidget {
                 onPressed: onPressed,
               ),
               onPressed: onPressed,
-              child: ElevatedButtonText(
-                text: text,
-                fontSize: fontSize,
-                textColor: textColor,
+              child: Text(
+                text.toUpperCase(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             )
           : ElevatedButton.icon(
-              icon: icon!,
+              icon: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  textColor ?? Theme.of(context).textTheme.titleLarge!.color!,
+                  BlendMode.srcIn,
+                ),
+                child: icon,
+              ),
               style: elevatedStyleFrom(
                 borderRadius: borderRadius,
                 context: context,
@@ -71,10 +77,11 @@ class MyElevatedButton extends StatelessWidget {
                 onPressed: onPressed,
               ),
               onPressed: onPressed,
-              label: ElevatedButtonText(
-                text: text,
-                fontSize: fontSize,
-                textColor: textColor,
+              label: Text(
+                text.toUpperCase(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ),
     );
@@ -90,16 +97,16 @@ ButtonStyle elevatedStyleFrom({
   GestureTapCallback? onPressed,
 }) {
   return ButtonStyle(
-    elevation: MaterialStateProperty.all(elevation),
-    padding: MaterialStateProperty.all(
+    elevation: WidgetStateProperty.all(elevation),
+    padding: WidgetStateProperty.all(
       EdgeInsets.symmetric(vertical: verticalSpacing),
     ),
-    backgroundColor: MaterialStateProperty.all(
+    backgroundColor: WidgetStateProperty.all(
       onPressed == null
-          ? Theme.of(context).colorScheme.disabledBgColor
-          : backgroundColor ?? Theme.of(context).colorScheme.primary,
+          ? Theme.of(context).colorScheme.outline
+          : backgroundColor ?? Theme.of(context).colorScheme.secondaryContainer,
     ),
-    shape: MaterialStateProperty.all(
+    shape: WidgetStateProperty.all(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius),
       ),
@@ -107,6 +114,7 @@ ButtonStyle elevatedStyleFrom({
   );
 }
 
+// @TODO: remove if buttons OK
 class ElevatedButtonText extends StatelessWidget {
   const ElevatedButtonText({
     super.key,
@@ -123,8 +131,8 @@ class ElevatedButtonText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.toUpperCase(),
-      style: GoogleFonts.poppins(
-        color: textColor ?? Theme.of(context).colorScheme.onElevatedButton,
+      style: TextStyle(
+        color: textColor ?? Theme.of(context).colorScheme.onPrimary,
         fontSize: fontSize,
         fontWeight: FontWeight.w700,
       ),

@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CredentialField extends StatelessWidget {
@@ -66,7 +65,7 @@ class DisplayCredentialField extends StatelessWidget {
             if (title != null) ...[
               TextSpan(
                 text: showVertically ? title : '$title: ',
-                style: textTheme.credentialFieldTitle.copyWith(
+                style: textTheme.bodyMedium!.copyWith(
                   color: titleColor,
                 ),
               ),
@@ -74,8 +73,7 @@ class DisplayCredentialField extends StatelessWidget {
             ],
             TextSpan(
               text: value,
-              style: textTheme.credentialFieldDescription
-                  .copyWith(color: valueColor),
+              style: textTheme.bodyMedium!.copyWith(color: valueColor),
             ),
           ],
         ),

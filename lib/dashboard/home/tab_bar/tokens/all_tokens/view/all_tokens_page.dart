@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -130,7 +129,10 @@ class _AllTokensViewState extends State<_AllTokensView> {
                     separatorBuilder: (_, __) {
                       return Divider(
                         height: 0.3,
-                        color: Theme.of(context).colorScheme.borderColor,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.12),
                       );
                     },
                     itemCount: state.filteredContracts.length,

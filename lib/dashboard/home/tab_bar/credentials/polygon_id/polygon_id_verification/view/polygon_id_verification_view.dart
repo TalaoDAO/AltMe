@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
@@ -68,7 +68,6 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final body = widget.iden3MessageEntity.body as AuthBodyRequest;
-    // TODO(all): change UI
     return BlocConsumer<PolygonIdVerificationCubit, PolygonIdVerificationState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -96,10 +95,9 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                 Text(
                   l10n.thisOrganisationRequestsThisInformation,
                   textAlign: TextAlign.center,
-                  style:
-                      Theme.of(context).textTheme.credentialSubtitle.copyWith(
-                            color: Theme.of(context).colorScheme.lightPurple,
-                          ),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                 ),
                 const SizedBox(height: 10),
                 if (body.scope != null)
@@ -273,7 +271,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      MyGradientButton(
+                      MyElevatedButton(
                         text: l10n.approve,
                         onPressed: state.canGenerateProof
                             ? () async {

@@ -7,14 +7,24 @@
 
 import 'package:altme/app/app.dart';
 import 'package:altme/bootstrap.dart';
-import 'package:device_preview/device_preview.dart';
+import 'package:altme/theme/theme_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  bootstrap(
-    () => DevicePreview(
-      builder: (context) => const App(
-        flavorMode: FlavorMode.staging,
-      ),
+Future<void> main() async {
+  // required when using any plugin. In our case, it's shared_preferences
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Creating an instance of ThemeRepository that will invoke the _init() method
+  // and populate the stream controller in the repository.
+  final themeRepository = ThemeRepository(
+    sharedPreferences: await SharedPreferences.getInstance(),
+  );
+
+  await bootstrap(
+    () => App(
+      flavorMode: FlavorMode.staging,
+      themeRepository: themeRepository,
     ),
   );
 }

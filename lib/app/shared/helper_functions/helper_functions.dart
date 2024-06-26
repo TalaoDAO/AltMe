@@ -1,16 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:asn1lib/asn1lib.dart' as asn1lib;
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dartez/dartez.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -25,6 +22,9 @@ import 'package:secure_storage/secure_storage.dart';
 import 'package:x509/x509.dart' as x509;
 import 'package:x509/x509.dart';
 
+export 'is_connected_to_internet.dart';
+export 'test_platform.dart';
+
 String generateDefaultAccountName(
   int accountIndex,
   List<String> accountNameList,
@@ -37,10 +37,6 @@ String generateDefaultAccountName(
     return defaultAccountName;
   }
 }
-
-bool get isAndroid => Platform.isAndroid;
-
-bool get isIOS => Platform.isIOS;
 
 String getIssuerDid({required Uri uriToCheck}) {
   String did = '';
@@ -75,11 +71,15 @@ KeyStoreModel getKeysFromSecretKey({required String secretKey}) {
   );
 }
 
-String stringToHexPrefixedWith05({required String payload}) {
+String stringToHexPrefixedWith05({
+  required String payload,
+  DateTime? dateTime,
+}) {
+  dateTime ??= DateTime.now();
   final String formattedInput = <String>[
     'Tezos Signed Message:',
     'altme.io',
-    DateTime.now().toString(),
+    dateTime.toString(),
     payload,
   ].join(' ');
 
@@ -92,23 +92,6 @@ String stringToHexPrefixedWith05({required String payload}) {
   final payloadBytes = '$prefix$stringIsHex$bytesOfByteLength$bytes';
 
   return payloadBytes;
-}
-
-Future<bool> isConnected() async {
-  final log = getLogger('Check Internet Connection');
-
-  if (!isAndroid) {
-    if (!(await DeviceInfoPlugin().iosInfo).isPhysicalDevice) {
-      return true;
-    }
-  }
-  final connectivityResult = await Connectivity().checkConnectivity();
-  if (connectivityResult == ConnectivityResult.mobile ||
-      connectivityResult == ConnectivityResult.wifi) {
-    return true;
-  }
-  log.e('No Internet Connection');
-  return false;
 }
 
 String getCredentialName(String constraints) {
@@ -238,11 +221,13 @@ Future<bool> getStoragePermission() async {
   return false;
 }
 
-String getDateTimeWithoutSpace() {
-  final dateTime = DateTime.fromMicrosecondsSinceEpoch(
-    DateTime.now().microsecondsSinceEpoch,
+String getDateTimeWithoutSpace({DateTime? dateTime}) {
+  dateTime ??= DateTime.now();
+
+  final dateTimeString = DateTime.fromMicrosecondsSinceEpoch(
+    dateTime.microsecondsSinceEpoch,
   ).toString().replaceAll(' ', '-');
-  return dateTime;
+  return dateTimeString;
 }
 
 int getIndexValue({
@@ -273,12 +258,23 @@ Future<String> getPrivateKey({
   required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
 }) async {
+  final customOidc4vcProfile = profileCubit.state.model.profileSetting
+      .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+  if (customOidc4vcProfile.clientType == ClientType.p256JWKThumprint) {
+    final privateKey =
+        await getP256KeyToGetAndPresentVC(profileCubit.secureStorageProvider);
+
+    return privateKey;
+  }
+
   final mnemonic = await profileCubit.secureStorageProvider
       .get(SecureStorageKeys.ssiMnemonic);
 
   switch (didKeyType) {
     case DidKeyType.edDSA:
-      final ssiKey = await getSecureStorage.get(SecureStorageKeys.ssiKey);
+      final ssiKey = await profileCubit.secureStorageProvider
+          .get(SecureStorageKeys.ssiKey);
       return ssiKey.toString();
 
     case DidKeyType.secp256k1:
@@ -719,6 +715,7 @@ Future<
   final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
     baseUrl: issuer,
     isAuthorizationServer: false,
+    dio: client.dio,
   );
 
   if (preAuthorizedCode == null) {
@@ -743,6 +740,7 @@ Future<
     authorizationServerConfiguration = await oidc4vc.getOpenIdConfig(
       baseUrl: authorizationServer,
       isAuthorizationServer: true,
+      dio: client.dio,
     );
   }
 
@@ -998,6 +996,7 @@ Future<bool?> isEBSIV3ForVerifiers({
         await oidc4vc.getOpenIdConfig(
       baseUrl: clientId,
       isAuthorizationServer: false,
+      dio: Dio(),
     );
 
     final subjectTrustFrameworksSupported =
@@ -1164,7 +1163,7 @@ MessageHandler getMessageHandler(dynamic e) {
           'error_description': 'Failed to extract header from jwt.',
         },
       );
-    } else if (stringException.contains('INVALID_TOKEN')) {
+    } else if (stringException.contains('INVALID_PAYLOAD')) {
       return ResponseMessage(
         data: {
           'error': 'invalid_format',
@@ -1585,8 +1584,11 @@ Future<(String?, String?, String?, String?)> getClientDetails({
 
     final didKeyType = customOidc4vcProfile.defaultDid;
 
-    final privateKey =
-        await getP256KeyToGetAndPresentVC(profileCubit.secureStorageProvider);
+    final String privateKey = await fetchPrivateKey(
+      profileCubit: profileCubit,
+      isEBSIV3: isEBSIV3,
+      didKeyType: didKeyType,
+    );
 
     final (did, _) = await fetchDidAndKid(
       privateKey: privateKey,
@@ -1600,7 +1602,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
       did: '', // just added as it is required field
       mediaType: MediaType.basic, // just added as it is required field
       clientType:
-          ClientType.p256JWKThumprint, // just added as it is required field
+          customOidc4vcProfile.clientType, // just added as it is required field
       proofHeaderType: customOidc4vcProfile.proofHeader,
       clientId: '', // just added as it is required field
     );
@@ -1867,7 +1869,7 @@ List<String> getStringCredentialsForToken({
     presentJwtVc = false;
     presentJwtVcJson = true;
     presentVcSdJwt = false;
-  } else if (presentJwtVc && vcFormatType == VCFormatType.vcSdJWT) {
+  } else if (presentVcSdJwt && vcFormatType == VCFormatType.vcSdJWT) {
     presentLdpVc = false;
     presentJwtVc = false;
     presentJwtVcJson = false;
@@ -2134,7 +2136,10 @@ String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
   return null;
 }
 
-Future<String> fetchRpcUrl(BlockchainNetwork blockchainNetwork) async {
+Future<String> fetchRpcUrl({
+  required BlockchainNetwork blockchainNetwork,
+  required DotEnv dotEnv,
+}) async {
   String rpcUrl = '';
 
   if (blockchainNetwork is BinanceNetwork ||
@@ -2142,8 +2147,8 @@ Future<String> fetchRpcUrl(BlockchainNetwork blockchainNetwork) async {
     rpcUrl = blockchainNetwork.rpcNodeUrl as String;
   } else {
     if (blockchainNetwork.networkname == 'Mainnet') {
-      await dotenv.load();
-      final String infuraApiKey = dotenv.get('INFURA_API_KEY');
+      await dotEnv.load();
+      final String infuraApiKey = dotEnv.get('INFURA_API_KEY');
 
       late String prefixUrl;
 

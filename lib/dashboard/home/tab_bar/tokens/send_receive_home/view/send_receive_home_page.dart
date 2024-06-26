@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +47,8 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
   void initState() {
     Future.delayed(Duration.zero, () {
       sendReceiveHomeCubit.init(
-          baseUrl: context.read<ManageNetworkCubit>().state.network.apiUrl);
+        baseUrl: context.read<ManageNetworkCubit>().state.network.apiUrl,
+      );
     });
     super.initState();
   }
@@ -174,7 +175,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                           state.selectedToken.balanceInUSD
                               .decimalNumber(2)
                               .formatNumber,
-                      style: Theme.of(context).textTheme.normal,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const SizedBox(
                       height: Sizes.spaceNormal,
@@ -187,8 +188,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Flexible(
-                            child: MyGradientButton(
-                              upperCase: false,
+                            child: MyElevatedButton(
                               text: l10n.send,
                               verticalSpacing: 0,
                               fontSize: 16,
@@ -210,8 +210,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                             width: Sizes.spaceNormal,
                           ),
                           Flexible(
-                            child: MyGradientButton(
-                              upperCase: false,
+                            child: MyElevatedButton(
                               text: l10n.receive,
                               verticalSpacing: 0,
                               fontSize: 16,

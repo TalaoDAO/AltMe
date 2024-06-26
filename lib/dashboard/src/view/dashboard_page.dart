@@ -6,7 +6,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -162,12 +161,16 @@ class _DashboardViewState extends State<DashboardView> {
               .helpCenterOptions
               .displayChatSupport;
 
-          return WillPopScope(
-            onWillPop: () async {
+          final isEnterprise =
+              context.read<ProfileCubit>().state.model.walletType ==
+                  WalletType.enterprise;
+
+          return PopScope(
+            canPop: false,
+            onPopInvoked: (_) async {
               if (scaffoldKey.currentState!.isDrawerOpen) {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
               }
-              return false;
             },
             child: BasePage(
               scrollView: false,
@@ -211,7 +214,7 @@ class _DashboardViewState extends State<DashboardView> {
                               const WertPage()
                             else
                               const SearchPage(),
-                            if (displayChatSupport)
+                            if (displayChatSupport && isEnterprise)
                               const AltmeSupportChatPage()
                             else
                               Container(),
@@ -249,7 +252,7 @@ class _DashboardViewState extends State<DashboardView> {
                                 onTap: () => bottomTapped(2),
                                 isSelected: state.selectedIndex == 2,
                               ),
-                            if (displayChatSupport) ...[
+                            if (displayChatSupport && isEnterprise) ...[
                               StreamBuilder(
                                 initialData: context
                                     .read<AltmeChatSupportCubit>()

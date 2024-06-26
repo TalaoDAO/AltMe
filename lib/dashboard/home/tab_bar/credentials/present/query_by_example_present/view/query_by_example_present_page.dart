@@ -67,7 +67,7 @@ class _QueryByExamplePresentPageState extends State<QueryByExamplePresentPage> {
               //         CredentialModel(
               //             id: '', image: '', data: {'issuer': ''}))),
               const SizedBox(height: 24),
-              MyGradientButton(
+              MyElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement<void, void>(
                     QueryByExampleCredentialPickPage.route(

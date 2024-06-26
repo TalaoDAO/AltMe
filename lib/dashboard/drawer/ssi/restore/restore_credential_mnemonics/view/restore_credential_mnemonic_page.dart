@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -115,13 +115,13 @@ class _RestoreCredentialMnemonicViewState
               Text(
                 l10n.restoreCredentialStep1Title,
                 textAlign: TextAlign.left,
-                style: Theme.of(context).textTheme.subtitle3,
+                style: Theme.of(context).textTheme.labelMedium,
               ),
               const SizedBox(height: 32),
               BaseTextField(
                 hint: l10n.restorePhraseTextFieldHint,
                 fillColor: Colors.transparent,
-                hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
+                hintStyle: Theme.of(context).textTheme.bodyMedium,
                 controller: mnemonicController,
                 error: state.isTextFieldEdited && !state.isMnemonicValid
                     ? l10n.recoveryMnemonicError
@@ -139,7 +139,7 @@ class _RestoreCredentialMnemonicViewState
         child: BlocBuilder<RestoreCredentialMnemonicCubit,
             RestoreCredentialMnemonicState>(
           builder: (context, state) {
-            return MyGradientButton(
+            return MyElevatedButton(
               onPressed: !state.isMnemonicValid
                   ? null
                   : () async {

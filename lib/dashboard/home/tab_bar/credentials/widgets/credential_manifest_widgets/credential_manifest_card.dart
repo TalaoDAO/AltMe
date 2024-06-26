@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
@@ -47,7 +47,7 @@ class CredentialManifestCard extends StatelessWidget {
                     ],
                   )
                 : null,
-            shapeColor: Theme.of(context).colorScheme.documentShape,
+            shapeColor: Theme.of(context).colorScheme.primary.withOpacity(0.05),
             value: 1,
             anchors: showBgDecoration
                 ? const <Alignment>[Alignment.bottomRight]
@@ -68,12 +68,10 @@ class CredentialManifestCard extends StatelessWidget {
                         displayMapping: outputDescriptor.display?.title,
                         credentialModel: credentialModel,
                         textStyle: textColor == null
-                            ? Theme.of(context)
-                                .textTheme
-                                .credentialBaseTitleText
+                            ? Theme.of(context).textTheme.displayLarge!
                             : Theme.of(context)
                                 .textTheme
-                                .credentialBaseTitleText
+                                .displayLarge!
                                 .copyWith(color: textColor),
                       ),
                     ),
@@ -94,16 +92,12 @@ class CredentialManifestCard extends StatelessWidget {
                         children: <InlineSpan>[
                           TextSpan(
                             text: '${l10n.providedBy} ',
-                            style: Theme.of(context)
-                                .textTheme
-                                .credentialBaseLightText,
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           TextSpan(
                             text: credentialModel.credentialPreview
                                 .credentialSubjectModel.issuedBy?.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .credentialBaseBoldText,
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
                       ),
@@ -122,10 +116,10 @@ class CredentialManifestCard extends StatelessWidget {
                         displayMapping: outputDescriptor.display?.subtitle,
                         credentialModel: credentialModel,
                         textStyle: textColor == null
-                            ? Theme.of(context).textTheme.credentialBaseBoldText
+                            ? Theme.of(context).textTheme.bodyMedium!
                             : Theme.of(context)
                                 .textTheme
-                                .credentialBaseBoldText
+                                .bodyMedium!
                                 .copyWith(color: textColor),
                       ),
                     ),
@@ -138,7 +132,7 @@ class CredentialManifestCard extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.issuedOn,
-                    style: Theme.of(context).textTheme.credentialBaseBoldText,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
               ),
@@ -151,7 +145,7 @@ class CredentialManifestCard extends StatelessWidget {
                     UiDate.formatDateForCredentialCard(
                       credentialModel.credentialPreview.issuanceDate,
                     ),
-                    style: Theme.of(context).textTheme.credentialBaseLightText,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
               ),
@@ -163,7 +157,7 @@ class CredentialManifestCard extends StatelessWidget {
                     widthFactor: 0.4,
                     child: MyText(
                       l10n.expirationDate,
-                      style: Theme.of(context).textTheme.credentialBaseBoldText,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ),
@@ -177,8 +171,7 @@ class CredentialManifestCard extends StatelessWidget {
                       UiDate.formatDateForCredentialCard(
                         credentialModel.expirationDate!,
                       ),
-                      style:
-                          Theme.of(context).textTheme.credentialBaseLightText,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ),

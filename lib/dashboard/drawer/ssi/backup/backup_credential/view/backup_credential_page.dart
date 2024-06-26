@@ -4,7 +4,7 @@ import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
@@ -96,13 +96,13 @@ class BackupCredentialView extends StatelessWidget {
               Text(
                 l10n.saveBackupCredentialTitle,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.messageTitle,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: Sizes.spaceXLarge),
               Text(
                 l10n.saveBackupCredentialSubtitle,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.subtitle4,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: Sizes.spaceXLarge),
               Image.asset(
@@ -116,7 +116,7 @@ class BackupCredentialView extends StatelessWidget {
       ),
       navigation: Padding(
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: MyGradientButton(
+        child: MyElevatedButton(
           onPressed: () async {
             await context
                 .read<BackupCredentialCubit>()

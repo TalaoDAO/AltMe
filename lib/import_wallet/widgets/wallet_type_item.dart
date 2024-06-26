@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/import_wallet/import_wallet.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class WalletTypeItem extends StatelessWidget {
@@ -20,7 +19,9 @@ class WalletTypeItem extends StatelessWidget {
           color: Theme.of(context).highlightColor,
           borderRadius:
               const BorderRadius.all(Radius.circular(Sizes.smallRadius)),
-          border: Border.all(color: Theme.of(context).colorScheme.borderColor),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.max,

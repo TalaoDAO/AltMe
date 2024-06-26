@@ -1,5 +1,5 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:test/test.dart';
 
 void main() {
   const mnemonics =
@@ -138,50 +138,63 @@ void main() {
       });
     });
 
-    group('ethereum', () {
-      const accountType = AccountType.ethereum;
-      test('throw Exception for secretKey from ethereum', () async {
-        final key = await keyGenerator.jwkFromMnemonic(
-          mnemonic: mnemonics,
-          accountType: accountType,
-          derivePathIndex: derivePathIndex,
-        );
-        expect(key, evmJwkKey);
-      });
+    group('EVM', () {
+      const accountTypes = [
+        AccountType.ethereum,
+        AccountType.fantom,
+        AccountType.polygon,
+        AccountType.binance,
+      ];
 
-      test('key from secretKey for ethereum', () async {
-        final key = await keyGenerator.jwkFromSecretKey(
-          secretKey: ethereumSecretKey,
-          accountType: accountType,
-        );
-        expect(key, evmJwkKey);
-      });
+      for (final accountType in accountTypes) {
+        test('throw Exception for secretKey from ethereum', () async {
+          final key = await keyGenerator.jwkFromMnemonic(
+            mnemonic: mnemonics,
+            accountType: accountType,
+            derivePathIndex: derivePathIndex,
+          );
+          expect(key, evmJwkKey);
+        });
 
-      test('0x wallet address from mnemonics for ethereum', () async {
-        final walletAddress = await keyGenerator.walletAddressFromMnemonic(
-          mnemonic: mnemonics,
-          accountType: accountType,
-          derivePathIndex: derivePathIndex,
-        );
-        expect(walletAddress, ethereumWalletAddress);
-      });
+        test('key from secretKey for ethereum', () async {
+          final key = await keyGenerator.jwkFromSecretKey(
+            secretKey: ethereumSecretKey,
+            accountType: accountType,
+          );
+          expect(key, evmJwkKey);
+        });
 
-      test('secretKey from mnemonics for ethereum ', () async {
-        final secretKey = await keyGenerator.secretKeyFromMnemonic(
-          mnemonic: mnemonics,
-          accountType: accountType,
-          derivePathIndex: derivePathIndex,
-        );
-        expect(secretKey, ethereumSecretKey);
-      });
+        test('0x wallet address from mnemonics for ethereum', () async {
+          final walletAddress = await keyGenerator.walletAddressFromMnemonic(
+            mnemonic: mnemonics,
+            accountType: accountType,
+            derivePathIndex: derivePathIndex,
+          );
+          expect(walletAddress, ethereumWalletAddress);
+        });
 
-      test('0x wallet address from secret key for ethereum', () async {
-        final walletAddress = await keyGenerator.walletAddressFromSecretKey(
-          secretKey: ethereumSecretKey,
-          accountType: accountType,
-        );
-        expect(walletAddress, ethereumWalletAddress);
-      });
+        test('secretKey from mnemonics for ethereum ', () async {
+          final secretKey = await keyGenerator.secretKeyFromMnemonic(
+            mnemonic: mnemonics,
+            accountType: accountType,
+            derivePathIndex: derivePathIndex,
+          );
+          expect(secretKey, ethereumSecretKey);
+        });
+
+        test('0x wallet address from secret key for ethereum', () async {
+          final walletAddress = await keyGenerator.walletAddressFromSecretKey(
+            secretKey: ethereumSecretKey,
+            accountType: accountType,
+          );
+          expect(walletAddress, ethereumWalletAddress);
+        });
+      }
+    });
+
+    test('getKeystore returns correct value', () {
+      final data = keyGenerator.getKeystore(secretKey: tezosSecretKey);
+      expect(data.address, tezosWalletAddress);
     });
   });
 }

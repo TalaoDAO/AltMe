@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:dio/dio.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
@@ -34,6 +35,7 @@ Future<VerificationType> verifyEncodedData({
     publicJwk: publicKeyJwk,
     fromStatusList: fromStatusList,
     isCachingEnabled: isCachingEnabled,
+    dio: Dio(),
   );
   return verificationType;
 }

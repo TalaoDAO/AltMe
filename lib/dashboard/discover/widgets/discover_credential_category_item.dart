@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:altme/l10n/l10n.dart';
+
 import 'package:flutter/material.dart';
 
 class DiscoverCredentialCategoryItem extends StatelessWidget {
@@ -17,7 +18,7 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final credentialCategoryConfig = credentialCategory.config(context);
+    final credentialCategoryConfig = credentialCategory.config(context.l10n);
     //sort credentials by order
     dummyCredentials.sort(
       (a, b) =>
@@ -38,15 +39,19 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             child: Text(
               credentialCategoryConfig.discoverTitle,
-              style: Theme.of(context).textTheme.credentialCategoryTitle,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
-          ),
+          ), 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             child: Text(
               credentialCategoryConfig.discoverSubTitle,
               maxLines: 3,
-              style: Theme.of(context).textTheme.credentialCategorySubTitle,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.w100,
+                  ),
             ),
           ),
           const SizedBox(height: 14),

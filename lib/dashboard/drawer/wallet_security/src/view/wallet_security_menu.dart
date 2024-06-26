@@ -3,7 +3,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/protect_wallet/view/protect_wallet_page.dart';
 
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,7 +31,7 @@ class WalletSecurityView extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return BasePage(
-          backgroundColor: Theme.of(context).colorScheme.drawerBackground,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           useSafeArea: true,
           scrollView: true,
           titleAlignment: Alignment.topCenter,
@@ -40,9 +39,8 @@ class WalletSecurityView extends StatelessWidget {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              BackLeadingButton(
+              const BackLeadingButton(
                 padding: EdgeInsets.zero,
-                color: Theme.of(context).colorScheme.onPrimary,
               ),
               const DrawerLogo(),
               DrawerItem(

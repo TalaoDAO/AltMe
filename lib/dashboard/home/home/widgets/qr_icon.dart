@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,15 +45,29 @@ class QRIcon extends StatelessWidget {
               height: 80,
               width: 80,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.qrScanBackground,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(50),
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.primary,
+                    blurRadius: 5,
+                    offset: Offset.zero,
+                  ),
+                  BoxShadow(
+                    color:
+                        Theme.of(context).colorScheme.shadow.withOpacity(0.16),
+                    blurRadius: 12,
+                    spreadRadius: -12,
+                    offset: Offset.zero,
+                  ),
+                ],
               ),
             ),
             Container(
               height: 60,
               width: 60,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.primaryFixedDim,
                 borderRadius: BorderRadius.circular(50),
                 boxShadow: [
                   BoxShadow(
@@ -71,7 +84,7 @@ class QRIcon extends StatelessWidget {
               width: 40,
               child: ImageIcon(
                 const AssetImage(IconStrings.scan),
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: Theme.of(context).colorScheme.onPrimaryFixedVariant,
               ),
             ),
           ],

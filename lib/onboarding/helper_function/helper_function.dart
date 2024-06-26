@@ -4,11 +4,9 @@ import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 Future<void> generateAccount({
   required List<String> mnemonic,
-  required SecureStorageProvider secureStorageProvider,
   required KeyGenerator keyGenerator,
   required DIDKitProvider didKitProvider,
   required HomeCubit homeCubit,
@@ -20,7 +18,7 @@ Future<void> generateAccount({
   final mnemonicFormatted = mnemonic.join(' ');
 
   /// ssi wallet
-  await secureStorageProvider.set(
+  await profileCubit.secureStorageProvider.set(
     SecureStorageKeys.ssiMnemonic,
     mnemonicFormatted,
   );
@@ -31,7 +29,8 @@ Future<void> generateAccount({
     accountType: AccountType.ssi,
   );
 
-  await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
+  await profileCubit.secureStorageProvider
+      .set(SecureStorageKeys.ssiKey, ssiKey);
 
   /// create profile
   await profileCubit.load();

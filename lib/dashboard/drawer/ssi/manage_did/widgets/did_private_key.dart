@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class DidPrivateKey extends StatelessWidget {
@@ -22,7 +22,7 @@ class DidPrivateKey extends StatelessWidget {
         ),
         Text(
           l10n.didPrivateKey,
-          style: Theme.of(context).textTheme.title,
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(
           height: Sizes.spaceNormal,

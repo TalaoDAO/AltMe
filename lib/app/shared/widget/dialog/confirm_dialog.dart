@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class ConfirmDialog extends StatelessWidget {
@@ -29,10 +29,9 @@ class ConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background = bgColor ?? Theme.of(context).colorScheme.popupBackground;
-    final textColor =
-        this.textColor ?? Theme.of(context).colorScheme.dialogText;
+    final background =
+        bgColor ?? Theme.of(context).colorScheme.surfaceContainerHighest;
+    final textColor = this.textColor ?? Theme.of(context).colorScheme.onSurface;
 
     final l10n = context.l10n;
     return AlertDialog(
@@ -49,7 +48,7 @@ class ConfirmDialog extends StatelessWidget {
             icon,
             width: 50,
             height: 50,
-            color: textColor,
+            color: icon == IconStrings.cardReceive ? textColor : null,
             fit: BoxFit.fill,
           ),
           const SizedBox(height: 10),
@@ -57,7 +56,7 @@ class ConfirmDialog extends StatelessWidget {
             title,
             style: Theme.of(context)
                 .textTheme
-                .defaultDialogTitle
+                .headlineMedium!
                 .copyWith(color: textColor),
             textAlign: TextAlign.center,
           ),
@@ -67,7 +66,7 @@ class ConfirmDialog extends StatelessWidget {
               subtitle!,
               style: Theme.of(context)
                   .textTheme
-                  .defaultDialogSubtitle
+                  .titleLarge!
                   .copyWith(color: textColor),
               textAlign: TextAlign.center,
             ),
@@ -82,11 +81,6 @@ class ConfirmDialog extends StatelessWidget {
                     text: no ?? l10n.no,
                     verticalSpacing: 14,
                     fontSize: 15,
-                    borderColor: Theme.of(context)
-                        .colorScheme
-                        .defualtDialogCancelButtonBorderColor,
-                    backgroundColor: background,
-                    borderRadius: Sizes.smallRadius,
                     elevation: 0,
                     textColor: Theme.of(context)
                         .colorScheme
@@ -102,8 +96,6 @@ class ConfirmDialog extends StatelessWidget {
                 child: MyElevatedButton(
                   text: yes ?? l10n.yes,
                   verticalSpacing: 14,
-                  backgroundColor: color,
-                  borderRadius: Sizes.smallRadius,
                   fontSize: 15,
                   elevation: 0,
                   onPressed: () {

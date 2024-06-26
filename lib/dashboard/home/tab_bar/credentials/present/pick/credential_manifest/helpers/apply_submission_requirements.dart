@@ -3,6 +3,8 @@ import 'package:credential_manifest/credential_manifest.dart';
 PresentationDefinition applySubmissionRequirements(
   PresentationDefinition presentationDefinition,
 ) {
+  PresentationDefinition newPresentationDefinition = presentationDefinition;
+
   if (presentationDefinition.submissionRequirements != null) {
     /// https://identity.foundation/presentation-exchange/#presentation-definition-extensions
     final inputDescriptors = List.of(presentationDefinition.inputDescriptors);
@@ -47,10 +49,10 @@ PresentationDefinition applySubmissionRequirements(
       }
     }
 
-    presentationDefinition = PresentationDefinition.copyWithData(
+    newPresentationDefinition = PresentationDefinition.copyWithData(
       oldPresentationDefinition: presentationDefinition,
       inputDescriptors: newInputDescriptor,
     );
   }
-  return presentationDefinition;
+  return newPresentationDefinition;
 }

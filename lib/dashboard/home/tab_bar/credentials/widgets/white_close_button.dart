@@ -16,7 +16,7 @@ class WhiteCloseButton extends StatelessWidget {
         padding: const EdgeInsets.all(1.5),
         child: Icon(
           Icons.close,
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.surface,
           size: Sizes.icon,
         ),
       ),

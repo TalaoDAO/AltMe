@@ -167,7 +167,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                     ? Icons.check_box
                                     : Icons.check_box_outline_blank,
                                 size: 25,
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                           ),
@@ -181,7 +181,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
             navigation: SafeArea(
               child: Container(
                 padding: const EdgeInsets.all(16),
-                child: MyGradientButton(
+                child: MyElevatedButton(
                   onPressed: state.isEmpty
                       ? null
                       : () async {

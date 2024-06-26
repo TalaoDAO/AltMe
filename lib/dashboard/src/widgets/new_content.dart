@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 
 class NewContent extends StatelessWidget {
@@ -19,7 +19,7 @@ class NewContent extends StatelessWidget {
           ),
           child: Text(
             version,
-            style: Theme.of(context).textTheme.newVersionTitle,
+            style: Theme.of(context).textTheme.headlineSmall,
             textAlign: TextAlign.center,
           ),
         ),
@@ -47,11 +47,8 @@ class NewContent extends StatelessWidget {
                     child: Text(
                       features[index],
                       textAlign: TextAlign.left,
-                      style: Theme.of(context)
-                          .textTheme
-                          .defaultDialogBody
-                          .copyWith(
-                            color: background,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Colors.white,
                           ),
                     ),
                   ),

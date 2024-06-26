@@ -1,4 +1,3 @@
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class MyOutlinedButton extends StatelessWidget {
@@ -10,7 +9,7 @@ class MyOutlinedButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.borderColor,
-    this.borderRadius = 18,
+    this.borderRadius = 8,
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,
@@ -24,7 +23,7 @@ class MyOutlinedButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.borderColor,
-    this.borderRadius = 50,
+    this.borderRadius = 8,
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,
@@ -57,15 +56,28 @@ class MyOutlinedButton extends StatelessWidget {
                 onPressed: onPressed,
               ),
               onPressed: onPressed,
-              child: OutlinedButtonText(
-                text: text,
-                fontSize: fontSize,
-                textColor: textColor,
-                onPressed: onPressed,
+              child: Text(
+                text.toUpperCase(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: onPressed == null
+                          ? Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.12)
+                          : textColor ??
+                              Theme.of(context).colorScheme.secondaryContainer,
+                    ),
               ),
             )
           : OutlinedButton.icon(
-              icon: icon!,
+              icon: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  textColor ?? Theme.of(context).colorScheme.secondaryContainer,
+                  BlendMode.srcIn,
+                ),
+                child: icon,
+              ),
               style: outlinedStyleFrom(
                 borderRadius: borderRadius,
                 context: context,
@@ -76,11 +88,18 @@ class MyOutlinedButton extends StatelessWidget {
                 onPressed: onPressed,
               ),
               onPressed: onPressed,
-              label: OutlinedButtonText(
-                text: text,
-                fontSize: fontSize,
-                textColor: textColor,
-                onPressed: onPressed,
+              label: Text(
+                text.toUpperCase(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: onPressed == null
+                          ? Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.12)
+                          : textColor ??
+                              Theme.of(context).colorScheme.secondaryContainer,
+                    ),
               ),
             ),
     );
@@ -99,12 +118,11 @@ ButtonStyle outlinedStyleFrom({
   return OutlinedButton.styleFrom(
     padding: EdgeInsets.symmetric(vertical: verticalSpacing),
     elevation: elevation,
-    backgroundColor:
-        backgroundColor ?? Theme.of(context).colorScheme.background,
+    backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.surface,
     side: BorderSide(
       color: onPressed == null
-          ? Theme.of(context).colorScheme.disabledBgColor
-          : borderColor ?? Theme.of(context).colorScheme.primary,
+          ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
+          : borderColor ?? Theme.of(context).colorScheme.secondaryContainer,
       width: 2,
     ),
     shape: RoundedRectangleBorder(
@@ -133,8 +151,8 @@ class OutlinedButtonText extends StatelessWidget {
       text.toUpperCase(),
       style: TextStyle(
         color: onPressed == null
-            ? Theme.of(context).colorScheme.disabledBgColor
-            : textColor ?? Theme.of(context).colorScheme.onOutlineButton,
+            ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
+            : textColor ?? Theme.of(context).colorScheme.secondaryContainer,
         fontSize: fontSize,
         fontWeight: FontWeight.w700,
       ),

@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/onboarding.dart';
+import 'package:altme/onboarding/widgets/m_stepper.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +18,6 @@ class EnterNewPinCodePage extends StatelessWidget {
   static Route<dynamic> route({
     required VoidCallback isValidCallback,
     required bool isFromOnboarding,
-    bool restrictToBack = true,
   }) =>
       MaterialPageRoute<void>(
         builder: (_) => EnterNewPinCodePage(
@@ -32,8 +30,7 @@ class EnterNewPinCodePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          PinCodeViewCubit(profileCubit: context.read<ProfileCubit>()),
+      create: (context) => PinCodeViewCubit(),
       child: EnterNewPinCodeView(
         isValidCallback: isValidCallback,
         isFromOnboarding: isFromOnboarding,
@@ -76,10 +73,9 @@ class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
       scrollView: false,
       titleLeading: const BackLeadingButton(),
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: PinCodeWidget(
         title: l10n.enterNewPinCode,
-        passwordEnteredCallback: _onPasscodeEntered,
         header: widget.isFromOnboarding
             ? MStepper(
                 step: 1,
@@ -95,15 +91,17 @@ class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
           style: Theme.of(context).textTheme.labelLarge,
         ),
         cancelCallback: _onPasscodeCancelled,
+        isNewCode: true,
+        isValidCallback: _isValidCallback,
       ),
     );
   }
 
-  void _onPasscodeEntered(String enteredPasscode) {
+  void _isValidCallback() {
     Navigator.pushReplacement<dynamic, dynamic>(
       context,
       ConfirmPinCodePage.route(
-        storedPassword: enteredPasscode,
+        storedPassword: context.read<PinCodeViewCubit>().state.enteredPasscode,
         isValidCallback: widget.isValidCallback,
         isFromOnboarding: widget.isFromOnboarding,
       ),
