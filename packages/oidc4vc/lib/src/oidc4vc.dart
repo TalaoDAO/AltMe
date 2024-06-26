@@ -623,6 +623,8 @@ class OIDC4VC {
     return (tokenResponse, accessToken, cnonce, authorizationDetails);
   }
 
+  int count = 0;
+
   Future<dynamic> getSingleCredential({
     required IssuerTokenParameters issuerTokenParameters,
     required OpenIdConfiguration openIdConfiguration,
@@ -644,44 +646,87 @@ class OIDC4VC {
     required String? nonce,
     required Dio dio,
   }) async {
-    final credentialData = await buildCredentialData(
-      nonce: nonce,
-      issuerTokenParameters: issuerTokenParameters,
-      openIdConfiguration: openIdConfiguration,
-      credentialType: credentialType,
-      types: types,
-      format: format,
-      credentialIdentifier: credentialIdentifier,
-      cryptoHolderBinding: cryptoHolderBinding,
-      oidc4vciDraftType: oidc4vciDraftType,
-      credentialDefinition: credentialDefinition,
-      clientAuthentication: clientAuthentication,
-      vct: vct,
-      proofType: proofType,
-      did: did,
-      issuer: issuer,
-      kid: kid,
-      privateKey: privateKey,
-    );
+    try {
+      final credentialData = await buildCredentialData(
+        nonce: nonce,
+        issuerTokenParameters: issuerTokenParameters,
+        openIdConfiguration: openIdConfiguration,
+        credentialType: credentialType,
+        types: types,
+        format: format,
+        credentialIdentifier: credentialIdentifier,
+        cryptoHolderBinding: cryptoHolderBinding,
+        oidc4vciDraftType: oidc4vciDraftType,
+        credentialDefinition: credentialDefinition,
+        clientAuthentication: clientAuthentication,
+        vct: vct,
+        proofType: proofType,
+        did: did,
+        issuer: issuer,
+        kid: kid,
+        privateKey: privateKey,
+      );
 
-    /// sign proof
+      /// sign proof
 
-    final credentialEndpoint = readCredentialEndpoint(openIdConfiguration);
+      final credentialEndpoint = readCredentialEndpoint(openIdConfiguration);
 
-    final credentialHeaders = <String, dynamic>{
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
+      final credentialHeaders = <String, dynamic>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      };
 
-    final dynamic credentialResponse = await dio.post<dynamic>(
-      credentialEndpoint,
-      options: Options(headers: credentialHeaders),
-      data: credentialData,
-    );
+      final dynamic credentialResponse = await dio.post<dynamic>(
+        credentialEndpoint,
+        options: Options(headers: credentialHeaders),
+        data: credentialData,
+      );
 
-    final credentialResponseData = credentialResponse.data;
+      final credentialResponseData = credentialResponse.data;
 
-    return credentialResponseData;
+      return credentialResponseData;
+    } catch (e) {
+      if (count == 1) {
+        count = 0;
+        rethrow;
+      }
+
+      if (e is DioException &&
+          e.response != null &&
+          e.response!.data is Map<String, dynamic> &&
+          (e.response!.data as Map<String, dynamic>).containsKey('c_nonce')) {
+        count++;
+
+        final nonce = e.response!.data['c_nonce'].toString();
+
+        final credentialResponseDataValue = await getSingleCredential(
+          issuerTokenParameters: issuerTokenParameters,
+          openIdConfiguration: openIdConfiguration,
+          credentialType: credentialType,
+          types: types,
+          format: format,
+          cryptoHolderBinding: cryptoHolderBinding,
+          oidc4vciDraftType: oidc4vciDraftType,
+          credentialDefinition: credentialDefinition,
+          clientAuthentication: clientAuthentication,
+          vct: vct,
+          credentialIdentifier: null,
+          proofType: proofType,
+          did: did,
+          issuer: issuer,
+          kid: kid,
+          privateKey: privateKey,
+          accessToken: accessToken,
+          nonce: nonce,
+          dio: dio,
+        );
+        count = 0;
+        return credentialResponseDataValue;
+      } else {
+        count = 0;
+        rethrow;
+      }
+    }
   }
 
   /// get Deferred credential from url
