@@ -4,7 +4,6 @@ import 'package:altme/flavor/flavor.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:secure_storage/secure_storage.dart';
