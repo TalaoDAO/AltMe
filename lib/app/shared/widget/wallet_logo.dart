@@ -43,43 +43,66 @@ class WalletLogo extends StatelessWidget {
     return Column(
       children: [
         Center(
-          child: ColorFiltered(
-            colorFilter: ColorFilter.mode(
-              profileModel.profileType == ProfileType.enterprise
-                  ? Colors.transparent
-                  : Theme.of(context).colorScheme.primaryContainer,
-              BlendMode.srcIn,
-            ),
-            child: SizedBox(
+          child: profileModel.profileType != ProfileType.enterprise
+              ? ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.primaryContainer,
+                    BlendMode.srcIn,
+                  ),
+                  child: Logo(
+                    width: width,
+                    height: height,
+                    profileModel: profileModel,
+                    image: image,
+                  ),
+                )
+              : Logo(
+                  width: width,
+                  height: height,
+                  profileModel: profileModel,
+                  image: image,
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+class Logo extends StatelessWidget {
+  const Logo({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.profileModel,
+    required this.image,
+  });
+
+  final double? width;
+  final double? height;
+  final ProfileModel profileModel;
+  final String image;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: profileModel.profileType == ProfileType.enterprise
+          ? CachedImageFromNetwork(
+              image,
+              fit: BoxFit.contain,
+              width: width,
+              bgColor: Colors.transparent,
+              height: height,
+              errorMessage: '',
+              showLoading: false,
+            )
+          : Image.asset(
+              image,
+              fit: BoxFit.contain,
               width: width,
               height: height,
-              child: profileModel.profileType == ProfileType.enterprise
-                  ? CachedImageFromNetwork(
-                      image,
-                      fit: BoxFit.contain,
-                      width: width,
-                      bgColor: Colors.transparent,
-                      height: height,
-                      errorMessage: '',
-                      showLoading: false,
-                    )
-                  : Image.asset(
-                      image,
-                      fit: BoxFit.contain,
-                      width: width,
-                      height: height,
-                    ),
             ),
-          ),
-        ),
-        // if (showPoweredBy &&
-        //     profileModel.profileType == ProfileType.enterprise) ...[
-        //   if (profileModel.profileType.showSponseredBy) ...[
-        //     const SizedBox(height: 5),
-        //     const Center(child: PoweredByText()),
-        //   ],
-        // ],
-      ],
     );
   }
 }
