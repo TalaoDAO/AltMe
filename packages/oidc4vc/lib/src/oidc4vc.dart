@@ -146,11 +146,12 @@ class OIDC4VC {
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required VCFormatType vcFormatType,
-    required String? clientAssertion,
     required bool secureAuthorizedFlow,
     required Dio dio,
     required dynamic credentialOfferJson,
     SecureStorageProvider? secureStorage,
+    String? oAuthClientAttestation,
+    String? oAuthClientAttestationPop,
   }) async {
     try {
       final openIdConfiguration = await getOpenIdConfig(
@@ -185,7 +186,8 @@ class OIDC4VC {
         clientAuthentication: clientAuthentication,
         oidc4vciDraftType: oidc4vciDraftType,
         vcFormatType: vcFormatType,
-        clientAssertion: clientAssertion,
+        oAuthClientAttestation: oAuthClientAttestation,
+        oAuthClientAttestationPop: oAuthClientAttestationPop,
         secureAuthorizedFlow: secureAuthorizedFlow,
       );
 
@@ -216,8 +218,9 @@ class OIDC4VC {
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required VCFormatType vcFormatType,
-    required String? clientAssertion,
     required bool secureAuthorizedFlow,
+    String? oAuthClientAttestation,
+    String? oAuthClientAttestationPop,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -362,10 +365,8 @@ class OIDC4VC {
         myRequest['client_id'] = clientId;
         if (secureAuthorizedFlow ||
             openIdConfiguration.requirePushedAuthorizationRequests) {
-          myRequest['client_assertion'] = clientAssertion;
-          myRequest['client_assertion_type'] =
-              // ignore: lines_longer_than_80_chars
-              'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
+          myRequest['OAuth-Client-Attestation'] = oAuthClientAttestation;
+          myRequest['OAuth-Client-Attestation-PoP'] = oAuthClientAttestationPop;
         }
     }
 
@@ -579,7 +580,8 @@ class OIDC4VC {
     String? code,
     String? codeVerifier,
     String? authorization,
-    String? clientAssertion,
+    String? oAuthClientAttestation,
+    String? oAuthClientAttestationPop,
   }) async {
     final tokenEndPoint = await readTokenEndPoint(
       openIdConfiguration: openIdConfiguration,
@@ -602,7 +604,8 @@ class OIDC4VC {
       clientSecret: clientSecret,
       authorization: authorization,
       redirectUri: redirectUri,
-      clientAssertion: clientAssertion,
+      oAuthClientAttestation: oAuthClientAttestation,
+      oAuthClientAttestationPop: oAuthClientAttestationPop,
     );
 
     tokenResponse = await getToken(
@@ -754,7 +757,8 @@ class OIDC4VC {
     String? clientId,
     String? clientSecret,
     String? authorization,
-    String? clientAssertion,
+    String? oAuthClientAttestation,
+    String? oAuthClientAttestationPop,
   }) {
     late Map<String, dynamic> tokenData;
 
@@ -779,10 +783,9 @@ class OIDC4VC {
       if (clientSecret != null) tokenData['client_secret'] = clientSecret;
     }
 
-    if (clientAssertion != null) {
-      tokenData['client_assertion_type'] =
-          'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
-      tokenData['client_assertion'] = clientAssertion;
+    if (oAuthClientAttestation != null && oAuthClientAttestationPop != null) {
+      tokenData['OAuth-Client-Attestation'] = oAuthClientAttestation;
+      tokenData['OAuth-Client-Attestation-PoP'] = oAuthClientAttestationPop;
       tokenData['client_id'] = clientId;
     }
 

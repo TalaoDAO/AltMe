@@ -1568,7 +1568,12 @@ bool supportCryptoCredential(ProfileModel profileModel) {
   return supportAssociatedCredential;
 }
 
-Future<(String?, String?, String?, String?)> getClientDetails({
+// clientId,
+// clientSecret,
+// authorization,
+// oAuthClientAttestation,
+// oAuthClientAttestationPop
+Future<(String?, String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
   required bool isEBSIV3,
   required String issuer,
@@ -1577,7 +1582,8 @@ Future<(String?, String?, String?, String?)> getClientDetails({
     String? clientId;
     String? clientSecret;
     String? authorization;
-    String? clientAssertion;
+    String? oAuthClientAttestation;
+    String? oAuthClientAttestationPop;
 
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
@@ -1671,12 +1677,19 @@ Future<(String?, String?, String?, String?)> getClientDetails({
           ignoreProofHeaderType: true,
         );
 
-        clientAssertion = '$walletAttestationData~$jwtProofOfPossession';
+        oAuthClientAttestation = walletAttestationData;
+        oAuthClientAttestationPop = jwtProofOfPossession;
     }
 
-    return (clientId, clientSecret, authorization, clientAssertion);
+    return (
+      clientId,
+      clientSecret,
+      authorization,
+      oAuthClientAttestation,
+      oAuthClientAttestationPop
+    );
   } catch (e) {
-    return (null, null, null, null);
+    return (null, null, null, null, null);
   }
 }
 
