@@ -22,7 +22,8 @@ Future<void> getAuthorizationUriForIssuer({
   required ClientAuthentication clientAuthentication,
   required OIDC4VCIDraftType oidc4vciDraftType,
   required VCFormatType vcFormatType,
-  required String? clientAssertion,
+  String? oAuthClientAttestation,
+  String? oAuthClientAttestationPop,
   required bool secureAuthorizedFlow,
   required DioClient client,
 }) async {
@@ -64,7 +65,8 @@ Future<void> getAuthorizationUriForIssuer({
       data['client_id'] = clientId!;
     case ClientAuthentication.clientSecretJwt:
       data['client_id'] = clientId!;
-      data['client_assertion'] = clientAssertion!;
+      data['oAuthClientAttestation'] = oAuthClientAttestation!;
+      data['oAuthClientAttestationPop'] = oAuthClientAttestationPop!;
   }
 
   final jwt = JWT(data);
@@ -96,7 +98,8 @@ Future<void> getAuthorizationUriForIssuer({
     clientAuthentication: clientAuthentication,
     oidc4vciDraftType: oidc4vciDraftType,
     vcFormatType: vcFormatType,
-    clientAssertion: clientAssertion,
+    oAuthClientAttestation: oAuthClientAttestation,
+    oAuthClientAttestationPop: oAuthClientAttestationPop,
     secureAuthorizedFlow: secureAuthorizedFlow,
     credentialOfferJson: credentialOfferJson,
     dio: client.dio,
@@ -108,7 +111,10 @@ Future<void> getAuthorizationUriForIssuer({
   if (requirePushedAuthorizationRequests || secureAuthorizedFlow) {
     final headers = <String, dynamic>{
       'Content-Type': 'application/x-www-form-urlencoded',
+      'OAuth-Client-Attestation': oAuthClientAttestation,
+      'OAuth-Client-Attestation-PoP': oAuthClientAttestationPop,
     };
+
     final parUrl = openIdConfiguration.pushedAuthorizationRequestEndpoint ??
         '$authorizationEndpoint/par';
 
