@@ -57,6 +57,7 @@ class WalletSecurityView extends StatelessWidget {
                   );
                 },
               ),
+              const SizedBox(height: Sizes.spaceSmall),
               DrawerItem(
                 title: l10n.showWalletRecoveryPhrase,
                 subtitle: l10n.showWalletRecoveryPhraseSubtitle,
@@ -84,6 +85,7 @@ class WalletSecurityView extends StatelessWidget {
                   }
                 },
               ),
+              const SizedBox(height: Sizes.spaceSmall),
               if (context.read<ProfileCubit>().state.model.profileType ==
                   ProfileType.custom)
                 DrawerItem(

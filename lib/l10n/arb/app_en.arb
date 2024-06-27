@@ -757,7 +757,7 @@
   "skip": "Skip",
   "userNotFitErrorMessage": "You are unable to get this card because some conditions are not fulfilled.",
   "youAreMissing": "You are missing",
-  "credentialsRequestedBy": "credentials requested by",
+  "credentialsRequestedBy": "credentials",
   "transactionIsLikelyToFail": "Transaction is likely to fail.",
   "buy": "Buy",
   "thisFeatureIsNotSupportedYetForFantom": "This feature is not supported yet for Fantom.",

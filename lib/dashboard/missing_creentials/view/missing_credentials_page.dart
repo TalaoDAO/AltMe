@@ -62,16 +62,6 @@ class MissingCredentialsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    String issuerName = '';
-
-    if (credentialManifest != null) {
-      issuerName = credentialManifest!.issuedBy?.name ?? '';
-    }
-
-    if (query != null) {
-      // TOOD(bibash): Is there issuer name?
-      issuerName = '';
-    }
 
     return BlocBuilder<MissingCredentialsCubit, MissingCredentialsState>(
       builder: (context, state) {
@@ -84,7 +74,7 @@ class MissingCredentialsView extends StatelessWidget {
           body: Column(
             children: [
               Text(
-                '''${l10n.youAreMissing} ${state.dummyCredentials.length} ${l10n.credentialsRequestedBy} $issuerName.''',
+                '''${l10n.youAreMissing} ${state.dummyCredentials.length} ${l10n.credentialsRequestedBy}''',
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),

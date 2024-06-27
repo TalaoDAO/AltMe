@@ -117,12 +117,14 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          Icons.account_balance_wallet_rounded,
-                          size: Sizes.icon2x,
-                          color: Theme.of(context).colorScheme.inversePrimary,
+                        SizedBox(
+                          width: 48,
+                          child: Icon(
+                            Icons.account_balance_wallet_rounded,
+                            size: Sizes.icon2x,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
-                        const SizedBox(width: Sizes.spaceXSmall),
                         Text(
                           l10n.selectAccount,
                           style: Theme.of(context).textTheme.titleMedium,

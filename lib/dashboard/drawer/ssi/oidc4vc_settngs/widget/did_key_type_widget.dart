@@ -78,9 +78,7 @@ class DidKeyTypeWidget extends StatelessWidget {
                     ),
                     title: Text(
                       didKeyType.formattedString,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     trailing: Icon(
                       state.model.profileSetting.selfSovereignIdentityOptions

@@ -46,6 +46,7 @@ class BlockchainSettingsView extends StatelessWidget {
               Navigator.of(context).push<void>(ManageAccountsPage.route());
             },
           ),
+          const SizedBox(height: Sizes.spaceSmall),
           DrawerItem(
             title: l10n.manageConnectedApps,
             onTap: () {
@@ -60,6 +61,7 @@ class BlockchainSettingsView extends StatelessWidget {
               );
             },
           ),
+          const SizedBox(height: Sizes.spaceSmall),
           DrawerItem(
             title: l10n.blockchainNetwork,
             onTap: () async {

@@ -25,9 +25,6 @@ class AppTheme {
       ),
       tabBarTheme: const TabBarTheme(dividerColor: Colors.transparent),
       textTheme: const TextTheme(
-        headlineSmall: TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
         titleLarge: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.normal,

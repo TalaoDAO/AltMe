@@ -49,11 +49,17 @@ class SSIView extends StatelessWidget {
           ),
           const DrawerLogo(),
           if (displayManageDecentralizedId)
-            DrawerItem(
-              title: l10n.manageDecentralizedID,
-              onTap: () {
-                Navigator.of(context).push<void>(DidMenu.route());
-              },
+            Column(
+              children: [
+                DrawerItem(
+                  title: l10n.manageDecentralizedID,
+                  onTap: () {
+                    Navigator.of(context).push<void>(DidMenu.route());
+                  },
+                ),
+                const SizedBox(height: Sizes.spaceSmall),
+
+              ],
             ),
           DrawerItem(
             title: l10n.backup,
@@ -61,18 +67,21 @@ class SSIView extends StatelessWidget {
               await Navigator.of(context).push<void>(BackupMenu.route());
             },
           ),
+          const SizedBox(height: Sizes.spaceSmall),
           DrawerItem(
             title: l10n.restore,
             onTap: () async {
               await Navigator.of(context).push<void>(RestoreMenu.route());
             },
           ),
+          const SizedBox(height: Sizes.spaceSmall),
           DrawerItem(
             title: l10n.searchCredentials,
             onTap: () {
               Navigator.of(context).push<void>(SearchPage.route());
             },
           ),
+          const SizedBox(height: Sizes.spaceSmall),
           if (context.read<ProfileCubit>().state.model.profileType ==
               ProfileType.custom) ...[
             DrawerItem(
@@ -81,6 +90,7 @@ class SSIView extends StatelessWidget {
                 Navigator.of(context).push<void>(Oidc4vcSettingMenu.route());
               },
             ),
+            const SizedBox(height: Sizes.spaceSmall),
             DrawerItem(
               title: l10n.trustFramework,
               onTap: () async {

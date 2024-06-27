@@ -71,6 +71,24 @@ class StarterView extends StatelessWidget {
                         const Spacer(flex: 1),
                         SubTitle(profileModel: state.model),
                         const Spacer(flex: 4),
+                        MyOutlinedButton(
+                          text: l10n.importAccount,
+                          onPressed: () async {
+                            await profileCubit.setWalletType(
+                              walletType: WalletType.personal,
+                            );
+                            await profileCubit.setProfileSetting(
+                              profileSetting: ProfileSetting.initial(),
+                              profileType: ProfileType.defaultOne,
+                            );
+                            await Navigator.of(context).push<void>(
+                              ProtectWalletPage.route(
+                                routeType: WalletRouteType.import,
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 10),
                         MyElevatedButton(
                           text: l10n.createAccount,
                           verticalSpacing: 15,
@@ -91,27 +109,9 @@ class StarterView extends StatelessWidget {
                             );
                           },
                         ),
-                        const Spacer(flex: 1),
-                        MyOutlinedButton(
-                          text: l10n.importAccount,
-                          onPressed: () async {
-                            await profileCubit.setWalletType(
-                              walletType: WalletType.personal,
-                            );
-                            await profileCubit.setProfileSetting(
-                              profileSetting: ProfileSetting.initial(),
-                              profileType: ProfileType.defaultOne,
-                            );
-                            await Navigator.of(context).push<void>(
-                              ProtectWalletPage.route(
-                                routeType: WalletRouteType.import,
-                              ),
-                            );
-                          },
-                        ),
-                        const Spacer(flex: 1),
+                        const SizedBox(height: 10),
                         const AppVersionDrawer(isShortForm: true),
-                        const Spacer(flex: 1),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),

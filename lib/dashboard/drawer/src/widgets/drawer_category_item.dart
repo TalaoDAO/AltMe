@@ -9,23 +9,21 @@ class DrawerCategoryItem extends StatelessWidget {
     this.subTitle,
     this.onClick,
     this.trailing,
-    this.padding = const EdgeInsets.all(Sizes.spaceSmall),
   });
 
   final String title;
   final String? subTitle;
   final VoidCallback? onClick;
   final Widget? trailing;
-  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onClick,
       child: Container(
-        padding: padding,
+        padding: const EdgeInsets.all(Sizes.spaceSmall),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondaryContainer,
+          color: Theme.of(context).colorScheme.surfaceContainer,
           borderRadius: const BorderRadius.all(
             Radius.circular(Sizes.normalRadius),
           ),

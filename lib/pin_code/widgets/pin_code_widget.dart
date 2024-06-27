@@ -291,10 +291,10 @@ class PinCodeErrorMessage extends StatelessWidget {
 
     return BlocBuilder<PinCodeViewCubit, PinCodeViewState>(
       builder: (context, state) {
-        Widget errorWidget = const SizedBox.shrink();
+        Widget errorWidget = const PinCodeErrorText('');
         switch (state.pinCodeError) {
           case PinCodeErrors.none:
-            errorWidget = const SizedBox.shrink();
+            errorWidget = const PinCodeErrorText('');
           case PinCodeErrors.errorSerie:
             errorWidget = PinCodeErrorText(l10n.pincodeSerie);
           case PinCodeErrors.errorSequence:

@@ -48,6 +48,7 @@ class WalletSettingsMenuView extends StatelessWidget {
               await Navigator.of(context).push<void>(LanguageSettings.route());
             },
           ),
+          const SizedBox(height: Sizes.spaceSmall),
           DrawerItem(
             title: l10n.themeSettings,
             subtitle: l10n.themeSettingsDescription,

@@ -23,10 +23,9 @@ class DrawerItem extends StatelessWidget {
     return TransparentInkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(Sizes.spaceNormal),
-        margin: const EdgeInsets.all(Sizes.spaceXSmall),
+        padding: const EdgeInsets.all(Sizes.spaceSmall),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondaryContainer,
+          color: Theme.of(context).colorScheme.surfaceContainer,
           borderRadius: const BorderRadius.all(
             Radius.circular(
               Sizes.normalRadius,
@@ -45,30 +44,29 @@ class DrawerItem extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             color: isDisabled
                                 ? Theme.of(context)
                                     .colorScheme
                                     .onSurface
                                     .withOpacity(0.6)
                                 : null,
+                            fontWeight: FontWeight.bold,
                           ),
                     ),
                     if (subtitle != null) ...[
-                      const SizedBox(height: 10),
+                      const SizedBox(height: Sizes.space2XSmall),
                       Text(
                         subtitle!,
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: isDisabled
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .onSurface
-                                          .withOpacity(0.6)
-                                      : null,
-                                ),
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: isDisabled
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.6)
+                                  : null,
+                            ),
                       ),
-                      const SizedBox(height: 10),
                     ],
                   ],
                 ),

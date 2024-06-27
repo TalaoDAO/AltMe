@@ -30,8 +30,8 @@ class MyTab extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Sizes.normalRadius),
           color: isSelected
-              ? Theme.of(context).colorScheme.primaryFixedDim
-              : Theme.of(context).colorScheme.primaryContainer,
+              ? Theme.of(context).colorScheme.primaryContainer
+              : Theme.of(context).colorScheme.surfaceContainer,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -40,7 +40,7 @@ class MyTab extends StatelessWidget {
             if (isSelected)
               ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  Theme.of(context).colorScheme.primaryFixedDim,
+                  Theme.of(context).colorScheme.primaryContainer,
                   BlendMode.color,
                 ),
                 child: Image.asset(icon, height: Sizes.icon),
@@ -55,8 +55,8 @@ class MyTab extends StatelessWidget {
               maxLines: 1,
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     color: isSelected
-                        ? Theme.of(context).colorScheme.onPrimaryFixedVariant
-                        : Theme.of(context).colorScheme.onPrimaryContainer,
+                        ? Theme.of(context).colorScheme.onPrimaryContainer
+                        : Theme.of(context).colorScheme.inverseSurface,
                   ),
               overflow: TextOverflow.fade,
             ),

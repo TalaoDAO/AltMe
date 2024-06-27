@@ -8,7 +8,6 @@ class CustomListTileCard extends StatelessWidget {
     required this.title,
     required this.subTitle,
     required this.imageAssetPath,
-    this.recommended = false,
     this.onTap,
   });
 
@@ -16,7 +15,6 @@ class CustomListTileCard extends StatelessWidget {
   final String subTitle;
   final String imageAssetPath;
   final VoidCallback? onTap;
-  final bool recommended;
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +25,8 @@ class CustomListTileCard extends StatelessWidget {
           Radius.circular(Sizes.normalRadius),
         ),
       ),
-      contentPadding: const EdgeInsets.all(Sizes.spaceNormal),
-      tileColor: Theme.of(context).colorScheme.secondaryContainer,
+      contentPadding: const EdgeInsets.all(Sizes.spaceSmall),
+      tileColor: Theme.of(context).colorScheme.surfaceContainer,
       title: Row(
         children: [
           Expanded(
@@ -40,14 +38,6 @@ class CustomListTileCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          if (recommended)
-            const Icon(
-              Icons.thumb_up,
-              // size: 38,
-              color: Colors.white,
-            )
-          else
-            const SizedBox.shrink(),
         ],
       ),
       subtitle: Text(
@@ -59,7 +49,6 @@ class CustomListTileCard extends StatelessWidget {
         imageAssetPath,
         width: Sizes.icon5x,
         height: Sizes.icon5x,
-        fit: BoxFit.fitHeight,
       ),
     );
   }

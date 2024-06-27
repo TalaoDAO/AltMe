@@ -55,18 +55,6 @@ class LanguageSelectorWidget extends StatelessWidget {
 
                       return Column(
                         children: [
-                          if (index != 0)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Divider(
-                                height: 0,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.12),
-                              ),
-                            ),
                           ListTile(
                             onTap: () async {
                               await context
@@ -80,20 +68,27 @@ class LanguageSelectorWidget extends StatelessWidget {
                               ),
                             ),
                             title: Text(
-                              languageType.getTitle(
-                                l10n: l10n,
-                                name: languageType.name,
-                              ),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                            ),
+                                languageType.getTitle(
+                                  l10n: l10n,
+                                  name: languageType.name,
+                                ),
+                                style: Theme.of(context).textTheme.bodyLarge),
                             trailing: Icon(
                               state.languageType == languageType
                                   ? Icons.radio_button_checked
                                   : Icons.radio_button_unchecked,
                               size: Sizes.icon2x,
                               color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Divider(
+                              height: 0,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.12),
                             ),
                           ),
                         ],
