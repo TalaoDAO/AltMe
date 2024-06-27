@@ -19,6 +19,7 @@ import 'package:key_generator/key_generator.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:uuid/uuid.dart';
 import 'package:x509/x509.dart' as x509;
 import 'package:x509/x509.dart';
 
@@ -1669,6 +1670,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           'aud': issuer,
           'nbf': nbf,
           'exp': nbf + 60,
+          'jti': const Uuid().v4(),
         };
 
         final jwtProofOfPossession = profileCubit.oidc4vc.generateToken(

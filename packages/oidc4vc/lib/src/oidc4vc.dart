@@ -186,8 +186,6 @@ class OIDC4VC {
         clientAuthentication: clientAuthentication,
         oidc4vciDraftType: oidc4vciDraftType,
         vcFormatType: vcFormatType,
-        oAuthClientAttestation: oAuthClientAttestation,
-        oAuthClientAttestationPop: oAuthClientAttestationPop,
         secureAuthorizedFlow: secureAuthorizedFlow,
       );
 
@@ -219,8 +217,6 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required VCFormatType vcFormatType,
     required bool secureAuthorizedFlow,
-    String? oAuthClientAttestation,
-    String? oAuthClientAttestationPop,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -363,11 +359,6 @@ class OIDC4VC {
         myRequest['client_id'] = clientId;
       case ClientAuthentication.clientSecretJwt:
         myRequest['client_id'] = clientId;
-        if (secureAuthorizedFlow ||
-            openIdConfiguration.requirePushedAuthorizationRequests) {
-          myRequest['OAuth-Client-Attestation'] = oAuthClientAttestation;
-          myRequest['OAuth-Client-Attestation-PoP'] = oAuthClientAttestationPop;
-        }
     }
 
     if (scope) {
@@ -613,6 +604,8 @@ class OIDC4VC {
       tokenData: tokenData,
       authorization: authorization,
       dio: dio,
+      oAuthClientAttestation: oAuthClientAttestation,
+      oAuthClientAttestationPop: oAuthClientAttestationPop,
     );
 
     if (tokenResponse.containsKey('c_nonce')) {
@@ -784,8 +777,6 @@ class OIDC4VC {
     }
 
     if (oAuthClientAttestation != null && oAuthClientAttestationPop != null) {
-      tokenData['OAuth-Client-Attestation'] = oAuthClientAttestation;
-      tokenData['OAuth-Client-Attestation-PoP'] = oAuthClientAttestationPop;
       tokenData['client_id'] = clientId;
     }
 
@@ -1418,6 +1409,8 @@ class OIDC4VC {
     required Map<String, dynamic> tokenData,
     required String? authorization,
     required Dio dio,
+    required String? oAuthClientAttestation,
+    required String? oAuthClientAttestationPop,
   }) async {
     /// getting token
     final tokenHeaders = <String, dynamic>{
@@ -1426,6 +1419,11 @@ class OIDC4VC {
 
     if (authorization != null) {
       tokenHeaders['Authorization'] = 'Basic $authorization';
+    }
+
+    if (oAuthClientAttestation != null && oAuthClientAttestationPop != null) {
+      tokenHeaders['OAuth-Client-Attestation'] = oAuthClientAttestation;
+      tokenHeaders['OAuth-Client-Attestation-PoP'] = oAuthClientAttestationPop;
     }
 
     final dynamic tokenResponse = await dio.post<Map<String, dynamic>>(

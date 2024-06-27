@@ -111,7 +111,10 @@ Future<void> getAuthorizationUriForIssuer({
   if (requirePushedAuthorizationRequests || secureAuthorizedFlow) {
     final headers = <String, dynamic>{
       'Content-Type': 'application/x-www-form-urlencoded',
+      'OAuth-Client-Attestation': oAuthClientAttestation,
+      'OAuth-Client-Attestation-PoP': oAuthClientAttestationPop,
     };
+
     final parUrl = openIdConfiguration.pushedAuthorizationRequestEndpoint ??
         '$authorizationEndpoint/par';
 
