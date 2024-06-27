@@ -3,7 +3,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 
 class CongratulationsAccountCreationPage extends StatelessWidget {
@@ -106,7 +105,6 @@ class _CongratulationsAccountCreationViewState
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 WalletLogo(
-                  profileModel: context.read<ProfileCubit>().state.model,
                   height: Sizes.logo2XLarge,
                   width: MediaQuery.of(context).size.shortestSide * 0.5,
                   showPoweredBy: true,

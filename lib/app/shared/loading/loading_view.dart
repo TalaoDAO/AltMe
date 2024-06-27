@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoadingView {
   factory LoadingView() => _shared;
@@ -67,7 +65,6 @@ class LoadingView {
                     children: [
                       const SizedBox(height: 10),
                       WalletLogo(
-                        profileModel: context.read<ProfileCubit>().state.model,
                         height: Sizes.logoNormal,
                         width: MediaQuery.of(context).size.shortestSide * 0.5,
                         showPoweredBy: true,
