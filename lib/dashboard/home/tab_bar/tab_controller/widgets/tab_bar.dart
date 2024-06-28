@@ -38,12 +38,11 @@ class MyTab extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             if (isSelected)
-              ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  Theme.of(context).colorScheme.primaryContainer,
-                  BlendMode.color,
-                ),
-                child: Image.asset(icon, height: Sizes.icon),
+              Image.asset(
+                icon,
+                height: Sizes.icon,
+                colorBlendMode: BlendMode.color,
+                color: Theme.of(context).colorScheme.primaryContainer,
               )
             else
               Image.asset(icon, height: Sizes.icon),
