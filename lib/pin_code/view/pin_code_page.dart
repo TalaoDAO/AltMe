@@ -3,6 +3,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class PinCodePage extends StatelessWidget {
   const PinCodePage({
@@ -36,7 +37,10 @@ class PinCodePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PinCodeViewCubit(totalPermitedLoginAttempt: 3),
+      create: (context) => PinCodeViewCubit(
+        totalPermitedLoginAttempt: 3,
+        secureStorageProvider: getSecureStorage,
+      ),
       child: PinCodeView(
         isValidCallback: isValidCallback,
         restrictToBack: restrictToBack,
@@ -67,16 +71,6 @@ class PinCodeView extends StatefulWidget {
 
 class _PinCodeViewState extends State<PinCodeView> {
   final totalPermitedLoginAttempt = 3;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

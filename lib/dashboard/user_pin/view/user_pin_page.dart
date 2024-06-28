@@ -6,6 +6,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class UserPinPage extends StatelessWidget {
   const UserPinPage({
@@ -37,7 +38,10 @@ class UserPinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PinCodeViewCubit(isUserPin: true),
+      create: (context) => PinCodeViewCubit(
+        isUserPin: true,
+        secureStorageProvider: getSecureStorage,
+      ),
       child: UserPinView(
         onCancel: onCancel,
         onProceed: onProceed,

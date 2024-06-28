@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:bloc/bloc.dart';
@@ -10,12 +8,14 @@ part 'pin_code_view_state.dart';
 
 class PinCodeViewCubit extends Cubit<PinCodeViewState> {
   PinCodeViewCubit({
+    required this.secureStorageProvider,
     this.totalPermitedLoginAttempt = 3,
     this.isUserPin = false,
   }) : super(const PinCodeViewState());
 
   final int totalPermitedLoginAttempt;
   final bool isUserPin;
+  final SecureStorageProvider secureStorageProvider;
 
   void loginAttempt() {
     final loginAttemptCount = state.loginAttemptCount + 1;
@@ -33,10 +33,14 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
   }
 
   void setEnteredPasscode(
-      String enteredPasscode, PinCodeErrors newPinCodeError,) {
+    String enteredPasscode,
+    PinCodeErrors newPinCodeError,
+  ) {
     emit(
       state.copyWith(
-          enteredPasscode: enteredPasscode, pinCodeError: newPinCodeError,),
+        enteredPasscode: enteredPasscode,
+        pinCodeError: newPinCodeError,
+      ),
     );
   }
 
@@ -90,11 +94,11 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
             );
             return;
           }
-          await getSecureStorage.set(SecureStorageKeys.pinCode, passCode);
+          await secureStorageProvider.set(SecureStorageKeys.pinCode, passCode);
         } else {
           if (!isUserPin) {
             final isValid =
-                (await getSecureStorage.get(SecureStorageKeys.pinCode)) ==
+                (await secureStorageProvider.get(SecureStorageKeys.pinCode)) ==
                     passCode;
             if (!isValid) {
               emit(
