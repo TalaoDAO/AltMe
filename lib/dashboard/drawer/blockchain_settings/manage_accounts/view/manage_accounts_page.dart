@@ -114,7 +114,7 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, i) {
                     return Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8),
                       child: ManageAccountsItem(
                         cryptoAccountData: state.cryptoAccount.data[i],
                         listIndex: i,

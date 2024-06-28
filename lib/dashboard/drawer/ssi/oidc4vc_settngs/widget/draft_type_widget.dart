@@ -52,7 +52,7 @@ class DraftTypeWidget extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
-                  const DividerForRadioList()
+                  const DividerForRadioList(),
                 ],
               );
             },
