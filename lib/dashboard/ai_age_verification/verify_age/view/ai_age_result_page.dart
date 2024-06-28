@@ -116,7 +116,6 @@ class SuccessWidget extends StatelessWidget {
       children: [
         const Spacer(),
         WalletLogo(
-          profileModel: context.read<ProfileCubit>().state.model,
           height: Sizes.logo2XLarge,
           width: MediaQuery.of(context).size.shortestSide * 0.5,
           showPoweredBy: true,
@@ -176,7 +175,6 @@ class FailureWidget extends StatelessWidget {
       children: [
         const Spacer(),
         WalletLogo(
-          profileModel: context.read<ProfileCubit>().state.model,
           height: Sizes.logo2XLarge,
           width: MediaQuery.of(context).size.shortestSide * 0.5,
           showPoweredBy: true,

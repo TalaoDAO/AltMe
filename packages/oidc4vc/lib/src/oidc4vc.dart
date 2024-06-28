@@ -146,11 +146,12 @@ class OIDC4VC {
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required VCFormatType vcFormatType,
-    required String? clientAssertion,
     required bool secureAuthorizedFlow,
     required Dio dio,
     required dynamic credentialOfferJson,
     SecureStorageProvider? secureStorage,
+    String? oAuthClientAttestation,
+    String? oAuthClientAttestationPop,
   }) async {
     try {
       final openIdConfiguration = await getOpenIdConfig(
@@ -185,7 +186,6 @@ class OIDC4VC {
         clientAuthentication: clientAuthentication,
         oidc4vciDraftType: oidc4vciDraftType,
         vcFormatType: vcFormatType,
-        clientAssertion: clientAssertion,
         secureAuthorizedFlow: secureAuthorizedFlow,
       );
 
@@ -216,7 +216,6 @@ class OIDC4VC {
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required VCFormatType vcFormatType,
-    required String? clientAssertion,
     required bool secureAuthorizedFlow,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
@@ -360,13 +359,6 @@ class OIDC4VC {
         myRequest['client_id'] = clientId;
       case ClientAuthentication.clientSecretJwt:
         myRequest['client_id'] = clientId;
-        if (secureAuthorizedFlow ||
-            openIdConfiguration.requirePushedAuthorizationRequests) {
-          myRequest['client_assertion'] = clientAssertion;
-          myRequest['client_assertion_type'] =
-              // ignore: lines_longer_than_80_chars
-              'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
-        }
     }
 
     if (scope) {
@@ -579,7 +571,8 @@ class OIDC4VC {
     String? code,
     String? codeVerifier,
     String? authorization,
-    String? clientAssertion,
+    String? oAuthClientAttestation,
+    String? oAuthClientAttestationPop,
   }) async {
     final tokenEndPoint = await readTokenEndPoint(
       openIdConfiguration: openIdConfiguration,
@@ -602,7 +595,8 @@ class OIDC4VC {
       clientSecret: clientSecret,
       authorization: authorization,
       redirectUri: redirectUri,
-      clientAssertion: clientAssertion,
+      oAuthClientAttestation: oAuthClientAttestation,
+      oAuthClientAttestationPop: oAuthClientAttestationPop,
     );
 
     tokenResponse = await getToken(
@@ -610,6 +604,8 @@ class OIDC4VC {
       tokenData: tokenData,
       authorization: authorization,
       dio: dio,
+      oAuthClientAttestation: oAuthClientAttestation,
+      oAuthClientAttestationPop: oAuthClientAttestationPop,
     );
 
     if (tokenResponse.containsKey('c_nonce')) {
@@ -622,6 +618,8 @@ class OIDC4VC {
 
     return (tokenResponse, accessToken, cnonce, authorizationDetails);
   }
+
+  int count = 0;
 
   Future<dynamic> getSingleCredential({
     required IssuerTokenParameters issuerTokenParameters,
@@ -644,44 +642,87 @@ class OIDC4VC {
     required String? nonce,
     required Dio dio,
   }) async {
-    final credentialData = await buildCredentialData(
-      nonce: nonce,
-      issuerTokenParameters: issuerTokenParameters,
-      openIdConfiguration: openIdConfiguration,
-      credentialType: credentialType,
-      types: types,
-      format: format,
-      credentialIdentifier: credentialIdentifier,
-      cryptoHolderBinding: cryptoHolderBinding,
-      oidc4vciDraftType: oidc4vciDraftType,
-      credentialDefinition: credentialDefinition,
-      clientAuthentication: clientAuthentication,
-      vct: vct,
-      proofType: proofType,
-      did: did,
-      issuer: issuer,
-      kid: kid,
-      privateKey: privateKey,
-    );
+    try {
+      final credentialData = await buildCredentialData(
+        nonce: nonce,
+        issuerTokenParameters: issuerTokenParameters,
+        openIdConfiguration: openIdConfiguration,
+        credentialType: credentialType,
+        types: types,
+        format: format,
+        credentialIdentifier: credentialIdentifier,
+        cryptoHolderBinding: cryptoHolderBinding,
+        oidc4vciDraftType: oidc4vciDraftType,
+        credentialDefinition: credentialDefinition,
+        clientAuthentication: clientAuthentication,
+        vct: vct,
+        proofType: proofType,
+        did: did,
+        issuer: issuer,
+        kid: kid,
+        privateKey: privateKey,
+      );
 
-    /// sign proof
+      /// sign proof
 
-    final credentialEndpoint = readCredentialEndpoint(openIdConfiguration);
+      final credentialEndpoint = readCredentialEndpoint(openIdConfiguration);
 
-    final credentialHeaders = <String, dynamic>{
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
+      final credentialHeaders = <String, dynamic>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      };
 
-    final dynamic credentialResponse = await dio.post<dynamic>(
-      credentialEndpoint,
-      options: Options(headers: credentialHeaders),
-      data: credentialData,
-    );
+      final dynamic credentialResponse = await dio.post<dynamic>(
+        credentialEndpoint,
+        options: Options(headers: credentialHeaders),
+        data: credentialData,
+      );
 
-    final credentialResponseData = credentialResponse.data;
+      final credentialResponseData = credentialResponse.data;
 
-    return credentialResponseData;
+      return credentialResponseData;
+    } catch (e) {
+      if (count == 1) {
+        count = 0;
+        rethrow;
+      }
+
+      if (e is DioException &&
+          e.response != null &&
+          e.response!.data is Map<String, dynamic> &&
+          (e.response!.data as Map<String, dynamic>).containsKey('c_nonce')) {
+        count++;
+
+        final nonce = e.response!.data['c_nonce'].toString();
+
+        final credentialResponseDataValue = await getSingleCredential(
+          issuerTokenParameters: issuerTokenParameters,
+          openIdConfiguration: openIdConfiguration,
+          credentialType: credentialType,
+          types: types,
+          format: format,
+          cryptoHolderBinding: cryptoHolderBinding,
+          oidc4vciDraftType: oidc4vciDraftType,
+          credentialDefinition: credentialDefinition,
+          clientAuthentication: clientAuthentication,
+          vct: vct,
+          credentialIdentifier: null,
+          proofType: proofType,
+          did: did,
+          issuer: issuer,
+          kid: kid,
+          privateKey: privateKey,
+          accessToken: accessToken,
+          nonce: nonce,
+          dio: dio,
+        );
+        count = 0;
+        return credentialResponseDataValue;
+      } else {
+        count = 0;
+        rethrow;
+      }
+    }
   }
 
   /// get Deferred credential from url
@@ -709,7 +750,8 @@ class OIDC4VC {
     String? clientId,
     String? clientSecret,
     String? authorization,
-    String? clientAssertion,
+    String? oAuthClientAttestation,
+    String? oAuthClientAttestationPop,
   }) {
     late Map<String, dynamic> tokenData;
 
@@ -734,10 +776,7 @@ class OIDC4VC {
       if (clientSecret != null) tokenData['client_secret'] = clientSecret;
     }
 
-    if (clientAssertion != null) {
-      tokenData['client_assertion_type'] =
-          'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
-      tokenData['client_assertion'] = clientAssertion;
+    if (oAuthClientAttestation != null && oAuthClientAttestationPop != null) {
       tokenData['client_id'] = clientId;
     }
 
@@ -1370,6 +1409,8 @@ class OIDC4VC {
     required Map<String, dynamic> tokenData,
     required String? authorization,
     required Dio dio,
+    required String? oAuthClientAttestation,
+    required String? oAuthClientAttestationPop,
   }) async {
     /// getting token
     final tokenHeaders = <String, dynamic>{
@@ -1378,6 +1419,11 @@ class OIDC4VC {
 
     if (authorization != null) {
       tokenHeaders['Authorization'] = 'Basic $authorization';
+    }
+
+    if (oAuthClientAttestation != null && oAuthClientAttestationPop != null) {
+      tokenHeaders['OAuth-Client-Attestation'] = oAuthClientAttestation;
+      tokenHeaders['OAuth-Client-Attestation-PoP'] = oAuthClientAttestationPop;
     }
 
     final dynamic tokenResponse = await dio.post<Map<String, dynamic>>(

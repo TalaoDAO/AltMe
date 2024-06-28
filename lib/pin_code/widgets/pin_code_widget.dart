@@ -107,10 +107,6 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                   widget.header!
                                 else
                                   WalletLogo(
-                                    profileModel: context
-                                        .read<ProfileCubit>()
-                                        .state
-                                        .model,
                                     height: 90,
                                     width: MediaQuery.of(context)
                                             .size

@@ -62,7 +62,6 @@ class StarterView extends StatelessWidget {
                       children: [
                         const Spacer(flex: 5),
                         WalletLogo(
-                          profileModel: state.model,
                           width: MediaQuery.of(context).size.shortestSide * 0.6,
                           height: MediaQuery.of(context).size.longestSide * 0.2,
                         ),

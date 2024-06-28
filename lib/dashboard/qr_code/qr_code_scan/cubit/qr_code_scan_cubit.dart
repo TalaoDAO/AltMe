@@ -1185,8 +1185,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required dynamic credentialOfferJson,
   }) async {
     try {
-      final (clientId, clientSecret, authorization, clientAssertion) =
-          await getClientDetails(
+      final (
+        clientId,
+        clientSecret,
+        authorization,
+        oAuthClientAttestation,
+        oAuthClientAttestationPop
+      ) = await getClientDetails(
         profileCubit: profileCubit,
         isEBSIV3: isEBSIV3,
         issuer: issuer,
@@ -1207,7 +1212,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           authorization: authorization,
           clientId: clientId ?? '',
           clientSecret: clientSecret,
-          clientAssertion: clientAssertion,
+          oAuthClientAttestation: oAuthClientAttestation,
+          oAuthClientAttestationPop: oAuthClientAttestationPop,
         );
       } else {
         emit(state.loading());
@@ -1227,7 +1233,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           clientAuthentication: customOidc4vcProfile.clientAuthentication,
           oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
           vcFormatType: customOidc4vcProfile.vcFormatType,
-          clientAssertion: clientAssertion,
+          oAuthClientAttestation: oAuthClientAttestation,
+          oAuthClientAttestationPop: oAuthClientAttestationPop,
           secureAuthorizedFlow: customOidc4vcProfile.pushAuthorizationRequest,
           client: client,
         );
@@ -1254,7 +1261,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? authorization,
     required String? clientId,
     required String? clientSecret,
-    required String? clientAssertion,
+    String? oAuthClientAttestation,
+    String? oAuthClientAttestationPop,
   }) async {
     try {
       for (int i = 0; i < selectedCredentials.length; i++) {
@@ -1298,7 +1306,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
               redirectUri: Parameters.oidc4vcUniversalLink,
               openIdConfiguration: openIdConfiguration,
-              clientAssertion: clientAssertion,
+              oAuthClientAttestation: oAuthClientAttestation,
+              oAuthClientAttestationPop: oAuthClientAttestationPop,
               dio: client.dio,
             );
 
@@ -1483,8 +1492,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final String? authorization = statePayload['authorization'] as String?;
       final String? clientId = statePayload['client_id'] as String?;
       final String? clientSecret = statePayload['client_secret'] as String?;
-      final String? clientAssertion =
-          statePayload['client_assertion'] as String?;
+      final String? oAuthClientAttestation =
+          statePayload['oAuthClientAttestation'] as String?;
+      final String? oAuthClientAttestationPop =
+          statePayload['oAuthClientAttestationPop'] as String?;
 
       await addCredentialsInLoop(
         selectedCredentials: selectedCredentials,
@@ -1497,7 +1508,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         authorization: authorization,
         clientId: clientId ?? '',
         clientSecret: clientSecret,
-        clientAssertion: clientAssertion,
+        oAuthClientAttestation: oAuthClientAttestation,
+        oAuthClientAttestationPop: oAuthClientAttestationPop,
       );
     } catch (e) {
       emitError(e);
