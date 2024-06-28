@@ -89,7 +89,6 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       WalletLogo(
-                        profileModel: widget.profileCubit.state.model,
                         height: 90,
                         width: MediaQuery.of(context).size.shortestSide * 0.5,
                         showPoweredBy: true,
@@ -99,7 +98,12 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                       ),
                       Text(
                         l10n.walletReadyTitle,
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       const SizedBox(
                         height: Sizes.spaceNormal,

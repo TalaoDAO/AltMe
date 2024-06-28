@@ -26,7 +26,12 @@ class CustomAppBar extends PreferredSize {
         color: Theme.of(context).colorScheme.surface,
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.fromLTRB(
+              10,
+              0,
+              15,
+              0,
+            ),
             child: Stack(
               alignment: Alignment.topCenter,
               children: [
@@ -50,7 +55,9 @@ class CustomAppBar extends PreferredSize {
                     title ?? '',
                     maxLines: 2,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
               ],

@@ -237,7 +237,7 @@ class _DashboardViewState extends State<DashboardView> {
                               onTap: () => bottomTapped(1),
                               isSelected: state.selectedIndex == 1,
                             ),
-                            const SizedBox(width: 75 * 0.6),
+                            const SizedBox(width: 60),
                             if (Parameters.walletHandlesCrypto)
                               BottomBarItem(
                                 icon: IconStrings.cashInHand,

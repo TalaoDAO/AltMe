@@ -48,7 +48,12 @@ class _TabControllerViewState extends State<TabControllerView>
           mainAxisSize: MainAxisSize.max,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+              padding: const EdgeInsets.fromLTRB(
+                Sizes.spaceSmall,
+                Sizes.spaceSmall,
+                Sizes.spaceSmall,
+                0,
+              ),
               child: TabBar(
                 dividerColor: Colors.transparent,
                 controller: _tabController,

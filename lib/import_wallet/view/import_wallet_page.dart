@@ -195,12 +195,12 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                               margin: const EdgeInsets.all(Sizes.spaceNormal),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Theme.of(context).colorScheme.onTertiary,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.check,
                                 size: Sizes.icon,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                         ],

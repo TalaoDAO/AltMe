@@ -102,22 +102,20 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
           titleAlignment: Alignment.topCenter,
           scrollView: false,
           titleLeading: const BackLeadingButton(),
-          body: BackgroundCard(
-            height: double.infinity,
-            width: double.infinity,
-            padding: const EdgeInsets.all(Sizes.spaceSmall),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  ListView.builder(
-                    itemCount: state.cryptoAccount.data.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, i) {
-                      return ManageAccountsItem(
+          body: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                ListView.builder(
+                  itemCount: state.cryptoAccount.data.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, i) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: ManageAccountsItem(
                         cryptoAccountData: state.cryptoAccount.data[i],
                         listIndex: i,
                         onPressed: () {
@@ -126,14 +124,14 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
                               .setCurrentWalletAccount(i);
                         },
                         onEditButtonPressed: () => _edit(i),
-                      );
-                    },
-                  ),
-                  AddAccountButton(
-                    onPressed: onAddAccountPressed,
-                  ),
-                ],
-              ),
+                      ),
+                    );
+                  },
+                ),
+                AddAccountButton(
+                  onPressed: onAddAccountPressed,
+                ),
+              ],
             ),
           ),
         );

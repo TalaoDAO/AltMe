@@ -117,27 +117,11 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                       const SizedBox(height: Sizes.spaceNormal),
                       if (mnemonic != null)
                         MnemonicDisplay(mnemonic: mnemonic!),
-                      // const SizedBox(
-                      //   height: Sizes.spaceSmall,
-                      // ),
-                      // TextButton(
-                      //   onPressed: () {
-                      //     Clipboard.setData(
-                      //       ClipboardData(
-                      //         text: state.mnemonic.join(' '),
-                      //       ),
-                      //     );
-                      //   },
-                      //   child: Text(
-                      //     l10n.copyToClipboard,
-                      //     style: Theme.of(context).textTheme.bodyMedium!,
-                      //   ),
-                      // ),
                       const SizedBox(height: Sizes.spaceLarge),
                       Text(
                         l10n.onboardingAltmeMessage,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
                   ),

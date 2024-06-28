@@ -1,9 +1,6 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-//import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class KeyVerifiedPage extends StatelessWidget {
   const KeyVerifiedPage({super.key});
@@ -37,7 +34,6 @@ class KeyVerifiedView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               WalletLogo(
-                profileModel: context.read<ProfileCubit>().state.model,
                 height: 90,
                 width: MediaQuery.of(context).size.shortestSide * 0.5,
                 showPoweredBy: true,

@@ -33,10 +33,10 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
   }
 
   void setEnteredPasscode(
-      String enteredPasscode, PinCodeErrors newPinCodeError) {
+      String enteredPasscode, PinCodeErrors newPinCodeError,) {
     emit(
       state.copyWith(
-          enteredPasscode: enteredPasscode, pinCodeError: newPinCodeError),
+          enteredPasscode: enteredPasscode, pinCodeError: newPinCodeError,),
     );
   }
 

@@ -40,7 +40,6 @@ class DidView extends StatelessWidget {
                   padding: EdgeInsets.zero,
                 ),
                 WalletLogo(
-                  profileModel: context.read<ProfileCubit>().state.model,
                   height: 90,
                   width: MediaQuery.of(context).size.shortestSide * 0.5,
                   showPoweredBy: true,

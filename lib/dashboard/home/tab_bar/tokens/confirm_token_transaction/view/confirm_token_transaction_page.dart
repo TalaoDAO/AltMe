@@ -179,14 +179,10 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: Sizes.spaceSmall),
-                  MyText(
+                  Text(
                     amountAndSymbol,
                     textAlign: TextAlign.center,
-                    minFontSize: 12,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                        ),
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: Sizes.spaceSmall),
                   const FromAccountWidget(isEnabled: false),
@@ -224,6 +220,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     child: Image.asset(
                       IconStrings.arrowDown,
                       height: Sizes.icon3x,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   ConfirmTransactionDetailsCard(

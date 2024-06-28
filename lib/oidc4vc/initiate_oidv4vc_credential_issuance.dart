@@ -117,7 +117,10 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         final String? authorization = jwt['authorization'] as String?;
         final String? clientId = jwt['client_id'] as String?;
         final String? clientSecret = jwt['client_secret'] as String?;
-        final String? clientAssertion = jwt['client_assertion'] as String?;
+        final String? oAuthClientAttestation =
+            jwt['oAuthClientAttestation'] as String?;
+        final String? oAuthClientAttestationPop =
+            jwt['oAuthClientAttestationPop'] as String?;
 
         final selectedCredentials = stateOfCredentialsSelected
             .map((index) => credentials[index])
@@ -134,7 +137,8 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           authorization: authorization,
           clientId: clientId,
           clientSecret: clientSecret,
-          clientAssertion: clientAssertion,
+          oAuthClientAttestation: oAuthClientAttestation,
+          oAuthClientAttestationPop: oAuthClientAttestationPop,
         );
       }
     }

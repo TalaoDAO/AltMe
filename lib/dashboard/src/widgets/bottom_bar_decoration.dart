@@ -9,12 +9,11 @@ class BottomBarDecoration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: BackgroundCard(
-          padding: const EdgeInsets.all(8),
-          child: child,
-        ),
+      child: BackgroundCard(
+        padding: const EdgeInsets.all(8),
+        borderRadius: 0,
+        height: 65,
+        child: child,
       ),
     );
   }

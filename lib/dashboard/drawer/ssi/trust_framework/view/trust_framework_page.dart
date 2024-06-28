@@ -93,6 +93,17 @@ class TrustFrameworkPage extends StatelessWidget {
                           );
                     },
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.spaceSmall,
+                    ),
+                    child: Divider(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.12),
+                    ),
+                  ),
                 ],
               ),
               Padding(
@@ -102,11 +113,22 @@ class TrustFrameworkPage extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
               ),
-              const GroupedSection(
+              GroupedSection(
                 children: [
-                  IssuerVerifierSelector(
+                  const IssuerVerifierSelector(
                     title: 'EBSI',
                     isChecked: true,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.spaceSmall,
+                    ),
+                    child: Divider(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.12),
+                    ),
                   ),
                 ],
               ),

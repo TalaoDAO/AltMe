@@ -23,7 +23,7 @@ abstract class Sizes {
   ///borderRadius
   static const double credentialBorderRadius = 16;
   static const double smallRadius = 8;
-  static const double normalRadius = 12;
+  static const double normalRadius = 10;
   static const double largeRadius = 18;
 
   static const double credentialAspectRatio = 500 / 300;

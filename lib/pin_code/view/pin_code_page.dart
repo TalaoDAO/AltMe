@@ -84,8 +84,8 @@ class _PinCodeViewState extends State<PinCodeView> {
     return PopScope(
       canPop: !widget.restrictToBack,
       child: BasePage(
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title: '',
         titleAlignment: Alignment.topCenter,
         titleLeading: widget.restrictToBack ? null : const BackLeadingButton(),
         scrollView: false,

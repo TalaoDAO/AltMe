@@ -62,7 +62,6 @@ class StarterView extends StatelessWidget {
                       children: [
                         const Spacer(flex: 5),
                         WalletLogo(
-                          profileModel: state.model,
                           width: MediaQuery.of(context).size.shortestSide * 0.6,
                           height: MediaQuery.of(context).size.longestSide * 0.2,
                         ),
@@ -71,6 +70,24 @@ class StarterView extends StatelessWidget {
                         const Spacer(flex: 1),
                         SubTitle(profileModel: state.model),
                         const Spacer(flex: 4),
+                        MyOutlinedButton(
+                          text: l10n.importAccount,
+                          onPressed: () async {
+                            await profileCubit.setWalletType(
+                              walletType: WalletType.personal,
+                            );
+                            await profileCubit.setProfileSetting(
+                              profileSetting: ProfileSetting.initial(),
+                              profileType: ProfileType.defaultOne,
+                            );
+                            await Navigator.of(context).push<void>(
+                              ProtectWalletPage.route(
+                                routeType: WalletRouteType.import,
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 10),
                         MyElevatedButton(
                           text: l10n.createAccount,
                           verticalSpacing: 15,
@@ -91,27 +108,9 @@ class StarterView extends StatelessWidget {
                             );
                           },
                         ),
-                        const Spacer(flex: 1),
-                        MyOutlinedButton(
-                          text: l10n.importAccount,
-                          onPressed: () async {
-                            await profileCubit.setWalletType(
-                              walletType: WalletType.personal,
-                            );
-                            await profileCubit.setProfileSetting(
-                              profileSetting: ProfileSetting.initial(),
-                              profileType: ProfileType.defaultOne,
-                            );
-                            await Navigator.of(context).push<void>(
-                              ProtectWalletPage.route(
-                                routeType: WalletRouteType.import,
-                              ),
-                            );
-                          },
-                        ),
-                        const Spacer(flex: 1),
+                        const SizedBox(height: 10),
                         const AppVersionDrawer(isShortForm: true),
-                        const Spacer(flex: 1),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),

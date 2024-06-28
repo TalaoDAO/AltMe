@@ -90,7 +90,7 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
           title: l10n.confirmYourPinCode,
           header: widget.isFromOnboarding
               ? MStepper(
-                  step: 1,
+                  step: 2,
                   totalStep: byPassScreen ? 2 : 3,
                 )
               : null,

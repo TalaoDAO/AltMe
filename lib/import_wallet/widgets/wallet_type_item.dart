@@ -31,9 +31,8 @@ class WalletTypeItem extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(Sizes.spaceXSmall),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.inversePrimary,
-                borderRadius: const BorderRadius.all(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
                   Radius.circular(Sizes.smallRadius),
                 ),
               ),
@@ -54,7 +53,7 @@ class WalletTypeItem extends StatelessWidget {
             Icon(
               Icons.keyboard_arrow_right_rounded,
               size: Sizes.icon,
-              color: Theme.of(context).colorScheme.inversePrimary,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
             const SizedBox(
               width: Sizes.spaceSmall,

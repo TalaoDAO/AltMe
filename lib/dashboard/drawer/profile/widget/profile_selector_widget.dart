@@ -66,18 +66,6 @@ class ProfileSelectorWidget extends StatelessWidget {
 
                       return Column(
                         children: [
-                          if (index != 0)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Divider(
-                                height: 0,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.12),
-                              ),
-                            ),
                           ListTile(
                             onTap: () async {
                               await context
@@ -112,6 +100,16 @@ class ProfileSelectorWidget extends StatelessWidget {
                                   : Icons.radio_button_unchecked,
                               size: Sizes.icon2x,
                               color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Divider(
+                              height: 0,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.12),
                             ),
                           ),
                         ],

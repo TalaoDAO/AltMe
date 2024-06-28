@@ -30,46 +30,41 @@ class ManageNetworkPage extends StatelessWidget {
               context.read<WalletCubit>().state.currentAccount!.blockchainType;
           final currentNetworkList = blockchainType.networks;
 
-          return BackgroundCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Text(
-                    l10n.chooseNetWork,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  l10n.chooseNetWork,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                const SizedBox(height: 15),
-                ...List.generate(
-                  currentNetworkList.length,
-                  (index) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        NetworkSelector(
-                          network: currentNetworkList[index],
-                          groupValue: state.network,
+              ),
+              const SizedBox(height: 15),
+              ...List.generate(
+                currentNetworkList.length,
+                (index) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      NetworkSelector(
+                        network: currentNetworkList[index],
+                        groupValue: state.network,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Divider(
+                          height: 0,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.12),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Sizes.spaceSmall,
-                            vertical: Sizes.spaceXSmall,
-                          ),
-                          child: Divider(
-                            height: 0.2,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withOpacity(0.12),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ],
-            ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
           );
         },
       ),

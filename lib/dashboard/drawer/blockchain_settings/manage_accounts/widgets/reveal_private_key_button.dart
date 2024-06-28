@@ -29,11 +29,13 @@ class RevealPrivateKeyButton extends StatelessWidget {
             Image.asset(
               IconStrings.lockCircle,
               width: Sizes.icon,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
-            MyText(
+            Text(
               l10n.revealPrivateKey.toUpperCase(),
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
           ],
         ),

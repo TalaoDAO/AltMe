@@ -65,7 +65,7 @@ class CryptoAccountItem extends StatelessWidget {
             child: Icon(
               Icons.edit,
               size: 20,
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(width: Sizes.spaceXSmall),
@@ -101,6 +101,7 @@ class CryptoAccountItem extends StatelessWidget {
                 IconStrings.copy,
                 width: Sizes.icon,
                 height: Sizes.icon,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             const SizedBox(width: Sizes.spaceSmall),

@@ -114,7 +114,6 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                       selectionControls: _selectionControls,
                       controller: amountController,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: Colors.white,
                             fontWeight: FontWeight.w600,
                           ),
                       maxLines: 1,
@@ -161,7 +160,6 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                         suffixText: widget.selectedToken.symbol,
                         suffixStyle:
                             Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  color: Colors.white,
                                   fontWeight: FontWeight.w900,
                                 ),
                       ),
@@ -225,7 +223,7 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                           icon: Image.asset(
                             IconStrings.keyboardDelete,
                             width: Sizes.icon2x,
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           allowAction: true,
                           onLongPress: (_) {

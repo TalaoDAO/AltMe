@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
@@ -107,10 +106,6 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                   widget.header!
                                 else
                                   WalletLogo(
-                                    profileModel: context
-                                        .read<ProfileCubit>()
-                                        .state
-                                        .model,
                                     height: 90,
                                     width: MediaQuery.of(context)
                                             .size
@@ -291,10 +286,10 @@ class PinCodeErrorMessage extends StatelessWidget {
 
     return BlocBuilder<PinCodeViewCubit, PinCodeViewState>(
       builder: (context, state) {
-        Widget errorWidget = const SizedBox.shrink();
+        Widget errorWidget = const PinCodeErrorText('');
         switch (state.pinCodeError) {
           case PinCodeErrors.none:
-            errorWidget = const SizedBox.shrink();
+            errorWidget = const PinCodeErrorText('');
           case PinCodeErrors.errorSerie:
             errorWidget = PinCodeErrorText(l10n.pincodeSerie);
           case PinCodeErrors.errorSequence:
