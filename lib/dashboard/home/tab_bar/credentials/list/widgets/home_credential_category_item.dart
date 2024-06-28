@@ -57,30 +57,36 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
-          GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 14,
-              mainAxisSpacing: 14,
-              childAspectRatio: Sizes.credentialAspectRatio,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 4,
+              vertical: 0,
             ),
-            itemCount: sortedCredentials.length + 1,
-            itemBuilder: (_, index) {
-              if (index == sortedCredentials.length) {
-                if (credentialCategory == CredentialCategory.pendingCards) {
-                  return Container();
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 14,
+                mainAxisSpacing: 14,
+                childAspectRatio: Sizes.credentialAspectRatio,
+              ),
+              itemCount: sortedCredentials.length + 1,
+              itemBuilder: (_, index) {
+                if (index == sortedCredentials.length) {
+                  if (credentialCategory == CredentialCategory.pendingCards) {
+                    return Container();
+                  }
+                  return AddCredentialButton(
+                    credentialCategory: credentialCategory,
+                  );
+                } else {
+                  return HomeCredentialItem(
+                    credentialModel: sortedCredentials[index],
+                  );
                 }
-                return AddCredentialButton(
-                  credentialCategory: credentialCategory,
-                );
-              } else {
-                return HomeCredentialItem(
-                  credentialModel: sortedCredentials[index],
-                );
-              }
-            },
+              },
+            ),
           ),
         ],
       ),

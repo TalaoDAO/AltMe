@@ -26,7 +26,12 @@ class CustomAppBar extends PreferredSize {
         color: Theme.of(context).colorScheme.surface,
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.fromLTRB(
+              10,
+              0,
+              15,
+              0,
+            ),
             child: Stack(
               alignment: Alignment.topCenter,
               children: [

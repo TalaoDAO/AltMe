@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/widget/divider_for_radio_list.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -30,17 +31,6 @@ class ClientAuthenticationWidget extends StatelessWidget {
 
               return Column(
                 children: [
-                  if (index != 0)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Divider(
-                        height: 0,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.12),
-                      ),
-                    ),
                   ListTile(
                     onTap: () {
                       context.read<ProfileCubit>().updateProfileSetting(
@@ -55,9 +45,7 @@ class ClientAuthenticationWidget extends StatelessWidget {
                     ),
                     title: Text(
                       clientAuthenticationType.value,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     trailing: Icon(
                       state.model.profileSetting.selfSovereignIdentityOptions
@@ -66,9 +54,10 @@ class ClientAuthenticationWidget extends StatelessWidget {
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,
                       size: Sizes.icon2x,
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
+                  const DividerForRadioList(),
                 ],
               );
             },

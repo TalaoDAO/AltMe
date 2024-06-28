@@ -68,11 +68,12 @@ class LanguageSelectorWidget extends StatelessWidget {
                               ),
                             ),
                             title: Text(
-                                languageType.getTitle(
-                                  l10n: l10n,
-                                  name: languageType.name,
-                                ),
-                                style: Theme.of(context).textTheme.bodyLarge),
+                              languageType.getTitle(
+                                l10n: l10n,
+                                name: languageType.name,
+                              ),
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
                             trailing: Icon(
                               state.languageType == languageType
                                   ? Icons.radio_button_checked

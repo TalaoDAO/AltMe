@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/widget/divider_for_radio_list.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -29,17 +30,6 @@ class DidKeyTypeWidget extends StatelessWidget {
               }
               return Column(
                 children: [
-                  if (index != 0)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Divider(
-                        height: 0,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.12),
-                      ),
-                    ),
                   ListTile(
                     onTap: () {
                       final customOidc4vcProfile = state.model.profileSetting
@@ -87,9 +77,10 @@ class DidKeyTypeWidget extends StatelessWidget {
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,
                       size: Sizes.icon2x,
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
+                  const DividerForRadioList(),
                 ],
               );
             },
