@@ -37,57 +37,46 @@ class AccountSelectBoxView extends StatelessWidget {
               onPressed: isEnabled ? null : null,
             )
           else
-            Theme(
-              data: Theme.of(context).copyWith(
-                unselectedWidgetColor: Theme.of(context).colorScheme.onPrimary,
-                dividerColor: Theme.of(context).colorScheme.surface,
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                colorScheme: ColorScheme.dark(
-                  primary: Theme.of(context).colorScheme.onPrimary,
-                ),
+            ExpansionTile(
+              initiallyExpanded: initiallyExpanded,
+              childrenPadding: EdgeInsets.zero,
+              tilePadding: const EdgeInsets.symmetric(horizontal: 8),
+              title: SelectedAccountItem(
+                title: title,
+                cryptoAccountData: accounts[selectedAccountIndex],
+                isBoxOpen: true,
+                onPressed: isEnabled ? null : null,
               ),
-              child: ExpansionTile(
-                initiallyExpanded: initiallyExpanded,
-                childrenPadding: EdgeInsets.zero,
-                tilePadding: const EdgeInsets.symmetric(horizontal: 8),
-                title: SelectedAccountItem(
-                  title: title,
-                  cryptoAccountData: accounts[selectedAccountIndex],
-                  isBoxOpen: true,
-                  onPressed: isEnabled ? null : null,
-                ),
-                children: <Widget>[
-                  ListView.separated(
-                    itemCount: accounts.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, i) {
-                      return SelectBoxAccountItem(
-                        cryptoAccountData: accounts[i],
-                        isSelected: selectedAccountIndex == i,
-                        listIndex: i,
-                        onPressed: () {
-                          onSelectAccount.call(accounts[i], i);
-                        },
-                      );
-                    },
-                    separatorBuilder: (_, __) => Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Sizes.spaceSmall,
-                      ),
-                      child: Divider(
-                        height: 0.2,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.12),
-                      ),
+              children: <Widget>[
+                ListView.separated(
+                  itemCount: accounts.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, i) {
+                    return SelectBoxAccountItem(
+                      cryptoAccountData: accounts[i],
+                      isSelected: selectedAccountIndex == i,
+                      listIndex: i,
+                      onPressed: () {
+                        onSelectAccount.call(accounts[i], i);
+                      },
+                    );
+                  },
+                  separatorBuilder: (_, __) => Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.spaceSmall,
+                    ),
+                    child: Divider(
+                      height: 0.2,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.12),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                ],
-              ),
+                ),
+                const SizedBox(height: 10),
+              ],
             ),
         ],
       ),

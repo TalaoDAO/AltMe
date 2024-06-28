@@ -84,11 +84,14 @@ class _WithdrawalAddressInputPageState
         mainAxisSize: MainAxisSize.min,
         children: [
           if (widget.caption != null)
-            Text(
-              widget.caption!,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                widget.caption!,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+              ),
             ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,36 +101,39 @@ class _WithdrawalAddressInputPageState
                 child: Form(
                   autovalidateMode: autoValidateMode,
                   key: formKey,
-                  child: TextFormField(
-                    controller: withdrawalAddressController,
-                    style: Theme.of(context).textTheme.labelMedium,
-                    textInputAction: TextInputAction.done,
-                    maxLines: 2,
-                    onChanged: (value) {
-                      if (autoValidateMode == AutovalidateMode.disabled) {
-                        formKey.currentState?.setState(() {
-                          autoValidateMode = AutovalidateMode.always;
-                        });
-                      }
-                    },
-                    validator: (value) {
-                      if (validateWalletAddress(value)) {
-                        formKey.currentState?.setState(() {
-                          autoValidateMode = AutovalidateMode.disabled;
-                        });
-                        formKey.currentState?.save();
-                        return null;
-                      } else {
-                        return l10n.notAValidWalletAddress;
-                      }
-                    },
-                    onSaved: (value) {
-                      widget.onValidAddress?.call(value!);
-                    },
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: l10n.withdrawalInputHint,
-                      contentPadding: EdgeInsets.zero,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: TextFormField(
+                      controller: withdrawalAddressController,
+                      style: Theme.of(context).textTheme.labelMedium,
+                      textInputAction: TextInputAction.done,
+                      maxLines: 2,
+                      onChanged: (value) {
+                        if (autoValidateMode == AutovalidateMode.disabled) {
+                          formKey.currentState?.setState(() {
+                            autoValidateMode = AutovalidateMode.always;
+                          });
+                        }
+                      },
+                      validator: (value) {
+                        if (validateWalletAddress(value)) {
+                          formKey.currentState?.setState(() {
+                            autoValidateMode = AutovalidateMode.disabled;
+                          });
+                          formKey.currentState?.save();
+                          return null;
+                        } else {
+                          return l10n.notAValidWalletAddress;
+                        }
+                      },
+                      onSaved: (value) {
+                        widget.onValidAddress?.call(value!);
+                      },
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: l10n.withdrawalInputHint,
+                        contentPadding: EdgeInsets.zero,
+                      ),
                     ),
                   ),
                 ),

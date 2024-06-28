@@ -49,7 +49,7 @@ class ChooseAddAccountMethodView extends StatelessWidget {
               Navigator.of(context).push<void>(CreateAccountStep1Page.route());
             },
           ),
-          const SizedBox(height: Sizes.spaceLarge),
+          const SizedBox(height: Sizes.spaceSmall),
           CustomListTileCard(
             title: l10n.importAccount,
             subTitle: l10n.importAccountDescription,

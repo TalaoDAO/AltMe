@@ -23,7 +23,9 @@ class SubTitle extends StatelessWidget {
       child: Text(
         isEnterprise ? tag : l10n.splashSubtitle,
         textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headlineSmall,
+        style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+              fontWeight: FontWeight.normal,
+            ),
       ),
     );
   }

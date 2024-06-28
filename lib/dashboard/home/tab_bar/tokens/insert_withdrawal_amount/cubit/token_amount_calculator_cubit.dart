@@ -23,12 +23,12 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     Decimal validAmount = Decimal.parse('0');
     String insertedAmount = '';
     try {
-      if (amount.isEmpty ||
-          amount == '0' ||
-          amount == '0.0' ||
-          amount == '00') {
+      if (amount.isEmpty || amount == '0' || amount == '00') {
         validAmount = Decimal.parse('0');
-        insertedAmount = '';
+        insertedAmount = '0';
+      } else if (amount.isEmpty || amount == '.') {
+        validAmount = Decimal.parse('0.');
+        insertedAmount = '0.';
       } else {
         insertedAmount = amount.replaceAll(',', '');
         final bool isValid =

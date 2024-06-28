@@ -85,31 +85,42 @@ class ThemeModeLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () async {
-        context.read<ThemeCubit>().switchTheme(themeMode);
-      },
-      shape: const RoundedRectangleBorder(
-        side: BorderSide(
-          color: Color(0xFFDDDDEE),
-          width: 0.5,
+    return Column(
+      children: [
+        ListTile(
+          onTap: () async {
+            context.read<ThemeCubit>().switchTheme(themeMode);
+          },
+          shape: const RoundedRectangleBorder(
+            side: BorderSide(
+              color: Color(0xFFDDDDEE),
+              width: 0.5,
+            ),
+          ),
+          title: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          trailing: BlocBuilder<ThemeCubit, ThemeState>(
+            builder: (context, state) {
+              return Icon(
+                state.themeMode == themeMode
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
+                size: Sizes.icon2x,
+                color: Theme.of(context).colorScheme.primary,
+              );
+            },
+          ),
         ),
-      ),
-      title: Text(
-        label,
-        style: Theme.of(context).textTheme.bodyLarge,
-      ),
-      trailing: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, state) {
-          return Icon(
-            state.themeMode == themeMode
-                ? Icons.radio_button_checked
-                : Icons.radio_button_unchecked,
-            size: Sizes.icon2x,
-            color: Theme.of(context).colorScheme.primary,
-          );
-        },
-      ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Divider(
+            height: 0,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
+          ),
+        ),
+      ],
     );
   }
 }

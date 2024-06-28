@@ -98,7 +98,12 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                       ),
                       Text(
                         l10n.walletReadyTitle,
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       const SizedBox(
                         height: Sizes.spaceNormal,

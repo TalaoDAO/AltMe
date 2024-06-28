@@ -31,7 +31,7 @@ class ProtectWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.secondaryContainer,
+              : Theme.of(context).colorScheme.surfaceContainer,
           borderRadius: const BorderRadius.all(
             Radius.circular(
               Sizes.normalRadius,

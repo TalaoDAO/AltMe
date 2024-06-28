@@ -56,13 +56,14 @@ class MyElevatedButton extends StatelessWidget {
                 text.toUpperCase(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
               ),
             )
           : ElevatedButton.icon(
               icon: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  textColor ?? Theme.of(context).textTheme.titleLarge!.color!,
+                  textColor ?? Theme.of(context).colorScheme.onPrimaryContainer,
                   BlendMode.srcIn,
                 ),
                 child: icon,
@@ -80,6 +81,7 @@ class MyElevatedButton extends StatelessWidget {
                 text.toUpperCase(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
               ),
             ),
@@ -103,7 +105,15 @@ ButtonStyle elevatedStyleFrom({
     backgroundColor: WidgetStateProperty.all(
       onPressed == null
           ? Theme.of(context).colorScheme.outline
-          : backgroundColor ?? Theme.of(context).colorScheme.secondaryContainer,
+          : backgroundColor ?? Theme.of(context).colorScheme.primaryContainer,
+    ),
+    side: WidgetStatePropertyAll(
+      BorderSide(
+        color: onPressed == null
+            ? Theme.of(context).colorScheme.outline
+            : Theme.of(context).colorScheme.primaryContainer,
+        width: 2,
+      ),
     ),
     shape: WidgetStateProperty.all(
       RoundedRectangleBorder(

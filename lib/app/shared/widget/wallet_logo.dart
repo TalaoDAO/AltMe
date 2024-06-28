@@ -22,7 +22,6 @@ class WalletLogo extends StatelessWidget {
       builder: (context, state) {
         final FlavorCubit flavorCubit = context.read<FlavorCubit>();
         String image = '';
-
         final profileModel = state.model;
 
         switch (profileModel.profileType) {

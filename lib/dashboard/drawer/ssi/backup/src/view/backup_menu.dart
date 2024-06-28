@@ -42,7 +42,6 @@ class BackupView extends StatelessWidget {
                   width: MediaQuery.of(context).size.shortestSide * 0.5,
                   showPoweredBy: true,
                 ),
-                const SizedBox(height: Sizes.spaceSmall),
                 DrawerItem(
                   title: l10n.backupCredential,
                   onTap: () async {

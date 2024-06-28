@@ -60,17 +60,14 @@ class BottomBarItem extends StatelessWidget {
   }
 
   Color bottomBarItemColor(BuildContext context) {
-    final Color one = Theme.of(context).colorScheme.onPrimaryFixedVariant;
-    final Color two = Theme.of(context).colorScheme.primaryFixedDim;
+    final Color one = Theme.of(context).colorScheme.onSurface;
+    final Color two = Theme.of(context).colorScheme.onSurface;
     late Color selectedColor;
-    late Color unselectedColor;
     if (Theme.of(context).brightness == Brightness.light) {
       selectedColor = one;
-      unselectedColor = two;
     } else {
       selectedColor = two;
-      unselectedColor = one;
     }
-    return isSelected ? selectedColor : unselectedColor;
+    return isSelected ? selectedColor : Theme.of(context).colorScheme.outline;
   }
 }

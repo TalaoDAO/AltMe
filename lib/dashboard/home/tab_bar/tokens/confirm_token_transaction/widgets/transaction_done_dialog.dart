@@ -102,10 +102,6 @@ class TransactionDoneDialog extends StatelessWidget {
             const SizedBox(height: Sizes.spaceSmall),
             MyElevatedButton(
               text: l10n.done,
-              verticalSpacing: 18,
-              fontSize: 18,
-              borderRadius: 20,
-              backgroundColor: Theme.of(context).colorScheme.primary,
               onPressed: () {
                 Navigator.of(context).pop();
                 onDoneButtonClick?.call();
