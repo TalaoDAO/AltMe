@@ -148,9 +148,8 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
                   padding: const EdgeInsets.all(Sizes.spaceXSmall),
                   width: Sizes.icon4x,
                   height: Sizes.icon4x,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    borderRadius: const BorderRadius.all(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(
                       Radius.circular(Sizes.smallRadius),
                     ),
                   ),

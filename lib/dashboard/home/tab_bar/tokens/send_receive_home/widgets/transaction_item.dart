@@ -80,6 +80,7 @@ class TransactionItem extends StatelessWidget {
                     : IconStrings.receive,
                 width: Sizes.icon,
                 height: Sizes.icon,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               const SizedBox(
                 width: Sizes.space2XSmall,
@@ -103,7 +104,7 @@ class TransactionItem extends StatelessWidget {
                 operationModel.status,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       color: operationModel.status.toLowerCase() == 'applied'
-                          ? Theme.of(context).colorScheme.onTertiary
+                          ? Theme.of(context).colorScheme.secondary
                           : operationModel.status.toLowerCase() == 'failed' ||
                                   operationModel.status.toLowerCase() ==
                                       'backtracked'

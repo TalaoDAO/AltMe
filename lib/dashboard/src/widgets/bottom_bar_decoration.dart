@@ -12,7 +12,7 @@ class BottomBarDecoration extends StatelessWidget {
       child: BackgroundCard(
         padding: const EdgeInsets.all(8),
         borderRadius: 0,
-        height: 72,
+        height: 65,
         child: child,
       ),
     );

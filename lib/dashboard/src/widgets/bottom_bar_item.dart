@@ -39,7 +39,7 @@ class BottomBarItem extends StatelessWidget {
                 child: ImageIcon(
                   AssetImage(icon),
                   color: bottomBarItemColor(context),
-                  size: 24,
+                  size: 20,
                 ),
               ),
             ),
@@ -60,16 +60,14 @@ class BottomBarItem extends StatelessWidget {
   }
 
   Color bottomBarItemColor(BuildContext context) {
-    final Color one = Theme.of(context).colorScheme.primary;
-    final Color two = Theme.of(context).colorScheme.primaryContainer;
+    final Color one = Theme.of(context).colorScheme.onSurface;
+    final Color two = Theme.of(context).colorScheme.onSurface;
     late Color selectedColor;
     if (Theme.of(context).brightness == Brightness.light) {
       selectedColor = one;
     } else {
       selectedColor = two;
     }
-    return isSelected
-        ? selectedColor
-        : Theme.of(context).colorScheme.inverseSurface;
+    return isSelected ? selectedColor : Theme.of(context).colorScheme.outline;
   }
 }
