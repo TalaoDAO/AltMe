@@ -946,6 +946,7 @@ void main() {
 
           expect(value, jsonDecode(didDocument));
         });
+
         test('get corresponding did document', () async {
           const issuer = 'https://talao.co/issuer/zxhaokccsi';
           const openidConfigurationResponse1 =
