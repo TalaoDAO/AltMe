@@ -61,9 +61,9 @@ class LanguageSelectorWidget extends StatelessWidget {
                                   .read<LangCubit>()
                                   .setLocale(Locale(languageType.name));
                             },
-                            shape: const RoundedRectangleBorder(
+                            shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: Color(0xFFDDDDEE),
+                                color: Theme.of(context).colorScheme.onSurface,
                                 width: 0.5,
                               ),
                             ),
