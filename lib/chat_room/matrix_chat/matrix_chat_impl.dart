@@ -59,16 +59,16 @@ class MatrixChatImpl extends MatrixChatInterface {
       return user!;
     }
 
-    final didKeyType = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+    // final didKeyType = profileCubit.state.model.profileSetting
+    //     .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
     final privateKey = await getPrivateKey(
       profileCubit: profileCubit,
-      didKeyType: didKeyType,
+      didKeyType: DidKeyType.edDSA,
     );
 
     final (did, kid) = await getDidAndKid(
-      didKeyType: didKeyType,
+      didKeyType: DidKeyType.edDSA,
       privateKey: privateKey,
       profileCubit: profileCubit,
     );

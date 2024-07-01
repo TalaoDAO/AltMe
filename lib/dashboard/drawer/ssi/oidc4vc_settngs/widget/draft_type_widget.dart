@@ -32,6 +32,12 @@ class DraftTypeWidget extends StatelessWidget {
                             oidc4vciDraftType: draftType,
                           );
                     },
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        width: 0.5,
+                      ),
+                    ),
                     title: Text(
                       draftType.formattedString,
                       style: Theme.of(context).textTheme.bodyLarge,

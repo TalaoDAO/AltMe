@@ -32,6 +32,12 @@ class ClientTypeWidget extends StatelessWidget {
                             clientType: clientType,
                           );
                     },
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        width: 0.5,
+                      ),
+                    ),
                     title: Text(
                       clientType.getTitle,
                       style: Theme.of(context).textTheme.bodyLarge,
