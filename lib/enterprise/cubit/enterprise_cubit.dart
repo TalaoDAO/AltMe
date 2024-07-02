@@ -382,9 +382,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
                 // active
               } else {
                 // revoked
-                throw ResponseMessage(
-                  message: ResponseString.RESPONSE_STRING_theWalletIsSuspended,
-                );
+                emit(state.copyWith(status: AppStatus.revoked));
               }
             }
           }
