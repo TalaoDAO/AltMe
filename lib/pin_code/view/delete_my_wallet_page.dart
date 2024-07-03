@@ -34,32 +34,25 @@ class DeleteMyWalletView extends StatelessWidget {
       scrollView: false,
       body: Column(
         children: [
-          const Spacer(
-            flex: 8,
+          const Spacer(flex: 6),
+          WalletLogo(
+            height: 90,
+            width: MediaQuery.of(context).size.shortestSide * 0.5,
+            showPoweredBy: true,
           ),
-          Image.asset(
-            ImageStrings.cardMissing,
-            width: Sizes.icon,
-          ),
-          const SizedBox(
-            height: Sizes.spaceLarge,
-          ),
+          const SizedBox(height: Sizes.spaceLarge),
           Text(
             l10n.deleteMyWalletForWrontPincodeTitle,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.displaySmall,
           ),
-          const SizedBox(
-            height: Sizes.spaceXSmall,
-          ),
+          const SizedBox(height: Sizes.spaceXSmall),
           Text(
             l10n.deleteMyWalletForWrontPincodeDescription,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.labelMedium,
           ),
-          const Spacer(
-            flex: 14,
-          ),
+          const Spacer(flex: 15),
           MyElevatedButton(
             text: l10n.deleteMyWallet,
             onPressed: () async {
