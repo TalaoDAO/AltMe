@@ -54,7 +54,7 @@ class ManageDidPolygonIdPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.polygonIdDecentralizedId,
+      title: l10n.polygonDecentralizedID,
       titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
