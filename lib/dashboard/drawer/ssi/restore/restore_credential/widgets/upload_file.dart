@@ -50,13 +50,15 @@ class UploadFile extends StatelessWidget {
                   width: Sizes.icon,
                   height: Sizes.icon,
                 ),
-              const SizedBox(
-                width: Sizes.space2XSmall,
-              ),
-              MyText(
-                filePath == null ? l10n.uploadFile : filePath!.split('/').last,
-                minFontSize: 12,
-                style: Theme.of(context).textTheme.headlineSmall,
+              const SizedBox(width: Sizes.space2XSmall),
+              Expanded(
+                child: MyText(
+                  filePath == null
+                      ? l10n.uploadFile
+                      : filePath!.split('/').last,
+                  minFontSize: 12,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
             ],
           ),
