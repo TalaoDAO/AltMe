@@ -127,7 +127,7 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
               UploadFile(
                 filePath: state.backupFilePath,
                 onTap: () async {
-                  if (Platform.isAndroid) {
+                  if (isAndroid) {
                     final appDir = (await getTemporaryDirectory()).path;
                     await Directory(appDir).delete(recursive: true);
                   }
@@ -159,15 +159,21 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
   Future<void> _pickRestoreFile() async {
     final l10n = context.l10n;
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
 
     /// storage permission has changed with android 13
     late final PermissionStatus storagePermission;
-    if (int.parse(androidInfo.version.release) > 12) {
-      storagePermission = await Permission.photos.request();
+
+    if (isAndroid) {
+      final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      if (int.parse(androidInfo.version.release) > 12) {
+        storagePermission = await Permission.photos.request();
+      } else {
+        storagePermission = await Permission.storage.request();
+      }
     } else {
       storagePermission = await Permission.storage.request();
     }
+
     if (storagePermission.isDenied) {
       AlertMessage.showStateMessage(
         context: context,

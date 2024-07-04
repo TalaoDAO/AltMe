@@ -5,6 +5,7 @@ class TokenAmountCalculatorState extends Equatable {
   const TokenAmountCalculatorState({
     this.validAmount = '0',
     this.insertedAmount = '',
+    this.status = AppStatus.idle,
   });
 
   factory TokenAmountCalculatorState.fromJson(Map<String, dynamic> json) =>
@@ -12,12 +13,19 @@ class TokenAmountCalculatorState extends Equatable {
 
   final String validAmount;
   final String insertedAmount;
+  final AppStatus status;
+
+  TokenAmountCalculatorState loading() {
+    return copyWith(status: AppStatus.loading);
+  }
 
   TokenAmountCalculatorState copyWith({
+    AppStatus status = AppStatus.idle,
     String? validAmount,
     String? insertedAmount,
   }) {
     return TokenAmountCalculatorState(
+      status: status,
       insertedAmount: insertedAmount ?? this.insertedAmount,
       validAmount: validAmount ?? this.validAmount,
     );
@@ -27,6 +35,7 @@ class TokenAmountCalculatorState extends Equatable {
 
   @override
   List<Object?> get props => [
+        status,
         validAmount,
         insertedAmount,
       ];

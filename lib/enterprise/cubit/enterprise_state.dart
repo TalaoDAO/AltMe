@@ -28,7 +28,7 @@ class EnterpriseState extends Equatable {
   }
 
   EnterpriseState copyWith({
-    required StateMessage? message,
+    StateMessage? message,
     AppStatus? status,
   }) {
     return EnterpriseState(

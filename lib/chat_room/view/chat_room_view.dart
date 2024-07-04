@@ -51,6 +51,7 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final colorScheme = Theme.of(context).colorScheme;
     return BasePage(
       title: widget.appBarTitle,
       scrollView: false,
@@ -103,7 +104,78 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                 alignment: Alignment.topCenter,
                 children: [
                   Chat(
-                    theme: const DarkChatTheme(),
+                    theme: DefaultChatTheme(
+                      primaryColor: colorScheme.primaryContainer,
+                      secondaryColor: colorScheme.secondaryContainer,
+                      backgroundColor: colorScheme.surface,
+                      inputBackgroundColor: colorScheme.secondaryContainer,
+                      inputTextColor: colorScheme.onSurface,
+                      errorColor: colorScheme.error,
+                      sentMessageBodyTextStyle: TextStyle(
+                        color: colorScheme.onPrimary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        height: 1.5,
+                      ),
+                      sentMessageBodyBoldTextStyle: TextStyle(
+                        color: colorScheme.onPrimary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        height: 1.333,
+                      ),
+                      sentMessageDocumentIconColor: colorScheme.onPrimary,
+                      sentMessageLinkTitleTextStyle: TextStyle(
+                        color: colorScheme.onPrimary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        height: 1.375,
+                      ),
+                      sentMessageCaptionTextStyle: TextStyle(
+                        color: colorScheme.onPrimary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        height: 1,
+                      ),
+                      systemMessageTheme: SystemMessageTheme(
+                        margin: const EdgeInsets.only(
+                          bottom: 24,
+                          top: 8,
+                          left: 8,
+                          right: 8,
+                        ),
+                        textStyle: TextStyle(
+                          color: colorScheme.onPrimary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          height: 1.333,
+                        ),
+                      ),
+                      receivedMessageBodyTextStyle: TextStyle(
+                        color: colorScheme.onSurface,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        height: 1.5,
+                      ),
+                      receivedMessageCaptionTextStyle: TextStyle(
+                        color: colorScheme.onSurface,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        height: 1.333,
+                      ),
+                      receivedMessageDocumentIconColor: colorScheme.onSurface,
+                      receivedMessageLinkDescriptionTextStyle: TextStyle(
+                        color: colorScheme.onSurface,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        height: 1.428,
+                      ),
+                      receivedMessageLinkTitleTextStyle: TextStyle(
+                        color: colorScheme.onSurface,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        height: 1.375,
+                      ),
+                    ),
                     messages: state.messages,
                     onSendPressed: (partialText) {
                       FocusManager.instance.primaryFocus?.unfocus();

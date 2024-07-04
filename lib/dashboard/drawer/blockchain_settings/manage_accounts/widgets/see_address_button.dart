@@ -35,11 +35,13 @@ class SeeAddressButton extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
             ),
-            Text(
-              l10n.seeAddress.toUpperCase(),
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
+            Expanded(
+              child: MyText(
+                l10n.seeAddress.toUpperCase(),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+              ),
             ),
           ],
         ),

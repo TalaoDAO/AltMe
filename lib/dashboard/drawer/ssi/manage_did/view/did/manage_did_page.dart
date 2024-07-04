@@ -48,8 +48,9 @@ class _ManageDidEbsiPageState extends State<ManageDidPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final title = widget.didKeyType.getTitle(l10n);
     return BasePage(
-      title: l10n.decentralizedIDKey,
+      title: title,
       titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
