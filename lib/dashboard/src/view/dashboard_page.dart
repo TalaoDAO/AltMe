@@ -6,7 +6,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
