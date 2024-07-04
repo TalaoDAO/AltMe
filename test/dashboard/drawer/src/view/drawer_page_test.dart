@@ -206,7 +206,8 @@ void main() {
       expect(find.text('Self-Sovereign Identity (DID)'), findsOneWidget);
       expect(
         find.text(
-            'Manage your Decentralized ID and backup or restore your credentials'),
+          'Manage your Decentralized ID and backup or restore your credentials',
+        ),
         findsOneWidget,
       );
 

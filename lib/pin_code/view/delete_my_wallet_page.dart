@@ -1,4 +1,3 @@
-import 'package:altme/app/shared/constants/image_strings.dart';
 import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/dashboard/dashboard.dart';

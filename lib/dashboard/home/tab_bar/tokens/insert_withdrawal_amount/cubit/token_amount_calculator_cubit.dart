@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/logger/logger.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
 import 'package:decimal/decimal.dart';
