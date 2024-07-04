@@ -570,6 +570,7 @@ class CustomOidc4VcProfile extends Equatable {
       _$CustomOidc4VcProfileFromJson(json);
 
   final ClientAuthentication clientAuthentication;
+  @JsonKey(defaultValue: false)
   final bool credentialManifestSupport;
   @JsonKey(name: 'client_id')
   final String? clientId;
