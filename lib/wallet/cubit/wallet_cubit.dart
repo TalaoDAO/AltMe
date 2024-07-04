@@ -445,6 +445,8 @@ class WalletCubit extends Cubit<WalletState> {
     required BlockchainType blockchainType,
     required CredentialsCubit credentialsCubit,
   }) async {
+    emit(state.copyWith(status: WalletStatus.loading));
+
     final CryptoAccountData cryptoAccountData = state.cryptoAccount.data[index];
     cryptoAccountData.name = newAccountName;
 

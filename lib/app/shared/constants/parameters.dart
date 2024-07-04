@@ -102,4 +102,7 @@ class Parameters {
   // static const Color seedColor = Color(0xff6600FF);
   // Talao
   static const Color seedColor = Color(0xff1EAADC);
+
+  // ThemeMode.light for talao
+  static const ThemeMode defaultTheme = ThemeMode.light;
 }

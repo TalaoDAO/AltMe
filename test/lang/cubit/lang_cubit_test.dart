@@ -38,9 +38,9 @@ void main() {
     test('emits new state with recorded language locale', () async {
       when(() => mockSecureStorageProvider.get(SecureStorageKeys.language))
           .thenAnswer((_) async => 'es');
-      when(() =>
-              mockSecureStorageProvider.set(SecureStorageKeys.language, any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockSecureStorageProvider.set(SecureStorageKeys.language, any()),
+      ).thenAnswer((_) async {});
 
       await langCubit.checkLocale();
       expect(
@@ -52,9 +52,9 @@ void main() {
     test('returns LanguageType.phone when no recorded language', () async {
       when(() => mockSecureStorageProvider.get(SecureStorageKeys.language))
           .thenAnswer((_) async => null);
-      when(() =>
-              mockSecureStorageProvider.set(SecureStorageKeys.language, any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockSecureStorageProvider.set(SecureStorageKeys.language, any()),
+      ).thenAnswer((_) async {});
 
       final languageType = await langCubit.getRecordedLanguage();
       expect(languageType, LanguageType.phone);
@@ -80,15 +80,15 @@ void main() {
 
     test('calls secureStorageProvider.set with correct key and value',
         () async {
-      when(() =>
-              mockSecureStorageProvider.set(SecureStorageKeys.language, any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockSecureStorageProvider.set(SecureStorageKeys.language, any()),
+      ).thenAnswer((_) async {});
 
       await langCubit.recordLanguage('fr');
 
-      verify(() =>
-              mockSecureStorageProvider.set(SecureStorageKeys.language, 'fr'))
-          .called(1);
+      verify(
+        () => mockSecureStorageProvider.set(SecureStorageKeys.language, 'fr'),
+      ).called(1);
     });
   });
 }
