@@ -180,13 +180,16 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      CredentialField(
-                        padding: EdgeInsets.only(top: isFirstElement ? 10 : 0),
-                        title: title,
-                        value: claims.data,
-                        titleColor: Theme.of(context).colorScheme.onSurface,
-                        valueColor: Theme.of(context).colorScheme.onSurface,
-                        showVertically: showVertically,
+                      Flexible(
+                        child: CredentialField(
+                          padding:
+                              EdgeInsets.only(top: isFirstElement ? 10 : 0),
+                          title: title,
+                          value: claims.data,
+                          titleColor: Theme.of(context).colorScheme.onSurface,
+                          valueColor: Theme.of(context).colorScheme.onSurface,
+                          showVertically: showVertically,
+                        ),
                       ),
                       if (selectiveDisclosureState != null &&
                           claims.isfromDisclosureOfJWT) ...[
