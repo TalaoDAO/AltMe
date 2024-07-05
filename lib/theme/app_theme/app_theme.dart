@@ -43,6 +43,9 @@ class AppTheme {
         seedColor: seedColor,
         brightness: brightness,
         dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+        surfaceTint: brightness == Brightness.dark
+            ? const Color(0xFF00FF00)
+            : const Color(0xFF00CC00),
       ),
     );
   }
