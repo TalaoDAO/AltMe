@@ -48,7 +48,7 @@ class WalletRevokedDialog extends StatelessWidget {
               Navigator.of(context).pop();
             },
             child: Text(
-              l10n.skip.toUpperCase(),
+              l10n.close.toUpperCase(),
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
