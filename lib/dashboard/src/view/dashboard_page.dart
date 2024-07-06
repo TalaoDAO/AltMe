@@ -148,153 +148,151 @@ class _DashboardViewState extends State<DashboardView> {
         ),
       ],
       child: BlocBuilder<DashboardCubit, DashboardState>(
-        builder: (context, state) {
-          if (state.selectedIndex == 3) {
+        builder: (context, dashboardState) {
+          if (dashboardState.selectedIndex == 3) {
             context.read<AltmeChatSupportCubit>().setMessagesAsRead();
           }
 
-          final displayChatSupport = context
-              .read<ProfileCubit>()
-              .state
-              .model
-              .profileSetting
-              .helpCenterOptions
-              .displayChatSupport;
+          return BlocBuilder<ProfileCubit, ProfileState>(
+            builder: (context, profileState) {
+              final displayChatSupport = profileState
+                  .model.profileSetting.helpCenterOptions.displayChatSupport;
 
-          final isEnterprise =
-              context.read<ProfileCubit>().state.model.walletType ==
-                  WalletType.enterprise;
+              final isEnterprise =
+                  profileState.model.walletType == WalletType.enterprise;
 
-          return PopScope(
-            canPop: false,
-            onPopInvoked: (_) async {
-              if (scaffoldKey.currentState!.isDrawerOpen) {
-                // Navigator.of(context).pop();
-              }
-            },
-            child: BasePage(
-              scrollView: false,
-              title: _getTitle(state.selectedIndex, l10n),
-              scaffoldKey: scaffoldKey,
-              padding: EdgeInsets.zero,
-              drawer: const DrawerPage(),
-              titleLeading: HomeTitleLeading(
-                onPressed: () {
-                  if (context.read<HomeCubit>().state.homeStatus ==
-                      HomeStatus.hasNoWallet) {
-                    showDialog<void>(
-                      context: context,
-                      builder: (_) => const WalletDialog(),
-                    );
-                    return;
+              return PopScope(
+                canPop: false,
+                onPopInvoked: (_) async {
+                  if (scaffoldKey.currentState!.isDrawerOpen) {
+                    // Navigator.of(context).pop();
                   }
-                  scaffoldKey.currentState!.openDrawer();
                 },
-              ),
-              titleTrailing: Parameters.walletHandlesCrypto
-                  ? const CryptoAccountSwitcherButton()
-                  : const SizedBox.shrink(),
-              body: Stack(
-                children: [
-                  Column(
+                child: BasePage(
+                  scrollView: false,
+                  title: _getTitle(dashboardState.selectedIndex, l10n),
+                  scaffoldKey: scaffoldKey,
+                  padding: EdgeInsets.zero,
+                  drawer: const DrawerPage(),
+                  titleLeading: HomeTitleLeading(
+                    onPressed: () {
+                      if (context.read<HomeCubit>().state.homeStatus ==
+                          HomeStatus.hasNoWallet) {
+                        showDialog<void>(
+                          context: context,
+                          builder: (_) => const WalletDialog(),
+                        );
+                        return;
+                      }
+                      scaffoldKey.currentState!.openDrawer();
+                    },
+                  ),
+                  titleTrailing: Parameters.walletHandlesCrypto
+                      ? const CryptoAccountSwitcherButton()
+                      : const SizedBox.shrink(),
+                  body: Stack(
                     children: [
-                      Expanded(
-                        child: PageView(
-                          controller: pageController,
-                          onPageChanged:
-                              context.read<DashboardCubit>().onPageChanged,
-                          physics: const NeverScrollableScrollPhysics(),
-                          children: [
-                            const HomePage(),
-                            if (Parameters.walletHandlesCrypto)
-                              const DiscoverTabPage()
-                            else
-                              const DiscoverPage(),
-                            if (Parameters.walletHandlesCrypto)
-                              const WertPage()
-                            else
-                              const SearchPage(),
-                            if (displayChatSupport && isEnterprise)
-                              const AltmeSupportChatPage()
-                            else
-                              Container(),
-                          ],
-                        ),
-                      ),
-                      BottomBarDecoration(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            BottomBarItem(
-                              icon: IconStrings.home,
-                              text: l10n.home,
-                              onTap: () => bottomTapped(0),
-                              isSelected: state.selectedIndex == 0,
+                      Column(
+                        children: [
+                          Expanded(
+                            child: PageView(
+                              controller: pageController,
+                              onPageChanged:
+                                  context.read<DashboardCubit>().onPageChanged,
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: [
+                                const HomePage(),
+                                if (Parameters.walletHandlesCrypto)
+                                  const DiscoverTabPage()
+                                else
+                                  const DiscoverPage(),
+                                if (Parameters.walletHandlesCrypto)
+                                  const WertPage()
+                                else
+                                  const SearchPage(),
+                                if (displayChatSupport && isEnterprise)
+                                  const AltmeSupportChatPage()
+                                else
+                                  Container(),
+                              ],
                             ),
-                            BottomBarItem(
-                              icon: IconStrings.discover,
-                              text: l10n.discover,
-                              onTap: () => bottomTapped(1),
-                              isSelected: state.selectedIndex == 1,
+                          ),
+                          BottomBarDecoration(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                BottomBarItem(
+                                  icon: IconStrings.home,
+                                  text: l10n.home,
+                                  onTap: () => bottomTapped(0),
+                                  isSelected: dashboardState.selectedIndex == 0,
+                                ),
+                                BottomBarItem(
+                                  icon: IconStrings.discover,
+                                  text: l10n.discover,
+                                  onTap: () => bottomTapped(1),
+                                  isSelected: dashboardState.selectedIndex == 1,
+                                ),
+                                const SizedBox(width: 60),
+                                if (Parameters.walletHandlesCrypto)
+                                  BottomBarItem(
+                                    icon: IconStrings.cashInHand,
+                                    text: l10n.buy,
+                                    onTap: () => bottomTapped(2),
+                                    isSelected:
+                                        dashboardState.selectedIndex == 2,
+                                  )
+                                else
+                                  BottomBarItem(
+                                    icon: IconStrings.searchNormal,
+                                    text: l10n.search,
+                                    onTap: () => bottomTapped(2),
+                                    isSelected:
+                                        dashboardState.selectedIndex == 2,
+                                  ),
+                                if (displayChatSupport && isEnterprise) ...[
+                                  StreamBuilder(
+                                    initialData: context
+                                        .read<AltmeChatSupportCubit>()
+                                        .unreadMessageCount,
+                                    stream: context
+                                        .read<AltmeChatSupportCubit>()
+                                        .unreadMessageCountStream,
+                                    builder: (_, snapShot) {
+                                      return BottomBarItem(
+                                        icon: IconStrings.messaging,
+                                        text: l10n.chat,
+                                        badgeCount: snapShot.data ?? 0,
+                                        onTap: () => bottomTapped(3),
+                                        isSelected:
+                                            dashboardState.selectedIndex == 3,
+                                      );
+                                    },
+                                  ),
+                                ] else ...[
+                                  BottomBarItem(
+                                    icon: IconStrings.settings,
+                                    text: l10n.settings,
+                                    onTap: () =>
+                                        scaffoldKey.currentState!.openDrawer(),
+                                    isSelected: false,
+                                  ),
+                                ],
+                              ],
                             ),
-                            const SizedBox(width: 60),
-                            if (Parameters.walletHandlesCrypto)
-                              BottomBarItem(
-                                icon: IconStrings.cashInHand,
-                                text: l10n.buy,
-                                onTap: () => bottomTapped(2),
-                                isSelected: state.selectedIndex == 2,
-                              )
-                            else
-                              BottomBarItem(
-                                icon: IconStrings.searchNormal,
-                                text: l10n.search,
-                                onTap: () => bottomTapped(2),
-                                isSelected: state.selectedIndex == 2,
-                              ),
-                            if (displayChatSupport && isEnterprise) ...[
-                              StreamBuilder(
-                                initialData: context
-                                    .read<AltmeChatSupportCubit>()
-                                    .unreadMessageCount,
-                                stream: context
-                                    .read<AltmeChatSupportCubit>()
-                                    .unreadMessageCountStream,
-                                builder: (_, snapShot) {
-                                  return BottomBarItem(
-                                    icon: IconStrings.messaging,
-                                    text: l10n.chat,
-                                    badgeCount: snapShot.data ?? 0,
-                                    onTap: () => bottomTapped(3),
-                                    isSelected: state.selectedIndex == 3,
-                                  );
-                                },
-                              ),
-                            ] else ...[
-                              BottomBarItem(
-                                icon: IconStrings.settings,
-                                text: l10n.settings,
-                                onTap: () =>
-                                    scaffoldKey.currentState!.openDrawer(),
-                                isSelected: false,
-                              ),
-                            ],
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 1),
+                        ],
                       ),
-                      const SizedBox(height: 1),
+                      const Align(
+                        alignment: Alignment.bottomCenter,
+                        child: QRIcon(),
+                      ),
                     ],
                   ),
-                  const Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 16),
-                      child: QRIcon(),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           );
         },
       ),

@@ -7,7 +7,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/view/pin_code_page.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:flutter/foundation.dart';
@@ -50,19 +49,17 @@ class _SplashViewState extends State<SplashView> {
         /// In case app is opened through deeplink we need to handle
         /// incoming request.
         if (initialUri != null) {
-          await Navigator.of(context).push<void>(
-            PinCodePage.route(
-              restrictToBack: true,
-              isValidCallback: () {
-                Navigator.of(context).push<void>(DashboardPage.route());
-              },
-              walletProtectionType: WalletProtectionType.pinCode,
-            ),
-          );
+          await securityCheck(
+            context: context,
+            onSuccess: () async {
+              await Navigator.of(context).push<void>(DashboardPage.route());
 
-          await processIncomingUri(
-            initialUri,
-            context,
+              await processIncomingUri(
+                initialUri,
+                context,
+              );
+            },
+            localAuthApi: LocalAuthApi(),
           );
         }
       },
