@@ -28,7 +28,10 @@ List<CredentialModel> getCredentialsFromFilterList({
               (searchParameter) {
                 String? pattern;
 
-                if (field.filter?.pattern != null) {
+                if (field.filter == null) {
+                  //ascs case
+                  return false;
+                } else if (field.filter?.pattern != null) {
                   pattern = field.filter!.pattern;
                 } else if (field.filter?.contains?.containsConst != null) {
                   pattern = field.filter?.contains?.containsConst;
@@ -39,9 +42,9 @@ List<CredentialModel> getCredentialsFromFilterList({
                   if (searchParameter == 'true') return false;
                 }
 
-                if (pattern == null) return true;
-
-                if (pattern.endsWith(r'$')) {
+                if (pattern == null) {
+                  return true;
+                } else if (pattern.endsWith(r'$')) {
                   final RegExp regEx = RegExp(pattern);
                   final Match? match = regEx.firstMatch(searchParameter);
 
