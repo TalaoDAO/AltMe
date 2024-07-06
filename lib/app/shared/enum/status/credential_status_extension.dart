@@ -43,7 +43,7 @@ extension CredentialStatusExtension on CredentialStatus {
   Color color(BuildContext context) {
     switch (this) {
       case CredentialStatus.active:
-        return Theme.of(context).colorScheme.surfaceTint;
+        return Colors.green;
       case CredentialStatus.invalidStatus:
       case CredentialStatus.expired:
       case CredentialStatus.pending:
