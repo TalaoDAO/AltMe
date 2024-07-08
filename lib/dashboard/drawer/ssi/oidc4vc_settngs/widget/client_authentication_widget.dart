@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/widget/divider_for_radio_list.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -11,12 +10,13 @@ class ClientAuthenticationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return OptionContainer(
-          title: l10n.clientAuthenticationMethods,
-          subtitle: l10n.clientAuthenticationMethodsSubtitle,
+          title: 'Client Authentication Methods',
+          subtitle:
+              'Default: Client id as DID or JWK\nSelect to other authentication'
+              ' methods if needed.',
           body: ListView.builder(
             itemCount: ClientAuthentication.values.length,
             shrinkWrap: true,
