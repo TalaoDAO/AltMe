@@ -180,7 +180,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Flexible(
+                      Expanded(
                         child: CredentialField(
                           padding:
                               EdgeInsets.only(top: isFirstElement ? 10 : 0),
