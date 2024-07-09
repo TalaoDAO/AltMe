@@ -5,6 +5,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:altme/dashboard/qr_code/qr_code.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';
@@ -44,6 +45,7 @@ class HomeCubit extends Cubit<HomeState> {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required BlockchainType blockchainType,
     required VCFormatType vcFormatType,
+    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     // launch url to get Over18, Over15, Over13,Over21,Over50,Over65,
     // AgeRange Credentials
@@ -101,6 +103,7 @@ class HomeCubit extends Cubit<HomeState> {
         oidc4vciDraftType: oidc4vciDraftType,
         blockchainType: blockchainType,
         vcFormatType: vcFormatType,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
 
       await ageEstimate(
@@ -160,6 +163,7 @@ class HomeCubit extends Cubit<HomeState> {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required BlockchainType blockchainType,
     required VCFormatType vcFormatType,
+    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     /// if credential of this type is already in the wallet do nothing
     /// Ensure credentialType = name of credential type in CredentialModel
@@ -216,6 +220,7 @@ class HomeCubit extends Cubit<HomeState> {
           credential: credentialModel,
           showMessage: true,
           blockchainType: blockchainType,
+          qrCodeScanCubit: qrCodeScanCubit,
         );
         await cameraCubit.incrementAcquiredCredentialsQuantity();
         emit(state.copyWith(status: AppStatus.success));

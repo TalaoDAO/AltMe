@@ -59,7 +59,7 @@ class ScanCubit extends Cubit<ScanState> {
     required String keyId,
     required List<CredentialModel>? credentialsToBePresented,
     required Issuer issuer,
-    QRCodeScanCubit? qrCodeScanCubit,
+    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -110,7 +110,7 @@ class ScanCubit extends Cubit<ScanState> {
             privateKey: privateKey,
             stateValue: stateValue,
             idTokenNeeded: hasIDToken(responseType),
-            qrCodeScanCubit: qrCodeScanCubit!,
+            qrCodeScanCubit: qrCodeScanCubit,
           );
           return;
         } else {
@@ -282,6 +282,7 @@ class ScanCubit extends Cubit<ScanState> {
             activities: activities,
             credentialManifest: credentialManifest,
           ),
+          qrCodeScanCubit: qrCodeScanCubit,
         );
 
         if (credentialsToBePresented != null) {

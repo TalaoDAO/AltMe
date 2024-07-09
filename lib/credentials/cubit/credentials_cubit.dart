@@ -112,6 +112,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> addWalletCredential({
     required BlockchainType? blockchainType,
+    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     final log = getLogger('addRequiredCredentials');
 
@@ -175,6 +176,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         credential: walletCredential,
         showMessage: false,
         blockchainType: blockchainType,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
     }
   }
@@ -261,6 +263,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> insertCredential({
     required CredentialModel credential,
     required BlockchainType? blockchainType,
+    required QRCodeScanCubit qrCodeScanCubit,
     bool showMessage = true,
     bool showStatus = true,
     bool isPendingCredential = false,
@@ -335,6 +338,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             : null,
       ),
     );
+
+    if (qrCodeScanCubit.missingCredentialCompleter != null) {
+      qrCodeScanCubit.missingCredentialCompleter!.complete(true);
+    }
   }
 
   void enableCredentialCategory({required CredentialCategory category}) {
@@ -503,6 +510,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> insertAssociatedWalletCredential({
     required CryptoAccountData cryptoAccountData,
+    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     final supportAssociatedCredential =
         supportCryptoCredential(profileCubit.state.model);
@@ -549,6 +557,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       await insertCredential(
         credential: credential,
         blockchainType: cryptoAccountData.blockchainType,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
     }
   }

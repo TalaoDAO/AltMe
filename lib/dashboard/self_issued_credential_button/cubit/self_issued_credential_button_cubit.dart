@@ -22,12 +22,14 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
     required this.profileCubit,
     required this.walletCubit,
     required this.jwtDecode,
+    required this.qrCodeScanCubit,
   }) : super(const SelfIssuedCredentialButtonState());
 
   final CredentialsCubit credentialsCubit;
   final ProfileCubit profileCubit;
   final WalletCubit walletCubit;
   final JWTDecode jwtDecode;
+  final QRCodeScanCubit qrCodeScanCubit;
 
   Future<void> createSelfIssuedCredential({
     required SelfIssuedCredentialDataModel selfIssuedCredentialDataModel,
@@ -150,6 +152,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
     await credentialsCubit.insertCredential(
       credential: credentialModel,
       blockchainType: walletCubit.state.currentAccount!.blockchainType,
+      qrCodeScanCubit: qrCodeScanCubit,
     );
     emit(
       state.success(

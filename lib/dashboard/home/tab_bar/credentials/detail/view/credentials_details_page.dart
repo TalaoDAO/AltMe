@@ -468,6 +468,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                   .read<QRCodeScanCubit>()
                                   .startOIDC4VCDeferedCredentialIssuance(
                                     credentialModel: widget.credentialModel,
+                                    qrCodeScanCubit:
+                                        context.read<QRCodeScanCubit>(),
                                   );
                             },
                           ),

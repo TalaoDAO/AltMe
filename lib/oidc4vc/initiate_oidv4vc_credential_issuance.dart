@@ -139,6 +139,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           clientSecret: clientSecret,
           oAuthClientAttestation: oAuthClientAttestation,
           oAuthClientAttestationPop: oAuthClientAttestationPop,
+          qrCodeScanCubit: qrCodeScanCubit,
         );
       }
     }
@@ -151,6 +152,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       isEBSIV3: isEBSIV3,
       credentialOfferJson: credentialOfferJson,
       selectedCredentials: [credentials],
+      qrCodeScanCubit: qrCodeScanCubit,
     );
   }
 }

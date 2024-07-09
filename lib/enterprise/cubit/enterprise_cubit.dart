@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
-import 'package:altme/dashboard/profile/profile.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +25,10 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
   final ProfileCubit profileCubit;
   final CredentialsCubit credentialsCubit;
 
-  Future<void> requestTheConfiguration(Uri uri) async {
+  Future<void> requestTheConfiguration({
+    required Uri uri,
+    required QRCodeScanCubit qrCodeScanCubit,
+  }) async {
     try {
       emit(state.loading());
 
@@ -96,6 +99,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       await credentialsCubit.addWalletCredential(
         blockchainType:
             credentialsCubit.walletCubit.state.currentAccount?.blockchainType,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
 
       emit(

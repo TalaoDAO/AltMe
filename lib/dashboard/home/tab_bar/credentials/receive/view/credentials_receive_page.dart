@@ -143,12 +143,13 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                       );
                     } else {
                       context.read<ScanCubit>().credentialOfferOrPresent(
-                        uri: widget.uri,
-                        credentialModel: credentialModel,
-                        keyId: SecureStorageKeys.ssiKey,
-                        issuer: widget.issuer,
-                        credentialsToBePresented: [],
-                      );
+                            uri: widget.uri,
+                            credentialModel: credentialModel,
+                            keyId: SecureStorageKeys.ssiKey,
+                            issuer: widget.issuer,
+                            credentialsToBePresented: [],
+                            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                          );
                     }
                   },
                 ),
