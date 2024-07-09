@@ -43,19 +43,7 @@ class WalletRevokedDialog extends StatelessWidget {
               await resetWallet(context);
             },
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              l10n.close.toUpperCase(),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(color: textColor),
-              textAlign: TextAlign.center,
-            ),
-          ),
+          const SizedBox(height: 24),
         ],
       ),
     );

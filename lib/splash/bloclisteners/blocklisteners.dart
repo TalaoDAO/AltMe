@@ -874,6 +874,7 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
     if (state.status == AppStatus.revoked) {
       showDialog<void>(
         context: context,
+        barrierDismissible: false,
         builder: (_) => const WalletRevokedDialog(),
       );
     }
