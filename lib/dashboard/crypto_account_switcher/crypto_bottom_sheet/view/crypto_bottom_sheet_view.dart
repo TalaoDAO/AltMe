@@ -75,6 +75,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
     return BlocConsumer<CryptoBottomSheetCubit, CryptoBottomSheetState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -150,36 +151,51 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                   Radius.circular(Sizes.normalRadius),
                                 ),
                               ),
-                              child: ListView.separated(
-                                itemCount: state.cryptoAccount.data.length,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, i) {
-                                  return CryptoAccountItem(
-                                    cryptoAccountData:
-                                        state.cryptoAccount.data[i],
-                                    isSelected: state.currentCryptoIndex == i,
-                                    listIndex: i,
-                                    onPressed: () {
-                                      context
-                                          .read<CryptoBottomSheetCubit>()
-                                          .setCurrentWalletAccount(i);
+                              child: BlocBuilder<ProfileCubit, ProfileState>(
+                                builder: (context, profileStae) {
+                                  final profileSetting =
+                                      profileStae.model.profileSetting;
+
+                                  return ListView.separated(
+                                    itemCount: state.cryptoAccount.data.length,
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, i) {
+                                      final data = state.cryptoAccount.data[i];
+
+                                      if (!data.blockchainType
+                                          .isSupported(profileSetting)) {
+                                        return Container();
+                                      }
+
+                                      return CryptoAccountItem(
+                                        cryptoAccountData: data,
+                                        isSelected:
+                                            state.currentCryptoIndex == i,
+                                        listIndex: i,
+                                        onPressed: () {
+                                          context
+                                              .read<CryptoBottomSheetCubit>()
+                                              .setCurrentWalletAccount(i);
+                                        },
+                                        onEditButtonPressed: () => _edit(i),
+                                      );
                                     },
-                                    onEditButtonPressed: () => _edit(i),
+                                    separatorBuilder: (_, __) => Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: Sizes.spaceSmall,
+                                      ),
+                                      child: Divider(
+                                        height: 0.2,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withOpacity(0.12),
+                                      ),
+                                    ),
                                   );
                                 },
-                                separatorBuilder: (_, __) => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: Sizes.spaceSmall,
-                                  ),
-                                  child: Divider(
-                                    height: 0.2,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withOpacity(0.12),
-                                  ),
-                                ),
                               ),
                             ),
                             Container(height: 20),
