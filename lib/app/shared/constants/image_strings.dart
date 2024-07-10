@@ -56,7 +56,6 @@ class ImageStrings {
       '$imagePath/talao_community_card.png';
   static const String verifiableIdCard = '$imagePath/verifiable_id_card.png';
 
-  static const String linkedInCard = '$imagePath/linkedin_card.png';
   static const String kycAgeCredentialCard =
       '$imagePath/kyc_age_credential_card.png';
   static const String kycCountryOfResidenceCard =
@@ -124,7 +123,6 @@ class ImageStrings {
 
   static const String dummyVerifiableIdCard =
       '$imagePath/dummy_verifiable_id_card.png';
-  static const String dummyLinkedinCard = '$imagePath/dummy_linkedin_card.png';
 
   static const String dummyPhonePassCard =
       '$imagePath/dummy_phone_pass_card.png';
@@ -155,8 +153,6 @@ class ImageStrings {
       '$imagePath/import-account-method.png';
 
   static const String receiveSqure = '$imagePath/receive-square.png';
-
-  static const String linkedInBanner = '$imagePath/linkedin_banner.png';
 
   static const String blankGetCard =
       '$imagePath/blank_transparent_get_card.png';

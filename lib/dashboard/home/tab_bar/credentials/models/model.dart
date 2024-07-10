@@ -39,7 +39,6 @@ export 'kyc_age_credential/kyc_age_credential_model.dart';
 export 'kyc_country_of_residence/kyc_country_of_residence_model.dart';
 export 'learning_achievement/learning_achievement_model.dart';
 export 'legal_person_credential/legal_person_credential_model.dart';
-export 'linkedin_card/linkedin_card_model.dart';
 export 'liveness_card/liveness_card_model.dart';
 export 'nationality/nationality_model.dart';
 export 'over13/over13_model.dart';

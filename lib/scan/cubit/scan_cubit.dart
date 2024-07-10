@@ -30,8 +30,6 @@ part 'scan_state.dart';
 ///the wallet stores the VC
 /// If needed the wallet builds a VP with the VC and sends it to a Verifier
 
-/// In LinkedIn case the VP is embedded in the QR code, not sent to the verifier
-
 class ScanCubit extends Cubit<ScanState> {
   ScanCubit({
     required this.client,

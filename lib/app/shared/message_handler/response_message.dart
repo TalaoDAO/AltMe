@@ -99,11 +99,6 @@ class ResponseMessage with MessageHandler {
               .RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE
               .localise(context);
 
-        case ResponseString.RESPONSE_STRING_linkedInBannerSuccessfullyExported:
-          return ResponseString
-                  .RESPONSE_STRING_linkedInBannerSuccessfullyExported
-              .localise(context);
-
         case ResponseString.RESPONSE_STRING_credentialSuccessfullyExported:
           return ResponseString.RESPONSE_STRING_credentialSuccessfullyExported
               .localise(context);
@@ -521,23 +516,6 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_transactionIsLikelyToFail:
           return ResponseString.RESPONSE_STRING_transactionIsLikelyToFail
               .localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard:
-          return ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard
-              .localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_linkedinCardExpirationDate:
-          return ResponseString.RESPONSE_STRING_linkedinCardExpirationDate
-              .localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt:
-          return ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt.localise(
             context,
           );
 

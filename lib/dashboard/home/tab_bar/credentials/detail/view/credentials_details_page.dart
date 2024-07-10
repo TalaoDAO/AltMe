@@ -70,7 +70,6 @@ class CredentialsDetailsPage extends StatelessWidget {
       ],
       child: CredentialsDetailsView(
         credentialModel: credentialModel,
-        readOnly: readOnly,
         cardChatSupportCubit: cardChatSupportCubit,
       ),
     );
@@ -81,12 +80,10 @@ class CredentialsDetailsView extends StatefulWidget {
   const CredentialsDetailsView({
     super.key,
     required this.credentialModel,
-    required this.readOnly,
     required this.cardChatSupportCubit,
   });
 
   final CredentialModel credentialModel;
-  final bool readOnly;
   final CardChatSupportCubit? cardChatSupportCubit;
 
   @override
@@ -194,7 +191,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
             context.read<ProfileCubit>().state.model.profileSetting;
 
         return BasePage(
-          title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
+          title: l10n.cardDetails,
           titleAlignment: Alignment.topCenter,
           titleLeading: const BackLeadingButton(),
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -235,20 +232,19 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                         ),
                                   ),
                                 ),
-                                if (!widget.readOnly)
-                                  Expanded(
-                                    child: CredentialDetailTabbar(
-                                      isSelected: state
-                                              .credentialDetailTabStatus ==
-                                          CredentialDetailTabStatus.activity,
-                                      title: l10n.credentialDetailsActivity,
-                                      onTap: () => context
-                                          .read<CredentialDetailsCubit>()
-                                          .changeTabStatus(
+                                Expanded(
+                                  child: CredentialDetailTabbar(
+                                    isSelected:
+                                        state.credentialDetailTabStatus ==
                                             CredentialDetailTabStatus.activity,
-                                          ),
-                                    ),
+                                    title: l10n.credentialDetailsActivity,
+                                    onTap: () => context
+                                        .read<CredentialDetailsCubit>()
+                                        .changeTabStatus(
+                                          CredentialDetailTabStatus.activity,
+                                        ),
                                   ),
+                                ),
                                 if (widget.cardChatSupportCubit != null)
                                   Expanded(
                                     child: StreamBuilder(
@@ -392,112 +388,93 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               ),
             ],
           ),
-          navigation: widget.readOnly
-              ? null
-              : SafeArea(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 5,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        MyOutlinedButton(
-                          onPressed: widget.credentialModel.disAllowDelete
-                              ? null
-                              : delete,
-                          text: l10n.credentialDetailDeleteCard,
-                        ),
-                        const SizedBox(height: 8),
-                        if (widget.credentialModel.pendingInfo == null) ...[
-                          if (isDeveloperMode)
-                            MyOutlinedButton(
-                              text: widget.credentialModel.isLinkeInCard
-                                  ? l10n.exportToLinkedIn
-                                  : l10n.download,
-                              onPressed: () {
-                                if (widget.credentialModel.isLinkeInCard) {
-                                  Navigator.of(context).push<void>(
-                                    GetLinkedinInfoPage.route(
-                                      credentialModel: widget.credentialModel,
-                                    ),
-                                  );
-                                } else {
-                                  if (widget.credentialModel.isEbsiCard) {
-                                    /// removing type that was added in add_ebsi_credential.dart
-                                    widget.credentialModel
-                                        .data['credentialSubject']
-                                        .remove('type');
-                                  }
-
-                                  late String data;
-                                  final String? jwt =
-                                      widget.credentialModel.jwt;
-                                  if (jwt != null) {
-                                    data = jwt;
-                                  } else {
-                                    data =
-                                        jsonEncode(widget.credentialModel.data);
-                                  }
-
-                                  getLogger(
-                                    'CredentialDetailsPage - shared date',
-                                  ).i(data);
-
-                                  final box =
-                                      context.findRenderObject() as RenderBox?;
-                                  final subject = l10n.shareWith;
-
-                                  Share.share(
-                                    data,
-                                    subject: subject,
-                                    sharePositionOrigin:
-                                        box!.localToGlobal(Offset.zero) &
-                                            box.size,
-                                  );
-                                }
-                              },
-                            ),
-                        ] else ...[
-                          MyOutlinedButton(
-                            text: l10n.getItNow,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              context
-                                  .read<QRCodeScanCubit>()
-                                  .startOIDC4VCDeferedCredentialIssuance(
-                                    credentialModel: widget.credentialModel,
-                                    qrCodeScanCubit:
-                                        context.read<QRCodeScanCubit>(),
-                                  );
-                            },
-                          ),
-                        ],
-                        if (widget.credentialModel.shareLink != '')
-                          MyOutlinedButton.icon(
-                            icon: SvgPicture.asset(
-                              IconStrings.qrCode,
-                              width: 24,
-                              height: 24,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).push<void>(
-                                QrCodeDisplayPage.route(
-                                  title: '',
-                                  data: widget.credentialModel.shareLink,
-                                ),
-                              );
-                            },
-                            text: l10n.credentialDetailShare,
-                          )
-                        else
-                          Container(),
-                      ],
-                    ),
+          navigation: SafeArea(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 5,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MyOutlinedButton(
+                    onPressed:
+                        widget.credentialModel.disAllowDelete ? null : delete,
+                    text: l10n.credentialDetailDeleteCard,
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  if (widget.credentialModel.pendingInfo == null) ...[
+                    if (isDeveloperMode)
+                      MyOutlinedButton(
+                        text: l10n.download,
+                        onPressed: () {
+                          if (widget.credentialModel.isEbsiCard) {
+                            /// removing type that was added in add_ebsi_credential.dart
+                            widget.credentialModel.data['credentialSubject']
+                                .remove('type');
+                          }
+
+                          late String data;
+                          final String? jwt = widget.credentialModel.jwt;
+                          if (jwt != null) {
+                            data = jwt;
+                          } else {
+                            data = jsonEncode(widget.credentialModel.data);
+                          }
+
+                          getLogger(
+                            'CredentialDetailsPage - shared date',
+                          ).i(data);
+
+                          final box = context.findRenderObject() as RenderBox?;
+                          final subject = l10n.shareWith;
+
+                          Share.share(
+                            data,
+                            subject: subject,
+                            sharePositionOrigin:
+                                box!.localToGlobal(Offset.zero) & box.size,
+                          );
+                        },
+                      ),
+                  ] else ...[
+                    MyOutlinedButton(
+                      text: l10n.getItNow,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        context
+                            .read<QRCodeScanCubit>()
+                            .startOIDC4VCDeferedCredentialIssuance(
+                              credentialModel: widget.credentialModel,
+                              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                            );
+                      },
+                    ),
+                  ],
+                  if (widget.credentialModel.shareLink != '')
+                    MyOutlinedButton.icon(
+                      icon: SvgPicture.asset(
+                        IconStrings.qrCode,
+                        width: 24,
+                        height: 24,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push<void>(
+                          QrCodeDisplayPage.route(
+                            title: '',
+                            data: widget.credentialModel.shareLink,
+                          ),
+                        );
+                      },
+                      text: l10n.credentialDetailShare,
+                    )
+                  else
+                    Container(),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );
