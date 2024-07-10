@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class WalletRevokedDialog extends StatelessWidget {
   const WalletRevokedDialog({super.key});
@@ -43,7 +46,25 @@ class WalletRevokedDialog extends StatelessWidget {
               await resetWallet(context);
             },
           ),
-          const SizedBox(height: 24),
+          TextButton(
+            onPressed: () {
+              if (isAndroid) {
+                SystemNavigator.pop();
+              } else {
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  exit(0);
+                });
+              }
+            },
+            child: Text(
+              l10n.close.toUpperCase(),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(color: textColor),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ],
       ),
     );
