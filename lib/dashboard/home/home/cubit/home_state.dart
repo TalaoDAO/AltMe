@@ -7,7 +7,6 @@ class HomeState extends Equatable {
     this.message,
     this.homeStatus = HomeStatus.hasNoWallet,
     this.link,
-    this.tokenReward,
     this.data,
   });
 
@@ -18,14 +17,12 @@ class HomeState extends Equatable {
   final StateMessage? message;
   final HomeStatus homeStatus;
   final String? link;
-  final TokenReward? tokenReward;
   final dynamic data;
 
   HomeState loading() {
     return HomeState(
       status: AppStatus.loading,
       homeStatus: homeStatus,
-      tokenReward: null,
       link: link,
     );
   }
@@ -35,7 +32,6 @@ class HomeState extends Equatable {
     StateMessage? message,
     HomeStatus? homeStatus,
     String? link,
-    TokenReward? tokenReward,
     dynamic data,
     bool? needToVerifyMnemonics,
   }) {
@@ -44,7 +40,6 @@ class HomeState extends Equatable {
       message: message,
       homeStatus: homeStatus ?? this.homeStatus,
       link: link ?? this.link,
-      tokenReward: tokenReward ?? this.tokenReward,
       data: data ?? this.data,
     );
   }
@@ -57,7 +52,6 @@ class HomeState extends Equatable {
         message,
         homeStatus,
         link,
-        tokenReward,
         data,
       ];
 }
