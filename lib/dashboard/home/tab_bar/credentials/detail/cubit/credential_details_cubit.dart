@@ -202,7 +202,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   // revoked
                   emit(
                     state.copyWith(
-                      credentialStatus: CredentialStatus.invalidStatus,
+                      credentialStatus:
+                          CredentialStatus.statusListInvalidSignature,
                       status: AppStatus.idle,
                       statusListIndex: statusListIndex,
                       statusListUrl: statusListUri,
