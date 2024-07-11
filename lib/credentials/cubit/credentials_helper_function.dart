@@ -29,13 +29,14 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         didMethod = AltMeStrings.cryptoEVMDIDMethod;
     }
 
+    log.i('didMethod - $didMethod');
+
     final String jwkKey = await keyGenerator.jwkFromSecretKey(
       secretKey: cryptoAccountData.secretKey,
       accountType: blockchainType.accountType,
     );
 
-    final issuer = didKitProvider.keyToDID(didMethod, jwkKey);
-    log.i('didMethod - $didMethod');
+    final String issuer = didKitProvider.keyToDID(didMethod, jwkKey);
     log.i('jwkKey - $jwkKey');
     log.i('didKitProvider.keyToDID - $issuer');
 
@@ -54,9 +55,12 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       case BlockchainType.fantom:
       case BlockchainType.polygon:
       case BlockchainType.binance:
-        verificationMethod = '$issuer#Recovery2020';
+        //verificationMethod = '$issuer#Recovery2020';
+        verificationMethod =
+            await didKitProvider.keyToVerificationMethod(didMethod, jwkKey);
     }
-    log.i('hardcoded verificationMethod - $verificationMethod');
+
+    log.i('verificationMethod - $verificationMethod');
 
     final options = {
       'proofPurpose': 'assertionMethod',
