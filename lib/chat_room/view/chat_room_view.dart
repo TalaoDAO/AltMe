@@ -177,6 +177,8 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                       ),
                     ),
                     messages: state.messages,
+                    // imageMessageBuilder: (p0, {required messageWidth}) =>
+                    //     Text('Uri: ${p0.uri}'),
                     onSendPressed: (partialText) {
                       FocusManager.instance.primaryFocus?.unfocus();
                       liveChatCubit!.onSendPressed(partialText);
