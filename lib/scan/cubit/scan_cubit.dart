@@ -872,6 +872,7 @@ class ScanCubit extends Cubit<ScanState> {
       clientMetaData: clientMetaData,
       presentationDefinition: presentationDefinition,
       vcFormatType: vcFormatType,
+      credentialsToBePresented: credentialsToBePresented,
     );
 
     if (presentLdpVc) {
