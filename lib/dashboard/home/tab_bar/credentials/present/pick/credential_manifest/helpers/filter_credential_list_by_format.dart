@@ -32,31 +32,33 @@ List<CredentialModel> filterCredenialListByFormat({
       credentialsToBePresented: credentials,
     );
 
-    credentials.removeWhere(
-      (CredentialModel credentialModel) {
-        /// remove ldpVc
-        if (presentLdpVc) {
-          return credentialModel.getFormat != VCFormatType.ldpVc.vcValue;
-        }
+    if (vcFormatType != VCFormatType.auto) {
+      credentials.removeWhere(
+        (CredentialModel credentialModel) {
+          /// remove ldpVc
+          if (presentLdpVc) {
+            return credentialModel.getFormat != VCFormatType.ldpVc.vcValue;
+          }
 
-        /// remove jwtVc
-        if (presentJwtVc) {
-          return credentialModel.getFormat != VCFormatType.jwtVc.vcValue;
-        }
+          /// remove jwtVc
+          if (presentJwtVc) {
+            return credentialModel.getFormat != VCFormatType.jwtVc.vcValue;
+          }
 
-        /// remove JwtVcJson
-        if (presentJwtVcJson) {
-          return credentialModel.getFormat != VCFormatType.jwtVcJson.vcValue;
-        }
+          /// remove JwtVcJson
+          if (presentJwtVcJson) {
+            return credentialModel.getFormat != VCFormatType.jwtVcJson.vcValue;
+          }
 
-        /// remove vcSdJwt
-        if (presentVcSdJwt) {
-          return credentialModel.getFormat != VCFormatType.vcSdJWT.vcValue;
-        }
+          /// remove vcSdJwt
+          if (presentVcSdJwt) {
+            return credentialModel.getFormat != VCFormatType.vcSdJWT.vcValue;
+          }
 
-        return false;
-      },
-    );
+          return false;
+        },
+      );
+    }
   }
   return credentials;
 }
