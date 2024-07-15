@@ -22,6 +22,11 @@ class VCFormatWidget extends StatelessWidget {
             padding: EdgeInsets.zero,
             itemBuilder: (context, index) {
               final vcFormatType = VCFormatType.values[index];
+
+              if (vcFormatType == VCFormatType.auto) {
+                return Container();
+              }
+
               return Column(
                 children: [
                   ListTile(

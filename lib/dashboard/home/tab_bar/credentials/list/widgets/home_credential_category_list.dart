@@ -75,6 +75,11 @@ class HomeCredentialCategoryList extends StatelessWidget {
                       }
                     }
 
+                    if (customOidc4vcProfile.vcFormatType.vcValue ==
+                        VCFormatType.auto.vcValue) {
+                      return true;
+                    }
+
                     /// do not load the credential if vc format is different
                     if (customOidc4vcProfile.vcFormatType.vcValue !=
                         element.getFormat) {

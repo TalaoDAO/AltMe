@@ -1853,6 +1853,13 @@ List<String> getStringCredentialsForToken({
     }
   }
 
+  if (vcFormatType == VCFormatType.auto) {
+    presentLdpVc = true;
+    presentJwtVc = true;
+    presentJwtVcJson = true;
+    presentVcSdJwt = true;
+  }
+
   if (!presentLdpVc && !presentJwtVc && !presentJwtVcJson && !presentVcSdJwt) {
     throw ResponseMessage(
       data: {
@@ -1891,17 +1898,19 @@ List<String> getStringCredentialsForToken({
     presentVcSdJwt = true;
   }
 
-  if ((presentLdpVc && vcFormatType != VCFormatType.ldpVc) ||
-      (presentJwtVc && vcFormatType != VCFormatType.jwtVc) ||
-      presentJwtVcJson && vcFormatType != VCFormatType.jwtVcJson ||
-      presentVcSdJwt && vcFormatType != VCFormatType.vcSdJWT) {
-    throw ResponseMessage(
-      data: {
-        'error': 'invalid_request',
-        'error_description': 'Please switch to profile that supports format '
-            '${supportingFormats.join('/')}.',
-      },
-    );
+  if (vcFormatType != VCFormatType.auto) {
+    if ((presentLdpVc && vcFormatType != VCFormatType.ldpVc) ||
+        (presentJwtVc && vcFormatType != VCFormatType.jwtVc) ||
+        presentJwtVcJson && vcFormatType != VCFormatType.jwtVcJson ||
+        presentVcSdJwt && vcFormatType != VCFormatType.vcSdJWT) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Please switch to profile that supports format '
+              '${supportingFormats.join('/')}.',
+        },
+      );
+    }
   }
 
   return (presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt);
