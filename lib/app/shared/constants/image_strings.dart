@@ -7,8 +7,7 @@ class ImageStrings {
 
   static const String imagePath = 'assets/image';
   static const String ebsiLogo = '$imagePath/ebsi_logo.png';
-  static const String owfBaselineProfileLogo =
-      '$imagePath/owfBaselineProfileLogo.jpg';
+  static const String diipLogo = '$imagePath/diipLogo.png';
 
   static const String cardMissing = '$imagePath/card_missing.png';
   static const String employmentCertificateFront =
