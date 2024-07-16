@@ -1143,6 +1143,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               header: header,
               jwtDecode: jwtDecode,
             );
+          } else if (clientIdScheme == 'redirect_uri') {
+            /// no need to verify
+            return emit(state.acceptHost());
           }
 
           final VerificationType isVerified = await verifyEncodedData(
