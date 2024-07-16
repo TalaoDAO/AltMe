@@ -661,7 +661,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.defiCompliance:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
-        return [VCFormatType.ldpVc];
+        return [VCFormatType.ldpVc, VCFormatType.auto];
 
       case CredentialSubjectType.verifiableIdCard:
         return [
@@ -669,12 +669,13 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
           VCFormatType.jwtVcJson,
           VCFormatType.vcSdJWT,
           VCFormatType.jwtVc,
+          VCFormatType.auto,
         ];
 
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
       case CredentialSubjectType.pid:
-        return [VCFormatType.vcSdJWT];
+        return [VCFormatType.vcSdJWT, VCFormatType.auto];
 
       case CredentialSubjectType.over18:
       case CredentialSubjectType.phonePass:
@@ -683,6 +684,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return [
           VCFormatType.ldpVc,
           VCFormatType.jwtVcJson,
+          VCFormatType.auto,
         ];
 
       case CredentialSubjectType.nationality:
@@ -721,7 +723,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.civicPassCredential:
       case CredentialSubjectType.employeeCredential:
       case CredentialSubjectType.legalPersonalCredential:
-        return [VCFormatType.jwtVc];
+        return [VCFormatType.jwtVc, VCFormatType.auto];
     }
   }
 
