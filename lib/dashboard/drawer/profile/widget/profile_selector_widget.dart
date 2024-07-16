@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/profile/profile.dart';
-import 'package:altme/l10n/l10n.dart';
 
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +11,6 @@ class ProfileSelectorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     final profile = context.read<ProfileCubit>().state.model;
 
     final walletContainsEnterpriseProfile =
@@ -44,7 +41,7 @@ class ProfileSelectorWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          l10n.walletProfilesDescription,
+                          'Choose your SSI profile or customize your own',
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
@@ -89,7 +86,6 @@ class ProfileSelectorWidget extends StatelessWidget {
                             ),
                             title: Text(
                               profileType.getTitle(
-                                l10n: l10n,
                                 name: profile.enterpriseWalletName ?? '',
                               ),
                               style: Theme.of(context).textTheme.bodyLarge,
