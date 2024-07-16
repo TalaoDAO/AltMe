@@ -177,7 +177,7 @@ void main() {
       when(() => mockFlavorCubit.state).thenReturn(FlavorMode.development);
       when(() => mockProfileCubit.state).thenReturn(
         ProfileState(
-          model: ProfileModel.dutch(
+          model: ProfileModel.diipv2point1(
             polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
             walletType: WalletType.personal,
             walletProtectionType: WalletProtectionType.FA2,

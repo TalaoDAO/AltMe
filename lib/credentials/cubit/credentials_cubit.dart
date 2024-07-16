@@ -669,7 +669,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final vcFormatType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
-    final isDutchProfile = profileModel.profileType == ProfileType.dutch;
+    final isDutchProfile = profileModel.profileType == ProfileType.diipv2point1;
 
     final discoverCardsOptions = profileSetting.discoverCardsOptions;
     // entreprise user may have a list of external issuer
