@@ -8,7 +8,7 @@ void main() {
       expect(ProfileType.ebsiV3.showSponseredBy, true);
       expect(ProfileType.diipv2point1.showSponseredBy, false);
       expect(ProfileType.enterprise.showSponseredBy, true);
-      expect(ProfileType.owfBaselineProfile.showSponseredBy, true);
+      expect(ProfileType.diipv3.showSponseredBy, true);
       expect(ProfileType.defaultOne.showSponseredBy, false);
     });
   });

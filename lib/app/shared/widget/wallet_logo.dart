@@ -37,7 +37,7 @@ class WalletLogo extends StatelessWidget {
             image = ImageStrings.ebsiLogo;
           case ProfileType.enterprise:
             image = profileModel.profileSetting.generalOptions.companyLogo;
-          case ProfileType.owfBaselineProfile:
+          case ProfileType.diipv3:
             image = ImageStrings.owfBaselineProfileLogo;
         }
         return Column(

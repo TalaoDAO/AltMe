@@ -2,7 +2,7 @@ enum ProfileType {
   defaultOne,
   ebsiV3,
   diipv2point1,
-  owfBaselineProfile,
+  diipv3,
   custom,
   enterprise,
 }
@@ -18,8 +18,8 @@ extension ProfileTypeX on ProfileType {
         return 'Decentralized Identity Interop Profile (DIIP v2.1)';
       case ProfileType.enterprise:
         return name.isEmpty ? 'Enterprise' : name;
-      case ProfileType.owfBaselineProfile:
-        return 'OWF Baseline Profile';
+      case ProfileType.diipv3:
+        return 'Decentralized Identity Interop Profile (DIIP v3.0)';
       case ProfileType.defaultOne:
         return 'Default';
     }
@@ -33,7 +33,7 @@ extension ProfileTypeX on ProfileType {
         return false;
       case ProfileType.ebsiV3:
       case ProfileType.enterprise:
-      case ProfileType.owfBaselineProfile:
+      case ProfileType.diipv3:
         return true;
     }
   }

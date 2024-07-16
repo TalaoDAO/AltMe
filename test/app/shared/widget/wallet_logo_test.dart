@@ -262,12 +262,11 @@ void main() {
 
     testWidgets(
         'displays correct image for '
-        'ProfileType.owfBaselineProfile in development',
-        (WidgetTester tester) async {
+        'ProfileType.diipv3 in development', (WidgetTester tester) async {
       when(() => mockFlavorCubit.state).thenReturn(FlavorMode.development);
       when(() => mockProfileCubit.state).thenReturn(
         ProfileState(
-          model: ProfileModel.owfBaselineProfile(
+          model: ProfileModel.diipv3(
             polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
             walletType: WalletType.personal,
             walletProtectionType: WalletProtectionType.FA2,

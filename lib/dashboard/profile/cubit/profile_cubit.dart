@@ -259,7 +259,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             enterpriseWalletName: enterpriseWalletName,
           );
 
-        case ProfileType.owfBaselineProfile:
+        case ProfileType.diipv3:
           final privateKey = await getPrivateKey(
             didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
             profileCubit: this,
@@ -271,7 +271,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileCubit: this,
           );
 
-          profileModel = ProfileModel.owfBaselineProfile(
+          profileModel = ProfileModel.diipv3(
             polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
@@ -604,9 +604,9 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
           ),
         );
-      case ProfileType.owfBaselineProfile:
+      case ProfileType.diipv3:
         await update(
-          ProfileModel.owfBaselineProfile(
+          ProfileModel.diipv3(
             polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
