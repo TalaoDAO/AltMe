@@ -146,7 +146,9 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                   context: context,
                   localAuthApi: LocalAuthApi(),
                   onSuccess: () {
-                    context.read<PolygonIdCubit>().addPolygonIdCredentials();
+                    context.read<PolygonIdCubit>().addPolygonIdCredentials(
+                          qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                        );
                   },
                 );
               },

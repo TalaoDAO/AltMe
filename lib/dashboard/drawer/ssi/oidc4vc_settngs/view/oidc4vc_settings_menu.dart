@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class Oidc4vcSettingMenu extends StatelessWidget {
@@ -26,9 +25,8 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BasePage(
-      title: l10n.oidc4vc_settings,
+      title: 'OIDC4VC Settings',
       useSafeArea: true,
       scrollView: true,
       titleAlignment: Alignment.topCenter,
@@ -51,28 +49,28 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           const PushAuthorizationRequesWidget(),
           const StatusListCachingWidget(),
           DrawerItem(
-            title: l10n.walletMetadataForIssuers,
+            title: 'Wallet metadata for issuers',
             onTap: () {
               final value = const JsonEncoder.withIndent('  ').convert(
                 ConstantsJson.walletMetadataForIssuers,
               );
               Navigator.of(context).push<void>(
                 JsonViewerPage.route(
-                  title: l10n.walletMetadataForIssuers,
+                  title: 'Wallet metadata for issuers',
                   data: value,
                 ),
               );
             },
           ),
           DrawerItem(
-            title: l10n.walletMetadataForVerifiers,
+            title: 'Wallet metadata for verifiers',
             onTap: () {
               final value = const JsonEncoder.withIndent('  ').convert(
                 ConstantsJson.walletMetadataForVerifiers,
               );
               Navigator.of(context).push<void>(
                 JsonViewerPage.route(
-                  title: l10n.walletMetadataForVerifiers,
+                  title: 'Wallet metadata for verifiers',
                   data: value,
                 ),
               );

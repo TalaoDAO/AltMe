@@ -112,6 +112,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> addWalletCredential({
     required BlockchainType? blockchainType,
+    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     final log = getLogger('addRequiredCredentials');
 
@@ -175,6 +176,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         credential: walletCredential,
         showMessage: false,
         blockchainType: blockchainType,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
     }
   }
@@ -261,6 +263,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> insertCredential({
     required CredentialModel credential,
     required BlockchainType? blockchainType,
+    required QRCodeScanCubit qrCodeScanCubit,
     bool showMessage = true,
     bool showStatus = true,
     bool isPendingCredential = false,
@@ -335,6 +338,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             : null,
       ),
     );
+
+    if (qrCodeScanCubit.missingCredentialCompleter != null) {
+      qrCodeScanCubit.missingCredentialCompleter!.complete(true);
+    }
   }
 
   void enableCredentialCategory({required CredentialCategory category}) {
@@ -503,6 +510,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> insertAssociatedWalletCredential({
     required CryptoAccountData cryptoAccountData,
+    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     final supportAssociatedCredential =
         supportCryptoCredential(profileCubit.state.model);
@@ -549,6 +557,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       await insertCredential(
         credential: credential,
         blockchainType: cryptoAccountData.blockchainType,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
     }
   }
@@ -660,7 +669,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final vcFormatType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
-    final isDutchProfile = profileModel.profileType == ProfileType.dutch;
+    final isDutchProfile = profileModel.profileType == ProfileType.diipv2point1;
 
     final discoverCardsOptions = profileSetting.discoverCardsOptions;
     // entreprise user may have a list of external issuer
@@ -685,6 +694,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     .contains(CredentialSubjectType.over13)) {
               allSubjectTypeForCategory.add(CredentialSubjectType.over13);
             }
+
             if (discoverCardsOptions.displayOver15 &&
                 !allSubjectTypeForCategory
                     .contains(CredentialSubjectType.over15)) {
@@ -693,10 +703,13 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
             if (!allSubjectTypeForCategory
                 .contains(CredentialSubjectType.over18)) {
-              final displayOver18 = vcFormatType == VCFormatType.ldpVc &&
+              final displayOver18 = (vcFormatType == VCFormatType.ldpVc ||
+                      vcFormatType == VCFormatType.auto) &&
                   discoverCardsOptions.displayOver18;
-              final displayOver18Jwt = vcFormatType == VCFormatType.jwtVcJson &&
-                  discoverCardsOptions.displayOver18Jwt;
+              final displayOver18Jwt =
+                  (vcFormatType == VCFormatType.jwtVcJson ||
+                          vcFormatType == VCFormatType.auto) &&
+                      discoverCardsOptions.displayOver18Jwt;
 
               if (isDutchProfile || displayOver18 || displayOver18Jwt) {
                 allSubjectTypeForCategory.add(CredentialSubjectType.over18);
@@ -721,14 +734,17 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
             if (!allSubjectTypeForCategory
                 .contains(CredentialSubjectType.verifiableIdCard)) {
-              final displayVerifiableId = vcFormatType == VCFormatType.ldpVc &&
+              final displayVerifiableId = (vcFormatType == VCFormatType.ldpVc ||
+                      vcFormatType == VCFormatType.auto) &&
                   discoverCardsOptions.displayVerifiableId;
               final displayVerifiableIdJwt =
                   (vcFormatType == VCFormatType.jwtVc ||
-                          vcFormatType == VCFormatType.jwtVcJson) &&
+                          vcFormatType == VCFormatType.jwtVcJson ||
+                          vcFormatType == VCFormatType.auto) &&
                       discoverCardsOptions.displayVerifiableIdJwt;
               final displayVerifiableIdSdJwt =
-                  vcFormatType == VCFormatType.vcSdJWT &&
+                  (vcFormatType == VCFormatType.vcSdJWT ||
+                          vcFormatType == VCFormatType.auto) &&
                       discoverCardsOptions.displayVerifiableIdSdJwt;
 
               if (displayVerifiableId ||
@@ -753,10 +769,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
             if (!allSubjectTypeForCategory
                 .contains(CredentialSubjectType.livenessCard)) {
-              final displayHumanity = vcFormatType == VCFormatType.ldpVc &&
+              final displayHumanity = (vcFormatType == VCFormatType.ldpVc ||
+                      vcFormatType == VCFormatType.auto) &&
                   discoverCardsOptions.displayHumanity;
               final displayHumanityJwt =
-                  vcFormatType == VCFormatType.jwtVcJson &&
+                  (vcFormatType == VCFormatType.jwtVcJson ||
+                          vcFormatType == VCFormatType.auto) &&
                       discoverCardsOptions.displayHumanityJwt;
 
               if (displayHumanity || displayHumanityJwt) {
@@ -797,10 +815,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           case CredentialCategory.contactInfoCredentials:
             if (!allSubjectTypeForCategory
                 .contains(CredentialSubjectType.emailPass)) {
-              final displayEmailPass = vcFormatType == VCFormatType.ldpVc &&
+              final displayEmailPass = (vcFormatType == VCFormatType.ldpVc ||
+                      vcFormatType == VCFormatType.auto) &&
                   discoverCardsOptions.displayEmailPass;
               final displayEmailPassJwt =
-                  vcFormatType == VCFormatType.jwtVcJson &&
+                  (vcFormatType == VCFormatType.jwtVcJson ||
+                          vcFormatType == VCFormatType.auto) &&
                       discoverCardsOptions.displayEmailPassJwt;
 
               if (displayEmailPass || displayEmailPassJwt) {
@@ -810,10 +830,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
             if (!allSubjectTypeForCategory
                 .contains(CredentialSubjectType.phonePass)) {
-              final displayPhonePass = vcFormatType == VCFormatType.ldpVc &&
+              final displayPhonePass = (vcFormatType == VCFormatType.ldpVc ||
+                      vcFormatType == VCFormatType.auto) &&
                   discoverCardsOptions.displayPhonePass;
               final displayPhonePassJwt =
-                  vcFormatType == VCFormatType.jwtVcJson &&
+                  (vcFormatType == VCFormatType.jwtVcJson ||
+                          vcFormatType == VCFormatType.auto) &&
                       discoverCardsOptions.displayPhonePassJwt;
 
               if (displayPhonePass || displayPhonePassJwt) {

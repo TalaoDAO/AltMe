@@ -130,7 +130,10 @@ class _SplashViewState extends State<SplashView> {
     }
 
     if (uri.toString().startsWith('configuration://?')) {
-      await context.read<EnterpriseCubit>().requestTheConfiguration(uri!);
+      await context.read<EnterpriseCubit>().requestTheConfiguration(
+            uri: uri!,
+            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+          );
       return;
     }
 

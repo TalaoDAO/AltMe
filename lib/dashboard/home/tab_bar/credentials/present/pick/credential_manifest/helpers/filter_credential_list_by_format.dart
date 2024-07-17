@@ -10,6 +10,10 @@ List<CredentialModel> filterCredenialListByFormat({
   required PresentationDefinition presentationDefinition,
   required List<Field> filterList,
 }) {
+  if (vcFormatType == VCFormatType.auto) {
+    return credentialList;
+  }
+
   final credentials = List<CredentialModel>.from(credentialList);
   if (filterList.isNotEmpty) {
     final isJwtVpInJwtVCRequired = presentationDefinition.format?.jwtVp != null;
@@ -25,6 +29,7 @@ List<CredentialModel> filterCredenialListByFormat({
       clientMetaData: clientMetaData,
       presentationDefinition: presentationDefinition,
       vcFormatType: vcFormatType,
+      credentialsToBePresented: credentials,
     );
 
     credentials.removeWhere(

@@ -434,6 +434,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   openIdConfiguration: openIdConfigurationForIssuance,
                   issuer: issuerForIssuance,
                   preAuthorizedCode: preAuthorizedCodeForIssuance,
+                  uri: state.uri!,
                 );
           } else {
             context.read<QRCodeScanCubit>().emitError(
@@ -495,6 +496,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             await context.read<QRCodeScanCubit>().authorizedFlowCompletion(
                   statePayload: statePayload,
                   codeForAuthorisedFlow: codeForAuthorisedFlow,
+                  qrCodeScanCubit: context.read<QRCodeScanCubit>(),
                 );
           }
         } catch (e) {
@@ -570,7 +572,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             ) ??
             true;
 
-        context.read<QRCodeScanCubit>().completer!.complete(moveAhead);
+        context.read<QRCodeScanCubit>().completer?.complete(moveAhead);
         LoadingView().show(context: context);
       }
 
@@ -872,6 +874,7 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
     if (state.status == AppStatus.revoked) {
       showDialog<void>(
         context: context,
+        barrierDismissible: false,
         builder: (_) => const WalletRevokedDialog(),
       );
     }

@@ -1,6 +1,5 @@
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +9,6 @@ class ConfidentialClientWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     final color = Theme.of(context).colorScheme.primary;
     final background = Theme.of(context).colorScheme.surface;
     final textColor = Theme.of(context).colorScheme.onSurface;
@@ -30,7 +28,7 @@ class ConfidentialClientWidget extends StatelessWidget {
         final clientSecret = state.model.profileSetting
             .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret;
         return OptionContainer(
-          title: l10n.confidentialClient,
+          title: 'Confidential Client',
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
@@ -86,7 +84,7 @@ class ConfidentialClientWidget extends StatelessWidget {
                                 height: Sizes.spaceNormal,
                               ),
                               MyElevatedButton(
-                                text: l10n.confirm,
+                                text: 'Confirm',
                                 verticalSpacing: 14,
                                 backgroundColor: color,
                                 borderRadius: Sizes.smallRadius,
@@ -131,7 +129,7 @@ class ConfidentialClientWidget extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            '${l10n.clientId}: $clientId',
+                            'Client Id: $clientId',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),
@@ -196,7 +194,7 @@ class ConfidentialClientWidget extends StatelessWidget {
                                 height: Sizes.spaceNormal,
                               ),
                               MyElevatedButton(
-                                text: l10n.confirm,
+                                text: 'Confirm',
                                 verticalSpacing: 14,
                                 backgroundColor: color,
                                 borderRadius: Sizes.smallRadius,
@@ -241,8 +239,7 @@ class ConfidentialClientWidget extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            '${l10n.clientSecret}: '
-                            '$clientSecret',
+                            'Client Secret: $clientSecret',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),

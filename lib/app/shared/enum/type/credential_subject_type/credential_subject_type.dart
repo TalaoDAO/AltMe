@@ -32,7 +32,6 @@ enum CredentialSubjectType {
   kycAgeCredential,
   kycCountryOfResidence,
   learningAchievement,
-  linkedInCard,
   nationality,
   over13,
   over15,

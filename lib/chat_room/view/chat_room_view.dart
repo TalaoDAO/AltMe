@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -177,6 +179,27 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                       ),
                     ),
                     messages: state.messages,
+                    imageMessageBuilder: (p0, {required messageWidth}) {
+                      final link = p0.uri;
+
+                      if (link.isEmpty) return Container();
+
+                      if (link.startsWith('http')) {
+                        return CachedImageFromNetwork(
+                          link,
+                          fit: BoxFit.contain,
+                          width: 500,
+                          height: 500,
+                        );
+                      } else {
+                        return Image.file(
+                          File(link),
+                          fit: BoxFit.contain,
+                          width: 500,
+                          height: 500,
+                        );
+                      }
+                    },
                     onSendPressed: (partialText) {
                       FocusManager.instance.primaryFocus?.unfocus();
                       liveChatCubit!.onSendPressed(partialText);

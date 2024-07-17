@@ -24,14 +24,6 @@ class HomePage extends StatelessWidget {
         }
 
         if (homeState.status == AppStatus.success) {}
-
-        // if (homeState.status == AppStatus.gotTokenReward &&
-        //     homeState.tokenReward != null) {
-        //   TokenRewardDialog.show(
-        //     context: context,
-        //     tokenReward: homeState.tokenReward!,
-        //   );
-        // }
       },
       child: Parameters.walletHandlesCrypto
           ? const TabControllerPage()

@@ -498,7 +498,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     return claims;
   }
 
-  Future<void> addPolygonIdCredentials() async {
+  Future<void> addPolygonIdCredentials({
+    required QRCodeScanCubit qrCodeScanCubit,
+  }) async {
     try {
       log.i('add Claims');
       emit(state.copyWith(status: AppStatus.loading));
@@ -506,6 +508,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         await addToList(
           claimEntity: state.claims![i],
           credentialManifest: state.credentialManifests![i],
+          qrCodeScanCubit: qrCodeScanCubit,
         );
       }
       emit(state.copyWith(status: AppStatus.goBack));
@@ -531,6 +534,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   Future<void> addToList({
     required ClaimEntity claimEntity,
     required CredentialManifest credentialManifest,
+    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     final jsonCredential = claimEntity.info;
     final credentialPreview = Credential.fromJson(jsonCredential);
@@ -551,6 +555,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     await credentialsCubit.insertCredential(
       credential: credentialModel,
       blockchainType: walletCubit.state.currentAccount!.blockchainType,
+      qrCodeScanCubit: qrCodeScanCubit,
     );
   }
 

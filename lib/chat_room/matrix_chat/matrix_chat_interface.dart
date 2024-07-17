@@ -29,10 +29,11 @@ abstract class MatrixChatInterface {
   Message mapEventToMessage(Event event);
   Status mapEventStatusToMessageStatus(EventStatus status);
   String getUrlFromUri({
-    required String uri,
+    required String url,
     int width = 500,
     int height = 500,
   });
+  String getUrlFromImage(String url);
   Future<String> login({
     required String username,
     required String password,

@@ -172,12 +172,13 @@ void main() {
       });
     });
 
-    testWidgets('displays correct image for ProfileType.dutch in development',
+    testWidgets(
+        'displays correct image for ProfileType.diipv2point1 in development',
         (WidgetTester tester) async {
       when(() => mockFlavorCubit.state).thenReturn(FlavorMode.development);
       when(() => mockProfileCubit.state).thenReturn(
         ProfileState(
-          model: ProfileModel.dutch(
+          model: ProfileModel.diipv2point1(
             polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
             walletType: WalletType.personal,
             walletProtectionType: WalletProtectionType.FA2,
@@ -213,7 +214,7 @@ void main() {
 
       final Image image = tester.widget(imageFinder);
       final AssetImage imageProvider = image.image as AssetImage;
-      expect(imageProvider.assetName, ImageStrings.appLogoDev);
+      expect(imageProvider.assetName, ImageStrings.diipLogo);
     });
 
     testWidgets('displays correct image for ProfileType.ebsiV3 in development',
@@ -262,12 +263,11 @@ void main() {
 
     testWidgets(
         'displays correct image for '
-        'ProfileType.owfBaselineProfile in development',
-        (WidgetTester tester) async {
+        'ProfileType.diipv3 in development', (WidgetTester tester) async {
       when(() => mockFlavorCubit.state).thenReturn(FlavorMode.development);
       when(() => mockProfileCubit.state).thenReturn(
         ProfileState(
-          model: ProfileModel.owfBaselineProfile(
+          model: ProfileModel.diipv3(
             polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
             walletType: WalletType.personal,
             walletProtectionType: WalletProtectionType.FA2,
@@ -303,7 +303,7 @@ void main() {
 
       final Image image = tester.widget(imageFinder);
       final AssetImage imageProvider = image.image as AssetImage;
-      expect(imageProvider.assetName, ImageStrings.owfBaselineProfileLogo);
+      expect(imageProvider.assetName, ImageStrings.diipLogo);
     });
 
     testWidgets(

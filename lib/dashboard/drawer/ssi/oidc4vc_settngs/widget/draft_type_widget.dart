@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/widget/divider_for_radio_list.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -13,10 +12,9 @@ class DraftTypeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        final l10n = context.l10n;
         return OptionContainer(
           title: 'OIDC4VCI',
-          subtitle: l10n.protocoleStandardRelease,
+          subtitle: 'Protocole standard release',
           body: ListView.builder(
             itemCount: OIDC4VCIDraftType.values.length,
             shrinkWrap: true,

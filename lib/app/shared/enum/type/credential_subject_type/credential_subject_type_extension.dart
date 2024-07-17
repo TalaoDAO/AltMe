@@ -47,7 +47,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.gender:
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.verifiableIdCard:
-      case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.over13:
       case CredentialSubjectType.over15:
       case CredentialSubjectType.over18:
@@ -140,8 +139,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'IdentityPass';
       case CredentialSubjectType.verifiableIdCard:
         return 'VerifiableId';
-      case CredentialSubjectType.linkedInCard:
-        return 'LinkedinCard';
       case CredentialSubjectType.learningAchievement:
         return 'LearningAchievement';
       case CredentialSubjectType.over13:
@@ -303,8 +300,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return AragoOver18Model.fromJson(json);
       case CredentialSubjectType.pcdsAgentCertificate:
         return PcdsAgentCertificateModel.fromJson(json);
-      case CredentialSubjectType.linkedInCard:
-        return LinkedinCardModel.fromJson(json);
       case CredentialSubjectType.ethereumPooAddress:
         return EthereumPooAddressModel.fromJson(json);
       case CredentialSubjectType.fantomPooAddress:
@@ -418,8 +413,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.ageRange ||
         this == CredentialSubjectType.nationality ||
         this == CredentialSubjectType.gender ||
-        this == CredentialSubjectType.passportFootprint ||
-        this == CredentialSubjectType.linkedInCard) {
+        this == CredentialSubjectType.passportFootprint) {
       return true;
     }
     return false;
@@ -507,8 +501,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Identity Pass';
       case CredentialSubjectType.verifiableIdCard:
         return 'VerifiableId';
-      case CredentialSubjectType.linkedInCard:
-        return 'Linkedin Card';
       case CredentialSubjectType.learningAchievement:
         return 'Learning Achievement';
       case CredentialSubjectType.over13:
@@ -622,7 +614,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.defaultCredential:
       case CredentialSubjectType.emailPass:
-      case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.phonePass:
       case CredentialSubjectType.professionalExperienceAssessment:
@@ -670,7 +661,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.defiCompliance:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
-        return [VCFormatType.ldpVc];
+        return [VCFormatType.ldpVc, VCFormatType.auto];
 
       case CredentialSubjectType.verifiableIdCard:
         return [
@@ -678,12 +669,13 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
           VCFormatType.jwtVcJson,
           VCFormatType.vcSdJWT,
           VCFormatType.jwtVc,
+          VCFormatType.auto,
         ];
 
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
       case CredentialSubjectType.pid:
-        return [VCFormatType.vcSdJWT];
+        return [VCFormatType.vcSdJWT, VCFormatType.auto];
 
       case CredentialSubjectType.over18:
       case CredentialSubjectType.phonePass:
@@ -692,6 +684,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return [
           VCFormatType.ldpVc,
           VCFormatType.jwtVcJson,
+          VCFormatType.auto,
         ];
 
       case CredentialSubjectType.nationality:
@@ -710,7 +703,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.binancePooAddress:
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.defaultCredential:
-      case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.professionalExperienceAssessment:
       case CredentialSubjectType.professionalSkillAssessment:
@@ -731,7 +723,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.civicPassCredential:
       case CredentialSubjectType.employeeCredential:
       case CredentialSubjectType.legalPersonalCredential:
-        return [VCFormatType.jwtVc];
+        return [VCFormatType.jwtVc, VCFormatType.auto];
     }
   }
 
@@ -915,15 +907,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
             ResponseString.RESPONSE_STRING_verifiableIdCardExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_verifiableIdCardHowToGetIt;
 
-      case CredentialSubjectType.linkedInCard:
-        image = ImageStrings.dummyLinkedinCard;
-        link = Urls.linkedinCardUrl;
-        whyGetThisCard =
-            ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard;
-        expirationDateDetails =
-            ResponseString.RESPONSE_STRING_linkedinCardExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt;
-
       case CredentialSubjectType.tezotopiaMembership:
         image = ImageStrings.tezotopiaMemberShipDummy;
         link = Urls.tezotopiaMembershipCardUrl;
@@ -1105,8 +1088,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 90;
       case CredentialSubjectType.verifiableIdCard:
         return 97.5;
-      case CredentialSubjectType.linkedInCard:
-        return 86;
       case CredentialSubjectType.learningAchievement:
         return 0;
       case CredentialSubjectType.over13:

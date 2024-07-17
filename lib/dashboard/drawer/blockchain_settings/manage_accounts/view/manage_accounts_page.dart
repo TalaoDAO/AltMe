@@ -108,23 +108,32 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
-                ListView.builder(
-                  itemCount: state.cryptoAccount.data.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, i) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: ManageAccountsItem(
-                        cryptoAccountData: state.cryptoAccount.data[i],
-                        listIndex: i,
-                        onPressed: () {
-                          context
-                              .read<ManageAccountsCubit>()
-                              .setCurrentWalletAccount(i);
-                        },
-                        onEditButtonPressed: () => _edit(i),
-                      ),
+                BlocBuilder<ProfileCubit, ProfileState>(
+                  builder: (context, profileStae) {
+                    final profileSetting = profileStae.model.profileSetting;
+                    return ListView.builder(
+                      itemCount: state.cryptoAccount.data.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, i) {
+                        final data = state.cryptoAccount.data[i];
+                        if (!data.blockchainType.isSupported(profileSetting)) {
+                          return Container();
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: ManageAccountsItem(
+                            cryptoAccountData: data,
+                            listIndex: i,
+                            onPressed: () {
+                              context
+                                  .read<ManageAccountsCubit>()
+                                  .setCurrentWalletAccount(i);
+                            },
+                            onEditButtonPressed: () => _edit(i),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),

@@ -146,7 +146,7 @@ class ProfileModel extends Equatable {
         ),
       );
 
-  factory ProfileModel.dutch({
+  factory ProfileModel.diipv2point1({
     required PolygonIdNetwork polygonIdNetwork,
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
@@ -161,7 +161,7 @@ class ProfileModel extends Equatable {
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
-        profileType: ProfileType.dutch,
+        profileType: ProfileType.diipv2point1,
         profileSetting: ProfileSetting(
           blockchainOptions: BlockchainOptions.initial(),
           generalOptions: GeneralOptions.empty(),
@@ -215,7 +215,7 @@ class ProfileModel extends Equatable {
         ),
       );
 
-  factory ProfileModel.owfBaselineProfile({
+  factory ProfileModel.diipv3({
     required PolygonIdNetwork polygonIdNetwork,
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
@@ -230,7 +230,7 @@ class ProfileModel extends Equatable {
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
-        profileType: ProfileType.owfBaselineProfile,
+        profileType: ProfileType.diipv3,
         profileSetting: ProfileSetting(
           blockchainOptions: BlockchainOptions.initial(),
           generalOptions: GeneralOptions.empty(),
