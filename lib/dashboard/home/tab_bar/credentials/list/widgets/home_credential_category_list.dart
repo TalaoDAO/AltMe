@@ -49,8 +49,8 @@ class HomeCredentialCategoryList extends StatelessWidget {
                     if (element.credentialPreview.credentialSubjectModel
                             .credentialSubjectType ==
                         CredentialSubjectType.walletCredential) {
-                      if (profileModel.isDeveloperMode) {
-                        return true;
+                      if (!profileModel.isDeveloperMode) {
+                        return false;
                       }
                     }
 
