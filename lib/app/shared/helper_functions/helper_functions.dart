@@ -1775,9 +1775,8 @@ List<String> getStringCredentialsForToken({
   required ProfileCubit profileCubit,
 }) {
   final credentialList = credentialsToBePresented.map((item) {
-    final isVcSdJWT = profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType ==
-        VCFormatType.vcSdJWT;
+    final isVcSdJWT = item.getFormat == VCFormatType.vcSdJWT.vcValue;
+
     if (isVcSdJWT) {
       return item.selectiveDisclosureJwt ?? jsonEncode(item.toJson());
     }
