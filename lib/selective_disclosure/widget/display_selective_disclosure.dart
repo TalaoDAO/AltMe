@@ -110,7 +110,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                 }
 
                 bool? disable;
-                bool selected = false;
+                bool shouldBePreChecked = true;
 
                 if (selectiveDisclosureState != null) {
                   final limitDisclosure =
@@ -123,43 +123,33 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                         disable = true;
 
                         filters.forEach((key, value) {
+                          shouldBePreChecked = !(value['optional'] as bool);
+
+                          final containsKey = selectiveDisclosureState!
+                              .selectedClaimsKeyIds
+                              .contains(keyToCheck);
+
                           if (claims.threeDotValue != null) {
                             if (claimKey.contains(key) &&
                                 claims.data.replaceAll(' ', '') ==
                                     value['element']) {
                               disable = false;
-                              selected = value['optional'] as bool;
-                              if (!selectiveDisclosureState!
-                                      .selectedClaimsKeyIds
-                                      .contains(keyToCheck) &&
-                                  selected == true) {
-                                context
-                                    .read<SelectiveDisclosureCubit>()
-                                    .disclosureAction(
-                                      claimsKey: key,
-                                      credentialModel: credentialModel,
-                                      threeDotValue: claims.threeDotValue,
-                                      claimKeyId: claimKey,
-                                    );
+
+                              if (!containsKey && shouldBePreChecked == true) {
+                                onPressed?.call(
+                                  key,
+                                  claimKey,
+                                  claims.threeDotValue,
+                                );
                               }
                             }
                           } else {
                             if (claimKey == key &&
                                 claims.data == value['element']) {
                               disable = false;
-                              selected = !(value['optional'] as bool);
-                              if (!selectiveDisclosureState!
-                                      .selectedClaimsKeyIds
-                                      .contains(keyToCheck) &&
-                                  selected == true) {
-                                context
-                                    .read<SelectiveDisclosureCubit>()
-                                    .disclosureAction(
-                                      claimsKey: key,
-                                      credentialModel: credentialModel,
-                                      threeDotValue: claims.threeDotValue,
-                                      claimKeyId: claimKey,
-                                    );
+
+                              if (!containsKey && shouldBePreChecked == true) {
+                                onPressed?.call(key, claimKey, null);
                               }
                             }
                           }
@@ -171,7 +161,8 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
 
                 return TransparentInkWell(
                   onTap: () {
-                    if ((disable != null && disable!) || selected == true) {
+                    if ((disable != null && disable!) ||
+                        shouldBePreChecked == true) {
                       return;
                     }
 
