@@ -157,6 +157,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                               credentialSubjectType: credentialSubjectType,
                               image: discoverDummyCredential.image,
                               credentialName: credential,
+                              displayExternalIssuer: display,
                             ),
                           Align(
                             alignment: Alignment.centerRight,
