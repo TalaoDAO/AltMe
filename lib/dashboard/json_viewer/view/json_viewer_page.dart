@@ -62,9 +62,10 @@ class JsonViewerView extends StatelessWidget {
       textSpans.add(
         TextSpan(
           text: boldText,
-          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium!
+              .copyWith(fontWeight: FontWeight.w700),
         ),
       );
       currentIndex = match.end;
@@ -72,7 +73,12 @@ class JsonViewerView extends StatelessWidget {
 
     if (currentIndex < data.length) {
       final remainingText = data.substring(currentIndex);
-      textSpans.add(TextSpan(text: remainingText));
+      textSpans.add(
+        TextSpan(
+          text: remainingText,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      );
     }
 
     return BasePage(
