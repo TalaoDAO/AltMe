@@ -67,6 +67,7 @@ class DisplayCredentialField extends StatelessWidget {
                 text: showVertically ? title : '$title: ',
                 style: textTheme.bodyMedium!.copyWith(
                   color: titleColor,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               if (showVertically) const TextSpan(text: ' \n'),
