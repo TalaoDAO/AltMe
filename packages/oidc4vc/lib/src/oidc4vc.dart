@@ -17,6 +17,7 @@ import 'package:jose_plus/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:oidc4vc/src/helper_function.dart';
+import 'package:oidc4vc/src/vc_format_type.dart';
 import 'package:secp256k1/secp256k1.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -438,6 +439,7 @@ class OIDC4VC {
     required String accessToken,
     required String? cnonce,
     required Dio dio,
+    required VCFormatType vcFormatType,
     List<dynamic>? authorizationDetails,
   }) async {
     var nonce = cnonce;
@@ -511,6 +513,7 @@ class OIDC4VC {
           accessToken: accessToken,
           nonce: nonce,
           dio: dio,
+          vcFormatType: vcFormatType,
         );
 
         /// update nonce value
@@ -544,6 +547,7 @@ class OIDC4VC {
         accessToken: accessToken,
         nonce: cnonce,
         dio: dio,
+        vcFormatType: vcFormatType,
       );
 
       credentialResponseData.add(credentialResponseDataValue);
@@ -641,6 +645,7 @@ class OIDC4VC {
     required String accessToken,
     required String? nonce,
     required Dio dio,
+    required VCFormatType vcFormatType,
   }) async {
     try {
       final credentialData = await buildCredentialData(
@@ -661,6 +666,7 @@ class OIDC4VC {
         issuer: issuer,
         kid: kid,
         privateKey: privateKey,
+        vcFormatType: vcFormatType,
       );
 
       /// sign proof
@@ -715,6 +721,7 @@ class OIDC4VC {
           accessToken: accessToken,
           nonce: nonce,
           dio: dio,
+          vcFormatType: vcFormatType,
         );
         count = 0;
         return credentialResponseDataValue;
@@ -1055,6 +1062,7 @@ class OIDC4VC {
     required String issuer,
     required String kid,
     required String privateKey,
+    required VCFormatType vcFormatType,
   }) async {
     final credentialData = <String, dynamic>{};
 
@@ -1133,6 +1141,11 @@ class OIDC4VC {
         credentialData['format'] = format;
 
         if (credentialDefinition != null) {
+          if (vcFormatType == VCFormatType.jwtVcJson ||
+              vcFormatType == VCFormatType.ldpVc) {
+            credentialDefinition.removeWhere((key, _) => key != 'type');
+          }
+
           credentialData['credential_definition'] = credentialDefinition;
         }
 
