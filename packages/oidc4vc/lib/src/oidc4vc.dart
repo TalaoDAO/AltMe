@@ -17,7 +17,6 @@ import 'package:jose_plus/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:oidc4vc/src/helper_function.dart';
-import 'package:oidc4vc/src/vc_format_type.dart';
 import 'package:secp256k1/secp256k1.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
