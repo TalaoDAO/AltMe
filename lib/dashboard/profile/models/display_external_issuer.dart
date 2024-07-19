@@ -11,6 +11,7 @@ class DisplayExternalIssuer extends Equatable {
     this.category,
     this.redirect,
     this.background_url,
+    this.background_image,
     this.logo,
     this.background_color,
     this.text_color,
@@ -31,6 +32,7 @@ class DisplayExternalIssuer extends Equatable {
   final String? category;
   final String? redirect;
   final String? background_url;
+  final String? background_image;
   final String? logo;
   final String? background_color;
   final String? text_color;
@@ -50,6 +52,7 @@ class DisplayExternalIssuer extends Equatable {
     String? category,
     String? redirect,
     String? background_url,
+    String? background_image,
     String? logo,
     String? background_color,
     String? text_color,
@@ -67,6 +70,7 @@ class DisplayExternalIssuer extends Equatable {
         category: category ?? this.category,
         redirect: redirect ?? this.redirect,
         background_url: background_url ?? this.background_url,
+        background_image: background_image ?? this.background_image,
         logo: logo ?? this.logo,
         background_color: background_color ?? this.background_color,
         text_color: text_color ?? this.text_color,
@@ -86,6 +90,7 @@ class DisplayExternalIssuer extends Equatable {
         category,
         redirect,
         background_url,
+        background_image,
         logo,
         background_color,
         text_color,
