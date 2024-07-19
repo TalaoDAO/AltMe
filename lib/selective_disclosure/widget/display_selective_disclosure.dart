@@ -22,7 +22,6 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
   final Map<String, dynamic>? claims;
   final void Function(String?, String, String?)? onPressed;
   final SelectiveDisclosureState? selectiveDisclosureState;
-
   final String? parentKeyId;
 
   @override
@@ -110,59 +109,54 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                 }
 
                 bool? disable;
-                bool shouldBePreChecked = true;
+
+                final limitDisclosure =
+                    selectiveDisclosureState?.limitDisclosure;
+
+                final isCompulsarily =
+                    limitDisclosure != null && limitDisclosure == 'required';
+
+                final selectedKeyId = selectiveDisclosureState
+                    ?.selectedClaimsKeyIds
+                    .firstWhereOrNull((ele) => ele.keyId == keyToCheck);
 
                 if (selectiveDisclosureState != null) {
-                  final limitDisclosure =
-                      selectiveDisclosureState!.limitDisclosure;
+                  final filters = selectiveDisclosureState!.filters;
+                  if (filters != null) {
+                    disable = true;
 
-                  if (limitDisclosure != null) {
-                    final filters = selectiveDisclosureState!.filters;
-                    if (filters != null) {
-                      if (limitDisclosure == 'required') {
-                        disable = true;
+                    filters.forEach((key, value) {
+                      if (claims.threeDotValue != null) {
+                        if (claimKey.contains(key) &&
+                            claims.data.replaceAll(' ', '') == value) {
+                          disable = false;
 
-                        filters.forEach((key, value) {
-                          shouldBePreChecked = !(value['optional'] as bool);
-
-                          final containsKey = selectiveDisclosureState!
-                              .selectedClaimsKeyIds
-                              .contains(keyToCheck);
-
-                          if (claims.threeDotValue != null) {
-                            if (claimKey.contains(key) &&
-                                claims.data.replaceAll(' ', '') ==
-                                    value['element']) {
-                              disable = false;
-
-                              if (!containsKey && shouldBePreChecked == true) {
-                                onPressed?.call(
-                                  key,
-                                  claimKey,
-                                  claims.threeDotValue,
-                                );
-                              }
-                            }
-                          } else {
-                            if (claimKey == key &&
-                                claims.data == value['element']) {
-                              disable = false;
-
-                              if (!containsKey && shouldBePreChecked == true) {
-                                onPressed?.call(key, claimKey, null);
-                              }
-                            }
+                          if (selectedKeyId == null) {
+                            onPressed?.call(
+                              key,
+                              claimKey,
+                              claims.threeDotValue,
+                            );
                           }
-                        });
+                        }
+                      } else {
+                        if (claimKey == key && claims.data == value) {
+                          disable = false;
+
+                          if (selectedKeyId == null) {
+                            onPressed?.call(key, claimKey, null);
+                          }
+                        }
                       }
-                    }
+                    });
                   }
                 }
 
+                final isDisabled = disable != null && disable!;
+
                 return TransparentInkWell(
                   onTap: () {
-                    if ((disable != null && disable!) ||
-                        shouldBePreChecked == true) {
+                    if (isDisabled || isCompulsarily) {
                       return;
                     }
 
@@ -188,12 +182,11 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 0, right: 10),
                           child: Icon(
-                            selectiveDisclosureState!.selectedClaimsKeyIds
-                                    .contains(keyToCheck)
+                            (selectedKeyId != null && selectedKeyId.isSelected)
                                 ? Icons.check_box
                                 : Icons.check_box_outline_blank,
                             size: 25,
-                            color: disable != null && disable!
+                            color: isDisabled
                                 ? Theme.of(context)
                                     .colorScheme
                                     .onSurface

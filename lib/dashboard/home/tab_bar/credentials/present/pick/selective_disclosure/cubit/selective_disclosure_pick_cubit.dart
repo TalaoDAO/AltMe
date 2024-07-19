@@ -42,10 +42,7 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
             final searchList = getTextsFromCredential(path, credentialData);
             for (final element in searchList) {
               final key = path.split('.').toList().last;
-              json[key] = {
-                'element': element,
-                'optional': field.optional,
-              };
+              json[key] = element;
             }
           }
         }
@@ -56,22 +53,33 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
   }
 
   void toggle(String claimKeyId) {
-    final List<String> selectedClaimsKeys = List.of(state.selectedClaimsKeyIds);
+    final List<SelectedClaimsKeyIds> selectedClaimsKeys =
+        List.of(state.selectedClaimsKeyIds);
 
-    late List<String> id;
+    late List<SelectedClaimsKeyIds> ids;
 
-    if (selectedClaimsKeys.contains(claimKeyId)) {
-      /// deSelecting the credential
-      id = List<String>.from(state.selectedClaimsKeyIds)
-        ..removeWhere((element) => element == claimKeyId);
+    final selectedKey =
+        selectedClaimsKeys.firstWhereOrNull((ele) => ele.keyId == claimKeyId);
+
+    if (selectedKey != null) {
+      ids = List<SelectedClaimsKeyIds>.from(state.selectedClaimsKeyIds)
+        ..removeWhere((element) => element.keyId == claimKeyId)
+        ..add(
+          SelectedClaimsKeyIds(
+            keyId: claimKeyId,
+            isSelected: !selectedKey.isSelected,
+          ),
+        );
     } else {
-      /// selecting the credential
-      id = [
+      /// adding
+      ids = [
         ...state.selectedClaimsKeyIds,
-        ...[claimKeyId],
+        ...[
+          SelectedClaimsKeyIds(keyId: claimKeyId, isSelected: true),
+        ],
       ];
     }
-    emit(state.copyWith(selectedClaimsKeyIds: id));
+    emit(state.copyWith(selectedClaimsKeyIds: ids));
   }
 
   void saveIndexOfSDJWT({
