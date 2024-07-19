@@ -108,13 +108,13 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                   claimKey = '$claimKey-$index';
                 }
 
-                bool? disable;
-
                 final limitDisclosure =
                     selectiveDisclosureState?.limitDisclosure;
 
-                final isCompulsarily =
+                final isCompulsary =
                     limitDisclosure != null && limitDisclosure == 'required';
+
+                bool isDisabled = isCompulsary;
 
                 final selectedKeyId = selectiveDisclosureState
                     ?.selectedClaimsKeyIds
@@ -123,13 +123,13 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                 if (selectiveDisclosureState != null) {
                   final filters = selectiveDisclosureState!.filters;
                   if (filters != null) {
-                    disable = true;
+                    isDisabled = isCompulsary;
 
                     filters.forEach((key, value) {
                       if (claims.threeDotValue != null) {
                         if (claimKey.contains(key) &&
                             claims.data.replaceAll(' ', '') == value) {
-                          disable = false;
+                          if (isCompulsary) isDisabled = false;
 
                           if (selectedKeyId == null) {
                             onPressed?.call(
@@ -141,7 +141,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                         }
                       } else {
                         if (claimKey == key && claims.data == value) {
-                          disable = false;
+                          if (isCompulsary) isDisabled = false;
 
                           if (selectedKeyId == null) {
                             onPressed?.call(key, claimKey, null);
@@ -152,11 +152,9 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                   }
                 }
 
-                final isDisabled = disable != null && disable!;
-
                 return TransparentInkWell(
                   onTap: () {
-                    if (isDisabled || isCompulsarily) {
+                    if (isDisabled || isCompulsary) {
                       return;
                     }
 
