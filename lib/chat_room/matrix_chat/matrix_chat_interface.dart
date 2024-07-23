@@ -26,7 +26,7 @@ abstract class MatrixChatInterface {
   Future<void> handleFileSelection({
     required OnMessageCreated onMessageCreated,
   });
-  Message mapEventToMessage(Event event);
+  Future<Message> mapEventToMessage(Event event);
   Status mapEventStatusToMessageStatus(EventStatus status);
   String getThumbnail({
     required String url,

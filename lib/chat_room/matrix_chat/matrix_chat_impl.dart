@@ -177,7 +177,7 @@ class MatrixChatImpl extends MatrixChatInterface {
   }
 
   @override
-  Message mapEventToMessage(Event event) {
+  Future<Message> mapEventToMessage(Event event) async {
     late final Message message;
     num size = 0;
     if (event.content['info'] != null) {
@@ -205,6 +205,8 @@ class MatrixChatImpl extends MatrixChatInterface {
 
       final url =
           (file != null && file is Map<String, dynamic>) ? file['url'] : '';
+
+      final data = await event.downloadAndDecryptAttachment();
 
       message = ImageMessage(
         id: const Uuid().v4(),

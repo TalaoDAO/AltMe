@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/chat_room/widget/mxc_image.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -195,18 +197,11 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                           event: event,
                           fit: BoxFit.contain,
                         );
-                      }
-                      if (link.startsWith('mxc')) {
-                        return MxcImage(
-                          client: context
-                              .read<AltmeChatSupportCubit>()
-                              .matrixChat
-                              .client!,
+                      } else if (link.startsWith('mxc')) {
+                        final data = p0.metadata!['bytes'] as Uint8List;
+                        return Image.memory(
+                          data,
                           fit: BoxFit.contain,
-                          width: 500,
-                          height: 500,
-                          uri: Uri.parse(link),
-                          isThumbnail: false,
                         );
                       } else {
                         return TransparentInkWell(
