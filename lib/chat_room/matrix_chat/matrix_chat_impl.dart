@@ -173,17 +173,11 @@ class MatrixChatImpl extends MatrixChatInterface {
             (e1, e2) => e2.originServerTs.compareTo(e1.originServerTs),
           );
 
-    final List<Message> messages = [];
-
-    for (final event in messageEvents) {
-      final a = await mapEventToMessage(event);
-      messages.add(a);
-    }
-    return messages;
+    return messageEvents.map(mapEventToMessage).toList();
   }
 
   @override
-  Future<Message> mapEventToMessage(Event event) async {
+  Message mapEventToMessage(Event event) {
     late final Message message;
     num size = 0;
     if (event.content['info'] != null) {
@@ -212,15 +206,13 @@ class MatrixChatImpl extends MatrixChatInterface {
       final url =
           (file != null && file is Map<String, dynamic>) ? file['url'] : '';
 
-      final data = await event.downloadAndDecryptAttachment();
-
       message = ImageMessage(
         id: const Uuid().v4(),
         remoteId: event.eventId,
         name: event.plaintextBody,
         size: size,
         uri: url.toString(),
-        metadata: {'bytes': data.bytes},
+        metadata: {'event': event},
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         author: User(id: event.senderId),

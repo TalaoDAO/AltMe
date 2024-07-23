@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:altme/app/app.dart';
+import 'package:altme/chat_room/chat_room.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -7,8 +9,7 @@ import 'package:matrix/matrix.dart';
 
 class MxcImage extends StatefulWidget {
   const MxcImage({
-    required this.client,
-    this.uri,
+    required this.url,
     this.event,
     this.width,
     this.height,
@@ -20,12 +21,11 @@ class MxcImage extends StatefulWidget {
     this.retryDuration = const Duration(seconds: 2),
     this.animationCurve = Curves.easeInOut,
     this.thumbnailMethod = ThumbnailMethod.scale,
-    this.cacheKey,
     super.key,
   });
 
-  final Uri? uri;
   final Event? event;
+  final String url;
   final double? width;
   final double? height;
   final BoxFit? fit;
@@ -36,82 +36,16 @@ class MxcImage extends StatefulWidget {
   final Curve animationCurve;
   final ThumbnailMethod thumbnailMethod;
   final Widget Function(BuildContext context)? placeholder;
-  final String? cacheKey;
-  final Client client;
 
   @override
   State<MxcImage> createState() => _MxcImageState();
 }
 
 class _MxcImageState extends State<MxcImage> {
-  static final Map<String, Uint8List> _imageDataCache = {};
-  Uint8List? _imageDataNoCache;
-
-  Uint8List? get _imageData => widget.cacheKey == null
-      ? _imageDataNoCache
-      : _imageDataCache[widget.cacheKey];
-
-  set _imageData(Uint8List? data) {
-    if (data == null) return;
-    final cacheKey = widget.cacheKey;
-    cacheKey == null
-        ? _imageDataNoCache = data
-        : _imageDataCache[cacheKey] = data;
-  }
-
-  bool? _isCached;
+  Uint8List? _imageData;
 
   Future<void> _load() async {
-    final uri = widget.uri;
     final event = widget.event;
-
-    if (uri != null) {
-      final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
-      final width = widget.width;
-      final realWidth = width == null ? null : width * devicePixelRatio;
-      final height = widget.height;
-      final realHeight = height == null ? null : height * devicePixelRatio;
-
-      final httpUri = widget.isThumbnail
-          ? uri.getThumbnail(
-              widget.client,
-              width: realWidth,
-              height: realHeight,
-              animated: widget.animated,
-              method: widget.thumbnailMethod,
-            )
-          : uri.getDownloadLink(widget.client);
-
-      final storeKey = widget.isThumbnail ? httpUri : uri;
-
-      if (_isCached == null) {
-        final cachedData = await widget.client.database?.getFile(storeKey);
-        if (cachedData != null) {
-          if (!mounted) return;
-          setState(() {
-            _imageData = cachedData;
-            _isCached = true;
-          });
-          return;
-        }
-        _isCached = false;
-      }
-
-      final response = await http.get(httpUri);
-      if (response.statusCode != 200) {
-        if (response.statusCode == 404) {
-          return;
-        }
-        throw Exception();
-      }
-      final remoteData = response.bodyBytes;
-
-      if (!mounted) return;
-      setState(() {
-        _imageData = remoteData;
-      });
-      await widget.client.database?.storeFile(storeKey, remoteData, 0);
-    }
 
     if (event != null) {
       final data = await event.downloadAndDecryptAttachment(
@@ -149,8 +83,8 @@ class _MxcImageState extends State<MxcImage> {
   Widget placeholder(BuildContext context) =>
       widget.placeholder?.call(context) ??
       Container(
-        width: widget.width,
-        height: widget.height,
+        width: 250,
+        height: 250,
         alignment: Alignment.center,
         child: const CircularProgressIndicator.adaptive(strokeWidth: 2),
       );
@@ -166,18 +100,26 @@ class _MxcImageState extends State<MxcImage> {
       duration: const Duration(milliseconds: 250),
       firstChild: placeholder(context),
       secondChild: hasData
-          ? Image.memory(
-              data,
-              width: widget.width,
-              height: widget.height,
-              fit: widget.fit,
-              filterQuality: FilterQuality.none,
-              errorBuilder: (context, __, s) {
-                _isCached = false;
-                _imageData = null;
-                WidgetsBinding.instance.addPostFrameCallback(_tryLoad);
-                return placeholder(context);
+          ? TransparentInkWell(
+              onTap: () {
+                Navigator.of(context).push<void>(
+                  PhotoViewer.route(
+                    imageProvider: MemoryImage(data),
+                  ),
+                );
               },
+              child: Image.memory(
+                data,
+                width: widget.width,
+                height: widget.height,
+                fit: widget.fit,
+                filterQuality: FilterQuality.none,
+                errorBuilder: (context, __, s) {
+                  _imageData = null;
+                  WidgetsBinding.instance.addPostFrameCallback(_tryLoad);
+                  return placeholder(context);
+                },
+              ),
             )
           : SizedBox(
               width: widget.width,
