@@ -192,7 +192,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
     await _onEventSubscription?.cancel();
 
     _onEventSubscription =
-        matrixChat.client!.onRoomState.stream.listen((Event event) {
+        matrixChat.client!.onRoomState.stream.listen((Event event) async {
       if (event.roomId == _roomId && event.type == 'm.room.message') {
         final txId = event.unsigned?['transaction_id'] as String?;
         if (state.messages.any(
@@ -208,7 +208,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
           newMessages[index] = updatedMessage;
           emit(state.copyWith(messages: newMessages));
         } else {
-          final Message message = matrixChat.mapEventToMessage(event);
+          final Message message = await matrixChat.mapEventToMessage(event);
           emit(
             state.copyWith(
               messages: [message, ...state.messages],
@@ -218,7 +218,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
 
         setMessagesAsRead();
 
-        Future<void>.delayed(const Duration(seconds: 1))
+        await Future<void>.delayed(const Duration(seconds: 1))
             .then((val) => _getUnreadMessageCount());
       }
     });

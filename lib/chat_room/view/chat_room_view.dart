@@ -1,14 +1,17 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart' hide Message;
+import 'package:flutter_chat_ui/flutter_chat_ui.dart'
+    hide ImageMessage, Message;
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ChatRoomView<B extends ChatRoomCubit> extends StatefulWidget {
@@ -179,6 +182,7 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                       ),
                     ),
                     messages: state.messages,
+                    disableImageGallery: true,
                     imageMessageBuilder: (p0, {required messageWidth}) {
                       final link = p0.uri;
 
@@ -188,21 +192,12 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                         return CachedImageFromNetwork(
                           link,
                           fit: BoxFit.contain,
-                          width: 500,
-                          height: 500,
                         );
-                      }
-                      if (link.startsWith('mxc')) {
-                        return MxcImage(
-                          client: context
-                              .read<AltmeChatSupportCubit>()
-                              .matrixChat
-                              .client!,
+                      } else if (link.startsWith('mxc')) {
+                        final data = p0.metadata!['bytes'] as Uint8List;
+                        return Image.memory(
+                          data,
                           fit: BoxFit.contain,
-                          width: 500,
-                          height: 500,
-                          uri: Uri.parse(link),
-                          isThumbnail: false,
                         );
                       } else {
                         return Image.file(
@@ -322,6 +317,26 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
   }
 
   Future<void> _handleMessageTap(BuildContext _, Message message) async {
-    await liveChatCubit!.handleMessageTap(message);
+    if (message is ImageMessage) {
+      final link = message.uri;
+
+      late ImageProvider imageProvider;
+      if (link.startsWith('http')) {
+        imageProvider = CachedNetworkImageProvider(link);
+      } else if (link.startsWith('mxc')) {
+        final data = message.metadata!['bytes'] as Uint8List;
+        imageProvider = MemoryImage(data);
+      } else {
+        imageProvider = AssetImage(link);
+      }
+
+      await Navigator.of(context).push<void>(
+        PhotoViewer.route(
+          imageProvider: imageProvider,
+        ),
+      );
+    } else {
+      await liveChatCubit!.handleMessageTap(message);
+    }
   }
 }
