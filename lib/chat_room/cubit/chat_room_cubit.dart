@@ -208,7 +208,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
           newMessages[index] = updatedMessage;
           emit(state.copyWith(messages: newMessages));
         } else {
-          final Message message = matrixChat.mapEventToMessage(event);
+          final Message message = await matrixChat.mapEventToMessage(event);
           emit(
             state.copyWith(
               messages: [message, ...state.messages],
