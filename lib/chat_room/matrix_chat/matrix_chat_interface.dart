@@ -33,7 +33,6 @@ abstract class MatrixChatInterface {
     int width = 500,
     int height = 500,
   });
-  String getUrlFromImage(String url);
   Future<String> login({
     required String username,
     required String password,
