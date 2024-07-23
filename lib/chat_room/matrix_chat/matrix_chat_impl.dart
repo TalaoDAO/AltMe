@@ -205,19 +205,15 @@ class MatrixChatImpl extends MatrixChatInterface {
       final url =
           (file != null && file is Map<String, dynamic>) ? file['url'] : '';
 
-      final imageUrl = getUrlFromImage(url.toString());
-
       message = ImageMessage(
         id: const Uuid().v4(),
         remoteId: event.eventId,
         name: event.plaintextBody,
         size: size,
-        uri: imageUrl,
+        uri: url.toString(),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
-        author: User(
-          id: event.senderId,
-        ),
+        author: User(id: event.senderId),
       );
     } else if (event.messageType == 'm.file') {
       message = FileMessage(
@@ -225,7 +221,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         remoteId: event.eventId,
         name: event.plaintextBody,
         size: size,
-        uri: getUrlFromUri(url: event.content['url'] as String? ?? ''),
+        uri: getThumbnail(url: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         author: User(
@@ -252,7 +248,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         ),
         name: event.plaintextBody,
         size: size,
-        uri: getUrlFromUri(url: event.content['url'] as String? ?? ''),
+        uri: getThumbnail(url: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         author: User(
@@ -470,7 +466,7 @@ class MatrixChatImpl extends MatrixChatInterface {
   }
 
   @override
-  String getUrlFromUri({
+  String getThumbnail({
     required String url,
     int width = 500,
     int height = 500,
@@ -482,14 +478,6 @@ class MatrixChatImpl extends MatrixChatInterface {
       width: width,
       animated: false,
     );
-    return uri.toString();
-  }
-
-  @override
-  String getUrlFromImage(String url) {
-    if (url.trim().isEmpty) return '';
-
-    final Uri uri = Uri.parse(url).getDownloadLink(client!);
     return uri.toString();
   }
 
