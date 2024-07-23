@@ -195,6 +195,19 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                           event: event,
                           fit: BoxFit.contain,
                         );
+                      }
+                      if (link.startsWith('mxc')) {
+                        return MxcImage(
+                          client: context
+                              .read<AltmeChatSupportCubit>()
+                              .matrixChat
+                              .client!,
+                          fit: BoxFit.contain,
+                          width: 500,
+                          height: 500,
+                          uri: Uri.parse(link),
+                          isThumbnail: false,
+                        );
                       } else {
                         return TransparentInkWell(
                           onTap: () {
