@@ -6,7 +6,6 @@ import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/chat_room/widget/mxc_image.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
