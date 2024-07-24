@@ -5,6 +5,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/model/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ManageAccountsPage extends StatefulWidget {
   const ManageAccountsPage({super.key});
@@ -102,6 +103,7 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
           titleAlignment: Alignment.topCenter,
           scrollView: false,
           titleLeading: const BackLeadingButton(),
+          padding: EdgeInsets.zero,
           body: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -115,22 +117,78 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
                       itemCount: state.cryptoAccount.data.length,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
                       itemBuilder: (context, i) {
                         final data = state.cryptoAccount.data[i];
                         if (!data.blockchainType.isSupported(profileSetting)) {
                           return Container();
                         }
                         return Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: ManageAccountsItem(
-                            cryptoAccountData: data,
-                            listIndex: i,
-                            onPressed: () {
-                              context
-                                  .read<ManageAccountsCubit>()
-                                  .setCurrentWalletAccount(i);
-                            },
-                            onEditButtonPressed: () => _edit(i),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 15,
+                          ),
+                          child: Slidable(
+                            key: ValueKey(i),
+                            endActionPane: ActionPane(
+                              motion: const ScrollMotion(),
+                              dragDismissible: false,
+                              children: [
+                                SlidableAction(
+                                  backgroundColor: Colors.red,
+                                  foregroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  icon: Icons.delete,
+                                  onPressed: (_) async {
+                                    // cannot delete current account
+                                    final currentIndex =
+                                        state.currentCryptoIndex;
+
+                                    if (currentIndex == i) {
+                                      await showDialog<bool>(
+                                        context: context,
+                                        builder: (context) => ConfirmDialog(
+                                          title:
+                                              l10n.cannotDeleteCurrentAccount,
+                                          yes: l10n.ok,
+                                          showNoButton: false,
+                                        ),
+                                      );
+                                      return;
+                                    }
+
+                                    final value = await showDialog<bool>(
+                                      context: context,
+                                      builder: (context) => ConfirmDialog(
+                                        title: l10n
+                                            .deleteAccountMessage(data.name),
+                                        yes: l10n.ok,
+                                        showNoButton: false,
+                                      ),
+                                    );
+
+                                    if (value != null && value) {
+                                      await context
+                                          .read<ManageAccountsCubit>()
+                                          .deleteCryptoAccount(
+                                            index: i,
+                                            blockchainType: data.blockchainType,
+                                          );
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            child: ManageAccountsItem(
+                              cryptoAccountData: data,
+                              listIndex: i,
+                              onPressed: () {
+                                context
+                                    .read<ManageAccountsCubit>()
+                                    .setCurrentWalletAccount(i);
+                              },
+                              onEditButtonPressed: () => _edit(i),
+                            ),
                           ),
                         );
                       },

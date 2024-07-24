@@ -56,4 +56,20 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
       },
     );
   }
+
+  Future<void> deleteCryptoAccount({
+    required int index,
+    required BlockchainType blockchainType,
+  }) async {
+    // should not be able to delete correct index
+    emit(state.loading());
+    await walletCubit.deleteCryptoAccount(
+      index: index,
+      blockchainType: blockchainType,
+      credentialsCubit: credentialsCubit,
+      onComplete: (cryptoAccount) {
+        emit(state.success(cryptoAccount: cryptoAccount));
+      },
+    );
+  }
 }

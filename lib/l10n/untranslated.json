@@ -19,7 +19,9 @@
     "languageSettingsDescription",
     "themeSettings",
     "themeSettingsDescription",
-    "couldNotFindTheAccountWithThisAddress"
+    "couldNotFindTheAccountWithThisAddress",
+    "deleteAccountMessage",
+    "cannotDeleteCurrentAccount"
   ],
 
   "es": [
@@ -42,7 +44,9 @@
     "languageSettingsDescription",
     "themeSettings",
     "themeSettingsDescription",
-    "couldNotFindTheAccountWithThisAddress"
+    "couldNotFindTheAccountWithThisAddress",
+    "deleteAccountMessage",
+    "cannotDeleteCurrentAccount"
   ],
 
   "fr": [
@@ -70,6 +74,8 @@
     "languageSettingsDescription",
     "themeSettings",
     "themeSettingsDescription",
-    "couldNotFindTheAccountWithThisAddress"
+    "couldNotFindTheAccountWithThisAddress",
+    "deleteAccountMessage",
+    "cannotDeleteCurrentAccount"
   ]
 }

@@ -474,6 +474,51 @@ class WalletCubit extends Cubit<WalletState> {
     onComplete?.call(cryptoAccount);
   }
 
+  Future<void> deleteCryptoAccount({
+    required int index,
+    dynamic Function(CryptoAccount cryptoAccount)? onComplete,
+    required BlockchainType blockchainType,
+    required CredentialsCubit credentialsCubit,
+  }) async {
+    emit(state.copyWith(status: WalletStatus.loading));
+
+    // final CryptoAccountData deletedCryptoAccountData =
+    //     state.cryptoAccount.data[index];
+
+    final cryptoAccounts = List.of(state.cryptoAccount.data)..removeAt(index);
+
+    final CryptoAccount cryptoAccount = CryptoAccount(data: cryptoAccounts);
+    final String cryptoAccountString = jsonEncode(cryptoAccount.toJson());
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.cryptoAccount,
+      cryptoAccountString,
+    );
+
+    /// check if associated wallet credential is available for
+    /// blockchain type
+
+    // TODO may be we need to delete
+    // await credentialsCubit.updateAssociatedWalletCredential(
+    //   blockchainType: blockchainType,
+    //   cryptoAccountData: cryptoAccountData,
+    // );
+
+    /// update current index after deletion
+    final CryptoAccountData currentCryptoAccountData =
+        state.cryptoAccount.data[state.currentCryptoIndex];
+    final newIndex = cryptoAccounts.indexWhere(
+      (account) =>
+          account.walletAddress == currentCryptoAccountData.walletAddress &&
+          account.blockchainType == currentCryptoAccountData.blockchainType,
+    );
+    emit(state.copyWith(currentCryptoIndex: newIndex));
+
+    emitCryptoAccount(cryptoAccount);
+
+    onComplete?.call(cryptoAccount);
+  }
+
   void emitCryptoAccount(CryptoAccount cryptoAccount) {
     emit(
       state.copyWith(

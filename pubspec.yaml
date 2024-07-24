@@ -60,6 +60,7 @@ dependencies:
   flutter_native_timezone: ^2.0.0
   flutter_olm: ^1.4.1
   flutter_openssl_crypto: ^0.3.0
+  flutter_slidable: ^3.1.1
   flutter_svg: ^2.0.6
   google_fonts: 6.1.0
   #google_mlkit_face_detection: ^0.5.0

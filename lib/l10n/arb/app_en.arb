@@ -1039,10 +1039,19 @@
   "systemThemeText": "Phone Theme",
   "couldNotFindTheAccountWithThisAddress": "Could not find the address {address} in your account list.",
   "@couldNotFindTheAccountWithThisAddress": {
-    "description": "Credential issuer on detail page",
+    "description": "couldNotFindTheAccountWithThisAddress",
     "type": "text",
     "placeholders": {
       "address": {}
     }
-  }
+  },
+  "deleteAccountMessage": "Are you sure you want to delete {account}?",
+  "@deleteAccountMessage": {
+    "description": "Mesage to delete crypto account",
+    "type": "text",
+    "placeholders": {
+      "account": {}
+    }
+  },
+  "cannotDeleteCurrentAccount": "Sorrry, you cannot delete current account"
 }
