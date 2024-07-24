@@ -18,7 +18,8 @@
     "languageSettings",
     "languageSettingsDescription",
     "themeSettings",
-    "themeSettingsDescription"
+    "themeSettingsDescription",
+    "couldNotFindTheAccountWithThisAddress"
   ],
 
   "es": [
@@ -40,7 +41,8 @@
     "languageSettings",
     "languageSettingsDescription",
     "themeSettings",
-    "themeSettingsDescription"
+    "themeSettingsDescription",
+    "couldNotFindTheAccountWithThisAddress"
   ],
 
   "fr": [
@@ -67,6 +69,7 @@
     "languageSettings",
     "languageSettingsDescription",
     "themeSettings",
-    "themeSettingsDescription"
+    "themeSettingsDescription",
+    "couldNotFindTheAccountWithThisAddress"
   ]
 }

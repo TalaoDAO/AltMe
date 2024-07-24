@@ -762,6 +762,13 @@ class ResponseMessage with MessageHandler {
           return ResponseString.RESPONSE_STRING_theWalletIsSuspended.localise(
             context,
           );
+        case ResponseString
+              .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress:
+          return ResponseString
+              .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress.localise(
+            context,
+            injectedMessage: injectedMessage,
+          );
       }
     }
     return '';

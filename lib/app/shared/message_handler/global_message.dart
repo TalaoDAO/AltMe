@@ -385,4 +385,6 @@ class GlobalMessage {
   String get RESPONSE_STRING_statusListInvalidSignature =>
       l10n.statuslListSignatureFailed;
   String get RESPONSE_STRING_theWalletIsSuspended => l10n.theWalletIsSuspended;
+  String RESPONSE_STRING_couldNotFindTheAccountWithThisAddress(String value) =>
+      l10n.couldNotFindTheAccountWithThisAddress(value);
 }

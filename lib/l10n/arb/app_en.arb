@@ -1036,5 +1036,13 @@
   "themeSettingsDescription": "Choose your theme",
   "darkThemeText": "Dark Theme",
   "lightThemeText": "Light Theme",
-  "systemThemeText": "Phone Theme"
+  "systemThemeText": "Phone Theme",
+  "couldNotFindTheAccountWithThisAddress": "Could not find the address {address} in your account list.",
+  "@couldNotFindTheAccountWithThisAddress": {
+    "description": "Credential issuer on detail page",
+    "type": "text",
+    "placeholders": {
+      "address": {}
+    }
+  }
 }

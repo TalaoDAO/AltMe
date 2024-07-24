@@ -497,6 +497,13 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_theWalletIsSuspended:
         return globalMessage.RESPONSE_STRING_theWalletIsSuspended;
+
+      case ResponseString.RESPONSE_STRING_couldNotFindTheAccountWithThisAddress:
+        return globalMessage
+            .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress(
+          injectedMessage ?? '',
+        );
+        ;
     }
   }
 }
