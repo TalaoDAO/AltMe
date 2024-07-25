@@ -180,12 +180,14 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                             dragDismissible: false,
                                             children: [
                                               SlidableAction(
-                                                backgroundColor: Colors.red,
+                                                backgroundColor:
+                                                    Colors.transparent,
                                                 foregroundColor:
                                                     Theme.of(context)
                                                         .colorScheme
-                                                        .primary,
+                                                        .onSurface,
                                                 icon: Icons.delete,
+                                                label: l10n.delete,
                                                 onPressed: (_) async {
                                                   // cannot delete current account
                                                   final currentIndex =

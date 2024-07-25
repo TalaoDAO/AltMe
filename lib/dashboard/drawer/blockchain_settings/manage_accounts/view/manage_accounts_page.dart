@@ -135,10 +135,11 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
                               dragDismissible: false,
                               children: [
                                 SlidableAction(
-                                  backgroundColor: Colors.red,
+                                  backgroundColor: Colors.transparent,
                                   foregroundColor:
-                                      Theme.of(context).colorScheme.primary,
+                                      Theme.of(context).colorScheme.onSurface,
                                   icon: Icons.delete,
+                                  label: l10n.delete,
                                   onPressed: (_) async {
                                     // cannot delete current account
                                     final currentIndex =

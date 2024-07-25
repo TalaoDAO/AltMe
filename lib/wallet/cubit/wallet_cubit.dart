@@ -512,7 +512,7 @@ class WalletCubit extends Cubit<WalletState> {
           account.walletAddress == currentCryptoAccountData.walletAddress &&
           account.blockchainType == currentCryptoAccountData.blockchainType,
     );
-    emit(state.copyWith(currentCryptoIndex: newIndex));
+    await setCurrentWalletAccount(newIndex);
 
     emitCryptoAccount(cryptoAccount);
 
