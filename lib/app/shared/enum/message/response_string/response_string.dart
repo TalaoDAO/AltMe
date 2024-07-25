@@ -158,7 +158,6 @@ enum ResponseString {
   RESPONSE_STRING_statusListInvalidSignature,
   RESPONSE_STRING_theWalletIsSuspended,
   RESPONSE_STRING_couldNotFindTheAccountWithThisAddress,
-  RESPONSE_STRING_invalidRequestErrorDescription,
   RESPONSE_STRING_invalidClientErrorDescription,
   RESPONSE_STRING_vpFormatsNotSupportedErrorDescription,
   RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription,

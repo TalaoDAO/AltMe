@@ -504,9 +504,6 @@ extension ResponseStringX on ResponseString {
           injectedMessage ?? '',
         );
 
-      case ResponseString.RESPONSE_STRING_invalidRequestErrorDescription:
-        return globalMessage.RESPONSE_STRING_invalidRequestErrorDescription;
-
       case ResponseString.RESPONSE_STRING_invalidClientErrorDescription:
         return globalMessage.RESPONSE_STRING_invalidClientErrorDescription;
 

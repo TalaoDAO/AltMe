@@ -1252,6 +1252,7 @@ MessageHandler getMessageHandler(dynamic e) {
 
 ResponseString getErrorResponseString(String errorString) {
   switch (errorString) {
+    case 'invalid_request':
     case 'invalid_request_uri':
     case 'invalid_request_object':
       return ResponseString.RESPONSE_STRING_invalidRequest;
@@ -1299,9 +1300,6 @@ ResponseString getErrorResponseString(String errorString) {
     case 'issuance_pending':
       return ResponseString
           .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending;
-
-    case 'invalid_request':
-      return ResponseString.RESPONSE_STRING_invalidRequestErrorDescription;
 
     case 'invalid_client':
       return ResponseString.RESPONSE_STRING_invalidClientErrorDescription;

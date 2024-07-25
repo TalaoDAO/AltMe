@@ -22,7 +22,6 @@
     "couldNotFindTheAccountWithThisAddress",
     "deleteAccountMessage",
     "cannotDeleteCurrentAccount",
-    "invalidRequestErrorDescription",
     "invalidClientErrorDescription",
     "vpFormatsNotSupportedErrorDescription",
     "invalidPresentationDefinitionUriErrorDescription"
@@ -51,7 +50,6 @@
     "couldNotFindTheAccountWithThisAddress",
     "deleteAccountMessage",
     "cannotDeleteCurrentAccount",
-    "invalidRequestErrorDescription",
     "invalidClientErrorDescription",
     "vpFormatsNotSupportedErrorDescription",
     "invalidPresentationDefinitionUriErrorDescription"
@@ -85,7 +83,6 @@
     "couldNotFindTheAccountWithThisAddress",
     "deleteAccountMessage",
     "cannotDeleteCurrentAccount",
-    "invalidRequestErrorDescription",
     "invalidClientErrorDescription",
     "vpFormatsNotSupportedErrorDescription",
     "invalidPresentationDefinitionUriErrorDescription"

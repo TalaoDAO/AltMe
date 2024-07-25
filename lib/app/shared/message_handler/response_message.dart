@@ -770,12 +770,6 @@ class ResponseMessage with MessageHandler {
             injectedMessage: injectedMessage,
           );
 
-        case ResponseString.RESPONSE_STRING_invalidRequestErrorDescription:
-          return ResponseString.RESPONSE_STRING_invalidRequestErrorDescription
-              .localise(
-            context,
-          );
-
         case ResponseString.RESPONSE_STRING_invalidClientErrorDescription:
           return ResponseString.RESPONSE_STRING_invalidClientErrorDescription
               .localise(
