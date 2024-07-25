@@ -817,6 +817,7 @@ class ScanCubit extends Cubit<ScanState> {
                     r'$.vp.verifiableCredential[' + i.toString() + ']';
               }
             }
+            pathNested['format'] = vcFormat ?? vcFormatType.vcValue;
             descriptor['path_nested'] = pathNested;
           }
 
