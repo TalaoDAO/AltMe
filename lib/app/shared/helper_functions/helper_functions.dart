@@ -1254,6 +1254,7 @@ MessageHandler getMessageHandler(dynamic e) {
 
 ResponseString getErrorResponseString(String errorString) {
   switch (errorString) {
+    case 'invalid_request':
     case 'invalid_request_uri':
     case 'invalid_request_object':
       return ResponseString.RESPONSE_STRING_invalidRequest;
