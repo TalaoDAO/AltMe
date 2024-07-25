@@ -149,20 +149,6 @@ class DrawerView extends StatelessWidget {
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
-                      if (profileModel.profileType == ProfileType.enterprise &&
-                          profileModel.profileSetting.walletSecurityOptions
-                              .displaySecurityAdvancedSettings) ...[
-                        DrawerCategoryItem(
-                          title: l10n.advanceSettings,
-                          subTitle: l10n
-                              .selectCredentialCategoryWhichYouWantToShowInCredentialList,
-                          onClick: () {
-                            Navigator.of(context)
-                                .push<void>(AdvancedSettingsPage.route());
-                          },
-                        ),
-                        const SizedBox(height: Sizes.spaceSmall),
-                      ],
                       if (profileModel
                           .profileSetting.settingsMenu.displayHelpCenter) ...[
                         DrawerCategoryItem(
