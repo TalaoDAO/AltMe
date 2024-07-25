@@ -387,4 +387,16 @@ class GlobalMessage {
   String get RESPONSE_STRING_theWalletIsSuspended => l10n.theWalletIsSuspended;
   String RESPONSE_STRING_couldNotFindTheAccountWithThisAddress(String value) =>
       l10n.couldNotFindTheAccountWithThisAddress(value);
+
+  String get RESPONSE_STRING_invalidRequestErrorDescription =>
+      l10n.invalidRequestErrorDescription;
+
+  String get RESPONSE_STRING_invalidClientErrorDescription =>
+      l10n.invalidClientErrorDescription;
+
+  String get RESPONSE_STRING_vpFormatsNotSupportedErrorDescription =>
+      l10n.vpFormatsNotSupportedErrorDescription;
+
+  String get RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription =>
+      l10n.invalidPresentationDefinitionUriErrorDescription;
 }

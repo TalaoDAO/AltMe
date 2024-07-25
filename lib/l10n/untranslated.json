@@ -21,7 +21,11 @@
     "themeSettingsDescription",
     "couldNotFindTheAccountWithThisAddress",
     "deleteAccountMessage",
-    "cannotDeleteCurrentAccount"
+    "cannotDeleteCurrentAccount",
+    "invalidRequestErrorDescription",
+    "invalidClientErrorDescription",
+    "vpFormatsNotSupportedErrorDescription",
+    "invalidPresentationDefinitionUriErrorDescription"
   ],
 
   "es": [
@@ -46,7 +50,11 @@
     "themeSettingsDescription",
     "couldNotFindTheAccountWithThisAddress",
     "deleteAccountMessage",
-    "cannotDeleteCurrentAccount"
+    "cannotDeleteCurrentAccount",
+    "invalidRequestErrorDescription",
+    "invalidClientErrorDescription",
+    "vpFormatsNotSupportedErrorDescription",
+    "invalidPresentationDefinitionUriErrorDescription"
   ],
 
   "fr": [
@@ -76,6 +84,10 @@
     "themeSettingsDescription",
     "couldNotFindTheAccountWithThisAddress",
     "deleteAccountMessage",
-    "cannotDeleteCurrentAccount"
+    "cannotDeleteCurrentAccount",
+    "invalidRequestErrorDescription",
+    "invalidClientErrorDescription",
+    "vpFormatsNotSupportedErrorDescription",
+    "invalidPresentationDefinitionUriErrorDescription"
   ]
 }

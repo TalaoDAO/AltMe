@@ -1252,7 +1252,6 @@ MessageHandler getMessageHandler(dynamic e) {
 
 ResponseString getErrorResponseString(String errorString) {
   switch (errorString) {
-    case 'invalid_request':
     case 'invalid_request_uri':
     case 'invalid_request_object':
       return ResponseString.RESPONSE_STRING_invalidRequest;
@@ -1282,7 +1281,6 @@ ResponseString getErrorResponseString(String errorString) {
       return ResponseString.RESPONSE_STRING_theWalletIsNotRegistered;
 
     case 'invalid_grant':
-    case 'invalid_client':
     case 'invalid_token':
       return ResponseString.RESPONSE_STRING_credentialIssuanceDenied;
 
@@ -1301,6 +1299,20 @@ ResponseString getErrorResponseString(String errorString) {
     case 'issuance_pending':
       return ResponseString
           .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending;
+
+    case 'invalid_request':
+      return ResponseString.RESPONSE_STRING_invalidRequestErrorDescription;
+
+    case 'invalid_client':
+      return ResponseString.RESPONSE_STRING_invalidClientErrorDescription;
+
+    case 'vp_formats_not_supported':
+      return ResponseString
+          .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription;
+
+    case 'invalid_presentation_definition_uri':
+      return ResponseString
+          .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription;
 
     default:
       return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;

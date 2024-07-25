@@ -1053,5 +1053,9 @@
       "account": {}
     }
   },
-  "cannotDeleteCurrentAccount": "Sorrry, you cannot delete current account"
+  "cannotDeleteCurrentAccount": "Sorrry, you cannot delete current account",
+  "invalidRequestErrorDescription": "The request contains more than one out of the following three options to communicate a requested Credential: a presentation_definition parameter, a presentation_definition_uri parameter, or a scope value representing a Presentation Definition. Requested Presentation Definition does not conform the specs.The Wallet does not support the client_id_scheme value passed in the Authorization Request.The Client Identifier passed in the request did not belong to the Client Identifier scheme indicated in the Authorization Request, or requirements of a certain scheme was violated.",
+  "invalidClientErrorDescription": "client_id is not conformed to client_id_scheme",
+  "vpFormatsNotSupportedErrorDescription": "The Wallet does not support any of the formats requested by the Verifier, such as those included in the vp_formats registration parameter.",
+  "invalidPresentationDefinitionUriErrorDescription": "The Presentation Definition URL cannot be reached."
 }

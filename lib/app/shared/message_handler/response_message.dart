@@ -769,6 +769,33 @@ class ResponseMessage with MessageHandler {
             context,
             injectedMessage: injectedMessage,
           );
+
+        case ResponseString.RESPONSE_STRING_invalidRequestErrorDescription:
+          return ResponseString.RESPONSE_STRING_invalidRequestErrorDescription
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_invalidClientErrorDescription:
+          return ResponseString.RESPONSE_STRING_invalidClientErrorDescription
+              .localise(
+            context,
+          );
+
+        case ResponseString
+              .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription:
+          return ResponseString
+              .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription.localise(
+            context,
+          );
+
+        case ResponseString
+              .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription:
+          return ResponseString
+                  .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription
+              .localise(
+            context,
+          );
       }
     }
     return '';

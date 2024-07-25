@@ -503,7 +503,21 @@ extension ResponseStringX on ResponseString {
             .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress(
           injectedMessage ?? '',
         );
-        ;
+
+      case ResponseString.RESPONSE_STRING_invalidRequestErrorDescription:
+        return globalMessage.RESPONSE_STRING_invalidRequestErrorDescription;
+
+      case ResponseString.RESPONSE_STRING_invalidClientErrorDescription:
+        return globalMessage.RESPONSE_STRING_invalidClientErrorDescription;
+
+      case ResponseString.RESPONSE_STRING_vpFormatsNotSupportedErrorDescription:
+        return globalMessage
+            .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription;
+
+      case ResponseString
+            .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription:
+        return globalMessage
+            .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription;
     }
   }
 }
