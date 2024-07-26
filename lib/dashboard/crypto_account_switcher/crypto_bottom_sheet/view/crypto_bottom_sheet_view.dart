@@ -14,7 +14,7 @@ class CryptoBottomSheetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CryptoBottomSheetCubit(
+      create: (context) => ManageAccountsCubit(
         credentialsCubit: context.read<CredentialsCubit>(),
       ),
       child: const CryptoBottomSheetPage(),
@@ -33,7 +33,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
   Future<void> _edit(int index) async {
     final l10n = context.l10n;
     final List<CryptoAccountData> cryptoAccount =
-        context.read<CryptoBottomSheetCubit>().state.cryptoAccount.data;
+        context.read<ManageAccountsCubit>().state.cryptoAccount.data;
     final accountNameList = cryptoAccount.map((e) => e.name).toList();
 
     final cryptoAccountData = cryptoAccount[index];
@@ -60,7 +60,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
           ),
         );
       } else {
-        await context.read<CryptoBottomSheetCubit>().editCryptoAccount(
+        await context.read<ManageAccountsCubit>().editCryptoAccount(
               newAccountName: newCryptoAccountName,
               index: index,
               blockchainType: cryptoAccountData.blockchainType,
@@ -77,7 +77,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BlocConsumer<CryptoBottomSheetCubit, CryptoBottomSheetState>(
+    return BlocConsumer<ManageAccountsCubit, ManageAccountsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -189,7 +189,8 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                                 icon: Icons.delete,
                                                 label: l10n.delete,
                                                 onPressed: (_) async {
-                                                  // cannot delete current account
+                                                  // cannot delete current
+                                                  // account
                                                   final currentIndex =
                                                       state.currentCryptoIndex;
 
@@ -223,7 +224,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                                   if (value != null && value) {
                                                     await context
                                                         .read<
-                                                            CryptoBottomSheetCubit>()
+                                                            ManageAccountsCubit>()
                                                         .deleteCryptoAccount(
                                                           index: i,
                                                           blockchainType: data
@@ -241,8 +242,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                             listIndex: i,
                                             onPressed: () {
                                               context
-                                                  .read<
-                                                      CryptoBottomSheetCubit>()
+                                                  .read<ManageAccountsCubit>()
                                                   .setCurrentWalletAccount(i);
                                             },
                                             onEditButtonPressed: () => _edit(i),

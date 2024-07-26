@@ -61,7 +61,8 @@ class ImportAccountStep1View extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push<void>(
                       ImportAccountStep2Page.route(
-                          accountType: AccountType.tezos),
+                        accountType: AccountType.tezos,
+                      ),
                     );
                   },
                 ),
@@ -75,7 +76,8 @@ class ImportAccountStep1View extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push<void>(
                       ImportAccountStep2Page.route(
-                          accountType: AccountType.ethereum),
+                        accountType: AccountType.ethereum,
+                      ),
                     );
                   },
                 ),
@@ -89,7 +91,8 @@ class ImportAccountStep1View extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push<void>(
                       ImportAccountStep2Page.route(
-                          accountType: AccountType.fantom),
+                        accountType: AccountType.fantom,
+                      ),
                     );
                   },
                 ),
@@ -103,7 +106,8 @@ class ImportAccountStep1View extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push<void>(
                       ImportAccountStep2Page.route(
-                          accountType: AccountType.polygon),
+                        accountType: AccountType.polygon,
+                      ),
                     );
                   },
                 ),
@@ -117,7 +121,8 @@ class ImportAccountStep1View extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push<void>(
                       ImportAccountStep2Page.route(
-                          accountType: AccountType.binance),
+                        accountType: AccountType.binance,
+                      ),
                     );
                   },
                 ),

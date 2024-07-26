@@ -476,7 +476,7 @@ class WalletCubit extends Cubit<WalletState> {
 
   Future<void> deleteCryptoAccount({
     required int index,
-    dynamic Function(CryptoAccount cryptoAccount)? onComplete,
+    dynamic Function(CryptoAccount cryptoAccount, int newIndex)? onComplete,
     required BlockchainType blockchainType,
     required CredentialsCubit credentialsCubit,
   }) async {
@@ -516,7 +516,7 @@ class WalletCubit extends Cubit<WalletState> {
 
     emitCryptoAccount(cryptoAccount);
 
-    onComplete?.call(cryptoAccount);
+    onComplete?.call(cryptoAccount, newIndex);
   }
 
   void emitCryptoAccount(CryptoAccount cryptoAccount) {

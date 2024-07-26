@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
@@ -61,7 +62,7 @@ class _MxcImageState extends State<MxcImage> {
     }
   }
 
-  void _tryLoad(_) async {
+  Future<void> _tryLoad(_) async {
     if (_imageData != null) {
       return;
     }
@@ -70,7 +71,7 @@ class _MxcImageState extends State<MxcImage> {
     } catch (_) {
       if (!mounted) return;
       await Future<void>.delayed(widget.retryDuration);
-      _tryLoad(_);
+      unawaited(_tryLoad(_));
     }
   }
 

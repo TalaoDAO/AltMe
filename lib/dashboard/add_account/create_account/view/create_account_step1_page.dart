@@ -1,7 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/constants/icon_strings.dart';
-import 'package:altme/app/shared/constants/sizes.dart';
-import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -65,7 +62,8 @@ class CreateAccountStep1View extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push<void>(
                       CreateAccountStep2Page.route(
-                          accountType: AccountType.tezos),
+                        accountType: AccountType.tezos,
+                      ),
                     );
                   },
                 ),
@@ -79,7 +77,8 @@ class CreateAccountStep1View extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push<void>(
                       CreateAccountStep2Page.route(
-                          accountType: AccountType.ethereum),
+                        accountType: AccountType.ethereum,
+                      ),
                     );
                   },
                 ),
@@ -93,7 +92,8 @@ class CreateAccountStep1View extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push<void>(
                       CreateAccountStep2Page.route(
-                          accountType: AccountType.fantom),
+                        accountType: AccountType.fantom,
+                      ),
                     );
                   },
                 ),
@@ -107,7 +107,8 @@ class CreateAccountStep1View extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push<void>(
                       CreateAccountStep2Page.route(
-                          accountType: AccountType.polygon),
+                        accountType: AccountType.polygon,
+                      ),
                     );
                   },
                 ),
@@ -121,7 +122,8 @@ class CreateAccountStep1View extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push<void>(
                       CreateAccountStep2Page.route(
-                          accountType: AccountType.binance),
+                        accountType: AccountType.binance,
+                      ),
                     );
                   },
                 ),

@@ -33,6 +33,10 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
   Future<void> setCurrentWalletAccount(int index) async {
     emit(state.loading());
     await walletCubit.setCurrentWalletAccount(index);
+    await credentialsCubit.loadAllCredentials(
+      blockchainType:
+          walletCubit.state.cryptoAccount.data[index].blockchainType,
+    );
     emit(state.success(currentCryptoIndex: index));
   }
 
@@ -63,8 +67,13 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
       index: index,
       blockchainType: blockchainType,
       credentialsCubit: credentialsCubit,
-      onComplete: (cryptoAccount) {
-        emit(state.success(cryptoAccount: cryptoAccount));
+      onComplete: (cryptoAccount, newIndex) {
+        emit(
+          state.success(
+            cryptoAccount: cryptoAccount,
+            currentCryptoIndex: newIndex,
+          ),
+        );
       },
     );
   }
