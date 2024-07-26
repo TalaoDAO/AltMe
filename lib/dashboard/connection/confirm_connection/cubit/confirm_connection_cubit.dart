@@ -89,16 +89,27 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
               .where((e) => e.blockchainType != BlockchainType.tezos)
               .toList();
 
-          final accounts = <String>[];
+          final params = sessionProposalEvent!.params;
 
-          final allowedNamespaces = [
-            ...sessionProposalEvent!
-                .params.optionalNamespaces['eip155']!.chains!,
-            ...sessionProposalEvent
-                .params.requiredNamespaces['eip155']!.chains!,
-          ];
+          final allowedNamespaces = <String>[];
+
+          if (params.optionalNamespaces.isNotEmpty) {
+            if (params.optionalNamespaces.containsKey('eip155')) {
+              allowedNamespaces
+                  .addAll(params.optionalNamespaces['eip155']!.chains!);
+            }
+          }
+
+          if (params.requiredNamespaces.isNotEmpty) {
+            if (params.requiredNamespaces.containsKey('eip155')) {
+              allowedNamespaces
+                  .addAll(params.requiredNamespaces['eip155']!.chains!);
+            }
+          }
 
           log.i(allowedNamespaces);
+
+          final accounts = <String>[];
 
           for (final evm in eVMAccounts) {
             if (allowedNamespaces.contains(evm.blockchainType.chain)) {
