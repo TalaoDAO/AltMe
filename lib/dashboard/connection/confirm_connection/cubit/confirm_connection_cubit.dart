@@ -121,7 +121,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
             'eip155': Namespace(
               accounts: accounts,
               methods: Parameters.walletConnectMethods,
-              events: Parameters.walletConnectEvents,
+              events: Parameters.allEvents,
             ),
           };
 

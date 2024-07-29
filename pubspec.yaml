@@ -109,7 +109,7 @@ dependencies:
   uni_links: ^0.5.1
   url_launcher: ^6.1.11
   visibility_detector: ^0.4.0+2
-  walletconnect_flutter_v2: ^2.1.11
+  walletconnect_flutter_v2: ^2.3.0
   webview_flutter: ^4.2.1
   webview_flutter_android: ^3.7.1
   webview_flutter_wkwebview: ^3.4.4

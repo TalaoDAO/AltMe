@@ -110,9 +110,15 @@ class _SignPayloadViewState extends State<SignPayloadView> {
                 Parameters.ETH_SIGN_TYPE_DATA ||
             walletConnectCubit.state.signType ==
                 Parameters.ETH_SIGN_TYPE_DATA_V4) {
-          final jsonData = jsonDecode(
-            walletConnectCubit.state.parameters[1] as String,
-          )['message'];
+          final param1 = walletConnectCubit.state.parameters[1];
+
+          if (param1.runtimeType != String) {
+            message = jsonEncode(param1);
+          } else {
+            message = param1.toString();
+          }
+
+          final jsonData = jsonDecode(message)['message'];
 
           String output = '';
 
@@ -127,6 +133,7 @@ class _SignPayloadViewState extends State<SignPayloadView> {
               output += '$key: $value\n';
             }
           });
+
           message = output;
         } else {
           message = state.payloadMessage ?? '';
