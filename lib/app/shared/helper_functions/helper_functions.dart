@@ -1355,17 +1355,9 @@ String getFormattedStringOIDC4VCI({
 <b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
 <b>CREDENTIAL OFFER  :</b> 
 ${credentialOfferJson != null ? const JsonEncoder.withIndent('  ').convert(credentialOfferJson) : 'None'}\n
-<b>ENDPOINTS :</b>
-    authorization server endpoint : ${openIdConfiguration?.authorizationServer ?? 'None'}
-    token endpoint : $tokenEndpoint}
-    credential endpoint : $credentialEndpoint}
-    deferred endpoint : ${openIdConfiguration?.deferredCredentialEndpoint ?? 'None'}
-    batch endpoint : ${openIdConfiguration?.batchEndpoint ?? 'None'}\n
-<b>CREDENTIAL SUPPORTED :</b> 
-${openIdConfiguration?.credentialsSupported != null ? const JsonEncoder.withIndent('  ').convert(openIdConfiguration!.credentialsSupported) : 'None'}\n
 <b>AUTHORIZATION SERVER CONFIGURATION :</b>
 ${authorizationServerConfiguration != null ? const JsonEncoder.withIndent('  ').convert(authorizationServerConfiguration) : 'None'}\n
-<b>CRDENTIAL ISSUER CONFIGURATION :</b> 
+<b>CREDENTIAL ISSUER CONFIGURATION :</b> 
 ${openIdConfiguration != null ? const JsonEncoder.withIndent('  ').convert(openIdConfiguration) : 'None'}
 ''';
 }
