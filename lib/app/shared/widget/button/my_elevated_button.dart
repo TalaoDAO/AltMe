@@ -53,7 +53,7 @@ class MyElevatedButton extends StatelessWidget {
                 onPressed: onPressed,
               ),
               onPressed: onPressed,
-              child: MyText(
+              child: Text(
                 text.toUpperCase(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.bold,
