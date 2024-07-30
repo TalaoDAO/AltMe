@@ -201,6 +201,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
     final payload = {
       'iss': thumbPrint,
+      'wallet': Parameters.appName.toLowerCase(),
       'aud': 'https://wallet-provider.altme.io',
       'jti': const Uuid().v4(),
       'nonce': nonce,
