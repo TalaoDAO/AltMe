@@ -109,9 +109,6 @@ class GlobalMessage {
   String get RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE =>
       l10n.backupCredentialSuccessMessage;
 
-  String get RESPONSE_STRING_linkedInBannerSuccessfullyExported =>
-      l10n.linkedInBannerSuccessfullyExported;
-
   String get RESPONSE_STRING_credentialSuccessfullyExported =>
       l10n.credentialSuccessfullyExported;
 
@@ -271,12 +268,6 @@ class GlobalMessage {
       l10n.verifiableIdCardExpirationDate;
   String get RESPONSE_STRING_verifiableIdCardHowToGetIt =>
       l10n.verifiableIdCardHowToGetIt;
-  String get RESPONSE_STRING_linkedinCardWhyGetThisCard =>
-      l10n.linkedinCardWhyGetThisCard;
-  String get RESPONSE_STRING_linkedinCardExpirationDate =>
-      l10n.linkedinCardExpirationDate;
-  String get RESPONSE_STRING_linkedinCardHowToGetIt =>
-      l10n.linkedinCardHowToGetIt;
   String get RESPONSE_STRING_phoneProofWhyGetThisCard =>
       l10n.phoneProofWhyGetThisCard;
   String get RESPONSE_STRING_phoneProofExpirationDate =>
@@ -394,4 +385,15 @@ class GlobalMessage {
   String get RESPONSE_STRING_statusListInvalidSignature =>
       l10n.statuslListSignatureFailed;
   String get RESPONSE_STRING_theWalletIsSuspended => l10n.theWalletIsSuspended;
+  String RESPONSE_STRING_couldNotFindTheAccountWithThisAddress(String value) =>
+      l10n.couldNotFindTheAccountWithThisAddress(value);
+
+  String get RESPONSE_STRING_invalidClientErrorDescription =>
+      l10n.invalidClientErrorDescription;
+
+  String get RESPONSE_STRING_vpFormatsNotSupportedErrorDescription =>
+      l10n.vpFormatsNotSupportedErrorDescription;
+
+  String get RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription =>
+      l10n.invalidPresentationDefinitionUriErrorDescription;
 }

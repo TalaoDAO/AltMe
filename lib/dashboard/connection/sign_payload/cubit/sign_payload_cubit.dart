@@ -168,13 +168,23 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         case ConnectionBridgeType.beacon:
           final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
 
-          final CryptoAccountData? currentAccount = walletCubit
-              .getCryptoAccountData(beaconRequest.request!.sourceAddress!);
+          final address = beaconRequest.request!.sourceAddress!;
+
+          final CryptoAccountData? currentAccount =
+              walletCubit.getCryptoAccountData(address);
 
           if (currentAccount == null) {
-            throw ResponseMessage(
-              message: ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            return emit(
+              state.copyWith(
+                status: AppStatus.error,
+                message: StateMessage.error(
+                  messageHandler: ResponseMessage(
+                    message: ResponseString
+                        .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress,
+                  ),
+                  injectedMessage: address,
+                ),
+              ),
             );
           }
 
@@ -226,9 +236,17 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
           log.i('currentAccount -$currentAccount');
           if (currentAccount == null) {
-            throw ResponseMessage(
-              message: ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            return emit(
+              state.copyWith(
+                status: AppStatus.error,
+                message: StateMessage.error(
+                  messageHandler: ResponseMessage(
+                    message: ResponseString
+                        .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress,
+                  ),
+                  injectedMessage: publicKey,
+                ),
+              ),
             );
           }
 

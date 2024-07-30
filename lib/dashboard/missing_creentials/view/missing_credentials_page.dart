@@ -62,7 +62,6 @@ class MissingCredentialsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-
     return BlocBuilder<MissingCredentialsCubit, MissingCredentialsState>(
       builder: (context, state) {
         return BasePage(
@@ -123,7 +122,7 @@ class MissingCredentialsView extends StatelessWidget {
                       ),
                     );
                   }
-                  Navigator.pop(context);
+                  Navigator.pop(context, true);
                 },
                 text: l10n.getItNow,
               ),

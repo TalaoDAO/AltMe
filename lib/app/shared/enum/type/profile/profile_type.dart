@@ -1,32 +1,27 @@
-import 'package:altme/l10n/l10n.dart';
-
 enum ProfileType {
   defaultOne,
   ebsiV3,
-  dutch,
-  owfBaselineProfile,
+  diipv2point1,
+  diipv3,
   custom,
   enterprise,
 }
 
 extension ProfileTypeX on ProfileType {
-  String getTitle({
-    required AppLocalizations l10n,
-    required String name,
-  }) {
+  String getTitle({required String name}) {
     switch (this) {
       case ProfileType.custom:
-        return l10n.profileCustom;
+        return 'Custom';
       case ProfileType.ebsiV3:
-        return l10n.profileEbsiV3;
-      case ProfileType.dutch:
-        return l10n.decentralizedIdentityInteropProfile;
+        return 'European Blockchain Services Infrastructure';
+      case ProfileType.diipv2point1:
+        return 'Decentralized Identity Interop Profile (DIIP v2.1)';
       case ProfileType.enterprise:
-        return name.isEmpty ? l10n.enterprise : name;
-      case ProfileType.owfBaselineProfile:
-        return l10n.oWFBaselineProfile;
+        return name.isEmpty ? 'Enterprise' : name;
+      case ProfileType.diipv3:
+        return 'Decentralized Identity Interop Profile (DIIP v3.0)';
       case ProfileType.defaultOne:
-        return l10n.defaultProfile;
+        return 'Default';
     }
   }
 
@@ -34,11 +29,11 @@ extension ProfileTypeX on ProfileType {
     switch (this) {
       case ProfileType.custom:
       case ProfileType.defaultOne:
-      case ProfileType.dutch:
+      case ProfileType.diipv2point1:
         return false;
       case ProfileType.ebsiV3:
       case ProfileType.enterprise:
-      case ProfileType.owfBaselineProfile:
+      case ProfileType.diipv3:
         return true;
     }
   }

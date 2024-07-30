@@ -127,6 +127,7 @@ class _CameraViewState extends State<CameraView> {
                       .currentAccount!
                       .blockchainType,
                   vcFormatType: customOidc4vcProfile.vcFormatType,
+                  qrCodeScanCubit: context.read<QRCodeScanCubit>(),
                 );
             LoadingView().hide();
             await Navigator.pushReplacement<void, void>(

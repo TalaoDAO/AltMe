@@ -1,3 +1,5 @@
+// ignore_for_file: inference_failure_on_instance_creation
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -12,7 +14,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
-import 'package:web3dart/web3dart.dart';
 
 part 'wallet_connect_cubit.g.dart';
 part 'wallet_connect_state.dart';
@@ -30,6 +31,20 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   final SecureStorageProvider secureStorageProvider;
   final RouteCubit routeCubit;
 
+  Map<String, dynamic Function(String, dynamic)> get sessionRequestHandlers => {
+        Parameters.ETH_SIGN: ethSign,
+        Parameters.ETH_SIGN_TRANSACTION: ethSignTransaction,
+        Parameters.ETH_SIGN_TYPE_DATA: ethSignTypedData,
+        Parameters.ETH_SIGN_TYPE_DATA_V4: ethSignTypedDataV4,
+        // SupportedEVMMethods.switchChain.name: switchChain,
+        // 'wallet_addEthereumChain': addChain,
+      };
+
+  Map<String, dynamic Function(String, dynamic)> get methodRequestHandlers => {
+        Parameters.PERSONAL_SIGN: personalSign,
+        Parameters.ETH_SEND_TRANSACTION: ethSendTransaction,
+      };
+
   final log = getLogger('WalletConnectCubit');
 
   Web3Wallet? _web3Wallet;
@@ -46,10 +61,13 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       log.i('Create the web3wallet');
       await dotenv.load();
       final projectId = dotenv.get('WALLET_CONNECT_PROJECT_ID');
-      _web3Wallet = await Web3Wallet.createInstance(
-        relayUrl:
-            'wss://relay.walletconnect.com', // The relay websocket URL, leave blank to use the default
-        projectId: projectId,
+
+      _web3Wallet = Web3Wallet(
+        core: Core(
+          projectId: projectId,
+          relayUrl:
+              'wss://relay.walletconnect.com', // The relay websocket URL, leave blank to use the default
+        ),
         metadata: const PairingMetadata(
           name: 'Wallet (Altme)',
           description: 'Altme Wallet',
@@ -57,6 +75,18 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           icons: [],
         ),
       );
+
+      log.i('Setup our listeners');
+      _web3Wallet!.core.pairing.onPairingInvalid.subscribe(_onPairingInvalid);
+      _web3Wallet!.core.pairing.onPairingCreate.subscribe(_onPairingCreate);
+      _web3Wallet!.pairings.onSync.subscribe(_onPairingsSync);
+      _web3Wallet!.onSessionProposal.subscribe(_onSessionProposal);
+      _web3Wallet!.onSessionProposalError.subscribe(_onSessionProposalError);
+      _web3Wallet!.onSessionConnect.subscribe(_onSessionConnect);
+      _web3Wallet!.onAuthRequest.subscribe(_onAuthRequest);
+
+      log.i('web3wallet init');
+      await _web3Wallet!.init();
 
       log.i('Setup our accounts');
 
@@ -80,15 +110,6 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         }
       }
 
-      log.i('Setup our listeners');
-      _web3Wallet!.core.pairing.onPairingInvalid.subscribe(_onPairingInvalid);
-      _web3Wallet!.core.pairing.onPairingCreate.subscribe(_onPairingCreate);
-      _web3Wallet!.pairings.onSync.subscribe(_onPairingsSync);
-      _web3Wallet!.onSessionProposal.subscribe(_onSessionProposal);
-      _web3Wallet!.onSessionProposalError.subscribe(_onSessionProposalError);
-      _web3Wallet!.onSessionConnect.subscribe(_onSessionConnect);
-      _web3Wallet!.onAuthRequest.subscribe(_onAuthRequest);
-
       /// register request emitter and request handler for all supported evms
 
       for (final blockchainType in BlockchainType.values) {
@@ -103,8 +124,8 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         registerRequestHandler(blockchainType.chain);
       }
 
-      log.i('web3wallet init');
-      await _web3Wallet!.init();
+      _web3Wallet!.onSessionRequest.subscribe(_onSessionRequest);
+
       log.i('metadata');
       log.i(_web3Wallet!.metadata);
 
@@ -119,46 +140,27 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     }
   }
 
-  void registerEventEmitter(String chain) {
-    for (final String event in Parameters.walletConnectEvents) {
-      _web3Wallet!.registerEventEmitter(
+  void registerRequestHandler(String chain) {
+    for (final handler in methodRequestHandlers.entries) {
+      _web3Wallet!.registerRequestHandler(
         chainId: chain,
-        event: event,
+        method: handler.key,
+        handler: handler.value,
+      );
+    }
+    for (final handler in sessionRequestHandlers.entries) {
+      _web3Wallet!.registerRequestHandler(
+        chainId: chain,
+        method: handler.key,
+        handler: handler.value,
       );
     }
   }
 
-  void registerRequestHandler(String chain) {
-    _web3Wallet!.registerRequestHandler(
-      chainId: chain,
-      method: Parameters.PERSONAL_SIGN,
-      handler: personalSign,
-    );
-    _web3Wallet!.registerRequestHandler(
-      chainId: chain,
-      method: Parameters.ETH_SIGN,
-      handler: ethSign,
-    );
-    _web3Wallet!.registerRequestHandler(
-      chainId: chain,
-      method: Parameters.ETH_SIGN_TRANSACTION,
-      handler: ethSignTransaction,
-    );
-    _web3Wallet!.registerRequestHandler(
-      chainId: chain,
-      method: Parameters.ETH_SIGN_TYPE_DATA,
-      handler: ethSignTypedData,
-    );
-    _web3Wallet!.registerRequestHandler(
-      chainId: chain,
-      method: Parameters.ETH_SIGN_TYPE_DATA_V4,
-      handler: ethSignTypedDataV4,
-    );
-    _web3Wallet!.registerRequestHandler(
-      chainId: chain,
-      method: Parameters.ETH_SEND_TRANSACTION,
-      handler: ethSendTransaction,
-    );
+  void registerEventEmitter(String chain) {
+    for (final String event in Parameters.allEvents) {
+      _web3Wallet!.registerEventEmitter(chainId: chain, event: event);
+    }
   }
 
   Future<void> connect(String walletConnectUri) async {
@@ -238,6 +240,22 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           ),
         ),
       );
+    }
+  }
+
+  Future<void> _onSessionRequest(SessionRequestEvent? args) async {
+    if (args != null) {
+      for (final evm in BlockchainType.values) {
+        if (evm == BlockchainType.tezos) continue;
+
+        if (args.chainId == evm.chain) {
+          log.i('[WALLET] _onSessionRequest $args');
+          final handler = sessionRequestHandlers[args.method];
+          if (handler != null) {
+            await handler(args.topic, args.params);
+          }
+        }
+      }
     }
   }
 
@@ -350,6 +368,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('completer initialise');
     completer.add(Completer<String>());
 
+    final pRequest = _web3Wallet!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
+
     emit(
       state.copyWith(
         status: WalletConnectStatus.signPayload,
@@ -361,6 +382,20 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
     final String result = await completer[completer.length - 1]!.future;
     log.i('complete - $result');
+
+    if (result == 'Failed') {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'User rejected method'),
+      );
+    } else {
+      response = response.copyWith(result: result);
+    }
+
+    await _web3Wallet!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+
     completer.removeLast();
     return result;
   }
@@ -370,6 +405,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
     log.i('completer initialise');
     completer.add(Completer<String>());
+
+    final pRequest = _web3Wallet!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
 
     emit(
       state.copyWith(
@@ -382,6 +420,20 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
     final String result = await completer[completer.length - 1]!.future;
     log.i('complete - $result');
+
+    if (result == 'Failed') {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'User rejected method'),
+      );
+    } else {
+      response = response.copyWith(result: result);
+    }
+
+    await _web3Wallet!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+
     completer.removeLast();
     return result;
   }
@@ -392,6 +444,8 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('completer initialise');
     completer.add(Completer<String>());
 
+    final pRequest = _web3Wallet!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
     final transaction = getTransaction(parameters);
 
     emit(
@@ -406,6 +460,20 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
     final String result = await completer[completer.length - 1]!.future;
     log.i('complete - $result');
+
+    if (result == 'Failed') {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'User rejected method'),
+      );
+    } else {
+      response = response.copyWith(result: result);
+    }
+
+    await _web3Wallet!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+
     completer.removeLast();
     return result;
   }
@@ -415,6 +483,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
     log.i('completer initialise');
     completer.add(Completer<String>());
+
+    final pRequest = _web3Wallet!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
 
     final Transaction transaction = getTransaction(parameters);
 
@@ -430,6 +501,19 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
     final String result = await completer[completer.length - 1]!.future;
     log.i('complete - $result');
+
+    if (result == 'Failed') {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'User rejected method'),
+      );
+    } else {
+      response = response.copyWith(result: result);
+    }
+
+    await _web3Wallet!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
     completer.removeLast();
     return result;
   }
@@ -439,6 +523,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
     log.i('completer initialise');
     completer.add(Completer<String>());
+
+    final pRequest = _web3Wallet!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
 
     emit(
       state.copyWith(
@@ -451,6 +538,20 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
     final String result = await completer[completer.length - 1]!.future;
     log.i('complete - $result');
+
+    if (result == 'Failed') {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'User rejected method'),
+      );
+    } else {
+      response = response.copyWith(result: result);
+    }
+
+    await _web3Wallet!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+
     completer.removeLast();
     return result;
   }
@@ -460,6 +561,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
     log.i('completer initialise');
     completer.add(Completer<String>());
+
+    final pRequest = _web3Wallet!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
 
     emit(
       state.copyWith(
@@ -472,6 +576,20 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
     final String result = await completer[completer.length - 1]!.future;
     log.i('complete - $result');
+
+    if (result == 'Failed') {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'User rejected method'),
+      );
+    } else {
+      response = response.copyWith(result: result);
+    }
+
+    await _web3Wallet!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+
     completer.removeLast();
     return result;
   }
@@ -545,7 +663,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     _web3Wallet!.onSessionProposal.unsubscribe(_onSessionProposal);
     _web3Wallet!.onSessionProposalError.unsubscribe(_onSessionProposalError);
     _web3Wallet!.onSessionConnect.unsubscribe(_onSessionConnect);
-    // _web3Wallet!.onSessionRequest.unsubscribe(_onSessionRequest);
+    _web3Wallet!.onSessionRequest.unsubscribe(_onSessionRequest);
     _web3Wallet!.onAuthRequest.unsubscribe(_onAuthRequest);
   }
 }

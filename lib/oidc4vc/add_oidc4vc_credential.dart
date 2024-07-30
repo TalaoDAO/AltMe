@@ -18,6 +18,7 @@ Future<void> addOIDC4VCCredential({
   required String format,
   required OpenIdConfiguration? openIdConfiguration,
   required JWTDecode jwtDecode,
+  required QRCodeScanCubit qrCodeScanCubit,
   String? credentialIdToBeDeleted,
   String? issuer,
 }) async {
@@ -32,7 +33,7 @@ Future<void> addOIDC4VCCredential({
     final jsonContent = jwtDecode.parseJwt(data);
 
     if (format == VCFormatType.vcSdJWT.vcValue) {
-      final sdAlg = jsonContent['_sd_alg']??'sha-256';
+      final sdAlg = jsonContent['_sd_alg'] ?? 'sha-256';
 
       if (sdAlg != 'sha-256') {
         throw ResponseMessage(
@@ -201,5 +202,6 @@ Future<void> addOIDC4VCCredential({
     showStatus: false,
     showMessage: isLastCall,
     blockchainType: blockchainType,
+    qrCodeScanCubit: qrCodeScanCubit,
   );
 }

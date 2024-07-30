@@ -135,11 +135,6 @@ void main() {
       );
 
       expect(
-        CredentialSubjectType.linkedInCard.defaultBackgroundColor,
-        equals(Colors.white),
-      );
-
-      expect(
         CredentialSubjectType.over13.defaultBackgroundColor,
         equals(Colors.white),
       );
@@ -415,7 +410,6 @@ void main() {
         CredentialSubjectType.verifiableIdCard.name,
         equals('VerifiableId'),
       );
-      expect(CredentialSubjectType.linkedInCard.name, equals('LinkedinCard'));
       expect(
         CredentialSubjectType.learningAchievement.name,
         equals('LearningAchievement'),
@@ -603,8 +597,7 @@ void main() {
             value == CredentialSubjectType.ageRange ||
             value == CredentialSubjectType.nationality ||
             value == CredentialSubjectType.gender ||
-            value == CredentialSubjectType.passportFootprint ||
-            value == CredentialSubjectType.linkedInCard) {
+            value == CredentialSubjectType.passportFootprint) {
           expect(value.byPassDeepLink, isTrue);
         } else {
           expect(value.byPassDeepLink, isFalse);
@@ -715,7 +708,6 @@ void main() {
       expect(CredentialSubjectType.emailPass.title, 'Email Pass');
       expect(CredentialSubjectType.identityPass.title, 'Identity Pass');
       expect(CredentialSubjectType.verifiableIdCard.title, 'VerifiableId');
-      expect(CredentialSubjectType.linkedInCard.title, 'Linkedin Card');
       expect(
         CredentialSubjectType.learningAchievement.title,
         'Learning Achievement',
@@ -848,7 +840,6 @@ void main() {
       );
       expect(CredentialSubjectType.defaultCredential.supportSingleOnly, false);
       expect(CredentialSubjectType.emailPass.supportSingleOnly, false);
-      expect(CredentialSubjectType.linkedInCard.supportSingleOnly, false);
       expect(
         CredentialSubjectType.learningAchievement.supportSingleOnly,
         false,
@@ -1068,10 +1059,7 @@ void main() {
         CredentialSubjectType.defaultCredential.getVCFormatType,
         [VCFormatType.jwtVc],
       );
-      expect(
-        CredentialSubjectType.linkedInCard.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
+
       expect(
         CredentialSubjectType.learningAchievement.getVCFormatType,
         [VCFormatType.jwtVc],
@@ -1178,7 +1166,6 @@ void main() {
       expect(CredentialSubjectType.emailPass.order, 99);
       expect(CredentialSubjectType.identityPass.order, 90);
       expect(CredentialSubjectType.verifiableIdCard.order, 97.5);
-      expect(CredentialSubjectType.linkedInCard.order, 86);
       expect(CredentialSubjectType.learningAchievement.order, 0);
       expect(CredentialSubjectType.over13.order, 97.3);
       expect(CredentialSubjectType.over15.order, 97.2);

@@ -93,16 +93,6 @@ class CredentialManifestOfferPickView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final isVcSdJWT = context
-            .read<ProfileCubit>()
-            .state
-            .model
-            .profileSetting
-            .selfSovereignIdentityOptions
-            .customOidc4vcProfile
-            .vcFormatType ==
-        VCFormatType.vcSdJWT;
-
     return BlocConsumer<CredentialManifestPickCubit,
         CredentialManifestPickState>(
       listener: (context, state) {
@@ -116,6 +106,10 @@ class CredentialManifestOfferPickView extends StatelessWidget {
       builder: (context, credentialManifestState) {
         final PresentationDefinition? presentationDefinition =
             credentialManifestState.presentationDefinition;
+
+        final isVcSdJWT = credentialManifestState
+                .filteredCredentialList.firstOrNull?.getFormat ==
+            VCFormatType.vcSdJWT.vcValue;
 
         return BlocListener<ScanCubit, ScanState>(
           listener: (context, scanState) {

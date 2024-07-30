@@ -15,12 +15,14 @@ Future<void> discoverCredential({
   if (dummyCredential.credentialSubjectType.isBlockchainAccount) {
     final credentialCubit = context.read<CredentialsCubit>();
     final walletCubit = context.read<WalletCubit>();
+    final qrCodeScanCubit = context.read<QRCodeScanCubit>();
 
     final cryptoAccountData = walletCubit.state.currentAccount;
 
     if (cryptoAccountData != null) {
       await credentialCubit.insertAssociatedWalletCredential(
         cryptoAccountData: cryptoAccountData,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
     }
 

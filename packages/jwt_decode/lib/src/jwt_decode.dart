@@ -7,9 +7,6 @@ class JWTDecode {
   ///parseJwt
   Map<String, dynamic> parseJwt(String token) {
     final parts = token.split('.');
-    if (parts.length != 3) {
-      throw Exception('INVALID_TOKEN');
-    }
 
     final payload = _decodeBase64(parts[1]);
 
@@ -23,9 +20,6 @@ class JWTDecode {
   ///parseJwt to get header
   Map<String, dynamic> parseJwtHeader(String token) {
     final parts = token.split('.');
-    if (parts.length != 3) {
-      throw Exception('INVALID_TOKEN');
-    }
 
     final header = _decodeBase64(parts[0]);
 

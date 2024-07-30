@@ -22,6 +22,7 @@ Future<void> addCredentialData({
   required bool isLastCall,
   required JWTDecode jwtDecode,
   required BlockchainType blockchainType,
+  required QRCodeScanCubit qrCodeScanCubit,
 }) async {
   for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {
     final data = encodedCredentialOrFutureTokens[i];
@@ -91,6 +92,7 @@ Future<void> addCredentialData({
             isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
         isPendingCredential: true,
         blockchainType: blockchainType,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
     } else {
       await addOIDC4VCCredential(
@@ -104,6 +106,7 @@ Future<void> addCredentialData({
         openIdConfiguration: openIdConfiguration,
         jwtDecode: jwtDecode,
         blockchainType: blockchainType,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
     }
   }

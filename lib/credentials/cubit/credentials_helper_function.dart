@@ -29,13 +29,14 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         didMethod = AltMeStrings.cryptoEVMDIDMethod;
     }
 
+    log.i('didMethod - $didMethod');
+
     final String jwkKey = await keyGenerator.jwkFromSecretKey(
       secretKey: cryptoAccountData.secretKey,
       accountType: blockchainType.accountType,
     );
 
-    final issuer = didKitProvider.keyToDID(didMethod, jwkKey);
-    log.i('didMethod - $didMethod');
+    final String issuer = didKitProvider.keyToDID(didMethod, jwkKey);
     log.i('jwkKey - $jwkKey');
     log.i('didKitProvider.keyToDID - $issuer');
 
@@ -54,9 +55,12 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       case BlockchainType.fantom:
       case BlockchainType.polygon:
       case BlockchainType.binance:
-        verificationMethod = '$issuer#Recovery2020';
+        //verificationMethod = '$issuer#Recovery2020';
+        verificationMethod =
+            await didKitProvider.keyToVerificationMethod(didMethod, jwkKey);
     }
-    log.i('hardcoded verificationMethod - $verificationMethod');
+
+    log.i('verificationMethod - $verificationMethod');
 
     final options = {
       'proofPurpose': 'assertionMethod',
@@ -181,7 +185,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           oidc4vc: oidc4vc,
           privateKey: privateKey,
           kid: verificationMethod,
-          issuer: issuer,
+          did: did,
         );
       }
     } else {
@@ -193,7 +197,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         oidc4vc: oidc4vc,
         privateKey: privateKey,
         kid: verificationMethod,
-        issuer: issuer,
+        did: did,
       );
     }
   } catch (e, s) {
@@ -212,7 +216,7 @@ Future<CredentialModel> _createCredential({
   required CustomOidc4VcProfile customOidc4vcProfile,
   required OIDC4VC oidc4vc,
   required Map<String, dynamic> privateKey,
-  required String issuer,
+  required String did,
   required String kid,
   String? oldId,
 }) async {
@@ -240,13 +244,13 @@ Future<CredentialModel> _createCredential({
       'exp': iat + 1000,
       'iss': jsonLd['issuer'],
       'jti': jsonLd['id'] ?? 'urn:uuid:${const Uuid().v4()}',
-      'sub': issuer,
+      'sub': did,
       'vc': jsonLd,
     };
 
     final tokenParameters = TokenParameters(
       privateKey: privateKey,
-      did: issuer,
+      did: did,
       kid: kid,
       mediaType: MediaType.basic,
       clientType: customOidc4vcProfile.clientType,

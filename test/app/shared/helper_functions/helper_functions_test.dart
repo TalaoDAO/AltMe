@@ -1084,6 +1084,7 @@ void main() {
                   ),
                 ),
                 clientMetaData: null,
+                credentialsToBePresented: [],
               ),
               (true, false, false, false),
             );
@@ -1102,6 +1103,7 @@ void main() {
                 vcFormatType: VCFormatType.ldpVc,
                 presentationDefinition: presentationDefinition,
                 clientMetaData: null,
+                credentialsToBePresented: [],
               ),
               throwsA(
                 isA<ResponseMessage>().having((e) => e.data, '', {
@@ -1124,6 +1126,7 @@ void main() {
                   format: null,
                 ),
                 clientMetaData: null,
+                credentialsToBePresented: [],
               ),
               (false, true, false, false),
             );
@@ -1141,6 +1144,7 @@ void main() {
                   format: null,
                 ),
                 clientMetaData: null,
+                credentialsToBePresented: [],
               ),
               (false, false, true, false),
             );
@@ -1158,6 +1162,7 @@ void main() {
                   format: null,
                 ),
                 clientMetaData: null,
+                credentialsToBePresented: [],
               ),
               (false, false, false, true),
             );
@@ -1179,6 +1184,7 @@ void main() {
                     'jwt_vc_json': 'here',
                   },
                 },
+                credentialsToBePresented: [],
               ),
               (false, false, true, false),
             );
@@ -1200,6 +1206,7 @@ void main() {
                     'vc+sd-jwt': 'here',
                   },
                 },
+                credentialsToBePresented: [],
               ),
               (false, false, false, true),
             );

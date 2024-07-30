@@ -4,8 +4,6 @@ class SecureStorageKeys {
   static const String isFirstSelectedTokenContracts =
       'isFirstSelectedTokenContracts';
   static const String selectedContracts = 'selectedContracts';
-  static const String lastNotifiedUNORewardId = 'lastNotifiedUNORewardId';
-  static const String lastNotifiedXTZRewardId = 'lastNotifiedXTZRewardId';
   static const String isIdentityEnabled = 'isIdentityEnabled';
   static const String isProfessionalEnabled = 'isProfessionalEnabled';
   static const String isCommunityEnabled = 'isCommunityEnabled';
