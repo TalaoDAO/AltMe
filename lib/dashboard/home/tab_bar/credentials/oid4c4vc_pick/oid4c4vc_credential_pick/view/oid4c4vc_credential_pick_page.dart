@@ -157,6 +157,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                               credentialSubjectType: credentialSubjectType,
                               image: discoverDummyCredential.image,
                               credentialName: credential,
+                              displayExternalIssuer: display,
                             ),
                           Align(
                             alignment: Alignment.centerRight,
@@ -199,6 +200,8 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                 preAuthorizedCode: preAuthorizedCode,
                                 isEBSIV3: isEBSIV3,
                                 credentialOfferJson: credentialOfferJson,
+                                qrCodeScanCubit:
+                                    context.read<QRCodeScanCubit>(),
                               );
                         },
                   text: l10n.proceed,

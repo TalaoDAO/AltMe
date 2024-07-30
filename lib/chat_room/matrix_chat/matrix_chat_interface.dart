@@ -28,8 +28,8 @@ abstract class MatrixChatInterface {
   });
   Message mapEventToMessage(Event event);
   Status mapEventStatusToMessageStatus(EventStatus status);
-  String getUrlFromUri({
-    required String uri,
+  String getThumbnail({
+    required String url,
     int width = 500,
     int height = 500,
   });

@@ -172,6 +172,7 @@ class MatrixChatImpl extends MatrixChatInterface {
           ..sort(
             (e1, e2) => e2.originServerTs.compareTo(e1.originServerTs),
           );
+
     return messageEvents.map(mapEventToMessage).toList();
   }
 
@@ -187,28 +188,34 @@ class MatrixChatImpl extends MatrixChatInterface {
     }
 
     if (event.messageType == 'm.text') {
+      final redactedBecause = event.unsigned?['redacted_because'];
+
       message = TextMessage(
         id: event.unsigned?['transaction_id'] as String? ?? const Uuid().v4(),
         remoteId: event.eventId,
-        text: event.plaintextBody,
+        text: redactedBecause != null ? 'Message deleted' : event.plaintextBody,
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         status: mapEventStatusToMessageStatus(event.status),
-        author: User(
-          id: event.senderId,
-        ),
+        author: User(id: event.senderId),
       );
     } else if (event.messageType == 'm.image') {
+      final content = event.content;
+
+      final file = content['file'];
+
+      final url =
+          (file != null && file is Map<String, dynamic>) ? file['url'] : '';
+
       message = ImageMessage(
         id: const Uuid().v4(),
         remoteId: event.eventId,
         name: event.plaintextBody,
         size: size,
-        uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
+        uri: url.toString(),
+        metadata: {'event': event},
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
-        author: User(
-          id: event.senderId,
-        ),
+        author: User(id: event.senderId),
       );
     } else if (event.messageType == 'm.file') {
       message = FileMessage(
@@ -216,7 +223,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         remoteId: event.eventId,
         name: event.plaintextBody,
         size: size,
-        uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
+        uri: getThumbnail(url: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         author: User(
@@ -243,7 +250,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         ),
         name: event.plaintextBody,
         size: size,
-        uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
+        uri: getThumbnail(url: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         author: User(
@@ -461,13 +468,19 @@ class MatrixChatImpl extends MatrixChatInterface {
   }
 
   @override
-  String getUrlFromUri({
-    required String uri,
+  String getThumbnail({
+    required String url,
     int width = 500,
     int height = 500,
   }) {
-    if (uri.trim().isEmpty) return '';
-    return '${Urls.matrixHomeServer}/_matrix/media/v3/thumbnail/${Urls.matrixHomeServer.replaceAll('https://', '')}/${uri.split('/').last}?width=$width&height=$height';
+    if (url.trim().isEmpty) return '';
+    final Uri uri = Uri.parse(url).getThumbnail(
+      client!,
+      height: height,
+      width: width,
+      animated: false,
+    );
+    return uri.toString();
   }
 
   @override

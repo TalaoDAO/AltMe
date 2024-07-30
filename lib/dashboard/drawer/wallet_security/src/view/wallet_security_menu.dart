@@ -28,6 +28,7 @@ class WalletSecurityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return BasePage(
@@ -84,8 +85,8 @@ class WalletSecurityView extends StatelessWidget {
                   }
                 },
               ),
-              if (context.read<ProfileCubit>().state.model.profileType ==
-                  ProfileType.custom)
+              if (state.model.profileSetting.walletSecurityOptions
+                  .displaySecurityAdvancedSettings)
                 DrawerItem(
                   title: l10n.advancedSecuritySettings,
                   onTap: () {

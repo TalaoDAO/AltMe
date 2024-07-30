@@ -6,6 +6,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class CryptoBottomSheetView extends StatelessWidget {
   const CryptoBottomSheetView({super.key});
@@ -13,7 +14,7 @@ class CryptoBottomSheetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CryptoBottomSheetCubit(
+      create: (context) => ManageAccountsCubit(
         credentialsCubit: context.read<CredentialsCubit>(),
       ),
       child: const CryptoBottomSheetPage(),
@@ -32,7 +33,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
   Future<void> _edit(int index) async {
     final l10n = context.l10n;
     final List<CryptoAccountData> cryptoAccount =
-        context.read<CryptoBottomSheetCubit>().state.cryptoAccount.data;
+        context.read<ManageAccountsCubit>().state.cryptoAccount.data;
     final accountNameList = cryptoAccount.map((e) => e.name).toList();
 
     final cryptoAccountData = cryptoAccount[index];
@@ -59,7 +60,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
           ),
         );
       } else {
-        await context.read<CryptoBottomSheetCubit>().editCryptoAccount(
+        await context.read<ManageAccountsCubit>().editCryptoAccount(
               newAccountName: newCryptoAccountName,
               index: index,
               blockchainType: cryptoAccountData.blockchainType,
@@ -75,7 +76,8 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocConsumer<CryptoBottomSheetCubit, CryptoBottomSheetState>(
+
+    return BlocConsumer<ManageAccountsCubit, ManageAccountsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -137,48 +139,130 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            DecoratedBox(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withOpacity(0.12),
-                                  width: 0.2,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(Sizes.normalRadius),
-                                ),
+                            ClipRRect(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(Sizes.normalRadius),
                               ),
-                              child: ListView.separated(
-                                itemCount: state.cryptoAccount.data.length,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, i) {
-                                  return CryptoAccountItem(
-                                    cryptoAccountData:
-                                        state.cryptoAccount.data[i],
-                                    isSelected: state.currentCryptoIndex == i,
-                                    listIndex: i,
-                                    onPressed: () {
-                                      context
-                                          .read<CryptoBottomSheetCubit>()
-                                          .setCurrentWalletAccount(i);
-                                    },
-                                    onEditButtonPressed: () => _edit(i),
-                                  );
-                                },
-                                separatorBuilder: (_, __) => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: Sizes.spaceSmall,
-                                  ),
-                                  child: Divider(
-                                    height: 0.2,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSurface
                                         .withOpacity(0.12),
+                                    width: 0.2,
                                   ),
+                                ),
+                                child: BlocBuilder<ProfileCubit, ProfileState>(
+                                  builder: (context, profileStae) {
+                                    final profileSetting =
+                                        profileStae.model.profileSetting;
+
+                                    return ListView.separated(
+                                      itemCount:
+                                          state.cryptoAccount.data.length,
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, i) {
+                                        final data =
+                                            state.cryptoAccount.data[i];
+
+                                        if (!data.blockchainType
+                                            .isSupported(profileSetting)) {
+                                          return Container();
+                                        }
+
+                                        return Slidable(
+                                          key: ValueKey(i),
+                                          endActionPane: ActionPane(
+                                            motion: const ScrollMotion(),
+                                            dragDismissible: false,
+                                            children: [
+                                              SlidableAction(
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                foregroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface,
+                                                icon: Icons.delete,
+                                                label: l10n.delete,
+                                                onPressed: (_) async {
+                                                  // cannot delete current
+                                                  // account
+                                                  final currentIndex =
+                                                      state.currentCryptoIndex;
+
+                                                  if (currentIndex == i) {
+                                                    await showDialog<bool>(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          ConfirmDialog(
+                                                        title: l10n
+                                                            .cannotDeleteCurrentAccount,
+                                                        yes: l10n.ok,
+                                                        showNoButton: false,
+                                                      ),
+                                                    );
+                                                    return;
+                                                  }
+
+                                                  final value =
+                                                      await showDialog<bool>(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        ConfirmDialog(
+                                                      title: l10n
+                                                          .deleteAccountMessage(
+                                                              data.name),
+                                                      yes: l10n.ok,
+                                                      showNoButton: false,
+                                                    ),
+                                                  );
+
+                                                  if (value != null && value) {
+                                                    await context
+                                                        .read<
+                                                            ManageAccountsCubit>()
+                                                        .deleteCryptoAccount(
+                                                          index: i,
+                                                          blockchainType: data
+                                                              .blockchainType,
+                                                        );
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                          child: CryptoAccountItem(
+                                            cryptoAccountData: data,
+                                            isSelected:
+                                                state.currentCryptoIndex == i,
+                                            listIndex: i,
+                                            onPressed: () {
+                                              context
+                                                  .read<ManageAccountsCubit>()
+                                                  .setCurrentWalletAccount(i);
+                                            },
+                                            onEditButtonPressed: () => _edit(i),
+                                          ),
+                                        );
+                                      },
+                                      separatorBuilder: (_, __) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: Sizes.spaceSmall,
+                                        ),
+                                        child: Divider(
+                                          height: 0.2,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withOpacity(0.12),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),

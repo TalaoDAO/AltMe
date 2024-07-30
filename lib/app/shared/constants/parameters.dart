@@ -63,7 +63,16 @@ class Parameters {
     ETH_SIGN_TYPE_DATA_V4,
   ];
 
-  static const walletConnectEvents = ['chainChanged', 'accountsChanged'];
+  static const chainChanged = 'chainChanged';
+  static const accountsChanged = 'accountsChanged';
+
+  static const requiredEvents = [
+    chainChanged,
+    accountsChanged,
+  ];
+  static const optionalEvents = ['message', 'disconnect', 'connect'];
+
+  static const allEvents = [...requiredEvents, ...optionalEvents];
 
   static const String clientId = 'urn:altme:0001';
   static const int maxEntries = 3;

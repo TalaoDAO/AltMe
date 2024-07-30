@@ -49,8 +49,8 @@ class HomeCredentialCategoryList extends StatelessWidget {
                     if (element.credentialPreview.credentialSubjectModel
                             .credentialSubjectType ==
                         CredentialSubjectType.walletCredential) {
-                      if (profileModel.isDeveloperMode) {
-                        return true;
+                      if (!profileModel.isDeveloperMode) {
+                        return false;
                       }
                     }
 
@@ -75,10 +75,19 @@ class HomeCredentialCategoryList extends StatelessWidget {
                       }
                     }
 
+                    if (customOidc4vcProfile.vcFormatType.vcValue ==
+                        VCFormatType.auto.vcValue) {
+                      return true;
+                    }
+
                     /// do not load the credential if vc format is different
-                    if (customOidc4vcProfile.vcFormatType.vcValue !=
-                        element.getFormat) {
-                      return false;
+                    if (element.credentialPreview.credentialSubjectModel
+                            .credentialSubjectType !=
+                        CredentialSubjectType.walletCredential) {
+                      if (customOidc4vcProfile.vcFormatType.vcValue !=
+                          element.getFormat) {
+                        return false;
+                      }
                     }
 
                     return true;

@@ -18,7 +18,13 @@
     "languageSettings",
     "languageSettingsDescription",
     "themeSettings",
-    "themeSettingsDescription"
+    "themeSettingsDescription",
+    "couldNotFindTheAccountWithThisAddress",
+    "deleteAccountMessage",
+    "cannotDeleteCurrentAccount",
+    "invalidClientErrorDescription",
+    "vpFormatsNotSupportedErrorDescription",
+    "invalidPresentationDefinitionUriErrorDescription"
   ],
 
   "es": [
@@ -40,26 +46,24 @@
     "languageSettings",
     "languageSettingsDescription",
     "themeSettings",
-    "themeSettingsDescription"
+    "themeSettingsDescription",
+    "couldNotFindTheAccountWithThisAddress",
+    "deleteAccountMessage",
+    "cannotDeleteCurrentAccount",
+    "invalidClientErrorDescription",
+    "vpFormatsNotSupportedErrorDescription",
+    "invalidPresentationDefinitionUriErrorDescription"
   ],
 
   "fr": [
-    "pushAuthorizationRequestTitle",
-    "pushAuthorizationRequestSubTitle",
     "cardIsValid",
     "cardIsExpired",
     "signatureIsInvalid",
     "statusIsInvalid",
     "statuslListSignatureFailed",
-    "walletMetadataForIssuers",
-    "walletMetadataForVerifiers",
-    "statusListCachingTitle",
-    "statusListCachingSubTitle",
     "statusList",
     "statusListIndex",
     "theWalletIsSuspended",
-    "clientTypeTitle",
-    "confidentialClient",
     "jwkThumbprintP256Key",
     "walletBlockedPopupTitle",
     "walletBlockedPopupDescription",
@@ -75,6 +79,12 @@
     "languageSettings",
     "languageSettingsDescription",
     "themeSettings",
-    "themeSettingsDescription"
+    "themeSettingsDescription",
+    "couldNotFindTheAccountWithThisAddress",
+    "deleteAccountMessage",
+    "cannotDeleteCurrentAccount",
+    "invalidClientErrorDescription",
+    "vpFormatsNotSupportedErrorDescription",
+    "invalidPresentationDefinitionUriErrorDescription"
   ]
 }

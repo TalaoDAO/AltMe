@@ -63,6 +63,7 @@ Future<
     authorizationDetails: authorizationDetails,
     openIdConfiguration: openIdConfiguration,
     dio: Dio(),
+    vcFormatType: customOidc4vcProfile.vcFormatType,
   );
 
   return (

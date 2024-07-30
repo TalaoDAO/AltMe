@@ -570,6 +570,7 @@ void main() {
           accessToken: accessToken,
           cnonce: nonce,
           dio: client,
+          vcFormatType: VCFormatType.jwtVcJson,
         );
 
         expect(credentialResponseData, [expecedCredentialResponse]);
@@ -602,6 +603,7 @@ void main() {
               accessToken: '',
               cnonce: null,
               dio: client,
+              vcFormatType: VCFormatType.jwtVcJson,
             );
           },
           throwsA(isA<FormatException>()),

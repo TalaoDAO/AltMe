@@ -15,6 +15,7 @@ Future<void> getAndAddDefferedCredential({
   required OIDC4VCIDraftType oidc4vciDraftType,
   required BlockchainType blockchainType,
   required String? issuer,
+  required QRCodeScanCubit qrCodeScanCubit,
 }) async {
   Map<String, dynamic>? credentialHeaders;
   Map<String, dynamic>? body;
@@ -68,5 +69,6 @@ Future<void> getAndAddDefferedCredential({
     openIdConfiguration: null,
     jwtDecode: jwtDecode,
     blockchainType: blockchainType,
+    qrCodeScanCubit: qrCodeScanCubit,
   );
 }

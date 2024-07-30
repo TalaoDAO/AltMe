@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/widget/divider_for_radio_list.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -11,12 +10,11 @@ class DidKeyTypeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return OptionContainer(
-          title: l10n.defaultDid,
-          subtitle: l10n.selectOneOfTheDid,
+          title: 'Default DID',
+          subtitle: 'Select one of the DIDs',
           body: ListView.builder(
             itemCount: DidKeyType.values.length,
             shrinkWrap: true,
@@ -47,9 +45,9 @@ class DidKeyTypeWidget extends StatelessWidget {
                       if (isldpVc && isUnmatchedDid) {
                         showDialog<bool>(
                           context: context,
-                          builder: (context) => ErrorDetailsDialog(
-                            erroDescription:
-                                l10n.theLdpFormatIsNotSupportedByThisDIDMethod,
+                          builder: (context) => const ErrorDetailsDialog(
+                            erroDescription: 'The ldp_format is not supported'
+                                ' by this DID method.',
                           ),
                         );
 

@@ -68,9 +68,6 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE:
         return globalMessage.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE;
 
-      case ResponseString.RESPONSE_STRING_linkedInBannerSuccessfullyExported:
-        return globalMessage.RESPONSE_STRING_linkedInBannerSuccessfullyExported;
-
       case ResponseString.RESPONSE_STRING_credentialSuccessfullyExported:
         return globalMessage.RESPONSE_STRING_credentialSuccessfullyExported;
 
@@ -299,15 +296,6 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_verifiableIdCardHowToGetIt:
         return globalMessage.RESPONSE_STRING_verifiableIdCardHowToGetIt;
 
-      case ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_linkedinCardWhyGetThisCard;
-
-      case ResponseString.RESPONSE_STRING_linkedinCardExpirationDate:
-        return globalMessage.RESPONSE_STRING_linkedinCardExpirationDate;
-
-      case ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt:
-        return globalMessage.RESPONSE_STRING_linkedinCardHowToGetIt;
-
       case ResponseString.RESPONSE_STRING_phoneProofWhyGetThisCard:
         return globalMessage.RESPONSE_STRING_phoneProofWhyGetThisCard;
 
@@ -509,6 +497,24 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_theWalletIsSuspended:
         return globalMessage.RESPONSE_STRING_theWalletIsSuspended;
+
+      case ResponseString.RESPONSE_STRING_couldNotFindTheAccountWithThisAddress:
+        return globalMessage
+            .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress(
+          injectedMessage ?? '',
+        );
+
+      case ResponseString.RESPONSE_STRING_invalidClientErrorDescription:
+        return globalMessage.RESPONSE_STRING_invalidClientErrorDescription;
+
+      case ResponseString.RESPONSE_STRING_vpFormatsNotSupportedErrorDescription:
+        return globalMessage
+            .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription;
+
+      case ResponseString
+            .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription:
+        return globalMessage
+            .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription;
     }
   }
 }

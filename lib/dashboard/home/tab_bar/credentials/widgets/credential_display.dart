@@ -137,9 +137,6 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.verifiableIdCard:
         return VerifiableIdCardWidget(credentialModel: credentialModel);
 
-      case CredentialSubjectType.linkedInCard:
-        return LinkedinCardWidget(credentialModel: credentialModel);
-
       case CredentialSubjectType.euDiplomaCard:
         return EUDiplomaCardWidget(credentialModel: credentialModel);
 

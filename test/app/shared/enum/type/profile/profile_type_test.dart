@@ -6,9 +6,9 @@ void main() {
     test('Show Sponsered By', () {
       expect(ProfileType.custom.showSponseredBy, false);
       expect(ProfileType.ebsiV3.showSponseredBy, true);
-      expect(ProfileType.dutch.showSponseredBy, false);
+      expect(ProfileType.diipv2point1.showSponseredBy, false);
       expect(ProfileType.enterprise.showSponseredBy, true);
-      expect(ProfileType.owfBaselineProfile.showSponseredBy, true);
+      expect(ProfileType.diipv3.showSponseredBy, true);
       expect(ProfileType.defaultOne.showSponseredBy, false);
     });
   });

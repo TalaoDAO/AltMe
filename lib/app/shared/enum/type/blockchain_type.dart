@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:key_generator/key_generator.dart';
 
@@ -233,5 +234,29 @@ extension BlockchainTypeX on BlockchainType {
       case BlockchainType.binance:
         return false;
     }
+  }
+
+  bool isSupported(ProfileSetting profileSetting) {
+    if (profileSetting.generalOptions.walletType != WalletAppType.altme) {
+      /// Only applies to altme
+      return true;
+    }
+
+    final blockchainOptions = profileSetting.blockchainOptions;
+
+    switch (this) {
+      case BlockchainType.tezos:
+        if (blockchainOptions?.tezosSupport ?? false) return true;
+      case BlockchainType.ethereum:
+        if (blockchainOptions?.ethereumSupport ?? false) return true;
+      case BlockchainType.fantom:
+        if (blockchainOptions?.fantomSupport ?? false) return true;
+      case BlockchainType.polygon:
+        if (blockchainOptions?.polygonSupport ?? false) return true;
+      case BlockchainType.binance:
+        if (blockchainOptions?.bnbSupport ?? false) return true;
+    }
+
+    return false;
   }
 }

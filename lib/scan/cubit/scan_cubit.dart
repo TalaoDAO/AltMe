@@ -30,8 +30,6 @@ part 'scan_state.dart';
 ///the wallet stores the VC
 /// If needed the wallet builds a VP with the VC and sends it to a Verifier
 
-/// In LinkedIn case the VP is embedded in the QR code, not sent to the verifier
-
 class ScanCubit extends Cubit<ScanState> {
   ScanCubit({
     required this.client,
@@ -59,7 +57,7 @@ class ScanCubit extends Cubit<ScanState> {
     required String keyId,
     required List<CredentialModel>? credentialsToBePresented,
     required Issuer issuer,
-    QRCodeScanCubit? qrCodeScanCubit,
+    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -110,7 +108,7 @@ class ScanCubit extends Cubit<ScanState> {
             privateKey: privateKey,
             stateValue: stateValue,
             idTokenNeeded: hasIDToken(responseType),
-            qrCodeScanCubit: qrCodeScanCubit!,
+            qrCodeScanCubit: qrCodeScanCubit,
           );
           return;
         } else {
@@ -282,6 +280,7 @@ class ScanCubit extends Cubit<ScanState> {
             activities: activities,
             credentialManifest: credentialManifest,
           ),
+          qrCodeScanCubit: qrCodeScanCubit,
         );
 
         if (credentialsToBePresented != null) {
@@ -818,6 +817,7 @@ class ScanCubit extends Cubit<ScanState> {
                     r'$.vp.verifiableCredential[' + i.toString() + ']';
               }
             }
+            pathNested['format'] = vcFormat ?? vcFormatType.vcValue;
             descriptor['path_nested'] = pathNested;
           }
 
@@ -873,6 +873,7 @@ class ScanCubit extends Cubit<ScanState> {
       clientMetaData: clientMetaData,
       presentationDefinition: presentationDefinition,
       vcFormatType: vcFormatType,
+      credentialsToBePresented: credentialsToBePresented,
     );
 
     if (presentLdpVc) {

@@ -233,10 +233,6 @@ class CredentialModel extends Equatable {
       credentialPreview.credentialSubjectModel.credentialSubjectType ==
       CredentialSubjectType.defaultCredential;
 
-  bool get isLinkeInCard =>
-      credentialPreview.credentialSubjectModel.credentialSubjectType ==
-      CredentialSubjectType.linkedInCard;
-
   bool get isEbsiCard =>
       credentialPreview.credentialSubjectModel.credentialSubjectType.isEbsiCard;
 
