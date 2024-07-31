@@ -1056,5 +1056,6 @@
   "cannotDeleteCurrentAccount": "Sorrry, you cannot delete current account",
   "invalidClientErrorDescription": "client_id is not conformed to client_id_scheme",
   "vpFormatsNotSupportedErrorDescription": "The Wallet does not support any of the formats requested by the Verifier, such as those included in the vp_formats registration parameter.",
-  "invalidPresentationDefinitionUriErrorDescription": "The Presentation Definition URL cannot be reached."
+  "invalidPresentationDefinitionUriErrorDescription": "The Presentation Definition URL cannot be reached.",
+  "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings": "To stop displaying this popup, deactivate the 'developer mode' in the settings."
 }
