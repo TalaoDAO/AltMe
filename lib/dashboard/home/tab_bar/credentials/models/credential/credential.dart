@@ -59,7 +59,7 @@ class Credential {
   final String issuer;
   @JsonKey(fromJson: _fromJsonTranslations)
   final List<Translation> description;
-  @JsonKey(defaultValue: <Translation>[])
+  @JsonKey(defaultValue: <Translation>[], fromJson: _fromJsonTranslations)
   final List<Translation> name;
   @JsonKey(defaultValue: '')
   final String expirationDate;
@@ -125,6 +125,9 @@ class Credential {
       return json
           .map((dynamic e) => Translation.fromJson(e as Map<String, dynamic>))
           .toList();
+    }
+    if (json is String) {
+      return [Translation('en', json)];
     }
     return [Translation.fromJson(json as Map<String, dynamic>)];
   }
