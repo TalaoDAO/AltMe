@@ -24,7 +24,8 @@
     "cannotDeleteCurrentAccount",
     "invalidClientErrorDescription",
     "vpFormatsNotSupportedErrorDescription",
-    "invalidPresentationDefinitionUriErrorDescription"
+    "invalidPresentationDefinitionUriErrorDescription",
+    "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings"
   ],
 
   "es": [
@@ -52,7 +53,8 @@
     "cannotDeleteCurrentAccount",
     "invalidClientErrorDescription",
     "vpFormatsNotSupportedErrorDescription",
-    "invalidPresentationDefinitionUriErrorDescription"
+    "invalidPresentationDefinitionUriErrorDescription",
+    "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings"
   ],
 
   "fr": [
@@ -85,6 +87,7 @@
     "cannotDeleteCurrentAccount",
     "invalidClientErrorDescription",
     "vpFormatsNotSupportedErrorDescription",
-    "invalidPresentationDefinitionUriErrorDescription"
+    "invalidPresentationDefinitionUriErrorDescription",
+    "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings"
   ]
 }

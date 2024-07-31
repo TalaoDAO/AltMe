@@ -37,6 +37,12 @@ class DeveloperModeDialog extends StatelessWidget {
             color: textColor,
           ),
           const SizedBox(height: 15),
+          Text(
+            l10n.toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings,
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
           MyElevatedButton(
             text: l10n.display,
             verticalSpacing: 14,
