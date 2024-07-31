@@ -105,20 +105,16 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      const SizedBox(
-                        height: Sizes.spaceNormal,
-                      ),
-                      Text(
-                        l10n.walletReadySubtitle,
-                        textAlign: TextAlign.center,
-                        style:
-                            Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.normal,
-                                ),
-                      ),
-                      const SizedBox(
-                        height: Sizes.space3XLarge,
-                      ),
+                      // const SizedBox(height: Sizes.spaceNormal),
+                      // Text(
+                      //   l10n.walletReadySubtitle,
+                      //   textAlign: TextAlign.center,
+                      //   style:
+                      //       Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      //             fontWeight: FontWeight.normal,
+                      //           ),
+                      // ),
+                      const SizedBox(height: Sizes.space3XLarge),
                     ],
                   ),
                 ),
