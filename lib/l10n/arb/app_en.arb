@@ -105,7 +105,6 @@
   "recoveryKeyTitle": "Recovery phrase",
   "showRecoveryPhrase": "Show Recovery Phrase",
   "warningDialogTitle": "Be careful",
-  "warningDialogSubtitle": "The recovery page contains sensitive information that will compromise your identifier in the wrong hands. You should not open this page in public or share it with anyone.",
   "recoveryText": "Please enter your recovery phrase",
   "recoveryMnemonicHintText": "Enter your recovery phrase here.\nOnce you have entered your 12 words,\ntap Import.",
   "recoveryMnemonicError": "Please enter a valid mnemonic phrase",
@@ -1057,5 +1056,6 @@
   "invalidClientErrorDescription": "client_id is not conformed to client_id_scheme",
   "vpFormatsNotSupportedErrorDescription": "The Wallet does not support any of the formats requested by the Verifier, such as those included in the vp_formats registration parameter.",
   "invalidPresentationDefinitionUriErrorDescription": "The Presentation Definition URL cannot be reached.",
-  "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings": "To stop displaying this popup, deactivate the 'developer mode' in the settings."
+  "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings": "To stop displaying this popup, deactivate the 'developer mode' in the settings.",
+  "warningDialogSubtitle": "The recovery page contains sensitive information. Please, make sure to keep it private."
 }

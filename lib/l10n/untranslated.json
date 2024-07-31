@@ -25,7 +25,8 @@
     "invalidClientErrorDescription",
     "vpFormatsNotSupportedErrorDescription",
     "invalidPresentationDefinitionUriErrorDescription",
-    "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings"
+    "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings",
+    "warningDialogSubtitle"
   ],
 
   "es": [
@@ -54,7 +55,8 @@
     "invalidClientErrorDescription",
     "vpFormatsNotSupportedErrorDescription",
     "invalidPresentationDefinitionUriErrorDescription",
-    "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings"
+    "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings",
+    "warningDialogSubtitle"
   ],
 
   "fr": [
@@ -88,6 +90,7 @@
     "invalidClientErrorDescription",
     "vpFormatsNotSupportedErrorDescription",
     "invalidPresentationDefinitionUriErrorDescription",
-    "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings"
+    "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings",
+    "warningDialogSubtitle"
   ]
 }

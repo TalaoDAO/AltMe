@@ -105,7 +105,6 @@
   "recoveryKeyTitle": "Clé de récupération",
   "showRecoveryPhrase": "Afficher la phrase de récupération",
   "warningDialogTitle": "Soyez prudent",
-  "warningDialogSubtitle": "La page de récupération contient des informations sensibles qui pourraient compromettre vos informations entre de mauvaises mains. Vous ne devez pas ouvrir cette page en public ni la partager avec qui que ce soit.",
   "recoveryText": "Veuillez entrer votre phrase de récupération",
   "recoveryMnemonicHintText": "Saisissez votre phrase de récupération ici.  Une fois que vous avez saisi vos 12 mots, appuyez sur Importer.",
   "recoveryMnemonicError": "Veuillez entrer une phrase mnémonique valide",

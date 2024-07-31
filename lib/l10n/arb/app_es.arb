@@ -105,7 +105,6 @@
   "recoveryKeyTitle": "Frase de recuperación",
   "showRecoveryPhrase": "Mostrar frase de recuperación",
   "warningDialogTitle": "Cuidado",
-  "warningDialogSubtitle": "La página de recuperación contiene información sensible, por lo que su identificador podría caer en malas manos. No debe abrir esta página en un lugar público ni compartirla con nadie.",
   "recoveryText": "Introduzca su frase de recuperación",
   "recoveryMnemonicHintText": "Escriba aquí su frase de recuperación.\nUna vez que escriba sus 12 palabras,\ntoque Importar.",
   "recoveryMnemonicError": "Introduzca una frase mnemotécnica válida",
