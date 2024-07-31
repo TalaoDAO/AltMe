@@ -908,7 +908,7 @@
   "confirmVerifierAccess": "Confirmer le partage du document",
   "confirmVerifierAccessSubtitle": "Par défaut : Activé\nDésactivez pour demander une confirmation lorsque vous partagez vos documents vérifiables.",
   "credentialManifestSupport": "Credential Manifest Support",
-  "credentialManifestSupportSubtitle": "Default: Off\nUse DIF Wallet Rendering syntax instead of the 'display' attribute.",
+  "credentialManifestSupportSubtitle": "Use DIF Wallet Rendering syntax instead of the 'display' attribute. Default: Off",
   "secureAuthenticationWithPINCode": "Authentification sécurisée avec Code PIN",
   "secureAuthenticationWithPINCodeSubtitle": "Par défaut : Activé\nDésactivez pour ignorer le code PIN lors de l'authentification Web (non recommandé).",
   "youcanSelectOnlyXCredential": "Vous pouvez sélectionner uniquement {count} document(s).",

@@ -14,7 +14,7 @@ class ProofHeaderWidget extends StatelessWidget {
       builder: (context, state) {
         return OptionContainer(
           title: 'Proof of Possession Header',
-          subtitle: 'Default: kid\nSwitch if jwk is needed in header.',
+          subtitle: 'Switch if jwk is needed in header. Default: kid.',
           body: ListView.builder(
             itemCount: ProofHeaderType.values.length,
             shrinkWrap: true,
