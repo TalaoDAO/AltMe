@@ -102,9 +102,7 @@ class AccountPublicAddressPage extends StatelessWidget {
                         );
                       },
                     ),
-                    const SizedBox(
-                      width: Sizes.space2XLarge,
-                    ),
+                    const SizedBox(width: Sizes.space2XLarge),
                     ShareButton(
                       onTap: () {
                         final box = context.findRenderObject() as RenderBox?;
