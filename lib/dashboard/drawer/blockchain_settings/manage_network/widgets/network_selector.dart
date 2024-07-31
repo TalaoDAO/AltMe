@@ -22,9 +22,22 @@ class NetworkSelector extends StatelessWidget {
           onTap: () async {
             await context.read<ManageNetworkCubit>().setNetwork(network);
           },
-          title: Text(
-            '${network.title!}\n${network.subTitle!}',
-            style: Theme.of(context).textTheme.bodyLarge,
+          title: RichText(
+            text: TextSpan(
+              children: <InlineSpan>[
+                TextSpan(
+                  text: network.title,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const TextSpan(text: '\n'),
+                TextSpan(
+                  text: network.subTitle,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ],
+            ),
           ),
           trailing: Icon(
             state.network == network
