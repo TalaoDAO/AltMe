@@ -460,7 +460,6 @@
   "privateKey": "Clé privée",
   "decentralizedID": "ID décentralisé (DID)",
   "did": "DID",
-  "accountPrivateKeyAlert": "Ne partagez jamais votre phrase de récupération. Le partage de votre phrase de récupération peut entraîner une perte de vos fonds.",
   "sameAccountNameError": "Ce nom de compte a déjà été utilisé ; entrez un nom de compte différent, svp",
   "unknown": "Inconnu",
   "credentialManifestDescription": "Description",

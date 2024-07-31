@@ -460,7 +460,6 @@
   "privateKey": "Clave privada",
   "decentralizedID": "Identificador descentralizado",
   "did": "DID",
-  "accountPrivateKeyAlert": "No comparta su frase de recuperación con nadie. Esta cartera es sin custodia. Nunca se la pediremos. Si comparte su frase de recuperación, podría perder sus fondos",
   "sameAccountNameError": "Este nombre de cuenta se ha usado antes, escriba uno distinto",
   "unknown": "Desconocido",
   "credentialManifestDescription": "Descripción",

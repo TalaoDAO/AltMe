@@ -460,7 +460,6 @@
   "privateKey": "Clau privada",
   "decentralizedID": "IDentificador descentralitzat",
   "did": "DID",
-  "accountPrivateKeyAlert": "No comparteixis la frase de recuperació amb ningú. Aquesta cartera no és d’autocustòdia,mai t’ho demanarem. Si dius la teva frase de recuperació, podries perdre els teus fons",
   "sameAccountNameError": "Aquest nom de compte s’utilitzava abans; introdueix l’altre nom del compte",
   "unknown": "Desconegut",
   "credentialManifestDescription": "Descripció",

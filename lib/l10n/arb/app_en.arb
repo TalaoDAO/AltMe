@@ -457,7 +457,6 @@
   "privateKey": "Private key",
   "decentralizedID": "Decentralized IDentifier",
   "did": "DID",
-  "accountPrivateKeyAlert": "Please do not share your recovery phrase with anyone. This wallet is non custodial, we will never ask for it. Sharing your recovery phrase may result in a loss of your funds",
   "sameAccountNameError": "This account name was used before; enter the different account name, please",
   "unknown": "Unknown",
   "credentialManifestDescription": "Description",
@@ -1057,5 +1056,6 @@
   "vpFormatsNotSupportedErrorDescription": "The Wallet does not support any of the formats requested by the Verifier, such as those included in the vp_formats registration parameter.",
   "invalidPresentationDefinitionUriErrorDescription": "The Presentation Definition URL cannot be reached.",
   "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings": "To stop displaying this popup, deactivate the 'developer mode' in the settings.",
-  "warningDialogSubtitle": "The recovery page contains sensitive information. Please, make sure to keep it private."
+  "warningDialogSubtitle": "The recovery page contains sensitive information. Please, make sure to keep it private.",
+  "accountPrivateKeyAlert": "The recovery page contains sensitive information. Please, make sure to keep it private."
 }
