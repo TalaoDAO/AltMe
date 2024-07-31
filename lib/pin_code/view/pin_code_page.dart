@@ -80,6 +80,7 @@ class _PinCodeViewState extends State<PinCodeView> {
       child: BasePage(
         padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
         backgroundColor: Theme.of(context).colorScheme.surface,
+        appBarHeight: Sizes.defaltAppBarHeight,
         titleAlignment: Alignment.topCenter,
         titleLeading: widget.restrictToBack ? null : const BackLeadingButton(),
         scrollView: false,
