@@ -125,7 +125,7 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
                         }
                         return Padding(
                           padding: const EdgeInsets.symmetric(
-                            vertical: 8,
+                            vertical: 5,
                             horizontal: 15,
                           ),
                           child: Slidable(
