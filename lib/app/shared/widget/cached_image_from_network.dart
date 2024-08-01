@@ -97,7 +97,7 @@ class CachedImageFromNetwork extends StatelessWidget {
                         : ErrorWidget(errorMessage: errorMessage),
                   )
                 : Image.memory(
-                    base64Decode(url),
+                    base64Decode(url.replaceAll('data:image/jpeg;base64,', '')),
                     fit: fit,
                     width: width,
                     height: height,
