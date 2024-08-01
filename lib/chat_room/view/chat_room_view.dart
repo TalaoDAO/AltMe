@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
@@ -194,12 +193,6 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                         return MxcImage(
                           url: link,
                           event: event,
-                          fit: BoxFit.contain,
-                        );
-                      } else if (link.startsWith('mxc')) {
-                        final data = p0.metadata!['bytes'] as Uint8List;
-                        return Image.memory(
-                          data,
                           fit: BoxFit.contain,
                         );
                       } else {
