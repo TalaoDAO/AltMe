@@ -110,7 +110,7 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
                     hint: l10n.importWalletHintText(
                       state.accountType == AccountType.tezos ? 54 : 64,
                     ),
-                    fillColor: Colors.transparent,
+                    fillColor: Theme.of(context).colorScheme.surfaceContainer,
                     hintStyle: Theme.of(context).textTheme.bodyMedium,
                     maxLines: 10,
                     borderRadius: Sizes.normalRadius,
