@@ -142,103 +142,59 @@ class WalletCubit extends Cubit<WalletState> {
           );
         } else {
           /// creating all ethereum based accounts
-          cryptoAccountDataList.add(
-            await _createBlockchainAccount(
+
+          final accounts = <BlockchainType, int>{
+            BlockchainType.fantom: 0,
+            BlockchainType.polygon: 1,
+            BlockchainType.binance: 2,
+            BlockchainType.ethereum: 3,
+            BlockchainType.etherlink: 4,
+          };
+
+          for (final entry in accounts.entries) {
+            final blockchainType = entry.key;
+            final value = entry.value;
+
+            final accountData = await _createBlockchainAccount(
               accountName: accountName,
               mnemonicOrKey: mnemonicOrKey,
               isImported: isImported,
               isSecretKey: isSecretKey,
-              blockchainType: BlockchainType.fantom,
-              totalAccountsYet: accountsCount,
+              blockchainType: blockchainType,
+              totalAccountsYet: accountsCount + value,
               showStatus: showStatus,
-            ),
-          );
-          cryptoAccountDataList.add(
-            await _createBlockchainAccount(
-              accountName: accountName,
-              mnemonicOrKey: mnemonicOrKey,
-              isImported: isImported,
-              isSecretKey: isSecretKey,
-              blockchainType: BlockchainType.polygon,
-              totalAccountsYet: accountsCount + 1,
-              showStatus: showStatus,
-            ),
-          );
-          cryptoAccountDataList.add(
-            await _createBlockchainAccount(
-              accountName: accountName,
-              mnemonicOrKey: mnemonicOrKey,
-              isImported: isImported,
-              isSecretKey: isSecretKey,
-              blockchainType: BlockchainType.binance,
-              totalAccountsYet: accountsCount + 2,
-              showStatus: showStatus,
-            ),
-          );
-          cryptoAccountDataList.add(
-            await _createBlockchainAccount(
-              accountName: accountName,
-              mnemonicOrKey: mnemonicOrKey,
-              isImported: isImported,
-              isSecretKey: isSecretKey,
-              blockchainType: BlockchainType.ethereum,
-              totalAccountsYet: accountsCount + 3,
-              showStatus: showStatus,
-            ),
-          );
+            );
+
+            cryptoAccountDataList.add(accountData);
+          }
         }
       } else {
-        /// Polygon at start
-        cryptoAccountDataList.add(
-          await _createBlockchainAccount(
-            accountName: accountName,
-            mnemonicOrKey: mnemonicOrKey,
-            isImported: isImported,
-            isSecretKey: isSecretKey,
-            blockchainType: BlockchainType.polygon,
-            totalAccountsYet: accountsCount,
-            showStatus: showStatus,
-          ),
-        );
+        /// creating accounts at start
 
-        /// Binance at start
-        cryptoAccountDataList.add(
-          await _createBlockchainAccount(
-            accountName: accountName,
-            mnemonicOrKey: mnemonicOrKey,
-            isImported: isImported,
-            isSecretKey: isSecretKey,
-            blockchainType: BlockchainType.binance,
-            totalAccountsYet: accountsCount + 1,
-            showStatus: showStatus,
-          ),
-        );
+        final accounts = <BlockchainType, int>{
+          BlockchainType.polygon: 0,
+          BlockchainType.binance: 1,
+          BlockchainType.tezos: 2,
+          BlockchainType.ethereum: 3,
+          BlockchainType.etherlink: 4,
+        };
 
-        /// Tezos at start
-        cryptoAccountDataList.add(
-          await _createBlockchainAccount(
-            accountName: accountName,
-            mnemonicOrKey: mnemonicOrKey,
-            isImported: isImported,
-            isSecretKey: isSecretKey,
-            blockchainType: BlockchainType.tezos,
-            totalAccountsYet: accountsCount + 2,
-            showStatus: showStatus,
-          ),
-        );
+        for (final entry in accounts.entries) {
+          final blockchainType = entry.key;
+          final value = entry.value;
 
-        /// Ethereum at start
-        cryptoAccountDataList.add(
-          await _createBlockchainAccount(
+          final accountData = await _createBlockchainAccount(
             accountName: accountName,
             mnemonicOrKey: mnemonicOrKey,
             isImported: isImported,
             isSecretKey: isSecretKey,
-            blockchainType: BlockchainType.ethereum,
-            totalAccountsYet: accountsCount + 3,
+            blockchainType: blockchainType,
+            totalAccountsYet: accountsCount + value,
             showStatus: showStatus,
-          ),
-        );
+          );
+
+          cryptoAccountDataList.add(accountData);
+        }
       }
     }
 

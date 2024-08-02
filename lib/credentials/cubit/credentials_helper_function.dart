@@ -26,6 +26,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       case BlockchainType.fantom:
       case BlockchainType.polygon:
       case BlockchainType.binance:
+      case BlockchainType.etherlink:
         didMethod = AltMeStrings.cryptoEVMDIDMethod;
     }
 
@@ -55,6 +56,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       case BlockchainType.fantom:
       case BlockchainType.polygon:
       case BlockchainType.binance:
+      case BlockchainType.etherlink:
         //verificationMethod = '$issuer#Recovery2020';
         verificationMethod =
             await didKitProvider.keyToVerificationMethod(didMethod, jwkKey);
@@ -141,6 +143,20 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'BinanceAssociatedAddress',
+            issuedBy: const Author('My wallet'),
+          ),
+        );
+
+      case BlockchainType.etherlink:
+        associatedAddressCredential = EtherlinkAssociatedAddressCredential(
+          id: id,
+          issuer: issuer,
+          issuanceDate: issuanceDate,
+          credentialSubjectModel: EthereumAssociatedAddressModel(
+            id: did,
+            accountName: cryptoAccountData.name,
+            associatedAddress: cryptoAccountData.walletAddress,
+            type: 'EtherlinkAssociatedAddress',
             issuedBy: const Author('My wallet'),
           ),
         );

@@ -27,7 +27,12 @@
     "invalidPresentationDefinitionUriErrorDescription",
     "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings",
     "warningDialogSubtitle",
-    "accountPrivateKeyAlert"
+    "accountPrivateKeyAlert",
+    "etherlinkNetwork",
+    "etherlinkAccount",
+    "etherlinkAccountDescription",
+    "etherlinkAccountCreationCongratulations",
+    "etherlinkProofMessage"
   ],
 
   "es": [
@@ -58,7 +63,12 @@
     "invalidPresentationDefinitionUriErrorDescription",
     "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings",
     "warningDialogSubtitle",
-    "accountPrivateKeyAlert"
+    "accountPrivateKeyAlert",
+    "etherlinkNetwork",
+    "etherlinkAccount",
+    "etherlinkAccountDescription",
+    "etherlinkAccountCreationCongratulations",
+    "etherlinkProofMessage"
   ],
 
   "fr": [
@@ -94,6 +104,11 @@
     "invalidPresentationDefinitionUriErrorDescription",
     "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings",
     "warningDialogSubtitle",
-    "accountPrivateKeyAlert"
+    "accountPrivateKeyAlert",
+    "etherlinkNetwork",
+    "etherlinkAccount",
+    "etherlinkAccountDescription",
+    "etherlinkAccountCreationCongratulations",
+    "etherlinkProofMessage"
   ]
 }

@@ -57,6 +57,7 @@ class KeyGenerator {
       case AccountType.fantom:
       case AccountType.polygon:
       case AccountType.binance:
+      case AccountType.etherlink:
         final rootKey = bip32.BIP32.fromSeed(seed); //Instance of 'BIP32'
         // derive path for ethereum '60' see bip 44, first address
         final child = rootKey.derivePath(
@@ -95,6 +96,7 @@ class KeyGenerator {
       case AccountType.fantom:
       case AccountType.polygon:
       case AccountType.binance:
+      case AccountType.etherlink:
         final epk = HEX.encode(seedBytes);
         final pk = PrivateKey.fromHex(epk); //Instance of 'PrivateKey'
         final pub = pk.publicKey.toHex().substring(2);
@@ -154,6 +156,7 @@ class KeyGenerator {
       case AccountType.fantom:
       case AccountType.polygon:
       case AccountType.binance:
+      case AccountType.etherlink:
         final seed = bip393.mnemonicToSeed(mnemonic);
         final rootKey = bip32.BIP32.fromSeed(seed);
         final child = rootKey.derivePath(
@@ -200,6 +203,7 @@ class KeyGenerator {
       case AccountType.fantom:
       case AccountType.polygon:
       case AccountType.binance:
+      case AccountType.etherlink:
         final seedHex = bip393.mnemonicToSeedHex(mnemonic);
 
         final chain = Chain.seed(seedHex);
@@ -231,6 +235,7 @@ class KeyGenerator {
       case AccountType.fantom:
       case AccountType.polygon:
       case AccountType.binance:
+      case AccountType.etherlink:
         final ethPrivateKey = EthPrivateKey.fromHex(secretKey);
         final walletAddress = await ethPrivateKey.extractAddress();
         return walletAddress.hex;
@@ -255,6 +260,7 @@ class KeyGenerator {
       case AccountType.fantom:
       case AccountType.polygon:
       case AccountType.binance:
+      case AccountType.etherlink:
       case AccountType.ssi:
         seedBytes = Uint8List.fromList(hexToBytes(secretKey));
     }

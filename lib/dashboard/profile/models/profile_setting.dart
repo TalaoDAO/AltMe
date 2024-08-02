@@ -90,6 +90,7 @@ class BlockchainOptions extends Equatable {
     required this.hederaSupport,
     required this.infuraRpcNode,
     required this.polygonSupport,
+    required this.etherlinkSupport,
     required this.tezosSupport,
     required this.tzproRpcNode,
     this.tzproApiKey,
@@ -106,6 +107,7 @@ class BlockchainOptions extends Equatable {
         hederaSupport: true,
         infuraRpcNode: false,
         polygonSupport: true,
+        etherlinkSupport: true,
         tezosSupport: true,
         tzproRpcNode: false,
       );
@@ -117,6 +119,7 @@ class BlockchainOptions extends Equatable {
   final String? infuraApiKey;
   final bool infuraRpcNode;
   final bool polygonSupport;
+  final bool etherlinkSupport;
   final bool tezosSupport;
   final String? tzproApiKey;
   final bool tzproRpcNode;
@@ -131,6 +134,7 @@ class BlockchainOptions extends Equatable {
     String? infuraApiKey,
     bool? infuraRpcNode,
     bool? polygonSupport,
+    bool? etherlinkSupport,
     bool? tezosSupport,
     String? tzproApiKey,
     bool? tzproRpcNode,
@@ -142,6 +146,7 @@ class BlockchainOptions extends Equatable {
       hederaSupport: hederaSupport ?? this.hederaSupport,
       infuraRpcNode: infuraRpcNode ?? this.infuraRpcNode,
       polygonSupport: polygonSupport ?? this.polygonSupport,
+      etherlinkSupport: etherlinkSupport ?? this.etherlinkSupport,
       tezosSupport: tezosSupport ?? this.tezosSupport,
       tzproRpcNode: tzproRpcNode ?? this.tzproRpcNode,
       infuraApiKey: infuraApiKey ?? this.infuraApiKey,
@@ -158,6 +163,7 @@ class BlockchainOptions extends Equatable {
         infuraApiKey,
         infuraRpcNode,
         polygonSupport,
+        etherlinkSupport,
         tezosSupport,
         tzproApiKey,
         tzproRpcNode,

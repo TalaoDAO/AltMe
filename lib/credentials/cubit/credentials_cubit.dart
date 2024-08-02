@@ -869,6 +869,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 CredentialSubjectType.fantomAssociatedWallet,
                 CredentialSubjectType.binanceAssociatedWallet,
                 CredentialSubjectType.polygonAssociatedWallet,
+                CredentialSubjectType.etherlinkAssociatedWallet,
               ]);
             }
 
@@ -907,6 +908,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           BlockchainType.binance: CredentialSubjectType.binanceAssociatedWallet,
           BlockchainType.ethereum:
               CredentialSubjectType.ethereumAssociatedWallet,
+          BlockchainType.etherlink:
+              CredentialSubjectType.etherlinkAssociatedWallet,
           BlockchainType.polygon: CredentialSubjectType.polygonAssociatedWallet,
         };
 
