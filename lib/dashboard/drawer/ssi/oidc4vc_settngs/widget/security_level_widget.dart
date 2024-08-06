@@ -11,8 +11,8 @@ class SecurityLevelWidget extends StatelessWidget {
       builder: (context, state) {
         return OptionContainer(
           title: 'Wallet Level',
-          subtitle: 'Default: Permissive\nSet to Strict to strengthen'
-              ' controls for issuers and verifiers',
+          subtitle: 'Set to Strict to strengthen'
+              ' controls for issuers and verifiers. Default: Permissive.',
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(

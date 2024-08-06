@@ -172,6 +172,10 @@ void main() {
         equals(BlockchainType.binance),
       );
       expect(
+        getBlockchainType(AccountType.etherlink),
+        equals(BlockchainType.etherlink),
+      );
+      expect(
         () => getBlockchainType(AccountType.ssi),
         throwsA(isA<ResponseMessage>()),
       );
@@ -1547,6 +1551,17 @@ void main() {
               ),
             ),
             'fantomAddress',
+          );
+          expect(
+            getWalletAddress(
+              EtherlinkAssociatedAddressModel(
+                id: 'id',
+                type: 'type',
+                issuedBy: const Author('name'),
+                associatedAddress: 'etherlinkAddress',
+              ),
+            ),
+            'etherlinkAddress',
           );
           expect(
             getWalletAddress(

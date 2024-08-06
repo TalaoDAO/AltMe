@@ -309,6 +309,11 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.binanceAssociatedWallet:
         return BinanceAssociatedAddressWidget(credentialModel: credentialModel);
 
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+        return EtherlinkAssociatedAddressWidget(
+          credentialModel: credentialModel,
+        );
+
       case CredentialSubjectType.ethereumPooAddress:
         return EthereumPooAddressWidget(
           credentialModel: credentialModel,

@@ -78,6 +78,7 @@ class IconStrings {
   static const String send = '$base/send.png';
   static const String receive = '$base/receive.png';
   static const String ethereum = '$base/blockchain-ethereum.png';
+  static const String etherlink = '$base/blockchain-etherlink.png';
   static const String fantom = '$base/blockchain-fantom.png';
   static const String polygon = '$base/blockchain-polygon.png';
   static const String binance = '$base/blockchain-binance.png';

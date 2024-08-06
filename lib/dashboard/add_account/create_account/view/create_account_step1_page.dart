@@ -128,6 +128,21 @@ class CreateAccountStep1View extends StatelessWidget {
                   },
                 ),
               ],
+              if (BlockchainType.etherlink.isSupported(profileSetting)) ...[
+                CustomListTileCard(
+                  title: l10n.etherlinkAccount,
+                  subTitle: l10n.etherlinkAccountDescription,
+                  imageAssetPath: IconStrings.etherlink,
+                  onTap: () {
+                    Navigator.of(context).push<void>(
+                      CreateAccountStep2Page.route(
+                        accountType: AccountType.etherlink,
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: Sizes.spaceNormal),
+              ],
             ],
           );
         },

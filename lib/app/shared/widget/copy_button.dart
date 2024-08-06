@@ -21,10 +21,9 @@ class CopyButton extends StatelessWidget {
             IconStrings.copy,
             width: Sizes.icon2x,
             height: Sizes.icon2x,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
-          const SizedBox(
-            width: Sizes.spaceSmall,
-          ),
+          const SizedBox(width: Sizes.spaceSmall),
           Text(
             l10n.copy,
             style: Theme.of(context).textTheme.headlineSmall,

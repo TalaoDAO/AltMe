@@ -102,7 +102,9 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                     tilePadding: const EdgeInsets.symmetric(horizontal: 8),
                     title: Text(
                       l10n.credentialManifestDescription,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     children: <Widget>[
                       Padding(

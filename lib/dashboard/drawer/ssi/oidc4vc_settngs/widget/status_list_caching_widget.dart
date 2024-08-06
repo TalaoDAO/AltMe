@@ -11,7 +11,7 @@ class StatusListCachingWidget extends StatelessWidget {
       builder: (context, state) {
         return OptionContainer(
           title: 'StatusList caching',
-          subtitle: 'Default: On\nSwitch off to reload StatusList when needed',
+          subtitle: 'Switch off to reload StatusList when needed. Default: On.',
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(

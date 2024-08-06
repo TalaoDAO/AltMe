@@ -30,6 +30,7 @@ class WertCubit extends Cubit<String> {
         link = '$link&commodities=MATIC&commodity=MATIC';
       case BlockchainType.fantom:
       case BlockchainType.binance:
+      case BlockchainType.etherlink:
         break;
     }
 

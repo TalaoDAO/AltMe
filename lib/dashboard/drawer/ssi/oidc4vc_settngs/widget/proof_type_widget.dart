@@ -14,7 +14,7 @@ class ProofTypeWidget extends StatelessWidget {
       builder: (context, state) {
         return OptionContainer(
           title: 'OIDC4VCI Proof Type',
-          subtitle: 'Default: jwt\nSelect one of the proof type.',
+          subtitle: 'Select one of the proof type. Default: jwt.',
           body: ListView.builder(
             itemCount: ProofType.values.length,
             shrinkWrap: true,

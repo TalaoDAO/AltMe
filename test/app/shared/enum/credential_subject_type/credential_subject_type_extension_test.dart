@@ -260,6 +260,11 @@ void main() {
       );
 
       expect(
+        CredentialSubjectType.etherlinkAssociatedWallet.defaultBackgroundColor,
+        equals(Colors.white),
+      );
+
+      expect(
         CredentialSubjectType.ethereumPooAddress.defaultBackgroundColor,
         equals(Colors.white),
       );
@@ -379,6 +384,10 @@ void main() {
       expect(
         CredentialSubjectType.binanceAssociatedWallet.name,
         equals('BinanceAssociatedAddress'),
+      );
+      expect(
+        CredentialSubjectType.etherlinkAssociatedWallet.name,
+        equals('EtherlinkAssociatedAddress'),
       );
       expect(
         CredentialSubjectType.ethereumPooAddress.name,
@@ -622,7 +631,8 @@ void main() {
             value == CredentialSubjectType.ethereumAssociatedWallet ||
             value == CredentialSubjectType.binanceAssociatedWallet ||
             value == CredentialSubjectType.fantomAssociatedWallet ||
-            value == CredentialSubjectType.polygonAssociatedWallet) {
+            value == CredentialSubjectType.polygonAssociatedWallet ||
+            value == CredentialSubjectType.etherlinkAssociatedWallet) {
           expect(value.isBlockchainAccount, isTrue);
         } else {
           expect(value.isBlockchainAccount, isFalse);
@@ -645,6 +655,11 @@ void main() {
           expect(value.blockchainWidget, isA<BinanceAssociatedAddressWidget>());
         } else if (value == CredentialSubjectType.fantomAssociatedWallet) {
           expect(value.blockchainWidget, isA<FantomAssociatedAddressWidget>());
+        } else if (value == CredentialSubjectType.etherlinkAssociatedWallet) {
+          expect(
+            value.blockchainWidget,
+            isA<EtherlinkAssociatedAddressWidget>(),
+          );
         } else {
           expect(value.blockchainWidget, isNull);
         }
@@ -683,6 +698,10 @@ void main() {
       expect(
         CredentialSubjectType.binanceAssociatedWallet.title,
         'BNB Chain Associated Address',
+      );
+      expect(
+        CredentialSubjectType.etherlinkAssociatedWallet.title,
+        'Etherlink Associated Address',
       );
       expect(
         CredentialSubjectType.ethereumPooAddress.title,
@@ -828,6 +847,10 @@ void main() {
         true,
       );
 
+      expect(
+        CredentialSubjectType.etherlinkAssociatedWallet.supportSingleOnly,
+        true,
+      );
       expect(CredentialSubjectType.walletCredential.supportSingleOnly, false);
       expect(CredentialSubjectType.tezosPooAddress.supportSingleOnly, false);
       expect(CredentialSubjectType.ethereumPooAddress.supportSingleOnly, false);
@@ -912,6 +935,10 @@ void main() {
       );
       expect(
         CredentialSubjectType.binanceAssociatedWallet.getVCFormatType,
+        VCFormatType.values,
+      );
+      expect(
+        CredentialSubjectType.etherlinkAssociatedWallet.getVCFormatType,
         VCFormatType.values,
       );
       expect(
@@ -1155,6 +1182,7 @@ void main() {
       expect(CredentialSubjectType.ethereumAssociatedWallet.order, 69);
       expect(CredentialSubjectType.fantomAssociatedWallet.order, 67);
       expect(CredentialSubjectType.polygonAssociatedWallet.order, 71);
+      expect(CredentialSubjectType.etherlinkAssociatedWallet.order, 72);
       expect(CredentialSubjectType.binanceAssociatedWallet.order, 70);
       expect(CredentialSubjectType.tezosPooAddress.order, 0);
       expect(CredentialSubjectType.ethereumPooAddress.order, 0);

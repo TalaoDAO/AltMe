@@ -141,6 +141,8 @@ BlockchainType getBlockchainType(AccountType accountType) {
       return BlockchainType.polygon;
     case AccountType.binance:
       return BlockchainType.binance;
+    case AccountType.etherlink:
+      return BlockchainType.etherlink;
   }
 }
 
