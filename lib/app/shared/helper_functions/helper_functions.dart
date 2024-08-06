@@ -2202,7 +2202,8 @@ Future<String> fetchRpcUrl({
   String rpcUrl = '';
 
   if (blockchainNetwork is BinanceNetwork ||
-      blockchainNetwork is FantomNetwork) {
+      blockchainNetwork is FantomNetwork ||
+      blockchainNetwork is EtherlinkNetwork) {
     rpcUrl = blockchainNetwork.rpcNodeUrl as String;
   } else {
     if (blockchainNetwork.networkname == 'Mainnet') {

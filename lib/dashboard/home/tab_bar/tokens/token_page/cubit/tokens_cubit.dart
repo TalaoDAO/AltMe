@@ -81,6 +81,7 @@ class TokensCubit extends Cubit<TokensState> {
       if (state.blockchainType != selectedAccountBlockchainType) {
         emit(state.reset(blockchainType: selectedAccountBlockchainType));
       }
+
       if (state.offset == 0) {
         emit(state.fetching());
       }
@@ -89,6 +90,13 @@ class TokensCubit extends Cubit<TokensState> {
         await getTokensOnTezos(
           walletAddress: walletAddress,
           tezosNetwork: networkCubit.state.network as TezosNetwork,
+          limit: _limit,
+          offset: state.offset,
+        );
+      } else if (selectedAccountBlockchainType == BlockchainType.etherlink) {
+        await getTokensOnEtherlink(
+          walletAddress: walletAddress,
+          ethereumNetwork: networkCubit.state.network as EthereumNetwork,
           limit: _limit,
           offset: state.offset,
         );
@@ -114,6 +122,86 @@ class TokensCubit extends Cubit<TokensState> {
         ),
       );
     }
+  }
+
+  Future<void> getTokensOnEtherlink({
+    required String walletAddress,
+    required EthereumNetwork ethereumNetwork,
+    required int limit,
+    required int offset,
+  }) async {
+    if (offset > 0) {
+      //because at this time pagination not supported for Ethereum tokens
+      return;
+    }
+    final baseUrl = ethereumNetwork.apiUrl;
+
+    final List<dynamic> tokensBalancesJsonArray = await client.get(
+      '$baseUrl/v2/addresses/$walletAddress/token-balances',
+      headers: <String, dynamic>{'Content-Type': 'application/json'},
+    ) as List<dynamic>;
+
+    List<TokenModel> newData = [];
+
+    if (tokensBalancesJsonArray.isNotEmpty) {
+      newData = tokensBalancesJsonArray.map(
+        (dynamic json) {
+          final icon = (json['token_instance']
+              as Map<String, dynamic>)['metadata']['image_url'];
+          return TokenModel(
+            contractAddress: (json['token_instance']
+                as Map<String, dynamic>)['owner']['hash'] as String,
+            name:
+                ((json['token'] as Map<String, dynamic>)['name'] as String?) ??
+                    '',
+            symbol: ((json['token'] as Map<String, dynamic>)['symbol']
+                    as String?) ??
+                '',
+            balance: (json['value'] as String?) ?? '',
+            decimals: ((json['token_instance'] as Map<String, dynamic>)['token']
+                        ['decimals'] ??
+                    0)
+                .toString(),
+            thumbnailUri: '',
+            standard: 'erc20',
+            icon: icon.toString(),
+            decimalsToShow: 2,
+          );
+        },
+      ).toList();
+    }
+
+    if (offset == 0) {
+      final ethereumBaseToken = await _getBaseTokenBalanceOnEtherlink(
+        walletAddress,
+        ethereumNetwork.chain,
+        ethereumNetwork,
+      );
+      if (ethereumBaseToken != null) {
+        newData.insert(0, ethereumBaseToken);
+      }
+      data = newData;
+    } else {
+      data.addAll(newData);
+    }
+
+    data = await setUSDValues(data);
+    double totalBalanceInUSD = 0;
+    for (final tokenElement in data) {
+      totalBalanceInUSD += tokenElement.balanceInUSD;
+    }
+    data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
+
+    emit(
+      state.copyWith(
+        status: AppStatus.success,
+        data: data.toSet(),
+        totalBalanceInUSD: totalBalanceInUSD,
+      ),
+    );
+    await checkIfItNeedsToVerifyMnemonic(
+      totalBalanceInUSD: totalBalanceInUSD,
+    );
   }
 
   Future<void> getTokensOnEthereum({
@@ -161,7 +249,7 @@ class TokensCubit extends Cubit<TokensState> {
     }
 
     if (offset == 0) {
-      final ethereumBaseToken = await _getBaseTokenBalanceOnEth(
+      final ethereumBaseToken = await _getBaseTokenBalanceOnEthereum(
         walletAddress,
         ethereumNetwork.chain,
         ethereumNetwork,
@@ -421,7 +509,39 @@ class TokensCubit extends Cubit<TokensState> {
     }
   }
 
-  Future<TokenModel?> _getBaseTokenBalanceOnEth(
+  Future<TokenModel?> _getBaseTokenBalanceOnEtherlink(
+    String walletAddress,
+    String chain,
+    EthereumNetwork ethereumNetwork,
+  ) async {
+    try {
+      final dynamic response = await client.get(
+        '${ethereumNetwork.apiUrl}/v2/addresses/$walletAddress',
+        headers: <String, dynamic>{'Content-Type': 'application/json'},
+      ) as Map<String, dynamic>;
+
+      final name = response['token']['name'] ?? ethereumNetwork.mainTokenName;
+
+      final mainTokenSymbol =
+          response['token']['symbol'] ?? ethereumNetwork.mainTokenSymbol;
+
+      return TokenModel(
+        contractAddress: '',
+        name: name.toString(),
+        symbol: mainTokenSymbol.toString(),
+        icon: ethereumNetwork.mainTokenIcon,
+        balance: response['coin_balance'] as String,
+        decimals: ethereumNetwork.mainTokenDecimal,
+        standard: 'ERC20',
+        decimalsToShow: 5,
+      );
+    } catch (e, s) {
+      getLogger(toString()).e('error: $e, stack: $s');
+      return null;
+    }
+  }
+
+  Future<TokenModel?> _getBaseTokenBalanceOnEthereum(
     String walletAddress,
     String chain,
     EthereumNetwork ethereumNetwork,
