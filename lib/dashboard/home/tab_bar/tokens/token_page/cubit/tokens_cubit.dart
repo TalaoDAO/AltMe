@@ -171,15 +171,19 @@ class TokensCubit extends Cubit<TokensState> {
       ).toList();
     }
 
-    if (offset == 0) {
-      final ethereumBaseToken = await _getBaseTokenBalanceOnEtherlink(
-        walletAddress,
-        ethereumNetwork.chain,
-        ethereumNetwork,
+    if (offset == 0 && tokensBalancesJsonArray.isEmpty) {
+      final ethereumBaseToken = TokenModel(
+        contractAddress: '',
+        name: 'Etherlink',
+        symbol: 'XTZ',
+        icon: ethereumNetwork.mainTokenIcon,
+        balance: '0',
+        decimals: ethereumNetwork.mainTokenDecimal,
+        standard: 'ERC20',
+        decimalsToShow: 5,
       );
-      if (ethereumBaseToken != null) {
-        newData.insert(0, ethereumBaseToken);
-      }
+      newData.insert(0, ethereumBaseToken);
+
       data = newData;
     } else {
       data.addAll(newData);
@@ -506,38 +510,6 @@ class TokensCubit extends Cubit<TokensState> {
       return response as Map<String, dynamic>;
     } catch (_) {
       return {};
-    }
-  }
-
-  Future<TokenModel?> _getBaseTokenBalanceOnEtherlink(
-    String walletAddress,
-    String chain,
-    EthereumNetwork ethereumNetwork,
-  ) async {
-    try {
-      final dynamic response = await client.get(
-        '${ethereumNetwork.apiUrl}/v2/addresses/$walletAddress',
-        headers: <String, dynamic>{'Content-Type': 'application/json'},
-      ) as Map<String, dynamic>;
-
-      final name = response['token']['name'] ?? ethereumNetwork.mainTokenName;
-
-      final mainTokenSymbol =
-          response['token']['symbol'] ?? ethereumNetwork.mainTokenSymbol;
-
-      return TokenModel(
-        contractAddress: '',
-        name: name.toString(),
-        symbol: mainTokenSymbol.toString(),
-        icon: ethereumNetwork.mainTokenIcon,
-        balance: response['coin_balance'] as String,
-        decimals: ethereumNetwork.mainTokenDecimal,
-        standard: 'ERC20',
-        decimalsToShow: 5,
-      );
-    } catch (e, s) {
-      getLogger(toString()).e('error: $e, stack: $s');
-      return null;
     }
   }
 
