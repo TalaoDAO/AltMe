@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:convert/convert.dart';
 import 'package:decimal/decimal.dart';
@@ -46,7 +47,12 @@ extension StringExtension on String {
   }
 
   bool get isEVM {
-    if (this == 'ETH' || this == 'MATIC' || this == 'FTM' || this == 'BNB') {
+    if (this == 'ETH' ||
+        this == 'MATIC' ||
+        this == 'FTM' ||
+        this == 'BNB' ||
+        this == 'XTZ') {
+      // Etherlink - XTZ
       return true;
     }
     return false;
@@ -65,5 +71,22 @@ extension StringExtension on String {
         (Decimal.parse(this) * Decimal.parse(number.toString())).floor() /
             Decimal.parse(number.toString());
     return twoDecimalNumber.toDecimal().toString();
+  }
+
+  BigInt get convertTo1e18 {
+    var value = BigInt.parse(this);
+
+    const int targetLength = 18;
+
+    final currentLength = value.toString().length;
+
+    final zerosToAdd = targetLength - currentLength;
+
+    if (zerosToAdd > 0) {
+      final factor = BigInt.from(pow(10, zerosToAdd));
+      value = value * factor;
+    }
+
+    return value;
   }
 }

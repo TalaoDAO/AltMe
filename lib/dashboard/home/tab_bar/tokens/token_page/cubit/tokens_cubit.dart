@@ -171,19 +171,16 @@ class TokensCubit extends Cubit<TokensState> {
       ).toList();
     }
 
-    if (offset == 0 && tokensBalancesJsonArray.isEmpty) {
-      final ethereumBaseToken = TokenModel(
-        contractAddress: '',
-        name: 'Etherlink',
-        symbol: 'XTZ',
-        icon: ethereumNetwork.mainTokenIcon,
-        balance: '0',
-        decimals: ethereumNetwork.mainTokenDecimal,
-        standard: 'ERC20',
-        decimalsToShow: 5,
+    if (offset == 0) {
+      final ethereumBaseToken = await _getBaseTokenBalanceOnEtherlink(
+        walletAddress,
+        ethereumNetwork.chain,
+        ethereumNetwork,
       );
-      newData.insert(0, ethereumBaseToken);
 
+      if (ethereumBaseToken != null) {
+        newData.insert(0, ethereumBaseToken);
+      }
       data = newData;
     } else {
       data.addAll(newData);
@@ -510,6 +507,36 @@ class TokensCubit extends Cubit<TokensState> {
       return response as Map<String, dynamic>;
     } catch (_) {
       return {};
+    }
+  }
+
+  Future<TokenModel?> _getBaseTokenBalanceOnEtherlink(
+    String walletAddress,
+    String chain,
+    EthereumNetwork ethereumNetwork,
+  ) async {
+    try {
+      final response = await client.get(
+        '${ethereumNetwork.apiUrl}/v2/addresses/$walletAddress',
+        headers: <String, dynamic>{'Content-Type': 'application/json'},
+      ) as Map<String, dynamic>;
+
+      final coinBalance = response['coin_balance'].toString().convertTo1e18;
+
+      return TokenModel(
+        contractAddress: '',
+        name: 'Etherlink',
+        symbol: 'XTZ',
+        icon: ethereumNetwork.mainTokenIcon,
+        balance: coinBalance.toString(),
+        decimals: ethereumNetwork.mainTokenDecimal,
+        standard: 'ERC20',
+        decimalsToShow: 5,
+      );
+      ;
+    } catch (e, s) {
+      getLogger(toString()).e('error: $e, stack: $s');
+      return null;
     }
   }
 
