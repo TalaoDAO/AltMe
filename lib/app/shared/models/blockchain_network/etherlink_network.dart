@@ -28,7 +28,7 @@ class EtherlinkNetwork extends EthereumNetwork {
         apiUrl: 'https://explorer.etherlink.com/api',
         chainId: 42793,
         chain: 'etherlink',
-        rpcNodeUrl: 'https://node.mainnet.etherlink.com ',
+        rpcNodeUrl: 'https://node.mainnet.etherlink.com',
         title: 'Etherlink Mainnet',
         subTitle:
             'This network is the official Etherlink blockchain running Network.'
