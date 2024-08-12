@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -282,6 +283,10 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
           final response = await client.get(
             uri,
             headers: headers,
+            options: Options().copyWith(
+              sendTimeout: const Duration(seconds: 10),
+              receiveTimeout: const Duration(seconds: 10),
+            ),
           );
 
           final payload = profileCubit.jwtDecode.parseJwt(response.toString());
@@ -362,6 +367,10 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
             final response = await client.get(
               uri,
               headers: headers,
+              options: Options().copyWith(
+                sendTimeout: const Duration(seconds: 10),
+                receiveTimeout: const Duration(seconds: 10),
+              ),
             );
 
             final payload =
