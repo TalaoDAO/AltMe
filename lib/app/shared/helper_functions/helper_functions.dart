@@ -2191,6 +2191,8 @@ String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
     return credentialSubjectModel.associatedAddress;
   } else if (credentialSubjectModel is FantomAssociatedAddressModel) {
     return credentialSubjectModel.associatedAddress;
+  } else if (credentialSubjectModel is EtherlinkAssociatedAddressModel) {
+    return credentialSubjectModel.associatedAddress;
   }
   return null;
 }

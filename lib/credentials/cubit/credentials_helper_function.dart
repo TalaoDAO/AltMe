@@ -152,7 +152,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           id: id,
           issuer: issuer,
           issuanceDate: issuanceDate,
-          credentialSubjectModel: EthereumAssociatedAddressModel(
+          credentialSubjectModel: EtherlinkAssociatedAddressModel(
             id: did,
             accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
