@@ -95,7 +95,12 @@ class ProfileModel extends Equatable {
           ),
           settingsMenu: SettingsMenu.initial(),
           version: '',
-          walletSecurityOptions: WalletSecurityOptions.initial(),
+          walletSecurityOptions: const WalletSecurityOptions(
+            confirmSecurityVerifierAccess: true,
+            displaySecurityAdvancedSettings: true,
+            secureSecurityAuthenticationWithPinCode: true,
+            verifySecurityIssuerWebsiteIdentity: true,
+          ),
         ),
       );
 
@@ -142,7 +147,12 @@ class ProfileModel extends Equatable {
           ),
           settingsMenu: SettingsMenu.initial(),
           version: '',
-          walletSecurityOptions: WalletSecurityOptions.initial(),
+          walletSecurityOptions: const WalletSecurityOptions(
+            confirmSecurityVerifierAccess: true,
+            displaySecurityAdvancedSettings: true,
+            secureSecurityAuthenticationWithPinCode: true,
+            verifySecurityIssuerWebsiteIdentity: true,
+          ),
         ),
       );
 
@@ -211,7 +221,12 @@ class ProfileModel extends Equatable {
           ),
           settingsMenu: SettingsMenu.initial(),
           version: '',
-          walletSecurityOptions: WalletSecurityOptions.initial(),
+          walletSecurityOptions: const WalletSecurityOptions(
+            confirmSecurityVerifierAccess: true,
+            displaySecurityAdvancedSettings: true,
+            secureSecurityAuthenticationWithPinCode: true,
+            verifySecurityIssuerWebsiteIdentity: true,
+          ),
         ),
       );
 
@@ -283,8 +298,8 @@ class ProfileModel extends Equatable {
           walletSecurityOptions: const WalletSecurityOptions(
             confirmSecurityVerifierAccess: true,
             displaySecurityAdvancedSettings: true,
-            secureSecurityAuthenticationWithPinCode: false,
-            verifySecurityIssuerWebsiteIdentity: false,
+            secureSecurityAuthenticationWithPinCode: true,
+            verifySecurityIssuerWebsiteIdentity: true,
           ),
         ),
       );
