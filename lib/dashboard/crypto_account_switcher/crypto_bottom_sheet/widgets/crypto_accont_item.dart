@@ -86,9 +86,7 @@ class CryptoAccountItem extends StatelessWidget {
             InkWell(
               onTap: () async {
                 await Clipboard.setData(
-                  ClipboardData(
-                    text: walletAddressExtracted,
-                  ),
+                  ClipboardData(text: cryptoAccountData.walletAddress),
                 );
                 AlertMessage.showStateMessage(
                   context: context,
