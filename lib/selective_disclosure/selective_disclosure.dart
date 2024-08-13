@@ -4,12 +4,26 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:json_path/json_path.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 export 'model/model.dart';
 
 class SelectiveDisclosure {
   SelectiveDisclosure(this.credentialModel);
   final CredentialModel credentialModel;
+
+  Map<String, dynamic> get payload {
+    final encryptedValues = credentialModel.jwt
+        ?.split('~')
+        .where((element) => element.isNotEmpty)
+        .toList();
+
+    final encryptedPayload = encryptedValues!.first;
+    return decodePayload(
+      jwtDecode: JWTDecode(),
+      token: encryptedPayload,
+    );
+  }
 
   Map<String, dynamic> get claims {
     final credentialSupported = credentialModel.credentialSupported;
@@ -52,7 +66,7 @@ class SelectiveDisclosure {
 
   Map<String, dynamic> get extractedValuesFromJwt {
     final extractedValues = <String, dynamic>{};
-    for (final element in disclosureToContent.entries.toList()) {
+    for (final element in disclosureListToContent.entries.toList()) {
       try {
         final lisString = jsonDecode(element.value.toString());
         if (lisString is List) {
@@ -100,23 +114,10 @@ class SelectiveDisclosure {
     return [];
   }
 
-  Map<String, dynamic> get disclosureToContent {
+  Map<String, dynamic> get disclosureListToContent {
     final data = <String, dynamic>{};
-
-    for (var element in disclosureFromJWT) {
-      try {
-        while (element.length % 4 != 0) {
-          element += '=';
-        }
-
-        final decryptedData = utf8.decode(base64Decode(element));
-
-        if (decryptedData.isNotEmpty) {
-          data[element] = decryptedData;
-        }
-      } catch (e) {
-        //
-      }
+    for (final element in disclosureFromJWT) {
+      data[element] = disclosureToContent(element);
     }
 
     return data;
@@ -126,28 +127,42 @@ class SelectiveDisclosure {
     final data = <String, dynamic>{};
 
     for (final element in contents) {
-      try {
-        final sh256Hash = OIDC4VC().sh256HashOfContent(element);
-        final lisString = jsonDecode(element);
-        if (lisString is List) {
-          if (lisString.length == 3) {
-            /// '["Qg_O64zqAxe412a108iroA", "phone_number", "+81-80-1234-5678"]'
-            data[sh256Hash] = {lisString[1]: lisString[2]};
-          } else if (lisString.length == 2) {
-            /// '["Qg_O64zqAxe412a108iroA", "DE']
-            data[sh256Hash] = {lisString[0]: lisString[1]};
-          }
-        }
-      } catch (e) {
-        //
-      }
+      data.addAll(contentOfSh256Hash(element));
     }
     return data;
   }
 
+  Map<String, dynamic> contentOfSh256Hash(
+    String element,
+  ) {
+    final data = <String, dynamic>{};
+    try {
+      final sh256Hash = OIDC4VC().sh256HashOfContent(element);
+      // print('element: $element');
+      final lisString = jsonDecode(element);
+      if (lisString is List) {
+        if (lisString.length == 3) {
+          /// '["Qg_O64zqAxe412a108iroA", "phone_number", "+81-80-1234-5678"]'
+          data[sh256Hash] = {
+            lisString[1]: lisString[2],
+          };
+        } else if (lisString.length == 2) {
+          /// '["Qg_O64zqAxe412a108iroA", "DE']
+          data[sh256Hash] = {
+            lisString[0]: lisString[1],
+          };
+        }
+      }
+      return data;
+    } catch (e) {
+      //
+      return data;
+    }
+  }
+
   List<String> get contents {
     final contents = <String>[];
-    for (final element in disclosureToContent.entries.toList()) {
+    for (final element in disclosureListToContent.entries.toList()) {
       contents.add(element.value.toString());
     }
     return contents;
@@ -259,5 +274,20 @@ class SelectiveDisclosure {
     }
 
     return value;
+  }
+
+  String disclosureToContent(String element) {
+    String encryptedData = element;
+    try {
+      while (encryptedData.length % 4 != 0) {
+        encryptedData += '=';
+      }
+
+      final decryptedData = utf8.decode(base64Decode(encryptedData));
+      return decryptedData;
+    } catch (e) {
+      return '';
+      //
+    }
   }
 }
