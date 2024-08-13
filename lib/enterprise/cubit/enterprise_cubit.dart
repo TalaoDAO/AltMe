@@ -139,7 +139,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     };
 
     final response = await client.post(
-      '$url/configuration',
+      '${url}configuration',
       headers: headers,
       data: data,
     );
@@ -169,7 +169,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
   }
 
   Future<String> getNonce(String url) async {
-    final dynamic getRepsponse = await client.get('$url/nonce');
+    final dynamic getRepsponse = await client.get('${url}nonce');
     final nonce = getRepsponse['nonce'].toString();
     return nonce;
   }
@@ -238,7 +238,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
     /// get vc
     final response = await client.post(
-      '$url/token',
+      '${url}token',
       headers: <String, dynamic>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
