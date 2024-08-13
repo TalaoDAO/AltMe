@@ -2228,3 +2228,21 @@ Future<String> fetchRpcUrl({
 
   return rpcUrl;
 }
+
+String getDidMethod(BlockchainType blockchainType) {
+  late String didMethod;
+
+  switch (blockchainType) {
+    case BlockchainType.tezos:
+      didMethod = AltMeStrings.cryptoTezosDIDMethod;
+
+    case BlockchainType.ethereum:
+    case BlockchainType.fantom:
+    case BlockchainType.polygon:
+    case BlockchainType.binance:
+    case BlockchainType.etherlink:
+      didMethod = AltMeStrings.cryptoEVMDIDMethod;
+  }
+
+  return didMethod;
+}

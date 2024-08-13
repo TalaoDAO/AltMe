@@ -16,19 +16,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       getLogger('CredentialsCubit - generateAssociatedWalletCredential');
   log.i(blockchainType);
   try {
-    late String didMethod;
-
-    switch (blockchainType) {
-      case BlockchainType.tezos:
-        didMethod = AltMeStrings.cryptoTezosDIDMethod;
-
-      case BlockchainType.ethereum:
-      case BlockchainType.fantom:
-      case BlockchainType.polygon:
-      case BlockchainType.binance:
-      case BlockchainType.etherlink:
-        didMethod = AltMeStrings.cryptoEVMDIDMethod;
-    }
+    final didMethod = getDidMethod(blockchainType);
 
     log.i('didMethod - $didMethod');
 
@@ -38,6 +26,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     );
 
     final String issuer = didKitProvider.keyToDID(didMethod, jwkKey);
+
     log.i('jwkKey - $jwkKey');
     log.i('didKitProvider.keyToDID - $issuer');
 
