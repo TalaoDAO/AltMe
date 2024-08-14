@@ -2180,21 +2180,42 @@ Future<Map<String, dynamic>?> checkVerifierAttestation({
   return cnf['jwk'] as Map<String, dynamic>;
 }
 
-String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
+/// walletaddress and blockchain type
+(String?, BlockchainType?) getWalletAddress(
+  CredentialSubjectModel credentialSubjectModel,
+) {
   if (credentialSubjectModel is TezosAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.tezos,
+    );
   } else if (credentialSubjectModel is EthereumAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.ethereum,
+    );
   } else if (credentialSubjectModel is PolygonAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.polygon,
+    );
   } else if (credentialSubjectModel is BinanceAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.binance,
+    );
   } else if (credentialSubjectModel is FantomAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.fantom,
+    );
   } else if (credentialSubjectModel is EtherlinkAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.etherlink,
+    );
   }
-  return null;
+  return (null, null);
 }
 
 Future<String> fetchRpcUrl({

@@ -89,22 +89,38 @@ class _HomeCredentialCategoryListState
                             /// crypto credential account to be shown always
                             if (element.credentialPreview.credentialSubjectModel
                                 .credentialSubjectType.isBlockchainAccount) {
-                              /// only show crypto card with matches current account
-                              /// wallet address
-                              final String? currentWalletAddress = context
+                              /// only show crypto card with matches current
+                              /// account wallet address
+
+                              final currentAccount = context
                                   .read<WalletCubit>()
                                   .state
-                                  .currentAccount
-                                  ?.walletAddress;
+                                  .currentAccount;
 
-                              final String? walletAddress = getWalletAddress(
-                                element
-                                    .credentialPreview.credentialSubjectModel,
-                              );
+                              if (currentAccount != null) {
+                                final currentWalletAddress =
+                                    currentAccount.walletAddress;
 
-                              if (currentWalletAddress.toString() !=
-                                  walletAddress.toString()) {
-                                return false;
+                                final currentBlockchainType =
+                                    currentAccount.blockchainType;
+
+                                final (walletAddress, blockchainType) =
+                                    getWalletAddress(
+                                  element
+                                      .credentialPreview.credentialSubjectModel,
+                                );
+
+                                final matchesWalletAddress =
+                                    currentWalletAddress !=
+                                        walletAddress.toString();
+
+                                final matchesBlockchainType =
+                                    currentBlockchainType != blockchainType;
+
+                                if (matchesWalletAddress ||
+                                    matchesBlockchainType) {
+                                  return false;
+                                }
                               }
                             }
 
