@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -138,7 +139,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     };
 
     final response = await client.post(
-      '$url/configuration',
+      '${url}configuration',
       headers: headers,
       data: data,
     );
@@ -168,7 +169,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
   }
 
   Future<String> getNonce(String url) async {
-    final dynamic getRepsponse = await client.get('$url/nonce');
+    final dynamic getRepsponse = await client.get('${url}nonce');
     final nonce = getRepsponse['nonce'].toString();
     return nonce;
   }
@@ -237,7 +238,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
     /// get vc
     final response = await client.post(
-      '$url/token',
+      '${url}token',
       headers: <String, dynamic>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -282,6 +283,10 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
           final response = await client.get(
             uri,
             headers: headers,
+            options: Options().copyWith(
+              sendTimeout: const Duration(seconds: 10),
+              receiveTimeout: const Duration(seconds: 10),
+            ),
           );
 
           final payload = profileCubit.jwtDecode.parseJwt(response.toString());
@@ -362,6 +367,10 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
             final response = await client.get(
               uri,
               headers: headers,
+              options: Options().copyWith(
+                sendTimeout: const Duration(seconds: 10),
+                receiveTimeout: const Duration(seconds: 10),
+              ),
             );
 
             final payload =

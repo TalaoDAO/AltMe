@@ -25,10 +25,10 @@ class EtherlinkNetwork extends EthereumNetwork {
   factory EtherlinkNetwork.mainNet() => const EtherlinkNetwork(
         type: BlockchainType.etherlink,
         networkname: 'Mainnet',
-        apiUrl: Urls.moralisBaseUrl,
+        apiUrl: 'https://explorer.etherlink.com/api',
         chainId: 42793,
         chain: 'etherlink',
-        rpcNodeUrl: 'https://explorer.etherlink.com',
+        rpcNodeUrl: 'https://node.mainnet.etherlink.com',
         title: 'Etherlink Mainnet',
         subTitle:
             'This network is the official Etherlink blockchain running Network.'
@@ -38,10 +38,10 @@ class EtherlinkNetwork extends EthereumNetwork {
   factory EtherlinkNetwork.testNet() => const EtherlinkNetwork(
         type: BlockchainType.etherlink,
         networkname: 'Ghostnet',
-        apiUrl: Urls.moralisBaseUrl,
+        apiUrl: 'https://testnet.explorer.etherlink.com/api',
         chain: 'etherlink-testnet',
         chainId: 128123,
-        rpcNodeUrl: 'https://testnet.explorer.etherlink.com/',
+        rpcNodeUrl: 'https://node.ghostnet.etherlink.com',
         title: 'Etherlink Testnet (Ghostnet)',
         subTitle: 'This network is used to test protocol upgrades'
             ' (do not use it unless you are a developer).',

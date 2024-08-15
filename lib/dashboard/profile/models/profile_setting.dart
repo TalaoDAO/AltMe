@@ -90,11 +90,11 @@ class BlockchainOptions extends Equatable {
     required this.hederaSupport,
     required this.infuraRpcNode,
     required this.polygonSupport,
-    required this.etherlinkSupport,
     required this.tezosSupport,
     required this.tzproRpcNode,
     this.tzproApiKey,
     this.infuraApiKey,
+    this.etherlinkSupport,
   });
 
   factory BlockchainOptions.fromJson(Map<String, dynamic> json) =>
@@ -119,7 +119,7 @@ class BlockchainOptions extends Equatable {
   final String? infuraApiKey;
   final bool infuraRpcNode;
   final bool polygonSupport;
-  final bool etherlinkSupport;
+  final bool? etherlinkSupport;
   final bool tezosSupport;
   final String? tzproApiKey;
   final bool tzproRpcNode;

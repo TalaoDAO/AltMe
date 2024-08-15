@@ -5,6 +5,7 @@ import 'package:altme/oidc4vc/verify_encoded_data.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -153,6 +154,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 statusListUri,
                 headers: headers,
                 isCachingEnabled: customOidc4vcProfile.statusListCache,
+                options: Options().copyWith(
+                  sendTimeout: const Duration(seconds: 10),
+                  receiveTimeout: const Duration(seconds: 10),
+                ),
               );
 
               final payload = jwtDecode.parseJwt(response.toString());
@@ -234,6 +239,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 statusListUri,
                 headers: headers,
                 isCachingEnabled: customOidc4vcProfile.statusListCache,
+                options: Options().copyWith(
+                  sendTimeout: const Duration(seconds: 10),
+                  receiveTimeout: const Duration(seconds: 10),
+                ),
               );
 
               final payload = jwtDecode.parseJwt(response.toString());

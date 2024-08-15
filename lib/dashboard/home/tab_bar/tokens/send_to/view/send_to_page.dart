@@ -83,13 +83,9 @@ class _SendToViewState extends State<SendToView>
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                const SizedBox(
-                  height: Sizes.spaceXLarge,
-                ),
+                const SizedBox(height: Sizes.spaceXLarge),
                 const FromAccountWidget(),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
+                const SizedBox(height: Sizes.spaceNormal),
                 WithdrawalAddressInputView(
                   withdrawalAddressController: withdrawalAddressController,
                   caption: l10n.to,
