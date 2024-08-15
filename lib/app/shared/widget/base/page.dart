@@ -27,6 +27,7 @@ class BasePage extends StatefulWidget {
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.secureScreen = false,
+    this.appBarHeight = Sizes.appBarHeight,
   });
 
   final GlobalKey<ScaffoldState>? scaffoldKey;
@@ -47,6 +48,7 @@ class BasePage extends StatefulWidget {
   final Widget? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final bool secureScreen;
+  final double appBarHeight;
 
   @override
   State<BasePage> createState() => _BasePageState();
@@ -140,6 +142,7 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
                             leading: widget.titleLeading,
                             titleAlignment: widget.titleAlignment,
                             trailing: widget.titleTrailing,
+                            appBarHeight: widget.appBarHeight,
                           ),
                     bottomNavigationBar: widget.navigation != null
                         ? (widget.useSafeArea
@@ -183,6 +186,7 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
                     leading: widget.titleLeading,
                     titleAlignment: widget.titleAlignment,
                     trailing: widget.titleTrailing,
+                    appBarHeight: widget.appBarHeight,
                   ),
             bottomNavigationBar: widget.navigation != null
                 ? (widget.useSafeArea

@@ -36,7 +36,7 @@ class SelectAccount extends StatelessWidget {
                 if (connectionBridgeType == ConnectionBridgeType.beacon) {
                   if (cryptoAccountData.blockchainType !=
                       BlockchainType.tezos) {
-                    // beacon and ethereum, matic, polygon, binance
+                    // beacon and ethereum, matic, polygon, binance, etherlink
                     return Container();
                   }
                 } else {

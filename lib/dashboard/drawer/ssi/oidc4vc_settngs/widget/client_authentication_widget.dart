@@ -14,9 +14,8 @@ class ClientAuthenticationWidget extends StatelessWidget {
       builder: (context, state) {
         return OptionContainer(
           title: 'Client Authentication Methods',
-          subtitle:
-              'Default: Client id as DID or JWK\nSelect to other authentication'
-              ' methods if needed.',
+          subtitle: 'Select to other authentication'
+              ' methods if needed. Default: Client id as DID or JWK.',
           body: ListView.builder(
             itemCount: ClientAuthentication.values.length,
             shrinkWrap: true,

@@ -11,8 +11,8 @@ class ScopeParameterWidget extends StatelessWidget {
       builder: (context, state) {
         return OptionContainer(
           title: 'Scope Parameters',
-          subtitle: 'Default : Off\nEnable to force wallet to use scope'
-              ' instead of authorization_details.',
+          subtitle: 'Enable to force wallet to use scope'
+              ' instead of authorization_details. Default: Off.',
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(

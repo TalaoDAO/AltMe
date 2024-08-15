@@ -144,6 +144,7 @@ void main() {
         AccountType.fantom,
         AccountType.polygon,
         AccountType.binance,
+        AccountType.etherlink,
       ];
 
       for (final accountType in accountTypes) {

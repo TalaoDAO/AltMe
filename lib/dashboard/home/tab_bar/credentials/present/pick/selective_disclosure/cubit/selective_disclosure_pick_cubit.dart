@@ -95,10 +95,11 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
       index = selectiveDisclosure.disclosureFromJWT
           .indexWhere((entry) => entry == threeDotValue);
     } else if (claimsKey != null) {
-      index =
-          selectiveDisclosure.disclosureToContent.entries.toList().indexWhere(
-                (entry) => entry.value.toString().contains(claimsKey),
-              );
+      index = selectiveDisclosure.disclosureListToContent.entries
+          .toList()
+          .indexWhere(
+            (entry) => entry.value.toString().contains(claimsKey),
+          );
     }
 
     if (index == null || index == -1) {

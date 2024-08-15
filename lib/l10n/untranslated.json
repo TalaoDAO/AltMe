@@ -24,7 +24,15 @@
     "cannotDeleteCurrentAccount",
     "invalidClientErrorDescription",
     "vpFormatsNotSupportedErrorDescription",
-    "invalidPresentationDefinitionUriErrorDescription"
+    "invalidPresentationDefinitionUriErrorDescription",
+    "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings",
+    "warningDialogSubtitle",
+    "accountPrivateKeyAlert",
+    "etherlinkNetwork",
+    "etherlinkAccount",
+    "etherlinkAccountDescription",
+    "etherlinkAccountCreationCongratulations",
+    "etherlinkProofMessage"
   ],
 
   "es": [
@@ -52,7 +60,15 @@
     "cannotDeleteCurrentAccount",
     "invalidClientErrorDescription",
     "vpFormatsNotSupportedErrorDescription",
-    "invalidPresentationDefinitionUriErrorDescription"
+    "invalidPresentationDefinitionUriErrorDescription",
+    "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings",
+    "warningDialogSubtitle",
+    "accountPrivateKeyAlert",
+    "etherlinkNetwork",
+    "etherlinkAccount",
+    "etherlinkAccountDescription",
+    "etherlinkAccountCreationCongratulations",
+    "etherlinkProofMessage"
   ],
 
   "fr": [
@@ -85,6 +101,14 @@
     "cannotDeleteCurrentAccount",
     "invalidClientErrorDescription",
     "vpFormatsNotSupportedErrorDescription",
-    "invalidPresentationDefinitionUriErrorDescription"
+    "invalidPresentationDefinitionUriErrorDescription",
+    "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings",
+    "warningDialogSubtitle",
+    "accountPrivateKeyAlert",
+    "etherlinkNetwork",
+    "etherlinkAccount",
+    "etherlinkAccountDescription",
+    "etherlinkAccountCreationCongratulations",
+    "etherlinkProofMessage"
   ]
 }

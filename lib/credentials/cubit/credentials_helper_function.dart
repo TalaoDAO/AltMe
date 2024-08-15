@@ -16,18 +16,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       getLogger('CredentialsCubit - generateAssociatedWalletCredential');
   log.i(blockchainType);
   try {
-    late String didMethod;
-
-    switch (blockchainType) {
-      case BlockchainType.tezos:
-        didMethod = AltMeStrings.cryptoTezosDIDMethod;
-
-      case BlockchainType.ethereum:
-      case BlockchainType.fantom:
-      case BlockchainType.polygon:
-      case BlockchainType.binance:
-        didMethod = AltMeStrings.cryptoEVMDIDMethod;
-    }
+    final didMethod = getDidMethod(blockchainType);
 
     log.i('didMethod - $didMethod');
 
@@ -37,6 +26,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     );
 
     final String issuer = didKitProvider.keyToDID(didMethod, jwkKey);
+
     log.i('jwkKey - $jwkKey');
     log.i('didKitProvider.keyToDID - $issuer');
 
@@ -55,6 +45,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       case BlockchainType.fantom:
       case BlockchainType.polygon:
       case BlockchainType.binance:
+      case BlockchainType.etherlink:
         //verificationMethod = '$issuer#Recovery2020';
         verificationMethod =
             await didKitProvider.keyToVerificationMethod(didMethod, jwkKey);
@@ -141,6 +132,20 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'BinanceAssociatedAddress',
+            issuedBy: const Author('My wallet'),
+          ),
+        );
+
+      case BlockchainType.etherlink:
+        associatedAddressCredential = EtherlinkAssociatedAddressCredential(
+          id: id,
+          issuer: issuer,
+          issuanceDate: issuanceDate,
+          credentialSubjectModel: EtherlinkAssociatedAddressModel(
+            id: did,
+            accountName: cryptoAccountData.name,
+            associatedAddress: cryptoAccountData.walletAddress,
+            type: 'EtherlinkAssociatedAddress',
             issuedBy: const Author('My wallet'),
           ),
         );

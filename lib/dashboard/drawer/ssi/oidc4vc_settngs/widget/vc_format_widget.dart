@@ -14,7 +14,7 @@ class VCFormatWidget extends StatelessWidget {
       builder: (context, state) {
         return OptionContainer(
           title: 'VC Format"',
-          subtitle: 'Default: ldp_vc\nSelect one of the VC formats.',
+          subtitle: 'Select one of the VC formats. Default: ldp_vc.',
           body: ListView.builder(
             itemCount: VCFormatType.values.length,
             shrinkWrap: true,

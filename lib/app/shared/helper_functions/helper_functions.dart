@@ -141,6 +141,8 @@ BlockchainType getBlockchainType(AccountType accountType) {
       return BlockchainType.polygon;
     case AccountType.binance:
       return BlockchainType.binance;
+    case AccountType.etherlink:
+      return BlockchainType.etherlink;
   }
 }
 
@@ -2178,19 +2180,42 @@ Future<Map<String, dynamic>?> checkVerifierAttestation({
   return cnf['jwk'] as Map<String, dynamic>;
 }
 
-String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
+/// walletaddress and blockchain type
+(String?, BlockchainType?) getWalletAddress(
+  CredentialSubjectModel credentialSubjectModel,
+) {
   if (credentialSubjectModel is TezosAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.tezos,
+    );
   } else if (credentialSubjectModel is EthereumAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.ethereum,
+    );
   } else if (credentialSubjectModel is PolygonAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.polygon,
+    );
   } else if (credentialSubjectModel is BinanceAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.binance,
+    );
   } else if (credentialSubjectModel is FantomAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.fantom,
+    );
+  } else if (credentialSubjectModel is EtherlinkAssociatedAddressModel) {
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.etherlink,
+    );
   }
-  return null;
+  return (null, null);
 }
 
 Future<String> fetchRpcUrl({
@@ -2200,7 +2225,8 @@ Future<String> fetchRpcUrl({
   String rpcUrl = '';
 
   if (blockchainNetwork is BinanceNetwork ||
-      blockchainNetwork is FantomNetwork) {
+      blockchainNetwork is FantomNetwork ||
+      blockchainNetwork is EtherlinkNetwork) {
     rpcUrl = blockchainNetwork.rpcNodeUrl as String;
   } else {
     if (blockchainNetwork.networkname == 'Mainnet') {
@@ -2222,4 +2248,22 @@ Future<String> fetchRpcUrl({
   }
 
   return rpcUrl;
+}
+
+String getDidMethod(BlockchainType blockchainType) {
+  late String didMethod;
+
+  switch (blockchainType) {
+    case BlockchainType.tezos:
+      didMethod = AltMeStrings.cryptoTezosDIDMethod;
+
+    case BlockchainType.ethereum:
+    case BlockchainType.fantom:
+    case BlockchainType.polygon:
+    case BlockchainType.binance:
+    case BlockchainType.etherlink:
+      didMethod = AltMeStrings.cryptoEVMDIDMethod;
+  }
+
+  return didMethod;
 }

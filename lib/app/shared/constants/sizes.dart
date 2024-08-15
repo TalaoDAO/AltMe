@@ -43,6 +43,7 @@ abstract class Sizes {
 
   //TextField height
   static const double appBarHeight = 89;
+  static const double defaltAppBarHeight = 56;
 
   //Button height
   static const double normalButton = 38;

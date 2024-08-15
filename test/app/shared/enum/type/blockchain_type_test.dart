@@ -13,6 +13,7 @@ void main() {
       expect(BlockchainType.fantom.icon, equals(IconStrings.fantom));
       expect(BlockchainType.polygon.icon, equals(IconStrings.polygon));
       expect(BlockchainType.binance.icon, equals(IconStrings.binance));
+      expect(BlockchainType.etherlink.icon, equals(IconStrings.etherlink));
     });
 
     test('BlockchainType accountType returns correct value', () {
@@ -21,6 +22,10 @@ void main() {
       expect(BlockchainType.fantom.accountType, equals(AccountType.fantom));
       expect(BlockchainType.polygon.accountType, equals(AccountType.polygon));
       expect(BlockchainType.binance.accountType, equals(AccountType.binance));
+      expect(
+        BlockchainType.etherlink.accountType,
+        equals(AccountType.etherlink),
+      );
     });
 
     test('BlockchainType symbol returns correct value', () {
@@ -29,6 +34,7 @@ void main() {
       expect(BlockchainType.fantom.symbol, equals('FTM'));
       expect(BlockchainType.polygon.symbol, equals('MATIC'));
       expect(BlockchainType.binance.symbol, equals('BNB'));
+      expect(BlockchainType.etherlink.symbol, equals('XTZ'));
     });
 
     test('BlockchainType chain returns correct value', () {
@@ -49,6 +55,10 @@ void main() {
         BlockchainType.binance.chain,
         equals('${Parameters.NAMESPACE}:56'),
       );
+      expect(
+        BlockchainType.etherlink.chain,
+        equals('${Parameters.NAMESPACE}:42793'),
+      );
     });
 
     test('BlockchainType chainId returns correct value', () {
@@ -60,6 +70,7 @@ void main() {
       expect(BlockchainType.fantom.chainId, equals(250));
       expect(BlockchainType.polygon.chainId, equals(137));
       expect(BlockchainType.binance.chainId, equals(56));
+      expect(BlockchainType.etherlink.chainId, equals(42793));
     });
 
     test('BlockchainType derivePathIndexKey returns correct value', () {
@@ -82,6 +93,10 @@ void main() {
       expect(
         BlockchainType.binance.derivePathIndexKey,
         equals(SecureStorageKeys.binanceDerivePathIndex),
+      );
+      expect(
+        BlockchainType.etherlink.derivePathIndexKey,
+        equals(SecureStorageKeys.etherlinkDerivePathIndex),
       );
     });
 
@@ -136,6 +151,16 @@ void main() {
           ),
         ),
       );
+      expect(
+        jsonEncode(BlockchainType.etherlink.credentialManifest),
+        equals(
+          jsonEncode(
+            CredentialManifest.fromJson(
+              ConstantsJson.etherlinkAssociatedAddressCredentialManifestJson,
+            ),
+          ),
+        ),
+      );
     });
 
     test('BlockchainType filter returns correct value', () {
@@ -182,6 +207,15 @@ void main() {
           ),
         ),
       );
+      expect(
+        jsonEncode(BlockchainType.etherlink.filter.toJson()),
+        equals(
+          jsonEncode(
+            Filter(type: 'String', pattern: 'EtherlinkAssociatedAddress')
+                .toJson(),
+          ),
+        ),
+      );
     });
 
     test('BlockchainType connectionBridge returns correct value', () {
@@ -203,6 +237,10 @@ void main() {
       );
       expect(
         BlockchainType.binance.connectionBridge,
+        equals(ConnectionBridgeType.walletconnect),
+      );
+      expect(
+        BlockchainType.etherlink.connectionBridge,
         equals(ConnectionBridgeType.walletconnect),
       );
     });
@@ -228,6 +266,10 @@ void main() {
         BlockchainType.binance.networks,
         equals([BinanceNetwork.mainNet(), BinanceNetwork.testNet()]),
       );
+      expect(
+        BlockchainType.etherlink.networks,
+        equals([EtherlinkNetwork.mainNet(), EtherlinkNetwork.testNet()]),
+      );
     });
 
     test('BlockchainType isDisabled returns correct value', () {
@@ -236,6 +278,7 @@ void main() {
       expect(BlockchainType.fantom.isDisabled, isFalse);
       expect(BlockchainType.polygon.isDisabled, isFalse);
       expect(BlockchainType.binance.isDisabled, isFalse);
+      expect(BlockchainType.etherlink.isDisabled, isFalse);
     });
   });
 }

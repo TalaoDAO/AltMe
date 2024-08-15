@@ -49,7 +49,7 @@ class AboutAltmeView extends StatelessWidget {
               const DrawerLogo(),
               const AppVersionDrawer(),
               if (profileModel.profileType == ProfileType.enterprise) ...[
-                const SizedBox(height: Sizes.spaceLarge),
+                const SizedBox(height: Sizes.spaceXSmall),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: Sizes.spaceXSmall,
@@ -62,17 +62,15 @@ class AboutAltmeView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: Sizes.spaceXSmall),
-                EnterpriseData(
-                  title: l10n.profileName,
-                  value: profileSetting.generalOptions.profileName,
+                DrawerItem(
+                  title: '${l10n.profileName} :'
+                      ' ${profileSetting.generalOptions.profileName}',
+                  trailing: Container(),
                 ),
-                // EnterpriseData(
-                //   title: l10n.companyName,
-                //   value: profileSetting.generalOptions.companyName,
-                // ),
-                EnterpriseData(
-                  title: l10n.configFileIdentifier,
-                  value: profileSetting.generalOptions.profileId,
+                DrawerItem(
+                  title: '${l10n.configFileIdentifier} :'
+                      ' ${profileSetting.generalOptions.profileId}',
+                  trailing: Container(),
                 ),
                 const SizedBox(height: Sizes.spaceSmall),
                 Padding(
@@ -97,7 +95,7 @@ class AboutAltmeView extends StatelessWidget {
                   }
                   return DrawerItem(
                     title: '${l10n.yourAppVersion} : $appVersion',
-                    trailing: const Center(),
+                    trailing: Container(),
                   );
                 },
               ),
@@ -106,11 +104,11 @@ class AboutAltmeView extends StatelessWidget {
                 onTap: () =>
                     Navigator.of(context).push<void>(TermsPage.route()),
               ),
-              DrawerItem(
-                title: l10n.softwareLicenses,
-                onTap: () => Navigator.of(context)
-                    .push<void>(SoftwareLicensePage.route()),
-              ),
+              // DrawerItem(
+              //   title: l10n.softwareLicenses,
+              //   onTap: () => Navigator.of(context)
+              //       .push<void>(SoftwareLicensePage.route()),
+              // ),
             ],
           ),
         );

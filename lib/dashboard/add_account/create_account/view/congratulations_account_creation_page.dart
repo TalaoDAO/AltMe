@@ -90,6 +90,9 @@ class _CongratulationsAccountCreationViewState
 
       case AccountType.binance:
         message = l10n.binanceAccountCreationCongratulations;
+
+      case AccountType.etherlink:
+        message = l10n.etherlinkAccountCreationCongratulations;
     }
 
     return Stack(
@@ -119,9 +122,11 @@ class _CongratulationsAccountCreationViewState
                 const SizedBox(
                   height: Sizes.spaceNormal,
                 ),
-                Text(message,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineSmall,),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
                 const SizedBox(
                   height: Sizes.space3XLarge,
                 ),

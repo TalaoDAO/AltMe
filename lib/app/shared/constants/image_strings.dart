@@ -72,6 +72,8 @@ class ImageStrings {
       '$imagePath/binance-ownership-card.png';
   static const String ethereumOwnershipCard =
       '$imagePath/ethereum-ownership-card.png';
+  static const String etherlinkOwnershipCard =
+      '$imagePath/etherlink-ownership-card.png';
   static const String fantomOwnershipCard =
       '$imagePath/fantom-ownership-card.png';
   static const String polygonOwnershipCard =

@@ -12,7 +12,7 @@ class PushAuthorizationRequesWidget extends StatelessWidget {
         return OptionContainer(
           title: 'Push Authorization Request (PAR)',
           subtitle:
-              'Default: false\nEnable to secure the authorization code flow',
+              'Enable to secure the authorization code flow. Default: false.',
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(

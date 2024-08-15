@@ -3,7 +3,14 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:key_generator/key_generator.dart';
 
-enum BlockchainType { tezos, ethereum, fantom, polygon, binance }
+enum BlockchainType {
+  tezos,
+  ethereum,
+  fantom,
+  polygon,
+  binance,
+  etherlink,
+}
 
 extension BlockchainTypeX on BlockchainType {
   String get icon {
@@ -22,6 +29,9 @@ extension BlockchainTypeX on BlockchainType {
 
       case BlockchainType.binance:
         return IconStrings.binance;
+
+      case BlockchainType.etherlink:
+        return IconStrings.etherlink;
     }
   }
 
@@ -41,6 +51,9 @@ extension BlockchainTypeX on BlockchainType {
 
       case BlockchainType.binance:
         return AccountType.binance;
+
+      case BlockchainType.etherlink:
+        return AccountType.etherlink;
     }
   }
 
@@ -60,6 +73,9 @@ extension BlockchainTypeX on BlockchainType {
 
       case BlockchainType.binance:
         return 'BNB';
+
+      case BlockchainType.etherlink:
+        return 'XTZ';
     }
   }
 
@@ -85,6 +101,9 @@ extension BlockchainTypeX on BlockchainType {
 
       case BlockchainType.binance:
         name = '56';
+
+      case BlockchainType.etherlink:
+        name = '42793';
     }
 
     return '${Parameters.NAMESPACE}:$name';
@@ -111,6 +130,9 @@ extension BlockchainTypeX on BlockchainType {
 
       case BlockchainType.binance:
         return 56;
+
+      case BlockchainType.etherlink:
+        return 42793;
     }
   }
 
@@ -130,6 +152,9 @@ extension BlockchainTypeX on BlockchainType {
 
       case BlockchainType.binance:
         return SecureStorageKeys.binanceDerivePathIndex;
+
+      case BlockchainType.etherlink:
+        return SecureStorageKeys.etherlinkDerivePathIndex;
     }
   }
 
@@ -155,6 +180,10 @@ extension BlockchainTypeX on BlockchainType {
         return CredentialManifest.fromJson(
           ConstantsJson.binanceAssociatedAddressCredentialManifestJson,
         );
+      case BlockchainType.etherlink:
+        return CredentialManifest.fromJson(
+          ConstantsJson.etherlinkAssociatedAddressCredentialManifestJson,
+        );
     }
   }
 
@@ -174,6 +203,9 @@ extension BlockchainTypeX on BlockchainType {
 
       case BlockchainType.binance:
         return Filter(type: 'String', pattern: 'BinanceAssociatedAddress');
+
+      case BlockchainType.etherlink:
+        return Filter(type: 'String', pattern: 'EtherlinkAssociatedAddress');
     }
   }
 
@@ -186,6 +218,7 @@ extension BlockchainTypeX on BlockchainType {
       case BlockchainType.fantom:
       case BlockchainType.polygon:
       case BlockchainType.binance:
+      case BlockchainType.etherlink:
         return ConnectionBridgeType.walletconnect;
     }
   }
@@ -218,20 +251,22 @@ extension BlockchainTypeX on BlockchainType {
           BinanceNetwork.mainNet(),
           BinanceNetwork.testNet(),
         ];
+      case BlockchainType.etherlink:
+        return [
+          EtherlinkNetwork.mainNet(),
+          EtherlinkNetwork.testNet(),
+        ];
     }
   }
 
   bool get isDisabled {
     switch (this) {
       case BlockchainType.tezos:
-        return false;
       case BlockchainType.ethereum:
-        return false;
       case BlockchainType.fantom:
-        return false;
       case BlockchainType.polygon:
-        return false;
       case BlockchainType.binance:
+      case BlockchainType.etherlink:
         return false;
     }
   }
@@ -255,6 +290,8 @@ extension BlockchainTypeX on BlockchainType {
         if (blockchainOptions?.polygonSupport ?? false) return true;
       case BlockchainType.binance:
         if (blockchainOptions?.bnbSupport ?? false) return true;
+      case BlockchainType.etherlink:
+        if (blockchainOptions?.etherlinkSupport ?? false) return true;
     }
 
     return false;

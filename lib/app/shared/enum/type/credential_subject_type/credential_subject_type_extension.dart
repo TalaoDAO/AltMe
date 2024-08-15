@@ -72,6 +72,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.fantomAssociatedWallet:
       case CredentialSubjectType.polygonAssociatedWallet:
       case CredentialSubjectType.binanceAssociatedWallet:
+      case CredentialSubjectType.etherlinkAssociatedWallet:
       case CredentialSubjectType.ethereumPooAddress:
       case CredentialSubjectType.fantomPooAddress:
       case CredentialSubjectType.polygonPooAddress:
@@ -121,6 +122,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'PolygonAssociatedAddress';
       case CredentialSubjectType.binanceAssociatedWallet:
         return 'BinanceAssociatedAddress';
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+        return 'EtherlinkAssociatedAddress';
       case CredentialSubjectType.ethereumPooAddress:
         return 'EthereumPooAddress';
       case CredentialSubjectType.fantomPooAddress:
@@ -244,6 +247,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return PolygonAssociatedAddressModel.fromJson(json);
       case CredentialSubjectType.binanceAssociatedWallet:
         return BinanceAssociatedAddressModel.fromJson(json);
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+        return EtherlinkAssociatedAddressModel.fromJson(json);
       case CredentialSubjectType.certificateOfEmployment:
         return CertificateOfEmploymentModel.fromJson(json);
       case CredentialSubjectType.emailPass:
@@ -432,7 +437,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.ethereumAssociatedWallet ||
         this == CredentialSubjectType.binanceAssociatedWallet ||
         this == CredentialSubjectType.fantomAssociatedWallet ||
-        this == CredentialSubjectType.polygonAssociatedWallet) {
+        this == CredentialSubjectType.polygonAssociatedWallet ||
+        this == CredentialSubjectType.etherlinkAssociatedWallet) {
       return true;
     }
     return false;
@@ -449,6 +455,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       return const BinanceAssociatedAddressWidget();
     } else if (this == CredentialSubjectType.fantomAssociatedWallet) {
       return const FantomAssociatedAddressWidget();
+    } else if (this == CredentialSubjectType.etherlinkAssociatedWallet) {
+      return const EtherlinkAssociatedAddressWidget();
     }
     return null;
   }
@@ -483,6 +491,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Polygon Associated Address';
       case CredentialSubjectType.binanceAssociatedWallet:
         return 'BNB Chain Associated Address';
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+        return 'Etherlink Associated Address';
       case CredentialSubjectType.ethereumPooAddress:
         return 'Ethereum Poo Address';
       case CredentialSubjectType.fantomPooAddress:
@@ -604,6 +614,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.fantomAssociatedWallet:
       case CredentialSubjectType.polygonAssociatedWallet:
       case CredentialSubjectType.binanceAssociatedWallet:
+      case CredentialSubjectType.etherlinkAssociatedWallet:
         return true;
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.tezosPooAddress:
@@ -649,6 +660,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.polygonAssociatedWallet:
       case CredentialSubjectType.binanceAssociatedWallet:
       case CredentialSubjectType.tezosAssociatedWallet:
+      case CredentialSubjectType.etherlinkAssociatedWallet:
         return VCFormatType.values;
 
       case CredentialSubjectType.over13:
@@ -979,6 +991,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         image = ImageStrings.binanceOwnershipCard;
       case CredentialSubjectType.tezosAssociatedWallet:
         image = ImageStrings.tezosOwnershipCard;
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+        image = ImageStrings.etherlinkOwnershipCard;
 
       case CredentialSubjectType.employeeCredential:
         image = ImageStrings.dummyEmployeeCard;
@@ -1068,6 +1082,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 71;
       case CredentialSubjectType.binanceAssociatedWallet:
         return 70;
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+        return 72;
       case CredentialSubjectType.tezosPooAddress:
         return 0;
       case CredentialSubjectType.ethereumPooAddress:

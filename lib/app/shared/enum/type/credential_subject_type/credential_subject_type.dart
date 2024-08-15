@@ -22,6 +22,7 @@ enum CredentialSubjectType {
   diplomaCard,
   emailPass,
   ethereumAssociatedWallet,
+  etherlinkAssociatedWallet,
   ethereumPooAddress,
   euDiplomaCard,
   euVerifiableId,
