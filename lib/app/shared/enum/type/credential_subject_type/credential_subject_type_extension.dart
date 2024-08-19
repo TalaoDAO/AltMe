@@ -898,12 +898,18 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         howToGetIt = ResponseString.RESPONSE_STRING_tezVoucherHowToGetIt;
 
       case CredentialSubjectType.verifiableIdCard:
+        var type = 'verifiableid';
         image = ImageStrings.dummyVerifiableIdCard;
 
-        var type = 'verifiableid';
-
         if (vcFormatType == VCFormatType.vcSdJWT) {
-          type = 'identitycredential';
+          final discoverCardsOptions = profileSetting.discoverCardsOptions;
+          if (discoverCardsOptions != null &&
+              discoverCardsOptions.displayVerifiableIdSdJwt) {
+            type = 'pid';
+            image = ImageStrings.dummyPIDCard;
+          } else {
+            type = 'identitycredential';
+          }
         } else if (vcFormatType == VCFormatType.jwtVc) {
           type = 'individualverifiableattestation';
         }

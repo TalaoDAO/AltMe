@@ -124,6 +124,7 @@ class ImageStrings {
 
   static const String dummyVerifiableIdCard =
       '$imagePath/dummy_verifiable_id_card.png';
+  static const String dummyPIDCard = '$imagePath/dummy_pid_card.png';
 
   static const String dummyPhonePassCard =
       '$imagePath/dummy_phone_pass_card.png';
