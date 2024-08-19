@@ -136,7 +136,6 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
           return Container();
         }
       } else {
-
         /// keep going only if element is in the nested value of the parentKeyId
         /// either in the payload or the claims
 
@@ -305,7 +304,8 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                     showVertically: showVertically,
                   ),
                 ),
-                if (selectiveDisclosureState != null &&
+                if (!isDisabled &&
+                    selectiveDisclosureState != null &&
                     claims.isfromDisclosureOfJWT) ...[
                   const Spacer(),
                   Padding(
@@ -315,12 +315,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                           ? Icons.check_box
                           : Icons.check_box_outline_blank,
                       size: 25,
-                      color: isDisabled
-                          ? Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(0.3)
-                          : Theme.of(context).colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ],
