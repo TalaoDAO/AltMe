@@ -23,49 +23,52 @@ class WalletRevokedDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 25),
-          Text(
-            l10n.theWalletIsSuspended,
-            style: Theme.of(context)
-                .textTheme
-                .headlineMedium!
-                .copyWith(color: textColor),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          MyElevatedButton(
-            text: l10n.deleteMyWallet,
-            verticalSpacing: 14,
-            borderRadius: Sizes.smallRadius,
-            elevation: 0,
-            onPressed: () async {
-              Navigator.of(context).pop();
-              await resetWallet(context);
-            },
-          ),
-          TextButton(
-            onPressed: () {
-              if (isAndroid) {
-                SystemNavigator.pop();
-              } else {
-                Future.delayed(const Duration(milliseconds: 500), () {
-                  exit(0);
-                });
-              }
-            },
-            child: Text(
-              l10n.close.toUpperCase(),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.shortestSide * 0.8,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 25),
+            Text(
+              l10n.theWalletIsSuspended,
               style: Theme.of(context)
                   .textTheme
-                  .bodyLarge!
+                  .headlineMedium!
                   .copyWith(color: textColor),
               textAlign: TextAlign.center,
             ),
-          ),
-        ],
+            const SizedBox(height: 24),
+            MyElevatedButton(
+              text: l10n.deleteMyWallet,
+              verticalSpacing: 14,
+              borderRadius: Sizes.smallRadius,
+              elevation: 0,
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await resetWallet(context);
+              },
+            ),
+            TextButton(
+              onPressed: () {
+                if (isAndroid) {
+                  SystemNavigator.pop();
+                } else {
+                  Future.delayed(const Duration(milliseconds: 500), () {
+                    exit(0);
+                  });
+                }
+              },
+              child: Text(
+                l10n.close.toUpperCase(),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(color: textColor),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

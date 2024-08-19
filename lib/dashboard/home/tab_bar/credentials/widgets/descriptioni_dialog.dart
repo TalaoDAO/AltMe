@@ -23,44 +23,47 @@ class DescriptionDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '${context.l10n.credentialManifestDescription}:',
-                style: Theme.of(context).textTheme.titleLarge,
-                textAlign: TextAlign.left,
-              ),
-              TransparentInkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                  height: 20,
-                  width: 20,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: colorScheme.surface,
-                  ),
-                  child: Icon(
-                    Icons.clear_rounded,
-                    size: 18,
-                    color: colorScheme.onPrimary,
+      content: SizedBox(
+        width: MediaQuery.of(context).size.shortestSide * 0.8,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${context.l10n.credentialManifestDescription}:',
+                  style: Theme.of(context).textTheme.titleLarge,
+                  textAlign: TextAlign.left,
+                ),
+                TransparentInkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    height: 20,
+                    width: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: colorScheme.surface,
+                    ),
+                    child: Icon(
+                      Icons.clear_rounded,
+                      size: 18,
+                      color: colorScheme.onPrimary,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 5),
-          Text(
-            text,
-            style: Theme.of(context).textTheme.bodySmall,
-            textAlign: TextAlign.left,
-          ),
-        ],
+              ],
+            ),
+            const SizedBox(height: 5),
+            Text(
+              text,
+              style: Theme.of(context).textTheme.bodySmall,
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -41,68 +41,71 @@ class ConfirmDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Image.asset(
-            icon,
-            width: 50,
-            height: 50,
-            color: icon == IconStrings.cardReceive ? textColor : null,
-            fit: BoxFit.fill,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            title,
-            style: Theme.of(context)
-                .textTheme
-                .headlineMedium!
-                .copyWith(color: textColor),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: Sizes.spaceSmall),
-          if (subtitle != null) ...[
+      content: SizedBox(
+        width: MediaQuery.of(context).size.shortestSide * 0.8,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              icon,
+              width: 50,
+              height: 50,
+              color: icon == IconStrings.cardReceive ? textColor : null,
+              fit: BoxFit.fill,
+            ),
+            const SizedBox(height: 10),
             Text(
-              subtitle!,
+              title,
               style: Theme.of(context)
                   .textTheme
-                  .titleLarge!
+                  .headlineMedium!
                   .copyWith(color: textColor),
               textAlign: TextAlign.center,
             ),
-          ],
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              if (showNoButton) ...[
+            const SizedBox(height: Sizes.spaceSmall),
+            if (subtitle != null) ...[
+              Text(
+                subtitle!,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(color: textColor),
+                textAlign: TextAlign.center,
+              ),
+            ],
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                if (showNoButton) ...[
+                  Expanded(
+                    child: MyOutlinedButton(
+                      text: no ?? l10n.no,
+                      verticalSpacing: 14,
+                      fontSize: 15,
+                      elevation: 0,
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                ],
                 Expanded(
-                  child: MyOutlinedButton(
-                    text: no ?? l10n.no,
+                  child: MyElevatedButton(
+                    text: yes ?? l10n.yes,
                     verticalSpacing: 14,
                     fontSize: 15,
                     elevation: 0,
                     onPressed: () {
-                      Navigator.of(context).pop(false);
+                      Navigator.of(context).pop(true);
                     },
                   ),
                 ),
-                const SizedBox(width: 16),
               ],
-              Expanded(
-                child: MyElevatedButton(
-                  text: yes ?? l10n.yes,
-                  verticalSpacing: 14,
-                  fontSize: 15,
-                  elevation: 0,
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

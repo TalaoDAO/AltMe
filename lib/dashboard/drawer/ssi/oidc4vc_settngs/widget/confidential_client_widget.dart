@@ -50,54 +50,59 @@ class ConfidentialClientWidget extends StatelessWidget {
                               Radius.circular(25),
                             ),
                           ),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Image.asset(
-                                IconStrings.cardReceive,
-                                width: 50,
-                                height: 50,
-                                color: textColor,
-                              ),
-                              const SizedBox(
-                                height: Sizes.spaceNormal,
-                              ),
-                              TextFormField(
-                                controller: clientIdController,
-                                style: Theme.of(context).textTheme.labelMedium,
-                                maxLines: 1,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(
-                                        Sizes.smallRadius,
+                          content: SizedBox(
+                            width:
+                                MediaQuery.of(context).size.shortestSide * 0.8,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Image.asset(
+                                  IconStrings.cardReceive,
+                                  width: 50,
+                                  height: 50,
+                                  color: textColor,
+                                ),
+                                const SizedBox(
+                                  height: Sizes.spaceNormal,
+                                ),
+                                TextFormField(
+                                  controller: clientIdController,
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
+                                  maxLines: 1,
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(
+                                          Sizes.smallRadius,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: 5,
-                                    horizontal: 10,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      vertical: 5,
+                                      horizontal: 10,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: Sizes.spaceNormal,
-                              ),
-                              MyElevatedButton(
-                                text: 'Confirm',
-                                verticalSpacing: 14,
-                                backgroundColor: color,
-                                borderRadius: Sizes.smallRadius,
-                                fontSize: 15,
-                                elevation: 0,
-                                onPressed: () {
-                                  Navigator.of(context).pop(
-                                    clientIdController.text.trim(),
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: 15),
-                            ],
+                                const SizedBox(
+                                  height: Sizes.spaceNormal,
+                                ),
+                                MyElevatedButton(
+                                  text: 'Confirm',
+                                  verticalSpacing: 14,
+                                  backgroundColor: color,
+                                  borderRadius: Sizes.smallRadius,
+                                  fontSize: 15,
+                                  elevation: 0,
+                                  onPressed: () {
+                                    Navigator.of(context).pop(
+                                      clientIdController.text.trim(),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(height: 15),
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -160,54 +165,59 @@ class ConfidentialClientWidget extends StatelessWidget {
                               Radius.circular(25),
                             ),
                           ),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Image.asset(
-                                IconStrings.cardReceive,
-                                width: 50,
-                                height: 50,
-                                color: textColor,
-                              ),
-                              const SizedBox(
-                                height: Sizes.spaceNormal,
-                              ),
-                              TextFormField(
-                                controller: clientSecretController,
-                                style: Theme.of(context).textTheme.labelMedium,
-                                maxLines: 1,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(
-                                        Sizes.smallRadius,
+                          content: SizedBox(
+                            width:
+                                MediaQuery.of(context).size.shortestSide * 0.8,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Image.asset(
+                                  IconStrings.cardReceive,
+                                  width: 50,
+                                  height: 50,
+                                  color: textColor,
+                                ),
+                                const SizedBox(
+                                  height: Sizes.spaceNormal,
+                                ),
+                                TextFormField(
+                                  controller: clientSecretController,
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
+                                  maxLines: 1,
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(
+                                          Sizes.smallRadius,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: 5,
-                                    horizontal: 10,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      vertical: 5,
+                                      horizontal: 10,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: Sizes.spaceNormal,
-                              ),
-                              MyElevatedButton(
-                                text: 'Confirm',
-                                verticalSpacing: 14,
-                                backgroundColor: color,
-                                borderRadius: Sizes.smallRadius,
-                                fontSize: 15,
-                                elevation: 0,
-                                onPressed: () {
-                                  Navigator.of(context).pop(
-                                    clientSecretController.text.trim(),
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: 15),
-                            ],
+                                const SizedBox(
+                                  height: Sizes.spaceNormal,
+                                ),
+                                MyElevatedButton(
+                                  text: 'Confirm',
+                                  verticalSpacing: 14,
+                                  backgroundColor: color,
+                                  borderRadius: Sizes.smallRadius,
+                                  fontSize: 15,
+                                  elevation: 0,
+                                  onPressed: () {
+                                    Navigator.of(context).pop(
+                                      clientSecretController.text.trim(),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(height: 15),
+                              ],
+                            ),
                           ),
                         );
                       },

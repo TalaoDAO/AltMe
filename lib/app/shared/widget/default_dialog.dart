@@ -28,37 +28,40 @@ class DefaultDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const DialogCloseButton(),
-            const SizedBox(height: Sizes.spaceSmall),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.headlineMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: Sizes.spaceSmall),
-            Text(
-              description,
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: Sizes.spaceSmall),
-            if (buttonLabel != null)
-              MyElevatedButton(
-                text: buttonLabel!,
-                verticalSpacing: 18,
-                fontSize: 18,
-                borderRadius: 20,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  onButtonClick?.call();
-                },
+      content: SizedBox(
+        width: MediaQuery.of(context).size.shortestSide * 0.8,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const DialogCloseButton(),
+              const SizedBox(height: Sizes.spaceSmall),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.headlineMedium,
+                textAlign: TextAlign.center,
               ),
-          ],
+              const SizedBox(height: Sizes.spaceSmall),
+              Text(
+                description,
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: Sizes.spaceSmall),
+              if (buttonLabel != null)
+                MyElevatedButton(
+                  text: buttonLabel!,
+                  verticalSpacing: 18,
+                  fontSize: 18,
+                  borderRadius: 20,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    onButtonClick?.call();
+                  },
+                ),
+            ],
+          ),
         ),
       ),
     );
