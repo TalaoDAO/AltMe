@@ -174,7 +174,6 @@ class TokensCubit extends Cubit<TokensState> {
     if (offset == 0) {
       final ethereumBaseToken = await _getBaseTokenBalanceOnEtherlink(
         walletAddress,
-        ethereumNetwork.chain,
         ethereumNetwork,
       );
 
@@ -182,6 +181,11 @@ class TokensCubit extends Cubit<TokensState> {
         newData.insert(0, ethereumBaseToken);
       }
       data = newData;
+
+      if (data.length < 5) {
+        final tokens = await _getEtherlinkTokens(ethereumNetwork);
+        data.addAll(tokens);
+      }
     } else {
       data.addAll(newData);
     }
@@ -512,7 +516,6 @@ class TokensCubit extends Cubit<TokensState> {
 
   Future<TokenModel?> _getBaseTokenBalanceOnEtherlink(
     String walletAddress,
-    String chain,
     EthereumNetwork ethereumNetwork,
   ) async {
     try {
@@ -536,6 +539,45 @@ class TokensCubit extends Cubit<TokensState> {
     } catch (e, s) {
       getLogger(toString()).e('error: $e, stack: $s');
       return null;
+    }
+  }
+
+  Future<List<TokenModel>> _getEtherlinkTokens(
+    EthereumNetwork ethereumNetwork,
+  ) async {
+    try {
+      final response = await client.get(
+        '${ethereumNetwork.apiUrl}/v2/tokens?type=ERC-20',
+        headers: <String, dynamic>{'Content-Type': 'application/json'},
+      ) as Map<String, dynamic>;
+
+      final items = response['items'] as List<dynamic>;
+      final tokens = <TokenModel>[];
+
+      for (int i = 0; i < items.length; i++) {
+        if (i == 5) break;
+        final token = items[i];
+
+        if (token is Map<String, dynamic>) {
+          tokens.add(
+            TokenModel(
+              contractAddress: '',
+              name: token['name'].toString(),
+              symbol: token['symbol'].toString(),
+              icon: token['icon_url'].toString(),
+              balance: '0',
+              decimals: token['decimals'].toString(),
+              standard: 'ERC20',
+              decimalsToShow: 5,
+            ),
+          );
+        }
+      }
+
+      return tokens;
+    } catch (e, s) {
+      getLogger(toString()).e('error: $e, stack: $s');
+      return [];
     }
   }
 

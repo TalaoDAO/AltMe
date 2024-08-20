@@ -22,9 +22,9 @@ class TokenItem extends StatelessWidget {
         child: ListTile(
           contentPadding: EdgeInsets.zero,
           minVerticalPadding: 0,
-          leading: token.iconUrl == null
-              ? const CircleAvatar(
-                  backgroundColor: Colors.transparent,
+          leading: token.iconUrl == null || token.iconUrl == 'null'
+              ? CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
                 )
               : CachedImageFromNetwork(
                   token.iconUrl!,
