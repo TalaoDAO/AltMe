@@ -5,7 +5,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:flutter/material.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:matrix/matrix.dart';
 
 class MxcImage extends StatefulWidget {

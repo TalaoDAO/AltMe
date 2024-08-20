@@ -533,7 +533,6 @@ class TokensCubit extends Cubit<TokensState> {
         standard: 'ERC20',
         decimalsToShow: 5,
       );
-      ;
     } catch (e, s) {
       getLogger(toString()).e('error: $e, stack: $s');
       return null;
