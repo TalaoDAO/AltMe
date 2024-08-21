@@ -174,7 +174,7 @@ class TokensCubit extends Cubit<TokensState> {
     if (offset == 0) {
       final ethereumBaseToken = await _getBaseTokenBalanceOnEtherlink(
         walletAddress,
-        ethereumNetwork.chain,
+
         ethereumNetwork,
       );
 
@@ -182,6 +182,13 @@ class TokensCubit extends Cubit<TokensState> {
         newData.insert(0, ethereumBaseToken);
       }
       data = newData;
+
+
+      if (data.length == 1) {
+        final emptyTokens = await getSomeEmptyCoins(ethereumNetwork.type);
+        data.addAll(emptyTokens);
+      }
+
     } else {
       data.addAll(newData);
     }
@@ -259,6 +266,11 @@ class TokensCubit extends Cubit<TokensState> {
         newData.insert(0, ethereumBaseToken);
       }
       data = newData;
+
+      if (data.length == 1) {
+        final emptyTokens = await getSomeEmptyCoins(ethereumNetwork.type);
+        data.addAll(emptyTokens);
+      }
     } else {
       data.addAll(newData);
     }
@@ -344,6 +356,8 @@ class TokensCubit extends Cubit<TokensState> {
       final tezosToken = await _getXtzBalance(walletAddress);
       newData.insert(0, tezosToken);
       data = newData;
+
+      // empty coins handled in different way
     } else {
       data.addAll(newData);
     }
@@ -400,6 +414,7 @@ class TokensCubit extends Cubit<TokensState> {
     } else {
       data = _updateToSelectedTezosTokens(data);
     }
+
     emit(
       state.copyWith(
         status: AppStatus.success,
@@ -512,7 +527,7 @@ class TokensCubit extends Cubit<TokensState> {
 
   Future<TokenModel?> _getBaseTokenBalanceOnEtherlink(
     String walletAddress,
-    String chain,
+
     EthereumNetwork ethereumNetwork,
   ) async {
     try {
@@ -533,7 +548,7 @@ class TokensCubit extends Cubit<TokensState> {
         standard: 'ERC20',
         decimalsToShow: 5,
       );
-      ;
+
     } catch (e, s) {
       getLogger(toString()).e('error: $e, stack: $s');
       return null;
@@ -571,6 +586,60 @@ class TokensCubit extends Cubit<TokensState> {
     } catch (e, s) {
       getLogger(toString()).e('error: $e, stack: $s');
       return null;
+    }
+  }
+
+  Future<List<TokenModel>> getSomeEmptyCoins(
+    BlockchainType blockchaintype,
+  ) async {
+    try {
+      emit(state.copyWith(status: AppStatus.loading));
+      await dotenv.load();
+      final apiKey = dotenv.get('COIN_GECKO_API_KEY');
+
+      final dynamic result = await client.get(
+        '${Urls.coinGeckoBase}coins/markets',
+        queryParameters: {
+          'vs_currency': 'usd',
+          'category': blockchaintype.category,
+          'order': 'market_cap_desc',
+          'per_page': 10,
+          'page': 1,
+          'sparkline': false,
+          'locale': 'en',
+          'x_cg_pro_api_key': apiKey,
+        },
+      );
+      final contracts = (result as List<dynamic>)
+          .map(
+            (dynamic e) => ContractModel.fromJson(e as Map<String, dynamic>),
+          )
+          .toList();
+
+      final tokens = <TokenModel>[];
+      for (int i = 0; i < contracts.length; i++) {
+        if (i == 10) break;
+        final token = contracts[i];
+
+        if (token.symbol.toUpperCase() == blockchaintype.symbol) continue;
+
+        tokens.add(
+          TokenModel(
+            name: token.name.toString(),
+            symbol: token.symbol,
+            icon: token.image,
+            balance: '0',
+            contractAddress: '',
+            decimals: '18',
+          ),
+        );
+      }
+
+      return tokens;
+    } catch (e, s) {
+      getLogger(runtimeType.toString())
+          .e('error in getAllContracts(), e: $e, s:$s');
+      return [];
     }
   }
 

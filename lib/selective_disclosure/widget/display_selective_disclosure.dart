@@ -136,7 +136,6 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
           return Container();
         }
       } else {
-
         /// keep going only if element is in the nested value of the parentKeyId
         /// either in the payload or the claims
 
@@ -153,6 +152,10 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
           if (claimList is List) {
             if (claimList.contains(digest)) displayElement = true;
           }
+          // nestedValue.remove('_sd');
+          // if (nestedValue.isNotEmpty) {
+          //   displayElement = true;
+          // }
         }
         if (!displayElement) return Container();
       }
@@ -170,38 +173,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
       final element = value.entries.first;
       if (!currentClaims.containsKey(element.key)) {
         if (element.value is Map) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Text(
-                  element.key.toString(),
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: DisplaySelectiveDisclosure(
-                  credentialModel: credentialModel,
-                  claims: const {},
-                  showVertically: showVertically,
-                  selectiveDisclosureState: selectiveDisclosureState,
-                  parentKeyId: element.key.toString(),
-                  onPressed: (nestedKey, _, threeDotValue) {
-                    onPressed?.call(
-                      nestedKey,
-                      '${element.key}-$nestedKey',
-                      threeDotValue,
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
+          return WidgetForNestedClaimWithoutDisplay(element, context);
         }
 
         final toto = displayClaimData(
@@ -214,6 +186,70 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
         return Container();
       }
     });
+  }
+
+  Widget WidgetForNestedClaimWithoutDisplay(
+    dynamic element,
+    BuildContext context,
+  ) {
+    final value = element.value as Map<String, dynamic>;
+    late Widget nestedChild;
+    value.remove('_sd');
+    if (value.isEmpty) {
+      nestedChild = DisplaySelectiveDisclosure(
+        credentialModel: credentialModel,
+        claims: const {},
+        showVertically: showVertically,
+        selectiveDisclosureState: selectiveDisclosureState,
+        parentKeyId: element.key.toString(),
+        onPressed: (nestedKey, _, threeDotValue) {
+          onPressed?.call(
+            nestedKey,
+            '${element.key}-$nestedKey',
+            threeDotValue,
+          );
+        },
+      );
+    } else {
+      final limitDisclosure = selectiveDisclosureState?.limitDisclosure;
+
+      final isCompulsary =
+          limitDisclosure != null && limitDisclosure == 'required';
+
+      final bool isDisabled = isCompulsary;
+
+      nestedChild = TransparentInkWell(
+        onTap: () {
+          if (isDisabled || isCompulsary) {
+            return;
+          }
+
+          onPressed?.call(element.key.toString(), element.key.toString(),
+              element.value.toString());
+        },
+        child: DisplayNestedMap(value, context),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Text(
+            element.key.toString(),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: nestedChild,
+        ),
+      ],
+    );
   }
 
   Widget displayClaimData(String mapKey, String? title, BuildContext context) {
@@ -305,7 +341,8 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                     showVertically: showVertically,
                   ),
                 ),
-                if (selectiveDisclosureState != null &&
+                if (!isDisabled &&
+                    selectiveDisclosureState != null &&
                     claims.isfromDisclosureOfJWT) ...[
                   const Spacer(),
                   Padding(
@@ -315,12 +352,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
                           ? Icons.check_box
                           : Icons.check_box_outline_blank,
                       size: 25,
-                      color: isDisabled
-                          ? Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(0.3)
-                          : Theme.of(context).colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ],
@@ -368,18 +400,58 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
   }
 
   bool isNestedInpayload(List<String> contents, String digest) {
-    final payload = SelectiveDisclosure(credentialModel).payload;
-    final JsonPath dataPath = JsonPath(
+    final payloadSd = SelectiveDisclosure(credentialModel).payload;
+    final JsonPath dataPathSd = JsonPath(
       r'$..["_sd"]',
     );
-    final List<dynamic> list = [];
-    payload.remove('_sd');
-    dataPath.read(payload).forEach((element) {
+    final List<dynamic> listSd = [];
+    payloadSd.remove('_sd');
+    dataPathSd.read(payloadSd).forEach((element) {
       if (element.value is List) {
-        list.addAll(element.value! as List);
+        listSd.addAll(element.value! as List);
+      }
+    });
+    final payloadThreeDot = SelectiveDisclosure(credentialModel).payload;
+
+    final JsonPath dataPathThreeDot = JsonPath(
+      r'$..["..."]',
+    );
+    final List<dynamic> listThreeDot = [];
+    payloadThreeDot.remove('_sd');
+    dataPathThreeDot.read(payloadThreeDot).forEach((element) {
+      if (element.value is String) {
+        listThreeDot.add(element.value);
       }
     });
 
-    return list.contains(digest);
+    return listSd.contains(digest) || listThreeDot.contains(digest);
+  }
+}
+
+class DisplayNestedMap extends StatelessWidget {
+  const DisplayNestedMap(this.value, this.context);
+
+  final Map<String, dynamic> value;
+  final BuildContext context;
+
+  @override
+  Widget build(BuildContext context) {
+    final list = value.entries.map(
+      (MapEntry<String, dynamic> e) {
+        return CredentialField(
+          padding: const EdgeInsets.only(top: 10),
+          title: e.key,
+          value: e.value.toString(),
+          titleColor: Theme.of(context).colorScheme.onSurface,
+          valueColor: Theme.of(context).colorScheme.onSurface,
+          showVertically: true,
+        );
+      },
+    ).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: list,
+    );
   }
 }

@@ -49,65 +49,68 @@ class TransactionDoneDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: Sizes.spaceSmall),
-            Image.asset(
-              IconStrings.bigCheckCircle,
-              height: Sizes.icon4x,
-              width: Sizes.icon4x,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            const SizedBox(height: Sizes.spaceNormal),
-            Text(
-              '$amountAndSymbol ${l10n.sent.toLowerCase()}',
-              style: Theme.of(context).textTheme.headlineMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: Sizes.spaceSmall),
-            Text(
-              l10n.operationCompleted,
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
-            if (transactionHash != null) ...[
+      content: SizedBox(
+        width: MediaQuery.of(context).size.shortestSide * 0.8,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
               const SizedBox(height: Sizes.spaceSmall),
-              InkWell(
-                onTap: onTrasactionHashTap,
-                onLongPress: () async {
-                  await Clipboard.setData(
-                    ClipboardData(
-                      text: transactionHash!,
-                    ),
-                  );
-                  AlertMessage.showStateMessage(
-                    context: context,
-                    stateMessage: StateMessage.success(
-                      stringMessage: l10n.copiedToClipboard,
-                    ),
-                  );
-                },
-                child: Text(
-                  transactionHash!,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline,
+              Image.asset(
+                IconStrings.bigCheckCircle,
+                height: Sizes.icon4x,
+                width: Sizes.icon4x,
+                color: Theme.of(context).iconTheme.color,
+              ),
+              const SizedBox(height: Sizes.spaceNormal),
+              Text(
+                '$amountAndSymbol ${l10n.sent.toLowerCase()}',
+                style: Theme.of(context).textTheme.headlineMedium,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: Sizes.spaceSmall),
+              Text(
+                l10n.operationCompleted,
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+              if (transactionHash != null) ...[
+                const SizedBox(height: Sizes.spaceSmall),
+                InkWell(
+                  onTap: onTrasactionHashTap,
+                  onLongPress: () async {
+                    await Clipboard.setData(
+                      ClipboardData(
+                        text: transactionHash!,
                       ),
-                  textAlign: TextAlign.center,
+                    );
+                    AlertMessage.showStateMessage(
+                      context: context,
+                      stateMessage: StateMessage.success(
+                        stringMessage: l10n.copiedToClipboard,
+                      ),
+                    );
+                  },
+                  child: Text(
+                    transactionHash!,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
+              ],
+              const SizedBox(height: Sizes.spaceSmall),
+              MyElevatedButton(
+                text: l10n.done,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  onDoneButtonClick?.call();
+                },
               ),
             ],
-            const SizedBox(height: Sizes.spaceSmall),
-            MyElevatedButton(
-              text: l10n.done,
-              onPressed: () {
-                Navigator.of(context).pop();
-                onDoneButtonClick?.call();
-              },
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -160,21 +160,28 @@ class _SelectiveDisclosurePickViewState
             navigation: SafeArea(
               child: Container(
                 padding: const EdgeInsets.all(16),
-                child: Tooltip(
-                  message: l10n.credentialPickPresent,
-                  child: BlocBuilder<SelectiveDisclosureCubit,
-                      SelectiveDisclosureState>(
-                    builder: (context, state) {
-                      return MyElevatedButton(
-                        onPressed: () => present(
-                          context: context,
-                          selectedSDIndexInJWT: state.selectedSDIndexInJWT,
-                          uri: widget.uri,
-                        ),
-                        text: l10n.credentialPickPresent,
-                      );
-                    },
-                  ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BlocBuilder<SelectiveDisclosureCubit,
+                        SelectiveDisclosureState>(
+                      builder: (context, state) {
+                        return MyElevatedButton(
+                          onPressed: () => present(
+                            context: context,
+                            selectedSDIndexInJWT: state.selectedSDIndexInJWT,
+                            uri: widget.uri,
+                          ),
+                          text: l10n.credentialPickPresent,
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    MyOutlinedButton(
+                      text: l10n.cancel,
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
                 ),
               ),
             ),

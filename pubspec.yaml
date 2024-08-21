@@ -1,11 +1,14 @@
 name: altme
 description: AltMe Flutter App
-version: 2.10.8+490
+
+version: 2.10.10+492
+
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 environment:
   sdk: ">=3.1.0 <4.0.0"
 
 dependencies:
+  app_links: ^6.2.0
   asn1lib: ^1.5.2
   async: ^2.11.0
   auto_size_text: ^3.0.0
@@ -106,7 +109,6 @@ dependencies:
       url: https://github.com/autonomy-system/tezart.git
       ref: 7534512ff7c874251e5b1e1a426f5822a3837b51
   timezone: ^0.9.2
-  uni_links: ^0.5.1
   url_launcher: ^6.1.11
   visibility_detector: ^0.4.0+2
   walletconnect_flutter_v2: ^2.3.0

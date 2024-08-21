@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class MyElevatedButton extends StatelessWidget {
@@ -53,7 +54,6 @@ class MyElevatedButton extends StatelessWidget {
               ),
               onPressed: onPressed,
               child: Text(
-                maxLines: 1,
                 text.toUpperCase(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.bold,
@@ -78,8 +78,7 @@ class MyElevatedButton extends StatelessWidget {
                 onPressed: onPressed,
               ),
               onPressed: onPressed,
-              label: Text(
-                maxLines: 1,
+              label: MyText(
                 text.toUpperCase(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.bold,

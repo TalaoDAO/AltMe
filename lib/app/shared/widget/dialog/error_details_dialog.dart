@@ -34,53 +34,57 @@ class ErrorDetailsDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 25),
-            if (erroDescription != null) ...[
-              Text(
-                erroDescription!,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: textColor),
-                textAlign: TextAlign.center,
-              ),
-            ],
-            if (erroUrl != null) ...[
-              const SizedBox(height: Sizes.spaceXSmall),
-              TransparentInkWell(
-                onTap: () async {
-                  await LaunchUrl.launch(
-                    erroUrl!,
-                    launchMode: LaunchMode.inAppWebView,
-                  );
-                },
-                child: Text(
-                  l10n.moreDetails,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        decoration: TextDecoration.underline,
-                        decorationColor: Theme.of(context).colorScheme.primary,
-                      ),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.shortestSide * 0.8,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 25),
+              if (erroDescription != null) ...[
+                Text(
+                  erroDescription!,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: textColor),
                   textAlign: TextAlign.center,
                 ),
+              ],
+              if (erroUrl != null) ...[
+                const SizedBox(height: Sizes.spaceXSmall),
+                TransparentInkWell(
+                  onTap: () async {
+                    await LaunchUrl.launch(
+                      erroUrl!,
+                      launchMode: LaunchMode.inAppWebView,
+                    );
+                  },
+                  child: Text(
+                    l10n.moreDetails,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          decoration: TextDecoration.underline,
+                          decorationColor:
+                              Theme.of(context).colorScheme.primary,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+              const SizedBox(height: 24),
+              MyElevatedButton(
+                text: l10n.ok,
+                verticalSpacing: 14,
+                fontSize: 15,
+                elevation: 0,
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
               ),
+              const SizedBox(height: 15),
             ],
-            const SizedBox(height: 24),
-            MyElevatedButton(
-              text: l10n.ok,
-              verticalSpacing: 14,
-              fontSize: 15,
-              elevation: 0,
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-            ),
-            const SizedBox(height: 15),
-          ],
+          ),
         ),
       ),
     );
