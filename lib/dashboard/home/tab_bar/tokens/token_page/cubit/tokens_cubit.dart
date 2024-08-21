@@ -182,9 +182,9 @@ class TokensCubit extends Cubit<TokensState> {
       }
       data = newData;
 
-      if (data.length < 5) {
-        final tokens = await _getEtherlinkTokens(ethereumNetwork);
-        data.addAll(tokens);
+      if (data.length == 1) {
+        final emptyTokens = await getSomeEmptyCoins(ethereumNetwork.type);
+        data.addAll(emptyTokens);
       }
     } else {
       data.addAll(newData);
@@ -263,6 +263,11 @@ class TokensCubit extends Cubit<TokensState> {
         newData.insert(0, ethereumBaseToken);
       }
       data = newData;
+
+      if (data.length == 1) {
+        final emptyTokens = await getSomeEmptyCoins(ethereumNetwork.type);
+        data.addAll(emptyTokens);
+      }
     } else {
       data.addAll(newData);
     }
@@ -545,45 +550,6 @@ class TokensCubit extends Cubit<TokensState> {
     }
   }
 
-  Future<List<TokenModel>> _getEtherlinkTokens(
-    EthereumNetwork ethereumNetwork,
-  ) async {
-    try {
-      final response = await client.get(
-        '${ethereumNetwork.apiUrl}/v2/tokens?type=ERC-20',
-        headers: <String, dynamic>{'Content-Type': 'application/json'},
-      ) as Map<String, dynamic>;
-
-      final items = response['items'] as List<dynamic>;
-      final tokens = <TokenModel>[];
-
-      for (int i = 0; i < items.length; i++) {
-        if (i == 5) break;
-        final token = items[i];
-
-        if (token is Map<String, dynamic>) {
-          tokens.add(
-            TokenModel(
-              contractAddress: '',
-              name: token['name'].toString(),
-              symbol: token['symbol'].toString(),
-              icon: token['icon_url'].toString(),
-              balance: '0',
-              decimals: token['decimals'].toString(),
-              standard: 'ERC20',
-              decimalsToShow: 5,
-            ),
-          );
-        }
-      }
-
-      return tokens;
-    } catch (e, s) {
-      getLogger(toString()).e('error: $e, stack: $s');
-      return [];
-    }
-  }
-
   Future<TokenModel?> _getBaseTokenBalanceOnEthereum(
     String walletAddress,
     String chain,
@@ -615,6 +581,60 @@ class TokensCubit extends Cubit<TokensState> {
     } catch (e, s) {
       getLogger(toString()).e('error: $e, stack: $s');
       return null;
+    }
+  }
+
+  Future<List<TokenModel>> getSomeEmptyCoins(
+    BlockchainType blockchaintype,
+  ) async {
+    try {
+      emit(state.copyWith(status: AppStatus.loading));
+      await dotenv.load();
+      final apiKey = dotenv.get('COIN_GECKO_API_KEY');
+
+      final dynamic result = await client.get(
+        '${Urls.coinGeckoBase}coins/markets',
+        queryParameters: {
+          'vs_currency': 'usd',
+          'category': blockchaintype.category,
+          'order': 'market_cap_desc',
+          'per_page': 10,
+          'page': 1,
+          'sparkline': false,
+          'locale': 'en',
+          'x_cg_pro_api_key': apiKey,
+        },
+      );
+      final contracts = (result as List<dynamic>)
+          .map(
+            (dynamic e) => ContractModel.fromJson(e as Map<String, dynamic>),
+          )
+          .toList();
+
+      final tokens = <TokenModel>[];
+      for (int i = 0; i < contracts.length; i++) {
+        if (i == 10) break;
+        final token = contracts[i];
+
+        if (token.symbol.toUpperCase() == blockchaintype.symbol) continue;
+
+        tokens.add(
+          TokenModel(
+            name: token.name.toString(),
+            symbol: token.symbol,
+            icon: token.image,
+            balance: '0',
+            contractAddress: '',
+            decimals: '18',
+          ),
+        );
+      }
+
+      return tokens;
+    } catch (e, s) {
+      getLogger(runtimeType.toString())
+          .e('error in getAllContracts(), e: $e, s:$s');
+      return [];
     }
   }
 

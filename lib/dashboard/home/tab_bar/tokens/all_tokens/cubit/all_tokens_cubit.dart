@@ -133,7 +133,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
       );
 
       for (int i = 0; i < state.contracts.length; i++) {
-        if (i == 6) break;
+        if (i == 10) break;
         final token = state.contracts[i];
 
         if (token.symbol.toUpperCase() == 'XTZ') continue;
