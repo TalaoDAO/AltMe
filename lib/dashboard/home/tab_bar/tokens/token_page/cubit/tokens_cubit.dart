@@ -349,10 +349,7 @@ class TokensCubit extends Cubit<TokensState> {
       newData.insert(0, tezosToken);
       data = newData;
 
-      if (data.length < 5) {
-        final tokens = await _getTezosTokens();
-        data.addAll(tokens);
-      }
+      // empty coins handled in different way
     } else {
       data.addAll(newData);
     }
@@ -409,6 +406,7 @@ class TokensCubit extends Cubit<TokensState> {
     } else {
       data = _updateToSelectedTezosTokens(data);
     }
+
     emit(
       state.copyWith(
         status: AppStatus.success,
@@ -650,72 +648,6 @@ class TokensCubit extends Cubit<TokensState> {
     } catch (e, s) {
       getLogger(toString()).e('unable to get usd balance of XTZ, e: $e, s: $s');
       return token;
-    }
-  }
-
-  Future<List<TokenModel>> _getTezosTokens() async {
-    try {
-      final baseUrl = networkCubit.state.network.apiUrl;
-      final response = await client.get('$baseUrl/v1/tokens');
-
-      final items = response as List<dynamic>;
-      final tokens = <TokenModel>[];
-
-      final fa1Point2Tokens = items.where((element) {
-        if (element is Map<String, dynamic>) {
-          final isToken = element['standard'] == 'fa1.2';
-          if (!isToken) return false;
-
-          final metadata = element['metadata'];
-          final containsMetaData =
-              metadata != null && metadata is Map<String, dynamic>;
-          if (!containsMetaData) return false;
-
-          final name = metadata['name'];
-          final symbol = metadata['symbol'];
-
-          if (name == null || symbol == null) {
-            return false;
-          }
-
-          return true;
-        }
-        return false;
-      }).toList();
-
-      for (int i = 0; i < fa1Point2Tokens.length; i++) {
-        if (i == 5) break;
-        final token = fa1Point2Tokens[i];
-
-        if (token is Map<String, dynamic>) {
-          final metaData = token['metadata'] as Map<String, dynamic>;
-          final name = metaData['name'].toString();
-          final symbol = metaData['symbol'].toString();
-          final icon =
-              metaData.containsKey('icon') ? metaData['icon'].toString() : null;
-          final decimals = metaData.containsKey('decimals')
-              ? metaData['decimals'].toString()
-              : '18';
-
-          tokens.add(
-            TokenModel(
-              contractAddress: '',
-              name: name,
-              symbol: symbol,
-              icon: icon,
-              balance: '0',
-              decimals: decimals,
-              standard: 'ERC20',
-              decimalsToShow: 5,
-            ),
-          );
-        }
-      }
-
-      return tokens;
-    } catch (e, s) {
-      getLogger(toString()).e('unable to get usd balance of XTZ, e: $e, s: $s');
-      return [];
     }
   }
 

@@ -131,69 +131,24 @@ class AllTokensCubit extends Cubit<AllTokensState> {
         SecureStorageKeys.isFirstSelectedTokenContracts,
         false.toString(),
       );
-      selectedContracs.addAll(const [
-        // ContractModel(
-        //   id: 'energy',
-        //   symbol: 'ENR',
-        //   image: '',
-        //   name: 'Energy',
-        //   currentPrice: 0,
-        // ),
-        ContractModel(
-          id: 'unobtanium-tezos',
-          symbol: 'UNO',
-          name: 'Unobtanium',
-          image:
-              'https://assets.coingecko.com/coins/images/19469/large/uno.png?1635255375',
-          currentPrice: 0,
-        ),
-        // ContractModel(
-        //   id: 'machinery',
-        //   symbol: 'MCH',
-        //   image: '',
-        //   name: 'Machinery',
-        //   currentPrice: 0,
-        // ),
-        // ContractModel(
-        //   id: 'minerals',
-        //   symbol: 'MIN',
-        //   name: 'Minerals',
-        //   currentPrice: 0,
-        //   image: '',
-        // ),
-        ContractModel(
-          id: 'gif-dao',
-          symbol: 'GIF',
-          image:
-              'https://assets.coingecko.com/coins/images/19470/large/gif.png?1635255734',
-          name: 'GIF DAO',
-          currentPrice: 0,
-        ),
-        ContractModel(
-          id: 'dogami',
-          symbol: 'DOGA',
-          image:
-              'https://assets.coingecko.com/coins/images/24510/large/doga_logo.png?1648541150',
-          name: 'DOGAMI',
-          currentPrice: 0,
-        ),
-        ContractModel(
-          id: 'kolibri-dao',
-          symbol: 'kDAO',
-          image:
-              'https://assets.coingecko.com/coins/images/22192/large/8BpzM6c.png?1641189068',
-          name: 'Kolibri DAO',
-          currentPrice: 0,
-        ),
-        ContractModel(
-          id: 'wrapped-busd',
-          symbol: 'wBUSD',
-          image:
-              'https://assets.coingecko.com/coins/images/19498/large/wbusd.png?1635305456',
-          name: 'Wrapped BUSD',
-          currentPrice: 0,
-        ),
-      ]);
+
+      for (int i = 0; i < state.contracts.length; i++) {
+        if (i == 6) break;
+        final token = state.contracts[i];
+
+        if (token.symbol.toUpperCase() == 'XTZ') continue;
+
+        selectedContracs.add(
+          ContractModel(
+            name: token.name.toString(),
+            symbol: token.symbol,
+            image: token.image,
+            currentPrice: 0,
+            id: '',
+          ),
+        );
+      }
+
       await secureStorageProvider.set(
         SecureStorageKeys.selectedContracts,
         jsonEncode(selectedContracs.map((e) => e.toJson()).toList()),
