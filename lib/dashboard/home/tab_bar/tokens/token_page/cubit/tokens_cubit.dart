@@ -174,6 +174,7 @@ class TokensCubit extends Cubit<TokensState> {
     if (offset == 0) {
       final ethereumBaseToken = await _getBaseTokenBalanceOnEtherlink(
         walletAddress,
+
         ethereumNetwork,
       );
 
@@ -182,10 +183,12 @@ class TokensCubit extends Cubit<TokensState> {
       }
       data = newData;
 
+
       if (data.length == 1) {
         final emptyTokens = await getSomeEmptyCoins(ethereumNetwork.type);
         data.addAll(emptyTokens);
       }
+
     } else {
       data.addAll(newData);
     }
@@ -524,6 +527,7 @@ class TokensCubit extends Cubit<TokensState> {
 
   Future<TokenModel?> _getBaseTokenBalanceOnEtherlink(
     String walletAddress,
+
     EthereumNetwork ethereumNetwork,
   ) async {
     try {
@@ -544,6 +548,7 @@ class TokensCubit extends Cubit<TokensState> {
         standard: 'ERC20',
         decimalsToShow: 5,
       );
+
     } catch (e, s) {
       getLogger(toString()).e('error: $e, stack: $s');
       return null;
