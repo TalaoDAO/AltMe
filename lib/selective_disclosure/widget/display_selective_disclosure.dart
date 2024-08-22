@@ -196,19 +196,37 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
     late Widget nestedChild;
     value.remove('_sd');
     if (value.isEmpty) {
-      nestedChild = DisplaySelectiveDisclosure(
-        credentialModel: credentialModel,
-        claims: const {},
-        showVertically: showVertically,
-        selectiveDisclosureState: selectiveDisclosureState,
-        parentKeyId: element.key.toString(),
-        onPressed: (nestedKey, _, threeDotValue) {
-          onPressed?.call(
-            nestedKey,
-            '${element.key}-$nestedKey',
-            threeDotValue,
-          );
-        },
+      nestedChild = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(
+              element.key.toString(),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: DisplaySelectiveDisclosure(
+              credentialModel: credentialModel,
+              claims: const {},
+              showVertically: showVertically,
+              selectiveDisclosureState: selectiveDisclosureState,
+              parentKeyId: element.key.toString(),
+              onPressed: (nestedKey, _, threeDotValue) {
+                onPressed?.call(
+                  nestedKey,
+                  '${element.key}-$nestedKey',
+                  threeDotValue,
+                );
+              },
+            ),
+          ),
+        ],
       );
     } else {
       final limitDisclosure = selectiveDisclosureState?.limitDisclosure;
@@ -217,6 +235,8 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
           limitDisclosure != null && limitDisclosure == 'required';
 
       final bool isDisabled = isCompulsary;
+      final selectedKeyId = selectiveDisclosureState?.selectedClaimsKeyIds
+          .firstWhereOrNull((ele) => ele.keyId == element.key.toString());
 
       nestedChild = TransparentInkWell(
         onTap: () {
@@ -224,32 +244,52 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
             return;
           }
 
-          onPressed?.call(element.key.toString(), element.key.toString(),
-              element.value.toString());
+          onPressed?.call(
+            element.key.toString(),
+            element.key.toString(),
+            null,
+          );
         },
-        child: DisplayNestedMap(value, context),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                children: [
+                  Text(
+                    element.key.toString(),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  if (!isDisabled && selectiveDisclosureState != null) ...[
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 0, right: 10),
+                      child: Icon(
+                        (selectedKeyId != null && selectedKeyId.isSelected)
+                            ? Icons.check_box
+                            : Icons.check_box_outline_blank,
+                        size: 25,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: DisplayNestedMap(value, context),
+            ),
+          ],
+        ),
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Text(
-            element.key.toString(),
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: nestedChild,
-        ),
-      ],
-    );
+    return nestedChild;
   }
 
   Widget displayClaimData(String mapKey, String? title, BuildContext context) {
@@ -429,7 +469,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
 }
 
 class DisplayNestedMap extends StatelessWidget {
-  const DisplayNestedMap(this.value, this.context);
+  const DisplayNestedMap(this.value, this.context, {super.key});
 
   final Map<String, dynamic> value;
   final BuildContext context;
@@ -438,13 +478,19 @@ class DisplayNestedMap extends StatelessWidget {
   Widget build(BuildContext context) {
     final list = value.entries.map(
       (MapEntry<String, dynamic> e) {
-        return CredentialField(
-          padding: const EdgeInsets.only(top: 10),
-          title: e.key,
-          value: e.value.toString(),
-          titleColor: Theme.of(context).colorScheme.onSurface,
-          valueColor: Theme.of(context).colorScheme.onSurface,
-          showVertically: true,
+        return Row(
+          children: [
+            Expanded(
+              child: CredentialField(
+                padding: const EdgeInsets.only(top: 10),
+                title: e.key,
+                value: e.value.toString(),
+                titleColor: Theme.of(context).colorScheme.onSurface,
+                valueColor: Theme.of(context).colorScheme.onSurface,
+                showVertically: true,
+              ),
+            ),
+          ],
         );
       },
     ).toList();
