@@ -348,6 +348,7 @@ class GeneralOptions extends Equatable {
     required this.companyName,
     required this.companyWebsite,
     required this.companyLogo,
+    required this.companyLogoLight,
     required this.tagLine,
     this.splashScreenTitle,
     required this.profileName,
@@ -366,6 +367,7 @@ class GeneralOptions extends Equatable {
         companyName: '',
         companyWebsite: '',
         companyLogo: '',
+        companyLogoLight: '',
         tagLine: '',
         splashScreenTitle: '',
         profileName: '',
@@ -380,6 +382,7 @@ class GeneralOptions extends Equatable {
   final String companyName;
   final String companyWebsite;
   final String companyLogo;
+  final String companyLogoLight;
   final String tagLine;
   final String? splashScreenTitle;
   final String profileName;
@@ -396,6 +399,7 @@ class GeneralOptions extends Equatable {
     String? companyName,
     String? companyWebsite,
     String? companyLogo,
+    String? companyLogoLight,
     String? splashScreenTitle,
     String? tagLine,
     String? profileName,
@@ -410,6 +414,7 @@ class GeneralOptions extends Equatable {
       companyName: companyName ?? this.companyName,
       companyWebsite: companyWebsite ?? this.companyWebsite,
       companyLogo: companyLogo ?? this.companyLogo,
+      companyLogoLight: companyLogoLight ?? this.companyLogoLight,
       tagLine: tagLine ?? this.tagLine,
       splashScreenTitle: splashScreenTitle ?? this.splashScreenTitle,
       profileName: profileName ?? this.profileName,
