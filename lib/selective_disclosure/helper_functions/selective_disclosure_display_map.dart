@@ -1,4 +1,6 @@
+import 'package:altme/app/shared/extension/iterable_extension.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/selective_disclosure/cubit/selective_disclosure_pick_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -13,6 +15,8 @@ class SelectiveDisclosureDisplayMap {
     required this.isDeveloperMode,
     this.claims,
     this.parentKeyId,
+    required this.selectedClaimsKeyIds,
+    this.onPressed,
   });
 
   final CredentialModel credentialModel;
@@ -23,6 +27,8 @@ class SelectiveDisclosureDisplayMap {
   final Map<String, dynamic>? claims;
   final String? parentKeyId;
   final Map<String, dynamic> filters;
+  final List<SelectedClaimsKeyIds> selectedClaimsKeyIds;
+  final void Function(String?, String, String?)? onPressed;
 
   Map<String, dynamic> get buildMap {
     final builtMap = <String, dynamic>{};
@@ -54,6 +60,8 @@ class SelectiveDisclosureDisplayMap {
           filters: filters,
           parentKeyId: mapKey,
           isDeveloperMode: isDeveloperMode,
+          selectedClaimsKeyIds: selectedClaimsKeyIds,
+          onPressed: onPressed,
         ).buildMap;
         if (nestedMap.isNotEmpty) {
           builtMap[title] = nestedMap;
@@ -171,6 +179,8 @@ class SelectiveDisclosureDisplayMap {
         filters: filters,
         parentKeyId: element.key.toString(),
         isDeveloperMode: isDeveloperMode,
+        selectedClaimsKeyIds: selectedClaimsKeyIds,
+        onPressed: onPressed,
       ).buildMap;
       if (mapNestedSelectiveDisclosure.isNotEmpty) {
         builtMap.addAll({
@@ -187,7 +197,8 @@ class SelectiveDisclosureDisplayMap {
         'claimKey': element.key.toString(),
         'threeDotValue': null,
         'value': value,
-        'hasCheckboxe': !(isDisabled && isPresentation),
+        'hasCheckbox': !isDisabled && isPresentation,
+        'isCompulsary': isCompulsary,
       };
     }
 
@@ -209,12 +220,18 @@ class SelectiveDisclosureDisplayMap {
       if (parentKeyId != null) {
         keyToCheck = '$parentKeyId-$mapKey';
       }
-      keyToCheck = '$keyToCheck-$index';
-      claimKey = '$claimKey-$index';
+      final isFirstElement = index == 0;
+
+      if (!isFirstElement) {
+        keyToCheck = '$keyToCheck-$index';
+        claimKey = '$claimKey-$index';
+      }
 
       final isCompulsary = limitDisclosure == 'required';
 
       bool isDisabled = isCompulsary;
+      final selectedKeyId = selectedClaimsKeyIds
+          .firstWhereOrNull((ele) => ele.keyId == keyToCheck);
 
       if (isPresentation) {
         if (filters.isNotEmpty) {
@@ -225,24 +242,39 @@ class SelectiveDisclosureDisplayMap {
               if (claimKey.contains(key) &&
                   element.data.replaceAll(' ', '') == value) {
                 if (isCompulsary) isDisabled = false;
+                if (selectedKeyId == null) {
+                  onPressed?.call(
+                    key,
+                    claimKey,
+                    element.threeDotValue,
+                  );
+                }
               }
             } else {
               if (claimKey == key && element.data == value) {
                 if (isCompulsary) isDisabled = false;
+                if (selectedKeyId == null) {
+                  onPressed?.call(
+                    key,
+                    claimKey,
+                    null,
+                  );
+                }
               }
             }
           });
         }
       }
       if (!(isDisabled && isPresentation)) {
+        final listElement = {
+          'mapKey': mapKey,
+          'claimKey': claimKey,
+          'threeDotValue': element.threeDotValue,
+          'value': element.data,
+          'hasCheckbox': !isDisabled && isPresentation,
+          'isCompulsary': isCompulsary,
+        };
         if (claimsData.length > 1) {
-          final listElement = {
-            'mapKey': mapKey,
-            'claimKey': claimKey,
-            'threeDotValue': element.threeDotValue,
-            'value': element.data,
-            'hasCheckboxe': !(isDisabled && isPresentation),
-          };
           if (index == 0) {
             claimDataMap[title ?? mapKey] = {
               'value': [listElement],
@@ -251,13 +283,7 @@ class SelectiveDisclosureDisplayMap {
             claimDataMap[title ?? mapKey]['value'].add(listElement);
           }
         } else {
-          claimDataMap[title ?? mapKey] = {
-            'mapKey': mapKey,
-            'claimKey': claimKey,
-            'threeDotValue': element.threeDotValue,
-            'value': element.data,
-            'hasCheckboxe': !(isDisabled && isPresentation),
-          };
+          claimDataMap[title ?? mapKey] = listElement;
         }
       }
       index++;

@@ -1,3 +1,6 @@
+import 'package:altme/app/shared/extension/iterable_extension.dart';
+import 'package:altme/app/shared/widget/base/credential_field.dart';
+import 'package:altme/app/shared/widget/transparent_ink_well.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/selective_disclosure/helper_functions/selective_disclosure_display_map.dart';
@@ -37,11 +40,16 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
       limitDisclosure: limitDisclosure,
       filters: filters,
       isDeveloperMode: context.read<ProfileCubit>().state.model.isDeveloperMode,
+      selectedClaimsKeyIds:
+          selectiveDisclosureState?.selectedClaimsKeyIds ?? [],
+      onPressed: onPressed,
     ).buildMap;
 
     final List<Widget> listOfClaims =
         mapToDisplay.entries.map((MapEntry<String, dynamic> map) {
       return DisplaySelectiveDisclosureValue(
+        onPressed: onPressed,
+        showVertically: showVertically,
         disclosure: {
           map.key: map.value,
         },
@@ -58,8 +66,13 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
   const DisplaySelectiveDisclosureValue({
     super.key,
     required this.disclosure,
+    required this.showVertically,
+    required this.onPressed,
   });
   final Map<String, dynamic> disclosure;
+  final bool showVertically;
+  final void Function(String?, String, String?)? onPressed;
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> widgetList = [];
@@ -70,16 +83,15 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(element.key),
-                    const Spacer(),
-                    const Text('Object'),
-                  ],
+                DisclosureTitle(
+                  element: element,
+                  onPressed: onPressed,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(left: 8),
                   child: DisplaySelectiveDisclosureValue(
+                    onPressed: onPressed,
+                    showVertically: showVertically,
                     disclosure: element.value['value'] as Map<String, dynamic>,
                   ),
                 ),
@@ -90,40 +102,35 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
         }
         if (element.value['value'] is String) {
           widgetList.add(
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(element.key),
-                    const Spacer(),
-                    const Text('String'),
-                  ],
-                ),
-                Text(element.value['value'].toString()),
-              ],
+            DisclosureLine(
+              onPressed: onPressed,
+              elementKey: element.key,
+              elementValue: element.value,
+              showVertically: showVertically,
             ),
           );
           continue;
         }
         if (element.value['value'] == null) {
           widgetList.add(
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Text(element.key),
-                    const Spacer(),
-                    const Text('nested'),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: DisplaySelectiveDisclosureValue(
-                    disclosure: element.value as Map<String, dynamic>,
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Column(
+                children: [
+                  DisclosureTitle(
+                    element: element,
+                    onPressed: onPressed,
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: DisplaySelectiveDisclosureValue(
+                      onPressed: onPressed,
+                      showVertically: showVertically,
+                      disclosure: element.value as Map<String, dynamic>,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
           continue;
@@ -132,12 +139,11 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
           final List<Widget> nestedList = [];
           for (final nestedListElement in element.value['value'] as List) {
             nestedList.add(
-              Row(
-                children: [
-                  Text(nestedListElement['value'].toString()),
-                  const Spacer(),
-                  const Text('nested List element'),
-                ],
+              DisclosureLine(
+                onPressed: onPressed,
+                elementKey: null,
+                elementValue: nestedListElement,
+                showVertically: showVertically,
               ),
             );
           }
@@ -145,15 +151,12 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(element.key),
-                    const Spacer(),
-                    const Text('nested List'),
-                  ],
+                DisclosureTitle(
+                  element: element,
+                  onPressed: onPressed,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(left: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: nestedList,
@@ -164,34 +167,164 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
           );
           continue;
         }
-        widgetList.add(Text('Nt found 1: ${element.value}'));
       }
       if (element.value is String ||
           element.value is num ||
           element.value is bool) {
         widgetList.add(
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(element.key),
-                  const Spacer(),
-                  const Text('String from json'),
-                ],
-              ),
-              Text(element.value.toString()),
-            ],
+          CredentialField(
+            padding: const EdgeInsets.only(top: 8),
+            title: element.key,
+            value: element.value.toString(),
+            titleColor: Theme.of(context).colorScheme.onSurface,
+            valueColor: Theme.of(context).colorScheme.onSurface,
+            showVertically: showVertically,
           ),
         );
         continue;
       }
-
-      widgetList.add(Text('Nt found 2'));
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: widgetList,
+    );
+  }
+}
+
+class DisclosureTitle extends StatelessWidget {
+  const DisclosureTitle({
+    super.key,
+    required this.element,
+    this.onPressed,
+  });
+  final void Function(String?, String, String?)? onPressed;
+  final MapEntry<String, dynamic> element;
+
+  @override
+  Widget build(BuildContext context) {
+    return TransparentInkWell(
+      onTap: () {
+        if (element.value['hasCheckbox'] != true ||
+            element.value['isCompulsary'] == true) {
+          return;
+        }
+
+        onPressed?.call(
+          element.value['mapKey'].toString(),
+          element.value['claimKey'].toString(),
+          element.value['threeDotValue']?.toString(),
+        );
+      },
+      child: Row(
+        children: [
+          Text(
+            element.key,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const Spacer(),
+          if (element.value['hasCheckbox'] == true) ...[
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: BlocBuilder<SelectiveDisclosureCubit,
+                  SelectiveDisclosureState>(
+                builder: (context, state) {
+                  final selectedKeyId =
+                      state.selectedClaimsKeyIds.firstWhereOrNull(
+                    (ele) => ele.keyId == element.value['claimKey'].toString(),
+                  );
+
+                  return Center(
+                    child: Icon(
+                      (selectedKeyId != null && selectedKeyId.isSelected)
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                      size: 25,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class DisclosureLine extends StatelessWidget {
+  const DisclosureLine({
+    super.key,
+    required this.onPressed,
+    required this.showVertically,
+    this.elementKey,
+    required this.elementValue,
+  });
+
+  final void Function(String?, String, String?)? onPressed;
+  final bool showVertically;
+  final String? elementKey;
+  final dynamic elementValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return TransparentInkWell(
+      onTap: () {
+        if (elementValue['hasCheckbox'] != true ||
+            elementValue['isCompulsary'] == true) {
+          return;
+        }
+
+        onPressed?.call(
+          elementValue['mapKey'].toString(),
+          elementValue['claimKey'].toString(),
+          elementValue['threeDotValue']?.toString(),
+        );
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: CredentialField(
+              padding: const EdgeInsets.only(top: 8),
+              title: elementKey,
+              value: elementValue['value'].toString(),
+              titleColor: Theme.of(context).colorScheme.onSurface,
+              valueColor: Theme.of(context).colorScheme.onSurface,
+              showVertically: showVertically,
+            ),
+          ),
+          if (elementValue['hasCheckbox'] == true) ...[
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: BlocBuilder<SelectiveDisclosureCubit,
+                  SelectiveDisclosureState>(
+                builder: (context, state) {
+                  final selectedKeyId =
+                      state.selectedClaimsKeyIds.firstWhereOrNull(
+                    (ele) => ele.keyId == elementValue['claimKey'].toString(),
+                  );
+
+                  return Center(
+                    child: Icon(
+                      (selectedKeyId != null && selectedKeyId.isSelected)
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                      size: 25,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }
