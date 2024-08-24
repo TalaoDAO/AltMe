@@ -326,6 +326,7 @@ void main() {
                 companyName: '',
                 companyWebsite: '',
                 companyLogo: 'https://www.demo.com',
+                companyLogoLight: 'https://www.demo.com',
                 tagLine: '',
                 splashScreenTitle: '',
                 profileName: '',
