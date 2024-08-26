@@ -348,7 +348,6 @@ class GeneralOptions extends Equatable {
     required this.companyName,
     required this.companyWebsite,
     required this.companyLogo,
-    required this.companyLogoLight,
     required this.tagLine,
     this.splashScreenTitle,
     required this.profileName,
@@ -357,6 +356,7 @@ class GeneralOptions extends Equatable {
     required this.profileId,
     required this.customerPlan,
     this.primaryColor,
+    this.companyLogoLight,
   });
 
   factory GeneralOptions.fromJson(Map<String, dynamic> json) =>
@@ -367,7 +367,6 @@ class GeneralOptions extends Equatable {
         companyName: '',
         companyWebsite: '',
         companyLogo: '',
-        companyLogoLight: '',
         tagLine: '',
         splashScreenTitle: '',
         profileName: '',
@@ -382,7 +381,7 @@ class GeneralOptions extends Equatable {
   final String companyName;
   final String companyWebsite;
   final String companyLogo;
-  final String companyLogoLight;
+  final String? companyLogoLight;
   final String tagLine;
   final String? splashScreenTitle;
   final String profileName;

@@ -536,7 +536,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     ///company Logo Light
 
-    if (isURL(companyLogoLight)) {
+    if (companyLogoLight != null && isURL(companyLogoLight)) {
       try {
         final http.Response response =
             await http.get(Uri.parse(companyLogoLight));

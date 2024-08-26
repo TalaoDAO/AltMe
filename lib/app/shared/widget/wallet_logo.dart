@@ -41,7 +41,7 @@ class WalletLogo extends StatelessWidget {
 
             final generalOptions = profileModel.profileSetting.generalOptions;
             image = isLightTheme
-                ? generalOptions.companyLogoLight
+                ? generalOptions.companyLogoLight ?? generalOptions.companyLogo
                 : generalOptions.companyLogo;
 
           case ProfileType.diipv2point1:
