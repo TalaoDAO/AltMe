@@ -64,7 +64,7 @@ class WalletSecurityView extends StatelessWidget {
                 onTap: () async {
                   final confirm = await showDialog<bool>(
                         context: context,
-                        builder: (context) => ConfirmDialog(
+                        builder: (_) => ConfirmDialog(
                           title: l10n.warningDialogTitle,
                           subtitle: l10n.warningDialogSubtitle,
                           yes: l10n.showDialogYes,

@@ -10,6 +10,7 @@ class DrawerItem2 extends StatelessWidget {
     this.isDisabled = false,
     this.onTap,
     this.trailing,
+    this.padding = const EdgeInsets.all(Sizes.spaceNormal),
   });
 
   final bool isDisabled;
@@ -17,13 +18,14 @@ class DrawerItem2 extends StatelessWidget {
   final String title;
   final String? subtitle;
   final VoidCallback? onTap;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     return TransparentInkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(Sizes.spaceNormal),
+        padding: padding,
         margin: const EdgeInsets.all(Sizes.spaceXSmall),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,

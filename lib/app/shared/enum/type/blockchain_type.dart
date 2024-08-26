@@ -296,4 +296,26 @@ extension BlockchainTypeX on BlockchainType {
 
     return false;
   }
+
+  String get category {
+    switch (this) {
+      case BlockchainType.tezos:
+        return 'tezos-ecosystem';
+
+      case BlockchainType.ethereum:
+        return 'ethereum-ecosystem';
+
+      case BlockchainType.fantom:
+        return 'fantom-ecosystem';
+
+      case BlockchainType.polygon:
+        return 'polygon-ecosystem';
+
+      case BlockchainType.binance:
+        return 'binance-smart-chain';
+
+      case BlockchainType.etherlink:
+        return 'etherlink-ecosystem';
+    }
+  }
 }

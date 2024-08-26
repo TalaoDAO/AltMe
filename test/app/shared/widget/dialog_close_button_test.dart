@@ -36,8 +36,11 @@ void main() {
                 onPressed: () {
                   showDialog<void>(
                     context: context,
-                    builder: (context) => const AlertDialog(
-                      content: DialogCloseButton(),
+                    builder: (context) => AlertDialog(
+                      content: SizedBox(
+                        width: MediaQuery.of(context).size.shortestSide * 0.8,
+                        child: const DialogCloseButton(),
+                      ),
                     ),
                   );
                 },

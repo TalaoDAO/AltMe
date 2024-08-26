@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/flavor.dart';
+import 'package:altme/theme/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,11 +36,19 @@ class WalletLogo extends StatelessWidget {
           case ProfileType.ebsiV3:
             image = ImageStrings.ebsiLogo;
           case ProfileType.enterprise:
-            image = profileModel.profileSetting.generalOptions.companyLogo;
+            final isLightTheme =
+                Theme.of(context).brightness == Brightness.light;
+
+            final generalOptions = profileModel.profileSetting.generalOptions;
+            image = isLightTheme
+                ? generalOptions.companyLogoLight
+                : generalOptions.companyLogo;
+
           case ProfileType.diipv2point1:
           case ProfileType.diipv3:
             image = ImageStrings.diipLogo;
         }
+
         return Column(
           children: [
             Center(

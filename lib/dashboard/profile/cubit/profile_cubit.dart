@@ -532,10 +532,28 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
     }
 
+    String? companyLogoLight = profileSetting.generalOptions.companyLogoLight;
+
+    ///company Logo Light
+
+    if (isURL(companyLogoLight)) {
+      try {
+        final http.Response response =
+            await http.get(Uri.parse(companyLogoLight));
+        if (response.statusCode == 200) {
+          companyLogoLight = base64Encode(response.bodyBytes);
+        }
+      } catch (e) {
+        //
+      }
+    }
+
     final profileModel = state.model.copyWith(
       profileSetting: profileSetting.copyWith(
-        generalOptions:
-            profileSetting.generalOptions.copyWith(companyLogo: companyLogo),
+        generalOptions: profileSetting.generalOptions.copyWith(
+          companyLogo: companyLogo,
+          companyLogoLight: companyLogoLight,
+        ),
         discoverCardsOptions: profileSetting.discoverCardsOptions?.copyWith(
           displayExternalIssuer: updatedExternalIssuer,
         ),
