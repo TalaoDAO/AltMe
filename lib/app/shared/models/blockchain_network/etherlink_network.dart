@@ -42,7 +42,7 @@ class EtherlinkNetwork extends EthereumNetwork {
         chain: 'etherlink-testnet',
         chainId: 128123,
         rpcNodeUrl: 'https://node.ghostnet.etherlink.com',
-        title: 'Etherlink Testnet (Ghostnet)',
+        title: 'Etherlink Testnet',
         subTitle: 'This network is used to test protocol upgrades'
             ' (do not use it unless you are a developer).',
       );
