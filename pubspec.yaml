@@ -3,7 +3,6 @@ description: AltMe Flutter App
 
 version: 2.12.5+510
 
-
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 environment:
   sdk: ">=3.1.0 <4.0.0"
@@ -128,7 +127,6 @@ dependency_overrides:
   pointycastle: ^3.7.4 #polygonid from path requires pointycastle 3.7.3
   uuid: ^3.0.7 #web3dart >=2.7.2 depends on uuid ^4.0.0
   web3dart: ^2.5.1 #alletconnect_flutter_v2 >=2.2.2-beta01 depends on web3dart ^2.7.3
-  
 
 dev_dependencies:
   bloc_test: ^9.1.2
