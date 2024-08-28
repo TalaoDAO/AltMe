@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/flavor.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/helper_function/helper_function.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -23,6 +24,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     required this.splashCubit,
     required this.flavorCubit,
     required this.altmeChatSupportCubit,
+    required this.matrixNotificationCubit,
     required this.profileCubit,
   }) : super(OnBoardingVerifyPhraseState());
 
@@ -34,6 +36,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
   final FlavorCubit flavorCubit;
   final SplashCubit splashCubit;
   final AltmeChatSupportCubit altmeChatSupportCubit;
+  final MatrixNotificationCubit matrixNotificationCubit;
   final ProfileCubit profileCubit;
 
   final log = getLogger('OnBoardingVerifyPhraseCubit');
@@ -118,6 +121,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
           walletCubit: walletCubit,
           splashCubit: splashCubit,
           altmeChatSupportCubit: altmeChatSupportCubit,
+          matrixNotificationCubit: matrixNotificationCubit,
           profileCubit: profileCubit,
         );
       }

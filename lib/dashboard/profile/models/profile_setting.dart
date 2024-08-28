@@ -446,11 +446,13 @@ class GeneralOptions extends Equatable {
 class HelpCenterOptions extends Equatable {
   const HelpCenterOptions({
     required this.customChatSupport,
-    this.customChatSupportName,
-    this.customEmail,
     required this.customEmailSupport,
     required this.displayChatSupport,
     required this.displayEmailSupport,
+    this.customChatSupportName,
+    this.customEmail,
+    this.displayNotification,
+    this.customNotification,
   });
 
   factory HelpCenterOptions.fromJson(Map<String, dynamic> json) =>
@@ -469,6 +471,8 @@ class HelpCenterOptions extends Equatable {
   final bool customEmailSupport;
   final bool displayChatSupport;
   final bool displayEmailSupport;
+  final bool? displayNotification;
+  final bool? customNotification;
 
   Map<String, dynamic> toJson() => _$HelpCenterOptionsToJson(this);
 
@@ -479,6 +483,8 @@ class HelpCenterOptions extends Equatable {
     bool? customEmailSupport,
     bool? displayChatSupport,
     bool? displayEmailSupport,
+    bool? displayNotification,
+    bool? customNotification,
   }) =>
       HelpCenterOptions(
         customChatSupport: customChatSupport ?? this.customChatSupport,
@@ -488,6 +494,8 @@ class HelpCenterOptions extends Equatable {
         customChatSupportName:
             customChatSupportName ?? this.customChatSupportName,
         customEmail: customEmail ?? this.customEmail,
+        displayNotification: displayNotification ?? this.displayNotification,
+        customNotification: customNotification ?? this.customNotification,
       );
 
   @override
@@ -498,6 +506,8 @@ class HelpCenterOptions extends Equatable {
         customEmailSupport,
         displayChatSupport,
         displayEmailSupport,
+        displayNotification,
+        customNotification,
       ];
 }
 

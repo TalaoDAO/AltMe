@@ -17,6 +17,7 @@ import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
+import 'package:altme/matrix_notification/cubit/matrix_notification_cubit.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
@@ -266,9 +267,19 @@ class App extends StatelessWidget {
           BlocProvider<AltmeChatSupportCubit>(
             lazy: false,
             create: (context) => AltmeChatSupportCubit(
-              secureStorageProvider: getSecureStorage,
+              secureStorageProvider: secureStorageProvider,
               matrixChat: MatrixChatImpl(),
               profileCubit: context.read<ProfileCubit>(),
+              roomIdStoredKey: SecureStorageKeys.chatSupportRoomId,
+            ),
+          ),
+          BlocProvider<MatrixNotificationCubit>(
+            lazy: false,
+            create: (context) => MatrixNotificationCubit(
+              secureStorageProvider: secureStorageProvider,
+              matrixChat: MatrixChatImpl(),
+              profileCubit: context.read<ProfileCubit>(),
+              roomIdStoredKey: SecureStorageKeys.notificationSupportRoomId,
             ),
           ),
           BlocProvider(
@@ -283,6 +294,7 @@ class App extends StatelessWidget {
                 dio: Dio(),
               ),
               altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
+              matrixNotificationCubit: context.read<MatrixNotificationCubit>(),
               profileCubit: context.read<ProfileCubit>(),
             ),
           ),

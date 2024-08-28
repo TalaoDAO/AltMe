@@ -24,6 +24,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
     required this.secureStorageProvider,
     required this.matrixChat,
     required this.profileCubit,
+    required this.roomIdStoredKey,
   }) : super(const ChatRoomState());
 
   final SecureStorageProvider secureStorageProvider;
@@ -36,6 +37,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   //
   final MatrixChatImpl matrixChat;
   final ProfileCubit profileCubit;
+  final String roomIdStoredKey;
 
   Stream<int> get unreadMessageCountStream {
     _notificationStreamController ??= StreamController<int>.broadcast();
@@ -140,7 +142,8 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       List<Message> retrivedMessageFromDB = [];
       await _checkIfRoomNotExistThenCreateIt();
-      final savedRoomId = await matrixChat.getRoomIdFromStorage();
+      final savedRoomId =
+          await matrixChat.getRoomIdFromStorage(roomIdStoredKey);
       if (savedRoomId != null) {
         _roomId = savedRoomId;
         await matrixChat.enableRoomEncyption(savedRoomId);
@@ -285,12 +288,17 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       final List<String> invites = [];
 
-      if (profileCubit.state.model.walletType == WalletType.enterprise &&
-          helpCenterOptions.customChatSupport &&
-          helpCenterOptions.customChatSupportName != null) {
-        invites.add(helpCenterOptions.customChatSupportName!);
+      if (roomIdStoredKey == SecureStorageKeys.notificationSupportRoomId) {
+        invites.add(AltMeStrings.matrixNotificationSupportId);
       } else {
-        invites.add(AltMeStrings.matrixSupportId);
+        //roomIdStoredKey == SecureStorageKeys.chatSupportRoomId
+        if (profileCubit.state.model.walletType == WalletType.enterprise &&
+            helpCenterOptions.customChatSupport &&
+            helpCenterOptions.customChatSupportName != null) {
+          invites.add(helpCenterOptions.customChatSupportName!);
+        } else {
+          invites.add(AltMeStrings.matrixChatSupportId);
+        }
       }
 
       _roomId = await matrixChat.createRoomAndInviteSupport(
@@ -298,7 +306,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
         invites,
       );
 
-      await matrixChat.setRoomIdInStorage(_roomId!);
+      await matrixChat.setRoomIdInStorage(roomIdStoredKey, _roomId!);
       _getUnreadMessageCount();
       await _subscribeToEventsOfRoom();
     }
