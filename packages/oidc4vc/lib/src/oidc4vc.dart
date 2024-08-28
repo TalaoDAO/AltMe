@@ -1331,6 +1331,7 @@ class OIDC4VC {
     required Map<String, dynamic> payload,
     required Map<String, dynamic> privateKey,
     required String kid,
+    required MediaType mediaType,
   }) {
     final d = base64Url.decode(privateKey['d'].toString());
     final x = base64Url.decode(privateKey['x'].toString());
@@ -1340,7 +1341,7 @@ class OIDC4VC {
     final jwt = JWT(
       payload,
       header: {
-        'typ': 'openid4vci-proof+jwt',
+        'typ': mediaType.typ,
         'alg': 'EdDSA',
         'kid': kid,
       },
@@ -1617,6 +1618,7 @@ class OIDC4VC {
         payload: payload,
         privateKey: tokenParameters.privateKey,
         kid: tokenParameters.kid ?? tokenParameters.thumbprint,
+        mediaType: tokenParameters.mediaType,
       );
 
       return jwt;
