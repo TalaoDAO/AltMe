@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -136,10 +137,21 @@ class TokensCubit extends Cubit<TokensState> {
     }
     final baseUrl = ethereumNetwork.apiUrl;
 
-    final List<dynamic> tokensBalancesJsonArray = await client.get(
-      '$baseUrl/v2/addresses/$walletAddress/token-balances',
-      headers: <String, dynamic>{'Content-Type': 'application/json'},
-    ) as List<dynamic>;
+    List<dynamic> tokensBalancesJsonArray = [];
+
+    try {
+      tokensBalancesJsonArray = await client.get(
+        '$baseUrl/v2/addresses/$walletAddress/token-balances',
+        headers: <String, dynamic>{'Content-Type': 'application/json'},
+      ) as List<dynamic>;
+    } catch (e) {
+      if (e is NetworkException &&
+          e.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
+        tokensBalancesJsonArray = [];
+      } else {
+        rethrow;
+      }
+    }
 
     List<TokenModel> newData = [];
 
@@ -174,7 +186,6 @@ class TokensCubit extends Cubit<TokensState> {
     if (offset == 0) {
       final ethereumBaseToken = await _getBaseTokenBalanceOnEtherlink(
         walletAddress,
-
         ethereumNetwork,
       );
 
@@ -183,12 +194,10 @@ class TokensCubit extends Cubit<TokensState> {
       }
       data = newData;
 
-
       if (data.length == 1) {
         final emptyTokens = await getSomeEmptyCoins(ethereumNetwork.type);
         data.addAll(emptyTokens);
       }
-
     } else {
       data.addAll(newData);
     }
@@ -527,7 +536,6 @@ class TokensCubit extends Cubit<TokensState> {
 
   Future<TokenModel?> _getBaseTokenBalanceOnEtherlink(
     String walletAddress,
-
     EthereumNetwork ethereumNetwork,
   ) async {
     try {
@@ -548,8 +556,21 @@ class TokensCubit extends Cubit<TokensState> {
         standard: 'ERC20',
         decimalsToShow: 5,
       );
-
     } catch (e, s) {
+      if (e is NetworkException &&
+          e.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
+        return TokenModel(
+          contractAddress: '',
+          name: 'Etherlink',
+          symbol: 'XTZ',
+          icon: ethereumNetwork.mainTokenIcon,
+          balance: '0',
+          decimals: ethereumNetwork.mainTokenDecimal,
+          standard: 'ERC20',
+          decimalsToShow: 5,
+        );
+      }
+
       getLogger(toString()).e('error: $e, stack: $s');
       return null;
     }
