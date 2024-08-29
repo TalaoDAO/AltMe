@@ -7,6 +7,7 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -180,18 +181,45 @@ class _DashboardViewState extends State<DashboardView> {
                   scaffoldKey: scaffoldKey,
                   padding: EdgeInsets.zero,
                   drawer: const DrawerPage(),
-                  titleLeading: HomeTitleLeading(
-                    onPressed: () {
-                      if (context.read<HomeCubit>().state.homeStatus ==
-                          HomeStatus.hasNoWallet) {
-                        showDialog<void>(
-                          context: context,
-                          builder: (_) => const WalletDialog(),
-                        );
-                        return;
-                      }
-                      scaffoldKey.currentState!.openDrawer();
-                    },
+                  titleLeading: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: HomeTitleLeading(
+                          onPressed: () {
+                            if (context.read<HomeCubit>().state.homeStatus ==
+                                HomeStatus.hasNoWallet) {
+                              showDialog<void>(
+                                context: context,
+                                builder: (_) => const WalletDialog(),
+                              );
+                              return;
+                            }
+                            scaffoldKey.currentState!.openDrawer();
+                          },
+                        ),
+                      ),
+                      if (isEnterprise)
+                        StreamBuilder(
+                          initialData: context
+                              .read<MatrixNotificationCubit>()
+                              .unreadMessageCount,
+                          stream: context
+                              .read<MatrixNotificationCubit>()
+                              .unreadMessageCountStream,
+                          builder: (_, snapShot) {
+                            return Flexible(
+                              child: NotifyIcon(
+                                badgeCount: snapShot.data ?? 0,
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .push<void>(NotificationPage.route());
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                    ],
                   ),
                   titleTrailing: Parameters.walletHandlesCrypto
                       ? const CryptoAccountSwitcherButton()
