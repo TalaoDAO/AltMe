@@ -45,17 +45,11 @@ class CustomListTileCard extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyMedium,
       ),
       minVerticalPadding: 0,
-      trailing: Container(
-        height: 65,
-        width: 65,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Theme.of(context).colorScheme.secondary,
-        ),
-        child: Image.asset(
-          imageAssetPath,
-          color: Theme.of(context).colorScheme.onSecondary,
-        ),
+      trailing: Image.asset(
+        imageAssetPath,
+        width: Sizes.icon5x,
+        height: Sizes.icon5x,
+        fit: BoxFit.fitHeight,
       ),
     );
   }

@@ -127,6 +127,7 @@ class CreateAccountStep1View extends StatelessWidget {
                     );
                   },
                 ),
+                const SizedBox(height: Sizes.spaceNormal),
               ],
               if (BlockchainType.etherlink.isSupported(profileSetting)) ...[
                 CustomListTileCard(
