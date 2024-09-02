@@ -162,11 +162,20 @@ class _DashboardViewState extends State<DashboardView> {
 
           return BlocBuilder<ProfileCubit, ProfileState>(
             builder: (context, profileState) {
-              final displayChatSupport = profileState
-                  .model.profileSetting.helpCenterOptions.displayChatSupport;
+              final profileModel = profileState.model;
 
               final isEnterprise =
-                  profileState.model.walletType == WalletType.enterprise;
+                  profileModel.walletType == WalletType.enterprise;
+
+              final helpCenterOptions =
+                  profileModel.profileSetting.helpCenterOptions;
+
+              final displayChatSupport = helpCenterOptions.displayChatSupport;
+
+              final displayNotification =
+                  helpCenterOptions.displayNotification != null &&
+                      helpCenterOptions.displayNotification! &&
+                      helpCenterOptions.customNotification != null;
 
               return PopScope(
                 canPop: false,
@@ -177,57 +186,69 @@ class _DashboardViewState extends State<DashboardView> {
                 },
                 child: BasePage(
                   scrollView: false,
-                  title: _getTitle(dashboardState.selectedIndex, l10n),
                   scaffoldKey: scaffoldKey,
                   padding: EdgeInsets.zero,
                   drawer: const DrawerPage(),
-                  titleLeading: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: HomeTitleLeading(
-                          onPressed: () {
-                            if (context.read<HomeCubit>().state.homeStatus ==
-                                HomeStatus.hasNoWallet) {
-                              showDialog<void>(
-                                context: context,
-                                builder: (_) => const WalletDialog(),
-                              );
-                              return;
-                            }
-                            scaffoldKey.currentState!.openDrawer();
-                          },
-                        ),
-                      ),
-                      if (isEnterprise)
-                        StreamBuilder(
-                          initialData: context
-                              .read<MatrixNotificationCubit>()
-                              .unreadMessageCount,
-                          stream: context
-                              .read<MatrixNotificationCubit>()
-                              .unreadMessageCountStream,
-                          builder: (_, snapShot) {
-                            return Flexible(
-                              child: NotifyIcon(
-                                badgeCount: snapShot.data ?? 0,
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .push<void>(NotificationPage.route());
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                    ],
-                  ),
-                  titleTrailing: Parameters.walletHandlesCrypto
-                      ? const CryptoAccountSwitcherButton()
-                      : const SizedBox.shrink(),
                   body: Stack(
                     children: [
                       Column(
                         children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 15, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                HomeTitleLeading(
+                                  onPressed: () {
+                                    if (context
+                                            .read<HomeCubit>()
+                                            .state
+                                            .homeStatus ==
+                                        HomeStatus.hasNoWallet) {
+                                      showDialog<void>(
+                                        context: context,
+                                        builder: (_) => const WalletDialog(),
+                                      );
+                                      return;
+                                    }
+                                    scaffoldKey.currentState!.openDrawer();
+                                  },
+                                ),
+                                if (Parameters.walletHandlesCrypto)
+                                  const CryptoAccountSwitcherButton(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                  ),
+                                if (isEnterprise && displayNotification)
+                                  StreamBuilder(
+                                    initialData: context
+                                        .read<MatrixNotificationCubit>()
+                                        .unreadMessageCount,
+                                    stream: context
+                                        .read<MatrixNotificationCubit>()
+                                        .unreadMessageCountStream,
+                                    builder: (_, snapShot) {
+                                      return NotifyIcon(
+                                        badgeCount: snapShot.data ?? 0,
+                                        onTap: () {
+                                          Navigator.of(context).push<void>(
+                                            NotificationPage.route(),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            _getTitle(dashboardState.selectedIndex, l10n),
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
                           Expanded(
                             child: PageView(
                               controller: pageController,

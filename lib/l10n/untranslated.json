@@ -32,7 +32,10 @@
     "etherlinkAccount",
     "etherlinkAccountDescription",
     "etherlinkAccountCreationCongratulations",
-    "etherlinkProofMessage"
+    "etherlinkProofMessage",
+    "notification",
+    "notifications",
+    "notificationTitle"
   ],
 
   "es": [
@@ -68,7 +71,10 @@
     "etherlinkAccount",
     "etherlinkAccountDescription",
     "etherlinkAccountCreationCongratulations",
-    "etherlinkProofMessage"
+    "etherlinkProofMessage",
+    "notification",
+    "notifications",
+    "notificationTitle"
   ],
 
   "fr": [
@@ -109,6 +115,9 @@
     "etherlinkAccount",
     "etherlinkAccountDescription",
     "etherlinkAccountCreationCongratulations",
-    "etherlinkProofMessage"
+    "etherlinkProofMessage",
+    "notification",
+    "notifications",
+    "notificationTitle"
   ]
 }

@@ -219,8 +219,6 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
           );
         }
 
-        setMessagesAsRead();
-
         await Future<void>.delayed(const Duration(seconds: 1))
             .then((val) => _getUnreadMessageCount());
       }
@@ -289,7 +287,11 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
       final List<String> invites = [];
 
       if (roomIdStoredKey == SecureStorageKeys.notificationSupportRoomId) {
-        invites.add(AltMeStrings.matrixNotificationSupportId);
+        if (helpCenterOptions.displayNotification != null &&
+            helpCenterOptions.displayNotification! &&
+            helpCenterOptions.customNotification != null) {
+          invites.add(helpCenterOptions.customNotification!);
+        }
       } else {
         //roomIdStoredKey == SecureStorageKeys.chatSupportRoomId
         if (profileCubit.state.model.walletType == WalletType.enterprise &&

@@ -19,8 +19,6 @@ class AltMeStrings {
 
   //page
   static const String matrixChatSupportId = '@support:matrix.talao.co';
-  static const String matrixNotificationSupportId =
-      '@notification:matrix.talao.co';
 
   //Chat
   static const String dashBoardPage = '/dashboardPage';

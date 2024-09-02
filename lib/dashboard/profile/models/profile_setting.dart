@@ -472,7 +472,7 @@ class HelpCenterOptions extends Equatable {
   final bool displayChatSupport;
   final bool displayEmailSupport;
   final bool? displayNotification;
-  final bool? customNotification;
+  final String? customNotification;
 
   Map<String, dynamic> toJson() => _$HelpCenterOptionsToJson(this);
 
@@ -484,7 +484,7 @@ class HelpCenterOptions extends Equatable {
     bool? displayChatSupport,
     bool? displayEmailSupport,
     bool? displayNotification,
-    bool? customNotification,
+    String? customNotification,
   }) =>
       HelpCenterOptions(
         customChatSupport: customChatSupport ?? this.customChatSupport,

@@ -1,4 +1,5 @@
-import 'package:badges/badges.dart' as badges;
+import 'package:altme/app/app.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:flutter/material.dart';
 
 class NotifyIcon extends StatelessWidget {
@@ -13,22 +14,17 @@ class NotifyIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return TransparentInkWell(
       onTap: onTap,
-      child: Center(
-        child: badges.Badge(
-          showBadge: badgeCount > 0,
-          badgeContent: Text(
-            badgeCount.toString(),
-            style: Theme.of(context).textTheme.bodySmall,
-            textAlign: TextAlign.center,
-          ),
-          child: Icon(
-            Icons.notification_add_rounded,
+      child: Stack(
+        alignment: Alignment.topRight,
+        children: [
+          ImageIcon(
+            const AssetImage(IconStrings.notification),
             color: Theme.of(context).colorScheme.onSurface,
-            size: 20,
           ),
-        ),
+          if (badgeCount != 0) const NotifyDot(),
+        ],
       ),
     );
   }

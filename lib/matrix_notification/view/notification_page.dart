@@ -6,9 +6,6 @@ import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart'
-    hide ImageMessage, Message;
-import 'package:visibility_detector/visibility_detector.dart';
 
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
@@ -63,7 +60,7 @@ class _NotificationViewState<B extends ChatRoomCubit>
     final l10n = context.l10n;
     final colorScheme = Theme.of(context).colorScheme;
     return BasePage(
-      title: 'Test Notification',
+      title: l10n.notifications,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
       titleAlignment: Alignment.topCenter,
@@ -96,93 +93,86 @@ class _NotificationViewState<B extends ChatRoomCubit>
               return Container();
             }
 
-            if (pageIsVisible) {
-              liveChatCubit!.setMessagesAsRead();
-            }
-            return VisibilityDetector(
-              key: const Key('chat-widget'),
-              onVisibilityChanged: (visibilityInfo) {
-                if (visibilityInfo.visibleFraction == 1.0) {
-                  liveChatCubit!.setMessagesAsRead();
-                  pageIsVisible = true;
-                } else {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  pageIsVisible = false;
-                }
-              },
-              child: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  Chat(
-                    theme: DefaultChatTheme(
-                      primaryColor: colorScheme.primaryContainer,
-                      secondaryColor: colorScheme.secondaryContainer,
-                      backgroundColor: colorScheme.surface,
-                      inputBackgroundColor: colorScheme.secondaryContainer,
-                      inputTextColor: colorScheme.onSurface,
-                      errorColor: colorScheme.error,
-                      systemMessageTheme: SystemMessageTheme(
-                        margin: const EdgeInsets.only(
-                          bottom: 24,
-                          top: 8,
-                          left: 8,
-                          right: 8,
-                        ),
-                        textStyle: TextStyle(
-                          color: colorScheme.onPrimary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                          height: 1.333,
-                        ),
-                      ),
-                      receivedMessageBodyTextStyle: TextStyle(
-                        color: colorScheme.onSurface,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        height: 1.5,
-                      ),
-                      receivedMessageCaptionTextStyle: TextStyle(
-                        color: colorScheme.onSurface,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        height: 1.333,
-                      ),
-                      receivedMessageDocumentIconColor: colorScheme.onSurface,
-                      receivedMessageLinkDescriptionTextStyle: TextStyle(
-                        color: colorScheme.onSurface,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        height: 1.428,
-                      ),
-                      receivedMessageLinkTitleTextStyle: TextStyle(
-                        color: colorScheme.onSurface,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        height: 1.375,
-                      ),
-                    ),
-                    messages: state.messages,
-                    disableImageGallery: true,
-                    onSendPressed: (partialText) {},
-                    onPreviewDataFetched:
-                        liveChatCubit!.handlePreviewDataFetched,
-                    user: state.user ?? const User(id: ''),
-                    customBottomWidget: Container(),
+            return Column(
+              children: [
+                Text(
+                  l10n.notificationTitle,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: Sizes.spaceLarge),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: state.messages.length,
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    physics: const ScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final Message message = state.messages[index];
+                      final map = message.toJson();
+
+                      final String text = map['text'].toString();
+
+                      return Column(
+                        children: [
+                          TransparentInkWell(
+                            onTap: () {
+                              context
+                                  .read<MatrixNotificationCubit>()
+                                  .markMessageAsRead([message.remoteId]);
+                              Navigator.of(context).push<void>(
+                                NotificationDetailsPage.route(message: text),
+                              );
+                            },
+                            child: BackgroundCard(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        chatTimeFormatter(
+                                            message.createdAt ?? 0),
+                                        style: TextStyle(
+                                          color: colorScheme.onSurface,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          height: 1.333,
+                                        ),
+                                      ),
+                                      if (message.status != null &&
+                                          message.status != Status.seen) ...[
+                                        const SizedBox(width: 10),
+                                        const NotifyDot(),
+                                      ],
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      text,
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                        color: colorScheme.onSurface,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        height: 1.5,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      );
+                    },
                   ),
-                  if (state.messages.isEmpty)
-                    BackgroundCard(
-                      padding: const EdgeInsets.all(Sizes.spaceSmall),
-                      margin: const EdgeInsets.all(Sizes.spaceNormal),
-                      child: Center(
-                        child: Text(
-                          'Test: Notification is empty',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+                ),
+              ],
             );
           }
         },
