@@ -144,6 +144,7 @@ void main() {
           payload: payload,
           privateKey: privateKey,
           kid: kid,
+          mediaType: MediaType.proofOfOwnership,
         );
 
         final value = oidc4vc.verifyTokenEdDSA(
