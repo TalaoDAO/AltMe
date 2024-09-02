@@ -289,8 +289,10 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
       if (roomIdStoredKey == SecureStorageKeys.notificationSupportRoomId) {
         if (helpCenterOptions.displayNotification != null &&
             helpCenterOptions.displayNotification! &&
-            helpCenterOptions.customNotification != null) {
-          invites.add(helpCenterOptions.customNotification!);
+            helpCenterOptions.customNotification != null &&
+            helpCenterOptions.customNotification! &&
+            helpCenterOptions.customNotificationRoom != null) {
+          invites.add(helpCenterOptions.customNotificationRoom!);
         }
       } else {
         //roomIdStoredKey == SecureStorageKeys.chatSupportRoomId

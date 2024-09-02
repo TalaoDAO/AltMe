@@ -453,6 +453,7 @@ class HelpCenterOptions extends Equatable {
     this.customEmail,
     this.displayNotification,
     this.customNotification,
+    this.customNotificationRoom,
   });
 
   factory HelpCenterOptions.fromJson(Map<String, dynamic> json) =>
@@ -472,7 +473,8 @@ class HelpCenterOptions extends Equatable {
   final bool displayChatSupport;
   final bool displayEmailSupport;
   final bool? displayNotification;
-  final String? customNotification;
+  final bool? customNotification;
+  final String? customNotificationRoom;
 
   Map<String, dynamic> toJson() => _$HelpCenterOptionsToJson(this);
 
@@ -484,7 +486,8 @@ class HelpCenterOptions extends Equatable {
     bool? displayChatSupport,
     bool? displayEmailSupport,
     bool? displayNotification,
-    String? customNotification,
+    bool? customNotification,
+    String? customNotificationRoom,
   }) =>
       HelpCenterOptions(
         customChatSupport: customChatSupport ?? this.customChatSupport,
@@ -496,6 +499,8 @@ class HelpCenterOptions extends Equatable {
         customEmail: customEmail ?? this.customEmail,
         displayNotification: displayNotification ?? this.displayNotification,
         customNotification: customNotification ?? this.customNotification,
+        customNotificationRoom:
+            customNotificationRoom ?? this.customNotificationRoom,
       );
 
   @override
@@ -508,6 +513,7 @@ class HelpCenterOptions extends Equatable {
         displayEmailSupport,
         displayNotification,
         customNotification,
+        customNotificationRoom,
       ];
 }
 

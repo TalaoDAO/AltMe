@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
@@ -20,11 +21,13 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     required this.client,
     required this.profileCubit,
     required this.credentialsCubit,
+    required this.matrixNotificationCubit,
   }) : super(const EnterpriseState());
 
   final DioClient client;
   final ProfileCubit profileCubit;
   final CredentialsCubit credentialsCubit;
+  final MatrixNotificationCubit matrixNotificationCubit;
 
   Future<void> requestTheConfiguration({
     required Uri uri,
@@ -159,6 +162,15 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       profileSetting: profileSetting,
       profileType: ProfileType.enterprise,
     );
+    final helpCenterOptions = profileSetting.helpCenterOptions;
+
+    if (helpCenterOptions.displayNotification != null &&
+        helpCenterOptions.displayNotification! &&
+        helpCenterOptions.customNotification != null &&
+        helpCenterOptions.customNotification! &&
+        helpCenterOptions.customNotificationRoom != null) {
+      await matrixNotificationCubit.init();
+    }
 
     emit(
       state.copyWith(

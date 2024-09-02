@@ -170,16 +170,6 @@ class App extends StatelessWidget {
               walletCubit: context.read<WalletCubit>(),
             ),
           ),
-          BlocProvider<EnterpriseCubit>(
-            create: (context) => EnterpriseCubit(
-              client: DioClient(
-                secureStorageProvider: secureStorageProvider,
-                dio: Dio(),
-              ),
-              profileCubit: context.read<ProfileCubit>(),
-              credentialsCubit: context.read<CredentialsCubit>(),
-            ),
-          ),
           BlocProvider<ScanCubit>(
             create: (context) => ScanCubit(
               client: DioClient(
@@ -194,6 +184,26 @@ class App extends StatelessWidget {
               walletCubit: context.read<WalletCubit>(),
               oidc4vc: OIDC4VC(),
               jwtDecode: JWTDecode(),
+            ),
+          ),
+          BlocProvider<MatrixNotificationCubit>(
+            lazy: false,
+            create: (context) => MatrixNotificationCubit(
+              secureStorageProvider: secureStorageProvider,
+              matrixChat: MatrixChatImpl(),
+              profileCubit: context.read<ProfileCubit>(),
+              roomIdStoredKey: SecureStorageKeys.notificationSupportRoomId,
+            ),
+          ),
+          BlocProvider<EnterpriseCubit>(
+            create: (context) => EnterpriseCubit(
+              client: DioClient(
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+              profileCubit: context.read<ProfileCubit>(),
+              credentialsCubit: context.read<CredentialsCubit>(),
+              matrixNotificationCubit: context.read<MatrixNotificationCubit>(),
             ),
           ),
           BlocProvider<QRCodeScanCubit>(
@@ -271,15 +281,6 @@ class App extends StatelessWidget {
               matrixChat: MatrixChatImpl(),
               profileCubit: context.read<ProfileCubit>(),
               roomIdStoredKey: SecureStorageKeys.chatSupportRoomId,
-            ),
-          ),
-          BlocProvider<MatrixNotificationCubit>(
-            lazy: false,
-            create: (context) => MatrixNotificationCubit(
-              secureStorageProvider: secureStorageProvider,
-              matrixChat: MatrixChatImpl(),
-              profileCubit: context.read<ProfileCubit>(),
-              roomIdStoredKey: SecureStorageKeys.notificationSupportRoomId,
             ),
           ),
           BlocProvider(
