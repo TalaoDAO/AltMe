@@ -19,6 +19,7 @@ abstract class MatrixChatInterface {
     String roomName,
     List<String>? invites,
   );
+  Future<String> joinRoom(String roomName);
   Future<void> enableRoomEncyption(String roomId);
   Future<void> handleImageSelection({
     required OnMessageCreated onMessageCreated,

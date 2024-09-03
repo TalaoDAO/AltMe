@@ -507,6 +507,16 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       //   );
       // }
 
+      final helpCenterOptions = profileSetting.helpCenterOptions;
+
+      if (helpCenterOptions.displayNotification != null &&
+          helpCenterOptions.displayNotification! &&
+          helpCenterOptions.customNotification != null &&
+          helpCenterOptions.customNotification! &&
+          helpCenterOptions.customNotificationRoom != null) {
+        await matrixNotificationCubit.init();
+      }
+
       emit(
         state.copyWith(
           status: AppStatus.success,

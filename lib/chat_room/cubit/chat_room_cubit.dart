@@ -292,7 +292,8 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
             helpCenterOptions.customNotification != null &&
             helpCenterOptions.customNotification! &&
             helpCenterOptions.customNotificationRoom != null) {
-          invites.add(helpCenterOptions.customNotificationRoom!);
+          _roomId = await matrixChat
+              .joinRoom(helpCenterOptions.customNotificationRoom!);
         }
       } else {
         //roomIdStoredKey == SecureStorageKeys.chatSupportRoomId
@@ -303,12 +304,11 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
         } else {
           invites.add(AltMeStrings.matrixChatSupportId);
         }
+        _roomId = await matrixChat.createRoomAndInviteSupport(
+          tokenParameters.thumbprint,
+          invites,
+        );
       }
-
-      _roomId = await matrixChat.createRoomAndInviteSupport(
-        tokenParameters.thumbprint,
-        invites,
-      );
 
       await matrixChat.setRoomIdInStorage(roomIdStoredKey, _roomId!);
       _getUnreadMessageCount();

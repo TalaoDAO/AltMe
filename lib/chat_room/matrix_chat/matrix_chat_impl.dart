@@ -467,6 +467,22 @@ class MatrixChatImpl extends MatrixChatInterface {
     }
   }
 
+  /// join room with [roomName]
+  @override
+  Future<String> joinRoom(String roomName) async {
+    try {
+      if (client == null) {
+        await _initClient();
+      }
+      final roomId = await client!.joinRoom(roomName);
+      await enableRoomEncyption(roomId);
+      return roomId;
+    } catch (e, s) {
+      logger.e('e: $e, s: $s');
+      throw Exception();
+    }
+  }
+
   @override
   String getThumbnail({
     required String url,
