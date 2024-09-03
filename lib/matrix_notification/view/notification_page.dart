@@ -46,6 +46,7 @@ class _NotificationViewState<B extends ChatRoomCubit>
         liveChatCubit = context.read<B>();
 
         await context.read<MatrixNotificationCubit>().init();
+        liveChatCubit!.setMessagesAsRead();
       },
     );
   }
