@@ -138,6 +138,11 @@ class MatrixChatImpl extends MatrixChatInterface {
   }
 
   @override
+  Future<void> clearRoomIdInStorage(String roomIdStoredKey) async {
+    await secureStorageProvider.delete(roomIdStoredKey);
+  }
+
+  @override
   int getUnreadMessageCount(String? roomId) =>
       client?.getRoomById(roomId ?? '')?.notificationCount ?? 0;
 

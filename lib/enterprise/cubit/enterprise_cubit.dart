@@ -514,6 +514,15 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
           helpCenterOptions.customNotification != null &&
           helpCenterOptions.customNotification! &&
           helpCenterOptions.customNotificationRoom != null) {
+        final roomName = helpCenterOptions.customNotificationRoom;
+
+        final savedRoomName =
+            await matrixNotificationCubit.getRoomIdFromStorage();
+
+        if (roomName != savedRoomName) {
+          await matrixNotificationCubit.clearRoomIdFromStorage();
+        }
+
         await matrixNotificationCubit.init();
       }
 

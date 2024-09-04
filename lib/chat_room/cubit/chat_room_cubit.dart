@@ -134,6 +134,15 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
     );
   }
 
+  Future<String?> getRoomIdFromStorage() async {
+    final savedRoomId = await matrixChat.getRoomIdFromStorage(roomIdStoredKey);
+    return savedRoomId;
+  }
+
+  Future<void> clearRoomIdFromStorage() async {
+    await matrixChat.clearRoomIdInStorage(roomIdStoredKey);
+  }
+
   Future<void> init() async {
     try {
       emit(state.copyWith(status: AppStatus.loading));
