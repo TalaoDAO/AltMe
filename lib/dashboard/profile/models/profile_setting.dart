@@ -449,9 +449,9 @@ class HelpCenterOptions extends Equatable {
     required this.customEmailSupport,
     required this.displayChatSupport,
     required this.displayEmailSupport,
+    required this.displayNotification,
     this.customChatSupportName,
     this.customEmail,
-    this.displayNotification,
     this.customNotification,
     this.customNotificationRoom,
   });
@@ -464,6 +464,7 @@ class HelpCenterOptions extends Equatable {
         customEmailSupport: false,
         displayChatSupport: true,
         displayEmailSupport: true,
+        displayNotification: true,
       );
 
   final bool customChatSupport;
@@ -472,7 +473,7 @@ class HelpCenterOptions extends Equatable {
   final bool customEmailSupport;
   final bool displayChatSupport;
   final bool displayEmailSupport;
-  final bool? displayNotification;
+  final bool displayNotification;
   final bool? customNotification;
   final String? customNotificationRoom;
 

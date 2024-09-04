@@ -63,9 +63,7 @@ class SplashCubit extends Cubit<SplashState> {
             final helpCenterOptions =
                 profileCubit.state.model.profileSetting.helpCenterOptions;
 
-            if (helpCenterOptions.displayNotification != null &&
-                helpCenterOptions.displayNotification! &&
-                helpCenterOptions.customNotification != null &&
+            if (helpCenterOptions.customNotification != null &&
                 helpCenterOptions.customNotification! &&
                 helpCenterOptions.customNotificationRoom != null) {
               await matrixNotificationCubit.init();

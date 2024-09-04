@@ -48,6 +48,7 @@ class CryptoAccountSwitcherButton extends StatelessWidget {
                   },
                   child: Row(
                     mainAxisAlignment: mainAxisAlignment,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       if (blockchainType != null) ...[
                         Image.asset(

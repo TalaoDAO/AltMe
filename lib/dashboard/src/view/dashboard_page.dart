@@ -170,14 +170,11 @@ class _DashboardViewState extends State<DashboardView> {
               final helpCenterOptions =
                   profileModel.profileSetting.helpCenterOptions;
 
-              final displayChatSupport = helpCenterOptions.displayChatSupport;
+              final displayChatSupport =
+                  isEnterprise && helpCenterOptions.displayChatSupport;
 
               final displayNotification =
-                  helpCenterOptions.displayNotification != null &&
-                      helpCenterOptions.displayNotification! &&
-                      helpCenterOptions.customNotification != null &&
-                      helpCenterOptions.customNotification! &&
-                      helpCenterOptions.customNotificationRoom != null;
+                  isEnterprise && helpCenterOptions.displayNotification;
 
               return PopScope(
                 canPop: false,
@@ -220,7 +217,7 @@ class _DashboardViewState extends State<DashboardView> {
                                   const CryptoAccountSwitcherButton(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                   ),
-                                if (isEnterprise && displayNotification)
+                                if (displayNotification)
                                   StreamBuilder(
                                     initialData: context
                                         .read<MatrixNotificationCubit>()
@@ -267,7 +264,7 @@ class _DashboardViewState extends State<DashboardView> {
                                   const WertPage()
                                 else
                                   const SearchPage(),
-                                if (displayChatSupport && isEnterprise)
+                                if (displayChatSupport)
                                   const AltmeSupportChatPage()
                                 else
                                   Container(),

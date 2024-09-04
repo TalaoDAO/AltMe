@@ -164,9 +164,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     );
     final helpCenterOptions = profileSetting.helpCenterOptions;
 
-    if (helpCenterOptions.displayNotification != null &&
-        helpCenterOptions.displayNotification! &&
-        helpCenterOptions.customNotification != null &&
+    if (helpCenterOptions.customNotification != null &&
         helpCenterOptions.customNotification! &&
         helpCenterOptions.customNotificationRoom != null) {
       await matrixNotificationCubit.init();
@@ -509,9 +507,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
       final helpCenterOptions = profileSetting.helpCenterOptions;
 
-      if (helpCenterOptions.displayNotification != null &&
-          helpCenterOptions.displayNotification! &&
-          helpCenterOptions.customNotification != null &&
+      if (helpCenterOptions.customNotification != null &&
           helpCenterOptions.customNotification! &&
           helpCenterOptions.customNotificationRoom != null) {
         final roomName = helpCenterOptions.customNotificationRoom;

@@ -37,7 +37,8 @@
     "notifications",
     "notificationTitle",
     "chatRoom",
-    "notificationRoom"
+    "notificationRoom",
+    "notificationSubtitle"
   ],
 
   "es": [
@@ -78,7 +79,8 @@
     "notifications",
     "notificationTitle",
     "chatRoom",
-    "notificationRoom"
+    "notificationRoom",
+    "notificationSubtitle"
   ],
 
   "fr": [
@@ -124,6 +126,7 @@
     "notifications",
     "notificationTitle",
     "chatRoom",
-    "notificationRoom"
+    "notificationRoom",
+    "notificationSubtitle"
   ]
 }

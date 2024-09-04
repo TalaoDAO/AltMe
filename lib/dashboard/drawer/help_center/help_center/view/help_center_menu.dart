@@ -86,9 +86,7 @@ class HelpCenterView extends StatelessWidget {
               },
             ),
           ],
-          if (helpCenterOptions.displayNotification != null &&
-              helpCenterOptions.displayNotification! &&
-              isEnterprise) ...[
+          if (helpCenterOptions.displayNotification && isEnterprise) ...[
             DrawerItem(
               title: l10n.notificationRoom,
               onTap: () {

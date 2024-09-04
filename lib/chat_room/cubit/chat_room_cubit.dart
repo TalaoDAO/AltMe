@@ -296,9 +296,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
       final List<String> invites = [];
 
       if (roomIdStoredKey == SecureStorageKeys.notificationSupportRoomId) {
-        if (helpCenterOptions.displayNotification != null &&
-            helpCenterOptions.displayNotification! &&
-            helpCenterOptions.customNotification != null &&
+        if (helpCenterOptions.customNotification != null &&
             helpCenterOptions.customNotification! &&
             helpCenterOptions.customNotificationRoom != null) {
           _roomId = await matrixChat
