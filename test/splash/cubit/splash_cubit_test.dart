@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/matrix_notification/cubit/matrix_notification_cubit.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc_test/bloc_test.dart';
@@ -22,6 +23,9 @@ class MockHomeCubit extends MockCubit<HomeState> implements HomeCubit {
 
 class MockAltmeChatSupportCubit extends MockCubit<ChatRoomState>
     implements AltmeChatSupportCubit {}
+
+class MockMatrixNotificationCubit extends MockCubit<ChatRoomState>
+    implements MatrixNotificationCubit {}
 
 class MockCredentialsCubit extends MockCubit<CredentialsState>
     implements CredentialsCubit {
@@ -72,6 +76,7 @@ void main() {
   late CredentialsCubit credentialsCubit;
   late WalletCubit walletCubit;
   late AltmeChatSupportCubit altmeChatSupportCubit;
+  late MatrixNotificationCubit matrixNotificationCubit;
   late ProfileCubit profileCubit;
 
   final packageInfo = PackageInfo(
@@ -88,6 +93,7 @@ void main() {
     credentialsCubit = MockCredentialsCubit();
     walletCubit = MockWalletCubit();
     altmeChatSupportCubit = MockAltmeChatSupportCubit();
+    matrixNotificationCubit = MockMatrixNotificationCubit();
     profileCubit = MockProfileCubit();
 
     when(() => mockSecureStorage.get(SecureStorageKeys.version))
@@ -114,6 +120,7 @@ void main() {
             dio: Dio(),
           ),
           altmeChatSupportCubit: altmeChatSupportCubit,
+          matrixNotificationCubit: matrixNotificationCubit,
           profileCubit: profileCubit,
           packageInfo: packageInfo,
         ).state,
@@ -140,6 +147,7 @@ void main() {
             dio: Dio(),
           ),
           altmeChatSupportCubit: altmeChatSupportCubit,
+          matrixNotificationCubit: matrixNotificationCubit,
           profileCubit: profileCubit,
           packageInfo: packageInfo,
         );
@@ -187,6 +195,7 @@ void main() {
               dio: Dio(),
             ),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            matrixNotificationCubit: matrixNotificationCubit,
             profileCubit: profileCubit,
             packageInfo: packageInfo,
           );
@@ -216,6 +225,7 @@ void main() {
               dio: Dio(),
             ),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            matrixNotificationCubit: matrixNotificationCubit,
             profileCubit: profileCubit,
             packageInfo: packageInfo,
           );
@@ -245,6 +255,7 @@ void main() {
               dio: Dio(),
             ),
             altmeChatSupportCubit: altmeChatSupportCubit,
+            matrixNotificationCubit: matrixNotificationCubit,
             profileCubit: profileCubit,
             packageInfo: packageInfo,
           );
