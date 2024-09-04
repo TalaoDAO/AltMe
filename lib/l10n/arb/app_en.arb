@@ -1065,5 +1065,7 @@
   "etherlinkProofMessage": "",
   "notification": "Notification",
   "notifications": "Notifications",
-  "notificationTitle": "Welcome to the Notifications!\nStay informed with important updates."
+  "notificationTitle": "Welcome to the Notifications!\nStay informed with important updates.",
+  "chatRoom": "Chat room",
+  "notificationRoom": "Notification room"
 }

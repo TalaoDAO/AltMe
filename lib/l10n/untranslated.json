@@ -35,7 +35,9 @@
     "etherlinkProofMessage",
     "notification",
     "notifications",
-    "notificationTitle"
+    "notificationTitle",
+    "chatRoom",
+    "notificationRoom"
   ],
 
   "es": [
@@ -74,7 +76,9 @@
     "etherlinkProofMessage",
     "notification",
     "notifications",
-    "notificationTitle"
+    "notificationTitle",
+    "chatRoom",
+    "notificationRoom"
   ],
 
   "fr": [
@@ -118,6 +122,8 @@
     "etherlinkProofMessage",
     "notification",
     "notifications",
-    "notificationTitle"
+    "notificationTitle",
+    "chatRoom",
+    "notificationRoom"
   ]
 }

@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -75,13 +76,23 @@ class HelpCenterView extends StatelessWidget {
           const DrawerLogo(),
           if (helpCenterOptions.displayChatSupport && isEnterprise) ...[
             DrawerItem(
-              title: '${l10n.chatWith} $customChatSupportName',
+              title: l10n.chatRoom,
               onTap: () {
                 Navigator.of(context).push<void>(
                   AltmeSupportChatPage.route(
                     appBarTitle: '${l10n.chatWith} $customChatSupportName',
                   ),
                 );
+              },
+            ),
+          ],
+          if (helpCenterOptions.displayNotification != null &&
+              helpCenterOptions.displayNotification! &&
+              isEnterprise) ...[
+            DrawerItem(
+              title: l10n.notificationRoom,
+              onTap: () {
+                Navigator.of(context).push<void>(NotificationPage.route());
               },
             ),
           ],
