@@ -526,6 +526,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
         if (roomName != savedRoomName) {
           await matrixNotificationCubit.clearRoomIdFromStorage();
+          await matrixNotificationCubit.dispose();
         }
 
         await matrixNotificationCubit.init();
