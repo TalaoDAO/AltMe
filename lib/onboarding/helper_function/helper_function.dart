@@ -45,10 +45,13 @@ Future<void> generateAccount({
   );
 
   if (profileCubit.state.model.walletType == WalletType.enterprise) {
-    /// initiate chat if it is enterprise
-    await altmeChatSupportCubit.init();
     final helpCenterOptions =
         profileCubit.state.model.profileSetting.helpCenterOptions;
+
+    if (helpCenterOptions.customChatSupport &&
+        helpCenterOptions.customChatSupportName != null) {
+      await altmeChatSupportCubit.init();
+    }
 
     if (helpCenterOptions.customNotification != null &&
         helpCenterOptions.customNotification! &&

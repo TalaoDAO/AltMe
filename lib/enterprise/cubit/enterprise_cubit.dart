@@ -21,12 +21,14 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     required this.client,
     required this.profileCubit,
     required this.credentialsCubit,
+    required this.altmeChatSupportCubit,
     required this.matrixNotificationCubit,
   }) : super(const EnterpriseState());
 
   final DioClient client;
   final ProfileCubit profileCubit;
   final CredentialsCubit credentialsCubit;
+  final AltmeChatSupportCubit altmeChatSupportCubit;
   final MatrixNotificationCubit matrixNotificationCubit;
 
   Future<void> requestTheConfiguration({
@@ -164,11 +166,18 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     );
     final helpCenterOptions = profileSetting.helpCenterOptions;
 
+    if (helpCenterOptions.customChatSupport &&
+        helpCenterOptions.customChatSupportName != null) {
+      await altmeChatSupportCubit.init();
+    }
+
     if (helpCenterOptions.customNotification != null &&
         helpCenterOptions.customNotification! &&
         helpCenterOptions.customNotificationRoom != null) {
       await matrixNotificationCubit.init();
     }
+
+    // chat is not initiatied at start
 
     emit(
       state.copyWith(
@@ -517,6 +526,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
         if (roomName != savedRoomName) {
           await matrixNotificationCubit.clearRoomIdFromStorage();
+          await matrixNotificationCubit.dispose();
         }
 
         await matrixNotificationCubit.init();

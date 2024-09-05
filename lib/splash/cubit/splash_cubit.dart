@@ -58,10 +58,13 @@ class SplashCubit extends Cubit<SplashState> {
         if (hasWallet) {
           await homeCubit.emitHasWallet();
           if (profileCubit.state.model.walletType == WalletType.enterprise) {
-            await altmeChatSupportCubit.init();
-
             final helpCenterOptions =
                 profileCubit.state.model.profileSetting.helpCenterOptions;
+
+            if (helpCenterOptions.customChatSupport &&
+                helpCenterOptions.customChatSupportName != null) {
+              await altmeChatSupportCubit.init();
+            }
 
             if (helpCenterOptions.customNotification != null &&
                 helpCenterOptions.customNotification! &&

@@ -186,6 +186,15 @@ class App extends StatelessWidget {
               jwtDecode: JWTDecode(),
             ),
           ),
+          BlocProvider<AltmeChatSupportCubit>(
+            lazy: false,
+            create: (context) => AltmeChatSupportCubit(
+              secureStorageProvider: secureStorageProvider,
+              matrixChat: MatrixChatImpl(),
+              profileCubit: context.read<ProfileCubit>(),
+              roomIdStoredKey: SecureStorageKeys.chatSupportRoomId,
+            ),
+          ),
           BlocProvider<MatrixNotificationCubit>(
             lazy: false,
             create: (context) => MatrixNotificationCubit(
@@ -204,6 +213,7 @@ class App extends StatelessWidget {
               profileCubit: context.read<ProfileCubit>(),
               credentialsCubit: context.read<CredentialsCubit>(),
               matrixNotificationCubit: context.read<MatrixNotificationCubit>(),
+              altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
             ),
           ),
           BlocProvider<QRCodeScanCubit>(
@@ -272,15 +282,6 @@ class App extends StatelessWidget {
               ),
               walletCubit: context.read<WalletCubit>(),
               manageNetworkCubit: context.read<ManageNetworkCubit>(),
-            ),
-          ),
-          BlocProvider<AltmeChatSupportCubit>(
-            lazy: false,
-            create: (context) => AltmeChatSupportCubit(
-              secureStorageProvider: secureStorageProvider,
-              matrixChat: MatrixChatImpl(),
-              profileCubit: context.read<ProfileCubit>(),
-              roomIdStoredKey: SecureStorageKeys.chatSupportRoomId,
             ),
           ),
           BlocProvider(

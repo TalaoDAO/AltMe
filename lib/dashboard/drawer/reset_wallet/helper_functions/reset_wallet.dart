@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> resetWallet(BuildContext context) async {
+  await context.read<AltmeChatSupportCubit>().dispose();
+  await context.read<MatrixNotificationCubit>().dispose();
   await context.read<ProfileCubit>().resetProfile();
   await context
       .read<WalletCubit>()
-      .resetWallet(context.read<CredentialsCubit>());
-  await context.read<AltmeChatSupportCubit>().dispose();
-  await context.read<MatrixNotificationCubit>().dispose();
+      .resetWallet(context.read<CredentialsCubit>()); // should be at last
 }
