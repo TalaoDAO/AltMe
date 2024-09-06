@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -83,14 +82,6 @@ class HelpCenterView extends StatelessWidget {
                     appBarTitle: '${l10n.chatWith} $customChatSupportName',
                   ),
                 );
-              },
-            ),
-          ],
-          if (helpCenterOptions.displayNotification && isEnterprise) ...[
-            DrawerItem(
-              title: l10n.notificationRoom,
-              onTap: () {
-                Navigator.of(context).push<void>(NotificationPage.route());
               },
             ),
           ],
