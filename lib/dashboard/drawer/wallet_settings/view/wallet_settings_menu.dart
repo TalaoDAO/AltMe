@@ -29,12 +29,6 @@ class WalletSettingsMenuView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final profileModel = context.read<ProfileCubit>().state.model;
-
-    final helpCenterOptions = profileModel.profileSetting.helpCenterOptions;
-
-    final isEnterprise = profileModel.walletType == WalletType.enterprise;
-
     return BasePage(
       backgroundColor: Theme.of(context).colorScheme.surface,
       useSafeArea: true,
