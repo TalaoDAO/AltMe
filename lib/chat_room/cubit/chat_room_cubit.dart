@@ -288,6 +288,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
             SecureStorageKeys.notificationRoomName,
             roomName,
           );
+
           _roomId = await matrixChat.joinRoom(roomName);
         }
       } else {
