@@ -31,7 +31,6 @@ class WalletSecurityView extends StatelessWidget {
 
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        final helpCenterOptions = state.model.profileSetting.helpCenterOptions;
         return BasePage(
           backgroundColor: Theme.of(context).colorScheme.surface,
           useSafeArea: true,
