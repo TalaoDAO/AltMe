@@ -515,6 +515,7 @@ class HelpCenterOptions extends Equatable {
         displayNotification,
         customNotification,
         customNotificationRoom,
+        displayNotification,
       ];
 }
 

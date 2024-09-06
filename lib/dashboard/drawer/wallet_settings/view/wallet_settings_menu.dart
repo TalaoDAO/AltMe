@@ -30,48 +30,74 @@ class WalletSettingsMenuView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final profileModel = context.read<ProfileCubit>().state.model;
-
-    final helpCenterOptions = profileModel.profileSetting.helpCenterOptions;
-
-    final isEnterprise = profileModel.walletType == WalletType.enterprise;
-
     return BasePage(
       backgroundColor: Theme.of(context).colorScheme.surface,
       useSafeArea: true,
       scrollView: true,
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const BackLeadingButton(
-            padding: EdgeInsets.zero,
-          ),
-          const DrawerLogo(),
-          DrawerItem(
-            title: l10n.languageSettings,
-            subtitle: l10n.languageSettingsDescription,
-            onTap: () async {
-              await Navigator.of(context).push<void>(LanguageSettings.route());
-            },
-          ),
-          DrawerItem(
-            title: l10n.themeSettings,
-            subtitle: l10n.themeSettingsDescription,
-            onTap: () async {
-              await Navigator.of(context).push<void>(ThemeSettings.route());
-            },
-          ),
-          if (helpCenterOptions.displayNotification && isEnterprise) ...[
-            DrawerItem(
-              title: l10n.notificationRoom,
-              onTap: () {
-                Navigator.of(context).push<void>(NotificationPage.route());
-              },
-            ),
-          ],
-        ],
+      body: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          final helpCenterOptions =
+              state.model.profileSetting.helpCenterOptions;
+
+          final isEnterprise = state.model.walletType == WalletType.enterprise;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const BackLeadingButton(
+                padding: EdgeInsets.zero,
+              ),
+              const DrawerLogo(),
+              DrawerItem(
+                title: l10n.languageSettings,
+                subtitle: l10n.languageSettingsDescription,
+                onTap: () async {
+                  await Navigator.of(context)
+                      .push<void>(LanguageSettings.route());
+                },
+              ),
+              DrawerItem(
+                title: l10n.themeSettings,
+                subtitle: l10n.themeSettingsDescription,
+                onTap: () async {
+                  await Navigator.of(context).push<void>(ThemeSettings.route());
+                },
+              ),
+              if (helpCenterOptions.customNotification != null &&
+                  helpCenterOptions.customNotification! &&
+                  helpCenterOptions.customNotificationRoom != null) ...[
+                Padding(
+                  padding: const EdgeInsets.all(Sizes.spaceSmall / 2),
+                  child: DrawerCategoryItem(
+                    title: l10n.notification,
+                    subTitle: l10n.notificationSubtitle,
+                    trailing: SizedBox(
+                      height: 25,
+                      child: BlocBuilder<ProfileCubit, ProfileState>(
+                        builder: (context, state) {
+                          return Switch(
+                            key: const Key('customNotificationRoom'),
+                            onChanged: (value) async {
+                              await context
+                                  .read<ProfileCubit>()
+                                  .updateProfileSetting(
+                                    displayNotification: value,
+                                  );
+                            },
+                            value: helpCenterOptions.displayNotification,
+                            activeColor: Theme.of(context).colorScheme.primary,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: Sizes.spaceSmall),
+              ],
+            ],
+          );
+        },
       ),
     );
   }
