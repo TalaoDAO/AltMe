@@ -31,7 +31,6 @@ class WalletSecurityView extends StatelessWidget {
 
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        final helpCenterOptions = state.model.profileSetting.helpCenterOptions;
         return BasePage(
           backgroundColor: Theme.of(context).colorScheme.surface,
           useSafeArea: true,
@@ -96,37 +95,6 @@ class WalletSecurityView extends StatelessWidget {
                     );
                   },
                 ),
-              if (helpCenterOptions.customNotification != null &&
-                  helpCenterOptions.customNotification! &&
-                  helpCenterOptions.customNotificationRoom != null) ...[
-                Padding(
-                  padding: const EdgeInsets.all(Sizes.spaceSmall / 2),
-                  child: DrawerCategoryItem(
-                    title: l10n.notification,
-                    subTitle: l10n.notificationSubtitle,
-                    trailing: SizedBox(
-                      height: 25,
-                      child: BlocBuilder<ProfileCubit, ProfileState>(
-                        builder: (context, state) {
-                          return Switch(
-                            key: const Key('customNotificationRoom'),
-                            onChanged: (value) async {
-                              await context
-                                  .read<ProfileCubit>()
-                                  .updateProfileSetting(
-                                    displayNotification: value,
-                                  );
-                            },
-                            value: helpCenterOptions.displayNotification,
-                            activeColor: Theme.of(context).colorScheme.primary,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: Sizes.spaceSmall),
-              ],
             ],
           ),
         );
