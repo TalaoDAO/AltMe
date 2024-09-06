@@ -140,6 +140,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
   Future<void> clearRoomIdFromStorage() async {
+    _roomId = null;
     await matrixChat.clearRoomIdInStorage(roomIdStoredKey);
   }
 
@@ -287,6 +288,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
             SecureStorageKeys.notificationRoomName,
             roomName,
           );
+
           _roomId = await matrixChat.joinRoom(roomName);
         }
       } else {
