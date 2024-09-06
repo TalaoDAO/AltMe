@@ -24,6 +24,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
     required this.secureStorageProvider,
     required this.matrixChat,
     required this.profileCubit,
+    required this.roomIdStoredKey,
   }) : super(const ChatRoomState());
 
   final SecureStorageProvider secureStorageProvider;
@@ -36,6 +37,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   //
   final MatrixChatImpl matrixChat;
   final ProfileCubit profileCubit;
+  final String roomIdStoredKey;
 
   Stream<int> get unreadMessageCountStream {
     _notificationStreamController ??= StreamController<int>.broadcast();
@@ -132,6 +134,16 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
     );
   }
 
+  Future<String?> getRoomIdFromStorage() async {
+    final savedRoomId = await matrixChat.getRoomIdFromStorage(roomIdStoredKey);
+    return savedRoomId;
+  }
+
+  Future<void> clearRoomIdFromStorage() async {
+    _roomId = null;
+    await matrixChat.clearRoomIdInStorage(roomIdStoredKey);
+  }
+
   Future<void> init() async {
     try {
       emit(state.copyWith(status: AppStatus.loading));
@@ -140,7 +152,8 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       List<Message> retrivedMessageFromDB = [];
       await _checkIfRoomNotExistThenCreateIt();
-      final savedRoomId = await matrixChat.getRoomIdFromStorage();
+      final savedRoomId =
+          await matrixChat.getRoomIdFromStorage(roomIdStoredKey);
       if (savedRoomId != null) {
         _roomId = savedRoomId;
         await matrixChat.enableRoomEncyption(savedRoomId);
@@ -216,8 +229,6 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
           );
         }
 
-        setMessagesAsRead();
-
         await Future<void>.delayed(const Duration(seconds: 1))
             .then((val) => _getUnreadMessageCount());
       }
@@ -264,41 +275,56 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   Future<void> _checkIfRoomNotExistThenCreateIt() async {
     if (_roomId == null || _roomId!.isEmpty) {
-      final p256KeyForWallet =
-          await getP256KeyToGetAndPresentVC(secureStorageProvider);
-
-      final customOidc4vcProfile = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile;
-
-      final tokenParameters = TokenParameters(
-        privateKey: jsonDecode(p256KeyForWallet) as Map<String, dynamic>,
-        did: '', // just added as it is required field
-        mediaType: MediaType.basic, // just added as it is required field
-        clientType:
-            ClientType.p256JWKThumprint, // just added as it is required field
-        proofHeaderType: customOidc4vcProfile.proofHeader,
-        clientId: customOidc4vcProfile.clientId ?? '',
-      );
-
       final helpCenterOptions =
           profileCubit.state.model.profileSetting.helpCenterOptions;
 
-      final List<String> invites = [];
+      if (roomIdStoredKey == SecureStorageKeys.notificationSupportRoomId) {
+        if (helpCenterOptions.customNotification != null &&
+            helpCenterOptions.customNotification! &&
+            helpCenterOptions.customNotificationRoom != null) {
+          final roomName = helpCenterOptions.customNotificationRoom!;
 
-      if (profileCubit.state.model.walletType == WalletType.enterprise &&
-          helpCenterOptions.customChatSupport &&
-          helpCenterOptions.customChatSupportName != null) {
-        invites.add(helpCenterOptions.customChatSupportName!);
+          await secureStorageProvider.set(
+            SecureStorageKeys.notificationRoomName,
+            roomName,
+          );
+
+          _roomId = await matrixChat.joinRoom(roomName);
+        }
       } else {
-        invites.add(AltMeStrings.matrixSupportId);
+        //roomIdStoredKey == SecureStorageKeys.chatSupportRoomId
+
+        final p256KeyForWallet =
+            await getP256KeyToGetAndPresentVC(secureStorageProvider);
+
+        final customOidc4vcProfile = profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+        final tokenParameters = TokenParameters(
+          privateKey: jsonDecode(p256KeyForWallet) as Map<String, dynamic>,
+          did: '', // just added as it is required field
+          mediaType: MediaType.basic, // just added as it is required field
+          clientType:
+              ClientType.p256JWKThumprint, // just added as it is required field
+          proofHeaderType: customOidc4vcProfile.proofHeader,
+          clientId: customOidc4vcProfile.clientId ?? '',
+        );
+
+        final List<String> invites = [];
+
+        if (profileCubit.state.model.walletType == WalletType.enterprise &&
+            helpCenterOptions.customChatSupport &&
+            helpCenterOptions.customChatSupportName != null) {
+          invites.add(helpCenterOptions.customChatSupportName!);
+        }
+
+        _roomId = await matrixChat.createRoomAndInviteSupport(
+          tokenParameters.thumbprint,
+          invites,
+        );
       }
 
-      _roomId = await matrixChat.createRoomAndInviteSupport(
-        tokenParameters.thumbprint,
-        invites,
-      );
-
-      await matrixChat.setRoomIdInStorage(_roomId!);
+      await matrixChat.setRoomIdInStorage(roomIdStoredKey, _roomId!);
       _getUnreadMessageCount();
       await _subscribeToEventsOfRoom();
     }

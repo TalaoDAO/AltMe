@@ -206,6 +206,7 @@ class DisplayDetails extends Equatable {
   const DisplayDetails({
     this.url,
     this.altText,
+    this.uri,
   });
 
   factory DisplayDetails.fromJson(Map<String, dynamic> json) =>
@@ -214,6 +215,7 @@ class DisplayDetails extends Equatable {
   final String? url;
   @JsonKey(name: 'alt_text')
   final String? altText;
+  final String? uri;
 
   Map<String, dynamic> toJson() => _$DisplayDetailsToJson(this);
 
@@ -221,5 +223,6 @@ class DisplayDetails extends Equatable {
   List<Object?> get props => [
         url,
         altText,
+        uri,
       ];
 }

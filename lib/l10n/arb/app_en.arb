@@ -1058,9 +1058,15 @@
   "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings": "To stop displaying this popup, deactivate the 'developer mode' in the settings.",
   "warningDialogSubtitle": "The recovery page contains sensitive information. Please, make sure to keep it private.",
   "accountPrivateKeyAlert": "The recovery page contains sensitive information. Please, make sure to keep it private.",
-  "etherlinkNetwork": "Etherlink Network",
-  "etherlinkAccount": "Etherlink account",
-  "etherlinkAccountDescription": "Create a new Etherlink blockchain address",
-  "etherlinkAccountCreationCongratulations": "Your new Etherlink account has been successfully created.",
-  "etherlinkProofMessage": ""
+  "etherlinkNetwork": "Ethereum Network",
+  "etherlinkAccount": "Ethereum account",
+  "etherlinkAccountDescription": "Create a new Ethereum blockchain address",
+  "etherlinkAccountCreationCongratulations": "Your new Ethereum account has been successfully created.",
+  "etherlinkProofMessage": "",
+  "notification": "Notification",
+  "notifications": "Notifications",
+  "notificationTitle": "Welcome to the Notifications!\nStay informed with important updates.",
+  "chatRoom": "Chat room",
+  "notificationRoom": "Notification room",
+  "notificationSubtitle": "Enable to get the notification"
 }

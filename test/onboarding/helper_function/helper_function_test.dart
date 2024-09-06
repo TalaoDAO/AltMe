@@ -3,6 +3,7 @@ import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -55,6 +56,9 @@ class MockSplashCubit extends MockCubit<SplashState> implements SplashCubit {}
 class MockAltmeChatSupportCubit extends MockCubit<ChatRoomState>
     implements AltmeChatSupportCubit {}
 
+class MockMatrixNotificationCubit extends MockCubit<ChatRoomState>
+    implements MatrixNotificationCubit {}
+
 class MockSecureStorageProvider extends Mock implements SecureStorageProvider {}
 
 class MockLangCubit extends MockCubit<LangState> implements LangCubit {}
@@ -69,6 +73,7 @@ void main() {
     late MockWalletCubit walletCubit;
     late MockSplashCubit splashCubit;
     late MockAltmeChatSupportCubit altmeChatSupportCubit;
+    late MatrixNotificationCubit matrixNotificationCubit;
     late ProfileCubit profileCubit;
     late MockSecureStorageProvider secureStorageProvider;
 
@@ -79,6 +84,7 @@ void main() {
       walletCubit = MockWalletCubit();
       splashCubit = MockSplashCubit();
       altmeChatSupportCubit = MockAltmeChatSupportCubit();
+      matrixNotificationCubit = MockMatrixNotificationCubit();
       secureStorageProvider = MockSecureStorageProvider();
 
       when(() => secureStorageProvider.get(any())).thenAnswer((_) async => '');
@@ -108,6 +114,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
       );
 
@@ -144,6 +151,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
       );
 

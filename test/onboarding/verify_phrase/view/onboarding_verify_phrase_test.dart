@@ -4,6 +4,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/flavor.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
 import 'package:altme/lang/lang.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
@@ -65,6 +66,9 @@ class MockFlavorCubit extends MockCubit<FlavorMode> implements FlavorCubit {}
 class MockAltmeChatSupportCubit extends MockCubit<ChatRoomState>
     implements AltmeChatSupportCubit {}
 
+class MockMatrixNotificationCubit extends MockCubit<ChatRoomState>
+    implements MatrixNotificationCubit {}
+
 class MockOnboardingCubit extends MockCubit<OnboardingState>
     implements OnboardingCubit {}
 
@@ -82,6 +86,7 @@ void main() {
   late MockSplashCubit splashCubit;
   late MockFlavorCubit flavorCubit;
   late AltmeChatSupportCubit altmeChatSupportCubit;
+  late MatrixNotificationCubit matrixNotificationCubit;
   late MockOnboardingCubit onboardingCubit;
   late MockNavigator navigator;
   late MockSecureStorageProvider secureStorageProvider;
@@ -99,6 +104,7 @@ void main() {
     splashCubit = MockSplashCubit();
     flavorCubit = MockFlavorCubit();
     altmeChatSupportCubit = MockAltmeChatSupportCubit();
+    matrixNotificationCubit = MockMatrixNotificationCubit();
     onboardingCubit = MockOnboardingCubit();
     navigator = MockNavigator();
     secureStorageProvider = MockSecureStorageProvider();
@@ -168,6 +174,7 @@ void main() {
                 walletCubit: walletCubit,
                 splashCubit: splashCubit,
                 altmeChatSupportCubit: altmeChatSupportCubit,
+                matrixNotificationCubit: matrixNotificationCubit,
                 profileCubit: ProfileCubit(
                   didKitProvider: didKitProvider,
                   jwtDecode: JWTDecode(),
@@ -214,6 +221,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: ProfileCubit(
           didKitProvider: didKitProvider,
           jwtDecode: JWTDecode(),
@@ -260,6 +268,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: ProfileCubit(
           didKitProvider: didKitProvider,
           jwtDecode: JWTDecode(),
@@ -338,6 +347,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: ProfileCubit(
           didKitProvider: didKitProvider,
           jwtDecode: JWTDecode(),
@@ -410,6 +420,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: ProfileCubit(
           didKitProvider: didKitProvider,
           jwtDecode: JWTDecode(),
@@ -463,6 +474,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: ProfileCubit(
           didKitProvider: didKitProvider,
           jwtDecode: JWTDecode(),
