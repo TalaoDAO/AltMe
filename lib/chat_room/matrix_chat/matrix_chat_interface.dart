@@ -19,6 +19,7 @@ abstract class MatrixChatInterface {
     String roomName,
     List<String>? invites,
   );
+  Future<String> joinRoom(String roomName);
   Future<void> enableRoomEncyption(String roomId);
   Future<void> handleImageSelection({
     required OnMessageCreated onMessageCreated,
@@ -44,8 +45,9 @@ abstract class MatrixChatInterface {
   });
   Future<void> dispose();
   Future<void> init(ProfileCubit profileCubit);
-  Future<String?> getRoomIdFromStorage();
-  Future<void> setRoomIdInStorage(String roomId);
+  Future<String?> getRoomIdFromStorage(String roomIdStoredKey);
+  Future<void> setRoomIdInStorage(String roomIdStoredKey, String roomId);
+  Future<void> clearRoomIdInStorage(String roomIdStoredKey);
   int getUnreadMessageCount(String? roomId);
   Future<List<Message>> retriveMessagesFromDB(String roomId);
   Future<void> markMessageAsRead(

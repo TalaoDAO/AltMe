@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
@@ -30,6 +31,7 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
         walletCubit: context.read<WalletCubit>(),
         splashCubit: context.read<SplashCubit>(),
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
+        matrixNotificationCubit: context.read<MatrixNotificationCubit>(),
         profileCubit: context.read<ProfileCubit>(),
       ),
       child: const OnBoardingGenPhraseView(),

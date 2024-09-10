@@ -446,11 +446,14 @@ class GeneralOptions extends Equatable {
 class HelpCenterOptions extends Equatable {
   const HelpCenterOptions({
     required this.customChatSupport,
-    this.customChatSupportName,
-    this.customEmail,
     required this.customEmailSupport,
     required this.displayChatSupport,
     required this.displayEmailSupport,
+    required this.displayNotification,
+    this.customChatSupportName,
+    this.customEmail,
+    this.customNotification,
+    this.customNotificationRoom,
   });
 
   factory HelpCenterOptions.fromJson(Map<String, dynamic> json) =>
@@ -461,6 +464,7 @@ class HelpCenterOptions extends Equatable {
         customEmailSupport: false,
         displayChatSupport: true,
         displayEmailSupport: true,
+        displayNotification: true,
       );
 
   final bool customChatSupport;
@@ -469,6 +473,9 @@ class HelpCenterOptions extends Equatable {
   final bool customEmailSupport;
   final bool displayChatSupport;
   final bool displayEmailSupport;
+  final bool displayNotification;
+  final bool? customNotification;
+  final String? customNotificationRoom;
 
   Map<String, dynamic> toJson() => _$HelpCenterOptionsToJson(this);
 
@@ -479,6 +486,9 @@ class HelpCenterOptions extends Equatable {
     bool? customEmailSupport,
     bool? displayChatSupport,
     bool? displayEmailSupport,
+    bool? displayNotification,
+    bool? customNotification,
+    String? customNotificationRoom,
   }) =>
       HelpCenterOptions(
         customChatSupport: customChatSupport ?? this.customChatSupport,
@@ -488,6 +498,10 @@ class HelpCenterOptions extends Equatable {
         customChatSupportName:
             customChatSupportName ?? this.customChatSupportName,
         customEmail: customEmail ?? this.customEmail,
+        displayNotification: displayNotification ?? this.displayNotification,
+        customNotification: customNotification ?? this.customNotification,
+        customNotificationRoom:
+            customNotificationRoom ?? this.customNotificationRoom,
       );
 
   @override
@@ -498,6 +512,10 @@ class HelpCenterOptions extends Equatable {
         customEmailSupport,
         displayChatSupport,
         displayEmailSupport,
+        displayNotification,
+        customNotification,
+        customNotificationRoom,
+        displayNotification,
       ];
 }
 

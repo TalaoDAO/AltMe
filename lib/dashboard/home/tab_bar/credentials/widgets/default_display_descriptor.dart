@@ -23,7 +23,8 @@ class DefaultDisplayDescriptor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = credentialModel.display?.backgroundColor;
-    final backgroundImage = credentialModel.display?.backgroundImage?.url;
+    final backgroundImage = credentialModel.display?.backgroundImage?.url ??
+        credentialModel.display?.backgroundImage?.uri;
 
     return (backgroundImage != null && backgroundImage != '')
         ? AspectRatio(
@@ -97,7 +98,8 @@ class DefaultCardBody extends StatelessWidget {
           )
         : null;
 
-    final logo = credentialModel.display?.logo?.url;
+    final logo = credentialModel.display?.logo?.url ??
+        credentialModel.display?.logo?.uri;
 
     return CustomMultiChildLayout(
       delegate: CredentialBaseWidgetDelegate(position: Offset.zero),

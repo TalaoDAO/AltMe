@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/matrix_notification/cubit/matrix_notification_cubit.dart';
 import 'package:altme/splash/helper_function/is_wallet_created.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
@@ -21,6 +22,7 @@ class SplashCubit extends Cubit<SplashState> {
     required this.walletCubit,
     required this.credentialsCubit,
     required this.altmeChatSupportCubit,
+    required this.matrixNotificationCubit,
     required this.client,
     required this.profileCubit,
     this.packageInfo,
@@ -33,6 +35,7 @@ class SplashCubit extends Cubit<SplashState> {
   final WalletCubit walletCubit;
   final CredentialsCubit credentialsCubit;
   final AltmeChatSupportCubit altmeChatSupportCubit;
+  final MatrixNotificationCubit matrixNotificationCubit;
   final DioClient client;
   final ProfileCubit profileCubit;
   final PackageInfo? packageInfo;
@@ -54,9 +57,20 @@ class SplashCubit extends Cubit<SplashState> {
 
         if (hasWallet) {
           await homeCubit.emitHasWallet();
-
           if (profileCubit.state.model.walletType == WalletType.enterprise) {
-            await altmeChatSupportCubit.init();
+            final helpCenterOptions =
+                profileCubit.state.model.profileSetting.helpCenterOptions;
+
+            if (helpCenterOptions.customChatSupport &&
+                helpCenterOptions.customChatSupportName != null) {
+              await altmeChatSupportCubit.init();
+            }
+
+            if (helpCenterOptions.customNotification != null &&
+                helpCenterOptions.customNotification! &&
+                helpCenterOptions.customNotificationRoom != null) {
+              await matrixNotificationCubit.init();
+            }
           }
 
           emit(state.copyWith(status: SplashStatus.routeToPassCode));

@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -21,6 +22,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     required this.walletCubit,
     required this.splashCubit,
     required this.altmeChatSupportCubit,
+    required this.matrixNotificationCubit,
     required this.profileCubit,
   }) : super(const OnBoardingGenPhraseState());
 
@@ -31,6 +33,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
   final WalletCubit walletCubit;
   final SplashCubit splashCubit;
   final AltmeChatSupportCubit altmeChatSupportCubit;
+  final MatrixNotificationCubit matrixNotificationCubit;
   final ProfileCubit profileCubit;
 
   final log = getLogger('OnBoardingGenPhraseCubit');
@@ -46,6 +49,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
       );
 

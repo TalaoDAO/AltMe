@@ -145,7 +145,8 @@ class SelectiveDisclosureDisplayMap {
           .value;
 
       final element = value.entries.first;
-      if (!currentClaims.containsKey(element.key)) {
+      if (!currentClaims.containsKey(element.key) ||
+          currentClaims[element.key].length == 0) {
         if (element.value is Map) {
           builtMap.addAll(MapForNestedClaimWithoutDisplay(element));
           continue;
