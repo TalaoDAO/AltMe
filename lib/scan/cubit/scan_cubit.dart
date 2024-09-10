@@ -741,6 +741,7 @@ class ScanCubit extends Cubit<ScanState> {
         vpFormat = 'jwt_vp_json';
       } else if (vcSdJwt) {
         vpFormat = 'vc+sd-jwt';
+        vcFormat = 'vc+sd-jwt';
       }
     } else {
       if (clientMetaData == null) {
@@ -765,6 +766,7 @@ class ScanCubit extends Cubit<ScanState> {
           vpFormat = 'jwt_vp_json';
         } else if (vpFormats.containsKey('vc+sd-jwt')) {
           vpFormat = 'vc+sd-jwt';
+          vcFormat = 'vc+sd-jwt';
         }
       }
     }
