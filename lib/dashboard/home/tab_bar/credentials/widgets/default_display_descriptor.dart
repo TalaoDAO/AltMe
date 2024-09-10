@@ -25,16 +25,21 @@ class DefaultDisplayDescriptor extends StatelessWidget {
     final backgroundColor = credentialModel.display?.backgroundColor;
     final backgroundImage = credentialModel.display?.backgroundImage?.url ??
         credentialModel.display?.backgroundImage?.uri;
+    final altText = credentialModel.display?.backgroundImage?.altText ??
+        credentialModel.display?.backgroundImage?.altText;
 
     return (backgroundImage != null && backgroundImage != '')
-        ? AspectRatio(
-            aspectRatio: Sizes.credentialAspectRatio,
-            child: CredentialUrlImage(
-              url: backgroundImage,
-              child: DefaultCardBody(
-                credentialModel: credentialModel,
-                descriptionMaxLine: descriptionMaxLine,
-                displyalDescription: displyalDescription,
+        ? Semantics(
+            label: altText,
+            child: AspectRatio(
+              aspectRatio: Sizes.credentialAspectRatio,
+              child: CredentialUrlImage(
+                url: backgroundImage,
+                child: DefaultCardBody(
+                  credentialModel: credentialModel,
+                  descriptionMaxLine: descriptionMaxLine,
+                  displyalDescription: displyalDescription,
+                ),
               ),
             ),
           )
