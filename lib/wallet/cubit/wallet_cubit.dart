@@ -147,8 +147,8 @@ class WalletCubit extends Cubit<WalletState> {
             BlockchainType.fantom: 0,
             BlockchainType.polygon: 1,
             BlockchainType.binance: 2,
-            BlockchainType.ethereum: 3,
-            BlockchainType.etherlink: 4,
+            BlockchainType.etherlink: 3,
+            BlockchainType.ethereum: 4,
           };
 
           for (final entry in accounts.entries) {
@@ -172,11 +172,12 @@ class WalletCubit extends Cubit<WalletState> {
         /// creating accounts at start
 
         final accounts = <BlockchainType, int>{
-          BlockchainType.polygon: 0,
-          BlockchainType.binance: 1,
-          BlockchainType.tezos: 2,
-          BlockchainType.ethereum: 3,
+          BlockchainType.fantom: 0,
+          BlockchainType.polygon: 1,
+          BlockchainType.binance: 2,
+          BlockchainType.tezos: 3,
           BlockchainType.etherlink: 4,
+          BlockchainType.ethereum: 5, // default account as it is last
         };
 
         for (final entry in accounts.entries) {

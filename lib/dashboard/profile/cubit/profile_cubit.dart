@@ -419,6 +419,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     ProofType? proofType,
     bool? pushAuthorizationRequest,
     bool? statusListCaching,
+    bool? displayNotification,
   }) async {
     final profileModel = state.model.copyWith(
       profileSetting: state.model.profileSetting.copyWith(
@@ -429,6 +430,10 @@ class ProfileCubit extends Cubit<ProfileState> {
               verifySecurityIssuerWebsiteIdentity,
           secureSecurityAuthenticationWithPinCode:
               secureSecurityAuthenticationWithPinCode,
+        ),
+        helpCenterOptions:
+            state.model.profileSetting.helpCenterOptions.copyWith(
+          displayNotification: displayNotification,
         ),
         selfSovereignIdentityOptions:
             state.model.profileSetting.selfSovereignIdentityOptions.copyWith(

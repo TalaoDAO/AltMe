@@ -102,31 +102,24 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
           );
     }
 
-    if (index == null || index == -1) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'Issue with the dislosure of jwt.',
-        },
-      );
+    if (!(index == null || index == -1)) {
+      final bool isSelected = state.selectedSDIndexInJWT.contains(index);
+
+      late List<int> selected;
+
+      if (isSelected) {
+        /// deSelecting the credential
+        selected = List<int>.from(state.selectedSDIndexInJWT)
+          ..removeWhere((element) => element == index);
+      } else {
+        /// selecting the credential
+        selected = [
+          ...state.selectedSDIndexInJWT,
+          ...[index],
+        ];
+      }
+      emit(state.copyWith(selectedSDIndexInJWT: selected));
     }
-
-    final bool isSelected = state.selectedSDIndexInJWT.contains(index);
-
-    late List<int> selected;
-
-    if (isSelected) {
-      /// deSelecting the credential
-      selected = List<int>.from(state.selectedSDIndexInJWT)
-        ..removeWhere((element) => element == index);
-    } else {
-      /// selecting the credential
-      selected = [
-        ...state.selectedSDIndexInJWT,
-        ...[index],
-      ];
-    }
-    emit(state.copyWith(selectedSDIndexInJWT: selected));
   }
 
   void disclosureAction({

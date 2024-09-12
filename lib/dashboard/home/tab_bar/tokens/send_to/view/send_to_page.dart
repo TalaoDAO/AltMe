@@ -7,15 +7,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SendToPage extends StatelessWidget {
   const SendToPage({
     super.key,
-    required this.defaultSelectedToken,
+    this.defaultSelectedToken,
+    this.nftModel,
   });
 
-  final TokenModel defaultSelectedToken;
+  final TokenModel? defaultSelectedToken;
+  final NftModel? nftModel;
 
-  static Route<dynamic> route({required TokenModel defaultSelectedToken}) {
+  static Route<dynamic> route({
+    TokenModel? defaultSelectedToken,
+    NftModel? nftModel,
+  }) {
     return MaterialPageRoute<void>(
       builder: (_) => SendToPage(
         defaultSelectedToken: defaultSelectedToken,
+        nftModel: nftModel,
       ),
       settings: const RouteSettings(name: '/sendToPage'),
     );
@@ -27,6 +33,7 @@ class SendToPage extends StatelessWidget {
       create: (_) => SendToCubit(),
       child: SendToView(
         defaultSelectedToken: defaultSelectedToken,
+        nftModel: nftModel,
       ),
     );
   }
@@ -35,10 +42,12 @@ class SendToPage extends StatelessWidget {
 class SendToView extends StatefulWidget {
   const SendToView({
     super.key,
-    required this.defaultSelectedToken,
+    this.defaultSelectedToken,
+    this.nftModel,
   });
 
-  final TokenModel defaultSelectedToken;
+  final TokenModel? defaultSelectedToken;
+  final NftModel? nftModel;
 
   @override
   State<SendToView> createState() => _SendToViewState();
@@ -84,7 +93,7 @@ class _SendToViewState extends State<SendToView>
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: Sizes.spaceXLarge),
-                const FromAccountWidget(),
+                FromAccountWidget(isEnabled: widget.nftModel == null),
                 const SizedBox(height: Sizes.spaceNormal),
                 WithdrawalAddressInputView(
                   withdrawalAddressController: withdrawalAddressController,
@@ -110,12 +119,29 @@ class _SendToViewState extends State<SendToView>
                 onPressed: state.withdrawalAddress.trim().isEmpty
                     ? null
                     : () {
-                        Navigator.of(context).push<void>(
-                          InsertWithdrawalAmountPage.route(
-                            defualtSelectedToken: widget.defaultSelectedToken,
-                            withdrawalAddress: state.withdrawalAddress,
-                          ),
-                        );
+                        if (widget.nftModel != null) {
+                          final isTezos = widget.nftModel is TezosNftModel;
+                          Navigator.of(context).push<void>(
+                            ConfirmTokenTransactionPage.route(
+                              selectedToken: isTezos
+                                  ? (widget.nftModel! as TezosNftModel)
+                                      .getToken()
+                                  : (widget.nftModel! as EthereumNftModel)
+                                      .getToken(),
+                              withdrawalAddress: state.withdrawalAddress,
+                              amount: '1',
+                              isNFT: true,
+                            ),
+                          );
+                        } else if (widget.defaultSelectedToken != null) {
+                          Navigator.of(context).push<void>(
+                            InsertWithdrawalAmountPage.route(
+                              defualtSelectedToken:
+                                  widget.defaultSelectedToken!,
+                              withdrawalAddress: state.withdrawalAddress,
+                            ),
+                          );
+                        }
                       },
               );
             },

@@ -5,6 +5,7 @@ import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
 import 'package:altme/lang/lang.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
@@ -64,6 +65,9 @@ class MockSplashCubit extends MockCubit<SplashState> implements SplashCubit {}
 class MockAltmeChatSupportCubit extends MockCubit<ChatRoomState>
     implements AltmeChatSupportCubit {}
 
+class MockMatrixNotificationCubit extends MockCubit<ChatRoomState>
+    implements MatrixNotificationCubit {}
+
 class MockSecureStorageProvider extends Mock implements SecureStorageProvider {}
 
 class MockLangCubit extends MockCubit<LangState> implements LangCubit {}
@@ -77,6 +81,7 @@ void main() {
   late WalletCubit walletCubit;
   late SplashCubit splashCubit;
   late AltmeChatSupportCubit altmeChatSupportCubit;
+  late MatrixNotificationCubit matrixNotificationCubit;
   late OnboardingCubit onboardingCubit;
   late MockSecureStorageProvider secureStorageProvider;
   late MockOIDC4VC oidc4vc;
@@ -100,6 +105,7 @@ void main() {
     splashCubit = MockSplashCubit();
     walletCubit = MockWalletCubit();
     altmeChatSupportCubit = MockAltmeChatSupportCubit();
+    matrixNotificationCubit = MockMatrixNotificationCubit();
     onboardingCubit = OnboardingCubit();
     secureStorageProvider = MockSecureStorageProvider();
     oidc4vc = MockOIDC4VC();
@@ -192,6 +198,7 @@ void main() {
                 walletCubit: walletCubit,
                 splashCubit: splashCubit,
                 altmeChatSupportCubit: altmeChatSupportCubit,
+                matrixNotificationCubit: matrixNotificationCubit,
                 profileCubit: ProfileCubit(
                   didKitProvider: didKitProvider,
                   jwtDecode: JWTDecode(),
@@ -241,6 +248,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
       );
 
@@ -284,6 +292,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
       );
 
@@ -327,6 +336,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
       );
 
@@ -382,6 +392,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
       );
 
@@ -437,6 +448,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
       );
 
@@ -492,6 +504,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
       );
 
@@ -548,6 +561,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
       );
 
@@ -613,6 +627,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
       );
 
@@ -667,6 +682,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
       );
 

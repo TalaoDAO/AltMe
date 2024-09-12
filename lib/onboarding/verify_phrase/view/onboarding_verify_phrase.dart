@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/flavor.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
@@ -45,6 +46,7 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
         splashCubit: context.read<SplashCubit>(),
         flavorCubit: context.read<FlavorCubit>(),
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
+        matrixNotificationCubit: context.read<MatrixNotificationCubit>(),
         profileCubit: context.read<ProfileCubit>(),
       ),
       child: Builder(

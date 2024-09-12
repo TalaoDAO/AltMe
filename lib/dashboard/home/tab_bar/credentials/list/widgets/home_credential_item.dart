@@ -19,6 +19,7 @@ class HomeCredentialItem extends StatelessWidget {
         secureStorageProvider: getSecureStorage,
         matrixChat: MatrixChatImpl(),
         profileCubit: context.read<ProfileCubit>(),
+        roomIdStoredKey: 'putIdHereIfNeededInFuture',
       );
 
       return BlocProvider(

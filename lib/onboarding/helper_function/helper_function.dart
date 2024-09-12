@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
@@ -13,6 +14,7 @@ Future<void> generateAccount({
   required WalletCubit walletCubit,
   required SplashCubit splashCubit,
   required AltmeChatSupportCubit altmeChatSupportCubit,
+  required MatrixNotificationCubit matrixNotificationCubit,
   required ProfileCubit profileCubit,
 }) async {
   final mnemonicFormatted = mnemonic.join(' ');
@@ -43,8 +45,19 @@ Future<void> generateAccount({
   );
 
   if (profileCubit.state.model.walletType == WalletType.enterprise) {
-    /// initiate chat if it is enterprise
-    await altmeChatSupportCubit.init();
+    final helpCenterOptions =
+        profileCubit.state.model.profileSetting.helpCenterOptions;
+
+    if (helpCenterOptions.customChatSupport &&
+        helpCenterOptions.customChatSupportName != null) {
+      await altmeChatSupportCubit.init();
+    }
+
+    if (helpCenterOptions.customNotification != null &&
+        helpCenterOptions.customNotification! &&
+        helpCenterOptions.customNotificationRoom != null) {
+      await matrixNotificationCubit.init();
+    }
   }
 
   await homeCubit.emitHasWallet();

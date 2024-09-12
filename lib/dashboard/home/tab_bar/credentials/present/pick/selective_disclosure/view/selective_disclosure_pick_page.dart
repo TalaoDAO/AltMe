@@ -269,14 +269,17 @@ class _SelectiveDisclosurePickViewState
         'sd_hash': sdHash,
       };
 
-      /// sign and get token
-      final jwtToken = profileCubit.oidc4vc.generateToken(
-        payload: payload,
-        tokenParameters: tokenParameters,
-        ignoreProofHeaderType: true,
-      );
+// If there no cnf in the payload, then no need to add signature
+      if (payload['cnf'] != null) {
+        /// sign and get token
+        final jwtToken = profileCubit.oidc4vc.generateToken(
+          payload: payload,
+          tokenParameters: tokenParameters,
+          ignoreProofHeaderType: true,
+        );
 
-      newJwt = '$newJwt$jwtToken';
+        newJwt = '$newJwt$jwtToken';
+      }
 
       final CredentialModel newModel = widget.credentialToBePresented
           .copyWith(selectiveDisclosureJwt: newJwt);

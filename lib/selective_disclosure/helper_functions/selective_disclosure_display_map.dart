@@ -145,7 +145,8 @@ class SelectiveDisclosureDisplayMap {
           .value;
 
       final element = value.entries.first;
-      if (!currentClaims.containsKey(element.key)) {
+      if (!currentClaims.containsKey(element.key) ||
+          currentClaims[element.key].length == 0) {
         if (element.value is Map) {
           builtMap.addAll(MapForNestedClaimWithoutDisplay(element));
           continue;
@@ -190,8 +191,16 @@ class SelectiveDisclosureDisplayMap {
     } else {
       final isCompulsary = limitDisclosure == 'required';
 
-      final bool isDisabled = isCompulsary;
-      if (!isDisabled && isPresentation && parentKeyId != null) {}
+      bool isDisabled = isCompulsary;
+      final index = SelectiveDisclosure(credentialModel)
+          .disclosureListToContent
+          .entries
+          .toList()
+          .indexWhere(
+            (entry) => entry.value.toString().contains(element.key.toString()),
+          );
+      if (index == -1) isDisabled = true;
+      // if (!isDisabled && isPresentation && parentKeyId != null) {}
       builtMap[element.key.toString()] = {
         'mapKey': element.key.toString(),
         'claimKey': element.key.toString(),
@@ -265,6 +274,15 @@ class SelectiveDisclosureDisplayMap {
           });
         }
       }
+      final indexInDisclosure = SelectiveDisclosure(credentialModel)
+          .disclosureListToContent
+          .entries
+          .toList()
+          .indexWhere(
+            (entry) => entry.value.toString().contains(claimKey),
+          );
+      if (indexInDisclosure == -1) isDisabled = true;
+
       if (!(isDisabled && isPresentation)) {
         final listElement = {
           'mapKey': mapKey,

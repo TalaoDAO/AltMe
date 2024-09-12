@@ -1062,5 +1062,11 @@
   "etherlinkAccount": "Ethereum account",
   "etherlinkAccountDescription": "Create a new Ethereum blockchain address",
   "etherlinkAccountCreationCongratulations": "Your new Ethereum account has been successfully created.",
-  "etherlinkProofMessage": ""
+  "etherlinkProofMessage": "",
+  "notification": "Notification",
+  "notifications": "Notifications",
+  "notificationTitle": "Welcome to the Notifications!\nStay informed with important updates.",
+  "chatRoom": "Chat room",
+  "notificationRoom": "Notification room",
+  "notificationSubtitle": "Enable to get the notification"
 }

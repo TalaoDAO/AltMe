@@ -7,8 +7,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CryptoAccountSwitcherButton extends StatelessWidget {
   const CryptoAccountSwitcherButton({
+    this.mainAxisAlignment = MainAxisAlignment.end,
     super.key,
   });
+
+  final MainAxisAlignment mainAxisAlignment;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,8 @@ class CryptoAccountSwitcherButton extends StatelessWidget {
                     );
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: mainAxisAlignment,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       if (blockchainType != null) ...[
                         Image.asset(

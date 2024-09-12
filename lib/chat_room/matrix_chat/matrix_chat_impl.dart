@@ -128,13 +128,18 @@ class MatrixChatImpl extends MatrixChatInterface {
   }
 
   @override
-  Future<String?> getRoomIdFromStorage() async {
-    return secureStorageProvider.get(SecureStorageKeys.supportRoomId);
+  Future<String?> getRoomIdFromStorage(String roomIdStoredKey) async {
+    return secureStorageProvider.get(roomIdStoredKey);
   }
 
   @override
-  Future<void> setRoomIdInStorage(String roomId) async {
-    await secureStorageProvider.set(SecureStorageKeys.supportRoomId, roomId);
+  Future<void> setRoomIdInStorage(String roomIdStoredKey, String roomId) async {
+    await secureStorageProvider.set(roomIdStoredKey, roomId);
+  }
+
+  @override
+  Future<void> clearRoomIdInStorage(String roomIdStoredKey) async {
+    await secureStorageProvider.delete(roomIdStoredKey);
   }
 
   @override
@@ -464,6 +469,22 @@ class MatrixChatImpl extends MatrixChatInterface {
         await enableRoomEncyption(roomId);
         return roomId;
       }
+    }
+  }
+
+  /// join room with [roomName]
+  @override
+  Future<String> joinRoom(String roomName) async {
+    try {
+      if (client == null) {
+        await _initClient();
+      }
+      final roomId = await client!.joinRoom(roomName);
+      await enableRoomEncyption(roomId);
+      return roomId;
+    } catch (e, s) {
+      logger.e('e: $e, s: $s');
+      throw Exception();
     }
   }
 

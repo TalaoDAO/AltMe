@@ -23,17 +23,23 @@ class DefaultDisplayDescriptor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = credentialModel.display?.backgroundColor;
-    final backgroundImage = credentialModel.display?.backgroundImage?.url;
+    final backgroundImage = credentialModel.display?.backgroundImage?.url ??
+        credentialModel.display?.backgroundImage?.uri;
+    final altText = credentialModel.display?.backgroundImage?.altText ??
+        credentialModel.display?.backgroundImage?.altText;
 
     return (backgroundImage != null && backgroundImage != '')
-        ? AspectRatio(
-            aspectRatio: Sizes.credentialAspectRatio,
-            child: CredentialUrlImage(
-              url: backgroundImage,
-              child: DefaultCardBody(
-                credentialModel: credentialModel,
-                descriptionMaxLine: descriptionMaxLine,
-                displyalDescription: displyalDescription,
+        ? Semantics(
+            label: altText,
+            child: AspectRatio(
+              aspectRatio: Sizes.credentialAspectRatio,
+              child: CredentialUrlImage(
+                url: backgroundImage,
+                child: DefaultCardBody(
+                  credentialModel: credentialModel,
+                  descriptionMaxLine: descriptionMaxLine,
+                  displyalDescription: displyalDescription,
+                ),
               ),
             ),
           )
@@ -97,7 +103,8 @@ class DefaultCardBody extends StatelessWidget {
           )
         : null;
 
-    final logo = credentialModel.display?.logo?.url;
+    final logo = credentialModel.display?.logo?.url ??
+        credentialModel.display?.logo?.uri;
 
     return CustomMultiChildLayout(
       delegate: CredentialBaseWidgetDelegate(position: Offset.zero),

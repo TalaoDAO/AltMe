@@ -1,7 +1,8 @@
 name: altme
 description: AltMe Flutter App
 
-version: 2.11.1+494
+version: 2.12.2+507
+
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 environment:
