@@ -270,7 +270,7 @@ class _SelectiveDisclosurePickViewState
       };
 
 // If there no cnf in the payload, then no need to add signature
-      if (payload['cnf'] != null) {
+      if (widget.credentialToBePresented.data['cnf'] != null) {
         /// sign and get token
         final jwtToken = profileCubit.oidc4vc.generateToken(
           payload: payload,
