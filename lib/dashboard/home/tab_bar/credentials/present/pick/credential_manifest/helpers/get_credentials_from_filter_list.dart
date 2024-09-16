@@ -30,7 +30,7 @@ List<CredentialModel> getCredentialsFromFilterList({
 
                 if (field.filter == null) {
                   //ascs case
-                  return false;
+                  return true;
                 } else if (field.filter?.pattern != null) {
                   pattern = field.filter!.pattern;
                 } else if (field.filter?.contains?.containsConst != null) {
@@ -62,6 +62,8 @@ List<CredentialModel> getCredentialsFromFilterList({
           /// a valid candidate
           if (searchList.isNotEmpty) {
             selectedCredential.add(credential);
+          } else {
+            break;
           }
         }
       }
