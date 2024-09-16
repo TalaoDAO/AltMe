@@ -30,7 +30,7 @@ List<CredentialModel> getCredentialsFromFilterList({
 
                 if (field.filter == null) {
                   //ascs case
-                  return true;
+                  return false;
                 } else if (field.filter?.pattern != null) {
                   pattern = field.filter!.pattern;
                 } else if (field.filter?.contains?.containsConst != null) {
