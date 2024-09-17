@@ -754,6 +754,16 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     final oidc4vcDraftType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.oidc4vciDraft;
 
+    final discoverCardsOptions = profileSetting.discoverCardsOptions;
+
+    var format = VCFormatType.ldpVc.urlValue;
+
+    if (vcFormatType == VCFormatType.auto && discoverCardsOptions != null) {
+      format = discoverCardsOptions.vcFormatTypeForAuto;
+    } else {
+      format = vcFormatType.urlValue;
+    }
+
     switch (this) {
       case CredentialSubjectType.defiCompliance:
         image = ImageStrings.dummyDefiComplianceCard;
@@ -793,7 +803,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.emailPassUrl}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}';
+            '&format=$format';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard;
         expirationDateDetails =
@@ -805,7 +815,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=over13';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over13WhyGetThisCard;
@@ -818,7 +828,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=over15';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over15WhyGetThisCard;
@@ -831,7 +841,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=over18';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -844,7 +854,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=over21';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -857,7 +867,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=over50';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -870,7 +880,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=over65';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -916,7 +926,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=$type';
 
         whyGetThisCard =
@@ -963,7 +973,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.phonePassUrl}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}';
+            '&format=$format';
 
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_phoneProofWhyGetThisCard;
@@ -976,7 +986,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=liveness';
 
         whyGetThisCard =
