@@ -3,7 +3,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/drawer/wallet_settings/view/language_settings.dart';
 import 'package:altme/dashboard/drawer/wallet_settings/view/theme_settings.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,7 +40,6 @@ class WalletSettingsMenuView extends StatelessWidget {
           final helpCenterOptions =
               state.model.profileSetting.helpCenterOptions;
 
-          final isEnterprise = state.model.walletType == WalletType.enterprise;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
