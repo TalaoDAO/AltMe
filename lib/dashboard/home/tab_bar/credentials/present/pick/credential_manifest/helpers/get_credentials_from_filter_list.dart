@@ -13,8 +13,10 @@ List<CredentialModel> getCredentialsFromFilterList({
     /// remove ldp_vp if jwt_vp is required
 
     final selectedCredential = <CredentialModel>[];
-    for (final field in filterList) {
-      for (final credential in credentialList) {
+
+    for (final credential in credentialList) {
+      fieldLoop:
+      for (final field in filterList) {
         for (final path in field.path) {
           final credentialData = createJsonByDecryptingSDValues(
             encryptedJson: credential.data,
@@ -63,12 +65,29 @@ List<CredentialModel> getCredentialsFromFilterList({
           if (searchList.isNotEmpty) {
             selectedCredential.add(credential);
           } else {
-            break;
+            break fieldLoop;
           }
         }
       }
     }
-    return selectedCredential.toSet().toList();
+
+    final credentials = selectedCredential.toSet().toList();
+
+    credentials.sort(
+      (a, b) {
+        final firstCredName = a.display?.name ??
+            a.credentialPreview.credentialSubjectModel.credentialSubjectType
+                .name;
+        final secondCredName = b.display?.name ??
+            b.credentialPreview.credentialSubjectModel.credentialSubjectType
+                .name;
+
+        return firstCredName.compareTo(secondCredName);
+      },
+    );
+
+    return credentials;
   }
+
   return credentialList;
 }
