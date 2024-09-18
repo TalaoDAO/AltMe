@@ -62,6 +62,8 @@ List<CredentialModel> getCredentialsFromFilterList({
           /// a valid candidate
           if (searchList.isNotEmpty) {
             selectedCredential.add(credential);
+          } else {
+            break;
           }
         }
       }
