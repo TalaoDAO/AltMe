@@ -77,51 +77,51 @@ class DeveloperDetails extends StatelessWidget {
           valueColor: valueColor,
           showVertically: showVertically,
         ),
-        CredentialField(
-          padding: const EdgeInsets.only(top: 10),
-          title: l10n.issuerDID,
-          value: issuerDid,
-          titleColor: titleColor,
-          valueColor: valueColor,
-          showVertically: showVertically,
-        ),
-        if (credentialModel.credentialPreview.credentialSubjectModel
-                is! WalletCredentialModel &&
-            subjectDid.isNotEmpty)
-          CredentialField(
-            padding: const EdgeInsets.only(top: 10),
-            title: l10n.subjectDID,
-            value: subjectDid,
-            titleColor: titleColor,
-            valueColor: valueColor,
-            showVertically: showVertically,
-          ),
-        CredentialField(
-          padding: const EdgeInsets.only(top: 10),
-          title: l10n.type,
-          value: type,
-          titleColor: titleColor,
-          valueColor: valueColor,
-          showVertically: showVertically,
-        ),
-        if (statusListUri != null)
-          CredentialField(
-            padding: const EdgeInsets.only(top: 10),
-            title: l10n.statusList,
-            value: statusListUri.toString(),
-            titleColor: titleColor,
-            valueColor: valueColor,
-            showVertically: false,
-          ),
-        if (statusListIndex != null)
-          CredentialField(
-            padding: const EdgeInsets.only(top: 10),
-            title: l10n.statusListIndex,
-            value: statusListIndex.toString(),
-            titleColor: titleColor,
-            valueColor: valueColor,
-            showVertically: false,
-          ),
+        // CredentialField(
+        //   padding: const EdgeInsets.only(top: 10),
+        //   title: l10n.issuerDID,
+        //   value: issuerDid,
+        //   titleColor: titleColor,
+        //   valueColor: valueColor,
+        //   showVertically: showVertically,
+        // ),
+        // if (credentialModel.credentialPreview.credentialSubjectModel
+        //         is! WalletCredentialModel &&
+        //     subjectDid.isNotEmpty)
+        //   CredentialField(
+        //     padding: const EdgeInsets.only(top: 10),
+        //     title: l10n.subjectDID,
+        //     value: subjectDid,
+        //     titleColor: titleColor,
+        //     valueColor: valueColor,
+        //     showVertically: showVertically,
+        //   ),
+        // CredentialField(
+        //   padding: const EdgeInsets.only(top: 10),
+        //   title: l10n.type,
+        //   value: type,
+        //   titleColor: titleColor,
+        //   valueColor: valueColor,
+        //   showVertically: showVertically,
+        // ),
+        // if (statusListUri != null)
+        //   CredentialField(
+        //     padding: const EdgeInsets.only(top: 10),
+        //     title: l10n.statusList,
+        //     value: statusListUri.toString(),
+        //     titleColor: titleColor,
+        //     valueColor: valueColor,
+        //     showVertically: false,
+        //   ),
+        // if (statusListIndex != null)
+        //   CredentialField(
+        //     padding: const EdgeInsets.only(top: 10),
+        //     title: l10n.statusListIndex,
+        //     value: statusListIndex.toString(),
+        //     titleColor: titleColor,
+        //     valueColor: valueColor,
+        //     showVertically: false,
+        //   ),
         if (header != null)
           CredentialField(
             padding: const EdgeInsets.only(top: 10),
