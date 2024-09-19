@@ -215,7 +215,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                                         ConfirmDialog(
                                                       title: l10n
                                                           .deleteAccountMessage(
-                                                              data.name),
+                                                              data.name,),
                                                       yes: l10n.ok,
                                                       showNoButton: false,
                                                     ),

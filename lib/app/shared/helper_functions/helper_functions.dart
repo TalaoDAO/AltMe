@@ -99,7 +99,7 @@ String getCredentialName(String constraints) {
   final dynamic constraintsJson = jsonDecode(constraints);
   final fieldsPath = JsonPath(r'$..fields');
   final dynamic credentialField =
-      (fieldsPath.read(constraintsJson).first.value as List)
+      (fieldsPath.read(constraintsJson).first.value! as List)
           .where(
             (dynamic e) =>
                 e['path'].toString() == r'[$.credentialSubject.type]',
@@ -113,7 +113,7 @@ String getIssuersName(String constraints) {
   final dynamic constraintsJson = jsonDecode(constraints);
   final fieldsPath = JsonPath(r'$..fields');
   final dynamic issuerField =
-      (fieldsPath.read(constraintsJson).first.value as List)
+      (fieldsPath.read(constraintsJson).first.value! as List)
           .where(
             (dynamic e) => e['path'].toString() == r'[$.issuer]',
           )

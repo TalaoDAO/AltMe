@@ -19,7 +19,7 @@ Future<CredentialManifest> getCredentialManifestFromAltMe({
     credentialManifetPath
         .read(jsonDecode(jsonEncode(openIdConfiguration)))
         .first
-        .value as Map<String, dynamic>,
+        .value! as Map<String, dynamic>,
   );
   return credentialManifest;
 }

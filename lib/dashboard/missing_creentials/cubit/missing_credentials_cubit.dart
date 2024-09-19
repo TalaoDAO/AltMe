@@ -46,7 +46,7 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
           /// using JsonPath to find credential Name
           final dynamic json = jsonDecode(jsonEncode(descriptor.constraints));
           final dynamic credentialField =
-              (JsonPath(r'$..fields').read(json).first.value as List)
+              (JsonPath(r'$..fields').read(json).first.value! as List)
                   .toList()
                   .first;
 
