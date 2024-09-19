@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:flutter/material.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class DeveloperDetails extends StatelessWidget {
   const DeveloperDetails({
@@ -28,6 +33,38 @@ class DeveloperDetails extends StatelessWidget {
 
     final titleColor = Theme.of(context).colorScheme.onSurface;
     final valueColor = Theme.of(context).colorScheme.onSurface;
+
+    final jwtDecode = JWTDecode();
+
+    String? header;
+    String? payload;
+    String? data;
+
+    if (credentialModel.jwt != null) {
+      final jsonheader = decodeHeader(
+        jwtDecode: jwtDecode,
+        token: credentialModel.jwt!,
+      );
+      header = const JsonEncoder.withIndent('  ').convert(jsonheader);
+      final jsonPayload = decodePayload(
+        jwtDecode: jwtDecode,
+        token: credentialModel.jwt!,
+      );
+      payload = const JsonEncoder.withIndent('  ').convert(jsonPayload);
+
+      if (credentialModel.getFormat == VCFormatType.vcSdJWT.vcValue) {
+        final selectiveDisclosure = SelectiveDisclosure(credentialModel);
+
+        final data = createJsonByDecryptingSDValues(
+          encryptedJson: credentialModel.data,
+          selectiveDisclosure: selectiveDisclosure,
+        );
+
+        payload = const JsonEncoder.withIndent('  ').convert(data);
+      }
+    } else {
+      data = const JsonEncoder.withIndent('  ').convert(credentialModel.data);
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +104,7 @@ class DeveloperDetails extends StatelessWidget {
           valueColor: valueColor,
           showVertically: showVertically,
         ),
-        if (statusListUri != null) ...[
+        if (statusListUri != null)
           CredentialField(
             padding: const EdgeInsets.only(top: 10),
             title: l10n.statusList,
@@ -76,8 +113,7 @@ class DeveloperDetails extends StatelessWidget {
             valueColor: valueColor,
             showVertically: false,
           ),
-        ],
-        if (statusListIndex != null) ...[
+        if (statusListIndex != null)
           CredentialField(
             padding: const EdgeInsets.only(top: 10),
             title: l10n.statusListIndex,
@@ -86,7 +122,33 @@ class DeveloperDetails extends StatelessWidget {
             valueColor: valueColor,
             showVertically: false,
           ),
-        ],
+        if (header != null)
+          CredentialField(
+            padding: const EdgeInsets.only(top: 10),
+            title: l10n.header,
+            value: header,
+            titleColor: titleColor,
+            valueColor: valueColor,
+            showVertically: showVertically,
+          ),
+        if (payload != null)
+          CredentialField(
+            padding: const EdgeInsets.only(top: 10),
+            title: l10n.payload,
+            value: payload,
+            titleColor: titleColor,
+            valueColor: valueColor,
+            showVertically: showVertically,
+          ),
+        if (data != null)
+          CredentialField(
+            padding: const EdgeInsets.only(top: 10),
+            title: l10n.data,
+            value: data,
+            titleColor: titleColor,
+            valueColor: valueColor,
+            showVertically: showVertically,
+          ),
       ],
     );
   }

@@ -38,7 +38,10 @@
     "notificationTitle",
     "chatRoom",
     "notificationRoom",
-    "notificationSubtitle"
+    "notificationSubtitle",
+    "header",
+    "payload",
+    "data"
   ],
 
   "es": [
@@ -80,7 +83,10 @@
     "notificationTitle",
     "chatRoom",
     "notificationRoom",
-    "notificationSubtitle"
+    "notificationSubtitle",
+    "header",
+    "payload",
+    "data"
   ],
 
   "fr": [
@@ -127,6 +133,9 @@
     "notificationTitle",
     "chatRoom",
     "notificationRoom",
-    "notificationSubtitle"
+    "notificationSubtitle",
+    "header",
+    "payload",
+    "data"
   ]
 }
