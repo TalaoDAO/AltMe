@@ -315,6 +315,33 @@ class DiscoverCardsOptions extends Equatable {
     );
   }
 
+  String get vcFormatTypeForAuto {
+    if (displayDefi ||
+        displayEmailPass ||
+        displayGender ||
+        displayHumanity ||
+        displayOver13 ||
+        displayOver15 ||
+        displayOver18 ||
+        displayOver21 ||
+        displayOver50 ||
+        displayOver65 ||
+        displayPhonePass ||
+        displayVerifiableId) {
+      return VCFormatType.ldpVc.urlValue;
+    } else if (displayPhonePassJwt ||
+        displayOver18Jwt ||
+        displayEmailPassJwt ||
+        displayVerifiableIdJwt ||
+        displayHumanityJwt) {
+      return VCFormatType.jwtVcJson.urlValue;
+    } else if (displayVerifiableIdSdJwt) {
+      return VCFormatType.vcSdJWT.urlValue;
+    }
+
+    return VCFormatType.ldpVc.urlValue;
+  }
+
   @override
   List<Object?> get props => [
         displayDefi,

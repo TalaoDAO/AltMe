@@ -116,7 +116,6 @@ class SelectiveDisclosureDisplayMap {
       } else {
         /// keep going only if element is in the nested value of the parentKeyId
         /// either in the payload or the claims
-        print(parentKeyId);
         final nestedValue =
             selectiveDisclosure.extractedValuesFromJwt[parentKeyId] ??
                 SelectiveDisclosure(credentialModel).payload[parentKeyId];
@@ -200,7 +199,6 @@ class SelectiveDisclosureDisplayMap {
             (entry) => entry.value.toString().contains(element.key.toString()),
           );
       if (index == -1) isDisabled = true;
-      // if (!isDisabled && isPresentation && parentKeyId != null) {}
       builtMap[element.key.toString()] = {
         'mapKey': element.key.toString(),
         'claimKey': element.key.toString(),
@@ -283,26 +281,24 @@ class SelectiveDisclosureDisplayMap {
           );
       if (indexInDisclosure == -1) isDisabled = true;
 
-      if (!(isDisabled && isPresentation)) {
-        final listElement = {
-          'mapKey': mapKey,
-          'claimKey': claimKey,
-          'threeDotValue': element.threeDotValue,
-          'value': element.data,
-          'hasCheckbox': !isDisabled && isPresentation,
-          'isCompulsary': isCompulsary,
-        };
-        if (claimsData.length > 1) {
-          if (index == 0) {
-            claimDataMap[title ?? mapKey] = {
-              'value': [listElement],
-            };
-          } else {
-            claimDataMap[title ?? mapKey]['value'].add(listElement);
-          }
+      final listElement = {
+        'mapKey': mapKey,
+        'claimKey': claimKey,
+        'threeDotValue': element.threeDotValue,
+        'value': element.data,
+        'hasCheckbox': !isDisabled && isPresentation,
+        'isCompulsary': isCompulsary,
+      };
+      if (claimsData.length > 1) {
+        if (index == 0) {
+          claimDataMap[title ?? mapKey] = {
+            'value': [listElement],
+          };
         } else {
-          claimDataMap[title ?? mapKey] = listElement;
+          claimDataMap[title ?? mapKey]['value'].add(listElement);
         }
+      } else {
+        claimDataMap[title ?? mapKey] = listElement;
       }
       index++;
     }

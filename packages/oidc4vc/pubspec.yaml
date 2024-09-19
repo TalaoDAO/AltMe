@@ -29,18 +29,18 @@ dependencies:
   jose_plus: ^0.4.5
   json_annotation: ^4.8.1
   json_path: ^0.7.2 #latest version creates test issue
+  pinenacl: ^0.6.0
   secp256k1: ^0.3.0
   secure_storage:
     path: ../secure_storage
   tezart:
     git:
       url: https://github.com/autonomy-system/tezart.git
-      ref: 7534512ff7c874251e5b1e1a426f5822a3837b51
+      ref: 85070e8ddafe5140c0bfd2cb9d569ecf986e7234
   uuid: ^3.0.7
 
 dependency_overrides:
   ffi: 2.1.0 #didkit from path which depends on ffi ^1.0.0
-  pinenacl: ^0.5.1 # tezart from git depends on pinenacl ^0.3.3
 
 dev_dependencies:
   build_runner: ^2.4.4
