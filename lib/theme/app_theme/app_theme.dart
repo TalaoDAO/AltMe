@@ -29,6 +29,9 @@ class AppTheme {
           fontSize: 20,
           fontWeight: FontWeight.normal,
         ),
+        bodySmall: TextStyle(
+          fontSize: 11,
+        ),
       ),
       buttonTheme: ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
