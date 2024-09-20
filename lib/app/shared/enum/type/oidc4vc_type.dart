@@ -14,7 +14,7 @@ enum OIDC4VCType {
     presentationPrefix: 'openid-hedera://',
   ),
 
-  EBSIV3(
+  EBSI(
     offerPrefix: 'openid-credential-offer://',
     presentationPrefix: 'openid-vc://',
   ),
@@ -44,7 +44,7 @@ extension OIDC4VCTypeX on OIDC4VCType {
       case OIDC4VCType.DEFAULT:
       case OIDC4VCType.GAIAX:
       case OIDC4VCType.GREENCYPHER:
-      case OIDC4VCType.EBSIV3:
+      case OIDC4VCType.EBSI:
       case OIDC4VCType.HAIP:
         return true;
       case OIDC4VCType.JWTVC:
