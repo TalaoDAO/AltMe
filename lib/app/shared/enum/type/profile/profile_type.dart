@@ -13,7 +13,7 @@ extension ProfileTypeX on ProfileType {
       case ProfileType.custom:
         return 'Custom';
       case ProfileType.ebsiV3:
-        return 'European Blockchain Services Infrastructure';
+        return 'European Blockchain Services Infrastructure (EBSI v3.x)';
       case ProfileType.diipv2point1:
         return 'Decentralized Identity Interop Profile (DIIP v2.1)';
       case ProfileType.enterprise:
