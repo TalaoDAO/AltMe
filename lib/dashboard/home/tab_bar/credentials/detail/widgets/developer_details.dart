@@ -26,10 +26,10 @@ class DeveloperDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final String issuerDid = credentialModel.credentialPreview.issuer;
-    final String subjectDid =
-        credentialModel.credentialPreview.credentialSubjectModel.id ?? '';
-    final String type = credentialModel.credentialPreview.type.toString();
+    // final String issuerDid = credentialModel.credentialPreview.issuer;
+    // final String subjectDid =
+    //     credentialModel.credentialPreview.credentialSubjectModel.id ?? '';
+    // final String type = credentialModel.credentialPreview.type.toString();
 
     final titleColor = Theme.of(context).colorScheme.onSurface;
     final valueColor = Theme.of(context).colorScheme.onSurface;
@@ -39,6 +39,9 @@ class DeveloperDetails extends StatelessWidget {
     String? header;
     String? payload;
     String? data;
+
+    String? kbHeader;
+    String? kbPayload;
 
     if (credentialModel.jwt != null) {
       final jsonheader = decodeHeader(
@@ -61,6 +64,28 @@ class DeveloperDetails extends StatelessWidget {
         );
 
         payload = const JsonEncoder.withIndent('  ').convert(data);
+
+        final probableJwt = credentialModel.jwt?.split('~').last;
+        kbHeader = 'None';
+        kbPayload = 'None';
+
+        if (probableJwt != null &&
+            probableJwt.isNotEmpty &&
+            probableJwt.startsWith('e')) {
+          try {
+            final header = jwtDecode.parseJwtHeader(probableJwt);
+            kbHeader = const JsonEncoder.withIndent('  ').convert(header);
+          } catch (e) {
+            kbHeader = 'None';
+          }
+
+          try {
+            final payload = jwtDecode.parseJwt(probableJwt);
+            kbPayload = const JsonEncoder.withIndent('  ').convert(payload);
+          } catch (e) {
+            kbPayload = 'None';
+          }
+        }
       }
     } else {
       data = const JsonEncoder.withIndent('  ').convert(credentialModel.data);
@@ -145,6 +170,24 @@ class DeveloperDetails extends StatelessWidget {
             padding: const EdgeInsets.only(top: 10),
             title: l10n.data,
             value: data,
+            titleColor: titleColor,
+            valueColor: valueColor,
+            showVertically: showVertically,
+          ),
+        if (kbHeader != null)
+          CredentialField(
+            padding: const EdgeInsets.only(top: 10),
+            title: l10n.keyBindingHeader,
+            value: kbHeader,
+            titleColor: titleColor,
+            valueColor: valueColor,
+            showVertically: showVertically,
+          ),
+        if (kbPayload != null)
+          CredentialField(
+            padding: const EdgeInsets.only(top: 10),
+            title: l10n.keyBindingPayload,
+            value: kbPayload,
             titleColor: titleColor,
             valueColor: valueColor,
             showVertically: showVertically,

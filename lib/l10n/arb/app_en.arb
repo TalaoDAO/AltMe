@@ -1071,5 +1071,7 @@
   "notificationSubtitle": "Enable to get the notification",
   "header": "Header",
   "payload": "Payload",
-  "data": "Data"
+  "data": "Data",
+  "keyBindingHeader": "Key Binding Header",
+  "keyBindingPayload": "Key Binding Payload"
 }
