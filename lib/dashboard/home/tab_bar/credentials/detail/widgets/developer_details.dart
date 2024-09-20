@@ -53,7 +53,9 @@ class DeveloperDetails extends StatelessWidget {
         jwtDecode: jwtDecode,
         token: credentialModel.jwt!,
       );
-      payload = const JsonEncoder.withIndent('  ').convert(jsonPayload);
+      payload = const JsonEncoder.withIndent('  ').convert(
+        Map.of(jsonPayload)..removeWhere((key, value) => key == 'jwt'),
+      );
 
       if (credentialModel.getFormat == VCFormatType.vcSdJWT.vcValue) {
         final selectiveDisclosure = SelectiveDisclosure(credentialModel);
@@ -63,7 +65,8 @@ class DeveloperDetails extends StatelessWidget {
           selectiveDisclosure: selectiveDisclosure,
         );
 
-        payload = const JsonEncoder.withIndent('  ').convert(data);
+        payload = const JsonEncoder.withIndent('  ')
+            .convert(Map.of(data)..removeWhere((key, value) => key == 'jwt'));
 
         final probableJwt = credentialModel.jwt?.split('~').last;
         kbHeader = 'None';
