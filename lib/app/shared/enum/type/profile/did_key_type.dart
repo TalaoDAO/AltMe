@@ -10,6 +10,7 @@ enum DidKeyType {
   p256,
   @JsonValue('did:key:ebsi')
   ebsiv3,
+  ebsiv4,
   @JsonValue('did:jwk:p-256')
   jwkP256,
   @JsonValue(
@@ -29,6 +30,8 @@ extension DidKeyTypeX on DidKeyType {
         return 'did:key P-256';
       case DidKeyType.ebsiv3:
         return 'did:key EBSI-V3';
+      case DidKeyType.ebsiv4:
+        return 'did:key EBSI-V4';
       case DidKeyType.jwkP256:
         return 'did:jwk P-256';
       case DidKeyType.jwtClientAttestation:
@@ -46,6 +49,8 @@ extension DidKeyTypeX on DidKeyType {
         return l10n.keyDecentralizedIDP256;
       case DidKeyType.ebsiv3:
         return l10n.ebsiV3DecentralizedId;
+      case DidKeyType.ebsiv4:
+        return l10n.ebsiV4DecentralizedId;
       case DidKeyType.jwkP256:
         return l10n.jwkDecentralizedIDP256;
       case DidKeyType.jwtClientAttestation:
@@ -62,6 +67,7 @@ extension DidKeyTypeX on DidKeyType {
       case DidKeyType.edDSA:
         return true;
       case DidKeyType.ebsiv3:
+      case DidKeyType.ebsiv4:
         return false;
     }
   }

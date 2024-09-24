@@ -739,6 +739,7 @@ class SettingsMenu extends Equatable {
     required this.displayHelpCenter,
     required this.displayProfile,
     this.displaySelfSovereignIdentity = true,
+    this.displayActivityLog = false,
   });
 
   factory SettingsMenu.fromJson(Map<String, dynamic> json) =>
@@ -754,6 +755,7 @@ class SettingsMenu extends Equatable {
   final bool displayHelpCenter;
   final bool displayProfile;
   final bool displaySelfSovereignIdentity;
+  final bool displayActivityLog;
 
   Map<String, dynamic> toJson() => _$SettingsMenuToJson(this);
 
@@ -762,6 +764,7 @@ class SettingsMenu extends Equatable {
     bool? displayHelpCenter,
     bool? displayProfile,
     bool? displaySelfSovereignIdentity,
+    bool? displayActivityLog,
   }) =>
       SettingsMenu(
         displayDeveloperMode: displayDeveloperMode ?? this.displayDeveloperMode,
@@ -769,6 +772,7 @@ class SettingsMenu extends Equatable {
         displayProfile: displayProfile ?? this.displayProfile,
         displaySelfSovereignIdentity:
             displaySelfSovereignIdentity ?? this.displaySelfSovereignIdentity,
+        displayActivityLog: displayActivityLog ?? this.displayActivityLog,
       );
 
   @override
@@ -777,6 +781,7 @@ class SettingsMenu extends Equatable {
         displayHelpCenter,
         displayProfile,
         displaySelfSovereignIdentity,
+        displayActivityLog,
       ];
 }
 

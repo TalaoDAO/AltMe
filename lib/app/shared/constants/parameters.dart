@@ -102,6 +102,7 @@ class Parameters {
   static const String walletName = 'altme_wallet';
 
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
+  static const DidKeyType didKeyTypeForEbsiV4 = DidKeyType.ebsiv4;
   static const DidKeyType didKeyTypeForDefault = DidKeyType.edDSA;
   static const DidKeyType didKeyTypeForDutch = DidKeyType.jwkP256;
   static const DidKeyType didKeyTypeForOwfBaselineProfile = DidKeyType.jwkP256;

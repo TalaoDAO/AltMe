@@ -13,7 +13,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     required this.userPin,
     required this.preAuthorizedCode,
     required this.issuer,
-    required this.isEBSIV3,
+    required this.isEBSI,
     required this.credentialOfferJson,
     required this.openIdConfiguration,
   });
@@ -22,7 +22,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
   final String? userPin;
   final String? preAuthorizedCode;
   final String issuer;
-  final bool isEBSIV3;
+  final bool isEBSI;
   final dynamic credentialOfferJson;
   final OpenIdConfiguration openIdConfiguration;
 
@@ -31,7 +31,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     required String? userPin,
     required String? preAuthorizedCode,
     required String issuer,
-    required bool isEBSIV3,
+    required bool isEBSI,
     required dynamic credentialOfferJson,
     required OpenIdConfiguration openIdConfiguration,
   }) =>
@@ -41,7 +41,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
           userPin: userPin,
           issuer: issuer,
           preAuthorizedCode: preAuthorizedCode,
-          isEBSIV3: isEBSIV3,
+          isEBSI: isEBSI,
           credentialOfferJson: credentialOfferJson,
           openIdConfiguration: openIdConfiguration,
         ),
@@ -57,7 +57,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
         userPin: userPin,
         issuer: issuer,
         preAuthorizedCode: preAuthorizedCode,
-        isEBSIV3: isEBSIV3,
+        isEBSI: isEBSI,
         credentialOfferJson: credentialOfferJson,
         openIdConfiguration: openIdConfiguration,
       ),
@@ -72,7 +72,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
     required this.userPin,
     required this.preAuthorizedCode,
     required this.issuer,
-    required this.isEBSIV3,
+    required this.isEBSI,
     required this.credentialOfferJson,
     required this.openIdConfiguration,
   });
@@ -81,7 +81,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
   final String? userPin;
   final String? preAuthorizedCode;
   final String issuer;
-  final bool isEBSIV3;
+  final bool isEBSI;
   final dynamic credentialOfferJson;
   final OpenIdConfiguration openIdConfiguration;
 
@@ -198,7 +198,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                 userPin: userPin,
                                 issuer: issuer,
                                 preAuthorizedCode: preAuthorizedCode,
-                                isEBSIV3: isEBSIV3,
+                                isEBSI: isEBSI,
                                 credentialOfferJson: credentialOfferJson,
                                 qrCodeScanCubit:
                                     context.read<QRCodeScanCubit>(),

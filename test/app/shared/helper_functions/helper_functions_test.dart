@@ -232,21 +232,21 @@ void main() {
 
     test('getIndexValue returns correct index for each DidKeyType', () {
       expect(
-        getIndexValue(isEBSIV3: true, didKeyType: DidKeyType.secp256k1),
+        getIndexValue(isEBSI: true, didKeyType: DidKeyType.secp256k1),
         3,
       );
       expect(
-        getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.secp256k1),
+        getIndexValue(isEBSI: false, didKeyType: DidKeyType.secp256k1),
         1,
       );
 
-      expect(getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.p256), 4);
-      expect(getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.ebsiv3), 5);
-      expect(getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.jwkP256), 6);
-      expect(getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.edDSA), 0);
+      expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.p256), 4);
+      expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.ebsiv3), 5);
+      expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.jwkP256), 6);
+      expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.edDSA), 0);
       expect(
         getIndexValue(
-          isEBSIV3: false,
+          isEBSI: false,
           didKeyType: DidKeyType.jwtClientAttestation,
         ),
         0,

@@ -12,7 +12,7 @@ Future<
       String?,
       String,
     )> getCredential({
-  required bool isEBSIV3,
+  required bool isEBSI,
   required dynamic credential,
   required ProfileCubit profileCubit,
   required String issuer,
@@ -26,13 +26,13 @@ Future<
   required List<dynamic>? authorizationDetails,
 }) async {
   final privateKey = await fetchPrivateKey(
-    isEBSIV3: isEBSIV3,
+    isEBSI: isEBSI,
     didKeyType: didKeyType,
     profileCubit: profileCubit,
   );
 
   final (did, kid) = await fetchDidAndKid(
-    isEBSIV3: isEBSIV3,
+    isEBSI: isEBSI,
     privateKey: privateKey,
     didKeyType: didKeyType,
     profileCubit: profileCubit,
