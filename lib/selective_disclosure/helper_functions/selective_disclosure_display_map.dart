@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/shared/extension/iterable_extension.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/selective_disclosure/cubit/selective_disclosure_pick_cubit.dart';
@@ -128,6 +130,13 @@ class SelectiveDisclosureDisplayMap {
           final claimList = nestedValue['_sd'];
           if (claimList is List) {
             if (claimList.contains(digest)) displayElement = true;
+          }
+          if (claimList == null) {
+            // checking if content is the nested value we want to display
+            final contentJson = jsonDecode(content);
+            if (contentJson[1] == parentKeyId) {
+              displayElement = true;
+            }
           }
         }
         if (!displayElement) continue;
