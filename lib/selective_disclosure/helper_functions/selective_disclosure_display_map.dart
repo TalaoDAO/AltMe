@@ -67,6 +67,10 @@ class SelectiveDisclosureDisplayMap {
         ).buildMap;
         if (nestedMap.isNotEmpty) {
           builtMap[title] = nestedMap;
+        } else {
+          builtMap.addAll(
+            claimData(mapKey, title),
+          );
         }
       } else {
         builtMap.addAll(claimData(mapKey, title));
@@ -131,13 +135,6 @@ class SelectiveDisclosureDisplayMap {
           if (claimList is List) {
             if (claimList.contains(digest)) displayElement = true;
           }
-          if (claimList == null) {
-            // checking if content is the nested value we want to display
-            final contentJson = jsonDecode(content);
-            if (contentJson[1] == parentKeyId) {
-              displayElement = true;
-            }
-          }
         }
         if (!displayElement) continue;
       }
@@ -156,7 +153,7 @@ class SelectiveDisclosureDisplayMap {
       if (!currentClaims.containsKey(element.key) ||
           currentClaims[element.key].length == 0) {
         if (element.value is Map) {
-          builtMap.addAll(MapForNestedClaimWithoutDisplay(element));
+          builtMap.addAll(MapForNestedClaimWithoutDisplay(element, null));
           continue;
         }
 
@@ -174,6 +171,7 @@ class SelectiveDisclosureDisplayMap {
   /// can be used in recursive way to get more nested levels
   Map<String, dynamic> MapForNestedClaimWithoutDisplay(
     dynamic element,
+    String? title,
   ) {
     final value = element.value as Map<String, dynamic>;
     final builtMap = <String, dynamic>{};
@@ -208,7 +206,7 @@ class SelectiveDisclosureDisplayMap {
             (entry) => entry.value.toString().contains(element.key.toString()),
           );
       if (index == -1) isDisabled = true;
-      builtMap[element.key.toString()] = {
+      builtMap[title ?? element.key.toString()] = {
         'mapKey': element.key.toString(),
         'claimKey': element.key.toString(),
         'threeDotValue': null,
@@ -289,12 +287,19 @@ class SelectiveDisclosureDisplayMap {
             (entry) => entry.value.toString().contains(claimKey),
           );
       if (indexInDisclosure == -1) isDisabled = true;
-
+      // ignore: inference_failure_on_uninitialized_variable, prefer_typing_uninitialized_variables
+      late final value;
+      try {
+        final json = jsonDecode(element.data);
+        value = json;
+      } catch (e) {
+        value = element.data;
+      }
       final listElement = {
         'mapKey': mapKey,
         'claimKey': claimKey,
         'threeDotValue': element.threeDotValue,
-        'value': element.data,
+        'value': value,
         'hasCheckbox': !isDisabled && isPresentation,
         'isCompulsary': isCompulsary,
       };
