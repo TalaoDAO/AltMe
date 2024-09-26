@@ -48,7 +48,8 @@ class SelectiveDisclosureDisplayMap {
 
       if (display == null) return;
       title = display['name'].toString();
-
+      /// Getting value_type if defined in the claim
+      final type = mapValue['value_type'] as String?;
       final bool hasNestedData =
           mapValue.values.any((element) => element is Map<String, dynamic>);
 
@@ -69,11 +70,11 @@ class SelectiveDisclosureDisplayMap {
           builtMap[title] = nestedMap;
         } else {
           builtMap.addAll(
-            claimData(mapKey, title),
+            claimData(mapKey, title, type),
           );
         }
       } else {
-        builtMap.addAll(claimData(mapKey, title));
+        builtMap.addAll(claimData(mapKey, title, type));
       }
     });
     final Map<String, dynamic> mapFromJwtEntries = fileterdMapFromJwt(
@@ -161,6 +162,7 @@ class SelectiveDisclosureDisplayMap {
           claimData(
             element.key.toString(),
             element.key.toString(),
+            null,
           ),
         );
       }
@@ -219,7 +221,11 @@ class SelectiveDisclosureDisplayMap {
     return builtMap;
   }
 
-  Map<String, dynamic> claimData(String mapKey, String? title) {
+  Map<String, dynamic> claimData(
+    String mapKey,
+    String? title,
+    String? type,
+  ) {
     final claimDataMap = <String, dynamic>{};
     final List<ClaimsData> claimsData =
         SelectiveDisclosure(credentialModel).getClaimsData(
@@ -302,6 +308,7 @@ class SelectiveDisclosureDisplayMap {
         'value': value,
         'hasCheckbox': !isDisabled && isPresentation,
         'isCompulsary': isCompulsary,
+        'type': type,
       };
       if (claimsData.length > 1) {
         if (index == 0) {

@@ -296,6 +296,7 @@ class DisclosureLine extends StatelessWidget {
               titleColor: Theme.of(context).colorScheme.onSurface,
               valueColor: Theme.of(context).colorScheme.onSurface,
               showVertically: showVertically,
+              type: elementValue['type'].toString(),
             ),
           ),
           if (elementValue['hasCheckbox'] == true) ...[
