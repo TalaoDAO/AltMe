@@ -124,6 +124,7 @@ class CredentialSubjectData extends StatelessWidget {
           titleColor: Theme.of(context).colorScheme.onSurface,
           valueColor: Theme.of(context).colorScheme.onSurface,
           showVertically: showVertically,
+          type: value['value_type'].toString(),
         );
       }).toList(),
     );
