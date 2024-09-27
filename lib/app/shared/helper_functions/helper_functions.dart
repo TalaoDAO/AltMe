@@ -99,7 +99,7 @@ String getCredentialName(String constraints) {
   final dynamic constraintsJson = jsonDecode(constraints);
   final fieldsPath = JsonPath(r'$..fields');
   final dynamic credentialField =
-      (fieldsPath.read(constraintsJson).first.value as List)
+      (fieldsPath.read(constraintsJson).first.value! as List)
           .where(
             (dynamic e) =>
                 e['path'].toString() == r'[$.credentialSubject.type]',
@@ -113,7 +113,7 @@ String getIssuersName(String constraints) {
   final dynamic constraintsJson = jsonDecode(constraints);
   final fieldsPath = JsonPath(r'$..fields');
   final dynamic issuerField =
-      (fieldsPath.read(constraintsJson).first.value as List)
+      (fieldsPath.read(constraintsJson).first.value! as List)
           .where(
             (dynamic e) => e['path'].toString() == r'[$.issuer]',
           )
@@ -234,12 +234,12 @@ String getDateTimeWithoutSpace({DateTime? dateTime}) {
 }
 
 int getIndexValue({
-  required bool isEBSIV3,
+  required bool isEBSI,
   required DidKeyType didKeyType,
 }) {
   switch (didKeyType) {
     case DidKeyType.secp256k1:
-      if (isEBSIV3) {
+      if (isEBSI) {
         return 3;
       } else {
         return 1;
@@ -250,7 +250,8 @@ int getIndexValue({
       return 5;
     case DidKeyType.jwkP256:
       return 6;
-
+    case DidKeyType.ebsiv4:
+      return 7;
     case DidKeyType.edDSA:
     case DidKeyType.jwtClientAttestation:
       return 0; // it is not needed, just assigned
@@ -282,7 +283,7 @@ Future<String> getPrivateKey({
 
     case DidKeyType.secp256k1:
       final index = getIndexValue(
-        isEBSIV3: true,
+        isEBSI: true,
         didKeyType: didKeyType,
       );
       final key = profileCubit.oidc4vc.privateKeyFromMnemonic(
@@ -293,9 +294,10 @@ Future<String> getPrivateKey({
 
     case DidKeyType.p256:
     case DidKeyType.ebsiv3:
+    case DidKeyType.ebsiv4:
     case DidKeyType.jwkP256:
       final indexValue = getIndexValue(
-        isEBSIV3: false,
+        isEBSI: false,
         didKeyType: didKeyType,
       );
 
@@ -398,9 +400,9 @@ DidKeyType? getDidKeyFromString(String? didKeyTypeString) {
 Future<String> fetchPrivateKey({
   required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
-  bool? isEBSIV3,
+  bool? isEBSI,
 }) async {
-  if (isEBSIV3 != null && isEBSIV3) {
+  if (isEBSI != null && isEBSI) {
     final privateKey = await getPrivateKey(
       profileCubit: profileCubit,
       didKeyType: DidKeyType.ebsiv3,
@@ -533,6 +535,7 @@ Future<(String, String)> getDidAndKid({
 
   switch (didKeyType) {
     case DidKeyType.ebsiv3:
+    case DidKeyType.ebsiv4:
 
       //b'\xd1\xd6\x03' in python
       final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
@@ -592,11 +595,11 @@ Future<(String, String)> getDidAndKid({
 
 Future<(String, String)> fetchDidAndKid({
   required String privateKey,
-  bool? isEBSIV3,
+  bool? isEBSI,
   required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
 }) async {
-  if (isEBSIV3 != null && isEBSIV3) {
+  if (isEBSI != null && isEBSI) {
     final (did, kid) = await getDidAndKid(
       didKeyType: DidKeyType.ebsiv3,
       privateKey: privateKey,
@@ -785,7 +788,7 @@ Future<
   for (final oidc4vcType in OIDC4VCType.values) {
     if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
       if (oidc4vcType == OIDC4VCType.DEFAULT ||
-          oidc4vcType == OIDC4VCType.EBSIV3) {
+          oidc4vcType == OIDC4VCType.EBSI) {
         if (credSupported?.trustFramework != null &&
             credSupported == credSupported?.trustFramework) {
           return (
@@ -801,7 +804,7 @@ Future<
         if (credSupported?.trustFramework?.name != null &&
             credSupported?.trustFramework?.name == 'ebsi') {
           return (
-            OIDC4VCType.EBSIV3,
+            OIDC4VCType.EBSI,
             openIdConfiguration,
             authorizationServerConfiguration,
             credentialOfferJson,
@@ -997,7 +1000,7 @@ Future<Map<String, dynamic>?> getClientMetada({
   }
 }
 
-Future<bool?> isEBSIV3ForVerifiers({
+Future<bool?> isEBSIForVerifiers({
   required Uri uri,
   required OIDC4VC oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
@@ -1595,7 +1598,7 @@ bool supportCryptoCredential(ProfileModel profileModel) {
 // oAuthClientAttestationPop
 Future<(String?, String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
-  required bool isEBSIV3,
+  required bool isEBSI,
   required String issuer,
 }) async {
   try {
@@ -1612,13 +1615,13 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
 
     final String privateKey = await fetchPrivateKey(
       profileCubit: profileCubit,
-      isEBSIV3: isEBSIV3,
+      isEBSI: isEBSI,
       didKeyType: didKeyType,
     );
 
     final (did, _) = await fetchDidAndKid(
       privateKey: privateKey,
-      isEBSIV3: isEBSIV3,
+      isEBSI: isEBSI,
       profileCubit: profileCubit,
       didKeyType: didKeyType,
     );

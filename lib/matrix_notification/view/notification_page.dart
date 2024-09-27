@@ -133,7 +133,7 @@ class _NotificationViewState<B extends ChatRoomCubit>
                                     children: [
                                       Text(
                                         chatTimeFormatter(
-                                            message.createdAt ?? 0),
+                                            message.createdAt ?? 0,),
                                         style: TextStyle(
                                           color: colorScheme.onSurface,
                                           fontSize: 12,

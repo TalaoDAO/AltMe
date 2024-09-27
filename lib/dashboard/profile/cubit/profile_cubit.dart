@@ -237,6 +237,28 @@ class ProfileCubit extends Cubit<ProfileState> {
             enterpriseWalletName: enterpriseWalletName,
           );
 
+        case ProfileType.ebsiV4:
+          final privateKey = await getPrivateKey(
+            didKeyType: Parameters.didKeyTypeForEbsiV4,
+            profileCubit: this,
+          );
+
+          final (did, _) = await getDidAndKid(
+            didKeyType: Parameters.didKeyTypeForEbsiV4,
+            privateKey: privateKey,
+            profileCubit: this,
+          );
+
+          profileModel = ProfileModel.ebsiV4(
+            polygonIdNetwork: polygonIdNetwork,
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+            clientId: did,
+            clientSecret: randomString(12),
+            enterpriseWalletName: enterpriseWalletName,
+          );
+
         case ProfileType.diipv2point1:
           final privateKey = await getPrivateKey(
             didKeyType: Parameters.didKeyTypeForDutch,
@@ -588,6 +610,20 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.ebsiV3:
         await update(
           ProfileModel.ebsiV3(
+            polygonIdNetwork: state.model.polygonIdNetwork,
+            walletProtectionType: state.model.walletProtectionType,
+            isDeveloperMode: state.model.isDeveloperMode,
+            walletType: state.model.walletType,
+            enterpriseWalletName: state.model.enterpriseWalletName,
+            clientId: state.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.clientId,
+            clientSecret: state.model.profileSetting
+                .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
+          ),
+        );
+      case ProfileType.ebsiV4:
+        await update(
+          ProfileModel.ebsiV4(
             polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,

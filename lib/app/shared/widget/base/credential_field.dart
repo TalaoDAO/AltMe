@@ -1,3 +1,5 @@
+import 'package:altme/app/shared/launch_url/launch_url.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class CredentialField extends StatelessWidget {
@@ -9,6 +11,7 @@ class CredentialField extends StatelessWidget {
     this.titleColor,
     this.valueColor,
     this.padding = const EdgeInsets.all(8),
+    this.type = 'string',
   });
 
   final String value;
@@ -17,6 +20,7 @@ class CredentialField extends StatelessWidget {
   final Color? valueColor;
   final EdgeInsetsGeometry padding;
   final bool showVertically;
+  final String type;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +33,7 @@ class CredentialField extends StatelessWidget {
         valueColor: valueColor,
         padding: padding,
         showVertically: showVertically,
+        type: type,
       ),
     );
   }
@@ -43,6 +48,7 @@ class DisplayCredentialField extends StatelessWidget {
     this.valueColor,
     required this.padding,
     required this.showVertically,
+    this.type = 'string',
   });
 
   final String? title;
@@ -51,6 +57,7 @@ class DisplayCredentialField extends StatelessWidget {
   final Color? valueColor;
   final EdgeInsetsGeometry padding;
   final bool showVertically;
+  final String type;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +81,20 @@ class DisplayCredentialField extends StatelessWidget {
             ],
             TextSpan(
               text: value,
-              style: textTheme.bodyMedium!.copyWith(color: valueColor),
+              style: textTheme.bodyMedium!.copyWith(
+                color: (type == 'uri' || type == 'email')
+                    ? Theme.of(context).colorScheme.primary
+                    : valueColor,
+              ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () async {
+                  if (type == 'uri') {
+                    await LaunchUrl.launch(value);
+                  }
+                  if (type == 'email') {
+                    await LaunchUrl.launch('mailto:$value');
+                  }
+                },
             ),
           ],
         ),

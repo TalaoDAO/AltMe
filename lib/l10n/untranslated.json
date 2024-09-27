@@ -38,7 +38,13 @@
     "notificationTitle",
     "chatRoom",
     "notificationRoom",
-    "notificationSubtitle"
+    "notificationSubtitle",
+    "header",
+    "payload",
+    "data",
+    "keyBindingHeader",
+    "keyBindingPayload",
+    "ebsiV4DecentralizedId"
   ],
 
   "es": [
@@ -80,7 +86,13 @@
     "notificationTitle",
     "chatRoom",
     "notificationRoom",
-    "notificationSubtitle"
+    "notificationSubtitle",
+    "header",
+    "payload",
+    "data",
+    "keyBindingHeader",
+    "keyBindingPayload",
+    "ebsiV4DecentralizedId"
   ],
 
   "fr": [
@@ -127,6 +139,12 @@
     "notificationTitle",
     "chatRoom",
     "notificationRoom",
-    "notificationSubtitle"
+    "notificationSubtitle",
+    "header",
+    "payload",
+    "data",
+    "keyBindingHeader",
+    "keyBindingPayload",
+    "ebsiV4DecentralizedId"
   ]
 }

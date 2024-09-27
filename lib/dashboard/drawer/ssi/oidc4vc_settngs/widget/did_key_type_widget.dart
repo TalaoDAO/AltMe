@@ -40,6 +40,7 @@ class DidKeyTypeWidget extends StatelessWidget {
                           VCFormatType.ldpVc;
 
                       final isUnmatchedDid = didKeyType == DidKeyType.ebsiv3 ||
+                          didKeyType == DidKeyType.ebsiv4 ||
                           didKeyType == DidKeyType.jwkP256;
 
                       if (isldpVc && isUnmatchedDid) {

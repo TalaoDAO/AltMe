@@ -246,7 +246,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         await startOIDC4VCCredentialIssuance(
           scannedResponse: uri.toString(),
-          isEBSIV3: oidcType == OIDC4VCType.EBSIV3,
+          isEBSI: oidcType == OIDC4VCType.EBSI,
           qrCodeScanCubit: qrCodeScanCubit,
           oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
           credentialOfferJson: credentialOfferJson,
@@ -456,7 +456,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> startOIDC4VCCredentialIssuance({
     required String scannedResponse,
-    required bool isEBSIV3,
+    required bool isEBSI,
     required QRCodeScanCubit qrCodeScanCubit,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required dynamic credentialOfferJson,
@@ -533,7 +533,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                     dioClient: client,
                     userPin: userPin,
                     oidc4vc: oidc4vc,
-                    isEBSIV3: isEBSIV3,
+                    isEBSI: isEBSI,
                     credentialOfferJson: credentialOfferJson,
                     cryptoHolderBinding:
                         customOidc4vcProfile.cryptoHolderBinding,
@@ -562,7 +562,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       dioClient: client,
       userPin: null,
       credentialOfferJson: credentialOfferJson,
-      isEBSIV3: isEBSIV3,
+      isEBSI: isEBSI,
       cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
       oidc4vciDraftType: oidc4vciDraftType,
       profileCubit: profileCubit,
@@ -890,7 +890,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? userPin,
     required String? preAuthorizedCode,
     required String issuer,
-    required bool isEBSIV3,
+    required bool isEBSI,
     required dynamic credentialOfferJson,
     required OpenIdConfiguration openIdConfiguration,
   }) {
@@ -902,7 +902,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           userPin: userPin,
           issuer: issuer,
           preAuthorizedCode: preAuthorizedCode,
-          isEBSIV3: isEBSIV3,
+          isEBSI: isEBSI,
           credentialOfferJson: credentialOfferJson,
           openIdConfiguration: openIdConfiguration,
         ),
@@ -1189,8 +1189,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final nonce = state.uri?.queryParameters['nonce'];
       final stateValue = state.uri?.queryParameters['state'];
 
-      // final bool? isEBSIV3 =
-      //     await isEBSIV3ForVerifier(client: client, uri: state.uri!);
+      // final bool? isEBSI =
+      //     await isEBSIForVerifier(client: client, uri: state.uri!);
 
       final didKeyType = profileCubit.state.model.profileSetting
           .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
@@ -1257,7 +1257,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> processSelectedCredentials({
     required List<dynamic> selectedCredentials,
-    required bool isEBSIV3,
+    required bool isEBSI,
     required String? userPin,
     required String? preAuthorizedCode,
     required String issuer,
@@ -1273,7 +1273,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         oAuthClientAttestationPop
       ) = await getClientDetails(
         profileCubit: profileCubit,
-        isEBSIV3: isEBSIV3,
+        isEBSI: isEBSI,
         issuer: issuer,
       );
 
@@ -1283,7 +1283,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       if (preAuthorizedCode != null) {
         await addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
-          isEBSIV3: isEBSIV3,
+          isEBSI: isEBSI,
           userPin: userPin,
           preAuthorizedCode: preAuthorizedCode,
           issuer: issuer,
@@ -1303,7 +1303,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         await getAuthorizationUriForIssuer(
           scannedResponse: state.uri.toString(),
           oidc4vc: oidc4vc,
-          isEBSIV3: isEBSIV3,
+          isEBSI: isEBSI,
           didKitProvider: didKitProvider,
           selectedCredentials: selectedCredentials,
           credentialOfferJson: credentialOfferJson,
@@ -1333,7 +1333,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> addCredentialsInLoop({
     required List<dynamic> selectedCredentials,
-    required bool isEBSIV3,
+    required bool isEBSI,
     required String? userPin,
     required String? preAuthorizedCode,
     required String issuer,
@@ -1437,7 +1437,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             String? deferredCredentialEndpoint,
             String format,
           ) = await getCredential(
-            isEBSIV3: isEBSIV3,
+            isEBSI: isEBSI,
             credential: selectedCredentials[i],
             issuer: issuer,
             cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
@@ -1558,7 +1558,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final containsAllRequiredKey = statePayload.containsKey('credentials') &&
           statePayload.containsKey('codeVerifier') &&
           statePayload.containsKey('issuer') &&
-          statePayload.containsKey('isEBSIV3');
+          statePayload.containsKey('isEBSI');
 
       if (!containsAllRequiredKey) {
         throw ResponseMessage(
@@ -1572,7 +1572,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final selectedCredentials = statePayload['credentials'] as List<dynamic>;
       final String codeVerifier = statePayload['codeVerifier'].toString();
       final String issuer = statePayload['issuer'].toString();
-      final bool isEBSIV3 = statePayload['isEBSIV3'] as bool;
+      final bool isEBSI = statePayload['isEBSI'] as bool;
       final String? authorization = statePayload['authorization'] as String?;
       final String? clientId = statePayload['client_id'] as String?;
       final String? clientSecret = statePayload['client_secret'] as String?;
@@ -1586,7 +1586,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         userPin: null,
         issuer: issuer,
         preAuthorizedCode: null,
-        isEBSIV3: isEBSIV3,
+        isEBSI: isEBSI,
         codeForAuthorisedFlow: codeForAuthorisedFlow,
         codeVerifier: codeVerifier,
         authorization: authorization,

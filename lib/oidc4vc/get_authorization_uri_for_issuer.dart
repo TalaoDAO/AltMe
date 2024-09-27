@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 Future<void> getAuthorizationUriForIssuer({
   required String scannedResponse,
   required OIDC4VC oidc4vc,
-  required bool isEBSIV3,
+  required bool isEBSI,
   required DIDKitProvider didKitProvider,
   required List<dynamic> selectedCredentials,
   required String issuer,
@@ -49,7 +49,7 @@ Future<void> getAuthorizationUriForIssuer({
     'codeVerifier': pkcePair.codeVerifier,
     'credentials': selectedCredentials,
     'issuer': issuer,
-    'isEBSIV3': isEBSIV3,
+    'isEBSI': isEBSI,
   };
 
   switch (clientAuthentication) {

@@ -1068,5 +1068,11 @@
   "notificationTitle": "Welcome to the Notifications!\nStay informed with important updates.",
   "chatRoom": "Chat room",
   "notificationRoom": "Notification room",
-  "notificationSubtitle": "Enable to get the notification"
+  "notificationSubtitle": "Enable to get the notification",
+  "header": "Header",
+  "payload": "Payload",
+  "data": "Data",
+  "keyBindingHeader": "Key Binding Header",
+  "keyBindingPayload": "Key Binding Payload",
+  "ebsiV4DecentralizedId": "did:key EBSI V4 P-256"
 }

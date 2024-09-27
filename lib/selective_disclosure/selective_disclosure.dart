@@ -211,7 +211,7 @@ class SelectiveDisclosure {
       value.add(
         ClaimsData(
           isfromDisclosureOfJWT: true,
-          data: data.toString(),
+          data: data is Map ? jsonEncode(data) : data.toString(),
         ),
       );
     } catch (e) {
