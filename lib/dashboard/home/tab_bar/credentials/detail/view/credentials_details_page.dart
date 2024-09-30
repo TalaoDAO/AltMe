@@ -306,7 +306,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
                           /// display widget
                           if (!credentialManifestSupport &&
-                              widget.credentialModel.display != null) ...[
+                              widget.credentialModel.display != null &&
+                              !isDeveloperMode) ...[
                             const SizedBox(height: 10),
                             DisplayWidget(
                               display: widget.credentialModel.display!,
