@@ -315,10 +315,11 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           ],
 
                           /// credentialSubjectData
-                          CredentialSubjectData(
-                            credentialModel: widget.credentialModel,
-                            showVertically: showVerticalDescription,
-                          ),
+                          if (!isDeveloperMode)
+                            CredentialSubjectData(
+                              credentialModel: widget.credentialModel,
+                              showVertically: showVerticalDescription,
+                            ),
 
                           /// selective disclouse data - _sd
                           /// and normal data too
