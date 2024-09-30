@@ -58,7 +58,7 @@ class DeveloperDetails extends StatelessWidget {
         final selectiveDisclosure = SelectiveDisclosure(credentialModel);
 
         final data = createJsonByDecryptingSDValues(
-          encryptedJson: credentialModel.data,
+          encryptedJson: jsonPayload,
           selectiveDisclosure: selectiveDisclosure,
         );
 
