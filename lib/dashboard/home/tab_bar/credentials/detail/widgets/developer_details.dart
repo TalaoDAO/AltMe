@@ -40,9 +40,6 @@ class DeveloperDetails extends StatelessWidget {
     String? payload;
     String? data;
 
-    String? kbHeader;
-    String? kbPayload;
-
     if (credentialModel.jwt != null) {
       final jsonheader = decodeHeader(
         jwtDecode: jwtDecode,
@@ -67,28 +64,6 @@ class DeveloperDetails extends StatelessWidget {
 
         payload = const JsonEncoder.withIndent('  ')
             .convert(Map.of(data)..removeWhere((key, value) => key == 'jwt'));
-
-        final probableJwt = credentialModel.jwt?.split('~').last;
-        kbHeader = 'None';
-        kbPayload = 'None';
-
-        if (probableJwt != null &&
-            probableJwt.isNotEmpty &&
-            probableJwt.startsWith('e')) {
-          try {
-            final header = jwtDecode.parseJwtHeader(probableJwt);
-            kbHeader = const JsonEncoder.withIndent('  ').convert(header);
-          } catch (e) {
-            kbHeader = 'None';
-          }
-
-          try {
-            final payload = jwtDecode.parseJwt(probableJwt);
-            kbPayload = const JsonEncoder.withIndent('  ').convert(payload);
-          } catch (e) {
-            kbPayload = 'None';
-          }
-        }
       }
     } else {
       data = const JsonEncoder.withIndent('  ').convert(credentialModel.data);
@@ -173,24 +148,6 @@ class DeveloperDetails extends StatelessWidget {
             padding: const EdgeInsets.only(top: 10),
             title: l10n.data,
             value: data,
-            titleColor: titleColor,
-            valueColor: valueColor,
-            showVertically: showVertically,
-          ),
-        if (kbHeader != null)
-          CredentialField(
-            padding: const EdgeInsets.only(top: 10),
-            title: l10n.keyBindingHeader,
-            value: kbHeader,
-            titleColor: titleColor,
-            valueColor: valueColor,
-            showVertically: showVertically,
-          ),
-        if (kbPayload != null)
-          CredentialField(
-            padding: const EdgeInsets.only(top: 10),
-            title: l10n.keyBindingPayload,
-            value: kbPayload,
             titleColor: titleColor,
             valueColor: valueColor,
             showVertically: showVertically,
