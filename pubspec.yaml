@@ -1,7 +1,7 @@
 name: altme
 description: AltMe Flutter App
 
-version: 2.13.3+516
+version: 2.13.4+517
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 environment:
@@ -157,6 +157,7 @@ flutter:
     - assets/terms/
     - assets/notices/
     - assets/faq.json
+
 flutter_icons:
   android: "ic_launcher"
   ios: true
