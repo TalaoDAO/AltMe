@@ -130,7 +130,6 @@ class _NotificationViewState<B extends ChatRoomCubit>
                         physics: const ScrollPhysics(),
                         itemBuilder: (context, index) {
                           final Message message = state.messages[index];
-
                           return Column(
                             children: [
                               TransparentInkWell(
