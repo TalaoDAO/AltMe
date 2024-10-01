@@ -129,11 +129,12 @@ class _NotificationViewState<B extends ChatRoomCubit>
                               child: Column(
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
                                         chatTimeFormatter(
-                                            message.createdAt ?? 0,),
+                                          message.createdAt ?? 0,
+                                        ),
                                         style: TextStyle(
                                           color: colorScheme.onSurface,
                                           fontSize: 12,
