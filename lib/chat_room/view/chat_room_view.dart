@@ -57,6 +57,10 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colorScheme = Theme.of(context).colorScheme;
+
+    final adaptiveOnPrimary = colorScheme.primaryContainer.adaptiveTopColor;
+    final adaptiveOnSurface = colorScheme.surface.adaptiveTopColor;
+
     return BasePage(
       title: widget.appBarTitle,
       scrollView: false,
@@ -114,29 +118,29 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                       secondaryColor: colorScheme.secondaryContainer,
                       backgroundColor: colorScheme.surface,
                       inputBackgroundColor: colorScheme.secondaryContainer,
-                      inputTextColor: colorScheme.onSurface,
+                      inputTextColor: adaptiveOnSurface,
                       errorColor: colorScheme.error,
                       sentMessageBodyTextStyle: TextStyle(
-                        color: colorScheme.onPrimary,
+                        color: adaptiveOnPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         height: 1.5,
                       ),
                       sentMessageBodyBoldTextStyle: TextStyle(
-                        color: colorScheme.onPrimary,
+                        color: adaptiveOnPrimary,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                         height: 1.333,
                       ),
-                      sentMessageDocumentIconColor: colorScheme.onPrimary,
+                      sentMessageDocumentIconColor: adaptiveOnPrimary,
                       sentMessageLinkTitleTextStyle: TextStyle(
-                        color: colorScheme.onPrimary,
+                        color: adaptiveOnPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                         height: 1.375,
                       ),
                       sentMessageCaptionTextStyle: TextStyle(
-                        color: colorScheme.onPrimary,
+                        color: adaptiveOnPrimary,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                         height: 1,
@@ -149,33 +153,33 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                           right: 8,
                         ),
                         textStyle: TextStyle(
-                          color: colorScheme.onPrimary,
+                          color: adaptiveOnPrimary,
                           fontSize: 12,
                           fontWeight: FontWeight.w800,
                           height: 1.333,
                         ),
                       ),
                       receivedMessageBodyTextStyle: TextStyle(
-                        color: colorScheme.onSurface,
+                        color: adaptiveOnSurface,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         height: 1.5,
                       ),
                       receivedMessageCaptionTextStyle: TextStyle(
-                        color: colorScheme.onSurface,
+                        color: adaptiveOnSurface,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                         height: 1.333,
                       ),
-                      receivedMessageDocumentIconColor: colorScheme.onSurface,
+                      receivedMessageDocumentIconColor: adaptiveOnSurface,
                       receivedMessageLinkDescriptionTextStyle: TextStyle(
-                        color: colorScheme.onSurface,
+                        color: adaptiveOnSurface,
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         height: 1.428,
                       ),
                       receivedMessageLinkTitleTextStyle: TextStyle(
-                        color: colorScheme.onSurface,
+                        color: adaptiveOnSurface,
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                         height: 1.375,
