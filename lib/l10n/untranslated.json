@@ -44,7 +44,9 @@
     "data",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "approveProfileTitle",
+    "approveProfileDescription"
   ],
 
   "es": [
@@ -92,7 +94,9 @@
     "data",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "approveProfileTitle",
+    "approveProfileDescription"
   ],
 
   "fr": [
@@ -145,6 +149,8 @@
     "data",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "approveProfileTitle",
+    "approveProfileDescription"
   ]
 }

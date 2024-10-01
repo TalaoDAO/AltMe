@@ -56,19 +56,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         SecureStorageKeys.enterpriseEmail,
       );
 
-      // if (savedEmail != null) {
-      //   if (email == savedEmail) {
-      //     /// if email is matched then update the configuration
-      //     await updateTheConfiguration();
-      //     return;
-      //   } else {
-      //     throw ResponseMessage(
-      //       message:
-      //           ResponseString.RESPONSE_STRING_thisWalleIsAlreadyConfigured,
-      //     );
-      //   }
-      // }
-
       if (savedEmail != null) {
         throw ResponseMessage(
           message: ResponseString.RESPONSE_STRING_thisWalleIsAlreadyConfigured,
@@ -95,29 +82,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
       await profileCubit.secureStorageProvider
           .set(SecureStorageKeys.enterpriseWalletProvider, url);
-
-      /// uprade wallet to enterprise
-      await profileCubit.setWalletType(
-        walletType: WalletType.enterprise,
-      );
-
-      // if enterprise and walletAttestation data is available and added
-      await credentialsCubit.addWalletCredential(
-        blockchainType:
-            credentialsCubit.walletCubit.state.currentAccount?.blockchainType,
-        qrCodeScanCubit: qrCodeScanCubit,
-      );
-
-      emit(
-        state.copyWith(
-          message: StateMessage.success(
-            messageHandler: ResponseMessage(
-              message: ResponseString
-                  .RESPONSE_STRING_successfullyAddedEnterpriseAccount,
-            ),
-          ),
-        ),
-      );
     } catch (e) {
       emitError(e);
     }
@@ -144,51 +108,86 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     };
 
     final response = await client.post(
-      '${url}configuration',
+      '$url/configuration',
       headers: headers,
       data: data,
     );
 
     final profileSettingJson =
         profileCubit.jwtDecode.parseJwt(response as String);
-
-    await profileCubit.secureStorageProvider.set(
-      SecureStorageKeys.enterpriseProfileSetting,
-      jsonEncode(profileSettingJson),
-    );
-
-    final profileSetting = ProfileSetting.fromJson(profileSettingJson);
-
-    ///save to profileCubit
-    await profileCubit.setProfileSetting(
-      profileSetting: profileSetting,
-      profileType: ProfileType.enterprise,
-    );
-    final helpCenterOptions = profileSetting.helpCenterOptions;
-
-    if (helpCenterOptions.customChatSupport &&
-        helpCenterOptions.customChatSupportName != null) {
-      await altmeChatSupportCubit.init();
-    }
-
-    if (helpCenterOptions.customNotification != null &&
-        helpCenterOptions.customNotification! &&
-        helpCenterOptions.customNotificationRoom != null) {
-      await matrixNotificationCubit.init();
-    }
-
-    // chat is not initiatied at start
-
+    // we emit new state, waiting for user approval
     emit(
       state.copyWith(
-        status: AppStatus.success,
-        message: null,
+        status: AppStatus.walletProviderApproval,
+        profileSettingJson: jsonEncode(profileSettingJson),
       ),
     );
   }
 
+  Future<void> applyConfiguration(
+    QRCodeScanCubit qrCodeScanCubit,
+  ) async {
+    assert(state.profileSettingJson != null, 'Profile setting is missing.');
+    emit(state.loading());
+
+    final setting = state.profileSettingJson;
+    if (setting != null) {
+      await profileCubit.secureStorageProvider.set(
+        SecureStorageKeys.enterpriseProfileSetting,
+        setting,
+      );
+
+      final profileSetting =
+          ProfileSetting.fromJson(jsonDecode(setting) as Map<String, dynamic>);
+
+      ///save to profileCubit
+      await profileCubit.setProfileSetting(
+        profileSetting: profileSetting,
+        profileType: ProfileType.enterprise,
+      );
+      final helpCenterOptions = profileSetting.helpCenterOptions;
+
+      if (helpCenterOptions.customChatSupport &&
+          helpCenterOptions.customChatSupportName != null) {
+        await altmeChatSupportCubit.init();
+      }
+
+      if (helpCenterOptions.customNotification != null &&
+          helpCenterOptions.customNotification! &&
+          helpCenterOptions.customNotificationRoom != null) {
+        await matrixNotificationCubit.init();
+      }
+
+      // chat is not initiatied at start
+
+      /// uprade wallet to enterprise
+      await profileCubit.setWalletType(
+        walletType: WalletType.enterprise,
+      );
+
+      // if enterprise and walletAttestation data is available and added
+      await credentialsCubit.addWalletCredential(
+        blockchainType:
+            credentialsCubit.walletCubit.state.currentAccount?.blockchainType,
+        qrCodeScanCubit: qrCodeScanCubit,
+      );
+
+      emit(
+        state.copyWith(
+          status: AppStatus.success,
+          message: StateMessage.success(
+            messageHandler: ResponseMessage(
+              message: ResponseString
+                  .RESPONSE_STRING_successfullyAddedEnterpriseAccount,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
   Future<String> getNonce(String url) async {
-    final dynamic getRepsponse = await client.get('${url}nonce');
+    final dynamic getRepsponse = await client.get('$url/nonce');
     final nonce = getRepsponse['nonce'].toString();
     return nonce;
   }
@@ -257,7 +256,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
     /// get vc
     final response = await client.post(
-      '${url}token',
+      '$url/token',
       headers: <String, dynamic>{
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -558,5 +557,32 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         ),
       ),
     );
+  }
+
+  Future<void> getWalletProviderAccount(
+    QRCodeScanCubit qrCodeScanCubit,
+  ) async {
+    late final dynamic configurationResponse;
+    // check if wallet is Altme or Talao
+    if (Parameters.appName == 'Altme') {
+      // get configuration file for this device
+      configurationResponse = await client.get(Urls.walletConfigurationAltme);
+    }
+    if (Parameters.appName == 'Talao') {
+      // get configuration file for this device
+      configurationResponse = await client.get(Urls.walletConfigurationTalao);
+    }
+    if (configurationResponse != null &&
+        configurationResponse is Map<String, dynamic>) {
+      if (configurationResponse['login'] != null &&
+          configurationResponse['password'] != null &&
+          configurationResponse['wallet-provider'] != null) {
+        final uri = Uri.https('example.com', '/path', configurationResponse);
+        await requestTheConfiguration(
+          uri: uri,
+          qrCodeScanCubit: qrCodeScanCubit,
+        );
+      }
+    }
   }
 }

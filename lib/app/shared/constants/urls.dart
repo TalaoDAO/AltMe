@@ -121,4 +121,10 @@ class Urls {
   // wallet provider
   static const walletProvider = 'https://wallet-provider.talao.co';
   static const walletTestProvider = 'https://preprod.wallet-provider.talao.co';
+
+  // wallet provider
+  static const walletConfigurationAltme = 'https://app.altme.io/configuration';
+  static const walletConfigurationTalao = 'https://app.talao.co/configuration';
+
+
 }
