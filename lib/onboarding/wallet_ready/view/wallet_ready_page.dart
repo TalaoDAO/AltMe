@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -209,6 +210,14 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                                     DashboardPage.route(),
                                     (Route<dynamic> route) => route.isFirst,
                                   );
+                                  // Check with API if it is an  organization
+                                  // wallet
+
+                                  context
+                                      .read<EnterpriseCubit>()
+                                      .getWalletProviderAccount(
+                                        context.read<QRCodeScanCubit>(),
+                                      );
                                 }
                               : null,
                         ),

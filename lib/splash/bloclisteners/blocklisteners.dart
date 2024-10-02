@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -860,7 +861,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
 );
 
 final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
-  listener: (BuildContext context, EnterpriseState state) {
+  listener: (BuildContext context, EnterpriseState state) async {
     if (state.status == AppStatus.loading) {
       LoadingView().show(context: context);
     } else {
@@ -872,11 +873,46 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
     }
 
     if (state.status == AppStatus.revoked) {
-      showDialog<void>(
+      await showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (_) => const WalletRevokedDialog(),
       );
+    }
+
+    if (state.status == AppStatus.walletProviderApproval) {
+      final settingJson = state.profileSettingJson;
+      if (settingJson != null) {
+        final l10n = context.l10n;
+        final profileSetting = ProfileSetting.fromJson(
+          jsonDecode(settingJson) as Map<String, dynamic>,
+        );
+        final confirm = await showDialog<bool>(
+              context: context,
+              builder: (_) => ConfirmDialog(
+                title: l10n.approveProfileTitle,
+                subtitle: l10n.approveProfileDescription(
+                  profileSetting.generalOptions.companyName,
+                ),
+                yes: l10n.showDialogYes,
+                no: l10n.showDialogNo,
+              ),
+            ) ??
+            false;
+
+        if (confirm) {
+          await context
+              .read<EnterpriseCubit>()
+              .applyConfiguration(context.read<QRCodeScanCubit>());
+        } else {
+          /// Need to remove the enterprise email from secure storage
+          /// because we may think later that the entreprise profile is
+          /// already installed.
+          await getSecureStorage.delete(
+            SecureStorageKeys.enterpriseEmail,
+          );
+        }
+      }
     }
 
     if (state.message != null) {
