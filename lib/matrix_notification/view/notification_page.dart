@@ -1,11 +1,13 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/chat_room/widget/mxc_image.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
+import 'package:matrix/matrix.dart';
 
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
@@ -128,9 +130,6 @@ class _NotificationViewState<B extends ChatRoomCubit>
                         physics: const ScrollPhysics(),
                         itemBuilder: (context, index) {
                           final Message message = state.messages[index];
-                          final map = message.toJson();
-
-                          final String text = map['text'].toString();
 
                           return Column(
                             children: [
@@ -141,11 +140,14 @@ class _NotificationViewState<B extends ChatRoomCubit>
                                       .markMessageAsRead([message.remoteId]);
                                   Navigator.of(context).push<void>(
                                     NotificationDetailsPage.route(
-                                        message: text),
+                                      message: message,
+                                    ),
                                   );
                                 },
                                 child: BackgroundCard(
                                   child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
@@ -171,20 +173,33 @@ class _NotificationViewState<B extends ChatRoomCubit>
                                         ],
                                       ),
                                       const SizedBox(height: 4),
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          text,
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                            color: colorScheme.onSurface,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            height: 1.5,
-                                            overflow: TextOverflow.ellipsis,
+                                      if (message is TextMessage)
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            message.text,
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                              color: colorScheme.onSurface,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              height: 1.5,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                      if (message is ImageMessage)
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          height: 40,
+                                          width: 40,
+                                          child: MxcImage(
+                                            url: message.uri,
+                                            event: message.metadata!['event']
+                                                as Event,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
                                     ],
                                   ),
                                 ),
