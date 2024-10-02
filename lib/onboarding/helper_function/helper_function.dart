@@ -44,20 +44,18 @@ Future<void> generateAccount({
     isFromOnboarding: true,
   );
 
-  if (profileCubit.state.model.walletType == WalletType.enterprise) {
-    final helpCenterOptions =
-        profileCubit.state.model.profileSetting.helpCenterOptions;
+  final helpCenterOptions =
+      profileCubit.state.model.profileSetting.helpCenterOptions;
 
-    if (helpCenterOptions.customChatSupport &&
-        helpCenterOptions.customChatSupportName != null) {
-      await altmeChatSupportCubit.init();
-    }
+  if (helpCenterOptions.customChatSupport &&
+      helpCenterOptions.customChatSupportName != null) {
+    await altmeChatSupportCubit.init();
+  }
 
-    if (helpCenterOptions.customNotification != null &&
-        helpCenterOptions.customNotification! &&
-        helpCenterOptions.customNotificationRoom != null) {
-      await matrixNotificationCubit.init();
-    }
+  if (helpCenterOptions.customNotification != null &&
+      helpCenterOptions.customNotification! &&
+      helpCenterOptions.customNotificationRoom != null) {
+    await matrixNotificationCubit.init();
   }
 
   await homeCubit.emitHasWallet();

@@ -57,20 +57,19 @@ class SplashCubit extends Cubit<SplashState> {
 
         if (hasWallet) {
           await homeCubit.emitHasWallet();
-          if (profileCubit.state.model.walletType == WalletType.enterprise) {
-            final helpCenterOptions =
-                profileCubit.state.model.profileSetting.helpCenterOptions;
 
-            if (helpCenterOptions.customChatSupport &&
-                helpCenterOptions.customChatSupportName != null) {
-              await altmeChatSupportCubit.init();
-            }
+          final helpCenterOptions =
+              profileCubit.state.model.profileSetting.helpCenterOptions;
 
-            if (helpCenterOptions.customNotification != null &&
-                helpCenterOptions.customNotification! &&
-                helpCenterOptions.customNotificationRoom != null) {
-              await matrixNotificationCubit.init();
-            }
+          if (helpCenterOptions.customChatSupport &&
+              helpCenterOptions.customChatSupportName != null) {
+            await altmeChatSupportCubit.init();
+          }
+
+          if (helpCenterOptions.customNotification != null &&
+              helpCenterOptions.customNotification! &&
+              helpCenterOptions.customNotificationRoom != null) {
+            await matrixNotificationCubit.init();
           }
 
           emit(state.copyWith(status: SplashStatus.routeToPassCode));

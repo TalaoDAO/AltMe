@@ -44,7 +44,10 @@
     "data",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "noNotificationsYet",
+    "approveProfileTitle",
+    "approveProfileDescription"
   ],
 
   "es": [
@@ -92,7 +95,10 @@
     "data",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "noNotificationsYet",
+    "approveProfileTitle",
+    "approveProfileDescription"
   ],
 
   "fr": [
@@ -145,6 +151,9 @@
     "data",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "noNotificationsYet",
+    "approveProfileTitle",
+    "approveProfileDescription"
   ]
 }

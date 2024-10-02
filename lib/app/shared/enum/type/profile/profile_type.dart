@@ -16,7 +16,7 @@ extension ProfileTypeX on ProfileType {
       case ProfileType.ebsiV3:
         return 'European Blockchain Services Infrastructure (EBSI v3.x)';
       case ProfileType.ebsiV4:
-        return 'European Blockchain Services Infrastructure (EBSI v4.x)';
+        return 'European Blockchain Services Infrastructure (EBSI v4.0)';
       case ProfileType.diipv2point1:
         return 'Decentralized Identity Interop Profile (DIIP v2.1)';
       case ProfileType.enterprise:

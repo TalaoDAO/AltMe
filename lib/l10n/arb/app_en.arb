@@ -1074,5 +1074,16 @@
   "data": "Data",
   "keyBindingHeader": "Key Binding Header",
   "keyBindingPayload": "Key Binding Payload",
-  "ebsiV4DecentralizedId": "did:key EBSI V4 P-256"
+  "ebsiV4DecentralizedId": "did:key EBSI V4 P-256",
+  "noNotificationsYet": "No notifications yet",
+    "approveProfileTitle": "Install configuration",
+    "approveProfileDescription": "Do you consent to install the configuration of {company}?",
+  "@approveProfileDescription": {
+    "description": "name of the company owning the configuration",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  }
+
 }
