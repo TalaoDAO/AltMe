@@ -45,8 +45,12 @@
     "keyBindingHeader",
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
+<<<<<<< HEAD
     "approveProfileTitle",
     "approveProfileDescription"
+=======
+    "noNotificationsYet"
+>>>>>>> main
   ],
 
   "es": [
@@ -95,8 +99,12 @@
     "keyBindingHeader",
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
+<<<<<<< HEAD
     "approveProfileTitle",
     "approveProfileDescription"
+=======
+    "noNotificationsYet"
+>>>>>>> main
   ],
 
   "fr": [
@@ -150,7 +158,11 @@
     "keyBindingHeader",
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
+<<<<<<< HEAD
     "approveProfileTitle",
     "approveProfileDescription"
+=======
+    "noNotificationsYet"
+>>>>>>> main
   ]
 }
