@@ -467,18 +467,9 @@ String birthDateFormater(int birthData) {
 }
 
 String chatTimeFormatter(int birthData) {
-  final String birthdate = birthData.toString();
-
-  // Parse the input string
-  final DateTime parsedBirthdate = DateTime.parse(
-    '${birthdate.substring(0, 4)}-${birthdate.substring(4, 6)}-${birthdate.substring(6, 8)}', // ignore: lines_longer_than_80_chars
-  );
-
-  // Format the parsed date
-  final DateFormat formatter = DateFormat('dd:MM:yyyy');
-  final String formattedBirthdate = formatter.format(parsedBirthdate);
-
-  return formattedBirthdate;
+  final dateTime = DateTime.fromMillisecondsSinceEpoch(birthData);
+  final formattedDate = DateFormat('dd.MM.yyyy').format(dateTime);
+  return formattedDate;
 }
 
 String getSignatureType(String circuitId) {

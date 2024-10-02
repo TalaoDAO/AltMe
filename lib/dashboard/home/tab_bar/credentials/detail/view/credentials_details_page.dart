@@ -306,7 +306,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
                           /// display widget
                           if (!credentialManifestSupport &&
-                              widget.credentialModel.display != null) ...[
+                              widget.credentialModel.display != null &&
+                              !isDeveloperMode) ...[
                             const SizedBox(height: 10),
                             DisplayWidget(
                               display: widget.credentialModel.display!,
@@ -314,18 +315,20 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           ],
 
                           /// credentialSubjectData
-                          CredentialSubjectData(
-                            credentialModel: widget.credentialModel,
-                            showVertically: showVerticalDescription,
-                          ),
+                          if (!isDeveloperMode)
+                            CredentialSubjectData(
+                              credentialModel: widget.credentialModel,
+                              showVertically: showVerticalDescription,
+                            ),
 
                           /// selective disclouse data - _sd
                           /// and normal data too
-                          DisplaySelectiveDisclosure(
-                            credentialModel: widget.credentialModel,
-                            claims: null,
-                            showVertically: showVerticalDescription,
-                          ),
+                          if (!isDeveloperMode)
+                            DisplaySelectiveDisclosure(
+                              credentialModel: widget.credentialModel,
+                              claims: null,
+                              showVertically: showVerticalDescription,
+                            ),
 
                           // /// normal claims data
                           // if (widget.credentialModel.credentialSupported !=

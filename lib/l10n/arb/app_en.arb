@@ -1074,5 +1074,6 @@
   "data": "Data",
   "keyBindingHeader": "Key Binding Header",
   "keyBindingPayload": "Key Binding Payload",
-  "ebsiV4DecentralizedId": "did:key EBSI V4 P-256"
+  "ebsiV4DecentralizedId": "did:key EBSI V4 P-256",
+  "noNotificationsYet": "No notifications yet"
 }

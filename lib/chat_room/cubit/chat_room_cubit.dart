@@ -312,8 +312,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
 
         final List<String> invites = [];
 
-        if (profileCubit.state.model.walletType == WalletType.enterprise &&
-            helpCenterOptions.customChatSupport &&
+        if (helpCenterOptions.customChatSupport &&
             helpCenterOptions.customChatSupportName != null) {
           invites.add(helpCenterOptions.customChatSupportName!);
         }

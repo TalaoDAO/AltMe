@@ -95,6 +95,18 @@ class WalletSecurityView extends StatelessWidget {
                     );
                   },
                 ),
+              DrawerItem(
+                title: l10n.backup,
+                onTap: () async {
+                  await Navigator.of(context).push<void>(BackupMenu.route());
+                },
+              ),
+              DrawerItem(
+                title: l10n.restore,
+                onTap: () async {
+                  await Navigator.of(context).push<void>(RestoreMenu.route());
+                },
+              ),
             ],
           ),
         );

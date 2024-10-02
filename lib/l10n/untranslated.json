@@ -44,7 +44,8 @@
     "data",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "noNotificationsYet"
   ],
 
   "es": [
@@ -92,7 +93,8 @@
     "data",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "noNotificationsYet"
   ],
 
   "fr": [
@@ -145,6 +147,7 @@
     "data",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "noNotificationsYet"
   ]
 }
