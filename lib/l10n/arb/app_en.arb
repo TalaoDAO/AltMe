@@ -1084,6 +1084,7 @@
     "placeholders": {
       "company": {}
     }
-  }
-
+  },
+  "activityLog": "Activity Log",
+  "activityLogDescription": "See your activities"
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -40,6 +41,7 @@ class ScanCubit extends Cubit<ScanState> {
     required this.walletCubit,
     required this.oidc4vc,
     required this.jwtDecode,
+    required this.activityLogManager,
   }) : super(const ScanState());
 
   final DioClient client;
@@ -50,6 +52,7 @@ class ScanCubit extends Cubit<ScanState> {
   final WalletCubit walletCubit;
   final OIDC4VC oidc4vc;
   final JWTDecode jwtDecode;
+  final ActivityLogManager activityLogManager;
 
   Future<void> credentialOfferOrPresent({
     required Uri uri,
@@ -985,13 +988,21 @@ class ScanCubit extends Cubit<ScanState> {
     final log = getLogger('ScanCubit');
     log.i('adding presentation Activity');
     for (final credentialModel in credentialModels) {
+      final now = DateTime.now();
+
       final Activity activity = Activity(
-        presentation: Presentation(
-          issuer: issuer,
-          presentedAt: DateTime.now(),
-        ),
+        presentation: Presentation(issuer: issuer, presentedAt: now),
       );
       credentialModel.activities.add(activity);
+
+      await activityLogManager.writeLog(
+        LogData(
+          type: LogType.presentVC,
+          timestamp: now,
+          credentialId: credentialModel.id,
+          data: credentialModel.getName,
+        ),
+      );
 
       log.i('presentation activity added to the credential');
       await credentialsCubit.updateCredential(

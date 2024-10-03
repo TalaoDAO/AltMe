@@ -1,3 +1,4 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/splash/splash.dart';
@@ -22,6 +23,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
     required this.homeCubit,
     required this.walletCubit,
     required this.splashCubit,
+    required this.activityLogManager,
   }) : super(const ImportWalletState());
 
   final DIDKitProvider didKitProvider;
@@ -31,6 +33,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
 
   final WalletCubit walletCubit;
   final SplashCubit splashCubit;
+  final ActivityLogManager activityLogManager;
 
   void isMnemonicsOrKeyValid(String value) {
     //different type of tezos private keys start with 'edsk' ,
@@ -87,6 +90,9 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
           accountType: AccountType.ssi,
         );
         await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
+        await activityLogManager.writeLog(
+          LogData(type: LogType.walletInit, timestamp: DateTime.now()),
+        );
       }
 
       /// crypto wallet with unknown blockchain type
@@ -114,6 +120,13 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
           'yes',
         );
       }
+
+      await activityLogManager.writeLog(
+        LogData(
+          type: LogType.importKey,
+          timestamp: DateTime.now(),
+        ),
+      );
 
       await homeCubit.emitHasWallet();
       emit(state.success());

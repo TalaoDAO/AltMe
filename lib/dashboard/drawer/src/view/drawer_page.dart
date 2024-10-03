@@ -169,6 +169,18 @@ class DrawerView extends StatelessWidget {
                               .push<void>(AboutAltmeMenu.route());
                         },
                       ),
+                      if (profileModel
+                          .profileSetting.settingsMenu.displayActivityLog) ...[
+                        DrawerCategoryItem(
+                          title: l10n.activityLog,
+                          subTitle: l10n.activityLogDescription,
+                          onClick: () {
+                            Navigator.of(context)
+                                .push<void>(ActivityLogPage.route());
+                          },
+                        ),
+                        const SizedBox(height: Sizes.spaceSmall),
+                      ],
                       const SizedBox(height: Sizes.spaceSmall),
                       DrawerCategoryItem(
                         title: l10n.resetWallet,

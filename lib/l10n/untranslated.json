@@ -47,7 +47,9 @@
     "ebsiV4DecentralizedId",
     "noNotificationsYet",
     "approveProfileTitle",
-    "approveProfileDescription"
+    "approveProfileDescription",
+    "activityLog",
+    "activityLogDescription"
   ],
 
   "es": [
@@ -98,7 +100,9 @@
     "ebsiV4DecentralizedId",
     "noNotificationsYet",
     "approveProfileTitle",
-    "approveProfileDescription"
+    "approveProfileDescription",
+    "activityLog",
+    "activityLogDescription"
   ],
 
   "fr": [
@@ -154,6 +158,8 @@
     "ebsiV4DecentralizedId",
     "noNotificationsYet",
     "approveProfileTitle",
-    "approveProfileDescription"
+    "approveProfileDescription",
+    "activityLog",
+    "activityLogDescription"
   ]
 }

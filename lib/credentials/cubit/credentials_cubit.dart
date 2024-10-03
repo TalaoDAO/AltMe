@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
@@ -36,6 +37,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required this.profileCubit,
     required this.oidc4vc,
     required this.walletCubit,
+    required this.activityLogManager,
   }) : super(const CredentialsState());
 
   final CredentialsRepository credentialsRepository;
@@ -48,6 +50,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   final ProfileCubit profileCubit;
   final OIDC4VC oidc4vc;
   final WalletCubit walletCubit;
+  final ActivityLogManager activityLogManager;
 
   final log = getLogger('CredentialsCubit');
 
@@ -196,12 +199,25 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     bool showMessage = true,
   }) async {
     emit(state.loading());
+
+    final credential =
+        state.credentials.where((element) => element.id == id).first;
+
     await credentialsRepository.deleteById(id);
     final credentials = List.of(state.credentials)
       ..removeWhere((element) => element.id == id);
     final dummies = _getAvalaibleDummyCredentials(
       credentials: credentials,
       blockchainType: blockchainType,
+    );
+
+    await activityLogManager.writeLog(
+      LogData(
+        type: LogType.deleteVC,
+        timestamp: DateTime.now(),
+        credentialId: id,
+        data: credential.getName,
+      ),
     );
     emit(
       state.copyWith(
@@ -323,6 +339,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final dummies = _getAvalaibleDummyCredentials(
       credentials: credentials,
       blockchainType: blockchainType,
+    );
+
+    await activityLogManager.writeLog(
+      LogData(
+        type: LogType.addVC,
+        timestamp: DateTime.now(),
+        credentialId: credential.id,
+        data: credential.getName,
+      ),
     );
 
     emit(
