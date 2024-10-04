@@ -36,9 +36,7 @@ Future<void> generateAccount({
   await profileCubit.secureStorageProvider
       .set(SecureStorageKeys.ssiKey, ssiKey);
 
-  await activityLogManager.writeLog(
-    LogData(type: LogType.walletInit, timestamp: DateTime.now()),
-  );
+  await activityLogManager.saveLog(LogData(type: LogType.walletInit));
 
   /// create profile
   await profileCubit.load();

@@ -1076,8 +1076,8 @@
   "keyBindingPayload": "Key Binding Payload",
   "ebsiV4DecentralizedId": "did:key EBSI V4 P-256",
   "noNotificationsYet": "No notifications yet",
-    "approveProfileTitle": "Install configuration",
-    "approveProfileDescription": "Do you consent to install the configuration of {company}?",
+  "approveProfileTitle": "Install configuration",
+  "approveProfileDescription": "Do you consent to install the configuration of {company}?",
   "@approveProfileDescription": {
     "description": "name of the company owning the configuration",
     "type": "text",
@@ -1086,5 +1086,40 @@
     }
   },
   "activityLog": "Activity Log",
-  "activityLogDescription": "See your activities"
+  "activityLogDescription": "See your activities",
+  "walletInitialized": "Wallet Initialized",
+  "backupCredentials": "Backup Credentials",
+  "restoredCredentials": "Restored Credentials",
+  "addedCredential": "Added credential {credential}",  
+  "@addedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "deletedCredential": "Deleted credential {credential}",
+  "@deletedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "presentedCredential": "Presented credential {credential} to {domain}",
+  "@presentedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "@presentedCredentialDomain": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": { 
+      "domain": {}
+    }
+  },
+  "keysImported": "Keys imported"
 }

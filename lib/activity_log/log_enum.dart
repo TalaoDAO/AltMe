@@ -1,6 +1,6 @@
 enum LogType {
   walletInit,
-  backupData, 
+  backupData,
   restoreWallet,
   addVC,
   deleteVC,

@@ -1,4 +1,5 @@
 import 'package:altme/activity_log/activity_log.dart';
+import 'package:altme/app/app.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -6,20 +7,18 @@ part 'log_class.g.dart';
 
 @JsonSerializable()
 class LogData extends Equatable {
-  const LogData({
+  LogData({
     required this.type,
-    required this.timestamp,
-    this.credentialId,
-    this.data,
-  });
+    DateTime? timestamp,
+    this.vcInfo,
+  }) : timestamp = timestamp ?? DateTime.now();
 
   factory LogData.fromJson(Map<String, dynamic> json) =>
       _$LogDataFromJson(json);
 
   final LogType type;
   final DateTime timestamp;
-  final String? credentialId;
-  final String? data;
+  final VCInfo? vcInfo;
 
   Map<String, dynamic> toJson() => _$LogDataToJson(this);
 
@@ -27,7 +26,30 @@ class LogData extends Equatable {
   List<Object?> get props => [
         type,
         timestamp,
-        credentialId,
-        data,
+        vcInfo,
+      ];
+}
+
+@JsonSerializable()
+class VCInfo extends Equatable {
+  const VCInfo({
+    required this.id,
+    required this.name,
+    this.issuer,
+  });
+
+  factory VCInfo.fromJson(Map<String, dynamic> json) => _$VCInfoFromJson(json);
+
+  final String id;
+  final String name;
+  final Issuer? issuer;
+
+  Map<String, dynamic> toJson() => _$VCInfoToJson(this);
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        issuer,
       ];
 }

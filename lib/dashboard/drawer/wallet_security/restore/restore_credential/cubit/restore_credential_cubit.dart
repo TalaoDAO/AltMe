@@ -146,12 +146,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
         blockchainType: walletCubit.state.currentAccount!.blockchainType,
       );
 
-      await activityLogManager.writeLog(
-        LogData(
-          type: LogType.restoreWallet,
-          timestamp: DateTime.now(),
-        ),
-      );
+      await activityLogManager.saveLog(LogData(type: LogType.restoreWallet));
       emit(state.success(recoveredCredentialLength: credentialList.length));
     } catch (e) {
       if (e is MessageHandler) {

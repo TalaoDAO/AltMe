@@ -87,12 +87,7 @@ class BackupPolygonIdIdentityCubit extends Cubit<BackupPolygonIdIdentityState> {
       if (filePath != null && filePath.isEmpty) {
         emit(state.copyWith(status: AppStatus.idle));
       } else {
-        await activityLogManager.writeLog(
-          LogData(
-            type: LogType.backupData,
-            timestamp: DateTime.now(),
-          ),
-        );
+        await activityLogManager.saveLog(LogData(type: LogType.backupData));
         emit(
           state.copyWith(
             status: AppStatus.success,

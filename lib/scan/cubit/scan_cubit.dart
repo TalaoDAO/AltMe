@@ -995,12 +995,15 @@ class ScanCubit extends Cubit<ScanState> {
       );
       credentialModel.activities.add(activity);
 
-      await activityLogManager.writeLog(
+      await activityLogManager.saveLog(
         LogData(
           type: LogType.presentVC,
           timestamp: now,
-          credentialId: credentialModel.id,
-          data: credentialModel.getName,
+          vcInfo: VCInfo(
+            id: credentialModel.id,
+            name: credentialModel.getName,
+            issuer: issuer,
+          ),
         ),
       );
 

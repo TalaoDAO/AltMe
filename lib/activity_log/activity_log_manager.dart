@@ -29,7 +29,7 @@ class ActivityLogManager {
   }
 
   /// Set log entry
-  Future<void> writeLog(LogData log) async {
+  Future<void> saveLog(LogData log) async {
     final currentBatchIndex = await _getCurrentBatchIndex();
 
     List<LogData> logs = await _getLogsForCurrentBatch(currentBatchIndex);

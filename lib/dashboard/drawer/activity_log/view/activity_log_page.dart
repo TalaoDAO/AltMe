@@ -74,21 +74,31 @@ class _ActivityLogViewState extends State<ActivityLogView> {
 
               var message = '';
 
+              var credentialName = '';
+              var domainName = '';
+
+              if (logData.vcInfo != null) {
+                credentialName = logData.vcInfo!.name;
+                domainName =
+                    logData.vcInfo!.issuer?.organizationInfo.website ?? '';
+              }
+
               switch (logData.type) {
                 case LogType.walletInit:
-                  message = 'Wallet Initialized';
+                  message = l10n.walletInitialized;
                 case LogType.backupData:
-                  message = 'Backup Credentials';
+                  message = l10n.backupCredentials;
                 case LogType.restoreWallet:
-                  message = 'Restored Credentials';
+                  message = l10n.restoredCredentials;
                 case LogType.addVC:
-                  message = 'Added credential ${logData.data}';
+                  message = l10n.addedCredential(credentialName);
                 case LogType.deleteVC:
-                  message = 'Deleted credential ${logData.data}';
+                  message = l10n.deletedCredential(credentialName);
                 case LogType.presentVC:
-                  message = 'Presented credential ${logData.data}';
+                  message =
+                      l10n.presentedCredential(credentialName, domainName);
                 case LogType.importKey:
-                  message = 'Keys imported';
+                  message = l10n.keysImported;
               }
 
               return Column(

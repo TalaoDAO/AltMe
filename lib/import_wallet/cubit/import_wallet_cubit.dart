@@ -90,9 +90,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
           accountType: AccountType.ssi,
         );
         await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
-        await activityLogManager.writeLog(
-          LogData(type: LogType.walletInit, timestamp: DateTime.now()),
-        );
+        await activityLogManager.saveLog(LogData(type: LogType.walletInit));
       }
 
       /// crypto wallet with unknown blockchain type
@@ -121,12 +119,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         );
       }
 
-      await activityLogManager.writeLog(
-        LogData(
-          type: LogType.importKey,
-          timestamp: DateTime.now(),
-        ),
-      );
+      await activityLogManager.saveLog(LogData(type: LogType.importKey));
 
       await homeCubit.emitHasWallet();
       emit(state.success());

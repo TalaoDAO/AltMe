@@ -211,12 +211,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       blockchainType: blockchainType,
     );
 
-    await activityLogManager.writeLog(
+    await activityLogManager.saveLog(
       LogData(
         type: LogType.deleteVC,
-        timestamp: DateTime.now(),
-        credentialId: id,
-        data: credential.getName,
+        vcInfo: VCInfo(id: credential.id, name: credential.getName),
       ),
     );
     emit(
@@ -341,12 +339,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       blockchainType: blockchainType,
     );
 
-    await activityLogManager.writeLog(
+    await activityLogManager.saveLog(
       LogData(
         type: LogType.addVC,
-        timestamp: DateTime.now(),
-        credentialId: credential.id,
-        data: credential.getName,
+        vcInfo: VCInfo(id: credential.id, name: credential.getName),
       ),
     );
 
