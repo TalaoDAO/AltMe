@@ -1,4 +1,5 @@
 import 'package:altme/activity_log/activity_log.dart';
+import 'package:altme/app/app.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
