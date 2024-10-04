@@ -111,7 +111,7 @@ class _ActivityLogViewState extends State<ActivityLogView> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              logData.timestamp.toString(),
+                              UiDate.formatDatetime(logData.timestamp),
                               style: TextStyle(
                                 color: colorScheme.onSurface,
                                 fontSize: 12,
