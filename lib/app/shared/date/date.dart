@@ -44,7 +44,7 @@ class UiDate {
 
   static String formatDatetime(DateTime dateTime) {
     final date = '${dateTime.year}.${dateTime.month}.${dateTime.day}';
-    final time = '${dateTime.hour}:${dateTime.minute}';
+    final time = '${dateTime.hour}:${dateTime.minute}:${dateTime.second}';
 
     return '$date $time';
   }
