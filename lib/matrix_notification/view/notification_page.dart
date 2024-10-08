@@ -188,15 +188,13 @@ class _NotificationViewState<B extends ChatRoomCubit>
                                           ),
                                         ),
                                       if (message is ImageMessage)
-                                        Container(
-                                          alignment: Alignment.centerLeft,
-                                          height: 40,
-                                          width: 40,
+                                        SizedBox(
+                                          width: double.infinity,
                                           child: MxcImage(
                                             url: message.uri,
                                             event: message.metadata!['event']
                                                 as Event,
-                                            fit: BoxFit.contain,
+                                            fit: BoxFit.fitWidth,
                                           ),
                                         ),
                                     ],
