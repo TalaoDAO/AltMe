@@ -35,14 +35,14 @@ class VCInfo extends Equatable {
   const VCInfo({
     required this.id,
     required this.name,
-    this.issuer,
+    this.domain,
   });
 
   factory VCInfo.fromJson(Map<String, dynamic> json) => _$VCInfoFromJson(json);
 
   final String id;
   final String name;
-  final Issuer? issuer;
+  final String? domain;
 
   Map<String, dynamic> toJson() => _$VCInfoToJson(this);
 
@@ -50,6 +50,6 @@ class VCInfo extends Equatable {
   List<Object?> get props => [
         id,
         name,
-        issuer,
+        domain,
       ];
 }

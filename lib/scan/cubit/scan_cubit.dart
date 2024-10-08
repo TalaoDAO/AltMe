@@ -290,6 +290,7 @@ class ScanCubit extends Cubit<ScanState> {
           await presentationActivity(
             credentialModels: credentialsToBePresented,
             issuer: issuer,
+            uri: uri,
           );
         }
         emit(state.copyWith(status: ScanStatus.success));
@@ -376,6 +377,7 @@ class ScanCubit extends Cubit<ScanState> {
       await presentationActivity(
         credentialModels: credentialsToBePresented,
         issuer: issuer,
+        uri: Uri.parse(url),
       );
 
       String? responseMessage;
@@ -630,6 +632,7 @@ class ScanCubit extends Cubit<ScanState> {
         await presentationActivity(
           credentialModels: credentialsToBePresented,
           issuer: issuer,
+          uri: uri,
         );
         emit(
           state.copyWith(
@@ -662,6 +665,7 @@ class ScanCubit extends Cubit<ScanState> {
         await presentationActivity(
           credentialModels: credentialsToBePresented,
           issuer: issuer,
+          uri: uri,
         );
 
         String? url;
@@ -984,6 +988,7 @@ class ScanCubit extends Cubit<ScanState> {
   Future<void> presentationActivity({
     required List<CredentialModel> credentialModels,
     required Issuer issuer,
+    required Uri uri,
   }) async {
     final log = getLogger('ScanCubit');
     log.i('adding presentation Activity');
@@ -995,6 +1000,10 @@ class ScanCubit extends Cubit<ScanState> {
       );
       credentialModel.activities.add(activity);
 
+      final String responseOrRedirectUri =
+          uri.queryParameters['redirect_uri'] ??
+              uri.queryParameters['response_uri']!;
+
       await activityLogManager.saveLog(
         LogData(
           type: LogType.presentVC,
@@ -1002,7 +1011,7 @@ class ScanCubit extends Cubit<ScanState> {
           vcInfo: VCInfo(
             id: credentialModel.id,
             name: credentialModel.getName,
-            issuer: issuer,
+            domain: Uri.parse(responseOrRedirectUri).host,
           ),
         ),
       );

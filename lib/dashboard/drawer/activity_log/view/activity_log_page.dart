@@ -79,8 +79,7 @@ class _ActivityLogViewState extends State<ActivityLogView> {
 
               if (logData.vcInfo != null) {
                 credentialName = logData.vcInfo!.name;
-                domainName =
-                    logData.vcInfo!.issuer?.organizationInfo.website ?? '';
+                domainName = logData.vcInfo!.domain ?? '';
               }
 
               switch (logData.type) {
