@@ -1,3 +1,4 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -78,6 +79,8 @@ class MockLangCubit extends MockCubit<LangState> implements LangCubit {}
 
 class MockOIDC4VC extends Mock implements OIDC4VC {}
 
+class MockActivityLogManager extends Mock implements ActivityLogManager {}
+
 void main() {
   late MockDIDKitProvider didKitProvider;
   late KeyGenerator keyGenerator;
@@ -91,6 +94,7 @@ void main() {
   late MockNavigator navigator;
   late MockSecureStorageProvider secureStorageProvider;
   late MockOIDC4VC oidc4vc;
+  late MockActivityLogManager activityLogManager;
 
   const mnemonicString =
       'notice photo opera keen climb agent soft parrot best joke field devote';
@@ -109,6 +113,7 @@ void main() {
     navigator = MockNavigator();
     secureStorageProvider = MockSecureStorageProvider();
     oidc4vc = MockOIDC4VC();
+    activityLogManager = MockActivityLogManager();
   });
 
   group('Onboarding Verify Phrase Test', () {
@@ -183,6 +188,7 @@ void main() {
                   langCubit: MockLangCubit(),
                 ),
                 flavorCubit: flavorCubit,
+                activityLogManager: activityLogManager,
               ),
             ),
             BlocProvider<HomeCubit>.value(value: homeCubit),
@@ -230,6 +236,7 @@ void main() {
           langCubit: MockLangCubit(),
         ),
         flavorCubit: flavorCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
@@ -277,6 +284,7 @@ void main() {
           langCubit: MockLangCubit(),
         ),
         flavorCubit: flavorCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
@@ -356,6 +364,7 @@ void main() {
           langCubit: MockLangCubit(),
         ),
         flavorCubit: flavorCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
@@ -429,6 +438,7 @@ void main() {
           langCubit: MockLangCubit(),
         ),
         flavorCubit: flavorCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
@@ -483,6 +493,7 @@ void main() {
           langCubit: MockLangCubit(),
         ),
         flavorCubit: flavorCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(

@@ -1,3 +1,4 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -68,6 +69,8 @@ class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
   final state = ProfileState(model: ProfileModel.empty());
 }
 
+class MockActivityLogManager extends Mock implements ActivityLogManager {}
+
 void main() {
   late DIDKitProvider didKitProvider;
   late KeyGenerator keyGenerator;
@@ -78,6 +81,7 @@ void main() {
   late MatrixNotificationCubit matrixNotificationCubit;
   late ProfileCubit profileCubit;
   late OnboardingCubit onboardingCubit;
+  late MockActivityLogManager activityLogManager;
 
   setUpAll(() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -90,6 +94,7 @@ void main() {
     matrixNotificationCubit = MockMatrixNotificationCubit();
     profileCubit = MockProfileCubit();
     onboardingCubit = OnboardingCubit();
+    activityLogManager = MockActivityLogManager();
   });
 
   group('OnBoarding GenPhrase Page', () {
@@ -107,6 +112,7 @@ void main() {
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
       );
       navigator = MockNavigator();
       when(navigator.canPop).thenReturn(true);

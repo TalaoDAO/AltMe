@@ -1,3 +1,4 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/profile/profile.dart';
@@ -26,6 +27,8 @@ class MockOIDC4VC extends Mock implements OIDC4VC {}
 
 class MockJWTDecode extends Mock implements JWTDecode {}
 
+class MockActivityLogManager extends Mock implements ActivityLogManager {}
+
 void main() {
   group('ScanCubit', () {
     late MockDioClient mockDioClient;
@@ -37,6 +40,7 @@ void main() {
     late MockOIDC4VC mockOIDC4VC;
     late MockJWTDecode mockJWTDecode;
     late ScanCubit scanCubit;
+    late ActivityLogManager activityLogManager;
 
     setUp(() {
       mockDioClient = MockDioClient();
@@ -47,6 +51,7 @@ void main() {
       mockWalletCubit = MockWalletCubit();
       mockOIDC4VC = MockOIDC4VC();
       mockJWTDecode = MockJWTDecode();
+      activityLogManager = MockActivityLogManager();
 
       scanCubit = ScanCubit(
         client: mockDioClient,
@@ -57,6 +62,7 @@ void main() {
         walletCubit: mockWalletCubit,
         oidc4vc: mockOIDC4VC,
         jwtDecode: mockJWTDecode,
+        activityLogManager: activityLogManager,
       );
     });
 

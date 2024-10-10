@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:altme/activity_log/activity_log_manager.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -74,6 +75,8 @@ class MockLangCubit extends MockCubit<LangState> implements LangCubit {}
 
 class MockOIDC4VC extends Mock implements OIDC4VC {}
 
+class MockActivityLogManager extends Mock implements ActivityLogManager {}
+
 void main() {
   late DIDKitProvider didKitProvider;
   late KeyGenerator keyGenerator;
@@ -85,6 +88,7 @@ void main() {
   late OnboardingCubit onboardingCubit;
   late MockSecureStorageProvider secureStorageProvider;
   late MockOIDC4VC oidc4vc;
+  late MockActivityLogManager activityLogManager;
 
   const mnemonicString =
       'notice photo opera keen climb agent soft parrot best joke field devote';
@@ -109,6 +113,7 @@ void main() {
     onboardingCubit = OnboardingCubit();
     secureStorageProvider = MockSecureStorageProvider();
     oidc4vc = MockOIDC4VC();
+    activityLogManager = MockActivityLogManager();
 
     when(() => secureStorageProvider.get(any())).thenAnswer((_) async => '');
 
@@ -206,6 +211,7 @@ void main() {
                   secureStorageProvider: secureStorageProvider,
                   langCubit: MockLangCubit(),
                 ),
+                activityLogManager: activityLogManager,
               ),
             ),
             BlocProvider<HomeCubit>.value(value: homeCubit),
@@ -250,6 +256,7 @@ void main() {
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
@@ -294,6 +301,7 @@ void main() {
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
@@ -338,6 +346,7 @@ void main() {
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
@@ -394,6 +403,7 @@ void main() {
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
@@ -450,6 +460,7 @@ void main() {
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
@@ -506,6 +517,7 @@ void main() {
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
@@ -563,6 +575,7 @@ void main() {
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
@@ -629,6 +642,7 @@ void main() {
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
@@ -684,6 +698,7 @@ void main() {
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
       );
 
       await tester.pumpApp(
