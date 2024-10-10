@@ -1,3 +1,4 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/flavor.dart';
@@ -12,6 +13,7 @@ import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingVerifyPhrasePage extends StatelessWidget {
   const OnBoardingVerifyPhrasePage({
@@ -48,6 +50,7 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
         matrixNotificationCubit: context.read<MatrixNotificationCubit>(),
         profileCubit: context.read<ProfileCubit>(),
+        activityLogManager: ActivityLogManager(getSecureStorage),
       ),
       child: Builder(
         builder: (context) {

@@ -1,3 +1,4 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -33,6 +34,7 @@ class BackupPolygonIdIdentityPage extends StatelessWidget {
         walletCubit: context.read<WalletCubit>(),
         fileSaver: FileSaver.instance,
         polygonIdCubit: context.read<PolygonIdCubit>(),
+        activityLogManager: ActivityLogManager(getSecureStorage),
       ),
       child: const BackupPolygonIdIdentityView(),
     );

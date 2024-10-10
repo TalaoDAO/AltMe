@@ -1,3 +1,4 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/flavor.dart';
@@ -26,6 +27,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     required this.altmeChatSupportCubit,
     required this.matrixNotificationCubit,
     required this.profileCubit,
+    required this.activityLogManager,
   }) : super(OnBoardingVerifyPhraseState());
 
   final KeyGenerator keyGenerator;
@@ -38,6 +40,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
   final AltmeChatSupportCubit altmeChatSupportCubit;
   final MatrixNotificationCubit matrixNotificationCubit;
   final ProfileCubit profileCubit;
+  final ActivityLogManager activityLogManager;
 
   final log = getLogger('OnBoardingVerifyPhraseCubit');
 
@@ -123,6 +126,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
           altmeChatSupportCubit: altmeChatSupportCubit,
           matrixNotificationCubit: matrixNotificationCubit,
           profileCubit: profileCubit,
+          activityLogManager: activityLogManager,
         );
       }
       await profileCubit.secureStorageProvider.set(

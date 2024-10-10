@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -23,6 +24,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
     required this.cryptoKeys,
     required this.secureStorageProvider,
     required this.polygonId,
+    required this.activityLogManager,
   }) : super(const RestoreCredentialState());
 
   final WalletCubit walletCubit;
@@ -30,6 +32,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
   final CryptocurrencyKeys cryptoKeys;
   final SecureStorageProvider secureStorageProvider;
   final PolygonId polygonId;
+  final ActivityLogManager activityLogManager;
 
   void setFilePath({String? filePath}) {
     emit(state.copyWith(backupFilePath: filePath));
@@ -142,6 +145,8 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
       await credentialsCubit.loadAllCredentials(
         blockchainType: walletCubit.state.currentAccount!.blockchainType,
       );
+
+      await activityLogManager.saveLog(LogData(type: LogType.restoreWallet));
       emit(state.success(recoveredCredentialLength: credentialList.length));
     } catch (e) {
       if (e is MessageHandler) {

@@ -1299,6 +1299,8 @@ class OIDC4VC {
         publicKeyJwk['crv'] = 'P-256K';
       }
 
+      publicKeyJwk.remove('kid');
+
       late final bool isVerified;
       if (kty == 'OKP') {
         isVerified = verifyTokenEdDSA(
@@ -1931,7 +1933,13 @@ class OIDC4VC {
 
       // final value = {'expiry': expiry, 'data': response.data};
       // await secureStorageProvider.set(uri, jsonEncode(value));
-      response = await dio.get<dynamic>(uri);
+      response = await dio.get<dynamic>(
+        uri,
+        options: Options().copyWith(
+          sendTimeout: const Duration(seconds: 10),
+          receiveTimeout: const Duration(seconds: 10),
+        ),
+      );
 
       return response.data;
     } on FormatException {

@@ -1,3 +1,4 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
@@ -16,6 +17,7 @@ Future<void> generateAccount({
   required AltmeChatSupportCubit altmeChatSupportCubit,
   required MatrixNotificationCubit matrixNotificationCubit,
   required ProfileCubit profileCubit,
+  required ActivityLogManager activityLogManager,
 }) async {
   final mnemonicFormatted = mnemonic.join(' ');
 
@@ -33,6 +35,8 @@ Future<void> generateAccount({
 
   await profileCubit.secureStorageProvider
       .set(SecureStorageKeys.ssiKey, ssiKey);
+
+  await activityLogManager.saveLog(LogData(type: LogType.walletInit));
 
   /// create profile
   await profileCubit.load();

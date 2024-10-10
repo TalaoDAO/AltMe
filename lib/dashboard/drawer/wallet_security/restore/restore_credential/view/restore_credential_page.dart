@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -34,6 +35,7 @@ class RestoreCredentialPage extends StatelessWidget {
         walletCubit: context.read<WalletCubit>(),
         credentialsCubit: context.read<CredentialsCubit>(),
         polygonId: PolygonId(),
+        activityLogManager: ActivityLogManager(getSecureStorage),
       ),
       child: const RestoreCredentialView(),
     );

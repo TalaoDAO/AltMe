@@ -256,10 +256,10 @@ class _DashboardViewState extends State<DashboardView> {
                               physics: const NeverScrollableScrollPhysics(),
                               children: [
                                 const HomePage(),
-                                if (Parameters.walletHandlesCrypto)
-                                  const DiscoverTabPage()
-                                else
-                                  const DiscoverPage(),
+                                // if (Parameters.walletHandlesCrypto)
+                                //   const DiscoverTabPage()
+                                // else
+                                const DiscoverPage(),
                                 if (Parameters.walletHandlesCrypto)
                                   const WertPage()
                                 else

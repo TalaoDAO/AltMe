@@ -5,6 +5,7 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -149,6 +150,7 @@ class App extends StatelessWidget {
               jwtDecode: JWTDecode(),
               profileCubit: context.read<ProfileCubit>(),
               walletCubit: context.read<WalletCubit>(),
+              activityLogManager: ActivityLogManager(secureStorageProvider),
             ),
           ),
           BlocProvider<ManageNetworkCubit>(
@@ -184,6 +186,7 @@ class App extends StatelessWidget {
               walletCubit: context.read<WalletCubit>(),
               oidc4vc: OIDC4VC(),
               jwtDecode: JWTDecode(),
+              activityLogManager: ActivityLogManager(secureStorageProvider),
             ),
           ),
           BlocProvider<AltmeChatSupportCubit>(

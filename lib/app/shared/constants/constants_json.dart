@@ -305,26 +305,26 @@ abstract class ConstantsJson {
   static const walletMetadataForIssuers = <String, dynamic>{
     'vp_formats_supported': {
       'jwt_vp': {
-        'alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
+        'alg': ['ES256', 'ES256K', 'EdDSA'],
       },
       'jwt_vc': {
-        'alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
+        'alg': ['ES256', 'ES256K', 'EdDSA'],
       },
       'jwt_vp_json': {
-        'alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
+        'alg': ['ES256', 'ES256K', 'EdDSA'],
       },
       'jwt_vc_json': {
-        'alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
+        'alg': ['ES256', 'ES256K', 'EdDSA'],
       },
       'vc+sd-jwt': {
-        'alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
+        'alg': ['ES256', 'ES256K', 'EdDSA'],
       },
       'ldp_vp': {
         'proof_type': [
           'JsonWebSignature2020',
           'Ed25519Signature2018',
           'EcdsaSecp256k1Signature2019',
-          'RsaSignature2018',
+          'RsaSignature2018'
         ],
       },
       'ldp_vc': {
@@ -337,13 +337,12 @@ abstract class ConstantsJson {
       },
     },
     'grant_types': ['authorization code', 'pre-authorized_code'],
-    'redirect_uris': [Parameters.redirectUri],
+    'redirect_uris': [Parameters.authorizationEndPoint],
     'subject_syntax_types_supported': ['did:key', 'did:jwk'],
     'subject_syntax_types_discriminations': [
       'did:key:jwk_jcs-pub',
       'did:ebsi:v1',
     ],
-    'response_types_supported': ['vp_token', 'id_token'],
     'token_endpoint_auth_method_supported': [
       'none',
       'client_id',
@@ -351,10 +350,8 @@ abstract class ConstantsJson {
       'client_secret_basic',
       'client_secret_jwt',
     ],
-    'credential_offer_endpoint_supported': [
-      'openid-credential-offer://',
-      'haip://',
-    ],
+    'credential_offer_endpoint': ['openid-credential-offer://', 'haip://'],
+    'client_name': '${Parameters.appName} wallet',
     'contacts': ['contact@talao.io'],
   };
 

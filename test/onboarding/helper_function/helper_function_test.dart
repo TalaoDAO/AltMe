@@ -1,3 +1,4 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -65,6 +66,8 @@ class MockLangCubit extends MockCubit<LangState> implements LangCubit {}
 
 class MockOIDC4VC extends Mock implements OIDC4VC {}
 
+class MockActivityLogManager extends Mock implements ActivityLogManager {}
+
 void main() {
   group('generateAccount', () {
     late KeyGenerator keyGenerator;
@@ -76,6 +79,7 @@ void main() {
     late MatrixNotificationCubit matrixNotificationCubit;
     late ProfileCubit profileCubit;
     late MockSecureStorageProvider secureStorageProvider;
+    late MockActivityLogManager activityLogManager;
 
     setUp(() {
       keyGenerator = KeyGenerator();
@@ -86,6 +90,7 @@ void main() {
       altmeChatSupportCubit = MockAltmeChatSupportCubit();
       matrixNotificationCubit = MockMatrixNotificationCubit();
       secureStorageProvider = MockSecureStorageProvider();
+      activityLogManager = MockActivityLogManager();
 
       when(() => secureStorageProvider.get(any())).thenAnswer((_) async => '');
 
@@ -116,6 +121,7 @@ void main() {
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
       );
 
       verify(
@@ -153,6 +159,7 @@ void main() {
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
       );
 
       expect(profileCubit.state.model.walletType, WalletType.enterprise);

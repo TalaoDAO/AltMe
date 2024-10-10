@@ -242,6 +242,27 @@ class CredentialModel extends Equatable {
 
   String get getFormat => format != null ? format! : 'ldp_vc';
 
+  String get getName {
+    try {
+      var name =
+          credentialPreview.credentialSubjectModel.credentialSubjectType.name;
+
+      if (name.isNotEmpty) return name;
+
+      name = display?.name ?? '';
+
+      if (name.isNotEmpty) return name;
+
+      name = credentialPreview.type.last;
+
+      if (name.isNotEmpty) return name;
+
+      return '';
+    } catch (e) {
+      return '';
+    }
+  }
+
   @override
   List<Object?> get props => [
         id,
