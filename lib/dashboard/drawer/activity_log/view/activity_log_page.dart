@@ -125,13 +125,11 @@ class _ActivityLogViewState extends State<ActivityLogView> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             message,
-                            maxLines: 2,
                             style: TextStyle(
                               color: colorScheme.onSurface,
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               height: 1.5,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ),

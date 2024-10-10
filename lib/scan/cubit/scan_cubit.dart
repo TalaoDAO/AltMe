@@ -1011,7 +1011,7 @@ class ScanCubit extends Cubit<ScanState> {
           vcInfo: VCInfo(
             id: credentialModel.id,
             name: credentialModel.getName,
-            domain: Uri.parse(responseOrRedirectUri).host,
+            domain: Uri.parse(responseOrRedirectUri).origin,
           ),
         ),
       );
