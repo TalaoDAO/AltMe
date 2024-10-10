@@ -1299,6 +1299,8 @@ class OIDC4VC {
         publicKeyJwk['crv'] = 'P-256K';
       }
 
+      publicKeyJwk.remove('kid');
+
       late final bool isVerified;
       if (kty == 'OKP') {
         isVerified = verifyTokenEdDSA(
