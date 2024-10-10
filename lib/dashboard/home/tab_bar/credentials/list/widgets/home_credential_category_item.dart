@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/list/widgets/credential_list_widget.dart';
 import 'package:altme/l10n/l10n.dart';
 
 import 'package:flutter/material.dart';
@@ -62,30 +63,9 @@ class HomeCredentialCategoryItem extends StatelessWidget {
               horizontal: 4,
               vertical: 0,
             ),
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 14,
-                mainAxisSpacing: 14,
-                childAspectRatio: Sizes.credentialAspectRatio,
-              ),
-              itemCount: sortedCredentials.length + 1,
-              itemBuilder: (_, index) {
-                if (index == sortedCredentials.length) {
-                  if (credentialCategory == CredentialCategory.pendingCards) {
-                    return Container();
-                  }
-                  return AddCredentialButton(
-                    credentialCategory: credentialCategory,
-                  );
-                } else {
-                  return HomeCredentialItem(
-                    credentialModel: sortedCredentials[index],
-                  );
-                }
-              },
+            child: CredentialListWidget(
+              sortedCredentials: sortedCredentials,
+              credentialCategory: credentialCategory,
             ),
           ),
         ],
