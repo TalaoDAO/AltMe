@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
@@ -22,6 +23,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
     required this.credentialsCubit,
     required this.fileSaver,
     required this.polygonIdCubit,
+    required this.activityLogManager,
   }) : super(const BackupCredentialState());
 
   final SecureStorageProvider secureStorageProvider;
@@ -29,6 +31,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
   final CredentialsCubit credentialsCubit;
   final FileSaver fileSaver;
   final PolygonIdCubit polygonIdCubit;
+  final ActivityLogManager activityLogManager;
 
   Future<void> encryptAndDownloadFile() async {
     emit(state.loading());
@@ -71,6 +74,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       if (filePath != null && filePath.isEmpty) {
         emit(state.copyWith(status: AppStatus.idle));
       } else {
+        await activityLogManager.saveLog(LogData(type: LogType.backupData));
         emit(
           state.copyWith(
             status: AppStatus.success,

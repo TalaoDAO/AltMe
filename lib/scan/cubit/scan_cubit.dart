@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -40,6 +41,7 @@ class ScanCubit extends Cubit<ScanState> {
     required this.walletCubit,
     required this.oidc4vc,
     required this.jwtDecode,
+    required this.activityLogManager,
   }) : super(const ScanState());
 
   final DioClient client;
@@ -50,6 +52,7 @@ class ScanCubit extends Cubit<ScanState> {
   final WalletCubit walletCubit;
   final OIDC4VC oidc4vc;
   final JWTDecode jwtDecode;
+  final ActivityLogManager activityLogManager;
 
   Future<void> credentialOfferOrPresent({
     required Uri uri,
@@ -287,6 +290,7 @@ class ScanCubit extends Cubit<ScanState> {
           await presentationActivity(
             credentialModels: credentialsToBePresented,
             issuer: issuer,
+            uri: uri,
           );
         }
         emit(state.copyWith(status: ScanStatus.success));
@@ -373,6 +377,7 @@ class ScanCubit extends Cubit<ScanState> {
       await presentationActivity(
         credentialModels: credentialsToBePresented,
         issuer: issuer,
+        uri: Uri.parse(url),
       );
 
       String? responseMessage;
@@ -627,6 +632,7 @@ class ScanCubit extends Cubit<ScanState> {
         await presentationActivity(
           credentialModels: credentialsToBePresented,
           issuer: issuer,
+          uri: uri,
         );
         emit(
           state.copyWith(
@@ -659,6 +665,7 @@ class ScanCubit extends Cubit<ScanState> {
         await presentationActivity(
           credentialModels: credentialsToBePresented,
           issuer: issuer,
+          uri: uri,
         );
 
         String? url;
@@ -981,17 +988,33 @@ class ScanCubit extends Cubit<ScanState> {
   Future<void> presentationActivity({
     required List<CredentialModel> credentialModels,
     required Issuer issuer,
+    required Uri uri,
   }) async {
     final log = getLogger('ScanCubit');
     log.i('adding presentation Activity');
     for (final credentialModel in credentialModels) {
+      final now = DateTime.now();
+
       final Activity activity = Activity(
-        presentation: Presentation(
-          issuer: issuer,
-          presentedAt: DateTime.now(),
-        ),
+        presentation: Presentation(issuer: issuer, presentedAt: now),
       );
       credentialModel.activities.add(activity);
+
+      final String responseOrRedirectUri =
+          uri.queryParameters['redirect_uri'] ??
+              uri.queryParameters['response_uri']!;
+
+      await activityLogManager.saveLog(
+        LogData(
+          type: LogType.presentVC,
+          timestamp: now,
+          vcInfo: VCInfo(
+            id: credentialModel.id,
+            name: credentialModel.getName,
+            domain: Uri.parse(responseOrRedirectUri).origin,
+          ),
+        ),
+      );
 
       log.i('presentation activity added to the credential');
       await credentialsCubit.updateCredential(

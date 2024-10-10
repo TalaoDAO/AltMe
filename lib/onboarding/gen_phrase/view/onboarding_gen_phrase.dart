@@ -1,3 +1,4 @@
+import 'package:altme/activity_log/activity_log_manager.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -12,6 +13,7 @@ import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingGenPhrasePage extends StatelessWidget {
   const OnBoardingGenPhrasePage({super.key});
@@ -33,6 +35,7 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
         matrixNotificationCubit: context.read<MatrixNotificationCubit>(),
         profileCubit: context.read<ProfileCubit>(),
+        activityLogManager: ActivityLogManager(getSecureStorage),
       ),
       child: const OnBoardingGenPhraseView(),
     );

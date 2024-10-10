@@ -1,3 +1,4 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/import_wallet/import_wallet.dart';
@@ -45,6 +46,7 @@ class ImportWalletPage extends StatelessWidget {
         homeCubit: context.read<HomeCubit>(),
         walletCubit: context.read<WalletCubit>(),
         splashCubit: context.read<SplashCubit>(),
+        activityLogManager: ActivityLogManager(getSecureStorage),
       ),
       child: ImportWalletView(
         accountName: accountName,

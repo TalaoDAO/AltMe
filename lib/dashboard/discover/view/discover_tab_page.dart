@@ -3,7 +3,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class DiscoverTabPage extends StatelessWidget {
   const DiscoverTabPage({super.key});

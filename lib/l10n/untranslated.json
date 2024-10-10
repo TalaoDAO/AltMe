@@ -47,7 +47,16 @@
     "ebsiV4DecentralizedId",
     "noNotificationsYet",
     "approveProfileTitle",
-    "approveProfileDescription"
+    "approveProfileDescription",
+    "activityLog",
+    "activityLogDescription",
+    "walletInitialized",
+    "backupCredentials",
+    "restoredCredentials",
+    "addedCredential",
+    "deletedCredential",
+    "presentedCredential",
+    "keysImported"
   ],
 
   "es": [
@@ -98,7 +107,16 @@
     "ebsiV4DecentralizedId",
     "noNotificationsYet",
     "approveProfileTitle",
-    "approveProfileDescription"
+    "approveProfileDescription",
+    "activityLog",
+    "activityLogDescription",
+    "walletInitialized",
+    "backupCredentials",
+    "restoredCredentials",
+    "addedCredential",
+    "deletedCredential",
+    "presentedCredential",
+    "keysImported"
   ],
 
   "fr": [
@@ -154,6 +172,15 @@
     "ebsiV4DecentralizedId",
     "noNotificationsYet",
     "approveProfileTitle",
-    "approveProfileDescription"
+    "approveProfileDescription",
+    "activityLog",
+    "activityLogDescription",
+    "walletInitialized",
+    "backupCredentials",
+    "restoredCredentials",
+    "addedCredential",
+    "deletedCredential",
+    "presentedCredential",
+    "keysImported"
   ]
 }
