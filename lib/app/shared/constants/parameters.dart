@@ -115,4 +115,10 @@ class Parameters {
 
   // ThemeMode.light for talao
   static const ThemeMode defaultTheme = ThemeMode.dark;
+
+// Used to prevent display
+// This key tells the app to not display the field and it allows use of maps
+// with display of key value. See displayKeyValueFromMap
+
+  static const String doNotDisplayMe = 'doNotDisplayMeMggK5GvU7';
 }

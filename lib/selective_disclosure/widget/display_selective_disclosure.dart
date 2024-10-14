@@ -1,3 +1,4 @@
+import 'package:altme/app/shared/constants/parameters.dart';
 import 'package:altme/app/shared/extension/iterable_extension.dart';
 import 'package:altme/app/shared/widget/base/credential_field.dart';
 import 'package:altme/app/shared/widget/transparent_ink_well.dart';
@@ -204,6 +205,10 @@ class DisclosureTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (element.key.startsWith(Parameters.doNotDisplayMe) &&
+        element.value['hasCheckbox'] != true) {
+      return const SizedBox();
+    }
     return TransparentInkWell(
       onTap: () {
         if (element.value['hasCheckbox'] != true ||
@@ -220,7 +225,7 @@ class DisclosureTitle extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            element.key,
+            displayKeyValueFromMap(element.key),
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
@@ -258,6 +263,9 @@ class DisclosureTitle extends StatelessWidget {
   }
 }
 
+String displayKeyValueFromMap(String key) =>
+    key.startsWith(Parameters.doNotDisplayMe) ? '' : key;
+
 class DisclosureLine extends StatelessWidget {
   const DisclosureLine({
     super.key,
@@ -274,6 +282,10 @@ class DisclosureLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? title = elementKey;
+    if (title != null) {
+      title = title.startsWith(Parameters.doNotDisplayMe) ? null : title;
+    }
     return TransparentInkWell(
       onTap: () {
         if (elementValue['hasCheckbox'] != true ||
@@ -293,7 +305,7 @@ class DisclosureLine extends StatelessWidget {
           Expanded(
             child: CredentialField(
               padding: const EdgeInsets.only(top: 8),
-              title: elementKey,
+              title: title,
               value: elementValue['value'].toString(),
               titleColor: Theme.of(context).colorScheme.onSurface,
               valueColor: Theme.of(context).colorScheme.onSurface,
