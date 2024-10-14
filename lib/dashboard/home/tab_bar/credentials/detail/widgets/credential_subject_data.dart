@@ -80,7 +80,7 @@ class CredentialSubjectData extends StatelessWidget {
 
         if (value is! Map<String, dynamic>) return Container();
 
-        if (value.isEmpty) return Container();
+        // if (value.isEmpty) return Container();
 
         if (value.containsKey('display')) {
           final displays = value['display'];
@@ -112,10 +112,15 @@ class CredentialSubjectData extends StatelessWidget {
             data = credentialSubjectData[key].toString();
           }
         } else {
-          return Container();
+          if (credentialSubjectData[key] != null) {
+            title = null;
+            data = credentialSubjectData[key].toString();
+          } else {
+            return Container();
+          }
         }
 
-        if (title == null || data == null) return Container();
+        if (data == null) return Container();
 
         return CredentialField(
           padding: const EdgeInsets.only(top: 10),
