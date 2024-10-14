@@ -100,7 +100,9 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
           );
           continue;
         }
-        if (element.value['value'] is String) {
+        if (element.value['value'] is String ||
+            element.value['value'] is bool ||
+            element.value['value'] is num) {
           widgetList.add(
             DisclosureLine(
               onPressed: onPressed,
