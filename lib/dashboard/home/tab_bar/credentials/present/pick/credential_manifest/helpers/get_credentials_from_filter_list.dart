@@ -45,7 +45,7 @@ List<CredentialModel> getCredentialsFromFilterList({
                 }
 
                 if (pattern == null) {
-                  return true;
+                  return false;
                 } else if (pattern.endsWith(r'$')) {
                   final RegExp regEx = RegExp(pattern);
                   final Match? match = regEx.firstMatch(searchParameter);
