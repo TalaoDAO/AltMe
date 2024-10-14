@@ -117,7 +117,10 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
         if (element.value['value'] == null) {
           widgetList.add(
             Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: (element.key.startsWith(Parameters.doNotDisplayMe) &&
+                      element.value['hasCheckbox'] != true)
+                  ? EdgeInsets.zero
+                  : const EdgeInsets.only(top: 8),
               child: Column(
                 children: [
                   DisclosureTitle(
