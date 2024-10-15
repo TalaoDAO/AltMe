@@ -25,7 +25,6 @@ Future<void> securityCheck({
         ),
       );
     case WalletProtectionType.biometrics:
-      final LocalAuthApi localAuthApi = LocalAuthApi();
       final authenticated = await localAuthApi.authenticate(
         localizedReason: l10n.scanFingerprintToAuthenticate,
       );

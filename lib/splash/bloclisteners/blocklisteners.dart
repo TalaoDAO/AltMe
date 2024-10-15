@@ -35,6 +35,7 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
         localAuthApi: LocalAuthApi(),
         onSuccess: () {
           Navigator.of(context).push<void>(DashboardPage.route());
+          context.read<SplashCubit>().authenticated();
         },
       );
     }

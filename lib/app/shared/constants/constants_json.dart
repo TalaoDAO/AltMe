@@ -324,7 +324,7 @@ abstract class ConstantsJson {
           'JsonWebSignature2020',
           'Ed25519Signature2018',
           'EcdsaSecp256k1Signature2019',
-          'RsaSignature2018'
+          'RsaSignature2018',
         ],
       },
       'ldp_vc': {

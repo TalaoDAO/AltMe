@@ -455,12 +455,6 @@ class WalletCubit extends Cubit<WalletState> {
     /// check if associated wallet credential is available for
     /// blockchain type
 
-    // TODO may be we need to delete
-    // await credentialsCubit.updateAssociatedWalletCredential(
-    //   blockchainType: blockchainType,
-    //   cryptoAccountData: cryptoAccountData,
-    // );
-
     /// update current index after deletion
     final CryptoAccountData currentCryptoAccountData =
         state.cryptoAccount.data[state.currentCryptoIndex];
