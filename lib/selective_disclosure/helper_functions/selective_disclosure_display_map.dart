@@ -254,9 +254,8 @@ class SelectiveDisclosureDisplayMap {
       final isCompulsary = limitDisclosure == 'required';
 
       bool isDisabled = isCompulsary;
-      final selectedKeyId = selectedClaimsKeyIds
-          .firstWhereOrNull((ele) => ele.keyId == keyToCheck);
-
+      final selectedKeyId =
+          selectedClaimsKeyIds.firstWhereOrNull((ele) => ele.keyId == claimKey);
       if (isPresentation) {
         if (filters.isNotEmpty) {
           isDisabled = isCompulsary;
