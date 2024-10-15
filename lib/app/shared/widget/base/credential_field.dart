@@ -105,6 +105,7 @@ class DisplayCredentialField extends StatelessWidget {
             ),
           ),
         );
+      case 'image/png':
       case 'image/jpeg':
         late Widget image;
         try {
