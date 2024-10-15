@@ -239,15 +239,10 @@ class SelectiveDisclosureDisplayMap {
     if (claimsData.isEmpty) return claimDataMap;
     int index = 0;
     for (final element in claimsData) {
-      var keyToCheck = mapKey;
       var claimKey = mapKey;
-      if (parentKeyId != null) {
-        keyToCheck = '$parentKeyId-$mapKey';
-      }
       final isFirstElement = index == 0;
 
       if (!isFirstElement) {
-        keyToCheck = '$keyToCheck-$index';
         claimKey = '$claimKey-$index';
       }
 
