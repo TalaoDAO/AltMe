@@ -109,9 +109,13 @@ class DisplayCredentialField extends StatelessWidget {
       case 'image/jpeg':
         late Widget image;
         try {
-          final base64Image = value.split(',').last;
-          final byteImage = const Base64Decoder().convert(base64Image);
-          image = Image.memory(byteImage);
+          if (value.startsWith('http')) {
+            image = Image.network(value);
+          } else {
+            final base64Image = value.split(',').last;
+            final byteImage = const Base64Decoder().convert(base64Image);
+            image = Image.memory(byteImage);
+          }
         } catch (e) {
           image = const SizedBox.shrink();
         }
