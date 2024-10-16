@@ -235,7 +235,8 @@ class DisclosureTitle extends StatelessWidget {
                 ),
           ),
           const Spacer(),
-          if (element.value['hasCheckbox'] == true) ...[
+          if (element.value['hasCheckbox'] == true &&
+              element.value['isCompulsary'] == false) ...[
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(top: 8),
@@ -316,7 +317,8 @@ class DisclosureLine extends StatelessWidget {
               type: elementValue['type'].toString(),
             ),
           ),
-          if (elementValue['hasCheckbox'] == true) ...[
+          if (elementValue['hasCheckbox'] == true &&
+              elementValue['isCompulsary'] == false) ...[
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(top: 8),
