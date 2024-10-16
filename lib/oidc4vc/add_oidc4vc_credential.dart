@@ -26,7 +26,8 @@ Future<void> addOIDC4VCCredential({
 
   if (format == VCFormatType.jwtVc.vcValue ||
       format == VCFormatType.jwtVcJson.vcValue ||
-      format == VCFormatType.vcSdJWT.vcValue) {
+      format == VCFormatType.vcSdJWT.vcValue ||
+      format == VCFormatType.jwtVcJsonLd.vcValue) {
     //jwt_vc
     final data = encodedCredentialFromOIDC4VC['credential'] as String;
 

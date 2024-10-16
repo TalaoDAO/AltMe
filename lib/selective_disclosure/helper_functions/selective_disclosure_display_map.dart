@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:altme/app/shared/constants/parameters.dart';
 import 'package:altme/app/shared/extension/iterable_extension.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/selective_disclosure/cubit/selective_disclosure_pick_cubit.dart';
@@ -36,7 +37,9 @@ class SelectiveDisclosureDisplayMap {
     final builtMap = <String, dynamic>{};
     final selectiveDisclosure = SelectiveDisclosure(credentialModel);
     final currentClaims = claims ?? selectiveDisclosure.claims;
+    int index = 0;
     currentClaims.forEach((key, value) {
+      index++;
       String? title;
 
       final mapKey = key;
@@ -46,8 +49,9 @@ class SelectiveDisclosureDisplayMap {
 
       final display = getDisplay(mapKey, mapValue, languageCode);
 
-      if (display == null) return;
-      title = display['name'].toString();
+      title =
+          display?['name'].toString() ?? '${Parameters.doNotDisplayMe}$index';
+
       /// Getting value_type if defined in the claim
       final type = mapValue['value_type'] as String?;
       final bool hasNestedData =
@@ -235,24 +239,18 @@ class SelectiveDisclosureDisplayMap {
     if (claimsData.isEmpty) return claimDataMap;
     int index = 0;
     for (final element in claimsData) {
-      var keyToCheck = mapKey;
       var claimKey = mapKey;
-      if (parentKeyId != null) {
-        keyToCheck = '$parentKeyId-$mapKey';
-      }
       final isFirstElement = index == 0;
 
       if (!isFirstElement) {
-        keyToCheck = '$keyToCheck-$index';
         claimKey = '$claimKey-$index';
       }
 
       final isCompulsary = limitDisclosure == 'required';
 
       bool isDisabled = isCompulsary;
-      final selectedKeyId = selectedClaimsKeyIds
-          .firstWhereOrNull((ele) => ele.keyId == keyToCheck);
-
+      final selectedKeyId =
+          selectedClaimsKeyIds.firstWhereOrNull((ele) => ele.keyId == claimKey);
       if (isPresentation) {
         if (filters.isNotEmpty) {
           isDisabled = isCompulsary;

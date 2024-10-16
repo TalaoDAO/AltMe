@@ -52,7 +52,13 @@ class _SplashViewState extends State<SplashView> {
     // Handle links
     _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
       debugPrint('onAppLink: $uri');
-      processIncomingUri(uri);
+      Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (context.read<SplashCubit>().state.status ==
+            SplashStatus.authenticated) {
+          timer.cancel();
+          processIncomingUri(uri);
+        }
+      });
     });
   }
 
@@ -70,11 +76,6 @@ class _SplashViewState extends State<SplashView> {
     final l10n = context.l10n;
     String beaconData = '';
     bool isBeaconRequest = false;
-
-    Timer.periodic(const Duration(seconds: 3), (timer) {
-      timer.cancel();
-      _deeplink = null;
-    });
 
     if (_deeplink != null && _deeplink == uri.toString()) {
       return;

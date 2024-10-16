@@ -24,6 +24,7 @@ class PinCodeWidget extends StatefulWidget {
     this.onLoginAttempt,
     this.isNewCode = false,
     this.isUserPin = false,
+    this.showKeyboard = false,
   })  : circleUIConfig = circleUIConfig ?? const CircleUIConfig(),
         keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
 
@@ -48,6 +49,7 @@ class PinCodeWidget extends StatefulWidget {
 
   final Color? backgroundColor;
   final Widget? bottomWidget;
+  final bool showKeyboard;
 
   @override
   State<StatefulWidget> createState() => _PinCodeWidgetState();
@@ -58,6 +60,10 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
   bool isConfirmationPage = false;
 
   final log = getLogger('PinCodeWidget');
+  final FocusNode _focusNode = FocusNode();
+  final TextEditingController _controller = TextEditingController();
+  String _latestKey = '';
+  String _previousText = '';
 
   @override
   void initState() {
@@ -69,7 +75,37 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
           isConfirmationPage = true;
         });
       }
+      if (widget.showKeyboard) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          FocusScope.of(context).requestFocus(_focusNode);
+        });
+        _controller.addListener(() {
+          final currentText = _controller.text;
+
+          if (currentText.length > _previousText.length) {
+            _latestKey = currentText.substring(currentText.length - 1);
+            context.read<PinCodeViewCubit>().onKeyboardButtonPressed(
+                  passwordDigits: widget.passwordDigits,
+                  text: _latestKey,
+                  cancelCallback: widget.cancelCallback,
+                  isNewCode: widget.isNewCode,
+                );
+          } else if (currentText.length < _previousText.length) {
+            context
+                .read<PinCodeViewCubit>()
+                .onDeleteCancelButtonPressed(widget.cancelCallback);
+          }
+          _previousText = currentText;
+        });
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -150,18 +186,29 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                 PinCodeErrorMessage(
                                   isConfirmationPage: isConfirmationPage,
                                 ),
-                                NumKeyboard(
-                                  keyboardUIConfig: widget.keyboardUIConfig,
-                                  passwordDigits: widget.passwordDigits,
-                                  cancelCallback: widget.cancelCallback,
-                                  allowAction: true,
-                                  isNewCode: widget.isNewCode,
-                                  keyboardButton:
-                                      KeyboardButton(widget: widget),
-                                ),
+                                if (!widget.showKeyboard)
+                                  NumKeyboard(
+                                    keyboardUIConfig: widget.keyboardUIConfig,
+                                    passwordDigits: widget.passwordDigits,
+                                    cancelCallback: widget.cancelCallback,
+                                    allowAction: true,
+                                    isNewCode: widget.isNewCode,
+                                    keyboardButton:
+                                        KeyboardButton(widget: widget),
+                                  ),
                                 widget.bottomWidget ?? Container(),
                               ],
                             ),
+                            if (widget.showKeyboard)
+                              Offstage(
+                                child: TextField(
+                                  focusNode: _focusNode,
+                                  controller: _controller,
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       ],
@@ -238,18 +285,30 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                     )
                                   else
                                     Container(),
+                                  if (widget.showKeyboard)
+                                    Offstage(
+                                      child: TextField(
+                                        focusNode: _focusNode,
+                                        controller: _controller,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
                                 ],
                               ),
                             ),
-                            Expanded(
-                              child: NumKeyboard(
-                                keyboardUIConfig: widget.keyboardUIConfig,
-                                passwordDigits: widget.passwordDigits,
-                                cancelCallback: widget.cancelCallback,
-                                allowAction: true,
-                                keyboardButton: KeyboardButton(widget: widget),
+                            if (!widget.showKeyboard)
+                              Expanded(
+                                child: NumKeyboard(
+                                  keyboardUIConfig: widget.keyboardUIConfig,
+                                  passwordDigits: widget.passwordDigits,
+                                  cancelCallback: widget.cancelCallback,
+                                  allowAction: true,
+                                  keyboardButton:
+                                      KeyboardButton(widget: widget),
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       ),

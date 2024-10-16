@@ -1140,11 +1140,15 @@ class OIDC4VC {
         credentialData['format'] = format;
 
         if (credentialDefinition != null) {
-          if (vcFormatType == VCFormatType.jwtVcJson ||
-              vcFormatType == VCFormatType.ldpVc) {
+          if (vcFormatType == VCFormatType.jwtVcJson) {
             credentialDefinition.removeWhere((key, _) => key != 'type');
           }
 
+          if (vcFormatType == VCFormatType.ldpVc ||
+              vcFormatType == VCFormatType.jwtVcJsonLd) {
+            credentialDefinition
+                .removeWhere((key, _) => key != 'type' && key != '@context');
+          }
           credentialData['credential_definition'] = credentialDefinition;
         }
 

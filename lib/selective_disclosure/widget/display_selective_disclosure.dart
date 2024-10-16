@@ -1,3 +1,4 @@
+import 'package:altme/app/shared/constants/parameters.dart';
 import 'package:altme/app/shared/extension/iterable_extension.dart';
 import 'package:altme/app/shared/widget/base/credential_field.dart';
 import 'package:altme/app/shared/widget/transparent_ink_well.dart';
@@ -100,7 +101,9 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
           );
           continue;
         }
-        if (element.value['value'] is String) {
+        if (element.value['value'] is String ||
+            element.value['value'] is bool ||
+            element.value['value'] is num) {
           widgetList.add(
             DisclosureLine(
               onPressed: onPressed,
@@ -114,7 +117,10 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
         if (element.value['value'] == null) {
           widgetList.add(
             Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: (element.key.startsWith(Parameters.doNotDisplayMe) &&
+                      element.value['hasCheckbox'] != true)
+                  ? EdgeInsets.zero
+                  : const EdgeInsets.only(top: 8),
               child: Column(
                 children: [
                   DisclosureTitle(
@@ -202,6 +208,10 @@ class DisclosureTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (element.key.startsWith(Parameters.doNotDisplayMe) &&
+        element.value['hasCheckbox'] != true) {
+      return const SizedBox();
+    }
     return TransparentInkWell(
       onTap: () {
         if (element.value['hasCheckbox'] != true ||
@@ -218,14 +228,15 @@ class DisclosureTitle extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            element.key,
+            displayKeyValueFromMap(element.key),
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
                 ),
           ),
           const Spacer(),
-          if (element.value['hasCheckbox'] == true) ...[
+          if (element.value['hasCheckbox'] == true &&
+              element.value['isCompulsary'] == false) ...[
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(top: 8),
@@ -256,6 +267,9 @@ class DisclosureTitle extends StatelessWidget {
   }
 }
 
+String displayKeyValueFromMap(String key) =>
+    key.startsWith(Parameters.doNotDisplayMe) ? '' : key;
+
 class DisclosureLine extends StatelessWidget {
   const DisclosureLine({
     super.key,
@@ -272,6 +286,10 @@ class DisclosureLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? title = elementKey;
+    if (title != null) {
+      title = title.startsWith(Parameters.doNotDisplayMe) ? null : title;
+    }
     return TransparentInkWell(
       onTap: () {
         if (elementValue['hasCheckbox'] != true ||
@@ -291,7 +309,7 @@ class DisclosureLine extends StatelessWidget {
           Expanded(
             child: CredentialField(
               padding: const EdgeInsets.only(top: 8),
-              title: elementKey,
+              title: title,
               value: elementValue['value'].toString(),
               titleColor: Theme.of(context).colorScheme.onSurface,
               valueColor: Theme.of(context).colorScheme.onSurface,
@@ -299,7 +317,8 @@ class DisclosureLine extends StatelessWidget {
               type: elementValue['type'].toString(),
             ),
           ),
-          if (elementValue['hasCheckbox'] == true) ...[
+          if (elementValue['hasCheckbox'] == true &&
+              elementValue['isCompulsary'] == false) ...[
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(top: 8),
