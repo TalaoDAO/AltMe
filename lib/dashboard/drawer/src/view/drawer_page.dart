@@ -180,15 +180,6 @@ class DrawerView extends StatelessWidget {
                       ),
                       const SizedBox(height: Sizes.spaceSmall),
                       DrawerCategoryItem(
-                        title: l10n.activityLog,
-                        subTitle: l10n.activityLogDescription,
-                        onClick: () {
-                          Navigator.of(context)
-                              .push<void>(ActivityLogPage.route());
-                        },
-                      ),
-                      const SizedBox(height: Sizes.spaceSmall),
-                      DrawerCategoryItem(
                         title: l10n.resetWallet,
                         subTitle: l10n.resetWalletDescription,
                         onClick: () {
