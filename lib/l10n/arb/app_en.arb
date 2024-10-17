@@ -1076,15 +1076,6 @@
   "keyBindingPayload": "Key Binding Payload",
   "ebsiV4DecentralizedId": "did:key EBSI V4 P-256",
   "noNotificationsYet": "No notifications yet",
-  "approveProfileTitle": "Install configuration",
-  "approveProfileDescription": "Do you consent to install the configuration of {company}?",
-  "@approveProfileDescription": {
-    "description": "name of the company owning the configuration",
-    "type": "text",
-    "placeholders": {
-      "company": {}
-    }
-  },
   "activityLog": "Activity Log",
   "activityLogDescription": "See your activities",
   "walletInitialized": "Wallet Initialized",
@@ -1121,5 +1112,31 @@
       "domain": {}
     }
   },
-  "keysImported": "Keys imported"
+  "keysImported": "Keys imported",
+  "approveProfileTitle": "Install configuration",
+  "approveProfileDescription": "Do you consent to install the configuration of {company}?",
+  "@approveProfileDescription": {
+    "description": "name of the company owning the configuration",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  },
+  "updateProfileTitle": "Update configuration",
+  "updateProfileDescription": "Do you consent to update the configuration of {company}?",
+  "@updateProfileDescription": {
+    "description": "name of the company owning the configuration",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  }, 
+  "replaceProfileDescription": "Do you consent to replace the current configuration with that of {company}?",
+  "@replaceProfileDescription": {
+    "description": "name of the company owning the configuration",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  }
 }
