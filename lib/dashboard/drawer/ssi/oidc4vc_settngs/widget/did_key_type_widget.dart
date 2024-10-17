@@ -26,6 +26,12 @@ class DidKeyTypeWidget extends StatelessWidget {
               if (didKeyType == DidKeyType.jwtClientAttestation) {
                 return Container();
               }
+
+              /// there is no new key for EBSI V4
+              if (didKeyType == DidKeyType.ebsiv4) {
+                return Container();
+              }
+
               return Column(
                 children: [
                   ListTile(
@@ -66,7 +72,7 @@ class DidKeyTypeWidget extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                      didKeyType.formattedString,
+                      didKeyType.didString,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     trailing: Icon(
