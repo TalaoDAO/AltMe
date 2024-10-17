@@ -9,5 +9,7 @@ enum AppStatus {
   idle,
   goBack,
   revoked,
-  walletProviderApproval,
+  addEnterpriseAccount,
+  updateEnterpriseAccount,
+  replaceEnterpriseAccount
 }

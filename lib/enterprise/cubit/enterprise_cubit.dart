@@ -52,16 +52,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         );
       }
 
-      final savedEmail = await profileCubit.secureStorageProvider.get(
-        SecureStorageKeys.enterpriseEmail,
-      );
-
-      if (savedEmail != null) {
-        throw ResponseMessage(
-          message: ResponseString.RESPONSE_STRING_thisWalleIsAlreadyConfigured,
-        );
-      }
-
       /// get vc and store it in the wallet
       final walletAttestationData = await getWalletAttestationData(url);
 
@@ -114,19 +104,51 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     );
 
     final profileSettingJson =
-        profileCubit.jwtDecode.parseJwt(response as String);
-    // we emit new state, waiting for user approval
-    emit(
-      state.copyWith(
-        status: AppStatus.walletProviderApproval,
-        profileSettingJson: jsonEncode(profileSettingJson),
-      ),
+        jsonEncode(profileCubit.jwtDecode.parseJwt(response as String));
+
+    final savedEmail = await profileCubit.secureStorageProvider.get(
+      SecureStorageKeys.enterpriseEmail,
     );
+
+    // we emit new state, waiting for user approval
+
+    if (savedEmail == null) {
+      // new configuration
+
+      // throw ResponseMessage(
+      //   message: ResponseString.RESPONSE_STRING_thisWalleIsAlreadyConfigured,
+      // );
+      emit(
+        state.copyWith(
+          status: AppStatus.addEnterpriseAccount,
+          profileSettingJson: profileSettingJson,
+        ),
+      );
+    } else {
+      if (email == savedEmail) {
+        // update old configuraion
+        emit(
+          state.copyWith(
+            status: AppStatus.updateEnterpriseAccount,
+            profileSettingJson: profileSettingJson,
+          ),
+        );
+      } else {
+        // new configuration
+        emit(
+          state.copyWith(
+            status: AppStatus.replaceEnterpriseAccount,
+            profileSettingJson: profileSettingJson,
+          ),
+        );
+      }
+    }
   }
 
-  Future<void> applyConfiguration(
-    QRCodeScanCubit qrCodeScanCubit,
-  ) async {
+  Future<void> applyConfiguration({
+    required QRCodeScanCubit qrCodeScanCubit,
+    required AppStatus status,
+  }) async {
     assert(state.profileSettingJson != null, 'Profile setting is missing.');
     emit(state.loading());
 
@@ -177,8 +199,11 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
           status: AppStatus.success,
           message: StateMessage.success(
             messageHandler: ResponseMessage(
-              message: ResponseString
-                  .RESPONSE_STRING_successfullyAddedEnterpriseAccount,
+              message: status == AppStatus.addEnterpriseAccount
+                  ? ResponseString
+                      .RESPONSE_STRING_successfullyAddedEnterpriseAccount
+                  : ResponseString
+                      .RESPONSE_STRING_successfullyUpdatedEnterpriseAccount,
             ),
           ),
         ),
