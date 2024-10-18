@@ -11,5 +11,6 @@ enum AppStatus {
   revoked,
   addEnterpriseAccount,
   updateEnterpriseAccount,
-  replaceEnterpriseAccount
+  replaceEnterpriseAccount,
+  restoreWallet,
 }

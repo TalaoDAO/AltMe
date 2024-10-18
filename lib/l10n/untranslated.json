@@ -59,7 +59,11 @@
     "approveProfileDescription",
     "updateProfileTitle",
     "updateProfileDescription",
-    "replaceProfileDescription"
+    "replaceProfileDescription",
+    "saveBackupCredentialSubtitle2",
+    "createWallet",
+    "restoreWallet",
+    "showWalletRecoveryPhraseSubtitle2"
   ],
 
   "es": [
@@ -122,7 +126,11 @@
     "approveProfileDescription",
     "updateProfileTitle",
     "updateProfileDescription",
-    "replaceProfileDescription"
+    "replaceProfileDescription",
+    "saveBackupCredentialSubtitle2",
+    "createWallet",
+    "restoreWallet",
+    "showWalletRecoveryPhraseSubtitle2"
   ],
 
   "fr": [
@@ -190,6 +198,10 @@
     "approveProfileDescription",
     "updateProfileTitle",
     "updateProfileDescription",
-    "replaceProfileDescription"
+    "replaceProfileDescription",
+    "saveBackupCredentialSubtitle2",
+    "createWallet",
+    "restoreWallet",
+    "showWalletRecoveryPhraseSubtitle2"
   ]
 }

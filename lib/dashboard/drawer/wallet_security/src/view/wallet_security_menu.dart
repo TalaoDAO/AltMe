@@ -52,15 +52,18 @@ class WalletSecurityView extends StatelessWidget {
                     context: context,
                     localAuthApi: LocalAuthApi(),
                     onSuccess: () {
-                      Navigator.of(context)
-                          .push<void>(ProtectWalletPage.route());
+                      Navigator.of(context).push<void>(
+                        ProtectWalletPage.route(restoreWallet: false),
+                      );
                     },
                   );
                 },
               ),
               DrawerItem(
                 title: l10n.showWalletRecoveryPhrase,
-                subtitle: l10n.showWalletRecoveryPhraseSubtitle,
+                subtitle: Parameters.useMnemonicsForBackup
+                    ? l10n.showWalletRecoveryPhraseSubtitle
+                    : l10n.showWalletRecoveryPhraseSubtitle2,
                 onTap: () async {
                   final confirm = await showDialog<bool>(
                         context: context,
@@ -98,13 +101,24 @@ class WalletSecurityView extends StatelessWidget {
               DrawerItem(
                 title: l10n.backup,
                 onTap: () async {
-                  await Navigator.of(context).push<void>(BackupMenu.route());
+                  if (Parameters.useMnemonicsForBackup) {
+                    await Navigator.of(context).push<void>(BackupMenu.route());
+                  } else {
+                    await Navigator.of(context)
+                        .push<void>(BackupCredentialPage.route());
+                  }
                 },
               ),
               DrawerItem(
                 title: l10n.restore,
                 onTap: () async {
-                  await Navigator.of(context).push<void>(RestoreMenu.route());
+                  if (Parameters.useMnemonicsForBackup) {
+                    await Navigator.of(context).push<void>(RestoreMenu.route());
+                  } else {
+                    await Navigator.of(context).push<void>(
+                      RestoreCredentialPage.route(fromOnBoarding: false),
+                    );
+                  }
                 },
               ),
             ],

@@ -41,7 +41,10 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
 
   final log = getLogger('OnBoardingGenPhraseCubit');
 
-  Future<void> generateSSIAndCryptoAccount(List<String> mnemonic) async {
+  Future<void> generateSSIAndCryptoAccount({
+    required List<String> mnemonic,
+    required bool restoreWallet,
+  }) async {
     emit(state.loading());
     try {
       await generateAccount(
@@ -61,7 +64,12 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         SecureStorageKeys.hasVerifiedMnemonics,
         'no',
       );
-      emit(state.success());
+
+      if (restoreWallet) {
+        emit(state.copyWith(status: AppStatus.restoreWallet));
+      } else {
+        emit(state.success());
+      }
     } catch (e, s) {
       log.e(
         'something went wrong when generating a key',

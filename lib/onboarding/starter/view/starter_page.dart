@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,26 +71,53 @@ class StarterView extends StatelessWidget {
                         const Spacer(flex: 1),
                         SubTitle(profileModel: state.model),
                         const Spacer(flex: 4),
-                        MyOutlinedButton(
-                          text: l10n.importAccount,
-                          onPressed: () async {
-                            await profileCubit.setWalletType(
-                              walletType: WalletType.personal,
-                            );
-                            await profileCubit.setProfileSetting(
-                              profileSetting: ProfileSetting.initial(),
-                              profileType: ProfileType.defaultOne,
-                            );
-                            await Navigator.of(context).push<void>(
-                              ProtectWalletPage.route(
-                                routeType: WalletRouteType.import,
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 10),
+                        if (Parameters.useMnemonicsForBackup) ...[
+                          MyOutlinedButton(
+                            text: l10n.importAccount,
+                            onPressed: () async {
+                              await profileCubit.setWalletType(
+                                walletType: WalletType.personal,
+                              );
+                              await profileCubit.setProfileSetting(
+                                profileSetting: ProfileSetting.initial(),
+                                profileType: ProfileType.defaultOne,
+                              );
+                              await Navigator.of(context).push<void>(
+                                ProtectWalletPage.route(
+                                  routeType: WalletRouteType.import,
+                                  restoreWallet: false,
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 10),
+                        ] else ...[
+                          MyOutlinedButton(
+                            text: l10n.restoreWallet,
+                            onPressed: () async {
+                              await profileCubit.setWalletType(
+                                walletType: WalletType.personal,
+                              );
+
+                              await profileCubit.setProfileSetting(
+                                profileSetting: ProfileSetting.initial(),
+                                profileType: ProfileType.defaultOne,
+                              );
+
+                              await Navigator.of(context).push<void>(
+                                ProtectWalletPage.route(
+                                  routeType: WalletRouteType.create,
+                                  restoreWallet: true,
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 10),
+                        ],
                         MyElevatedButton(
-                          text: l10n.createAccount,
+                          text: Parameters.useMnemonicsForBackup
+                              ? l10n.createAccount
+                              : l10n.createWallet,
                           verticalSpacing: 15,
                           onPressed: () async {
                             await profileCubit.setWalletType(
@@ -104,6 +132,7 @@ class StarterView extends StatelessWidget {
                             await Navigator.of(context).push<void>(
                               ProtectWalletPage.route(
                                 routeType: WalletRouteType.create,
+                                restoreWallet: false,
                               ),
                             );
                           },

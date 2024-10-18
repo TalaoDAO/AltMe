@@ -67,7 +67,9 @@ class RestoreView extends StatelessWidget {
                               title: l10n.restoreCredential,
                               isValidCallback: () {
                                 Navigator.of(context).push<void>(
-                                  RestoreCredentialPage.route(),
+                                  RestoreCredentialPage.route(
+                                    fromOnBoarding: false,
+                                  ),
                                 );
                               },
                             ),

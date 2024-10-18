@@ -10,6 +10,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -38,19 +39,30 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
     emit(state.copyWith(backupFilePath: filePath));
   }
 
-  Future<void> recoverWallet({required bool isPolygonIdCredentials}) async {
+  Future<void> recoverWallet({
+    required bool isPolygonIdCredentials,
+    required bool isFromOnBoarding,
+  }) async {
     if (state.backupFilePath == null) return;
     await Future<void>.delayed(const Duration(milliseconds: 500));
     emit(state.loading());
 
-    final String? recoveryMnemonic = await secureStorageProvider
-        .get(SecureStorageKeys.recoverCredentialMnemonics);
+    late String stringForBackup;
 
-    if (recoveryMnemonic == null) {
-      throw ResponseMessage(
-        message:
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-      );
+    if (Parameters.useMnemonicsForBackup) {
+      final String? recoveryMnemonic = await secureStorageProvider
+          .get(SecureStorageKeys.recoverCredentialMnemonics);
+
+      if (recoveryMnemonic == null) {
+        throw ResponseMessage(
+          message: ResponseString
+              .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
+      stringForBackup = recoveryMnemonic;
+    } else {
+      await dotenv.load();
+      stringForBackup = dotenv.get('BACKUP_RECOVERY_KEY');
     }
 
     try {
@@ -72,7 +84,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
         }
 
         final privateIdentityEntity = await polygonId.restoreIdentity(
-          mnemonic: recoveryMnemonic,
+          mnemonic: stringForBackup,
           encryptedDb: text,
           network: network,
         );
@@ -117,7 +129,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
           authenticationTag: json['authenticationTag'] as String,
         );
         final decryptedText =
-            await cryptoKeys.decrypt(recoveryMnemonic, encryption);
+            await cryptoKeys.decrypt(stringForBackup, encryption);
         final decryptedJson = jsonDecode(decryptedText) as Map<String, dynamic>;
         if (!decryptedJson.containsKey('date') ||
             !decryptedJson.containsKey('credentials') ||
@@ -142,12 +154,25 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
         credentials: credentialList,
         isPolygonIdCredentials: isPolygonIdCredentials,
       );
-      await credentialsCubit.loadAllCredentials(
-        blockchainType: walletCubit.state.currentAccount!.blockchainType,
-      );
+
+      if (walletCubit.state.currentAccount != null) {
+        await credentialsCubit.loadAllCredentials(
+          blockchainType: walletCubit.state.currentAccount!.blockchainType,
+        );
+      }
 
       await activityLogManager.saveLog(LogData(type: LogType.restoreWallet));
-      emit(state.success(recoveredCredentialLength: credentialList.length));
+
+      if (isFromOnBoarding) {
+        emit(
+          state.copyWith(
+            status: AppStatus.restoreWallet,
+            recoveredCredentialLength: credentialList.length,
+          ),
+        );
+      } else {
+        emit(state.success(recoveredCredentialLength: credentialList.length));
+      }
     } catch (e) {
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
