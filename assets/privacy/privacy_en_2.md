@@ -54,6 +54,7 @@ We may collect your Personal Data from different sources:
 
 
 * **Identity Data**: Your first name, last name, date of birth, nationality, and postal address.
+* **Face Data**: Selfie, Video Selfie.
 * **Contact Data**: Telephone number and email address.
 * **Correspondence Data**: Feedback, problems with the Service, received customer support, or otherwise corresponded with us.
 * **Payment Data**: Your credit card number, bank account number, and any other payment-related information.
@@ -75,7 +76,7 @@ This Privacy Policy governs the collection, usage, and disclosure of personal in
 
 The Talao.io website and Talao mobile application enable visitors and users to perform various types of verifications, including:
 
-- **Identity Verification**: Web3 Digital Wallet collaborates with DOCAPOSTE ([https://www.docaposte.com/en/solutions/id360](https://www.docaposte.com/en/solutions/id360)), a third-party company, to authenticate identity documents. This process involves facial recognition (3D liveliness) and the issuance of credentials for Firstname, Lastname, Age, Gender, Nationality, and Humanity (Proof of personhood) verifications. Additionally, Talao utilizes age estimation credentials through Artificial Intelligence verifications, using user photos via the YOTI company ([https://yoti.com](https://yoti.com/)).
+- **Identity Verification**: Web3 Digital Wallet collaborates with DOCAPOSTE ([https://www.docaposte.com/en/solutions/id360](https://www.docaposte.com/en/solutions/id360)), a third-party company, to authenticate identity documents. This process involves facial recognition (through face data, 3D liveliness) and the issuance of credentials for Firstname, Lastname, Age, Gender, Nationality, and Humanity (Proof of personhood) verifications. Additionally, Talao utilizes age estimation credentials through Artificial Intelligence verifications, using face data via the YOTI company ([https://yoti.com](https://yoti.com/)).
 - **Email Validation**: Talao validates users' email addresses by sending secret codes via email.
 - **Phone Number Verification**: Talao confirms the validity of users' phone numbers by sending secret codes via SMS.
 
@@ -92,11 +93,12 @@ Please note that the information collected for certificate issuance is not retai
 
 ## Storage of Personal Information
 
-Your personal information is securely stored on your smartphone in the form of signed files. Talao does not retain personal data used to issue identity credentials. For credentials produced with the assistance of third-party companies like Docaposte or Yoti, please refer to their respective terms and conditions regarding data retention.
+Your personal information is securely stored on your smartphone in the form of signed files. Talao does not retain personal data used to issue identity credentials. Third-party companies, Docaposte and Yoti, are collecting and storing face data temporarily on their servers.
 
 ## Data Retention
 
 At Talao, we prioritize the protection of your data and practice minimal data collection. We only retain essential user information, specifically email addresses and phone numbers, which allow us to maintain contact with our users for the purpose of enhancing the quality of our services. We do not store any other personal information unless explicitly provided by the user for identity verification purposes.
+Face data is destroyed after a few seconds when provided to Yoti (AI age detection) and 48h when provided to ID360. 
 
 Our data retention policy is designed with your privacy in mind: \
 
