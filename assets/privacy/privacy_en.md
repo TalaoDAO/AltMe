@@ -3,7 +3,7 @@
 ** \
 Privacy Policy**
 
-Effective Date: November 23, 2023
+Effective Date: October 18, 2024
 
 ## Preamble
 
