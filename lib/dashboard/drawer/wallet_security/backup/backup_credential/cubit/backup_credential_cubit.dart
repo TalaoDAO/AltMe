@@ -10,6 +10,7 @@ import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -36,8 +37,6 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
   Future<void> encryptAndDownloadFile() async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
-    final mnemonic =
-        await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
     final isPermissionStatusGranted = await getStoragePermission();
 
     try {
@@ -58,8 +57,19 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
         'credentials': credentialModels,
       };
 
+      late String stringForBackup;
+
+      if (Parameters.useMnemonicsForBackup) {
+        final mnemonic =
+            await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+        stringForBackup = mnemonic!;
+      } else {
+        await dotenv.load();
+        stringForBackup = dotenv.get('BACKUP_RECOVERY_KEY');
+      }
+
       final encrypted =
-          await cryptoKeys.encrypt(jsonEncode(message), mnemonic!);
+          await cryptoKeys.encrypt(jsonEncode(message), stringForBackup);
       final encryptedString = jsonEncode(encrypted);
 
       final fileBytes = Uint8List.fromList(utf8.encode(encryptedString));

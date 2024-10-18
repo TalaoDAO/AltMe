@@ -20,17 +20,21 @@ import 'package:secure_storage/secure_storage.dart';
 class ProtectWalletPage extends StatelessWidget {
   const ProtectWalletPage({
     super.key,
+    required this.restoreWallet,
     this.routeType,
   });
 
+  final bool restoreWallet;
   final WalletRouteType? routeType;
 
   static Route<dynamic> route({
+    required bool restoreWallet,
     WalletRouteType? routeType,
   }) {
     return MaterialPageRoute<void>(
       builder: (_) => ProtectWalletPage(
         routeType: routeType,
+        restoreWallet: restoreWallet,
       ),
       settings: const RouteSettings(name: '/ProtectWalletPage'),
     );
@@ -57,6 +61,7 @@ class ProtectWalletPage extends StatelessWidget {
             profileCubit: context.read<ProfileCubit>(),
             onBoardingGenPhraseCubit: context.read<OnBoardingGenPhraseCubit>(),
             onboardingCubit: context.read<OnboardingCubit>(),
+            restoreWallet: restoreWallet,
           );
         },
       ),
@@ -67,12 +72,14 @@ class ProtectWalletPage extends StatelessWidget {
 class ProtectWalletView extends StatefulWidget {
   const ProtectWalletView({
     super.key,
+    required this.restoreWallet,
     required this.profileCubit,
     required this.onBoardingGenPhraseCubit,
     required this.onboardingCubit,
     this.routeType,
   });
 
+  final bool restoreWallet;
   final WalletRouteType? routeType;
   final ProfileCubit profileCubit;
   final OnBoardingGenPhraseCubit onBoardingGenPhraseCubit;
@@ -87,14 +94,16 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
 
   bool get isFromOnboarding => widget.routeType != null;
 
-  Future<void> createImportAccount({required bool byPassScreen}) async {
+  Future<void> createImportAccount() async {
     if (widget.routeType == WalletRouteType.create) {
       if (byPassScreen) {
         await widget.onboardingCubit.emitOnboardingProcessing();
         final mnemonic = bip39.generateMnemonic().split(' ');
 
-        await widget.onBoardingGenPhraseCubit
-            .generateSSIAndCryptoAccount(mnemonic);
+        await widget.onBoardingGenPhraseCubit.generateSSIAndCryptoAccount(
+          mnemonic: mnemonic,
+          restoreWallet: widget.restoreWallet,
+        );
       } else {
         await Navigator.of(context).push<void>(OnBoardingGenPhrasePage.route());
       }
@@ -129,6 +138,14 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
           await Navigator.pushAndRemoveUntil<void>(
             context,
             WalletReadyPage.route(),
+            (Route<dynamic> route) => route.isFirst,
+          );
+        }
+
+        if (state.status == AppStatus.restoreWallet) {
+          await Navigator.pushAndRemoveUntil<void>(
+            context,
+            RestoreCredentialPage.route(fromOnBoarding: true),
             (Route<dynamic> route) => route.isFirst,
           );
         }
@@ -171,9 +188,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                           );
                           Navigator.of(context).pop();
                           if (isFromOnboarding) {
-                            await createImportAccount(
-                              byPassScreen: byPassScreen,
-                            );
+                            await createImportAccount();
                           } else {
                             AlertMessage.showStateMessage(
                               context: context,
@@ -208,9 +223,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                             );
                             Navigator.of(context).pop();
                             if (isFromOnboarding) {
-                              await createImportAccount(
-                                byPassScreen: byPassScreen,
-                              );
+                              await createImportAccount();
                             } else {
                               AlertMessage.showStateMessage(
                                 context: context,
@@ -250,9 +263,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                                   );
                                   Navigator.of(context).pop();
                                   if (isFromOnboarding) {
-                                    await createImportAccount(
-                                      byPassScreen: byPassScreen,
-                                    );
+                                    await createImportAccount();
                                   } else {
                                     AlertMessage.showStateMessage(
                                       context: context,
