@@ -171,7 +171,6 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
               onPressed: state.backupFilePath == null
                   ? null
                   : () => context.read<RestoreCredentialCubit>().recoverWallet(
-                        isPolygonIdCredentials: false,
                         isFromOnBoarding: widget.fromOnBoarding,
                       ),
               text: l10n.loadFile,

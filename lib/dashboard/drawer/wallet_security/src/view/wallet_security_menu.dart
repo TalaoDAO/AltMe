@@ -102,7 +102,21 @@ class WalletSecurityView extends StatelessWidget {
                 title: l10n.backup,
                 onTap: () async {
                   if (Parameters.useMnemonicsForBackup) {
-                    await Navigator.of(context).push<void>(BackupMenu.route());
+                    await securityCheck(
+                      context: context,
+                      localAuthApi: LocalAuthApi(),
+                      onSuccess: () {
+                        Navigator.of(context).push<void>(
+                          BackupMnemonicPage.route(
+                            title: l10n.backupCredential,
+                            isValidCallback: () {
+                              Navigator.of(context)
+                                  .push<void>(BackupCredentialPage.route());
+                            },
+                          ),
+                        );
+                      },
+                    );
                   } else {
                     await Navigator.of(context)
                         .push<void>(BackupCredentialPage.route());
@@ -113,7 +127,38 @@ class WalletSecurityView extends StatelessWidget {
                 title: l10n.restore,
                 onTap: () async {
                   if (Parameters.useMnemonicsForBackup) {
-                    await Navigator.of(context).push<void>(RestoreMenu.route());
+                    final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => ConfirmDialog(
+                            title: l10n.warningDialogTitle,
+                            subtitle:
+                                l10n.restorationCredentialWarningDialogSubtitle,
+                            yes: l10n.showDialogYes,
+                            no: l10n.showDialogNo,
+                          ),
+                        ) ??
+                        false;
+
+                    if (confirm) {
+                      await securityCheck(
+                        context: context,
+                        localAuthApi: LocalAuthApi(),
+                        onSuccess: () {
+                          Navigator.of(context).push<void>(
+                            RestoreCredentialMnemonicPage.route(
+                              title: l10n.restoreCredential,
+                              isValidCallback: () {
+                                Navigator.of(context).push<void>(
+                                  RestoreCredentialPage.route(
+                                    fromOnBoarding: false,
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    }
                   } else {
                     await Navigator.of(context).push<void>(
                       RestoreCredentialPage.route(fromOnBoarding: false),
