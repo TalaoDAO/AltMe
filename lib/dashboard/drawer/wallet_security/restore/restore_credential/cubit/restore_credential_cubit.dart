@@ -40,7 +40,6 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
   }
 
   Future<void> recoverWallet({
-    required bool isPolygonIdCredentials,
     required bool isFromOnBoarding,
   }) async {
     if (state.backupFilePath == null) return;
@@ -71,89 +70,42 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
 
       late List<CredentialModel> credentialList;
 
-      if (isPolygonIdCredentials) {
-        final polygonIdNetwork =
-            await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
-
-        String network = Parameters.POLYGON_MAIN_NETWORK;
-
-        if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
-          network = Parameters.POLYGON_MAIN_NETWORK;
-        } else {
-          network = Parameters.POLYGON_TEST_NETWORK;
-        }
-
-        final privateIdentityEntity = await polygonId.restoreIdentity(
-          mnemonic: stringForBackup,
-          encryptedDb: text,
-          network: network,
+      final json = jsonDecode(text) as Map<String, dynamic>;
+      if (!json.containsKey('cipherText') ||
+          !json.containsKey('authenticationTag') ||
+          json['cipherText'] is! String ||
+          json['authenticationTag'] is! String) {
+        throw ResponseMessage(
+          message: ResponseString
+              .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
         );
-
-        final List<ClaimEntity> claims = await polygonId.restoreClaims(
-          privateIdentityEntity: privateIdentityEntity,
+      }
+      final encryption = Encryption(
+        cipherText: json['cipherText'] as String,
+        authenticationTag: json['authenticationTag'] as String,
+      );
+      final decryptedText =
+          await cryptoKeys.decrypt(stringForBackup, encryption);
+      final decryptedJson = jsonDecode(decryptedText) as Map<String, dynamic>;
+      if (!decryptedJson.containsKey('date') ||
+          !decryptedJson.containsKey('credentials') ||
+          decryptedJson['date'] is! String) {
+        throw ResponseMessage(
+          message: ResponseString
+              .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
         );
-
-        final credentials = claims.map(
-          (ClaimEntity claimEntity) {
-            final jsonCredential = claimEntity.info;
-            final credentialPreview = Credential.fromJson(jsonCredential);
-
-            final credentialModel = CredentialModel(
-              id: claimEntity.id,
-              image: 'image',
-              data: jsonCredential,
-              shareLink: '',
-              credentialPreview: credentialPreview,
-              expirationDate: claimEntity.expiration,
-              jwt: null,
-              format: 'ldp_vc',
-              activities: [Activity(acquisitionAt: DateTime.now())],
-            );
-            return credentialModel;
-          },
-        );
-        credentialList = credentials.toList();
-      } else {
-        final json = jsonDecode(text) as Map<String, dynamic>;
-        if (!json.containsKey('cipherText') ||
-            !json.containsKey('authenticationTag') ||
-            json['cipherText'] is! String ||
-            json['authenticationTag'] is! String) {
-          throw ResponseMessage(
-            message: ResponseString
-                .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
-          );
-        }
-        final encryption = Encryption(
-          cipherText: json['cipherText'] as String,
-          authenticationTag: json['authenticationTag'] as String,
-        );
-        final decryptedText =
-            await cryptoKeys.decrypt(stringForBackup, encryption);
-        final decryptedJson = jsonDecode(decryptedText) as Map<String, dynamic>;
-        if (!decryptedJson.containsKey('date') ||
-            !decryptedJson.containsKey('credentials') ||
-            decryptedJson['date'] is! String) {
-          throw ResponseMessage(
-            message: ResponseString
-                .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
-          );
-        }
-
-        final List<dynamic> credentialJson =
-            decryptedJson['credentials'] as List<dynamic>;
-        final credentials = credentialJson.map(
-          (dynamic credential) =>
-              CredentialModel.fromJson(credential as Map<String, dynamic>),
-        );
-
-        credentialList = credentials.toList();
       }
 
-      await credentialsCubit.recoverWallet(
-        credentials: credentialList,
-        isPolygonIdCredentials: isPolygonIdCredentials,
+      final List<dynamic> credentialJson =
+          decryptedJson['credentials'] as List<dynamic>;
+      final credentials = credentialJson.map(
+        (dynamic credential) =>
+            CredentialModel.fromJson(credential as Map<String, dynamic>),
       );
+
+      credentialList = credentials.toList();
+
+      await credentialsCubit.recoverWallet(credentials: credentialList);
 
       if (walletCubit.state.currentAccount != null) {
         await credentialsCubit.loadAllCredentials(
