@@ -150,6 +150,7 @@ class _RestorePolygonIdCredentialViewState
                   ? null
                   : () => context.read<RestoreCredentialCubit>().recoverWallet(
                         isPolygonIdCredentials: true,
+                        isFromOnBoarding: false,
                       ),
               text: l10n.loadFile,
             );

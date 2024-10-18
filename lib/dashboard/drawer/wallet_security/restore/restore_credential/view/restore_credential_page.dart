@@ -19,10 +19,18 @@ import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class RestoreCredentialPage extends StatelessWidget {
-  const RestoreCredentialPage({super.key});
+  const RestoreCredentialPage({
+    super.key,
+    required this.fromOnBoarding,
+  });
 
-  static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (context) => const RestoreCredentialPage(),
+  final bool fromOnBoarding;
+
+  static Route<dynamic> route({required bool fromOnBoarding}) =>
+      MaterialPageRoute<void>(
+        builder: (context) => RestoreCredentialPage(
+          fromOnBoarding: fromOnBoarding,
+        ),
         settings: const RouteSettings(name: '/RestoreCredentialPage'),
       );
 
@@ -37,13 +45,18 @@ class RestoreCredentialPage extends StatelessWidget {
         polygonId: PolygonId(),
         activityLogManager: ActivityLogManager(getSecureStorage),
       ),
-      child: const RestoreCredentialView(),
+      child: RestoreCredentialView(fromOnBoarding: fromOnBoarding),
     );
   }
 }
 
 class RestoreCredentialView extends StatefulWidget {
-  const RestoreCredentialView({super.key});
+  const RestoreCredentialView({
+    super.key,
+    required this.fromOnBoarding,
+  });
+
+  final bool fromOnBoarding;
 
   @override
   _RestoreCredentialViewState createState() => _RestoreCredentialViewState();
@@ -67,14 +80,16 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
         right: Sizes.spaceSmall,
         bottom: Sizes.spaceSmall,
       ),
-      titleLeading: BackLeadingButton(
-        onPressed: () {
-          if (context.read<RestoreCredentialCubit>().state.status !=
-              AppStatus.loading) {
-            Navigator.of(context).pop();
-          }
-        },
-      ),
+      titleLeading: widget.fromOnBoarding
+          ? null
+          : BackLeadingButton(
+              onPressed: () {
+                if (context.read<RestoreCredentialCubit>().state.status !=
+                    AppStatus.loading) {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
       body: BlocConsumer<RestoreCredentialCubit, RestoreCredentialState>(
         listener: (context, state) async {
           if (state.status == AppStatus.loading) {
@@ -97,6 +112,14 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
             await Future<void>.delayed(const Duration(milliseconds: 800));
             Navigator.of(context).pop();
             Navigator.of(context).pop();
+          }
+
+          if (state.status == AppStatus.restoreWallet) {
+            await Navigator.pushAndRemoveUntil<void>(
+              context,
+              WalletReadyPage.route(),
+              (Route<dynamic> route) => route.isFirst,
+            );
           }
 
           if (state.message != null) {
@@ -149,6 +172,7 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
                   ? null
                   : () => context.read<RestoreCredentialCubit>().recoverWallet(
                         isPolygonIdCredentials: false,
+                        isFromOnBoarding: widget.fromOnBoarding,
                       ),
               text: l10n.loadFile,
             );

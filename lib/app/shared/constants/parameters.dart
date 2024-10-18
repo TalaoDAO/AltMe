@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class Parameters {
   static const int multipleCredentialsProcessDelay = 1;
 
+  // 'false' for talao
+  // 'true' for altme
   static const bool walletHandlesCrypto = true;
 
   static const AdvanceSettingsState defaultAdvanceSettingsState =
@@ -70,6 +72,7 @@ class Parameters {
     chainChanged,
     accountsChanged,
   ];
+
   static const optionalEvents = ['message', 'disconnect', 'connect'];
 
   static const allEvents = [...requiredEvents, ...optionalEvents];
@@ -78,27 +81,42 @@ class Parameters {
   static const int maxEntries = 3;
 
   // 'Talao'for talao
+  // 'Altme' for altme
   static const String appName = 'Altme';
 
+  // 'false' for talao
+  // 'true' for altme
+  static const bool useMnemonicsForBackup = true;
+
   // false for talao
+  // 'true' for altme
   static const bool supportDefiCompliance = true;
+
   // false for talao
+  // 'true' for altme
   static const bool supportCryptoAccountOwnershipInDiscoverForEnterpriseMode =
       true;
+
   // false for talao
-  static const bool showChainbornCard = false;
+  // 'true' for altme
+  static const bool showChainbornCard = true;
+
   // false for talao
-  static const bool showTezotopiaCard = false;
+  // true for altme
+  static const bool showTezotopiaCard = true;
 
   //'https://app.talao.co/app/download/authorize' for Talao
+  // 'https://app.altme.io/app/download/authorize' for altme
   static const String redirectUri =
       'https://app.altme.io/app/download/authorize';
 
   //'https://app.talao.co/app/download/callback' for Talao
+  // 'https://app.altme.io/app/download/callback' for altme
   static const String authorizationEndPoint =
       'https://app.altme.io/app/download/callback';
 
   // 'talao_wallet'for talao
+  // 'altme_wallet' for altme
   static const String walletName = 'altme_wallet';
 
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
@@ -114,6 +132,7 @@ class Parameters {
   // static const Color seedColor = Color(0xff1EAADC);
 
   // ThemeMode.light for talao
+  // 'ThemeMode.dark' for altme
   static const ThemeMode defaultTheme = ThemeMode.dark;
 
 // Used to prevent display
