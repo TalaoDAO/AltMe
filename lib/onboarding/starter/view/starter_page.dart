@@ -71,7 +71,7 @@ class StarterView extends StatelessWidget {
                         const Spacer(flex: 1),
                         SubTitle(profileModel: state.model),
                         const Spacer(flex: 4),
-                        if (Parameters.useMnemonicsForBackup) ...[
+                        if (Parameters.useRandomMnemonicsForBackup) ...[
                           MyOutlinedButton(
                             text: l10n.importAccount,
                             onPressed: () async {
@@ -106,7 +106,7 @@ class StarterView extends StatelessWidget {
 
                               await Navigator.of(context).push<void>(
                                 ProtectWalletPage.route(
-                                  routeType: WalletRouteType.create,
+                                  routeType: WalletRouteType.import,
                                   restoreWallet: true,
                                 ),
                               );
@@ -115,7 +115,7 @@ class StarterView extends StatelessWidget {
                           const SizedBox(height: 10),
                         ],
                         MyElevatedButton(
-                          text: Parameters.useMnemonicsForBackup
+                          text: Parameters.useRandomMnemonicsForBackup
                               ? l10n.createAccount
                               : l10n.createWallet,
                           verticalSpacing: 15,

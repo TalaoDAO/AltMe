@@ -57,19 +57,11 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
         'credentials': credentialModels,
       };
 
-      late String stringForBackup;
-
-      if (Parameters.useMnemonicsForBackup) {
-        final mnemonic =
-            await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
-        stringForBackup = mnemonic!;
-      } else {
-        await dotenv.load();
-        stringForBackup = dotenv.get('BACKUP_RECOVERY_KEY');
-      }
+      final mnemonic =
+          await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
       final encrypted =
-          await cryptoKeys.encrypt(jsonEncode(message), stringForBackup);
+          await cryptoKeys.encrypt(jsonEncode(message), mnemonic!);
       final encryptedString = jsonEncode(encrypted);
 
       final fileBytes = Uint8List.fromList(utf8.encode(encryptedString));

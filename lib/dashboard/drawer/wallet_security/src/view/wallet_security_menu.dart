@@ -61,7 +61,7 @@ class WalletSecurityView extends StatelessWidget {
               ),
               DrawerItem(
                 title: l10n.showWalletRecoveryPhrase,
-                subtitle: Parameters.useMnemonicsForBackup
+                subtitle: Parameters.useRandomMnemonicsForBackup
                     ? l10n.showWalletRecoveryPhraseSubtitle
                     : l10n.showWalletRecoveryPhraseSubtitle2,
                 onTap: () async {
@@ -101,7 +101,7 @@ class WalletSecurityView extends StatelessWidget {
               DrawerItem(
                 title: l10n.backup,
                 onTap: () async {
-                  if (Parameters.useMnemonicsForBackup) {
+                  if (Parameters.useRandomMnemonicsForBackup) {
                     await securityCheck(
                       context: context,
                       localAuthApi: LocalAuthApi(),
@@ -126,42 +126,36 @@ class WalletSecurityView extends StatelessWidget {
               DrawerItem(
                 title: l10n.restore,
                 onTap: () async {
-                  if (Parameters.useMnemonicsForBackup) {
-                    final confirm = await showDialog<bool>(
-                          context: context,
-                          builder: (context) => ConfirmDialog(
-                            title: l10n.warningDialogTitle,
-                            subtitle:
-                                l10n.restorationCredentialWarningDialogSubtitle,
-                            yes: l10n.showDialogYes,
-                            no: l10n.showDialogNo,
-                          ),
-                        ) ??
-                        false;
-
-                    if (confirm) {
-                      await securityCheck(
+                  final confirm = await showDialog<bool>(
                         context: context,
-                        localAuthApi: LocalAuthApi(),
-                        onSuccess: () {
-                          Navigator.of(context).push<void>(
-                            RestoreCredentialMnemonicPage.route(
-                              title: l10n.restoreCredential,
-                              isValidCallback: () {
-                                Navigator.of(context).push<void>(
-                                  RestoreCredentialPage.route(
-                                    fromOnBoarding: false,
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      );
-                    }
-                  } else {
-                    await Navigator.of(context).push<void>(
-                      RestoreCredentialPage.route(fromOnBoarding: false),
+                        builder: (context) => ConfirmDialog(
+                          title: l10n.warningDialogTitle,
+                          subtitle:
+                              l10n.restorationCredentialWarningDialogSubtitle,
+                          yes: l10n.showDialogYes,
+                          no: l10n.showDialogNo,
+                        ),
+                      ) ??
+                      false;
+
+                  if (confirm) {
+                    await securityCheck(
+                      context: context,
+                      localAuthApi: LocalAuthApi(),
+                      onSuccess: () {
+                        Navigator.of(context).push<void>(
+                          RestoreCredentialMnemonicPage.route(
+                            title: l10n.restoreCredential,
+                            isValidCallback: () {
+                              Navigator.of(context).push<void>(
+                                RestoreCredentialPage.route(
+                                  fromOnBoarding: false,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     );
                   }
                 },

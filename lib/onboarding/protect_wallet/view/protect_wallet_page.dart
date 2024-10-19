@@ -109,9 +109,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
       }
     } else {
       await Navigator.of(context).push<void>(
-        ImportWalletPage.route(
-          isFromOnboarding: true,
-        ),
+        ImportWalletPage.route(isFromOnboarding: true),
       );
     }
   }
@@ -138,14 +136,6 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
           await Navigator.pushAndRemoveUntil<void>(
             context,
             WalletReadyPage.route(),
-            (Route<dynamic> route) => route.isFirst,
-          );
-        }
-
-        if (state.status == AppStatus.restoreWallet) {
-          await Navigator.pushAndRemoveUntil<void>(
-            context,
-            RestoreCredentialPage.route(fromOnBoarding: true),
             (Route<dynamic> route) => route.isFirst,
           );
         }

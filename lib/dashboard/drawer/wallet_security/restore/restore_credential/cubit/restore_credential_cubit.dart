@@ -48,7 +48,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
 
     late String stringForBackup;
 
-    if (Parameters.useMnemonicsForBackup) {
+    if (Parameters.useRandomMnemonicsForBackup) {
       final String? recoveryMnemonic = await secureStorageProvider
           .get(SecureStorageKeys.recoverCredentialMnemonics);
 
@@ -60,8 +60,16 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
       }
       stringForBackup = recoveryMnemonic;
     } else {
-      await dotenv.load();
-      stringForBackup = dotenv.get('BACKUP_RECOVERY_KEY');
+      final String? ssiMnemonic =
+          await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+
+      if (ssiMnemonic == null) {
+        throw ResponseMessage(
+          message: ResponseString
+              .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
+      stringForBackup = ssiMnemonic;
     }
 
     try {

@@ -65,11 +65,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         'no',
       );
 
-      if (restoreWallet) {
-        emit(state.copyWith(status: AppStatus.restoreWallet));
-      } else {
-        emit(state.success());
-      }
+      emit(state.success());
     } catch (e, s) {
       log.e(
         'something went wrong when generating a key',
