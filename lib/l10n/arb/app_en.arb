@@ -769,7 +769,7 @@
   "keyDecentralizedIdEdSA": "did:key EdDSA",
   "keyDecentralizedIDSecp256k1": "did:key Secp256k1",
   "polygonIdDecentralizedId": "Polygon Decentralized ID",
-  "ebsiV3DecentralizedId": "did:key EBSI V3 P-256",
+  "ebsiV3DecentralizedId": "did:key EBSI P-256",
   "requiredCredentialNotFoundTitle": "We are unable to find the credential\nyou need in your wallet.",
   "requiredCredentialNotFoundSubTitle": "The required credential is not in your wallet",
   "requiredCredentialNotFoundDescription": "Please contact us on :",
