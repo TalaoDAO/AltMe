@@ -4,13 +4,13 @@ import 'dart:typed_data';
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
+import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -25,6 +25,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
     required this.fileSaver,
     required this.polygonIdCubit,
     required this.activityLogManager,
+    required this.profileCubit,
   }) : super(const BackupCredentialState());
 
   final SecureStorageProvider secureStorageProvider;
@@ -33,6 +34,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
   final FileSaver fileSaver;
   final PolygonIdCubit polygonIdCubit;
   final ActivityLogManager activityLogManager;
+  final ProfileCubit profileCubit;
 
   Future<void> encryptAndDownloadFile() async {
     emit(state.loading());
@@ -56,6 +58,32 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
         'date': date,
         'credentials': credentialModels,
       };
+
+      final profileModel = profileCubit.state.model;
+
+      if (profileModel.profileType == ProfileType.enterprise) {
+        final profileSetting = profileModel.profileSetting.toJson();
+        final email = await profileCubit.secureStorageProvider
+            .get(SecureStorageKeys.enterpriseEmail);
+
+        final password = await profileCubit.secureStorageProvider
+            .get(SecureStorageKeys.enterprisePassword);
+
+        final walletProvider = await profileCubit.secureStorageProvider
+            .get(SecureStorageKeys.enterpriseWalletProvider);
+
+        message['profileSetting'] = profileSetting;
+        message['profile'] =
+            profileModel.profileType.getTitle(name: 'Enterprise');
+
+        final enterprise = {
+          'email': email,
+          'password': password,
+          'walletProvider': walletProvider,
+        };
+
+        message['enterprise'] = enterprise;
+      }
 
       final mnemonic =
           await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);

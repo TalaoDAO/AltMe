@@ -44,6 +44,7 @@ class RestoreCredentialPage extends StatelessWidget {
         credentialsCubit: context.read<CredentialsCubit>(),
         polygonId: PolygonId(),
         activityLogManager: ActivityLogManager(getSecureStorage),
+        profileCubit: context.read<ProfileCubit>(),
       ),
       child: RestoreCredentialView(fromOnBoarding: fromOnBoarding),
     );

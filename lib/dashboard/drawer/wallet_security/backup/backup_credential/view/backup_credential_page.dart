@@ -1,7 +1,7 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
-import 'package:altme/dashboard/drawer/drawer.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
@@ -34,6 +34,7 @@ class BackupCredentialPage extends StatelessWidget {
         fileSaver: FileSaver.instance,
         polygonIdCubit: context.read<PolygonIdCubit>(),
         activityLogManager: ActivityLogManager(getSecureStorage),
+        profileCubit: context.read<ProfileCubit>(),
       ),
       child: const BackupCredentialView(),
     );

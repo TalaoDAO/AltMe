@@ -5,12 +5,10 @@ import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -26,6 +24,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
     required this.secureStorageProvider,
     required this.polygonId,
     required this.activityLogManager,
+    required this.profileCubit,
   }) : super(const RestoreCredentialState());
 
   final WalletCubit walletCubit;
@@ -34,6 +33,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
   final SecureStorageProvider secureStorageProvider;
   final PolygonId polygonId;
   final ActivityLogManager activityLogManager;
+  final ProfileCubit profileCubit;
 
   void setFilePath({String? filePath}) {
     emit(state.copyWith(backupFilePath: filePath));
@@ -114,6 +114,49 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
       credentialList = credentials.toList();
 
       await credentialsCubit.recoverWallet(credentials: credentialList);
+
+      if (decryptedJson.containsKey('profile')) {
+        if (decryptedJson['profile'] == 'Enterprise') {
+          final profileSettingJson = decryptedJson['profileSetting'];
+
+          if (profileSettingJson != null) {
+            final profileSetting = ProfileSetting.fromJson(
+              profileSettingJson as Map<String, dynamic>,
+            );
+            await profileCubit.setProfileSetting(
+              profileSetting: profileSetting,
+              profileType: ProfileType.enterprise,
+            );
+          }
+
+          /// save enterprise data
+          final enterprise = decryptedJson['enterprise'];
+          if (enterprise != null) {
+            final email = enterprise['email'];
+            final password = enterprise['password'];
+            final walletProvider = enterprise['walletProvider'];
+
+            if (email != null) {
+              await profileCubit.secureStorageProvider
+                  .set(SecureStorageKeys.enterpriseEmail, email.toString());
+            }
+
+            if (password != null) {
+              await profileCubit.secureStorageProvider.set(
+                  SecureStorageKeys.enterprisePassword, password.toString());
+            }
+
+            if (walletProvider != null) {
+              await profileCubit.secureStorageProvider.set(
+                SecureStorageKeys.enterpriseWalletProvider,
+                walletProvider.toString(),
+              );
+            }
+          }
+        }
+      }
+
+      /// restore profile if it is enterprise account
 
       if (walletCubit.state.currentAccount != null) {
         await credentialsCubit.loadAllCredentials(
