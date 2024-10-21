@@ -904,7 +904,7 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
         }
 
         if (state.status == AppStatus.replaceEnterpriseAccount) {
-          title = l10n.updateProfileTitle;
+          title = l10n.replaceProfileTitle;
           subTitle = l10n.replaceProfileDescription(
             profileSetting.generalOptions.companyName,
           );

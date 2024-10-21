@@ -1130,7 +1130,8 @@
     "placeholders": {
       "company": {}
     }
-  }, 
+  },
+  "replaceProfileTitle": "Install a new configuration", 
   "replaceProfileDescription": "Do you consent to replace the current configuration with that of {company}?",
   "@replaceProfileDescription": {
     "description": "name of the company owning the configuration",
