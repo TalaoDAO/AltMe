@@ -116,11 +116,19 @@ class _ImportWalletViewState extends State<ImportWalletView> {
         if (state.status == AppStatus.success) {
           /// Removes every stack except first route (splashPage)
           if (widget.isFromOnboarding) {
-            await Navigator.pushAndRemoveUntil<void>(
-              context,
-              WalletReadyPage.route(),
-              (Route<dynamic> route) => route.isFirst,
-            );
+            if (Parameters.useRandomMnemonicsForBackup) {
+              await Navigator.pushAndRemoveUntil<void>(
+                context,
+                WalletReadyPage.route(),
+                (Route<dynamic> route) => route.isFirst,
+              );
+            } else {
+              await Navigator.pushAndRemoveUntil<void>(
+                context,
+                RestoreCredentialPage.route(fromOnBoarding: true),
+                (Route<dynamic> route) => route.isFirst,
+              );
+            }
           } else {
             await Navigator.pushAndRemoveUntil<void>(
               context,

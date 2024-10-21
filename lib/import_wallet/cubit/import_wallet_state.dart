@@ -46,6 +46,20 @@ class ImportWalletState extends Equatable {
     );
   }
 
+  ImportWalletState copyWith({
+    required AppStatus status,
+    MessageHandler? messageHandler,
+  }) {
+    return ImportWalletState(
+      status: status,
+      message: messageHandler == null
+          ? null
+          : StateMessage.success(messageHandler: messageHandler),
+      isTextFieldEdited: isTextFieldEdited,
+      isMnemonicOrKeyValid: isMnemonicOrKeyValid,
+    );
+  }
+
   ImportWalletState success({
     MessageHandler? messageHandler,
   }) {

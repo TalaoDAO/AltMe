@@ -52,15 +52,18 @@ class WalletSecurityView extends StatelessWidget {
                     context: context,
                     localAuthApi: LocalAuthApi(),
                     onSuccess: () {
-                      Navigator.of(context)
-                          .push<void>(ProtectWalletPage.route());
+                      Navigator.of(context).push<void>(
+                        ProtectWalletPage.route(restoreWallet: false),
+                      );
                     },
                   );
                 },
               ),
               DrawerItem(
                 title: l10n.showWalletRecoveryPhrase,
-                subtitle: l10n.showWalletRecoveryPhraseSubtitle,
+                subtitle: Parameters.useRandomMnemonicsForBackup
+                    ? l10n.showWalletRecoveryPhraseSubtitle
+                    : l10n.showWalletRecoveryPhraseSubtitle2,
                 onTap: () async {
                   final confirm = await showDialog<bool>(
                         context: context,
@@ -98,13 +101,63 @@ class WalletSecurityView extends StatelessWidget {
               DrawerItem(
                 title: l10n.backup,
                 onTap: () async {
-                  await Navigator.of(context).push<void>(BackupMenu.route());
+                  if (Parameters.useRandomMnemonicsForBackup) {
+                    await securityCheck(
+                      context: context,
+                      localAuthApi: LocalAuthApi(),
+                      onSuccess: () {
+                        Navigator.of(context).push<void>(
+                          BackupMnemonicPage.route(
+                            title: l10n.backupCredential,
+                            isValidCallback: () {
+                              Navigator.of(context)
+                                  .push<void>(BackupCredentialPage.route());
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    await Navigator.of(context)
+                        .push<void>(BackupCredentialPage.route());
+                  }
                 },
               ),
               DrawerItem(
                 title: l10n.restore,
                 onTap: () async {
-                  await Navigator.of(context).push<void>(RestoreMenu.route());
+                  final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => ConfirmDialog(
+                          title: l10n.warningDialogTitle,
+                          subtitle:
+                              l10n.restorationCredentialWarningDialogSubtitle,
+                          yes: l10n.showDialogYes,
+                          no: l10n.showDialogNo,
+                        ),
+                      ) ??
+                      false;
+
+                  if (confirm) {
+                    await securityCheck(
+                      context: context,
+                      localAuthApi: LocalAuthApi(),
+                      onSuccess: () {
+                        Navigator.of(context).push<void>(
+                          RestoreCredentialMnemonicPage.route(
+                            title: l10n.restoreCredential,
+                            isValidCallback: () {
+                              Navigator.of(context).push<void>(
+                                RestoreCredentialPage.route(
+                                  fromOnBoarding: false,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  }
                 },
               ),
             ],

@@ -169,7 +169,7 @@ void main() {
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
                   Navigator.of(context).push<void>(
-                    ProtectWalletPage.route(),
+                    ProtectWalletPage.route(restoreWallet: false),
                   );
                 },
               ),
@@ -231,7 +231,7 @@ void main() {
             ),
             BlocProvider<OnboardingCubit>.value(value: onboardingCubit),
           ],
-          child: const ProtectWalletPage(),
+          child: const ProtectWalletPage(restoreWallet: false),
         ),
       );
 
@@ -273,6 +273,7 @@ void main() {
             profileCubit: profileCubit,
             onBoardingGenPhraseCubit: onBoardingGenPhraseCubit,
             onboardingCubit: onboardingCubit,
+            restoreWallet: false,
           ),
         ),
       );
@@ -365,6 +366,7 @@ void main() {
               profileCubit: profileCubit,
               onBoardingGenPhraseCubit: onBoardingGenPhraseCubit,
               onboardingCubit: onboardingCubit,
+              restoreWallet: false,
             ),
           ),
         ),
@@ -422,6 +424,7 @@ void main() {
               profileCubit: profileCubit,
               onBoardingGenPhraseCubit: onBoardingGenPhraseCubit,
               onboardingCubit: onboardingCubit,
+              restoreWallet: false,
             ),
           ),
         ),
@@ -479,6 +482,7 @@ void main() {
               profileCubit: profileCubit,
               onBoardingGenPhraseCubit: onBoardingGenPhraseCubit,
               onboardingCubit: onboardingCubit,
+              restoreWallet: false,
             ),
           ),
         ),
@@ -537,6 +541,7 @@ void main() {
               onBoardingGenPhraseCubit: onBoardingGenPhraseCubit,
               onboardingCubit: onboardingCubit,
               routeType: WalletRouteType.create,
+              restoreWallet: false,
             ),
           ),
         ),
@@ -601,6 +606,7 @@ void main() {
               onBoardingGenPhraseCubit: onBoardingGenPhraseCubit,
               onboardingCubit: onboardingCubit,
               routeType: WalletRouteType.create,
+              restoreWallet: false,
             ),
           ),
         ),
@@ -662,6 +668,7 @@ void main() {
               onBoardingGenPhraseCubit: onBoardingGenPhraseCubit,
               onboardingCubit: onboardingCubit,
               routeType: WalletRouteType.import,
+              restoreWallet: false,
             ),
           ),
         ),
@@ -718,6 +725,7 @@ void main() {
               onBoardingGenPhraseCubit: onBoardingGenPhraseCubit,
               onboardingCubit: onboardingCubit,
               routeType: WalletRouteType.import,
+              restoreWallet: false,
             ),
           ),
         ),

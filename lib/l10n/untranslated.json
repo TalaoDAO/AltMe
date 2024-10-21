@@ -46,8 +46,6 @@
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
     "noNotificationsYet",
-    "approveProfileTitle",
-    "approveProfileDescription",
     "activityLog",
     "activityLogDescription",
     "walletInitialized",
@@ -56,7 +54,17 @@
     "addedCredential",
     "deletedCredential",
     "presentedCredential",
-    "keysImported"
+    "keysImported",
+    "approveProfileTitle",
+    "approveProfileDescription",
+    "updateProfileTitle",
+    "updateProfileDescription",
+    "replaceProfileTitle",
+    "replaceProfileDescription",
+    "saveBackupCredentialSubtitle2",
+    "createWallet",
+    "restoreWallet",
+    "showWalletRecoveryPhraseSubtitle2"
   ],
 
   "es": [
@@ -106,8 +114,6 @@
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
     "noNotificationsYet",
-    "approveProfileTitle",
-    "approveProfileDescription",
     "activityLog",
     "activityLogDescription",
     "walletInitialized",
@@ -116,7 +122,17 @@
     "addedCredential",
     "deletedCredential",
     "presentedCredential",
-    "keysImported"
+    "keysImported",
+    "approveProfileTitle",
+    "approveProfileDescription",
+    "updateProfileTitle",
+    "updateProfileDescription",
+    "replaceProfileTitle",
+    "replaceProfileDescription",
+    "saveBackupCredentialSubtitle2",
+    "createWallet",
+    "restoreWallet",
+    "showWalletRecoveryPhraseSubtitle2"
   ],
 
   "fr": [
@@ -171,8 +187,6 @@
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
     "noNotificationsYet",
-    "approveProfileTitle",
-    "approveProfileDescription",
     "activityLog",
     "activityLogDescription",
     "walletInitialized",
@@ -181,6 +195,16 @@
     "addedCredential",
     "deletedCredential",
     "presentedCredential",
-    "keysImported"
+    "keysImported",
+    "approveProfileTitle",
+    "approveProfileDescription",
+    "updateProfileTitle",
+    "updateProfileDescription",
+    "replaceProfileTitle",
+    "replaceProfileDescription",
+    "saveBackupCredentialSubtitle2",
+    "createWallet",
+    "restoreWallet",
+    "showWalletRecoveryPhraseSubtitle2"
   ]
 }

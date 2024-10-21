@@ -122,6 +122,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
       await activityLogManager.saveLog(LogData(type: LogType.importKey));
 
       await homeCubit.emitHasWallet();
+
       emit(state.success());
     } catch (e, s) {
       log.e(

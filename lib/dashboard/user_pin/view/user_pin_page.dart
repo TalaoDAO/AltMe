@@ -100,7 +100,8 @@ class _UserPinViewState extends State<UserPinView> {
             style: Theme.of(context).textTheme.labelLarge,
           ),
           cancelCallback: _onPasscodeCancelled,
-          showKeyboard: widget.txCode?.inputMode != 'numeric',
+          showKeyboard:
+              widget.txCode != null && widget.txCode!.inputMode != 'numeric',
           isValidCallback: () {
             Navigator.pop(context);
             widget.onProceed.call(

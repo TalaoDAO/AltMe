@@ -881,20 +881,40 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
       );
     }
 
-    if (state.status == AppStatus.walletProviderApproval) {
+    if (state.status == AppStatus.addEnterpriseAccount ||
+        state.status == AppStatus.updateEnterpriseAccount ||
+        state.status == AppStatus.replaceEnterpriseAccount) {
       final settingJson = state.profileSettingJson;
       if (settingJson != null) {
         final l10n = context.l10n;
         final profileSetting = ProfileSetting.fromJson(
           jsonDecode(settingJson) as Map<String, dynamic>,
         );
+
+        var title = l10n.approveProfileTitle;
+        var subTitle = l10n.approveProfileDescription(
+          profileSetting.generalOptions.companyName,
+        );
+
+        if (state.status == AppStatus.updateEnterpriseAccount) {
+          title = l10n.updateProfileTitle;
+          subTitle = l10n.updateProfileDescription(
+            profileSetting.generalOptions.companyName,
+          );
+        }
+
+        if (state.status == AppStatus.replaceEnterpriseAccount) {
+          title = l10n.replaceProfileTitle;
+          subTitle = l10n.replaceProfileDescription(
+            profileSetting.generalOptions.companyName,
+          );
+        }
+
         final confirm = await showDialog<bool>(
               context: context,
               builder: (_) => ConfirmDialog(
-                title: l10n.approveProfileTitle,
-                subtitle: l10n.approveProfileDescription(
-                  profileSetting.generalOptions.companyName,
-                ),
+                title: title,
+                subtitle: subTitle,
                 yes: l10n.showDialogYes,
                 no: l10n.showDialogNo,
               ),
@@ -902,9 +922,10 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
             false;
 
         if (confirm) {
-          await context
-              .read<EnterpriseCubit>()
-              .applyConfiguration(context.read<QRCodeScanCubit>());
+          await context.read<EnterpriseCubit>().applyConfiguration(
+                qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                status: state.status,
+              );
         } else {
           /// Need to remove the enterprise email from secure storage
           /// because we may think later that the entreprise profile is

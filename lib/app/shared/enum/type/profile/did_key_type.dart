@@ -39,6 +39,24 @@ extension DidKeyTypeX on DidKeyType {
     }
   }
 
+  String get didString {
+    switch (this) {
+      case DidKeyType.edDSA:
+        return 'did:key edDSA';
+      case DidKeyType.secp256k1:
+        return 'did:key secp256k1';
+      case DidKeyType.p256:
+        return 'did:key P-256';
+      case DidKeyType.ebsiv3:
+      case DidKeyType.ebsiv4:
+        return 'did:key EBSI P-256';
+      case DidKeyType.jwkP256:
+        return 'did:jwk P-256';
+      case DidKeyType.jwtClientAttestation:
+        return '';
+    }
+  }
+
   String getTitle(AppLocalizations l10n) {
     switch (this) {
       case DidKeyType.edDSA:
