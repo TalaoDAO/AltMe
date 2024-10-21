@@ -1318,6 +1318,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           oAuthClientAttestationPop: oAuthClientAttestationPop,
           secureAuthorizedFlow: customOidc4vcProfile.pushAuthorizationRequest,
           client: client,
+          profileType: profileCubit.state.model.profileType,
+          walletIssuer: Parameters.walletIssuer,
         );
         goBack();
       }

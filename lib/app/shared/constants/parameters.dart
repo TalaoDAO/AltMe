@@ -119,6 +119,10 @@ class Parameters {
   // 'altme_wallet' for altme
   static const String walletName = 'altme_wallet';
 
+  // 'https://app.talao.co/wallet_issuer'for talao
+  // 'https://app.altme.io/wallet_issuer' for altme
+  static const String walletIssuer = 'https://app.altme.io/wallet_issuer';
+
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
   static const DidKeyType didKeyTypeForEbsiV4 = DidKeyType.ebsiv4;
   static const DidKeyType didKeyTypeForDefault = DidKeyType.edDSA;
