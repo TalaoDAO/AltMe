@@ -295,8 +295,7 @@ class DisclosureLine extends StatelessWidget {
     late String value;
 
     if (elementValue['value'] is Map<String, dynamic>) {
-      value =
-          const JsonEncoder.withIndent('     ').convert(elementValue['value']);
+      value = jsonEncode(elementValue['value']);
     } else {
       value = elementValue['value'].toString();
     }
