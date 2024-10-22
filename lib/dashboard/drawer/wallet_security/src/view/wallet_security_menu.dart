@@ -61,7 +61,7 @@ class WalletSecurityView extends StatelessWidget {
               ),
               DrawerItem(
                 title: l10n.showWalletRecoveryPhrase,
-                subtitle: Parameters.useRandomMnemonicsForBackup
+                subtitle: Parameters.importAtOnboarding
                     ? l10n.showWalletRecoveryPhraseSubtitle
                     : l10n.showWalletRecoveryPhraseSubtitle2,
                 onTap: () async {
@@ -101,26 +101,21 @@ class WalletSecurityView extends StatelessWidget {
               DrawerItem(
                 title: l10n.backup,
                 onTap: () async {
-                  if (Parameters.useRandomMnemonicsForBackup) {
-                    await securityCheck(
-                      context: context,
-                      localAuthApi: LocalAuthApi(),
-                      onSuccess: () {
-                        Navigator.of(context).push<void>(
-                          BackupMnemonicPage.route(
-                            title: l10n.backupCredential,
-                            isValidCallback: () {
-                              Navigator.of(context)
-                                  .push<void>(BackupCredentialPage.route());
-                            },
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    await Navigator.of(context)
-                        .push<void>(BackupCredentialPage.route());
-                  }
+                  await securityCheck(
+                    context: context,
+                    localAuthApi: LocalAuthApi(),
+                    onSuccess: () {
+                      Navigator.of(context).push<void>(
+                        BackupMnemonicPage.route(
+                          title: l10n.backupCredential,
+                          isValidCallback: () {
+                            Navigator.of(context)
+                                .push<void>(BackupCredentialPage.route());
+                          },
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
               DrawerItem(

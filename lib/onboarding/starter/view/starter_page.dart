@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,7 +70,7 @@ class StarterView extends StatelessWidget {
                         const Spacer(flex: 1),
                         SubTitle(profileModel: state.model),
                         const Spacer(flex: 4),
-                        if (Parameters.useRandomMnemonicsForBackup) ...[
+                        if (Parameters.importAtOnboarding) ...[
                           MyOutlinedButton(
                             text: l10n.importAccount,
                             onPressed: () async {
@@ -115,7 +114,7 @@ class StarterView extends StatelessWidget {
                           const SizedBox(height: 10),
                         ],
                         MyElevatedButton(
-                          text: Parameters.useRandomMnemonicsForBackup
+                          text: Parameters.importAtOnboarding
                               ? l10n.createAccount
                               : l10n.createWallet,
                           verticalSpacing: 15,

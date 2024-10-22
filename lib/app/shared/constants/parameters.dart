@@ -86,7 +86,7 @@ class Parameters {
 
   // 'false' for talao
   // 'true' for altme
-  static const bool useRandomMnemonicsForBackup = true;
+  static const bool importAtOnboarding = true;
 
   // false for talao
   // 'true' for altme

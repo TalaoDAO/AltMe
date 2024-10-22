@@ -116,7 +116,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
         if (state.status == AppStatus.success) {
           /// Removes every stack except first route (splashPage)
           if (widget.isFromOnboarding) {
-            if (Parameters.useRandomMnemonicsForBackup) {
+            if (Parameters.importAtOnboarding) {
               await Navigator.pushAndRemoveUntil<void>(
                 context,
                 WalletReadyPage.route(),

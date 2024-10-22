@@ -103,7 +103,7 @@ class BackupCredentialView extends StatelessWidget {
               ),
               const SizedBox(height: Sizes.spaceXLarge),
               Text(
-                Parameters.useRandomMnemonicsForBackup
+                Parameters.importAtOnboarding
                     ? l10n.saveBackupCredentialSubtitle
                     : l10n.saveBackupCredentialSubtitle2,
                 textAlign: TextAlign.center,
