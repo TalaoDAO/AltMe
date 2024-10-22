@@ -152,10 +152,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                           .emitOnboardingProcessing();
                       await context
                           .read<OnBoardingGenPhraseCubit>()
-                          .generateSSIAndCryptoAccount(
-                            mnemonic: mnemonic!,
-                            restoreWallet: false,
-                          );
+                          .generateSSIAndCryptoAccount(mnemonic!);
                     },
                   ),
                   const SizedBox(height: 10),

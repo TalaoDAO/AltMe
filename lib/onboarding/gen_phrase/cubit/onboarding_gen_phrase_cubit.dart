@@ -41,10 +41,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
 
   final log = getLogger('OnBoardingGenPhraseCubit');
 
-  Future<void> generateSSIAndCryptoAccount({
-    required List<String> mnemonic,
-    required bool restoreWallet,
-  }) async {
+  Future<void> generateSSIAndCryptoAccount(List<String> mnemonic) async {
     emit(state.loading());
     try {
       await generateAccount(

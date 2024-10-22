@@ -20,22 +20,16 @@ import 'package:secure_storage/secure_storage.dart';
 class ProtectWalletPage extends StatelessWidget {
   const ProtectWalletPage({
     super.key,
-    required this.restoreWallet,
     this.routeType,
   });
 
-  final bool restoreWallet;
   final WalletRouteType? routeType;
 
   static Route<dynamic> route({
-    required bool restoreWallet,
     WalletRouteType? routeType,
   }) {
     return MaterialPageRoute<void>(
-      builder: (_) => ProtectWalletPage(
-        routeType: routeType,
-        restoreWallet: restoreWallet,
-      ),
+      builder: (_) => ProtectWalletPage(routeType: routeType),
       settings: const RouteSettings(name: '/ProtectWalletPage'),
     );
   }
@@ -61,7 +55,6 @@ class ProtectWalletPage extends StatelessWidget {
             profileCubit: context.read<ProfileCubit>(),
             onBoardingGenPhraseCubit: context.read<OnBoardingGenPhraseCubit>(),
             onboardingCubit: context.read<OnboardingCubit>(),
-            restoreWallet: restoreWallet,
           );
         },
       ),
@@ -72,14 +65,12 @@ class ProtectWalletPage extends StatelessWidget {
 class ProtectWalletView extends StatefulWidget {
   const ProtectWalletView({
     super.key,
-    required this.restoreWallet,
     required this.profileCubit,
     required this.onBoardingGenPhraseCubit,
     required this.onboardingCubit,
     this.routeType,
   });
 
-  final bool restoreWallet;
   final WalletRouteType? routeType;
   final ProfileCubit profileCubit;
   final OnBoardingGenPhraseCubit onBoardingGenPhraseCubit;
@@ -100,10 +91,8 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
         await widget.onboardingCubit.emitOnboardingProcessing();
         final mnemonic = bip39.generateMnemonic().split(' ');
 
-        await widget.onBoardingGenPhraseCubit.generateSSIAndCryptoAccount(
-          mnemonic: mnemonic,
-          restoreWallet: widget.restoreWallet,
-        );
+        await widget.onBoardingGenPhraseCubit
+            .generateSSIAndCryptoAccount(mnemonic);
       } else {
         await Navigator.of(context).push<void>(OnBoardingGenPhrasePage.route());
       }
