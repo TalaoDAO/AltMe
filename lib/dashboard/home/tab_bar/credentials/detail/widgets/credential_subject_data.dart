@@ -89,12 +89,18 @@ class CredentialSubjectData extends StatelessWidget {
 
           if (credentialSubjectData.containsKey(key)) {
             title = display['name'].toString();
-            data = credentialSubjectData[key].toString();
+            data = credentialSubjectData[key] is Map
+                ? const JsonEncoder.withIndent('     ')
+                    .convert(credentialSubjectData[key])
+                : credentialSubjectData[key].toString();
           }
         } else {
           if (credentialSubjectData[key] != null) {
             title = null;
-            data = credentialSubjectData[key].toString();
+            data = credentialSubjectData[key] is Map
+                ? const JsonEncoder.withIndent('     ')
+                    .convert(credentialSubjectData[key])
+                : credentialSubjectData[key].toString();
           } else {
             return Container();
           }
