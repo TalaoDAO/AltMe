@@ -291,7 +291,15 @@ class SelectiveDisclosureDisplayMap {
           .indexWhere(
             (entry) => entry.value.toString().contains(claimKey),
           );
-      if (indexInDisclosure == -1) isDisabled = true;
+      if (indexInDisclosure == -1) {
+        isDisabled = true;
+      } else if (isDisabled) {
+        // Don't add in the map if limitDisclosure is required and the
+        // considered element is:
+        // - From the SD
+        // - Not targeted by the filters
+        continue;
+      }
       // ignore: inference_failure_on_uninitialized_variable, prefer_typing_uninitialized_variables
       late final value;
       try {
@@ -324,8 +332,6 @@ class SelectiveDisclosureDisplayMap {
     }
     return claimDataMap;
   }
-
-
 
   bool isNestedInpayload(List<String> contents, String digest) {
     final payloadSd = SelectiveDisclosure(credentialModel).payload;
