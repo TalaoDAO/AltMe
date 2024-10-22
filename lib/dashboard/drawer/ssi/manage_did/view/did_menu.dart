@@ -55,6 +55,11 @@ class DidView extends StatelessWidget {
                       return Container();
                     }
 
+                    /// there is no new key for EBSI V4
+                    if (didKeyType == DidKeyType.ebsiv4) {
+                      return Container();
+                    }
+
                     final title = didKeyType.getTitle(l10n);
                     return DrawerItem(
                       title: title,

@@ -149,6 +149,8 @@ class OIDC4VC {
     required bool secureAuthorizedFlow,
     required Dio dio,
     required dynamic credentialOfferJson,
+    required bool isEBSIProfile,
+    required String walletIssuer,
     SecureStorageProvider? secureStorage,
     String? oAuthClientAttestation,
     String? oAuthClientAttestationPop,
@@ -187,6 +189,8 @@ class OIDC4VC {
         oidc4vciDraftType: oidc4vciDraftType,
         vcFormatType: vcFormatType,
         secureAuthorizedFlow: secureAuthorizedFlow,
+        isEBSIProfile: isEBSIProfile,
+        walletIssuer: walletIssuer,
       );
 
       return (
@@ -217,6 +221,8 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required VCFormatType vcFormatType,
     required bool secureAuthorizedFlow,
+    required bool isEBSIProfile,
+    required String walletIssuer,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -339,13 +345,18 @@ class OIDC4VC {
       myRequest['issuer_state'] = issuerState;
     }
 
-    if (secureAuthorizedFlow) {
-      myRequest['client_metadata'] =
-          Uri.encodeComponent(jsonEncode(clientMetaData));
-    } else if (clientAuthentication != ClientAuthentication.clientSecretJwt) {
-      myRequest['client_metadata'] = jsonEncode(clientMetaData);
-      // paramètre config du portail, on ne met pas si : client authentication :
+    if (isEBSIProfile) {
+      if (secureAuthorizedFlow) {
+        myRequest['client_metadata'] =
+            Uri.encodeComponent(jsonEncode(clientMetaData));
+      } else if (clientAuthentication != ClientAuthentication.clientSecretJwt) {
+        myRequest['client_metadata'] = jsonEncode(clientMetaData);
+        // paramètre config du portail, on ne met pas si : client authentication :
+      }
+    } else {
+      myRequest['wallet_issuer'] = walletIssuer;
     }
+
     switch (clientAuthentication) {
       case ClientAuthentication.none:
         break;

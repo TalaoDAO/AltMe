@@ -71,7 +71,9 @@ class StarterView extends StatelessWidget {
                         SubTitle(profileModel: state.model),
                         const Spacer(flex: 4),
                         MyOutlinedButton(
-                          text: l10n.importAccount,
+                          text: Parameters.importAtOnboarding
+                              ? l10n.importAccount
+                              : l10n.restoreWallet,
                           onPressed: () async {
                             await profileCubit.setWalletType(
                               walletType: WalletType.personal,
@@ -89,7 +91,9 @@ class StarterView extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         MyElevatedButton(
-                          text: l10n.createAccount,
+                          text: Parameters.importAtOnboarding
+                              ? l10n.createAccount
+                              : l10n.createWallet,
                           verticalSpacing: 15,
                           onPressed: () async {
                             await profileCubit.setWalletType(
