@@ -165,7 +165,9 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
 
             if (password != null) {
               await profileCubit.secureStorageProvider.set(
-                  SecureStorageKeys.enterprisePassword, password.toString());
+                SecureStorageKeys.enterprisePassword,
+                password.toString(),
+              );
             }
 
             if (walletProvider != null) {
