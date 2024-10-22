@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/shared/constants/parameters.dart';
 import 'package:altme/app/shared/extension/iterable_extension.dart';
 import 'package:altme/app/shared/widget/base/credential_field.dart';
@@ -290,6 +292,13 @@ class DisclosureLine extends StatelessWidget {
     if (title != null) {
       title = title.startsWith(Parameters.doNotDisplayMe) ? null : title;
     }
+    late String value;
+
+    if (elementValue['value'] is Map<String, dynamic>) {
+      value = jsonEncode(elementValue['value']);
+    } else {
+      value = elementValue['value'].toString();
+    }
     return TransparentInkWell(
       onTap: () {
         if (elementValue['hasCheckbox'] != true ||
@@ -310,7 +319,7 @@ class DisclosureLine extends StatelessWidget {
             child: CredentialField(
               padding: const EdgeInsets.only(top: 8),
               title: title,
-              value: elementValue['value'].toString(),
+              value: value,
               titleColor: Theme.of(context).colorScheme.onSurface,
               valueColor: Theme.of(context).colorScheme.onSurface,
               showVertically: showVertically,

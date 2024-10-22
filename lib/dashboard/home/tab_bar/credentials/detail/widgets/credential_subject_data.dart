@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/helper_functions/get_display.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:flutter/material.dart';
@@ -80,41 +83,22 @@ class CredentialSubjectData extends StatelessWidget {
 
         if (value is! Map<String, dynamic>) return Container();
 
-        // if (value.isEmpty) return Container();
-
         if (value.containsKey('display')) {
-          final displays = value['display'];
-          if (displays is! List<dynamic>) return Container();
-
-          final display = displays.firstWhere(
-            (element) =>
-                element is Map<String, dynamic> &&
-                element.containsKey('locale') &&
-                element['locale'].toString().contains(languageCode),
-            orElse: () => displays.firstWhere(
-              (element) =>
-                  element is Map<String, dynamic> &&
-                  element.containsKey('locale') &&
-                  element['locale'].toString().contains('en'),
-              orElse: () => displays.firstWhere(
-                (element) =>
-                    element is Map<String, dynamic> &&
-                    element.containsKey('locale'),
-                orElse: () => null,
-              ),
-            ),
-          );
-
+          final display = getDisplay(value, languageCode);
           if (display == null) return Container();
 
           if (credentialSubjectData.containsKey(key)) {
             title = display['name'].toString();
-            data = credentialSubjectData[key].toString();
+            data = credentialSubjectData[key] is Map
+                ? jsonEncode(credentialSubjectData[key])
+                : credentialSubjectData[key].toString();
           }
         } else {
           if (credentialSubjectData[key] != null) {
             title = null;
-            data = credentialSubjectData[key].toString();
+            data = credentialSubjectData[key] is Map
+                ? jsonEncode(credentialSubjectData[key])
+                : credentialSubjectData[key].toString();
           } else {
             return Container();
           }
@@ -122,16 +106,84 @@ class CredentialSubjectData extends StatelessWidget {
 
         if (data == null) return Container();
 
-        return CredentialField(
-          padding: const EdgeInsets.only(top: 10),
+        final widget = DisplayCredentialField(
           title: title,
-          value: data,
-          titleColor: Theme.of(context).colorScheme.onSurface,
-          valueColor: Theme.of(context).colorScheme.onSurface,
-          showVertically: showVertically,
+          data: data,
           type: value['value_type'].toString(),
+          showVertically: showVertically,
         );
+
+        return widget;
       }).toList(),
     );
+  }
+}
+
+class DisplayCredentialField extends StatelessWidget {
+  const DisplayCredentialField({
+    super.key,
+    this.title,
+    required this.data,
+    this.type = 'string',
+    required this.showVertically,
+  });
+  final String? title;
+  final dynamic data;
+  final String type;
+  final bool showVertically;
+
+  @override
+  Widget build(BuildContext context) {
+    late Widget widget;
+    try {
+      final json = jsonDecode(data.toString());
+      if (json is Map<String, dynamic>) {
+        widget = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title ?? '',
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: DisplayCredentialFieldMap(
+                showVertically: showVertically,
+                data: data,
+                type: type,
+              ),
+            ),
+          ],
+        );
+      }
+    } catch (e) {
+      widget = CredentialField(
+        padding: const EdgeInsets.only(top: 10),
+        title: title,
+        value: data.toString(),
+        titleColor: Theme.of(context).colorScheme.onSurface,
+        valueColor: Theme.of(context).colorScheme.onSurface,
+        showVertically: showVertically,
+        type: type,
+      );
+    }
+
+    return CredentialField(
+      padding: const EdgeInsets.only(top: 10),
+      title: title,
+      value: data.toString(),
+      titleColor: Theme.of(context).colorScheme.onSurface,
+      valueColor: Theme.of(context).colorScheme.onSurface,
+      showVertically: showVertically,
+      type: type,
+    );
+  }
+
+  Widget DisplayCredentialFieldMap(
+      {required bool showVertically, required data, required String type}) {
+    return Text('DisplayCredentialFieldMap');
   }
 }
