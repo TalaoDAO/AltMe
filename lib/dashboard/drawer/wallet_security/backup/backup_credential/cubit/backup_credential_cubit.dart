@@ -61,8 +61,15 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
 
       final profileModel = profileCubit.state.model;
 
-      if (profileModel.profileType == ProfileType.enterprise) {
+      message['profile'] = profileModel.profileType.profileId;
+
+      if (profileModel.profileType == ProfileType.custom ||
+          profileModel.profileType == ProfileType.enterprise) {
         final profileSetting = profileModel.profileSetting.toJson();
+        message['profileSetting'] = profileSetting;
+      }
+
+      if (profileModel.profileType == ProfileType.enterprise) {
         final email = await profileCubit.secureStorageProvider
             .get(SecureStorageKeys.enterpriseEmail);
 
@@ -71,10 +78,6 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
 
         final walletProvider = await profileCubit.secureStorageProvider
             .get(SecureStorageKeys.enterpriseWalletProvider);
-
-        message['profileSetting'] = profileSetting;
-        message['profile'] =
-            profileModel.profileType.getTitle(name: 'Enterprise');
 
         final enterprise = {
           'email': email,

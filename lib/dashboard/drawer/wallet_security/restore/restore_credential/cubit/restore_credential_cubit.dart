@@ -115,8 +115,20 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
 
       await credentialsCubit.recoverWallet(credentials: credentialList);
 
-      if (decryptedJson.containsKey('profile')) {
-        if (decryptedJson['profile'] == 'Enterprise') {
+      final profile = decryptedJson['profile'];
+
+      if (profile != null) {
+        final profileType = ProfileType.values
+            .firstWhereOrNull((ele) => ele.profileId == profile);
+
+        if (profileType == null) {
+          throw ResponseMessage(
+            message: ResponseString.RESPONSE_STRING_AN_UNKNOWN_ERROR_HAPPENED,
+          );
+        }
+
+        if (profileType == ProfileType.custom ||
+            profileType == ProfileType.enterprise) {
           final profileSettingJson = decryptedJson['profileSetting'];
 
           if (profileSettingJson != null) {
@@ -125,11 +137,21 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
             );
             await profileCubit.setProfileSetting(
               profileSetting: profileSetting,
-              profileType: ProfileType.enterprise,
+              profileType: profileType,
             );
-          }
 
-          /// save enterprise data
+            if (profileType == ProfileType.custom) {
+              await secureStorageProvider.set(
+                SecureStorageKeys.customProfileSettings,
+                jsonEncode(profileSettingJson),
+              );
+            }
+          }
+        } else {
+          await profileCubit.setProfile(profileType);
+        }
+
+        if (profileType == ProfileType.enterprise) {
           final enterprise = decryptedJson['enterprise'];
           if (enterprise != null) {
             final email = enterprise['email'];
