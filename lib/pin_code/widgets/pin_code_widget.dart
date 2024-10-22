@@ -149,6 +149,8 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                         0.5,
                                     showPoweredBy: true,
                                   ),
+                                if (widget.showKeyboard)
+                                  const SizedBox(height: 80),
                                 const SizedBox(height: Sizes.spaceSmall),
                                 PinCodeTitle(
                                   title: widget.title,

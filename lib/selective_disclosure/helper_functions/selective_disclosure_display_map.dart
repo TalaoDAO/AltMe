@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/shared/constants/parameters.dart';
 import 'package:altme/app/shared/extension/iterable_extension.dart';
+import 'package:altme/app/shared/helper_functions/get_display.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/selective_disclosure/cubit/selective_disclosure_pick_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
@@ -47,7 +48,7 @@ class SelectiveDisclosureDisplayMap {
 
       if (mapValue is! Map<String, dynamic>) return;
 
-      final display = getDisplay(mapKey, mapValue, languageCode);
+      final display = getDisplay(mapValue, languageCode);
 
       title =
           display?['name'].toString() ?? '${Parameters.doNotDisplayMe}$index';
@@ -290,7 +291,15 @@ class SelectiveDisclosureDisplayMap {
           .indexWhere(
             (entry) => entry.value.toString().contains(claimKey),
           );
-      if (indexInDisclosure == -1) isDisabled = true;
+      if (indexInDisclosure == -1) {
+        isDisabled = true;
+      } else if (isDisabled) {
+        // Don't add in the map if limitDisclosure is required and the
+        // considered element is:
+        // - From the SD
+        // - Not targeted by the filters
+        continue;
+      }
       // ignore: inference_failure_on_uninitialized_variable, prefer_typing_uninitialized_variables
       late final value;
       try {
@@ -322,41 +331,6 @@ class SelectiveDisclosureDisplayMap {
       index++;
     }
     return claimDataMap;
-  }
-
-  dynamic getDisplay(String key, dynamic value, String languageCode) {
-    if (value is! Map<String, dynamic>) return null;
-
-    if (value.isEmpty) return null;
-
-    if (value.containsKey('display')) {
-      final displays = value['display'];
-      if (displays is! List<dynamic>) return null;
-      if (displays.isEmpty) return null;
-
-      final display = displays.firstWhere(
-        (element) =>
-            element is Map<String, dynamic> &&
-            element.containsKey('locale') &&
-            element['locale'].toString().contains(languageCode),
-        orElse: () => displays.firstWhere(
-          (element) =>
-              element is Map<String, dynamic> &&
-              element.containsKey('locale') &&
-              element['locale'].toString().contains('en'),
-          orElse: () => displays.firstWhere(
-            (element) =>
-                element is Map<String, dynamic> &&
-                element.containsKey('locale'),
-            orElse: () => null,
-          ),
-        ),
-      );
-
-      return display;
-    } else {
-      return null;
-    }
   }
 
   bool isNestedInpayload(List<String> contents, String digest) {

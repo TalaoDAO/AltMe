@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class Parameters {
   static const int multipleCredentialsProcessDelay = 1;
 
+  // 'false' for talao
+  // 'true' for altme
   static const bool walletHandlesCrypto = false;
 
   static const AdvanceSettingsState defaultAdvanceSettingsState =
@@ -70,6 +72,7 @@ class Parameters {
     chainChanged,
     accountsChanged,
   ];
+
   static const optionalEvents = ['message', 'disconnect', 'connect'];
 
   static const allEvents = [...requiredEvents, ...optionalEvents];
@@ -78,28 +81,46 @@ class Parameters {
   static const int maxEntries = 3;
 
   // 'Talao'for talao
+  // 'Altme' for altme
   static const String appName = 'Talao';
 
+  // 'false' for talao
+  // 'true' for altme
+  static const bool importAtOnboarding = false;
+
   // false for talao
+  // 'true' for altme
   static const bool supportDefiCompliance = false;
+
   // false for talao
+  // 'true' for altme
   static const bool supportCryptoAccountOwnershipInDiscoverForEnterpriseMode =
       false;
   // false for talao
-  static const bool showChainbornCard = false;
+  // 'true' for altme
+  static const bool showChainbornCard = true;
+
   // false for talao
-  static const bool showTezotopiaCard = false;
+  // true for altme
+  static const bool showTezotopiaCard = true;
 
   //'https://app.talao.co/app/download/authorize' for Talao
+  // 'https://app.altme.io/app/download/authorize' for altme
   static const String redirectUri =
       'https://app.talao.co/app/download/authorize';
 
   //'https://app.talao.co/app/download/callback' for Talao
+  // 'https://app.altme.io/app/download/callback' for altme
   static const String authorizationEndPoint =
       'https://app.talao.co/app/download/callback';
 
   // 'talao_wallet'for talao
+  // 'altme_wallet' for altme
   static const String walletName = 'talao_wallet';
+
+  // 'https://app.talao.co/wallet_issuer'for talao
+  // 'https://app.altme.io/wallet_issuer' for altme
+  static const String walletIssuer = 'https://app.talao.co/wallet_issuer';
 
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
   static const DidKeyType didKeyTypeForEbsiV4 = DidKeyType.ebsiv4;

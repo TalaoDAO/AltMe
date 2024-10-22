@@ -495,11 +495,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> recoverWallet({
     required List<CredentialModel> credentials,
-    required bool isPolygonIdCredentials,
   }) async {
-    if (!isPolygonIdCredentials) {
-      await credentialsRepository.deleteAll();
-    }
+    await credentialsRepository.deleteAll();
+
     for (final credential in credentials) {
       await credentialsRepository.insert(credential);
     }
