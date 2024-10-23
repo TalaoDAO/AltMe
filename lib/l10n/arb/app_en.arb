@@ -81,7 +81,6 @@
   "credentialPresentConfirm": "Select credential(s)",
   "credentialPresentCancel": "Reject",
   "credentialPickPresent": "Present",
-  "credentialPickTitle": "Select credential(s)",
   "selectYourTezosAssociatedWallet": "Select your Tezos associated wallet",
   "credentialPickSelect": "Select your credential",
   "siopV2credentialPickSelect": "Choose only one credential from your wallet to present",
@@ -1144,5 +1143,6 @@
   "createWallet": "Create Wallet",
   "restoreWallet": "Restore Wallet",
   "showWalletRecoveryPhraseSubtitle2": "This recovery phrase is requested to restore a wallet at installation.",
-  "documentation": "Documentation"
+  "documentation": "Documentation",
+  "credentialPickTitle": "Choose the credential(s) you wish to obtain"
 }

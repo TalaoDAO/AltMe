@@ -81,7 +81,6 @@
   "credentialPresentConfirm": "Sélectionnez les documents",
   "credentialPresentCancel": "Rejeter",
   "credentialPickPresent": "Présente",
-  "credentialPickTitle": "Sélectionnez les documents",
   "selectYourTezosAssociatedWallet": "Sélectionnez votre portefeuille associé Tezos",
   "credentialPickSelect": "Sélectionnez votre identifiant",
   "siopV2credentialPickSelect": "Choisissez un seul document à présenter",

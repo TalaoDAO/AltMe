@@ -65,7 +65,8 @@
     "createWallet",
     "restoreWallet",
     "showWalletRecoveryPhraseSubtitle2",
-    "documentation"
+    "documentation",
+    "credentialPickTitle"
   ],
 
   "es": [
@@ -134,7 +135,8 @@
     "createWallet",
     "restoreWallet",
     "showWalletRecoveryPhraseSubtitle2",
-    "documentation"
+    "documentation",
+    "credentialPickTitle"
   ],
 
   "fr": [
@@ -208,6 +210,7 @@
     "createWallet",
     "restoreWallet",
     "showWalletRecoveryPhraseSubtitle2",
-    "documentation"
+    "documentation",
+    "credentialPickTitle"
   ]
 }
