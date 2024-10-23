@@ -1143,5 +1143,6 @@
   "saveBackupCredentialSubtitle2": "To recover all your credentials you will need this backup file.",
   "createWallet": "Create Wallet",
   "restoreWallet": "Restore Wallet",
-  "showWalletRecoveryPhraseSubtitle2": "This recovery phrase is requested to restore a wallet at installation."
+  "showWalletRecoveryPhraseSubtitle2": "This recovery phrase is requested to restore a wallet at installation.",
+  "documentation": "Documentation"
 }

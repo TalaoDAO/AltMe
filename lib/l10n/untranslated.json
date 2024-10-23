@@ -64,7 +64,8 @@
     "saveBackupCredentialSubtitle2",
     "createWallet",
     "restoreWallet",
-    "showWalletRecoveryPhraseSubtitle2"
+    "showWalletRecoveryPhraseSubtitle2",
+    "documentation"
   ],
 
   "es": [
@@ -132,7 +133,8 @@
     "saveBackupCredentialSubtitle2",
     "createWallet",
     "restoreWallet",
-    "showWalletRecoveryPhraseSubtitle2"
+    "showWalletRecoveryPhraseSubtitle2",
+    "documentation"
   ],
 
   "fr": [
@@ -205,6 +207,7 @@
     "saveBackupCredentialSubtitle2",
     "createWallet",
     "restoreWallet",
-    "showWalletRecoveryPhraseSubtitle2"
+    "showWalletRecoveryPhraseSubtitle2",
+    "documentation"
   ]
 }
