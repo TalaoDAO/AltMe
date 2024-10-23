@@ -1417,7 +1417,7 @@ Future<String> getFormattedStringOIDC4VPSIOPV2({
   final data = '''
 <b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
 <b>AUTHORIZATION REQUEST :</b>
-${response != null ? const JsonEncoder.withIndent('  ').convert(response) : 'None'}\n
+${response != null ? const JsonEncoder.withIndent('  ').convert(response) : Uri.decodeComponent(url)}\n
 <b>CLIENT METADATA  :</b>  
 ${clientMetaData != null ? const JsonEncoder.withIndent('  ').convert(clientMetaData) : 'None'}\n
 <b>PRESENTATION DEFINITION  :</b> 
