@@ -135,6 +135,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                       children: [
                         Stack(
                           children: [
+                            if (widget.showKeyboard) const BackLeadingButton(),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -209,6 +210,8 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                   decoration: const InputDecoration(
                                     border: InputBorder.none,
                                   ),
+                                  onEditingComplete: () {},
+                                  onSubmitted: (value) {},
                                 ),
                               ),
                           ],
@@ -295,6 +298,8 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                         decoration: const InputDecoration(
                                           border: InputBorder.none,
                                         ),
+                                        onEditingComplete: () {},
+                                        onSubmitted: (value) {},
                                       ),
                                     ),
                                 ],
