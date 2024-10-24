@@ -105,11 +105,6 @@ class Parameters {
   // true for altme
   static const bool showTezotopiaCard = true;
 
-  //'https://app.talao.co/app/download/authorize' for Talao
-  // 'https://app.altme.io/app/download/authorize' for altme
-  static const String redirectUri =
-      'https://app.altme.io/app/download/authorize';
-
   //'https://app.talao.co/app/download/callback' for Talao
   // 'https://app.altme.io/app/download/callback' for altme
   static const String authorizationEndPoint =
