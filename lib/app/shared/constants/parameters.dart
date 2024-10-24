@@ -110,9 +110,9 @@ class Parameters {
   static const String authorizationEndPoint =
       'https://app.altme.io/app/download/callback';
 
-  // 'talao_wallet'for talao
-  // 'altme_wallet' for altme
-  static const String walletName = 'altme_wallet';
+  // 'Talao_wallet'for talao
+  // 'Altme_wallet' for altme
+  static const String walletName = 'Altme_wallet';
 
   // 'https://app.talao.co/wallet_issuer'for talao
   // 'https://app.altme.io/wallet_issuer' for altme
