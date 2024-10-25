@@ -536,7 +536,6 @@ class ScanCubit extends Cubit<ScanState> {
         clientMetaData: clientMetaData,
         profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
       );
-
       final String vpToken = await createVpToken(
         credentialsToBePresented: credentialsToBePresented,
         did: did,
@@ -830,7 +829,8 @@ class ScanCubit extends Cubit<ScanState> {
       credentialsToBePresented: credentialsToBePresented,
     );
 
-    if (supportingFormats.contains(VCFormatType.vcSdJWT)) {
+    // if (supportingFormats.contains(VCFormatType.vcSdJWT)) {
+    if (formatFromPresentationSubmission == VCFormatType.vcSdJWT) {
       final credentialList = getStringCredentialsForToken(
         credentialsToBePresented: credentialsToBePresented,
         profileCubit: profileCubit,
@@ -840,9 +840,12 @@ class ScanCubit extends Cubit<ScanState> {
       // considering only one
 
       return vpToken;
-    } else if (supportingFormats.contains(VCFormatType.jwtVc) ||
-        supportingFormats.contains(VCFormatType.jwtVcJson) ||
-        supportingFormats.contains(VCFormatType.jwtVcJsonLd)) {
+      // } else if (supportingFormats.contains(VCFormatType.jwtVc) ||
+      //     supportingFormats.contains(VCFormatType.jwtVcJson) ||
+      //     supportingFormats.contains(VCFormatType.jwtVcJsonLd)) {
+    } else if (formatFromPresentationSubmission == VCFormatType.jwtVc ||
+        formatFromPresentationSubmission == VCFormatType.jwtVcJson ||
+        formatFromPresentationSubmission == VCFormatType.jwtVcJsonLd) {
       final credentialList = getStringCredentialsForToken(
         credentialsToBePresented: credentialsToBePresented,
         profileCubit: profileCubit,
@@ -859,7 +862,8 @@ class ScanCubit extends Cubit<ScanState> {
       );
 
       return vpToken;
-    } else if (supportingFormats.contains(VCFormatType.ldpVc)) {
+      // } else if (supportingFormats.contains(VCFormatType.ldpVc)) {
+    } else if (formatFromPresentationSubmission == VCFormatType.ldpVc) {
       /// proof is done with a creation date 20 seconds in the past to avoid
       /// proof check to fail because of time difference on server
       final options = jsonEncode({
