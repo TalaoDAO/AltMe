@@ -10,51 +10,24 @@ List<CredentialModel> filterCredenialListByFormat({
   required PresentationDefinition presentationDefinition,
   required List<Field> filterList,
 }) {
-  if (vcFormatType == VCFormatType.auto) {
-    return credentialList;
-  }
-
   final credentials = List<CredentialModel>.from(credentialList);
   if (filterList.isNotEmpty) {
-    final isJwtVpInJwtVCRequired = presentationDefinition.format?.jwtVp != null;
-
-    if (isJwtVpInJwtVCRequired) {
-      credentials.removeWhere(
-        (CredentialModel credentialModel) => credentialModel.jwt == null,
-      );
-    }
-
-    final (presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt) =
-        getPresentVCDetails(
+    final supportingFormats = getPresentVCDetails(
       clientMetaData: clientMetaData,
       presentationDefinition: presentationDefinition,
       vcFormatType: vcFormatType,
       credentialsToBePresented: credentials,
     );
-
     credentials.removeWhere(
       (CredentialModel credentialModel) {
-        /// remove ldpVc
-        if (presentLdpVc) {
-          return credentialModel.getFormat != VCFormatType.ldpVc.vcValue;
+        /// we keep credential whose format are supported
+        bool remove = true;
+        for (final supportingFormat in supportingFormats) {
+          if (credentialModel.getFormat == supportingFormat.vcValue) {
+            remove = false;
+          }
         }
-
-        /// remove jwtVc
-        if (presentJwtVc) {
-          return credentialModel.getFormat != VCFormatType.jwtVc.vcValue;
-        }
-
-        /// remove JwtVcJson
-        if (presentJwtVcJson) {
-          return credentialModel.getFormat != VCFormatType.jwtVcJson.vcValue;
-        }
-
-        /// remove vcSdJwt
-        if (presentVcSdJwt) {
-          return credentialModel.getFormat != VCFormatType.vcSdJWT.vcValue;
-        }
-
-        return false;
+        return remove;
       },
     );
   }

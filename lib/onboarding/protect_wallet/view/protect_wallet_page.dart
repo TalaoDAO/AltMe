@@ -97,9 +97,14 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
         await Navigator.of(context).push<void>(OnBoardingGenPhrasePage.route());
       }
     } else {
-      await Navigator.of(context).push<void>(
-        ImportWalletPage.route(isFromOnboarding: true),
-      );
+      /// import case
+      if (Parameters.importAndRestoreAtOnboarding) {
+        await Navigator.of(context).push<void>(RestoreOptionsPage.route());
+      } else {
+        await Navigator.of(context).push<void>(
+          ImportWalletPage.route(restoreType: RestoreType.appBackup),
+        );
+      }
     }
   }
 

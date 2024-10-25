@@ -1417,7 +1417,7 @@ Future<String> getFormattedStringOIDC4VPSIOPV2({
   final data = '''
 <b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
 <b>AUTHORIZATION REQUEST :</b>
-${response != null ? const JsonEncoder.withIndent('  ').convert(response) : 'None'}\n
+${response != null ? const JsonEncoder.withIndent('  ').convert(response) : Uri.decodeComponent(url)}\n
 <b>CLIENT METADATA  :</b>  
 ${clientMetaData != null ? const JsonEncoder.withIndent('  ').convert(clientMetaData) : 'None'}\n
 <b>PRESENTATION DEFINITION  :</b> 
@@ -1802,7 +1802,7 @@ List<String> getStringCredentialsForToken({
 }
 
 //(presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt)
-(bool, bool, bool, bool) getPresentVCDetails({
+List<VCFormatType> getPresentVCDetails({
   required VCFormatType vcFormatType,
   required PresentationDefinition presentationDefinition,
   required Map<String, dynamic>? clientMetaData,
@@ -1811,154 +1811,70 @@ List<String> getStringCredentialsForToken({
   bool presentLdpVc = false;
   bool presentJwtVc = false;
   bool presentJwtVcJson = false;
+  bool presentJwtVcJsonLd = false;
   bool presentVcSdJwt = false;
 
-  if (vcFormatType == VCFormatType.auto) {
-    final credential = credentialsToBePresented.firstOrNull;
+  final supportingFormats = <VCFormatType>[];
 
-    if (credential == null) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'VC format is missing',
-        },
-      );
-    }
+  if (presentationDefinition.format != null) {
+    final format = presentationDefinition.format;
 
-    final credentialFormat = credential.getFormat;
+    /// ldp_vc
+    presentLdpVc = format?.ldpVc != null || format?.ldpVp != null;
 
-    if (credentialFormat == VCFormatType.ldpVc.vcValue) {
-      presentLdpVc = true;
-      presentJwtVc = false;
-      presentJwtVcJson = false;
-      presentVcSdJwt = false;
-    } else if (credentialFormat == VCFormatType.jwtVc.vcValue) {
-      presentLdpVc = false;
-      presentJwtVc = true;
-      presentJwtVcJson = false;
-      presentVcSdJwt = false;
-    } else if (credentialFormat == VCFormatType.jwtVcJson.vcValue) {
-      presentLdpVc = false;
-      presentJwtVc = false;
-      presentJwtVcJson = true;
-      presentVcSdJwt = false;
-    } else if (credentialFormat == VCFormatType.vcSdJWT.vcValue) {
-      presentLdpVc = false;
-      presentJwtVc = false;
-      presentJwtVcJson = false;
-      presentVcSdJwt = true;
-    }
+    /// jwt_vc
+    presentJwtVc = format?.jwtVc != null || format?.jwtVp != null;
+
+    /// jwt_vc_json
+    presentJwtVcJson = format?.jwtVcJson != null || format?.jwtVpJson != null;
+
+    /// vc+sd-jwt
+    presentVcSdJwt = format?.vcSdJwt != null;
   } else {
-    final supportingFormats = <String>[];
-
-    if (presentationDefinition.format != null) {
-      final format = presentationDefinition.format;
+    if (clientMetaData == null) {
+      /// credential manifest case
+      presentLdpVc = true;
+      presentJwtVc = true;
+      presentJwtVcJson = true;
+      presentJwtVcJsonLd = true;
+      presentVcSdJwt = true;
+    } else {
+      final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
 
       /// ldp_vc
-      presentLdpVc = format?.ldpVc != null || format?.ldpVp != null;
+      presentLdpVc = vpFormats.containsKey('ldp_vc');
 
       /// jwt_vc
-      presentJwtVc = format?.jwtVc != null || format?.jwtVp != null;
+      presentJwtVc = vpFormats.containsKey('jwt_vc');
 
       /// jwt_vc_json
-      presentJwtVcJson = format?.jwtVcJson != null || format?.jwtVpJson != null;
+      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json');
+
+      /// jwt_vc_json-ld
+      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json-ld');
 
       /// vc+sd-jwt
-      presentVcSdJwt = format?.vcSdJwt != null;
-    } else {
-      if (clientMetaData == null) {
-        /// credential manifest case
-        if (vcFormatType == VCFormatType.ldpVc) {
-          presentLdpVc = true;
-        } else if (vcFormatType == VCFormatType.jwtVc) {
-          presentJwtVc = true;
-        } else if (vcFormatType == VCFormatType.jwtVcJson) {
-          presentJwtVcJson = true;
-        } else if (vcFormatType == VCFormatType.vcSdJWT) {
-          presentVcSdJwt = true;
-        }
-      } else {
-        final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
-
-        /// ldp_vc
-        presentLdpVc = vpFormats.containsKey('ldp_vc');
-
-        /// jwt_vc
-        presentJwtVc = vpFormats.containsKey('jwt_vc');
-
-        /// jwt_vc_json
-        presentJwtVcJson = vpFormats.containsKey('jwt_vc_json');
-
-        /// vc+sd-jwt
-        presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
-      }
-      if (!presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
-        presentLdpVc = true;
-      } else if (!presentJwtVc && vcFormatType == VCFormatType.jwtVc) {
-        presentJwtVc = true;
-      } else if (!presentJwtVcJson && vcFormatType == VCFormatType.jwtVcJson) {
-        presentJwtVcJson = true;
-      } else if (!presentVcSdJwt && vcFormatType == VCFormatType.vcSdJWT) {
-        presentVcSdJwt = true;
-      }
-    }
-
-    if (!presentLdpVc &&
-        !presentJwtVc &&
-        !presentJwtVcJson &&
-        !presentVcSdJwt) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'VC format is missing',
-        },
-      );
-    }
-
-    /// create list of supported formats
-    if (presentLdpVc) supportingFormats.add(VCFormatType.ldpVc.vcValue);
-    if (presentJwtVc) supportingFormats.add(VCFormatType.jwtVc.vcValue);
-    if (presentJwtVcJson) supportingFormats.add(VCFormatType.jwtVcJson.vcValue);
-    if (presentVcSdJwt) supportingFormats.add(VCFormatType.vcSdJWT.vcValue);
-
-    /// make sure only one of all are true
-    if (presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
-      presentLdpVc = true;
-      presentJwtVc = false;
-      presentJwtVcJson = false;
-      presentVcSdJwt = false;
-    } else if (presentJwtVc && vcFormatType == VCFormatType.jwtVc) {
-      presentLdpVc = false;
-      presentJwtVc = true;
-      presentJwtVcJson = false;
-      presentVcSdJwt = false;
-    } else if (presentJwtVcJson && vcFormatType == VCFormatType.jwtVcJson) {
-      presentLdpVc = false;
-      presentJwtVc = false;
-      presentJwtVcJson = true;
-      presentVcSdJwt = false;
-    } else if (presentVcSdJwt && vcFormatType == VCFormatType.vcSdJWT) {
-      presentLdpVc = false;
-      presentJwtVc = false;
-      presentJwtVcJson = false;
-      presentVcSdJwt = true;
-    }
-
-    if ((presentLdpVc && vcFormatType != VCFormatType.ldpVc) ||
-        (presentJwtVc && vcFormatType != VCFormatType.jwtVc) ||
-        presentJwtVcJson && vcFormatType != VCFormatType.jwtVcJson ||
-        presentVcSdJwt && vcFormatType != VCFormatType.vcSdJWT) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'Please switch to profile that supports format '
-              '${supportingFormats.join('/')}.',
-        },
-      );
+      presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
     }
   }
 
-  return (presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt);
+  if (!presentLdpVc && !presentJwtVc && !presentJwtVcJson && !presentVcSdJwt) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description': 'VC format is missing',
+      },
+    );
+  }
+
+  /// create list of supported formats
+  if (presentLdpVc) supportingFormats.add(VCFormatType.ldpVc);
+  if (presentJwtVc) supportingFormats.add(VCFormatType.jwtVc);
+  if (presentJwtVcJson) supportingFormats.add(VCFormatType.jwtVcJson);
+  if (presentJwtVcJsonLd) supportingFormats.add(VCFormatType.jwtVcJsonLd);
+  if (presentVcSdJwt) supportingFormats.add(VCFormatType.vcSdJWT);
+
+  return supportingFormats;
 }
 
 List<dynamic> collectSdValues(Map<String, dynamic> data) {

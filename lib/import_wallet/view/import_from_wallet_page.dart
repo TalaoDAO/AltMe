@@ -18,26 +18,26 @@ class ImportFromWalletPage extends StatelessWidget {
     super.key,
     required this.walletTypeModel,
     this.accountName,
-    required this.isFromOnboard,
+    required this.restoreType,
   });
 
   static Route<dynamic> route({
     required WalletTypeModel walletTypeModel,
-    required bool isFromOnboard,
+    required RestoreType? restoreType,
     String? accountName,
   }) =>
       MaterialPageRoute<void>(
         builder: (context) => ImportFromWalletPage(
           walletTypeModel: walletTypeModel,
           accountName: accountName,
-          isFromOnboard: isFromOnboard,
+          restoreType: restoreType,
         ),
         settings: const RouteSettings(name: '/ImportFromWalletPage'),
       );
 
   final WalletTypeModel walletTypeModel;
   final String? accountName;
-  final bool isFromOnboard;
+  final RestoreType? restoreType;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class ImportFromWalletPage extends StatelessWidget {
       child: ImportFromOtherWalletView(
         walletTypeModel: walletTypeModel,
         accountName: accountName,
-        isFromOnboard: isFromOnboard,
+        restoreType: restoreType,
       ),
     );
   }
@@ -64,13 +64,13 @@ class ImportFromOtherWalletView extends StatefulWidget {
   const ImportFromOtherWalletView({
     super.key,
     required this.walletTypeModel,
-    required this.isFromOnboard,
+    required this.restoreType,
     this.accountName,
   });
 
   final WalletTypeModel walletTypeModel;
   final String? accountName;
-  final bool isFromOnboard;
+  final RestoreType? restoreType;
 
   @override
   _ImportFromOtherWalletViewState createState() =>
@@ -95,6 +95,7 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final isFromOnboarding = widget.restoreType != null;
 
     return BlocConsumer<ImportWalletCubit, ImportWalletState>(
       listener: (context, state) async {
@@ -110,14 +111,24 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
             stateMessage: state.message!,
           );
         }
+
         if (state.status == AppStatus.success) {
           /// Removes every stack except first route (splashPage)
-          if (widget.isFromOnboard) {
-            await Navigator.pushAndRemoveUntil<void>(
-              context,
-              WalletReadyPage.route(),
-              (Route<dynamic> route) => route.isFirst,
-            );
+          if (isFromOnboarding) {
+            switch (widget.restoreType!) {
+              case RestoreType.cryptoWallet:
+                await Navigator.pushAndRemoveUntil<void>(
+                  context,
+                  WalletReadyPage.route(),
+                  (Route<dynamic> route) => route.isFirst,
+                );
+              case RestoreType.appBackup:
+                await Navigator.pushAndRemoveUntil<void>(
+                  context,
+                  RestoreCredentialPage.route(fromOnBoarding: true),
+                  (Route<dynamic> route) => route.isFirst,
+                );
+            }
           } else {
             await Navigator.pushAndRemoveUntil<void>(
               context,
@@ -242,7 +253,7 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
                     ? null
                     : () async {
                         await context.read<ImportWalletCubit>().import(
-                              isFromOnboarding: widget.isFromOnboard,
+                              restoreType: widget.restoreType,
                               accountName: widget.accountName,
                               mnemonicOrKey: mnemonicController.text,
                             );
