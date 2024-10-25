@@ -684,6 +684,7 @@ void main() {
         final issuerJwt = await oidc4vc.getIssuerJwt(
           tokenParameters: tokenParameters,
           clientAuthentication: ClientAuthentication.clientId,
+          iss: clientId,
           cnonce: '2da2d506-0910-11ef-9e49-0a1628958560',
         );
 
