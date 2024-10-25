@@ -111,7 +111,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                       //   l10n.walletReadySubtitle,
                       //   textAlign: TextAlign.center,
                       //   style:
-                      //       Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      //    Theme.of(context).textTheme.headlineSmall?.copyWith(
                       //             fontWeight: FontWeight.normal,
                       //           ),
                       // ),

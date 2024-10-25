@@ -200,6 +200,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                                       builder: (context) =>
                                                           ConfirmDialog(
                                                         title: l10n
+                                                            // ignore: lines_longer_than_80_chars
                                                             .cannotDeleteCurrentAccount,
                                                         yes: l10n.ok,
                                                         showNoButton: false,
@@ -215,7 +216,8 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                                         ConfirmDialog(
                                                       title: l10n
                                                           .deleteAccountMessage(
-                                                              data.name,),
+                                                        data.name,
+                                                      ),
                                                       yes: l10n.ok,
                                                       showNoButton: false,
                                                     ),
@@ -224,6 +226,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                                   if (value != null && value) {
                                                     await context
                                                         .read<
+                                                            // ignore: lines_longer_than_80_chars
                                                             ManageAccountsCubit>()
                                                         .deleteCryptoAccount(
                                                           index: i,

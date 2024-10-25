@@ -40,6 +40,7 @@ class DeveloperModeDialog extends StatelessWidget {
             ),
             const SizedBox(height: 15),
             Text(
+              // ignore: lines_longer_than_80_chars
               l10n.toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings,
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,

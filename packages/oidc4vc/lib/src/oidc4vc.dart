@@ -351,7 +351,8 @@ class OIDC4VC {
             Uri.encodeComponent(jsonEncode(clientMetaData));
       } else if (clientAuthentication != ClientAuthentication.clientSecretJwt) {
         myRequest['client_metadata'] = jsonEncode(clientMetaData);
-        // paramètre config du portail, on ne met pas si : client authentication :
+        // paramètre config du portail,
+        // on ne met pas si : client authentication :
       }
     } else {
       myRequest['wallet_issuer'] = walletIssuer;

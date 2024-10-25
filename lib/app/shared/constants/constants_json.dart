@@ -337,11 +337,11 @@ abstract class ConstantsJson {
       'did',
       'redirect_uri',
       'x509_san_dns',
-      'verifier_attestation'
+      'verifier_attestation',
     ],
     'request_object_signing_alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
     'presentation_definition_uri_supported': true,
-    'contacts': ['contact@talao.io']
+    'contacts': ['contact@talao.io'],
   };
 
   static const walletMetadataForVerifiers = <String, dynamic>{
