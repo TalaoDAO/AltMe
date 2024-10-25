@@ -786,6 +786,7 @@ class ResponseMessage with MessageHandler {
         case ResponseString
               .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription:
           return ResponseString
+                  // ignore: lines_longer_than_80_chars
                   .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription
               .localise(
             context,
