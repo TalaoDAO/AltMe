@@ -1144,5 +1144,14 @@
   "restoreWallet": "Restore Wallet",
   "showWalletRecoveryPhraseSubtitle2": "This recovery phrase is requested to restore a wallet at installation.",
   "documentation": "Documentation",
-  "credentialPickTitle": "Choose the credential(s) you wish to obtain"
+  "credentialPickTitle": "Choose the credential(s) you wish to obtain",
+  "restoreACryptoWallet": "Restore a crypto wallet",
+  "restoreAnAppBackup": "Restore an {appName} backup",
+  "@restoreAnAppBackup": {
+    "description": "name of the app",
+    "type": "text",
+    "placeholders": {
+      "appName": {}
+    }
+  }
 }

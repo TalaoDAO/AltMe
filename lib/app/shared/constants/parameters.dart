@@ -86,7 +86,7 @@ class Parameters {
 
   // 'false' for talao
   // 'true' for altme
-  static const bool importAtOnboarding = true;
+  static const bool importAndRestoreAtOnboarding = true;
 
   // false for talao
   // 'true' for altme
