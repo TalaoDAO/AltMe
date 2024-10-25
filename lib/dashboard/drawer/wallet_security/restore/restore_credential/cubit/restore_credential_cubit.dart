@@ -48,7 +48,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
 
     late String stringForBackup;
 
-    if (Parameters.importAtOnboarding) {
+    if (Parameters.importAndRestoreAtOnboarding) {
       final String? recoveryMnemonic = await secureStorageProvider
           .get(SecureStorageKeys.recoverCredentialMnemonics);
 

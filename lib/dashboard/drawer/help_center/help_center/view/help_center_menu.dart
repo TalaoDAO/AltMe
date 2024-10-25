@@ -104,17 +104,23 @@ class HelpCenterView extends StatelessWidget {
             ),
           ],
           DrawerItem(
-            title: l10n.faqs,
             onTap: () {
-              Navigator.of(context).push<void>(FAQsPage.route());
+              LaunchUrl.launch('https://doc.wallet-provider.io/welcome');
             },
+            title: l10n.documentation,
           ),
-          DrawerItem(
-            onTap: () {
-              LaunchUrl.launch('https://${AltMeStrings.appContactWebsiteName}');
-            },
-            title: l10n.officialWebsite,
-          ),
+          // DrawerItem(
+          //   title: l10n.faqs,
+          //   onTap: () {
+          //     Navigator.of(context).push<void>(FAQsPage.route());
+          //   },
+          // ),
+          // DrawerItem(
+          //   onTap: () {
+          //     LaunchUrl.launch('https://${AltMeStrings.appContactWebsiteName}');
+          //   },
+          //   title: l10n.officialWebsite,
+          // ),
         ],
       ),
     );

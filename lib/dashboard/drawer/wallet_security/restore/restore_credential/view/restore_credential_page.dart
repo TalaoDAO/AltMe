@@ -72,111 +72,133 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BasePage(
-      title: l10n.restoreCredential,
-      titleAlignment: Alignment.topCenter,
-      padding: const EdgeInsets.only(
-        top: 0,
-        left: Sizes.spaceSmall,
-        right: Sizes.spaceSmall,
-        bottom: Sizes.spaceSmall,
-      ),
-      titleLeading: widget.fromOnBoarding
-          ? null
-          : BackLeadingButton(
-              onPressed: () {
-                if (context.read<RestoreCredentialCubit>().state.status !=
-                    AppStatus.loading) {
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-      body: BlocConsumer<RestoreCredentialCubit, RestoreCredentialState>(
-        listener: (context, state) async {
-          if (state.status == AppStatus.loading) {
-            LoadingView().show(context: context);
-          } else {
-            LoadingView().hide();
-          }
-
-          if (state.status == AppStatus.success &&
-              state.recoveredCredentialLength != null) {
-            final credentialLength = state.recoveredCredentialLength;
-            AlertMessage.showStateMessage(
-              context: context,
-              stateMessage: StateMessage.success(
-                stringMessage: l10n.recoveryCredentialSuccessMessage(
-                  '''$credentialLength ${credentialLength! > 1 ? '${l10n.credential}s' : l10n.credential}''',
-                ),
-              ),
-            );
-            await Future<void>.delayed(const Duration(milliseconds: 800));
-            Navigator.of(context).pop();
-            Navigator.of(context).pop();
-          }
-
-          if (state.status == AppStatus.restoreWallet) {
-            await Navigator.pushAndRemoveUntil<void>(
-              context,
-              WalletReadyPage.route(),
-              (Route<dynamic> route) => route.isFirst,
-            );
-          }
-
-          if (state.message != null) {
-            AlertMessage.showStateMessage(
-              context: context,
-              stateMessage: state.message!,
-            );
-          }
-        },
-        builder: (context, state) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              const MStepper(
-                totalStep: 2,
-                step: 2,
-              ),
-              const SizedBox(
-                height: Sizes.spaceNormal,
-              ),
-              Text(
-                l10n.restoreCredentialStep2Title,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-              const SizedBox(
-                height: Sizes.spaceNormal,
-              ),
-              UploadFile(
-                filePath: state.backupFilePath,
-                onTap: () async {
-                  if (isAndroid) {
-                    final appDir = (await getTemporaryDirectory()).path;
-                    await Directory(appDir).delete(recursive: true);
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: BasePage(
+        title: l10n.restoreCredential,
+        titleAlignment: Alignment.topCenter,
+        padding: const EdgeInsets.only(
+          top: 0,
+          left: Sizes.spaceSmall,
+          right: Sizes.spaceSmall,
+          bottom: Sizes.spaceSmall,
+        ),
+        titleLeading: widget.fromOnBoarding
+            ? null
+            : BackLeadingButton(
+                onPressed: () {
+                  if (context.read<RestoreCredentialCubit>().state.status !=
+                      AppStatus.loading) {
+                    Navigator.of(context).pop();
                   }
-                  await _pickRestoreFile();
+                },
+              ),
+        body: BlocConsumer<RestoreCredentialCubit, RestoreCredentialState>(
+          listener: (context, state) async {
+            if (state.status == AppStatus.loading) {
+              LoadingView().show(context: context);
+            } else {
+              LoadingView().hide();
+            }
+
+            if (state.status == AppStatus.success &&
+                state.recoveredCredentialLength != null) {
+              final credentialLength = state.recoveredCredentialLength;
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: StateMessage.success(
+                  stringMessage: l10n.recoveryCredentialSuccessMessage(
+                    '''$credentialLength ${credentialLength! > 1 ? '${l10n.credential}s' : l10n.credential}''',
+                  ),
+                ),
+              );
+              await Future<void>.delayed(const Duration(milliseconds: 800));
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            }
+
+            if (state.status == AppStatus.restoreWallet) {
+              await Navigator.pushAndRemoveUntil<void>(
+                context,
+                WalletReadyPage.route(),
+                (Route<dynamic> route) => route.isFirst,
+              );
+            }
+
+            if (state.message != null) {
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: state.message!,
+              );
+            }
+          },
+          builder: (context, state) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                const MStepper(
+                  totalStep: 2,
+                  step: 2,
+                ),
+                const SizedBox(
+                  height: Sizes.spaceNormal,
+                ),
+                Text(
+                  l10n.restoreCredentialStep2Title,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                const SizedBox(
+                  height: Sizes.spaceNormal,
+                ),
+                UploadFile(
+                  filePath: state.backupFilePath,
+                  onTap: () async {
+                    if (isAndroid) {
+                      final appDir = (await getTemporaryDirectory()).path;
+                      await Directory(appDir).delete(recursive: true);
+                    }
+                    await _pickRestoreFile();
+                  },
+                ),
+              ],
+            );
+          },
+        ),
+        navigation: Padding(
+          padding: const EdgeInsets.all(Sizes.spaceSmall),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              BlocBuilder<RestoreCredentialCubit, RestoreCredentialState>(
+                builder: (context, state) {
+                  return MyElevatedButton(
+                    onPressed: state.backupFilePath == null
+                        ? null
+                        : () => context
+                            .read<RestoreCredentialCubit>()
+                            .recoverWallet(
+                              isFromOnBoarding: widget.fromOnBoarding,
+                            ),
+                    text: l10n.loadFile,
+                  );
+                },
+              ),
+              const SizedBox(height: 5),
+              MyOutlinedButton(
+                text: l10n.skip,
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil<void>(
+                    context,
+                    WalletReadyPage.route(),
+                    (Route<dynamic> route) => route.isFirst,
+                  );
                 },
               ),
             ],
-          );
-        },
-      ),
-      navigation: Padding(
-        padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: BlocBuilder<RestoreCredentialCubit, RestoreCredentialState>(
-          builder: (context, state) {
-            return MyElevatedButton(
-              onPressed: state.backupFilePath == null
-                  ? null
-                  : () => context.read<RestoreCredentialCubit>().recoverWallet(
-                        isFromOnBoarding: widget.fromOnBoarding,
-                      ),
-              text: l10n.loadFile,
-            );
-          },
+          ),
         ),
       ),
     );

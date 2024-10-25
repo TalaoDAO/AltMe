@@ -64,7 +64,11 @@
     "saveBackupCredentialSubtitle2",
     "createWallet",
     "restoreWallet",
-    "showWalletRecoveryPhraseSubtitle2"
+    "showWalletRecoveryPhraseSubtitle2",
+    "documentation",
+    "credentialPickTitle",
+    "restoreACryptoWallet",
+    "restoreAnAppBackup"
   ],
 
   "es": [
@@ -132,7 +136,11 @@
     "saveBackupCredentialSubtitle2",
     "createWallet",
     "restoreWallet",
-    "showWalletRecoveryPhraseSubtitle2"
+    "showWalletRecoveryPhraseSubtitle2",
+    "documentation",
+    "credentialPickTitle",
+    "restoreACryptoWallet",
+    "restoreAnAppBackup"
   ],
 
   "fr": [
@@ -205,6 +213,10 @@
     "saveBackupCredentialSubtitle2",
     "createWallet",
     "restoreWallet",
-    "showWalletRecoveryPhraseSubtitle2"
+    "showWalletRecoveryPhraseSubtitle2",
+    "documentation",
+    "credentialPickTitle",
+    "restoreACryptoWallet",
+    "restoreAnAppBackup"
   ]
 }

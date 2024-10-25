@@ -86,7 +86,7 @@ class Parameters {
 
   // 'false' for talao
   // 'true' for altme
-  static const bool importAtOnboarding = true;
+  static const bool importAndRestoreAtOnboarding = true;
 
   // false for talao
   // 'true' for altme
@@ -105,19 +105,14 @@ class Parameters {
   // true for altme
   static const bool showTezotopiaCard = true;
 
-  //'https://app.talao.co/app/download/authorize' for Talao
-  // 'https://app.altme.io/app/download/authorize' for altme
-  static const String redirectUri =
-      'https://app.altme.io/app/download/authorize';
-
   //'https://app.talao.co/app/download/callback' for Talao
   // 'https://app.altme.io/app/download/callback' for altme
   static const String authorizationEndPoint =
       'https://app.altme.io/app/download/callback';
 
-  // 'talao_wallet'for talao
-  // 'altme_wallet' for altme
-  static const String walletName = 'altme_wallet';
+  // 'Talao_wallet'for talao
+  // 'Altme_wallet' for altme
+  static const String walletName = 'Altme_wallet';
 
   // 'https://app.talao.co/wallet_issuer'for talao
   // 'https://app.altme.io/wallet_issuer' for altme

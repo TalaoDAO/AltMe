@@ -81,7 +81,6 @@
   "credentialPresentConfirm": "Selecciona credencial/s",
   "credentialPresentCancel": "Refusar",
   "credentialPickPresent": "Presentar",
-  "credentialPickTitle": "Selecciona credencial/s",
   "selectYourTezosAssociatedWallet": "Selecciona la teva cartera Tezos associada",
   "credentialPickSelect": "Selecciona la teva credencial",
   "siopV2credentialPickSelect": "Tria una sola credencial de la teva cartera per presentar-la",
