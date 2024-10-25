@@ -139,12 +139,12 @@ class _SignPayloadViewState extends State<SignPayloadView> {
           message = state.payloadMessage ?? '';
         }
 
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          onPopInvoked: (didPop) {
             context.read<SignPayloadCubit>().rejectSigning(
                   connectionBridgeType: widget.connectionBridgeType,
                 );
-            return true;
+            if (didPop) Navigator.of(context).pop();
           },
           child: BasePage(
             scrollView: false,

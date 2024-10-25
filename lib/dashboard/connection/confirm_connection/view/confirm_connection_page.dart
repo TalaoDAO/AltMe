@@ -81,12 +81,12 @@ class ConfirmConnectionView extends StatelessWidget {
           Navigator.of(context).pop();
         }
       },
-      child: WillPopScope(
-        onWillPop: () async {
+      child: PopScope(
+        onPopInvoked: (didPop) {
           context.read<ConfirmConnectionCubit>().rejectConnection(
                 connectionBridgeType: connectionBridgeType,
               );
-          return true;
+          if (didPop) Navigator.of(context).pop();
         },
         child: BasePage(
           scrollView: false,

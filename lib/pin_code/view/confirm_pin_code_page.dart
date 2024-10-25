@@ -80,8 +80,8 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return WillPopScope(
-      onWillPop: () async => !widget.isFromOnboarding,
+    return PopScope(
+      canPop: !widget.isFromOnboarding,
       child: BasePage(
         scrollView: false,
         title: '',

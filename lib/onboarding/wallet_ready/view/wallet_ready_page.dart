@@ -75,8 +75,8 @@ class _WalletReadyViewState extends State<WalletReadyView> {
     final l10n = context.l10n;
     return BlocBuilder<WalletReadyCubit, WalletReadyState>(
       builder: (context, state) {
-        return WillPopScope(
-          onWillPop: () async => false,
+        return PopScope(
+          canPop: false,
           child: Stack(
             alignment: Alignment.topCenter,
             fit: StackFit.expand,
