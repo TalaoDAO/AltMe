@@ -134,56 +134,130 @@ class DisplayCredentialField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late Widget widget;
+    Widget? widget;
     try {
       final json = jsonDecode(data.toString());
       if (json is Map<String, dynamic>) {
-        widget = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title ?? '',
+        widget = IndentedCredentialFields(
+          title: title,
+          children: DisplayCredentialFieldMap(
+            showVertically: showVertically,
+            data: json,
+            type: type,
+          ),
+        );
+      }
+
+      if (json is List<dynamic>) {
+        widget = IndentedCredentialFields(
+          title: title,
+          children: DisplayCredentialFieldList(
+            showVertically: showVertically,
+            data: json,
+            type: type,
+          ),
+        );
+      }
+    } catch (e) {
+      /// Empty catch because data is not a valid json and
+      /// the return of the function will take care of
+      /// this usecase (widget is null)
+    }
+
+    return widget ??
+        CredentialField(
+          padding: const EdgeInsets.only(top: 10),
+          title: title,
+          value: data.toString(),
+          titleColor: Theme.of(context).colorScheme.onSurface,
+          valueColor: Theme.of(context).colorScheme.onSurface,
+          showVertically: showVertically,
+          type: type,
+        );
+  }
+
+  List<Widget> DisplayCredentialFieldMap({
+    required bool showVertically,
+    required Map<String, dynamic> data,
+    required String type,
+  }) {
+    final List<Widget> column = [];
+
+    /// for each element in Map data, call DisplayCredentialField
+    for (final element in data.entries) {
+      column.add(
+        DisplayCredentialField(
+          title: element.key,
+          data: element.value is String
+              ? element.value
+              : jsonEncode(element.value),
+          type: type,
+          showVertically: showVertically,
+        ),
+      );
+    }
+
+    return column;
+  }
+
+  List<Widget> DisplayCredentialFieldList({
+    required bool showVertically,
+    required List<dynamic> data,
+    required String type,
+  }) {
+    final List<Widget> column = [];
+
+    /// for each element in Map data, call DisplayCredentialField
+    for (final element in data) {
+      column.add(
+        DisplayCredentialField(
+          title: null,
+          data: element is String ? element : jsonEncode(element),
+          type: type,
+          showVertically: showVertically,
+        ),
+      );
+    }
+
+    return column;
+  }
+}
+
+class IndentedCredentialFields extends StatelessWidget {
+  const IndentedCredentialFields({
+    super.key,
+    required this.children,
+    this.title,
+  });
+
+  final List<Widget> children;
+  final String? title;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (title != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(
+              title!,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: DisplayCredentialFieldMap(
-                showVertically: showVertically,
-                data: data,
-                type: type,
-              ),
-            ),
-          ],
-        );
-      }
-    } catch (e) {
-      widget = CredentialField(
-        padding: const EdgeInsets.only(top: 10),
-        title: title,
-        value: data.toString(),
-        titleColor: Theme.of(context).colorScheme.onSurface,
-        valueColor: Theme.of(context).colorScheme.onSurface,
-        showVertically: showVertically,
-        type: type,
-      );
-    }
-
-    return CredentialField(
-      padding: const EdgeInsets.only(top: 10),
-      title: title,
-      value: data.toString(),
-      titleColor: Theme.of(context).colorScheme.onSurface,
-      valueColor: Theme.of(context).colorScheme.onSurface,
-      showVertically: showVertically,
-      type: type,
+          )
+        else
+          const SizedBox.shrink(),
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: children,
+          ),
+        ),
+      ],
     );
-  }
-
-  Widget DisplayCredentialFieldMap(
-      {required bool showVertically, required data, required String type}) {
-    return Text('DisplayCredentialFieldMap');
   }
 }

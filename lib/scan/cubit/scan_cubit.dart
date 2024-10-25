@@ -524,7 +524,18 @@ class ScanCubit extends Cubit<ScanState> {
       if (presentationDefinition.format == null) {
         clientMetaData = await getClientMetada(client: client, uri: uri);
       }
+      // final String vpFormat = getVpFormat(
+      //   presentationDefinition: presentationDefinition,
+      //   clientMetaData: clientMetaData,
+      // );
 
+      final (presentationSubmission, formatFromPresentationSubmission) =
+          await getPresentationSubmission(
+        credentialsToBePresented: credentialsToBePresented,
+        presentationDefinition: presentationDefinition,
+        clientMetaData: clientMetaData,
+        profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
+      );
       final String vpToken = await createVpToken(
         credentialsToBePresented: credentialsToBePresented,
         did: did,
@@ -535,13 +546,7 @@ class ScanCubit extends Cubit<ScanState> {
         uri: uri,
         clientMetaData: clientMetaData,
         profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
-      );
-
-      final presentationSubmission = await getPresentationSubmission(
-        credentialsToBePresented: credentialsToBePresented,
-        presentationDefinition: presentationDefinition,
-        clientMetaData: clientMetaData,
-        profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
+        formatFromPresentationSubmission: formatFromPresentationSubmission,
       );
 
       Map<String, dynamic> body;
@@ -701,7 +706,7 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  Future<Map<String, dynamic>> getPresentationSubmission({
+  Future<(Map<String, dynamic>, VCFormatType)> getPresentationSubmission({
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
     required Map<String, dynamic>? clientMetaData,
@@ -714,70 +719,11 @@ class ScanCubit extends Cubit<ScanState> {
       'definition_id': presentationDefinition.id,
     };
 
-    final vcFormatType = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+    // final vcFormatType = profileSetting
+    //     .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
     final inputDescriptors = <Map<String, dynamic>>[];
-
-    String? vcFormat;
-    String? vpFormat;
-
-    if (presentationDefinition.format != null) {
-      final ldpVc = presentationDefinition.format?.ldpVc != null;
-      final jwtVc = presentationDefinition.format?.jwtVc != null;
-      final jwtVcJson = presentationDefinition.format?.jwtVcJson != null;
-
-      if (ldpVc) {
-        vcFormat = 'ldp_vc';
-      } else if (jwtVc) {
-        vcFormat = 'jwt_vc';
-      } else if (jwtVcJson) {
-        vcFormat = 'jwt_vc_json';
-      }
-
-      final ldpVp = presentationDefinition.format?.ldpVp != null;
-      final jwtVp = presentationDefinition.format?.jwtVp != null;
-      final jwtVpJson = presentationDefinition.format?.jwtVpJson != null;
-      final vcSdJwt = presentationDefinition.format?.vcSdJwt != null;
-
-      if (ldpVp) {
-        vpFormat = 'ldp_vp';
-      } else if (jwtVp) {
-        vpFormat = 'jwt_vp';
-      } else if (jwtVpJson) {
-        vpFormat = 'jwt_vp_json';
-      } else if (vcSdJwt) {
-        vpFormat = 'vc+sd-jwt';
-        vcFormat = 'vc+sd-jwt';
-      }
-    } else {
-      if (clientMetaData == null) {
-        vcFormat = vcFormatType.vcValue;
-        vpFormat = vcFormatType.vpValue;
-      } else {
-        final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
-
-        if (vpFormats.containsKey('ldp_vc')) {
-          vcFormat = 'ldp_vc';
-        } else if (vpFormats.containsKey('jwt_vc')) {
-          vcFormat = 'jwt_vc';
-        } else if (vpFormats.containsKey('jwt_vc_json')) {
-          vcFormat = 'jwt_vc_json';
-        }
-
-        if (vpFormats.containsKey('ldp_vp')) {
-          vpFormat = 'ldp_vp';
-        } else if (vpFormats.containsKey('jwt_vp')) {
-          vpFormat = 'jwt_vp';
-        } else if (vpFormats.containsKey('jwt_vp_json')) {
-          vpFormat = 'jwt_vp_json';
-        } else if (vpFormats.containsKey('vc+sd-jwt')) {
-          vpFormat = 'vc+sd-jwt';
-          vcFormat = 'vc+sd-jwt';
-        }
-      }
-    }
-
+    VCFormatType formatFromPresentationSubmission = VCFormatType.vcSdJWT;
     for (int i = 0; i < credentialsToBePresented.length; i++) {
       for (final InputDescriptor inputDescriptor
           in presentationDefinition.inputDescriptors) {
@@ -787,38 +733,35 @@ class ScanCubit extends Cubit<ScanState> {
           filterList: filterList,
           credentialList: [credentialsToBePresented[i]],
         );
-
+        final format = getVcFormatType(credential[0].getFormat);
         Map<String, dynamic>? pathNested;
-
-        if (vcFormatType != VCFormatType.vcSdJWT) {
-          pathNested = {
-            'id': inputDescriptor.id,
-            'format': vcFormat,
-          };
-        }
 
         if (credential.isNotEmpty) {
           final Map<String, dynamic> descriptor = {
             'id': inputDescriptor.id,
-            'format': vpFormat,
+            'format': format.vpValue,
             'path': r'$',
           };
 
-          if (vcFormatType != VCFormatType.vcSdJWT && pathNested != null) {
+          if (format != VCFormatType.vcSdJWT) {
+            pathNested = {
+              'id': inputDescriptor.id,
+              'format': format.vpValue,
+            };
             if (credentialsToBePresented.length == 1) {
-              if (vpFormat == 'ldp_vp') {
+              if (format == VCFormatType.ldpVc) {
                 pathNested['path'] = r'$.verifiableCredential';
-              } else if (vpFormat == 'vc+sd-jwt') {
+              } else if (format == VCFormatType.vcSdJWT) {
                 pathNested['path'] = r'$';
               } else {
                 pathNested['path'] = r'$.vp.verifiableCredential[0]';
               }
             } else {
-              if (vpFormat == 'ldp_vp') {
+              if (format == VCFormatType.ldpVc) {
                 pathNested['path'] =
                     // ignore: prefer_interpolation_to_compose_strings
                     r'$.verifiableCredential[' + i.toString() + ']';
-              } else if (vpFormat == 'vc+sd-jwt') {
+              } else if (format == VCFormatType.vcSdJWT) {
                 pathNested['path'] = r'$';
               } else {
                 pathNested['path'] =
@@ -826,18 +769,19 @@ class ScanCubit extends Cubit<ScanState> {
                     r'$.vp.verifiableCredential[' + i.toString() + ']';
               }
             }
-            pathNested['format'] = vcFormat ?? vcFormatType.vcValue;
+            pathNested['format'] = format.vcValue;
             descriptor['path_nested'] = pathNested;
           }
 
           inputDescriptors.add(descriptor);
+          formatFromPresentationSubmission = format;
         }
       }
     }
 
     presentationSubmission['descriptor_map'] = inputDescriptors;
 
-    return presentationSubmission;
+    return (presentationSubmission, formatFromPresentationSubmission);
   }
 
   Future<void> askPermissionDIDAuthCHAPI({
@@ -868,6 +812,7 @@ class ScanCubit extends Cubit<ScanState> {
     required Uri uri,
     required Map<String, dynamic>? clientMetaData,
     required ProfileSetting profileSetting,
+    VCFormatType? formatFromPresentationSubmission,
   }) async {
     final nonce = uri.queryParameters['nonce'] ?? '';
     final clientId = uri.queryParameters['client_id'] ?? '';
@@ -877,15 +822,48 @@ class ScanCubit extends Cubit<ScanState> {
 
     final vcFormatType = customOidc4vcProfile.vcFormatType;
 
-    final (presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt) =
-        getPresentVCDetails(
+    final supportingFormats = getPresentVCDetails(
       clientMetaData: clientMetaData,
       presentationDefinition: presentationDefinition,
       vcFormatType: vcFormatType,
       credentialsToBePresented: credentialsToBePresented,
     );
 
-    if (presentLdpVc) {
+    // if (supportingFormats.contains(VCFormatType.vcSdJWT)) {
+    if (formatFromPresentationSubmission == VCFormatType.vcSdJWT) {
+      final credentialList = getStringCredentialsForToken(
+        credentialsToBePresented: credentialsToBePresented,
+        profileCubit: profileCubit,
+      );
+
+      final vpToken = credentialList.first;
+      // considering only one
+
+      return vpToken;
+      // } else if (supportingFormats.contains(VCFormatType.jwtVc) ||
+      //     supportingFormats.contains(VCFormatType.jwtVcJson) ||
+      //     supportingFormats.contains(VCFormatType.jwtVcJsonLd)) {
+    } else if (formatFromPresentationSubmission == VCFormatType.jwtVc ||
+        formatFromPresentationSubmission == VCFormatType.jwtVcJson ||
+        formatFromPresentationSubmission == VCFormatType.jwtVcJsonLd) {
+      final credentialList = getStringCredentialsForToken(
+        credentialsToBePresented: credentialsToBePresented,
+        profileCubit: profileCubit,
+      );
+
+      final vpToken = await oidc4vc.extractVpToken(
+        clientId: clientId,
+        credentialsToBePresented: credentialList,
+        did: did,
+        kid: kid,
+        privateKey: privateKey,
+        nonce: nonce,
+        proofHeaderType: customOidc4vcProfile.proofHeader,
+      );
+
+      return vpToken;
+      // } else if (supportingFormats.contains(VCFormatType.ldpVc)) {
+    } else if (formatFromPresentationSubmission == VCFormatType.ldpVc) {
       /// proof is done with a creation date 20 seconds in the past to avoid
       /// proof check to fail because of time difference on server
       final options = jsonEncode({
@@ -913,33 +891,6 @@ class ScanCubit extends Cubit<ScanState> {
         options,
         privateKey,
       );
-      return vpToken;
-    } else if (presentJwtVc || presentJwtVcJson) {
-      final credentialList = getStringCredentialsForToken(
-        credentialsToBePresented: credentialsToBePresented,
-        profileCubit: profileCubit,
-      );
-
-      final vpToken = await oidc4vc.extractVpToken(
-        clientId: clientId,
-        credentialsToBePresented: credentialList,
-        did: did,
-        kid: kid,
-        privateKey: privateKey,
-        nonce: nonce,
-        proofHeaderType: customOidc4vcProfile.proofHeader,
-      );
-
-      return vpToken;
-    } else if (presentVcSdJwt) {
-      final credentialList = getStringCredentialsForToken(
-        credentialsToBePresented: credentialsToBePresented,
-        profileCubit: profileCubit,
-      );
-
-      final vpToken = credentialList.first;
-      // considering only one
-
       return vpToken;
     } else {
       throw ResponseMessage(
@@ -1022,5 +973,12 @@ class ScanCubit extends Cubit<ScanState> {
         showMessage: false,
       );
     }
+  }
+
+  String getVpFormat({
+    required PresentationDefinition presentationDefinition,
+    Map<String, dynamic>? clientMetaData,
+  }) {
+    return 'vc+sd-jwt';
   }
 }
