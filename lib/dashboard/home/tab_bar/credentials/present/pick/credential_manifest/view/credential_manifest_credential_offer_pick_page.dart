@@ -189,8 +189,11 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                       ? SafeArea(
                           child: Container(
                             padding: const EdgeInsets.all(16),
-                            child: isVcSdJWT
-                                ? MyElevatedButton(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (isVcSdJWT)
+                                  MyElevatedButton(
                                     onPressed: !credentialManifestState
                                             .isButtonEnabled
                                         ? null
@@ -220,7 +223,8 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                     /// from the selected credential
                                     text: l10n.next,
                                   )
-                                : Builder(
+                                else
+                                  Builder(
                                     builder: (context) {
                                       final inputDescriptor =
                                           presentationDefinition!
@@ -277,6 +281,13 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                       }
                                     },
                                   ),
+                                const SizedBox(height: 8),
+                                MyOutlinedButton(
+                                  text: l10n.cancel,
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                              ],
+                            ),
                           ),
                         )
                       : const SizedBox.shrink(),

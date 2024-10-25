@@ -28,6 +28,8 @@ extension ProfileTypeX on ProfileType {
     }
   }
 
+  String get profileId => name;
+
   bool get showSponseredBy {
     switch (this) {
       case ProfileType.custom:

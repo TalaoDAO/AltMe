@@ -277,6 +277,8 @@ void main() {
             dio: client,
             credentialOfferJson: credentialOfferJson,
             secureStorage: mockSecureStorage,
+            isEBSIProfile: true,
+            walletIssuer: 'https://app.talao.co/wallet_issuer',
           );
 
           expect(authorizationEndpoint, expectedAuthorizationEndpoint);
@@ -312,6 +314,8 @@ void main() {
               vcFormatType: VCFormatType.jwtVc,
               credentialOfferJson: credentialOfferJson,
               dio: client,
+              isEBSIProfile: true,
+              walletIssuer: 'https://app.talao.co/wallet_issuer',
             ),
             throwsA(
               isA<Exception>().having(
@@ -350,6 +354,8 @@ void main() {
               jsonDecode(openIdConfiguration) as Map<String, dynamic>,
             ),
             redirectUri: redirectUri,
+            isEBSIProfile: true,
+            walletIssuer: 'https://app.talao.co/wallet_issuer',
           );
 
           expect(
@@ -434,6 +440,8 @@ void main() {
               dio: client,
               credentialOfferJson: credentialOfferJsonAuthorizedTest10,
               secureStorage: mockSecureStorage,
+              isEBSIProfile: true,
+              walletIssuer: 'https://app.talao.co/wallet_issuer',
             );
 
             expect(authorizationEndpoint, expectedAuthorizationEndpoint);
@@ -496,6 +504,8 @@ void main() {
               dio: client,
               credentialOfferJson: credentialOfferJsonPreAuthorizedTest10,
               secureStorage: mockSecureStorage,
+              isEBSIProfile: true,
+              walletIssuer: 'https://app.talao.co/wallet_issuer',
             );
 
             expect(authorizationEndpoint, expectedAuthorizationEndpoint);
@@ -674,7 +684,6 @@ void main() {
         final issuerJwt = await oidc4vc.getIssuerJwt(
           tokenParameters: tokenParameters,
           clientAuthentication: ClientAuthentication.clientId,
-          iss: clientId,
           cnonce: '2da2d506-0910-11ef-9e49-0a1628958560',
         );
 

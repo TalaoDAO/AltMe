@@ -61,6 +61,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         SecureStorageKeys.hasVerifiedMnemonics,
         'no',
       );
+
       emit(state.success());
     } catch (e, s) {
       log.e(

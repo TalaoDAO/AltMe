@@ -29,9 +29,7 @@ class ProtectWalletPage extends StatelessWidget {
     WalletRouteType? routeType,
   }) {
     return MaterialPageRoute<void>(
-      builder: (_) => ProtectWalletPage(
-        routeType: routeType,
-      ),
+      builder: (_) => ProtectWalletPage(routeType: routeType),
       settings: const RouteSettings(name: '/ProtectWalletPage'),
     );
   }
@@ -87,7 +85,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
 
   bool get isFromOnboarding => widget.routeType != null;
 
-  Future<void> createImportAccount({required bool byPassScreen}) async {
+  Future<void> createImportAccount() async {
     if (widget.routeType == WalletRouteType.create) {
       if (byPassScreen) {
         await widget.onboardingCubit.emitOnboardingProcessing();
@@ -99,11 +97,14 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
         await Navigator.of(context).push<void>(OnBoardingGenPhrasePage.route());
       }
     } else {
-      await Navigator.of(context).push<void>(
-        ImportWalletPage.route(
-          isFromOnboarding: true,
-        ),
-      );
+      /// import case
+      if (Parameters.importAndRestoreAtOnboarding) {
+        await Navigator.of(context).push<void>(RestoreOptionsPage.route());
+      } else {
+        await Navigator.of(context).push<void>(
+          ImportWalletPage.route(restoreType: RestoreType.appBackup),
+        );
+      }
     }
   }
 
@@ -171,9 +172,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                           );
                           Navigator.of(context).pop();
                           if (isFromOnboarding) {
-                            await createImportAccount(
-                              byPassScreen: byPassScreen,
-                            );
+                            await createImportAccount();
                           } else {
                             AlertMessage.showStateMessage(
                               context: context,
@@ -208,9 +207,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                             );
                             Navigator.of(context).pop();
                             if (isFromOnboarding) {
-                              await createImportAccount(
-                                byPassScreen: byPassScreen,
-                              );
+                              await createImportAccount();
                             } else {
                               AlertMessage.showStateMessage(
                                 context: context,
@@ -250,9 +247,7 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                                   );
                                   Navigator.of(context).pop();
                                   if (isFromOnboarding) {
-                                    await createImportAccount(
-                                      byPassScreen: byPassScreen,
-                                    );
+                                    await createImportAccount();
                                   } else {
                                     AlertMessage.showStateMessage(
                                       context: context,

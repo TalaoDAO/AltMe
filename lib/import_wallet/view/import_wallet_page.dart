@@ -18,23 +18,23 @@ class ImportWalletPage extends StatelessWidget {
   const ImportWalletPage({
     super.key,
     this.accountName,
-    required this.isFromOnboarding,
+    required this.restoreType,
   });
 
   static Route<dynamic> route({
     String? accountName,
-    required bool isFromOnboarding,
+    required RestoreType? restoreType,
   }) =>
       MaterialPageRoute<void>(
         builder: (context) => ImportWalletPage(
           accountName: accountName,
-          isFromOnboarding: isFromOnboarding,
+          restoreType: restoreType,
         ),
         settings: const RouteSettings(name: '/ImportWalletPage'),
       );
 
   final String? accountName;
-  final bool isFromOnboarding;
+  final RestoreType? restoreType;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class ImportWalletPage extends StatelessWidget {
       ),
       child: ImportWalletView(
         accountName: accountName,
-        isFromOnboarding: isFromOnboarding,
+        restoreType: restoreType,
       ),
     );
   }
@@ -60,11 +60,11 @@ class ImportWalletView extends StatefulWidget {
   const ImportWalletView({
     super.key,
     this.accountName,
-    required this.isFromOnboarding,
+    required this.restoreType,
   });
 
   final String? accountName;
-  final bool isFromOnboarding;
+  final RestoreType? restoreType;
 
   @override
   _ImportWalletViewState createState() => _ImportWalletViewState();
@@ -95,6 +95,8 @@ class _ImportWalletViewState extends State<ImportWalletView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
+    final isFromOnboarding = widget.restoreType != null;
+
     return BlocConsumer<ImportWalletCubit, ImportWalletState>(
       listener: (context, state) async {
         if (state.status == AppStatus.loading) {
@@ -113,14 +115,24 @@ class _ImportWalletViewState extends State<ImportWalletView> {
             stateMessage: state.message!,
           );
         }
+
         if (state.status == AppStatus.success) {
           /// Removes every stack except first route (splashPage)
-          if (widget.isFromOnboarding) {
-            await Navigator.pushAndRemoveUntil<void>(
-              context,
-              WalletReadyPage.route(),
-              (Route<dynamic> route) => route.isFirst,
-            );
+          if (isFromOnboarding) {
+            switch (widget.restoreType!) {
+              case RestoreType.cryptoWallet:
+                await Navigator.pushAndRemoveUntil<void>(
+                  context,
+                  WalletReadyPage.route(),
+                  (Route<dynamic> route) => route.isFirst,
+                );
+              case RestoreType.appBackup:
+                await Navigator.pushAndRemoveUntil<void>(
+                  context,
+                  RestoreCredentialPage.route(fromOnBoarding: true),
+                  (Route<dynamic> route) => route.isFirst,
+                );
+            }
           } else {
             await Navigator.pushAndRemoveUntil<void>(
               context,
@@ -145,7 +157,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                if (widget.isFromOnboarding)
+                if (isFromOnboarding)
                   const MStepper(
                     step: 3,
                     totalStep: 3,
@@ -165,7 +177,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                         ),
                   ),
                 ),
-                if (widget.isFromOnboarding)
+                if (isFromOnboarding)
                   Column(
                     children: [
                       const SizedBox(height: Sizes.spaceLarge),
@@ -226,7 +238,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                         ImportFromWalletPage.route(
                           walletTypeModel: wallet,
                           accountName: widget.accountName,
-                          isFromOnboard: widget.isFromOnboarding,
+                          restoreType: widget.restoreType,
                         ),
                       );
                     },
@@ -252,7 +264,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
               ],
             ),
           ),
-          navigation: widget.isFromOnboarding
+          navigation: isFromOnboarding
               ? SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(Sizes.spaceSmall),
@@ -264,7 +276,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                               await context.read<ImportWalletCubit>().import(
                                     mnemonicOrKey: mnemonicController.text,
                                     accountName: widget.accountName,
-                                    isFromOnboarding: widget.isFromOnboarding,
+                                    restoreType: widget.restoreType,
                                   );
                             },
                     ),

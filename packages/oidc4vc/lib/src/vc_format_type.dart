@@ -80,3 +80,12 @@ extension VCFormatTypeX on VCFormatType {
     }
   }
 }
+
+VCFormatType getVcFormatType(String formatString) {
+  for (final element in VCFormatType.values) {
+    if (element.vcValue == formatString) {
+      return element;
+    }
+  }
+  throw Exception('Invalid VCFormatType');
+}

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/shared.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 import 'package:did_kit/did_kit.dart';
@@ -26,6 +27,8 @@ Future<void> getAuthorizationUriForIssuer({
   String? oAuthClientAttestationPop,
   required bool secureAuthorizedFlow,
   required DioClient client,
+  required ProfileType profileType,
+  required String walletIssuer,
 }) async {
   /// this is first phase flow for authorization_code
 
@@ -103,6 +106,9 @@ Future<void> getAuthorizationUriForIssuer({
     secureAuthorizedFlow: secureAuthorizedFlow,
     credentialOfferJson: credentialOfferJson,
     dio: client.dio,
+    isEBSIProfile:
+        profileType == ProfileType.ebsiV3 || profileType == ProfileType.ebsiV4,
+    walletIssuer: walletIssuer,
   );
 
   final requirePushedAuthorizationRequests =

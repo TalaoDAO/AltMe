@@ -51,12 +51,14 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
 
   Future<void> import({
     required String mnemonicOrKey,
-    required bool isFromOnboarding,
+    required RestoreType? restoreType,
     String? accountName,
   }) async {
     final log = getLogger('ImportWalletCubit - import');
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    final isFromOnboarding = restoreType != null;
 
     try {
       log.i('isFromOnboarding: $isFromOnboarding');
@@ -122,6 +124,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
       await activityLogManager.saveLog(LogData(type: LogType.importKey));
 
       await homeCubit.emitHasWallet();
+
       emit(state.success());
     } catch (e, s) {
       log.e(

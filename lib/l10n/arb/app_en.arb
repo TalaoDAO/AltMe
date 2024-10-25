@@ -81,7 +81,6 @@
   "credentialPresentConfirm": "Select credential(s)",
   "credentialPresentCancel": "Reject",
   "credentialPickPresent": "Present",
-  "credentialPickTitle": "Select credential(s)",
   "selectYourTezosAssociatedWallet": "Select your Tezos associated wallet",
   "credentialPickSelect": "Select your credential",
   "siopV2credentialPickSelect": "Choose only one credential from your wallet to present",
@@ -769,7 +768,7 @@
   "keyDecentralizedIdEdSA": "did:key EdDSA",
   "keyDecentralizedIDSecp256k1": "did:key Secp256k1",
   "polygonIdDecentralizedId": "Polygon Decentralized ID",
-  "ebsiV3DecentralizedId": "did:key EBSI V3 P-256",
+  "ebsiV3DecentralizedId": "did:key EBSI P-256",
   "requiredCredentialNotFoundTitle": "We are unable to find the credential\nyou need in your wallet.",
   "requiredCredentialNotFoundSubTitle": "The required credential is not in your wallet",
   "requiredCredentialNotFoundDescription": "Please contact us on :",
@@ -1076,15 +1075,6 @@
   "keyBindingPayload": "Key Binding Payload",
   "ebsiV4DecentralizedId": "did:key EBSI V4 P-256",
   "noNotificationsYet": "No notifications yet",
-  "approveProfileTitle": "Install configuration",
-  "approveProfileDescription": "Do you consent to install the configuration of {company}?",
-  "@approveProfileDescription": {
-    "description": "name of the company owning the configuration",
-    "type": "text",
-    "placeholders": {
-      "company": {}
-    }
-  },
   "activityLog": "Activity Log",
   "activityLogDescription": "See your activities",
   "walletInitialized": "Wallet Initialized",
@@ -1121,5 +1111,47 @@
       "domain": {}
     }
   },
-  "keysImported": "Keys imported"
+  "keysImported": "Keys imported",
+  "approveProfileTitle": "Install configuration",
+  "approveProfileDescription": "Do you consent to install the configuration of {company}?",
+  "@approveProfileDescription": {
+    "description": "name of the company owning the configuration",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  },
+  "updateProfileTitle": "Update configuration",
+  "updateProfileDescription": "Do you consent to update the configuration of {company}?",
+  "@updateProfileDescription": {
+    "description": "name of the company owning the configuration",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  },
+  "replaceProfileTitle": "Install a new configuration", 
+  "replaceProfileDescription": "Do you consent to replace the current configuration with that of {company}?",
+  "@replaceProfileDescription": {
+    "description": "name of the company owning the configuration",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  },
+  "saveBackupCredentialSubtitle2": "To recover all your credentials you will need this backup file.",
+  "createWallet": "Create Wallet",
+  "restoreWallet": "Restore Wallet",
+  "showWalletRecoveryPhraseSubtitle2": "This recovery phrase is requested to restore a wallet at installation.",
+  "documentation": "Documentation",
+  "credentialPickTitle": "Choose the credential(s) you wish to obtain",
+  "restoreACryptoWallet": "Restore a crypto wallet",
+  "restoreAnAppBackup": "Restore an {appName} backup",
+  "@restoreAnAppBackup": {
+    "description": "name of the app",
+    "type": "text",
+    "placeholders": {
+      "appName": {}
+    }
+  }
 }
