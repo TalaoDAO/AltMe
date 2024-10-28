@@ -1784,8 +1784,6 @@ class OIDC4VC {
     ///the wallet is the authorization server the verifier metadata are in
     ////openid-configuration
 
-    final url = '$baseUrl/.well-known/openid-configuration';
-
     if (!isAuthorizationServer) {
       final data = await getOpenIdConfigSecondMethod(
         baseUrl,
@@ -1795,6 +1793,8 @@ class OIDC4VC {
       );
       return data;
     }
+
+    final url = '$baseUrl/.well-known/oauth-authorization-server';
 
     try {
       final response = await dioGet(
@@ -1819,6 +1819,36 @@ class OIDC4VC {
   }
 
   Future<OpenIdConfiguration> getOpenIdConfigSecondMethod(
+    String baseUrl, {
+    required bool isCachingEnabled,
+    required Dio dio,
+    SecureStorageProvider? secureStorage,
+  }) async {
+    final url = '$baseUrl/.well-known/openid-configuration';
+
+    try {
+      final response = await dioGet(
+        url,
+        isCachingEnabled: isCachingEnabled,
+        dio: dio,
+        secureStorage: secureStorage,
+      );
+      final data = response is String
+          ? jsonDecode(response) as Map<String, dynamic>
+          : response as Map<String, dynamic>;
+
+      return OpenIdConfiguration.fromJson(data);
+    } catch (e) {
+      final data = await getOpenIdConfigThirdMethod(
+        baseUrl,
+        isCachingEnabled: isCachingEnabled,
+        dio: dio,
+      );
+      return data;
+    }
+  }
+
+  Future<OpenIdConfiguration> getOpenIdConfigThirdMethod(
     String baseUrl, {
     required bool isCachingEnabled,
     required Dio dio,
