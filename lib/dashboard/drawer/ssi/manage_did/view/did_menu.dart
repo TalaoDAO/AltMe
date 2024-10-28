@@ -73,32 +73,32 @@ class DidView extends StatelessWidget {
                     );
                   },
                 ),
-                DrawerItem(
-                  title: l10n.polygonDecentralizedID,
-                  onTap: () async {
-                    LoadingView().show(context: context);
-                    try {
-                      final polygonIdCubit = context.read<PolygonIdCubit>();
-                      await polygonIdCubit.initialise();
-                      LoadingView().hide();
-                      await Navigator.of(context)
-                          .push<void>(ManageDidPolygonIdPage.route());
-                    } catch (e) {
-                      LoadingView().hide();
-                      AlertMessage.showStateMessage(
-                        context: context,
-                        stateMessage: StateMessage.error(
-                          showDialog: true,
-                          //stringMessage: e.toString(),
-                          messageHandler: ResponseMessage(
-                            message: ResponseString
-                                .RESPONSE_STRING_deviceIncompatibilityMessage,
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                ),
+                // DrawerItem(
+                //   title: l10n.polygonDecentralizedID,
+                //   onTap: () async {
+                //     LoadingView().show(context: context);
+                //     try {
+                //       final polygonIdCubit = context.read<PolygonIdCubit>();
+                //       await polygonIdCubit.initialise();
+                //       LoadingView().hide();
+                //       await Navigator.of(context)
+                //           .push<void>(ManageDidPolygonIdPage.route());
+                //     } catch (e) {
+                //       LoadingView().hide();
+                //       AlertMessage.showStateMessage(
+                //         context: context,
+                //         stateMessage: StateMessage.error(
+                //           showDialog: true,
+                //           //stringMessage: e.toString(),
+                //           messageHandler: ResponseMessage(
+                //             message: ResponseString
+                //                 .RESPONSE_STRING_deviceIncompatibilityMessage,
+                //           ),
+                //         ),
+                //       );
+                //     }
+                //   },
+                // ),
                 DrawerItem(
                   title: l10n.jwkThumbprintP256Key,
                   onTap: () {
