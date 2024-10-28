@@ -1648,7 +1648,7 @@ class OIDC4VC {
       'aud': tokenParameters.audience,
       'exp': iat + 1000,
       'sub': tokenParameters.did,
-      'iss': tokenParameters.did,
+      //'iss': tokenParameters.did,
       'vp': {
         '@context': ['https://www.w3.org/2018/credentials/v1'],
         'id': presentationId,
@@ -1753,7 +1753,7 @@ class OIDC4VC {
       'aud': tokenParameters.audience, // devrait être verifier
       'exp': iat + 1000,
       'sub': issAndSub,
-      'iss': issAndSub,
+      // 'iss': issAndSub,
     };
 
     if (tokenParameters.nonce != null) {
