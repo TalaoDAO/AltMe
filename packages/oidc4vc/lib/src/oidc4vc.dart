@@ -1873,7 +1873,7 @@ class OIDC4VC {
     required Dio dio,
     SecureStorageProvider? secureStorage,
   }) async {
-    final url = '$baseUrl/.well-known/openid-credential-issuer';
+    final url = '$baseUrl/.well-known/openid-configuration';
 
     try {
       final response = await dioGet(
