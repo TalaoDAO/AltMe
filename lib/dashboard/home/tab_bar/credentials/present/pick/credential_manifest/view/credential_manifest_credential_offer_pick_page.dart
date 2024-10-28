@@ -259,7 +259,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                               ? l10n.skip
                                               : isOngoingStep
                                                   ? l10n.next
-                                                  : l10n.credentialPickPresent,
+                                                  : l10n.credentialPickShare,
                                         );
                                       } else {
                                         return MyElevatedButton(
@@ -276,7 +276,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                                   ),
                                           text: isOngoingStep
                                               ? l10n.next
-                                              : l10n.credentialPickPresent,
+                                              : l10n.credentialPickShare,
                                         );
                                       }
                                     },

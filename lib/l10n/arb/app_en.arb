@@ -80,7 +80,6 @@
   "credentialPresentRequiredCredential": "Someone is asking for your",
   "credentialPresentConfirm": "Select credential(s)",
   "credentialPresentCancel": "Reject",
-  "credentialPickPresent": "Present",
   "selectYourTezosAssociatedWallet": "Select your Tezos associated wallet",
   "credentialPickSelect": "Select your credential",
   "siopV2credentialPickSelect": "Choose only one credential from your wallet to present",
@@ -1144,7 +1143,7 @@
   "restoreWallet": "Restore Wallet",
   "showWalletRecoveryPhraseSubtitle2": "This recovery phrase is requested to restore a wallet at installation.",
   "documentation": "Documentation",
-  "credentialPickTitle": "Choose the credential(s) you wish to obtain",
+  "credentialPickTitle": "Choose the credential(s) to share",
   "restoreACryptoWallet": "Restore a crypto wallet",
   "restoreAnAppBackup": "Restore an {appName} backup",
   "@restoreAnAppBackup": {
@@ -1153,5 +1152,6 @@
     "placeholders": {
       "appName": {}
     }
-  }
+  },
+  "credentialPickShare": "credentialPickShare"
 }
