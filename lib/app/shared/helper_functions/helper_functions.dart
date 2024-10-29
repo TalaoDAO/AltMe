@@ -1258,6 +1258,13 @@ MessageHandler getMessageHandler(dynamic e) {
           'error_description': 'Issue while restoring claims.',
         },
       );
+    } else if (stringException.contains('KID_DOES_NOT_MATCH_DIDDOCUMENT')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Kid does not match the did document.',
+        },
+      );
     } else {
       return ResponseMessage(
         message:

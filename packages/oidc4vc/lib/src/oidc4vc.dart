@@ -1050,6 +1050,10 @@ class OIDC4VC {
             .toList();
       }
 
+      if (data.isEmpty) {
+        throw Exception('KID_DOES_NOT_MATCH_DIDDOCUMENT');
+      }
+
       final method = data.first as Map<String, dynamic>;
 
       dynamic publicKeyJwk;
@@ -1355,7 +1359,7 @@ class OIDC4VC {
         return VerificationType.notVerified;
       }
     } catch (e) {
-      return VerificationType.unKnown;
+      rethrow;
     }
   }
 

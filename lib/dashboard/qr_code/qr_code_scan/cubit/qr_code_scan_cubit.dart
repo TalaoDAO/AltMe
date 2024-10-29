@@ -1170,11 +1170,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         emit(state.acceptHost());
       } catch (e) {
-        emitError(
-          ResponseMessage(
-            message: ResponseString.RESPONSE_STRING_invalidRequest,
-          ),
-        );
+        rethrow;
       }
     } else {
       emit(state.acceptHost());
