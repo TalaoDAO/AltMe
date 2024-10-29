@@ -131,8 +131,8 @@ app.*.map.json
 !.idea/runConfigurations/
 
 #build_runner
-*.g.dart
-*.freezed.dart
+# *.g.dart
+# *.freezed.dart
 
 #private key related
 *.env
