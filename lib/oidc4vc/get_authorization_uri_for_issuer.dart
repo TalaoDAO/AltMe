@@ -29,6 +29,7 @@ Future<void> getAuthorizationUriForIssuer({
   required DioClient client,
   required ProfileType profileType,
   required String walletIssuer,
+  required bool useOAuthAuthorizationServerLink,
 }) async {
   /// this is first phase flow for authorization_code
 
@@ -109,6 +110,7 @@ Future<void> getAuthorizationUriForIssuer({
     isEBSIProfile:
         profileType == ProfileType.ebsiV3 || profileType == ProfileType.ebsiV4,
     walletIssuer: walletIssuer,
+    useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
   );
 
   final requirePushedAuthorizationRequests =

@@ -675,6 +675,7 @@ Future<
   required DioClient client,
   required OIDC4VC oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
+  required bool useOAuthAuthorizationServerLink,
 }) async {
   final uri = Uri.parse(url);
 
@@ -729,6 +730,7 @@ Future<
     baseUrl: issuer,
     isAuthorizationServer: false,
     dio: client.dio,
+    useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
   );
 
   if (preAuthorizedCode == null) {
@@ -754,6 +756,7 @@ Future<
       baseUrl: authorizationServer,
       isAuthorizationServer: true,
       dio: client.dio,
+      useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
     );
   }
 
@@ -996,6 +999,7 @@ Future<bool?> isEBSIForVerifiers({
   required Uri uri,
   required OIDC4VC oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
+  required bool useOAuthAuthorizationServerLink,
 }) async {
   try {
     final String? clientId = uri.queryParameters['client_id'];
@@ -1010,6 +1014,7 @@ Future<bool?> isEBSIForVerifiers({
       baseUrl: clientId,
       isAuthorizationServer: false,
       dio: Dio(),
+      useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
     );
 
     final subjectTrustFrameworksSupported =
@@ -2192,4 +2197,23 @@ String getDidMethod(BlockchainType blockchainType) {
   }
 
   return didMethod;
+}
+
+bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
+  final profileSetting = profileModel.profileSetting;
+  final customOidc4vcProfile =
+      profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
+
+  final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
+      profileModel.profileType == ProfileType.ebsiV4 ||
+      profileModel.profileType == ProfileType.defaultOne;
+
+  if (notEligible) return false;
+
+  final bool greaterThanDraft13 =
+      customOidc4vcProfile.oidc4vciDraft != OIDC4VCIDraftType.draft11;
+
+  if (greaterThanDraft13) return true;
+
+  return false;
 }

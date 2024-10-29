@@ -831,6 +831,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         client: client,
         oidc4vc: oidc4vc,
         oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+        useOAuthAuthorizationServerLink:
+            useOauthServerAuthEndPoint(profileCubit.state.model),
       );
 
       if (openIdConfiguration != null) {
@@ -1153,6 +1155,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             jwtDecode: jwtDecode,
             jwt: encodedData,
             publicKeyJwk: publicKeyJwk,
+            useOAuthAuthorizationServerLink:
+                useOauthServerAuthEndPoint(profileCubit.state.model),
           );
 
           if (isVerified != VerificationType.verified) {
@@ -1320,6 +1324,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           client: client,
           profileType: profileCubit.state.model.profileType,
           walletIssuer: Parameters.walletIssuer,
+          useOAuthAuthorizationServerLink:
+              useOauthServerAuthEndPoint(profileCubit.state.model),
         );
         goBack();
       }
@@ -1369,6 +1375,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             baseUrl: issuer,
             isAuthorizationServer: false,
             dio: client.dio,
+            useOAuthAuthorizationServerLink:
+                useOauthServerAuthEndPoint(profileCubit.state.model),
           );
 
           if (savedAccessToken == null) {
@@ -1393,6 +1401,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               oAuthClientAttestation: oAuthClientAttestation,
               oAuthClientAttestationPop: oAuthClientAttestationPop,
               dio: client.dio,
+              useOAuthAuthorizationServerLink:
+                  useOauthServerAuthEndPoint(profileCubit.state.model),
             );
 
             savedAccessToken = accessToken;

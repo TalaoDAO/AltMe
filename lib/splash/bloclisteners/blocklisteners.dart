@@ -256,6 +256,8 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               oidc4vc: oidc4vc,
               oidc4vciDraftType: profileSetting.selfSovereignIdentityOptions
                   .customOidc4vcProfile.oidc4vciDraft,
+              useOAuthAuthorizationServerLink:
+                  useOauthServerAuthEndPoint(profileCubit.state.model),
             );
 
             oidc4vcTypeForIssuance = oidc4vcType;
@@ -279,6 +281,8 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     issuer: issuer,
                     oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
                     dio: Dio(),
+                    useOAuthAuthorizationServerLink:
+                        useOauthServerAuthEndPoint(profileCubit.state.model),
                   );
 
                   credentialEndpoint =

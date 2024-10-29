@@ -8,11 +8,13 @@ import 'package:oidc4vc/oidc4vc.dart';
 Future<CredentialManifest> getCredentialManifestFromAltMe({
   required OIDC4VC oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
+  required bool useOAuthAuthorizationServerLink,
 }) async {
   final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
     baseUrl: 'https://issuer.talao.co',
     isAuthorizationServer: false,
     dio: Dio(),
+    useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
   );
   final JsonPath credentialManifetPath = JsonPath(r'$..credential_manifest');
   final credentialManifest = CredentialManifest.fromJson(

@@ -151,6 +151,7 @@ class OIDC4VC {
     required dynamic credentialOfferJson,
     required bool isEBSIProfile,
     required String walletIssuer,
+    required bool useOAuthAuthorizationServerLink,
     SecureStorageProvider? secureStorage,
     String? oAuthClientAttestation,
     String? oAuthClientAttestationPop,
@@ -161,6 +162,7 @@ class OIDC4VC {
         isAuthorizationServer: false,
         dio: dio,
         secureStorage: secureStorage,
+        useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
       );
 
       final credentialAuthorizationEndpoint = await readAuthorizationEndPoint(
@@ -170,6 +172,7 @@ class OIDC4VC {
         dio: dio,
         credentialOfferJson: credentialOfferJson,
         secureStorage: secureStorage,
+        useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
       );
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
@@ -581,6 +584,7 @@ class OIDC4VC {
     required String redirectUri,
     required OpenIdConfiguration openIdConfiguration,
     required Dio dio,
+    required bool useOAuthAuthorizationServerLink,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -594,6 +598,7 @@ class OIDC4VC {
       issuer: issuer,
       oidc4vciDraftType: oidc4vciDraftType,
       dio: dio,
+      useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
     );
 
     Map<String, dynamic>? tokenResponse;
@@ -813,6 +818,7 @@ class OIDC4VC {
     required bool fromStatusList,
     required bool isCachingEnabled,
     required Dio dio,
+    required bool useOAuthAuthorizationServerLink,
     SecureStorageProvider? secureStorage,
   }) async {
     try {
@@ -832,6 +838,7 @@ class OIDC4VC {
           isCachingEnabled: isCachingEnabled,
           dio: dio,
           secureStorage: secureStorage,
+          useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
         );
 
         final authorizationServer = openIdConfiguration.authorizationServer;
@@ -843,6 +850,7 @@ class OIDC4VC {
             isCachingEnabled: isCachingEnabled,
             dio: dio,
             secureStorage: secureStorage,
+            useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
           );
         }
 
@@ -890,6 +898,7 @@ class OIDC4VC {
     required String issuer,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required Dio dio,
+    required bool useOAuthAuthorizationServerLink,
     SecureStorageProvider? secureStorage,
   }) async {
     var tokenEndPoint = '$issuer/token';
@@ -905,6 +914,7 @@ class OIDC4VC {
         isAuthorizationServer: true,
         dio: dio,
         secureStorage: secureStorage,
+        useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
       );
 
       if (authorizationServerConfiguration.tokenEndpoint != null) {
@@ -921,6 +931,7 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required Dio dio,
     required dynamic credentialOfferJson,
+    required bool useOAuthAuthorizationServerLink,
     SecureStorageProvider? secureStorage,
   }) async {
     String? authorizationEndpoint;
@@ -938,6 +949,7 @@ class OIDC4VC {
             isAuthorizationServer: true,
             dio: dio,
             secureStorage: secureStorage,
+            useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
           );
 
           if (authorizationServerConfiguration.authorizationEndpoint != null) {
@@ -1288,6 +1300,7 @@ class OIDC4VC {
     required bool fromStatusList,
     required bool isCachingEnabled,
     required Dio dio,
+    required bool useOAuthAuthorizationServerLink,
   }) async {
     try {
       Map<String, dynamic>? publicKeyJwk;
@@ -1300,6 +1313,7 @@ class OIDC4VC {
           fromStatusList: fromStatusList,
           isCachingEnabled: isCachingEnabled,
           dio: dio,
+          useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
         );
 
         publicKeyJwk = readPublicKeyJwk(
@@ -1773,6 +1787,7 @@ class OIDC4VC {
   Future<OpenIdConfiguration> getOpenIdConfig({
     required String baseUrl,
     required bool isAuthorizationServer,
+    required bool useOAuthAuthorizationServerLink,
     required Dio dio,
     bool isCachingEnabled = false,
     SecureStorageProvider? secureStorage,
@@ -1794,7 +1809,11 @@ class OIDC4VC {
       return data;
     }
 
-    final url = '$baseUrl/.well-known/oauth-authorization-server';
+    var url = '$baseUrl/.well-known/openid-configuration';
+
+    if (useOAuthAuthorizationServerLink) {
+      url = '$baseUrl/.well-known/oauth-authorization-server';
+    }
 
     try {
       final response = await dioGet(
@@ -1819,36 +1838,6 @@ class OIDC4VC {
   }
 
   Future<OpenIdConfiguration> getOpenIdConfigSecondMethod(
-    String baseUrl, {
-    required bool isCachingEnabled,
-    required Dio dio,
-    SecureStorageProvider? secureStorage,
-  }) async {
-    final url = '$baseUrl/.well-known/openid-configuration';
-
-    try {
-      final response = await dioGet(
-        url,
-        isCachingEnabled: isCachingEnabled,
-        dio: dio,
-        secureStorage: secureStorage,
-      );
-      final data = response is String
-          ? jsonDecode(response) as Map<String, dynamic>
-          : response as Map<String, dynamic>;
-
-      return OpenIdConfiguration.fromJson(data);
-    } catch (e) {
-      final data = await getOpenIdConfigThirdMethod(
-        baseUrl,
-        isCachingEnabled: isCachingEnabled,
-        dio: dio,
-      );
-      return data;
-    }
-  }
-
-  Future<OpenIdConfiguration> getOpenIdConfigThirdMethod(
     String baseUrl, {
     required bool isCachingEnabled,
     required Dio dio,
