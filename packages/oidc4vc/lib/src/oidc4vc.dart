@@ -1080,6 +1080,10 @@ class OIDC4VC {
         throw Exception('KID_DOES_NOT_MATCH_DIDDOCUMENT');
       }
 
+      if (data.isEmpty) {
+        throw Exception('KID_DOES_NOT_MATCH_DIDDOCUMENT');
+      }
+
       final method = data.first as Map<String, dynamic>;
 
       dynamic publicKeyJwk;
