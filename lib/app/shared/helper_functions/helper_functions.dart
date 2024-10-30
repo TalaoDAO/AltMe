@@ -1865,6 +1865,10 @@ List<VCFormatType> getPresentVCDetails({
     /// jwt_vc_json
     presentJwtVcJson = format?.jwtVcJson != null || format?.jwtVpJson != null;
 
+    /// jwt_vc_json_ld
+    presentJwtVcJsonLd =
+        format?.jwtVcJsonLd != null || format?.jwtVpJson != null;
+
     /// vc+sd-jwt
     presentVcSdJwt = format?.vcSdJwt != null;
   } else {
