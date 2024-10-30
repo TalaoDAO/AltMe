@@ -1738,6 +1738,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
 }) {
   Display? display;
   dynamic credentialSupported;
+
   if (openIdConfiguration.credentialsSupported != null) {
     final credentialsSupported = openIdConfiguration.credentialsSupported!;
     final CredentialsSupported? credSupported =
@@ -1802,6 +1803,20 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
         }
       }
     }
+  }
+
+  if (display == null && openIdConfiguration.display != null) {
+    final displays = openIdConfiguration.display!;
+
+    display = displays.firstWhereOrNull(
+          (Display display) => display.locale.toString().contains(languageCode),
+        ) ??
+        displays.firstWhereOrNull(
+          (Display display) => display.locale.toString().contains('en'),
+        ) ??
+        displays.firstWhereOrNull(
+          (Display display) => display.locale != null,
+        );
   }
   return (display, credentialSupported);
 }
