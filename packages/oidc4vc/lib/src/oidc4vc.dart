@@ -1043,11 +1043,19 @@ class OIDC4VC {
       if (holderKid == null) {
         data = (jsonPath.read(didDocument).first.value! as List).toList();
       } else {
-        data = (jsonPath.read(didDocument).first.value! as List)
-            .where(
-              (dynamic e) => e['id'].toString() == holderKid,
-            )
-            .toList();
+        data = (jsonPath.read(didDocument).first.value! as List).where(
+          (dynamic e) {
+            final kid = e['id'].toString();
+
+            if (holderKid.contains('#')) {
+              final identifier = '#${holderKid.split('#')[1]}';
+              if (kid == identifier) return true;
+            } else {
+              if (holderKid == kid) return true;
+            }
+            return false;
+          },
+        ).toList();
       }
 
       if (data.isEmpty) {

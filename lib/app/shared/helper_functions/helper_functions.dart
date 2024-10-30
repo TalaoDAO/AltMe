@@ -1863,14 +1863,18 @@ List<VCFormatType> getPresentVCDetails({
       presentJwtVcJson = vpFormats.containsKey('jwt_vc_json');
 
       /// jwt_vc_json-ld
-      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json-ld');
+      presentJwtVcJsonLd = vpFormats.containsKey('jwt_vc_json-ld');
 
       /// vc+sd-jwt
       presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
     }
   }
 
-  if (!presentLdpVc && !presentJwtVc && !presentJwtVcJson && !presentVcSdJwt) {
+  if (!presentLdpVc &&
+      !presentJwtVc &&
+      !presentJwtVcJson &&
+      !presentJwtVcJsonLd &&
+      !presentVcSdJwt) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_request',
