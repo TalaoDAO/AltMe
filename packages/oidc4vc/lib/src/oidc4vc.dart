@@ -130,7 +130,7 @@ class OIDC4VC {
 
   /// authorization endpoint, authorizationRequestParemeters,
   /// OpenIdConfiguration
-  Future<(String, Map<String, dynamic>, OpenIdConfiguration)>
+  Future<(String, Map<String, dynamic>, Map<String, dynamic>)>
       getAuthorizationData({
     required List<dynamic> selectedCredentials,
     required String? clientId,
@@ -151,17 +151,22 @@ class OIDC4VC {
     required dynamic credentialOfferJson,
     required bool isEBSIProfile,
     required String walletIssuer,
+    required bool useOAuthAuthorizationServerLink,
     SecureStorageProvider? secureStorage,
     String? oAuthClientAttestation,
     String? oAuthClientAttestationPop,
   }) async {
     try {
-      final openIdConfiguration = await getOpenIdConfig(
+      final openIdConfigurationData = await getOpenIdConfig(
         baseUrl: issuer,
         isAuthorizationServer: false,
         dio: dio,
         secureStorage: secureStorage,
+        useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
       );
+
+      final openIdConfiguration =
+          OpenIdConfiguration.fromJson(openIdConfigurationData);
 
       final credentialAuthorizationEndpoint = await readAuthorizationEndPoint(
         openIdConfiguration: openIdConfiguration,
@@ -170,6 +175,7 @@ class OIDC4VC {
         dio: dio,
         credentialOfferJson: credentialOfferJson,
         secureStorage: secureStorage,
+        useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
       );
 
       final authorizationRequestParemeters = getAuthorizationRequestParemeters(
@@ -196,7 +202,7 @@ class OIDC4VC {
       return (
         credentialAuthorizationEndpoint,
         authorizationRequestParemeters,
-        openIdConfiguration,
+        openIdConfigurationData,
       );
     } catch (e) {
       throw Exception('NOT_A_VALID_OPENID_URL');
@@ -351,7 +357,8 @@ class OIDC4VC {
             Uri.encodeComponent(jsonEncode(clientMetaData));
       } else if (clientAuthentication != ClientAuthentication.clientSecretJwt) {
         myRequest['client_metadata'] = jsonEncode(clientMetaData);
-        // paramètre config du portail, on ne met pas si : client authentication :
+        // paramètre config du portail,
+        // on ne met pas si : client authentication :
       }
     } else {
       myRequest['wallet_issuer'] = walletIssuer;
@@ -580,6 +587,7 @@ class OIDC4VC {
     required String redirectUri,
     required OpenIdConfiguration openIdConfiguration,
     required Dio dio,
+    required bool useOAuthAuthorizationServerLink,
     String? preAuthorizedCode,
     String? userPin,
     String? code,
@@ -593,6 +601,7 @@ class OIDC4VC {
       issuer: issuer,
       oidc4vciDraftType: oidc4vciDraftType,
       dio: dio,
+      useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
     );
 
     Map<String, dynamic>? tokenResponse;
@@ -812,6 +821,7 @@ class OIDC4VC {
     required bool fromStatusList,
     required bool isCachingEnabled,
     required Dio dio,
+    required bool useOAuthAuthorizationServerLink,
     SecureStorageProvider? secureStorage,
   }) async {
     try {
@@ -825,24 +835,31 @@ class OIDC4VC {
           isAuthorizationServer = true;
         }
 
-        openIdConfiguration = await getOpenIdConfig(
+        final openIdConfigurationData = await getOpenIdConfig(
           baseUrl: didKey,
           isAuthorizationServer: isAuthorizationServer,
           isCachingEnabled: isCachingEnabled,
           dio: dio,
           secureStorage: secureStorage,
+          useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
         );
+
+        openIdConfiguration =
+            OpenIdConfiguration.fromJson(openIdConfigurationData);
 
         final authorizationServer = openIdConfiguration.authorizationServer;
 
         if (authorizationServer != null) {
-          openIdConfiguration = await getOpenIdConfig(
+          final openIdConfigurationData = await getOpenIdConfig(
             baseUrl: authorizationServer,
             isAuthorizationServer: true,
             isCachingEnabled: isCachingEnabled,
             dio: dio,
             secureStorage: secureStorage,
+            useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
           );
+          openIdConfiguration =
+              OpenIdConfiguration.fromJson(openIdConfigurationData);
         }
 
         if (openIdConfiguration.jwksUri == null) {
@@ -889,6 +906,7 @@ class OIDC4VC {
     required String issuer,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required Dio dio,
+    required bool useOAuthAuthorizationServerLink,
     SecureStorageProvider? secureStorage,
   }) async {
     var tokenEndPoint = '$issuer/token';
@@ -899,12 +917,16 @@ class OIDC4VC {
       final authorizationServer =
           openIdConfiguration.authorizationServer ?? issuer;
 
-      final authorizationServerConfiguration = await getOpenIdConfig(
+      final authorizationServerConfigurationData = await getOpenIdConfig(
         baseUrl: authorizationServer,
         isAuthorizationServer: true,
         dio: dio,
         secureStorage: secureStorage,
+        useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
       );
+
+      final authorizationServerConfiguration =
+          OpenIdConfiguration.fromJson(authorizationServerConfigurationData);
 
       if (authorizationServerConfiguration.tokenEndpoint != null) {
         tokenEndPoint = authorizationServerConfiguration.tokenEndpoint!;
@@ -920,6 +942,7 @@ class OIDC4VC {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required Dio dio,
     required dynamic credentialOfferJson,
+    required bool useOAuthAuthorizationServerLink,
     SecureStorageProvider? secureStorage,
   }) async {
     String? authorizationEndpoint;
@@ -932,11 +955,16 @@ class OIDC4VC {
           final authorizationServer =
               openIdConfiguration.authorizationServer ?? issuer;
 
-          final authorizationServerConfiguration = await getOpenIdConfig(
+          final authorizationServerConfigurationData = await getOpenIdConfig(
             baseUrl: authorizationServer,
             isAuthorizationServer: true,
             dio: dio,
             secureStorage: secureStorage,
+            useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+          );
+
+          final authorizationServerConfiguration = OpenIdConfiguration.fromJson(
+            authorizationServerConfigurationData,
           );
 
           if (authorizationServerConfiguration.authorizationEndpoint != null) {
@@ -1024,17 +1052,32 @@ class OIDC4VC {
 
       return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
     } else {
+      final totoPath = JsonPath(r'$..[?(@.verificationMethod)]');
+      final toto =
+          (totoPath.read(didDocument).first.value!) as Map<String, dynamic>;
       final jsonPath = JsonPath(r'$..verificationMethod');
       late List<dynamic> data;
 
       if (holderKid == null) {
         data = (jsonPath.read(didDocument).first.value! as List).toList();
       } else {
-        data = (jsonPath.read(didDocument).first.value! as List)
-            .where(
-              (dynamic e) => e['id'].toString() == holderKid,
-            )
-            .toList();
+        data = (toto['verificationMethod'] as List).where(
+          (dynamic e) {
+            final id = toto['id'];
+            final kid = e['id'].toString();
+
+            if (kid.startsWith('#')) {
+              if (holderKid == id + kid) return true;
+            } else {
+              if (holderKid == kid) return true;
+            }
+            return false;
+          },
+        ).toList();
+      }
+
+      if (data.isEmpty) {
+        throw Exception('KID_DOES_NOT_MATCH_DIDDOCUMENT');
       }
 
       final method = data.first as Map<String, dynamic>;
@@ -1287,6 +1330,7 @@ class OIDC4VC {
     required bool fromStatusList,
     required bool isCachingEnabled,
     required Dio dio,
+    required bool useOAuthAuthorizationServerLink,
   }) async {
     try {
       Map<String, dynamic>? publicKeyJwk;
@@ -1299,6 +1343,7 @@ class OIDC4VC {
           fromStatusList: fromStatusList,
           isCachingEnabled: isCachingEnabled,
           dio: dio,
+          useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
         );
 
         publicKeyJwk = readPublicKeyJwk(
@@ -1340,7 +1385,7 @@ class OIDC4VC {
         return VerificationType.notVerified;
       }
     } catch (e) {
-      return VerificationType.unKnown;
+      rethrow;
     }
   }
 
@@ -1769,9 +1814,10 @@ class OIDC4VC {
   //   return tokenParameters.kid;
   // }
 
-  Future<OpenIdConfiguration> getOpenIdConfig({
+  Future<Map<String, dynamic>> getOpenIdConfig({
     required String baseUrl,
     required bool isAuthorizationServer,
+    required bool useOAuthAuthorizationServerLink,
     required Dio dio,
     bool isCachingEnabled = false,
     SecureStorageProvider? secureStorage,
@@ -1783,8 +1829,6 @@ class OIDC4VC {
     ///the wallet is the authorization server the verifier metadata are in
     ////openid-configuration
 
-    final url = '$baseUrl/.well-known/openid-configuration';
-
     if (!isAuthorizationServer) {
       final data = await getOpenIdConfigSecondMethod(
         baseUrl,
@@ -1793,6 +1837,12 @@ class OIDC4VC {
         secureStorage: secureStorage,
       );
       return data;
+    }
+
+    var url = '$baseUrl/.well-known/openid-configuration';
+
+    if (useOAuthAuthorizationServerLink) {
+      url = '$baseUrl/.well-known/oauth-authorization-server';
     }
 
     try {
@@ -1806,7 +1856,7 @@ class OIDC4VC {
           ? jsonDecode(response) as Map<String, dynamic>
           : response as Map<String, dynamic>;
 
-      return OpenIdConfiguration.fromJson(data);
+      return data;
     } catch (e) {
       final data = await getOpenIdConfigSecondMethod(
         baseUrl,
@@ -1817,7 +1867,7 @@ class OIDC4VC {
     }
   }
 
-  Future<OpenIdConfiguration> getOpenIdConfigSecondMethod(
+  Future<Map<String, dynamic>> getOpenIdConfigSecondMethod(
     String baseUrl, {
     required bool isCachingEnabled,
     required Dio dio,
@@ -1836,7 +1886,7 @@ class OIDC4VC {
           ? jsonDecode(response) as Map<String, dynamic>
           : response as Map<String, dynamic>;
 
-      return OpenIdConfiguration.fromJson(data);
+      return data;
     } catch (e) {
       throw Exception('OPENID-CONFIGURATION-ISSUE');
     }

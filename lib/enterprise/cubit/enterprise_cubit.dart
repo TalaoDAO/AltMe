@@ -300,6 +300,8 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       issuer: did,
       jwtDecode: profileCubit.jwtDecode,
       jwt: jwtVc,
+      useOAuthAuthorizationServerLink:
+          useOauthServerAuthEndPoint(profileCubit.state.model),
     );
 
     if (isVerified != VerificationType.verified) {
@@ -340,6 +342,8 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
             jwtDecode: profileCubit.jwtDecode,
             jwt: response.toString(),
             fromStatusList: true,
+            useOAuthAuthorizationServerLink:
+                useOauthServerAuthEndPoint(profileCubit.state.model),
           );
 
           if (isVerified != VerificationType.verified) {

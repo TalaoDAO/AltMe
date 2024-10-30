@@ -821,8 +821,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       final (
         _,
-        OpenIdConfiguration? openIdConfiguration,
-        OpenIdConfiguration? authorizationServerConfiguration,
+        Map<String, dynamic>? openIdConfigurationData,
+        Map<String, dynamic>? authorizationServerConfigurationData,
         _,
         String? issuer,
         _,
@@ -831,13 +831,16 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         client: client,
         oidc4vc: oidc4vc,
         oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+        useOAuthAuthorizationServerLink:
+            useOauthServerAuthEndPoint(profileCubit.state.model),
       );
 
-      if (openIdConfiguration != null) {
+      if (openIdConfigurationData != null) {
         await handleErrorForOID4VCI(
           url: url,
-          openIdConfiguration: openIdConfiguration,
-          authorizationServerConfiguration: authorizationServerConfiguration,
+          openIdConfigurationData: openIdConfigurationData,
+          authorizationServerConfigurationData:
+              authorizationServerConfigurationData,
         );
       }
 
@@ -1153,6 +1156,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             jwtDecode: jwtDecode,
             jwt: encodedData,
             publicKeyJwk: publicKeyJwk,
+            useOAuthAuthorizationServerLink:
+                useOauthServerAuthEndPoint(profileCubit.state.model),
           );
 
           if (isVerified != VerificationType.verified) {
@@ -1166,11 +1171,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         emit(state.acceptHost());
       } catch (e) {
-        emitError(
-          ResponseMessage(
-            message: ResponseString.RESPONSE_STRING_invalidRequest,
-          ),
-        );
+        rethrow;
       }
     } else {
       emit(state.acceptHost());
@@ -1320,6 +1321,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           client: client,
           profileType: profileCubit.state.model.profileType,
           walletIssuer: Parameters.walletIssuer,
+          useOAuthAuthorizationServerLink:
+              useOauthServerAuthEndPoint(profileCubit.state.model),
         );
         goBack();
       }
@@ -1365,10 +1368,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           /// this is full phase flow for preAuthorizedCode
 
           /// get openid configuration
-          final openIdConfiguration = await oidc4vc.getOpenIdConfig(
+          final openIdConfigurationData = await oidc4vc.getOpenIdConfig(
             baseUrl: issuer,
             isAuthorizationServer: false,
             dio: client.dio,
+            useOAuthAuthorizationServerLink:
+                useOauthServerAuthEndPoint(profileCubit.state.model),
           );
 
           if (savedAccessToken == null) {
@@ -1389,10 +1394,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               authorization: authorization,
               oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
               redirectUri: Parameters.oidc4vcUniversalLink,
-              openIdConfiguration: openIdConfiguration,
+              openIdConfiguration:
+                  OpenIdConfiguration.fromJson(openIdConfigurationData),
               oAuthClientAttestation: oAuthClientAttestation,
               oAuthClientAttestationPop: oAuthClientAttestationPop,
               dio: client.dio,
+              useOAuthAuthorizationServerLink:
+                  useOauthServerAuthEndPoint(profileCubit.state.model),
             );
 
             savedAccessToken = accessToken;
@@ -1450,7 +1458,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             accessToken: savedAccessToken!,
             nonce: savedNonce,
             authorizationDetails: savedAuthorizationDetails,
-            openIdConfiguration: openIdConfiguration,
+            openIdConfiguration:
+                OpenIdConfiguration.fromJson(openIdConfigurationData),
           );
 
           final lastElement = encodedCredentialOrFutureTokens.last;
@@ -1501,7 +1510,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             deferredCredentialEndpoint: deferredCredentialEndpoint,
             encodedCredentialOrFutureTokens: encodedCredentialOrFutureTokens,
             format: format,
-            openIdConfiguration: openIdConfiguration,
+            openIdConfiguration:
+                OpenIdConfiguration.fromJson(openIdConfigurationData),
             qrCodeScanCubit: qrCodeScanCubit,
           );
         } else {
