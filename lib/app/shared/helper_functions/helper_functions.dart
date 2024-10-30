@@ -665,8 +665,8 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
 Future<
     (
       OIDC4VCType?,
-      OpenIdConfiguration?,
-      OpenIdConfiguration?,
+      Map<String, dynamic>?,
+      Map<String, dynamic>?,
       dynamic,
       String?,
       String?,
@@ -726,12 +726,15 @@ Future<
     return (null, null, null, null, null, null);
   }
 
-  final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
+  final openIdConfigurationData = await oidc4vc.getOpenIdConfig(
     baseUrl: issuer,
     isAuthorizationServer: false,
     dio: client.dio,
     useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
   );
+
+  final openIdConfiguration =
+      OpenIdConfiguration.fromJson(openIdConfigurationData);
 
   if (preAuthorizedCode == null) {
     final grantTypesSupported = openIdConfiguration.grantTypesSupported;
@@ -749,10 +752,10 @@ Future<
 
   final authorizationServer = openIdConfiguration.authorizationServer;
 
-  OpenIdConfiguration? authorizationServerConfiguration;
+  Map<String, dynamic>? authorizationServerConfigurationData;
 
   if (authorizationServer != null) {
-    authorizationServerConfiguration = await oidc4vc.getOpenIdConfig(
+    authorizationServerConfigurationData = await oidc4vc.getOpenIdConfig(
       baseUrl: authorizationServer,
       isAuthorizationServer: true,
       dio: client.dio,
@@ -788,8 +791,8 @@ Future<
             credSupported == credSupported?.trustFramework) {
           return (
             OIDC4VCType.DEFAULT,
-            openIdConfiguration,
-            authorizationServerConfiguration,
+            openIdConfigurationData,
+            authorizationServerConfigurationData,
             credentialOfferJson,
             issuer,
             preAuthorizedCode,
@@ -800,8 +803,8 @@ Future<
             credSupported?.trustFramework?.name == 'ebsi') {
           return (
             OIDC4VCType.EBSI,
-            openIdConfiguration,
-            authorizationServerConfiguration,
+            openIdConfigurationData,
+            authorizationServerConfigurationData,
             credentialOfferJson,
             issuer,
             preAuthorizedCode,
@@ -809,8 +812,8 @@ Future<
         } else {
           return (
             OIDC4VCType.DEFAULT,
-            openIdConfiguration,
-            authorizationServerConfiguration,
+            openIdConfigurationData,
+            authorizationServerConfigurationData,
             credentialOfferJson,
             issuer,
             preAuthorizedCode,
@@ -819,8 +822,8 @@ Future<
       }
       return (
         oidc4vcType,
-        openIdConfiguration,
-        authorizationServerConfiguration,
+        openIdConfigurationData,
+        authorizationServerConfigurationData,
         credentialOfferJson,
         issuer,
         preAuthorizedCode,
@@ -830,8 +833,8 @@ Future<
 
   return (
     null,
-    openIdConfiguration,
-    authorizationServerConfiguration,
+    openIdConfigurationData,
+    authorizationServerConfigurationData,
     credentialOfferJson,
     issuer,
     preAuthorizedCode,
@@ -840,9 +843,12 @@ Future<
 
 Future<void> handleErrorForOID4VCI({
   required String url,
-  required OpenIdConfiguration openIdConfiguration,
-  required OpenIdConfiguration? authorizationServerConfiguration,
+  required Map<String, dynamic> openIdConfigurationData,
+  required Map<String, dynamic>? authorizationServerConfigurationData,
 }) async {
+  final openIdConfiguration =
+      OpenIdConfiguration.fromJson(openIdConfigurationData);
+
   final authorizationServer = openIdConfiguration.authorizationServer;
 
   List<dynamic>? subjectSyntaxTypesSupported;
@@ -857,7 +863,10 @@ Future<void> handleErrorForOID4VCI({
     tokenEndpoint = openIdConfiguration.tokenEndpoint;
   }
 
-  if (authorizationServer != null && authorizationServerConfiguration != null) {
+  if (authorizationServer != null &&
+      authorizationServerConfigurationData != null) {
+    final authorizationServerConfiguration =
+        OpenIdConfiguration.fromJson(authorizationServerConfigurationData);
     if (subjectSyntaxTypesSupported == null &&
         authorizationServerConfiguration.subjectSyntaxTypesSupported != null) {
       subjectSyntaxTypesSupported =
@@ -1009,14 +1018,15 @@ Future<bool?> isEBSIForVerifiers({
     final isUrl = isURL(clientId);
     if (!isUrl) return false;
 
-    final OpenIdConfiguration openIdConfiguration =
-        await oidc4vc.getOpenIdConfig(
+    final openIdConfigurationData = await oidc4vc.getOpenIdConfig(
       baseUrl: clientId,
       isAuthorizationServer: false,
       dio: Dio(),
       useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
     );
 
+    final openIdConfiguration =
+        OpenIdConfiguration.fromJson(openIdConfigurationData);
     final subjectTrustFrameworksSupported =
         openIdConfiguration.subjectTrustFrameworksSupported;
 
@@ -1371,8 +1381,8 @@ String getFormattedStringOIDC4VCI({
   required String url,
   required String tokenEndpoint,
   required String credentialEndpoint,
-  OpenIdConfiguration? openIdConfiguration,
-  OpenIdConfiguration? authorizationServerConfiguration,
+  Map<String, dynamic>? openIdConfigurationData,
+  Map<String, dynamic>? authorizationServerConfigurationData,
   dynamic credentialOfferJson,
 }) {
   return '''
@@ -1380,9 +1390,9 @@ String getFormattedStringOIDC4VCI({
 <b>CREDENTIAL OFFER  :</b> 
 ${credentialOfferJson != null ? const JsonEncoder.withIndent('  ').convert(credentialOfferJson) : 'None'}\n
 <b>AUTHORIZATION SERVER CONFIGURATION :</b>
-${authorizationServerConfiguration != null ? const JsonEncoder.withIndent('  ').convert(authorizationServerConfiguration) : 'None'}\n
+${authorizationServerConfigurationData != null ? const JsonEncoder.withIndent('  ').convert(authorizationServerConfigurationData) : 'None'}\n
 <b>CREDENTIAL ISSUER CONFIGURATION :</b> 
-${openIdConfiguration != null ? const JsonEncoder.withIndent('  ').convert(openIdConfiguration) : 'None'}
+${openIdConfigurationData != null ? const JsonEncoder.withIndent('  ').convert(openIdConfigurationData) : 'None'}
 ''';
 }
 

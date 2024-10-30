@@ -86,7 +86,7 @@ Future<void> getAuthorizationUriForIssuer({
   final (
     authorizationEndpoint,
     authorizationRequestParemeters,
-    openIdConfiguration
+    openIdConfigurationData
   ) = await oidc4vc.getAuthorizationData(
     selectedCredentials: selectedCredentials,
     clientId: clientId,
@@ -112,6 +112,9 @@ Future<void> getAuthorizationUriForIssuer({
     walletIssuer: walletIssuer,
     useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
   );
+
+  final openIdConfiguration =
+      OpenIdConfiguration.fromJson(openIdConfigurationData);
 
   final requirePushedAuthorizationRequests =
       openIdConfiguration.requirePushedAuthorizationRequests;
