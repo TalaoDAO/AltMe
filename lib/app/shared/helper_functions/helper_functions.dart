@@ -1828,6 +1828,10 @@ List<VCFormatType> getPresentVCDetails({
     /// jwt_vc_json
     presentJwtVcJson = format?.jwtVcJson != null || format?.jwtVpJson != null;
 
+    /// jwt_vc_json_ld
+    presentJwtVcJsonLd =
+        format?.jwtVcJsonLd != null || format?.jwtVpJson != null;
+
     /// vc+sd-jwt
     presentVcSdJwt = format?.vcSdJwt != null;
   } else {
@@ -1851,14 +1855,18 @@ List<VCFormatType> getPresentVCDetails({
       presentJwtVcJson = vpFormats.containsKey('jwt_vc_json');
 
       /// jwt_vc_json-ld
-      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json-ld');
+      presentJwtVcJsonLd = vpFormats.containsKey('jwt_vc_json-ld');
 
       /// vc+sd-jwt
       presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
     }
   }
 
-  if (!presentLdpVc && !presentJwtVc && !presentJwtVcJson && !presentVcSdJwt) {
+  if (!presentLdpVc &&
+      !presentJwtVc &&
+      !presentJwtVcJson &&
+      !presentJwtVcJsonLd &&
+      !presentVcSdJwt) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_request',
