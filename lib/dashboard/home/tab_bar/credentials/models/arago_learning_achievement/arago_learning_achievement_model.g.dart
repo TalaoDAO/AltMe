@@ -10,7 +10,7 @@ AragoLearningAchievementModel _$AragoLearningAchievementModelFromJson(
         Map<String, dynamic> json) =>
     AragoLearningAchievementModel(
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       familyName: json['familyName'] as String? ?? '',
       givenName: json['givenName'] as String? ?? '',
       email: json['email'] as String? ?? '',

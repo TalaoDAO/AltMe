@@ -9,7 +9,7 @@ part of 'eudipid_subject_model.dart';
 EudipidSubjectModel _$EudipidSubjectModelFromJson(Map<String, dynamic> json) =>
     EudipidSubjectModel(
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
     );
 

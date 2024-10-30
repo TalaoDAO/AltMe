@@ -11,7 +11,7 @@ NationalityModel _$NationalityModelFromJson(Map<String, dynamic> json) =>
       expires: json['expires'] as String? ?? '',
       nationality: json['nationality'] as String? ?? '',
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
     );
 

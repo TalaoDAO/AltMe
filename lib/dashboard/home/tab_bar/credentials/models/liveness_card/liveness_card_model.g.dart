@@ -13,7 +13,7 @@ LivenessCardModel _$LivenessCardModelFromJson(Map<String, dynamic> json) =>
           ? null
           : Offers.fromJson(json['offers'] as Map<String, dynamic>),
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );

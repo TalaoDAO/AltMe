@@ -23,6 +23,9 @@ OpenIdConfiguration _$OpenIdConfigurationFromJson(Map<String, dynamic> json) =>
       pushedAuthorizationRequestEndpoint:
           json['pushed_authorization_request_endpoint'] as String?,
       credentialIssuer: json['credential_issuer'] as String?,
+      display: (json['display'] as List<dynamic>?)
+          ?.map((e) => Display.fromJson(e as Map<String, dynamic>))
+          .toList(),
       subjectSyntaxTypesSupported:
           json['subject_syntax_types_supported'] as List<dynamic>?,
       tokenEndpoint: json['token_endpoint'] as String?,
@@ -54,6 +57,7 @@ Map<String, dynamic> _$OpenIdConfigurationToJson(
       'authorization_servers': instance.authorizationServers,
       'credential_endpoint': instance.credentialEndpoint,
       'credential_issuer': instance.credentialIssuer,
+      'display': instance.display,
       'subject_syntax_types_supported': instance.subjectSyntaxTypesSupported,
       'token_endpoint': instance.tokenEndpoint,
       'batch_endpoint': instance.batchEndpoint,

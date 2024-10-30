@@ -9,7 +9,7 @@ part of 'arago_pass_model.dart';
 AragoPassModel _$AragoPassModelFromJson(Map<String, dynamic> json) =>
     AragoPassModel(
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       identifier: json['identifier'] as String? ?? '',
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),

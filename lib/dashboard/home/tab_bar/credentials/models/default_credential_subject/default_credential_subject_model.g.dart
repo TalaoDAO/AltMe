@@ -10,7 +10,7 @@ DefaultCredentialSubjectModel _$DefaultCredentialSubjectModelFromJson(
         Map<String, dynamic> json) =>
     DefaultCredentialSubjectModel(
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       credentialSubjectType: $enumDecodeNullable(
               _$CredentialSubjectTypeEnumMap, json['credentialSubjectType']) ??

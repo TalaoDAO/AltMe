@@ -10,7 +10,7 @@ ProfessionalSkillAssessmentModel _$ProfessionalSkillAssessmentModelFromJson(
         Map<String, dynamic> json) =>
     ProfessionalSkillAssessmentModel(
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       skills: (json['skills'] as List<dynamic>?)
           ?.map((e) => Skill.fromJson(e as Map<String, dynamic>))
           .toList(),

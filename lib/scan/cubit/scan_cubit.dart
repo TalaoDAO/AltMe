@@ -733,10 +733,11 @@ class ScanCubit extends Cubit<ScanState> {
           filterList: filterList,
           credentialList: [credentialsToBePresented[i]],
         );
-        final format = getVcFormatType(credential[0].getFormat);
+
         Map<String, dynamic>? pathNested;
 
         if (credential.isNotEmpty) {
+          final format = getVcFormatType(credential[0].getFormat);
           final Map<String, dynamic> descriptor = {
             'id': inputDescriptor.id,
             'format': format.vpValue,

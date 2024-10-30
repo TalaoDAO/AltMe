@@ -82,8 +82,8 @@ class _UserPinViewState extends State<UserPinView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: BasePage(
         backgroundColor: Theme.of(context).colorScheme.surface,
         scrollView: false,

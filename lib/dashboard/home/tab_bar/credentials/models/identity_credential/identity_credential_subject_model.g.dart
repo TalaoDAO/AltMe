@@ -10,7 +10,7 @@ IdentityCredentialSubjectModel _$IdentityCredentialSubjectModelFromJson(
         Map<String, dynamic> json) =>
     IdentityCredentialSubjectModel(
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
     );
 

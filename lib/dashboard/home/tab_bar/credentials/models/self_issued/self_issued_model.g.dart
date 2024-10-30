@@ -12,7 +12,7 @@ SelfIssuedModel _$SelfIssuedModelFromJson(Map<String, dynamic> json) =>
       address: json['address'] as String?,
       familyName: json['familyName'] as String?,
       givenName: json['givenName'] as String?,
-      type: json['type'] as String? ?? 'SelfIssued',
+      type: json['type'] ?? 'SelfIssued',
       telephone: json['telephone'] as String?,
       email: json['email'] as String?,
       workFor: json['workFor'] as String?,

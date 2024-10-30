@@ -15,7 +15,7 @@ ProfessionalStudentCardModel _$ProfessionalStudentCardModelFromJson(
               json['recipient'] as Map<String, dynamic>),
       expires: json['expires'] as String? ?? '',
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );

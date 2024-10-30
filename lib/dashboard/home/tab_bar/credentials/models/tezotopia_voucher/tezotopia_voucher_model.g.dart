@@ -10,7 +10,7 @@ TezotopiaVoucherModel _$TezotopiaVoucherModelFromJson(
         Map<String, dynamic> json) =>
     TezotopiaVoucherModel(
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
       identifier: json['identifier'] as String? ?? '',

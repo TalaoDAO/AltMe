@@ -10,7 +10,7 @@ CertificateOfEmploymentModel _$CertificateOfEmploymentModelFromJson(
         Map<String, dynamic> json) =>
     CertificateOfEmploymentModel(
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       familyName: json['familyName'] as String? ?? '',
       givenName: json['givenName'] as String? ?? '',
       startDate: json['startDate'] as String? ?? '',

@@ -12,7 +12,7 @@ WalletCredentialModel _$WalletCredentialModelFromJson(
       publicKey: json['publicKey'] as String? ?? '',
       walletInstanceKey: json['walletInstanceKey'] as String? ?? '',
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );

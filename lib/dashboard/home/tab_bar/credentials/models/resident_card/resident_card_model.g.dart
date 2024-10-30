@@ -11,7 +11,7 @@ ResidentCardModel _$ResidentCardModelFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String?,
       gender: json['gender'] as String? ?? '',
       maritalStatus: json['maritalStatus'] as String? ?? '',
-      type: json['type'] as String?,
+      type: json['type'],
       birthPlace: json['birthPlace'] as String? ?? '',
       nationality: json['nationality'] as String? ?? '',
       address: json['address'] as String? ?? '',

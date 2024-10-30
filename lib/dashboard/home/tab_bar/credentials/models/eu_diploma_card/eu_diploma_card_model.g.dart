@@ -30,7 +30,7 @@ EUDiplomaCardModel _$EUDiplomaCardModelFromJson(Map<String, dynamic> json) =>
           : LearningSpecification.fromJson(
               json['learningSpecification'] as Map<String, dynamic>),
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );

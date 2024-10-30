@@ -12,7 +12,7 @@ DiplomaCardModel _$DiplomaCardModelFromJson(Map<String, dynamic> json) =>
       givenName: json['givenName'] as String? ?? '',
       programName: json['programName'] as String? ?? '',
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
       identifier: json['identifier'] as String? ?? '',

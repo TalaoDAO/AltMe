@@ -8,7 +8,7 @@ part of 'over21_model.dart';
 
 Over21Model _$Over21ModelFromJson(Map<String, dynamic> json) => Over21Model(
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );

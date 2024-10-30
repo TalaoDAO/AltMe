@@ -9,7 +9,7 @@ part of 'pid_subject_model.dart';
 PidSubjectModel _$PidSubjectModelFromJson(Map<String, dynamic> json) =>
     PidSubjectModel(
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
     );
 

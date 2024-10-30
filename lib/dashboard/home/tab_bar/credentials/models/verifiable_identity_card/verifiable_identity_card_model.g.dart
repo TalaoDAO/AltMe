@@ -18,7 +18,7 @@ VerifiableIdCardModel _$VerifiableIdCardModelFromJson(
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
     );
 
 Map<String, dynamic> _$VerifiableIdCardModelToJson(

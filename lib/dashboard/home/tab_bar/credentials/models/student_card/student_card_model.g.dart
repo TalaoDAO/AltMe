@@ -12,7 +12,7 @@ StudentCardModel _$StudentCardModelFromJson(Map<String, dynamic> json) =>
           json['recipient']),
       expires: json['expires'] as String? ?? '',
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );

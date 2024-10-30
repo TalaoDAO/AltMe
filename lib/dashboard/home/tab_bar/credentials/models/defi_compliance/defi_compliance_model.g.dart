@@ -13,7 +13,7 @@ DefiComplianceModel _$DefiComplianceModelFromJson(Map<String, dynamic> json) =>
       amlComplianceCheck: json['amlComplianceCheck'] as String? ?? '',
       sanctionListCheck: json['sanctionListCheck'] as String? ?? '',
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );

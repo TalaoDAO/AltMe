@@ -9,7 +9,7 @@ part of 'tx_code.dart';
 TxCode _$TxCodeFromJson(Map<String, dynamic> json) => TxCode(
       length: (json['length'] as num).toInt(),
       inputMode: json['input_mode'] as String,
-      description: json['description'] as String,
+      description: json['description'] as String?,
     );
 
 Map<String, dynamic> _$TxCodeToJson(TxCode instance) => <String, dynamic>{

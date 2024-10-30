@@ -172,7 +172,7 @@ class _SelectiveDisclosurePickViewState
                             selectedSDIndexInJWT: state.selectedSDIndexInJWT,
                             uri: widget.uri,
                           ),
-                          text: l10n.credentialPickPresent,
+                          text: l10n.credentialPickShare,
                         );
                       },
                     ),

@@ -15,6 +15,7 @@ class OpenIdConfiguration extends Equatable {
     this.credentialEndpoint,
     this.pushedAuthorizationRequestEndpoint,
     this.credentialIssuer,
+    this.display,
     this.subjectSyntaxTypesSupported,
     this.tokenEndpoint,
     this.batchEndpoint,
@@ -40,6 +41,7 @@ class OpenIdConfiguration extends Equatable {
   final String? credentialEndpoint;
   @JsonKey(name: 'credential_issuer')
   final String? credentialIssuer;
+  final List<Display>? display;
   @JsonKey(name: 'subject_syntax_types_supported')
   final List<dynamic>? subjectSyntaxTypesSupported;
   @JsonKey(name: 'token_endpoint')
@@ -80,6 +82,7 @@ class OpenIdConfiguration extends Equatable {
         authorizationServers,
         credentialEndpoint,
         credentialIssuer,
+        display,
         subjectSyntaxTypesSupported,
         tokenEndpoint,
         batchEndpoint,

@@ -11,7 +11,7 @@ EmailPassModel _$EmailPassModelFromJson(Map<String, dynamic> json) =>
       expires: json['expires'] as String? ?? '',
       email: json['email'] as String? ?? '',
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
       passbaseMetadata: json['passbaseMetadata'] as String? ?? '',

@@ -334,19 +334,6 @@ $ flutter build appbundle --flavor "staging" --target "lib/main_staging.dart"
 $ flutter build appbundle --flavor "production" --target "lib/main_production.dart"
 ```
 
-### iOS .app for Simulator
-
-```bash
-# Development
-$ flutter build ios --simulator --flavor "development" --target "lib/main_development.dart"
-
-# Staging
-$ flutter build ios --simulator --flavor "staging" --target "lib/main_staging.dart"
-
-# Production
-$ flutter build ios --simulator --flavor "production" --target "lib/main_production.dart"
-```
-
 ### iOS .app for Devices
 
 ```bash

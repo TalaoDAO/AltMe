@@ -9,7 +9,7 @@ part of 'arago_over18_model.dart';
 AragoOver18Model _$AragoOver18ModelFromJson(Map<String, dynamic> json) =>
     AragoOver18Model(
       id: json['id'] as String?,
-      type: json['type'] as String?,
+      type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );

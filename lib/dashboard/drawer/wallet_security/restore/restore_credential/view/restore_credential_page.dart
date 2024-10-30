@@ -72,8 +72,8 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: BasePage(
         title: l10n.restoreCredential,
         titleAlignment: Alignment.topCenter,
