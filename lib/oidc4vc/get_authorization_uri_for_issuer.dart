@@ -29,6 +29,7 @@ Future<void> getAuthorizationUriForIssuer({
   required DioClient client,
   required ProfileType profileType,
   required String walletIssuer,
+  required bool useOAuthAuthorizationServerLink,
 }) async {
   /// this is first phase flow for authorization_code
 
@@ -85,7 +86,7 @@ Future<void> getAuthorizationUriForIssuer({
   final (
     authorizationEndpoint,
     authorizationRequestParemeters,
-    openIdConfiguration
+    openIdConfigurationData
   ) = await oidc4vc.getAuthorizationData(
     selectedCredentials: selectedCredentials,
     clientId: clientId,
@@ -109,7 +110,11 @@ Future<void> getAuthorizationUriForIssuer({
     isEBSIProfile:
         profileType == ProfileType.ebsiV3 || profileType == ProfileType.ebsiV4,
     walletIssuer: walletIssuer,
+    useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
   );
+
+  final openIdConfiguration =
+      OpenIdConfiguration.fromJson(openIdConfigurationData);
 
   final requirePushedAuthorizationRequests =
       openIdConfiguration.requirePushedAuthorizationRequests;

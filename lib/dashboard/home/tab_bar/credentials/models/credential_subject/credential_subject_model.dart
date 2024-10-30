@@ -25,7 +25,7 @@ class CredentialSubjectModel {
   }
 
   final String? id;
-  final String? type;
+  final dynamic type;
   @JsonKey(fromJson: fromJsonAuthor)
   final Author? issuedBy;
   @JsonKey(fromJson: fromJsonAuthor, includeIfNull: false)
@@ -35,7 +35,7 @@ class CredentialSubjectModel {
 
   CredentialSubjectModel copyWith({
     String? id,
-    String? type,
+    dynamic type,
     Author? issuedBy,
     Author? offeredBy,
     CredentialSubjectType? credentialSubjectType,

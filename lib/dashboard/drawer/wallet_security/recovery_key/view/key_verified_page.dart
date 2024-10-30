@@ -24,8 +24,8 @@ class KeyVerifiedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: BasePage(
         scrollView: false,
         body: Center(

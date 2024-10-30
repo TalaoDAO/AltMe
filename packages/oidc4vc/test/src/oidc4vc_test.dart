@@ -279,6 +279,7 @@ void main() {
             secureStorage: mockSecureStorage,
             isEBSIProfile: true,
             walletIssuer: 'https://app.talao.co/wallet_issuer',
+            useOAuthAuthorizationServerLink: false,
           );
 
           expect(authorizationEndpoint, expectedAuthorizationEndpoint);
@@ -316,6 +317,8 @@ void main() {
               dio: client,
               isEBSIProfile: true,
               walletIssuer: 'https://app.talao.co/wallet_issuer',
+              useOAuthAuthorizationServerLink: false,
+              secureStorage: mockSecureStorage,
             ),
             throwsA(
               isA<Exception>().having(
@@ -442,6 +445,7 @@ void main() {
               secureStorage: mockSecureStorage,
               isEBSIProfile: true,
               walletIssuer: 'https://app.talao.co/wallet_issuer',
+              useOAuthAuthorizationServerLink: false,
             );
 
             expect(authorizationEndpoint, expectedAuthorizationEndpoint);
@@ -506,6 +510,7 @@ void main() {
               secureStorage: mockSecureStorage,
               isEBSIProfile: true,
               walletIssuer: 'https://app.talao.co/wallet_issuer',
+              useOAuthAuthorizationServerLink: false,
             );
 
             expect(authorizationEndpoint, expectedAuthorizationEndpoint);
@@ -717,6 +722,7 @@ void main() {
           jsonDecode(openidConfigurationResponse) as Map<String, dynamic>,
         ),
         secureStorage: mockSecureStorage,
+        useOAuthAuthorizationServerLink: false,
       );
 
       expect(tokenEndpoint, expectedTokenEndpoint);
@@ -781,6 +787,7 @@ void main() {
           fromStatusList: false,
           isCachingEnabled: false,
           publicJwk: null,
+          useOAuthAuthorizationServerLink: false,
         );
         expect(isVerified, VerificationType.verified);
       });
@@ -794,6 +801,7 @@ void main() {
           fromStatusList: false,
           isCachingEnabled: false,
           publicJwk: null,
+          useOAuthAuthorizationServerLink: false,
         );
         expect(isVerified, VerificationType.unKnown);
       });
@@ -809,6 +817,7 @@ void main() {
           fromStatusList: false,
           isCachingEnabled: false,
           publicJwk: null,
+          useOAuthAuthorizationServerLink: false,
         );
         expect(isVerified, VerificationType.notVerified);
       });
@@ -826,6 +835,7 @@ void main() {
           fromStatusList: false,
           isCachingEnabled: false,
           publicJwk: null,
+          useOAuthAuthorizationServerLink: false,
         );
         expect(isVerified, VerificationType.notVerified);
       });
@@ -917,6 +927,7 @@ void main() {
             fromStatusList: false,
             isCachingEnabled: false,
             dio: client,
+            useOAuthAuthorizationServerLink: false,
           );
 
           expect(value, jsonDecode(didDocument));
@@ -955,6 +966,7 @@ void main() {
             fromStatusList: false,
             isCachingEnabled: false,
             dio: client,
+            useOAuthAuthorizationServerLink: false,
           );
 
           expect(value, jsonDecode(didDocument));
@@ -994,6 +1006,7 @@ void main() {
             isCachingEnabled: false,
             dio: client,
             secureStorage: mockSecureStorage,
+            useOAuthAuthorizationServerLink: false,
           );
           expect(value, jsonDecode(expectedDidDocument));
         });

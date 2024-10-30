@@ -7,6 +7,7 @@ Future<VerificationType> verifyEncodedData({
   required String issuer,
   required JWTDecode jwtDecode,
   required String jwt,
+  required bool useOAuthAuthorizationServerLink,
   Map<String, dynamic>? publicKeyJwk,
   bool fromStatusList = false,
   bool isCachingEnabled = false,
@@ -36,6 +37,7 @@ Future<VerificationType> verifyEncodedData({
     fromStatusList: fromStatusList,
     isCachingEnabled: isCachingEnabled,
     dio: Dio(),
+    useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
   );
   return verificationType;
 }

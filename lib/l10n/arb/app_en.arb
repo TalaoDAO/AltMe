@@ -80,7 +80,6 @@
   "credentialPresentRequiredCredential": "Someone is asking for your",
   "credentialPresentConfirm": "Select credential(s)",
   "credentialPresentCancel": "Reject",
-  "credentialPickPresent": "Present",
   "selectYourTezosAssociatedWallet": "Select your Tezos associated wallet",
   "credentialPickSelect": "Select your credential",
   "siopV2credentialPickSelect": "Choose only one credential from your wallet to present",
@@ -677,8 +676,8 @@
   "walletSecurityDescription": "Protect your wallet with Pin Code and Biometrics Authentication",
   "blockchainSettings": "Blockchain Settings",
   "blockchainSettingsDescription": "Manage accounts, Recovery Phrase, Connected dApps and Networks",
-  "ssi": "Self-Sovereign Identity (DID)",
-  "ssiDescription": "Manage your Decentralized ID and backup or restore your credentials",
+  "ssi": "Self Sovereign Identity Settings",
+  "ssiDescription": "Manage Decentralized Identifiers (DIDs) and protocol options",
   "helpCenter": "Help Center",
   "helpCenterDescription": "Contact us and get support if you need assistance on using our wallet",
   "about": "About",
@@ -1144,7 +1143,7 @@
   "restoreWallet": "Restore Wallet",
   "showWalletRecoveryPhraseSubtitle2": "This recovery phrase is requested to restore a wallet at installation.",
   "documentation": "Documentation",
-  "credentialPickTitle": "Choose the credential(s) you wish to obtain",
+  "credentialPickTitle": "Choose the credential(s) to share",
   "restoreACryptoWallet": "Restore a crypto wallet",
   "restoreAnAppBackup": "Restore an {appName} backup",
   "@restoreAnAppBackup": {
@@ -1153,5 +1152,6 @@
     "placeholders": {
       "appName": {}
     }
-  }
+  },
+  "credentialPickShare": "Share"
 }
