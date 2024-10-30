@@ -178,7 +178,10 @@ class _DashboardViewState extends State<DashboardView> {
 
               return PopScope(
                 canPop: false,
-                onPopInvoked: (_) async {
+                onPopInvoked: (didPop) async {
+                  if (didPop) {
+                    return;
+                  }
                   if (scaffoldKey.currentState!.isDrawerOpen) {
                     // Navigator.of(context).pop();
                   }
