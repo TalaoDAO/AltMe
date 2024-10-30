@@ -1052,19 +1052,22 @@ class OIDC4VC {
 
       return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
     } else {
+      final totoPath = JsonPath(r'$..[?(@.verificationMethod)]');
+      final toto =
+          (totoPath.read(didDocument).first.value!) as Map<String, dynamic>;
       final jsonPath = JsonPath(r'$..verificationMethod');
       late List<dynamic> data;
 
       if (holderKid == null) {
         data = (jsonPath.read(didDocument).first.value! as List).toList();
       } else {
-        data = (jsonPath.read(didDocument).first.value! as List).where(
+        data = (toto['verificationMethod'] as List).where(
           (dynamic e) {
+            final id = toto['id'];
             final kid = e['id'].toString();
 
-            if (holderKid.contains('#')) {
-              final identifier = '#${holderKid.split('#')[1]}';
-              if (kid == identifier) return true;
+            if (kid.startsWith('#')) {
+              if (holderKid == id + kid) return true;
             } else {
               if (holderKid == kid) return true;
             }
@@ -1750,7 +1753,7 @@ class OIDC4VC {
       'aud': tokenParameters.audience, // devrait être verifier
       'exp': iat + 1000,
       'sub': issAndSub,
-      // 'iss': issAndSub,
+      'iss': issAndSub,
     };
 
     if (tokenParameters.nonce != null) {
