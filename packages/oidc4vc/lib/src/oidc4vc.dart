@@ -1652,7 +1652,7 @@ class OIDC4VC {
       'aud': tokenParameters.audience,
       'exp': iat + 1000,
       'sub': tokenParameters.did,
-      //'iss': tokenParameters.did,
+      'iss': tokenParameters.did,
       'vp': {
         '@context': ['https://www.w3.org/2018/credentials/v1'],
         'id': presentationId,
