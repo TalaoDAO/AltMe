@@ -238,15 +238,15 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
           OIDC4VCType? oidc4vcTypeForIssuance;
           dynamic credentialOfferJsonForIssuance;
-          OpenIdConfiguration? openIdConfigurationForIssuance;
+          OpenIdConfiguration? openIdConfiguration;
           String? issuerForIssuance;
           String? preAuthorizedCodeForIssuance;
 
           if (isOpenIDUrl || isFromDeeplink) {
             final (
               OIDC4VCType? oidc4vcType,
-              OpenIdConfiguration? openIdConfiguration,
-              OpenIdConfiguration? authorizationServerConfiguration,
+              Map<String, dynamic>? openIdConfigurationData,
+              Map<String, dynamic>? authorizationServerConfigurationData,
               dynamic credentialOfferJson,
               String? issuer,
               String? preAuthorizedCode,
@@ -256,11 +256,17 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               oidc4vc: oidc4vc,
               oidc4vciDraftType: profileSetting.selfSovereignIdentityOptions
                   .customOidc4vcProfile.oidc4vciDraft,
+              useOAuthAuthorizationServerLink:
+                  useOauthServerAuthEndPoint(profileCubit.state.model),
             );
 
             oidc4vcTypeForIssuance = oidc4vcType;
             credentialOfferJsonForIssuance = credentialOfferJson;
-            openIdConfigurationForIssuance = openIdConfiguration;
+            if (openIdConfigurationData != null) {
+              openIdConfiguration =
+                  OpenIdConfiguration.fromJson(openIdConfigurationData);
+            }
+
             issuerForIssuance = issuer;
             preAuthorizedCodeForIssuance = preAuthorizedCode;
 
@@ -279,6 +285,8 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     issuer: issuer,
                     oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
                     dio: Dio(),
+                    useOAuthAuthorizationServerLink:
+                        useOauthServerAuthEndPoint(profileCubit.state.model),
                   );
 
                   credentialEndpoint =
@@ -287,10 +295,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
                 formattedData = getFormattedStringOIDC4VCI(
                   url: state.uri.toString(),
-                  authorizationServerConfiguration:
-                      authorizationServerConfiguration,
+                  authorizationServerConfigurationData:
+                      authorizationServerConfigurationData,
                   credentialOfferJson: credentialOfferJson,
-                  openIdConfiguration: openIdConfiguration,
+                  openIdConfigurationData: openIdConfigurationData,
                   tokenEndpoint: tokenEndPoint,
                   credentialEndpoint: credentialEndpoint,
                 );
@@ -370,12 +378,12 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               if (!moveAhead) return;
             }
 
-            if (openIdConfiguration != null) {
+            if (openIdConfigurationData != null) {
               await handleErrorForOID4VCI(
                 url: state.uri.toString(),
-                openIdConfiguration: openIdConfiguration,
-                authorizationServerConfiguration:
-                    authorizationServerConfiguration,
+                openIdConfigurationData: openIdConfigurationData,
+                authorizationServerConfigurationData:
+                    authorizationServerConfigurationData,
               );
             }
           }
@@ -433,7 +441,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   qrCodeScanCubit: context.read<QRCodeScanCubit>(),
                   oidcType: oidc4vcTypeForIssuance,
                   credentialOfferJson: credentialOfferJsonForIssuance,
-                  openIdConfiguration: openIdConfigurationForIssuance,
+                  openIdConfiguration: openIdConfiguration,
                   issuer: issuerForIssuance,
                   preAuthorizedCode: preAuthorizedCodeForIssuance,
                   uri: state.uri!,

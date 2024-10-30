@@ -169,6 +169,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 jwt: response.toString(),
                 fromStatusList: true,
                 isCachingEnabled: customOidc4vcProfile.statusListCache,
+                useOAuthAuthorizationServerLink:
+                    useOauthServerAuthEndPoint(profileCubit.state.model),
               );
 
               if (isVerified != VerificationType.verified) {
@@ -254,6 +256,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 jwt: response.toString(),
                 fromStatusList: true,
                 isCachingEnabled: customOidc4vcProfile.statusListCache,
+                useOAuthAuthorizationServerLink:
+                    useOauthServerAuthEndPoint(profileCubit.state.model),
               );
 
               if (isVerified != VerificationType.verified) {
@@ -333,6 +337,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           jwtDecode: jwtDecode,
           jwt: jwt,
           publicKeyJwk: publicKeyJwk,
+          useOAuthAuthorizationServerLink:
+              useOauthServerAuthEndPoint(profileCubit.state.model),
         );
 
         if (isVerified == VerificationType.verified) {

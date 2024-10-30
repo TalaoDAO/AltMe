@@ -8,7 +8,7 @@ class TxCode extends Equatable {
   const TxCode({
     required this.length,
     required this.inputMode,
-    required this.description,
+    this.description,
   });
 
   factory TxCode.fromJson(Map<String, dynamic> json) => _$TxCodeFromJson(json);
@@ -16,7 +16,7 @@ class TxCode extends Equatable {
   final int length;
   @JsonKey(name: 'input_mode')
   final String inputMode;
-  final String description;
+  final String? description;
 
   Map<String, dynamic> toJson() => _$TxCodeToJson(this);
 

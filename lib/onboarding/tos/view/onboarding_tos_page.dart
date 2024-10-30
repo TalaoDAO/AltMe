@@ -65,10 +65,8 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
     final l10n = context.l10n;
     return BlocBuilder<OnBoardingTosCubit, OnBoardingTosState>(
       builder: (context, state) {
-        return WillPopScope(
-          onWillPop: () async {
-            return false;
-          },
+        return PopScope(
+          canPop: false,
           child: BasePage(
             backgroundColor: Theme.of(context).colorScheme.surface,
             title: l10n.termsOfUse,

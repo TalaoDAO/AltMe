@@ -68,7 +68,8 @@
     "documentation",
     "credentialPickTitle",
     "restoreACryptoWallet",
-    "restoreAnAppBackup"
+    "restoreAnAppBackup",
+    "credentialPickShare"
   ],
 
   "es": [
@@ -140,7 +141,8 @@
     "documentation",
     "credentialPickTitle",
     "restoreACryptoWallet",
-    "restoreAnAppBackup"
+    "restoreAnAppBackup",
+    "credentialPickShare"
   ],
 
   "fr": [
@@ -217,6 +219,7 @@
     "documentation",
     "credentialPickTitle",
     "restoreACryptoWallet",
-    "restoreAnAppBackup"
+    "restoreAnAppBackup",
+    "credentialPickShare"
   ]
 }

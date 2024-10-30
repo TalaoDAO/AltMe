@@ -137,12 +137,12 @@ class _OperationViewState extends State<OperationView> {
           message = messageHandler.getMessage(context, messageHandler);
         }
 
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          onPopInvoked: (didPop) {
             context.read<OperationCubit>().rejectOperation(
                   connectionBridgeType: widget.connectionBridgeType,
                 );
-            return true;
+            if (didPop) Navigator.of(context).pop();
           },
           child: BasePage(
             scrollView: false,
