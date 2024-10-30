@@ -1061,13 +1061,13 @@ class OIDC4VC {
       if (holderKid == null) {
         data = (jsonPath.read(didDocument).first.value! as List).toList();
       } else {
-        data = (toto['verificationMethod'] as List).where(
+        data = (jsonPath.read(didDocument).first.value! as List).where(
           (dynamic e) {
-            final id = toto['id'];
             final kid = e['id'].toString();
 
-            if (kid.startsWith('#')) {
-              if (holderKid == id + kid) return true;
+            if (holderKid.contains('#')) {
+              final identifier = '#${holderKid.split('#')[1]}';
+              if (kid == identifier) return true;
             } else {
               if (holderKid == kid) return true;
             }
