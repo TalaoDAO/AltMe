@@ -1052,9 +1052,6 @@ class OIDC4VC {
 
       return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
     } else {
-      final totoPath = JsonPath(r'$..[?(@.verificationMethod)]');
-      final toto =
-          (totoPath.read(didDocument).first.value!) as Map<String, dynamic>;
       final jsonPath = JsonPath(r'$..verificationMethod');
       late List<dynamic> data;
 
@@ -1065,19 +1062,14 @@ class OIDC4VC {
           (dynamic e) {
             final kid = e['id'].toString();
 
-            if (holderKid.contains('#')) {
-              final identifier = '#${holderKid.split('#')[1]}';
-              if (kid == identifier) return true;
+            if (holderKid.contains('#0') && kid == '#0') {
+              return true;
             } else {
               if (holderKid == kid) return true;
             }
             return false;
           },
         ).toList();
-      }
-
-      if (data.isEmpty) {
-        throw Exception('KID_DOES_NOT_MATCH_DIDDOCUMENT');
       }
 
       if (data.isEmpty) {
