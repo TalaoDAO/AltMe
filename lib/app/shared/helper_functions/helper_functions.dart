@@ -754,14 +754,12 @@ Future<
 
   Map<String, dynamic>? authorizationServerConfigurationData;
 
-  if (authorizationServer != null) {
-    authorizationServerConfigurationData = await oidc4vc.getOpenIdConfig(
-      baseUrl: authorizationServer,
-      isAuthorizationServer: true,
-      dio: client.dio,
-      useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-    );
-  }
+  authorizationServerConfigurationData = await oidc4vc.getOpenIdConfig(
+    baseUrl: authorizationServer ?? issuer,
+    isAuthorizationServer: true,
+    dio: client.dio,
+    useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+  );
 
   final credentialsSupported = openIdConfiguration.credentialsSupported;
   final credentialConfigurationsSupported =
