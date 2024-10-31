@@ -844,7 +844,7 @@ class OIDC4VC {
           isCachingEnabled: isCachingEnabled,
           dio: dio,
           secureStorage: secureStorage,
-          useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+          useOAuthAuthorizationServerLink: useOAuthAuthorizationServer,
         );
 
         openIdConfiguration =
@@ -859,7 +859,7 @@ class OIDC4VC {
             isCachingEnabled: isCachingEnabled,
             dio: dio,
             secureStorage: secureStorage,
-            useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+            useOAuthAuthorizationServerLink: useOAuthAuthorizationServer,
           );
           openIdConfiguration =
               OpenIdConfiguration.fromJson(openIdConfigurationData);
