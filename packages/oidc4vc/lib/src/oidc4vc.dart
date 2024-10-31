@@ -829,10 +829,16 @@ class OIDC4VC {
         OpenIdConfiguration openIdConfiguration;
 
         var isAuthorizationServer = false;
+        var useOAuthAuthorizationServer = useOAuthAuthorizationServerLink;
 
         if (fromStatusList) {
           ///as this is not a VC issuer
           isAuthorizationServer = true;
+
+          /// the status list server is a standalone server. the endpoint
+          /// is /.well-known/openid-configuration'
+          /// so, useOAuthAuthorizationServerLink: false
+          useOAuthAuthorizationServer = false;
         }
 
         final openIdConfigurationData = await getOpenIdConfig(
@@ -841,7 +847,7 @@ class OIDC4VC {
           isCachingEnabled: isCachingEnabled,
           dio: dio,
           secureStorage: secureStorage,
-          useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+          useOAuthAuthorizationServerLink: useOAuthAuthorizationServer,
         );
 
         openIdConfiguration =
@@ -856,7 +862,7 @@ class OIDC4VC {
             isCachingEnabled: isCachingEnabled,
             dio: dio,
             secureStorage: secureStorage,
-            useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+            useOAuthAuthorizationServerLink: useOAuthAuthorizationServer,
           );
           openIdConfiguration =
               OpenIdConfiguration.fromJson(openIdConfigurationData);
