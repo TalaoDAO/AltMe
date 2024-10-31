@@ -66,10 +66,10 @@
     "restoreWallet",
     "showWalletRecoveryPhraseSubtitle2",
     "documentation",
-    "credentialPickTitle",
     "restoreACryptoWallet",
     "restoreAnAppBackup",
-    "credentialPickShare"
+    "credentialPickShare",
+    "credentialPickTitle"
   ],
 
   "es": [
@@ -139,10 +139,10 @@
     "restoreWallet",
     "showWalletRecoveryPhraseSubtitle2",
     "documentation",
-    "credentialPickTitle",
     "restoreACryptoWallet",
     "restoreAnAppBackup",
-    "credentialPickShare"
+    "credentialPickShare",
+    "credentialPickTitle"
   ],
 
   "fr": [
@@ -217,9 +217,9 @@
     "restoreWallet",
     "showWalletRecoveryPhraseSubtitle2",
     "documentation",
-    "credentialPickTitle",
     "restoreACryptoWallet",
     "restoreAnAppBackup",
-    "credentialPickShare"
+    "credentialPickShare",
+    "credentialPickTitle"
   ]
 }
