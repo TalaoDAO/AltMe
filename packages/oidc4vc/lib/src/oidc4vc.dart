@@ -1752,7 +1752,7 @@ class OIDC4VC {
       'aud': tokenParameters.audience, // devrait être verifier
       'exp': iat + 1000,
       'sub': issAndSub,
-      // 'iss': issAndSub,
+      'iss': issAndSub,
     };
 
     if (tokenParameters.nonce != null) {
