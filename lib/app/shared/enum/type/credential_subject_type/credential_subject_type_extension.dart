@@ -697,6 +697,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
           VCFormatType.ldpVc,
           VCFormatType.jwtVcJson,
           VCFormatType.auto,
+          VCFormatType.vcSdJWT,
         ];
 
       case CredentialSubjectType.nationality:

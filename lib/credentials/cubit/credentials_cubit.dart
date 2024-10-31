@@ -688,7 +688,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final vcFormatType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
-    final isDutchProfile = profileModel.profileType == ProfileType.diipv2point1;
+    final isDiipv2point1hProfile =
+        profileModel.profileType == ProfileType.diipv2point1;
+    final isDiipv3Profile = profileModel.profileType == ProfileType.diipv3;
 
     final discoverCardsOptions = profileSetting.discoverCardsOptions;
     // entreprise user may have a list of external issuer
@@ -730,7 +732,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                           vcFormatType == VCFormatType.auto) &&
                       discoverCardsOptions.displayOver18Jwt;
 
-              if (isDutchProfile || displayOver18 || displayOver18Jwt) {
+              if (isDiipv2point1hProfile || displayOver18 || displayOver18Jwt) {
                 allSubjectTypeForCategory.add(CredentialSubjectType.over18);
               }
             }
@@ -842,7 +844,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                           vcFormatType == VCFormatType.auto) &&
                       discoverCardsOptions.displayEmailPassJwt;
 
-              if (displayEmailPass || displayEmailPassJwt) {
+              if (isDiipv3Profile || displayEmailPass || displayEmailPassJwt) {
                 allSubjectTypeForCategory.add(CredentialSubjectType.emailPass);
               }
             }
