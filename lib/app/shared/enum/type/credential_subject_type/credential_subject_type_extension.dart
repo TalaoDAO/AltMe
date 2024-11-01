@@ -760,7 +760,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     var format = VCFormatType.ldpVc.urlValue;
 
     if (vcFormatType == VCFormatType.auto && discoverCardsOptions != null) {
-      format = discoverCardsOptions.vcFormatTypeForAuto;
+      format = discoverCardsOptions.vcFormatTypeForAuto(this);
     } else {
       format = vcFormatType.urlValue;
     }

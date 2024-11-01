@@ -346,6 +346,7 @@ class ProfileModel extends Equatable {
             displayAgeRange: false,
             displayGender: false,
             displayExternalIssuer: [],
+            displayEmailPassSdJwt: true,
           ),
           selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
             displayManageDecentralizedId: true,
