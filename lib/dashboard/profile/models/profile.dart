@@ -337,7 +337,7 @@ class ProfileModel extends Equatable {
             displayChainborn: false,
             displayTezotopia: false,
             displayVerifiableId: false,
-            displayVerifiableIdJwt: true,
+            displayVerifiableIdJwt: false,
             displayOver65: false,
             displayEmailPass: false,
             displayEmailPassJwt: false,

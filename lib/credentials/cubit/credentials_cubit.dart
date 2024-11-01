@@ -696,10 +696,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     for (final CredentialCategory category in getCredentialCategorySorted) {
       final allCategoryVC = <CredInfo>[];
 
-      // /// tezVoucher is available only on Android platform
-      // if (isIOS) {
-      //   allCategoryVC.remove(CredentialSubjectType.tezVoucher);
-      // }
+      /// tezVoucher is available only on Android platform
+      if (isIOS) {
+        allCategoryVC.removeWhere(
+          (item) => item.credentialType == CredentialSubjectType.tezVoucher,
+        );
+      }
 
       // remove cards in discover based on profile
       if (discoverCardsOptions != null) {
@@ -717,6 +719,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           case CredentialCategory.identityCards:
 
             /// over 13
+
             if (ldpVcType && discoverCardsOptions.displayOver13) {
               allCategoryVC.add(
                 CredInfo(
@@ -727,6 +730,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Over 15
+
             if (ldpVcType && discoverCardsOptions.displayOver15) {
               allCategoryVC.add(
                 CredInfo(
@@ -890,6 +894,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           case CredentialCategory.contactInfoCredentials:
 
             /// Email Pass
+
             if (ldpVcType && discoverCardsOptions.displayEmailPass) {
               allCategoryVC.add(
                 CredInfo(
@@ -1041,6 +1046,11 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             credInfo.credentialType.supportSingleOnly) {
           /// credential available case
           for (final credential in credentialsOfSameType) {
+            final alreadyAdded = requiredCreds.any(
+              (item) =>
+                  item.credentialType == credInfo.credentialType &&
+                  item.formatType == credInfo.formatType,
+            );
             if (isBlockchainAccount && supportAssociatedCredential) {
               /// there can be multiple blockchain profiles
               ///
@@ -1052,7 +1062,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
               if (isCurrentBlockchainAccount) {
                 /// if already added do not add
-                if (!requiredCreds.contains(credInfo)) {
+                if (!alreadyAdded) {
                   requiredCreds.add(credInfo);
                 }
               }
@@ -1063,7 +1073,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 /// do not add if format matched
                 /// there can be same credentials with different format
               } else {
-                requiredCreds.add(credInfo);
+                if (!alreadyAdded) {
+                  requiredCreds.add(credInfo);
+                }
               }
             }
           }
@@ -1075,7 +1087,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               !isCurrentBlockchainAccount) {
             /// do not add if current blockchain acccount does not match
           } else {
-            requiredCreds.add(credInfo);
+            final alreadyAdded = requiredCreds.any(
+              (item) =>
+                  item.credentialType == credInfo.credentialType &&
+                  item.formatType == credInfo.formatType,
+            );
+            if (!alreadyAdded) {
+              requiredCreds.add(credInfo);
+            }
           }
         }
       }
