@@ -1072,18 +1072,25 @@ class OIDC4VC {
 
       return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
     } else {
+      final idAndVerificationMethodPath =
+          JsonPath(r'$..[?(@.verificationMethod)]');
+      final idAndVerificationMethod = (idAndVerificationMethodPath
+          .read(didDocument)
+          .first
+          .value!) as Map<String, dynamic>;
       final jsonPath = JsonPath(r'$..verificationMethod');
       late List<dynamic> data;
 
       if (holderKid == null) {
         data = (jsonPath.read(didDocument).first.value! as List).toList();
       } else {
-        data = (jsonPath.read(didDocument).first.value! as List).where(
+        data = (idAndVerificationMethod['verificationMethod'] as List).where(
           (dynamic e) {
+            final id = idAndVerificationMethod['id'];
             final kid = e['id'].toString();
 
-            if (holderKid.contains('#0') && kid == '#0') {
-              return true;
+            if (kid.startsWith('#')) {
+              if (holderKid == id + kid) return true;
             } else {
               if (holderKid == kid) return true;
             }
