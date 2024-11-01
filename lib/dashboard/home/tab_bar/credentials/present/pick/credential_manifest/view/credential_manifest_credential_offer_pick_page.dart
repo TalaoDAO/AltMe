@@ -128,7 +128,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
           child: credentialManifestState.filteredCredentialList.isEmpty
               ? const RequiredCredentialNotFound()
               : BasePage(
-                  title: l10n.credentialPickTitle,
+                  title: l10n.credentialShareTitle,
                   titleAlignment: Alignment.topCenter,
                   titleTrailing: const WhiteCloseButton(),
                   padding: const EdgeInsets.symmetric(

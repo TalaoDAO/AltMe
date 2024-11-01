@@ -9,15 +9,12 @@ class BinanceAssociatedAddressModel extends CredentialSubjectModel {
   BinanceAssociatedAddressModel({
     this.associatedAddress,
     this.accountName,
-    required String id,
-    required String type,
-    required Author issuedBy,
+    required String super.id,
+    required String super.type,
+    required Author super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
           credentialSubjectType: CredentialSubjectType.binanceAssociatedWallet,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
-          issuedBy: issuedBy,
         );
 
   factory BinanceAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>

@@ -668,12 +668,21 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over21:
       case CredentialSubjectType.over50:
       case CredentialSubjectType.over65:
-      case CredentialSubjectType.gender:
       case CredentialSubjectType.ageRange:
-      case CredentialSubjectType.defiCompliance:
-      case CredentialSubjectType.tezotopiaMembership:
+      case CredentialSubjectType.gender:
       case CredentialSubjectType.chainbornMembership:
+      case CredentialSubjectType.tezotopiaMembership:
+      case CredentialSubjectType.defiCompliance:
         return [VCFormatType.ldpVc, VCFormatType.auto];
+
+      case CredentialSubjectType.over18:
+      case CredentialSubjectType.livenessCard:
+      case CredentialSubjectType.phonePass:
+        return [
+          VCFormatType.ldpVc,
+          VCFormatType.jwtVcJson,
+          VCFormatType.auto,
+        ];
 
       case CredentialSubjectType.verifiableIdCard:
         return [
@@ -684,20 +693,19 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
           VCFormatType.auto,
         ];
 
-      case CredentialSubjectType.identityCredential:
-      case CredentialSubjectType.eudiPid:
-      case CredentialSubjectType.pid:
-        return [VCFormatType.vcSdJWT, VCFormatType.auto];
-
-      case CredentialSubjectType.over18:
-      case CredentialSubjectType.phonePass:
-      case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.emailPass:
         return [
           VCFormatType.ldpVc,
           VCFormatType.jwtVcJson,
           VCFormatType.auto,
+          VCFormatType.vcSdJWT,
         ];
+
+      /// Exceptions
+      case CredentialSubjectType.identityCredential:
+      case CredentialSubjectType.eudiPid:
+      case CredentialSubjectType.pid:
+        return [VCFormatType.vcSdJWT, VCFormatType.auto];
 
       case CredentialSubjectType.nationality:
       case CredentialSubjectType.identityPass:
@@ -739,7 +747,10 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
-  DiscoverDummyCredential dummyCredential(ProfileSetting profileSetting) {
+  DiscoverDummyCredential dummyCredential({
+    required ProfileSetting profileSetting,
+    required VCFormatType assignedVCFormatType,
+  }) {
     String? image;
     String? link;
     String? websiteLink;
@@ -759,7 +770,10 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     var format = VCFormatType.ldpVc.urlValue;
 
     if (vcFormatType == VCFormatType.auto && discoverCardsOptions != null) {
-      format = discoverCardsOptions.vcFormatTypeForAuto;
+      format = discoverCardsOptions.vcFormatTypeForAuto(
+        credentialSubjectType: this,
+        vcFormatType: assignedVCFormatType,
+      );
     } else {
       format = vcFormatType.urlValue;
     }
@@ -911,14 +925,19 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         var type = 'verifiableid';
         image = ImageStrings.dummyVerifiableIdCard;
 
-        if (vcFormatType == VCFormatType.vcSdJWT) {
-          final discoverCardsOptions = profileSetting.discoverCardsOptions;
-          if (discoverCardsOptions != null &&
-              discoverCardsOptions.displayVerifiableIdSdJwt) {
+        final discoverCardsOptions = profileSetting.discoverCardsOptions;
+
+        if (discoverCardsOptions != null) {
+          if (discoverCardsOptions.displayVerifiableIdSdJwt &&
+              assignedVCFormatType == VCFormatType.vcSdJWT) {
             type = 'pid';
             image = ImageStrings.dummyPIDCard;
-          } else {
-            type = 'identitycredential';
+          } else if (discoverCardsOptions.displayVerifiableIdJwt &&
+              assignedVCFormatType == VCFormatType.jwtVcJson) {
+            type = 'verifiableid';
+          } else if (discoverCardsOptions.displayVerifiableId &&
+              assignedVCFormatType == VCFormatType.ldpVc) {
+            type = 'verifiableid';
           }
         } else if (vcFormatType == VCFormatType.jwtVc) {
           type = 'individualverifiableattestation';

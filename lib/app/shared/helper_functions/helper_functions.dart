@@ -754,14 +754,12 @@ Future<
 
   Map<String, dynamic>? authorizationServerConfigurationData;
 
-  if (authorizationServer != null) {
-    authorizationServerConfigurationData = await oidc4vc.getOpenIdConfig(
-      baseUrl: authorizationServer,
-      isAuthorizationServer: true,
-      dio: client.dio,
-      useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-    );
-  }
+  authorizationServerConfigurationData = await oidc4vc.getOpenIdConfig(
+    baseUrl: authorizationServer ?? issuer,
+    isAuthorizationServer: true,
+    dio: client.dio,
+    useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+  );
 
   final credentialsSupported = openIdConfiguration.credentialsSupported;
   final credentialConfigurationsSupported =
@@ -1883,16 +1881,20 @@ List<VCFormatType> getPresentVCDetails({
       final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
 
       /// ldp_vc
-      presentLdpVc = vpFormats.containsKey('ldp_vc');
+      presentLdpVc =
+          vpFormats.containsKey('ldp_vc') || vpFormats.containsKey('ldp_vp');
 
       /// jwt_vc
-      presentJwtVc = vpFormats.containsKey('jwt_vc');
+      presentJwtVc =
+          vpFormats.containsKey('jwt_vc') || vpFormats.containsKey('jwt_vp');
 
       /// jwt_vc_json
-      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json');
+      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json') ||
+          vpFormats.containsKey('jwt_vp_json');
 
       /// jwt_vc_json-ld
-      presentJwtVcJsonLd = vpFormats.containsKey('jwt_vc_json-ld');
+      presentJwtVcJsonLd = vpFormats.containsKey('jwt_vc_json-ld') ||
+          vpFormats.containsKey('jwt_vp_json-ld');
 
       /// vc+sd-jwt
       presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');

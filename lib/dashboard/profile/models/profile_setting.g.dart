@@ -99,6 +99,7 @@ DiscoverCardsOptions _$DiscoverCardsOptionsFromJson(
       displayChainborn: json['displayChainborn'] as bool? ?? false,
       displayTezotopia: json['displayTezotopia'] as bool? ?? false,
       displayHumanityJwt: json['displayHumanityJwt'] as bool? ?? false,
+      displayEmailPassSdJwt: json['displayEmailPassSdJwt'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$DiscoverCardsOptionsToJson(
@@ -126,6 +127,7 @@ Map<String, dynamic> _$DiscoverCardsOptionsToJson(
       'displayExternalIssuer': instance.displayExternalIssuer,
       'displayChainborn': instance.displayChainborn,
       'displayTezotopia': instance.displayTezotopia,
+      'displayEmailPassSdJwt': instance.displayEmailPassSdJwt,
     };
 
 GeneralOptions _$GeneralOptionsFromJson(Map<String, dynamic> json) =>
