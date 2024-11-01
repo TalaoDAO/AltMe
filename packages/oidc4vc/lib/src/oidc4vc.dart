@@ -1015,6 +1015,23 @@ class OIDC4VC {
           }
         }
     }
+
+    // If authorizationEndpoint is null, we fetch from oauth-
+    if (authorizationEndpoint == null) {
+      final authorizationServerConfigurationData = await getOpenIdConfig(
+        baseUrl: issuer,
+        isAuthorizationServer: true,
+        dio: dio,
+        secureStorage: secureStorage,
+        useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+      );
+      final authorizationServerConfiguration = OpenIdConfiguration.fromJson(
+        authorizationServerConfigurationData,
+      );
+      authorizationEndpoint =
+          authorizationServerConfiguration.authorizationEndpoint;
+    }
+
     // If authorizationEndpoint is null, we consider the issuer
     // as the authorizationEndpoint
 
