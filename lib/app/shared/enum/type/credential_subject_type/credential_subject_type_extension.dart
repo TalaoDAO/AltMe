@@ -925,14 +925,19 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         var type = 'verifiableid';
         image = ImageStrings.dummyVerifiableIdCard;
 
-        if (vcFormatType == VCFormatType.vcSdJWT) {
-          final discoverCardsOptions = profileSetting.discoverCardsOptions;
-          if (discoverCardsOptions != null &&
-              discoverCardsOptions.displayVerifiableIdSdJwt) {
+        final discoverCardsOptions = profileSetting.discoverCardsOptions;
+
+        if (discoverCardsOptions != null) {
+          if (discoverCardsOptions.displayVerifiableIdSdJwt &&
+              assignedVCFormatType == VCFormatType.vcSdJWT) {
             type = 'pid';
             image = ImageStrings.dummyPIDCard;
-          } else {
-            type = 'identitycredential';
+          } else if (discoverCardsOptions.displayVerifiableIdJwt &&
+              assignedVCFormatType == VCFormatType.jwtVcJson) {
+            type = 'verifiableid';
+          } else if (discoverCardsOptions.displayVerifiableId &&
+              assignedVCFormatType == VCFormatType.ldpVc) {
+            type = 'verifiableid';
           }
         } else if (vcFormatType == VCFormatType.jwtVc) {
           type = 'individualverifiableattestation';

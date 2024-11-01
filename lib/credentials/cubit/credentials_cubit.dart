@@ -709,8 +709,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             vcFormatType == VCFormatType.auto;
         final jwtVcJsonType = vcFormatType == VCFormatType.jwtVcJson ||
             vcFormatType == VCFormatType.auto;
-        final jwtVcType = vcFormatType == VCFormatType.jwtVc ||
-            vcFormatType == VCFormatType.auto;
+        final jwtVcType = vcFormatType == VCFormatType.jwtVc;
         final vcSdJWType = vcFormatType == VCFormatType.vcSdJWT ||
             vcFormatType == VCFormatType.auto;
 
@@ -810,7 +809,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 ),
               );
             }
-            if (vcSdJWType && discoverCardsOptions.displayVerifiableIdSdJwt) {
+            if (jwtVcJsonType &&
+                discoverCardsOptions.displayVerifiableIdSdJwt) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.verifiableIdCard,
@@ -1087,10 +1087,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       /// add dummies from the category
       dummies[category]?.addAll(
         requiredCreds
-            .map((item) => item.credentialType.dummyCredential(
-                  profileSetting: profileSetting,
-                  assignedVCFormatType: item.formatType,
-                ))
+            .map(
+              (item) => item.credentialType.dummyCredential(
+                profileSetting: profileSetting,
+                assignedVCFormatType: item.formatType,
+              ),
+            )
             .toList(),
       );
     }
