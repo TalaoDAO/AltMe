@@ -363,7 +363,7 @@ class ProfileModel extends Equatable {
               clientType: ClientType.did,
               clientId: clientId,
               clientSecret: clientSecret,
-              vcFormatType: VCFormatType.vcSdJWT,
+              vcFormatType: VCFormatType.auto,
               proofType: ProofType.jwt,
             ),
           ),

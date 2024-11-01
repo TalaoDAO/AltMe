@@ -1883,16 +1883,20 @@ List<VCFormatType> getPresentVCDetails({
       final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
 
       /// ldp_vc
-      presentLdpVc = vpFormats.containsKey('ldp_vc');
+      presentLdpVc =
+          vpFormats.containsKey('ldp_vc') || vpFormats.containsKey('ldp_vp');
 
       /// jwt_vc
-      presentJwtVc = vpFormats.containsKey('jwt_vc');
+      presentJwtVc =
+          vpFormats.containsKey('jwt_vc') || vpFormats.containsKey('jwt_vp');
 
       /// jwt_vc_json
-      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json');
+      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json') ||
+          vpFormats.containsKey('jwt_vp_json');
 
       /// jwt_vc_json-ld
-      presentJwtVcJsonLd = vpFormats.containsKey('jwt_vc_json-ld');
+      presentJwtVcJsonLd = vpFormats.containsKey('jwt_vc_json-ld') ||
+          vpFormats.containsKey('jwt_vp_json-ld');
 
       /// vc+sd-jwt
       presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
