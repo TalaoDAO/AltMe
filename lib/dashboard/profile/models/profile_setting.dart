@@ -186,8 +186,8 @@ class DiscoverCardsOptions extends Equatable {
     required this.displayVerifiableId,
     required this.displayExternalIssuer,
     this.displayOver18Jwt = false,
-    this.displayVerifiableIdJwt = true,
-    this.displayVerifiableIdSdJwt = true,
+    this.displayVerifiableIdJwt = false,
+    this.displayVerifiableIdSdJwt = false,
     this.displayEmailPass = true,
     this.displayEmailPassJwt = true,
     this.displayPhonePass = true,
@@ -195,6 +195,7 @@ class DiscoverCardsOptions extends Equatable {
     this.displayChainborn = false,
     this.displayTezotopia = false,
     this.displayHumanityJwt = false,
+    this.displayEmailPassSdJwt = false,
   });
 
   factory DiscoverCardsOptions.fromJson(Map<String, dynamic> json) =>
@@ -238,6 +239,7 @@ class DiscoverCardsOptions extends Equatable {
         displayAgeRange: false,
         displayGender: false,
         displayExternalIssuer: [],
+        displayEmailPassSdJwt: false,
       );
 
   final bool displayDefi;
@@ -262,6 +264,7 @@ class DiscoverCardsOptions extends Equatable {
   final List<DisplayExternalIssuer> displayExternalIssuer;
   final bool displayChainborn;
   final bool displayTezotopia;
+  final bool displayEmailPassSdJwt;
 
   Map<String, dynamic> toJson() => _$DiscoverCardsOptionsToJson(this);
 
@@ -287,6 +290,7 @@ class DiscoverCardsOptions extends Equatable {
     List<DisplayExternalIssuer>? displayExternalIssuer,
     bool? displayChainborn,
     bool? displayTezotopia,
+    bool? displayEmailPassSdJwt,
   }) {
     return DiscoverCardsOptions(
       displayDefi: displayDefi ?? this.displayDefi,
@@ -312,31 +316,104 @@ class DiscoverCardsOptions extends Equatable {
           displayExternalIssuer ?? this.displayExternalIssuer,
       displayChainborn: displayChainborn ?? this.displayChainborn,
       displayTezotopia: displayTezotopia ?? this.displayTezotopia,
+      displayEmailPassSdJwt:
+          displayEmailPassSdJwt ?? this.displayEmailPassSdJwt,
     );
   }
 
-  String get vcFormatTypeForAuto {
-    if (displayDefi ||
-        displayEmailPass ||
-        displayGender ||
-        displayHumanity ||
-        displayOver13 ||
-        displayOver15 ||
-        displayOver18 ||
-        displayOver21 ||
-        displayOver50 ||
-        displayOver65 ||
-        displayPhonePass ||
-        displayVerifiableId) {
-      return VCFormatType.ldpVc.urlValue;
-    } else if (displayPhonePassJwt ||
-        displayOver18Jwt ||
-        displayEmailPassJwt ||
-        displayVerifiableIdJwt ||
-        displayHumanityJwt) {
-      return VCFormatType.jwtVcJson.urlValue;
-    } else if (displayVerifiableIdSdJwt) {
-      return VCFormatType.vcSdJWT.urlValue;
+  String vcFormatTypeForAuto({
+    required CredentialSubjectType credentialSubjectType,
+    required VCFormatType vcFormatType,
+  }) {
+    final ldpVcValue = VCFormatType.ldpVc.urlValue;
+    final jwtVcJsonValue = VCFormatType.jwtVcJson.urlValue;
+    final vcSdJWTValue = VCFormatType.vcSdJWT.urlValue;
+
+    final isLdpVc = vcFormatType == VCFormatType.ldpVc;
+    final isJwtVcJson = vcFormatType == VCFormatType.jwtVcJson;
+    final isVcSdJWT = vcFormatType == VCFormatType.vcSdJWT;
+
+    switch (credentialSubjectType) {
+      case CredentialSubjectType.defiCompliance:
+        if (isLdpVc && displayDefi) return ldpVcValue;
+      case CredentialSubjectType.livenessCard:
+        if (isLdpVc && displayHumanity) return ldpVcValue;
+        if (isJwtVcJson && displayHumanityJwt) return vcSdJWTValue;
+      case CredentialSubjectType.gender:
+        if (isLdpVc && displayGender) return ldpVcValue;
+      case CredentialSubjectType.verifiableIdCard:
+        if (isLdpVc && displayVerifiableId) return ldpVcValue;
+        if (isJwtVcJson && displayVerifiableIdJwt) return jwtVcJsonValue;
+        if (isVcSdJWT && displayVerifiableIdSdJwt) return vcSdJWTValue;
+      case CredentialSubjectType.over13:
+        if (isLdpVc && displayOver13) return ldpVcValue;
+      case CredentialSubjectType.over15:
+        if (isLdpVc && displayOver15) return ldpVcValue;
+      case CredentialSubjectType.over18:
+        if (isLdpVc && displayOver18) return ldpVcValue;
+        if (isJwtVcJson && displayOver18Jwt) return jwtVcJsonValue;
+      case CredentialSubjectType.over21:
+        if (isLdpVc && displayOver21) return ldpVcValue;
+      case CredentialSubjectType.over50:
+        if (isLdpVc && displayOver50) return ldpVcValue;
+      case CredentialSubjectType.over65:
+        if (isLdpVc && displayOver65) return ldpVcValue;
+      case CredentialSubjectType.emailPass:
+        if (isLdpVc && displayEmailPass) return ldpVcValue;
+        if (isJwtVcJson && displayEmailPassJwt) return jwtVcJsonValue;
+        if (isVcSdJWT && displayEmailPassSdJwt) return vcSdJWTValue;
+      case CredentialSubjectType.learningAchievement:
+      case CredentialSubjectType.phonePass:
+        if (isLdpVc && displayPhonePass) return ldpVcValue;
+        if (isJwtVcJson && displayPhonePassJwt) return jwtVcJsonValue;
+      case CredentialSubjectType.identityPass:
+      case CredentialSubjectType.tezotopiaMembership:
+      case CredentialSubjectType.chainbornMembership:
+      case CredentialSubjectType.ageRange:
+      case CredentialSubjectType.nationality:
+      case CredentialSubjectType.passportFootprint:
+      case CredentialSubjectType.residentCard:
+      case CredentialSubjectType.voucher:
+      case CredentialSubjectType.tezVoucher:
+      case CredentialSubjectType.diplomaCard:
+      case CredentialSubjectType.twitterCard:
+      case CredentialSubjectType.tezosAssociatedWallet:
+      case CredentialSubjectType.ethereumAssociatedWallet:
+      case CredentialSubjectType.fantomAssociatedWallet:
+      case CredentialSubjectType.polygonAssociatedWallet:
+      case CredentialSubjectType.binanceAssociatedWallet:
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+      case CredentialSubjectType.walletCredential:
+      case CredentialSubjectType.tezosPooAddress:
+      case CredentialSubjectType.ethereumPooAddress:
+      case CredentialSubjectType.fantomPooAddress:
+      case CredentialSubjectType.polygonPooAddress:
+      case CredentialSubjectType.binancePooAddress:
+      case CredentialSubjectType.certificateOfEmployment:
+      case CredentialSubjectType.defaultCredential:
+      case CredentialSubjectType.professionalExperienceAssessment:
+      case CredentialSubjectType.professionalSkillAssessment:
+      case CredentialSubjectType.professionalStudentCard:
+      case CredentialSubjectType.selfIssued:
+      case CredentialSubjectType.studentCard:
+      case CredentialSubjectType.aragoPass:
+      case CredentialSubjectType.aragoEmailPass:
+      case CredentialSubjectType.aragoIdentityCard:
+      case CredentialSubjectType.aragoLearningAchievement:
+      case CredentialSubjectType.aragoOver18:
+      case CredentialSubjectType.pcdsAgentCertificate:
+      case CredentialSubjectType.euDiplomaCard:
+      case CredentialSubjectType.euVerifiableId:
+      case CredentialSubjectType.kycAgeCredential:
+      case CredentialSubjectType.kycCountryOfResidence:
+      case CredentialSubjectType.proofOfTwitterStats:
+      case CredentialSubjectType.civicPassCredential:
+      case CredentialSubjectType.employeeCredential:
+      case CredentialSubjectType.legalPersonalCredential:
+      case CredentialSubjectType.identityCredential:
+      case CredentialSubjectType.eudiPid:
+      case CredentialSubjectType.pid:
+        return VCFormatType.ldpVc.urlValue;
     }
 
     return VCFormatType.ldpVc.urlValue;

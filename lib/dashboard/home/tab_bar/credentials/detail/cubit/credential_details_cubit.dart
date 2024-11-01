@@ -90,7 +90,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
       if (item.expirationDate != null) {
         final DateTime dateTimeExpirationDate =
-            DateTime.parse(item.expirationDate!);
+            UiDate.parseExpirationDate(item.expirationDate!);
         if (!dateTimeExpirationDate.isAfter(DateTime.now())) {
           emit(
             state.copyWith(

@@ -940,7 +940,8 @@ class ScanCubit extends Cubit<ScanState> {
 
       final String responseOrRedirectUri =
           uri.queryParameters['redirect_uri'] ??
-              uri.queryParameters['response_uri']!;
+              uri.queryParameters['response_uri'] ??
+              uri.origin;
 
       await activityLogManager.saveLog(
         LogData(

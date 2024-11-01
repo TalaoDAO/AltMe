@@ -829,10 +829,13 @@ class OIDC4VC {
         OpenIdConfiguration openIdConfiguration;
 
         var isAuthorizationServer = false;
+        var useOAuthAuthorizationServer = useOAuthAuthorizationServerLink;
 
         if (fromStatusList) {
           ///as this is not a VC issuer
           isAuthorizationServer = true;
+
+          useOAuthAuthorizationServer = false;
         }
 
         final openIdConfigurationData = await getOpenIdConfig(
@@ -841,7 +844,7 @@ class OIDC4VC {
           isCachingEnabled: isCachingEnabled,
           dio: dio,
           secureStorage: secureStorage,
-          useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+          useOAuthAuthorizationServerLink: useOAuthAuthorizationServer,
         );
 
         openIdConfiguration =
@@ -856,7 +859,7 @@ class OIDC4VC {
             isCachingEnabled: isCachingEnabled,
             dio: dio,
             secureStorage: secureStorage,
-            useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+            useOAuthAuthorizationServerLink: useOAuthAuthorizationServer,
           );
           openIdConfiguration =
               OpenIdConfiguration.fromJson(openIdConfigurationData);
@@ -1012,6 +1015,23 @@ class OIDC4VC {
           }
         }
     }
+
+    // If authorizationEndpoint is null, we fetch from oauth-
+    if (authorizationEndpoint == null) {
+      final authorizationServerConfigurationData = await getOpenIdConfig(
+        baseUrl: issuer,
+        isAuthorizationServer: true,
+        dio: dio,
+        secureStorage: secureStorage,
+        useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+      );
+      final authorizationServerConfiguration = OpenIdConfiguration.fromJson(
+        authorizationServerConfigurationData,
+      );
+      authorizationEndpoint =
+          authorizationServerConfiguration.authorizationEndpoint;
+    }
+
     // If authorizationEndpoint is null, we consider the issuer
     // as the authorizationEndpoint
 
@@ -1052,18 +1072,21 @@ class OIDC4VC {
 
       return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
     } else {
-      final totoPath = JsonPath(r'$..[?(@.verificationMethod)]');
-      final toto =
-          (totoPath.read(didDocument).first.value!) as Map<String, dynamic>;
+      final idAndVerificationMethodPath =
+          JsonPath(r'$..[?(@.verificationMethod)]');
+      final idAndVerificationMethod = (idAndVerificationMethodPath
+          .read(didDocument)
+          .first
+          .value!) as Map<String, dynamic>;
       final jsonPath = JsonPath(r'$..verificationMethod');
       late List<dynamic> data;
 
       if (holderKid == null) {
         data = (jsonPath.read(didDocument).first.value! as List).toList();
       } else {
-        data = (toto['verificationMethod'] as List).where(
+        data = (idAndVerificationMethod['verificationMethod'] as List).where(
           (dynamic e) {
-            final id = toto['id'];
+            final id = idAndVerificationMethod['id'];
             final kid = e['id'].toString();
 
             if (kid.startsWith('#')) {

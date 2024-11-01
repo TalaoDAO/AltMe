@@ -139,6 +139,9 @@ class _OperationViewState extends State<OperationView> {
 
         return PopScope(
           onPopInvoked: (didPop) {
+            if (didPop) {
+              return;
+            }
             context.read<OperationCubit>().rejectOperation(
                   connectionBridgeType: widget.connectionBridgeType,
                 );

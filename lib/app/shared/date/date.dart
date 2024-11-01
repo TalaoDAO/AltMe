@@ -111,4 +111,15 @@ class UiDate {
       return null;
     }
   }
+
+  static DateTime parseExpirationDate(String input) {
+    if (RegExp(r'^\d+$').hasMatch(input)) {
+      // numeric date string
+      final int timestamp = int.parse(input);
+      return DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    } else {
+      // ISO 8601 formatted date string
+      return DateTime.parse(input);
+    }
+  }
 }
