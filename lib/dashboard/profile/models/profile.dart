@@ -257,7 +257,7 @@ class ProfileModel extends Equatable {
             displayOver13: false,
             displayOver15: false,
             displayOver18: false,
-            displayOver18Jwt: false,
+            displayOver18Jwt: true,
             displayOver21: false,
             displayOver50: false,
             displayChainborn: false,
@@ -347,6 +347,7 @@ class ProfileModel extends Equatable {
             displayGender: false,
             displayExternalIssuer: [],
             displayEmailPassSdJwt: true,
+            displayVerifiableIdSdJwt: true,
           ),
           selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
             displayManageDecentralizedId: true,

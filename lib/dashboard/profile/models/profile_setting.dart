@@ -321,44 +321,51 @@ class DiscoverCardsOptions extends Equatable {
     );
   }
 
-  String vcFormatTypeForAuto(CredentialSubjectType credentialSubjectType) {
-    final ldpVc = VCFormatType.ldpVc.urlValue;
-    final jwtVcJson = VCFormatType.jwtVcJson.urlValue;
-    final vcSdJWT = VCFormatType.vcSdJWT.urlValue;
+  String vcFormatTypeForAuto({
+    required CredentialSubjectType credentialSubjectType,
+    required VCFormatType vcFormatType,
+  }) {
+    final ldpVcValue = VCFormatType.ldpVc.urlValue;
+    final jwtVcJsonValue = VCFormatType.jwtVcJson.urlValue;
+    final vcSdJWTValue = VCFormatType.vcSdJWT.urlValue;
+
+    final isLdpVc = vcFormatType == VCFormatType.ldpVc;
+    final isJwtVcJson = vcFormatType == VCFormatType.jwtVcJson;
+    final isVcSdJWT = vcFormatType == VCFormatType.vcSdJWT;
 
     switch (credentialSubjectType) {
       case CredentialSubjectType.defiCompliance:
-        if (displayDefi) return ldpVc;
+        if (isLdpVc && displayDefi) return ldpVcValue;
       case CredentialSubjectType.livenessCard:
-        if (displayHumanity) return ldpVc;
-        if (displayHumanityJwt) return vcSdJWT;
+        if (isLdpVc && displayHumanity) return ldpVcValue;
+        if (isJwtVcJson && displayHumanityJwt) return vcSdJWTValue;
       case CredentialSubjectType.gender:
-        if (displayGender) return ldpVc;
+        if (isLdpVc && displayGender) return ldpVcValue;
       case CredentialSubjectType.verifiableIdCard:
-        if (displayVerifiableId) return ldpVc;
-        if (displayVerifiableIdJwt) return jwtVcJson;
-        if (displayVerifiableIdSdJwt) return vcSdJWT;
+        if (isLdpVc && displayVerifiableId) return ldpVcValue;
+        if (isJwtVcJson && displayVerifiableIdJwt) return jwtVcJsonValue;
+        if (isVcSdJWT && displayVerifiableIdSdJwt) return vcSdJWTValue;
       case CredentialSubjectType.over13:
-        if (displayOver13) return ldpVc;
+        if (isLdpVc && displayOver13) return ldpVcValue;
       case CredentialSubjectType.over15:
-        if (displayOver15) return ldpVc;
+        if (isLdpVc && displayOver15) return ldpVcValue;
       case CredentialSubjectType.over18:
-        if (displayOver18) return ldpVc;
-        if (displayOver18Jwt) return jwtVcJson;
+        if (isLdpVc && displayOver18) return ldpVcValue;
+        if (isJwtVcJson && displayOver18Jwt) return jwtVcJsonValue;
       case CredentialSubjectType.over21:
-        if (displayOver21) return ldpVc;
+        if (isLdpVc && displayOver21) return ldpVcValue;
       case CredentialSubjectType.over50:
-        if (displayOver50) return ldpVc;
+        if (isLdpVc && displayOver50) return ldpVcValue;
       case CredentialSubjectType.over65:
-        if (displayOver65) return ldpVc;
+        if (isLdpVc && displayOver65) return ldpVcValue;
       case CredentialSubjectType.emailPass:
-        if (displayEmailPass) return ldpVc;
-        if (displayEmailPassJwt) return jwtVcJson;
-        if (displayEmailPassSdJwt) return vcSdJWT;
+        if (isLdpVc && displayEmailPass) return ldpVcValue;
+        if (isJwtVcJson && displayEmailPassJwt) return jwtVcJsonValue;
+        if (isVcSdJWT && displayEmailPassSdJwt) return vcSdJWTValue;
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.phonePass:
-        if (displayPhonePass) return ldpVc;
-        if (displayPhonePassJwt) return jwtVcJson;
+        if (isLdpVc && displayPhonePass) return ldpVcValue;
+        if (isJwtVcJson && displayPhonePassJwt) return jwtVcJsonValue;
       case CredentialSubjectType.identityPass:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
