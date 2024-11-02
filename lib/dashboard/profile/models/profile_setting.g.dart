@@ -89,9 +89,9 @@ DiscoverCardsOptions _$DiscoverCardsOptionsFromJson(
           .map((e) => DisplayExternalIssuer.fromJson(e as Map<String, dynamic>))
           .toList(),
       displayOver18Jwt: json['displayOver18Jwt'] as bool? ?? false,
-      displayVerifiableIdJwt: json['displayVerifiableIdJwt'] as bool? ?? true,
+      displayVerifiableIdJwt: json['displayVerifiableIdJwt'] as bool? ?? false,
       displayVerifiableIdSdJwt:
-          json['displayVerifiableIdSdJwt'] as bool? ?? true,
+          json['displayVerifiableIdSdJwt'] as bool? ?? false,
       displayEmailPass: json['displayEmailPass'] as bool? ?? true,
       displayEmailPassJwt: json['displayEmailPassJwt'] as bool? ?? true,
       displayPhonePass: json['displayPhonePass'] as bool? ?? true,
