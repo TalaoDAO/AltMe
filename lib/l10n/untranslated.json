@@ -70,7 +70,8 @@
     "restoreAnAppBackup",
     "credentialPickShare",
     "credentialPickTitle",
-    "credentialShareTitle"
+    "credentialShareTitle",
+    "enterYourSecretCode"
   ],
 
   "es": [
@@ -144,7 +145,8 @@
     "restoreAnAppBackup",
     "credentialPickShare",
     "credentialPickTitle",
-    "credentialShareTitle"
+    "credentialShareTitle",
+    "enterYourSecretCode"
   ],
 
   "fr": [
@@ -223,6 +225,7 @@
     "restoreAnAppBackup",
     "credentialPickShare",
     "credentialPickTitle",
-    "credentialShareTitle"
+    "credentialShareTitle",
+    "enterYourSecretCode"
   ]
 }

@@ -894,7 +894,6 @@
   "pleaseSwitchToCorrectOIDC4VCProfile": "Please switch to correct OIDC4VC profile.",
   "authenticationSuccess": "Authentication Success",
   "format": "Format",
-  "pleaseInsertTheSecredCodeReceived": "Please insert the secret code received.",
   "verifyIssuerWebsiteIdentity": "Verify issuer website identity",
   "verifyIssuerWebsiteIdentitySubtitle": "Enable to verify website identity before access. Default: Off.",
   "developerMode": "Developer Mode",
@@ -1154,5 +1153,6 @@
   },
   "credentialPickShare": "Share",
   "credentialPickTitle": "Choose the credential(s) to wish to obtain",
-  "credentialShareTitle": "Choose the credential(s) to share"
+  "credentialShareTitle": "Choose the credential(s) to share",
+  "enterYourSecretCode": "Enter your secret code."
 }
