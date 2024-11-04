@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/drawer/ssi/verifiers_metadata/view/verifiers_metadata_page.dart';
 import 'package:flutter/material.dart';
 
 class Oidc4vcSettingMenu extends StatelessWidget {
@@ -65,15 +66,7 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           DrawerItem(
             title: 'Wallet metadata for verifiers',
             onTap: () {
-              final value = const JsonEncoder.withIndent('  ').convert(
-                ConstantsJson.walletMetadataForVerifiers,
-              );
-              Navigator.of(context).push<void>(
-                JsonViewerPage.route(
-                  title: 'Wallet metadata for verifiers',
-                  data: value,
-                ),
-              );
+              Navigator.of(context).push<void>(VerifiersMetadataPage.route());
             },
           ),
         ],
