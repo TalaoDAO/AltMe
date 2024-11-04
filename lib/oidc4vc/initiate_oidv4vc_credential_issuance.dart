@@ -20,6 +20,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required SecureStorageProvider secureStorageProvider,
   required DioClient dioClient,
   required String? userPin,
+  required String? txCode,
   required dynamic credentialOfferJson,
   required bool cryptoHolderBinding,
   required OpenIdConfiguration? openIdConfiguration,
@@ -86,6 +87,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
         credentials: credentials,
         userPin: userPin,
+        txCode: txCode,
         issuer: issuer,
         preAuthorizedCode: preAuthorizedCode,
         isEBSI: isEBSI,
@@ -98,6 +100,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
           credentials: credentials,
           userPin: userPin,
+          txCode: txCode,
           issuer: issuer,
           preAuthorizedCode: preAuthorizedCode,
           isEBSI: isEBSI,
@@ -129,6 +132,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         await qrCodeScanCubit.addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
           userPin: userPin,
+          txCode: txCode,
           issuer: issuer,
           preAuthorizedCode: null,
           isEBSI: isEBSI,
@@ -147,6 +151,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
     // full phase flow of preAuthorized
     await qrCodeScanCubit.processSelectedCredentials(
       userPin: userPin,
+      txCode: txCode,
       issuer: issuer,
       preAuthorizedCode: preAuthorizedCode,
       isEBSI: isEBSI,

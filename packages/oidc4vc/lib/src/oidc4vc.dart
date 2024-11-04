@@ -588,8 +588,9 @@ class OIDC4VC {
     required OpenIdConfiguration openIdConfiguration,
     required Dio dio,
     required bool useOAuthAuthorizationServerLink,
+    required String? userPin,
+    required String? txCode,
     String? preAuthorizedCode,
-    String? userPin,
     String? code,
     String? codeVerifier,
     String? authorization,
@@ -615,6 +616,7 @@ class OIDC4VC {
       code: code,
       codeVerifier: codeVerifier,
       clientId: clientId,
+      txCode: txCode,
       clientSecret: clientSecret,
       authorization: authorization,
       redirectUri: redirectUri,
@@ -771,6 +773,7 @@ class OIDC4VC {
     required String redirectUri,
     String? preAuthorizedCode,
     String? userPin,
+    String? txCode,
     String? code,
     String? codeVerifier,
     String? clientId,
@@ -808,9 +811,11 @@ class OIDC4VC {
 
     if (userPin != null) {
       tokenData['user_pin'] = userPin;
+    }
 
-      /// draft 13
-      tokenData['tx_code'] = userPin;
+    /// draft 13 and above
+    if (txCode != null) {
+      tokenData['tx_code'] = txCode;
     }
 
     return tokenData;
