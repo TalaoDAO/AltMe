@@ -816,7 +816,7 @@ class SettingsMenu extends Equatable {
     required this.displayHelpCenter,
     required this.displayProfile,
     this.displaySelfSovereignIdentity = true,
-    this.displayActivityLog = false,
+    this.displayActivityLog = true,
   });
 
   factory SettingsMenu.fromJson(Map<String, dynamic> json) =>
