@@ -333,7 +333,7 @@ SettingsMenu _$SettingsMenuFromJson(Map<String, dynamic> json) => SettingsMenu(
       displayProfile: json['displayProfile'] as bool,
       displaySelfSovereignIdentity:
           json['displaySelfSovereignIdentity'] as bool? ?? true,
-      displayActivityLog: json['displayActivityLog'] as bool? ?? false,
+      displayActivityLog: json['displayActivityLog'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$SettingsMenuToJson(SettingsMenu instance) =>
