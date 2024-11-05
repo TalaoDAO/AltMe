@@ -242,6 +242,7 @@ CustomOidc4VcProfile _$CustomOidc4VcProfileFromJson(
       pushAuthorizationRequest:
           json['pushAuthorizationRequest'] as bool? ?? false,
       statusListCache: json['statusListCache'] as bool? ?? true,
+      dpopSupport: json['dpopSupport'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$CustomOidc4VcProfileToJson(
@@ -265,6 +266,7 @@ Map<String, dynamic> _$CustomOidc4VcProfileToJson(
       'subjectSyntaxeType': _$ClientTypeEnumMap[instance.clientType]!,
       'vcFormat': _$VCFormatTypeEnumMap[instance.vcFormatType]!,
       'proofType': _$ProofTypeEnumMap[instance.proofType]!,
+      'dpopSupport': instance.dpopSupport,
     };
 
 const _$ClientAuthenticationEnumMap = {

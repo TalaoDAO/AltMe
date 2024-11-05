@@ -3,6 +3,7 @@ export 'client_type_widget.dart';
 export 'confidential_client_widget.dart';
 export 'cryptograhic_holder_binding.dart';
 export 'did_key_type_widget.dart';
+export 'dpop_support_widget.dart';
 export 'draft_type_widget.dart';
 export 'option_container.dart';
 export 'proof_header_widget.dart';

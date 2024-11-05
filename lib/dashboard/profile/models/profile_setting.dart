@@ -681,6 +681,7 @@ class CustomOidc4VcProfile extends Equatable {
     this.proofType = ProofType.jwt,
     this.pushAuthorizationRequest = false,
     this.statusListCache = true,
+    this.dpopSupport = false,
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
@@ -728,6 +729,7 @@ class CustomOidc4VcProfile extends Equatable {
   @JsonKey(name: 'vcFormat')
   final VCFormatType vcFormatType;
   final ProofType proofType;
+  final bool dpopSupport;
 
   Map<String, dynamic> toJson() => _$CustomOidc4VcProfileToJson(this);
 
@@ -764,6 +766,7 @@ class CustomOidc4VcProfile extends Equatable {
     ClientType? clientType,
     VCFormatType? vcFormatType,
     ProofType? proofType,
+    bool? dpopSupport,
   }) =>
       CustomOidc4VcProfile(
         clientAuthentication: clientAuthentication ?? this.clientAuthentication,
@@ -785,6 +788,7 @@ class CustomOidc4VcProfile extends Equatable {
         clientSecret: clientSecret ?? this.clientSecret,
         vcFormatType: vcFormatType ?? this.vcFormatType,
         proofType: proofType ?? this.proofType,
+        dpopSupport: dpopSupport ?? this.dpopSupport,
       );
 
   @override
@@ -806,6 +810,7 @@ class CustomOidc4VcProfile extends Equatable {
         clientType,
         vcFormatType,
         proofType,
+        dpopSupport,
       ];
 }
 
