@@ -278,6 +278,7 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayOver18Jwt,
     bool? displayVerifiableId,
     bool? displayVerifiableIdJwt,
+    bool? displayVerifiableIdSdJwt,
     bool? displayOver21,
     bool? displayOver65,
     bool? displayEmailPass,
@@ -303,6 +304,8 @@ class DiscoverCardsOptions extends Equatable {
       displayVerifiableId: displayVerifiableId ?? this.displayVerifiableId,
       displayVerifiableIdJwt:
           displayVerifiableIdJwt ?? this.displayVerifiableIdJwt,
+      displayVerifiableIdSdJwt:
+          displayVerifiableIdSdJwt ?? this.displayVerifiableIdSdJwt,
       displayOver21: displayOver21 ?? this.displayOver21,
       displayOver65: displayOver65 ?? this.displayOver65,
       displayEmailPass: displayEmailPass ?? this.displayEmailPass,
