@@ -71,7 +71,8 @@
     "credentialPickShare",
     "credentialPickTitle",
     "credentialShareTitle",
-    "enterYourSecretCode"
+    "enterYourSecretCode",
+    "jwk"
   ],
 
   "es": [
@@ -146,7 +147,8 @@
     "credentialPickShare",
     "credentialPickTitle",
     "credentialShareTitle",
-    "enterYourSecretCode"
+    "enterYourSecretCode",
+    "jwk"
   ],
 
   "fr": [
@@ -226,6 +228,7 @@
     "credentialPickShare",
     "credentialPickTitle",
     "credentialShareTitle",
-    "enterYourSecretCode"
+    "enterYourSecretCode",
+    "jwk"
   ]
 }
