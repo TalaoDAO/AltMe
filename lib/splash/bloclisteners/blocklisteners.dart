@@ -32,6 +32,7 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
     if (state.status == SplashStatus.routeToPassCode) {
       securityCheck(
         context: context,
+        title: context.l10n.typeYourPINCodeToOpenTheWallet,
         localAuthApi: LocalAuthApi(),
         onSuccess: () {
           Navigator.of(context).push<void>(DashboardPage.route());
@@ -530,6 +531,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           bool authenticated = false;
           await securityCheck(
             context: context,
+            title: l10n.typeYourPINCodeToAuthenticate,
             localAuthApi: LocalAuthApi(),
             onSuccess: () {
               authenticated = true;
@@ -844,6 +846,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
 
         await securityCheck(
           context: context,
+          title: l10n.typeYourPINCodeToAuthenticate,
           localAuthApi: LocalAuthApi(),
           onSuccess: () {
             context.read<PolygonIdCubit>().authenticateOrGenerateProof(

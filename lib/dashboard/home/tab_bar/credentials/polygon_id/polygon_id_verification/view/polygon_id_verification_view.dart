@@ -277,6 +277,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                             ? () async {
                                 await securityCheck(
                                   context: context,
+                                  title: l10n.typeYourPINCodeToAuthenticate,
                                   localAuthApi: LocalAuthApi(),
                                   onSuccess: () {
                                     context

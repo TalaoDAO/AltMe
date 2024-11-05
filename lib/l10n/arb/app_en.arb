@@ -1155,5 +1155,8 @@
   "credentialPickTitle": "Choose the credential(s) to wish to obtain",
   "credentialShareTitle": "Choose the credential(s) to share",
   "enterYourSecretCode": "Enter your secret code.",
-  "jwk": "JWK"
+  "jwk": "JWK",
+  "typeYourPINCodeToOpenTheWallet": "Type your PIN code to open the wallet",
+  "typeYourPINCodeToShareTheData": "Type your PIN code to share the data",
+  "typeYourPINCodeToAuthenticate": "Type your PIN code to authenticate"
 }

@@ -51,6 +51,7 @@ class DidPrivateKey extends StatelessWidget {
             if (confirm) {
               await securityCheck(
                 context: context,
+                title: l10n.typeYourPINCodeToAuthenticate,
                 localAuthApi: LocalAuthApi(),
                 onSuccess: () {
                   Navigator.push<void>(context, route);

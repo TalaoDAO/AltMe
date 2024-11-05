@@ -349,6 +349,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
         bool authenticated = false;
         await securityCheck(
           context: context,
+          title: context.l10n.typeYourPINCodeToShareTheData,
           localAuthApi: LocalAuthApi(),
           onSuccess: () {
             authenticated = true;

@@ -72,7 +72,10 @@
     "credentialPickTitle",
     "credentialShareTitle",
     "enterYourSecretCode",
-    "jwk"
+    "jwk",
+    "typeYourPINCodeToOpenTheWallet",
+    "typeYourPINCodeToShareTheData",
+    "typeYourPINCodeToAuthenticate"
   ],
 
   "es": [
@@ -148,7 +151,10 @@
     "credentialPickTitle",
     "credentialShareTitle",
     "enterYourSecretCode",
-    "jwk"
+    "jwk",
+    "typeYourPINCodeToOpenTheWallet",
+    "typeYourPINCodeToShareTheData",
+    "typeYourPINCodeToAuthenticate"
   ],
 
   "fr": [
@@ -229,6 +235,9 @@
     "credentialPickTitle",
     "credentialShareTitle",
     "enterYourSecretCode",
-    "jwk"
+    "jwk",
+    "typeYourPINCodeToOpenTheWallet",
+    "typeYourPINCodeToShareTheData",
+    "typeYourPINCodeToAuthenticate"
   ]
 }
