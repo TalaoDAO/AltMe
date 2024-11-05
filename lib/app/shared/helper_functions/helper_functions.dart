@@ -1755,7 +1755,8 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
             ) ??
             credSupportedDisplay.firstWhereOrNull(
               (Display display) => display.locale != null,
-            );
+            ) ??
+            credSupportedDisplay.first; // if local is not provided
       }
     }
   } else if (openIdConfiguration.credentialConfigurationsSupported != null) {
