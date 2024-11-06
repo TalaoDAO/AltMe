@@ -1316,7 +1316,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(state.loading());
         final scope = customOidc4vcProfile.scope;
 
-        await getAuthorizationUriForIssuer(
+        final authorizationUri = await getAuthorizationUriForIssuer(
           scannedResponse: state.uri.toString(),
           oidc4vc: oidc4vc,
           isEBSI: isEBSI,
@@ -1338,7 +1338,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           walletIssuer: Parameters.walletIssuer,
           useOAuthAuthorizationServerLink:
               useOauthServerAuthEndPoint(profileCubit.state.model),
+          profileCubit: profileCubit,
+          qrCodeScanCubit: qrCodeScanCubit,
         );
+
+        if (authorizationUri == null) return;
+
+        await LaunchUrl.launchUri(authorizationUri);
         goBack();
       }
     } catch (e) {
