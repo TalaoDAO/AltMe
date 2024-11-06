@@ -863,6 +863,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         blockchainType: walletCubit.state.currentAccount!.blockchainType,
         oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
         qrCodeScanCubit: qrCodeScanCubit,
+        profileCubit: profileCubit,
       );
     } catch (e) {
       emitError(e);

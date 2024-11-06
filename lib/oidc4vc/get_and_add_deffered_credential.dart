@@ -16,9 +16,10 @@ Future<void> getAndAddDefferedCredential({
   required BlockchainType blockchainType,
   required String? issuer,
   required QRCodeScanCubit qrCodeScanCubit,
+  required ProfileCubit profileCubit,
 }) async {
-  Map<String, dynamic>? credentialHeaders;
-  Map<String, dynamic>? body;
+  late Map<String, dynamic> credentialHeaders;
+  late Map<String, dynamic> body;
 
   final pendingInfo = credentialModel.pendingInfo!;
 
@@ -47,6 +48,22 @@ Future<void> getAndAddDefferedCredential({
           pendingInfo.encodedCredentialFromOIDC4VC['transaction_id'].toString();
 
       body = {'transaction_id': transactionId};
+  }
+
+  if (profileCubit.state.model.isDeveloperMode) {
+    final value = await qrCodeScanCubit.showDataBeforeSending(
+      title: 'DEFERRED CREDENTIAL DATA',
+      data: body,
+    );
+
+    if (value) {
+      qrCodeScanCubit.completer = null;
+    } else {
+      qrCodeScanCubit.completer = null;
+      qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
+      qrCodeScanCubit.goBack();
+      return;
+    }
   }
 
   final dynamic encodedCredentialOrFutureToken =
