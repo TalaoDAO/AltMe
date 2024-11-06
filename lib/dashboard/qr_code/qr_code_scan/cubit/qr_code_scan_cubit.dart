@@ -1392,6 +1392,36 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           );
 
           if (savedAccessToken == null) {
+            /// get tokendata
+            final tokenData = oidc4vc.buildTokenData(
+              preAuthorizedCode: preAuthorizedCode,
+              userPin: userPin,
+              code: codeForAuthorisedFlow,
+              codeVerifier: codeVerifier,
+              clientId: clientId,
+              txCode: txCode,
+              clientSecret: clientSecret,
+              authorization: authorization,
+              redirectUri: Parameters.oidc4vcUniversalLink,
+              oAuthClientAttestation: oAuthClientAttestation,
+              oAuthClientAttestationPop: oAuthClientAttestationPop,
+            );
+
+            if (profileCubit.state.model.isDeveloperMode) {
+              final value = await showDataBeforeSending(
+                title: 'TOKEN DATA',
+                data: tokenData,
+              );
+              if (value) {
+                completer = null;
+              } else {
+                completer = null;
+                resetNonceAndAccessTokenAndAuthorizationDetails();
+                goBack();
+                return;
+              }
+            }
+
             /// get token response
             final (
               Map<String, dynamic>? tokenResponse,
@@ -1399,17 +1429,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               String? cnonce,
               List<dynamic>? authorizationDetails,
             ) = await oidc4vc.getTokenResponse(
-              preAuthorizedCode: preAuthorizedCode,
               issuer: issuer,
-              clientId: clientId,
-              clientSecret: clientSecret,
-              userPin: userPin,
-              txCode: txCode,
-              code: codeForAuthorisedFlow,
-              codeVerifier: codeVerifier,
               authorization: authorization,
               oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
-              redirectUri: Parameters.oidc4vcUniversalLink,
               openIdConfiguration:
                   OpenIdConfiguration.fromJson(openIdConfigurationData),
               oAuthClientAttestation: oAuthClientAttestation,
@@ -1417,6 +1439,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               dio: client.dio,
               useOAuthAuthorizationServerLink:
                   useOauthServerAuthEndPoint(profileCubit.state.model),
+              tokenData: tokenData,
             );
 
             savedAccessToken = accessToken;
@@ -1458,11 +1481,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           }
 
           /// get credentials
-          final (
-            List<dynamic> encodedCredentialOrFutureTokens,
-            String? deferredCredentialEndpoint,
-            String format,
-          ) = await getCredential(
+          final result = await getCredential(
             isEBSI: isEBSI,
             credential: selectedCredentials[i],
             issuer: issuer,
@@ -1472,13 +1491,22 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             clientId: clientId,
             profileCubit: profileCubit,
             accessToken: savedAccessToken!,
-            nonce: savedNonce,
+            cnonce: savedNonce,
             authorizationDetails: savedAuthorizationDetails,
             openIdConfiguration:
                 OpenIdConfiguration.fromJson(openIdConfigurationData),
+            qrCodeScanCubit: qrCodeScanCubit,
           );
 
-          final lastElement = encodedCredentialOrFutureTokens.last;
+          if (result == null) return;
+
+          final (
+            encodedCredentialOrFutureTokens,
+            deferredCredentialEndpoint,
+            format
+          ) = result;
+
+          final lastElement = encodedCredentialOrFutureTokens!.last;
 
           /// update nonce value
           if (lastElement is Map<String, dynamic>) {
@@ -1525,7 +1553,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             blockchainType: walletCubit.state.currentAccount!.blockchainType,
             deferredCredentialEndpoint: deferredCredentialEndpoint,
             encodedCredentialOrFutureTokens: encodedCredentialOrFutureTokens,
-            format: format,
+            format: format!,
             openIdConfiguration:
                 OpenIdConfiguration.fromJson(openIdConfigurationData),
             qrCodeScanCubit: qrCodeScanCubit,
@@ -1547,6 +1575,28 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       resetNonceAndAccessTokenAndAuthorizationDetails();
       emitError(e);
     }
+  }
+
+  Future<bool> showDataBeforeSending({
+    required String title,
+    required Map<String, dynamic> data,
+  }) async {
+    completer = Completer<bool>();
+
+    final formattedData = '''
+<b>$title :</b> 
+${const JsonEncoder.withIndent('  ').convert(data)}\n
+''';
+    emit(
+      state.copyWith(
+        qrScanStatus: QrScanStatus.pauseForDisplay,
+        dialogData: formattedData,
+      ),
+    );
+
+    final value = await completer!.future;
+
+    return value;
   }
 
   void resetNonceAndAccessTokenAndAuthorizationDetails() {

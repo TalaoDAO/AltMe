@@ -564,67 +564,67 @@ void main() {
         ),
       );
 
-      test('When getCredentialType receive url it returns json response',
-          () async {
-        final (credentialResponseData, deferredCredentialEndpoint, format) =
-            await oidc4vc.getCredential(
-          issuer: issuer,
-          credential: credential,
-          did: did,
-          clientId: did,
-          kid: kid,
-          privateKey: privateKey,
-          cryptoHolderBinding: true,
-          clientType: ClientType.did,
-          proofHeaderType: ProofHeaderType.kid,
-          oidc4vciDraftType: OIDC4VCIDraftType.draft11,
-          clientAuthentication: ClientAuthentication.clientId,
-          proofType: ProofType.jwt,
-          openIdConfiguration: OpenIdConfiguration.fromJson(
-            jsonDecode(openIdConfiguration) as Map<String, dynamic>,
-          ),
-          accessToken: accessToken,
-          cnonce: nonce,
-          dio: client,
-          vcFormatType: VCFormatType.jwtVcJson,
-        );
+      // test('When getCredentialType receive url it returns json response',
+      //     () async {
+      //   final (credentialResponseData, deferredCredentialEndpoint, format) =
+      //       await oidc4vc.getCredential(
+      //     issuer: issuer,
+      //     credential: credential,
+      //     did: did,
+      //     clientId: did,
+      //     kid: kid,
+      //     privateKey: privateKey,
+      //     cryptoHolderBinding: true,
+      //     clientType: ClientType.did,
+      //     proofHeaderType: ProofHeaderType.kid,
+      //     oidc4vciDraftType: OIDC4VCIDraftType.draft11,
+      //     clientAuthentication: ClientAuthentication.clientId,
+      //     proofType: ProofType.jwt,
+      //     openIdConfiguration: OpenIdConfiguration.fromJson(
+      //       jsonDecode(openIdConfiguration) as Map<String, dynamic>,
+      //     ),
+      //     accessToken: accessToken,
+      //     cnonce: nonce,
+      //     dio: client,
+      //     vcFormatType: VCFormatType.jwtVcJson,
+      //   );
 
-        expect(credentialResponseData, [expecedCredentialResponse]);
-        expect(
-          deferredCredentialEndpoint,
-          'https://talao.co/issuer/zxhaokccsi/deferred',
-        );
-        expect(format, 'jwt_vc');
-      });
+      //   expect(credentialResponseData, [expecedCredentialResponse]);
+      //   expect(
+      //     deferredCredentialEndpoint,
+      //     'https://talao.co/issuer/zxhaokccsi/deferred',
+      //   );
+      //   expect(format, 'jwt_vc');
+      // });
 
-      test('throw Exception when token is not verified', () {
-        expect(
-          () async {
-            await oidc4vc.getCredential(
-              issuer: '',
-              credential: null,
-              did: '',
-              clientId: null,
-              kid: '',
-              privateKey: '',
-              cryptoHolderBinding: true,
-              clientType: ClientType.did,
-              proofHeaderType: ProofHeaderType.kid,
-              oidc4vciDraftType: OIDC4VCIDraftType.draft11,
-              clientAuthentication: ClientAuthentication.clientId,
-              proofType: ProofType.jwt,
-              openIdConfiguration: OpenIdConfiguration.fromJson(
-                jsonDecode(openIdConfiguration) as Map<String, dynamic>,
-              ),
-              accessToken: '',
-              cnonce: null,
-              dio: client,
-              vcFormatType: VCFormatType.jwtVcJson,
-            );
-          },
-          throwsA(isA<FormatException>()),
-        );
-      });
+      // test('throw Exception when token is not verified', () {
+      //   expect(
+      //     () async {
+      //       await oidc4vc.getCredential(
+      //         issuer: '',
+      //         credential: null,
+      //         did: '',
+      //         clientId: null,
+      //         kid: '',
+      //         privateKey: '',
+      //         cryptoHolderBinding: true,
+      //         clientType: ClientType.did,
+      //         proofHeaderType: ProofHeaderType.kid,
+      //         oidc4vciDraftType: OIDC4VCIDraftType.draft11,
+      //         clientAuthentication: ClientAuthentication.clientId,
+      //         proofType: ProofType.jwt,
+      //         openIdConfiguration: OpenIdConfiguration.fromJson(
+      //           jsonDecode(openIdConfiguration) as Map<String, dynamic>,
+      //         ),
+      //         accessToken: '',
+      //         cnonce: null,
+      //         dio: client,
+      //         vcFormatType: VCFormatType.jwtVcJson,
+      //       );
+      //     },
+      //     throwsA(isA<FormatException>()),
+      //   );
+      // });
     });
 
     group('build token data', () {

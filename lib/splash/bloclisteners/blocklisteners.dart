@@ -588,6 +588,29 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         LoadingView().show(context: context);
       }
 
+      if (state.status == QrScanStatus.pauseForDisplay) {
+        LoadingView().hide();
+
+        final data = state.dialogData ?? '';
+
+        final returnedValue = await Navigator.of(context).push<dynamic>(
+          JsonViewerPage.route(
+            title: l10n.display,
+            data: data,
+            showContinueButton: true,
+          ),
+        );
+
+        var moveAhead = false;
+
+        if (returnedValue != null && returnedValue is bool && returnedValue) {
+          moveAhead = true;
+        }
+
+        context.read<QRCodeScanCubit>().completer?.complete(moveAhead);
+        LoadingView().show(context: context);
+      }
+
       if (state.status == QrScanStatus.success) {
         if (state.route != null) {
           await Navigator.of(context).push<void>(state.route!);
