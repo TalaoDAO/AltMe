@@ -328,9 +328,14 @@ class DiscoverCardsOptions extends Equatable {
     required CredentialSubjectType credentialSubjectType,
     required VCFormatType vcFormatType,
   }) {
-    final ldpVcValue = VCFormatType.ldpVc.urlValue;
-    final jwtVcJsonValue = VCFormatType.jwtVcJson.urlValue;
-    final vcSdJWTValue = VCFormatType.vcSdJWT.urlValue;
+    final isEmailPass =
+        credentialSubjectType == CredentialSubjectType.emailPass;
+
+    final ldpVcValue = VCFormatType.ldpVc.urlValue(isEmailPass: isEmailPass);
+    final jwtVcJsonValue =
+        VCFormatType.jwtVcJson.urlValue(isEmailPass: isEmailPass);
+    final vcSdJWTValue =
+        VCFormatType.vcSdJWT.urlValue(isEmailPass: isEmailPass);
 
     final isLdpVc = vcFormatType == VCFormatType.ldpVc;
     final isJwtVcJson = vcFormatType == VCFormatType.jwtVcJson;
@@ -416,10 +421,10 @@ class DiscoverCardsOptions extends Equatable {
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
       case CredentialSubjectType.pid:
-        return VCFormatType.ldpVc.urlValue;
+        return VCFormatType.ldpVc.urlValue(isEmailPass: isEmailPass);
     }
 
-    return VCFormatType.ldpVc.urlValue;
+    return VCFormatType.ldpVc.urlValue(isEmailPass: isEmailPass);
   }
 
   @override
