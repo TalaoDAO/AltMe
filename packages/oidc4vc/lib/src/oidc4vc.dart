@@ -1398,7 +1398,7 @@ class OIDC4VC {
     }
   }
 
-  Future<Response<dynamic>> siopv2Flow({
+  Future<Map<String, dynamic>> getDataForSiopV2Flow({
     required String clientId,
     required String did,
     required String kid,
@@ -1407,40 +1407,47 @@ class OIDC4VC {
     required String privateKey,
     required String? stateValue,
     required ClientType clientType,
-    required ProofHeaderType proofHeaderType,
-    required Dio dio,
+    required ProofHeaderType proofHeader,
   }) async {
+    final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
+    final tokenParameters = VerifierTokenParameters(
+      privateKey: private,
+      did: did,
+      kid: kid,
+      audience: clientId,
+      credentials: [],
+      nonce: nonce,
+      mediaType: MediaType.basic,
+      clientType: clientType,
+      proofHeaderType: proofHeader,
+      clientId: clientId,
+    );
+
+    // structures
+    final verifierIdToken = await getIdToken(tokenParameters);
+
+    final responseData = <String, dynamic>{
+      'id_token': verifierIdToken,
+    };
+
+    if (stateValue != null) {
+      responseData['state'] = stateValue;
+    }
+
+    return responseData;
+  }
+
+  Future<Response<dynamic>> siopv2Flow({
+    required String redirectUri,
+    required Dio dio,
+    required Map<String, dynamic> responseData,
+  }) async {
+    final responseHeaders = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
     try {
-      final private = jsonDecode(privateKey) as Map<String, dynamic>;
-
-      final tokenParameters = VerifierTokenParameters(
-        privateKey: private,
-        did: did,
-        kid: kid,
-        audience: clientId,
-        credentials: [],
-        nonce: nonce,
-        mediaType: MediaType.basic,
-        clientType: clientType,
-        proofHeaderType: proofHeaderType,
-        clientId: clientId,
-      );
-
-      // structures
-      final verifierIdToken = await getIdToken(tokenParameters);
-
-      final responseHeaders = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      };
-
-      final responseData = <String, dynamic>{
-        'id_token': verifierIdToken,
-      };
-
-      if (stateValue != null) {
-        responseData['state'] = stateValue;
-      }
-
       final response = await dio.post<dynamic>(
         redirectUri,
         options: Options(

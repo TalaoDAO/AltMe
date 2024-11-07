@@ -1223,7 +1223,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final customOidc4vcProfile = profileCubit.state.model.profileSetting
           .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-      final Response<dynamic> response = await oidc4vc.siopv2Flow(
+      final Map<String, dynamic> responseData =
+          await oidc4vc.getDataForSiopV2Flow(
         clientId: clientId,
         privateKey: privateKey,
         did: did,
@@ -1232,8 +1233,28 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         nonce: nonce,
         stateValue: stateValue,
         clientType: customOidc4vcProfile.clientType,
-        proofHeaderType: customOidc4vcProfile.proofHeader,
+        proofHeader: customOidc4vcProfile.proofHeader,
+      );
+
+      if (profileCubit.state.model.isDeveloperMode) {
+        final value = await showDataBeforeSending(
+          title: 'Response Data',
+          data: responseData,
+        );
+        if (value) {
+          completer = null;
+        } else {
+          completer = null;
+          resetNonceAndAccessTokenAndAuthorizationDetails();
+          goBack();
+          return;
+        }
+      }
+
+      final Response<dynamic> response = await oidc4vc.siopv2Flow(
+        redirectUri: redirectUri ?? responseUri!,
         dio: client.dio,
+        responseData: responseData,
       );
 
       String? url;
