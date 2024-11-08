@@ -111,7 +111,7 @@ Future<
 
       if (profileCubit.state.model.isDeveloperMode) {
         final value = await qrCodeScanCubit.showDataBeforeSending(
-          title: 'CREDENTIAL DATA',
+          title: 'CREDENTIAL REQUEST',
           data: credentialData,
         );
 
@@ -167,7 +167,7 @@ Future<
 
     if (profileCubit.state.model.isDeveloperMode) {
       await qrCodeScanCubit.showDataBeforeSending(
-        title: 'CREDENTIAL DATA',
+        title: 'CREDENTIAL REQUEST',
         data: credentialData,
       );
 

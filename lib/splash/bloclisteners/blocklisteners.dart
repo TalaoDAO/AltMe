@@ -348,13 +348,20 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     context: context,
                     builder: (_) {
                       return DeveloperModeDialog(
-                        onDisplay: () {
-                          Navigator.of(context).push<void>(
+                        onDisplay: () async {
+                          final returnedValue =
+                              await Navigator.of(context).push<dynamic>(
                             JsonViewerPage.route(
                               title: l10n.display,
                               data: formattedData,
                             ),
                           );
+
+                          if (returnedValue != null &&
+                              returnedValue is bool &&
+                              returnedValue) {
+                            Navigator.of(context).pop(true);
+                          }
                           return;
                         },
                         onDownload: () {
@@ -555,13 +562,21 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               context: context,
               builder: (_) {
                 return DeveloperModeDialog(
-                  onDisplay: () {
-                    Navigator.of(context).push<void>(
+                  onDisplay: () async {
+                    final returnedValue =
+                        await Navigator.of(context).push<dynamic>(
                       JsonViewerPage.route(
                         title: l10n.display,
                         data: data,
                       ),
                     );
+
+                    if (returnedValue != null &&
+                        returnedValue is bool &&
+                        returnedValue) {
+                      Navigator.of(context).pop(true);
+                    }
+
                     return;
                   },
                   onDownload: () {
@@ -597,7 +612,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           JsonViewerPage.route(
             title: l10n.display,
             data: data,
-            showContinueButton: true,
           ),
         );
 

@@ -134,7 +134,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
 
     if (profileCubit.state.model.isDeveloperMode) {
       final value = await qrCodeScanCubit.showDataBeforeSending(
-        title: 'Pushed Authorization Request Data',
+        title: 'PUSHED AUTHORIZATION REQUEST',
         data: authorizationRequestParemeters,
       );
 

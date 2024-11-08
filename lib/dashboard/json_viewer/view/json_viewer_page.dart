@@ -8,23 +8,19 @@ class JsonViewerPage extends StatelessWidget {
     super.key,
     required this.title,
     required this.data,
-    required this.showContinueButton,
   });
 
   final String title;
   final String data;
-  final bool showContinueButton;
 
   static Route<dynamic> route({
     required String title,
     required String data,
-    bool showContinueButton = false,
   }) =>
       MaterialPageRoute<void>(
         builder: (_) => JsonViewerPage(
           title: title,
           data: data,
-          showContinueButton: showContinueButton,
         ),
         settings: const RouteSettings(name: '/JsonViewerPage'),
       );
@@ -34,7 +30,6 @@ class JsonViewerPage extends StatelessWidget {
     return JsonViewerView(
       title: title,
       data: data,
-      showContinueButton: showContinueButton,
     );
   }
 }
@@ -44,12 +39,10 @@ class JsonViewerView extends StatelessWidget {
     super.key,
     required this.title,
     required this.data,
-    required this.showContinueButton,
   });
 
   final String title;
   final String data;
-  final bool showContinueButton;
 
   @override
   Widget build(BuildContext context) {
@@ -64,19 +57,17 @@ class JsonViewerView extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10),
       body: JsonViewWidget(data: data),
-      navigation: !showContinueButton
-          ? null
-          : Padding(
-              padding: const EdgeInsets.all(
-                Sizes.spaceSmall,
-              ),
-              child: MyElevatedButton(
-                text: context.l10n.continueString,
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-              ),
-            ),
+      navigation: Padding(
+        padding: const EdgeInsets.all(
+          Sizes.spaceSmall,
+        ),
+        child: MyElevatedButton(
+          text: context.l10n.continueString,
+          onPressed: () {
+            Navigator.of(context).pop(true);
+          },
+        ),
+      ),
     );
   }
 }

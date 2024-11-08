@@ -1238,7 +1238,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       if (profileCubit.state.model.isDeveloperMode) {
         final value = await showDataBeforeSending(
-          title: 'Response Data',
+          title: 'RESPONSE REQUEST',
           data: responseData,
         );
         if (value) {
@@ -1437,7 +1437,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
             if (profileCubit.state.model.isDeveloperMode) {
               final value = await showDataBeforeSending(
-                title: 'TOKEN DATA',
+                title: 'TOKEN REQUEST',
                 data: tokenData,
               );
               if (value) {

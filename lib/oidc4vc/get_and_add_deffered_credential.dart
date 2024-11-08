@@ -52,7 +52,7 @@ Future<void> getAndAddDefferedCredential({
 
   if (profileCubit.state.model.isDeveloperMode) {
     final value = await qrCodeScanCubit.showDataBeforeSending(
-      title: 'DEFERRED CREDENTIAL DATA',
+      title: 'DEFERRED CREDENTIAL REQUEST',
       data: body,
     );
 

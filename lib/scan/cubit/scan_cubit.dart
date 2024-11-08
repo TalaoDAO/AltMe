@@ -620,7 +620,7 @@ class ScanCubit extends Cubit<ScanState> {
 
       if (profileCubit.state.model.isDeveloperMode) {
         final value = await qrCodeScanCubit.showDataBeforeSending(
-          title: 'Response Data',
+          title: 'RESPONSE REQUEST',
           data: body,
         );
         if (value) {
