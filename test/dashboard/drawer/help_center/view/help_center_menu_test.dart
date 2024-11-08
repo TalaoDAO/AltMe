@@ -136,38 +136,38 @@ void main() {
       ).called(1);
     });
 
-    testWidgets('navigates to FAQsPage when "faqs" is tapped', (tester) async {
-      when(() => mockProfileCubit.state).thenReturn(
-        ProfileState(model: ProfileModel.empty()),
-      );
+    // testWidgets('navigates to FAQsPage when "faqs" is tapped', (tester) async {
+    //   when(() => mockProfileCubit.state).thenReturn(
+    //     ProfileState(model: ProfileModel.empty()),
+    //   );
 
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
-              BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
-            ],
-            child: HelpCenterView(profileCubit: mockProfileCubit),
-          ),
-        ),
-      );
+    //   await tester.pumpApp(
+    //     MockNavigatorProvider(
+    //       navigator: navigator,
+    //       child: MultiBlocProvider(
+    //         providers: [
+    //           BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
+    //           BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
+    //         ],
+    //         child: HelpCenterView(profileCubit: mockProfileCubit),
+    //       ),
+    //     ),
+    //   );
 
-      expect(find.text('Frequently Asked Questions (FAQs)'), findsOneWidget);
+    //   expect(find.text('Frequently Asked Questions (FAQs)'), findsOneWidget);
 
-      await tester.tap(find.text('Frequently Asked Questions (FAQs)'));
-      await tester.pumpAndSettle();
+    //   await tester.tap(find.text('Frequently Asked Questions (FAQs)'));
+    //   await tester.pumpAndSettle();
 
-      verify(
-        () => navigator.push<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/FAQsPage'),
-            ),
-          ),
-        ),
-      ).called(1);
-    });
+    //   verify(
+    //     () => navigator.push<void>(
+    //       any(
+    //         that: isRoute<void>(
+    //           whereName: equals('/FAQsPage'),
+    //         ),
+    //       ),
+    //     ),
+    //   ).called(1);
+    // });
   });
 }

@@ -1314,6 +1314,7 @@ ResponseString getErrorResponseString(String errorString) {
       return ResponseString.RESPONSE_STRING_theWalletIsNotRegistered;
 
     case 'invalid_grant':
+    case 'issuance_pending':
     case 'invalid_token':
       return ResponseString.RESPONSE_STRING_credentialIssuanceDenied;
 
@@ -1328,10 +1329,6 @@ ResponseString getErrorResponseString(String errorString) {
 
     case 'server_error':
       return ResponseString.RESPONSE_STRING_theServiceIsNotAvailable;
-
-    case 'issuance_pending':
-      return ResponseString
-          .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending;
 
     case 'invalid_client':
       return ResponseString.RESPONSE_STRING_invalidClientErrorDescription;

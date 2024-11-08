@@ -920,253 +920,109 @@ void main() {
       expect(CredentialSubjectType.pid.supportSingleOnly, false);
     });
 
-    test('CredentialSubjectType getVCFormatType returns correct value', () {
-      expect(
-        CredentialSubjectType.ethereumAssociatedWallet.getVCFormatType,
-        VCFormatType.values,
-      );
-      expect(
-        CredentialSubjectType.fantomAssociatedWallet.getVCFormatType,
-        VCFormatType.values,
-      );
-      expect(
-        CredentialSubjectType.polygonAssociatedWallet.getVCFormatType,
-        VCFormatType.values,
-      );
-      expect(
-        CredentialSubjectType.binanceAssociatedWallet.getVCFormatType,
-        VCFormatType.values,
-      );
-      expect(
-        CredentialSubjectType.etherlinkAssociatedWallet.getVCFormatType,
-        VCFormatType.values,
-      );
-      expect(
-        CredentialSubjectType.tezosAssociatedWallet.getVCFormatType,
-        VCFormatType.values,
-      );
+    test('returns correct VCFormatType values for each CredentialSubjectType',
+        () {
+      void verifyVCFormatType(CredentialSubjectType subjectType,
+          List<VCFormatType> expectedValues) {
+        expect(
+          subjectType.getVCFormatType,
+          equals(expectedValues),
+          reason: 'Failed for $subjectType',
+        );
+      }
 
-      expect(
-        CredentialSubjectType.over13.getVCFormatType,
-        [VCFormatType.ldpVc],
-      );
-      expect(
-        CredentialSubjectType.over15.getVCFormatType,
-        [VCFormatType.ldpVc],
-      );
-      expect(
-        CredentialSubjectType.over21.getVCFormatType,
-        [VCFormatType.ldpVc],
-      );
-      expect(
-        CredentialSubjectType.over50.getVCFormatType,
-        [VCFormatType.ldpVc],
-      );
-      expect(
-        CredentialSubjectType.over65.getVCFormatType,
-        [VCFormatType.ldpVc],
-      );
-      expect(
-        CredentialSubjectType.gender.getVCFormatType,
-        [VCFormatType.ldpVc],
-      );
-      expect(
-        CredentialSubjectType.ageRange.getVCFormatType,
-        [VCFormatType.ldpVc],
-      );
-      expect(
-        CredentialSubjectType.defiCompliance.getVCFormatType,
-        [VCFormatType.ldpVc],
-      );
-      expect(
-        CredentialSubjectType.tezotopiaMembership.getVCFormatType,
-        [VCFormatType.ldpVc],
-      );
-      expect(
-        CredentialSubjectType.chainbornMembership.getVCFormatType,
-        [VCFormatType.ldpVc],
-      );
+      for (final type in CredentialSubjectType.values) {
+        switch (type) {
+          case CredentialSubjectType.ethereumAssociatedWallet:
+          case CredentialSubjectType.fantomAssociatedWallet:
+          case CredentialSubjectType.polygonAssociatedWallet:
+          case CredentialSubjectType.binanceAssociatedWallet:
+          case CredentialSubjectType.tezosAssociatedWallet:
+          case CredentialSubjectType.etherlinkAssociatedWallet:
+            verifyVCFormatType(type, VCFormatType.values);
 
-      expect(CredentialSubjectType.verifiableIdCard.getVCFormatType, [
-        VCFormatType.ldpVc,
-        VCFormatType.jwtVcJson,
-        VCFormatType.vcSdJWT,
-        VCFormatType.jwtVc,
-      ]);
+          case CredentialSubjectType.over13:
+          case CredentialSubjectType.over15:
+          case CredentialSubjectType.over21:
+          case CredentialSubjectType.over50:
+          case CredentialSubjectType.over65:
+          case CredentialSubjectType.ageRange:
+          case CredentialSubjectType.gender:
+          case CredentialSubjectType.chainbornMembership:
+          case CredentialSubjectType.tezotopiaMembership:
+          case CredentialSubjectType.defiCompliance:
+            verifyVCFormatType(type, [VCFormatType.ldpVc, VCFormatType.auto]);
 
-      expect(
-        CredentialSubjectType.identityCredential.getVCFormatType,
-        [VCFormatType.vcSdJWT],
-      );
-      expect(
-        CredentialSubjectType.eudiPid.getVCFormatType,
-        [VCFormatType.vcSdJWT],
-      );
-      expect(CredentialSubjectType.pid.getVCFormatType, [VCFormatType.vcSdJWT]);
+          case CredentialSubjectType.over18:
+          case CredentialSubjectType.livenessCard:
+          case CredentialSubjectType.phonePass:
+            verifyVCFormatType(type, [
+              VCFormatType.ldpVc,
+              VCFormatType.jwtVcJson,
+              VCFormatType.auto,
+            ]);
 
-      expect(CredentialSubjectType.over18.getVCFormatType, [
-        VCFormatType.ldpVc,
-        VCFormatType.jwtVcJson,
-      ]);
+          case CredentialSubjectType.verifiableIdCard:
+            verifyVCFormatType(type, [
+              VCFormatType.ldpVc,
+              VCFormatType.jwtVcJson,
+              VCFormatType.vcSdJWT,
+              VCFormatType.jwtVc,
+              VCFormatType.auto,
+            ]);
 
-      expect(
-        CredentialSubjectType.phonePass.getVCFormatType,
-        [VCFormatType.ldpVc, VCFormatType.jwtVcJson],
-      );
-      expect(
-        CredentialSubjectType.livenessCard.getVCFormatType,
-        [VCFormatType.ldpVc, VCFormatType.jwtVcJson],
-      );
-      expect(
-        CredentialSubjectType.emailPass.getVCFormatType,
-        [VCFormatType.ldpVc, VCFormatType.jwtVcJson],
-      );
+          case CredentialSubjectType.emailPass:
+            verifyVCFormatType(type, [
+              VCFormatType.ldpVc,
+              VCFormatType.jwtVcJson,
+              VCFormatType.auto,
+              VCFormatType.vcSdJWT,
+            ]);
 
-      expect(
-        CredentialSubjectType.nationality.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.identityPass.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.passportFootprint.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.residentCard.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.voucher.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.tezVoucher.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.diplomaCard.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.twitterCard.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.walletCredential.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.tezosPooAddress.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.ethereumPooAddress.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.fantomPooAddress.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.polygonPooAddress.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.binancePooAddress.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.certificateOfEmployment.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.defaultCredential.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
+          case CredentialSubjectType.identityCredential:
+          case CredentialSubjectType.eudiPid:
+          case CredentialSubjectType.pid:
+            verifyVCFormatType(type, [VCFormatType.vcSdJWT, VCFormatType.auto]);
 
-      expect(
-        CredentialSubjectType.learningAchievement.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.professionalExperienceAssessment.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.professionalSkillAssessment.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.professionalStudentCard.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.selfIssued.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.studentCard.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.aragoPass.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.aragoEmailPass.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.aragoIdentityCard.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.aragoLearningAchievement.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.aragoOver18.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.pcdsAgentCertificate.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.euDiplomaCard.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.euVerifiableId.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.kycAgeCredential.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.kycCountryOfResidence.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.proofOfTwitterStats.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.civicPassCredential.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.employeeCredential.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
-      expect(
-        CredentialSubjectType.legalPersonalCredential.getVCFormatType,
-        [VCFormatType.jwtVc],
-      );
+          case CredentialSubjectType.nationality:
+          case CredentialSubjectType.identityPass:
+          case CredentialSubjectType.passportFootprint:
+          case CredentialSubjectType.residentCard:
+          case CredentialSubjectType.voucher:
+          case CredentialSubjectType.tezVoucher:
+          case CredentialSubjectType.diplomaCard:
+          case CredentialSubjectType.twitterCard:
+          case CredentialSubjectType.walletCredential:
+          case CredentialSubjectType.tezosPooAddress:
+          case CredentialSubjectType.ethereumPooAddress:
+          case CredentialSubjectType.fantomPooAddress:
+          case CredentialSubjectType.polygonPooAddress:
+          case CredentialSubjectType.binancePooAddress:
+          case CredentialSubjectType.certificateOfEmployment:
+          case CredentialSubjectType.defaultCredential:
+          case CredentialSubjectType.learningAchievement:
+          case CredentialSubjectType.professionalExperienceAssessment:
+          case CredentialSubjectType.professionalSkillAssessment:
+          case CredentialSubjectType.professionalStudentCard:
+          case CredentialSubjectType.selfIssued:
+          case CredentialSubjectType.studentCard:
+          case CredentialSubjectType.aragoPass:
+          case CredentialSubjectType.aragoEmailPass:
+          case CredentialSubjectType.aragoIdentityCard:
+          case CredentialSubjectType.aragoLearningAchievement:
+          case CredentialSubjectType.aragoOver18:
+          case CredentialSubjectType.pcdsAgentCertificate:
+          case CredentialSubjectType.euDiplomaCard:
+          case CredentialSubjectType.euVerifiableId:
+          case CredentialSubjectType.kycAgeCredential:
+          case CredentialSubjectType.kycCountryOfResidence:
+          case CredentialSubjectType.proofOfTwitterStats:
+          case CredentialSubjectType.civicPassCredential:
+          case CredentialSubjectType.employeeCredential:
+          case CredentialSubjectType.legalPersonalCredential:
+            verifyVCFormatType(type, [VCFormatType.jwtVc, VCFormatType.auto]);
+        }
+      }
     });
 
     test('CredentialSubjectType order returns correct value', () {
