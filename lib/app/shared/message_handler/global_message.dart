@@ -365,6 +365,8 @@ class GlobalMessage {
       l10n.theWalletIsNotRegistered;
   String get RESPONSE_STRING_credentialIssuanceDenied =>
       l10n.credentialIssuanceDenied;
+  String get RESPONSE_STRING_credentialIssuanceIsStillPending =>
+      l10n.credentialIssuanceIsStillPending;
   String get RESPONSE_STRING_thisCredentialFormatIsNotSupported =>
       l10n.thisCredentialFormatIsNotSupported;
   String get RESPONSE_STRING_thisFormatIsNotSupported =>

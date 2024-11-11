@@ -937,7 +937,7 @@ void main() {
           );
           expect(
             getErrorResponseString('issuance_pending'),
-            ResponseString.RESPONSE_STRING_credentialIssuanceDenied,
+            ResponseString.RESPONSE_STRING_credentialIssuanceIsStillPending,
           );
           expect(
             getErrorResponseString('invalid_token'),

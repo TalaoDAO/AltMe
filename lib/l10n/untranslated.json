@@ -75,7 +75,8 @@
     "jwk",
     "typeYourPINCodeToOpenTheWallet",
     "typeYourPINCodeToShareTheData",
-    "typeYourPINCodeToAuthenticate"
+    "typeYourPINCodeToAuthenticate",
+    "credentialIssuanceIsStillPending"
   ],
 
   "es": [
@@ -154,7 +155,8 @@
     "jwk",
     "typeYourPINCodeToOpenTheWallet",
     "typeYourPINCodeToShareTheData",
-    "typeYourPINCodeToAuthenticate"
+    "typeYourPINCodeToAuthenticate",
+    "credentialIssuanceIsStillPending"
   ],
 
   "fr": [
@@ -238,6 +240,7 @@
     "jwk",
     "typeYourPINCodeToOpenTheWallet",
     "typeYourPINCodeToShareTheData",
-    "typeYourPINCodeToAuthenticate"
+    "typeYourPINCodeToAuthenticate",
+    "credentialIssuanceIsStillPending"
   ]
 }

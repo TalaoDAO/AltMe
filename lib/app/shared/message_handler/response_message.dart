@@ -700,6 +700,12 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
+        case ResponseString.RESPONSE_STRING_credentialIssuanceIsStillPending:
+          return ResponseString.RESPONSE_STRING_credentialIssuanceIsStillPending
+              .localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_thisCredentialFormatIsNotSupported:
           return ResponseString
               .RESPONSE_STRING_thisCredentialFormatIsNotSupported.localise(
