@@ -266,6 +266,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     ? () async {
                         await securityCheck(
                           context: context,
+                          title: l10n.typeYourPINCodeToAuthenticate,
                           localAuthApi: LocalAuthApi(),
                           onSuccess: () {
                             context

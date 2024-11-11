@@ -618,6 +618,21 @@ class ScanCubit extends Cubit<ScanState> {
         body = responseData;
       }
 
+      if (profileCubit.state.model.isDeveloperMode) {
+        final value = await qrCodeScanCubit.showDataBeforeSending(
+          title: 'RESPONSE REQUEST',
+          data: body,
+        );
+        if (value) {
+          qrCodeScanCubit.completer = null;
+        } else {
+          qrCodeScanCubit.completer = null;
+          qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
+          qrCodeScanCubit.goBack();
+          return;
+        }
+      }
+
       await Future<void>.delayed(const Duration(seconds: 2));
       final response = await client.dio.post<dynamic>(
         responseOrRedirectUri,

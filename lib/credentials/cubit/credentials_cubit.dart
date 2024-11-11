@@ -1058,7 +1058,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
               /// We always have the associated Adress credential
               /// in the discover since "Do not remove the GET a crypto account
-              ///  in the Discover #2649"
+              /// in the Discover #2649"
 
               if (isCurrentBlockchainAccount) {
                 /// if already added do not add
@@ -1073,9 +1073,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 /// do not add if format matched
                 /// there can be same credentials with different format
               } else {
-                if (!alreadyAdded) {
-                  requiredCreds.add(credInfo);
-                }
+                requiredCreds.add(credInfo);
               }
             }
           }
@@ -1087,14 +1085,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               !isCurrentBlockchainAccount) {
             /// do not add if current blockchain acccount does not match
           } else {
-            final alreadyAdded = requiredCreds.any(
-              (item) =>
-                  item.credentialType == credInfo.credentialType &&
-                  item.formatType == credInfo.formatType,
-            );
-            if (!alreadyAdded) {
-              requiredCreds.add(credInfo);
-            }
+            requiredCreds.add(credInfo);
           }
         }
       }

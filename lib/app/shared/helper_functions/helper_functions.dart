@@ -1314,6 +1314,7 @@ ResponseString getErrorResponseString(String errorString) {
       return ResponseString.RESPONSE_STRING_theWalletIsNotRegistered;
 
     case 'invalid_grant':
+    case 'issuance_pending':
     case 'invalid_token':
       return ResponseString.RESPONSE_STRING_credentialIssuanceDenied;
 
@@ -1328,10 +1329,6 @@ ResponseString getErrorResponseString(String errorString) {
 
     case 'server_error':
       return ResponseString.RESPONSE_STRING_theServiceIsNotAvailable;
-
-    case 'issuance_pending':
-      return ResponseString
-          .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending;
 
     case 'invalid_client':
       return ResponseString.RESPONSE_STRING_invalidClientErrorDescription;
@@ -1428,12 +1425,6 @@ Future<String> getFormattedStringOIDC4VPSIOPV2({
     uri: Uri.parse(url),
   );
 
-  final registration = Uri.parse(url).queryParameters['registration'];
-
-  final registrationMap = registration != null
-      ? jsonDecode(registration) as Map<String, dynamic>
-      : null;
-
   final data = '''
 <b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
 <b>AUTHORIZATION REQUEST :</b>
@@ -1441,9 +1432,7 @@ ${response != null ? const JsonEncoder.withIndent('  ').convert(response) : Uri.
 <b>CLIENT METADATA  :</b>  
 ${clientMetaData != null ? const JsonEncoder.withIndent('  ').convert(clientMetaData) : 'None'}\n
 <b>PRESENTATION DEFINITION  :</b> 
-${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}\n
-<b>REGISTRATION  :</b> 
-${registrationMap != null ? const JsonEncoder.withIndent('  ').convert(registrationMap) : 'None'}
+${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}
 ''';
 
   return data;
@@ -1763,7 +1752,8 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
             ) ??
             credSupportedDisplay.firstWhereOrNull(
               (Display display) => display.locale != null,
-            );
+            ) ??
+            credSupportedDisplay.first; // if local is not provided
       }
     }
   } else if (openIdConfiguration.credentialConfigurationsSupported != null) {

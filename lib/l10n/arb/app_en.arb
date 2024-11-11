@@ -894,7 +894,6 @@
   "pleaseSwitchToCorrectOIDC4VCProfile": "Please switch to correct OIDC4VC profile.",
   "authenticationSuccess": "Authentication Success",
   "format": "Format",
-  "pleaseInsertTheSecredCodeReceived": "Please insert the secret code received.",
   "verifyIssuerWebsiteIdentity": "Verify issuer website identity",
   "verifyIssuerWebsiteIdentitySubtitle": "Enable to verify website identity before access. Default: Off.",
   "developerMode": "Developer Mode",
@@ -935,7 +934,7 @@
   "theCredentialOfferIsInvalid": "The credential offer is invalid",
   "dateOfRequest": "Date of Request",
   "keyDecentralizedIDP256": "did:key P-256",
-  "jwkDecentralizedIDP256": "JWK Thumbprint P-256",
+  "jwkDecentralizedIDP256": "did:jwk P-256",
   "defaultDid": "Default DID",
   "selectOneOfTheDid": "Select one of the DIDs",   
   "theServiceIsNotAvailable": "The service is not available",
@@ -1007,7 +1006,7 @@
   "statusList": "Status list",
   "statusListIndex": "Status list index",
   "theWalletIsSuspended": "The wallet is suspended.", 
-  "jwkThumbprintP256Key": "did:jwk P-256",
+  "jwkThumbprintP256Key": "JWK Thumbprint P-256",
   "walletBlockedPopupTitle": "Blockerd 10 minutes",
   "walletBlockedPopupDescription": "Too many failed attempts, your wallet is blocked for your security.\nYou can reset your wallet in order to use servives again.",
   "deleteMyWalletForWrontPincodeTitle": "Account blocked after 3 unsuccessful attempts",
@@ -1154,5 +1153,10 @@
   },
   "credentialPickShare": "Share",
   "credentialPickTitle": "Choose the credential(s) to wish to obtain",
-  "credentialShareTitle": "Choose the credential(s) to share"
+  "credentialShareTitle": "Choose the credential(s) to share",
+  "enterYourSecretCode": "Enter your secret code.",
+  "jwk": "JWK",
+  "typeYourPINCodeToOpenTheWallet": "Type your PIN code to open the wallet",
+  "typeYourPINCodeToShareTheData": "Type your PIN code to share the data",
+  "typeYourPINCodeToAuthenticate": "Type your PIN code to authenticate"
 }

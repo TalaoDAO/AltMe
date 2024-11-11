@@ -21,7 +21,11 @@ dynamic getDisplay(dynamic value, String languageCode) {
         orElse: () => displays.firstWhere(
           (element) =>
               element is Map<String, dynamic> && element.containsKey('locale'),
-          orElse: () => null,
+          orElse: () => displays.firstWhere(
+            (element) =>
+                element is Map<String, dynamic>, // if local is not provided
+            orElse: () => null,
+          ),
         ),
       ),
     );

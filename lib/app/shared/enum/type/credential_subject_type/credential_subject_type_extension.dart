@@ -767,7 +767,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
     final discoverCardsOptions = profileSetting.discoverCardsOptions;
 
-    var format = VCFormatType.ldpVc.urlValue;
+    final isEmailPass = this == CredentialSubjectType.emailPass;
+
+    var format = VCFormatType.ldpVc.urlValue(isEmailPass: isEmailPass);
 
     if (vcFormatType == VCFormatType.auto && discoverCardsOptions != null) {
       format = discoverCardsOptions.vcFormatTypeForAuto(
@@ -775,7 +777,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         vcFormatType: assignedVCFormatType,
       );
     } else {
-      format = vcFormatType.urlValue;
+      format = vcFormatType.urlValue(isEmailPass: isEmailPass);
     }
 
     switch (this) {

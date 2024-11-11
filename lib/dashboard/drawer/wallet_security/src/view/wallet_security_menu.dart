@@ -50,6 +50,7 @@ class WalletSecurityView extends StatelessWidget {
                 onTap: () async {
                   await securityCheck(
                     context: context,
+                    title: l10n.typeYourPINCodeToAuthenticate,
                     localAuthApi: LocalAuthApi(),
                     onSuccess: () {
                       Navigator.of(context)
@@ -78,6 +79,7 @@ class WalletSecurityView extends StatelessWidget {
                   if (confirm) {
                     await securityCheck(
                       context: context,
+                      title: l10n.typeYourPINCodeToAuthenticate,
                       localAuthApi: LocalAuthApi(),
                       onSuccess: () {
                         Navigator.of(context)
@@ -102,6 +104,7 @@ class WalletSecurityView extends StatelessWidget {
                 onTap: () async {
                   await securityCheck(
                     context: context,
+                    title: l10n.typeYourPINCodeToAuthenticate,
                     localAuthApi: LocalAuthApi(),
                     onSuccess: () {
                       Navigator.of(context).push<void>(
