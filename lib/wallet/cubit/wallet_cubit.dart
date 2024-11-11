@@ -429,14 +429,6 @@ class WalletCubit extends Cubit<WalletState> {
       cryptoAccountString,
     );
 
-    /// check if associated wallet credential is available for
-    /// blockchain type
-
-    await credentialsCubit.updateAssociatedWalletCredential(
-      blockchainType: blockchainType,
-      cryptoAccountData: cryptoAccountData,
-    );
-
     emitCryptoAccount(cryptoAccount);
 
     onComplete?.call(cryptoAccount);

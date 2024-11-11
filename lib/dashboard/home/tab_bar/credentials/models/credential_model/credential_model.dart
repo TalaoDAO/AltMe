@@ -79,6 +79,7 @@ class CredentialModel extends Equatable {
       selectiveDisclosureJwt: oldCredentialModel.selectiveDisclosureJwt,
       format: oldCredentialModel.format,
       credentialSupported: oldCredentialModel.credentialSupported,
+      pendingInfo: oldCredentialModel.pendingInfo,
     );
   }
 

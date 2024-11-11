@@ -73,7 +73,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: TezosAssociatedAddressModel(
             id: did,
-            accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'TezosAssociatedAddress',
             issuedBy: const Author('My wallet'),
@@ -87,7 +86,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: EthereumAssociatedAddressModel(
             id: did,
-            accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'EthereumAssociatedAddress',
             issuedBy: const Author('My wallet'),
@@ -101,7 +99,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: FantomAssociatedAddressModel(
             id: did,
-            accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'FantomAssociatedAddress',
             issuedBy: const Author('My wallet'),
@@ -115,7 +112,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: PolygonAssociatedAddressModel(
             id: did,
-            accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'PolygonAssociatedAddress',
             issuedBy: const Author('My wallet'),
@@ -129,7 +125,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: BinanceAssociatedAddressModel(
             id: did,
-            accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'BinanceAssociatedAddress',
             issuedBy: const Author('My wallet'),
@@ -143,7 +138,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: EtherlinkAssociatedAddressModel(
             id: did,
-            accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'EtherlinkAssociatedAddress',
             issuedBy: const Author('My wallet'),
