@@ -1,6 +1,7 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
@@ -47,6 +48,8 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     required String mnemonicOrKey,
     required bool isImported,
     required bool isFromOnboarding,
+    required QRCodeScanCubit qrCodeScanCubit,
+    required CredentialsCubit credentialsCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -71,6 +74,17 @@ class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
 
 class MockActivityLogManager extends Mock implements ActivityLogManager {}
 
+class MockQRCodeScanCubit extends MockCubit<QRCodeScanState>
+    implements QRCodeScanCubit {}
+
+class MockCredentialsCubit extends MockCubit<CredentialsState>
+    implements CredentialsCubit {
+  @override
+  Future<void> loadAllCredentials({
+    required BlockchainType blockchainType,
+  }) async {}
+}
+
 void main() {
   late DIDKitProvider didKitProvider;
   late KeyGenerator keyGenerator;
@@ -82,6 +96,8 @@ void main() {
   late ProfileCubit profileCubit;
   late OnboardingCubit onboardingCubit;
   late MockActivityLogManager activityLogManager;
+  late MockQRCodeScanCubit qrCodeScanCubit;
+  late MockCredentialsCubit credentialsCubit;
 
   setUpAll(() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -95,6 +111,8 @@ void main() {
     profileCubit = MockProfileCubit();
     onboardingCubit = OnboardingCubit();
     activityLogManager = MockActivityLogManager();
+    qrCodeScanCubit = MockQRCodeScanCubit();
+    credentialsCubit = MockCredentialsCubit();
   });
 
   group('OnBoarding GenPhrase Page', () {
@@ -113,6 +131,8 @@ void main() {
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
         activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
       navigator = MockNavigator();
       when(navigator.canPop).thenReturn(true);

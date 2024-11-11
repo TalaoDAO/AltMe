@@ -56,6 +56,8 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     required String mnemonicOrKey,
     required bool isImported,
     required bool isFromOnboarding,
+    required QRCodeScanCubit qrCodeScanCubit,
+    required CredentialsCubit credentialsCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -70,6 +72,9 @@ class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
   final state = ProfileState(model: ProfileModel.empty());
 }
 
+class MockQRCodeScanCubit extends MockCubit<QRCodeScanState>
+    implements QRCodeScanCubit {}
+
 void main() {
   late SecureStorageProvider mockSecureStorage;
   late HomeCubit homeCubit;
@@ -78,6 +83,7 @@ void main() {
   late AltmeChatSupportCubit altmeChatSupportCubit;
   late MatrixNotificationCubit matrixNotificationCubit;
   late ProfileCubit profileCubit;
+  late QRCodeScanCubit qrCodeScanCubit;
 
   final packageInfo = PackageInfo(
     appName: 'testApp',
@@ -95,7 +101,7 @@ void main() {
     altmeChatSupportCubit = MockAltmeChatSupportCubit();
     matrixNotificationCubit = MockMatrixNotificationCubit();
     profileCubit = MockProfileCubit();
-
+    qrCodeScanCubit = MockQRCodeScanCubit();
     when(() => mockSecureStorage.get(SecureStorageKeys.version))
         .thenAnswer((_) async => '1.0.0');
     when(() => mockSecureStorage.get(SecureStorageKeys.buildNumber))
@@ -123,6 +129,7 @@ void main() {
           matrixNotificationCubit: matrixNotificationCubit,
           profileCubit: profileCubit,
           packageInfo: packageInfo,
+          qrCodeScanCubit: qrCodeScanCubit,
         ).state,
         const SplashState(
           status: SplashStatus.init,
@@ -150,6 +157,7 @@ void main() {
           matrixNotificationCubit: matrixNotificationCubit,
           profileCubit: profileCubit,
           packageInfo: packageInfo,
+          qrCodeScanCubit: qrCodeScanCubit,
         );
         fakeAsync((async) {
           splashCubit.initialiseApp();
@@ -198,6 +206,7 @@ void main() {
             matrixNotificationCubit: matrixNotificationCubit,
             profileCubit: profileCubit,
             packageInfo: packageInfo,
+            qrCodeScanCubit: qrCodeScanCubit,
           );
           fakeAsync((async) {
             splashCubit.initialiseApp();
@@ -228,6 +237,7 @@ void main() {
             matrixNotificationCubit: matrixNotificationCubit,
             profileCubit: profileCubit,
             packageInfo: packageInfo,
+            qrCodeScanCubit: qrCodeScanCubit,
           );
           fakeAsync((async) {
             splashCubit.initialiseApp();
@@ -258,6 +268,7 @@ void main() {
             matrixNotificationCubit: matrixNotificationCubit,
             profileCubit: profileCubit,
             packageInfo: packageInfo,
+            qrCodeScanCubit: qrCodeScanCubit,
           );
           fakeAsync((async) {
             splashCubit.initialiseApp();

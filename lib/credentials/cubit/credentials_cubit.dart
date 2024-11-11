@@ -564,6 +564,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         credential: credential,
         blockchainType: cryptoAccountData.blockchainType,
         qrCodeScanCubit: qrCodeScanCubit,
+        showMessage: false,
       );
     }
   }

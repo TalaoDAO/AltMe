@@ -51,6 +51,8 @@ class WalletCubit extends Cubit<WalletState> {
     required String mnemonicOrKey,
     required bool isImported,
     required bool isFromOnboarding,
+    required QRCodeScanCubit qrCodeScanCubit,
+    required CredentialsCubit credentialsCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -115,6 +117,8 @@ class WalletCubit extends Cubit<WalletState> {
           blockchainType: blockchainType,
           totalAccountsYet: accountsCount,
           showStatus: showStatus,
+          qrCodeScanCubit: qrCodeScanCubit,
+          credentialsCubit: credentialsCubit,
         ),
       );
     } else {
@@ -138,6 +142,8 @@ class WalletCubit extends Cubit<WalletState> {
               blockchainType: BlockchainType.tezos,
               totalAccountsYet: accountsCount,
               showStatus: showStatus,
+              qrCodeScanCubit: qrCodeScanCubit,
+              credentialsCubit: credentialsCubit,
             ),
           );
         } else {
@@ -163,6 +169,8 @@ class WalletCubit extends Cubit<WalletState> {
               blockchainType: blockchainType,
               totalAccountsYet: accountsCount + value,
               showStatus: showStatus,
+              qrCodeScanCubit: qrCodeScanCubit,
+              credentialsCubit: credentialsCubit,
             );
 
             cryptoAccountDataList.add(accountData);
@@ -192,6 +200,8 @@ class WalletCubit extends Cubit<WalletState> {
             blockchainType: blockchainType,
             totalAccountsYet: accountsCount + value,
             showStatus: showStatus,
+            qrCodeScanCubit: qrCodeScanCubit,
+            credentialsCubit: credentialsCubit,
           );
 
           cryptoAccountDataList.add(accountData);
@@ -228,6 +238,8 @@ class WalletCubit extends Cubit<WalletState> {
     required BlockchainType blockchainType,
     required int totalAccountsYet,
     required bool showStatus,
+    required QRCodeScanCubit qrCodeScanCubit,
+    required CredentialsCubit credentialsCubit,
   }) async {
     final AccountType accountType = blockchainType.accountType;
 
@@ -301,15 +313,14 @@ class WalletCubit extends Cubit<WalletState> {
 
     log.i('$blockchainType created');
 
-    /// disable associated wallet account creation at start
     /// If we are not using crypto in the wallet we are not generating
     /// AssociatedAddress credentials.
-    // if (Parameters.walletHandlesCrypto) {
-    //   await credentialsCubit.insertAssociatedWalletCredential(
-    //     blockchainType: blockchainType,
-    //     cryptoAccountData: cryptoAccountData,
-    //   );
-    // }
+    if (Parameters.walletHandlesCrypto) {
+      await credentialsCubit.insertAssociatedWalletCredential(
+        qrCodeScanCubit: qrCodeScanCubit,
+        cryptoAccountData: cryptoAccountData,
+      );
+    }
 
     return cryptoAccountData;
   }

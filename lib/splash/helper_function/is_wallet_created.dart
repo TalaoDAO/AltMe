@@ -4,13 +4,15 @@ import 'package:altme/app/logger/logger.dart';
 import 'package:altme/app/shared/constants/constants.dart';
 import 'package:altme/app/shared/enum/enum.dart';
 import 'package:altme/credentials/credentials.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 Future<bool> isWalletCreated({
   required SecureStorageProvider secureStorageProvider,
-  required WalletCubit walletCubit,
+  required QRCodeScanCubit qrCodeScanCubit,
   required CredentialsCubit credentialsCubit,
+  required WalletCubit walletCubit,
 }) async {
   final log = getLogger('IsWalletCreated');
 
@@ -29,9 +31,11 @@ Future<bool> isWalletCreated({
 
   log.i('blockchain initialisation');
   await blockchainInitialize(
-    walletCubit: walletCubit,
+    qrCodeScanCubit: qrCodeScanCubit,
     ssiMnemonic: ssiMnemonic,
     secureStorageProvider: secureStorageProvider,
+    walletCubit: walletCubit,
+    credentialsCubit: credentialsCubit,
   );
 
   log.i('wallet initialisation');
@@ -43,6 +47,8 @@ Future<bool> isWalletCreated({
 }
 
 Future<void> blockchainInitialize({
+  required QRCodeScanCubit qrCodeScanCubit,
+  required CredentialsCubit credentialsCubit,
   required WalletCubit walletCubit,
   required String ssiMnemonic,
   required SecureStorageProvider secureStorageProvider,
@@ -75,6 +81,8 @@ Future<void> blockchainInitialize({
       isImported: false,
       blockchainType: BlockchainType.tezos,
       isFromOnboarding: true,
+      qrCodeScanCubit: qrCodeScanCubit,
+      credentialsCubit: credentialsCubit,
     );
   }
 }

@@ -291,8 +291,6 @@ class App extends StatelessWidget {
             create: (context) => SplashCubit(
               secureStorageProvider: secureStorageProvider,
               homeCubit: context.read<HomeCubit>(),
-              walletCubit: context.read<WalletCubit>(),
-              credentialsCubit: context.read<CredentialsCubit>(),
               client: DioClient(
                 baseUrl: Urls.checkIssuerTalaoUrl,
                 secureStorageProvider: secureStorageProvider,
@@ -300,6 +298,9 @@ class App extends StatelessWidget {
               ),
               altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
               matrixNotificationCubit: context.read<MatrixNotificationCubit>(),
+              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+              credentialsCubit: context.read<CredentialsCubit>(),
+              walletCubit: context.read<WalletCubit>(),
               profileCubit: context.read<ProfileCubit>(),
             ),
           ),

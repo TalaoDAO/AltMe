@@ -1,6 +1,7 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/flavor.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
@@ -51,6 +52,8 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     required String mnemonicOrKey,
     required bool isImported,
     required bool isFromOnboarding,
+    required QRCodeScanCubit qrCodeScanCubit,
+    required CredentialsCubit credentialsCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -81,6 +84,17 @@ class MockOIDC4VC extends Mock implements OIDC4VC {}
 
 class MockActivityLogManager extends Mock implements ActivityLogManager {}
 
+class MockCredentialsCubit extends MockCubit<CredentialsState>
+    implements CredentialsCubit {
+  @override
+  Future<void> loadAllCredentials({
+    required BlockchainType blockchainType,
+  }) async {}
+}
+
+class MockQRCodeScanCubit extends MockCubit<QRCodeScanState>
+    implements QRCodeScanCubit {}
+
 void main() {
   late MockDIDKitProvider didKitProvider;
   late KeyGenerator keyGenerator;
@@ -95,6 +109,8 @@ void main() {
   late MockSecureStorageProvider secureStorageProvider;
   late MockOIDC4VC oidc4vc;
   late MockActivityLogManager activityLogManager;
+  late MockQRCodeScanCubit qrCodeScanCubit;
+  late MockCredentialsCubit credentialsCubit;
 
   const mnemonicString =
       'notice photo opera keen climb agent soft parrot best joke field devote';
@@ -114,6 +130,8 @@ void main() {
     secureStorageProvider = MockSecureStorageProvider();
     oidc4vc = MockOIDC4VC();
     activityLogManager = MockActivityLogManager();
+    qrCodeScanCubit = MockQRCodeScanCubit();
+    credentialsCubit = MockCredentialsCubit();
   });
 
   group('Onboarding Verify Phrase Test', () {
@@ -187,6 +205,8 @@ void main() {
                   secureStorageProvider: secureStorageProvider,
                   langCubit: MockLangCubit(),
                 ),
+                credentialsCubit: credentialsCubit,
+                qrCodeScanCubit: qrCodeScanCubit,
                 flavorCubit: flavorCubit,
                 activityLogManager: activityLogManager,
               ),
@@ -237,6 +257,8 @@ void main() {
         ),
         flavorCubit: flavorCubit,
         activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
 
       await tester.pumpApp(
@@ -285,6 +307,8 @@ void main() {
         ),
         flavorCubit: flavorCubit,
         activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
 
       await tester.pumpApp(
@@ -365,6 +389,8 @@ void main() {
         ),
         flavorCubit: flavorCubit,
         activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
 
       await tester.pumpApp(
@@ -439,6 +465,8 @@ void main() {
         ),
         flavorCubit: flavorCubit,
         activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
 
       await tester.pumpApp(
@@ -494,6 +522,8 @@ void main() {
         ),
         flavorCubit: flavorCubit,
         activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
 
       await tester.pumpApp(

@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -31,6 +32,8 @@ class ImportAccountStep3Page extends StatelessWidget {
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),
+        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+        credentialsCubit: context.read<CredentialsCubit>(),
         walletCubit: context.read<WalletCubit>(),
       ),
       child: ImportAccountStep3View(

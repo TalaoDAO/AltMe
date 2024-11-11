@@ -534,7 +534,7 @@ class ScanCubit extends Cubit<ScanState> {
         credentialsToBePresented: credentialsToBePresented,
         presentationDefinition: presentationDefinition,
         clientMetaData: clientMetaData,
-        profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
+        profileSetting: profileCubit.state.model.profileSetting,
       );
       final String vpToken = await createVpToken(
         credentialsToBePresented: credentialsToBePresented,
@@ -545,7 +545,7 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey: privateKey,
         uri: uri,
         clientMetaData: clientMetaData,
-        profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
+        profileSetting: profileCubit.state.model.profileSetting,
         formatFromPresentationSubmission: formatFromPresentationSubmission,
       );
 
