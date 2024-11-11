@@ -1,8 +1,8 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/credentials/cubit/credentials_cubit.dart';
+//import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
-import 'package:altme/wallet/wallet.dart';
+//import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -12,22 +12,22 @@ Future<void> discoverCredential({
   required DiscoverDummyCredential dummyCredential,
   required BuildContext context,
 }) async {
-  if (dummyCredential.credentialSubjectType.isBlockchainAccount) {
-    final credentialCubit = context.read<CredentialsCubit>();
-    final walletCubit = context.read<WalletCubit>();
-    final qrCodeScanCubit = context.read<QRCodeScanCubit>();
+  // if (dummyCredential.credentialSubjectType.isBlockchainAccount) {
+  //   final credentialCubit = context.read<CredentialsCubit>();
+  //   final walletCubit = context.read<WalletCubit>();
+  //   final qrCodeScanCubit = context.read<QRCodeScanCubit>();
 
-    final cryptoAccountData = walletCubit.state.currentAccount;
+  //   final cryptoAccountData = walletCubit.state.currentAccount;
 
-    if (cryptoAccountData != null) {
-      await credentialCubit.insertAssociatedWalletCredential(
-        cryptoAccountData: cryptoAccountData,
-        qrCodeScanCubit: qrCodeScanCubit,
-      );
-    }
+  //   if (cryptoAccountData != null) {
+  //     await credentialCubit.insertAssociatedWalletCredential(
+  //       cryptoAccountData: cryptoAccountData,
+  //       qrCodeScanCubit: qrCodeScanCubit,
+  //     );
+  //   }
 
-    return;
-  }
+  //   return;
+  // }
 
   final profileCubit = context.read<ProfileCubit>();
 
