@@ -8,24 +8,28 @@ import 'package:secure_storage/secure_storage.dart';
 class PinCodePage extends StatelessWidget {
   const PinCodePage({
     super.key,
+    required this.title,
     required this.isValidCallback,
     this.restrictToBack = true,
     required this.localAuthApi,
     required this.walletProtectionType,
   });
 
+  final String title;
   final VoidCallback isValidCallback;
   final bool restrictToBack;
   final LocalAuthApi localAuthApi;
   final WalletProtectionType walletProtectionType;
 
   static Route<dynamic> route({
+    required String title,
     required VoidCallback isValidCallback,
     required WalletProtectionType walletProtectionType,
     bool restrictToBack = true,
   }) =>
       MaterialPageRoute<void>(
         builder: (_) => PinCodePage(
+          title: title,
           isValidCallback: isValidCallback,
           restrictToBack: restrictToBack,
           localAuthApi: LocalAuthApi(),
@@ -42,6 +46,7 @@ class PinCodePage extends StatelessWidget {
         secureStorageProvider: getSecureStorage,
       ),
       child: PinCodeView(
+        title: title,
         isValidCallback: isValidCallback,
         restrictToBack: restrictToBack,
         localAuthApi: localAuthApi,
@@ -54,12 +59,14 @@ class PinCodePage extends StatelessWidget {
 class PinCodeView extends StatefulWidget {
   const PinCodeView({
     super.key,
+    required this.title,
     required this.isValidCallback,
     this.restrictToBack = true,
     required this.localAuthApi,
     required this.walletProtectionType,
   });
 
+  final String title;
   final VoidCallback isValidCallback;
   final bool restrictToBack;
   final LocalAuthApi localAuthApi;
@@ -85,8 +92,7 @@ class _PinCodeViewState extends State<PinCodeView> {
         titleLeading: widget.restrictToBack ? null : const BackLeadingButton(),
         scrollView: false,
         body: PinCodeWidget(
-          title: l10n.enterYourPinCode,
-          subTitle: l10n.pinCodeMessage,
+          title: widget.title,
           deleteButton: Text(
             l10n.delete,
             style: Theme.of(context).textTheme.labelLarge,

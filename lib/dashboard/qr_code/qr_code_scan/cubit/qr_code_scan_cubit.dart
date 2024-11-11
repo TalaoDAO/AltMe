@@ -523,7 +523,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 onCancel: () {
                   goBack();
                 },
-                onProceed: (String userPin) async {
+                onProceed: (String pinCode) async {
+                  String? userPin;
+                  String? txCodeData;
+
+                  if (txCode != null) {
+                    txCodeData = pinCode;
+                  } else {
+                    userPin = pinCode;
+                  }
                   await initiateOIDC4VCCredentialIssuance(
                     scannedResponse: scannedResponse,
                     credentialsCubit: credentialsCubit,
@@ -532,6 +540,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                     secureStorageProvider: getSecureStorage,
                     dioClient: client,
                     userPin: userPin,
+                    txCode: txCodeData,
                     oidc4vc: oidc4vc,
                     isEBSI: isEBSI,
                     credentialOfferJson: credentialOfferJson,
@@ -561,6 +570,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       secureStorageProvider: getSecureStorage,
       dioClient: client,
       userPin: null,
+      txCode: null,
       credentialOfferJson: credentialOfferJson,
       isEBSI: isEBSI,
       cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
@@ -853,6 +863,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         blockchainType: walletCubit.state.currentAccount!.blockchainType,
         oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
         qrCodeScanCubit: qrCodeScanCubit,
+        profileCubit: profileCubit,
       );
     } catch (e) {
       emitError(e);
@@ -891,6 +902,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   void navigateToOidc4vcCredentialPickPage({
     required List<dynamic> credentials,
     required String? userPin,
+    required String? txCode,
     required String? preAuthorizedCode,
     required String issuer,
     required bool isEBSI,
@@ -903,6 +915,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         route: Oidc4vcCredentialPickPage.route(
           credentials: credentials,
           userPin: userPin,
+          txCode: txCode,
           issuer: issuer,
           preAuthorizedCode: preAuthorizedCode,
           isEBSI: isEBSI,
@@ -1210,7 +1223,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final customOidc4vcProfile = profileCubit.state.model.profileSetting
           .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-      final Response<dynamic> response = await oidc4vc.siopv2Flow(
+      final Map<String, dynamic> responseData =
+          await oidc4vc.getDataForSiopV2Flow(
         clientId: clientId,
         privateKey: privateKey,
         did: did,
@@ -1219,8 +1233,28 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         nonce: nonce,
         stateValue: stateValue,
         clientType: customOidc4vcProfile.clientType,
-        proofHeaderType: customOidc4vcProfile.proofHeader,
+        proofHeader: customOidc4vcProfile.proofHeader,
+      );
+
+      if (profileCubit.state.model.isDeveloperMode) {
+        final value = await showDataBeforeSending(
+          title: 'RESPONSE REQUEST',
+          data: responseData,
+        );
+        if (value) {
+          completer = null;
+        } else {
+          completer = null;
+          resetNonceAndAccessTokenAndAuthorizationDetails();
+          goBack();
+          return;
+        }
+      }
+
+      final Response<dynamic> response = await oidc4vc.siopv2Flow(
+        redirectUri: redirectUri ?? responseUri!,
         dio: client.dio,
+        responseData: responseData,
       );
 
       String? url;
@@ -1260,6 +1294,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required List<dynamic> selectedCredentials,
     required bool isEBSI,
     required String? userPin,
+    required String? txCode,
     required String? preAuthorizedCode,
     required String issuer,
     required dynamic credentialOfferJson,
@@ -1286,6 +1321,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           selectedCredentials: selectedCredentials,
           isEBSI: isEBSI,
           userPin: userPin,
+          txCode: txCode,
           preAuthorizedCode: preAuthorizedCode,
           issuer: issuer,
           codeForAuthorisedFlow: null,
@@ -1301,7 +1337,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(state.loading());
         final scope = customOidc4vcProfile.scope;
 
-        await getAuthorizationUriForIssuer(
+        final authorizationUri = await getAuthorizationUriForIssuer(
           scannedResponse: state.uri.toString(),
           oidc4vc: oidc4vc,
           isEBSI: isEBSI,
@@ -1323,7 +1359,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           walletIssuer: Parameters.walletIssuer,
           useOAuthAuthorizationServerLink:
               useOauthServerAuthEndPoint(profileCubit.state.model),
+          profileCubit: profileCubit,
+          qrCodeScanCubit: qrCodeScanCubit,
         );
+
+        if (authorizationUri == null) return;
+
+        await LaunchUrl.launchUri(authorizationUri);
         goBack();
       }
     } catch (e) {
@@ -1340,6 +1382,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required List<dynamic> selectedCredentials,
     required bool isEBSI,
     required String? userPin,
+    required String? txCode,
     required String? preAuthorizedCode,
     required String issuer,
     required String? codeForAuthorisedFlow,
@@ -1377,6 +1420,36 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           );
 
           if (savedAccessToken == null) {
+            /// get tokendata
+            final tokenData = oidc4vc.buildTokenData(
+              preAuthorizedCode: preAuthorizedCode,
+              userPin: userPin,
+              code: codeForAuthorisedFlow,
+              codeVerifier: codeVerifier,
+              clientId: clientId,
+              txCode: txCode,
+              clientSecret: clientSecret,
+              authorization: authorization,
+              redirectUri: Parameters.oidc4vcUniversalLink,
+              oAuthClientAttestation: oAuthClientAttestation,
+              oAuthClientAttestationPop: oAuthClientAttestationPop,
+            );
+
+            if (profileCubit.state.model.isDeveloperMode) {
+              final value = await showDataBeforeSending(
+                title: 'TOKEN REQUEST',
+                data: tokenData,
+              );
+              if (value) {
+                completer = null;
+              } else {
+                completer = null;
+                resetNonceAndAccessTokenAndAuthorizationDetails();
+                goBack();
+                return;
+              }
+            }
+
             /// get token response
             final (
               Map<String, dynamic>? tokenResponse,
@@ -1384,16 +1457,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               String? cnonce,
               List<dynamic>? authorizationDetails,
             ) = await oidc4vc.getTokenResponse(
-              preAuthorizedCode: preAuthorizedCode,
               issuer: issuer,
-              clientId: clientId,
-              clientSecret: clientSecret,
-              userPin: userPin,
-              code: codeForAuthorisedFlow,
-              codeVerifier: codeVerifier,
               authorization: authorization,
               oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
-              redirectUri: Parameters.oidc4vcUniversalLink,
               openIdConfiguration:
                   OpenIdConfiguration.fromJson(openIdConfigurationData),
               oAuthClientAttestation: oAuthClientAttestation,
@@ -1401,6 +1467,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               dio: client.dio,
               useOAuthAuthorizationServerLink:
                   useOauthServerAuthEndPoint(profileCubit.state.model),
+              tokenData: tokenData,
             );
 
             savedAccessToken = accessToken;
@@ -1442,11 +1509,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           }
 
           /// get credentials
-          final (
-            List<dynamic> encodedCredentialOrFutureTokens,
-            String? deferredCredentialEndpoint,
-            String format,
-          ) = await getCredential(
+          final result = await getCredential(
             isEBSI: isEBSI,
             credential: selectedCredentials[i],
             issuer: issuer,
@@ -1456,13 +1519,22 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             clientId: clientId,
             profileCubit: profileCubit,
             accessToken: savedAccessToken!,
-            nonce: savedNonce,
+            cnonce: savedNonce,
             authorizationDetails: savedAuthorizationDetails,
             openIdConfiguration:
                 OpenIdConfiguration.fromJson(openIdConfigurationData),
+            qrCodeScanCubit: qrCodeScanCubit,
           );
 
-          final lastElement = encodedCredentialOrFutureTokens.last;
+          if (result == null) return;
+
+          final (
+            encodedCredentialOrFutureTokens,
+            deferredCredentialEndpoint,
+            format
+          ) = result;
+
+          final lastElement = encodedCredentialOrFutureTokens!.last;
 
           /// update nonce value
           if (lastElement is Map<String, dynamic>) {
@@ -1509,7 +1581,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             blockchainType: walletCubit.state.currentAccount!.blockchainType,
             deferredCredentialEndpoint: deferredCredentialEndpoint,
             encodedCredentialOrFutureTokens: encodedCredentialOrFutureTokens,
-            format: format,
+            format: format!,
             openIdConfiguration:
                 OpenIdConfiguration.fromJson(openIdConfigurationData),
             qrCodeScanCubit: qrCodeScanCubit,
@@ -1531,6 +1603,28 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       resetNonceAndAccessTokenAndAuthorizationDetails();
       emitError(e);
     }
+  }
+
+  Future<bool> showDataBeforeSending({
+    required String title,
+    required Map<String, dynamic> data,
+  }) async {
+    completer = Completer<bool>();
+
+    final formattedData = '''
+<b>$title :</b> 
+${const JsonEncoder.withIndent('  ').convert(data)}\n
+''';
+    emit(
+      state.copyWith(
+        qrScanStatus: QrScanStatus.pauseForDisplay,
+        dialogData: formattedData,
+      ),
+    );
+
+    final value = await completer!.future;
+
+    return value;
   }
 
   void resetNonceAndAccessTokenAndAuthorizationDetails() {
@@ -1596,6 +1690,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       await addCredentialsInLoop(
         selectedCredentials: selectedCredentials,
         userPin: null,
+        txCode: null,
         issuer: issuer,
         preAuthorizedCode: null,
         isEBSI: isEBSI,

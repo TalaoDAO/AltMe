@@ -101,6 +101,7 @@ class ResetWalletView extends StatelessWidget {
                       ? () async {
                           await securityCheck(
                             context: context,
+                            title: l10n.typeYourPINCodeToAuthenticate,
                             localAuthApi: LocalAuthApi(),
                             onSuccess: () async {
                               await resetWallet(context);

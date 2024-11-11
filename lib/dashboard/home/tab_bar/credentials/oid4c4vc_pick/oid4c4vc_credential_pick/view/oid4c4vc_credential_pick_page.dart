@@ -11,6 +11,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     super.key,
     required this.credentials,
     required this.userPin,
+    required this.txCode,
     required this.preAuthorizedCode,
     required this.issuer,
     required this.isEBSI,
@@ -20,6 +21,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
 
   final List<dynamic> credentials;
   final String? userPin;
+  final String? txCode;
   final String? preAuthorizedCode;
   final String issuer;
   final bool isEBSI;
@@ -29,6 +31,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
   static Route<dynamic> route({
     required List<dynamic> credentials,
     required String? userPin,
+    required String? txCode,
     required String? preAuthorizedCode,
     required String issuer,
     required bool isEBSI,
@@ -39,6 +42,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
         builder: (context) => Oidc4vcCredentialPickPage(
           credentials: credentials,
           userPin: userPin,
+          txCode: txCode,
           issuer: issuer,
           preAuthorizedCode: preAuthorizedCode,
           isEBSI: isEBSI,
@@ -55,6 +59,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
       child: Oidc4vcCredentialPickView(
         credentials: credentials,
         userPin: userPin,
+        txCode: txCode,
         issuer: issuer,
         preAuthorizedCode: preAuthorizedCode,
         isEBSI: isEBSI,
@@ -70,6 +75,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
     super.key,
     required this.credentials,
     required this.userPin,
+    required this.txCode,
     required this.preAuthorizedCode,
     required this.issuer,
     required this.isEBSI,
@@ -79,6 +85,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
 
   final List<dynamic> credentials;
   final String? userPin;
+  final String? txCode;
   final String? preAuthorizedCode;
   final String issuer;
   final bool isEBSI;
@@ -203,6 +210,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                               .processSelectedCredentials(
                                 selectedCredentials: selectedCredentials,
                                 userPin: userPin,
+                                txCode: txCode,
                                 issuer: issuer,
                                 preAuthorizedCode: preAuthorizedCode,
                                 isEBSI: isEBSI,

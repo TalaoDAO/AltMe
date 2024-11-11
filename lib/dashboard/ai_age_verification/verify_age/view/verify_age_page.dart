@@ -81,6 +81,7 @@ class _VerifyAgeViewState extends State<VerifyAgeView> {
             onPressed: () async {
               await securityCheck(
                 context: context,
+                title: l10n.typeYourPINCodeToAuthenticate,
                 localAuthApi: LocalAuthApi(),
                 onSuccess: () {
                   Navigator.push(

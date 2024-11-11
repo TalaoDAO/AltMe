@@ -431,47 +431,10 @@ class OIDC4VC {
     };
   }
 
-  /// Retreive credential_type from url
-  /// credentialResponseData, deferredCredentialEndpoint, format
-
-  Future<
-      (
-        List<dynamic>,
-        String?,
-        String,
-      )> getCredential({
-    required String issuer,
-    required dynamic credential,
-    required String did,
-    required String? clientId,
-    required String kid,
-    required String privateKey,
-    required bool cryptoHolderBinding,
-    required ClientType clientType,
-    required ProofHeaderType proofHeaderType,
-    required OIDC4VCIDraftType oidc4vciDraftType,
-    required ClientAuthentication clientAuthentication,
-    required ProofType proofType,
-    required OpenIdConfiguration openIdConfiguration,
-    required String accessToken,
-    required String? cnonce,
-    required Dio dio,
-    required VCFormatType vcFormatType,
-    List<dynamic>? authorizationDetails,
-  }) async {
-    var nonce = cnonce;
-
-    final issuerTokenParameters = IssuerTokenParameters(
-      privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
-      did: did,
-      kid: kid,
-      issuer: issuer,
-      mediaType: MediaType.proofOfOwnership,
-      clientType: clientType,
-      proofHeaderType: proofHeaderType,
-      clientId: clientId ?? '',
-    );
-
+  ///deferredCredentialEndpoint
+  String? getDeferredCredentialEndpoint(
+    OpenIdConfiguration openIdConfiguration,
+  ) {
     String? deferredCredentialEndpoint;
 
     if (openIdConfiguration.deferredCredentialEndpoint != null) {
@@ -479,147 +442,33 @@ class OIDC4VC {
           openIdConfiguration.deferredCredentialEndpoint;
     }
 
-    final (credentialType, types, credentialDefinition, vct, format) =
-        await getCredentialData(
-      openIdConfiguration: openIdConfiguration,
-      credential: credential,
-    );
-
-    final credentialResponseData = <dynamic>[];
-
-    if (authorizationDetails != null) {
-      final dynamic authDetailForCredential = authorizationDetails
-          .where(
-            (dynamic ele) =>
-                ele is Map<String, dynamic> &&
-                ((ele.containsKey('types') &&
-                        (ele['types'] as List).contains(credentialType)) ||
-                    (ele.containsKey('credential_definition') &&
-                        (ele['credential_definition']['type'] as List)
-                            .contains(credentialType))),
-          )
-          .firstOrNull;
-
-      if (authDetailForCredential == null) {
-        throw Exception('AUTHORIZATION_DETAIL_ERROR');
-      }
-
-      final credentialIdentifiers =
-          (authDetailForCredential['credential_identifiers'] as List<dynamic>)
-              .map((dynamic element) => element.toString())
-              .toList();
-
-      for (final credentialIdentifier in credentialIdentifiers) {
-        final credentialResponseDataValue = await getSingleCredential(
-          issuerTokenParameters: issuerTokenParameters,
-          openIdConfiguration: openIdConfiguration,
-          credentialType: credentialType,
-          types: types,
-          format: format,
-          credentialIdentifier: credentialIdentifier,
-          cryptoHolderBinding: cryptoHolderBinding,
-          oidc4vciDraftType: oidc4vciDraftType,
-          credentialDefinition: credentialDefinition,
-          clientAuthentication: clientAuthentication,
-          vct: vct,
-          proofType: proofType,
-          did: did,
-          issuer: issuer,
-          kid: kid,
-          privateKey: privateKey,
-          accessToken: accessToken,
-          nonce: nonce,
-          dio: dio,
-          vcFormatType: vcFormatType,
-        );
-
-        /// update nonce value
-        if (credentialResponseDataValue is Map<String, dynamic>) {
-          if (credentialResponseDataValue.containsKey('c_nonce')) {
-            nonce = credentialResponseDataValue['c_nonce'].toString();
-          }
-        }
-
-        credentialResponseData.add(credentialResponseDataValue);
-      }
-//
-    } else {
-      final credentialResponseDataValue = await getSingleCredential(
-        issuerTokenParameters: issuerTokenParameters,
-        openIdConfiguration: openIdConfiguration,
-        credentialType: credentialType,
-        types: types,
-        format: format,
-        cryptoHolderBinding: cryptoHolderBinding,
-        oidc4vciDraftType: oidc4vciDraftType,
-        credentialDefinition: credentialDefinition,
-        clientAuthentication: clientAuthentication,
-        vct: vct,
-        credentialIdentifier: null,
-        proofType: proofType,
-        did: did,
-        issuer: issuer,
-        kid: kid,
-        privateKey: privateKey,
-        accessToken: accessToken,
-        nonce: cnonce,
-        dio: dio,
-        vcFormatType: vcFormatType,
-      );
-
-      credentialResponseData.add(credentialResponseDataValue);
-    }
-
-    return (
-      credentialResponseData,
-      deferredCredentialEndpoint,
-      format,
-    );
+    return deferredCredentialEndpoint;
   }
 
   /// tokenResponse, accessToken, cnonce, authorizationDetails
   Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
       getTokenResponse({
     required String issuer,
-    required String? clientId,
-    required String? clientSecret,
     required OIDC4VCIDraftType oidc4vciDraftType,
-    required String redirectUri,
     required OpenIdConfiguration openIdConfiguration,
     required Dio dio,
     required bool useOAuthAuthorizationServerLink,
-    String? preAuthorizedCode,
-    String? userPin,
-    String? code,
-    String? codeVerifier,
+    required Map<String, dynamic> tokenData,
     String? authorization,
     String? oAuthClientAttestation,
     String? oAuthClientAttestationPop,
   }) async {
+    Map<String, dynamic>? tokenResponse;
+    String? accessToken;
+    String? cnonce;
+    List<dynamic>? authorizationDetails;
+
     final tokenEndPoint = await readTokenEndPoint(
       openIdConfiguration: openIdConfiguration,
       issuer: issuer,
       oidc4vciDraftType: oidc4vciDraftType,
       dio: dio,
       useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-    );
-
-    Map<String, dynamic>? tokenResponse;
-    String? accessToken;
-    String? cnonce;
-    List<dynamic>? authorizationDetails;
-
-    final tokenData = buildTokenData(
-      preAuthorizedCode: preAuthorizedCode,
-      userPin: userPin,
-      code: code,
-      codeVerifier: codeVerifier,
-      clientId: clientId,
-      clientSecret: clientSecret,
-      authorization: authorization,
-      redirectUri: redirectUri,
-      oAuthClientAttestation: oAuthClientAttestation,
-      oAuthClientAttestationPop: oAuthClientAttestationPop,
     );
 
     tokenResponse = await getToken(
@@ -645,51 +494,14 @@ class OIDC4VC {
   int count = 0;
 
   Future<dynamic> getSingleCredential({
-    required IssuerTokenParameters issuerTokenParameters,
     required OpenIdConfiguration openIdConfiguration,
-    required String credentialType,
-    required List<String>? types,
-    required String format,
-    required bool cryptoHolderBinding,
-    required OIDC4VCIDraftType oidc4vciDraftType,
-    required ClientAuthentication clientAuthentication,
-    required String? credentialIdentifier,
-    required Map<String, dynamic>? credentialDefinition,
-    required String? vct,
-    required ProofType proofType,
-    required String did,
-    required String issuer,
-    required String kid,
-    required String privateKey,
     required String accessToken,
     required String? nonce,
     required Dio dio,
-    required VCFormatType vcFormatType,
+    required Map<String, dynamic> credentialData,
   }) async {
     try {
-      final credentialData = await buildCredentialData(
-        nonce: nonce,
-        issuerTokenParameters: issuerTokenParameters,
-        openIdConfiguration: openIdConfiguration,
-        credentialType: credentialType,
-        types: types,
-        format: format,
-        credentialIdentifier: credentialIdentifier,
-        cryptoHolderBinding: cryptoHolderBinding,
-        oidc4vciDraftType: oidc4vciDraftType,
-        credentialDefinition: credentialDefinition,
-        clientAuthentication: clientAuthentication,
-        vct: vct,
-        proofType: proofType,
-        did: did,
-        issuer: issuer,
-        kid: kid,
-        privateKey: privateKey,
-        vcFormatType: vcFormatType,
-      );
-
       /// sign proof
-
       final credentialEndpoint = readCredentialEndpoint(openIdConfiguration);
 
       final credentialHeaders = <String, dynamic>{
@@ -721,26 +533,11 @@ class OIDC4VC {
         final nonce = e.response!.data['c_nonce'].toString();
 
         final credentialResponseDataValue = await getSingleCredential(
-          issuerTokenParameters: issuerTokenParameters,
           openIdConfiguration: openIdConfiguration,
-          credentialType: credentialType,
-          types: types,
-          format: format,
-          cryptoHolderBinding: cryptoHolderBinding,
-          oidc4vciDraftType: oidc4vciDraftType,
-          credentialDefinition: credentialDefinition,
-          clientAuthentication: clientAuthentication,
-          vct: vct,
-          credentialIdentifier: null,
-          proofType: proofType,
-          did: did,
-          issuer: issuer,
-          kid: kid,
-          privateKey: privateKey,
           accessToken: accessToken,
           nonce: nonce,
           dio: dio,
-          vcFormatType: vcFormatType,
+          credentialData: credentialData,
         );
         count = 0;
         return credentialResponseDataValue;
@@ -771,6 +568,7 @@ class OIDC4VC {
     required String redirectUri,
     String? preAuthorizedCode,
     String? userPin,
+    String? txCode,
     String? code,
     String? codeVerifier,
     String? clientId,
@@ -808,9 +606,11 @@ class OIDC4VC {
 
     if (userPin != null) {
       tokenData['user_pin'] = userPin;
+    }
 
-      /// draft 13
-      tokenData['tx_code'] = userPin;
+    /// draft 13 and above
+    if (txCode != null) {
+      tokenData['tx_code'] = txCode;
     }
 
     return tokenData;
@@ -1598,7 +1398,7 @@ class OIDC4VC {
     }
   }
 
-  Future<Response<dynamic>> siopv2Flow({
+  Future<Map<String, dynamic>> getDataForSiopV2Flow({
     required String clientId,
     required String did,
     required String kid,
@@ -1607,40 +1407,47 @@ class OIDC4VC {
     required String privateKey,
     required String? stateValue,
     required ClientType clientType,
-    required ProofHeaderType proofHeaderType,
-    required Dio dio,
+    required ProofHeaderType proofHeader,
   }) async {
+    final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
+    final tokenParameters = VerifierTokenParameters(
+      privateKey: private,
+      did: did,
+      kid: kid,
+      audience: clientId,
+      credentials: [],
+      nonce: nonce,
+      mediaType: MediaType.basic,
+      clientType: clientType,
+      proofHeaderType: proofHeader,
+      clientId: clientId,
+    );
+
+    // structures
+    final verifierIdToken = await getIdToken(tokenParameters);
+
+    final responseData = <String, dynamic>{
+      'id_token': verifierIdToken,
+    };
+
+    if (stateValue != null) {
+      responseData['state'] = stateValue;
+    }
+
+    return responseData;
+  }
+
+  Future<Response<dynamic>> siopv2Flow({
+    required String redirectUri,
+    required Dio dio,
+    required Map<String, dynamic> responseData,
+  }) async {
+    final responseHeaders = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
     try {
-      final private = jsonDecode(privateKey) as Map<String, dynamic>;
-
-      final tokenParameters = VerifierTokenParameters(
-        privateKey: private,
-        did: did,
-        kid: kid,
-        audience: clientId,
-        credentials: [],
-        nonce: nonce,
-        mediaType: MediaType.basic,
-        clientType: clientType,
-        proofHeaderType: proofHeaderType,
-        clientId: clientId,
-      );
-
-      // structures
-      final verifierIdToken = await getIdToken(tokenParameters);
-
-      final responseHeaders = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      };
-
-      final responseData = <String, dynamic>{
-        'id_token': verifierIdToken,
-      };
-
-      if (stateValue != null) {
-        responseData['state'] = stateValue;
-      }
-
       final response = await dio.post<dynamic>(
         redirectUri,
         options: Options(
