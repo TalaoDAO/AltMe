@@ -21,6 +21,7 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -1611,10 +1612,44 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }) async {
     completer = Completer<bool>();
 
-    final formattedData = '''
+    var formattedData = '''
 <b>$title :</b> 
-${const JsonEncoder.withIndent('  ').convert(data)}\n
+${const JsonEncoder.withIndent('  ').convert(data)}
 ''';
+
+    final jwtMappedIterable = JsonPath(r'$..jwt').read(data);
+
+    if (jwtMappedIterable.isNotEmpty) {
+      final jwtValue = jwtMappedIterable.first.value;
+
+      if (jwtValue != null) {
+        final jwt = jwtValue.toString();
+
+        try {
+          final header = jwtDecode.parseJwtHeader(jwt);
+          final headerData = '''
+<b>HEADER :</b> 
+${const JsonEncoder.withIndent('  ').convert(header)}
+''';
+          formattedData = '$formattedData\n$headerData';
+        } catch (e) {
+          //
+        }
+
+        try {
+          final payload = jwtDecode.parseJwt(jwt);
+
+          final payloadData = '''
+<b>PAYLOAD :</b> 
+${const JsonEncoder.withIndent('  ').convert(payload)}
+''';
+
+          formattedData = '$formattedData\n$payloadData';
+        } catch (e) {
+          //
+        }
+      }
+    }
     emit(
       state.copyWith(
         qrScanStatus: QrScanStatus.pauseForDisplay,
