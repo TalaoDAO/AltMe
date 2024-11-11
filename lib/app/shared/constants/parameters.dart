@@ -118,6 +118,11 @@ class Parameters {
   // 'https://app.altme.io/wallet_issuer' for altme
   static const String walletIssuer = 'https://app.altme.io/wallet_issuer';
 
+  // 'https://app.talao.co/wallet-issuer/.well-known/openid-configuration'for talao
+  // 'https://app.altme.io/wallet-issuer/.well-known/openid-configuration' for altme
+  static const String walletMetadataForVerifier =
+      'https://app.altme.io/wallet-issuer/.well-known/openid-configuration';
+
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
   static const DidKeyType didKeyTypeForEbsiV4 = DidKeyType.ebsiv4;
   static const DidKeyType didKeyTypeForDefault = DidKeyType.edDSA;

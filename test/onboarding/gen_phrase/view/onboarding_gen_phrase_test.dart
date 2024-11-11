@@ -164,6 +164,9 @@ void main() {
             BlocProvider<AltmeChatSupportCubit>.value(
               value: altmeChatSupportCubit,
             ),
+            BlocProvider<MatrixNotificationCubit>.value(
+              value: matrixNotificationCubit,
+            ),
             BlocProvider<ProfileCubit>.value(value: profileCubit),
           ],
           child: const OnBoardingGenPhrasePage(),

@@ -70,6 +70,7 @@ void main() {
                   Navigator.of(context).push<void>(
                     PinCodePage.route(
                       isValidCallback: () {},
+                      title: '',
                       walletProtectionType: WalletProtectionType.FA2,
                     ),
                   );
@@ -102,6 +103,7 @@ void main() {
             BlocProvider<FlavorCubit>.value(value: flavorCubit),
           ],
           child: PinCodePage(
+            title: '',
             isValidCallback: () {},
             walletProtectionType: WalletProtectionType.FA2,
             localAuthApi: localAuthApi,

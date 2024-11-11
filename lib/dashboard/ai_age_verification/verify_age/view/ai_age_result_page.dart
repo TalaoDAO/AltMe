@@ -204,6 +204,7 @@ class FailureWidget extends StatelessWidget {
           onPressed: () async {
             await securityCheck(
               context: context,
+              title: l10n.typeYourPINCodeToAuthenticate,
               localAuthApi: LocalAuthApi(),
               onSuccess: () {
                 Navigator.pushReplacement(
@@ -226,6 +227,7 @@ class FailureWidget extends StatelessWidget {
           onPressed: () async {
             await securityCheck(
               context: context,
+              title: l10n.typeYourPINCodeToAuthenticate,
               localAuthApi: LocalAuthApi(),
               onSuccess: () {
                 context

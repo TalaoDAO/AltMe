@@ -32,6 +32,7 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
     if (state.status == SplashStatus.routeToPassCode) {
       securityCheck(
         context: context,
+        title: context.l10n.typeYourPINCodeToOpenTheWallet,
         localAuthApi: LocalAuthApi(),
         onSuccess: () {
           Navigator.of(context).push<void>(DashboardPage.route());
@@ -347,13 +348,20 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     context: context,
                     builder: (_) {
                       return DeveloperModeDialog(
-                        onDisplay: () {
-                          Navigator.of(context).push<void>(
+                        onDisplay: () async {
+                          final returnedValue =
+                              await Navigator.of(context).push<dynamic>(
                             JsonViewerPage.route(
                               title: l10n.display,
                               data: formattedData,
                             ),
                           );
+
+                          if (returnedValue != null &&
+                              returnedValue is bool &&
+                              returnedValue) {
+                            Navigator.of(context).pop(true);
+                          }
                           return;
                         },
                         onDownload: () {
@@ -530,6 +538,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           bool authenticated = false;
           await securityCheck(
             context: context,
+            title: l10n.typeYourPINCodeToAuthenticate,
             localAuthApi: LocalAuthApi(),
             onSuccess: () {
               authenticated = true;
@@ -553,13 +562,21 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               context: context,
               builder: (_) {
                 return DeveloperModeDialog(
-                  onDisplay: () {
-                    Navigator.of(context).push<void>(
+                  onDisplay: () async {
+                    final returnedValue =
+                        await Navigator.of(context).push<dynamic>(
                       JsonViewerPage.route(
                         title: l10n.display,
                         data: data,
                       ),
                     );
+
+                    if (returnedValue != null &&
+                        returnedValue is bool &&
+                        returnedValue) {
+                      Navigator.of(context).pop(true);
+                    }
+
                     return;
                   },
                   onDownload: () {
@@ -581,6 +598,28 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               },
             ) ??
             true;
+
+        context.read<QRCodeScanCubit>().completer?.complete(moveAhead);
+        LoadingView().show(context: context);
+      }
+
+      if (state.status == QrScanStatus.pauseForDisplay) {
+        LoadingView().hide();
+
+        final data = state.dialogData ?? '';
+
+        final returnedValue = await Navigator.of(context).push<dynamic>(
+          JsonViewerPage.route(
+            title: l10n.display,
+            data: data,
+          ),
+        );
+
+        var moveAhead = false;
+
+        if (returnedValue != null && returnedValue is bool && returnedValue) {
+          moveAhead = true;
+        }
 
         context.read<QRCodeScanCubit>().completer?.complete(moveAhead);
         LoadingView().show(context: context);
@@ -844,6 +883,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
 
         await securityCheck(
           context: context,
+          title: l10n.typeYourPINCodeToAuthenticate,
           localAuthApi: LocalAuthApi(),
           onSuccess: () {
             context.read<PolygonIdCubit>().authenticateOrGenerateProof(

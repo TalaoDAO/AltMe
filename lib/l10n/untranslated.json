@@ -70,7 +70,12 @@
     "restoreAnAppBackup",
     "credentialPickShare",
     "credentialPickTitle",
-    "credentialShareTitle"
+    "credentialShareTitle",
+    "enterYourSecretCode",
+    "jwk",
+    "typeYourPINCodeToOpenTheWallet",
+    "typeYourPINCodeToShareTheData",
+    "typeYourPINCodeToAuthenticate"
   ],
 
   "es": [
@@ -144,7 +149,12 @@
     "restoreAnAppBackup",
     "credentialPickShare",
     "credentialPickTitle",
-    "credentialShareTitle"
+    "credentialShareTitle",
+    "enterYourSecretCode",
+    "jwk",
+    "typeYourPINCodeToOpenTheWallet",
+    "typeYourPINCodeToShareTheData",
+    "typeYourPINCodeToAuthenticate"
   ],
 
   "fr": [
@@ -223,6 +233,11 @@
     "restoreAnAppBackup",
     "credentialPickShare",
     "credentialPickTitle",
-    "credentialShareTitle"
+    "credentialShareTitle",
+    "enterYourSecretCode",
+    "jwk",
+    "typeYourPINCodeToOpenTheWallet",
+    "typeYourPINCodeToShareTheData",
+    "typeYourPINCodeToAuthenticate"
   ]
 }

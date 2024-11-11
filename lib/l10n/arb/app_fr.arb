@@ -897,7 +897,6 @@
   "pleaseSwitchToCorrectOIDC4VCProfile": "Veuillez passer au bon profil OIDC4VC.",
   "authenticationSuccess": "Authentification Réussie",
   "format": "Format",
-  "pleaseInsertTheSecredCodeReceived": "Veuillez insérer le code secret reçu.",
   "verifyIssuerWebsiteIdentity": "Vérifier l'identité du site Web de l'émetteur",
   "verifyIssuerWebsiteIdentitySubtitle": "Par défaut : Désactivé\nActivez pour vérifier l'identité du site Web avant l'accès.",
   "developerMode": "Mode Développeur",

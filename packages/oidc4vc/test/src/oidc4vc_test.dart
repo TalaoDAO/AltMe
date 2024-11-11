@@ -253,10 +253,16 @@ void main() {
                 '[{\"type\":\"openid_credential\",\"credential_configuration_id\":\"EmailPass\"}]',
           };
 
-          dioAdapter.onGet(
-            'https://talao.co/issuer/mfyttabosy/.well-known/openid-credential-issuer',
-            (request) => request.reply(200, jsonDecode(openIdConfiguration)),
-          );
+          dioAdapter
+            ..onGet(
+              'https://talao.co/issuer/mfyttabosy/.well-known/openid-credential-issuer',
+              (request) => request.reply(200, jsonDecode(openIdConfiguration)),
+            )
+            ..onGet(
+              'https://talao.co/issuer/mfyttabosy/.well-known/openid-configuration',
+              (request) => request.reply(200, jsonDecode(openIdConfiguration)),
+            );
+
           final (authorizationEndpoint, authorizationRequestParemeters, _) =
               await oidc4vc.getAuthorizationData(
             selectedCredentials: selectedCredentials,
@@ -524,26 +530,6 @@ void main() {
     });
 
     group('OIC4VC request credential', () {
-      const issuer = 'https://talao.co/issuer/zxhaokccsi';
-
-      const credential = {
-        'format': 'jwt_vc',
-        'types': [
-          'VerifiableCredential',
-          'VerifiableAttestation',
-          'VerifiableDiploma2',
-        ],
-      };
-
-      const did =
-          'did:key:z2dmzD81cgPx8Vki7JbuuMmFYrWPgYoytykUZ3eyqht1j9Kbrbpg5is8LfTLuQ1RsW5r7s7ZjbDDFbDgy1tLrdc7Bj3itBGQkuGUQyfzKhFqbUNW2PqJPMSSzWoF2DGSvDSijCtJtYCSRsjSVLrwu5oHNbnPFvSEC4iRZPpU6B6nExRBTa';
-
-      const kid =
-          'did:key:z2dmzD81cgPx8Vki7JbuuMmFYrWPgYoytykUZ3eyqht1j9Kbrbpg5is8LfTLuQ1RsW5r7s7ZjbDDFbDgy1tLrdc7Bj3itBGQkuGUQyfzKhFqbUNW2PqJPMSSzWoF2DGSvDSijCtJtYCSRsjSVLrwu5oHNbnPFvSEC4iRZPpU6B6nExRBTa#z2dmzD81cgPx8Vki7JbuuMmFYrWPgYoytykUZ3eyqht1j9Kbrbpg5is8LfTLuQ1RsW5r7s7ZjbDDFbDgy1tLrdc7Bj3itBGQkuGUQyfzKhFqbUNW2PqJPMSSzWoF2DGSvDSijCtJtYCSRsjSVLrwu5oHNbnPFvSEC4iRZPpU6B6nExRBTa';
-
-      const privateKey =
-          '{"kty":"EC","crv":"P-256","d":"amrwK13ZiYoJ5g0fc6MvXc86RB9ID8VuK_dMowU68FE","x":"fJQ2c9P_YDep3jzidwykcSlyoC4omqBvd9RHP1nz0cw","y":"K7VxrW-S1ONuX5cxrWIltF36ac1K8kj9as_o5cyc2zk"}';
-
       const openIdConfiguration =
           '{"authorization_server":"https://talao.co/issuer/zxhaokccsi","credential_endpoint":"https://talao.co/issuer/zxhaokccsi/credential","credential_issuer":"https://talao.co/issuer/zxhaokccsi","subject_syntax_types_supported":null,"token_endpoint":null,"batch_endpoint":null,"authorization_endpoint":null,"subject_trust_frameworks_supported":null,"credentials_supported":[{"display":[{"locale":"en-US","name":"EU Diploma","description":"This the official EBSI VC Diploma","text_color":"#FFFFFF","background_color":"#3B6F6D","background_image":{"url":"https://i.ibb.co/CHqjxrJ/dbc-card-hig-res.png","alt_text":"Connected open cubes in blue with one orange cube as a background of the card"},"logo":{"url":"https://dutchblockchaincoalition.org/assets/images/icons/Logo-DBC.png","alt_text":"An orange block shape, with the text Dutch Blockchain Coalition next to it, portraying the logo of the Dutch Blockchain Coalition."}}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableDiploma2"],"id":null,"scope":null,"credentialSubject":{"dateOfBirth":{"display":[{"locale":"en-US","name":"Birth Date"},{"locale":"fr-FR","name":"Date de naissance"}]},"familyName":{"display":[{"locale":"en-US","name":"Family Name"},{"locale":"fr-FR","name":"Nom"}]},"givenNames":{"display":[{"locale":"en-US","name":"First Name"},{"locale":"fr-FR","name":"Prénom"}]}}},{"display":[{"locale":"en-US","name":"Individual attestation","description":"This is the EBSI Individual Verifiable Attestation","text_color":"#FFFFFF","background_color":"#3B6F6D","background_image":null,"logo":null}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","IndividualVerifiableAttestation"],"id":null,"scope":null,"credentialSubject":{"dateOfBirth":{"display":[{"locale":"en-US","name":"Birth Date"},{"locale":"fr-FR","name":"Date de naissance"}]},"familyName":{"display":[{"locale":"en-US","name":"Family Name"},{"locale":"fr-FR","name":"Nom"}]},"firstName":{"display":[{"locale":"en-US","name":"First Name"},{"locale":"fr-FR","name":"Prénom"}]},"issuing_country":{"display":[{"locale":"en-US","name":"Issued by"},{"locale":"fr-FR","name":"Délivré par"}]},"placeOfBirth":{"display":[{"locale":"en-US","name":"Birth Place"},{"locale":"fr-FR","name":"Lieu de naissance"}]}}},{"display":[{"locale":"en-GB","name":"Email proof","description":"This is a verifiable credential","text_color":null,"background_color":null,"background_image":null,"logo":null}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","EmailPass"],"id":null,"scope":null,"credentialSubject":null},{"display":[{"locale":"en-GB","name":"Verifiable Id","description":"This is a verifiable credential","text_color":null,"background_color":null,"background_image":null,"logo":null}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableId"],"id":null,"scope":null,"credentialSubject":null}],"credential_configurations_supported":null,"deferred_credential_endpoint":"https://talao.co/issuer/zxhaokccsi/deferred","service_documentation":null,"credential_manifest":null,"credential_manifests":null,"issuer":null,"jwks_uri":null,"grant_types_supported":null}';
 
@@ -566,64 +552,17 @@ void main() {
 
       test('When getCredentialType receive url it returns json response',
           () async {
-        final (credentialResponseData, deferredCredentialEndpoint, format) =
-            await oidc4vc.getCredential(
-          issuer: issuer,
-          credential: credential,
-          did: did,
-          clientId: did,
-          kid: kid,
-          privateKey: privateKey,
-          cryptoHolderBinding: true,
-          clientType: ClientType.did,
-          proofHeaderType: ProofHeaderType.kid,
-          oidc4vciDraftType: OIDC4VCIDraftType.draft11,
-          clientAuthentication: ClientAuthentication.clientId,
-          proofType: ProofType.jwt,
+        final credentialResponseData = await oidc4vc.getSingleCredential(
           openIdConfiguration: OpenIdConfiguration.fromJson(
             jsonDecode(openIdConfiguration) as Map<String, dynamic>,
           ),
           accessToken: accessToken,
-          cnonce: nonce,
+          nonce: nonce,
           dio: client,
-          vcFormatType: VCFormatType.jwtVcJson,
+          credentialData: {},
         );
 
-        expect(credentialResponseData, [expecedCredentialResponse]);
-        expect(
-          deferredCredentialEndpoint,
-          'https://talao.co/issuer/zxhaokccsi/deferred',
-        );
-        expect(format, 'jwt_vc');
-      });
-
-      test('throw Exception when token is not verified', () {
-        expect(
-          () async {
-            await oidc4vc.getCredential(
-              issuer: '',
-              credential: null,
-              did: '',
-              clientId: null,
-              kid: '',
-              privateKey: '',
-              cryptoHolderBinding: true,
-              clientType: ClientType.did,
-              proofHeaderType: ProofHeaderType.kid,
-              oidc4vciDraftType: OIDC4VCIDraftType.draft11,
-              clientAuthentication: ClientAuthentication.clientId,
-              proofType: ProofType.jwt,
-              openIdConfiguration: OpenIdConfiguration.fromJson(
-                jsonDecode(openIdConfiguration) as Map<String, dynamic>,
-              ),
-              accessToken: '',
-              cnonce: null,
-              dio: client,
-              vcFormatType: VCFormatType.jwtVcJson,
-            );
-          },
-          throwsA(isA<FormatException>()),
-        );
+        expect(credentialResponseData, expecedCredentialResponse);
       });
     });
 
@@ -792,18 +731,26 @@ void main() {
         expect(isVerified, VerificationType.verified);
       });
 
-      test('returns VerificationType.unKnown', () async {
-        final isVerified = await oidc4vc.verifyEncodedData(
-          issuer: issuer,
-          jwt: jwt,
-          issuerKid: issuerKid2,
-          dio: client,
-          fromStatusList: false,
-          isCachingEnabled: false,
-          publicJwk: null,
-          useOAuthAuthorizationServerLink: false,
+      test('throws exception KID_DOES_NOT_MATCH_DIDDOCUMENT', () async {
+        expect(
+          () async => oidc4vc.verifyEncodedData(
+            issuer: issuer,
+            jwt: jwt,
+            issuerKid: issuerKid2,
+            dio: client,
+            fromStatusList: false,
+            isCachingEnabled: false,
+            publicJwk: null,
+            useOAuthAuthorizationServerLink: false,
+          ),
+          throwsA(
+            isA<Exception>().having(
+              (p0) => p0.toString(),
+              'toString()',
+              'Exception: KID_DOES_NOT_MATCH_DIDDOCUMENT',
+            ),
+          ),
         );
-        expect(isVerified, VerificationType.unKnown);
       });
 
       test('returns VerificationType.notVerified', () async {

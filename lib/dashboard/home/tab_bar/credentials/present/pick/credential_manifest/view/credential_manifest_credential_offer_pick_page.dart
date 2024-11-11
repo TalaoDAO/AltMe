@@ -73,7 +73,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
   }
 }
 
-class CredentialManifestOfferPickView extends StatelessWidget {
+class CredentialManifestOfferPickView extends StatefulWidget {
   const CredentialManifestOfferPickView({
     super.key,
     required this.uri,
@@ -88,6 +88,66 @@ class CredentialManifestOfferPickView extends StatelessWidget {
   final Issuer issuer;
   final int inputDescriptorIndex;
   final List<CredentialModel> credentialsToBePresented;
+
+  @override
+  State<CredentialManifestOfferPickView> createState() =>
+      _CredentialManifestOfferPickViewState();
+}
+
+class _CredentialManifestOfferPickViewState
+    extends State<CredentialManifestOfferPickView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final isVcSdJWT = context
+              .read<CredentialManifestPickCubit>()
+              .state
+              .filteredCredentialList
+              .firstOrNull
+              ?.getFormat ==
+          VCFormatType.vcSdJWT.vcValue;
+
+      if (isVcSdJWT) {
+        final element = context
+            .read<CredentialManifestPickCubit>()
+            .state
+            .filteredCredentialList;
+
+        final containsSingleElement = element.isNotEmpty && element.length == 1;
+        if (containsSingleElement) {
+          final PresentationDefinition? presentationDefinition = context
+              .read<CredentialManifestPickCubit>()
+              .state
+              .presentationDefinition;
+
+          if (presentationDefinition != null) {
+            context.read<CredentialManifestPickCubit>().toggle(
+                  index: 0,
+                  inputDescriptor: presentationDefinition
+                      .inputDescriptors[widget.inputDescriptorIndex],
+                  isVcSdJWT: isVcSdJWT,
+                );
+
+            final credentialManifestState =
+                context.read<CredentialManifestPickCubit>().state;
+            final credentialToBePresented = credentialManifestState
+                .filteredCredentialList[credentialManifestState.selected.first];
+
+            Navigator.of(context).pushReplacement<void, void>(
+              SelectiveDisclosurePickPage.route(
+                uri: widget.uri,
+                issuer: widget.issuer,
+                credential: widget.credential,
+                credentialToBePresented: credentialToBePresented,
+                presentationDefinition: presentationDefinition,
+              ),
+            );
+          }
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +200,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                       : Column(
                           children: <Widget>[
                             Text(
-                              '${inputDescriptorIndex + 1}/${presentationDefinition.inputDescriptors.length}',
+                              '${widget.inputDescriptorIndex + 1}/${presentationDefinition.inputDescriptors.length}',
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                             const SizedBox(height: 10),
@@ -148,7 +208,8 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                               padding: const EdgeInsets.all(8),
                               child: Text(
                                 presentationDefinition
-                                        .inputDescriptors[inputDescriptorIndex]
+                                        .inputDescriptors[
+                                            widget.inputDescriptorIndex]
                                         .purpose ??
                                     l10n.credentialPickSelect,
                                 style: Theme.of(context).textTheme.titleMedium,
@@ -175,7 +236,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                           inputDescriptor:
                                               presentationDefinition
                                                       .inputDescriptors[
-                                                  inputDescriptorIndex],
+                                                  widget.inputDescriptorIndex],
                                           isVcSdJWT: isVcSdJWT,
                                         );
                                   },
@@ -207,9 +268,9 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                             Navigator.of(context)
                                                 .pushReplacement<void, void>(
                                               SelectiveDisclosurePickPage.route(
-                                                uri: uri,
-                                                issuer: issuer,
-                                                credential: credential,
+                                                uri: widget.uri,
+                                                issuer: widget.issuer,
+                                                credential: widget.credential,
                                                 credentialToBePresented:
                                                     credentialToBePresented,
                                                 presentationDefinition:
@@ -229,7 +290,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                       final inputDescriptor =
                                           presentationDefinition!
                                                   .inputDescriptors[
-                                              inputDescriptorIndex];
+                                              widget.inputDescriptorIndex];
 
                                       final bool isOptional = inputDescriptor
                                               .constraints
@@ -239,7 +300,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                           false;
 
                                       final bool isOngoingStep =
-                                          inputDescriptorIndex + 1 !=
+                                          widget.inputDescriptorIndex + 1 !=
                                               presentationDefinition
                                                   .inputDescriptors.length;
 
@@ -306,7 +367,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
     late List<CredentialModel> updatedCredentials;
     if (skip) {
       updatedCredentials = List.of(
-        credentialsToBePresented,
+        widget.credentialsToBePresented,
       );
     } else {
       final selectedCredentials = credentialManifestState.selected
@@ -317,21 +378,21 @@ class CredentialManifestOfferPickView extends StatelessWidget {
           .toList();
 
       updatedCredentials = List.of(
-        credentialsToBePresented,
+        widget.credentialsToBePresented,
       )..addAll(selectedCredentials);
     }
 
     getLogger('present')
         .i('credential to presented - ${updatedCredentials.length}');
 
-    if (inputDescriptorIndex + 1 !=
+    if (widget.inputDescriptorIndex + 1 !=
         presentationDefinition.inputDescriptors.length) {
       await Navigator.of(context).pushReplacement<void, void>(
         CredentialManifestOfferPickPage.route(
-          uri: uri,
-          credential: credential,
-          issuer: issuer,
-          inputDescriptorIndex: inputDescriptorIndex + 1,
+          uri: widget.uri,
+          credential: widget.credential,
+          issuer: widget.issuer,
+          inputDescriptorIndex: widget.inputDescriptorIndex + 1,
           credentialsToBePresented: updatedCredentials,
         ),
       );
@@ -349,6 +410,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
         bool authenticated = false;
         await securityCheck(
           context: context,
+          title: context.l10n.typeYourPINCodeToShareTheData,
           localAuthApi: LocalAuthApi(),
           onSuccess: () {
             authenticated = true;
@@ -360,11 +422,11 @@ class CredentialManifestOfferPickView extends StatelessWidget {
         }
       }
       await context.read<ScanCubit>().credentialOfferOrPresent(
-            uri: uri,
-            credentialModel: credential,
+            uri: widget.uri,
+            credentialModel: widget.credential,
             keyId: SecureStorageKeys.ssiKey,
             credentialsToBePresented: updatedCredentials,
-            issuer: issuer,
+            issuer: widget.issuer,
             qrCodeScanCubit: context.read<QRCodeScanCubit>(),
           );
     }

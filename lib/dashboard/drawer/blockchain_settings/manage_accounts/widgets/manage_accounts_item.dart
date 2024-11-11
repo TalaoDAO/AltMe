@@ -139,6 +139,7 @@ class ManageAccountsItem extends StatelessWidget {
                     if (confirm) {
                       await securityCheck(
                         context: context,
+                        title: l10n.typeYourPINCodeToAuthenticate,
                         localAuthApi: LocalAuthApi(),
                         onSuccess: () {
                           Navigator.of(context).push<void>(

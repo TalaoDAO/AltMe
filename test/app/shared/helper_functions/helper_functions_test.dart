@@ -936,7 +936,7 @@ void main() {
             ResponseString.RESPONSE_STRING_credentialIssuanceDenied,
           );
           expect(
-            getErrorResponseString('invalid_client'),
+            getErrorResponseString('issuance_pending'),
             ResponseString.RESPONSE_STRING_credentialIssuanceDenied,
           );
           expect(
@@ -965,8 +965,20 @@ void main() {
           );
 
           expect(
-            getErrorResponseString('issuance_pending'),
-            ResponseString.RESPONSE_STRING_theIssuanceOfThisCredentialIsPending,
+            getErrorResponseString('invalid_client'),
+            ResponseString.RESPONSE_STRING_invalidClientErrorDescription,
+          );
+
+          expect(
+            getErrorResponseString('vp_formats_not_supported'),
+            ResponseString
+                .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription,
+          );
+
+          expect(
+            getErrorResponseString('invalid_presentation_definition_uri'),
+            ResponseString
+                .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription,
           );
 
           expect(
@@ -1090,7 +1102,7 @@ void main() {
                 clientMetaData: null,
                 credentialsToBePresented: [],
               ),
-              (true, false, false, false),
+              [VCFormatType.ldpVc],
             );
           });
 
@@ -1132,7 +1144,13 @@ void main() {
                 clientMetaData: null,
                 credentialsToBePresented: [],
               ),
-              (false, true, false, false),
+              [
+                VCFormatType.ldpVc,
+                VCFormatType.jwtVc,
+                VCFormatType.jwtVcJson,
+                VCFormatType.jwtVcJsonLd,
+                VCFormatType.vcSdJWT,
+              ],
             );
           });
 
@@ -1150,7 +1168,13 @@ void main() {
                 clientMetaData: null,
                 credentialsToBePresented: [],
               ),
-              (false, false, true, false),
+              [
+                VCFormatType.ldpVc,
+                VCFormatType.jwtVc,
+                VCFormatType.jwtVcJson,
+                VCFormatType.jwtVcJsonLd,
+                VCFormatType.vcSdJWT,
+              ],
             );
           });
 
@@ -1168,7 +1192,13 @@ void main() {
                 clientMetaData: null,
                 credentialsToBePresented: [],
               ),
-              (false, false, false, true),
+              [
+                VCFormatType.ldpVc,
+                VCFormatType.jwtVc,
+                VCFormatType.jwtVcJson,
+                VCFormatType.jwtVcJsonLd,
+                VCFormatType.vcSdJWT,
+              ],
             );
           });
 
@@ -1190,7 +1220,7 @@ void main() {
                 },
                 credentialsToBePresented: [],
               ),
-              (false, false, true, false),
+              [VCFormatType.jwtVcJson],
             );
           });
 
@@ -1212,7 +1242,7 @@ void main() {
                 },
                 credentialsToBePresented: [],
               ),
-              (false, false, false, true),
+              [VCFormatType.vcSdJWT],
             );
           });
         });
@@ -1506,7 +1536,7 @@ void main() {
                 associatedAddress: 'tezosAddress',
               ),
             ),
-            'tezosAddress',
+            ('tezosAddress', BlockchainType.tezos),
           );
           expect(
             getWalletAddress(
@@ -1517,7 +1547,7 @@ void main() {
                 associatedAddress: 'ethereumAddress',
               ),
             ),
-            'ethereumAddress',
+            ('ethereumAddress', BlockchainType.ethereum),
           );
           expect(
             getWalletAddress(
@@ -1528,7 +1558,7 @@ void main() {
                 associatedAddress: 'polygonAddress',
               ),
             ),
-            'polygonAddress',
+            ('polygonAddress', BlockchainType.polygon),
           );
           expect(
             getWalletAddress(
@@ -1539,7 +1569,7 @@ void main() {
                 associatedAddress: 'address',
               ),
             ),
-            'address',
+            ('address', BlockchainType.binance),
           );
           expect(
             getWalletAddress(
@@ -1550,7 +1580,7 @@ void main() {
                 associatedAddress: 'fantomAddress',
               ),
             ),
-            'fantomAddress',
+            ('fantomAddress', BlockchainType.fantom),
           );
           expect(
             getWalletAddress(
@@ -1561,7 +1591,7 @@ void main() {
                 associatedAddress: 'etherlinkAddress',
               ),
             ),
-            'etherlinkAddress',
+            ('etherlinkAddress', BlockchainType.etherlink),
           );
           expect(
             getWalletAddress(
@@ -1571,7 +1601,7 @@ void main() {
                 issuedBy: const Author('name'),
               ),
             ),
-            isNull,
+            (null, null),
           );
         });
 

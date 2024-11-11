@@ -278,6 +278,7 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayOver18Jwt,
     bool? displayVerifiableId,
     bool? displayVerifiableIdJwt,
+    bool? displayVerifiableIdSdJwt,
     bool? displayOver21,
     bool? displayOver65,
     bool? displayEmailPass,
@@ -303,6 +304,8 @@ class DiscoverCardsOptions extends Equatable {
       displayVerifiableId: displayVerifiableId ?? this.displayVerifiableId,
       displayVerifiableIdJwt:
           displayVerifiableIdJwt ?? this.displayVerifiableIdJwt,
+      displayVerifiableIdSdJwt:
+          displayVerifiableIdSdJwt ?? this.displayVerifiableIdSdJwt,
       displayOver21: displayOver21 ?? this.displayOver21,
       displayOver65: displayOver65 ?? this.displayOver65,
       displayEmailPass: displayEmailPass ?? this.displayEmailPass,
@@ -325,9 +328,14 @@ class DiscoverCardsOptions extends Equatable {
     required CredentialSubjectType credentialSubjectType,
     required VCFormatType vcFormatType,
   }) {
-    final ldpVcValue = VCFormatType.ldpVc.urlValue;
-    final jwtVcJsonValue = VCFormatType.jwtVcJson.urlValue;
-    final vcSdJWTValue = VCFormatType.vcSdJWT.urlValue;
+    final isEmailPass =
+        credentialSubjectType == CredentialSubjectType.emailPass;
+
+    final ldpVcValue = VCFormatType.ldpVc.urlValue(isEmailPass: isEmailPass);
+    final jwtVcJsonValue =
+        VCFormatType.jwtVcJson.urlValue(isEmailPass: isEmailPass);
+    final vcSdJWTValue =
+        VCFormatType.vcSdJWT.urlValue(isEmailPass: isEmailPass);
 
     final isLdpVc = vcFormatType == VCFormatType.ldpVc;
     final isJwtVcJson = vcFormatType == VCFormatType.jwtVcJson;
@@ -413,10 +421,10 @@ class DiscoverCardsOptions extends Equatable {
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
       case CredentialSubjectType.pid:
-        return VCFormatType.ldpVc.urlValue;
+        return VCFormatType.ldpVc.urlValue(isEmailPass: isEmailPass);
     }
 
-    return VCFormatType.ldpVc.urlValue;
+    return VCFormatType.ldpVc.urlValue(isEmailPass: isEmailPass);
   }
 
   @override
@@ -681,6 +689,7 @@ class CustomOidc4VcProfile extends Equatable {
     this.proofType = ProofType.jwt,
     this.pushAuthorizationRequest = false,
     this.statusListCache = true,
+    this.dpopSupport = false,
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
@@ -728,6 +737,7 @@ class CustomOidc4VcProfile extends Equatable {
   @JsonKey(name: 'vcFormat')
   final VCFormatType vcFormatType;
   final ProofType proofType;
+  final bool dpopSupport;
 
   Map<String, dynamic> toJson() => _$CustomOidc4VcProfileToJson(this);
 
@@ -764,6 +774,7 @@ class CustomOidc4VcProfile extends Equatable {
     ClientType? clientType,
     VCFormatType? vcFormatType,
     ProofType? proofType,
+    bool? dpopSupport,
   }) =>
       CustomOidc4VcProfile(
         clientAuthentication: clientAuthentication ?? this.clientAuthentication,
@@ -785,6 +796,7 @@ class CustomOidc4VcProfile extends Equatable {
         clientSecret: clientSecret ?? this.clientSecret,
         vcFormatType: vcFormatType ?? this.vcFormatType,
         proofType: proofType ?? this.proofType,
+        dpopSupport: dpopSupport ?? this.dpopSupport,
       );
 
   @override
@@ -806,6 +818,7 @@ class CustomOidc4VcProfile extends Equatable {
         clientType,
         vcFormatType,
         proofType,
+        dpopSupport,
       ];
 }
 
@@ -816,7 +829,7 @@ class SettingsMenu extends Equatable {
     required this.displayHelpCenter,
     required this.displayProfile,
     this.displaySelfSovereignIdentity = true,
-    this.displayActivityLog = false,
+    this.displayActivityLog = true,
   });
 
   factory SettingsMenu.fromJson(Map<String, dynamic> json) =>

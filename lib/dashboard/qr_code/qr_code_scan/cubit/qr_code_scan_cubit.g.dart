@@ -38,4 +38,5 @@ const _$QrScanStatusEnumMap = {
   QrScanStatus.success: 'success',
   QrScanStatus.goBack: 'goBack',
   QrScanStatus.pauseForDialog: 'pauseForDialog',
+  QrScanStatus.pauseForDisplay: 'pauseForDisplay',
 };

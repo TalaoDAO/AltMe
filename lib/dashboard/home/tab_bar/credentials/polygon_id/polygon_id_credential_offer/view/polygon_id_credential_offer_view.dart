@@ -144,6 +144,7 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
               onPressed: () async {
                 await securityCheck(
                   context: context,
+                  title: l10n.typeYourPINCodeToAuthenticate,
                   localAuthApi: LocalAuthApi(),
                   onSuccess: () {
                     context.read<PolygonIdCubit>().addPolygonIdCredentials(

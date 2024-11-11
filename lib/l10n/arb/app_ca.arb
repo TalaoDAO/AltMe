@@ -897,7 +897,6 @@
   "pleaseSwitchToCorrectOIDC4VCProfile": "Canvia al perfil OIDC4VC correcte.",
   "authenticationSuccess": "Autenticació correcta",
   "format": "Format",
-  "pleaseInsertTheSecredCodeReceived": "Escriu el codi secret que has rebut.",
   "verifyIssuerWebsiteIdentity": "Verificar la identitat del lloc web de l'emissor",
   "verifyIssuerWebsiteIdentitySubtitle": "Per defecte: desactivat\nActivar per verificar la identitat del lloc web abans de l’accés.",
   "developerMode": "Mode desenvolupador",

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/shared.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 import 'package:did_kit/did_kit.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:uuid/uuid.dart';
 
-Future<void> getAuthorizationUriForIssuer({
+Future<Uri?> getAuthorizationUriForIssuer({
   required String scannedResponse,
   required OIDC4VC oidc4vc,
   required bool isEBSI,
@@ -23,13 +24,15 @@ Future<void> getAuthorizationUriForIssuer({
   required ClientAuthentication clientAuthentication,
   required OIDC4VCIDraftType oidc4vciDraftType,
   required VCFormatType vcFormatType,
-  String? oAuthClientAttestation,
-  String? oAuthClientAttestationPop,
   required bool secureAuthorizedFlow,
   required DioClient client,
   required ProfileType profileType,
   required String walletIssuer,
   required bool useOAuthAuthorizationServerLink,
+  required ProfileCubit profileCubit,
+  required QRCodeScanCubit qrCodeScanCubit,
+  String? oAuthClientAttestation,
+  String? oAuthClientAttestationPop,
 }) async {
   /// this is first phase flow for authorization_code
 
@@ -129,6 +132,22 @@ Future<void> getAuthorizationUriForIssuer({
     final parUrl = openIdConfiguration.pushedAuthorizationRequestEndpoint ??
         '$authorizationEndpoint/par';
 
+    if (profileCubit.state.model.isDeveloperMode) {
+      final value = await qrCodeScanCubit.showDataBeforeSending(
+        title: 'PUSHED AUTHORIZATION REQUEST',
+        data: authorizationRequestParemeters,
+      );
+
+      if (value) {
+        qrCodeScanCubit.completer = null;
+      } else {
+        qrCodeScanCubit.completer = null;
+        qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
+        qrCodeScanCubit.goBack();
+        return null;
+      }
+    }
+
     /// error we shuld get it from
     final response = await client.post(
       parUrl,
@@ -157,5 +176,5 @@ Future<void> getAuthorizationUriForIssuer({
         Uri.https(url.authority, url.path, authorizationRequestParemeters);
   }
 
-  await LaunchUrl.launchUri(authorizationUri);
+  return authorizationUri;
 }

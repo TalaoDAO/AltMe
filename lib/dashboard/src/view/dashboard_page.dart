@@ -122,6 +122,7 @@ class _DashboardViewState extends State<DashboardView> {
                   onButtonClick: () async {
                     await securityCheck(
                       context: context,
+                      title: l10n.typeYourPINCodeToAuthenticate,
                       localAuthApi: LocalAuthApi(),
                       onSuccess: () => Navigator.of(context)
                           .push<void>(RecoveryKeyPage.route()),
