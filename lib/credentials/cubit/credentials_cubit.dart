@@ -531,19 +531,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required CryptoAccountData cryptoAccountData,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
-    final supportAssociatedCredential =
-        supportCryptoCredential(profileCubit.state.model);
-
-    if (!supportAssociatedCredential) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description':
-              'The crypto associated credential is not supported.',
-        },
-      );
-    }
-
     final didKeyType = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
@@ -1009,29 +996,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
         final isBlockchainAccount = credInfo.credentialType.isBlockchainAccount;
 
-        final supportAssociatedCredential =
-            supportCryptoCredential(profileModel);
-
-        /// remove if credential is blockchain account and
-        /// profile do not support
-        if (isBlockchainAccount && !supportAssociatedCredential) {
+        /// remove if credential it is blockchain account
+        if (isBlockchainAccount) {
           continue;
         }
-
-        final Map<BlockchainType, CredentialSubjectType>
-            blockchainToSubjectType = {
-          BlockchainType.tezos: CredentialSubjectType.tezosAssociatedWallet,
-          BlockchainType.fantom: CredentialSubjectType.fantomAssociatedWallet,
-          BlockchainType.binance: CredentialSubjectType.binanceAssociatedWallet,
-          BlockchainType.ethereum:
-              CredentialSubjectType.ethereumAssociatedWallet,
-          BlockchainType.etherlink:
-              CredentialSubjectType.etherlinkAssociatedWallet,
-          BlockchainType.polygon: CredentialSubjectType.polygonAssociatedWallet,
-        };
-
-        final isCurrentBlockchainAccount =
-            blockchainToSubjectType[blockchainType] == credInfo.credentialType;
 
         final credentialsOfSameType = credentials
             .where(
@@ -1046,47 +1014,21 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             credInfo.credentialType.supportSingleOnly) {
           /// credential available case
           for (final credential in credentialsOfSameType) {
-            final alreadyAdded = requiredCreds.any(
-              (item) =>
-                  item.credentialType == credInfo.credentialType &&
-                  item.formatType == credInfo.formatType,
-            );
-            if (isBlockchainAccount && supportAssociatedCredential) {
-              /// there can be multiple blockchain profiles
-              ///
-              /// each profiles should be allowed to add the respective cards
-
-              /// We always have the associated Adress credential
-              /// in the discover since "Do not remove the GET a crypto account
-              /// in the Discover #2649"
-
-              if (isCurrentBlockchainAccount) {
-                /// if already added do not add
-                if (!alreadyAdded) {
-                  requiredCreds.add(credInfo);
-                }
-              }
-
-              //get current wallet address
+            // final alreadyAdded = requiredCreds.any(
+            //   (item) =>
+            //       item.credentialType == credInfo.credentialType &&
+            //       item.formatType == credInfo.formatType,
+            // );
+            if (vcFormatType.vcValue == credential.getFormat) {
+              /// do not add if format matched
+              /// there can be same credentials with different format
             } else {
-              if (vcFormatType.vcValue == credential.getFormat) {
-                /// do not add if format matched
-                /// there can be same credentials with different format
-              } else {
-                requiredCreds.add(credInfo);
-              }
+              requiredCreds.add(credInfo);
             }
           }
         } else {
           /// credential not available case
-
-          if (isBlockchainAccount &&
-              supportAssociatedCredential &&
-              !isCurrentBlockchainAccount) {
-            /// do not add if current blockchain acccount does not match
-          } else {
-            requiredCreds.add(credInfo);
-          }
+          requiredCreds.add(credInfo);
         }
       }
 
