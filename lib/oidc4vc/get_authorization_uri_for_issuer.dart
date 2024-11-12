@@ -155,6 +155,23 @@ Future<Uri?> getAuthorizationUriForIssuer({
       data: authorizationRequestParemeters,
     );
 
+    if (profileCubit.state.model.isDeveloperMode) {
+      final formattedData = '''
+<b>REQUEST RESPONSE :</b>
+${const JsonEncoder.withIndent('  ').convert(response)}\n
+''';
+      final value = await qrCodeScanCubit.showDataAfterReceiving(formattedData);
+
+      if (value) {
+        qrCodeScanCubit.completer = null;
+      } else {
+        qrCodeScanCubit.completer = null;
+        qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
+        qrCodeScanCubit.goBack();
+        return null;
+      }
+    }
+
     final requestUri = response['request_uri'];
 
     if (requestUri == null) {

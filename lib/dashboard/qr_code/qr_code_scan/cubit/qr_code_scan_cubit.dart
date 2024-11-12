@@ -1476,18 +1476,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             savedAuthorizationDetails = authorizationDetails;
 
             if (profileCubit.state.model.isDeveloperMode) {
-              completer = Completer<bool>();
-
               final formattedData =
                   getFormattedTokenResponse(tokenData: tokenResponse);
-              emit(
-                state.copyWith(
-                  qrScanStatus: QrScanStatus.pauseForDialog,
-                  dialogData: formattedData,
-                ),
-              );
 
-              final value = await completer!.future;
+              final value = await showDataAfterReceiving(formattedData);
 
               if (value) {
                 completer = null;
@@ -1547,19 +1539,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           }
 
           if (profileCubit.state.model.isDeveloperMode) {
-            completer = Completer<bool>();
-
             final formattedData = getFormattedCredentialResponse(
               credentialData: encodedCredentialOrFutureTokens,
             );
-            emit(
-              state.copyWith(
-                qrScanStatus: QrScanStatus.pauseForDialog,
-                dialogData: formattedData,
-              ),
-            );
 
-            final value = await completer!.future;
+            final value = await showDataAfterReceiving(formattedData);
 
             if (value) {
               completer = null;
@@ -1681,6 +1665,21 @@ ${const JsonEncoder.withIndent('  ').convert(payload)}
     emit(
       state.copyWith(
         qrScanStatus: QrScanStatus.pauseForDisplay,
+        dialogData: formattedData,
+      ),
+    );
+
+    final value = await completer!.future;
+
+    return value;
+  }
+
+  Future<bool> showDataAfterReceiving(String formattedData) async {
+    completer = Completer<bool>();
+
+    emit(
+      state.copyWith(
+        qrScanStatus: QrScanStatus.pauseForDialog,
         dialogData: formattedData,
       ),
     );
