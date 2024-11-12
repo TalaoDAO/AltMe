@@ -122,6 +122,22 @@ Future<Uri?> getAuthorizationUriForIssuer({
   final requirePushedAuthorizationRequests =
       openIdConfiguration.requirePushedAuthorizationRequests;
 
+  if (profileCubit.state.model.isDeveloperMode) {
+    final value = await qrCodeScanCubit.showDataBeforeSending(
+      title: 'AUTHORIZATION REQUEST',
+      data: authorizationRequestParemeters,
+    );
+
+    if (value) {
+      qrCodeScanCubit.completer = null;
+    } else {
+      qrCodeScanCubit.completer = null;
+      qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
+      qrCodeScanCubit.goBack();
+      return null;
+    }
+  }
+
   if (requirePushedAuthorizationRequests || secureAuthorizedFlow) {
     final headers = <String, dynamic>{
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -131,22 +147,6 @@ Future<Uri?> getAuthorizationUriForIssuer({
 
     final parUrl = openIdConfiguration.pushedAuthorizationRequestEndpoint ??
         '$authorizationEndpoint/par';
-
-    if (profileCubit.state.model.isDeveloperMode) {
-      final value = await qrCodeScanCubit.showDataBeforeSending(
-        title: 'PUSHED AUTHORIZATION REQUEST',
-        data: authorizationRequestParemeters,
-      );
-
-      if (value) {
-        qrCodeScanCubit.completer = null;
-      } else {
-        qrCodeScanCubit.completer = null;
-        qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
-        qrCodeScanCubit.goBack();
-        return null;
-      }
-    }
 
     /// error we shuld get it from
     final response = await client.post(
