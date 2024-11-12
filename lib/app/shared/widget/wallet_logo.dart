@@ -44,6 +44,7 @@ class WalletLogo extends StatelessWidget {
                 ? generalOptions.companyLogoLight ?? generalOptions.companyLogo
                 : generalOptions.companyLogo;
 
+          //case ProfileType.diipv2point1:
           case ProfileType.diipv3:
             image = ImageStrings.diipLogo;
         }
