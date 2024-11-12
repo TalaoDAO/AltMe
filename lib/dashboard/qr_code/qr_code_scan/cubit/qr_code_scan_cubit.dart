@@ -1609,67 +1609,75 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<bool> showDataBeforeSending({
-    required String title,
-    required Map<String, dynamic> data,
+    String? title,
+    Map<String, dynamic>? data,
+    String? fullData,
   }) async {
     completer = Completer<bool>();
 
-    var formattedData = '''
+    var formattedData = '';
+
+    if (fullData != null) {
+      formattedData = fullData;
+    } else {
+      formattedData = '''
 <b>$title :</b> 
 ${const JsonEncoder.withIndent('  ').convert(data)}
 ''';
 
-    /// jwt
-    final jwtMappedIterable = JsonPath(r'$..jwt').read(data);
+      /// jwt
+      final jwtMappedIterable = JsonPath(r'$..jwt').read(data);
 
-    if (jwtMappedIterable.isNotEmpty) {
-      final jwtValue = jwtMappedIterable.first.value;
+      if (jwtMappedIterable.isNotEmpty) {
+        final jwtValue = jwtMappedIterable.first.value;
 
-      if (jwtValue != null) {
-        final jwt = jwtValue.toString();
+        if (jwtValue != null) {
+          final jwt = jwtValue.toString();
 
-        try {
-          final header = jwtDecode.parseJwtHeader(jwt);
-          final payload = jwtDecode.parseJwt(jwt);
+          try {
+            final header = jwtDecode.parseJwtHeader(jwt);
+            final payload = jwtDecode.parseJwt(jwt);
 
-          final jwtData = '''
+            final jwtData = '''
 <b>HEADER :</b>
 ${const JsonEncoder.withIndent('  ').convert(header)}\n
 <b>PAYLOAD :</b>
 ${const JsonEncoder.withIndent('  ').convert(payload)}
 ''';
-          formattedData = '$formattedData\n$jwtData';
-        } catch (e) {
-          //
+            formattedData = '$formattedData\n$jwtData';
+          } catch (e) {
+            //
+          }
         }
       }
-    }
 
-    /// id_token
-    final idTokenMappedIterable = JsonPath(r'$..id_token').read(data);
+      /// id_token
+      final idTokenMappedIterable = JsonPath(r'$..id_token').read(data);
 
-    if (idTokenMappedIterable.isNotEmpty) {
-      final jwtValue = idTokenMappedIterable.first.value;
+      if (idTokenMappedIterable.isNotEmpty) {
+        final jwtValue = idTokenMappedIterable.first.value;
 
-      if (jwtValue != null) {
-        final jwt = jwtValue.toString();
+        if (jwtValue != null) {
+          final jwt = jwtValue.toString();
 
-        try {
-          final header = jwtDecode.parseJwtHeader(jwt);
-          final payload = jwtDecode.parseJwt(jwt);
+          try {
+            final header = jwtDecode.parseJwtHeader(jwt);
+            final payload = jwtDecode.parseJwt(jwt);
 
-          final jwtData = '''
+            final jwtData = '''
 <b>HEADER :</b> 
 ${const JsonEncoder.withIndent('  ').convert(header)}\n
 <b>PAYLOAD :</b> 
 ${const JsonEncoder.withIndent('  ').convert(payload)}
 ''';
-          formattedData = '$formattedData\n$jwtData';
-        } catch (e) {
-          //
+            formattedData = '$formattedData\n$jwtData';
+          } catch (e) {
+            //
+          }
         }
       }
     }
+
     emit(
       state.copyWith(
         qrScanStatus: QrScanStatus.pauseForDisplay,
@@ -1728,6 +1736,26 @@ ${const JsonEncoder.withIndent('  ').convert(payload)}
             'error_description': 'The state value is incorrect.',
           },
         );
+      }
+
+      if (profileCubit.state.model.isDeveloperMode) {
+        final formattedData = '''
+<b>AUTHORIZATION RESPONSE:</b>
+${state.uri}
+''';
+
+        final value = await qrCodeScanCubit.showDataBeforeSending(
+          fullData: formattedData,
+        );
+
+        if (value) {
+          qrCodeScanCubit.completer = null;
+        } else {
+          qrCodeScanCubit.completer = null;
+          qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
+          qrCodeScanCubit.goBack();
+          return;
+        }
       }
 
       final selectedCredentials = statePayload['credentials'] as List<dynamic>;
