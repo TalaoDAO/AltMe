@@ -185,8 +185,9 @@ class OperationCubit extends Cubit<OperationState> {
       emit(state.loading());
       log.i('estimateOperationFee');
 
-      late double amount;
-      late double fee;
+      late String amount;
+      late String totalFee;
+      String? bakerFee;
 
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
@@ -194,19 +195,28 @@ class OperationCubit extends Cubit<OperationState> {
               await getBeaonOperationList(preCheckBalance: true);
           await operationList.estimate();
           log.i('after operationList.estimate()');
-          amount = int.parse(
-                beaconCubit
-                    .state.beaconRequest!.operationDetails!.first.amount!,
-              ) /
-              1e6;
-          fee = operationList.operations
-                  .map((Operation e) => e.totalFee)
-                  .reduce((int value, int element) => value + element) /
-              1e6;
+          amount = (int.parse(
+                    beaconCubit
+                        .state.beaconRequest!.operationDetails!.first.amount!,
+                  ) /
+                  1e6)
+              .toString();
+          totalFee = (operationList.operations
+                      .map((Operation e) => e.totalFee)
+                      .reduce((int value, int element) => value + element) /
+                  1e6)
+              .toString();
+          bakerFee = (operationList.operations
+                      .map((Operation e) => e.fee)
+                      .reduce((int value, int element) => value + element) /
+                  1e6)
+              .toString();
+          log.i('bakerFee - $bakerFee');
         case ConnectionBridgeType.walletconnect:
           final EtherAmount ethAmount =
               walletConnectCubit.state.transaction!.value!;
-          amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
+          amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei)
+              .toString();
 
           final web3RpcURL = await fetchRpcUrl(
             blockchainNetwork: manageNetworkCubit.state.network,
@@ -224,17 +234,18 @@ class OperationCubit extends Cubit<OperationState> {
                 : utf8.decode(walletConnectCubit.state.transaction!.data!),
           );
 
-          fee = MWeb3Client.formatEthAmount(amount: feeData);
+          totalFee = MWeb3Client.formatEthAmount(amount: feeData).toString();
       }
 
       log.i('amount - $amount');
-      log.i('fee - $fee');
+      log.i('totalFee - $totalFee');
 
       emit(
         state.copyWith(
           status: AppStatus.idle,
           amount: amount,
-          fee: fee,
+          totalFee: totalFee,
+          bakerFee: bakerFee,
         ),
       );
     } catch (e) {
@@ -571,7 +582,8 @@ class OperationCubit extends Cubit<OperationState> {
         log.i(
           'publicKey: ${keystore.publicKey} '
           'amount: ${state.amount} '
-          'networkFee: ${state.fee} '
+          'networkFee: ${state.totalFee} '
+          'bakerFee: ${state.bakerFee} '
           'address: ${keystore.address} =>To address: '
           '${beaconRequest.operationDetails!.first.destination!}',
         );

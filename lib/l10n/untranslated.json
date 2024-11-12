@@ -76,7 +76,9 @@
     "typeYourPINCodeToOpenTheWallet",
     "typeYourPINCodeToShareTheData",
     "typeYourPINCodeToAuthenticate",
-    "credentialIssuanceIsStillPending"
+    "credentialIssuanceIsStillPending",
+    "bakerFee",
+    "storageFee"
   ],
 
   "es": [
@@ -156,7 +158,9 @@
     "typeYourPINCodeToOpenTheWallet",
     "typeYourPINCodeToShareTheData",
     "typeYourPINCodeToAuthenticate",
-    "credentialIssuanceIsStillPending"
+    "credentialIssuanceIsStillPending",
+    "bakerFee",
+    "storageFee"
   ],
 
   "fr": [
@@ -241,6 +245,8 @@
     "typeYourPINCodeToOpenTheWallet",
     "typeYourPINCodeToShareTheData",
     "typeYourPINCodeToAuthenticate",
-    "credentialIssuanceIsStillPending"
+    "credentialIssuanceIsStillPending",
+    "bakerFee",
+    "storageFee"
   ]
 }

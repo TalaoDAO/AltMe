@@ -1159,5 +1159,7 @@
   "typeYourPINCodeToOpenTheWallet": "Type your PIN code to open the wallet",
   "typeYourPINCodeToShareTheData": "Type your PIN code to share the data",
   "typeYourPINCodeToAuthenticate": "Type your PIN code to authenticate",
-  "credentialIssuanceIsStillPending": "Credential issuance is still pending"
+  "credentialIssuanceIsStillPending": "Credential issuance is still pending",
+  "bakerFee": "Baker fee",
+  "storageFee": "Storage Fee"
 }
