@@ -1617,6 +1617,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 ${const JsonEncoder.withIndent('  ').convert(data)}
 ''';
 
+    /// jwt
     final jwtMappedIterable = JsonPath(r'$..jwt').read(data);
 
     if (jwtMappedIterable.isNotEmpty) {
@@ -1627,24 +1628,41 @@ ${const JsonEncoder.withIndent('  ').convert(data)}
 
         try {
           final header = jwtDecode.parseJwtHeader(jwt);
-          final headerData = '''
-<b>HEADER :</b> 
-${const JsonEncoder.withIndent('  ').convert(header)}
+          final payload = jwtDecode.parseJwt(jwt);
+
+          final jwtData = '''
+<b>HEADER :</b>
+${const JsonEncoder.withIndent('  ').convert(header)}\n
+<b>PAYLOAD :</b>
+${const JsonEncoder.withIndent('  ').convert(payload)}
 ''';
-          formattedData = '$formattedData\n$headerData';
+          formattedData = '$formattedData\n$jwtData';
         } catch (e) {
           //
         }
+      }
+    }
+
+    /// id_token
+    final idTokenMappedIterable = JsonPath(r'$..id_token').read(data);
+
+    if (idTokenMappedIterable.isNotEmpty) {
+      final jwtValue = idTokenMappedIterable.first.value;
+
+      if (jwtValue != null) {
+        final jwt = jwtValue.toString();
 
         try {
+          final header = jwtDecode.parseJwtHeader(jwt);
           final payload = jwtDecode.parseJwt(jwt);
 
-          final payloadData = '''
+          final jwtData = '''
+<b>HEADER :</b> 
+${const JsonEncoder.withIndent('  ').convert(header)}\n
 <b>PAYLOAD :</b> 
 ${const JsonEncoder.withIndent('  ').convert(payload)}
 ''';
-
-          formattedData = '$formattedData\n$payloadData';
+          formattedData = '$formattedData\n$jwtData';
         } catch (e) {
           //
         }
