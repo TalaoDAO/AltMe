@@ -1527,7 +1527,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             qrCodeScanCubit: qrCodeScanCubit,
           );
 
-          if (result == null) return;
+          if (result == null) {
+            return emit(state.copyWith(qrScanStatus: QrScanStatus.idle));
+          }
 
           final (
             encodedCredentialOrFutureTokens,
