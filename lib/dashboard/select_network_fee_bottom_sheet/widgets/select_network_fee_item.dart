@@ -45,7 +45,7 @@ class SelectNetworkFeeItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           MyText(
-            '''${networkFeeModel.fee.toString().formatNumber} ${networkFeeModel.tokenSymbol}''',
+            '''${networkFeeModel.totalFee.formatNumber} ${networkFeeModel.tokenSymbol}''',
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(

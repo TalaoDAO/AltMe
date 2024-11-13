@@ -62,7 +62,7 @@ class FeeDetails extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  '${bakerCost!.decimalNumber(6).formatNumber} $symbol',
+                  '${bakerCost.decimalNumber(6).formatNumber} $symbol',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
@@ -76,7 +76,7 @@ class FeeDetails extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  '${storageFee!.decimalNumber(6).formatNumber}'
+                  '${storageFee.decimalNumber(6).formatNumber}'
                   ' $symbol',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
