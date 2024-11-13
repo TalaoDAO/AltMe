@@ -122,9 +122,11 @@ Future<Uri?> getAuthorizationUriForIssuer({
   final requirePushedAuthorizationRequests =
       openIdConfiguration.requirePushedAuthorizationRequests;
 
+  final isSecure = requirePushedAuthorizationRequests || secureAuthorizedFlow;
+
   if (profileCubit.state.model.isDeveloperMode) {
     final value = await qrCodeScanCubit.showDataBeforeSending(
-      title: 'AUTHORIZATION REQUEST',
+      title: isSecure ? 'PUSH AUTHORIZATION REQUEST' : 'AUTHORIZATION REQUEST',
       data: authorizationRequestParemeters,
     );
 
@@ -138,7 +140,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
     }
   }
 
-  if (requirePushedAuthorizationRequests || secureAuthorizedFlow) {
+  if (isSecure) {
     final headers = <String, dynamic>{
       'Content-Type': 'application/x-www-form-urlencoded',
       'OAuth-Client-Attestation': oAuthClientAttestation,
