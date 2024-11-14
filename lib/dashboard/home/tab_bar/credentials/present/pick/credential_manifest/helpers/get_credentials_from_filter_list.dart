@@ -15,59 +15,75 @@ List<CredentialModel> getCredentialsFromFilterList({
     final selectedCredential = <CredentialModel>[];
 
     for (final credential in credentialList) {
+      bool allConditionsSatisfied = false;
       fieldLoop:
       for (final field in filterList) {
-        for (final path in field.path) {
-          final credentialData = createJsonByDecryptingSDValues(
-            encryptedJson: credential.data,
-            selectiveDisclosure: SelectiveDisclosure(credential),
-          );
-
-          final searchList = getTextsFromCredential(path, credentialData);
-          if (searchList.isNotEmpty) {
-            /// remove unmatched credential
-            searchList.removeWhere(
-              (searchParameter) {
-                String? pattern;
-
-                if (field.filter == null) {
-                  //ascs case
-                  return false;
-                } else if (field.filter?.pattern != null) {
-                  pattern = field.filter!.pattern;
-                } else if (field.filter?.contains?.containsConst != null) {
-                  pattern = field.filter?.contains?.containsConst;
-                } else if (field.filter?.containsConst != null) {
-                  pattern = field.filter?.containsConst;
-                } else {
-                  /// sd-jwt vc bool case
-                  if (searchParameter == 'true') return false;
-                }
-
-                if (pattern == null) {
-                  return false;
-                } else if (pattern.endsWith(r'$')) {
-                  final RegExp regEx = RegExp(pattern);
-                  final Match? match = regEx.firstMatch(searchParameter);
-
-                  if (match != null) return false;
-                } else {
-                  if (searchParameter == pattern) return false;
-                }
-
-                return true;
-              },
+        /// if optional not need to compute
+        if (field.optional) {
+          allConditionsSatisfied = true;
+        } else {
+          pathLoop:
+          for (final path in field.path) {
+            final credentialData = createJsonByDecryptingSDValues(
+              encryptedJson: credential.data,
+              selectiveDisclosure: SelectiveDisclosure(credential),
             );
-          }
 
-          /// if [searchList] is not empty we mark this credential as
-          /// a valid candidate
-          if (searchList.isNotEmpty) {
-            selectedCredential.add(credential);
-          } else {
+            final searchList = getTextsFromCredential(path, credentialData);
+            if (searchList.isNotEmpty) {
+              /// remove unmatched credential
+              searchList.removeWhere(
+                (searchParameter) {
+                  final filter = field.filter;
+
+                  /// condition matched - no further filtration needed
+                  if (filter == null) return false;
+
+                  String? pattern = filter.pattern;
+                  if (pattern != null) {
+                    pattern = filter.pattern;
+                  } else if (filter.contains?.containsConst != null) {
+                    pattern = filter.contains?.containsConst;
+                  } else if (filter.containsConst != null) {
+                    pattern = filter.containsConst;
+                  } else {
+                    /// sd-jwt vc bool case
+                    if (searchParameter == 'true') return false;
+                  }
+
+                  if (pattern == null) {
+                    return false;
+                  } else if (pattern.endsWith(r'$')) {
+                    final RegExp regEx = RegExp(pattern);
+                    final Match? match = regEx.firstMatch(searchParameter);
+
+                    if (match != null) return false;
+                  } else {
+                    if (searchParameter == pattern) return false;
+                  }
+
+                  return true;
+                },
+              );
+            }
+
+            /// if [searchList] is not empty we mark this credential as
+            /// a valid candidate
+            if (searchList.isNotEmpty) {
+              allConditionsSatisfied = true;
+              break pathLoop;
+            } else {
+              allConditionsSatisfied = false;
+            }
+          }
+          // if one field is not satisfied then condition is not satisfied
+          if (!allConditionsSatisfied) {
             break fieldLoop;
           }
         }
+      }
+      if (allConditionsSatisfied) {
+        selectedCredential.add(credential);
       }
     }
 
