@@ -56,7 +56,7 @@ class Credential {
   @JsonKey(name: '@context')
   final List<dynamic>? context;
   final List<String> type;
-  final String issuer;
+  final dynamic issuer;
   @JsonKey(fromJson: _fromJsonTranslations)
   final List<Translation> description;
   @JsonKey(defaultValue: <Translation>[], fromJson: _fromJsonTranslations)
