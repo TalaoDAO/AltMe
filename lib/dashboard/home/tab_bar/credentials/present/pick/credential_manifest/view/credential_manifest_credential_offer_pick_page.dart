@@ -96,58 +96,58 @@ class CredentialManifestOfferPickView extends StatefulWidget {
 
 class _CredentialManifestOfferPickViewState
     extends State<CredentialManifestOfferPickView> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final isVcSdJWT = context
-              .read<CredentialManifestPickCubit>()
-              .state
-              .filteredCredentialList
-              .firstOrNull
-              ?.getFormat ==
-          VCFormatType.vcSdJWT.vcValue;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     final isVcSdJWT = context
+  //             .read<CredentialManifestPickCubit>()
+  //             .state
+  //             .filteredCredentialList
+  //             .firstOrNull
+  //             ?.getFormat ==
+  //         VCFormatType.vcSdJWT.vcValue;
 
-      if (isVcSdJWT) {
-        final element = context
-            .read<CredentialManifestPickCubit>()
-            .state
-            .filteredCredentialList;
+  //     if (isVcSdJWT) {
+  //       final element = context
+  //           .read<CredentialManifestPickCubit>()
+  //           .state
+  //           .filteredCredentialList;
 
-        final containsSingleElement = element.isNotEmpty && element.length == 1;
-        if (containsSingleElement) {
-          final PresentationDefinition? presentationDefinition = context
-              .read<CredentialManifestPickCubit>()
-              .state
-              .presentationDefinition;
+  //       final containsSingleElement = element.isNotEmpty && element.length == 1;
+  //       if (containsSingleElement) {
+  //         final PresentationDefinition? presentationDefinition = context
+  //             .read<CredentialManifestPickCubit>()
+  //             .state
+  //             .presentationDefinition;
 
-          if (presentationDefinition != null) {
-            context.read<CredentialManifestPickCubit>().toggle(
-                  index: 0,
-                  inputDescriptor: presentationDefinition
-                      .inputDescriptors[widget.inputDescriptorIndex],
-                  isVcSdJWT: isVcSdJWT,
-                );
+  //         if (presentationDefinition != null) {
+  //           context.read<CredentialManifestPickCubit>().toggle(
+  //                 index: 0,
+  //                 inputDescriptor: presentationDefinition
+  //                     .inputDescriptors[widget.inputDescriptorIndex],
+  //                 isVcSdJWT: isVcSdJWT,
+  //               );
 
-            final credentialManifestState =
-                context.read<CredentialManifestPickCubit>().state;
-            final credentialToBePresented = credentialManifestState
-                .filteredCredentialList[credentialManifestState.selected.first];
+  //           final credentialManifestState =
+  //               context.read<CredentialManifestPickCubit>().state;
+  //           final credentialToBePresented = credentialManifestState
+  //               .filteredCredentialList[credentialManifestState.selected.first];
 
-            Navigator.of(context).pushReplacement<void, void>(
-              SelectiveDisclosurePickPage.route(
-                uri: widget.uri,
-                issuer: widget.issuer,
-                credential: widget.credential,
-                credentialToBePresented: credentialToBePresented,
-                presentationDefinition: presentationDefinition,
-              ),
-            );
-          }
-        }
-      }
-    });
-  }
+  //           Navigator.of(context).pushReplacement<void, void>(
+  //             SelectiveDisclosurePickPage.route(
+  //               uri: widget.uri,
+  //               issuer: widget.issuer,
+  //               credential: widget.credential,
+  //               credentialToBePresented: credentialToBePresented,
+  //               presentationDefinition: presentationDefinition,
+  //             ),
+  //           );
+  //         }
+  //       }
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -253,95 +253,78 @@ class _CredentialManifestOfferPickViewState
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                if (isVcSdJWT)
-                                  MyElevatedButton(
-                                    onPressed: !credentialManifestState
-                                            .isButtonEnabled
-                                        ? null
-                                        : () {
-                                            final credentialToBePresented =
-                                                credentialManifestState
-                                                        .filteredCredentialList[
-                                                    credentialManifestState
-                                                        .selected.first];
+                                Builder(
+                                  builder: (context) {
+                                    final inputDescriptor =
+                                        presentationDefinition!
+                                                .inputDescriptors[
+                                            widget.inputDescriptorIndex];
 
-                                            Navigator.of(context)
-                                                .pushReplacement<void, void>(
-                                              SelectiveDisclosurePickPage.route(
-                                                uri: widget.uri,
-                                                issuer: widget.issuer,
-                                                credential: widget.credential,
-                                                credentialToBePresented:
-                                                    credentialToBePresented,
-                                                presentationDefinition:
-                                                    presentationDefinition,
-                                              ),
-                                            );
-                                          },
+                                    final bool isOptional = inputDescriptor
+                                            .constraints
+                                            ?.fields
+                                            ?.first
+                                            .optional ??
+                                        false;
 
-                                    /// next button because we will now choose
-                                    /// the claims we will present
-                                    /// from the selected credential
-                                    text: l10n.next,
-                                  )
-                                else
-                                  Builder(
-                                    builder: (context) {
-                                      final inputDescriptor =
-                                          presentationDefinition!
-                                                  .inputDescriptors[
-                                              widget.inputDescriptorIndex];
+                                    final bool isOngoingStep =
+                                        widget.inputDescriptorIndex + 1 !=
+                                            presentationDefinition
+                                                .inputDescriptors.length;
 
-                                      final bool isOptional = inputDescriptor
-                                              .constraints
-                                              ?.fields
-                                              ?.first
-                                              .optional ??
-                                          false;
+                                    var buttonText = l10n.credentialPickShare;
 
-                                      final bool isOngoingStep =
-                                          widget.inputDescriptorIndex + 1 !=
-                                              presentationDefinition
-                                                  .inputDescriptors.length;
+                                    if (isOngoingStep) buttonText = l10n.next;
 
-                                      if (isOptional) {
-                                        return MyElevatedButton(
-                                          onPressed: () => present(
-                                            context: context,
-                                            credentialManifestState:
-                                                credentialManifestState,
-                                            presentationDefinition:
-                                                presentationDefinition,
-                                            skip: credentialManifestState
-                                                .selected.isEmpty,
-                                          ),
-                                          text: credentialManifestState
-                                                  .selected.isEmpty
-                                              ? l10n.skip
-                                              : isOngoingStep
-                                                  ? l10n.next
-                                                  : l10n.credentialPickShare,
-                                        );
-                                      } else {
-                                        return MyElevatedButton(
-                                          onPressed: !credentialManifestState
-                                                  .isButtonEnabled
-                                              ? null
-                                              : () => present(
-                                                    context: context,
-                                                    credentialManifestState:
-                                                        credentialManifestState,
-                                                    presentationDefinition:
-                                                        presentationDefinition,
-                                                    skip: false,
-                                                  ),
-                                          text: isOngoingStep
-                                              ? l10n.next
-                                              : l10n.credentialPickShare,
-                                        );
+                                    if (isOptional) {
+                                      if (credentialManifestState
+                                          .selected.isEmpty) {
+                                        buttonText = l10n.skip;
                                       }
-                                    },
-                                  ),
+
+                                      if (isVcSdJWT) {
+                                        /// skip is dont in next step
+                                        buttonText = l10n.next;
+                                      }
+
+                                      return MyElevatedButton(
+                                        onPressed: () => present(
+                                          context: context,
+                                          credentialManifestState:
+                                              credentialManifestState,
+                                          presentationDefinition:
+                                              presentationDefinition,
+                                          skip: credentialManifestState
+                                              .selected.isEmpty,
+                                          isVcSdJWT: isVcSdJWT,
+                                        ),
+                                        text: buttonText,
+                                      );
+                                    } else {
+                                      const skip = false;
+
+                                      /// always next for vcsdjwt, since we are
+                                      /// further processing in next step
+                                      if (isVcSdJWT) buttonText = l10n.next;
+
+                                      return MyElevatedButton(
+                                        onPressed: !credentialManifestState
+                                                .isButtonEnabled
+                                            ? null
+                                            : () => present(
+                                                  context: context,
+                                                  credentialManifestState:
+                                                      credentialManifestState,
+                                                  presentationDefinition:
+                                                      presentationDefinition,
+                                                  skip: skip,
+                                                  isVcSdJWT: isVcSdJWT,
+                                                ),
+                                        text: buttonText,
+                                      );
+                                    }
+                                  },
+                                ),
                                 const SizedBox(height: 8),
                                 MyOutlinedButton(
                                   text: l10n.cancel,
@@ -363,12 +346,33 @@ class _CredentialManifestOfferPickViewState
     required CredentialManifestPickState credentialManifestState,
     required PresentationDefinition presentationDefinition,
     required bool skip,
+    required bool isVcSdJWT,
   }) async {
-    late List<CredentialModel> updatedCredentials;
-    if (skip) {
-      updatedCredentials = List.of(
-        widget.credentialsToBePresented,
+    if (isVcSdJWT) {
+      /// for sd-jwt we only support single credentials right now
+      /// skip is not considered for sd-jwt right now
+      final firstOne = credentialManifestState
+          .filteredCredentialList[credentialManifestState.selected.first];
+
+      return Navigator.of(context).pushReplacement<void, void>(
+        SelectiveDisclosurePickPage.route(
+          uri: widget.uri,
+          issuer: widget.issuer,
+          credential: widget.credential,
+
+          /// inputDescriptorIndex incremented in next step
+          inputDescriptorIndex: widget.inputDescriptorIndex,
+          selectedCredential: firstOne,
+          presentationDefinition: presentationDefinition,
+          credentialsToBePresented: widget.credentialsToBePresented,
+        ),
       );
+    }
+
+    late List<CredentialModel> updatedCredentials;
+
+    if (skip) {
+      updatedCredentials = List.of(widget.credentialsToBePresented);
     } else {
       final selectedCredentials = credentialManifestState.selected
           .map(
@@ -377,9 +381,8 @@ class _CredentialManifestOfferPickViewState
           )
           .toList();
 
-      updatedCredentials = List.of(
-        widget.credentialsToBePresented,
-      )..addAll(selectedCredentials);
+      updatedCredentials = List.of(widget.credentialsToBePresented)
+        ..addAll(selectedCredentials);
     }
 
     getLogger('present')

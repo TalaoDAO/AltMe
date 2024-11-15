@@ -17,30 +17,38 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
     required this.uri,
     required this.credential,
     required this.issuer,
-    required this.credentialToBePresented,
+    required this.inputDescriptorIndex,
+    required this.selectedCredential,
     required this.presentationDefinition,
+    required this.credentialsToBePresented,
   });
 
   final Uri uri;
   final CredentialModel credential;
   final Issuer issuer;
-  final CredentialModel credentialToBePresented;
+  final int inputDescriptorIndex;
+  final CredentialModel selectedCredential;
   final PresentationDefinition? presentationDefinition;
+  final List<CredentialModel> credentialsToBePresented;
 
   static Route<dynamic> route({
     required Uri uri,
     required CredentialModel credential,
     required Issuer issuer,
-    required CredentialModel credentialToBePresented,
+    required int inputDescriptorIndex,
+    required CredentialModel selectedCredential,
     required PresentationDefinition? presentationDefinition,
+    required List<CredentialModel> credentialsToBePresented,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => SelectiveDisclosurePickPage(
         uri: uri,
         credential: credential,
         issuer: issuer,
-        credentialToBePresented: credentialToBePresented,
+        inputDescriptorIndex: inputDescriptorIndex,
+        selectedCredential: selectedCredential,
         presentationDefinition: presentationDefinition,
+        credentialsToBePresented: credentialsToBePresented,
       ),
       settings: const RouteSettings(name: '/SelectiveDisclosurePickPage'),
     );
@@ -56,8 +64,10 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
         uri: uri,
         credential: credential,
         issuer: issuer,
-        credentialToBePresented: credentialToBePresented,
+        inputDescriptorIndex: inputDescriptorIndex,
+        selectedCredential: selectedCredential,
         presentationDefinition: presentationDefinition,
+        credentialsToBePresented: credentialsToBePresented,
       ),
     );
   }
@@ -69,15 +79,19 @@ class SelectiveDisclosurePickView extends StatefulWidget {
     required this.uri,
     required this.credential,
     required this.issuer,
-    required this.credentialToBePresented,
+    required this.inputDescriptorIndex,
+    required this.selectedCredential,
     required this.presentationDefinition,
+    required this.credentialsToBePresented,
   });
 
   final Uri uri;
   final CredentialModel credential;
   final Issuer issuer;
-  final CredentialModel credentialToBePresented;
+  final int inputDescriptorIndex;
+  final CredentialModel selectedCredential;
   final PresentationDefinition? presentationDefinition;
+  final List<CredentialModel> credentialsToBePresented;
 
   @override
   State<SelectiveDisclosurePickView> createState() =>
@@ -91,7 +105,7 @@ class _SelectiveDisclosurePickViewState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       context.read<SelectiveDisclosureCubit>().dataFromPresentation(
-            credentialModel: widget.credentialToBePresented,
+            credentialModel: widget.selectedCredential,
             presentationDefinition: widget.presentationDefinition,
           );
     });
@@ -121,7 +135,10 @@ class _SelectiveDisclosurePickViewState
               context.read<ProfileCubit>().state.model.profileSetting;
 
           final credentialImage =
-              SelectiveDisclosure(widget.credentialToBePresented).getPicture;
+              SelectiveDisclosure(widget.selectedCredential).getPicture;
+
+          final bool isOngoingStep = widget.inputDescriptorIndex + 1 !=
+              widget.presentationDefinition!.inputDescriptors.length;
 
           return BasePage(
             title: l10n.thisOrganisationRequestsThisInformation,
@@ -137,18 +154,18 @@ class _SelectiveDisclosurePickViewState
                   PictureDisplay(credentialImage: credentialImage)
                 else
                   CredentialDisplay(
-                    credentialModel: widget.credentialToBePresented,
+                    credentialModel: widget.selectedCredential,
                     credDisplayType: CredDisplayType.List,
                     profileSetting: profileSetting,
                     isDiscover: false,
                   ),
                 const SizedBox(height: 20),
                 ConsumeSelectiveDisclosureCubit(
-                  credentialModel: widget.credentialToBePresented,
+                  credentialModel: widget.selectedCredential,
                   onPressed: (claimKey, claimKeyId, threeDotValue) {
                     context.read<SelectiveDisclosureCubit>().disclosureAction(
                           claimsKey: claimKey,
-                          credentialModel: widget.credentialToBePresented,
+                          credentialModel: widget.selectedCredential,
                           threeDotValue: threeDotValue,
                           claimKeyId: claimKeyId,
                         );
@@ -172,7 +189,9 @@ class _SelectiveDisclosurePickViewState
                             selectedSDIndexInJWT: state.selectedSDIndexInJWT,
                             uri: widget.uri,
                           ),
-                          text: l10n.credentialPickShare,
+                          text: isOngoingStep
+                              ? l10n.next
+                              : l10n.credentialPickShare,
                         );
                       },
                     ),
@@ -196,32 +215,10 @@ class _SelectiveDisclosurePickViewState
     required List<int> selectedSDIndexInJWT,
     required Uri uri,
   }) async {
-    final bool userPINCodeForAuthentication = context
-        .read<ProfileCubit>()
-        .state
-        .model
-        .profileSetting
-        .walletSecurityOptions
-        .secureSecurityAuthenticationWithPinCode;
+    final bool isOngoingStep = widget.inputDescriptorIndex + 1 !=
+        widget.presentationDefinition!.inputDescriptors.length;
 
-    if (userPINCodeForAuthentication) {
-      /// Authenticate
-      bool authenticated = false;
-      await securityCheck(
-        context: context,
-        title: context.l10n.typeYourPINCodeToShareTheData,
-        localAuthApi: LocalAuthApi(),
-        onSuccess: () {
-          authenticated = true;
-        },
-      );
-
-      if (!authenticated) {
-        return;
-      }
-    }
-
-    final encryptedValues = widget.credentialToBePresented.jwt
+    final encryptedValues = widget.selectedCredential.jwt
         ?.split('~')
         .where((element) => element.isNotEmpty)
         .toList();
@@ -271,7 +268,7 @@ class _SelectiveDisclosurePickViewState
       };
 
 // If there no cnf in the payload, then no need to add signature
-      if (widget.credentialToBePresented.data['cnf'] != null) {
+      if (widget.selectedCredential.data['cnf'] != null) {
         /// sign and get token
         final jwtToken = profileCubit.oidc4vc.generateToken(
           payload: payload,
@@ -282,19 +279,58 @@ class _SelectiveDisclosurePickViewState
         newJwt = '$newJwt$jwtToken';
       }
 
-      final CredentialModel newModel = widget.credentialToBePresented
-          .copyWith(selectiveDisclosureJwt: newJwt);
+      final CredentialModel newModel =
+          widget.selectedCredential.copyWith(selectiveDisclosureJwt: newJwt);
 
       final credToBePresented = [newModel];
 
-      await context.read<ScanCubit>().credentialOfferOrPresent(
-            uri: uri,
-            credentialModel: widget.credential,
-            keyId: SecureStorageKeys.ssiKey,
-            credentialsToBePresented: credToBePresented,
+      final updatedCredentials = List.of(widget.credentialsToBePresented)
+        ..addAll(credToBePresented);
+
+      if (isOngoingStep) {
+        await Navigator.of(context).pushReplacement<void, void>(
+          CredentialManifestOfferPickPage.route(
+            uri: widget.uri,
+            credential: widget.credential,
             issuer: widget.issuer,
-            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            inputDescriptorIndex: widget.inputDescriptorIndex + 1,
+            credentialsToBePresented: updatedCredentials,
+          ),
+        );
+      } else {
+        final bool userPINCodeForAuthentication = context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting
+            .walletSecurityOptions
+            .secureSecurityAuthenticationWithPinCode;
+
+        if (userPINCodeForAuthentication) {
+          /// Authenticate
+          bool authenticated = false;
+          await securityCheck(
+            context: context,
+            title: context.l10n.typeYourPINCodeToShareTheData,
+            localAuthApi: LocalAuthApi(),
+            onSuccess: () {
+              authenticated = true;
+            },
           );
+
+          if (!authenticated) {
+            return;
+          }
+        }
+        await context.read<ScanCubit>().credentialOfferOrPresent(
+              uri: uri,
+              credentialModel: widget.credential,
+              keyId: SecureStorageKeys.ssiKey,
+              credentialsToBePresented: updatedCredentials,
+              issuer: widget.issuer,
+              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            );
+      }
     } else {
       throw ResponseMessage(
         data: {

@@ -536,7 +536,8 @@ class ScanCubit extends Cubit<ScanState> {
         clientMetaData: clientMetaData,
         profileSetting: profileCubit.state.model.profileSetting,
       );
-      final String vpToken = await createVpToken(
+
+      final vpToken = await createVpToken(
         credentialsToBePresented: credentialsToBePresented,
         did: did,
         kid: kid,
@@ -756,10 +757,12 @@ class ScanCubit extends Cubit<ScanState> {
           final Map<String, dynamic> descriptor = {
             'id': inputDescriptor.id,
             'format': format.vpValue,
-            'path': r'$',
           };
 
-          if (format != VCFormatType.vcSdJWT) {
+          if (format == VCFormatType.vcSdJWT) {
+            descriptor['path'] = r'$[' + i.toString() + ']';
+          } else {
+            descriptor['path'] = r'$';
             pathNested = {
               'id': inputDescriptor.id,
               'format': format.vpValue,
@@ -767,8 +770,6 @@ class ScanCubit extends Cubit<ScanState> {
             if (credentialsToBePresented.length == 1) {
               if (format == VCFormatType.ldpVc) {
                 pathNested['path'] = r'$.verifiableCredential';
-              } else if (format == VCFormatType.vcSdJWT) {
-                pathNested['path'] = r'$';
               } else {
                 pathNested['path'] = r'$.vp.verifiableCredential[0]';
               }
@@ -777,8 +778,6 @@ class ScanCubit extends Cubit<ScanState> {
                 pathNested['path'] =
                     // ignore: prefer_interpolation_to_compose_strings
                     r'$.verifiableCredential[' + i.toString() + ']';
-              } else if (format == VCFormatType.vcSdJWT) {
-                pathNested['path'] = r'$';
               } else {
                 pathNested['path'] =
                     // ignore: prefer_interpolation_to_compose_strings
@@ -837,15 +836,16 @@ class ScanCubit extends Cubit<ScanState> {
         profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
 
     if (formatFromPresentationSubmission == VCFormatType.vcSdJWT) {
-      final credentialList = getStringCredentialsForToken(
+      final credentialListJwt = getStringCredentialsForToken(
         credentialsToBePresented: credentialsToBePresented,
         profileCubit: profileCubit,
       );
 
-      final vpToken = credentialList.first;
-      // considering only one
-
-      return vpToken;
+      if (credentialListJwt.length == 1) {
+        return credentialListJwt.first;
+      } else {
+        return credentialListJwt.toString();
+      }
     } else if (formatFromPresentationSubmission == VCFormatType.jwtVc ||
         formatFromPresentationSubmission == VCFormatType.jwtVcJson ||
         formatFromPresentationSubmission == VCFormatType.jwtVcJsonLd) {
