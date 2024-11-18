@@ -616,13 +616,6 @@ packages:
       relative: true
     source: path
     version: "1.0.0+1"
-  didkit:
-    dependency: transitive
-    description:
-      path: "../didkit/lib/flutter"
-      relative: true
-    source: path
-    version: "0.0.2"
   diff_match_patch:
     dependency: transitive
     description:
@@ -767,14 +760,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
-  file_picker:
-    dependency: "direct main"
-    description:
-      name: file_picker
-      sha256: "1bbf65dd997458a08b531042ec3794112a6c39c07c37ff22113d2e7e4f81d4e4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.2.1"
   file_saver:
     dependency: "direct main"
     description:
@@ -1649,7 +1634,7 @@ packages:
     source: hosted
     version: "2.1.0"
   package_info_plus:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: package_info_plus
       sha256: "2c582551839386fa7ddbc7770658be7c0f87f388a4bff72066478f597c34d17f"

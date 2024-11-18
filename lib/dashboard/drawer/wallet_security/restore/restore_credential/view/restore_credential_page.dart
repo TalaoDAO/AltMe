@@ -10,7 +10,6 @@ import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -233,17 +232,6 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
     if (storagePermission.isPermanentlyDenied) {
       await _showPermissionPopup();
       return;
-    }
-
-    if (storagePermission.isGranted || storagePermission.isLimited) {
-      final pickedFile = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowMultiple: false,
-        allowedExtensions: ['txt'],
-      );
-      context
-          .read<RestoreCredentialCubit>()
-          .setFilePath(filePath: pickedFile?.files.first.path);
     }
   }
 

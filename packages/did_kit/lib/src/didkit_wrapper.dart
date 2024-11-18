@@ -1,25 +1,24 @@
 import 'package:did_kit/src/didkit_interface.dart';
-import 'package:didkit/didkit.dart';
 
 class DIDKitWrapper implements DIDKitInterface {
   @override
   String getVersion() {
-    return DIDKit.getVersion();
+    return 'DIDKit.getVersion()';
   }
 
   @override
   String generateEd25519Key() {
-    return DIDKit.generateEd25519Key();
+    return 'DIDKit.generateEd25519Key()';
   }
 
   @override
   String keyToDID(String methodName, String key) {
-    return DIDKit.keyToDID(methodName, key);
+    return 'DIDKit.keyToDID(methodName, key)';
   }
 
   @override
   Future<String> keyToVerificationMethod(String methodName, String key) async {
-    return DIDKit.keyToVerificationMethod(methodName, key);
+    return 'DIDKit.keyToVerificationMethod(methodName, key)';
   }
 
   @override
@@ -28,7 +27,7 @@ class DIDKitWrapper implements DIDKitInterface {
     String options,
     String key,
   ) async {
-    return DIDKit.issueCredential(credential, options, key);
+    return 'DIDKit.issueCredential(credential, options, key)';
   }
 
   @override
@@ -36,7 +35,7 @@ class DIDKitWrapper implements DIDKitInterface {
     String credential,
     String options,
   ) async {
-    return DIDKit.verifyCredential(credential, options);
+    return 'DIDKit.verifyCredential(credential, options)';
   }
 
   @override
@@ -45,7 +44,7 @@ class DIDKitWrapper implements DIDKitInterface {
     String options,
     String key,
   ) async {
-    return DIDKit.issuePresentation(presentation, options, key);
+    return 'DIDKit.issuePresentation(presentation, options, key)';
   }
 
   @override
@@ -53,7 +52,7 @@ class DIDKitWrapper implements DIDKitInterface {
     String presentation,
     String options,
   ) async {
-    return DIDKit.verifyPresentation(presentation, options);
+    return 'DIDKit.verifyPresentation(presentation, options)';
   }
 
   @override
@@ -61,7 +60,7 @@ class DIDKitWrapper implements DIDKitInterface {
     String did,
     String inputMetadata,
   ) async {
-    return DIDKit.resolveDID(did, inputMetadata);
+    return 'DIDKit.resolveDID(did, inputMetadata)';
   }
 
   @override
@@ -69,7 +68,7 @@ class DIDKitWrapper implements DIDKitInterface {
     String didUrl,
     String inputMetadata,
   ) async {
-    return DIDKit.dereferenceDIDURL(didUrl, inputMetadata);
+    return 'DIDKit.dereferenceDIDURL(didUrl, inputMetadata)';
   }
 
   @override
@@ -78,6 +77,6 @@ class DIDKitWrapper implements DIDKitInterface {
     String options,
     String key,
   ) async {
-    return DIDKit.DIDAuth(did, options, key);
+    return 'DIDKit.DIDAuth(did, options, key)';
   }
 }

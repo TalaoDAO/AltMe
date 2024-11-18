@@ -39,6 +39,7 @@ dependencies:
   decimal: ^2.3.3
   device_info_plus: ^9.0.1
   devicelocale: ^0.7.0
+  did_kit:
     path: packages/did_kit
   dio: 5.6.0
   dotted_border: ^2.0.0+3
@@ -46,7 +47,6 @@ dependencies:
   equatable: ^2.0.5
   eth_sig_util: ^0.0.9
   fast_base58: ^0.2.1
-  file_picker: ^6.1.1
   file_saver: ^0.2.4
   flutter:
     sdk: flutter
@@ -118,7 +118,6 @@ dependency_overrides:
   http: ^1.0.0 #web3dart ^2.6.1 reqgetuires http ^0.13.5
   intl: ^0.19.0 #force pinned version of intl because polygonID use older version
   # logger: ^2.0.1
-  package_info_plus: ^7.0.0 #polygonid from path requires package_info_plus ^4.0.1
   permission_handler_platform_interface: 4.2.2 #issue on ios when getting openId configuration for local testing credentials
   pointycastle: ^3.7.4 #polygonid from path requires pointycastle 3.7.3
   uuid: ^3.0.7 #web3dart >=2.7.2 depends on uuid ^4.0.0

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
@@ -8,14 +7,12 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:crypto/crypto.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart' hide User;
-import 'package:mime/mime.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:platform_device_id/platform_device_id.dart';
@@ -326,42 +323,6 @@ class MatrixChatImpl extends MatrixChatInterface {
   }
 
   @override
-  Future<void> handleFileSelection({
-    required OnMessageCreated onMessageCreated,
-  }) async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.any,
-    );
-
-    if (result != null && result.files.single.path != null) {
-      final messageId = const Uuid().v4();
-      final message = FileMessage(
-        author: user!,
-        createdAt: DateTime.now().millisecondsSinceEpoch,
-        id: messageId,
-        mimeType: lookupMimeType(result.files.single.path!),
-        name: result.files.single.name,
-        size: result.files.single.size,
-        uri: result.files.single.path!,
-        status: Status.sending,
-      );
-      final roomId = await onMessageCreated.call(message);
-      final room = client!.getRoomById(roomId);
-      if (room == null) {
-        await client!.joinRoomById(roomId);
-        await enableRoomEncyption(roomId);
-      }
-      await client!.getRoomById(roomId)?.sendFileEvent(
-            MatrixFile(
-              bytes: File(result.files.single.path!).readAsBytesSync(),
-              name: result.files.single.name,
-            ),
-            txid: messageId,
-          );
-    }
-  }
-
-  @override
   Future<void> handleImageSelection({
     required OnMessageCreated onMessageCreated,
   }) async {
@@ -641,5 +602,12 @@ class MatrixChatImpl extends MatrixChatInterface {
     } catch (e, s) {
       logger.e('error in enabling room e2e encryption, e: $e, s: $s');
     }
+  }
+
+  @override
+  Future<void> handleFileSelection(
+      {required OnMessageCreated onMessageCreated}) {
+    // TODO: implement handleFileSelection
+    throw UnimplementedError();
   }
 }
