@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,61 +50,6 @@ class TrustFrameworkPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.only(left: Sizes.spaceSmall),
-                child: Text(
-                  l10n.polygon,
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-              ),
-              GroupedSection(
-                children: [
-                  IssuerVerifierSelector(
-                    title: PolygonIdNetwork.PolygonMainnet.name,
-                    isChecked: state.model.polygonIdNetwork ==
-                        PolygonIdNetwork.PolygonMainnet,
-                    onTap: () {
-                      context.read<ProfileCubit>().updatePolygonIdNetwork(
-                            polygonIdCubit: context.read<PolygonIdCubit>(),
-                            polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
-                          );
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.spaceSmall,
-                    ),
-                    child: Divider(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.12),
-                    ),
-                  ),
-                  IssuerVerifierSelector(
-                    title: PolygonIdNetwork.PolygonMumbai.name,
-                    isChecked: state.model.polygonIdNetwork ==
-                        PolygonIdNetwork.PolygonMumbai,
-                    onTap: () {
-                      context.read<ProfileCubit>().updatePolygonIdNetwork(
-                            polygonIdCubit: context.read<PolygonIdCubit>(),
-                            polygonIdNetwork: PolygonIdNetwork.PolygonMumbai,
-                          );
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.spaceSmall,
-                    ),
-                    child: Divider(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.12),
-                    ),
-                  ),
-                ],
-              ),
               Padding(
                 padding: const EdgeInsets.only(left: Sizes.spaceSmall),
                 child: Text(

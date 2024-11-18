@@ -39,7 +39,6 @@ dependencies:
   decimal: ^2.3.3
   device_info_plus: ^9.0.1
   devicelocale: ^0.7.0
-  did_kit:
     path: packages/did_kit
   dio: 5.6.0
   dotted_border: ^2.0.0+3
@@ -90,8 +89,6 @@ dependencies:
   path: ^1.8.3
   permission_handler: ^11.0.1
   platform_device_id: ^1.0.1
-  polygonid:
-    path: packages/polygonid
   pretty_qr_code: ^3.1.0
   qr_flutter: ^4.1.0
   random_string: ^2.3.1

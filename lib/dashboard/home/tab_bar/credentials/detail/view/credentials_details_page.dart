@@ -6,7 +6,6 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -60,7 +59,6 @@ class CredentialsDetailsPage extends StatelessWidget {
             ),
             jwtDecode: JWTDecode(),
             profileCubit: context.read<ProfileCubit>(),
-            polygonIdCubit: context.read<PolygonIdCubit>(),
           ),
         ),
         if (cardChatSupportCubit != null)

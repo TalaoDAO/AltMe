@@ -9,7 +9,6 @@ import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
@@ -23,7 +22,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -788,123 +786,6 @@ final walletConnectBlocListener =
       }
     } catch (e) {
       log.e(e);
-    }
-  },
-);
-
-final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
-  listener: (BuildContext context, PolygonIdState state) async {
-    final polygonIdCubit = context.read<PolygonIdCubit>();
-
-    if (state.status == AppStatus.loading) {
-      final MessageHandler? messageHandler = state.loadingText;
-      final String? message =
-          messageHandler?.getMessage(context, messageHandler);
-
-      LoadingView().show(context: context, text: message);
-    } else {
-      LoadingView().hide();
-    }
-
-    if (state.status == AppStatus.goBack) {
-      Navigator.of(context).pop();
-    }
-
-    if (state.message != null) {
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: state.message!,
-      );
-    }
-
-    if (state.polygonAction == PolygonIdAction.offer) {
-      try {
-        LoadingView().hide();
-        await Navigator.of(context)
-            .push<void>(PolygonIdCredentialOfferPage.route());
-      } catch (e) {
-        final l10n = context.l10n;
-        LoadingView().hide();
-        AlertMessage.showStateMessage(
-          context: context,
-          stateMessage: StateMessage.error(
-            stringMessage: l10n.somethingsWentWrongTryAgainLater,
-          ),
-        );
-      }
-    }
-
-    if (state.polygonAction == PolygonIdAction.verifier) {
-      final Iden3MessageEntity iden3MessageEntity =
-          await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
-      LoadingView().hide();
-      await Navigator.of(context).push<void>(
-        PolygonIdVerificationPage.route(iden3MessageEntity: iden3MessageEntity),
-      );
-    }
-
-    if (state.polygonAction == PolygonIdAction.issuer) {
-      var accept = true;
-      final profileCubit = context.read<ProfileCubit>();
-
-      final bool verifySecurityIssuerWebsiteIdentity = profileCubit
-          .state
-          .model
-          .profileSetting
-          .walletSecurityOptions
-          .verifySecurityIssuerWebsiteIdentity;
-
-      final l10n = context.l10n;
-
-      if (verifySecurityIssuerWebsiteIdentity) {
-        /// checking if it is issuer side
-
-        LoadingView().hide();
-
-        // TODO(all): later choose url based on mainnet and testnet
-        accept = await showDialog<bool>(
-              context: context,
-              builder: (BuildContext context) {
-                return ConfirmDialog(
-                  title: l10n.scanPromptHost,
-                  subtitle: Urls.checkIssuerPolygonTestnetUrl,
-                  no: l10n.communicationHostDeny,
-                );
-              },
-            ) ??
-            false;
-      }
-
-      LoadingView().hide();
-
-      if (accept) {
-        final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
-            .getIden3Message(message: state.scannedResponse!);
-
-        await securityCheck(
-          context: context,
-          title: l10n.typeYourPINCodeToAuthenticate,
-          localAuthApi: LocalAuthApi(),
-          onSuccess: () {
-            context.read<PolygonIdCubit>().authenticateOrGenerateProof(
-                  iden3MessageEntity: iden3MessageEntity,
-                  isGenerateProof: false,
-                );
-          },
-        );
-
-        return;
-      }
-    }
-
-    if (state.polygonAction == PolygonIdAction.contractFunctionCall) {
-      LoadingView().hide();
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: const StateMessage.error(
-          stringMessage: 'This feature is not available yet in our app.',
-        ),
-      );
     }
   },
 );

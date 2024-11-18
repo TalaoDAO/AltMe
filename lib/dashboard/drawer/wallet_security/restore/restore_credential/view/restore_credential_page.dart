@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class RestoreCredentialPage extends StatelessWidget {
@@ -42,7 +41,6 @@ class RestoreCredentialPage extends StatelessWidget {
         cryptoKeys: const CryptocurrencyKeys(),
         walletCubit: context.read<WalletCubit>(),
         credentialsCubit: context.read<CredentialsCubit>(),
-        polygonId: PolygonId(),
         activityLogManager: ActivityLogManager(getSecureStorage),
         profileCubit: context.read<ProfileCubit>(),
       ),

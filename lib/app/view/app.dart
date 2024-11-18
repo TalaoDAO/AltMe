@@ -20,7 +20,6 @@ import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
 import 'package:altme/matrix_notification/cubit/matrix_notification_cubit.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
-import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
@@ -39,7 +38,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class App extends StatelessWidget {
@@ -159,19 +157,6 @@ class App extends StatelessWidget {
               walletCubit: context.read<WalletCubit>(),
             ),
           ),
-          BlocProvider<PolygonIdCubit>(
-            create: (context) => PolygonIdCubit(
-              client: DioClient(
-                secureStorageProvider: secureStorageProvider,
-                dio: Dio(),
-              ),
-              secureStorageProvider: secureStorageProvider,
-              polygonId: PolygonId(),
-              credentialsCubit: context.read<CredentialsCubit>(),
-              profileCubit: context.read<ProfileCubit>(),
-              walletCubit: context.read<WalletCubit>(),
-            ),
-          ),
           BlocProvider<ScanCubit>(
             create: (context) => ScanCubit(
               client: DioClient(
@@ -239,7 +224,6 @@ class App extends StatelessWidget {
               beacon: Beacon(),
               walletConnectCubit: context.read<WalletConnectCubit>(),
               secureStorageProvider: secureStorageProvider,
-              polygonIdCubit: context.read<PolygonIdCubit>(),
               didKitProvider: DIDKitProvider(),
               oidc4vc: OIDC4VC(),
               walletCubit: context.read<WalletCubit>(),
