@@ -31,9 +31,6 @@ Future<void> discoverCredential({
 
   final profileCubit = context.read<ProfileCubit>();
 
-  final customOidc4vcProfile = profileCubit.state.model.profileSetting
-      .selfSovereignIdentityOptions.customOidc4vcProfile;
-
   final List<CredentialSubjectType> credentialSubjectTypeListForCheck = [
     CredentialSubjectType.defiCompliance,
     CredentialSubjectType.gender,
@@ -51,21 +48,30 @@ Future<void> discoverCredential({
       .contains(dummyCredential.credentialSubjectType)) {
     getLogger('discoverCredential').i(dummyCredential.credentialSubjectType);
 
+    if (profileCubit.state.model.profileType == ProfileType.defaultOne &&
+        dummyCredential.credentialSubjectType == CredentialSubjectType.over18) {
+      LoadingView().hide();
+      // start verification by Yoti AI
+      return Navigator.of(context).push<void>(
+        VerifyAgePage.route(
+          credentialSubjectType: dummyCredential.credentialSubjectType,
+        ),
+      );
+    }
+
     /// here check for over18, over15, age range and over13 to take photo for
     /// AI KYC
-    if (customOidc4vcProfile.vcFormatType == VCFormatType.ldpVc &&
-        dummyCredential.credentialSubjectType.checkForAIKYC) {
+    if (dummyCredential.credentialSubjectType.checkForAIKYC) {
       /// For DefiCompliance, it is not necessary to use Yoti. Instead,
       /// we can directly proceed with Id360.
       if (dummyCredential.credentialSubjectType ==
               CredentialSubjectType.defiCompliance ||
           dummyCredential.credentialSubjectType ==
               CredentialSubjectType.livenessCard) {
-        await context.read<KycVerificationCubit>().getVcByKycVerification(
+        return context.read<KycVerificationCubit>().getVcByKycVerification(
               vcType: dummyCredential.credentialSubjectType.getKycVcType,
               link: dummyCredential.link!,
             );
-        return;
       }
 
       if (profileCubit.state.model.profileType == ProfileType.enterprise) {
