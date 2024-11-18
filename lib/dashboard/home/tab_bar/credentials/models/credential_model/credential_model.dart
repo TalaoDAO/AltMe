@@ -150,7 +150,20 @@ class CredentialModel extends Equatable {
     );
   }
 
-  String get issuer => data['issuer'] == null ? '' : data['issuer'] as String;
+  String get issuer {
+    final issuer = data['issuer'];
+
+    if (issuer == null) return '';
+
+    if (issuer is String) {
+      return issuer;
+    } else if (issuer is Map) {
+      final id = issuer['id'];
+      if (id != null) return id.toString();
+    }
+
+    return '';
+  }
 
   static String fromJsonId(dynamic json) {
     if (json == null || json == '') {
