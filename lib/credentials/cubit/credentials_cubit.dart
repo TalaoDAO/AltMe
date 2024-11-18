@@ -614,7 +614,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           case CredentialCategory.identityCards:
 
             /// over 13
-
             if (ldpVcType && discoverCardsOptions.displayOver13) {
               allCategoryVC.add(
                 CredInfo(
@@ -625,7 +624,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Over 15
-
             if (ldpVcType && discoverCardsOptions.displayOver15) {
               allCategoryVC.add(
                 CredInfo(
