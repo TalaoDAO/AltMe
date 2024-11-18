@@ -54,6 +54,7 @@ BlockchainOptions _$BlockchainOptionsFromJson(Map<String, dynamic> json) =>
       tzproApiKey: json['tzproApiKey'] as String?,
       infuraApiKey: json['infuraApiKey'] as String?,
       etherlinkSupport: json['etherlinkSupport'] as bool?,
+      testnet: json['testnet'] as bool?,
     );
 
 Map<String, dynamic> _$BlockchainOptionsToJson(BlockchainOptions instance) =>
@@ -69,6 +70,7 @@ Map<String, dynamic> _$BlockchainOptionsToJson(BlockchainOptions instance) =>
       'tezosSupport': instance.tezosSupport,
       'tzproApiKey': instance.tzproApiKey,
       'tzproRpcNode': instance.tzproRpcNode,
+      'testnet': instance.testnet,
     };
 
 DiscoverCardsOptions _$DiscoverCardsOptionsFromJson(

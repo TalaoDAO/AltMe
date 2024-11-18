@@ -960,6 +960,7 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
         if (confirm) {
           await context.read<EnterpriseCubit>().applyConfiguration(
                 qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                manageNetworkCubit: context.read<ManageNetworkCubit>(),
                 status: state.status,
               );
         } else {

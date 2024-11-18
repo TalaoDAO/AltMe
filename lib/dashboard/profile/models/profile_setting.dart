@@ -95,6 +95,7 @@ class BlockchainOptions extends Equatable {
     this.tzproApiKey,
     this.infuraApiKey,
     this.etherlinkSupport,
+    this.testnet,
   });
 
   factory BlockchainOptions.fromJson(Map<String, dynamic> json) =>
@@ -110,6 +111,7 @@ class BlockchainOptions extends Equatable {
         etherlinkSupport: true,
         tezosSupport: true,
         tzproRpcNode: false,
+        testnet: true,
       );
 
   final bool bnbSupport;
@@ -123,6 +125,7 @@ class BlockchainOptions extends Equatable {
   final bool tezosSupport;
   final String? tzproApiKey;
   final bool tzproRpcNode;
+  final bool? testnet;
 
   Map<String, dynamic> toJson() => _$BlockchainOptionsToJson(this);
 
@@ -138,6 +141,7 @@ class BlockchainOptions extends Equatable {
     bool? tezosSupport,
     String? tzproApiKey,
     bool? tzproRpcNode,
+    bool? testnet,
   }) {
     return BlockchainOptions(
       bnbSupport: bnbSupport ?? this.bnbSupport,
@@ -151,6 +155,7 @@ class BlockchainOptions extends Equatable {
       tzproRpcNode: tzproRpcNode ?? this.tzproRpcNode,
       infuraApiKey: infuraApiKey ?? this.infuraApiKey,
       tzproApiKey: tzproApiKey ?? this.tzproApiKey,
+      testnet: testnet ?? this.testnet,
     );
   }
 
@@ -167,6 +172,7 @@ class BlockchainOptions extends Equatable {
         tezosSupport,
         tzproApiKey,
         tzproRpcNode,
+        testnet,
       ];
 }
 

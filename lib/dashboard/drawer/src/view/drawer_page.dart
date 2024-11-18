@@ -63,7 +63,9 @@ class DrawerView extends StatelessWidget {
                             Navigator.of(context).pop();
                             await context
                                 .read<EnterpriseCubit>()
-                                .updateTheConfiguration();
+                                .updateTheConfiguration(
+                                  context.read<ManageNetworkCubit>(),
+                                );
                           },
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
