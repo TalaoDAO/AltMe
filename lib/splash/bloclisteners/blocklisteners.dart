@@ -579,18 +579,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
                     return;
                   },
-                  onDownload: () {
-                    final box = context.findRenderObject() as RenderBox?;
-                    final subject = l10n.shareWith;
-
-                    Share.share(
-                      data,
-                      subject: subject,
-                      sharePositionOrigin:
-                          box!.localToGlobal(Offset.zero) & box.size,
-                    );
-                    return;
-                  },
                   onSkip: () {
                     Navigator.of(context).pop(true);
                   },
