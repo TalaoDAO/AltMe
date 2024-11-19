@@ -78,7 +78,8 @@
     "typeYourPINCodeToAuthenticate",
     "credentialIssuanceIsStillPending",
     "bakerFee",
-    "storageFee"
+    "storageFee",
+    "doYouWantToSetupTheProfile"
   ],
 
   "es": [
@@ -160,7 +161,8 @@
     "typeYourPINCodeToAuthenticate",
     "credentialIssuanceIsStillPending",
     "bakerFee",
-    "storageFee"
+    "storageFee",
+    "doYouWantToSetupTheProfile"
   ],
 
   "fr": [
@@ -247,6 +249,7 @@
     "typeYourPINCodeToAuthenticate",
     "credentialIssuanceIsStillPending",
     "bakerFee",
-    "storageFee"
+    "storageFee",
+    "doYouWantToSetupTheProfile"
   ]
 }
