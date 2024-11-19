@@ -76,6 +76,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     /// manually categorizing default credential
     for (final credential in savedCredentials) {
+      final profileLinked = credential.profileLinkedId;
+      final vcId = profileCubit.state.model.profileType.getVCId;
       if (credential.isDefaultCredential &&
           credential.isVerifiableDiplomaType) {
         final updatedCredential = credential.copyWith(
@@ -86,7 +88,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             ),
           ),
         );
-        updatedCredentials.add(updatedCredential);
+
+        if (profileLinked != null) {
+          if (profileLinked == vcId) updatedCredentials.add(updatedCredential);
+        } else {
+          updatedCredentials.add(updatedCredential);
+        }
       } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
         final updatedCredential = credential.copyWith(
           credentialPreview: credential.credentialPreview.copyWith(
@@ -97,9 +104,17 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           ),
         );
 
-        updatedCredentials.add(updatedCredential);
+        if (profileLinked != null) {
+          if (profileLinked == vcId) updatedCredentials.add(updatedCredential);
+        } else {
+          updatedCredentials.add(updatedCredential);
+        }
       } else {
-        updatedCredentials.add(credential);
+        if (profileLinked != null) {
+          if (profileLinked == vcId) updatedCredentials.add(credential);
+        } else {
+          updatedCredentials.add(credential);
+        }
       }
     }
 
@@ -172,6 +187,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         activities: [Activity(acquisitionAt: DateTime.now())],
         jwt: walletAttestationData,
         format: 'jwt',
+        profileLinkedId: ProfileType.enterprise.getVCId,
       );
 
       log.i('CredentialSubjectType.walletCredential added');
@@ -557,6 +573,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile,
       oidc4vc: oidc4vc,
       privateKey: private,
+      profileType: profileCubit.state.model.profileType,
     );
 
     if (credential != null) {

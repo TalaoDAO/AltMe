@@ -282,6 +282,7 @@ class ScanCubit extends Cubit<ScanState> {
             newData: jsonCredential as Map<String, dynamic>,
             activities: activities,
             credentialManifest: credentialManifest,
+            profileType: qrCodeScanCubit.profileCubit.state.model.profileType,
           ),
           qrCodeScanCubit: qrCodeScanCubit,
         );
@@ -748,6 +749,7 @@ class ScanCubit extends Cubit<ScanState> {
         final credential = getCredentialsFromFilterList(
           filterList: filterList,
           credentialList: [credentialsToBePresented[i]],
+          profileType: profileCubit.state.model.profileType,
         );
 
         Map<String, dynamic>? pathNested;

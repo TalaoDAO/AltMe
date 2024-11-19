@@ -113,10 +113,12 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
 
         if (!isPresentable) {
           if (credentialSubjectType != null) {
-            dummyCredentials.add(credentialSubjectType.dummyCredential(
-              profileSetting: profileSetting,
-              assignedVCFormatType: formatType,
-            ));
+            dummyCredentials.add(
+              credentialSubjectType.dummyCredential(
+                profileSetting: profileSetting,
+                assignedVCFormatType: formatType,
+              ),
+            );
           }
         }
       }

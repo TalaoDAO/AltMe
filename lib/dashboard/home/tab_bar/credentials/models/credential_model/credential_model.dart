@@ -21,6 +21,7 @@ class CredentialModel extends Equatable {
     required this.credentialPreview,
     required this.shareLink,
     required this.data,
+    this.profileLinkedId,
     this.format,
     this.display,
     this.expirationDate,
@@ -57,6 +58,7 @@ class CredentialModel extends Equatable {
     required CredentialModel oldCredentialModel,
     required Map<String, dynamic> newData,
     required List<Activity> activities,
+    required ProfileType profileType,
     Display? display,
     CredentialManifest? credentialManifest,
   }) {
@@ -80,6 +82,7 @@ class CredentialModel extends Equatable {
       format: oldCredentialModel.format,
       credentialSupported: oldCredentialModel.credentialSupported,
       pendingInfo: oldCredentialModel.pendingInfo,
+      profileLinkedId: profileType.getVCId,
     );
   }
 
@@ -105,6 +108,7 @@ class CredentialModel extends Equatable {
   final PendingInfo? pendingInfo;
   final String? format;
   final Map<String, dynamic>? credentialSupported;
+  final String? profileLinkedId;
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
@@ -127,6 +131,7 @@ class CredentialModel extends Equatable {
     String? format,
     Map<String, dynamic>? claims,
     Map<String, dynamic>? credentialSupported,
+    String? profileLinkedId,
   }) {
     return CredentialModel(
       id: id ?? this.id,
@@ -147,6 +152,7 @@ class CredentialModel extends Equatable {
       pendingInfo: pendingInfo ?? this.pendingInfo,
       format: format ?? this.format,
       credentialSupported: credentialSupported ?? this.credentialSupported,
+      profileLinkedId: profileLinkedId ?? this.profileLinkedId,
     );
   }
 

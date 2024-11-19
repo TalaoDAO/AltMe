@@ -186,6 +186,7 @@ Future<void> addOIDC4VCCredential({
     newData: credentialFromOIDC4VC,
     activities: [Activity(acquisitionAt: DateTime.now())],
     display: display,
+    profileType: qrCodeScanCubit.profileCubit.state.model.profileType,
   );
 
   if (credentialIdToBeDeleted != null) {

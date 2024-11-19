@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
 
 class PolygonIdProofPage extends StatelessWidget {
@@ -47,6 +48,7 @@ class PolygonIdProofPage extends StatelessWidget {
         value: '',
       );
     } else {
+      final profileModel = context.read<ProfileCubit>().state.model;
       widget = DefaultCredentialWidget(
         isDiscover: false,
         credentialModel: CredentialModel(
@@ -57,6 +59,7 @@ class PolygonIdProofPage extends StatelessWidget {
           data: const <String, dynamic>{},
           jwt: null,
           format: 'ldp_vc',
+          profileLinkedId: profileModel.profileType.getVCId,
         ),
       );
     }

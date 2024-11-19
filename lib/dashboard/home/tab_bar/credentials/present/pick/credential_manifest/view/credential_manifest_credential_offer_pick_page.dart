@@ -48,18 +48,14 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
+        final profileModel = context.read<ProfileCubit>().state.model;
         return CredentialManifestPickCubit(
           credential: credential,
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
-          vcFormatType: context
-              .read<ProfileCubit>()
-              .state
-              .model
-              .profileSetting
-              .selfSovereignIdentityOptions
-              .customOidc4vcProfile
-              .vcFormatType,
+          vcFormatType: profileModel.profileSetting.selfSovereignIdentityOptions
+              .customOidc4vcProfile.vcFormatType,
+          profileType: profileModel.profileType,
         );
       },
       child: CredentialManifestOfferPickView(

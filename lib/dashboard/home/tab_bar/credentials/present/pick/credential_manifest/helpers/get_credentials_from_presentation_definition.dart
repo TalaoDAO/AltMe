@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/credential.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/credential_manifest/helpers/filter_credential_list_by_format.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -9,6 +10,7 @@ List<CredentialModel> getCredentialsFromPresentationDefinition({
   required Map<String, dynamic>? clientMetaData,
   required List<CredentialModel> credentialList,
   required int inputDescriptorIndex,
+  required ProfileType profileType,
 }) {
   final filterList = presentationDefinition
           .inputDescriptors[inputDescriptorIndex].constraints?.fields ??
@@ -27,6 +29,7 @@ List<CredentialModel> getCredentialsFromPresentationDefinition({
   final filteredCredentialList = getCredentialsFromFilterList(
     filterList: filterList,
     credentialList: List.from(credentialListFilteredByFormat),
+    profileType: profileType,
   );
   return filteredCredentialList;
 }

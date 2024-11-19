@@ -148,6 +148,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       format: 'ldp_vc',
       credentialPreview: Credential.fromJson(jsonCredential),
       activities: [Activity(acquisitionAt: DateTime.now())],
+      profileLinkedId: profileCubit.state.model.profileType.getVCId,
     );
     await credentialsCubit.insertCredential(
       credential: credentialModel,

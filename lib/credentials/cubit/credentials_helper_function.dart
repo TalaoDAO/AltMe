@@ -10,6 +10,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   required CustomOidc4VcProfile customOidc4vcProfile,
   required OIDC4VC oidc4vc,
   required Map<String, dynamic> privateKey,
+  required ProfileType profileType,
   String? oldId,
 }) async {
   final log =
@@ -185,6 +186,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           privateKey: privateKey,
           kid: verificationMethod,
           did: did,
+          profileType: profileType,
         );
       }
     } else {
@@ -197,6 +199,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         privateKey: privateKey,
         kid: verificationMethod,
         did: did,
+        profileType: profileType,
       );
     }
   } catch (e, s) {
@@ -217,6 +220,7 @@ Future<CredentialModel> _createCredential({
   required Map<String, dynamic> privateKey,
   required String did,
   required String kid,
+  required ProfileType profileType,
   String? oldId,
 }) async {
   final jsonLd = jsonDecode(vc) as Map<String, dynamic>;
@@ -275,5 +279,6 @@ Future<CredentialModel> _createCredential({
     credentialPreview: Credential.fromJson(jsonLd),
     credentialManifest: credentialManifest,
     activities: [Activity(acquisitionAt: dateTime)],
+    profileLinkedId: profileType.getVCId,
   );
 }

@@ -216,6 +216,7 @@ class HomeCubit extends Cubit<HomeState> {
           ),
           newData: credential,
           activities: [Activity(acquisitionAt: DateTime.now())],
+          profileType: qrCodeScanCubit.profileCubit.state.model.profileType,
         );
         await credentialsCubit.insertCredential(
           credential: credentialModel,

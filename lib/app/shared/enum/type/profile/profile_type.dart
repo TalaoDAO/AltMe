@@ -43,4 +43,21 @@ extension ProfileTypeX on ProfileType {
         return true;
     }
   }
+
+  String get getVCId {
+    switch (this) {
+      case ProfileType.custom:
+        return 'A7G9B4C';
+      case ProfileType.ebsiV3:
+        return 'Q2X5T8L';
+      case ProfileType.ebsiV4:
+        return 'J9R3N6P';
+      case ProfileType.diipv3:
+        return 'M5K8Y2W';
+      case ProfileType.defaultOne:
+        return 'Z4C7T1X';
+      case ProfileType.enterprise:
+        return 'L8F6V3P';
+    }
+  }
 }

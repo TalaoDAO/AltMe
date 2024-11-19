@@ -891,6 +891,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           inputDescriptorIndex: index,
           clientMetaData: clientMetaData,
           vcFormatType: vcFormatType,
+          profileType: profileCubit.state.model.profileType,
         );
         if (filteredCredentialList.isEmpty) {
           return false;
@@ -1076,6 +1077,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           .vcFormatType
           .vcValue,
       credentialManifest: credentialManifest,
+      profileLinkedId: profileCubit.state.model.profileType.getVCId,
     );
 
     final host = await getHost(uri: uri, client: client);

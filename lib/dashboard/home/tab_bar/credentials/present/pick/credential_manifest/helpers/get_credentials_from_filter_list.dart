@@ -6,6 +6,7 @@ import 'package:credential_manifest/credential_manifest.dart';
 List<CredentialModel> getCredentialsFromFilterList({
   required List<Field> filterList,
   required List<CredentialModel> credentialList,
+  required ProfileType profileType,
 }) {
   /// If we have some instructions we filter the wallet's
   /// crendential list whith it
@@ -15,6 +16,12 @@ List<CredentialModel> getCredentialsFromFilterList({
     final selectedCredential = <CredentialModel>[];
 
     for (final credential in credentialList) {
+      /// profile should be matched for vc
+      final profileLinkedId = credential.profileLinkedId;
+      if (profileLinkedId != null && profileLinkedId != profileType.getVCId) {
+        continue;
+      }
+
       bool allConditionsSatisfied = false;
       fieldLoop:
       for (final field in filterList) {
