@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /// Provide secure storage
@@ -14,7 +15,10 @@ AndroidOptions _getAndroidOptions() => const AndroidOptions(
 
 /// Initialize and test secure storage availability on the phone.
 Future<void> get initSecureStorage async {
-  if (Platform.isAndroid) {
+  if (kIsWeb) {
+    const storage = FlutterSecureStorage();
+    await testStorage(storage);
+  } else if (Platform.isAndroid) {
     try {
       /// some android devices need additional parameters to use secureStorage
       /// We are testing getAllValues to check if those additional settings are

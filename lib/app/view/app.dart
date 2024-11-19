@@ -29,7 +29,6 @@ import 'package:altme/theme/theme_cubit.dart';
 import 'package:altme/theme/theme_repository.dart';
 
 import 'package:altme/wallet/wallet.dart';
-import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -70,9 +69,6 @@ class App extends StatelessWidget {
                 LangCubit(secureStorageProvider: getSecureStorage),
           ),
           BlocProvider<RouteCubit>(create: (context) => RouteCubit()),
-          BlocProvider<BeaconCubit>(
-            create: (context) => BeaconCubit(beacon: Beacon()),
-          ),
           BlocProvider<WalletConnectCubit>(
             create: (context) => WalletConnectCubit(
               secureStorageProvider: secureStorageProvider,
@@ -221,7 +217,6 @@ class App extends StatelessWidget {
               jwtDecode: JWTDecode(),
               profileCubit: context.read<ProfileCubit>(),
               credentialsCubit: context.read<CredentialsCubit>(),
-              beacon: Beacon(),
               walletConnectCubit: context.read<WalletConnectCubit>(),
               secureStorageProvider: secureStorageProvider,
               didKitProvider: DIDKitProvider(),

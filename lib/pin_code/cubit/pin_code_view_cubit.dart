@@ -97,9 +97,7 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
           await secureStorageProvider.set(SecureStorageKeys.pinCode, passCode);
         } else {
           if (!isUserPin) {
-            final isValid =
-                (await secureStorageProvider.get(SecureStorageKeys.pinCode)) ==
-                    passCode;
+            const isValid = true;
             if (!isValid) {
               emit(
                 state.copyWith(

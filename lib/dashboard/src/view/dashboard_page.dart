@@ -44,7 +44,7 @@ class _DashboardViewState extends State<DashboardView> {
       Future.delayed(Duration.zero, () {
         /// If there is a deepLink we give do as if it coming from QRCode
         context.read<QRCodeScanCubit>().deepLink();
-        context.read<BeaconCubit>().startBeacon();
+        // context.read<BeaconCubit>().startBeacon();
 
         // check if enterprise account is suspended or not
         if (context.read<ProfileCubit>().state.model.profileType ==

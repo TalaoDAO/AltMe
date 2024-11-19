@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:no_screenshot/no_screenshot.dart';
 import 'package:secure_application/secure_application.dart';
@@ -66,7 +67,7 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    if (widget.secureScreen) {
+    if (widget.secureScreen && !kIsWeb) {
       noScreenShot.screenshotOff();
     }
   }
@@ -75,15 +76,16 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        if (widget.secureScreen) {
-          noScreenShot.screenshotOff();
-        } else {
-          noScreenShot.screenshotOn();
+        if (!kIsWeb) {
+          if (widget.secureScreen) {
+            noScreenShot.screenshotOff();
+          } else {
+            noScreenShot.screenshotOn();
+          }
         }
-
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
-        if (widget.secureScreen) {
+        if (widget.secureScreen && !kIsWeb) {
           noScreenShot.screenshotOff();
           secureApplicationController.lock();
         }
@@ -97,7 +99,7 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    if (widget.secureScreen) {
+    if (widget.secureScreen && !kIsWeb) {
       noScreenShot.screenshotOn();
     }
     super.dispose();
@@ -105,109 +107,45 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return widget.secureScreen
-        ? SecureApplication(
-            nativeRemoveDelay: 800,
-            autoUnlockNative: true,
-            secureApplicationController: secureApplicationController,
-            onNeedUnlock: (secureApplicationController) async {
-              /// need unlock maybe use biometric to confirm and then
-              /// sercure.unlock() or you can use the lockedBuilder
-
-              secureApplicationController!.authSuccess(unlock: true);
-              return SecureApplicationAuthenticationStatus.SUCCESS;
-              //return null;
-            },
-            child: Builder(
-              builder: (context) {
-                return SecureGate(
-                  blurr: 100,
-                  opacity: 0.1,
-                  lockedBuilder: (context, secureNotifier) => Container(),
-                  child: Scaffold(
-                    key: widget.scaffoldKey,
-                    floatingActionButton: widget.floatingActionButton,
-                    floatingActionButtonLocation:
-                        widget.floatingActionButtonLocation,
-                    extendBody: widget.extendBelow ?? false,
-                    backgroundColor: widget.backgroundColor ??
-                        Theme.of(context).colorScheme.surface,
-                    appBar: (widget.title == null &&
-                            widget.titleLeading == null &&
-                            widget.titleTrailing == null)
-                        ? null
-                        : CustomAppBar(
-                            title: widget.title,
-                            titleMargin: widget.titleMargin,
-                            leading: widget.titleLeading,
-                            titleAlignment: widget.titleAlignment,
-                            trailing: widget.titleTrailing,
-                            appBarHeight: widget.appBarHeight,
-                          ),
-                    bottomNavigationBar: widget.navigation != null
-                        ? (widget.useSafeArea
-                            ? SafeArea(child: widget.navigation!)
-                            : widget.navigation)
-                        : null,
-                    drawer: widget.drawer,
-                    body: widget.scrollView
-                        ? SingleChildScrollView(
-                            padding: widget.padding,
-                            physics: const BouncingScrollPhysics(),
-                            child: widget.useSafeArea
-                                ? SafeArea(child: widget.body)
-                                : widget.body,
-                          )
-                        : Padding(
-                            padding: widget.padding,
-                            child: widget.useSafeArea
-                                ? SafeArea(child: widget.body)
-                                : widget.body,
-                          ),
-                  ),
-                );
-              },
+    return Scaffold(
+      key: widget.scaffoldKey,
+      floatingActionButton: widget.floatingActionButton,
+      floatingActionButtonLocation: widget.floatingActionButtonLocation,
+      extendBody: widget.extendBelow ?? false,
+      backgroundColor:
+          widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
+      appBar: (widget.title == null &&
+              widget.titleLeading == null &&
+              widget.titleTrailing == null)
+          ? null
+          : CustomAppBar(
+              title: widget.title,
+              titleMargin: widget.titleMargin,
+              leading: widget.titleLeading,
+              titleAlignment: widget.titleAlignment,
+              trailing: widget.titleTrailing,
+              appBarHeight: widget.appBarHeight,
             ),
-          )
-        : Scaffold(
-            key: widget.scaffoldKey,
-            floatingActionButton: widget.floatingActionButton,
-            floatingActionButtonLocation: widget.floatingActionButtonLocation,
-            extendBody: widget.extendBelow ?? false,
-            backgroundColor:
-                widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
-            appBar: (widget.title == null &&
-                    widget.titleLeading == null &&
-                    widget.titleTrailing == null)
-                ? null
-                : CustomAppBar(
-                    title: widget.title,
-                    titleMargin: widget.titleMargin,
-                    leading: widget.titleLeading,
-                    titleAlignment: widget.titleAlignment,
-                    trailing: widget.titleTrailing,
-                    appBarHeight: widget.appBarHeight,
-                  ),
-            bottomNavigationBar: widget.navigation != null
-                ? (widget.useSafeArea
-                    ? SafeArea(child: widget.navigation!)
-                    : widget.navigation)
-                : null,
-            drawer: widget.drawer,
-            body: widget.scrollView
-                ? SingleChildScrollView(
-                    padding: widget.padding,
-                    physics: const BouncingScrollPhysics(),
-                    child: widget.useSafeArea
-                        ? SafeArea(child: widget.body)
-                        : widget.body,
-                  )
-                : Padding(
-                    padding: widget.padding,
-                    child: widget.useSafeArea
-                        ? SafeArea(child: widget.body)
-                        : widget.body,
-                  ),
-          );
+      bottomNavigationBar: widget.navigation != null
+          ? (widget.useSafeArea
+              ? SafeArea(child: widget.navigation!)
+              : widget.navigation)
+          : null,
+      drawer: widget.drawer,
+      body: widget.scrollView
+          ? SingleChildScrollView(
+              padding: widget.padding,
+              physics: const BouncingScrollPhysics(),
+              child: widget.useSafeArea
+                  ? SafeArea(child: widget.body)
+                  : widget.body,
+            )
+          : Padding(
+              padding: widget.padding,
+              child: widget.useSafeArea
+                  ? SafeArea(child: widget.body)
+                  : widget.body,
+            ),
+    );
   }
 }

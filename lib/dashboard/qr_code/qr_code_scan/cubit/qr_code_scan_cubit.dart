@@ -36,7 +36,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.queryByExampleCubit,
     required this.deepLinkCubit,
     required this.jwtDecode,
-    required this.beacon,
     required this.walletConnectCubit,
     required this.secureStorageProvider,
     required this.didKitProvider,
@@ -53,7 +52,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final QueryByExampleCubit queryByExampleCubit;
   final DeepLinkCubit deepLinkCubit;
   final JWTDecode jwtDecode;
-  final Beacon beacon;
   final WalletConnectCubit walletConnectCubit;
   final SecureStorageProvider secureStorageProvider;
   final DIDKitProvider didKitProvider;
@@ -94,7 +92,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final String pairingRequest =
             Uri.parse(scannedResponse).queryParameters['data'].toString();
 
-        await beacon.pair(pairingRequest: pairingRequest);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith('wc:') ||
           scannedResponse.startsWith('wc-altme:')) {

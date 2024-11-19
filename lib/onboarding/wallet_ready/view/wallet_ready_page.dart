@@ -213,11 +213,11 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                                   // Check with API if it is an  organization
                                   // wallet
 
-                                  context
-                                      .read<EnterpriseCubit>()
-                                      .getWalletProviderAccount(
-                                        context.read<QRCodeScanCubit>(),
-                                      );
+                                  // context
+                                  //     .read<EnterpriseCubit>()
+                                  //     .getWalletProviderAccount(
+                                  //       context.read<QRCodeScanCubit>(),
+                                  //     );
                                 }
                               : null,
                         ),
