@@ -315,19 +315,34 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         if (state.payloadMessage != null &&
             state.payloadMessage!.contains('#')) {
           final String url = state.payloadMessage!.split('#')[1];
-          final uri = Uri.parse(url);
-          emit(
-            state.copyWith(
-              status: AppStatus.success,
-              message: StateMessage.success(
-                messageHandler: ResponseMessage(
-                  message: ResponseString
-                      .RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+          try {
+            final uri = Uri.parse(url);
+            emit(
+              state.copyWith(
+                status: AppStatus.success,
+                message: StateMessage.success(
+                  messageHandler: ResponseMessage(
+                    message: ResponseString
+                        .RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+                  ),
                 ),
               ),
-            ),
-          );
-          await qrCodeScanCubit.verify(uri: uri, isScan: false);
+            );
+            await qrCodeScanCubit.verify(uri: uri, isScan: false);
+          } catch (e) {
+            log.e('Invalid url, e: $e');
+            emit(
+              state.copyWith(
+                status: AppStatus.success,
+                message: StateMessage.success(
+                  messageHandler: ResponseMessage(
+                    message: ResponseString
+                        .RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+                  ),
+                ),
+              ),
+            );
+          }
         } else {
           emit(
             state.copyWith(
