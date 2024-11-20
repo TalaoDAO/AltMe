@@ -351,6 +351,7 @@ class ProfileModel extends Equatable {
             displayOver15: false,
             displayOver18: false,
             displayOver18Jwt: false,
+            displayOver18SdJwt: true,
             displayOver21: false,
             displayOver50: false,
             displayChainborn: false,

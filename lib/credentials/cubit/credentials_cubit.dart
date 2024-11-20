@@ -667,6 +667,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 ),
               );
             }
+            if (vcSdJWType && discoverCardsOptions.displayEmailPassSdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.over18,
+                  formatType: VCFormatType.vcSdJWT,
+                ),
+              );
+            }
 
             /// Over 21
             if (ldpVcType && discoverCardsOptions.displayOver21) {

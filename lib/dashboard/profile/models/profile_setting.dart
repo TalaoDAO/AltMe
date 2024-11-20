@@ -192,6 +192,7 @@ class DiscoverCardsOptions extends Equatable {
     required this.displayVerifiableId,
     required this.displayExternalIssuer,
     this.displayOver18Jwt = false,
+    this.displayOver18SdJwt = false,
     this.displayVerifiableIdJwt = false,
     this.displayVerifiableIdSdJwt = false,
     this.displayEmailPass = true,
@@ -255,6 +256,7 @@ class DiscoverCardsOptions extends Equatable {
   final bool displayOver15;
   final bool displayOver18;
   final bool displayOver18Jwt;
+  final bool displayOver18SdJwt;
   final bool displayOver21;
   final bool displayOver50;
   final bool displayOver65;
@@ -366,6 +368,7 @@ class DiscoverCardsOptions extends Equatable {
       case CredentialSubjectType.over18:
         if (isLdpVc && displayOver18) return ldpVcValue;
         if (isJwtVcJson && displayOver18Jwt) return jwtVcJsonValue;
+        if (isVcSdJWT && displayOver18SdJwt) return vcSdJWTValue;
       case CredentialSubjectType.over21:
         if (isLdpVc && displayOver21) return ldpVcValue;
       case CredentialSubjectType.over50:
@@ -440,6 +443,8 @@ class DiscoverCardsOptions extends Equatable {
         displayOver13,
         displayOver15,
         displayOver18,
+        displayOver18Jwt,
+        displayOver18SdJwt,
         displayVerifiableId,
         displayOver21,
         displayOver65,
