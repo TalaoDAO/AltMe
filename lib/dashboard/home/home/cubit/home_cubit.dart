@@ -76,17 +76,19 @@ class HomeCubit extends Cubit<HomeState> {
       'domain': 'issuer.talao.co',
     };
 
-    final String did_auth = await didKitProvider.didAuth(
-      did,
-      jsonEncode(options),
-      privateKey,
-    );
-
     final data = <String, dynamic>{
       'base64_encoded_string': base64EncodedImage,
-      'vp': did_auth,
       'did': did,
     };
+
+    if (vcFormatType != VCFormatType.vcSdJWT) {
+      final String did_auth = await didKitProvider.didAuth(
+        did,
+        jsonEncode(options),
+        privateKey,
+      );
+      data['vp'] = did_auth;
+    }
 
     await dotenv.load();
     final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');

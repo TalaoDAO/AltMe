@@ -5,7 +5,6 @@ import 'package:altme/kyc_verification/kyc_verification.dart';
 //import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oidc4vc/oidc4vc.dart';
 import 'package:uuid/uuid.dart';
 
 Future<void> discoverCredential({
@@ -55,6 +54,7 @@ Future<void> discoverCredential({
       return Navigator.of(context).push<void>(
         VerifyAgePage.route(
           credentialSubjectType: dummyCredential.credentialSubjectType,
+          vcFormatType: dummyCredential.vcFormatType,
         ),
       );
     }
@@ -116,6 +116,7 @@ Future<void> discoverCredential({
             await Navigator.of(context).push<void>(
               VerifyAgePage.route(
                 credentialSubjectType: dummyCredential.credentialSubjectType,
+                vcFormatType: dummyCredential.vcFormatType,
               ),
             );
           },
