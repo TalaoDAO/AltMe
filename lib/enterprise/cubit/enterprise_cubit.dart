@@ -189,11 +189,15 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       );
 
       final testnet = profileSetting.blockchainOptions?.testnet;
-      if (testnet != null && testnet) {
+      if (testnet != null) {
         final blockchainType =
             manageNetworkCubit.walletCubit.state.currentAccount!.blockchainType;
         final currentNetworkList = blockchainType.networks;
-        await manageNetworkCubit.setNetwork(currentNetworkList[1]);
+        if (testnet) {
+          await manageNetworkCubit.setNetwork(currentNetworkList[1]);
+        } else {
+          await manageNetworkCubit.setNetwork(currentNetworkList[0]);
+        }
       }
 
       // if enterprise and walletAttestation data is available and added
@@ -571,11 +575,15 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       }
 
       final testnet = profileSetting.blockchainOptions?.testnet;
-      if (testnet != null && testnet) {
+      if (testnet != null) {
         final blockchainType =
             manageNetworkCubit.walletCubit.state.currentAccount!.blockchainType;
         final currentNetworkList = blockchainType.networks;
-        await manageNetworkCubit.setNetwork(currentNetworkList[1]);
+        if (testnet) {
+          await manageNetworkCubit.setNetwork(currentNetworkList[1]);
+        } else {
+          await manageNetworkCubit.setNetwork(currentNetworkList[0]);
+        }
       }
 
       emit(
