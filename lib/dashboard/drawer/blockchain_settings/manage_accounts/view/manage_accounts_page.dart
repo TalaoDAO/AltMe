@@ -15,6 +15,7 @@ class ManageAccountsPage extends StatefulWidget {
       builder: (_) => BlocProvider(
         create: (context) => ManageAccountsCubit(
           credentialsCubit: context.read<CredentialsCubit>(),
+          manageNetworkCubit: context.read<ManageNetworkCubit>(),
         ),
         child: const ManageAccountsPage(),
       ),
