@@ -286,37 +286,49 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         if (!isPresentable) {
           emit(
             state.copyWith(
-              qrScanStatus: QrScanStatus.success,
-              route: MissingCredentialsPage.route(
-                credentialManifest: credentialManifest,
+              qrScanStatus: QrScanStatus.idle,
+              message: const StateMessage.info(
+                stringMessage: 'The required credential is not in your wallet',
+                showDialog: true,
               ),
             ),
           );
-
-          missingCredentialCompleter = Completer<bool>();
-          final value = await missingCredentialCompleter!.future;
-          missingCredentialCompleter = null;
-
-          if (value) {
-            final isPresentable = await isVCPresentable(
-              presentationDefinition: presentationDefinition,
-              clientMetaData: null,
-              vcFormatType: customOidc4vcProfile.vcFormatType,
-            );
-
-            if (!isPresentable) {
-              throw ResponseMessage(
-                message: ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-              );
-            }
-          } else {
-            throw ResponseMessage(
-              message: ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            );
-          }
+          return;
         }
+
+        //   emit(
+        //     state.copyWith(
+        //       qrScanStatus: QrScanStatus.success,
+        //       route: MissingCredentialsPage.route(
+        //         credentialManifest: credentialManifest,
+        //       ),
+        //     ),
+        //   );
+
+        //   missingCredentialCompleter = Completer<bool>();
+        //   final value = await missingCredentialCompleter!.future;
+        //   missingCredentialCompleter = null;
+
+        //   if (value) {
+        //     final isPresentable = await isVCPresentable(
+        //       presentationDefinition: presentationDefinition,
+        //       clientMetaData: null,
+        //       vcFormatType: customOidc4vcProfile.vcFormatType,
+        //     );
+
+        //     if (!isPresentable) {
+        //       throw ResponseMessage(
+        //         message: ResponseString
+        //             .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        //       );
+        //     }
+        //   } else {
+        //     throw ResponseMessage(
+        //       message: ResponseString
+        //           .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        //     );
+        //   }
+        // }
       }
 
       switch (data['type']) {
@@ -355,33 +367,45 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               if (!isPresentable) {
                 emit(
                   state.copyWith(
-                    qrScanStatus: QrScanStatus.success,
-                    route: MissingCredentialsPage.route(query: query),
+                    qrScanStatus: QrScanStatus.idle,
+                    message: const StateMessage.info(
+                      stringMessage:
+                          'The required credential is not in your wallet',
+                      showDialog: true,
+                    ),
                   ),
                 );
-
-                missingCredentialCompleter = Completer<bool>();
-                final value = await missingCredentialCompleter!.future;
-                missingCredentialCompleter = null;
-
-                if (value) {
-                  final isPresentable = await isCredentialPresentable(
-                    credentialSubjectType: credentialSubjectType,
-                    vcFormatType: customOidc4vcProfile.vcFormatType,
-                  );
-                  if (!isPresentable) {
-                    throw ResponseMessage(
-                      message: ResponseString
-                          .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                    );
-                  }
-                } else {
-                  throw ResponseMessage(
-                    message: ResponseString
-                        .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                  );
-                }
+                return;
+                // emit(
+                //   state.copyWith(
+                //     qrScanStatus: QrScanStatus.success,
+                //     route: MissingCredentialsPage.route(query: query),
+                //   ),
+                // );
               }
+
+              //   missingCredentialCompleter = Completer<bool>();
+              //   final value = await missingCredentialCompleter!.future;
+              //   missingCredentialCompleter = null;
+
+              //   if (value) {
+              //     final isPresentable = await isCredentialPresentable(
+              //       credentialSubjectType: credentialSubjectType,
+              //       vcFormatType: customOidc4vcProfile.vcFormatType,
+              //     );
+              //     if (!isPresentable) {
+              //       throw ResponseMessage(
+              //         message: ResponseString
+              //             .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              //       );
+              //     }
+              //   } else {
+              //     throw ResponseMessage(
+              //       message: ResponseString
+              //           .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              //     );
+              //   }
+              // }
 
               queryByExampleCubit.setQueryByExampleCubit(query);
 
@@ -928,7 +952,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
   }
 
-  Completer<bool>? missingCredentialCompleter;
+  //Completer<bool>? missingCredentialCompleter;
 
   Future<void> launchOIDC4VPAndSIOPV2Flow({
     required List<String> keys,
@@ -1018,48 +1042,48 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       presentationDefinition,
     );
 
-    final isPresentable = await isVCPresentable(
-      presentationDefinition: presentationDefinition,
-      clientMetaData: clientMetaData,
-      vcFormatType: profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
-    );
+    // final isPresentable = await isVCPresentable(
+    //   presentationDefinition: presentationDefinition,
+    //   clientMetaData: clientMetaData,
+    //   vcFormatType: profileCubit.state.model.profileSetting
+    //       .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
+    // );
 
-    if (!isPresentable) {
-      emit(
-        state.copyWith(
-          qrScanStatus: QrScanStatus.success,
-          route: MissingCredentialsPage.route(
-            credentialManifest: credentialManifest,
-          ),
-        ),
-      );
+    // if (!isPresentable) {
+    //   emit(
+    //     state.copyWith(
+    //       qrScanStatus: QrScanStatus.success,
+    //       route: MissingCredentialsPage.route(
+    //         credentialManifest: credentialManifest,
+    //       ),
+    //     ),
+    //   );
 
-      missingCredentialCompleter = Completer<bool>();
-      final value = await missingCredentialCompleter!.future;
-      missingCredentialCompleter = null;
+    //   missingCredentialCompleter = Completer<bool>();
+    //   final value = await missingCredentialCompleter!.future;
+    //   missingCredentialCompleter = null;
 
-      if (value) {
-        final isPresentable = await isVCPresentable(
-          presentationDefinition: presentationDefinition,
-          clientMetaData: clientMetaData,
-          vcFormatType: profileCubit.state.model.profileSetting
-              .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
-        );
+    //   if (value) {
+    //     final isPresentable = await isVCPresentable(
+    //       presentationDefinition: presentationDefinition,
+    //       clientMetaData: clientMetaData,
+    //       vcFormatType: profileCubit.state.model.profileSetting
+    //           .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
+    //     );
 
-        if (!isPresentable) {
-          throw ResponseMessage(
-            message: ResponseString
-                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          );
-        }
-      } else {
-        throw ResponseMessage(
-          message: ResponseString
-              .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-        );
-      }
-    }
+    //     if (!isPresentable) {
+    //       throw ResponseMessage(
+    //         message: ResponseString
+    //             .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+    //       );
+    //     }
+    //   } else {
+    //     throw ResponseMessage(
+    //       message: ResponseString
+    //           .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+    //     );
+    //   }
+    // }
 
     final CredentialModel credentialPreview = CredentialModel(
       id: 'id',
