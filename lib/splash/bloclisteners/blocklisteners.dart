@@ -25,7 +25,6 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:share_plus/share_plus.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
