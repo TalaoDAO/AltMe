@@ -731,8 +731,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 ),
               );
             }
-            if (jwtVcJsonType &&
-                discoverCardsOptions.displayVerifiableIdSdJwt) {
+            if (vcSdJWType && discoverCardsOptions.displayVerifiableIdSdJwt) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.verifiableIdCard,
