@@ -47,8 +47,7 @@ Future<void> discoverCredential({
       .contains(dummyCredential.credentialSubjectType)) {
     getLogger('discoverCredential').i(dummyCredential.credentialSubjectType);
 
-    if (profileCubit.state.model.profileType == ProfileType.defaultOne &&
-        dummyCredential.credentialSubjectType == CredentialSubjectType.over18) {
+    if (dummyCredential.credentialSubjectType == CredentialSubjectType.over18) {
       LoadingView().hide();
       // start verification by Yoti AI
       return Navigator.of(context).push<void>(
