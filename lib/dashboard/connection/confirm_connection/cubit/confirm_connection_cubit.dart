@@ -8,7 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:reown_walletkit/reown_walletkit.dart';
 
 part 'confirm_connection_cubit.g.dart';
 part 'confirm_connection_state.dart';
@@ -125,7 +125,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
             ),
           };
 
-          await walletConnectCubit.web3Wallet!.approveSession(
+          await walletConnectCubit.reownWalletKit!.approveSession(
             id: sessionProposalEvent.id,
             namespaces: walletNamespaces,
           );
@@ -178,11 +178,11 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
         final SessionProposalEvent? sessionProposalEvent =
             walletConnectState.sessionProposalEvent;
 
-        walletConnectCubit.web3Wallet!.rejectSession(
+        walletConnectCubit.reownWalletKit!.rejectSession(
           id: sessionProposalEvent!.id,
           reason: Errors.getSdkError(
             Errors.USER_REJECTED,
-          ),
+          ).toSignError(),
         );
     }
     emit(state.copyWith(appStatus: AppStatus.goBack));
