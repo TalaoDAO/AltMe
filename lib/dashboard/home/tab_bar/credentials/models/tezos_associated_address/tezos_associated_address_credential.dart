@@ -41,29 +41,10 @@ class TezosAssociatedAddressCredential {
   static const List<dynamic> _context = <dynamic>[
     'https://www.w3.org/2018/credentials/v1',
     {
-      'TezosAssociatedAddress': {
-        '@id': 'https://github.com/TalaoDAO/context#tezosassociatedaddress',
-        '@context': {
-          '@version': 1.1,
-          '@protected': true,
-          'id': '@id',
-          'type': '@type',
-          'schema': 'https://schema.org/',
-          'accountName': 'schema:identifier',
-          'associatedAddress': 'schema:account',
-          'cryptoWalletSignature': 'schema:identifier',
-          'cryptoWalletPayload': 'schema:identifier',
-          'issuedBy': {
-            '@id': 'schema:issuedBy',
-            '@context': {
-              '@version': 1.1,
-              '@protected': true,
-              'schema': 'https://schema.org/',
-              'name': 'schema:legalName',
-            },
-          },
-        },
-      },
+      '@vocab': 'https://schema.org',
+      'associatedAddress': 'https://w3id.org/security#blockchainAccountId',
+      'TezosAssociatedAddress':
+          'https://doc.wallet-provider.io/wallet/vc_type/#TezosAssociatedAdress',
     }
   ];
 }
