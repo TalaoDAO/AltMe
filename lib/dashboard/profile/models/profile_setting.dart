@@ -96,12 +96,14 @@ class BlockchainOptions extends Equatable {
     this.infuraApiKey,
     this.etherlinkSupport,
     this.testnet,
+    this.associatedAddressFormat = VCFormatType.ldpVc,
   });
 
   factory BlockchainOptions.fromJson(Map<String, dynamic> json) =>
       _$BlockchainOptionsFromJson(json);
 
   factory BlockchainOptions.initial() => const BlockchainOptions(
+        associatedAddressFormat: VCFormatType.ldpVc,
         bnbSupport: true,
         ethereumSupport: true,
         fantomSupport: true,
@@ -114,6 +116,7 @@ class BlockchainOptions extends Equatable {
         testnet: true,
       );
 
+  final VCFormatType? associatedAddressFormat;
   final bool bnbSupport;
   final bool ethereumSupport;
   final bool fantomSupport;
@@ -130,6 +133,7 @@ class BlockchainOptions extends Equatable {
   Map<String, dynamic> toJson() => _$BlockchainOptionsToJson(this);
 
   BlockchainOptions copyWth({
+    VCFormatType? associatedAddressFormat,
     bool? bnbSupport,
     bool? ethereumSupport,
     bool? fantomSupport,
@@ -144,6 +148,8 @@ class BlockchainOptions extends Equatable {
     bool? testnet,
   }) {
     return BlockchainOptions(
+      associatedAddressFormat:
+          associatedAddressFormat ?? this.associatedAddressFormat,
       bnbSupport: bnbSupport ?? this.bnbSupport,
       ethereumSupport: ethereumSupport ?? this.ethereumSupport,
       fantomSupport: fantomSupport ?? this.fantomSupport,
@@ -161,6 +167,7 @@ class BlockchainOptions extends Equatable {
 
   @override
   List<Object?> get props => [
+        associatedAddressFormat,
         bnbSupport,
         ethereumSupport,
         fantomSupport,
@@ -694,6 +701,7 @@ class CustomOidc4VcProfile extends Equatable {
     this.pushAuthorizationRequest = false,
     this.statusListCache = true,
     this.dpopSupport = false,
+    this.formatsSupported = const [],
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
@@ -711,8 +719,15 @@ class CustomOidc4VcProfile extends Equatable {
         clientSecret: randomString(12),
       );
 
-  factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) =>
-      _$CustomOidc4VcProfileFromJson(json);
+  factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) {
+    final profileFromJson = _$CustomOidc4VcProfileFromJson(json);
+    if (profileFromJson.formatsSupported!.isEmpty) {
+      return profileFromJson.copyWith(
+        formatsSupported: <VCFormatType>[profileFromJson.vcFormatType],
+      );
+    }
+    return profileFromJson;
+  }
 
   final ClientAuthentication clientAuthentication;
   @JsonKey(defaultValue: false)
@@ -740,6 +755,7 @@ class CustomOidc4VcProfile extends Equatable {
   final ClientType clientType;
   @JsonKey(name: 'vcFormat')
   final VCFormatType vcFormatType;
+  final List<VCFormatType>? formatsSupported;
   final ProofType proofType;
   final bool dpopSupport;
 
@@ -777,6 +793,7 @@ class CustomOidc4VcProfile extends Equatable {
     SIOPV2DraftType? siopv2Draft,
     ClientType? clientType,
     VCFormatType? vcFormatType,
+    List<VCFormatType>? formatsSupported,
     ProofType? proofType,
     bool? dpopSupport,
   }) =>
@@ -801,6 +818,7 @@ class CustomOidc4VcProfile extends Equatable {
         vcFormatType: vcFormatType ?? this.vcFormatType,
         proofType: proofType ?? this.proofType,
         dpopSupport: dpopSupport ?? this.dpopSupport,
+        formatsSupported: formatsSupported ?? this.formatsSupported,
       );
 
   @override
@@ -821,6 +839,7 @@ class CustomOidc4VcProfile extends Equatable {
         siopv2Draft,
         clientType,
         vcFormatType,
+        formatsSupported,
         proofType,
         dpopSupport,
       ];

@@ -55,10 +55,15 @@ BlockchainOptions _$BlockchainOptionsFromJson(Map<String, dynamic> json) =>
       infuraApiKey: json['infuraApiKey'] as String?,
       etherlinkSupport: json['etherlinkSupport'] as bool?,
       testnet: json['testnet'] as bool?,
+      associatedAddressFormat: $enumDecodeNullable(
+              _$VCFormatTypeEnumMap, json['associatedAddressFormat']) ??
+          VCFormatType.ldpVc,
     );
 
 Map<String, dynamic> _$BlockchainOptionsToJson(BlockchainOptions instance) =>
     <String, dynamic>{
+      'associatedAddressFormat':
+          _$VCFormatTypeEnumMap[instance.associatedAddressFormat],
       'bnbSupport': instance.bnbSupport,
       'ethereumSupport': instance.ethereumSupport,
       'fantomSupport': instance.fantomSupport,
@@ -72,6 +77,15 @@ Map<String, dynamic> _$BlockchainOptionsToJson(BlockchainOptions instance) =>
       'tzproRpcNode': instance.tzproRpcNode,
       'testnet': instance.testnet,
     };
+
+const _$VCFormatTypeEnumMap = {
+  VCFormatType.ldpVc: 'ldp_vc',
+  VCFormatType.jwtVc: 'jwt_vc',
+  VCFormatType.jwtVcJson: 'jwt_vc_json',
+  VCFormatType.jwtVcJsonLd: 'jwt_vc_json-ld',
+  VCFormatType.vcSdJWT: 'vc+sd-jwt',
+  VCFormatType.auto: 'auto',
+};
 
 DiscoverCardsOptions _$DiscoverCardsOptionsFromJson(
         Map<String, dynamic> json) =>
@@ -247,6 +261,10 @@ CustomOidc4VcProfile _$CustomOidc4VcProfileFromJson(
           json['pushAuthorizationRequest'] as bool? ?? false,
       statusListCache: json['statusListCache'] as bool? ?? true,
       dpopSupport: json['dpopSupport'] as bool? ?? false,
+      formatsSupported: (json['formatsSupported'] as List<dynamic>?)
+              ?.map((e) => $enumDecode(_$VCFormatTypeEnumMap, e))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$CustomOidc4VcProfileToJson(
@@ -269,6 +287,9 @@ Map<String, dynamic> _$CustomOidc4VcProfileToJson(
       'siopv2Draft': _$SIOPV2DraftTypeEnumMap[instance.siopv2Draft]!,
       'subjectSyntaxeType': _$ClientTypeEnumMap[instance.clientType]!,
       'vcFormat': _$VCFormatTypeEnumMap[instance.vcFormatType]!,
+      'formatsSupported': instance.formatsSupported
+          ?.map((e) => _$VCFormatTypeEnumMap[e]!)
+          .toList(),
       'proofType': _$ProofTypeEnumMap[instance.proofType]!,
       'dpopSupport': instance.dpopSupport,
     };
@@ -307,15 +328,6 @@ const _$ClientTypeEnumMap = {
   ClientType.p256JWKThumprint: 'urn:ietf:params:oauth:jwk-thumbprint',
   ClientType.did: 'did',
   ClientType.confidential: 'confidential',
-};
-
-const _$VCFormatTypeEnumMap = {
-  VCFormatType.ldpVc: 'ldp_vc',
-  VCFormatType.jwtVc: 'jwt_vc',
-  VCFormatType.jwtVcJson: 'jwt_vc_json',
-  VCFormatType.jwtVcJsonLd: 'jwt_vc_json-ld',
-  VCFormatType.vcSdJWT: 'vc+sd-jwt',
-  VCFormatType.auto: 'auto',
 };
 
 const _$ProofHeaderTypeEnumMap = {
