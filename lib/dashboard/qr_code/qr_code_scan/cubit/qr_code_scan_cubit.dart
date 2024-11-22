@@ -288,7 +288,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             state.copyWith(
               qrScanStatus: QrScanStatus.idle,
               message: const StateMessage.info(
-                stringMessage: 'The required credential is not in your wallet',
+                stringMessage: 'The credential requested has not been found',
                 showDialog: true,
               ),
             ),
@@ -370,7 +370,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                     qrScanStatus: QrScanStatus.idle,
                     message: const StateMessage.info(
                       stringMessage:
-                          'The required credential is not in your wallet',
+                          'The credential requested has not been found',
                       showDialog: true,
                     ),
                   ),
