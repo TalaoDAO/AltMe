@@ -376,9 +376,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       ),
     );
 
-    if (qrCodeScanCubit.missingCredentialCompleter != null) {
-      qrCodeScanCubit.missingCredentialCompleter!.complete(true);
-    }
+    // if (qrCodeScanCubit.missingCredentialCompleter != null) {
+    //   qrCodeScanCubit.missingCredentialCompleter!.complete(true);
+    // }
   }
 
   void enableCredentialCategory({required CredentialCategory category}) {
@@ -731,8 +731,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 ),
               );
             }
-            if (jwtVcJsonType &&
-                discoverCardsOptions.displayVerifiableIdSdJwt) {
+            if (vcSdJWType && discoverCardsOptions.displayVerifiableIdSdJwt) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.verifiableIdCard,

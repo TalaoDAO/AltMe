@@ -11,11 +11,32 @@ Future<bool> isConnectedToInternet() async {
       return true;
     }
   }
-  final connectivityResult = await Connectivity().checkConnectivity();
-  if (connectivityResult == ConnectivityResult.mobile ||
-      connectivityResult == ConnectivityResult.wifi) {
+
+  final List<ConnectivityResult> connectivityResult =
+      await Connectivity().checkConnectivity();
+
+  if (connectivityResult.contains(ConnectivityResult.mobile)) {
+    // Mobile network available.
+    return true;
+  } else if (connectivityResult.contains(ConnectivityResult.wifi)) {
+    // Wi-fi is available.
+
+    // Note for Android:
+
+    // When both mobile and Wi-Fi are turned on system will return
+    // Wi-Fi only as active network type
+    return true;
+  } else if (connectivityResult.contains(ConnectivityResult.ethernet)) {
+    // Ethernet connection available.
+    return true;
+  } else if (connectivityResult.contains(ConnectivityResult.vpn)) {
+    // Vpn connection active.
+    // Note for iOS and macOS:
+    // There is no separate network interface type for [vpn].
+    // It returns [other] on any device (also simulator)
     return true;
   }
+
   log.e('No Internet Connection');
   return false;
 }
