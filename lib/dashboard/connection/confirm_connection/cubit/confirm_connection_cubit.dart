@@ -135,28 +135,11 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           final walletNamespaces = <String, Namespace>{};
 
           if (accounts.any((acc) => acc.startsWith('tezos'))) {
-            final methods = <String>[];
-            final events = <String>[];
-
-            final requiredNamespaces = params.requiredNamespaces['tezos'];
-
-            if (requiredNamespaces != null) {
-              methods.addAll(requiredNamespaces.methods);
-              events.addAll(requiredNamespaces.events);
-            }
-
-            final optionalNamespaces = params.optionalNamespaces['tezos'];
-
-            if (optionalNamespaces != null) {
-              methods.addAll(optionalNamespaces.methods);
-              events.addAll(optionalNamespaces.events);
-            }
-
             walletNamespaces['tezos'] = Namespace(
               accounts:
                   accounts.where((acc) => acc.startsWith('tezos')).toList(),
-              methods: methods,
-              events: events,
+              methods: Parameters.tezosConnectMethods,
+              events: Parameters.tezosEvents,
             );
           } else {
             walletNamespaces['eip155'] = Namespace(

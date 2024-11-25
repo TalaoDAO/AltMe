@@ -38,6 +38,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         Parameters.ETH_SIGN_TYPE_DATA_V4: ethSignTypedDataV4,
         // SupportedEVMMethods.switchChain.name: switchChain,
         // 'wallet_addEthereumChain': addChain,
+        Parameters.TEZOS_GET_ACCOUNTS: tezosGetAccounts,
+        Parameters.TEZOS_SIGN: tezosSign,
+        Parameters.TEZOS_SEND: tezosSend,
       };
 
   Map<String, dynamic Function(String, dynamic)> get methodRequestHandlers => {
@@ -99,15 +102,21 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         final CryptoAccount cryptoAccount =
             CryptoAccount.fromJson(cryptoAccountJson);
 
-        final eVMAccounts = cryptoAccount.data
-            .where((e) => e.blockchainType != BlockchainType.tezos)
-            .toList();
+        final cryptoAccounts = cryptoAccount.data.toList();
 
         log.i('registering acconts');
-        for (final evm in eVMAccounts) {
+        for (final accounts in cryptoAccounts) {
+          var chain = '';
+
+          if (accounts.blockchainType == BlockchainType.tezos) {
+            chain = 'tezos:mainnet';
+          } else {
+            chain = accounts.blockchainType.chain;
+          }
+
           _reownWalletKit!.registerAccount(
-            chainId: evm.blockchainType.chain,
-            accountAddress: evm.walletAddress,
+            chainId: chain,
+            accountAddress: accounts.walletAddress,
           );
         }
       }
@@ -115,15 +124,21 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       /// register request emitter and request handler for all supported evms
 
       for (final blockchainType in BlockchainType.values) {
-        if (blockchainType == BlockchainType.tezos) {
-          continue;
-        }
         log.i(blockchainType);
+
+        var chain = '';
+
+        if (blockchainType == BlockchainType.tezos) {
+          chain = 'tezos:mainnet';
+        } else {
+          chain = blockchainType.chain;
+        }
+
         log.i('registerEventEmitter');
-        registerEventEmitter(blockchainType.chain);
+        registerEventEmitter(chain);
 
         log.i('registerRequestHandler');
-        registerRequestHandler(blockchainType.chain);
+        registerRequestHandler(chain);
       }
 
       _reownWalletKit!.onSessionRequest.subscribe(_onSessionRequest);
@@ -594,6 +609,27 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
     completer.removeLast();
     return result;
+  }
+
+  Future<String> tezosGetAccounts(String topic, dynamic parameters) async {
+    log.i('tezosGetAccounts topic: $topic');
+    log.i('tezosGetAccounts parameters: $parameters');
+
+    return 'result';
+  }
+
+  Future<String> tezosSign(String topic, dynamic parameters) async {
+    log.i('tezosSign topic: $topic');
+    log.i('tezosSign parameters: $parameters');
+
+    return 'result';
+  }
+
+  Future<String> tezosSend(String topic, dynamic parameters) async {
+    log.i('tezosSend topic: $topic');
+    log.i('tezosSend parameters: $parameters');
+
+    return 'result';
   }
 
   Transaction getTransaction(dynamic parameters) {

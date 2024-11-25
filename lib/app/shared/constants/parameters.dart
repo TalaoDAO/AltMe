@@ -65,6 +65,18 @@ class Parameters {
     ETH_SIGN_TYPE_DATA_V4,
   ];
 
+  static const TEZOS_SIGN = 'tezos_sign';
+  static const TEZOS_SEND = 'tezos_send';
+  static const TEZOS_GET_ACCOUNTS = 'tezos_getAccounts';
+
+  static const tezosConnectMethods = [
+    TEZOS_SIGN,
+    TEZOS_SEND,
+    TEZOS_GET_ACCOUNTS,
+  ];
+
+  static const tezosEvents = <String>[];
+
   static const chainChanged = 'chainChanged';
   static const accountsChanged = 'accountsChanged';
 
@@ -75,7 +87,11 @@ class Parameters {
 
   static const optionalEvents = ['message', 'disconnect', 'connect'];
 
-  static const allEvents = [...requiredEvents, ...optionalEvents];
+  static const allEvents = [
+    ...tezosEvents,
+    ...requiredEvents,
+    ...optionalEvents
+  ];
 
   static const String clientId = 'urn:altme:0001';
   static const int maxEntries = 3;
