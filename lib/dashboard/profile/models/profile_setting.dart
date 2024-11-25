@@ -695,6 +695,7 @@ class CustomOidc4VcProfile extends Equatable {
     required this.clientType,
     this.clientId = Parameters.clientId,
     this.clientSecret = 'FGbzMrvUpeFr',
+    this.vcFormatType = VCFormatType.jwtVcJson,
     this.proofHeader = ProofHeaderType.kid,
     this.proofType = ProofType.jwt,
     this.pushAuthorizationRequest = false,
@@ -752,6 +753,8 @@ class CustomOidc4VcProfile extends Equatable {
   final SIOPV2DraftType siopv2Draft;
   @JsonKey(name: 'subjectSyntaxeType')
   final ClientType clientType;
+  @JsonKey(name: 'vcFormat')
+  final VCFormatType vcFormatType;
   final List<VCFormatType>? formatsSupported;
   final ProofType proofType;
   final bool dpopSupport;
@@ -812,6 +815,7 @@ class CustomOidc4VcProfile extends Equatable {
         clientType: clientType ?? this.clientType,
         clientId: clientId ?? this.clientId,
         clientSecret: clientSecret ?? this.clientSecret,
+        vcFormatType: vcFormatType ?? this.vcFormatType,
         proofType: proofType ?? this.proofType,
         dpopSupport: dpopSupport ?? this.dpopSupport,
         formatsSupported: formatsSupported ?? this.formatsSupported,
@@ -834,6 +838,7 @@ class CustomOidc4VcProfile extends Equatable {
         pushAuthorizationRequest,
         siopv2Draft,
         clientType,
+        vcFormatType,
         formatsSupported,
         proofType,
         dpopSupport,
