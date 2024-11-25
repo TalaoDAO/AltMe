@@ -6,7 +6,6 @@ export 'discover/discover.dart';
 export 'drawer/drawer.dart';
 export 'home/home.dart';
 export 'json_viewer/json_viewer.dart';
-export 'missing_creentials/missing_credentials.dart';
 export 'mnemonic_verification/mnemonic_verification.dart';
 export 'profile/profile.dart';
 export 'qr_code/qr_code.dart';

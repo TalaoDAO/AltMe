@@ -157,7 +157,7 @@ CredentialSubjectType? getCredTypeFromName(String credentialName) {
 
 Future<bool> isCredentialPresentable({
   required CredentialSubjectType? credentialSubjectType,
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
 }) async {
   if (credentialSubjectType == null) {
     return true;
@@ -165,7 +165,7 @@ Future<bool> isCredentialPresentable({
 
   final isPresentable = await isCredentialAvaialble(
     credentialSubjectType: credentialSubjectType,
-    vcFormatType: vcFormatType,
+    formatsSupported: formatsSupported,
   );
 
   return isPresentable;
@@ -173,7 +173,7 @@ Future<bool> isCredentialPresentable({
 
 Future<bool> isCredentialAvaialble({
   required CredentialSubjectType credentialSubjectType,
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
 }) async {
   /// fetching all the credentials
   final CredentialsRepository repository =
@@ -185,8 +185,11 @@ Future<bool> isCredentialAvaialble({
     final matchSubjectType = credentialSubjectType ==
         credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
-
-    final matchFormat = vcFormatType.vcValue == credential.format;
+    final formatsSupportedStrings =
+        formatsSupported.map((e) => e.vcValue).toList();
+    final matchFormat =
+        formatsSupportedStrings.contains(credential.getFormat) ||
+            credential.getFormat == 'auto';
     if (matchSubjectType && matchFormat) {
       return true;
     }

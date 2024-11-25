@@ -280,7 +280,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final isPresentable = await isVCPresentable(
           presentationDefinition: presentationDefinition,
           clientMetaData: null,
-          formatsSupported: customOidc4vcProfile.formatsSupported,
+          formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
         );
 
         if (!isPresentable) {
@@ -361,7 +361,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
               final isPresentable = await isCredentialPresentable(
                 credentialSubjectType: credentialSubjectType,
-                vcFormatType: customOidc4vcProfile.vcFormatType,
+                formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
               );
 
               if (!isPresentable) {
@@ -1326,7 +1326,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           clientSecret: clientSecret,
           clientAuthentication: customOidc4vcProfile.clientAuthentication,
           oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
-          vcFormatType: customOidc4vcProfile.vcFormatType,
+          formatsSupported: customOidc4vcProfile.formatsSupported??[],
           oAuthClientAttestation: oAuthClientAttestation,
           oAuthClientAttestationPop: oAuthClientAttestationPop,
           secureAuthorizedFlow: customOidc4vcProfile.pushAuthorizationRequest,

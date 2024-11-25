@@ -145,7 +145,7 @@ class OIDC4VC {
     required bool scope,
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
-    required VCFormatType vcFormatType,
+    required List<VCFormatType> formatsSupported,
     required bool secureAuthorizedFlow,
     required Dio dio,
     required dynamic credentialOfferJson,
@@ -193,7 +193,7 @@ class OIDC4VC {
         scope: scope,
         clientAuthentication: clientAuthentication,
         oidc4vciDraftType: oidc4vciDraftType,
-        vcFormatType: vcFormatType,
+        formatsSuported: formatsSupported,
         secureAuthorizedFlow: secureAuthorizedFlow,
         isEBSIProfile: isEBSIProfile,
         walletIssuer: walletIssuer,
@@ -225,7 +225,7 @@ class OIDC4VC {
     required bool scope,
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
-    required VCFormatType vcFormatType,
+    required List<VCFormatType> formatsSuported,
     required bool secureAuthorizedFlow,
     required bool isEBSIProfile,
     required String walletIssuer,
@@ -298,7 +298,7 @@ class OIDC4VC {
             'credential_configuration_id': credential,
           };
           if (oidc4vciDraftType == OIDC4VCIDraftType.draft13 &&
-              vcFormatType == VCFormatType.vcSdJWT) {
+              formatsSuported == VCFormatType.vcSdJWT) {
             data = {
               'type': 'openid_credential',
               'format': 'vc+sd-jwt',
@@ -938,7 +938,7 @@ class OIDC4VC {
     required String issuer,
     required String kid,
     required String privateKey,
-    required VCFormatType vcFormatType,
+    required List<VCFormatType> formatsSupported,
   }) async {
     final credentialData = <String, dynamic>{};
 
@@ -1017,12 +1017,12 @@ class OIDC4VC {
         credentialData['format'] = format;
 
         if (credentialDefinition != null) {
-          if (vcFormatType == VCFormatType.jwtVcJson) {
+          if (formatsSupported == VCFormatType.jwtVcJson) {
             credentialDefinition.removeWhere((key, _) => key != 'type');
           }
 
-          if (vcFormatType == VCFormatType.ldpVc ||
-              vcFormatType == VCFormatType.jwtVcJsonLd) {
+          if (formatsSupported == VCFormatType.ldpVc ||
+              formatsSupported == VCFormatType.jwtVcJsonLd) {
             credentialDefinition
                 .removeWhere((key, _) => key != 'type' && key != '@context');
           }
