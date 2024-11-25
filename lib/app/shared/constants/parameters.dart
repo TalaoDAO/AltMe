@@ -55,7 +55,7 @@ class Parameters {
   static const ETH_SEND_TRANSACTION = 'eth_sendTransaction';
   static const ETH_SIGN_TYPE_DATA_V4 = 'eth_signTypedData_v4';
 
-  static const walletConnectMethods = [
+  static const evmConnectMethods = [
     PERSONAL_SIGN,
     ETH_SIGN,
     ETH_SIGN,
