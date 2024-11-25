@@ -17,14 +17,14 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
     required List<CredentialModel> credentialList,
     required CredentialModel credential,
     required int inputDescriptorIndex,
-    required VCFormatType vcFormatType,
+    required List<VCFormatType> formatsSupported,
     required ProfileType profileType,
   }) : super(const CredentialManifestPickState(filteredCredentialList: [])) {
     filterList(
       credentialList: credentialList,
       credential: credential,
       inputDescriptorIndex: inputDescriptorIndex,
-      vcFormatType: vcFormatType,
+      formatsSupported: formatsSupported,
       profileType: profileType,
     );
   }
@@ -33,7 +33,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
     required List<CredentialModel> credentialList,
     required CredentialModel credential,
     required int inputDescriptorIndex,
-    required VCFormatType vcFormatType,
+    required List<VCFormatType> formatsSupported,
     required ProfileType profileType,
   }) {
     var presentationDefinition =
@@ -48,7 +48,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
       credentialList: List.from(credentialList),
       inputDescriptorIndex: inputDescriptorIndex,
       clientMetaData: null,
-      vcFormatType: vcFormatType,
+      formatsSupported: formatsSupported,
       profileType: profileType,
     );
 

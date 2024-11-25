@@ -280,7 +280,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final isPresentable = await isVCPresentable(
           presentationDefinition: presentationDefinition,
           clientMetaData: null,
-          vcFormatType: customOidc4vcProfile.vcFormatType,
+          formatsSupported: customOidc4vcProfile.formatsSupported,
         );
 
         if (!isPresentable) {
@@ -896,7 +896,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<bool> isVCPresentable({
-    required VCFormatType vcFormatType,
+    required List<VCFormatType> formatsSupported,
     required PresentationDefinition? presentationDefinition,
     required Map<String, dynamic>? clientMetaData,
   }) async {
@@ -914,7 +914,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           credentialList: List.from(credentialList),
           inputDescriptorIndex: index,
           clientMetaData: clientMetaData,
-          vcFormatType: vcFormatType,
+          formatsSupported: formatsSupported,
           profileType: profileCubit.state.model.profileType,
         );
         if (filteredCredentialList.isEmpty) {
@@ -1042,49 +1042,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       presentationDefinition,
     );
 
-    // final isPresentable = await isVCPresentable(
-    //   presentationDefinition: presentationDefinition,
-    //   clientMetaData: clientMetaData,
-    //   vcFormatType: profileCubit.state.model.profileSetting
-    //       .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
-    // );
-
-    // if (!isPresentable) {
-    //   emit(
-    //     state.copyWith(
-    //       qrScanStatus: QrScanStatus.success,
-    //       route: MissingCredentialsPage.route(
-    //         credentialManifest: credentialManifest,
-    //       ),
-    //     ),
-    //   );
-
-    //   missingCredentialCompleter = Completer<bool>();
-    //   final value = await missingCredentialCompleter!.future;
-    //   missingCredentialCompleter = null;
-
-    //   if (value) {
-    //     final isPresentable = await isVCPresentable(
-    //       presentationDefinition: presentationDefinition,
-    //       clientMetaData: clientMetaData,
-    //       vcFormatType: profileCubit.state.model.profileSetting
-    //           .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType,
-    //     );
-
-    //     if (!isPresentable) {
-    //       throw ResponseMessage(
-    //         message: ResponseString
-    //             .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-    //       );
-    //     }
-    //   } else {
-    //     throw ResponseMessage(
-    //       message: ResponseString
-    //           .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-    //     );
-    //   }
-    // }
-
     final CredentialModel credentialPreview = CredentialModel(
       id: 'id',
       image: 'image',
@@ -1092,14 +1049,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       shareLink: 'shareLink',
       data: const {},
       jwt: null,
-      format: profileCubit
-          .state
-          .model
-          .profileSetting
-          .selfSovereignIdentityOptions
-          .customOidc4vcProfile
-          .vcFormatType
-          .vcValue,
       credentialManifest: credentialManifest,
       profileLinkedId: profileCubit.state.model.profileType.getVCId,
     );

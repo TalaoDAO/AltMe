@@ -1794,7 +1794,7 @@ List<String> getStringCredentialsForToken({
 
 //(presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt)
 List<VCFormatType> getPresentVCDetails({
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
   required PresentationDefinition presentationDefinition,
   required Map<String, dynamic>? clientMetaData,
   required List<CredentialModel> credentialsToBePresented,
@@ -1871,11 +1871,22 @@ List<VCFormatType> getPresentVCDetails({
   }
 
   /// create list of supported formats
-  if (presentLdpVc) supportingFormats.add(VCFormatType.ldpVc);
-  if (presentJwtVc) supportingFormats.add(VCFormatType.jwtVc);
-  if (presentJwtVcJson) supportingFormats.add(VCFormatType.jwtVcJson);
-  if (presentJwtVcJsonLd) supportingFormats.add(VCFormatType.jwtVcJsonLd);
-  if (presentVcSdJwt) supportingFormats.add(VCFormatType.vcSdJWT);
+  if (presentLdpVc && formatsSupported.contains(VCFormatType.ldpVc)) {
+    supportingFormats.add(VCFormatType.ldpVc);
+  }
+  if (presentJwtVc && formatsSupported.contains(VCFormatType.jwtVc)) {
+    supportingFormats.add(VCFormatType.jwtVc);
+  }
+  if (presentJwtVcJson && formatsSupported.contains(VCFormatType.jwtVcJson)) {
+    supportingFormats.add(VCFormatType.jwtVcJson);
+  }
+  if (presentJwtVcJsonLd &&
+      formatsSupported.contains(VCFormatType.jwtVcJsonLd)) {
+    supportingFormats.add(VCFormatType.jwtVcJsonLd);
+  }
+  if (presentVcSdJwt && formatsSupported.contains(VCFormatType.vcSdJWT)) {
+    supportingFormats.add(VCFormatType.vcSdJWT);
+  }
 
   return supportingFormats;
 }

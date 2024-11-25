@@ -1088,7 +1088,7 @@ void main() {
               () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.ldpVc,
+                formatsSupported: VCFormatType.ldpVc,
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: Format.fromJson(
@@ -1116,7 +1116,7 @@ void main() {
 
             expect(
               () => getPresentVCDetails(
-                vcFormatType: VCFormatType.ldpVc,
+                formatsSupported: VCFormatType.ldpVc,
                 presentationDefinition: presentationDefinition,
                 clientMetaData: null,
                 credentialsToBePresented: [],
@@ -1136,7 +1136,7 @@ void main() {
               ' and clientMetaData are null', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.jwtVc,
+                formatsSupported: VCFormatType.jwtVc,
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
@@ -1160,7 +1160,7 @@ void main() {
               ' and clientMetaData are null', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.jwtVcJson,
+                formatsSupported: VCFormatType.jwtVcJson,
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
@@ -1184,7 +1184,7 @@ void main() {
               ' and clientMetaData are null', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.vcSdJWT,
+                formatsSupported: VCFormatType.vcSdJWT,
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
@@ -1208,7 +1208,7 @@ void main() {
               ' and clientMetaData is provided', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.jwtVcJson,
+                formatsSupported: VCFormatType.jwtVcJson,
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
@@ -1230,7 +1230,7 @@ void main() {
               ' and clientMetaData is provided', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.vcSdJWT,
+                formatsSupported: VCFormatType.vcSdJWT,
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,

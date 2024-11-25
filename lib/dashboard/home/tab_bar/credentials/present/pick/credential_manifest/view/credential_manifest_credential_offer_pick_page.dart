@@ -53,8 +53,12 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
           credential: credential,
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
-          vcFormatType: profileModel.profileSetting.selfSovereignIdentityOptions
-              .customOidc4vcProfile.vcFormatType,
+          formatsSupported: profileModel
+                  .profileSetting
+                  .selfSovereignIdentityOptions
+                  .customOidc4vcProfile
+                  .formatsSupported ??
+              [],
           profileType: profileModel.profileType,
         );
       },
@@ -92,58 +96,6 @@ class CredentialManifestOfferPickView extends StatefulWidget {
 
 class _CredentialManifestOfferPickViewState
     extends State<CredentialManifestOfferPickView> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     final isVcSdJWT = context
-  //             .read<CredentialManifestPickCubit>()
-  //             .state
-  //             .filteredCredentialList
-  //             .firstOrNull
-  //             ?.getFormat ==
-  //         VCFormatType.vcSdJWT.vcValue;
-
-  //     if (isVcSdJWT) {
-  //       final element = context
-  //           .read<CredentialManifestPickCubit>()
-  //           .state
-  //           .filteredCredentialList;
-
-  //       final containsSingleElement = element.isNotEmpty && element.length == 1;
-  //       if (containsSingleElement) {
-  //         final PresentationDefinition? presentationDefinition = context
-  //             .read<CredentialManifestPickCubit>()
-  //             .state
-  //             .presentationDefinition;
-
-  //         if (presentationDefinition != null) {
-  //           context.read<CredentialManifestPickCubit>().toggle(
-  //                 index: 0,
-  //                 inputDescriptor: presentationDefinition
-  //                     .inputDescriptors[widget.inputDescriptorIndex],
-  //                 isVcSdJWT: isVcSdJWT,
-  //               );
-
-  //           final credentialManifestState =
-  //               context.read<CredentialManifestPickCubit>().state;
-  //           final credentialToBePresented = credentialManifestState
-  //               .filteredCredentialList[credentialManifestState.selected.first];
-
-  //           Navigator.of(context).pushReplacement<void, void>(
-  //             SelectiveDisclosurePickPage.route(
-  //               uri: widget.uri,
-  //               issuer: widget.issuer,
-  //               credential: widget.credential,
-  //               credentialToBePresented: credentialToBePresented,
-  //               presentationDefinition: presentationDefinition,
-  //             ),
-  //           );
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

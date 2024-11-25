@@ -53,9 +53,9 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
       body: BlocListener<ProfileCubit, ProfileState>(
         listenWhen: (previous, current) {
           if (current.model.profileSetting.selfSovereignIdentityOptions
-                  .customOidc4vcProfile.vcFormatType !=
+                  .customOidc4vcProfile.formatsSupported !=
               previous.model.profileSetting.selfSovereignIdentityOptions
-                  .customOidc4vcProfile.vcFormatType) {
+                  .customOidc4vcProfile.formatsSupported) {
             return true;
           }
 

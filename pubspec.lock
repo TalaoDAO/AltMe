@@ -430,18 +430,18 @@ packages:
     dependency: "direct main"
     description:
       name: connectivity_plus
-      sha256: "224a77051d52a11fbad53dd57827594d3bd24f945af28bd70bab376d68d437f0"
+      sha256: "876849631b0c7dc20f8b471a2a03142841b482438e3b707955464f5ffca3e4c3"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.2"
+    version: "6.1.0"
   connectivity_plus_platform_interface:
     dependency: transitive
     description:
       name: connectivity_plus_platform_interface
-      sha256: cf1d1c28f4416f8c654d7dc3cd638ec586076255d407cef3ddbdaf178272a71a
+      sha256: "42657c1715d48b167930d5f34d00222ac100475f73d10162ddf43e714932f204"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.4"
+    version: "2.0.1"
   convert:
     dependency: "direct main"
     description:
@@ -747,10 +747,10 @@ packages:
     dependency: "direct main"
     description:
       name: equatable
-      sha256: b35578f687b79243d39008c44d638474d93e9091e578c970efef41ce0c3fa000
+      sha256: "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.6"
+    version: "2.0.7"
   eth_sig_util:
     dependency: "direct main"
     description:
@@ -2056,6 +2056,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.3"
+  reown_core:
+    dependency: transitive
+    description:
+      name: reown_core
+      sha256: e21ad9ca211ecd5221f027a76f978105eaf2335edb0687ddcebda1da53417d20
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
+  reown_sign:
+    dependency: transitive
+    description:
+      name: reown_sign
+      sha256: ef2493a3992772d9495b9232b4ece7e7be0e0893f88d34f80aa6eda2e49b3e6e
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
+  reown_walletkit:
+    dependency: "direct main"
+    description:
+      name: reown_walletkit
+      sha256: "1fba5538db1b595f3b7ba09a4ac6ae5cc09a8488749bd27df7bdc7535ffc3c49"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   retry:
     dependency: transitive
     description:
@@ -2581,14 +2605,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.13"
-  walletconnect_flutter_v2:
-    dependency: "direct main"
-    description:
-      name: walletconnect_flutter_v2
-      sha256: "4a77de8d33f5d1f6b6ae07d4d2f7bf591ddb6c4cd671bf7493100798d92fa4d3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.0"
   watcher:
     dependency: transitive
     description:

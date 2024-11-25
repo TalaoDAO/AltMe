@@ -5,7 +5,7 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 List<CredentialModel> getCredentialsFromPresentationDefinition({
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
   required PresentationDefinition presentationDefinition,
   required Map<String, dynamic>? clientMetaData,
   required List<CredentialModel> credentialList,
@@ -21,7 +21,7 @@ List<CredentialModel> getCredentialsFromPresentationDefinition({
     presentationDefinition: presentationDefinition,
     filterList: filterList,
     clientMetaData: clientMetaData,
-    vcFormatType: vcFormatType,
+    formatsSupported: formatsSupported,
   );
 
   /// If we have some instructions we filter the wallet's
