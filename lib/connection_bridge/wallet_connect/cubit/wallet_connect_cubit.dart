@@ -8,6 +8,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -704,7 +705,43 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('tezosSend topic: $topic');
     log.i('tezosSend parameters: $parameters');
 
-    return 'result';
+    log.i('completer initialise');
+    completer.add(Completer<String>());
+
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
+
+    final operationDetails = getTezosOperationDetails(
+      parameters as Map<String, dynamic>,
+    );
+
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.operation,
+        parameters: parameters,
+        sessionTopic: topic,
+        signType: Parameters.TEZOS_SEND,
+        operationDetails: operationDetails,
+      ),
+    );
+
+    final String result = await completer[completer.length - 1]!.future;
+    log.i('complete - $result');
+
+    if (result == 'Failed') {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'User rejected method'),
+      );
+    } else {
+      response = response.copyWith(result: {'operationHash': result});
+    }
+
+    await _reownWalletKit!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+    completer.removeLast();
+    return result;
   }
 
   Transaction getTransaction(dynamic parameters) {
@@ -759,6 +796,33 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     );
 
     return transaction;
+  }
+
+  List<OperationDetails> getTezosOperationDetails(
+    Map<String, dynamic> parameters,
+  ) {
+    final from = parameters['account'];
+    final operations = parameters['operations'] as List<dynamic>;
+
+    final operationDetails = <OperationDetails>[];
+    for (final op in operations) {
+      final operationDetail = OperationDetails(
+        source: from.toString(),
+        amount: op['amount'].toString(),
+        destination: op['destination'].toString(),
+        kind: stringToEnum(op['kind'].toString()),
+      );
+      operationDetails.add(operationDetail);
+    }
+
+    return operationDetails;
+  }
+
+  OperationKind stringToEnum(String operation) {
+    return OperationKind.values.firstWhere(
+      (e) => e.toString().split('.').last == operation,
+      orElse: () => OperationKind.transaction,
+    );
   }
 
   Future<void> disconnectSession(String topic) async {
