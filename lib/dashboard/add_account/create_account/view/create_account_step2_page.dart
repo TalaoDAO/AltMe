@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -31,6 +32,7 @@ class CreateAccountStep2Page extends StatelessWidget {
         qrCodeScanCubit: context.read<QRCodeScanCubit>(),
         credentialsCubit: context.read<CredentialsCubit>(),
         walletCubit: context.read<WalletCubit>(),
+        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: CreateAccountStep2View(
         accountType: accountType,

@@ -12,6 +12,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:key_generator/key_generator.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -23,6 +24,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     required this.connectedDappRepository,
     required this.secureStorageProvider,
     required this.routeCubit,
+    required this.walletCubit,
   }) : super(const WalletConnectState()) {
     initialise();
   }
@@ -30,6 +32,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   final ConnectedDappRepository connectedDappRepository;
   final SecureStorageProvider secureStorageProvider;
   final RouteCubit routeCubit;
+  final WalletCubit walletCubit;
 
   Map<String, dynamic Function(String, dynamic)> get sessionRequestHandlers => {
         Parameters.ETH_SIGN: ethSign,
@@ -615,14 +618,86 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('tezosGetAccounts topic: $topic');
     log.i('tezosGetAccounts parameters: $parameters');
 
-    return 'result';
+    final currentAccount = walletCubit.state.currentAccount!;
+
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(
+      id: pRequest.id,
+      jsonrpc: '2.0',
+    );
+
+    final isTezos = currentAccount.blockchainType == BlockchainType.tezos;
+
+    if (isTezos) {
+      final pubkey = await KeyGenerator().hexPubKey(
+        secretKey: currentAccount.secretKey,
+        accountType: AccountType.tezos,
+      );
+
+      response = response.copyWith(
+        result: [
+          {
+            'algo': 'ed25519',
+            'pubkey': pubkey,
+            'address': currentAccount.walletAddress,
+          }
+        ],
+      );
+    } else {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'Wrong blockchain'),
+      );
+    }
+
+    await _reownWalletKit!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+
+    return 'true';
   }
 
   Future<String> tezosSign(String topic, dynamic parameters) async {
     log.i('tezosSign topic: $topic');
-    log.i('tezosSign parameters: $parameters');
 
-    return 'result';
+    log.i('received tezos sign request: $parameters');
+
+    log.i('completer initialise');
+    completer.add(Completer<String>());
+
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
+
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.signPayload,
+        parameters: parameters,
+        sessionTopic: topic,
+        signType: Parameters.TEZOS_SIGN,
+      ),
+    );
+
+    final String result = await completer[completer.length - 1]!.future;
+    log.i('complete - $result');
+
+    if (result == 'Failed') {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'User rejected method'),
+      );
+    } else {
+      response = response.copyWith(
+        result: {'signature': result},
+      );
+    }
+
+    await _reownWalletKit!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+
+    completer.removeLast();
+    emit(state.copyWith(status: WalletConnectStatus.idle));
+    return result;
   }
 
   Future<String> tezosSend(String topic, dynamic parameters) async {
