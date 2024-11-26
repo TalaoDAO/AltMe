@@ -17,6 +17,9 @@ WalletConnectState _$WalletConnectStateFromJson(Map<String, dynamic> json) =>
       sessionTopic: json['sessionTopic'] as String?,
       parameters: json['parameters'],
       signType: json['signType'] as String?,
+      operationDetails: (json['operationDetails'] as List<dynamic>?)
+          ?.map((e) => OperationDetails.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$WalletConnectStateToJson(WalletConnectState instance) =>
@@ -26,6 +29,7 @@ Map<String, dynamic> _$WalletConnectStateToJson(WalletConnectState instance) =>
       'sessionTopic': instance.sessionTopic,
       'parameters': instance.parameters,
       'signType': instance.signType,
+      'operationDetails': instance.operationDetails,
     };
 
 const _$WalletConnectStatusEnumMap = {
