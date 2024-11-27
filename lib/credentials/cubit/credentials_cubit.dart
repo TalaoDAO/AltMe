@@ -450,8 +450,11 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
       final isFormatMatched = iteratedCredentialFormat == credential.format;
 
+      final isOnSameProfile = storedCredential.profileLinkedId ==
+          profileCubit.state.model.profileType.getVCId;
+
       final isCredentialMatched =
-          isCredentialSubjectTypeMatched && isFormatMatched;
+          isCredentialSubjectTypeMatched && isFormatMatched && isOnSameProfile;
 
       if (isCredentialMatched) {
         // credential and format matches
@@ -460,11 +463,18 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         /// with same email address
         if (credentialSubjectModel.credentialSubjectType ==
             CredentialSubjectType.emailPass) {
-          final String? oldEmail =
-              (credentialSubjectModel as EmailPassModel).email;
-          final newEmail =
-              (iteratedCredentialSubjectModel as EmailPassModel).email;
-
+          late String? oldEmail;
+          late String? newEmail;
+          if (credential.data['email'] != null) {
+            oldEmail = credential.data['email'] as String;
+          } else {
+            oldEmail = (credentialSubjectModel as EmailPassModel).email;
+          }
+          if (storedCredential.data['email'] != null) {
+            newEmail = storedCredential.data['email'] as String;
+          } else {
+            newEmail = (iteratedCredentialSubjectModel as EmailPassModel).email;
+          }
           if (oldEmail != null && oldEmail == newEmail) {
             /// check if email is same
 
@@ -680,6 +690,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 );
                 break;
               }
+              break;
             }
 
             /// Over 21
@@ -757,6 +768,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 );
                 break;
               }
+              break;
             }
 
             /// age range
@@ -793,6 +805,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 );
                 break;
               }
+              break;
             }
 
             /// gender
@@ -871,6 +884,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 );
                 break;
               }
+              break;
             }
 
             /// Phone Pass
@@ -896,6 +910,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 );
                 break;
               }
+              break;
             }
 
           case CredentialCategory.educationCards:

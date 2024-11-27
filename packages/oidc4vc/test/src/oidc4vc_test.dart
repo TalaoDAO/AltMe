@@ -277,7 +277,7 @@ void main() {
             scope: false,
             clientAuthentication: ClientAuthentication.clientId,
             oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-            formatsSupported: VCFormatType.jwtVcJson,
+            formatsSupported: [VCFormatType.jwtVcJson],
             secureAuthorizedFlow: false,
             issuer: issuer,
             dio: client,
@@ -318,7 +318,7 @@ void main() {
               redirectUri: '',
               scope: false,
               secureAuthorizedFlow: false,
-              formatsSupported: VCFormatType.jwtVc,
+              formatsSupported: [VCFormatType.jwtVc],
               credentialOfferJson: credentialOfferJson,
               dio: client,
               isEBSIProfile: true,
@@ -439,7 +439,7 @@ void main() {
               scope: false,
               clientAuthentication: ClientAuthentication.clientId,
               oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-              formatsSupported: VCFormatType.jwtVcJson,
+              formatsSupported: [VCFormatType.jwtVcJson],
               oAuthClientAttestation:
                   'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA',
               oAuthClientAttestationPop:
@@ -504,7 +504,7 @@ void main() {
               scope: false,
               clientAuthentication: ClientAuthentication.clientId,
               oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-              formatsSupported: VCFormatType.jwtVcJson,
+              formatsSupported: [VCFormatType.jwtVcJson],
               oAuthClientAttestation:
                   'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA',
               oAuthClientAttestationPop:
