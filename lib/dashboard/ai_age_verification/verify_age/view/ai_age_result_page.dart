@@ -5,26 +5,31 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class AiAgeResultPage extends StatelessWidget {
   const AiAgeResultPage({
     super.key,
     required this.blocContext,
     required this.credentialSubjectType,
+    required this.vcFormatType,
   });
 
   final BuildContext blocContext;
   final CredentialSubjectType credentialSubjectType;
+  final VCFormatType vcFormatType;
 
   static Route<dynamic> route({
     required BuildContext context,
     required CredentialSubjectType credentialSubjectType,
+    required VCFormatType vcFormatType,
   }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/AiAgeResultPage'),
       builder: (_) => AiAgeResultPage(
         blocContext: context,
         credentialSubjectType: credentialSubjectType,
+        vcFormatType: vcFormatType,
       ),
     );
   }
@@ -35,6 +40,7 @@ class AiAgeResultPage extends StatelessWidget {
       create: (context) => BlocProvider.of<CameraCubit>(blocContext),
       child: AiAgeResultView(
         credentialSubjectType: credentialSubjectType,
+        vcFormatType: vcFormatType,
       ),
     );
   }
@@ -44,9 +50,11 @@ class AiAgeResultView extends StatefulWidget {
   const AiAgeResultView({
     super.key,
     required this.credentialSubjectType,
+    required this.vcFormatType,
   });
 
   final CredentialSubjectType credentialSubjectType;
+  final VCFormatType vcFormatType;
 
   @override
   State<AiAgeResultView> createState() => _AiAgeResultViewState();
@@ -77,8 +85,11 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
                     ? SuccessWidget(
                         ageEstimate: state.ageEstimate,
                         credentialSubjectType: widget.credentialSubjectType,
+                        vcFormatType: widget.vcFormatType,
                       )
-                    : const FailureWidget(),
+                    : FailureWidget(
+                        vcFormatType: widget.vcFormatType,
+                      ),
               ),
             ),
             if (state.acquiredCredentialsQuantity > 0)
@@ -102,9 +113,12 @@ class SuccessWidget extends StatelessWidget {
     super.key,
     required this.credentialSubjectType,
     required this.ageEstimate,
+    required this.vcFormatType,
   });
+
   final CredentialSubjectType credentialSubjectType;
   final String ageEstimate;
+  final VCFormatType vcFormatType;
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +177,12 @@ class SuccessWidget extends StatelessWidget {
 }
 
 class FailureWidget extends StatelessWidget {
-  const FailureWidget({super.key});
+  const FailureWidget({
+    super.key,
+    required this.vcFormatType,
+  });
+
+  final VCFormatType vcFormatType;
 
   @override
   Widget build(BuildContext context) {
@@ -211,6 +230,7 @@ class FailureWidget extends StatelessWidget {
                   context,
                   CameraPage.route(
                     credentialSubjectType: CredentialSubjectType.over13,
+                    vcFormatType: vcFormatType,
                   ),
                 );
               },

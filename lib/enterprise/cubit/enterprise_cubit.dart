@@ -147,6 +147,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
   Future<void> applyConfiguration({
     required QRCodeScanCubit qrCodeScanCubit,
+    required ManageNetworkCubit manageNetworkCubit,
     required AppStatus status,
   }) async {
     assert(state.profileSettingJson != null, 'Profile setting is missing.');
@@ -186,6 +187,18 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       await profileCubit.setWalletType(
         walletType: WalletType.enterprise,
       );
+
+      final testnet = profileSetting.blockchainOptions?.testnet;
+      if (testnet != null) {
+        final blockchainType =
+            manageNetworkCubit.walletCubit.state.currentAccount!.blockchainType;
+        final currentNetworkList = blockchainType.networks;
+        if (testnet) {
+          await manageNetworkCubit.setNetwork(currentNetworkList[1]);
+        } else {
+          await manageNetworkCubit.setNetwork(currentNetworkList[0]);
+        }
+      }
 
       // if enterprise and walletAttestation data is available and added
       await credentialsCubit.addWalletCredential(
@@ -454,7 +467,9 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     }
   }
 
-  Future<void> updateTheConfiguration() async {
+  Future<void> updateTheConfiguration(
+    ManageNetworkCubit manageNetworkCubit,
+  ) async {
     try {
       emit(state.loading());
 
@@ -557,6 +572,18 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         }
 
         await matrixNotificationCubit.init();
+      }
+
+      final testnet = profileSetting.blockchainOptions?.testnet;
+      if (testnet != null) {
+        final blockchainType =
+            manageNetworkCubit.walletCubit.state.currentAccount!.blockchainType;
+        final currentNetworkList = blockchainType.networks;
+        if (testnet) {
+          await manageNetworkCubit.setNetwork(currentNetworkList[1]);
+        } else {
+          await manageNetworkCubit.setNetwork(currentNetworkList[0]);
+        }
       }
 
       emit(

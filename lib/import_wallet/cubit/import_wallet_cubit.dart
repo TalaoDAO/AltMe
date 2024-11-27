@@ -1,5 +1,7 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -21,8 +23,11 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
     required this.secureStorageProvider,
     required this.keyGenerator,
     required this.homeCubit,
-    required this.walletCubit,
+    required this.qrCodeScanCubit,
     required this.splashCubit,
+    required this.walletCubit,
+    required this.credentialsCubit,
+    required this.walletConnectCubit,
     required this.activityLogManager,
   }) : super(const ImportWalletState());
 
@@ -30,9 +35,11 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
   final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;
   final HomeCubit homeCubit;
-
+  final QRCodeScanCubit qrCodeScanCubit;
   final WalletCubit walletCubit;
+  final CredentialsCubit credentialsCubit;
   final SplashCubit splashCubit;
+  final WalletConnectCubit walletConnectCubit;
   final ActivityLogManager activityLogManager;
 
   void isMnemonicsOrKeyValid(String value) {
@@ -102,6 +109,9 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         isImported: !isFromOnboarding,
         isFromOnboarding: isFromOnboarding,
         blockchainType: null,
+        qrCodeScanCubit: qrCodeScanCubit,
+        credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
         onComplete: ({
           required CryptoAccount cryptoAccount,
           required MessageHandler messageHandler,

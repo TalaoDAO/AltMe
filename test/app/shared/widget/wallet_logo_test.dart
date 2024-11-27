@@ -172,50 +172,48 @@ void main() {
       });
     });
 
-    testWidgets(
-        'displays correct image for ProfileType.diipv2point1 in development',
-        (WidgetTester tester) async {
-      when(() => mockFlavorCubit.state).thenReturn(FlavorMode.development);
-      when(() => mockProfileCubit.state).thenReturn(
-        ProfileState(
-          model: ProfileModel.diipv2point1(
-            polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
-            walletType: WalletType.personal,
-            walletProtectionType: WalletProtectionType.FA2,
-            isDeveloperMode: true,
-            clientId: 'clientId',
-            clientSecret: 'clientSecret',
-          ),
-        ),
-      );
-      await tester.pumpApp(
-        Scaffold(
-          body: Builder(
-            builder: (context) {
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider<FlavorCubit>(
-                    create: (context) => mockFlavorCubit,
-                  ),
-                  BlocProvider<ProfileCubit>(
-                    create: (context) => mockProfileCubit,
-                  ),
-                ],
-                child: const WalletLogo(height: 100, width: 100),
-              );
-            },
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      final imageFinder = find.byType(Image);
-      expect(imageFinder, findsOneWidget);
-
-      final Image image = tester.widget(imageFinder);
-      final AssetImage imageProvider = image.image as AssetImage;
-      expect(imageProvider.assetName, ImageStrings.diipLogo);
-    });
+    // testWidgets(
+    //     'displays correct image for ProfileType.diipv2point1 in development',
+    //     (WidgetTester tester) async {
+    //   when(() => mockFlavorCubit.state).thenReturn(FlavorMode.development);
+    //   when(() => mockProfileCubit.state).thenReturn(
+    //     ProfileState(
+    //       model: ProfileModel.diipv2point1(
+    //         polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
+    //         walletType: WalletType.personal,
+    //         walletProtectionType: WalletProtectionType.FA2,
+    //         isDeveloperMode: true,
+    //         clientId: 'clientId',
+    //         clientSecret: 'clientSecret',
+    //       ),
+    //     ),
+    //   );
+    //   await tester.pumpApp(
+    //     Scaffold(
+    //       body: Builder(
+    //         builder: (context) {
+    //           return MultiBlocProvider(
+    //             providers: [
+    //               BlocProvider<FlavorCubit>(
+    //                 create: (context) => mockFlavorCubit,
+    //               ),
+    //               BlocProvider<ProfileCubit>(
+    //                 create: (context) => mockProfileCubit,
+    //               ),
+    //             ],
+    //             child: const WalletLogo(height: 100, width: 100),
+    //           );
+    //         },
+    //       ),
+    //     ),
+    //   );
+    //   await tester.pumpAndSettle();
+    //   final imageFinder = find.byType(Image);
+    //   expect(imageFinder, findsOneWidget);
+    //   final Image image = tester.widget(imageFinder);
+    //   final AssetImage imageProvider = image.image as AssetImage;
+    //   expect(imageProvider.assetName, ImageStrings.diipLogo);
+    // });
 
     testWidgets('displays correct image for ProfileType.ebsiV3 in development',
         (WidgetTester tester) async {

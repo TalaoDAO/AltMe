@@ -25,7 +25,6 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:share_plus/share_plus.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
@@ -366,18 +365,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                           }
                           return;
                         },
-                        onDownload: () {
-                          final box = context.findRenderObject() as RenderBox?;
-                          final subject = l10n.shareWith;
-
-                          Share.share(
-                            formattedData,
-                            subject: subject,
-                            sharePositionOrigin:
-                                box!.localToGlobal(Offset.zero) & box.size,
-                          );
-                          return;
-                        },
                         onSkip: () {
                           Navigator.of(context).pop(true);
                         },
@@ -579,18 +566,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                       Navigator.of(context).pop(true);
                     }
 
-                    return;
-                  },
-                  onDownload: () {
-                    final box = context.findRenderObject() as RenderBox?;
-                    final subject = l10n.shareWith;
-
-                    Share.share(
-                      data,
-                      subject: subject,
-                      sharePositionOrigin:
-                          box!.localToGlobal(Offset.zero) & box.size,
-                    );
                     return;
                   },
                   onSkip: () {
@@ -930,7 +905,18 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
         builder: (_) => const WalletRevokedDialog(),
       );
     }
-
+    if (state.status == AppStatus.success) {
+      // get list of crypto accounts from profile cubit
+      final manageAccountsCubit = ManageAccountsCubit(
+        credentialsCubit: context.read<CredentialsCubit>(),
+        manageNetworkCubit: context.read<ManageNetworkCubit>(),
+      );
+      final cryptoAccounts = manageAccountsCubit.state.cryptoAccount.data;
+      // generate crypto accounts cards
+      context.read<CredentialsCubit>().generateCryptoAccountsCards(
+            cryptoAccounts,
+          );
+    }
     if (state.status == AppStatus.addEnterpriseAccount ||
         state.status == AppStatus.updateEnterpriseAccount ||
         state.status == AppStatus.replaceEnterpriseAccount) {
@@ -974,6 +960,7 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
         if (confirm) {
           await context.read<EnterpriseCubit>().applyConfiguration(
                 qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                manageNetworkCubit: context.read<ManageNetworkCubit>(),
                 status: state.status,
               );
         } else {

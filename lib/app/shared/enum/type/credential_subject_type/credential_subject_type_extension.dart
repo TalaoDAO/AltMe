@@ -759,8 +759,20 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     ResponseString? howToGetIt;
     ResponseString? longDescription;
 
-    final vcFormatType = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+    /// handles the dummy casse
+    final formatsSupported = profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.formatsSupported;
+    late VCFormatType vcFormatType;
+    if (formatsSupported != null) {
+      if (formatsSupported.contains(VCFormatType.vcSdJWT)) {
+        vcFormatType = VCFormatType.vcSdJWT;
+      } else {
+        vcFormatType = formatsSupported.first;
+      }
+    } else {
+      vcFormatType = profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+    }
 
     final oidc4vcDraftType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.oidc4vciDraft;
@@ -769,14 +781,16 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
     final isEmailPass = this == CredentialSubjectType.emailPass;
 
-    var format = VCFormatType.ldpVc.urlValue(isEmailPass: isEmailPass);
+    var format = vcFormatType.urlValue(isEmailPass: isEmailPass);
 
     if (vcFormatType == VCFormatType.auto && discoverCardsOptions != null) {
-      format = discoverCardsOptions.vcFormatTypeForAuto(
+      vcFormatType = discoverCardsOptions.vcFormatTypeForAuto(
         credentialSubjectType: this,
         vcFormatType: assignedVCFormatType,
       );
-    } else {
+
+      final isEmailPass = this == CredentialSubjectType.emailPass;
+
       format = vcFormatType.urlValue(isEmailPass: isEmailPass);
     }
 
@@ -1087,6 +1101,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       longDescription: longDescription == null
           ? null
           : ResponseMessage(message: longDescription),
+      vcFormatType: vcFormatType,
     );
   }
 

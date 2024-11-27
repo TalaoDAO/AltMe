@@ -22,13 +22,11 @@ class WalletCubit extends Cubit<WalletState> {
     required this.secureStorageProvider,
     required this.homeCubit,
     required this.keyGenerator,
-    required this.walletConnectCubit,
   }) : super(const WalletState());
 
   final SecureStorageProvider secureStorageProvider;
   final HomeCubit homeCubit;
   final KeyGenerator keyGenerator;
-  final WalletConnectCubit walletConnectCubit;
 
   final log = getLogger('WalletCubit');
 
@@ -51,6 +49,9 @@ class WalletCubit extends Cubit<WalletState> {
     required String mnemonicOrKey,
     required bool isImported,
     required bool isFromOnboarding,
+    required QRCodeScanCubit qrCodeScanCubit,
+    required CredentialsCubit credentialsCubit,
+    required WalletConnectCubit walletConnectCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -115,6 +116,8 @@ class WalletCubit extends Cubit<WalletState> {
           blockchainType: blockchainType,
           totalAccountsYet: accountsCount,
           showStatus: showStatus,
+          qrCodeScanCubit: qrCodeScanCubit,
+          credentialsCubit: credentialsCubit,
         ),
       );
     } else {
@@ -138,6 +141,8 @@ class WalletCubit extends Cubit<WalletState> {
               blockchainType: BlockchainType.tezos,
               totalAccountsYet: accountsCount,
               showStatus: showStatus,
+              qrCodeScanCubit: qrCodeScanCubit,
+              credentialsCubit: credentialsCubit,
             ),
           );
         } else {
@@ -163,6 +168,8 @@ class WalletCubit extends Cubit<WalletState> {
               blockchainType: blockchainType,
               totalAccountsYet: accountsCount + value,
               showStatus: showStatus,
+              qrCodeScanCubit: qrCodeScanCubit,
+              credentialsCubit: credentialsCubit,
             );
 
             cryptoAccountDataList.add(accountData);
@@ -192,6 +199,8 @@ class WalletCubit extends Cubit<WalletState> {
             blockchainType: blockchainType,
             totalAccountsYet: accountsCount + value,
             showStatus: showStatus,
+            qrCodeScanCubit: qrCodeScanCubit,
+            credentialsCubit: credentialsCubit,
           );
 
           cryptoAccountDataList.add(accountData);
@@ -202,10 +211,8 @@ class WalletCubit extends Cubit<WalletState> {
     final updatedCryptoAccount = CryptoAccount(data: cryptoAccountDataList);
     await _saveCryptoAccountDataInStorage(updatedCryptoAccount);
 
-    if (blockchainType != BlockchainType.tezos) {
-      await Future<void>.delayed(const Duration(milliseconds: 500));
-      await walletConnectCubit.initialise();
-    }
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+    await walletConnectCubit.initialise();
 
     emitCryptoAccount(updatedCryptoAccount);
 
@@ -228,6 +235,8 @@ class WalletCubit extends Cubit<WalletState> {
     required BlockchainType blockchainType,
     required int totalAccountsYet,
     required bool showStatus,
+    required QRCodeScanCubit qrCodeScanCubit,
+    required CredentialsCubit credentialsCubit,
   }) async {
     final AccountType accountType = blockchainType.accountType;
 
@@ -301,15 +310,13 @@ class WalletCubit extends Cubit<WalletState> {
 
     log.i('$blockchainType created');
 
-    /// disable associated wallet account creation at start
     /// If we are not using crypto in the wallet we are not generating
     /// AssociatedAddress credentials.
-    // if (Parameters.walletHandlesCrypto) {
-    //   await credentialsCubit.insertAssociatedWalletCredential(
-    //     blockchainType: blockchainType,
-    //     cryptoAccountData: cryptoAccountData,
-    //   );
-    // }
+    if (Parameters.walletHandlesCrypto) {
+      await credentialsCubit.insertAssociatedWalletCredential(
+        cryptoAccountData: cryptoAccountData,
+      );
+    }
 
     return cryptoAccountData;
   }
@@ -416,14 +423,6 @@ class WalletCubit extends Cubit<WalletState> {
     await secureStorageProvider.set(
       SecureStorageKeys.cryptoAccount,
       cryptoAccountString,
-    );
-
-    /// check if associated wallet credential is available for
-    /// blockchain type
-
-    await credentialsCubit.updateAssociatedWalletCredential(
-      blockchainType: blockchainType,
-      cryptoAccountData: cryptoAccountData,
     );
 
     emitCryptoAccount(cryptoAccount);

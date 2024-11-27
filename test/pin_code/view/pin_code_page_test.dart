@@ -113,25 +113,24 @@ void main() {
       expect(find.byType(PinCodeView), findsOneWidget);
     });
 
-    // testWidgets('renders UI correctly', (tester) async {
-    //   await tester.pumpApp(
-    //     MultiBlocProvider(
-    //       providers: [
-    //         BlocProvider<ProfileCubit>.value(value: profleCubit),
-    //         BlocProvider<PinCodeViewCubit>.value(value: pinCodeViewCubit),
-    //         BlocProvider<FlavorCubit>.value(value: flavorCubit),
-    //       ],
-    //       child: PinCodeView(
-    //         isValidCallback: () {},
-    //         walletProtectionType: WalletProtectionType.FA2,
-    //         secureStorageProvider: secureStorageProvider,
-    //         localAuthApi: localAuthApi,
-    //         profileCubit: profleCubit,
-    //       ),
-    //     ),
-    //   );
-    //   expect(find.byType(BasePage), findsOneWidget);
-    //   expect(find.byType(PinCodeWidget), findsOneWidget);
-    // });
+    testWidgets('renders UI correctly', (tester) async {
+      await tester.pumpApp(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<ProfileCubit>.value(value: profleCubit),
+            BlocProvider<PinCodeViewCubit>.value(value: pinCodeViewCubit),
+            BlocProvider<FlavorCubit>.value(value: flavorCubit),
+          ],
+          child: PinCodeView(
+            isValidCallback: () {},
+            walletProtectionType: WalletProtectionType.FA2,
+            localAuthApi: localAuthApi,
+            title: '',
+          ),
+        ),
+      );
+      expect(find.byType(BasePage), findsOneWidget);
+      expect(find.byType(PinCodeWidget), findsOneWidget);
+    });
   });
 }

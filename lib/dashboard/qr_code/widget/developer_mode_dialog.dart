@@ -6,12 +6,10 @@ class DeveloperModeDialog extends StatelessWidget {
   const DeveloperModeDialog({
     super.key,
     required this.onDisplay,
-    required this.onDownload,
     required this.onSkip,
   });
 
   final VoidCallback onDisplay;
-  final VoidCallback onDownload;
   final VoidCallback onSkip;
 
   @override
@@ -52,14 +50,6 @@ class DeveloperModeDialog extends StatelessWidget {
               fontSize: 15,
               elevation: 0,
               onPressed: onDisplay,
-            ),
-            const SizedBox(height: Sizes.spaceSmall),
-            MyElevatedButton(
-              text: l10n.download,
-              verticalSpacing: 14,
-              fontSize: 15,
-              elevation: 0,
-              onPressed: onDownload,
             ),
             const SizedBox(height: Sizes.spaceSmall),
             MyElevatedButton(

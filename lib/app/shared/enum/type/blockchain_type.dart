@@ -223,6 +223,8 @@ extension BlockchainTypeX on BlockchainType {
     }
   }
 
+  /// index 0 must be mainnet
+  /// index 1 is considered testnet in enterprise cubit
   List<BlockchainNetwork> get networks {
     switch (this) {
       case BlockchainType.tezos:

@@ -1,6 +1,8 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
@@ -43,6 +45,9 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     required String mnemonicOrKey,
     required bool isImported,
     required bool isFromOnboarding,
+    required QRCodeScanCubit qrCodeScanCubit,
+    required CredentialsCubit credentialsCubit,
+    required WalletConnectCubit walletConnectCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -68,6 +73,25 @@ class MockOIDC4VC extends Mock implements OIDC4VC {}
 
 class MockActivityLogManager extends Mock implements ActivityLogManager {}
 
+class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
+  @override
+  final state = ProfileState(model: ProfileModel.empty());
+}
+
+class MockQRCodeScanCubit extends MockCubit<QRCodeScanState>
+    implements QRCodeScanCubit {}
+
+class MockCredentialsCubit extends MockCubit<CredentialsState>
+    implements CredentialsCubit {
+  @override
+  Future<void> loadAllCredentials({
+    required BlockchainType blockchainType,
+  }) async {}
+}
+
+class MockWalletConnectCubit extends MockCubit<WalletConnectState>
+    implements WalletConnectCubit {}
+
 void main() {
   group('generateAccount', () {
     late KeyGenerator keyGenerator;
@@ -80,6 +104,9 @@ void main() {
     late ProfileCubit profileCubit;
     late MockSecureStorageProvider secureStorageProvider;
     late MockActivityLogManager activityLogManager;
+    late MockQRCodeScanCubit qrCodeScanCubit;
+    late MockCredentialsCubit credentialsCubit;
+    late MockWalletConnectCubit walletConnectCubit;
 
     setUp(() {
       keyGenerator = KeyGenerator();
@@ -91,6 +118,9 @@ void main() {
       matrixNotificationCubit = MockMatrixNotificationCubit();
       secureStorageProvider = MockSecureStorageProvider();
       activityLogManager = MockActivityLogManager();
+      qrCodeScanCubit = MockQRCodeScanCubit();
+      credentialsCubit = MockCredentialsCubit();
+      walletConnectCubit = MockWalletConnectCubit();
 
       when(() => secureStorageProvider.get(any())).thenAnswer((_) async => '');
 
@@ -122,6 +152,9 @@ void main() {
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
         activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       verify(
@@ -160,6 +193,9 @@ void main() {
         matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
         activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       expect(profileCubit.state.model.walletType, WalletType.enterprise);

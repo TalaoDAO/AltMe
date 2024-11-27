@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 class JsonViewerPage extends StatelessWidget {
   const JsonViewerPage({
@@ -46,6 +47,7 @@ class JsonViewerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BasePage(
       title: title,
       titleAlignment: Alignment.topCenter,
@@ -61,11 +63,34 @@ class JsonViewerView extends StatelessWidget {
         padding: const EdgeInsets.all(
           Sizes.spaceSmall,
         ),
-        child: MyElevatedButton(
-          text: context.l10n.continueString,
-          onPressed: () {
-            Navigator.of(context).pop(true);
-          },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            MyElevatedButton(
+              text: l10n.continueString,
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            const SizedBox(height: 8),
+            MyElevatedButton(
+              text: l10n.download,
+              verticalSpacing: 14,
+              fontSize: 15,
+              elevation: 0,
+              onPressed: () {
+                final box = context.findRenderObject() as RenderBox?;
+                final subject = l10n.shareWith;
+
+                Share.share(
+                  data,
+                  subject: subject,
+                  sharePositionOrigin:
+                      box!.localToGlobal(Offset.zero) & box.size,
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

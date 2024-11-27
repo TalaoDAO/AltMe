@@ -1,5 +1,7 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -26,6 +28,9 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     required this.matrixNotificationCubit,
     required this.profileCubit,
     required this.activityLogManager,
+    required this.qrCodeScanCubit,
+    required this.credentialsCubit,
+    required this.walletConnectCubit,
   }) : super(const OnBoardingGenPhraseState());
 
   final KeyGenerator keyGenerator;
@@ -38,6 +43,9 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
   final MatrixNotificationCubit matrixNotificationCubit;
   final ProfileCubit profileCubit;
   final ActivityLogManager activityLogManager;
+  final QRCodeScanCubit qrCodeScanCubit;
+  final CredentialsCubit credentialsCubit;
+  final WalletConnectCubit walletConnectCubit;
 
   final log = getLogger('OnBoardingGenPhraseCubit');
 
@@ -49,12 +57,15 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         keyGenerator: keyGenerator,
         didKitProvider: didKitProvider,
         homeCubit: homeCubit,
-        walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
         matrixNotificationCubit: matrixNotificationCubit,
-        profileCubit: profileCubit,
         activityLogManager: activityLogManager,
+        qrCodeScanCubit: qrCodeScanCubit,
+        credentialsCubit: credentialsCubit,
+        walletCubit: walletCubit,
+        profileCubit: profileCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await profileCubit.secureStorageProvider.set(

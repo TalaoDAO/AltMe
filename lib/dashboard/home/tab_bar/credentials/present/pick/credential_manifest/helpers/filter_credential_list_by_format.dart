@@ -4,7 +4,7 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 List<CredentialModel> filterCredenialListByFormat({
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
   required Map<String, dynamic>? clientMetaData,
   required List<CredentialModel> credentialList,
   required PresentationDefinition presentationDefinition,
@@ -15,7 +15,7 @@ List<CredentialModel> filterCredenialListByFormat({
     final supportingFormats = getPresentVCDetails(
       clientMetaData: clientMetaData,
       presentationDefinition: presentationDefinition,
-      vcFormatType: vcFormatType,
+      formatsSupported: formatsSupported,
       credentialsToBePresented: credentials,
     );
     credentials.removeWhere(

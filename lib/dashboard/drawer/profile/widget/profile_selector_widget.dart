@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
-import 'package:altme/dashboard/profile/profile.dart';
+import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,24 @@ class ProfileSelectorWidget extends StatelessWidget {
                         children: [
                           ListTile(
                             onTap: () async {
+                              if (profileType == ProfileType.custom) {
+                                final l10n = context.l10n;
+                                final bool moveAhead = await showDialog<bool>(
+                                      context: context,
+                                      builder: (_) {
+                                        return ConfirmDialog(
+                                          title:
+                                              l10n.doYouWantToSetupTheProfile,
+                                          yes: l10n.yes,
+                                          showNoButton: true,
+                                          no: l10n.no,
+                                        );
+                                      },
+                                    ) ??
+                                    false;
+                                if (!moveAhead) return;
+                              }
+
                               await context
                                   .read<ProfileCubit>()
                                   .setProfile(profileType);
@@ -77,6 +96,11 @@ class ProfileSelectorWidget extends StatelessWidget {
                                         .currentAccount!
                                         .blockchainType,
                                   );
+
+                              if (profileType == ProfileType.custom) {
+                                return Navigator.of(context)
+                                    .push<void>(Oidc4vcSettingMenu.route());
+                              }
                             },
                             shape: RoundedRectangleBorder(
                               side: BorderSide(

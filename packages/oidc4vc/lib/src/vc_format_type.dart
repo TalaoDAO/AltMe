@@ -91,6 +91,9 @@ VCFormatType getVcFormatType(String formatString) {
     if (element.vcValue == formatString) {
       return element;
     }
+    if (element.vpValue == formatString) {
+      return element;
+    }
   }
   throw Exception('Invalid VCFormatType');
 }

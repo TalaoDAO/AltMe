@@ -106,7 +106,7 @@ Future<
         issuer: issuer,
         kid: kid,
         privateKey: privateKey,
-        vcFormatType: customOidc4vcProfile.vcFormatType,
+        formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
       );
 
       if (profileCubit.state.model.isDeveloperMode) {
@@ -162,19 +162,22 @@ Future<
       issuer: issuer,
       kid: kid,
       privateKey: privateKey,
-      vcFormatType: customOidc4vcProfile.vcFormatType,
+      formatsSupported: customOidc4vcProfile.formatsSupported??[],
     );
 
     if (profileCubit.state.model.isDeveloperMode) {
-      await qrCodeScanCubit.showDataBeforeSending(
+      final value = await qrCodeScanCubit.showDataBeforeSending(
         title: 'CREDENTIAL REQUEST',
         data: credentialData,
       );
 
-      if (qrCodeScanCubit.savedAccessToken == null &&
-          qrCodeScanCubit.savedNonce == null &&
-          qrCodeScanCubit.savedAuthorizationDetails == null) {
-        return (null, null, null);
+      if (value) {
+        qrCodeScanCubit.completer = null;
+      } else {
+        qrCodeScanCubit.completer = null;
+        qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
+        qrCodeScanCubit.goBack();
+        return null;
       }
     }
 

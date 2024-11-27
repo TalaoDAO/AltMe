@@ -23,7 +23,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
   required String? clientSecret,
   required ClientAuthentication clientAuthentication,
   required OIDC4VCIDraftType oidc4vciDraftType,
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
   required bool secureAuthorizedFlow,
   required DioClient client,
   required ProfileType profileType,
@@ -104,7 +104,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
     scope: scope,
     clientAuthentication: clientAuthentication,
     oidc4vciDraftType: oidc4vciDraftType,
-    vcFormatType: vcFormatType,
+    formatsSupported: formatsSupported,
     oAuthClientAttestation: oAuthClientAttestation,
     oAuthClientAttestationPop: oAuthClientAttestationPop,
     secureAuthorizedFlow: secureAuthorizedFlow,
@@ -122,7 +122,25 @@ Future<Uri?> getAuthorizationUriForIssuer({
   final requirePushedAuthorizationRequests =
       openIdConfiguration.requirePushedAuthorizationRequests;
 
-  if (requirePushedAuthorizationRequests || secureAuthorizedFlow) {
+  final isSecure = requirePushedAuthorizationRequests || secureAuthorizedFlow;
+
+  if (profileCubit.state.model.isDeveloperMode) {
+    final value = await qrCodeScanCubit.showDataBeforeSending(
+      title: isSecure ? 'PUSH AUTHORIZATION REQUEST' : 'AUTHORIZATION REQUEST',
+      data: authorizationRequestParemeters,
+    );
+
+    if (value) {
+      qrCodeScanCubit.completer = null;
+    } else {
+      qrCodeScanCubit.completer = null;
+      qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
+      qrCodeScanCubit.goBack();
+      return null;
+    }
+  }
+
+  if (isSecure) {
     final headers = <String, dynamic>{
       'Content-Type': 'application/x-www-form-urlencoded',
       'OAuth-Client-Attestation': oAuthClientAttestation,
@@ -132,11 +150,19 @@ Future<Uri?> getAuthorizationUriForIssuer({
     final parUrl = openIdConfiguration.pushedAuthorizationRequestEndpoint ??
         '$authorizationEndpoint/par';
 
+    /// error we shuld get it from
+    final response = await client.post(
+      parUrl,
+      headers: headers,
+      data: authorizationRequestParemeters,
+    );
+
     if (profileCubit.state.model.isDeveloperMode) {
-      final value = await qrCodeScanCubit.showDataBeforeSending(
-        title: 'PUSHED AUTHORIZATION REQUEST',
-        data: authorizationRequestParemeters,
-      );
+      final formattedData = '''
+<b>REQUEST RESPONSE :</b>
+${const JsonEncoder.withIndent('  ').convert(response)}\n
+''';
+      final value = await qrCodeScanCubit.showDataAfterReceiving(formattedData);
 
       if (value) {
         qrCodeScanCubit.completer = null;
@@ -147,13 +173,6 @@ Future<Uri?> getAuthorizationUriForIssuer({
         return null;
       }
     }
-
-    /// error we shuld get it from
-    final response = await client.post(
-      parUrl,
-      headers: headers,
-      data: authorizationRequestParemeters,
-    );
 
     final requestUri = response['request_uri'];
 
