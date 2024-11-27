@@ -197,8 +197,6 @@ class HomeCubit extends Cubit<HomeState> {
             await getCredentialManifestFromAltMe(
           oidc4vc: oidc4vc,
           oidc4vciDraftType: oidc4vciDraftType,
-          useOAuthAuthorizationServerLink:
-              useOauthServerAuthEndPoint(profileCubit.state.model),
         );
         credentialManifest.outputDescriptors?.removeWhere(
           (element) => element.id != credentialSubjectType.name,
