@@ -680,10 +680,6 @@ class OIDC4VC {
         //
         // wallet must fetch the keys from <credential_issuer>/.well-known/jwks
 
-        if (openIdConfiguration.jwksUri == null) {
-          throw Exception();
-        }
-
         // for sd-jwt
         // take the iss attribute , if this attribute is not a DID this
         // attribute is the credential_issuer url
@@ -692,12 +688,20 @@ class OIDC4VC {
         // -> /.well-known/jwt-vc-issuer if credential_issuer = <domain>
         // -> /.well-known/jwt-vc-issuer/<path> if credential_issuer = <domain>/<path>
 
-        final response = await dioGet(
-          openIdConfiguration.jwksUri!,
-          isCachingEnabled: isCachingEnabled,
-          dio: dio,
-          secureStorage: secureStorage,
-        );
+        late dynamic response;
+
+        if (openIdConfiguration.jwksUri != null) {
+          response = await dioGet(
+            openIdConfiguration.jwksUri!,
+            isCachingEnabled: isCachingEnabled,
+            dio: dio,
+            secureStorage: secureStorage,
+          );
+        } else if (openIdConfiguration.jwks != null) {
+          response = openIdConfiguration.jwks;
+        } else {
+          throw Exception();
+        }
 
         return response as Map<String, dynamic>;
       } else {

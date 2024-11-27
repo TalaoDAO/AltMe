@@ -27,6 +27,7 @@ class OpenIdConfiguration extends Equatable {
     this.credentialManifests,
     this.issuer,
     this.jwksUri,
+    this.jwks,
     this.grantTypesSupported,
   });
 
@@ -69,6 +70,7 @@ class OpenIdConfiguration extends Equatable {
   final String? issuer;
   @JsonKey(name: 'jwks_uri')
   final String? jwksUri;
+  final Map<String, dynamic>? jwks;
   @JsonKey(name: 'require_pushed_authorization_requests', defaultValue: false)
   final bool requirePushedAuthorizationRequests;
   @JsonKey(name: 'grant_types_supported')
@@ -96,6 +98,7 @@ class OpenIdConfiguration extends Equatable {
         credentialManifests,
         issuer,
         jwksUri,
+        jwks,
         requirePushedAuthorizationRequests,
         grantTypesSupported,
       ];
