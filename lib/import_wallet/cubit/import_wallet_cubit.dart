@@ -1,5 +1,6 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/splash/splash.dart';
@@ -26,6 +27,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
     required this.splashCubit,
     required this.walletCubit,
     required this.credentialsCubit,
+    required this.walletConnectCubit,
     required this.activityLogManager,
   }) : super(const ImportWalletState());
 
@@ -37,6 +39,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
   final WalletCubit walletCubit;
   final CredentialsCubit credentialsCubit;
   final SplashCubit splashCubit;
+  final WalletConnectCubit walletConnectCubit;
   final ActivityLogManager activityLogManager;
 
   void isMnemonicsOrKeyValid(String value) {
@@ -108,6 +111,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         blockchainType: null,
         qrCodeScanCubit: qrCodeScanCubit,
         credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
         onComplete: ({
           required CryptoAccount cryptoAccount,
           required MessageHandler messageHandler,

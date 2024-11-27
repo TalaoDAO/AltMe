@@ -8,10 +8,12 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:key_generator/key_generator.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -23,6 +25,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     required this.connectedDappRepository,
     required this.secureStorageProvider,
     required this.routeCubit,
+    required this.walletCubit,
   }) : super(const WalletConnectState()) {
     initialise();
   }
@@ -30,6 +33,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   final ConnectedDappRepository connectedDappRepository;
   final SecureStorageProvider secureStorageProvider;
   final RouteCubit routeCubit;
+  final WalletCubit walletCubit;
 
   Map<String, dynamic Function(String, dynamic)> get sessionRequestHandlers => {
         Parameters.ETH_SIGN: ethSign,
@@ -38,6 +42,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         Parameters.ETH_SIGN_TYPE_DATA_V4: ethSignTypedDataV4,
         // SupportedEVMMethods.switchChain.name: switchChain,
         // 'wallet_addEthereumChain': addChain,
+        Parameters.TEZOS_GET_ACCOUNTS: tezosGetAccounts,
+        Parameters.TEZOS_SIGN: tezosSign,
+        Parameters.TEZOS_SEND: tezosSend,
       };
 
   Map<String, dynamic Function(String, dynamic)> get methodRequestHandlers => {
@@ -99,15 +106,21 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         final CryptoAccount cryptoAccount =
             CryptoAccount.fromJson(cryptoAccountJson);
 
-        final eVMAccounts = cryptoAccount.data
-            .where((e) => e.blockchainType != BlockchainType.tezos)
-            .toList();
+        final cryptoAccounts = cryptoAccount.data.toList();
 
         log.i('registering acconts');
-        for (final evm in eVMAccounts) {
+        for (final accounts in cryptoAccounts) {
+          var chain = '';
+
+          if (accounts.blockchainType == BlockchainType.tezos) {
+            chain = 'tezos:mainnet';
+          } else {
+            chain = accounts.blockchainType.chain;
+          }
+
           _reownWalletKit!.registerAccount(
-            chainId: evm.blockchainType.chain,
-            accountAddress: evm.walletAddress,
+            chainId: chain,
+            accountAddress: accounts.walletAddress,
           );
         }
       }
@@ -115,15 +128,21 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       /// register request emitter and request handler for all supported evms
 
       for (final blockchainType in BlockchainType.values) {
-        if (blockchainType == BlockchainType.tezos) {
-          continue;
-        }
         log.i(blockchainType);
+
+        var chain = '';
+
+        if (blockchainType == BlockchainType.tezos) {
+          chain = 'tezos:mainnet';
+        } else {
+          chain = blockchainType.chain;
+        }
+
         log.i('registerEventEmitter');
-        registerEventEmitter(blockchainType.chain);
+        registerEventEmitter(chain);
 
         log.i('registerRequestHandler');
-        registerRequestHandler(blockchainType.chain);
+        registerRequestHandler(chain);
       }
 
       _reownWalletKit!.onSessionRequest.subscribe(_onSessionRequest);
@@ -596,6 +615,135 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     return result;
   }
 
+  Future<String> tezosGetAccounts(String topic, dynamic parameters) async {
+    log.i('tezosGetAccounts topic: $topic');
+    log.i('tezosGetAccounts parameters: $parameters');
+
+    final currentAccount = walletCubit.state.currentAccount!;
+
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(
+      id: pRequest.id,
+      jsonrpc: '2.0',
+    );
+
+    final isTezos = currentAccount.blockchainType == BlockchainType.tezos;
+
+    if (isTezos) {
+      final pubkey = await KeyGenerator().hexPubKey(
+        secretKey: currentAccount.secretKey,
+        accountType: AccountType.tezos,
+      );
+
+      response = response.copyWith(
+        result: [
+          {
+            'algo': 'ed25519',
+            'pubkey': pubkey,
+            'address': currentAccount.walletAddress,
+          }
+        ],
+      );
+    } else {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'Wrong blockchain'),
+      );
+    }
+
+    await _reownWalletKit!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+
+    return 'true';
+  }
+
+  Future<String> tezosSign(String topic, dynamic parameters) async {
+    log.i('tezosSign topic: $topic');
+
+    log.i('received tezos sign request: $parameters');
+
+    log.i('completer initialise');
+    completer.add(Completer<String>());
+
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
+
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.signPayload,
+        parameters: parameters,
+        sessionTopic: topic,
+        signType: Parameters.TEZOS_SIGN,
+      ),
+    );
+
+    final String result = await completer[completer.length - 1]!.future;
+    log.i('complete - $result');
+
+    if (result == 'Failed') {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'User rejected method'),
+      );
+    } else {
+      response = response.copyWith(
+        result: {'signature': result},
+      );
+    }
+
+    await _reownWalletKit!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+
+    completer.removeLast();
+    emit(state.copyWith(status: WalletConnectStatus.idle));
+    return result;
+  }
+
+  Future<String> tezosSend(String topic, dynamic parameters) async {
+    log.i('tezosSend topic: $topic');
+    log.i('tezosSend parameters: $parameters');
+
+    log.i('completer initialise');
+    completer.add(Completer<String>());
+
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
+
+    final operationDetails = getTezosOperationDetails(
+      parameters as Map<String, dynamic>,
+    );
+
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.operation,
+        parameters: parameters,
+        sessionTopic: topic,
+        signType: Parameters.TEZOS_SEND,
+        operationDetails: operationDetails,
+      ),
+    );
+
+    final String result = await completer[completer.length - 1]!.future;
+    log.i('complete - $result');
+
+    if (result == 'Failed') {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'User rejected method'),
+      );
+    } else {
+      response = response.copyWith(result: {'operationHash': result});
+    }
+
+    await _reownWalletKit!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+    completer.removeLast();
+    return result;
+  }
+
   Transaction getTransaction(dynamic parameters) {
     final EthereumTransaction ethTransaction = EthereumTransaction.fromJson(
       parameters[0] as Map<String, dynamic>,
@@ -648,6 +796,33 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     );
 
     return transaction;
+  }
+
+  List<OperationDetails> getTezosOperationDetails(
+    Map<String, dynamic> parameters,
+  ) {
+    final from = parameters['account'];
+    final operations = parameters['operations'] as List<dynamic>;
+
+    final operationDetails = <OperationDetails>[];
+    for (final op in operations) {
+      final operationDetail = OperationDetails(
+        source: from.toString(),
+        amount: op['amount'].toString(),
+        destination: op['destination'].toString(),
+        kind: stringToEnum(op['kind'].toString()),
+      );
+      operationDetails.add(operationDetail);
+    }
+
+    return operationDetails;
+  }
+
+  OperationKind stringToEnum(String operation) {
+    return OperationKind.values.firstWhere(
+      (e) => e.toString().split('.').last == operation,
+      orElse: () => OperationKind.transaction,
+    );
   }
 
   Future<void> disconnectSession(String topic) async {

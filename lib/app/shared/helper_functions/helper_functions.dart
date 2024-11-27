@@ -729,11 +729,9 @@ Future<
     return (null, null, null, null, null, null);
   }
 
-  final openIdConfigurationData = await oidc4vc.getOpenIdConfig(
+  final openIdConfigurationData = await oidc4vc.getIssuerMetaData(
     baseUrl: issuer,
-    isAuthorizationServer: false,
     dio: client.dio,
-    useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
   );
 
   final openIdConfiguration =
@@ -757,9 +755,9 @@ Future<
 
   Map<String, dynamic>? authorizationServerConfigurationData;
 
-  authorizationServerConfigurationData = await oidc4vc.getOpenIdConfig(
+  authorizationServerConfigurationData =
+      await oidc4vc.getAuthorizationServerMetaData(
     baseUrl: authorizationServer ?? issuer,
-    isAuthorizationServer: true,
     dio: client.dio,
     useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
   );
@@ -1009,7 +1007,6 @@ Future<bool?> isEBSIForVerifiers({
   required Uri uri,
   required OIDC4VC oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
-  required bool useOAuthAuthorizationServerLink,
 }) async {
   try {
     final String? clientId = uri.queryParameters['client_id'];
@@ -1019,11 +1016,9 @@ Future<bool?> isEBSIForVerifiers({
     final isUrl = isURL(clientId);
     if (!isUrl) return false;
 
-    final openIdConfigurationData = await oidc4vc.getOpenIdConfig(
+    final openIdConfigurationData = await oidc4vc.getIssuerMetaData(
       baseUrl: clientId,
-      isAuthorizationServer: false,
       dio: Dio(),
-      useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
     );
 
     final openIdConfiguration =
@@ -1206,11 +1201,19 @@ MessageHandler getMessageHandler(dynamic e) {
           'error_description': 'SSI does not support this process.',
         },
       );
-    } else if (stringException.contains('OPENID-CONFIGURATION-ISSUE')) {
+    } else if (stringException
+        .contains('AUTHORIZATION_SERVER_METADATA_ISSUE')) {
       return ResponseMessage(
         data: {
           'error': 'unsupported_format',
-          'error_description': 'Openid configuration response issue.',
+          'error_description': 'Authorization server metadata response issue.',
+        },
+      );
+    } else if (stringException.contains('ISSUER_METADATA_ISSUE')) {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'Issuer metadata response issue.',
         },
       );
     } else if (stringException.contains('NOT_A_VALID_OPENID_URL')) {

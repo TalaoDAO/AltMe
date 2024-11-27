@@ -1,5 +1,6 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
@@ -21,6 +22,7 @@ Future<void> generateAccount({
   required WalletCubit walletCubit,
   required CredentialsCubit credentialsCubit,
   required ProfileCubit profileCubit,
+  required WalletConnectCubit walletConnectCubit,
 }) async {
   final mnemonicFormatted = mnemonic.join(' ');
 
@@ -48,6 +50,7 @@ Future<void> generateAccount({
   await walletCubit.createCryptoWallet(
     qrCodeScanCubit: qrCodeScanCubit,
     credentialsCubit: credentialsCubit,
+    walletConnectCubit: walletConnectCubit,
     mnemonicOrKey: mnemonicFormatted,
     isImported: false,
     isFromOnboarding: true,

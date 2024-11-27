@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/matrix_notification/cubit/matrix_notification_cubit.dart';
@@ -35,6 +36,9 @@ class MockCredentialsCubit extends MockCubit<CredentialsState>
   }) async {}
 }
 
+class MockWalletConnectCubit extends MockCubit<WalletConnectState>
+    implements WalletConnectCubit {}
+
 class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
   @override
   final state = WalletState(
@@ -58,6 +62,7 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     required bool isFromOnboarding,
     required QRCodeScanCubit qrCodeScanCubit,
     required CredentialsCubit credentialsCubit,
+    required WalletConnectCubit walletConnectCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -84,6 +89,7 @@ void main() {
   late MatrixNotificationCubit matrixNotificationCubit;
   late ProfileCubit profileCubit;
   late QRCodeScanCubit qrCodeScanCubit;
+  late MockWalletConnectCubit walletConnectCubit;
 
   final packageInfo = PackageInfo(
     appName: 'testApp',
@@ -102,6 +108,7 @@ void main() {
     matrixNotificationCubit = MockMatrixNotificationCubit();
     profileCubit = MockProfileCubit();
     qrCodeScanCubit = MockQRCodeScanCubit();
+    walletConnectCubit = MockWalletConnectCubit();
     when(() => mockSecureStorage.get(SecureStorageKeys.version))
         .thenAnswer((_) async => '1.0.0');
     when(() => mockSecureStorage.get(SecureStorageKeys.buildNumber))
@@ -130,6 +137,7 @@ void main() {
           profileCubit: profileCubit,
           packageInfo: packageInfo,
           qrCodeScanCubit: qrCodeScanCubit,
+          walletConnectCubit: walletConnectCubit,
         ).state,
         const SplashState(
           status: SplashStatus.init,
@@ -158,6 +166,7 @@ void main() {
           profileCubit: profileCubit,
           packageInfo: packageInfo,
           qrCodeScanCubit: qrCodeScanCubit,
+          walletConnectCubit: walletConnectCubit,
         );
         fakeAsync((async) {
           splashCubit.initialiseApp();
@@ -207,6 +216,7 @@ void main() {
             profileCubit: profileCubit,
             packageInfo: packageInfo,
             qrCodeScanCubit: qrCodeScanCubit,
+            walletConnectCubit: walletConnectCubit,
           );
           fakeAsync((async) {
             splashCubit.initialiseApp();
@@ -238,6 +248,7 @@ void main() {
             profileCubit: profileCubit,
             packageInfo: packageInfo,
             qrCodeScanCubit: qrCodeScanCubit,
+            walletConnectCubit: walletConnectCubit,
           );
           fakeAsync((async) {
             splashCubit.initialiseApp();
@@ -269,6 +280,7 @@ void main() {
             profileCubit: profileCubit,
             packageInfo: packageInfo,
             qrCodeScanCubit: qrCodeScanCubit,
+            walletConnectCubit: walletConnectCubit,
           );
           fakeAsync((async) {
             splashCubit.initialiseApp();

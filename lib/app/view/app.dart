@@ -75,14 +75,6 @@ class App extends StatelessWidget {
           BlocProvider<BeaconCubit>(
             create: (context) => BeaconCubit(beacon: Beacon()),
           ),
-          BlocProvider<WalletConnectCubit>(
-            create: (context) => WalletConnectCubit(
-              secureStorageProvider: secureStorageProvider,
-              connectedDappRepository:
-                  ConnectedDappRepository(secureStorageProvider),
-              routeCubit: context.read<RouteCubit>(),
-            ),
-          ),
           BlocProvider<DeepLinkCubit>(create: (context) => DeepLinkCubit()),
           BlocProvider<QueryByExampleCubit>(
             create: (context) => QueryByExampleCubit(),
@@ -134,7 +126,15 @@ class App extends StatelessWidget {
               secureStorageProvider: secureStorageProvider,
               homeCubit: context.read<HomeCubit>(),
               keyGenerator: KeyGenerator(),
-              walletConnectCubit: context.read<WalletConnectCubit>(),
+            ),
+          ),
+          BlocProvider<WalletConnectCubit>(
+            create: (context) => WalletConnectCubit(
+              secureStorageProvider: secureStorageProvider,
+              connectedDappRepository:
+                  ConnectedDappRepository(secureStorageProvider),
+              routeCubit: context.read<RouteCubit>(),
+              walletCubit: context.read<WalletCubit>(),
             ),
           ),
           BlocProvider<CredentialsCubit>(
@@ -302,6 +302,7 @@ class App extends StatelessWidget {
               credentialsCubit: context.read<CredentialsCubit>(),
               walletCubit: context.read<WalletCubit>(),
               profileCubit: context.read<ProfileCubit>(),
+              walletConnectCubit: context.read<WalletConnectCubit>(),
             ),
           ),
           BlocProvider(create: (context) => HomeTabbarCubit()),

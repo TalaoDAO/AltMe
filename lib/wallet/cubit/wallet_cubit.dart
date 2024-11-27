@@ -22,13 +22,11 @@ class WalletCubit extends Cubit<WalletState> {
     required this.secureStorageProvider,
     required this.homeCubit,
     required this.keyGenerator,
-    required this.walletConnectCubit,
   }) : super(const WalletState());
 
   final SecureStorageProvider secureStorageProvider;
   final HomeCubit homeCubit;
   final KeyGenerator keyGenerator;
-  final WalletConnectCubit walletConnectCubit;
 
   final log = getLogger('WalletCubit');
 
@@ -53,6 +51,7 @@ class WalletCubit extends Cubit<WalletState> {
     required bool isFromOnboarding,
     required QRCodeScanCubit qrCodeScanCubit,
     required CredentialsCubit credentialsCubit,
+    required WalletConnectCubit walletConnectCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -212,10 +211,8 @@ class WalletCubit extends Cubit<WalletState> {
     final updatedCryptoAccount = CryptoAccount(data: cryptoAccountDataList);
     await _saveCryptoAccountDataInStorage(updatedCryptoAccount);
 
-    if (blockchainType != BlockchainType.tezos) {
-      await Future<void>.delayed(const Duration(milliseconds: 500));
-      await walletConnectCubit.initialise();
-    }
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+    await walletConnectCubit.initialise();
 
     emitCryptoAccount(updatedCryptoAccount);
 

@@ -1387,12 +1387,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           /// this is full phase flow for preAuthorizedCode
 
           /// get openid configuration
-          final openIdConfigurationData = await oidc4vc.getOpenIdConfig(
+          final openIdConfigurationData = await oidc4vc.getIssuerMetaData(
             baseUrl: issuer,
-            isAuthorizationServer: false,
             dio: client.dio,
-            useOAuthAuthorizationServerLink:
-                useOauthServerAuthEndPoint(profileCubit.state.model),
           );
 
           if (savedAccessToken == null) {

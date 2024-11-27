@@ -9,6 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:reown_walletkit/reown_walletkit.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class OperationPage extends StatelessWidget {
@@ -108,27 +109,35 @@ class _OperationViewState extends State<OperationView> {
         }
       },
       builder: (context, state) {
+        late String sender;
+        late String reciever;
+        late String? symbol;
+
         final BeaconRequest? beaconRequest =
             context.read<BeaconCubit>().state.beaconRequest;
 
         final WalletConnectState walletConnectState =
             context.read<WalletConnectCubit>().state;
 
-        late String sender;
-        late String reciever;
+        final List<OperationDetails>? tezosOperationDetails =
+            walletConnectState.operationDetails;
 
-        late String? symbol;
+        final Transaction? transaction = walletConnectState.transaction;
 
-        switch (widget.connectionBridgeType) {
-          case ConnectionBridgeType.beacon:
+        if (beaconRequest != null || tezosOperationDetails != null) {
+          if (beaconRequest != null) {
             symbol = 'XTZ';
-            sender = beaconRequest!.request!.sourceAddress!;
+            sender = beaconRequest.request!.sourceAddress!;
             reciever = beaconRequest.operationDetails!.first.destination!;
-
-          case ConnectionBridgeType.walletconnect:
-            symbol = state.cryptoAccountData?.blockchainType.symbol;
-            sender = walletConnectState.transaction!.from!.toString();
-            reciever = walletConnectState.transaction!.to!.toString();
+          } else {
+            symbol = 'XTZ';
+            sender = tezosOperationDetails!.first.source!;
+            reciever = tezosOperationDetails.first.destination!;
+          }
+        } else if (transaction != null) {
+          symbol = state.cryptoAccountData?.blockchainType.symbol;
+          sender = transaction.from!.toString();
+          reciever = transaction.to!.toString();
         }
 
         String message = '';

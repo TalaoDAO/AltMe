@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -23,6 +24,7 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
     required this.qrCodeScanCubit,
     required this.walletCubit,
     required this.credentialsCubit,
+    required this.walletConnectCubit,
   }) : super(const ImportAccountState());
 
   final DIDKitProvider didKitProvider;
@@ -32,6 +34,7 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
   final QRCodeScanCubit qrCodeScanCubit;
   final WalletCubit walletCubit;
   final CredentialsCubit credentialsCubit;
+  final WalletConnectCubit walletConnectCubit;
 
   void isMnemonicsOrKeyValid(String value) {
     //different type of tezos private keys start with 'edsk' ,
@@ -85,6 +88,7 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
         isFromOnboarding: false,
         qrCodeScanCubit: qrCodeScanCubit,
         credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
         onComplete: ({
           required CryptoAccount cryptoAccount,
           required MessageHandler messageHandler,

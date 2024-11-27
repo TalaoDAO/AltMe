@@ -85,9 +85,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           final SessionProposalEvent? sessionProposalEvent =
               walletConnectState.sessionProposalEvent;
 
-          final eVMAccounts = walletCubit.state.cryptoAccount.data
-              .where((e) => e.blockchainType != BlockchainType.tezos)
-              .toList();
+          final cryptoAccounts = walletCubit.state.cryptoAccount.data.toList();
 
           final params = sessionProposalEvent!.params;
 
@@ -98,6 +96,11 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
               allowedNamespaces
                   .addAll(params.optionalNamespaces['eip155']!.chains!);
             }
+
+            if (params.optionalNamespaces.containsKey('tezos')) {
+              allowedNamespaces
+                  .addAll(params.optionalNamespaces['tezos']!.chains!);
+            }
           }
 
           if (params.requiredNamespaces.isNotEmpty) {
@@ -105,25 +108,47 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
               allowedNamespaces
                   .addAll(params.requiredNamespaces['eip155']!.chains!);
             }
+
+            if (params.requiredNamespaces.containsKey('tezos')) {
+              allowedNamespaces
+                  .addAll(params.requiredNamespaces['tezos']!.chains!);
+            }
           }
 
           log.i(allowedNamespaces);
 
           final accounts = <String>[];
 
-          for (final evm in eVMAccounts) {
-            if (allowedNamespaces.contains(evm.blockchainType.chain)) {
-              accounts.add('${evm.blockchainType.chain}:${evm.walletAddress}');
+          for (final account in cryptoAccounts) {
+            if (account.blockchainType == BlockchainType.tezos) {
+              final namespace = allowedNamespaces[0];
+              accounts.add(
+                '$namespace:${account.walletAddress}',
+              );
+            } else {
+              accounts.add(
+                '${account.blockchainType.chain}:${account.walletAddress}',
+              );
             }
           }
 
-          final walletNamespaces = {
-            'eip155': Namespace(
-              accounts: accounts,
-              methods: Parameters.walletConnectMethods,
+          final walletNamespaces = <String, Namespace>{};
+
+          if (accounts.any((acc) => acc.startsWith('tezos'))) {
+            walletNamespaces['tezos'] = Namespace(
+              accounts:
+                  accounts.where((acc) => acc.startsWith('tezos')).toList(),
+              methods: Parameters.tezosConnectMethods,
+              events: Parameters.tezosEvents,
+            );
+          } else {
+            walletNamespaces['eip155'] = Namespace(
+              accounts:
+                  accounts.where((acc) => acc.startsWith('eip155')).toList(),
+              methods: Parameters.evmConnectMethods,
               events: Parameters.allEvents,
-            ),
-          };
+            );
+          }
 
           await walletConnectCubit.reownWalletKit!.approveSession(
             id: sessionProposalEvent.id,

@@ -157,12 +157,10 @@ class OIDC4VC {
     String? oAuthClientAttestationPop,
   }) async {
     try {
-      final openIdConfigurationData = await getOpenIdConfig(
+      final openIdConfigurationData = await getIssuerMetaData(
         baseUrl: issuer,
-        isAuthorizationServer: false,
         dio: dio,
         secureStorage: secureStorage,
-        useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
       );
 
       final openIdConfiguration =
@@ -647,14 +645,24 @@ class OIDC4VC {
           useOAuthAuthorizationServer = false;
         }
 
-        final openIdConfigurationData = await getOpenIdConfig(
-          baseUrl: didKey,
-          isAuthorizationServer: isAuthorizationServer,
-          isCachingEnabled: isCachingEnabled,
-          dio: dio,
-          secureStorage: secureStorage,
-          useOAuthAuthorizationServerLink: useOAuthAuthorizationServer,
-        );
+        late Map<String, dynamic> openIdConfigurationData;
+
+        if (isAuthorizationServer) {
+          openIdConfigurationData = await getAuthorizationServerMetaData(
+            baseUrl: didKey,
+            isCachingEnabled: isCachingEnabled,
+            dio: dio,
+            secureStorage: secureStorage,
+            useOAuthAuthorizationServerLink: useOAuthAuthorizationServer,
+          );
+        } else {
+          openIdConfigurationData = await getIssuerMetaData(
+            baseUrl: didKey,
+            isCachingEnabled: isCachingEnabled,
+            dio: dio,
+            secureStorage: secureStorage,
+          );
+        }
 
         openIdConfiguration =
             OpenIdConfiguration.fromJson(openIdConfigurationData);
@@ -662,9 +670,8 @@ class OIDC4VC {
         final authorizationServer = openIdConfiguration.authorizationServer;
 
         if (authorizationServer != null) {
-          final openIdConfigurationData = await getOpenIdConfig(
+          final openIdConfigurationData = await getAuthorizationServerMetaData(
             baseUrl: authorizationServer,
-            isAuthorizationServer: true,
             isCachingEnabled: isCachingEnabled,
             dio: dio,
             secureStorage: secureStorage,
@@ -674,16 +681,36 @@ class OIDC4VC {
               OpenIdConfiguration.fromJson(openIdConfigurationData);
         }
 
-        if (openIdConfiguration.jwksUri == null) {
+        // **for ldp_vc, jwt_vc_json and jwt_vc_json-ld **,
+        // take the iss attribute (or theissuer attribute for ldp_vc)
+        //
+        // if this attribute is not a DID this attribute
+        // is the credential_issuer url
+        //
+        // wallet must fetch the keys from <credential_issuer>/.well-known/jwks
+
+        // for sd-jwt
+        // take the iss attribute , if this attribute is not a DID this
+        // attribute is the credential_issuer url
+        //
+        // the keys to validate the signature of the VC are situated in
+        // -> /.well-known/jwt-vc-issuer if credential_issuer = <domain>
+        // -> /.well-known/jwt-vc-issuer/<path> if credential_issuer = <domain>/<path>
+
+        late dynamic response;
+
+        if (openIdConfiguration.jwksUri != null) {
+          response = await dioGet(
+            openIdConfiguration.jwksUri!,
+            isCachingEnabled: isCachingEnabled,
+            dio: dio,
+            secureStorage: secureStorage,
+          );
+        } else if (openIdConfiguration.jwks != null) {
+          response = openIdConfiguration.jwks;
+        } else {
           throw Exception();
         }
-
-        final response = await dioGet(
-          openIdConfiguration.jwksUri!,
-          isCachingEnabled: isCachingEnabled,
-          dio: dio,
-          secureStorage: secureStorage,
-        );
 
         return response as Map<String, dynamic>;
       } else {
@@ -729,9 +756,9 @@ class OIDC4VC {
       final authorizationServer =
           openIdConfiguration.authorizationServer ?? issuer;
 
-      final authorizationServerConfigurationData = await getOpenIdConfig(
+      final authorizationServerConfigurationData =
+          await getAuthorizationServerMetaData(
         baseUrl: authorizationServer,
-        isAuthorizationServer: true,
         dio: dio,
         secureStorage: secureStorage,
         useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
@@ -767,9 +794,9 @@ class OIDC4VC {
           final authorizationServer =
               openIdConfiguration.authorizationServer ?? issuer;
 
-          final authorizationServerConfigurationData = await getOpenIdConfig(
+          final authorizationServerConfigurationData =
+              await getAuthorizationServerMetaData(
             baseUrl: authorizationServer,
-            isAuthorizationServer: true,
             dio: dio,
             secureStorage: secureStorage,
             useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
@@ -827,9 +854,9 @@ class OIDC4VC {
 
     // If authorizationEndpoint is null, we fetch from oauth-
     if (authorizationEndpoint == null) {
-      final authorizationServerConfigurationData = await getOpenIdConfig(
+      final authorizationServerConfigurationData =
+          await getAuthorizationServerMetaData(
         baseUrl: issuer,
-        isAuthorizationServer: true,
         dio: dio,
         secureStorage: secureStorage,
         useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
@@ -1663,9 +1690,8 @@ class OIDC4VC {
   //   return tokenParameters.kid;
   // }
 
-  Future<Map<String, dynamic>> getOpenIdConfig({
+  Future<Map<String, dynamic>> getAuthorizationServerMetaData({
     required String baseUrl,
-    required bool isAuthorizationServer,
     required bool useOAuthAuthorizationServerLink,
     required Dio dio,
     bool isCachingEnabled = false,
@@ -1677,16 +1703,6 @@ class OIDC4VC {
     ///(credential supported) for OIDC4VP and SIOPV2, the serve is a client,
     ///the wallet is the authorization server the verifier metadata are in
     ////openid-configuration
-
-    if (!isAuthorizationServer) {
-      final data = await getOpenIdConfigSecondMethod(
-        baseUrl,
-        isCachingEnabled: isCachingEnabled,
-        dio: dio,
-        secureStorage: secureStorage,
-      );
-      return data;
-    }
 
     var url = '$baseUrl/.well-known/openid-configuration';
 
@@ -1707,19 +1723,14 @@ class OIDC4VC {
 
       return data;
     } catch (e) {
-      final data = await getOpenIdConfigSecondMethod(
-        baseUrl,
-        isCachingEnabled: isCachingEnabled,
-        dio: dio,
-      );
-      return data;
+      throw Exception('AUTHORIZATION_SERVER_METADATA_ISSUE');
     }
   }
 
-  Future<Map<String, dynamic>> getOpenIdConfigSecondMethod(
-    String baseUrl, {
-    required bool isCachingEnabled,
+  Future<Map<String, dynamic>> getIssuerMetaData({
+    required String baseUrl,
     required Dio dio,
+    bool isCachingEnabled = false,
     SecureStorageProvider? secureStorage,
   }) async {
     final url = '$baseUrl/.well-known/openid-credential-issuer';
@@ -1737,7 +1748,7 @@ class OIDC4VC {
 
       return data;
     } catch (e) {
-      throw Exception('OPENID-CONFIGURATION-ISSUE');
+      throw Exception('ISSUER_METADATA_ISSUE');
     }
   }
 

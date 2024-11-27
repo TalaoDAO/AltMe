@@ -1,5 +1,6 @@
 import 'package:altme/activity_log/activity_log_manager.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/import_wallet/import_wallet.dart';
@@ -50,6 +51,7 @@ class ProtectWalletPage extends StatelessWidget {
         activityLogManager: ActivityLogManager(getSecureStorage),
         qrCodeScanCubit: context.read<QRCodeScanCubit>(),
         credentialsCubit: context.read<CredentialsCubit>(),
+        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: Builder(
         builder: (context) {
