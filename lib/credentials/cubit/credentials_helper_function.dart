@@ -187,6 +187,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           kid: verificationMethod,
           did: did,
           profileType: profileType,
+          vcFormatType: VCFormatType.ldpVc,
         );
       }
     } else {
@@ -200,6 +201,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         kid: verificationMethod,
         did: did,
         profileType: profileType,
+        vcFormatType: VCFormatType.ldpVc,
       );
     }
   } catch (e, s) {
@@ -221,6 +223,7 @@ Future<CredentialModel> _createCredential({
   required String did,
   required String kid,
   required ProfileType profileType,
+  required VCFormatType vcFormatType,
   String? oldId,
 }) async {
   final jsonLd = jsonDecode(vc) as Map<String, dynamic>;
@@ -228,7 +231,7 @@ Future<CredentialModel> _createCredential({
   String? jwt;
   DateTime dateTime = DateTime.now();
 
-  if (customOidc4vcProfile.vcFormatType != VCFormatType.ldpVc) {
+  if (vcFormatType != VCFormatType.ldpVc) {
     /// id -> jti (optional)
     /// issuer -> iss (compulsary)
     /// issuanceDate -> iat (optional)
@@ -275,7 +278,7 @@ Future<CredentialModel> _createCredential({
     data: jsonLd,
     shareLink: '',
     jwt: jwt,
-    format: customOidc4vcProfile.vcFormatType.vcValue,
+    format: vcFormatType.vcValue,
     credentialPreview: Credential.fromJson(jsonLd),
     credentialManifest: credentialManifest,
     activities: [Activity(acquisitionAt: dateTime)],

@@ -222,7 +222,6 @@ class HomeCubit extends Cubit<HomeState> {
           credential: credentialModel,
           showMessage: true,
           blockchainType: blockchainType,
-          qrCodeScanCubit: qrCodeScanCubit,
         );
         await cameraCubit.incrementAcquiredCredentialsQuantity();
         emit(state.copyWith(status: AppStatus.success));

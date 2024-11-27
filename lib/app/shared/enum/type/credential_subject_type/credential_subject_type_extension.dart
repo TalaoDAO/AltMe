@@ -759,8 +759,20 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     ResponseString? howToGetIt;
     ResponseString? longDescription;
 
-    var vcFormatType = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+    /// handles the dummy casse
+    final formatsSupported = profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile.formatsSupported;
+    late VCFormatType vcFormatType;
+    if (formatsSupported != null) {
+      if (formatsSupported.contains(VCFormatType.vcSdJWT)) {
+        vcFormatType = VCFormatType.vcSdJWT;
+      } else {
+        vcFormatType = formatsSupported.first;
+      }
+    } else {
+      vcFormatType = profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+    }
 
     final oidc4vcDraftType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.oidc4vciDraft;

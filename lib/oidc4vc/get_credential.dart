@@ -106,7 +106,7 @@ Future<
         issuer: issuer,
         kid: kid,
         privateKey: privateKey,
-        vcFormatType: customOidc4vcProfile.vcFormatType,
+        formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
       );
 
       if (profileCubit.state.model.isDeveloperMode) {
@@ -162,7 +162,7 @@ Future<
       issuer: issuer,
       kid: kid,
       privateKey: privateKey,
-      vcFormatType: customOidc4vcProfile.vcFormatType,
+      formatsSupported: customOidc4vcProfile.formatsSupported??[],
     );
 
     if (profileCubit.state.model.isDeveloperMode) {

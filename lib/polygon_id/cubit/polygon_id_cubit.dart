@@ -556,7 +556,6 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     await credentialsCubit.insertCredential(
       credential: credentialModel,
       blockchainType: walletCubit.state.currentAccount!.blockchainType,
-      qrCodeScanCubit: qrCodeScanCubit,
     );
   }
 

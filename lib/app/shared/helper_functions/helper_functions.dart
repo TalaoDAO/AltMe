@@ -157,7 +157,7 @@ CredentialSubjectType? getCredTypeFromName(String credentialName) {
 
 Future<bool> isCredentialPresentable({
   required CredentialSubjectType? credentialSubjectType,
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
 }) async {
   if (credentialSubjectType == null) {
     return true;
@@ -165,7 +165,7 @@ Future<bool> isCredentialPresentable({
 
   final isPresentable = await isCredentialAvaialble(
     credentialSubjectType: credentialSubjectType,
-    vcFormatType: vcFormatType,
+    formatsSupported: formatsSupported,
   );
 
   return isPresentable;
@@ -173,7 +173,7 @@ Future<bool> isCredentialPresentable({
 
 Future<bool> isCredentialAvaialble({
   required CredentialSubjectType credentialSubjectType,
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
 }) async {
   /// fetching all the credentials
   final CredentialsRepository repository =
@@ -185,8 +185,11 @@ Future<bool> isCredentialAvaialble({
     final matchSubjectType = credentialSubjectType ==
         credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
-
-    final matchFormat = vcFormatType.vcValue == credential.format;
+    final formatsSupportedStrings =
+        formatsSupported.map((e) => e.vcValue).toList();
+    final matchFormat =
+        formatsSupportedStrings.contains(credential.getFormat) ||
+            credential.getFormat == 'auto';
     if (matchSubjectType && matchFormat) {
       return true;
     }
@@ -1797,7 +1800,7 @@ List<String> getStringCredentialsForToken({
 
 //(presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt)
 List<VCFormatType> getPresentVCDetails({
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
   required PresentationDefinition presentationDefinition,
   required Map<String, dynamic>? clientMetaData,
   required List<CredentialModel> credentialsToBePresented,
@@ -1874,11 +1877,22 @@ List<VCFormatType> getPresentVCDetails({
   }
 
   /// create list of supported formats
-  if (presentLdpVc) supportingFormats.add(VCFormatType.ldpVc);
-  if (presentJwtVc) supportingFormats.add(VCFormatType.jwtVc);
-  if (presentJwtVcJson) supportingFormats.add(VCFormatType.jwtVcJson);
-  if (presentJwtVcJsonLd) supportingFormats.add(VCFormatType.jwtVcJsonLd);
-  if (presentVcSdJwt) supportingFormats.add(VCFormatType.vcSdJWT);
+  if (presentLdpVc && formatsSupported.contains(VCFormatType.ldpVc)) {
+    supportingFormats.add(VCFormatType.ldpVc);
+  }
+  if (presentJwtVc && formatsSupported.contains(VCFormatType.jwtVc)) {
+    supportingFormats.add(VCFormatType.jwtVc);
+  }
+  if (presentJwtVcJson && formatsSupported.contains(VCFormatType.jwtVcJson)) {
+    supportingFormats.add(VCFormatType.jwtVcJson);
+  }
+  if (presentJwtVcJsonLd &&
+      formatsSupported.contains(VCFormatType.jwtVcJsonLd)) {
+    supportingFormats.add(VCFormatType.jwtVcJsonLd);
+  }
+  if (presentVcSdJwt && formatsSupported.contains(VCFormatType.vcSdJWT)) {
+    supportingFormats.add(VCFormatType.vcSdJWT);
+  }
 
   return supportingFormats;
 }

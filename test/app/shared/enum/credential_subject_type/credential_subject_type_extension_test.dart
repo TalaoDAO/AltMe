@@ -924,8 +924,10 @@ void main() {
 
     test('returns correct VCFormatType values for each CredentialSubjectType',
         () {
-      void verifyVCFormatType(CredentialSubjectType subjectType,
-          List<VCFormatType> expectedValues) {
+      void verifyVCFormatType(
+        CredentialSubjectType subjectType,
+        List<VCFormatType> expectedValues,
+      ) {
         expect(
           subjectType.getVCFormatType,
           equals(expectedValues),

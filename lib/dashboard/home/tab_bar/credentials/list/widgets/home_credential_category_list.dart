@@ -131,18 +131,20 @@ class _HomeCredentialCategoryListState
                               return true;
                             }
 
-                            if (customOidc4vcProfile.vcFormatType.vcValue ==
-                                VCFormatType.auto.vcValue) {
-                              return true;
-                            }
-
                             if (element.credentialPreview.credentialSubjectModel
                                     .credentialSubjectType !=
                                 CredentialSubjectType.walletCredential) {
                               /// do not load the credential if vc format is
                               /// different
-                              if (customOidc4vcProfile.vcFormatType.vcValue !=
-                                  element.getFormat) {
+
+                              final formatsSupported = customOidc4vcProfile
+                                  .formatsSupported!
+                                  .map((e) => e.vcValue)
+                                  .toList();
+
+                              if (!formatsSupported
+                                      .contains(element.getFormat) ||
+                                  element.getFormat == 'auto') {
                                 return false;
                               }
                             }

@@ -145,7 +145,7 @@ class OIDC4VC {
     required bool scope,
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
-    required VCFormatType vcFormatType,
+    required List<VCFormatType> formatsSupported,
     required bool secureAuthorizedFlow,
     required Dio dio,
     required dynamic credentialOfferJson,
@@ -191,7 +191,7 @@ class OIDC4VC {
         scope: scope,
         clientAuthentication: clientAuthentication,
         oidc4vciDraftType: oidc4vciDraftType,
-        vcFormatType: vcFormatType,
+        formatsSuported: formatsSupported,
         secureAuthorizedFlow: secureAuthorizedFlow,
         isEBSIProfile: isEBSIProfile,
         walletIssuer: walletIssuer,
@@ -223,7 +223,7 @@ class OIDC4VC {
     required bool scope,
     required ClientAuthentication clientAuthentication,
     required OIDC4VCIDraftType oidc4vciDraftType,
-    required VCFormatType vcFormatType,
+    required List<VCFormatType> formatsSuported,
     required bool secureAuthorizedFlow,
     required bool isEBSIProfile,
     required String walletIssuer,
@@ -295,8 +295,17 @@ class OIDC4VC {
             'type': 'openid_credential',
             'credential_configuration_id': credential,
           };
+          late VCFormatType credentialSupportedType;
+          try {
+            credentialSupportedType = getVcFormatType(
+              credentialSupported['format'] as String,
+            );
+          } catch (e) {
+            throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+          }
+
           if (oidc4vciDraftType == OIDC4VCIDraftType.draft13 &&
-              vcFormatType == VCFormatType.vcSdJWT) {
+              credentialSupportedType == VCFormatType.vcSdJWT) {
             data = {
               'type': 'openid_credential',
               'format': 'vc+sd-jwt',
@@ -965,9 +974,19 @@ class OIDC4VC {
     required String issuer,
     required String kid,
     required String privateKey,
-    required VCFormatType vcFormatType,
+    required List<VCFormatType> formatsSupported,
   }) async {
     final credentialData = <String, dynamic>{};
+// check if we support the requested format
+    late VCFormatType vcFormatType;
+    try {
+      vcFormatType = getVcFormatType(format);
+    } catch (e) {
+      throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+    }
+    if (!formatsSupported.contains(vcFormatType)) {
+      throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+    }
 
     if (cryptoHolderBinding) {
       var currentProofType = proofType;

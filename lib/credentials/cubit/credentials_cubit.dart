@@ -195,7 +195,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         credential: walletCredential,
         showMessage: false,
         blockchainType: blockchainType,
-        qrCodeScanCubit: qrCodeScanCubit,
       );
     }
   }
@@ -293,7 +292,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> insertCredential({
     required CredentialModel credential,
     required BlockchainType? blockchainType,
-    required QRCodeScanCubit qrCodeScanCubit,
     bool showMessage = true,
     bool showStatus = true,
     bool isPendingCredential = false,
@@ -450,8 +448,11 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
       final isFormatMatched = iteratedCredentialFormat == credential.format;
 
+      final isOnSameProfile = storedCredential.profileLinkedId ==
+          profileCubit.state.model.profileType.getVCId;
+
       final isCredentialMatched =
-          isCredentialSubjectTypeMatched && isFormatMatched;
+          isCredentialSubjectTypeMatched && isFormatMatched && isOnSameProfile;
 
       if (isCredentialMatched) {
         // credential and format matches
@@ -460,11 +461,18 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         /// with same email address
         if (credentialSubjectModel.credentialSubjectType ==
             CredentialSubjectType.emailPass) {
-          final String? oldEmail =
-              (credentialSubjectModel as EmailPassModel).email;
-          final newEmail =
-              (iteratedCredentialSubjectModel as EmailPassModel).email;
-
+          late String? oldEmail;
+          late String? newEmail;
+          if (credential.data['email'] != null) {
+            oldEmail = credential.data['email'] as String;
+          } else {
+            oldEmail = (credentialSubjectModel as EmailPassModel).email;
+          }
+          if (storedCredential.data['email'] != null) {
+            newEmail = storedCredential.data['email'] as String;
+          } else {
+            newEmail = (iteratedCredentialSubjectModel as EmailPassModel).email;
+          }
           if (oldEmail != null && oldEmail == newEmail) {
             /// check if email is same
 
@@ -488,22 +496,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               // don not remove if support multiple
             }
           }
-        } else {
-          /// other cards
-          if (credentialSubjectModel.credentialSubjectType.supportSingleOnly) {
-            if (!credentialSubjectModel
-                .credentialSubjectType.isBlockchainAccount) {
-              await deleteById(
-                id: storedCredential.id,
-                showMessage: false,
-                blockchainType: blockchainType,
-              );
-            }
-
-            break;
-          } else {
-            // don not remove if support multiple
-          }
+        } else if (credentialSubjectModel
+                .credentialSubjectType.isBlockchainAccount ||
+            credentialSubjectModel.credentialSubjectType.supportSingleOnly) {
+          await deleteById(
+            id: storedCredential.id,
+            showMessage: false,
+            blockchainType: blockchainType,
+          );
         }
       }
     }
@@ -545,7 +545,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> insertAssociatedWalletCredential({
     required CryptoAccountData cryptoAccountData,
-    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     final didKeyType = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
@@ -577,10 +576,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     );
 
     if (credential != null) {
+      await modifyCredential(
+        credential: credential,
+        blockchainType: cryptoAccountData.blockchainType,
+      );
+
       await insertCredential(
         credential: credential,
         blockchainType: cryptoAccountData.blockchainType,
-        qrCodeScanCubit: qrCodeScanCubit,
         showMessage: false,
       );
     }
@@ -597,8 +600,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     final profileModel = profileCubit.state.model;
     final profileSetting = profileModel.profileSetting;
-    final vcFormatType = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+    final formatsSupported = profileModel
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .formatsSupported ??
+        [];
 
     final discoverCardsOptions = profileSetting.discoverCardsOptions;
     // entreprise user may have a list of external issuer
@@ -619,19 +626,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       if (discoverCardsOptions != null) {
         // add cards in discover based on profile
 
-        final ldpVcType = vcFormatType == VCFormatType.ldpVc ||
-            vcFormatType == VCFormatType.auto;
-        final jwtVcJsonType = vcFormatType == VCFormatType.jwtVcJson ||
-            vcFormatType == VCFormatType.auto;
-        final jwtVcType = vcFormatType == VCFormatType.jwtVc;
-        final vcSdJWType = vcFormatType == VCFormatType.vcSdJWT ||
-            vcFormatType == VCFormatType.auto;
-
         switch (category) {
           case CredentialCategory.identityCards:
 
             /// over 13
-            if (ldpVcType && discoverCardsOptions.displayOver13) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayOver13) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.over13,
@@ -641,7 +641,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Over 15
-            if (ldpVcType && discoverCardsOptions.displayOver15) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayOver15) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.over15,
@@ -650,34 +651,44 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               );
             }
 
-            /// Over 18
-            if (ldpVcType && discoverCardsOptions.displayOver18) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.over18,
-                  formatType: VCFormatType.ldpVc,
-                ),
-              );
-            }
-            if (jwtVcJsonType && discoverCardsOptions.displayOver18Jwt) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.over18,
-                  formatType: VCFormatType.jwtVcJson,
-                ),
-              );
-            }
-            if (vcSdJWType && discoverCardsOptions.displayEmailPassSdJwt) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.over18,
-                  formatType: VCFormatType.vcSdJWT,
-                ),
-              );
+            while (true) {
+              /// Over 18
+              if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                  discoverCardsOptions.displayOver18) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.over18,
+                    formatType: VCFormatType.ldpVc,
+                  ),
+                );
+                break;
+              }
+              if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                  discoverCardsOptions.displayEmailPassSdJwt) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.over18,
+                    formatType: VCFormatType.vcSdJWT,
+                  ),
+                );
+                break;
+              }
+              if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                  discoverCardsOptions.displayOver18Jwt) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.over18,
+                    formatType: VCFormatType.jwtVcJson,
+                  ),
+                );
+                break;
+              }
+              break;
             }
 
             /// Over 21
-            if (ldpVcType && discoverCardsOptions.displayOver21) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayOver21) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.over21,
@@ -687,7 +698,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Over 50
-            if (ldpVcType && discoverCardsOptions.displayOver50) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayOver50) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.over50,
@@ -697,7 +709,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Over 65
-            if (ldpVcType && discoverCardsOptions.displayOver65) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayOver65) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.over65,
@@ -707,41 +720,53 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// verifiableIdCard
-            if (ldpVcType && discoverCardsOptions.displayVerifiableId) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.verifiableIdCard,
-                  formatType: VCFormatType.ldpVc,
-                ),
-              );
-            }
-            if (jwtVcType && discoverCardsOptions.displayVerifiableIdJwt) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.verifiableIdCard,
-                  formatType: VCFormatType.jwtVc,
-                ),
-              );
-            }
-            if (jwtVcJsonType && discoverCardsOptions.displayVerifiableIdJwt) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.verifiableIdCard,
-                  formatType: VCFormatType.jwtVcJson,
-                ),
-              );
-            }
-            if (vcSdJWType && discoverCardsOptions.displayVerifiableIdSdJwt) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.verifiableIdCard,
-                  formatType: VCFormatType.vcSdJWT,
-                ),
-              );
+            while (true) {
+              if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                  discoverCardsOptions.displayVerifiableIdSdJwt) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.verifiableIdCard,
+                    formatType: VCFormatType.vcSdJWT,
+                  ),
+                );
+                break;
+              }
+              if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                  discoverCardsOptions.displayVerifiableId) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.verifiableIdCard,
+                    formatType: VCFormatType.ldpVc,
+                  ),
+                );
+                break;
+              }
+              if (formatsSupported.contains(VCFormatType.jwtVc) &&
+                  discoverCardsOptions.displayVerifiableIdJwt) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.verifiableIdCard,
+                    formatType: VCFormatType.jwtVc,
+                  ),
+                );
+                break;
+              }
+              if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                  discoverCardsOptions.displayVerifiableIdJwt) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.verifiableIdCard,
+                    formatType: VCFormatType.jwtVcJson,
+                  ),
+                );
+                break;
+              }
+              break;
             }
 
             /// age range
-            if (ldpVcType && discoverCardsOptions.displayAgeRange) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayAgeRange) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.ageRange,
@@ -751,26 +776,34 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// livenessCard
-            if (ldpVcType && discoverCardsOptions.displayHumanity) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.livenessCard,
-                  formatType: VCFormatType.ldpVc,
-                ),
-              );
-            }
+            while (true) {
+              if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                  discoverCardsOptions.displayHumanity) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.livenessCard,
+                    formatType: VCFormatType.ldpVc,
+                  ),
+                );
+                break;
+              }
 
-            if (jwtVcJsonType && discoverCardsOptions.displayHumanityJwt) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.livenessCard,
-                  formatType: VCFormatType.jwtVcJson,
-                ),
-              );
+              if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                  discoverCardsOptions.displayHumanityJwt) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.livenessCard,
+                    formatType: VCFormatType.jwtVcJson,
+                  ),
+                );
+                break;
+              }
+              break;
             }
 
             /// gender
-            if (ldpVcType && discoverCardsOptions.displayGender) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayGender) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.gender,
@@ -783,7 +816,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
             /// chainbornMembership
             if (Parameters.showChainbornCard) {
-              if (ldpVcType && discoverCardsOptions.displayChainborn) {
+              if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                  discoverCardsOptions.displayChainborn) {
                 allCategoryVC.add(
                   CredInfo(
                     credentialType: CredentialSubjectType.chainbornMembership,
@@ -795,7 +829,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
             /// tezotopiaMembership
             if (Parameters.showTezotopiaCard) {
-              if (ldpVcType && discoverCardsOptions.displayTezotopia) {
+              if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                  discoverCardsOptions.displayTezotopia) {
                 allCategoryVC.add(
                   CredInfo(
                     credentialType: CredentialSubjectType.tezotopiaMembership,
@@ -811,55 +846,72 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           case CredentialCategory.contactInfoCredentials:
 
             /// Email Pass
-
-            if (ldpVcType && discoverCardsOptions.displayEmailPass) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.emailPass,
-                  formatType: VCFormatType.ldpVc,
-                ),
-              );
-            }
-            if (jwtVcJsonType && discoverCardsOptions.displayEmailPassJwt) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.emailPass,
-                  formatType: VCFormatType.jwtVcJson,
-                ),
-              );
-            }
-            if (vcSdJWType && discoverCardsOptions.displayEmailPassSdJwt) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.emailPass,
-                  formatType: VCFormatType.vcSdJWT,
-                ),
-              );
+            while (true) {
+              if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                  discoverCardsOptions.displayEmailPass) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.emailPass,
+                    formatType: VCFormatType.ldpVc,
+                  ),
+                );
+                break;
+              }
+              if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                  discoverCardsOptions.displayEmailPassJwt) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.emailPass,
+                    formatType: VCFormatType.jwtVcJson,
+                  ),
+                );
+                break;
+              }
+              if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                  discoverCardsOptions.displayEmailPassSdJwt) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.emailPass,
+                    formatType: VCFormatType.vcSdJWT,
+                  ),
+                );
+                break;
+              }
+              break;
             }
 
             /// Phone Pass
-            if (ldpVcType && discoverCardsOptions.displayPhonePass) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.phonePass,
-                  formatType: VCFormatType.ldpVc,
-                ),
-              );
-            }
-            if (jwtVcJsonType && discoverCardsOptions.displayPhonePassJwt) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.phonePass,
-                  formatType: VCFormatType.jwtVcJson,
-                ),
-              );
+
+            while (true) {
+              if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                  discoverCardsOptions.displayPhonePass) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.phonePass,
+                    formatType: VCFormatType.ldpVc,
+                  ),
+                );
+                break;
+              }
+              if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                  discoverCardsOptions.displayPhonePassJwt) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.phonePass,
+                    formatType: VCFormatType.jwtVcJson,
+                  ),
+                );
+                break;
+              }
+              break;
             }
 
           case CredentialCategory.educationCards:
             break;
           case CredentialCategory.financeCards:
             if (Parameters.supportDefiCompliance) {
-              if (ldpVcType && discoverCardsOptions.displayDefi) {
+              if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                  discoverCardsOptions.displayDefi) {
                 allCategoryVC.add(
                   CredInfo(
                     credentialType: CredentialSubjectType.defiCompliance,
@@ -919,11 +971,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       final List<CredInfo> requiredCreds = [];
 
       for (final credInfo in allCategoryVC) {
-        /// remove if format is not matching
-        if (!credInfo.credentialType.getVCFormatType.contains(vcFormatType)) {
-          continue;
-        }
-
         final isBlockchainAccount = credInfo.credentialType.isBlockchainAccount;
 
         /// remove if credential it is blockchain account
@@ -944,12 +991,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             credInfo.credentialType.supportSingleOnly) {
           /// credential available case
           for (final credential in credentialsOfSameType) {
-            // final alreadyAdded = requiredCreds.any(
-            //   (item) =>
-            //       item.credentialType == credInfo.credentialType &&
-            //       item.formatType == credInfo.formatType,
-            // );
-            if (vcFormatType.vcValue == credential.getFormat) {
+            if (credInfo.formatType.vcValue == credential.getFormat) {
               /// do not add if format matched
               /// there can be same credentials with different format
             } else {
@@ -980,6 +1022,25 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     }
 
     return dummies;
+  }
+
+  Future<void> generateCryptoAccountsCards(
+    List<CryptoAccountData> cryptoAccounts,
+  ) async {
+    // Loop on cryptoAccounts and generate the cards
+    for (final cryptoAccount in cryptoAccounts) {
+      final cryptoAccountData = CryptoAccountData(
+        name: cryptoAccount.name,
+        secretKey: cryptoAccount.secretKey,
+        walletAddress: cryptoAccount.walletAddress,
+        isImported: cryptoAccount.isImported,
+        blockchainType: cryptoAccount.blockchainType,
+      );
+
+      await insertAssociatedWalletCredential(
+        cryptoAccountData: cryptoAccountData,
+      );
+    }
   }
 }
 

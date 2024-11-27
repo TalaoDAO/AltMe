@@ -33,6 +33,7 @@ class VCFormatWidget extends StatelessWidget {
                     onTap: () {
                       context.read<ProfileCubit>().updateProfileSetting(
                             vcFormatType: vcFormatType,
+                            formatsSupported: [vcFormatType],
                           );
                     },
                     shape: RoundedRectangleBorder(
