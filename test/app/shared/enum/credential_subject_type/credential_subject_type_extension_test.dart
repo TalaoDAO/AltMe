@@ -14,6 +14,7 @@ void main() {
         image: '',
         shareLink: '',
         display: const Display(backgroundColor: '#FFFFFF'),
+        profileLinkedId: '',
       );
       final credentialModel2 = CredentialModel(
         id: '',
@@ -21,6 +22,7 @@ void main() {
         data: const <String, dynamic>{},
         image: '',
         shareLink: '',
+        profileLinkedId: '',
       );
 
       for (final value in CredentialSubjectType.values) {
@@ -922,8 +924,10 @@ void main() {
 
     test('returns correct VCFormatType values for each CredentialSubjectType',
         () {
-      void verifyVCFormatType(CredentialSubjectType subjectType,
-          List<VCFormatType> expectedValues) {
+      void verifyVCFormatType(
+        CredentialSubjectType subjectType,
+        List<VCFormatType> expectedValues,
+      ) {
         expect(
           subjectType.getVCFormatType,
           equals(expectedValues),

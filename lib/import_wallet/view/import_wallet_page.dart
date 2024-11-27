@@ -1,5 +1,7 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -44,9 +46,12 @@ class ImportWalletPage extends StatelessWidget {
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),
-        walletCubit: context.read<WalletCubit>(),
+        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
         splashCubit: context.read<SplashCubit>(),
         activityLogManager: ActivityLogManager(getSecureStorage),
+        credentialsCubit: context.read<CredentialsCubit>(),
+        walletCubit: context.read<WalletCubit>(),
+        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: ImportWalletView(
         accountName: accountName,

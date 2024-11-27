@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/matrix_notification/cubit/matrix_notification_cubit.dart';
 import 'package:altme/splash/helper_function/is_wallet_created.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -21,10 +22,12 @@ class SplashCubit extends Cubit<SplashState> {
     required this.homeCubit,
     required this.walletCubit,
     required this.credentialsCubit,
+    required this.qrCodeScanCubit,
+    required this.profileCubit,
     required this.altmeChatSupportCubit,
     required this.matrixNotificationCubit,
+    required this.walletConnectCubit,
     required this.client,
-    required this.profileCubit,
     this.packageInfo,
   }) : super(const SplashState()) {
     _getAppVersion(packageInfo);
@@ -34,10 +37,12 @@ class SplashCubit extends Cubit<SplashState> {
   final HomeCubit homeCubit;
   final WalletCubit walletCubit;
   final CredentialsCubit credentialsCubit;
+  final QRCodeScanCubit qrCodeScanCubit;
+  final WalletConnectCubit walletConnectCubit;
   final AltmeChatSupportCubit altmeChatSupportCubit;
   final MatrixNotificationCubit matrixNotificationCubit;
-  final DioClient client;
   final ProfileCubit profileCubit;
+  final DioClient client;
   final PackageInfo? packageInfo;
 
   Future<void> initialiseApp() async {
@@ -51,8 +56,10 @@ class SplashCubit extends Cubit<SplashState> {
 
         final bool hasWallet = await isWalletCreated(
           secureStorageProvider: secureStorageProvider,
-          walletCubit: walletCubit,
+          qrCodeScanCubit: qrCodeScanCubit,
           credentialsCubit: credentialsCubit,
+          walletCubit: walletCubit,
+          walletConnectCubit: walletConnectCubit,
         );
 
         if (hasWallet) {

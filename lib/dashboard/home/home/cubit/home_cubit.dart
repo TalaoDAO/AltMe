@@ -76,17 +76,19 @@ class HomeCubit extends Cubit<HomeState> {
       'domain': 'issuer.talao.co',
     };
 
-    final String did_auth = await didKitProvider.didAuth(
-      did,
-      jsonEncode(options),
-      privateKey,
-    );
-
     final data = <String, dynamic>{
       'base64_encoded_string': base64EncodedImage,
-      'vp': did_auth,
       'did': did,
     };
+
+    if (vcFormatType != VCFormatType.vcSdJWT) {
+      final String did_auth = await didKitProvider.didAuth(
+        did,
+        jsonEncode(options),
+        privateKey,
+      );
+      data['vp'] = did_auth;
+    }
 
     await dotenv.load();
     final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');
@@ -195,8 +197,6 @@ class HomeCubit extends Cubit<HomeState> {
             await getCredentialManifestFromAltMe(
           oidc4vc: oidc4vc,
           oidc4vciDraftType: oidc4vciDraftType,
-          useOAuthAuthorizationServerLink:
-              useOauthServerAuthEndPoint(profileCubit.state.model),
         );
         credentialManifest.outputDescriptors?.removeWhere(
           (element) => element.id != credentialSubjectType.name,
@@ -216,12 +216,12 @@ class HomeCubit extends Cubit<HomeState> {
           ),
           newData: credential,
           activities: [Activity(acquisitionAt: DateTime.now())],
+          profileType: qrCodeScanCubit.profileCubit.state.model.profileType,
         );
         await credentialsCubit.insertCredential(
           credential: credentialModel,
           showMessage: true,
           blockchainType: blockchainType,
-          qrCodeScanCubit: qrCodeScanCubit,
         );
         await cameraCubit.incrementAcquiredCredentialsQuantity();
         emit(state.copyWith(status: AppStatus.success));

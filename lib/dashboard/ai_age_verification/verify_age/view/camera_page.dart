@@ -7,26 +7,31 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class CameraPage extends StatelessWidget {
   const CameraPage({
     super.key,
     required this.defaultconfig,
     required this.credentialSubjectType,
+    required this.vcFormatType,
   });
 
   final CameraConfig defaultconfig;
   final CredentialSubjectType credentialSubjectType;
+  final VCFormatType vcFormatType;
 
   static Route<List<int>?> route({
     CameraConfig defaultconfig = const CameraConfig(),
     required CredentialSubjectType credentialSubjectType,
+    required VCFormatType vcFormatType,
   }) {
     return MaterialPageRoute<List<int>?>(
       settings: const RouteSettings(name: '/cameraPage'),
       builder: (_) => CameraPage(
         defaultconfig: defaultconfig,
         credentialSubjectType: credentialSubjectType,
+        vcFormatType: vcFormatType,
       ),
     );
   }
@@ -39,6 +44,7 @@ class CameraPage extends StatelessWidget {
       ),
       child: CameraView(
         credentialSubjectType: credentialSubjectType,
+        vcFormatType: vcFormatType,
       ),
     );
   }
@@ -48,9 +54,11 @@ class CameraView extends StatefulWidget {
   const CameraView({
     super.key,
     required this.credentialSubjectType,
+    required this.vcFormatType,
   });
 
   final CredentialSubjectType credentialSubjectType;
+  final VCFormatType vcFormatType;
 
   @override
   State<CameraView> createState() => _CameraViewState();
@@ -126,7 +134,7 @@ class _CameraViewState extends State<CameraView> {
                       .state
                       .currentAccount!
                       .blockchainType,
-                  vcFormatType: customOidc4vcProfile.vcFormatType,
+                  vcFormatType: widget.vcFormatType,
                   qrCodeScanCubit: context.read<QRCodeScanCubit>(),
                 );
             LoadingView().hide();
@@ -135,6 +143,7 @@ class _CameraViewState extends State<CameraView> {
               AiAgeResultPage.route(
                 context: context,
                 credentialSubjectType: widget.credentialSubjectType,
+                vcFormatType: widget.vcFormatType,
               ),
             );
           }

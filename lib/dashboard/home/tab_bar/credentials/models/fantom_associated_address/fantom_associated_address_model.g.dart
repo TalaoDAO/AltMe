@@ -10,7 +10,6 @@ FantomAssociatedAddressModel _$FantomAssociatedAddressModelFromJson(
         Map<String, dynamic> json) =>
     FantomAssociatedAddressModel(
       associatedAddress: json['associatedAddress'] as String? ?? '',
-      accountName: json['accountName'] as String? ?? '',
       id: json['id'] as String,
       type: json['type'] as String,
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
@@ -23,5 +22,4 @@ Map<String, dynamic> _$FantomAssociatedAddressModelToJson(
       'type': instance.type,
       'issuedBy': instance.issuedBy?.toJson(),
       'associatedAddress': instance.associatedAddress,
-      'accountName': instance.accountName,
     };

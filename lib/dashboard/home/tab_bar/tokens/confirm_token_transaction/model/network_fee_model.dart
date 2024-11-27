@@ -8,58 +8,34 @@ enum NetworkSpeed { slow, average, fast }
 @JsonSerializable()
 class NetworkFeeModel extends Equatable {
   const NetworkFeeModel({
-    required this.fee,
+    required this.totalFee,
+    required this.networkSpeed,
     this.feeInUSD = 0.0,
     this.tokenSymbol = 'XTZ',
-    required this.networkSpeed,
+    this.bakerFee,
   });
 
   factory NetworkFeeModel.fromJson(Map<String, dynamic> json) =>
       _$NetworkFeeModelFromJson(json);
 
-  final double fee;
+  final String totalFee;
+  final String? bakerFee;
   final double feeInUSD;
   final String tokenSymbol;
   final NetworkSpeed networkSpeed;
 
   Map<String, dynamic> toJson() => _$NetworkFeeModelToJson(this);
 
-  static List<NetworkFeeModel> tezosNetworkFees({
-    double? slow,
-    double? average,
-    double? fast,
-  }) {
-    final List<NetworkFeeModel> fees = [];
-    if (slow != null) {
-      fees.add(
-        NetworkFeeModel(
-          fee: slow,
-          networkSpeed: NetworkSpeed.slow,
-        ),
-      );
-    }
-    if (average != null) {
-      fees.add(
-        NetworkFeeModel(
-          fee: average,
-          networkSpeed: NetworkSpeed.average,
-        ),
-      );
-    }
-    if (fast != null) {
-      fees.add(NetworkFeeModel(fee: fast, networkSpeed: NetworkSpeed.fast));
-    }
-    return fees;
-  }
-
   NetworkFeeModel copyWith({
-    double? fee,
+    String? totalFee,
+    String? bakerFee,
     double? feeInUSD,
     String? tokenSymbol,
     NetworkSpeed? networkSpeed,
   }) {
     return NetworkFeeModel(
-      fee: fee ?? this.fee,
+      totalFee: totalFee ?? this.totalFee,
+      bakerFee: bakerFee ?? this.bakerFee,
       networkSpeed: networkSpeed ?? this.networkSpeed,
       feeInUSD: feeInUSD ?? this.feeInUSD,
       tokenSymbol: tokenSymbol ?? this.tokenSymbol,
@@ -67,5 +43,5 @@ class NetworkFeeModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [fee, feeInUSD, tokenSymbol, networkSpeed];
+  List<Object?> get props => [totalFee, feeInUSD, tokenSymbol, networkSpeed];
 }

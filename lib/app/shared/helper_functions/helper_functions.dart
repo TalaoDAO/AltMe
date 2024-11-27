@@ -157,7 +157,7 @@ CredentialSubjectType? getCredTypeFromName(String credentialName) {
 
 Future<bool> isCredentialPresentable({
   required CredentialSubjectType? credentialSubjectType,
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
 }) async {
   if (credentialSubjectType == null) {
     return true;
@@ -165,7 +165,7 @@ Future<bool> isCredentialPresentable({
 
   final isPresentable = await isCredentialAvaialble(
     credentialSubjectType: credentialSubjectType,
-    vcFormatType: vcFormatType,
+    formatsSupported: formatsSupported,
   );
 
   return isPresentable;
@@ -173,7 +173,7 @@ Future<bool> isCredentialPresentable({
 
 Future<bool> isCredentialAvaialble({
   required CredentialSubjectType credentialSubjectType,
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
 }) async {
   /// fetching all the credentials
   final CredentialsRepository repository =
@@ -185,8 +185,11 @@ Future<bool> isCredentialAvaialble({
     final matchSubjectType = credentialSubjectType ==
         credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
-
-    final matchFormat = vcFormatType.vcValue == credential.format;
+    final formatsSupportedStrings =
+        formatsSupported.map((e) => e.vcValue).toList();
+    final matchFormat =
+        formatsSupportedStrings.contains(credential.getFormat) ||
+            credential.getFormat == 'auto';
     if (matchSubjectType && matchFormat) {
       return true;
     }
@@ -726,11 +729,9 @@ Future<
     return (null, null, null, null, null, null);
   }
 
-  final openIdConfigurationData = await oidc4vc.getOpenIdConfig(
+  final openIdConfigurationData = await oidc4vc.getIssuerMetaData(
     baseUrl: issuer,
-    isAuthorizationServer: false,
     dio: client.dio,
-    useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
   );
 
   final openIdConfiguration =
@@ -754,9 +755,9 @@ Future<
 
   Map<String, dynamic>? authorizationServerConfigurationData;
 
-  authorizationServerConfigurationData = await oidc4vc.getOpenIdConfig(
+  authorizationServerConfigurationData =
+      await oidc4vc.getAuthorizationServerMetaData(
     baseUrl: authorizationServer ?? issuer,
-    isAuthorizationServer: true,
     dio: client.dio,
     useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
   );
@@ -1006,7 +1007,6 @@ Future<bool?> isEBSIForVerifiers({
   required Uri uri,
   required OIDC4VC oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
-  required bool useOAuthAuthorizationServerLink,
 }) async {
   try {
     final String? clientId = uri.queryParameters['client_id'];
@@ -1016,11 +1016,9 @@ Future<bool?> isEBSIForVerifiers({
     final isUrl = isURL(clientId);
     if (!isUrl) return false;
 
-    final openIdConfigurationData = await oidc4vc.getOpenIdConfig(
+    final openIdConfigurationData = await oidc4vc.getIssuerMetaData(
       baseUrl: clientId,
-      isAuthorizationServer: false,
       dio: Dio(),
-      useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
     );
 
     final openIdConfiguration =
@@ -1203,11 +1201,19 @@ MessageHandler getMessageHandler(dynamic e) {
           'error_description': 'SSI does not support this process.',
         },
       );
-    } else if (stringException.contains('OPENID-CONFIGURATION-ISSUE')) {
+    } else if (stringException
+        .contains('AUTHORIZATION_SERVER_METADATA_ISSUE')) {
       return ResponseMessage(
         data: {
           'error': 'unsupported_format',
-          'error_description': 'Openid configuration response issue.',
+          'error_description': 'Authorization server metadata response issue.',
+        },
+      );
+    } else if (stringException.contains('ISSUER_METADATA_ISSUE')) {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'Issuer metadata response issue.',
         },
       );
     } else if (stringException.contains('NOT_A_VALID_OPENID_URL')) {
@@ -1314,9 +1320,11 @@ ResponseString getErrorResponseString(String errorString) {
       return ResponseString.RESPONSE_STRING_theWalletIsNotRegistered;
 
     case 'invalid_grant':
-    case 'issuance_pending':
     case 'invalid_token':
       return ResponseString.RESPONSE_STRING_credentialIssuanceDenied;
+
+    case 'issuance_pending':
+      return ResponseString.RESPONSE_STRING_credentialIssuanceIsStillPending;
 
     case 'unsupported_credential_format':
       return ResponseString.RESPONSE_STRING_thisCredentialFormatIsNotSupported;
@@ -1556,42 +1564,6 @@ String getUpdatedUrlForSIOPV2OIC4VP({
   return newUrl;
 }
 
-bool supportCryptoCredential(ProfileModel profileModel) {
-  final isEnterpriseProfile =
-      profileModel.profileType == ProfileType.enterprise;
-
-  if (isEnterpriseProfile &&
-      !Parameters.supportCryptoAccountOwnershipInDiscoverForEnterpriseMode) {
-    return false;
-  }
-
-  final profileSetting = profileModel.profileSetting;
-
-  final customOidc4vcProfile =
-      profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
-
-  /// suported VC format
-  final supportCryptoCredentialByVCFormat =
-      customOidc4vcProfile.vcFormatType.supportCryptoCredential;
-
-  /// supported did key
-  final supportCryptoCredentialByDidKey =
-      customOidc4vcProfile.defaultDid.supportCryptoCredential;
-
-  /// match format 1
-  final matchFormat1 =
-      supportCryptoCredentialByVCFormat && supportCryptoCredentialByDidKey;
-
-  /// match format 2
-  final matchFormat2 = customOidc4vcProfile.defaultDid == DidKeyType.edDSA &&
-      customOidc4vcProfile.vcFormatType == VCFormatType.ldpVc &&
-      !customOidc4vcProfile.cryptoHolderBinding;
-
-  final supportAssociatedCredential = matchFormat1 || matchFormat2;
-
-  return supportAssociatedCredential;
-}
-
 // clientId,
 // clientSecret,
 // authorization,
@@ -1828,7 +1800,7 @@ List<String> getStringCredentialsForToken({
 
 //(presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt)
 List<VCFormatType> getPresentVCDetails({
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
   required PresentationDefinition presentationDefinition,
   required Map<String, dynamic>? clientMetaData,
   required List<CredentialModel> credentialsToBePresented,
@@ -1905,11 +1877,22 @@ List<VCFormatType> getPresentVCDetails({
   }
 
   /// create list of supported formats
-  if (presentLdpVc) supportingFormats.add(VCFormatType.ldpVc);
-  if (presentJwtVc) supportingFormats.add(VCFormatType.jwtVc);
-  if (presentJwtVcJson) supportingFormats.add(VCFormatType.jwtVcJson);
-  if (presentJwtVcJsonLd) supportingFormats.add(VCFormatType.jwtVcJsonLd);
-  if (presentVcSdJwt) supportingFormats.add(VCFormatType.vcSdJWT);
+  if (presentLdpVc && formatsSupported.contains(VCFormatType.ldpVc)) {
+    supportingFormats.add(VCFormatType.ldpVc);
+  }
+  if (presentJwtVc && formatsSupported.contains(VCFormatType.jwtVc)) {
+    supportingFormats.add(VCFormatType.jwtVc);
+  }
+  if (presentJwtVcJson && formatsSupported.contains(VCFormatType.jwtVcJson)) {
+    supportingFormats.add(VCFormatType.jwtVcJson);
+  }
+  if (presentJwtVcJsonLd &&
+      formatsSupported.contains(VCFormatType.jwtVcJsonLd)) {
+    supportingFormats.add(VCFormatType.jwtVcJsonLd);
+  }
+  if (presentVcSdJwt && formatsSupported.contains(VCFormatType.vcSdJWT)) {
+    supportingFormats.add(VCFormatType.vcSdJWT);
+  }
 
   return supportingFormats;
 }

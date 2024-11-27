@@ -1,5 +1,7 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/flavor.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
@@ -21,25 +23,31 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     required this.keyGenerator,
     required this.didKitProvider,
     required this.homeCubit,
-    required this.walletCubit,
+    required this.qrCodeScanCubit,
+    required this.profileCubit,
     required this.splashCubit,
     required this.flavorCubit,
     required this.altmeChatSupportCubit,
     required this.matrixNotificationCubit,
-    required this.profileCubit,
     required this.activityLogManager,
+    required this.walletCubit,
+    required this.walletConnectCubit,
+    required this.credentialsCubit,
   }) : super(OnBoardingVerifyPhraseState());
 
   final KeyGenerator keyGenerator;
   final DIDKitProvider didKitProvider;
 
   final HomeCubit homeCubit;
-  final WalletCubit walletCubit;
+  final QRCodeScanCubit qrCodeScanCubit;
   final FlavorCubit flavorCubit;
   final SplashCubit splashCubit;
   final AltmeChatSupportCubit altmeChatSupportCubit;
   final MatrixNotificationCubit matrixNotificationCubit;
   final ProfileCubit profileCubit;
+  final WalletCubit walletCubit;
+  final CredentialsCubit credentialsCubit;
+  final WalletConnectCubit walletConnectCubit;
   final ActivityLogManager activityLogManager;
 
   final log = getLogger('OnBoardingVerifyPhraseCubit');
@@ -121,12 +129,15 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
           keyGenerator: keyGenerator,
           didKitProvider: didKitProvider,
           homeCubit: homeCubit,
-          walletCubit: walletCubit,
           splashCubit: splashCubit,
           altmeChatSupportCubit: altmeChatSupportCubit,
           matrixNotificationCubit: matrixNotificationCubit,
-          profileCubit: profileCubit,
           activityLogManager: activityLogManager,
+          qrCodeScanCubit: qrCodeScanCubit,
+          credentialsCubit: credentialsCubit,
+          walletCubit: walletCubit,
+          profileCubit: profileCubit,
+          walletConnectCubit: walletConnectCubit,
         );
       }
       await profileCubit.secureStorageProvider.set(

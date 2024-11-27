@@ -13,8 +13,9 @@ OperationState _$OperationStateFromJson(Map<String, dynamic> json) =>
       message: json['message'] == null
           ? null
           : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-      amount: (json['amount'] as num?)?.toDouble() ?? 0,
-      fee: (json['fee'] as num?)?.toDouble() ?? 0,
+      amount: json['amount'] as String? ?? '0',
+      totalFee: json['totalFee'] as String? ?? '0',
+      bakerFee: json['bakerFee'] as String?,
       usdRate: (json['usdRate'] as num?)?.toDouble() ?? 0,
       cryptoAccountData: json['cryptoAccountData'] == null
           ? null
@@ -28,7 +29,8 @@ Map<String, dynamic> _$OperationStateToJson(OperationState instance) =>
       'status': _$AppStatusEnumMap[instance.status]!,
       'message': instance.message,
       'amount': instance.amount,
-      'fee': instance.fee,
+      'totalFee': instance.totalFee,
+      'bakerFee': instance.bakerFee,
       'usdRate': instance.usdRate,
       'cryptoAccountData': instance.cryptoAccountData,
       'dAppName': instance.dAppName,

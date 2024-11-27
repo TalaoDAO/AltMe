@@ -48,12 +48,13 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     emit(
       state.copyWith(
         networkFee: state.networkFee!.copyWith(
-          feeInUSD: xtzUSDPrice * state.networkFee!.fee,
+          feeInUSD: xtzUSDPrice *
+              Decimal.parse(state.networkFee!.totalFee).toDouble(),
         ),
         networkFees: state.networkFees!
             .map(
               (e) => e.copyWith(
-                feeInUSD: xtzUSDPrice * e.fee,
+                feeInUSD: xtzUSDPrice * Decimal.parse(e.totalFee).toDouble(),
               ),
             )
             .toList(),
@@ -142,7 +143,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     final double feeInUSD = etherUSDPrice * fee;
 
     final networkFee = NetworkFeeModel(
-      fee: fee,
+      totalFee: fee.toString(),
       networkSpeed: NetworkSpeed.average,
       tokenSymbol: blockchainType.symbol,
       feeInUSD: feeInUSD,
@@ -154,7 +155,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         networkFee: networkFee,
         totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
             ? (Decimal.parse(state.tokenAmount) -
-                    Decimal.parse(networkFee.fee.toString()))
+                    Decimal.parse(networkFee.totalFee))
                 .toString()
             : state.tokenAmount,
       ),
@@ -185,31 +186,53 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         final keystore = KeyGenerator()
             .getKeystore(secretKey: state.selectedAccountSecretKey);
         late OperationsList? finalOperationList;
-        late List<NetworkFeeModel> tezosNetworkFees;
+        final List<NetworkFeeModel> tezosNetworkFees = [];
         late NetworkFeeModel networkFee;
         if (state.selectedToken.contractAddress.isEmpty) {
           finalOperationList = await tezosTransfert(keystore, client);
-          final finalFeesSum = finalOperationList.operations
+          final finalTotalFeesSum = finalOperationList.operations
               .fold(0, (sum, element) => sum + element.totalFee);
-          tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
-            average: finalFeesSum / 1000000,
+          final finalBakerFeesSum = finalOperationList.operations
+              .fold(0, (sum, element) => sum + element.fee);
+
+          networkFee = NetworkFeeModel(
+            totalFee: (finalTotalFeesSum / 1000000).toString(),
+            bakerFee: (finalBakerFeesSum / 1000000).toString(),
+            networkSpeed: NetworkSpeed.average,
           );
-          networkFee = tezosNetworkFees[0];
+
+          tezosNetworkFees.add(networkFee);
         } else {
           // Need to convert michelson expression into michelson
-          // finalOperationList = await tezosContract(
-          //   client,
-          //   keystore,
-          // );
-          tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
-            slow: 0.002496,
-            average: 0.021900,
-            fast: 0.050000,
-          );
-          finalOperationList = null;
-          networkFee = tezosNetworkFees[1];
-        }
 
+          finalOperationList =
+              await _calculateMichelsonContractFee(client, keystore);
+          if (finalOperationList != null) {
+            final finalTotalFeesSum = finalOperationList.operations
+                .fold(0, (sum, element) => sum + element.totalFee);
+            final finalBakerFeesSum = finalOperationList.operations
+                .fold(0, (sum, element) => sum + element.fee);
+
+            networkFee = NetworkFeeModel(
+              totalFee: (finalTotalFeesSum / 1000000).toString(),
+              bakerFee: (finalBakerFeesSum / 1000000).toString(),
+              networkSpeed: NetworkSpeed.average,
+            );
+          } else {
+            // tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
+            //   slow: '0.002496',
+            //   average: '0.021900',
+            //   fast: '0.050000',
+            // );
+
+            networkFee = const NetworkFeeModel(
+              totalFee: '0.021900',
+              networkSpeed: NetworkSpeed.average,
+            );
+          }
+          tezosNetworkFees.add(networkFee);
+          finalOperationList = null;
+        }
         emit(
           state.copyWith(
             networkFee: networkFee,
@@ -217,7 +240,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
             status: AppStatus.init,
             totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
                 ? (Decimal.parse(state.tokenAmount) -
-                        Decimal.parse(networkFee.fee.toString()))
+                        Decimal.parse(networkFee.totalFee))
                     .toString()
                 : state.tokenAmount,
             operationsList: finalOperationList,
@@ -244,6 +267,19 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           );
         }
       }
+    }
+  }
+
+  // This function estimates fees for Michelson-based contract transactions
+  Future<OperationsList?> _calculateMichelsonContractFee(
+    TezartClient client,
+    Keystore keystore,
+  ) async {
+    try {
+      return await tezosContract(client, keystore);
+    } catch (e) {
+      logger.e('Michelson contract fee estimation error: $e');
+      return null;
     }
   }
 
@@ -325,7 +361,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   void setNetworkFee({required NetworkFeeModel networkFee}) {
     final totalAmount = state.selectedToken.symbol == networkFee.tokenSymbol
         ? (Decimal.parse(state.tokenAmount) -
-                Decimal.parse(networkFee.fee.toString()))
+                Decimal.parse(networkFee.totalFee))
             .toString()
         : state.tokenAmount;
 
@@ -510,7 +546,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       // fee calculated by XTZ
       final customFee = int.parse(
-        state.networkFee!.fee
+        Decimal.parse(state.networkFee!.totalFee)
+            .toDouble()
             .toStringAsFixed(
               6,
             ) // 6 is because the deciaml of XTZ is alway 6 (mutez)
@@ -587,7 +624,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         rpcUrl: rpcUrl,
       );
 
-      if ((state.networkFee?.fee ?? 0) > ethBalance) {
+      final totalFee = state.networkFee?.totalFee ?? '0';
+
+      if (Decimal.parse(totalFee).toDouble() > ethBalance) {
         emit(
           state.error(
             messageHandler: ResponseMessage(

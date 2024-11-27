@@ -9,6 +9,7 @@ part 'discover_dummy_credential.g.dart';
 class DiscoverDummyCredential extends Equatable {
   const DiscoverDummyCredential({
     required this.credentialSubjectType,
+    this.vcFormatType = VCFormatType.ldpVc,
     this.link,
     this.image,
     this.websiteLink,
@@ -45,6 +46,8 @@ class DiscoverDummyCredential extends Equatable {
   final String? howToGetItExtern;
   final String? longDescriptionExtern;
   final String? websiteLinkExtern;
+  final VCFormatType vcFormatType;
+
   Map<String, dynamic> toJson() => _$DiscoverDummyCredentialToJson(this);
 
   @override
@@ -63,5 +66,6 @@ class DiscoverDummyCredential extends Equatable {
         howToGetItExtern,
         longDescriptionExtern,
         websiteLinkExtern,
+        vcFormatType,
       ];
 }

@@ -10,6 +10,7 @@ class WalletConnectState extends Equatable {
     this.parameters,
     this.signType,
     this.transaction,
+    this.operationDetails,
   });
 
   factory WalletConnectState.fromJson(Map<String, dynamic> json) =>
@@ -24,6 +25,7 @@ class WalletConnectState extends Equatable {
   final String? signType;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final Transaction? transaction;
+  final List<OperationDetails>? operationDetails;
 
   Map<String, dynamic> toJson() => _$WalletConnectStateToJson(this);
 
@@ -38,15 +40,15 @@ class WalletConnectState extends Equatable {
     );
   }
 
-  WalletConnectState copyWith({
-    WalletConnectStatus status = WalletConnectStatus.idle,
-    StateMessage? message,
-    SessionProposalEvent? sessionProposalEvent,
-    String? sessionTopic,
-    dynamic parameters,
-    String? signType,
-    Transaction? transaction,
-  }) {
+  WalletConnectState copyWith(
+      {WalletConnectStatus status = WalletConnectStatus.idle,
+      StateMessage? message,
+      SessionProposalEvent? sessionProposalEvent,
+      String? sessionTopic,
+      dynamic parameters,
+      String? signType,
+      Transaction? transaction,
+      List<OperationDetails>? operationDetails}) {
     return WalletConnectState(
       status: status,
       message: message,
@@ -55,6 +57,7 @@ class WalletConnectState extends Equatable {
       parameters: parameters ?? this.parameters,
       signType: signType ?? this.signType,
       transaction: transaction ?? this.transaction,
+      operationDetails: operationDetails ?? this.operationDetails,
     );
   }
 
@@ -66,5 +69,6 @@ class WalletConnectState extends Equatable {
         parameters,
         signType,
         transaction,
+        operationDetails,
       ];
 }

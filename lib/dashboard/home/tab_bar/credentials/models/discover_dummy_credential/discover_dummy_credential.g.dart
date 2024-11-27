@@ -11,6 +11,9 @@ DiscoverDummyCredential _$DiscoverDummyCredentialFromJson(
     DiscoverDummyCredential(
       credentialSubjectType: $enumDecode(
           _$CredentialSubjectTypeEnumMap, json['credentialSubjectType']),
+      vcFormatType:
+          $enumDecodeNullable(_$VCFormatTypeEnumMap, json['vcFormatType']) ??
+              VCFormatType.ldpVc,
       link: json['link'] as String?,
       image: json['image'] as String?,
       websiteLink: json['websiteLink'] as String?,
@@ -39,6 +42,7 @@ Map<String, dynamic> _$DiscoverDummyCredentialToJson(
       'howToGetItExtern': instance.howToGetItExtern,
       'longDescriptionExtern': instance.longDescriptionExtern,
       'websiteLinkExtern': instance.websiteLinkExtern,
+      'vcFormatType': _$VCFormatTypeEnumMap[instance.vcFormatType]!,
     };
 
 const _$CredentialSubjectTypeEnumMap = {
@@ -104,4 +108,13 @@ const _$CredentialSubjectTypeEnumMap = {
   CredentialSubjectType.identityCredential: 'identityCredential',
   CredentialSubjectType.eudiPid: 'eudiPid',
   CredentialSubjectType.pid: 'pid',
+};
+
+const _$VCFormatTypeEnumMap = {
+  VCFormatType.ldpVc: 'ldp_vc',
+  VCFormatType.jwtVc: 'jwt_vc',
+  VCFormatType.jwtVcJson: 'jwt_vc_json',
+  VCFormatType.jwtVcJsonLd: 'jwt_vc_json-ld',
+  VCFormatType.vcSdJWT: 'vc+sd-jwt',
+  VCFormatType.auto: 'auto',
 };

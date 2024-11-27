@@ -8,12 +8,14 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:key_generator/key_generator.dart';
+import 'package:reown_walletkit/reown_walletkit.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 part 'wallet_connect_cubit.g.dart';
 part 'wallet_connect_state.dart';
@@ -23,6 +25,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     required this.connectedDappRepository,
     required this.secureStorageProvider,
     required this.routeCubit,
+    required this.walletCubit,
   }) : super(const WalletConnectState()) {
     initialise();
   }
@@ -30,6 +33,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   final ConnectedDappRepository connectedDappRepository;
   final SecureStorageProvider secureStorageProvider;
   final RouteCubit routeCubit;
+  final WalletCubit walletCubit;
 
   Map<String, dynamic Function(String, dynamic)> get sessionRequestHandlers => {
         Parameters.ETH_SIGN: ethSign,
@@ -38,6 +42,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         Parameters.ETH_SIGN_TYPE_DATA_V4: ethSignTypedDataV4,
         // SupportedEVMMethods.switchChain.name: switchChain,
         // 'wallet_addEthereumChain': addChain,
+        Parameters.TEZOS_GET_ACCOUNTS: tezosGetAccounts,
+        Parameters.TEZOS_SIGN: tezosSign,
+        Parameters.TEZOS_SEND: tezosSend,
       };
 
   Map<String, dynamic Function(String, dynamic)> get methodRequestHandlers => {
@@ -47,13 +54,13 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
   final log = getLogger('WalletConnectCubit');
 
-  Web3Wallet? _web3Wallet;
+  ReownWalletKit? _reownWalletKit;
 
-  Web3Wallet? get web3Wallet => _web3Wallet;
+  ReownWalletKit? get reownWalletKit => _reownWalletKit;
 
   Future<void> initialise() async {
     try {
-      _web3Wallet = null;
+      _reownWalletKit = null;
 
       final String? savedCryptoAccount =
           await secureStorageProvider.get(SecureStorageKeys.cryptoAccount);
@@ -62,8 +69,8 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       await dotenv.load();
       final projectId = dotenv.get('WALLET_CONNECT_PROJECT_ID');
 
-      _web3Wallet = Web3Wallet(
-        core: Core(
+      _reownWalletKit = ReownWalletKit(
+        core: ReownCore(
           projectId: projectId,
           relayUrl:
               'wss://relay.walletconnect.com', // The relay websocket URL, leave blank to use the default
@@ -77,16 +84,18 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       );
 
       log.i('Setup our listeners');
-      _web3Wallet!.core.pairing.onPairingInvalid.subscribe(_onPairingInvalid);
-      _web3Wallet!.core.pairing.onPairingCreate.subscribe(_onPairingCreate);
-      _web3Wallet!.pairings.onSync.subscribe(_onPairingsSync);
-      _web3Wallet!.onSessionProposal.subscribe(_onSessionProposal);
-      _web3Wallet!.onSessionProposalError.subscribe(_onSessionProposalError);
-      _web3Wallet!.onSessionConnect.subscribe(_onSessionConnect);
-      _web3Wallet!.onAuthRequest.subscribe(_onAuthRequest);
+      _reownWalletKit!.core.pairing.onPairingInvalid
+          .subscribe(_onPairingInvalid);
+      _reownWalletKit!.core.pairing.onPairingCreate.subscribe(_onPairingCreate);
+      _reownWalletKit!.pairings.onSync.subscribe(_onPairingsSync);
+      _reownWalletKit!.onSessionProposal.subscribe(_onSessionProposal);
+      _reownWalletKit!.onSessionProposalError
+          .subscribe(_onSessionProposalError);
+      _reownWalletKit!.onSessionConnect.subscribe(_onSessionConnect);
+      _reownWalletKit!.onSessionAuthRequest.subscribe(_onAuthRequest);
 
       log.i('web3wallet init');
-      await _web3Wallet!.init();
+      await _reownWalletKit!.init();
 
       log.i('Setup our accounts');
 
@@ -97,15 +106,21 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         final CryptoAccount cryptoAccount =
             CryptoAccount.fromJson(cryptoAccountJson);
 
-        final eVMAccounts = cryptoAccount.data
-            .where((e) => e.blockchainType != BlockchainType.tezos)
-            .toList();
+        final cryptoAccounts = cryptoAccount.data.toList();
 
         log.i('registering acconts');
-        for (final evm in eVMAccounts) {
-          _web3Wallet!.registerAccount(
-            chainId: evm.blockchainType.chain,
-            accountAddress: evm.walletAddress,
+        for (final accounts in cryptoAccounts) {
+          var chain = '';
+
+          if (accounts.blockchainType == BlockchainType.tezos) {
+            chain = 'tezos:mainnet';
+          } else {
+            chain = accounts.blockchainType.chain;
+          }
+
+          _reownWalletKit!.registerAccount(
+            chainId: chain,
+            accountAddress: accounts.walletAddress,
           );
         }
       }
@@ -113,28 +128,34 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       /// register request emitter and request handler for all supported evms
 
       for (final blockchainType in BlockchainType.values) {
-        if (blockchainType == BlockchainType.tezos) {
-          continue;
-        }
         log.i(blockchainType);
+
+        var chain = '';
+
+        if (blockchainType == BlockchainType.tezos) {
+          chain = 'tezos:mainnet';
+        } else {
+          chain = blockchainType.chain;
+        }
+
         log.i('registerEventEmitter');
-        registerEventEmitter(blockchainType.chain);
+        registerEventEmitter(chain);
 
         log.i('registerRequestHandler');
-        registerRequestHandler(blockchainType.chain);
+        registerRequestHandler(chain);
       }
 
-      _web3Wallet!.onSessionRequest.subscribe(_onSessionRequest);
+      _reownWalletKit!.onSessionRequest.subscribe(_onSessionRequest);
 
       log.i('metadata');
-      log.i(_web3Wallet!.metadata);
+      log.i(_reownWalletKit!.metadata);
 
       log.i('pairings');
-      log.i(_web3Wallet!.pairings.getAll());
+      log.i(_reownWalletKit!.pairings.getAll());
       log.i('sessions');
-      log.i(_web3Wallet!.sessions.getAll());
-      log.i('completeRequests');
-      log.i(_web3Wallet!.completeRequests.getAll());
+      log.i(_reownWalletKit!.sessions.getAll());
+      // log.i('completeRequests');
+      // log.i(_reownWalletKit!.completeRequests.getAll());
     } catch (e) {
       log.e(e);
     }
@@ -142,14 +163,14 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
   void registerRequestHandler(String chain) {
     for (final handler in methodRequestHandlers.entries) {
-      _web3Wallet!.registerRequestHandler(
+      _reownWalletKit!.registerRequestHandler(
         chainId: chain,
         method: handler.key,
         handler: handler.value,
       );
     }
     for (final handler in sessionRequestHandlers.entries) {
-      _web3Wallet!.registerRequestHandler(
+      _reownWalletKit!.registerRequestHandler(
         chainId: chain,
         method: handler.key,
         handler: handler.value,
@@ -159,7 +180,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
   void registerEventEmitter(String chain) {
     for (final String event in Parameters.allEvents) {
-      _web3Wallet!.registerEventEmitter(chainId: chain, event: event);
+      _reownWalletKit!.registerEventEmitter(chainId: chain, event: event);
     }
   }
 
@@ -167,7 +188,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('walletConnectUri - $walletConnectUri');
 
     final Uri uriData = Uri.parse(walletConnectUri);
-    final PairingInfo pairingInfo = await _web3Wallet!.pair(
+    final PairingInfo pairingInfo = await _reownWalletKit!.pair(
       uri: uriData,
     );
     log.i(pairingInfo);
@@ -179,9 +200,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
   void _onPairingsSync(StoreSyncEvent? args) {
     if (args != null) {
-      //pairings.value = _web3Wallet!.pairings.getAll();
+      //pairings.value = _reownWalletKit!.pairings.getAll();
       log.i('onPairingsSync');
-      log.i(_web3Wallet!.pairings.getAll());
+      log.i(_reownWalletKit!.pairings.getAll());
     }
   }
 
@@ -277,7 +298,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('Pairing Create Event: $args');
   }
 
-  Future<void> _onAuthRequest(AuthRequest? args) async {
+  Future<void> _onAuthRequest(SessionAuthRequest? args) async {
     if (args != null) {
       log.i(args);
       // List<ChainKey> chainKeys = GetIt.I<IKeyService>().getKeysForChain(
@@ -289,7 +310,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       // print(args);
       //   final Widget w = WCRequestWidget(
       //     child: WCConnectionRequestWidget(
-      //       wallet: _web3Wallet!,
+      //       wallet: _reownWalletKit!,
       //       authRequest: WCAuthRequestModel(
       //         iss: iss,
       //         request: args,
@@ -301,7 +322,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       //   );
 
       //   if (auth != null && auth) {
-      //     final String message = _web3Wallet!.formatAuthMessage(
+      //     final String message = _reownWalletKit!.formatAuthMessage(
       //       iss: iss,
       //       cacaoPayload: CacaoRequestPayload.fromPayloadParams(
       //         args.payloadParams,
@@ -321,7 +342,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       //       privateKey: chainKeys.first.privateKey,
       //     );
 
-      //     await _web3Wallet!.respondAuthRequest(
+      //     await _reownWalletKit!.respondAuthRequest(
       //       id: args.id,
       //       iss: iss,
       //       signature: CacaoSignature(
@@ -330,7 +351,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       //       ),
       //     );
       //   } else {
-      //     await _web3Wallet!.respondAuthRequest(
+      //     await _reownWalletKit!.respondAuthRequest(
       //       id: args.id,
       //       iss: iss,
       //       error: Errors.getSdkError(
@@ -368,7 +389,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('completer initialise');
     completer.add(Completer<String>());
 
-    final pRequest = _web3Wallet!.pendingRequests.getAll().last;
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
     var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
 
     emit(
@@ -391,7 +412,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       response = response.copyWith(result: result);
     }
 
-    await _web3Wallet!.respondSessionRequest(
+    await _reownWalletKit!.respondSessionRequest(
       topic: topic,
       response: response,
     );
@@ -406,7 +427,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('completer initialise');
     completer.add(Completer<String>());
 
-    final pRequest = _web3Wallet!.pendingRequests.getAll().last;
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
     var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
 
     emit(
@@ -429,7 +450,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       response = response.copyWith(result: result);
     }
 
-    await _web3Wallet!.respondSessionRequest(
+    await _reownWalletKit!.respondSessionRequest(
       topic: topic,
       response: response,
     );
@@ -444,7 +465,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('completer initialise');
     completer.add(Completer<String>());
 
-    final pRequest = _web3Wallet!.pendingRequests.getAll().last;
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
     var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
     final transaction = getTransaction(parameters);
 
@@ -469,7 +490,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       response = response.copyWith(result: result);
     }
 
-    await _web3Wallet!.respondSessionRequest(
+    await _reownWalletKit!.respondSessionRequest(
       topic: topic,
       response: response,
     );
@@ -484,7 +505,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('completer initialise');
     completer.add(Completer<String>());
 
-    final pRequest = _web3Wallet!.pendingRequests.getAll().last;
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
     var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
 
     final Transaction transaction = getTransaction(parameters);
@@ -510,7 +531,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       response = response.copyWith(result: result);
     }
 
-    await _web3Wallet!.respondSessionRequest(
+    await _reownWalletKit!.respondSessionRequest(
       topic: topic,
       response: response,
     );
@@ -524,7 +545,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('completer initialise');
     completer.add(Completer<String>());
 
-    final pRequest = _web3Wallet!.pendingRequests.getAll().last;
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
     var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
 
     emit(
@@ -547,7 +568,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       response = response.copyWith(result: result);
     }
 
-    await _web3Wallet!.respondSessionRequest(
+    await _reownWalletKit!.respondSessionRequest(
       topic: topic,
       response: response,
     );
@@ -562,7 +583,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('completer initialise');
     completer.add(Completer<String>());
 
-    final pRequest = _web3Wallet!.pendingRequests.getAll().last;
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
     var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
 
     emit(
@@ -585,11 +606,140 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       response = response.copyWith(result: result);
     }
 
-    await _web3Wallet!.respondSessionRequest(
+    await _reownWalletKit!.respondSessionRequest(
       topic: topic,
       response: response,
     );
 
+    completer.removeLast();
+    return result;
+  }
+
+  Future<String> tezosGetAccounts(String topic, dynamic parameters) async {
+    log.i('tezosGetAccounts topic: $topic');
+    log.i('tezosGetAccounts parameters: $parameters');
+
+    final currentAccount = walletCubit.state.currentAccount!;
+
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(
+      id: pRequest.id,
+      jsonrpc: '2.0',
+    );
+
+    final isTezos = currentAccount.blockchainType == BlockchainType.tezos;
+
+    if (isTezos) {
+      final pubkey = await KeyGenerator().hexPubKey(
+        secretKey: currentAccount.secretKey,
+        accountType: AccountType.tezos,
+      );
+
+      response = response.copyWith(
+        result: [
+          {
+            'algo': 'ed25519',
+            'pubkey': pubkey,
+            'address': currentAccount.walletAddress,
+          }
+        ],
+      );
+    } else {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'Wrong blockchain'),
+      );
+    }
+
+    await _reownWalletKit!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+
+    return 'true';
+  }
+
+  Future<String> tezosSign(String topic, dynamic parameters) async {
+    log.i('tezosSign topic: $topic');
+
+    log.i('received tezos sign request: $parameters');
+
+    log.i('completer initialise');
+    completer.add(Completer<String>());
+
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
+
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.signPayload,
+        parameters: parameters,
+        sessionTopic: topic,
+        signType: Parameters.TEZOS_SIGN,
+      ),
+    );
+
+    final String result = await completer[completer.length - 1]!.future;
+    log.i('complete - $result');
+
+    if (result == 'Failed') {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'User rejected method'),
+      );
+    } else {
+      response = response.copyWith(
+        result: {'signature': result},
+      );
+    }
+
+    await _reownWalletKit!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
+
+    completer.removeLast();
+    emit(state.copyWith(status: WalletConnectStatus.idle));
+    return result;
+  }
+
+  Future<String> tezosSend(String topic, dynamic parameters) async {
+    log.i('tezosSend topic: $topic');
+    log.i('tezosSend parameters: $parameters');
+
+    log.i('completer initialise');
+    completer.add(Completer<String>());
+
+    final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
+
+    final operationDetails = getTezosOperationDetails(
+      parameters as Map<String, dynamic>,
+    );
+
+    emit(
+      state.copyWith(
+        status: WalletConnectStatus.operation,
+        parameters: parameters,
+        sessionTopic: topic,
+        signType: Parameters.TEZOS_SEND,
+        operationDetails: operationDetails,
+      ),
+    );
+
+    final String result = await completer[completer.length - 1]!.future;
+    log.i('complete - $result');
+
+    if (result == 'Failed') {
+      response = response.copyWith(
+        error: const JsonRpcError(code: 5001, message: 'User rejected method'),
+      );
+    } else {
+      response = response.copyWith(result: {'operationHash': result});
+    }
+
+    await _reownWalletKit!.respondSessionRequest(
+      topic: topic,
+      response: response,
+    );
     completer.removeLast();
     return result;
   }
@@ -648,22 +798,51 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     return transaction;
   }
 
+  List<OperationDetails> getTezosOperationDetails(
+    Map<String, dynamic> parameters,
+  ) {
+    final from = parameters['account'];
+    final operations = parameters['operations'] as List<dynamic>;
+
+    final operationDetails = <OperationDetails>[];
+    for (final op in operations) {
+      final operationDetail = OperationDetails(
+        source: from.toString(),
+        amount: op['amount'].toString(),
+        destination: op['destination'].toString(),
+        kind: stringToEnum(op['kind'].toString()),
+      );
+      operationDetails.add(operationDetail);
+    }
+
+    return operationDetails;
+  }
+
+  OperationKind stringToEnum(String operation) {
+    return OperationKind.values.firstWhere(
+      (e) => e.toString().split('.').last == operation,
+      orElse: () => OperationKind.transaction,
+    );
+  }
+
   Future<void> disconnectSession(String topic) async {
     log.i('disconnectSession: $topic');
-    await _web3Wallet!.disconnectSession(
+    await _reownWalletKit!.disconnectSession(
       topic: topic,
-      reason: Errors.getSdkError(Errors.USER_DISCONNECTED),
+      reason: Errors.getSdkError(Errors.USER_DISCONNECTED).toSignError(),
     );
   }
 
   Future<void> dispose() async {
     log.i('web3wallet dispose');
-    _web3Wallet!.core.pairing.onPairingInvalid.unsubscribe(_onPairingInvalid);
-    _web3Wallet!.pairings.onSync.unsubscribe(_onPairingsSync);
-    _web3Wallet!.onSessionProposal.unsubscribe(_onSessionProposal);
-    _web3Wallet!.onSessionProposalError.unsubscribe(_onSessionProposalError);
-    _web3Wallet!.onSessionConnect.unsubscribe(_onSessionConnect);
-    _web3Wallet!.onSessionRequest.unsubscribe(_onSessionRequest);
-    _web3Wallet!.onAuthRequest.unsubscribe(_onAuthRequest);
+    _reownWalletKit!.core.pairing.onPairingInvalid
+        .unsubscribe(_onPairingInvalid);
+    _reownWalletKit!.pairings.onSync.unsubscribe(_onPairingsSync);
+    _reownWalletKit!.onSessionProposal.unsubscribe(_onSessionProposal);
+    _reownWalletKit!.onSessionProposalError
+        .unsubscribe(_onSessionProposalError);
+    _reownWalletKit!.onSessionConnect.unsubscribe(_onSessionConnect);
+    _reownWalletKit!.onSessionRequest.unsubscribe(_onSessionRequest);
+    _reownWalletKit!.onSessionAuthRequest.unsubscribe(_onAuthRequest);
   }
 }

@@ -45,6 +45,7 @@ OpenIdConfiguration _$OpenIdConfigurationFromJson(Map<String, dynamic> json) =>
           .toList(),
       issuer: json['issuer'] as String?,
       jwksUri: json['jwks_uri'] as String?,
+      jwks: json['jwks'] as Map<String, dynamic>?,
       grantTypesSupported: (json['grant_types_supported'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -75,6 +76,7 @@ Map<String, dynamic> _$OpenIdConfigurationToJson(
       'credential_manifests': instance.credentialManifests,
       'issuer': instance.issuer,
       'jwks_uri': instance.jwksUri,
+      'jwks': instance.jwks,
       'require_pushed_authorization_requests':
           instance.requirePushedAuthorizationRequests,
       'grant_types_supported': instance.grantTypesSupported,

@@ -8,7 +8,6 @@ part 'ethereum_associated_address_model.g.dart';
 class EthereumAssociatedAddressModel extends CredentialSubjectModel {
   EthereumAssociatedAddressModel({
     this.associatedAddress,
-    this.accountName,
     required String super.id,
     required String super.type,
     required Author super.issuedBy,
@@ -22,9 +21,6 @@ class EthereumAssociatedAddressModel extends CredentialSubjectModel {
 
   @JsonKey(defaultValue: '')
   final String? associatedAddress;
-
-  @JsonKey(defaultValue: '')
-  final String? accountName;
 
   @override
   Map<String, dynamic> toJson() => _$EthereumAssociatedAddressModelToJson(this);
