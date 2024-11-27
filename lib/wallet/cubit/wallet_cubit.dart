@@ -317,7 +317,6 @@ class WalletCubit extends Cubit<WalletState> {
     /// AssociatedAddress credentials.
     if (Parameters.walletHandlesCrypto) {
       await credentialsCubit.insertAssociatedWalletCredential(
-        qrCodeScanCubit: qrCodeScanCubit,
         cryptoAccountData: cryptoAccountData,
       );
     }

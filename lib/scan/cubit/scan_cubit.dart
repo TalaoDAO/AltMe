@@ -284,7 +284,6 @@ class ScanCubit extends Cubit<ScanState> {
             credentialManifest: credentialManifest,
             profileType: qrCodeScanCubit.profileCubit.state.model.profileType,
           ),
-          qrCodeScanCubit: qrCodeScanCubit,
         );
 
         if (credentialsToBePresented != null) {

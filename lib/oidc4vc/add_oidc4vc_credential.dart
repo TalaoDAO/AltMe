@@ -204,6 +204,5 @@ Future<void> addOIDC4VCCredential({
     showStatus: false,
     showMessage: isLastCall,
     blockchainType: blockchainType,
-    qrCodeScanCubit: qrCodeScanCubit,
   );
 }

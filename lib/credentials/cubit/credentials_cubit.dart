@@ -195,7 +195,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         credential: walletCredential,
         showMessage: false,
         blockchainType: blockchainType,
-        qrCodeScanCubit: qrCodeScanCubit,
       );
     }
   }
@@ -293,7 +292,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> insertCredential({
     required CredentialModel credential,
     required BlockchainType? blockchainType,
-    required QRCodeScanCubit qrCodeScanCubit,
     bool showMessage = true,
     bool showStatus = true,
     bool isPendingCredential = false,
@@ -498,22 +496,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               // don not remove if support multiple
             }
           }
-        } else {
-          /// other cards
-          if (credentialSubjectModel.credentialSubjectType.supportSingleOnly) {
-            if (!credentialSubjectModel
-                .credentialSubjectType.isBlockchainAccount) {
-              await deleteById(
-                id: storedCredential.id,
-                showMessage: false,
-                blockchainType: blockchainType,
-              );
-            }
-
-            break;
-          } else {
-            // don not remove if support multiple
-          }
+        } else if (credentialSubjectModel
+                .credentialSubjectType.isBlockchainAccount ||
+            credentialSubjectModel.credentialSubjectType.supportSingleOnly) {
+          await deleteById(
+            id: storedCredential.id,
+            showMessage: false,
+            blockchainType: blockchainType,
+          );
         }
       }
     }
@@ -555,7 +545,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> insertAssociatedWalletCredential({
     required CryptoAccountData cryptoAccountData,
-    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     final didKeyType = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
@@ -587,10 +576,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     );
 
     if (credential != null) {
+      await modifyCredential(
+        credential: credential,
+        blockchainType: cryptoAccountData.blockchainType,
+      );
+
       await insertCredential(
         credential: credential,
         blockchainType: cryptoAccountData.blockchainType,
-        qrCodeScanCubit: qrCodeScanCubit,
         showMessage: false,
       );
     }
@@ -1029,6 +1022,25 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     }
 
     return dummies;
+  }
+
+  Future<void> generateCryptoAccountsCards(
+    List<CryptoAccountData> cryptoAccounts,
+  ) async {
+    // Loop on cryptoAccounts and generate the cards
+    for (final cryptoAccount in cryptoAccounts) {
+      final cryptoAccountData = CryptoAccountData(
+        name: cryptoAccount.name,
+        secretKey: cryptoAccount.secretKey,
+        walletAddress: cryptoAccount.walletAddress,
+        isImported: cryptoAccount.isImported,
+        blockchainType: cryptoAccount.blockchainType,
+      );
+
+      await insertAssociatedWalletCredential(
+        cryptoAccountData: cryptoAccountData,
+      );
+    }
   }
 }
 

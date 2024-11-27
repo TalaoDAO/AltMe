@@ -905,7 +905,18 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
         builder: (_) => const WalletRevokedDialog(),
       );
     }
-
+    if (state.status == AppStatus.success) {
+      // get list of crypto accounts from profile cubit
+      final manageAccountsCubit = ManageAccountsCubit(
+        credentialsCubit: context.read<CredentialsCubit>(),
+        manageNetworkCubit: context.read<ManageNetworkCubit>(),
+      );
+      final cryptoAccounts = manageAccountsCubit.state.cryptoAccount.data;
+      // generate crypto accounts cards
+      context.read<CredentialsCubit>().generateCryptoAccountsCards(
+            cryptoAccounts,
+          );
+    }
     if (state.status == AppStatus.addEnterpriseAccount ||
         state.status == AppStatus.updateEnterpriseAccount ||
         state.status == AppStatus.replaceEnterpriseAccount) {

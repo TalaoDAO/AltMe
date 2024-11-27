@@ -94,7 +94,6 @@ Future<void> addCredentialData({
             isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
         isPendingCredential: true,
         blockchainType: blockchainType,
-        qrCodeScanCubit: qrCodeScanCubit,
       );
     } else {
       await addOIDC4VCCredential(
