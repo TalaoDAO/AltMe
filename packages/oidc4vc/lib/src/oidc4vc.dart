@@ -297,8 +297,17 @@ class OIDC4VC {
             'type': 'openid_credential',
             'credential_configuration_id': credential,
           };
+          late VCFormatType credentialSupportedType;
+          try {
+            credentialSupportedType = getVcFormatType(
+              credentialSupported['format'] as String,
+            );
+          } catch (e) {
+            throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+          }
+
           if (oidc4vciDraftType == OIDC4VCIDraftType.draft13 &&
-              formatsSuported == VCFormatType.vcSdJWT) {
+              credentialSupportedType == VCFormatType.vcSdJWT) {
             data = {
               'type': 'openid_credential',
               'format': 'vc+sd-jwt',
@@ -941,6 +950,16 @@ class OIDC4VC {
     required List<VCFormatType> formatsSupported,
   }) async {
     final credentialData = <String, dynamic>{};
+// check if we support the requested format
+    late VCFormatType vcFormatType;
+    try {
+      vcFormatType = getVcFormatType(format);
+    } catch (e) {
+      throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+    }
+    if (!formatsSupported.contains(vcFormatType)) {
+      throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+    }
 
     if (cryptoHolderBinding) {
       var currentProofType = proofType;
@@ -1017,12 +1036,12 @@ class OIDC4VC {
         credentialData['format'] = format;
 
         if (credentialDefinition != null) {
-          if (formatsSupported == VCFormatType.jwtVcJson) {
+          if (vcFormatType == VCFormatType.jwtVcJson) {
             credentialDefinition.removeWhere((key, _) => key != 'type');
           }
 
-          if (formatsSupported == VCFormatType.ldpVc ||
-              formatsSupported == VCFormatType.jwtVcJsonLd) {
+          if (vcFormatType == VCFormatType.ldpVc ||
+              vcFormatType == VCFormatType.jwtVcJsonLd) {
             credentialDefinition
                 .removeWhere((key, _) => key != 'type' && key != '@context');
           }
