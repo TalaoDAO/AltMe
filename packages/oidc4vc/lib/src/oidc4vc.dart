@@ -629,6 +629,7 @@ class OIDC4VC {
     required bool isCachingEnabled,
     required Dio dio,
     required bool useOAuthAuthorizationServerLink,
+    required bool isSdJwtVc,
     SecureStorageProvider? secureStorage,
   }) async {
     try {
@@ -661,6 +662,7 @@ class OIDC4VC {
             isCachingEnabled: isCachingEnabled,
             dio: dio,
             secureStorage: secureStorage,
+            isSdJwtVc: isSdJwtVc,
           );
         }
 
@@ -1200,6 +1202,7 @@ class OIDC4VC {
     required bool isCachingEnabled,
     required Dio dio,
     required bool useOAuthAuthorizationServerLink,
+    bool isSdJwtVc = false,
   }) async {
     try {
       Map<String, dynamic>? publicKeyJwk;
@@ -1213,6 +1216,7 @@ class OIDC4VC {
           isCachingEnabled: isCachingEnabled,
           dio: dio,
           useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+          isSdJwtVc: isSdJwtVc,
         );
 
         publicKeyJwk = readPublicKeyJwk(
@@ -1731,9 +1735,19 @@ class OIDC4VC {
     required String baseUrl,
     required Dio dio,
     bool isCachingEnabled = false,
+    bool isSdJwtVc = false,
     SecureStorageProvider? secureStorage,
   }) async {
-    final url = '$baseUrl/.well-known/openid-credential-issuer';
+    var url = '$baseUrl/.well-known/openid-credential-issuer';
+
+    if (isSdJwtVc) {
+      final uri = Uri.parse(baseUrl);
+
+      final domain = '${uri.scheme}://${uri.host}';
+      final extraPath = uri.path;
+
+      url = '$domain/.well-known/jwt-vc-issuer$extraPath';
+    }
 
     try {
       final response = await dioGet(
