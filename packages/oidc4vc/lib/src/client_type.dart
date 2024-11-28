@@ -17,7 +17,7 @@ extension ClientTypeX on ClientType {
       case ClientType.did:
         return 'DID';
       case ClientType.confidential:
-        return 'Confidential Client';
+        return 'Pre-registered';
     }
   }
 }

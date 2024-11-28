@@ -663,7 +663,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 );
               }
               if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
-                  discoverCardsOptions.displayEmailPassSdJwt) {
+                  discoverCardsOptions.displayOver18SdJwt) {
                 allCategoryVC.add(
                   CredInfo(
                     credentialType: CredentialSubjectType.over18,
@@ -896,6 +896,16 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                   CredInfo(
                     credentialType: CredentialSubjectType.phonePass,
                     formatType: VCFormatType.jwtVcJson,
+                  ),
+                );
+                break;
+              }
+              if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                  discoverCardsOptions.displayPhonePassSdJwt) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.phonePass,
+                    formatType: VCFormatType.vcSdJWT,
                   ),
                 );
                 break;

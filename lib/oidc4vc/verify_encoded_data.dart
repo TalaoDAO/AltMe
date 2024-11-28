@@ -11,6 +11,7 @@ Future<VerificationType> verifyEncodedData({
   Map<String, dynamic>? publicKeyJwk,
   bool fromStatusList = false,
   bool isCachingEnabled = false,
+  bool isSdJwtVc = false,
 }) async {
   final OIDC4VC oidc4vc = OIDC4VC();
 
@@ -38,6 +39,7 @@ Future<VerificationType> verifyEncodedData({
     isCachingEnabled: isCachingEnabled,
     dio: Dio(),
     useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+    isSdJwtVc: isSdJwtVc,
   );
   return verificationType;
 }

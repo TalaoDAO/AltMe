@@ -6,7 +6,7 @@ void main() {
     test('getTitle', () {
       expect(ClientType.p256JWKThumprint.getTitle, 'P-256 JWK Thumbprint');
       expect(ClientType.did.getTitle, 'DID');
-      expect(ClientType.confidential.getTitle, 'Confidential Client');
+      expect(ClientType.confidential.getTitle, 'Pre-registered');
     });
   });
 }

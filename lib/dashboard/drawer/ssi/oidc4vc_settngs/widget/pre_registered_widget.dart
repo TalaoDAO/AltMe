@@ -4,8 +4,8 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ConfidentialClientWidget extends StatelessWidget {
-  const ConfidentialClientWidget({super.key});
+class PreRegisteredWidget extends StatelessWidget {
+  const PreRegisteredWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class ConfidentialClientWidget extends StatelessWidget {
         final clientSecret = state.model.profileSetting
             .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret;
         return OptionContainer(
-          title: 'Confidential Client',
+          title: 'Pre-registered',
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
