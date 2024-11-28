@@ -718,16 +718,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
             /// verifiableIdCard
             while (true) {
-              if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
-                  discoverCardsOptions.displayVerifiableIdSdJwt) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.verifiableIdCard,
-                    formatType: VCFormatType.vcSdJWT,
-                  ),
-                );
-                break;
-              }
               if (formatsSupported.contains(VCFormatType.ldpVc) &&
                   discoverCardsOptions.displayVerifiableId) {
                 allCategoryVC.add(
@@ -736,7 +726,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     formatType: VCFormatType.ldpVc,
                   ),
                 );
-                break;
               }
               if (formatsSupported.contains(VCFormatType.jwtVc) &&
                   discoverCardsOptions.displayVerifiableIdJwt) {
@@ -746,7 +735,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     formatType: VCFormatType.jwtVc,
                   ),
                 );
-                break;
               }
               if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
                   discoverCardsOptions.displayVerifiableIdJwt) {
@@ -756,7 +744,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     formatType: VCFormatType.jwtVcJson,
                   ),
                 );
-                break;
               }
               break;
             }
@@ -782,7 +769,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     formatType: VCFormatType.ldpVc,
                   ),
                 );
-                break;
               }
 
               if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
@@ -793,7 +779,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     formatType: VCFormatType.jwtVcJson,
                   ),
                 );
-                break;
               }
               break;
             }
