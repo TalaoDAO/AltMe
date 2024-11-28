@@ -903,6 +903,16 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 );
                 break;
               }
+              if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                  discoverCardsOptions.displayPhonePassSdJwt) {
+                allCategoryVC.add(
+                  CredInfo(
+                    credentialType: CredentialSubjectType.phonePass,
+                    formatType: VCFormatType.vcSdJWT,
+                  ),
+                );
+                break;
+              }
               break;
             }
 

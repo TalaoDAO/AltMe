@@ -779,9 +779,11 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
     final discoverCardsOptions = profileSetting.discoverCardsOptions;
 
-    final isEmailPass = this == CredentialSubjectType.emailPass;
+    final isEmailPassOrPhonePass = this == CredentialSubjectType.emailPass ||
+        this == CredentialSubjectType.phonePass;
 
-    var format = vcFormatType.urlValue(isEmailPass: isEmailPass);
+    var format =
+        vcFormatType.urlValue(isEmailPassOrPhonePass: isEmailPassOrPhonePass);
 
     if (vcFormatType == VCFormatType.auto && discoverCardsOptions != null) {
       vcFormatType = discoverCardsOptions.vcFormatTypeForAuto(
@@ -789,9 +791,11 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         vcFormatType: assignedVCFormatType,
       );
 
-      final isEmailPass = this == CredentialSubjectType.emailPass;
+      final isEmailPassOrPhonePass = this == CredentialSubjectType.emailPass ||
+          this == CredentialSubjectType.phonePass;
 
-      format = vcFormatType.urlValue(isEmailPass: isEmailPass);
+      format =
+          vcFormatType.urlValue(isEmailPassOrPhonePass: isEmailPassOrPhonePass);
     }
 
     switch (this) {
