@@ -90,7 +90,7 @@ class Parameters {
   static const allEvents = [
     ...tezosEvents,
     ...requiredEvents,
-    ...optionalEvents
+    ...optionalEvents,
   ];
 
   static const String clientId = 'urn:altme:0001';
