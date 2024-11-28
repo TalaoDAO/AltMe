@@ -664,7 +664,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 break;
               }
               if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
-                  discoverCardsOptions.displayEmailPassSdJwt) {
+                  discoverCardsOptions.displayOver18SdJwt) {
                 allCategoryVC.add(
                   CredInfo(
                     credentialType: CredentialSubjectType.over18,
