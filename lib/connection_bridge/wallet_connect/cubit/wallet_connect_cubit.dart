@@ -811,6 +811,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         amount: op['amount'].toString(),
         destination: op['destination'].toString(),
         kind: stringToEnum(op['kind'].toString()),
+        parameters: op['parameters'],
       );
       operationDetails.add(operationDetail);
     }
