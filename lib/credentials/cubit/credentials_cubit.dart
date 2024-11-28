@@ -651,8 +651,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               );
             }
 
+            /// Over 18
             while (true) {
-              /// Over 18
               if (formatsSupported.contains(VCFormatType.ldpVc) &&
                   discoverCardsOptions.displayOver18) {
                 allCategoryVC.add(

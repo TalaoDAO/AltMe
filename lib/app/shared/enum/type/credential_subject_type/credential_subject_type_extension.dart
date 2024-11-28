@@ -760,39 +760,13 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     ResponseString? longDescription;
 
     /// handles the dummy casse
-    final formatsSupported = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.formatsSupported;
-    late VCFormatType vcFormatType;
-    if (formatsSupported != null) {
-      if (formatsSupported.contains(VCFormatType.vcSdJWT)) {
-        vcFormatType = VCFormatType.vcSdJWT;
-      } else {
-        vcFormatType = formatsSupported.first;
-      }
-    } else {
-      vcFormatType = profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
-    }
 
     final oidc4vcDraftType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.oidc4vciDraft;
 
-    final discoverCardsOptions = profileSetting.discoverCardsOptions;
-
     final isEmailPass = this == CredentialSubjectType.emailPass;
 
-    var format = vcFormatType.urlValue(isEmailPass: isEmailPass);
-
-    if (vcFormatType == VCFormatType.auto && discoverCardsOptions != null) {
-      vcFormatType = discoverCardsOptions.vcFormatTypeForAuto(
-        credentialSubjectType: this,
-        vcFormatType: assignedVCFormatType,
-      );
-
-      final isEmailPass = this == CredentialSubjectType.emailPass;
-
-      format = vcFormatType.urlValue(isEmailPass: isEmailPass);
-    }
+    final format = assignedVCFormatType.urlValue(isEmailPass: isEmailPass);
 
     switch (this) {
       case CredentialSubjectType.defiCompliance:
@@ -955,7 +929,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
               assignedVCFormatType == VCFormatType.ldpVc) {
             type = 'verifiableid';
           }
-        } else if (vcFormatType == VCFormatType.jwtVc) {
+        } else if (assignedVCFormatType == VCFormatType.jwtVc) {
           type = 'individualverifiableattestation';
         }
 
@@ -1101,7 +1075,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       longDescription: longDescription == null
           ? null
           : ResponseMessage(message: longDescription),
-      vcFormatType: vcFormatType,
+      vcFormatType: assignedVCFormatType,
     );
   }
 
