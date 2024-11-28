@@ -26,7 +26,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       accountType: blockchainType.accountType,
     );
 
-    final String issuer = jsonEncode({'id': '', 'name': 'My Wallet'});
+    final String issuer = didKitProvider.keyToDID(didMethod, jwkKey);
 
     log.i('jwkKey - $jwkKey');
     log.i('didKitProvider.keyToDID - $issuer');

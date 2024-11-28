@@ -913,7 +913,7 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
       );
       final cryptoAccounts = manageAccountsCubit.state.cryptoAccount.data;
       // generate crypto accounts cards
-      context.read<CredentialsCubit>().generateCryptoAccountsCards(
+      await context.read<CredentialsCubit>().generateCryptoAccountsCards(
             cryptoAccounts,
           );
     }

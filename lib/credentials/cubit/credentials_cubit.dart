@@ -661,7 +661,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     formatType: VCFormatType.ldpVc,
                   ),
                 );
-                break;
               }
               if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
                   discoverCardsOptions.displayEmailPassSdJwt) {
@@ -671,7 +670,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     formatType: VCFormatType.vcSdJWT,
                   ),
                 );
-                break;
               }
               if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
                   discoverCardsOptions.displayOver18Jwt) {
@@ -681,7 +679,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                     formatType: VCFormatType.jwtVcJson,
                   ),
                 );
-                break;
               }
               break;
             }
