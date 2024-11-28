@@ -761,7 +761,11 @@ class ScanCubit extends Cubit<ScanState> {
           };
 
           if (format == VCFormatType.vcSdJWT) {
-            descriptor['path'] = r'$[' + i.toString() + ']';
+            if (credentialsToBePresented.length == 1) {
+              descriptor['path'] = r'$';
+            } else {
+              descriptor['path'] = r'$[' + i.toString() + ']';
+            }
           } else {
             descriptor['path'] = r'$';
             pathNested = {
