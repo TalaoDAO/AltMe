@@ -124,6 +124,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
             jwt['oAuthClientAttestation'] as String?;
         final String? oAuthClientAttestationPop =
             jwt['oAuthClientAttestationPop'] as String?;
+        final String publicKeyForDPop = jwt['publicKeyForDPop'].toString();
 
         final selectedCredentials = stateOfCredentialsSelected
             .map((index) => credentials[index])
@@ -144,6 +145,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           oAuthClientAttestation: oAuthClientAttestation,
           oAuthClientAttestationPop: oAuthClientAttestationPop,
           qrCodeScanCubit: qrCodeScanCubit,
+          publicKeyForDPop: publicKeyForDPop,
         );
       }
     }

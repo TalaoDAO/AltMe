@@ -2274,3 +2274,10 @@ Future<String> getDPopJwt({
   );
   return jwtToken;
 }
+
+String generateP256KeyForDPop() {
+  final randomKey = generateRandomP256Key();
+  final publicKeyForDPop = sortedPublcJwk(randomKey);
+
+  return publicKeyForDPop;
+}

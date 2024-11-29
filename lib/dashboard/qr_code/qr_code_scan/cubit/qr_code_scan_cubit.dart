@@ -1276,6 +1276,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required dynamic credentialOfferJson,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
+    final publicKeyForDPop = generateP256KeyForDPop();
     try {
       final (
         clientId,
@@ -1291,6 +1292,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       final customOidc4vcProfile = profileCubit.state.model.profileSetting
           .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+      final publicKeyForDPop = generateP256KeyForDPop();
 
       if (preAuthorizedCode != null) {
         await addCredentialsInLoop(
@@ -1308,6 +1311,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           oAuthClientAttestation: oAuthClientAttestation,
           oAuthClientAttestationPop: oAuthClientAttestationPop,
           qrCodeScanCubit: qrCodeScanCubit,
+          publicKeyForDPop: publicKeyForDPop,
         );
       } else {
         emit(state.loading());
@@ -1337,6 +1341,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               useOauthServerAuthEndPoint(profileCubit.state.model),
           profileCubit: profileCubit,
           qrCodeScanCubit: qrCodeScanCubit,
+          publicKeyForDPop: publicKeyForDPop,
         );
 
         if (authorizationUri == null) return;
@@ -1367,6 +1372,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? clientId,
     required String? clientSecret,
     required QRCodeScanCubit qrCodeScanCubit,
+    required String publicKeyForDPop,
     String? oAuthClientAttestation,
     String? oAuthClientAttestationPop,
   }) async {
@@ -1391,9 +1397,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             baseUrl: issuer,
             dio: client.dio,
           );
-
-          final randomKey = generateRandomP256Key();
-          final publicKeyForDPop = sortedPublcJwk(randomKey);
 
           if (savedAccessToken == null) {
             /// get tokendata
@@ -1762,6 +1765,8 @@ ${state.uri}
           statePayload['oAuthClientAttestation'] as String?;
       final String? oAuthClientAttestationPop =
           statePayload['oAuthClientAttestationPop'] as String?;
+      final String publicKeyForDPop =
+          statePayload['publicKeyForDPop'].toString();
 
       await addCredentialsInLoop(
         selectedCredentials: selectedCredentials,
@@ -1778,6 +1783,7 @@ ${state.uri}
         oAuthClientAttestation: oAuthClientAttestation,
         oAuthClientAttestationPop: oAuthClientAttestationPop,
         qrCodeScanCubit: qrCodeScanCubit,
+        publicKeyForDPop: publicKeyForDPop,
       );
     } catch (e) {
       emitError(e);
