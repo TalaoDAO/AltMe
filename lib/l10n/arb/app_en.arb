@@ -1152,7 +1152,7 @@
     }
   },
   "credentialPickShare": "Share",
-  "credentialPickTitle": "Choose the credential(s) to wish to obtain",
+  "credentialPickTitle": "Choose the credential(s) to get",
   "credentialShareTitle": "Choose the credential(s) to share",
   "enterYourSecretCode": "Enter your secret code.",
   "jwk": "JWK",
