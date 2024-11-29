@@ -1276,7 +1276,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required dynamic credentialOfferJson,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
-    final publicKeyForDPop = generateP256KeyForDPop();
     try {
       final (
         clientId,
