@@ -2232,3 +2232,45 @@ bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
 
   return false;
 }
+
+Future<String> getDPopJwt({
+  required OIDC4VC oidc4vc,
+  required String url,
+  required String publicKey,
+  String? accessToken,
+  String? nonce,
+}) async {
+  final tokenParameters = TokenParameters(
+    privateKey: jsonDecode(publicKey) as Map<String, dynamic>,
+    mediaType: MediaType.dPop,
+    did: '', // just added as it is required field
+    clientType:
+        ClientType.p256JWKThumprint, // just added as it is required field
+    proofHeaderType: ProofHeaderType.jwk,
+    clientId: '', // just added as it is required field
+  );
+
+  final jti = const Uuid().v4();
+  final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+
+  final payload = {
+    'jti': jti,
+    'htm': 'POST',
+    'htu': url,
+    'iat': iat,
+  };
+
+  if (accessToken != null) {
+    final hash = oidc4vc.sh256Hash(accessToken);
+    payload['ath'] = hash;
+  }
+
+  if (nonce != null) payload['nonce'] = nonce;
+
+  final jwtToken = oidc4vc.generateToken(
+    payload: payload,
+    tokenParameters: tokenParameters,
+    ignoreProofHeaderType: false,
+  );
+  return jwtToken;
+}

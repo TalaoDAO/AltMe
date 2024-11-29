@@ -1326,7 +1326,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           clientSecret: clientSecret,
           clientAuthentication: customOidc4vcProfile.clientAuthentication,
           oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
-          formatsSupported: customOidc4vcProfile.formatsSupported??[],
+          formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
           oAuthClientAttestation: oAuthClientAttestation,
           oAuthClientAttestationPop: oAuthClientAttestationPop,
           secureAuthorizedFlow: customOidc4vcProfile.pushAuthorizationRequest,
@@ -1392,6 +1392,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             dio: client.dio,
           );
 
+          final randomKey = generateRandomP256Key();
+          final publicKeyForDPop = sortedPublcJwk(randomKey);
+
           if (savedAccessToken == null) {
             /// get tokendata
             final tokenData = oidc4vc.buildTokenData(
@@ -1423,6 +1426,28 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               }
             }
 
+            final tokenEndPoint = await oidc4vc.getTokenEndPoint(
+              issuer: issuer,
+              oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+              openIdConfiguration:
+                  OpenIdConfiguration.fromJson(openIdConfigurationData),
+              dio: client.dio,
+              useOAuthAuthorizationServerLink:
+                  useOauthServerAuthEndPoint(profileCubit.state.model),
+            );
+
+            String? dPop;
+
+            if (customOidc4vcProfile.dpopSupport) {
+              dPop = await getDPopJwt(
+                oidc4vc: profileCubit.oidc4vc,
+                url: tokenEndPoint,
+                accessToken: savedAccessToken,
+                nonce: savedNonce,
+                publicKey: publicKeyForDPop,
+              );
+            }
+
             /// get token response
             final (
               Map<String, dynamic>? tokenResponse,
@@ -1430,17 +1455,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               String? cnonce,
               List<dynamic>? authorizationDetails,
             ) = await oidc4vc.getTokenResponse(
-              issuer: issuer,
               authorization: authorization,
-              oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
-              openIdConfiguration:
-                  OpenIdConfiguration.fromJson(openIdConfigurationData),
+              tokenEndPoint: tokenEndPoint,
               oAuthClientAttestation: oAuthClientAttestation,
               oAuthClientAttestationPop: oAuthClientAttestationPop,
               dio: client.dio,
-              useOAuthAuthorizationServerLink:
-                  useOauthServerAuthEndPoint(profileCubit.state.model),
               tokenData: tokenData,
+              dPop: dPop,
             );
 
             savedAccessToken = accessToken;
@@ -1489,6 +1510,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             openIdConfiguration:
                 OpenIdConfiguration.fromJson(openIdConfigurationData),
             qrCodeScanCubit: qrCodeScanCubit,
+            publicKeyForDPop: publicKeyForDPop,
           );
 
           if (result == null) {
