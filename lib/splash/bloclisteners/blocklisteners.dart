@@ -911,11 +911,22 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
         credentialsCubit: context.read<CredentialsCubit>(),
         manageNetworkCubit: context.read<ManageNetworkCubit>(),
       );
-      final cryptoAccounts = manageAccountsCubit.state.cryptoAccount.data;
-      // generate crypto accounts cards
-      await context.read<CredentialsCubit>().generateCryptoAccountsCards(
-            cryptoAccounts,
-          );
+
+      // TODO: when we create vc+sd-jwt associated address cards, we need to check also for vc+sd-jwt
+      if (context
+              .read<ProfileCubit>()
+              .state
+              .model
+              .profileSetting
+              .blockchainOptions
+              ?.associatedAddressFormat ==
+          VCFormatType.ldpVc) {
+        final cryptoAccounts = manageAccountsCubit.state.cryptoAccount.data;
+        // generate crypto accounts cards
+        await context.read<CredentialsCubit>().generateCryptoAccountsCards(
+              cryptoAccounts,
+            );
+      }
     }
     if (state.status == AppStatus.addEnterpriseAccount ||
         state.status == AppStatus.updateEnterpriseAccount ||
