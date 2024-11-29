@@ -1532,7 +1532,6 @@ void main() {
               TezosAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'tezosAddress',
               ),
             ),
@@ -1543,7 +1542,6 @@ void main() {
               EthereumAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'ethereumAddress',
               ),
             ),
@@ -1554,7 +1552,6 @@ void main() {
               PolygonAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'polygonAddress',
               ),
             ),
@@ -1565,7 +1562,6 @@ void main() {
               BinanceAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'address',
               ),
             ),
@@ -1576,7 +1572,6 @@ void main() {
               FantomAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'fantomAddress',
               ),
             ),
@@ -1587,7 +1582,6 @@ void main() {
               EtherlinkAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'etherlinkAddress',
               ),
             ),

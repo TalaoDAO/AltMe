@@ -22,7 +22,7 @@ EthereumAssociatedAddressCredential
                   'associatedAddress':
                       'https://w3id.org/security#blockchainAccountId',
                   'EthereumAssociatedAddress':
-                      'https://doc.wallet-provider.io/wallet/vc_type/#EthereumAssociatedAdress'
+                      'https://doc.wallet-provider.io/vc_type/#EthereumAssociatedAdress'
                 }
               ],
           type: (json['type'] as List<dynamic>?)

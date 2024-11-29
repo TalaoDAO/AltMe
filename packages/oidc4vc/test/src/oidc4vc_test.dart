@@ -875,6 +875,7 @@ void main() {
             isCachingEnabled: false,
             dio: client,
             useOAuthAuthorizationServerLink: false,
+            isSdJwtVc: false,
           );
 
           expect(value, jsonDecode(didDocument));
@@ -914,6 +915,7 @@ void main() {
             isCachingEnabled: false,
             dio: client,
             useOAuthAuthorizationServerLink: false,
+            isSdJwtVc: false,
           );
 
           expect(value, jsonDecode(didDocument));
@@ -954,6 +956,7 @@ void main() {
             dio: client,
             secureStorage: mockSecureStorage,
             useOAuthAuthorizationServerLink: false,
+            isSdJwtVc: false,
           );
           expect(value, jsonDecode(expectedDidDocument));
         });

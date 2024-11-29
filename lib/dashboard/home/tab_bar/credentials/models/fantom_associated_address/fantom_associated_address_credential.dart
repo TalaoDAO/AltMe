@@ -43,7 +43,7 @@ class FantomAssociatedAddressCredential {
       '@vocab': 'https://schema.org',
       'associatedAddress': 'https://w3id.org/security#blockchainAccountId',
       'FantomAssociatedAddress':
-          'https://doc.wallet-provider.io/wallet/vc_type/#FantomAssociatedAdress',
+          'https://doc.wallet-provider.io/vc_type/#FantomAssociatedAdress',
     }
   ];
 }

@@ -10,7 +10,6 @@ class PolygonAssociatedAddressModel extends CredentialSubjectModel {
     this.associatedAddress,
     required String super.id,
     required String super.type,
-    required Author super.issuedBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.polygonAssociatedWallet,
           credentialCategory: CredentialCategory.blockchainAccountsCards,

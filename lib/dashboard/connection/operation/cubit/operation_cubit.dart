@@ -659,7 +659,7 @@ class OperationCubit extends Cubit<OperationState> {
           /// check xtz balance
           log.i('checking xtz');
           final int balance = await dioClient.get(
-            '$baseUrl/v1/accounts/${sourceAddress!}/balance',
+            '$baseUrl/v1/accounts/$sourceAddress/balance',
           ) as int;
           log.i('total xtz - $balance');
           final formattedBalance = int.parse(

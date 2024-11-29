@@ -10,7 +10,6 @@ class FantomAssociatedAddressModel extends CredentialSubjectModel {
     this.associatedAddress,
     required String super.id,
     required String super.type,
-    required Author super.issuedBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.fantomAssociatedWallet,
           credentialCategory: CredentialCategory.blockchainAccountsCards,

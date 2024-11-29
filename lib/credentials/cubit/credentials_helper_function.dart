@@ -65,7 +65,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     final issuanceDate = '${formatter.format(DateTime.now())}Z';
 
     late dynamic associatedAddressCredential;
-
     switch (blockchainType) {
       case BlockchainType.tezos:
         associatedAddressCredential = TezosAssociatedAddressCredential(
@@ -76,7 +75,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             id: did,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'TezosAssociatedAddress',
-            issuedBy: const Author('My wallet'),
           ),
         );
 
@@ -89,7 +87,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             id: did,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'EthereumAssociatedAddress',
-            issuedBy: const Author('My wallet'),
           ),
         );
 
@@ -102,7 +99,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             id: did,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'FantomAssociatedAddress',
-            issuedBy: const Author('My wallet'),
           ),
         );
 
@@ -115,7 +111,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             id: did,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'PolygonAssociatedAddress',
-            issuedBy: const Author('My wallet'),
           ),
         );
 
@@ -128,7 +123,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             id: did,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'BinanceAssociatedAddress',
-            issuedBy: const Author('My wallet'),
           ),
         );
 
@@ -141,7 +135,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             id: did,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'EtherlinkAssociatedAddress',
-            issuedBy: const Author('My wallet'),
           ),
         );
     }

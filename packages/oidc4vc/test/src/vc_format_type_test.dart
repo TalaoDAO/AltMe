@@ -20,23 +20,46 @@ void main() {
     });
 
     test('urlValue', () {
-      expect(VCFormatType.ldpVc.urlValue(isEmailPass: true), 'ldp_vc');
-      expect(VCFormatType.ldpVc.urlValue(isEmailPass: false), 'ldp_vc');
-      expect(VCFormatType.jwtVc.urlValue(isEmailPass: true), 'jwt_vc');
-      expect(VCFormatType.jwtVc.urlValue(isEmailPass: false), 'jwt_vc');
-      expect(VCFormatType.jwtVcJson.urlValue(isEmailPass: true), 'jwt_vc_json');
       expect(
-          VCFormatType.jwtVcJson.urlValue(isEmailPass: false), 'jwt_vc_json');
+        VCFormatType.ldpVc.urlValue(isEmailPassOrPhonePass: true),
+        'ldp_vc',
+      );
       expect(
-        VCFormatType.jwtVcJsonLd.urlValue(isEmailPass: true),
+        VCFormatType.ldpVc.urlValue(isEmailPassOrPhonePass: false),
+        'ldp_vc',
+      );
+      expect(
+        VCFormatType.jwtVc.urlValue(isEmailPassOrPhonePass: true),
+        'jwt_vc',
+      );
+      expect(
+        VCFormatType.jwtVc.urlValue(isEmailPassOrPhonePass: false),
+        'jwt_vc',
+      );
+      expect(
+        VCFormatType.jwtVcJson.urlValue(isEmailPassOrPhonePass: true),
+        'jwt_vc_json',
+      );
+      expect(
+        VCFormatType.jwtVcJson.urlValue(isEmailPassOrPhonePass: false),
+        'jwt_vc_json',
+      );
+      expect(
+        VCFormatType.jwtVcJsonLd.urlValue(isEmailPassOrPhonePass: true),
         'jwt_vc_json-ld',
       );
       expect(
-        VCFormatType.jwtVcJsonLd.urlValue(isEmailPass: false),
+        VCFormatType.jwtVcJsonLd.urlValue(isEmailPassOrPhonePass: false),
         'jwt_vc_json-ld',
       );
-      expect(VCFormatType.vcSdJWT.urlValue(isEmailPass: true), 'vc_sd_jwt');
-      expect(VCFormatType.vcSdJWT.urlValue(isEmailPass: false), 'vcsd-jwt');
+      expect(
+        VCFormatType.vcSdJWT.urlValue(isEmailPassOrPhonePass: true),
+        'vc_sd_jwt',
+      );
+      expect(
+        VCFormatType.vcSdJWT.urlValue(isEmailPassOrPhonePass: false),
+        'vcsd-jwt',
+      );
     });
 
     test('supportCryptoCredential', () {
