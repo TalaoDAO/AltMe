@@ -31,6 +31,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
   required bool useOAuthAuthorizationServerLink,
   required ProfileCubit profileCubit,
   required QRCodeScanCubit qrCodeScanCubit,
+  required String publicKeyForDPop,
   String? oAuthClientAttestation,
   String? oAuthClientAttestationPop,
 }) async {
@@ -57,6 +58,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
     'credentials': selectedCredentials,
     'issuer': issuer,
     'isEBSI': isEBSI,
+    'publicKeyForDPop': publicKeyForDPop,
   };
 
   switch (clientAuthentication) {
@@ -141,14 +143,33 @@ Future<Uri?> getAuthorizationUriForIssuer({
   }
 
   if (isSecure) {
+    String? dPop;
+
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+    final parUrl = openIdConfiguration.pushedAuthorizationRequestEndpoint ??
+        '$authorizationEndpoint/par';
+
+    if (customOidc4vcProfile.dpopSupport) {
+      dPop = await getDPopJwt(
+        oidc4vc: profileCubit.oidc4vc,
+        url: parUrl,
+        // accessToken: savedAccessToken,
+        // nonce: savedNonce,
+        publicKey: publicKeyForDPop,
+      );
+    }
+
     final headers = <String, dynamic>{
       'Content-Type': 'application/x-www-form-urlencoded',
       'OAuth-Client-Attestation': oAuthClientAttestation,
       'OAuth-Client-Attestation-PoP': oAuthClientAttestationPop,
     };
 
-    final parUrl = openIdConfiguration.pushedAuthorizationRequestEndpoint ??
-        '$authorizationEndpoint/par';
+    if (dPop != null) {
+      headers['DPoP'] = dPop;
+    }
 
     /// error we shuld get it from
     final response = await client.post(

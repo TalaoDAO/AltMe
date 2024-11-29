@@ -635,6 +635,28 @@ String sortedPublcJwk(String privateKey) {
   return jsonString;
 }
 
+String sortedPrivateJwk(String privateKey) {
+  final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
+  /// we use crv P-256K in the rest of the package to ensure compatibility
+  /// with jose dart package. In fact our crv is secp256k1 wich change the
+  /// fingerprint
+
+  final sortedJwk = Map.fromEntries(
+    private.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
+  )
+    ..removeWhere((key, value) => key == 'use')
+    ..removeWhere((key, value) => key == 'alg');
+
+  /// this test is to be crv agnostic and respect https://www.rfc-editor.org/rfc/rfc7638
+  if (sortedJwk['crv'] == 'P-256K') {
+    sortedJwk['crv'] = 'secp256k1';
+  }
+
+  final jsonString = jsonEncode(sortedJwk).replaceAll(' ', '');
+  return jsonString;
+}
+
 bool isPolygonIdUrl(String url) =>
     url.startsWith('{"id":') ||
     url.startsWith('{"body":{"') ||
@@ -2231,4 +2253,53 @@ bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
   if (greaterThanDraft13) return true;
 
   return false;
+}
+
+Future<String> getDPopJwt({
+  required OIDC4VC oidc4vc,
+  required String url,
+  required String publicKey,
+  String? accessToken,
+  String? nonce,
+}) async {
+  final tokenParameters = TokenParameters(
+    privateKey: jsonDecode(publicKey) as Map<String, dynamic>,
+    mediaType: MediaType.dPop,
+    did: '', // just added as it is required field
+    clientType:
+        ClientType.p256JWKThumprint, // just added as it is required field
+    proofHeaderType: ProofHeaderType.jwk,
+    clientId: '', // just added as it is required field
+  );
+
+  final jti = const Uuid().v4();
+  final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+
+  final payload = {
+    'jti': jti,
+    'htm': 'POST',
+    'htu': url,
+    'iat': iat,
+  };
+
+  if (accessToken != null) {
+    final hash = oidc4vc.sh256Hash(accessToken);
+    payload['ath'] = hash;
+  }
+
+  // if (nonce != null) payload['nonce'] = nonce;
+
+  final jwtToken = oidc4vc.generateToken(
+    payload: payload,
+    tokenParameters: tokenParameters,
+    ignoreProofHeaderType: false,
+  );
+  return jwtToken;
+}
+
+String generateP256KeyForDPop() {
+  final randomKey = generateRandomP256Key();
+  final publicKeyForDPop = sortedPrivateJwk(randomKey);
+
+  return publicKeyForDPop;
 }
