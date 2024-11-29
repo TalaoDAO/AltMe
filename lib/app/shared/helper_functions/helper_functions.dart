@@ -2265,7 +2265,7 @@ Future<String> getDPopJwt({
     payload['ath'] = hash;
   }
 
-  if (nonce != null) payload['nonce'] = nonce;
+  // if (nonce != null) payload['nonce'] = nonce;
 
   final jwtToken = oidc4vc.generateToken(
     payload: payload,
