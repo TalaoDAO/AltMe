@@ -193,6 +193,17 @@ void main() {
 
     testWidgets('renders ProtectWalletView', (tester) async {
       when(() => flavorCubit.state).thenAnswer((_) => FlavorMode.development);
+      when(
+        () => secureStorageProvider
+            .get(SecureStorageKeys.enterpriseProfileSetting),
+      ).thenAnswer((_) async => null);
+      when(() => didKitProvider.keyToDID(any(), any())).thenReturn(
+        'did:key:z6MkkCk2d3LN8qn6tWxR1qxibMCpp9E9vJVBrfv5djSk3F56',
+      );
+      when(() => didKitProvider.keyToVerificationMethod(any(), any()))
+          .thenAnswer(
+        (_) async => 'did:key:z6MkkCk2d3LN8qn6tWxR1qxibMCpp9E9vJVBrfv5djSk3F56',
+      );
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
@@ -221,6 +232,10 @@ void main() {
             ),
             BlocProvider<HomeCubit>.value(value: homeCubit),
             BlocProvider<WalletCubit>.value(value: walletCubit),
+            BlocProvider<MatrixNotificationCubit>.value(
+              value: matrixNotificationCubit,
+            ),
+            BlocProvider<QRCodeScanCubit>.value(value: qrCodeScanCubit),
             BlocProvider<SplashCubit>.value(value: splashCubit),
             BlocProvider<AltmeChatSupportCubit>.value(
               value: altmeChatSupportCubit,

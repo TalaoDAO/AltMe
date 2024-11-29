@@ -103,21 +103,16 @@ class _VerifyAgeViewState extends State<VerifyAgeView> {
               );
             },
           ),
-          const SizedBox(
-            height: Sizes.spaceNormal,
-          ),
-          MyElevatedButton(
+          const SizedBox(height: 8),
+          MyOutlinedButton(
             text: l10n.decline,
             verticalSpacing: 16,
-            backgroundColor: Theme.of(context).colorScheme.surface,
             borderRadius: Sizes.largeRadius,
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
-          const SizedBox(
-            height: Sizes.spaceSmall,
-          ),
+          const SizedBox(height: Sizes.spaceSmall),
         ],
       ),
     );

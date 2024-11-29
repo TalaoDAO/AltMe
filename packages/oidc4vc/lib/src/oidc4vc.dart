@@ -452,24 +452,14 @@ class OIDC4VC {
     return deferredCredentialEndpoint;
   }
 
-  /// tokenResponse, accessToken, cnonce, authorizationDetails
-  Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
-      getTokenResponse({
+  /// tokenEndPoint
+  Future<String> getTokenEndPoint({
     required String issuer,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required OpenIdConfiguration openIdConfiguration,
     required Dio dio,
     required bool useOAuthAuthorizationServerLink,
-    required Map<String, dynamic> tokenData,
-    String? authorization,
-    String? oAuthClientAttestation,
-    String? oAuthClientAttestationPop,
   }) async {
-    Map<String, dynamic>? tokenResponse;
-    String? accessToken;
-    String? cnonce;
-    List<dynamic>? authorizationDetails;
-
     final tokenEndPoint = await readTokenEndPoint(
       openIdConfiguration: openIdConfiguration,
       issuer: issuer,
@@ -478,6 +468,25 @@ class OIDC4VC {
       useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
     );
 
+    return tokenEndPoint;
+  }
+
+  /// tokenResponse, accessToken, cnonce, authorizationDetails
+  Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
+      getTokenResponse({
+    required Dio dio,
+    required String tokenEndPoint,
+    required Map<String, dynamic> tokenData,
+    required String? authorization,
+    required String? oAuthClientAttestation,
+    required String? oAuthClientAttestationPop,
+    required String? dPop,
+  }) async {
+    Map<String, dynamic>? tokenResponse;
+    String? accessToken;
+    String? cnonce;
+    List<dynamic>? authorizationDetails;
+
     tokenResponse = await getToken(
       tokenEndPoint: tokenEndPoint,
       tokenData: tokenData,
@@ -485,6 +494,7 @@ class OIDC4VC {
       dio: dio,
       oAuthClientAttestation: oAuthClientAttestation,
       oAuthClientAttestationPop: oAuthClientAttestationPop,
+      dPop: dPop,
     );
 
     if (tokenResponse.containsKey('c_nonce')) {
@@ -506,53 +516,27 @@ class OIDC4VC {
     required String? nonce,
     required Dio dio,
     required Map<String, dynamic> credentialData,
+    required String credentialEndpoint,
+    required String? dPop,
   }) async {
-    try {
-      /// sign proof
-      final credentialEndpoint = readCredentialEndpoint(openIdConfiguration);
+    final credentialHeaders = <String, dynamic>{
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
 
-      final credentialHeaders = <String, dynamic>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-      };
-
-      final dynamic credentialResponse = await dio.post<dynamic>(
-        credentialEndpoint,
-        options: Options(headers: credentialHeaders),
-        data: credentialData,
-      );
-
-      final credentialResponseData = credentialResponse.data;
-
-      return credentialResponseData;
-    } catch (e) {
-      if (count == 1) {
-        count = 0;
-        rethrow;
-      }
-
-      if (e is DioException &&
-          e.response != null &&
-          e.response!.data is Map<String, dynamic> &&
-          (e.response!.data as Map<String, dynamic>).containsKey('c_nonce')) {
-        count++;
-
-        final nonce = e.response!.data['c_nonce'].toString();
-
-        final credentialResponseDataValue = await getSingleCredential(
-          openIdConfiguration: openIdConfiguration,
-          accessToken: accessToken,
-          nonce: nonce,
-          dio: dio,
-          credentialData: credentialData,
-        );
-        count = 0;
-        return credentialResponseDataValue;
-      } else {
-        count = 0;
-        rethrow;
-      }
+    if (dPop != null) {
+      credentialHeaders['DPoP'] = dPop;
     }
+
+    final dynamic credentialResponse = await dio.post<dynamic>(
+      credentialEndpoint,
+      options: Options(headers: credentialHeaders),
+      data: credentialData,
+    );
+
+    final credentialResponseData = credentialResponse.data;
+
+    return credentialResponseData;
   }
 
   /// get Deferred credential from url
@@ -1359,6 +1343,7 @@ class OIDC4VC {
     required Dio dio,
     required String? oAuthClientAttestation,
     required String? oAuthClientAttestationPop,
+    required String? dPop,
   }) async {
     /// getting token
     final tokenHeaders = <String, dynamic>{
@@ -1372,6 +1357,10 @@ class OIDC4VC {
     if (oAuthClientAttestation != null && oAuthClientAttestationPop != null) {
       tokenHeaders['OAuth-Client-Attestation'] = oAuthClientAttestation;
       tokenHeaders['OAuth-Client-Attestation-PoP'] = oAuthClientAttestationPop;
+    }
+
+    if (dPop != null) {
+      tokenHeaders['DPoP'] = dPop;
     }
 
     final dynamic tokenResponse = await dio.post<Map<String, dynamic>>(
