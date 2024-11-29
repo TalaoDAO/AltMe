@@ -652,35 +652,32 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Over 18
-            while (true) {
-              if (formatsSupported.contains(VCFormatType.ldpVc) &&
-                  discoverCardsOptions.displayOver18) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.over18,
-                    formatType: VCFormatType.ldpVc,
-                  ),
-                );
-              }
-              if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
-                  discoverCardsOptions.displayOver18SdJwt) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.over18,
-                    formatType: VCFormatType.vcSdJWT,
-                  ),
-                );
-              }
-              if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
-                  discoverCardsOptions.displayOver18Jwt) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.over18,
-                    formatType: VCFormatType.jwtVcJson,
-                  ),
-                );
-              }
-              break;
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayOver18) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.over18,
+                  formatType: VCFormatType.ldpVc,
+                ),
+              );
+            }
+            if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                discoverCardsOptions.displayOver18SdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.over18,
+                  formatType: VCFormatType.vcSdJWT,
+                ),
+              );
+            }
+            if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                discoverCardsOptions.displayOver18Jwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.over18,
+                  formatType: VCFormatType.jwtVcJson,
+                ),
+              );
             }
 
             /// Over 21
@@ -717,35 +714,32 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// verifiableIdCard
-            while (true) {
-              if (formatsSupported.contains(VCFormatType.ldpVc) &&
-                  discoverCardsOptions.displayVerifiableId) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.verifiableIdCard,
-                    formatType: VCFormatType.ldpVc,
-                  ),
-                );
-              }
-              if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
-                  discoverCardsOptions.displayVerifiableIdSdJwt) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.verifiableIdCard,
-                    formatType: VCFormatType.vcSdJWT,
-                  ),
-                );
-              }
-              if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
-                  discoverCardsOptions.displayVerifiableIdJwt) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.verifiableIdCard,
-                    formatType: VCFormatType.jwtVcJson,
-                  ),
-                );
-              }
-              break;
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayVerifiableId) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.verifiableIdCard,
+                  formatType: VCFormatType.ldpVc,
+                ),
+              );
+            }
+            if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                discoverCardsOptions.displayVerifiableIdSdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.verifiableIdCard,
+                  formatType: VCFormatType.vcSdJWT,
+                ),
+              );
+            }
+            if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                discoverCardsOptions.displayVerifiableIdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.verifiableIdCard,
+                  formatType: VCFormatType.jwtVcJson,
+                ),
+              );
             }
 
             /// age range
@@ -760,27 +754,24 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// livenessCard
-            while (true) {
-              if (formatsSupported.contains(VCFormatType.ldpVc) &&
-                  discoverCardsOptions.displayHumanity) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.livenessCard,
-                    formatType: VCFormatType.ldpVc,
-                  ),
-                );
-              }
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayHumanity) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.livenessCard,
+                  formatType: VCFormatType.ldpVc,
+                ),
+              );
+            }
 
-              if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
-                  discoverCardsOptions.displayHumanityJwt) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.livenessCard,
-                    formatType: VCFormatType.jwtVcJson,
-                  ),
-                );
-              }
-              break;
+            if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                discoverCardsOptions.displayHumanityJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.livenessCard,
+                  formatType: VCFormatType.jwtVcJson,
+                ),
+              );
             }
 
             /// gender
@@ -828,75 +819,63 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           case CredentialCategory.contactInfoCredentials:
 
             /// Email Pass
-            while (true) {
-              if (formatsSupported.contains(VCFormatType.ldpVc) &&
-                  discoverCardsOptions.displayEmailPass) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.emailPass,
-                    formatType: VCFormatType.ldpVc,
-                  ),
-                );
-                break;
-              }
-              if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
-                  discoverCardsOptions.displayEmailPassJwt) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.emailPass,
-                    formatType: VCFormatType.jwtVcJson,
-                  ),
-                );
-                break;
-              }
-              if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
-                  discoverCardsOptions.displayEmailPassSdJwt) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.emailPass,
-                    formatType: VCFormatType.vcSdJWT,
-                  ),
-                );
-                break;
-              }
-              break;
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayEmailPass) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.emailPass,
+                  formatType: VCFormatType.ldpVc,
+                ),
+              );
+            }
+            if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                discoverCardsOptions.displayEmailPassJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.emailPass,
+                  formatType: VCFormatType.jwtVcJson,
+                ),
+              );
+            }
+            if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                discoverCardsOptions.displayEmailPassSdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.emailPass,
+                  formatType: VCFormatType.vcSdJWT,
+                ),
+              );
             }
 
             /// Phone Pass
             ///
 
-            while (true) {
-              if (formatsSupported.contains(VCFormatType.ldpVc) &&
-                  discoverCardsOptions.displayPhonePass) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.phonePass,
-                    formatType: VCFormatType.ldpVc,
-                  ),
-                );
-                break;
-              }
-              if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
-                  discoverCardsOptions.displayPhonePassJwt) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.phonePass,
-                    formatType: VCFormatType.jwtVcJson,
-                  ),
-                );
-                break;
-              }
-              if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
-                  discoverCardsOptions.displayPhonePassSdJwt) {
-                allCategoryVC.add(
-                  CredInfo(
-                    credentialType: CredentialSubjectType.phonePass,
-                    formatType: VCFormatType.vcSdJWT,
-                  ),
-                );
-                break;
-              }
-              break;
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayPhonePass) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.phonePass,
+                  formatType: VCFormatType.ldpVc,
+                ),
+              );
+            }
+            if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                discoverCardsOptions.displayPhonePassJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.phonePass,
+                  formatType: VCFormatType.jwtVcJson,
+                ),
+              );
+            }
+            if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                discoverCardsOptions.displayPhonePassSdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.phonePass,
+                  formatType: VCFormatType.vcSdJWT,
+                ),
+              );
             }
 
           case CredentialCategory.educationCards:
