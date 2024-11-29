@@ -727,12 +727,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                   ),
                 );
               }
-              if (formatsSupported.contains(VCFormatType.jwtVc) &&
-                  discoverCardsOptions.displayVerifiableIdJwt) {
+              if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                  discoverCardsOptions.displayVerifiableIdSdJwt) {
                 allCategoryVC.add(
                   CredInfo(
                     credentialType: CredentialSubjectType.verifiableIdCard,
-                    formatType: VCFormatType.jwtVc,
+                    formatType: VCFormatType.vcSdJWT,
                   ),
                 );
               }
@@ -863,6 +863,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Phone Pass
+            ///
 
             while (true) {
               if (formatsSupported.contains(VCFormatType.ldpVc) &&
