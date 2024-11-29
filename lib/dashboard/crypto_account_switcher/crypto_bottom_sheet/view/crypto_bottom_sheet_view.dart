@@ -16,6 +16,7 @@ class CryptoBottomSheetView extends StatelessWidget {
     return BlocProvider(
       create: (context) => ManageAccountsCubit(
         credentialsCubit: context.read<CredentialsCubit>(),
+        manageNetworkCubit: context.read<ManageNetworkCubit>(),
       ),
       child: const CryptoBottomSheetPage(),
     );

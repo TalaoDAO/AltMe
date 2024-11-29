@@ -83,7 +83,21 @@ class OperationCubit extends Cubit<OperationState> {
         case ConnectionBridgeType.walletconnect:
           final walletConnectState = walletConnectCubit.state;
 
-          final publicKey = walletConnectState.parameters[0]['from'].toString();
+          var publicKey = '';
+
+          final params = walletConnectState.parameters;
+
+          if (params is List<dynamic>) {
+            publicKey = params[0]['from'].toString();
+          } else if (params is Map<String, dynamic>) {
+            // tezos
+            publicKey = params['account'].toString();
+          } else {
+            throw ResponseMessage(
+              message: ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
 
           final CryptoAccountData? currentAccount =
               walletCubit.getCryptoAccountData(publicKey);
@@ -120,22 +134,26 @@ class OperationCubit extends Cubit<OperationState> {
   Future<void> getUsdPrice(ConnectionBridgeType connectionBridgeType) async {
     if (isClosed) return;
     try {
-      switch (connectionBridgeType) {
-        case ConnectionBridgeType.beacon:
-          log.i('fetching xtz USDprice');
-          final xtzUsdPrice = await _getTezosCurrentPriceInUSD();
-          emit(state.copyWith(usdRate: xtzUsdPrice));
-        case ConnectionBridgeType.walletconnect:
-          log.i('fetching evm USDprice');
+      final isTezos = connectionBridgeType == ConnectionBridgeType.beacon ||
+          (connectionBridgeType == ConnectionBridgeType.walletconnect &&
+              state.cryptoAccountData?.blockchainType == BlockchainType.tezos);
 
-          final symbol = state.cryptoAccountData!.blockchainType.symbol;
+      if (isTezos) {
+        log.i('fetching xtz USDprice');
+        final xtzUsdPrice = await _getTezosCurrentPriceInUSD();
+        emit(state.copyWith(usdRate: xtzUsdPrice));
+      } else {
+        log.i('fetching evm USDprice');
 
-          final response = await dioClient.get(Urls.ethPrice(symbol))
-              as Map<String, dynamic>;
-          log.i('response - $response');
-          final double usdRate = response['USD'] as double;
-          emit(state.copyWith(usdRate: usdRate));
+        final symbol = state.cryptoAccountData!.blockchainType.symbol;
+
+        final response =
+            await dioClient.get(Urls.ethPrice(symbol)) as Map<String, dynamic>;
+        log.i('response - $response');
+        final double usdRate = response['USD'] as double;
+        emit(state.copyWith(usdRate: usdRate));
       }
+
       await getOtherPrices(connectionBridgeType);
     } catch (e) {
       log.e('getUsdPrice failure , e: $e');
@@ -185,56 +203,117 @@ class OperationCubit extends Cubit<OperationState> {
       emit(state.loading());
       log.i('estimateOperationFee');
 
-      late double amount;
-      late double fee;
+      late String amount;
+      late String totalFee;
+      String? bakerFee;
 
+      final BeaconRequest? beaconRequest = beaconCubit.state.beaconRequest;
+      final List<OperationDetails>? tezosOperationDetails =
+          walletConnectCubit.state.operationDetails;
+
+      final Transaction? transaction = walletConnectCubit.state.transaction;
+
+      /// Error cases
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
-          final operationList =
-              await getBeaonOperationList(preCheckBalance: true);
-          await operationList.estimate();
-          log.i('after operationList.estimate()');
-          amount = int.parse(
-                beaconCubit
-                    .state.beaconRequest!.operationDetails!.first.amount!,
-              ) /
-              1e6;
-          fee = operationList.operations
-                  .map((Operation e) => e.totalFee)
-                  .reduce((int value, int element) => value + element) /
-              1e6;
+          if (beaconRequest == null) {
+            throw ResponseMessage(
+              message: ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
         case ConnectionBridgeType.walletconnect:
-          final EtherAmount ethAmount =
-              walletConnectCubit.state.transaction!.value!;
-          amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
+          if (tezosOperationDetails == null && transaction == null) {
+            throw ResponseMessage(
+              message: ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
+      }
 
-          final web3RpcURL = await fetchRpcUrl(
-            blockchainNetwork: manageNetworkCubit.state.network,
-            dotEnv: dotenv,
+      if (beaconRequest != null || tezosOperationDetails != null) {
+        late List<OperationDetails> operationDetails;
+        late String sourceAddress;
+        NetworkType? networkType;
+
+        if (beaconRequest != null) {
+          operationDetails = beaconRequest.operationDetails!;
+          sourceAddress = beaconRequest.request!.sourceAddress!;
+          networkType = beaconRequest.request?.network?.type;
+        } else {
+          operationDetails = tezosOperationDetails!;
+          sourceAddress = operationDetails.first.source!;
+
+          /// todo(bibash): check later
+          networkType = NetworkType.mainnet;
+        }
+
+        if (networkType == null) {
+          throw ResponseMessage(
+            message: ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           );
-          log.i('web3RpcURL - $web3RpcURL');
+        }
 
-          final (_, _, feeData) = await MWeb3Client.estimateEVMFee(
-            web3RpcURL: web3RpcURL,
-            sender: walletConnectCubit.state.transaction!.from!,
-            reciever: walletConnectCubit.state.transaction!.to!,
-            amount: ethAmount,
-            data: walletConnectCubit.state.transaction?.data == null
-                ? null
-                : utf8.decode(walletConnectCubit.state.transaction!.data!),
-          );
+        final amountData = int.parse(operationDetails.first.amount!);
 
-          fee = MWeb3Client.formatEthAmount(amount: feeData);
+        final destination = operationDetails.first.destination!;
+
+        final operationList = await getTezosOperationList(
+          preCheckBalance: true,
+          sourceAddress: sourceAddress,
+          networkType: networkType,
+          amount: amountData,
+          destination: destination,
+          operationDetails: operationDetails,
+        );
+        await operationList.estimate();
+
+        log.i('after operationList.estimate()');
+        amount = (amountData / 1e6).toString();
+        totalFee = (operationList.operations
+                    .map((Operation e) => e.totalFee)
+                    .reduce((int value, int element) => value + element) /
+                1e6)
+            .toString();
+        bakerFee = (operationList.operations
+                    .map((Operation e) => e.fee)
+                    .reduce((int value, int element) => value + element) /
+                1e6)
+            .toString();
+        log.i('bakerFee - $bakerFee');
+      } else if (transaction != null) {
+        final EtherAmount ethAmount = transaction.value!;
+        amount =
+            MWeb3Client.formatEthAmount(amount: ethAmount.getInWei).toString();
+
+        final web3RpcURL = await fetchRpcUrl(
+          blockchainNetwork: manageNetworkCubit.state.network,
+          dotEnv: dotenv,
+        );
+        log.i('web3RpcURL - $web3RpcURL');
+
+        final (_, _, feeData) = await MWeb3Client.estimateEVMFee(
+          web3RpcURL: web3RpcURL,
+          sender: transaction.from!,
+          reciever: transaction.to!,
+          amount: ethAmount,
+          data:
+              transaction.data == null ? null : utf8.decode(transaction.data!),
+        );
+
+        totalFee = MWeb3Client.formatEthAmount(amount: feeData).toString();
       }
 
       log.i('amount - $amount');
-      log.i('fee - $fee');
+      log.i('totalFee - $totalFee');
 
       emit(
         state.copyWith(
           status: AppStatus.idle,
           amount: amount,
-          fee: fee,
+          totalFee: totalFee,
+          bakerFee: bakerFee,
         ),
       );
     } catch (e) {
@@ -333,53 +412,112 @@ class OperationCubit extends Cubit<OperationState> {
         );
       }
 
-      late bool success;
+      final BeaconRequest? beaconRequest = beaconCubit.state.beaconRequest;
+      final List<OperationDetails>? tezosOperationDetails =
+          walletConnectCubit.state.operationDetails;
 
+      final Transaction? transaction = walletConnectCubit.state.transaction;
+
+      /// Error cases
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
-          final operationList =
-              await getBeaonOperationList(preCheckBalance: false);
-          await operationList.executeAndMonitor(null);
-          log.i('after operationList.executeAndMonitor()');
+          if (beaconRequest == null) {
+            throw ResponseMessage(
+              message: ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
+        case ConnectionBridgeType.walletconnect:
+          if (tezosOperationDetails == null && transaction == null) {
+            throw ResponseMessage(
+              message: ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
+      }
 
-          final transactionHash = operationList.result.id;
-          log.i('transactionHash - $transactionHash');
+      late bool success;
 
+      if (beaconRequest != null || tezosOperationDetails != null) {
+        late List<OperationDetails> operationDetails;
+        late String sourceAddress;
+        NetworkType? networkType;
+
+        if (beaconRequest != null) {
+          operationDetails = beaconRequest.operationDetails!;
+          sourceAddress = beaconRequest.request!.sourceAddress!;
+          networkType = beaconRequest.request?.network?.type;
+        } else {
+          operationDetails = tezosOperationDetails!;
+          sourceAddress = operationDetails.first.source!;
+
+          /// todo(bibash): check later
+          networkType = NetworkType.mainnet;
+        }
+
+        if (networkType == null) {
+          throw ResponseMessage(
+            message: ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          );
+        }
+
+        final amountData = int.parse(operationDetails.first.amount!);
+        final destination = operationDetails.first.destination!;
+
+        final operationList = await getTezosOperationList(
+          preCheckBalance: true,
+          sourceAddress: sourceAddress,
+          networkType: networkType,
+          amount: amountData,
+          destination: destination,
+          operationDetails: operationDetails,
+        );
+        await operationList.executeAndMonitor(null);
+        log.i('after operationList.executeAndMonitor()');
+
+        final transactionHash = operationList.result.id;
+        log.i('transactionHash - $transactionHash');
+
+        if (beaconRequest != null) {
           final Map<dynamic, dynamic> response = await beacon.operationResponse(
             id: beaconCubit.state.beaconRequest!.request!.id!,
             transactionHash: transactionHash,
           );
 
           success = json.decode(response['success'].toString()) as bool;
-        case ConnectionBridgeType.walletconnect:
-          final CryptoAccountData transactionAccountData =
-              state.cryptoAccountData!;
-
-          final EtherAmount ethAmount =
-              walletConnectCubit.state.transaction!.value!;
-
-          final rpcUrl = await fetchRpcUrl(
-            blockchainNetwork: manageNetworkCubit.state.network,
-            dotEnv: dotenv,
-          );
-
-          log.i('rpcUrl - $rpcUrl');
-
-          final String transactionHash = await MWeb3Client.sendEVMTransaction(
-            chainId: transactionAccountData.blockchainType.chainId,
-            web3RpcURL: rpcUrl,
-            privateKey: transactionAccountData.secretKey,
-            sender: walletConnectCubit.state.transaction!.from!,
-            reciever: walletConnectCubit.state.transaction!.to!,
-            amount: ethAmount,
-            data: walletConnectCubit.state.transaction?.data == null
-                ? null
-                : utf8.decode(walletConnectCubit.state.transaction!.data!),
-          );
-
+        } else {
           walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
               .complete(transactionHash);
           success = true;
+        }
+      } else if (transaction != null) {
+        final CryptoAccountData transactionAccountData =
+            state.cryptoAccountData!;
+
+        final EtherAmount ethAmount = transaction.value!;
+
+        final rpcUrl = await fetchRpcUrl(
+          blockchainNetwork: manageNetworkCubit.state.network,
+          dotEnv: dotenv,
+        );
+
+        log.i('rpcUrl - $rpcUrl');
+
+        final String transactionHash = await MWeb3Client.sendEVMTransaction(
+          chainId: transactionAccountData.blockchainType.chainId,
+          web3RpcURL: rpcUrl,
+          privateKey: transactionAccountData.secretKey,
+          sender: transaction.from!,
+          reciever: transaction.to!,
+          amount: ethAmount,
+          data:
+              transaction.data == null ? null : utf8.decode(transaction.data!),
+        );
+
+        walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
+            .complete(transactionHash);
+        success = true;
       }
 
       if (success) {
@@ -460,8 +598,10 @@ class OperationCubit extends Cubit<OperationState> {
         );
       case ConnectionBridgeType.walletconnect:
         log.i('walletconnect  connection rejected');
-        walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
-            .complete('Failed');
+        if (walletConnectCubit.completer.isNotEmpty) {
+          walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
+              .complete('Failed');
+        }
     }
 
     emit(state.copyWith(status: AppStatus.goBack));
@@ -469,8 +609,13 @@ class OperationCubit extends Cubit<OperationState> {
 
   String? rpcNodeUrlForTransaction;
 
-  Future<OperationsList> getBeaonOperationList({
+  Future<OperationsList> getTezosOperationList({
     required bool preCheckBalance,
+    required String sourceAddress,
+    required NetworkType networkType,
+    required int amount,
+    required String destination,
+    required List<OperationDetails> operationDetails,
   }) async {
     int retryCount = 0;
     const maxRetries = Parameters.maxEntries;
@@ -478,10 +623,8 @@ class OperationCubit extends Cubit<OperationState> {
       try {
         log.i('getOperationList');
 
-        final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
-
-        final CryptoAccountData? currentAccount = walletCubit
-            .getCryptoAccountData(beaconRequest.request!.sourceAddress!);
+        final CryptoAccountData? currentAccount =
+            walletCubit.getCryptoAccountData(sourceAddress);
 
         if (currentAccount == null) {
           throw ResponseMessage(
@@ -491,15 +634,6 @@ class OperationCubit extends Cubit<OperationState> {
         }
 
         late String baseUrl;
-
-        final NetworkType? networkType = beaconRequest.request?.network?.type;
-
-        if (networkType == null) {
-          throw ResponseMessage(
-            message: ResponseString
-                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          );
-        }
 
         if (networkType == NetworkType.mainnet) {
           baseUrl = TezosNetwork.mainNet().apiUrl;
@@ -525,15 +659,12 @@ class OperationCubit extends Cubit<OperationState> {
           /// check xtz balance
           log.i('checking xtz');
           final int balance = await dioClient.get(
-            '$baseUrl/v1/accounts/${beaconRequest.request!.sourceAddress!}/balance',
+            '$baseUrl/v1/accounts/$sourceAddress/balance',
           ) as int;
           log.i('total xtz - $balance');
           final formattedBalance = int.parse(
             balance.toStringAsFixed(6).replaceAll('.', '').replaceAll(',', ''),
           );
-
-          final amount =
-              int.parse(beaconRequest.operationDetails!.first.amount!);
 
           if (amount >= formattedBalance) {
             emit(
@@ -559,7 +690,7 @@ class OperationCubit extends Cubit<OperationState> {
           rpcInterface: client.rpcInterface,
         );
 
-        final List<Operation> operations = getBeaonOperation();
+        final List<Operation> operations = getTezosOperation(operationDetails);
         for (final element in operations) {
           operationList.appendOperation(element);
         }
@@ -571,9 +702,10 @@ class OperationCubit extends Cubit<OperationState> {
         log.i(
           'publicKey: ${keystore.publicKey} '
           'amount: ${state.amount} '
-          'networkFee: ${state.fee} '
+          'networkFee: ${state.totalFee} '
+          'bakerFee: ${state.bakerFee} '
           'address: ${keystore.address} =>To address: '
-          '${beaconRequest.operationDetails!.first.destination!}',
+          '$destination',
         );
 
         return operationList;
@@ -604,12 +736,10 @@ class OperationCubit extends Cubit<OperationState> {
     );
   }
 
-  List<Operation> getBeaonOperation() {
+  List<Operation> getTezosOperation(List<OperationDetails> operationDetails) {
     final List<Operation> operations = [];
 
-    final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
-
-    for (final operationDetail in beaconRequest.operationDetails!) {
+    for (final operationDetail in operationDetails) {
       final String? storageLimit = operationDetail.storageLimit;
       final String? gasLimit = operationDetail.gasLimit;
       final String? fee = operationDetail.fee;

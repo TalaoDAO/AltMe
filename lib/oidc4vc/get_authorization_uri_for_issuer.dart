@@ -23,7 +23,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
   required String? clientSecret,
   required ClientAuthentication clientAuthentication,
   required OIDC4VCIDraftType oidc4vciDraftType,
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
   required bool secureAuthorizedFlow,
   required DioClient client,
   required ProfileType profileType,
@@ -31,6 +31,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
   required bool useOAuthAuthorizationServerLink,
   required ProfileCubit profileCubit,
   required QRCodeScanCubit qrCodeScanCubit,
+  required String publicKeyForDPop,
   String? oAuthClientAttestation,
   String? oAuthClientAttestationPop,
 }) async {
@@ -57,6 +58,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
     'credentials': selectedCredentials,
     'issuer': issuer,
     'isEBSI': isEBSI,
+    'publicKeyForDPop': publicKeyForDPop,
   };
 
   switch (clientAuthentication) {
@@ -104,7 +106,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
     scope: scope,
     clientAuthentication: clientAuthentication,
     oidc4vciDraftType: oidc4vciDraftType,
-    vcFormatType: vcFormatType,
+    formatsSupported: formatsSupported,
     oAuthClientAttestation: oAuthClientAttestation,
     oAuthClientAttestationPop: oAuthClientAttestationPop,
     secureAuthorizedFlow: secureAuthorizedFlow,
@@ -122,21 +124,66 @@ Future<Uri?> getAuthorizationUriForIssuer({
   final requirePushedAuthorizationRequests =
       openIdConfiguration.requirePushedAuthorizationRequests;
 
-  if (requirePushedAuthorizationRequests || secureAuthorizedFlow) {
+  final isSecure = requirePushedAuthorizationRequests || secureAuthorizedFlow;
+
+  if (profileCubit.state.model.isDeveloperMode) {
+    final value = await qrCodeScanCubit.showDataBeforeSending(
+      title: isSecure ? 'PUSH AUTHORIZATION REQUEST' : 'AUTHORIZATION REQUEST',
+      data: authorizationRequestParemeters,
+    );
+
+    if (value) {
+      qrCodeScanCubit.completer = null;
+    } else {
+      qrCodeScanCubit.completer = null;
+      qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
+      qrCodeScanCubit.goBack();
+      return null;
+    }
+  }
+
+  if (isSecure) {
+    String? dPop;
+
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+    final parUrl = openIdConfiguration.pushedAuthorizationRequestEndpoint ??
+        '$authorizationEndpoint/par';
+
+    if (customOidc4vcProfile.dpopSupport) {
+      dPop = await getDPopJwt(
+        oidc4vc: profileCubit.oidc4vc,
+        url: parUrl,
+        // accessToken: savedAccessToken,
+        // nonce: savedNonce,
+        publicKey: publicKeyForDPop,
+      );
+    }
+
     final headers = <String, dynamic>{
       'Content-Type': 'application/x-www-form-urlencoded',
       'OAuth-Client-Attestation': oAuthClientAttestation,
       'OAuth-Client-Attestation-PoP': oAuthClientAttestationPop,
     };
 
-    final parUrl = openIdConfiguration.pushedAuthorizationRequestEndpoint ??
-        '$authorizationEndpoint/par';
+    if (dPop != null) {
+      headers['DPoP'] = dPop;
+    }
+
+    /// error we shuld get it from
+    final response = await client.post(
+      parUrl,
+      headers: headers,
+      data: authorizationRequestParemeters,
+    );
 
     if (profileCubit.state.model.isDeveloperMode) {
-      final value = await qrCodeScanCubit.showDataBeforeSending(
-        title: 'PUSHED AUTHORIZATION REQUEST',
-        data: authorizationRequestParemeters,
-      );
+      final formattedData = '''
+<b>REQUEST RESPONSE :</b>
+${const JsonEncoder.withIndent('  ').convert(response)}\n
+''';
+      final value = await qrCodeScanCubit.showDataAfterReceiving(formattedData);
 
       if (value) {
         qrCodeScanCubit.completer = null;
@@ -147,13 +194,6 @@ Future<Uri?> getAuthorizationUriForIssuer({
         return null;
       }
     }
-
-    /// error we shuld get it from
-    final response = await client.post(
-      parUrl,
-      headers: headers,
-      data: authorizationRequestParemeters,
-    );
 
     final requestUri = response['request_uri'];
 

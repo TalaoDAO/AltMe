@@ -5,7 +5,7 @@ class SelectNetworkFeeState extends Equatable {
   SelectNetworkFeeState({
     required this.selectedNetworkFee,
     List<NetworkFeeModel>? networkFeeList,
-  }) : networkFeeList = networkFeeList ?? NetworkFeeModel.tezosNetworkFees();
+  }) : networkFeeList = networkFeeList ?? [];
 
   factory SelectNetworkFeeState.fromJson(Map<String, dynamic> json) =>
       _$SelectNetworkFeeStateFromJson(json);

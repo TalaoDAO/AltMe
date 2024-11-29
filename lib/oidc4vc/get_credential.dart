@@ -27,6 +27,7 @@ Future<
   required OpenIdConfiguration openIdConfiguration,
   required List<dynamic>? authorizationDetails,
   required QRCodeScanCubit qrCodeScanCubit,
+  required String publicKeyForDPop,
 }) async {
   final privateKey = await fetchPrivateKey(
     isEBSI: isEBSI,
@@ -106,7 +107,7 @@ Future<
         issuer: issuer,
         kid: kid,
         privateKey: privateKey,
-        vcFormatType: customOidc4vcProfile.vcFormatType,
+        formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
       );
 
       if (profileCubit.state.model.isDeveloperMode) {
@@ -125,13 +126,14 @@ Future<
         }
       }
 
-      final credentialResponseDataValue =
-          await profileCubit.oidc4vc.getSingleCredential(
+      final credentialResponseDataValue = await getSingleCredentialData(
+        profileCubit: profileCubit,
         openIdConfiguration: openIdConfiguration,
         accessToken: accessToken,
-        nonce: nonce,
+        cnonce: nonce,
         dio: Dio(),
         credentialData: credentialData,
+        publicKeyForDPop: publicKeyForDPop,
       );
 
       /// update nonce value
@@ -162,29 +164,33 @@ Future<
       issuer: issuer,
       kid: kid,
       privateKey: privateKey,
-      vcFormatType: customOidc4vcProfile.vcFormatType,
+      formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
     );
 
     if (profileCubit.state.model.isDeveloperMode) {
-      await qrCodeScanCubit.showDataBeforeSending(
+      final value = await qrCodeScanCubit.showDataBeforeSending(
         title: 'CREDENTIAL REQUEST',
         data: credentialData,
       );
 
-      if (qrCodeScanCubit.savedAccessToken == null &&
-          qrCodeScanCubit.savedNonce == null &&
-          qrCodeScanCubit.savedAuthorizationDetails == null) {
-        return (null, null, null);
+      if (value) {
+        qrCodeScanCubit.completer = null;
+      } else {
+        qrCodeScanCubit.completer = null;
+        qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
+        qrCodeScanCubit.goBack();
+        return null;
       }
     }
 
-    final credentialResponseDataValue =
-        await profileCubit.oidc4vc.getSingleCredential(
+    final credentialResponseDataValue = await getSingleCredentialData(
+      profileCubit: profileCubit,
       openIdConfiguration: openIdConfiguration,
       accessToken: accessToken,
-      nonce: cnonce,
+      cnonce: cnonce,
       dio: Dio(),
       credentialData: credentialData,
+      publicKeyForDPop: publicKeyForDPop,
     );
 
     credentialResponseData.add(credentialResponseDataValue);
@@ -198,4 +204,88 @@ Future<
     deferredCredentialEndpoint,
     format,
   );
+}
+
+int count = 0;
+
+Future<dynamic> getSingleCredentialData({
+  required ProfileCubit profileCubit,
+  required OpenIdConfiguration openIdConfiguration,
+  required String accessToken,
+  required String? cnonce,
+  required Dio dio,
+  required Map<String, dynamic> credentialData,
+  required String publicKeyForDPop,
+}) async {
+  final credentialEndpoint =
+      profileCubit.oidc4vc.readCredentialEndpoint(openIdConfiguration);
+
+  final customOidc4vcProfile = profileCubit.state.model.profileSetting
+      .selfSovereignIdentityOptions.customOidc4vcProfile;
+  try {
+    String? dPop;
+
+    if (customOidc4vcProfile.dpopSupport) {
+      dPop = await getDPopJwt(
+        oidc4vc: profileCubit.oidc4vc,
+        url: credentialEndpoint,
+        accessToken: accessToken,
+        publicKey: publicKeyForDPop,
+      );
+    }
+
+    final credentialResponseDataValue =
+        await profileCubit.oidc4vc.getSingleCredential(
+      openIdConfiguration: openIdConfiguration,
+      accessToken: accessToken,
+      nonce: cnonce,
+      dio: Dio(),
+      credentialData: credentialData,
+      credentialEndpoint: credentialEndpoint,
+      dPop: dPop,
+    );
+
+    return credentialResponseDataValue;
+  } catch (e) {
+    if (count == 1) {
+      count = 0;
+      rethrow;
+    }
+
+    if (e is DioException &&
+        e.response != null &&
+        e.response!.data is Map<String, dynamic> &&
+        (e.response!.data as Map<String, dynamic>).containsKey('c_nonce')) {
+      count++;
+
+      String? dPop2;
+
+      if (customOidc4vcProfile.dpopSupport) {
+        dPop2 = await getDPopJwt(
+          oidc4vc: profileCubit.oidc4vc,
+          url: credentialEndpoint,
+          accessToken: accessToken,
+          publicKey: publicKeyForDPop,
+        );
+      }
+
+      final nonce = e.response!.data['c_nonce'].toString();
+
+      final credentialResponseDataValue =
+          await profileCubit.oidc4vc.getSingleCredential(
+        openIdConfiguration: openIdConfiguration,
+        accessToken: accessToken,
+        nonce: nonce,
+        dio: dio,
+        credentialData: credentialData,
+        credentialEndpoint: credentialEndpoint,
+        dPop: dPop2,
+      );
+      count = 0;
+      return credentialResponseDataValue;
+    } else {
+      count = 0;
+      rethrow;
+    }
+  }
 }

@@ -339,6 +339,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           publicKeyJwk: publicKeyJwk,
           useOAuthAuthorizationServerLink:
               useOauthServerAuthEndPoint(profileCubit.state.model),
+          isSdJwtVc: item.getFormat == VCFormatType.vcSdJWT.vcValue,
         );
 
         if (isVerified == VerificationType.verified) {

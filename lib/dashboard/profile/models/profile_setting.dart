@@ -95,12 +95,15 @@ class BlockchainOptions extends Equatable {
     this.tzproApiKey,
     this.infuraApiKey,
     this.etherlinkSupport,
+    this.testnet,
+    this.associatedAddressFormat = VCFormatType.ldpVc,
   });
 
   factory BlockchainOptions.fromJson(Map<String, dynamic> json) =>
       _$BlockchainOptionsFromJson(json);
 
   factory BlockchainOptions.initial() => const BlockchainOptions(
+        associatedAddressFormat: VCFormatType.ldpVc,
         bnbSupport: true,
         ethereumSupport: true,
         fantomSupport: true,
@@ -110,8 +113,10 @@ class BlockchainOptions extends Equatable {
         etherlinkSupport: true,
         tezosSupport: true,
         tzproRpcNode: false,
+        testnet: true,
       );
 
+  final VCFormatType? associatedAddressFormat;
   final bool bnbSupport;
   final bool ethereumSupport;
   final bool fantomSupport;
@@ -123,10 +128,12 @@ class BlockchainOptions extends Equatable {
   final bool tezosSupport;
   final String? tzproApiKey;
   final bool tzproRpcNode;
+  final bool? testnet;
 
   Map<String, dynamic> toJson() => _$BlockchainOptionsToJson(this);
 
   BlockchainOptions copyWth({
+    VCFormatType? associatedAddressFormat,
     bool? bnbSupport,
     bool? ethereumSupport,
     bool? fantomSupport,
@@ -138,8 +145,11 @@ class BlockchainOptions extends Equatable {
     bool? tezosSupport,
     String? tzproApiKey,
     bool? tzproRpcNode,
+    bool? testnet,
   }) {
     return BlockchainOptions(
+      associatedAddressFormat:
+          associatedAddressFormat ?? this.associatedAddressFormat,
       bnbSupport: bnbSupport ?? this.bnbSupport,
       ethereumSupport: ethereumSupport ?? this.ethereumSupport,
       fantomSupport: fantomSupport ?? this.fantomSupport,
@@ -151,11 +161,13 @@ class BlockchainOptions extends Equatable {
       tzproRpcNode: tzproRpcNode ?? this.tzproRpcNode,
       infuraApiKey: infuraApiKey ?? this.infuraApiKey,
       tzproApiKey: tzproApiKey ?? this.tzproApiKey,
+      testnet: testnet ?? this.testnet,
     );
   }
 
   @override
   List<Object?> get props => [
+        associatedAddressFormat,
         bnbSupport,
         ethereumSupport,
         fantomSupport,
@@ -167,6 +179,7 @@ class BlockchainOptions extends Equatable {
         tezosSupport,
         tzproApiKey,
         tzproRpcNode,
+        testnet,
       ];
 }
 
@@ -186,12 +199,14 @@ class DiscoverCardsOptions extends Equatable {
     required this.displayVerifiableId,
     required this.displayExternalIssuer,
     this.displayOver18Jwt = false,
+    this.displayOver18SdJwt = false,
     this.displayVerifiableIdJwt = false,
     this.displayVerifiableIdSdJwt = false,
     this.displayEmailPass = true,
     this.displayEmailPassJwt = true,
     this.displayPhonePass = true,
     this.displayPhonePassJwt = true,
+    this.displayPhonePassSdJwt = false,
     this.displayChainborn = false,
     this.displayTezotopia = false,
     this.displayHumanityJwt = false,
@@ -249,6 +264,7 @@ class DiscoverCardsOptions extends Equatable {
   final bool displayOver15;
   final bool displayOver18;
   final bool displayOver18Jwt;
+  final bool displayOver18SdJwt;
   final bool displayOver21;
   final bool displayOver50;
   final bool displayOver65;
@@ -256,6 +272,7 @@ class DiscoverCardsOptions extends Equatable {
   final bool displayEmailPassJwt;
   final bool displayPhonePass;
   final bool displayPhonePassJwt;
+  final bool displayPhonePassSdJwt;
   final bool displayAgeRange;
   final bool displayVerifiableId;
   final bool displayVerifiableIdJwt;
@@ -276,6 +293,7 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayOver15,
     bool? displayOver18,
     bool? displayOver18Jwt,
+    bool? displayOver18SdJwt,
     bool? displayVerifiableId,
     bool? displayVerifiableIdJwt,
     bool? displayVerifiableIdSdJwt,
@@ -285,6 +303,7 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayEmailPassJwt,
     bool? displayPhonePass,
     bool? displayPhonePassJwt,
+    bool? displayPhonePassSdJwt,
     bool? displayAgeRange,
     bool? displayGender,
     bool? displayOver50,
@@ -301,6 +320,7 @@ class DiscoverCardsOptions extends Equatable {
       displayOver15: displayOver15 ?? this.displayOver15,
       displayOver18: displayOver18 ?? this.displayOver18,
       displayOver18Jwt: displayOver18Jwt ?? this.displayOver18Jwt,
+      displayOver18SdJwt: displayOver18SdJwt ?? this.displayOver18SdJwt,
       displayVerifiableId: displayVerifiableId ?? this.displayVerifiableId,
       displayVerifiableIdJwt:
           displayVerifiableIdJwt ?? this.displayVerifiableIdJwt,
@@ -312,6 +332,8 @@ class DiscoverCardsOptions extends Equatable {
       displayEmailPassJwt: displayEmailPassJwt ?? this.displayEmailPassJwt,
       displayPhonePass: displayPhonePass ?? this.displayPhonePass,
       displayPhonePassJwt: displayPhonePassJwt ?? this.displayPhonePassJwt,
+      displayPhonePassSdJwt:
+          displayPhonePassSdJwt ?? this.displayPhonePassSdJwt,
       displayAgeRange: displayAgeRange ?? this.displayAgeRange,
       displayGender: displayGender ?? this.displayGender,
       displayOver50: displayOver50 ?? this.displayOver50,
@@ -324,56 +346,50 @@ class DiscoverCardsOptions extends Equatable {
     );
   }
 
-  String vcFormatTypeForAuto({
+  VCFormatType vcFormatTypeForAuto({
     required CredentialSubjectType credentialSubjectType,
     required VCFormatType vcFormatType,
   }) {
-    final isEmailPass =
-        credentialSubjectType == CredentialSubjectType.emailPass;
-
-    final ldpVcValue = VCFormatType.ldpVc.urlValue(isEmailPass: isEmailPass);
-    final jwtVcJsonValue =
-        VCFormatType.jwtVcJson.urlValue(isEmailPass: isEmailPass);
-    final vcSdJWTValue =
-        VCFormatType.vcSdJWT.urlValue(isEmailPass: isEmailPass);
-
     final isLdpVc = vcFormatType == VCFormatType.ldpVc;
     final isJwtVcJson = vcFormatType == VCFormatType.jwtVcJson;
     final isVcSdJWT = vcFormatType == VCFormatType.vcSdJWT;
 
     switch (credentialSubjectType) {
       case CredentialSubjectType.defiCompliance:
-        if (isLdpVc && displayDefi) return ldpVcValue;
+        if (isLdpVc && displayDefi) return VCFormatType.ldpVc;
       case CredentialSubjectType.livenessCard:
-        if (isLdpVc && displayHumanity) return ldpVcValue;
-        if (isJwtVcJson && displayHumanityJwt) return vcSdJWTValue;
+        if (isLdpVc && displayHumanity) return VCFormatType.ldpVc;
+        if (isJwtVcJson && displayHumanityJwt) return VCFormatType.vcSdJWT;
       case CredentialSubjectType.gender:
-        if (isLdpVc && displayGender) return ldpVcValue;
+        if (isLdpVc && displayGender) return VCFormatType.ldpVc;
       case CredentialSubjectType.verifiableIdCard:
-        if (isLdpVc && displayVerifiableId) return ldpVcValue;
-        if (isJwtVcJson && displayVerifiableIdJwt) return jwtVcJsonValue;
-        if (isVcSdJWT && displayVerifiableIdSdJwt) return vcSdJWTValue;
+        if (isLdpVc && displayVerifiableId) return VCFormatType.ldpVc;
+        if (isJwtVcJson && displayVerifiableIdJwt) {
+          return VCFormatType.jwtVcJson;
+        }
+        if (isVcSdJWT && displayVerifiableIdSdJwt) return VCFormatType.vcSdJWT;
       case CredentialSubjectType.over13:
-        if (isLdpVc && displayOver13) return ldpVcValue;
+        if (isLdpVc && displayOver13) return VCFormatType.ldpVc;
       case CredentialSubjectType.over15:
-        if (isLdpVc && displayOver15) return ldpVcValue;
+        if (isLdpVc && displayOver15) return VCFormatType.ldpVc;
       case CredentialSubjectType.over18:
-        if (isLdpVc && displayOver18) return ldpVcValue;
-        if (isJwtVcJson && displayOver18Jwt) return jwtVcJsonValue;
+        if (isLdpVc && displayOver18) return VCFormatType.ldpVc;
+        if (isJwtVcJson && displayOver18Jwt) return VCFormatType.jwtVcJson;
+        if (isVcSdJWT && displayOver18SdJwt) return VCFormatType.vcSdJWT;
       case CredentialSubjectType.over21:
-        if (isLdpVc && displayOver21) return ldpVcValue;
+        if (isLdpVc && displayOver21) return VCFormatType.ldpVc;
       case CredentialSubjectType.over50:
-        if (isLdpVc && displayOver50) return ldpVcValue;
+        if (isLdpVc && displayOver50) return VCFormatType.ldpVc;
       case CredentialSubjectType.over65:
-        if (isLdpVc && displayOver65) return ldpVcValue;
+        if (isLdpVc && displayOver65) return VCFormatType.ldpVc;
       case CredentialSubjectType.emailPass:
-        if (isLdpVc && displayEmailPass) return ldpVcValue;
-        if (isJwtVcJson && displayEmailPassJwt) return jwtVcJsonValue;
-        if (isVcSdJWT && displayEmailPassSdJwt) return vcSdJWTValue;
+        if (isLdpVc && displayEmailPass) return VCFormatType.ldpVc;
+        if (isJwtVcJson && displayEmailPassJwt) return VCFormatType.jwtVcJson;
+        if (isVcSdJWT && displayEmailPassSdJwt) return VCFormatType.vcSdJWT;
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.phonePass:
-        if (isLdpVc && displayPhonePass) return ldpVcValue;
-        if (isJwtVcJson && displayPhonePassJwt) return jwtVcJsonValue;
+        if (isLdpVc && displayPhonePass) return VCFormatType.ldpVc;
+        if (isJwtVcJson && displayPhonePassJwt) return VCFormatType.jwtVcJson;
       case CredentialSubjectType.identityPass:
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
@@ -421,10 +437,10 @@ class DiscoverCardsOptions extends Equatable {
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
       case CredentialSubjectType.pid:
-        return VCFormatType.ldpVc.urlValue(isEmailPass: isEmailPass);
+        return VCFormatType.ldpVc;
     }
 
-    return VCFormatType.ldpVc.urlValue(isEmailPass: isEmailPass);
+    return VCFormatType.ldpVc;
   }
 
   @override
@@ -434,6 +450,8 @@ class DiscoverCardsOptions extends Equatable {
         displayOver13,
         displayOver15,
         displayOver18,
+        displayOver18Jwt,
+        displayOver18SdJwt,
         displayVerifiableId,
         displayOver21,
         displayOver65,
@@ -444,6 +462,7 @@ class DiscoverCardsOptions extends Equatable {
         displayEmailPassJwt,
         displayPhonePass,
         displayPhonePassJwt,
+        displayPhonePassSdJwt,
         displayExternalIssuer,
         displayHumanityJwt,
         displayOver18Jwt,
@@ -690,6 +709,7 @@ class CustomOidc4VcProfile extends Equatable {
     this.pushAuthorizationRequest = false,
     this.statusListCache = true,
     this.dpopSupport = false,
+    this.formatsSupported = const [],
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
@@ -707,8 +727,15 @@ class CustomOidc4VcProfile extends Equatable {
         clientSecret: randomString(12),
       );
 
-  factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) =>
-      _$CustomOidc4VcProfileFromJson(json);
+  factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) {
+    final profileFromJson = _$CustomOidc4VcProfileFromJson(json);
+    if (profileFromJson.formatsSupported!.isEmpty) {
+      return profileFromJson.copyWith(
+        formatsSupported: <VCFormatType>[profileFromJson.vcFormatType],
+      );
+    }
+    return profileFromJson;
+  }
 
   final ClientAuthentication clientAuthentication;
   @JsonKey(defaultValue: false)
@@ -736,6 +763,7 @@ class CustomOidc4VcProfile extends Equatable {
   final ClientType clientType;
   @JsonKey(name: 'vcFormat')
   final VCFormatType vcFormatType;
+  final List<VCFormatType>? formatsSupported;
   final ProofType proofType;
   final bool dpopSupport;
 
@@ -773,6 +801,7 @@ class CustomOidc4VcProfile extends Equatable {
     SIOPV2DraftType? siopv2Draft,
     ClientType? clientType,
     VCFormatType? vcFormatType,
+    List<VCFormatType>? formatsSupported,
     ProofType? proofType,
     bool? dpopSupport,
   }) =>
@@ -797,6 +826,7 @@ class CustomOidc4VcProfile extends Equatable {
         vcFormatType: vcFormatType ?? this.vcFormatType,
         proofType: proofType ?? this.proofType,
         dpopSupport: dpopSupport ?? this.dpopSupport,
+        formatsSupported: formatsSupported ?? this.formatsSupported,
       );
 
   @override
@@ -817,6 +847,7 @@ class CustomOidc4VcProfile extends Equatable {
         siopv2Draft,
         clientType,
         vcFormatType,
+        formatsSupported,
         proofType,
         dpopSupport,
       ];

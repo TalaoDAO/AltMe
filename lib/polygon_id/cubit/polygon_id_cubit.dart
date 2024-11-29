@@ -550,12 +550,12 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       credentialManifest: credentialManifest,
       expirationDate: claimEntity.expiration,
       activities: [Activity(acquisitionAt: DateTime.now())],
+      profileLinkedId: profileCubit.state.model.profileType.getVCId,
     );
     // insert the credential in the wallet
     await credentialsCubit.insertCredential(
       credential: credentialModel,
       blockchainType: walletCubit.state.currentAccount!.blockchainType,
-      qrCodeScanCubit: qrCodeScanCubit,
     );
   }
 

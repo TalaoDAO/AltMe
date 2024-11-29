@@ -8,10 +8,8 @@ part 'polygon_associated_address_model.g.dart';
 class PolygonAssociatedAddressModel extends CredentialSubjectModel {
   PolygonAssociatedAddressModel({
     this.associatedAddress,
-    this.accountName,
     required String super.id,
     required String super.type,
-    required Author super.issuedBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.polygonAssociatedWallet,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
@@ -22,9 +20,6 @@ class PolygonAssociatedAddressModel extends CredentialSubjectModel {
 
   @JsonKey(defaultValue: '')
   final String? associatedAddress;
-
-  @JsonKey(defaultValue: '')
-  final String? accountName;
 
   @override
   Map<String, dynamic> toJson() => _$PolygonAssociatedAddressModelToJson(this);

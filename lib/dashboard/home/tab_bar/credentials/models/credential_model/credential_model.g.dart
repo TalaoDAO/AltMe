@@ -14,6 +14,7 @@ CredentialModel _$CredentialModelFromJson(Map<String, dynamic> json) =>
           json['credentialPreview'] as Map<String, dynamic>),
       shareLink: json['shareLink'] as String? ?? '',
       data: json['data'] as Map<String, dynamic>,
+      profileLinkedId: json['profileLinkedId'] as String?,
       format: json['format'] as String?,
       display: CredentialModel.fromJsonDisplay(json['display']),
       expirationDate: json['expirationDate'] as String?,
@@ -54,4 +55,5 @@ Map<String, dynamic> _$CredentialModelToJson(CredentialModel instance) =>
       'pendingInfo': instance.pendingInfo?.toJson(),
       'format': instance.format,
       'credentialSupported': instance.credentialSupported,
+      'profileLinkedId': instance.profileLinkedId,
     };

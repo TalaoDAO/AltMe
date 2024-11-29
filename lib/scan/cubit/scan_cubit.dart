@@ -282,8 +282,8 @@ class ScanCubit extends Cubit<ScanState> {
             newData: jsonCredential as Map<String, dynamic>,
             activities: activities,
             credentialManifest: credentialManifest,
+            profileType: qrCodeScanCubit.profileCubit.state.model.profileType,
           ),
-          qrCodeScanCubit: qrCodeScanCubit,
         );
 
         if (credentialsToBePresented != null) {
@@ -534,9 +534,10 @@ class ScanCubit extends Cubit<ScanState> {
         credentialsToBePresented: credentialsToBePresented,
         presentationDefinition: presentationDefinition,
         clientMetaData: clientMetaData,
-        profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
+        profileSetting: profileCubit.state.model.profileSetting,
       );
-      final String vpToken = await createVpToken(
+
+      final vpToken = await createVpToken(
         credentialsToBePresented: credentialsToBePresented,
         did: did,
         kid: kid,
@@ -545,7 +546,7 @@ class ScanCubit extends Cubit<ScanState> {
         privateKey: privateKey,
         uri: uri,
         clientMetaData: clientMetaData,
-        profileSetting: qrCodeScanCubit.profileCubit.state.model.profileSetting,
+        profileSetting: profileCubit.state.model.profileSetting,
         formatFromPresentationSubmission: formatFromPresentationSubmission,
       );
 
@@ -747,6 +748,7 @@ class ScanCubit extends Cubit<ScanState> {
         final credential = getCredentialsFromFilterList(
           filterList: filterList,
           credentialList: [credentialsToBePresented[i]],
+          profileType: profileCubit.state.model.profileType,
         );
 
         Map<String, dynamic>? pathNested;
@@ -756,10 +758,16 @@ class ScanCubit extends Cubit<ScanState> {
           final Map<String, dynamic> descriptor = {
             'id': inputDescriptor.id,
             'format': format.vpValue,
-            'path': r'$',
           };
 
-          if (format != VCFormatType.vcSdJWT) {
+          if (format == VCFormatType.vcSdJWT) {
+            if (credentialsToBePresented.length == 1) {
+              descriptor['path'] = r'$';
+            } else {
+              descriptor['path'] = r'$[' + i.toString() + ']';
+            }
+          } else {
+            descriptor['path'] = r'$';
             pathNested = {
               'id': inputDescriptor.id,
               'format': format.vpValue,
@@ -767,8 +775,6 @@ class ScanCubit extends Cubit<ScanState> {
             if (credentialsToBePresented.length == 1) {
               if (format == VCFormatType.ldpVc) {
                 pathNested['path'] = r'$.verifiableCredential';
-              } else if (format == VCFormatType.vcSdJWT) {
-                pathNested['path'] = r'$';
               } else {
                 pathNested['path'] = r'$.vp.verifiableCredential[0]';
               }
@@ -777,8 +783,6 @@ class ScanCubit extends Cubit<ScanState> {
                 pathNested['path'] =
                     // ignore: prefer_interpolation_to_compose_strings
                     r'$.verifiableCredential[' + i.toString() + ']';
-              } else if (format == VCFormatType.vcSdJWT) {
-                pathNested['path'] = r'$';
               } else {
                 pathNested['path'] =
                     // ignore: prefer_interpolation_to_compose_strings
@@ -837,15 +841,16 @@ class ScanCubit extends Cubit<ScanState> {
         profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
 
     if (formatFromPresentationSubmission == VCFormatType.vcSdJWT) {
-      final credentialList = getStringCredentialsForToken(
+      final credentialListJwt = getStringCredentialsForToken(
         credentialsToBePresented: credentialsToBePresented,
         profileCubit: profileCubit,
       );
 
-      final vpToken = credentialList.first;
-      // considering only one
-
-      return vpToken;
+      if (credentialListJwt.length == 1) {
+        return credentialListJwt.first;
+      } else {
+        return credentialListJwt.toString();
+      }
     } else if (formatFromPresentationSubmission == VCFormatType.jwtVc ||
         formatFromPresentationSubmission == VCFormatType.jwtVcJson ||
         formatFromPresentationSubmission == VCFormatType.jwtVcJsonLd) {
@@ -866,6 +871,17 @@ class ScanCubit extends Cubit<ScanState> {
 
       return vpToken;
     } else if (formatFromPresentationSubmission == VCFormatType.ldpVc) {
+      ///didkit does not support did:jwk
+      if (did.startsWith('did:jwk')) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_format',
+            'error_description':
+                'This VC format is not supported with this profile.',
+          },
+        );
+      }
+
       /// proof is done with a creation date 20 seconds in the past to avoid
       /// proof check to fail because of time difference on server
       final options = jsonEncode({

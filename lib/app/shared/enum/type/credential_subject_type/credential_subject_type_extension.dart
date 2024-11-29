@@ -759,26 +759,17 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     ResponseString? howToGetIt;
     ResponseString? longDescription;
 
-    final vcFormatType = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+    /// handles the dummy casse
 
     final oidc4vcDraftType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.oidc4vciDraft;
 
-    final discoverCardsOptions = profileSetting.discoverCardsOptions;
+    final isEmailPassOrPhonePass = this == CredentialSubjectType.emailPass ||
+        this == CredentialSubjectType.phonePass;
 
-    final isEmailPass = this == CredentialSubjectType.emailPass;
-
-    var format = VCFormatType.ldpVc.urlValue(isEmailPass: isEmailPass);
-
-    if (vcFormatType == VCFormatType.auto && discoverCardsOptions != null) {
-      format = discoverCardsOptions.vcFormatTypeForAuto(
-        credentialSubjectType: this,
-        vcFormatType: assignedVCFormatType,
-      );
-    } else {
-      format = vcFormatType.urlValue(isEmailPass: isEmailPass);
-    }
+    final format = assignedVCFormatType.urlValue(
+      isEmailPassOrPhonePass: isEmailPassOrPhonePass,
+    );
 
     switch (this) {
       case CredentialSubjectType.defiCompliance:
@@ -941,7 +932,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
               assignedVCFormatType == VCFormatType.ldpVc) {
             type = 'verifiableid';
           }
-        } else if (vcFormatType == VCFormatType.jwtVc) {
+        } else if (assignedVCFormatType == VCFormatType.jwtVc) {
           type = 'individualverifiableattestation';
         }
 
@@ -1087,6 +1078,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       longDescription: longDescription == null
           ? null
           : ResponseMessage(message: longDescription),
+      vcFormatType: assignedVCFormatType,
     );
   }
 

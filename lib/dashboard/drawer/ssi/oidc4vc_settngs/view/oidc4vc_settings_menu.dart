@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/drawer/ssi/verifiers_metadata/view/verifiers_metadata_page.dart';
 import 'package:flutter/material.dart';
 
 class Oidc4vcSettingMenu extends StatelessWidget {
@@ -43,13 +42,13 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           const ScopeParameterWidget(),
           const ClientAuthenticationWidget(),
           const ClientTypeWidget(),
-          const ConfidentialClientWidget(),
+          const PreRegisteredWidget(),
           const VCFormatWidget(),
           const ProofTypeWidget(),
           const ProofHeaderWidget(),
           const PushAuthorizationRequesWidget(),
           const StatusListCachingWidget(),
-          //const DPopSupoprtWidget(),
+          const DPopSupoprtWidget(),
           DrawerItem(
             title: 'Wallet metadata for issuers',
             onTap: () {

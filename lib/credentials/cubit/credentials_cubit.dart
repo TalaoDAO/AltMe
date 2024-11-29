@@ -76,6 +76,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     /// manually categorizing default credential
     for (final credential in savedCredentials) {
+      final profileLinked = credential.profileLinkedId;
+      final vcId = profileCubit.state.model.profileType.getVCId;
       if (credential.isDefaultCredential &&
           credential.isVerifiableDiplomaType) {
         final updatedCredential = credential.copyWith(
@@ -86,7 +88,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             ),
           ),
         );
-        updatedCredentials.add(updatedCredential);
+
+        if (profileLinked != null) {
+          if (profileLinked == vcId) updatedCredentials.add(updatedCredential);
+        } else {
+          updatedCredentials.add(updatedCredential);
+        }
       } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
         final updatedCredential = credential.copyWith(
           credentialPreview: credential.credentialPreview.copyWith(
@@ -97,9 +104,17 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           ),
         );
 
-        updatedCredentials.add(updatedCredential);
+        if (profileLinked != null) {
+          if (profileLinked == vcId) updatedCredentials.add(updatedCredential);
+        } else {
+          updatedCredentials.add(updatedCredential);
+        }
       } else {
-        updatedCredentials.add(credential);
+        if (profileLinked != null) {
+          if (profileLinked == vcId) updatedCredentials.add(credential);
+        } else {
+          updatedCredentials.add(credential);
+        }
       }
     }
 
@@ -172,6 +187,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         activities: [Activity(acquisitionAt: DateTime.now())],
         jwt: walletAttestationData,
         format: 'jwt',
+        profileLinkedId: ProfileType.enterprise.getVCId,
       );
 
       log.i('CredentialSubjectType.walletCredential added');
@@ -179,7 +195,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         credential: walletCredential,
         showMessage: false,
         blockchainType: blockchainType,
-        qrCodeScanCubit: qrCodeScanCubit,
       );
     }
   }
@@ -277,7 +292,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> insertCredential({
     required CredentialModel credential,
     required BlockchainType? blockchainType,
-    required QRCodeScanCubit qrCodeScanCubit,
     bool showMessage = true,
     bool showStatus = true,
     bool isPendingCredential = false,
@@ -360,9 +374,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       ),
     );
 
-    if (qrCodeScanCubit.missingCredentialCompleter != null) {
-      qrCodeScanCubit.missingCredentialCompleter!.complete(true);
-    }
+    // if (qrCodeScanCubit.missingCredentialCompleter != null) {
+    //   qrCodeScanCubit.missingCredentialCompleter!.complete(true);
+    // }
   }
 
   void enableCredentialCategory({required CredentialCategory category}) {
@@ -434,8 +448,11 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
       final isFormatMatched = iteratedCredentialFormat == credential.format;
 
+      final isOnSameProfile = storedCredential.profileLinkedId ==
+          profileCubit.state.model.profileType.getVCId;
+
       final isCredentialMatched =
-          isCredentialSubjectTypeMatched && isFormatMatched;
+          isCredentialSubjectTypeMatched && isFormatMatched && isOnSameProfile;
 
       if (isCredentialMatched) {
         // credential and format matches
@@ -444,11 +461,18 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         /// with same email address
         if (credentialSubjectModel.credentialSubjectType ==
             CredentialSubjectType.emailPass) {
-          final String? oldEmail =
-              (credentialSubjectModel as EmailPassModel).email;
-          final newEmail =
-              (iteratedCredentialSubjectModel as EmailPassModel).email;
-
+          late String? oldEmail;
+          late String? newEmail;
+          if (credential.data['email'] != null) {
+            oldEmail = credential.data['email'] as String;
+          } else {
+            oldEmail = (credentialSubjectModel as EmailPassModel).email;
+          }
+          if (storedCredential.data['email'] != null) {
+            newEmail = storedCredential.data['email'] as String;
+          } else {
+            newEmail = (iteratedCredentialSubjectModel as EmailPassModel).email;
+          }
           if (oldEmail != null && oldEmail == newEmail) {
             /// check if email is same
 
@@ -472,22 +496,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               // don not remove if support multiple
             }
           }
-        } else {
-          /// other cards
-          if (credentialSubjectModel.credentialSubjectType.supportSingleOnly) {
-            if (!credentialSubjectModel
-                .credentialSubjectType.isBlockchainAccount) {
-              await deleteById(
-                id: storedCredential.id,
-                showMessage: false,
-                blockchainType: blockchainType,
-              );
-            }
-
-            break;
-          } else {
-            // don not remove if support multiple
-          }
+        } else if (credentialSubjectModel
+                .credentialSubjectType.isBlockchainAccount ||
+            credentialSubjectModel.credentialSubjectType.supportSingleOnly) {
+          await deleteById(
+            id: storedCredential.id,
+            showMessage: false,
+            blockchainType: blockchainType,
+          );
         }
       }
     }
@@ -529,21 +545,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> insertAssociatedWalletCredential({
     required CryptoAccountData cryptoAccountData,
-    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
-    final supportAssociatedCredential =
-        supportCryptoCredential(profileCubit.state.model);
-
-    if (!supportAssociatedCredential) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description':
-              'The crypto associated credential is not supported.',
-        },
-      );
-    }
-
     final didKeyType = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
@@ -570,107 +572,20 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           .selfSovereignIdentityOptions.customOidc4vcProfile,
       oidc4vc: oidc4vc,
       privateKey: private,
+      profileType: profileCubit.state.model.profileType,
     );
 
     if (credential != null) {
+      await modifyCredential(
+        credential: credential,
+        blockchainType: cryptoAccountData.blockchainType,
+      );
+
       await insertCredential(
         credential: credential,
         blockchainType: cryptoAccountData.blockchainType,
-        qrCodeScanCubit: qrCodeScanCubit,
+        showMessage: false,
       );
-    }
-  }
-
-  Future<void> updateAssociatedWalletCredential({
-    required BlockchainType blockchainType,
-    required CryptoAccountData cryptoAccountData,
-  }) async {
-    /// get id of current AssociatedAddres credential of this account
-    final oldCredentialList = List<CredentialModel>.from(state.credentials);
-
-    // need to update code
-    final filteredCredentialList = getCredentialsFromFilterList(
-      filterList: [
-        Field(path: [r'$..type'], filter: blockchainType.filter),
-        Field(
-          path: [r'$..associatedAddress'],
-          filter: Filter(
-            type: 'String',
-            pattern: cryptoAccountData.walletAddress,
-          ),
-        ),
-      ],
-      credentialList: oldCredentialList,
-    );
-
-    /// update AssociatedAddres credential with new name
-    if (filteredCredentialList.isNotEmpty) {
-      //find old id of the credential
-      final oldCredential = oldCredentialList.where((CredentialModel element) {
-        final credentialSubjectModel =
-            element.credentialPreview.credentialSubjectModel;
-
-        String? walletAddress;
-
-        if (credentialSubjectModel is EthereumAssociatedAddressModel) {
-          walletAddress = credentialSubjectModel.associatedAddress;
-        } else if (credentialSubjectModel is TezosAssociatedAddressModel) {
-          walletAddress = credentialSubjectModel.associatedAddress;
-        } else if (credentialSubjectModel is FantomAssociatedAddressModel) {
-          walletAddress = credentialSubjectModel.associatedAddress;
-        } else if (credentialSubjectModel is BinanceAssociatedAddressModel) {
-          walletAddress = credentialSubjectModel.associatedAddress;
-        } else if (credentialSubjectModel is PolygonAssociatedAddressModel) {
-          walletAddress = credentialSubjectModel.associatedAddress;
-        } else {
-          return false;
-        }
-
-        if (walletAddress != null &&
-            walletAddress == cryptoAccountData.walletAddress) {
-          return true;
-        }
-
-        return false;
-      }).first;
-
-      final did = oldCredential.credentialPreview.credentialSubjectModel.id;
-
-      if (did == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'DID is required.',
-          },
-        );
-      }
-
-      final didKeyType = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
-
-      final privateKey = await getPrivateKey(
-        profileCubit: profileCubit,
-        didKeyType: didKeyType,
-      );
-
-      final private = jsonDecode(privateKey) as Map<String, dynamic>;
-
-      final credential = await generateAssociatedWalletCredential(
-        cryptoAccountData: cryptoAccountData,
-        didKitProvider: didKitProvider,
-        blockchainType: blockchainType,
-        keyGenerator: keyGenerator,
-        oldId: oldCredential.id,
-        did: oldCredential.credentialPreview.credentialSubjectModel.id!,
-        customOidc4vcProfile: profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile,
-        oidc4vc: oidc4vc,
-        privateKey: private,
-      );
-
-      if (credential != null) {
-        await updateCredential(credential: credential);
-      }
     }
   }
 
@@ -685,8 +600,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     final profileModel = profileCubit.state.model;
     final profileSetting = profileModel.profileSetting;
-    final vcFormatType = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+    final formatsSupported = profileModel
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .formatsSupported ??
+        [];
 
     final discoverCardsOptions = profileSetting.discoverCardsOptions;
     // entreprise user may have a list of external issuer
@@ -707,20 +626,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       if (discoverCardsOptions != null) {
         // add cards in discover based on profile
 
-        final ldpVcType = vcFormatType == VCFormatType.ldpVc ||
-            vcFormatType == VCFormatType.auto;
-        final jwtVcJsonType = vcFormatType == VCFormatType.jwtVcJson ||
-            vcFormatType == VCFormatType.auto;
-        final jwtVcType = vcFormatType == VCFormatType.jwtVc;
-        final vcSdJWType = vcFormatType == VCFormatType.vcSdJWT ||
-            vcFormatType == VCFormatType.auto;
-
         switch (category) {
           case CredentialCategory.identityCards:
 
             /// over 13
-
-            if (ldpVcType && discoverCardsOptions.displayOver13) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayOver13) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.over13,
@@ -730,8 +641,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Over 15
-
-            if (ldpVcType && discoverCardsOptions.displayOver15) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayOver15) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.over15,
@@ -741,7 +652,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Over 18
-            if (ldpVcType && discoverCardsOptions.displayOver18) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayOver18) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.over18,
@@ -749,7 +661,17 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 ),
               );
             }
-            if (jwtVcJsonType && discoverCardsOptions.displayOver18Jwt) {
+            if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                discoverCardsOptions.displayOver18SdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.over18,
+                  formatType: VCFormatType.vcSdJWT,
+                ),
+              );
+            }
+            if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                discoverCardsOptions.displayOver18Jwt) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.over18,
@@ -759,7 +681,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Over 21
-            if (ldpVcType && discoverCardsOptions.displayOver21) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayOver21) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.over21,
@@ -769,7 +692,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Over 50
-            if (ldpVcType && discoverCardsOptions.displayOver50) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayOver50) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.over50,
@@ -779,7 +703,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Over 65
-            if (ldpVcType && discoverCardsOptions.displayOver65) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayOver65) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.over65,
@@ -789,7 +714,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// verifiableIdCard
-            if (ldpVcType && discoverCardsOptions.displayVerifiableId) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayVerifiableId) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.verifiableIdCard,
@@ -797,23 +723,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 ),
               );
             }
-            if (jwtVcType && discoverCardsOptions.displayVerifiableIdJwt) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.verifiableIdCard,
-                  formatType: VCFormatType.jwtVc,
-                ),
-              );
-            }
-            if (jwtVcJsonType && discoverCardsOptions.displayVerifiableIdJwt) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.verifiableIdCard,
-                  formatType: VCFormatType.jwtVcJson,
-                ),
-              );
-            }
-            if (jwtVcJsonType &&
+            if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
                 discoverCardsOptions.displayVerifiableIdSdJwt) {
               allCategoryVC.add(
                 CredInfo(
@@ -822,9 +732,19 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 ),
               );
             }
+            if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                discoverCardsOptions.displayVerifiableIdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.verifiableIdCard,
+                  formatType: VCFormatType.jwtVcJson,
+                ),
+              );
+            }
 
             /// age range
-            if (ldpVcType && discoverCardsOptions.displayAgeRange) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayAgeRange) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.ageRange,
@@ -834,7 +754,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// livenessCard
-            if (ldpVcType && discoverCardsOptions.displayHumanity) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayHumanity) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.livenessCard,
@@ -843,7 +764,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               );
             }
 
-            if (jwtVcJsonType && discoverCardsOptions.displayHumanityJwt) {
+            if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                discoverCardsOptions.displayHumanityJwt) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.livenessCard,
@@ -853,7 +775,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// gender
-            if (ldpVcType && discoverCardsOptions.displayGender) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayGender) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.gender,
@@ -866,7 +789,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
             /// chainbornMembership
             if (Parameters.showChainbornCard) {
-              if (ldpVcType && discoverCardsOptions.displayChainborn) {
+              if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                  discoverCardsOptions.displayChainborn) {
                 allCategoryVC.add(
                   CredInfo(
                     credentialType: CredentialSubjectType.chainbornMembership,
@@ -878,7 +802,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
             /// tezotopiaMembership
             if (Parameters.showTezotopiaCard) {
-              if (ldpVcType && discoverCardsOptions.displayTezotopia) {
+              if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                  discoverCardsOptions.displayTezotopia) {
                 allCategoryVC.add(
                   CredInfo(
                     credentialType: CredentialSubjectType.tezotopiaMembership,
@@ -894,8 +819,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           case CredentialCategory.contactInfoCredentials:
 
             /// Email Pass
-
-            if (ldpVcType && discoverCardsOptions.displayEmailPass) {
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayEmailPass) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.emailPass,
@@ -903,7 +828,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 ),
               );
             }
-            if (jwtVcJsonType && discoverCardsOptions.displayEmailPassJwt) {
+            if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                discoverCardsOptions.displayEmailPassJwt) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.emailPass,
@@ -911,7 +837,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 ),
               );
             }
-            if (vcSdJWType && discoverCardsOptions.displayEmailPassSdJwt) {
+            if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                discoverCardsOptions.displayEmailPassSdJwt) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.emailPass,
@@ -921,7 +848,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
             /// Phone Pass
-            if (ldpVcType && discoverCardsOptions.displayPhonePass) {
+            ///
+
+            if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                discoverCardsOptions.displayPhonePass) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.phonePass,
@@ -929,11 +859,21 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 ),
               );
             }
-            if (jwtVcJsonType && discoverCardsOptions.displayPhonePassJwt) {
+            if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
+                discoverCardsOptions.displayPhonePassJwt) {
               allCategoryVC.add(
                 CredInfo(
                   credentialType: CredentialSubjectType.phonePass,
                   formatType: VCFormatType.jwtVcJson,
+                ),
+              );
+            }
+            if (formatsSupported.contains(VCFormatType.vcSdJWT) &&
+                discoverCardsOptions.displayPhonePassSdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.phonePass,
+                  formatType: VCFormatType.vcSdJWT,
                 ),
               );
             }
@@ -942,7 +882,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             break;
           case CredentialCategory.financeCards:
             if (Parameters.supportDefiCompliance) {
-              if (ldpVcType && discoverCardsOptions.displayDefi) {
+              if (formatsSupported.contains(VCFormatType.ldpVc) &&
+                  discoverCardsOptions.displayDefi) {
                 allCategoryVC.add(
                   CredInfo(
                     credentialType: CredentialSubjectType.defiCompliance,
@@ -1002,36 +943,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       final List<CredInfo> requiredCreds = [];
 
       for (final credInfo in allCategoryVC) {
-        /// remove if format is not matching
-        if (!credInfo.credentialType.getVCFormatType.contains(vcFormatType)) {
-          continue;
-        }
-
         final isBlockchainAccount = credInfo.credentialType.isBlockchainAccount;
 
-        final supportAssociatedCredential =
-            supportCryptoCredential(profileModel);
-
-        /// remove if credential is blockchain account and
-        /// profile do not support
-        if (isBlockchainAccount && !supportAssociatedCredential) {
+        /// remove if credential it is blockchain account
+        if (isBlockchainAccount) {
           continue;
         }
-
-        final Map<BlockchainType, CredentialSubjectType>
-            blockchainToSubjectType = {
-          BlockchainType.tezos: CredentialSubjectType.tezosAssociatedWallet,
-          BlockchainType.fantom: CredentialSubjectType.fantomAssociatedWallet,
-          BlockchainType.binance: CredentialSubjectType.binanceAssociatedWallet,
-          BlockchainType.ethereum:
-              CredentialSubjectType.ethereumAssociatedWallet,
-          BlockchainType.etherlink:
-              CredentialSubjectType.etherlinkAssociatedWallet,
-          BlockchainType.polygon: CredentialSubjectType.polygonAssociatedWallet,
-        };
-
-        final isCurrentBlockchainAccount =
-            blockchainToSubjectType[blockchainType] == credInfo.credentialType;
 
         final credentialsOfSameType = credentials
             .where(
@@ -1046,47 +963,16 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             credInfo.credentialType.supportSingleOnly) {
           /// credential available case
           for (final credential in credentialsOfSameType) {
-            final alreadyAdded = requiredCreds.any(
-              (item) =>
-                  item.credentialType == credInfo.credentialType &&
-                  item.formatType == credInfo.formatType,
-            );
-            if (isBlockchainAccount && supportAssociatedCredential) {
-              /// there can be multiple blockchain profiles
-              ///
-              /// each profiles should be allowed to add the respective cards
-
-              /// We always have the associated Adress credential
-              /// in the discover since "Do not remove the GET a crypto account
-              /// in the Discover #2649"
-
-              if (isCurrentBlockchainAccount) {
-                /// if already added do not add
-                if (!alreadyAdded) {
-                  requiredCreds.add(credInfo);
-                }
-              }
-
-              //get current wallet address
+            if (credInfo.formatType.vcValue == credential.getFormat) {
+              /// do not add if format matched
+              /// there can be same credentials with different format
             } else {
-              if (vcFormatType.vcValue == credential.getFormat) {
-                /// do not add if format matched
-                /// there can be same credentials with different format
-              } else {
-                requiredCreds.add(credInfo);
-              }
+              requiredCreds.add(credInfo);
             }
           }
         } else {
           /// credential not available case
-
-          if (isBlockchainAccount &&
-              supportAssociatedCredential &&
-              !isCurrentBlockchainAccount) {
-            /// do not add if current blockchain acccount does not match
-          } else {
-            requiredCreds.add(credInfo);
-          }
+          requiredCreds.add(credInfo);
         }
       }
 
@@ -1108,6 +994,25 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     }
 
     return dummies;
+  }
+
+  Future<void> generateCryptoAccountsCards(
+    List<CryptoAccountData> cryptoAccounts,
+  ) async {
+    // Loop on cryptoAccounts and generate the cards
+    for (final cryptoAccount in cryptoAccounts) {
+      final cryptoAccountData = CryptoAccountData(
+        name: cryptoAccount.name,
+        secretKey: cryptoAccount.secretKey,
+        walletAddress: cryptoAccount.walletAddress,
+        isImported: cryptoAccount.isImported,
+        blockchainType: cryptoAccount.blockchainType,
+      );
+
+      await insertAssociatedWalletCredential(
+        cryptoAccountData: cryptoAccountData,
+      );
+    }
   }
 }
 

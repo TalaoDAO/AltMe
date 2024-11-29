@@ -937,7 +937,7 @@ void main() {
           );
           expect(
             getErrorResponseString('issuance_pending'),
-            ResponseString.RESPONSE_STRING_credentialIssuanceDenied,
+            ResponseString.RESPONSE_STRING_credentialIssuanceIsStillPending,
           );
           expect(
             getErrorResponseString('invalid_token'),
@@ -1088,7 +1088,7 @@ void main() {
               () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.ldpVc,
+                formatsSupported: [VCFormatType.ldpVc],
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: Format.fromJson(
@@ -1116,7 +1116,7 @@ void main() {
 
             expect(
               () => getPresentVCDetails(
-                vcFormatType: VCFormatType.ldpVc,
+                formatsSupported: [VCFormatType.ldpVc],
                 presentationDefinition: presentationDefinition,
                 clientMetaData: null,
                 credentialsToBePresented: [],
@@ -1136,7 +1136,7 @@ void main() {
               ' and clientMetaData are null', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.jwtVc,
+                formatsSupported: [VCFormatType.jwtVc],
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
@@ -1160,7 +1160,7 @@ void main() {
               ' and clientMetaData are null', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.jwtVcJson,
+                formatsSupported: [VCFormatType.jwtVcJson],
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
@@ -1184,7 +1184,7 @@ void main() {
               ' and clientMetaData are null', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.vcSdJWT,
+                formatsSupported: [VCFormatType.vcSdJWT],
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
@@ -1208,7 +1208,7 @@ void main() {
               ' and clientMetaData is provided', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.jwtVcJson,
+                formatsSupported: [VCFormatType.jwtVcJson],
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
@@ -1230,7 +1230,7 @@ void main() {
               ' and clientMetaData is provided', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.vcSdJWT,
+                formatsSupported: [VCFormatType.vcSdJWT],
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
@@ -1532,7 +1532,6 @@ void main() {
               TezosAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'tezosAddress',
               ),
             ),
@@ -1543,7 +1542,6 @@ void main() {
               EthereumAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'ethereumAddress',
               ),
             ),
@@ -1554,7 +1552,6 @@ void main() {
               PolygonAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'polygonAddress',
               ),
             ),
@@ -1565,7 +1562,6 @@ void main() {
               BinanceAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'address',
               ),
             ),
@@ -1576,7 +1572,6 @@ void main() {
               FantomAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'fantomAddress',
               ),
             ),
@@ -1587,7 +1582,6 @@ void main() {
               EtherlinkAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'etherlinkAddress',
               ),
             ),

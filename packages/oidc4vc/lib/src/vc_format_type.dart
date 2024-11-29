@@ -33,7 +33,9 @@ extension VCFormatTypeX on VCFormatType {
     }
   }
 
-  String urlValue({required bool isEmailPass}) {
+  String urlValue({
+    required bool isEmailPassOrPhonePass,
+  }) {
     switch (this) {
       case VCFormatType.ldpVc:
         return 'ldp_vc';
@@ -44,7 +46,7 @@ extension VCFormatTypeX on VCFormatType {
       case VCFormatType.jwtVcJsonLd:
         return 'jwt_vc_json-ld';
       case VCFormatType.vcSdJWT:
-        if (isEmailPass) {
+        if (isEmailPassOrPhonePass) {
           return 'vc_sd_jwt';
         } else {
           return 'vcsd-jwt';
@@ -89,6 +91,9 @@ extension VCFormatTypeX on VCFormatType {
 VCFormatType getVcFormatType(String formatString) {
   for (final element in VCFormatType.values) {
     if (element.vcValue == formatString) {
+      return element;
+    }
+    if (element.vpValue == formatString) {
       return element;
     }
   }

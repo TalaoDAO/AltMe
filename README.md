@@ -8,7 +8,6 @@ The Web 3 revolution is all about redistributing the power to the average consum
 This is why we are building Altme, to help you get control over your data back.
 Here is the last security audit done on our solution: [AltMe security audit report for Web3 Digital Wallet.pdf](https://github.com/TalaoDAO/AltMe/files/13362734/AltMe.security.audit.report.for.Web3.Digital.Wallet.pdf)
 
-
 ---
 
 ## Getting Started 🚀
@@ -372,6 +371,10 @@ $ $cd ios
 $ fastlane beta
 ```
 
+### Wallet Setup
+
+[`https://doc.wallet-provider.io/wallet/setup_wallet`](https://doc.wallet-provider.io/wallet/setup_wallet)
+
 ## Troubleshooting
 
 If you encounter any errors in the build process described here, please first try
@@ -625,8 +628,8 @@ $ ./script.sh -deploy ios
 $ sudo chmod 777 script.sh
 ```
 
-
 ## Current store's versions
+
 <pre>prod  
   altme  
     android:    365 (2.2.3)  
@@ -641,7 +644,7 @@ test
   talao  
     android: 	368 (2.2.6)  
     ios: 	    368 (2.2.6)  
-</pre> 
+</pre>
 
 [coverage_badge]: coverage_badge.svg
 [flutter_localizations_link]: https://api.flutter.dev/flutter/flutter_localizations/flutter_localizations-library.html

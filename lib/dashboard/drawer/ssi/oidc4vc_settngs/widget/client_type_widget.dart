@@ -14,7 +14,7 @@ class ClientTypeWidget extends StatelessWidget {
       builder: (context, state) {
         return OptionContainer(
           title: 'Wallet Client_id Scheme',
-          subtitle: 'Confidential Client',
+          subtitle: 'Pre-registered',
           body: ListView.builder(
             itemCount: ClientType.values.length,
             shrinkWrap: true,

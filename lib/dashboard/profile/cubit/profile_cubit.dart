@@ -259,27 +259,25 @@ class ProfileCubit extends Cubit<ProfileState> {
             enterpriseWalletName: enterpriseWalletName,
           );
 
-        case ProfileType.diipv2point1:
-          final privateKey = await getPrivateKey(
-            didKeyType: Parameters.didKeyTypeForDutch,
-            profileCubit: this,
-          );
-
-          final (did, _) = await getDidAndKid(
-            didKeyType: Parameters.didKeyTypeForDutch,
-            privateKey: privateKey,
-            profileCubit: this,
-          );
-
-          profileModel = ProfileModel.diipv2point1(
-            polygonIdNetwork: polygonIdNetwork,
-            walletType: walletType,
-            walletProtectionType: walletProtectionType,
-            isDeveloperMode: isDeveloperMode,
-            clientId: did,
-            clientSecret: randomString(12),
-            enterpriseWalletName: enterpriseWalletName,
-          );
+        // case ProfileType.diipv2point1:
+        //   final privateKey = await getPrivateKey(
+        //     didKeyType: Parameters.didKeyTypeForDutch,
+        //     profileCubit: this,
+        //   );
+        //   final (did, _) = await getDidAndKid(
+        //     didKeyType: Parameters.didKeyTypeForDutch,
+        //     privateKey: privateKey,
+        //     profileCubit: this,
+        //   );
+        //   profileModel = ProfileModel.diipv2point1(
+        //     polygonIdNetwork: polygonIdNetwork,
+        //     walletType: walletType,
+        //     walletProtectionType: walletProtectionType,
+        //     isDeveloperMode: isDeveloperMode,
+        //     clientId: did,
+        //     clientSecret: randomString(12),
+        //     enterpriseWalletName: enterpriseWalletName,
+        //   );
 
         case ProfileType.diipv3:
           final privateKey = await getPrivateKey(
@@ -437,6 +435,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     OIDC4VCIDraftType? oidc4vciDraftType,
     ClientType? clientType,
     VCFormatType? vcFormatType,
+    List<VCFormatType>? formatsSupported,
     ProofHeaderType? proofHeaderType,
     ProofType? proofType,
     bool? pushAuthorizationRequest,
@@ -479,6 +478,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             pushAuthorizationRequest: pushAuthorizationRequest,
             statusListCache: statusListCaching,
             dpopSupport: dpopSupport,
+            formatsSupported: formatsSupported,
           ),
         ),
       ),
@@ -651,20 +651,22 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
           ),
         );
-      case ProfileType.diipv2point1:
-        await update(
-          ProfileModel.diipv2point1(
-            polygonIdNetwork: state.model.polygonIdNetwork,
-            walletProtectionType: state.model.walletProtectionType,
-            isDeveloperMode: state.model.isDeveloperMode,
-            walletType: state.model.walletType,
-            enterpriseWalletName: state.model.enterpriseWalletName,
-            clientId: state.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.clientId,
-            clientSecret: state.model.profileSetting
-                .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
-          ),
-        );
+
+      // case ProfileType.diipv2point1:
+      //   await update(
+      //     ProfileModel.diipv2point1(
+      //       polygonIdNetwork: state.model.polygonIdNetwork,
+      //       walletProtectionType: state.model.walletProtectionType,
+      //       isDeveloperMode: state.model.isDeveloperMode,
+      //       walletType: state.model.walletType,
+      //       enterpriseWalletName: state.model.enterpriseWalletName,
+      //       clientId: state.model.profileSetting.selfSovereignIdentityOptions
+      //           .customOidc4vcProfile.clientId,
+      //       clientSecret: state.model.profileSetting
+      //           .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
+      //     ),
+      //   );
+
       case ProfileType.diipv3:
         await update(
           ProfileModel.diipv3(

@@ -10,10 +10,8 @@ PolygonAssociatedAddressModel _$PolygonAssociatedAddressModelFromJson(
         Map<String, dynamic> json) =>
     PolygonAssociatedAddressModel(
       associatedAddress: json['associatedAddress'] as String? ?? '',
-      accountName: json['accountName'] as String? ?? '',
       id: json['id'] as String,
       type: json['type'] as String,
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
     );
 
 Map<String, dynamic> _$PolygonAssociatedAddressModelToJson(
@@ -21,7 +19,5 @@ Map<String, dynamic> _$PolygonAssociatedAddressModelToJson(
     <String, dynamic>{
       'id': instance.id,
       'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
       'associatedAddress': instance.associatedAddress,
-      'accountName': instance.accountName,
     };

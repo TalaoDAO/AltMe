@@ -271,6 +271,20 @@ class KeyGenerator {
     return jsonEncode(jwk);
   }
 
+  Future<String> hexPubKey({
+    required String secretKey,
+    required AccountType accountType,
+  }) async {
+    final jwk =
+        await jwkFromSecretKey(secretKey: secretKey, accountType: accountType);
+
+    final json = jsonDecode(jwk) as Map<String, dynamic>;
+    final xField = json['x'].toString();
+    final xBytes = base64Url.decode(xField);
+    final hex = bytesToHex(xBytes);
+    return hex;
+  }
+
   Keystore getKeystore({required String secretKey}) {
     final keystore = Keystore.fromSecretKey(secretKey);
     return keystore;

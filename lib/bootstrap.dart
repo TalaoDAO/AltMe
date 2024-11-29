@@ -8,10 +8,14 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:altme/app/shared/enum/flavor.dart';
+import 'package:altme/app/view/app.dart';
+import 'package:altme/theme/theme_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:flutter/widgets.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
@@ -27,14 +31,21 @@ class AppBlocObserver extends BlocObserver {
   }
 }
 
-Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
+Future<void> bootstrap(FlavorMode flavor) async {
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
   await runZonedGuarded(
     () async {
+      // required when using any plugin. In our case, it's shared_preferences
       WidgetsFlutterBinding.ensureInitialized();
+
+      // Creating an instance of ThemeRepository that will invoke the _init() method
+      // and populate the stream controller in the repository.
+      final themeRepository = ThemeRepository(
+        sharedPreferences: await SharedPreferences.getInstance(),
+      );
 
       await initSecureStorage;
 
@@ -43,7 +54,10 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
       await Dartez().init();
       Bloc.observer = AppBlocObserver();
-      runApp(await builder());
+      runApp(App(
+        flavorMode: flavor,
+        themeRepository: themeRepository,
+      ));
     },
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );

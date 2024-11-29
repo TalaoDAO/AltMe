@@ -10,10 +10,8 @@ EthereumAssociatedAddressModel _$EthereumAssociatedAddressModelFromJson(
         Map<String, dynamic> json) =>
     EthereumAssociatedAddressModel(
       associatedAddress: json['associatedAddress'] as String? ?? '',
-      accountName: json['accountName'] as String? ?? '',
       id: json['id'] as String,
       type: json['type'] as String,
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
     );
 
 Map<String, dynamic> _$EthereumAssociatedAddressModelToJson(
@@ -21,7 +19,5 @@ Map<String, dynamic> _$EthereumAssociatedAddressModelToJson(
     <String, dynamic>{
       'id': instance.id,
       'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
       'associatedAddress': instance.associatedAddress,
-      'accountName': instance.accountName,
     };

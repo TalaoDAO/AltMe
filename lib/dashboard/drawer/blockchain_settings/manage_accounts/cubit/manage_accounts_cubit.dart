@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -12,11 +13,13 @@ part 'manage_accounts_state.dart';
 class ManageAccountsCubit extends Cubit<ManageAccountsState> {
   ManageAccountsCubit({
     required this.credentialsCubit,
+    required this.manageNetworkCubit,
   }) : super(const ManageAccountsState()) {
     initialise();
   }
 
   final CredentialsCubit credentialsCubit;
+  final ManageNetworkCubit manageNetworkCubit;
 
   WalletCubit get walletCubit => credentialsCubit.walletCubit;
 
@@ -33,11 +36,25 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
   Future<void> setCurrentWalletAccount(int index) async {
     emit(state.loading());
     await walletCubit.setCurrentWalletAccount(index);
+
+    final blockchainType =
+        walletCubit.state.cryptoAccount.data[index].blockchainType;
     await credentialsCubit.loadAllCredentials(
-      blockchainType:
-          walletCubit.state.cryptoAccount.data[index].blockchainType,
+      blockchainType: blockchainType,
     );
     emit(state.success(currentCryptoIndex: index));
+
+    final testnet = credentialsCubit
+        .profileCubit.state.model.profileSetting.blockchainOptions?.testnet;
+
+    if (testnet != null) {
+      final currentNetworkList = blockchainType.networks;
+      if (testnet) {
+        await manageNetworkCubit.setNetwork(currentNetworkList[1]);
+      } else {
+        await manageNetworkCubit.setNetwork(currentNetworkList[0]);
+      }
+    }
   }
 
   Future<void> editCryptoAccount({

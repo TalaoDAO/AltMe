@@ -24,6 +24,7 @@ Future<void> addCredentialData({
   required BlockchainType blockchainType,
   required QRCodeScanCubit qrCodeScanCubit,
 }) async {
+  final profileModel = credentialsCubit.profileCubit.state.model;
   for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {
     final data = encodedCredentialOrFutureTokens[i];
     final String credentialName = getCredentialData(credential);
@@ -83,6 +84,7 @@ Future<void> addCredentialData({
           issuer: issuer,
           requestedAt: DateTime.now(),
         ),
+        profileLinkedId: profileModel.profileType.getVCId,
       );
       // insert the credential in the wallet
       await credentialsCubit.insertCredential(
@@ -92,7 +94,6 @@ Future<void> addCredentialData({
             isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
         isPendingCredential: true,
         blockchainType: blockchainType,
-        qrCodeScanCubit: qrCodeScanCubit,
       );
     } else {
       await addOIDC4VCCredential(

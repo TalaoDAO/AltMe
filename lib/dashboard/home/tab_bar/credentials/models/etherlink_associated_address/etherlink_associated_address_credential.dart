@@ -41,31 +41,10 @@ class EtherlinkAssociatedAddressCredential {
   static const List<dynamic> _context = <dynamic>[
     'https://www.w3.org/2018/credentials/v1',
     {
-      'EtherlinkAssociatedAddress': {
-        '@id': 'https://github.com/TalaoDAO/context#etherlinkassociatedaddress',
-        '@context': {
-          '@version': 1.1,
-          '@protected': true,
-          'id': '@id',
-          'type': '@type',
-          'schema': 'https://schema.org/',
-          'accountName': 'schema:identifier',
-          'associatedAddress':
-              'https://github.com/TalaoDAO/context#associatedaddress',
-          'cryptoWalletSignature': 'schema:identifier',
-          'cryptoWalletPayload': 'schema:identifier',
-          'issuedBy': {
-            '@id': 'schema:issuedBy',
-            '@context': {
-              '@version': 1.1,
-              '@protected': true,
-              'schema': 'https://schema.org/',
-              'name': 'schema:legalName',
-              'logo': {'@id': 'schema:logo', '@type': '@id'},
-            },
-          },
-        },
-      },
+      '@vocab': 'https://schema.org',
+      'associatedAddress': 'https://w3id.org/security#blockchainAccountId',
+      'EtherlinkAssociatedAddress':
+          'https://doc.wallet-provider.io/vc_type/#EtherlinkAssociatedAdress',
     }
   ];
 }

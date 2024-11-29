@@ -43,7 +43,7 @@ dependency_overrides:
   ffi: 2.1.0 #didkit from path which depends on ffi ^1.0.0
 
 dev_dependencies:
-  build_runner: ^2.4.4
+  build_runner: ^2.4.11
   flutter_test:
     sdk: flutter
   json_serializable: ^6.7.0

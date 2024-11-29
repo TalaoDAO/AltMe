@@ -463,6 +463,9 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_credentialIssuanceDenied:
         return globalMessage.RESPONSE_STRING_credentialIssuanceDenied;
 
+      case ResponseString.RESPONSE_STRING_credentialIssuanceIsStillPending:
+        return globalMessage.RESPONSE_STRING_credentialIssuanceIsStillPending;
+
       case ResponseString.RESPONSE_STRING_thisCredentialFormatIsNotSupported:
         return globalMessage.RESPONSE_STRING_thisCredentialFormatIsNotSupported;
 
