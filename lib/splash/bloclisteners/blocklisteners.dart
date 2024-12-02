@@ -890,15 +890,15 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
   listener: (BuildContext context, EnterpriseState state) async {
     if (state.status == AppStatus.loading) {
       LoadingView().show(context: context);
-    } else {
-      LoadingView().hide();
     }
 
     if (state.status == AppStatus.goBack) {
       Navigator.of(context).pop();
+      LoadingView().hide();
     }
 
     if (state.status == AppStatus.revoked) {
+      LoadingView().hide();
       await showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -906,12 +906,6 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
       );
     }
     if (state.status == AppStatus.success) {
-      // get list of crypto accounts from profile cubit
-      final manageAccountsCubit = ManageAccountsCubit(
-        credentialsCubit: context.read<CredentialsCubit>(),
-        manageNetworkCubit: context.read<ManageNetworkCubit>(),
-      );
-
       // TODO: when we create vc+sd-jwt associated address cards, we need to check also for vc+sd-jwt
       if (context
               .read<ProfileCubit>()
@@ -921,11 +915,17 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
               .blockchainOptions
               ?.associatedAddressFormat ==
           VCFormatType.ldpVc) {
+        // get list of crypto accounts from profile cubit
+        final manageAccountsCubit = ManageAccountsCubit(
+          credentialsCubit: context.read<CredentialsCubit>(),
+          manageNetworkCubit: context.read<ManageNetworkCubit>(),
+        );
         final cryptoAccounts = manageAccountsCubit.state.cryptoAccount.data;
         // generate crypto accounts cards
         await context.read<CredentialsCubit>().generateCryptoAccountsCards(
               cryptoAccounts,
             );
+        LoadingView().hide();
       }
     }
     if (state.status == AppStatus.addEnterpriseAccount ||
@@ -974,6 +974,7 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
                 manageNetworkCubit: context.read<ManageNetworkCubit>(),
                 status: state.status,
               );
+          LoadingView().hide();
         } else {
           /// Need to remove the enterprise email from secure storage
           /// because we may think later that the entreprise profile is
@@ -981,6 +982,7 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
           await getSecureStorage.delete(
             SecureStorageKeys.enterpriseEmail,
           );
+          LoadingView().hide();
         }
       }
     }
