@@ -675,7 +675,6 @@
   "decline": "Rebutjar",
   "yotiCameraAppbarTitle": "Col·loca la cara al centre",
   "cameraSubtitle": "Tens 5 segons per fer la foto.\nMira que hi hagi prou llum abans de començar.",
-  "walletSecurity": "Seguretat de la cartera",
   "walletSecurityDescription": "Protegeix la cartera amb el codi PIN i l’autenticació biomètrica",
   "blockchainSettings": "Configuració de blockchain",
   "blockchainSettingsDescription": "Administrar comptes, frase de recuperació, dApps connectades i xarxes",

@@ -13,7 +13,7 @@ class VCFormatWidget extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return OptionContainer(
-          title: 'VC Format"',
+          title: 'VC Format',
           subtitle: 'Select one of the VC formats. Default: ldp_vc.',
           body: ListView.builder(
             itemCount: VCFormatType.values.length,
@@ -32,9 +32,9 @@ class VCFormatWidget extends StatelessWidget {
                   ListTile(
                     onTap: () {
                       context.read<ProfileCubit>().updateProfileSetting(
-                            vcFormatType: vcFormatType,
-                            formatsSupported: [vcFormatType],
-                          );
+                        vcFormatType: vcFormatType,
+                        formatsSupported: [vcFormatType],
+                      );
                     },
                     shape: RoundedRectangleBorder(
                       side: BorderSide(

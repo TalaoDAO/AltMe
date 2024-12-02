@@ -8,7 +8,8 @@
     "keyBindingHeader",
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
-    "thisFeatureIsNotSupportedYetForEtherlink"
+    "thisFeatureIsNotSupportedYetForEtherlink",
+    "walletSecurityAndBackup"
   ],
 
   "es": [
@@ -20,7 +21,8 @@
     "keyBindingHeader",
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
-    "thisFeatureIsNotSupportedYetForEtherlink"
+    "thisFeatureIsNotSupportedYetForEtherlink",
+    "walletSecurityAndBackup"
   ],
 
   "fr": [
@@ -109,6 +111,7 @@
     "bakerFee",
     "storageFee",
     "doYouWantToSetupTheProfile",
-    "thisFeatureIsNotSupportedYetForEtherlink"
+    "thisFeatureIsNotSupportedYetForEtherlink",
+    "walletSecurityAndBackup"
   ]
 }
