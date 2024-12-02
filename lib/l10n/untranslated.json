@@ -7,7 +7,8 @@
     "payload",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "thisFeatureIsNotSupportedYetForEtherlink"
   ],
 
   "es": [
@@ -18,7 +19,8 @@
     "payload",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "thisFeatureIsNotSupportedYetForEtherlink"
   ],
 
   "fr": [
@@ -106,6 +108,7 @@
     "credentialIssuanceIsStillPending",
     "bakerFee",
     "storageFee",
-    "doYouWantToSetupTheProfile"
+    "doYouWantToSetupTheProfile",
+    "thisFeatureIsNotSupportedYetForEtherlink"
   ]
 }

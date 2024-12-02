@@ -750,7 +750,6 @@
   "transactionIsLikelyToFail": "Transaction is likely to fail.",
   "buy": "Buy coins",
   "thisFeatureIsNotSupportedYetForFantom": "This feature is not supported yet for Fantom.",
-  "thisFeatureIsNotSupportedYetForBinance": "This feature is not supported yet for BNB Chain.",
   "faqs": "Frequently Asked Questions (FAQs)",
   "softwareLicenses": "Software Licenses",
   "notAValidWalletAddress": "Not a valid wallet address!",
@@ -1162,5 +1161,6 @@
   "credentialIssuanceIsStillPending": "Credential issuance is still pending",
   "bakerFee": "Baker fee",
   "storageFee": "Storage Fee",
-  "doYouWantToSetupTheProfile": "Do you want to setup the profile?"
+  "doYouWantToSetupTheProfile": "Do you want to setup the profile?",
+  "thisFeatureIsNotSupportedYetForEtherlink": "This feature is not supported yet for Etherlink Chain."
 }
