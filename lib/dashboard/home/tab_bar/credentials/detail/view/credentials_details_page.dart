@@ -296,7 +296,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           ],
 
                           /// credential manifest details
-                          if (credentialManifestSupport &&
+                          if (!isDeveloperMode &&
+                              credentialManifestSupport &&
                               outputDescriptors != null) ...[
                             CredentialManifestDetails(
                               outputDescriptor: outputDescriptors.firstOrNull,
