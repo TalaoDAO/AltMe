@@ -925,7 +925,6 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
         await context.read<CredentialsCubit>().generateCryptoAccountsCards(
               cryptoAccounts,
             );
-        LoadingView().hide();
       }
     }
     if (state.status == AppStatus.addEnterpriseAccount ||
@@ -956,6 +955,7 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
             profileSetting.generalOptions.companyName,
           );
         }
+        LoadingView().hide();
 
         final confirm = await showDialog<bool>(
               context: context,
@@ -974,7 +974,6 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
                 manageNetworkCubit: context.read<ManageNetworkCubit>(),
                 status: state.status,
               );
-          LoadingView().hide();
         } else {
           /// Need to remove the enterprise email from secure storage
           /// because we may think later that the entreprise profile is
@@ -982,7 +981,6 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
           await getSecureStorage.delete(
             SecureStorageKeys.enterpriseEmail,
           );
-          LoadingView().hide();
         }
       }
     }
