@@ -39,10 +39,10 @@ class PolygonNetwork extends EthereumNetwork {
         type: BlockchainType.polygon,
         networkname: 'Testnet',
         apiUrl: Urls.moralisBaseUrl,
-        chainId: 80001,
-        chain: 'mumbai',
-        rpcNodeUrl: 'https://rpc-mumbai.maticvigil.com',
-        title: 'Polygon Testnet (Mumbai)',
+        chainId: 80002,
+        chain: 'polygon amoy',
+        rpcNodeUrl: 'https://rpc-amoy.polygon.technology/',
+        title: 'Polygon Amoy Testnet',
         subTitle: 'This network is used to test protocol upgrades'
             ' (do not use it unless you are a developer).',
       );

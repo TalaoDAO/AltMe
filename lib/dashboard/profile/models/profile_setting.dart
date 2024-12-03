@@ -113,7 +113,7 @@ class BlockchainOptions extends Equatable {
         etherlinkSupport: true,
         tezosSupport: true,
         tzproRpcNode: false,
-        testnet: true,
+        testnet: false,
       );
 
   final VCFormatType? associatedAddressFormat;

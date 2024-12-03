@@ -672,7 +672,6 @@
   "decline": "Decline",
   "yotiCameraAppbarTitle": "Please, position your face in the center",
   "cameraSubtitle": "You have 5 seconds to take your photo.\nMake sure there’s enough light before starting.",
-  "walletSecurity": "Wallet Security",
   "walletSecurityDescription": "Protect your wallet with Pin Code and Biometrics Authentication",
   "blockchainSettings": "Blockchain Settings",
   "blockchainSettingsDescription": "Manage accounts, Recovery Phrase, Connected dApps and Networks",
@@ -750,7 +749,6 @@
   "transactionIsLikelyToFail": "Transaction is likely to fail.",
   "buy": "Buy coins",
   "thisFeatureIsNotSupportedYetForFantom": "This feature is not supported yet for Fantom.",
-  "thisFeatureIsNotSupportedYetForBinance": "This feature is not supported yet for BNB Chain.",
   "faqs": "Frequently Asked Questions (FAQs)",
   "softwareLicenses": "Software Licenses",
   "notAValidWalletAddress": "Not a valid wallet address!",
@@ -1162,5 +1160,7 @@
   "credentialIssuanceIsStillPending": "Credential issuance is still pending",
   "bakerFee": "Baker fee",
   "storageFee": "Storage Fee",
-  "doYouWantToSetupTheProfile": "Do you want to setup the profile?"
+  "doYouWantToSetupTheProfile": "Do you want to setup the profile?",
+  "thisFeatureIsNotSupportedYetForEtherlink": "This feature is not supported yet for Etherlink Chain.",
+  "walletSecurityAndBackup": "Wallet Security and Backup"
 }
