@@ -26,11 +26,6 @@ class DeveloperDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    // final String issuerDid = credentialModel.credentialPreview.issuer;
-    // final String subjectDid =
-    //     credentialModel.credentialPreview.credentialSubjectModel.id ?? '';
-    // final String type = credentialModel.credentialPreview.type.toString();
-
     final titleColor = Theme.of(context).colorScheme.onSurface;
     final valueColor = Theme.of(context).colorScheme.onSurface;
 
@@ -80,51 +75,6 @@ class DeveloperDetails extends StatelessWidget {
           valueColor: valueColor,
           showVertically: showVertically,
         ),
-        // CredentialField(
-        //   padding: const EdgeInsets.only(top: 10),
-        //   title: l10n.issuerDID,
-        //   value: issuerDid,
-        //   titleColor: titleColor,
-        //   valueColor: valueColor,
-        //   showVertically: showVertically,
-        // ),
-        // if (credentialModel.credentialPreview.credentialSubjectModel
-        //         is! WalletCredentialModel &&
-        //     subjectDid.isNotEmpty)
-        //   CredentialField(
-        //     padding: const EdgeInsets.only(top: 10),
-        //     title: l10n.subjectDID,
-        //     value: subjectDid,
-        //     titleColor: titleColor,
-        //     valueColor: valueColor,
-        //     showVertically: showVertically,
-        //   ),
-        // CredentialField(
-        //   padding: const EdgeInsets.only(top: 10),
-        //   title: l10n.type,
-        //   value: type,
-        //   titleColor: titleColor,
-        //   valueColor: valueColor,
-        //   showVertically: showVertically,
-        // ),
-        // if (statusListUri != null)
-        //   CredentialField(
-        //     padding: const EdgeInsets.only(top: 10),
-        //     title: l10n.statusList,
-        //     value: statusListUri.toString(),
-        //     titleColor: titleColor,
-        //     valueColor: valueColor,
-        //     showVertically: false,
-        //   ),
-        // if (statusListIndex != null)
-        //   CredentialField(
-        //     padding: const EdgeInsets.only(top: 10),
-        //     title: l10n.statusListIndex,
-        //     value: statusListIndex.toString(),
-        //     titleColor: titleColor,
-        //     valueColor: valueColor,
-        //     showVertically: false,
-        //   ),
         if (header != null)
           CredentialField(
             padding: const EdgeInsets.only(top: 10),
