@@ -113,25 +113,25 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       final listOfSd = collectSdValues(data);
 
       if (claims != null && listOfSd.isNotEmpty) {
-        final selectiveDisclosure = SelectiveDisclosure(item);
-        final decryptedDatas = selectiveDisclosure.contents;
+        // final selectiveDisclosure = SelectiveDisclosure(item);
+        // final decryptedDatas = selectiveDisclosure.contents;
 
-        /// check if sd already contain sh256 hash
-        for (final element in decryptedDatas) {
-          final sh256Hash = profileCubit.oidc4vc.sh256HashOfContent(element);
+        // /// check if sd already contain sh256 hash
+        // for (final element in decryptedDatas) {
+        //   final sh256Hash = profileCubit.oidc4vc.sh256HashOfContent(element);
 
-          if (!listOfSd.contains(sh256Hash)) {
-            emit(
-              state.copyWith(
-                credentialStatus: CredentialStatus.invalidSignature,
-                status: AppStatus.idle,
-                statusListIndex: statusListIndex,
-                statusListUrl: statusListUri,
-              ),
-            );
-            return;
-          }
-        }
+        //   if (!listOfSd.contains(sh256Hash)) {
+        //     emit(
+        //       state.copyWith(
+        //         credentialStatus: CredentialStatus.invalidSignature,
+        //         status: AppStatus.idle,
+        //         statusListIndex: statusListIndex,
+        //         statusListUrl: statusListUri,
+        //       ),
+        //     );
+        //     return;
+        //   }
+        // }
 
         /// check the status
         final status = item.data['status'];
