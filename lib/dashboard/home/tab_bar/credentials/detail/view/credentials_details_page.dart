@@ -342,9 +342,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           // ],
 
                           //// wallet attestation data
-                          if (widget.credentialModel.credentialPreview
-                                  .credentialSubjectModel
-                              is WalletCredentialModel) ...[
+                          if (!isDeveloperMode &&
+                              widget.credentialModel.credentialPreview
+                                      .credentialSubjectModel
+                                  is WalletCredentialModel) ...[
                             WalletCredentialetailsWidget(
                               credentialModel: widget.credentialModel,
                             ),
