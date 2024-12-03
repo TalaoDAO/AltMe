@@ -75,11 +75,11 @@ class SelectiveDisclosureDisplayMap {
           builtMap[title] = nestedMap;
         } else {
           builtMap.addAll(
-            claimData(mapKey, title, type),
+            claimData(mapKey, title, type, parentKeyId),
           );
         }
       } else {
-        builtMap.addAll(claimData(mapKey, title, type));
+        builtMap.addAll(claimData(mapKey, title, type, parentKeyId));
       }
     });
     final Map<String, dynamic> mapFromJwtEntries = fileterdMapFromJwt(
@@ -168,6 +168,7 @@ class SelectiveDisclosureDisplayMap {
             element.key.toString(),
             element.key.toString(),
             null,
+            parentKeyId,
           ),
         );
       }
@@ -248,11 +249,13 @@ class SelectiveDisclosureDisplayMap {
     String mapKey,
     String? title,
     String? type,
+    String? parentKeyId,
   ) {
     final claimDataMap = <String, dynamic>{};
     final List<ClaimsData> claimsData =
         SelectiveDisclosure(credentialModel).getClaimsData(
       key: mapKey,
+      parentKeyId: parentKeyId,
     );
 
     if (claimsData.isEmpty) return claimDataMap;
