@@ -181,9 +181,10 @@ class SelectiveDisclosureDisplayMap {
     String? title,
   ) {
     final value = element.value as Map<String, dynamic>;
+    final valueWithoutSd = Map<String, dynamic>.from(value);
+    valueWithoutSd.remove('_sd');
     final builtMap = <String, dynamic>{};
-    value.remove('_sd');
-    if (value.isEmpty) {
+    if (valueWithoutSd.isEmpty) {
       final mapNestedSelectiveDisclosure = SelectiveDisclosureDisplayMap(
         credentialModel: credentialModel,
         claims: const {},
@@ -213,6 +214,23 @@ class SelectiveDisclosureDisplayMap {
             (entry) => entry.value.toString().contains(element.key.toString()),
           );
       if (index == -1) isDisabled = true;
+      if (value['_sd'] != null) {
+        value.addAll(
+          SelectiveDisclosureDisplayMap(
+            credentialModel: credentialModel,
+            isPresentation: isPresentation,
+            languageCode: languageCode,
+            limitDisclosure: limitDisclosure,
+            filters: filters,
+            isDeveloperMode: isDeveloperMode,
+            claims: claims,
+            parentKeyId: element.key.toString(),
+            selectedClaimsKeyIds: selectedClaimsKeyIds,
+            onPressed: onPressed,
+          ).buildMap,
+        );
+      }
+
       builtMap[title ?? element.key.toString()] = {
         'mapKey': element.key.toString(),
         'claimKey': element.key.toString(),

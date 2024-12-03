@@ -1973,7 +1973,19 @@ Map<String, dynamic> createJsonByDecryptingSDValues({
             final content = sh256HashToContent[sdValue];
             if (content is Map) {
               content.forEach((key, value) {
-                json[key.toString()] = value;
+                if (value is Map<String, dynamic>) {
+                  if (value.containsKey('_sd')) {
+                    final nestedJson = createJsonByDecryptingSDValues(
+                      selectiveDisclosure: selectiveDisclosure,
+                      encryptedJson: value,
+                    );
+                    json[key.toString()] = nestedJson;
+                  } else {
+                    json[key.toString()] = value;
+                  }
+                } else {
+                  json[key.toString()] = value;
+                }
               });
             }
           }
