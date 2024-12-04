@@ -214,7 +214,7 @@ class SelectiveDisclosureDisplayMap {
           .indexWhere(
             (entry) => entry.value.toString().contains(element.key.toString()),
           );
-      if (index == -1) isDisabled = true;
+      if (index == -1 && element.threeDotValue == null) isDisabled = true;
       if (value['_sd'] != null) {
         value.addAll(
           SelectiveDisclosureDisplayMap(
@@ -235,7 +235,7 @@ class SelectiveDisclosureDisplayMap {
       builtMap[title ?? element.key.toString()] = {
         'mapKey': element.key.toString(),
         'claimKey': element.key.toString(),
-        'threeDotValue': null,
+        'threeDotValue': element.threeDotValue,
         'value': value,
         'hasCheckbox': !isDisabled && isPresentation,
         'isCompulsary': isCompulsary,
@@ -312,7 +312,7 @@ class SelectiveDisclosureDisplayMap {
           .indexWhere(
             (entry) => entry.value.toString().contains(claimKey),
           );
-      if (indexInDisclosure == -1) {
+      if (indexInDisclosure == -1 && element.threeDotValue == null) {
         isDisabled = true;
       } else if (isDisabled) {
         // Don't add in the map if limitDisclosure is required and the
