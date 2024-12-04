@@ -497,8 +497,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
           }
         } else if (credentialSubjectModel
-                .credentialSubjectType.isBlockchainAccount ||
-            credentialSubjectModel.credentialSubjectType.supportSingleOnly) {
+            .credentialSubjectType.supportSingleOnly) {
           await deleteById(
             id: storedCredential.id,
             showMessage: false,
