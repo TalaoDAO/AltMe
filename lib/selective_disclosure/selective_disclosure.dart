@@ -333,7 +333,7 @@ class SelectiveDisclosure {
     return newExtractedValue;
   }
 
-  Map<String, dynamic> getMapFromList(List lisString) {
+  Map<String, dynamic> getMapFromList(List<dynamic> lisString) {
     if (lisString.length == 3) {
       /// '["Qg_O64zqAxe412a108iroA", "phone_number", "+81-80-1234-5678"]'
       return {lisString[1].toString(): lisString[2]};
