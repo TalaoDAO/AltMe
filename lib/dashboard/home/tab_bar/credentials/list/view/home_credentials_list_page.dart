@@ -77,9 +77,7 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
               message = messageHandler.getMessage(context, messageHandler);
             }
 
-            if (state.status == CredentialsStatus.loading) {
-              return const CredentialListShimmer();
-            } else if (state.status == CredentialsStatus.error) {
+            if (state.status == CredentialsStatus.error) {
               return ErrorView(message: message, onTap: onRefresh);
             } else {
               return HomeCredentialCategoryList(

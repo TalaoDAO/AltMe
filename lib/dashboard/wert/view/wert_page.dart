@@ -138,13 +138,13 @@ class _WertViewState extends State<WertView> {
             body:
                 state.currentAccount!.blockchainType == BlockchainType.fantom ||
                         state.currentAccount!.blockchainType ==
-                            BlockchainType.binance
+                            BlockchainType.etherlink
                     ? Center(
                         child: Text(
                           state.currentAccount!.blockchainType ==
-                                  BlockchainType.binance
-                              ? l10n.thisFeatureIsNotSupportedYetForBinance
-                              : l10n.thisFeatureIsNotSupportedYetForFantom,
+                                  BlockchainType.fantom
+                              ? l10n.thisFeatureIsNotSupportedYetForFantom
+                              : l10n.thisFeatureIsNotSupportedYetForEtherlink,
                         ),
                       )
                     : WebViewWidget(controller: _controller),

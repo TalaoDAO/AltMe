@@ -3,7 +3,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/verify_encoded_data.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
-import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
@@ -113,25 +112,25 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       final listOfSd = collectSdValues(data);
 
       if (claims != null && listOfSd.isNotEmpty) {
-        final selectiveDisclosure = SelectiveDisclosure(item);
-        final decryptedDatas = selectiveDisclosure.contents;
+        // final selectiveDisclosure = SelectiveDisclosure(item);
+        // final decryptedDatas = selectiveDisclosure.contents;
 
-        /// check if sd already contain sh256 hash
-        for (final element in decryptedDatas) {
-          final sh256Hash = profileCubit.oidc4vc.sh256HashOfContent(element);
+        // /// check if sd already contain sh256 hash
+        // for (final element in decryptedDatas) {
+        //   final sh256Hash = profileCubit.oidc4vc.sh256HashOfContent(element);
 
-          if (!listOfSd.contains(sh256Hash)) {
-            emit(
-              state.copyWith(
-                credentialStatus: CredentialStatus.invalidSignature,
-                status: AppStatus.idle,
-                statusListIndex: statusListIndex,
-                statusListUrl: statusListUri,
-              ),
-            );
-            return;
-          }
-        }
+        //   if (!listOfSd.contains(sh256Hash)) {
+        //     emit(
+        //       state.copyWith(
+        //         credentialStatus: CredentialStatus.invalidSignature,
+        //         status: AppStatus.idle,
+        //         statusListIndex: statusListIndex,
+        //         statusListUrl: statusListUri,
+        //       ),
+        //     );
+        //     return;
+        //   }
+        // }
 
         /// check the status
         final status = item.data['status'];

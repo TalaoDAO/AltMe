@@ -143,8 +143,9 @@ class _HomeCredentialCategoryListState
                                   .toList();
 
                               if (!formatsSupported
-                                      .contains(element.getFormat) ||
-                                  element.getFormat == 'auto') {
+                                      .contains(element.getFormat) &&
+                                  element.getFormat != 'auto' &&
+                                  !formatsSupported.contains('auto')) {
                                 return false;
                               }
                             }

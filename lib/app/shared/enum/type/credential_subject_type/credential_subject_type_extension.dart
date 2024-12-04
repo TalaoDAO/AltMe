@@ -609,13 +609,13 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.tezVoucher:
       case CredentialSubjectType.diplomaCard:
       case CredentialSubjectType.twitterCard:
+        return true;
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.ethereumAssociatedWallet:
       case CredentialSubjectType.fantomAssociatedWallet:
       case CredentialSubjectType.polygonAssociatedWallet:
       case CredentialSubjectType.binanceAssociatedWallet:
       case CredentialSubjectType.etherlinkAssociatedWallet:
-        return true;
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.tezosPooAddress:
       case CredentialSubjectType.ethereumPooAddress:

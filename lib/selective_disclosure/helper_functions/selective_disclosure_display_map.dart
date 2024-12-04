@@ -75,11 +75,11 @@ class SelectiveDisclosureDisplayMap {
           builtMap[title] = nestedMap;
         } else {
           builtMap.addAll(
-            claimData(mapKey, title, type),
+            claimData(mapKey, title, type, parentKeyId),
           );
         }
       } else {
-        builtMap.addAll(claimData(mapKey, title, type));
+        builtMap.addAll(claimData(mapKey, title, type, parentKeyId));
       }
     });
     final Map<String, dynamic> mapFromJwtEntries = fileterdMapFromJwt(
@@ -168,6 +168,7 @@ class SelectiveDisclosureDisplayMap {
             element.key.toString(),
             element.key.toString(),
             null,
+            parentKeyId,
           ),
         );
       }
@@ -181,9 +182,10 @@ class SelectiveDisclosureDisplayMap {
     String? title,
   ) {
     final value = element.value as Map<String, dynamic>;
+    final valueWithoutSd = Map<String, dynamic>.from(value);
+    valueWithoutSd.remove('_sd');
     final builtMap = <String, dynamic>{};
-    value.remove('_sd');
-    if (value.isEmpty) {
+    if (valueWithoutSd.isEmpty) {
       final mapNestedSelectiveDisclosure = SelectiveDisclosureDisplayMap(
         credentialModel: credentialModel,
         claims: const {},
@@ -212,11 +214,28 @@ class SelectiveDisclosureDisplayMap {
           .indexWhere(
             (entry) => entry.value.toString().contains(element.key.toString()),
           );
-      if (index == -1) isDisabled = true;
+      if (index == -1 && element.threeDotValue == null) isDisabled = true;
+      if (value['_sd'] != null) {
+        value.addAll(
+          SelectiveDisclosureDisplayMap(
+            credentialModel: credentialModel,
+            isPresentation: isPresentation,
+            languageCode: languageCode,
+            limitDisclosure: limitDisclosure,
+            filters: filters,
+            isDeveloperMode: isDeveloperMode,
+            claims: claims,
+            parentKeyId: element.key.toString(),
+            selectedClaimsKeyIds: selectedClaimsKeyIds,
+            onPressed: onPressed,
+          ).buildMap,
+        );
+      }
+
       builtMap[title ?? element.key.toString()] = {
         'mapKey': element.key.toString(),
         'claimKey': element.key.toString(),
-        'threeDotValue': null,
+        'threeDotValue': element.threeDotValue,
         'value': value,
         'hasCheckbox': !isDisabled && isPresentation,
         'isCompulsary': isCompulsary,
@@ -230,11 +249,13 @@ class SelectiveDisclosureDisplayMap {
     String mapKey,
     String? title,
     String? type,
+    String? parentKeyId,
   ) {
     final claimDataMap = <String, dynamic>{};
     final List<ClaimsData> claimsData =
         SelectiveDisclosure(credentialModel).getClaimsData(
       key: mapKey,
+      parentKeyId: parentKeyId,
     );
 
     if (claimsData.isEmpty) return claimDataMap;
@@ -291,7 +312,7 @@ class SelectiveDisclosureDisplayMap {
           .indexWhere(
             (entry) => entry.value.toString().contains(claimKey),
           );
-      if (indexInDisclosure == -1) {
+      if (indexInDisclosure == -1 && element.threeDotValue == null) {
         isDisabled = true;
       } else if (isDisabled) {
         // Don't add in the map if limitDisclosure is required and the

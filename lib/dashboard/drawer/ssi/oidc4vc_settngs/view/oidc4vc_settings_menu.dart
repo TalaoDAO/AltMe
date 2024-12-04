@@ -59,6 +59,7 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
                 JsonViewerPage.route(
                   title: 'Wallet metadata for issuers',
                   data: value,
+                  showButton: false,
                 ),
               );
             },

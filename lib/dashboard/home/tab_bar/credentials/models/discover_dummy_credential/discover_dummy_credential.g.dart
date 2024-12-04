@@ -117,4 +117,5 @@ const _$VCFormatTypeEnumMap = {
   VCFormatType.jwtVcJsonLd: 'jwt_vc_json-ld',
   VCFormatType.vcSdJWT: 'vc+sd-jwt',
   VCFormatType.auto: 'auto',
+  VCFormatType.none: 'none',
 };
