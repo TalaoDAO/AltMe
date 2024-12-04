@@ -6,6 +6,8 @@ import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+
+export 'helper_functions/selective_disclosure_display_map.dart';
 export 'model/model.dart';
 
 class SelectiveDisclosure {
