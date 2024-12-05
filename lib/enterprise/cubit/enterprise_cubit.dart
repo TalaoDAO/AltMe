@@ -579,11 +579,15 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         final blockchainType =
             manageNetworkCubit.walletCubit.state.currentAccount!.blockchainType;
         final currentNetworkList = blockchainType.networks;
+
+        var network = currentNetworkList[0];
+
         if (testnet) {
-          await manageNetworkCubit.setNetwork(currentNetworkList[1]);
-        } else {
-          await manageNetworkCubit.setNetwork(currentNetworkList[0]);
+          network = currentNetworkList[1];
         }
+
+        await manageNetworkCubit.setNetwork(network);
+        await manageNetworkCubit.resetOtherNetworks(network);
       }
 
       emit(

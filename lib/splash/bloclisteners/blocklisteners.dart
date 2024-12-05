@@ -125,8 +125,8 @@ final walletBlocAccountChangeListener = BlocListener<WalletCubit, WalletState>(
   },
   listener: (context, state) async {
     try {
+      await context.read<ManageNetworkCubit>().loadNetwork();
       if (Parameters.walletHandlesCrypto) {
-        await context.read<ManageNetworkCubit>().loadNetwork();
         unawaited(context.read<TokensCubit>().fetchFromZero());
         unawaited(context.read<NftCubit>().fetchFromZero());
       }
