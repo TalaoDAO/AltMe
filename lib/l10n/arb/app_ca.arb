@@ -1159,5 +1159,9 @@
 "credentialIssuanceIsStillPending": "L'emissió de la credencial està pendent",
 "bakerFee": "Comissió de Baker",
 "storageFee": "Comissió d'emmagatzematge",
-"doYouWantToSetupTheProfile": "Vols configurar el perfil?"
+"doYouWantToSetupTheProfile": "Vols configurar el perfil?",
+"french": "Français",
+"spanish": "Español",
+"catalan": "Català",
+"english": "English"
 }
