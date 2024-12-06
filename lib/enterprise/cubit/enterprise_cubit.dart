@@ -205,6 +205,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         blockchainType:
             credentialsCubit.walletCubit.state.currentAccount?.blockchainType,
         qrCodeScanCubit: qrCodeScanCubit,
+        uri: Uri.parse(Parameters.walletIssuer),
       );
 
       emit(

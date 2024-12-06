@@ -1076,14 +1076,6 @@
   "walletInitialized": "Wallet Initialized",
   "backupCredentials": "Backup Credentials",
   "restoredCredentials": "Restored Credentials",
-  "addedCredential": "Added credential {credential}",  
-  "@addedCredentialDescription": {
-    "description": "name of the credential",
-    "type": "text",
-    "placeholders": {
-      "credential": {}
-    }
-  },
   "deletedCredential": "Deleted credential {credential}",
   "@deletedCredentialDescription": {
     "description": "name of the credential",
@@ -1101,7 +1093,7 @@
     }
   },
   "@presentedCredentialDomain": {
-    "description": "name of the credential",
+    "description": "domain of the credential",
     "type": "text",
     "placeholders": { 
       "domain": {}
@@ -1162,5 +1154,20 @@
   "storageFee": "Storage Fee",
   "doYouWantToSetupTheProfile": "Do you want to setup the profile?",
   "thisFeatureIsNotSupportedYetForEtherlink": "This feature is not supported yet for Etherlink Chain.",
-  "walletSecurityAndBackup": "Wallet Security and Backup"
+  "walletSecurityAndBackup": "Wallet Security and Backup", 
+  "addedCredential": "Added credential {credential} by {domain}",  
+  "@addedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "@addedCredentialDomain": {
+    "description": "domain of the credential",
+    "type": "text",
+    "placeholders": {
+      "domain": {}
+    }
+  }
 }

@@ -797,8 +797,17 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
     if (state.polygonAction == PolygonIdAction.offer) {
       try {
         LoadingView().hide();
+
+        var uri = Uri.parse('');
+
+        try {
+          uri = Uri.parse(state.scannedResponse!);
+        } catch (e) {
+          //
+        }
+
         await Navigator.of(context)
-            .push<void>(PolygonIdCredentialOfferPage.route());
+            .push<void>(PolygonIdCredentialOfferPage.route(uri));
       } catch (e) {
         final l10n = context.l10n;
         LoadingView().hide();

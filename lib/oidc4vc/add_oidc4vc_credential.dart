@@ -204,5 +204,6 @@ Future<void> addOIDC4VCCredential({
     showStatus: false,
     showMessage: isLastCall,
     blockchainType: blockchainType,
+    uri: Uri.parse(issuer ?? ''),
   );
 }

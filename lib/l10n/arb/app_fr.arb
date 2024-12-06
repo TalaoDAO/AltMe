@@ -1059,10 +1059,30 @@
   "activityLogDescription": "Consultez le journal des évènements",
   "walletInitialized": "Wallet initialisé",
   "backupCredentials": "Sauvegarde des attestations",
-  "restoredCredentials": "Restauration des attestations",
-  "addedCredential": "Attestation {credential} ajoutée",
+  "restoredCredentials": "Restauration des attestations", 
   "deletedCredential": "Attestation {credential} effaçée",
+  "@deletedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
   "presentedCredential": "Attestation présentée {credential} à {domain}",
+  "@presentedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "@presentedCredentialDomain": {
+    "description": "domain of the credential",
+    "type": "text",
+    "placeholders": { 
+      "domain": {}
+    }
+  },
   "keysImported": "Keys imported",
   "approveProfileTitle": "Installez la configuration",
   "approveProfileDescription": "Confirmez l'installation de la configuration de {company}?",
