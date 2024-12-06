@@ -106,7 +106,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
       await walletCubit.createCryptoWallet(
         accountName: accountName,
         mnemonicOrKey: mnemonicOrKey,
-        isImported: !isFromOnboarding,
+        isImported: true,
         isFromOnboarding: isFromOnboarding,
         blockchainType: null,
         qrCodeScanCubit: qrCodeScanCubit,
