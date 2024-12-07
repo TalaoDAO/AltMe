@@ -500,6 +500,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
 
   Future<void> addPolygonIdCredentials({
     required QRCodeScanCubit qrCodeScanCubit,
+    required Uri uri,
   }) async {
     try {
       log.i('add Claims');
@@ -509,6 +510,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           claimEntity: state.claims![i],
           credentialManifest: state.credentialManifests![i],
           qrCodeScanCubit: qrCodeScanCubit,
+          uri: uri,
         );
       }
       emit(state.copyWith(status: AppStatus.goBack));
@@ -535,6 +537,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     required ClaimEntity claimEntity,
     required CredentialManifest credentialManifest,
     required QRCodeScanCubit qrCodeScanCubit,
+    required Uri uri,
   }) async {
     final jsonCredential = claimEntity.info;
     final credentialPreview = Credential.fromJson(jsonCredential);
@@ -554,9 +557,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     );
     // insert the credential in the wallet
     await credentialsCubit.insertCredential(
-      credential: credentialModel,
-      blockchainType: walletCubit.state.currentAccount!.blockchainType,
-    );
+        credential: credentialModel,
+        blockchainType: walletCubit.state.currentAccount!.blockchainType,
+        uri: uri);
   }
 
   /// getSchemas

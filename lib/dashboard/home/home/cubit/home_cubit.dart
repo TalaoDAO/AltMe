@@ -222,6 +222,7 @@ class HomeCubit extends Cubit<HomeState> {
           credential: credentialModel,
           showMessage: true,
           blockchainType: blockchainType,
+          uri: Uri.parse(url),
         );
         await cameraCubit.incrementAcquiredCredentialsQuantity();
         emit(state.copyWith(status: AppStatus.success));

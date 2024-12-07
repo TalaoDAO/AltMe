@@ -76,7 +76,7 @@ class StarterView extends StatelessWidget {
                             );
                             await profileCubit.setProfileSetting(
                               profileSetting: ProfileSetting.initial(),
-                              profileType: ProfileType.defaultOne,
+                              profileType: ProfileType.diipv3,
                             );
                             await Navigator.of(context).push<void>(
                               ProtectWalletPage.route(
@@ -96,7 +96,7 @@ class StarterView extends StatelessWidget {
 
                             await profileCubit.setProfileSetting(
                               profileSetting: ProfileSetting.initial(),
-                              profileType: ProfileType.defaultOne,
+                              profileType: ProfileType.diipv3,
                             );
 
                             await Navigator.of(context).push<void>(

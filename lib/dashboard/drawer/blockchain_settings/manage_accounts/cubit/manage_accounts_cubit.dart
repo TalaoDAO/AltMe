@@ -43,18 +43,6 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
       blockchainType: blockchainType,
     );
     emit(state.success(currentCryptoIndex: index));
-
-    final testnet = credentialsCubit
-        .profileCubit.state.model.profileSetting.blockchainOptions?.testnet;
-
-    if (testnet != null) {
-      final currentNetworkList = blockchainType.networks;
-      if (testnet) {
-        await manageNetworkCubit.setNetwork(currentNetworkList[1]);
-      } else {
-        await manageNetworkCubit.setNetwork(currentNetworkList[0]);
-      }
-    }
   }
 
   Future<void> editCryptoAccount({

@@ -214,6 +214,9 @@ class WalletCubit extends Cubit<WalletState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
     await walletConnectCubit.initialise();
 
+    /// set new account as current
+    await setCurrentWalletAccount(cryptoAccountDataList.length - 1);
+
     emitCryptoAccount(updatedCryptoAccount);
 
     onComplete?.call(
@@ -222,9 +225,6 @@ class WalletCubit extends Cubit<WalletState> {
         message: ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
       ),
     );
-
-    /// set new account as current
-    await setCurrentWalletAccount(cryptoAccountDataList.length - 1);
   }
 
   Future<CryptoAccountData> _createBlockchainAccount({
