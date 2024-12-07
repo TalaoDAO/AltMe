@@ -209,7 +209,9 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
       emit(
         state.copyWith(
-          status: AppStatus.success,
+          status: status == AppStatus.addEnterpriseAccount
+              ? AppStatus.successAdd
+              : AppStatus.successUpdate,
           message: StateMessage.success(
             messageHandler: ResponseMessage(
               message: status == AppStatus.addEnterpriseAccount

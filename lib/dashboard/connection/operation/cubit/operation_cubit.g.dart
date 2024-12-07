@@ -51,4 +51,6 @@ const _$AppStatusEnumMap = {
   AppStatus.updateEnterpriseAccount: 'updateEnterpriseAccount',
   AppStatus.replaceEnterpriseAccount: 'replaceEnterpriseAccount',
   AppStatus.restoreWallet: 'restoreWallet',
+  AppStatus.successAdd: 'successAdd',
+  AppStatus.successUpdate: 'successUpdate',
 };

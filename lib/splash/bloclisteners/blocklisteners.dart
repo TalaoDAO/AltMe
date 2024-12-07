@@ -905,7 +905,7 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
         builder: (_) => const WalletRevokedDialog(),
       );
     }
-    if (state.status == AppStatus.success) {
+    if (state.status == AppStatus.successAdd) {
       // TODO: when we create vc+sd-jwt associated address cards, we need to check also for vc+sd-jwt
       if (context
               .read<ProfileCubit>()
