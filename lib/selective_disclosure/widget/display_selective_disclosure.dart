@@ -25,7 +25,12 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
   final CredentialModel credentialModel;
   final bool showVertically;
   final Map<String, dynamic>? claims;
-  final void Function(String?, String, String?)? onPressed;
+  final void Function(
+    String?,
+    String,
+    String?,
+    String?,
+  )? onPressed;
   final SelectiveDisclosureState? selectiveDisclosureState;
   final String? parentKeyId;
 
@@ -74,7 +79,12 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
   });
   final Map<String, dynamic> disclosure;
   final bool showVertically;
-  final void Function(String?, String, String?)? onPressed;
+  final void Function(
+    String?,
+    String,
+    String?,
+    String?,
+  )? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +215,7 @@ class DisclosureTitle extends StatelessWidget {
     required this.element,
     this.onPressed,
   });
-  final void Function(String?, String, String?)? onPressed;
+  final void Function(String?, String, String?, String?)? onPressed;
   final MapEntry<String, dynamic> element;
 
   @override
@@ -225,6 +235,7 @@ class DisclosureTitle extends StatelessWidget {
           element.value['mapKey'].toString(),
           element.value['claimKey'].toString(),
           element.value['threeDotValue']?.toString(),
+          element.value['sd']?.toString(),
         );
       },
       child: Row(
@@ -247,7 +258,9 @@ class DisclosureTitle extends StatelessWidget {
                 builder: (context, state) {
                   final selectedKeyId =
                       state.selectedClaimsKeyIds.firstWhereOrNull(
-                    (ele) => ele.keyId == element.value['claimKey'].toString(),
+                    (ele) =>
+                        ele.keyId ==
+                        '${element.value["claimKey"]}#${element.value["sd"]}',
                   );
 
                   return Center(
@@ -281,7 +294,12 @@ class DisclosureLine extends StatelessWidget {
     required this.elementValue,
   });
 
-  final void Function(String?, String, String?)? onPressed;
+  final void Function(
+    String?,
+    String,
+    String?,
+    String?,
+  )? onPressed;
   final bool showVertically;
   final String? elementKey;
   final dynamic elementValue;
@@ -310,6 +328,7 @@ class DisclosureLine extends StatelessWidget {
           elementValue['mapKey'].toString(),
           elementValue['claimKey'].toString(),
           elementValue['threeDotValue']?.toString(),
+          elementValue['sd']?.toString(),
         );
       },
       child: Row(
@@ -336,7 +355,9 @@ class DisclosureLine extends StatelessWidget {
                 builder: (context, state) {
                   final selectedKeyId =
                       state.selectedClaimsKeyIds.firstWhereOrNull(
-                    (ele) => ele.keyId == elementValue['claimKey'].toString(),
+                    (ele) =>
+                        ele.keyId ==
+                        '${elementValue["claimKey"]}#${elementValue["sd"]}',
                   );
 
                   return Center(

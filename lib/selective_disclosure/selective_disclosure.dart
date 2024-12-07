@@ -67,6 +67,13 @@ class SelectiveDisclosure {
   }
 
   Map<String, dynamic> get extractedValuesFromJwt {
+    final extractedValues = extractedValuesFromJwtWithSd;
+    replaceSdValues(extractedValues);
+
+    return extractedValues;
+  }
+
+  Map<String, dynamic> get extractedValuesFromJwtWithSd {
     final extractedValues = <String, dynamic>{};
     for (final element in disclosureListToContent.entries.toList()) {
       try {
@@ -84,7 +91,6 @@ class SelectiveDisclosure {
         );
       }
     }
-    replaceSdValues(extractedValues);
 
     return extractedValues;
   }
@@ -176,7 +182,7 @@ class SelectiveDisclosure {
     if (valueType == null) return null;
 
     if (valueType == 'image/jpeg') {
-      final List<ClaimsData> claimsData = getClaimsData(
+      final (claimsData, _) = getClaimsData(
         key: 'picture',
         parentKeyId: null,
       );
@@ -188,7 +194,7 @@ class SelectiveDisclosure {
     }
   }
 
-  List<ClaimsData> getClaimsData({
+  (List<ClaimsData>, String?) getClaimsData({
     required String key,
     required String? parentKeyId,
   }) {
@@ -203,6 +209,7 @@ class SelectiveDisclosure {
             // ignore: prefer_interpolation_to_compose_strings
             r'$..["' + parentKeyId + '"]["' + key + '"]',
           );
+    final String? sd = sdForNested(searchedKey: key, parentKeyId: parentKeyId);
 
     try {
       final uncryptedDataPath = dataPath.read(extractedValuesFromJwt).first;
@@ -267,13 +274,13 @@ class SelectiveDisclosure {
             }
           }
         }
-        return value;
+        return (value, sd);
       }
     } catch (e) {
-      return value;
+      return (value, sd);
     }
 
-    return value;
+    return (value, sd);
   }
 
   String disclosureToContent(String element) {
@@ -352,5 +359,77 @@ class SelectiveDisclosure {
         },
       );
     }
+  }
+
+  String? sdForNested({required String searchedKey, String? parentKeyId}) {
+    if (parentKeyId == null) {
+      return null;
+    }
+    String? sd;
+// search for the parentKeyId in extractedValuesFromJwtWithSd
+// if found, search for the key in the value of the parentKeyId
+// if found return null. If not found loop on _sd digest and check key of
+// corresponding sd
+
+    extractedValuesFromJwtWithSd.forEach((String key, dynamic value) {
+      final sdCandidate = gestSdFromDigestList(
+        key,
+        parentKeyId,
+        value,
+        searchedKey,
+      );
+      if (sdCandidate != null) {
+        sd = sdCandidate;
+      }
+    });
+// search for the parentKeyId in payload
+    payload.forEach((String key, dynamic value) {
+      final sdCandidate = gestSdFromDigestList(
+        key,
+        parentKeyId,
+        value,
+        searchedKey,
+      );
+      if (sdCandidate != null) {
+        sd = sdCandidate;
+      }
+    });
+
+    return sd;
+  }
+
+  String? gestSdFromDigestList(
+    String key,
+    String parentKeyId,
+    dynamic value,
+    String searchedKey,
+  ) {
+    String? sd;
+    if (key == parentKeyId) {
+      if (value is Map<String, dynamic>) {
+        if (value[searchedKey] != null) {
+          return null;
+        }
+        if (value['_sd'] != null) {
+          final digestList = value['_sd'] as List;
+          for (final digest in digestList) {
+            for (final element in disclosureListToContent.entries.toList()) {
+              final digestFromSd =
+                  OIDC4VC().sh256HashOfContent(element.value.toString());
+              if (digestFromSd == digest) {
+                final keyFromSd = getMapFromList(
+                  jsonDecode(element.value.toString()) as List,
+                ).keys.first;
+                if (keyFromSd == searchedKey) {
+                  sd = element.key;
+                }
+              }
+            }
+          }
+        }
+      }
+      return sd;
+    }
+    return null;
   }
 }
