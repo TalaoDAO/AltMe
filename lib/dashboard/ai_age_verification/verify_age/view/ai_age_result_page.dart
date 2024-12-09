@@ -155,7 +155,6 @@ class SuccessWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.normal,
-                  color: Theme.of(context).colorScheme.onTertiary,
                 ),
           ),
         ),
