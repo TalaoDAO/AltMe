@@ -7,7 +7,6 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activit
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:uuid/uuid.dart';
 
 Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
@@ -31,92 +30,12 @@ Future<void> addOIDC4VCCredential({
     //jwt_vc
     final data = encodedCredentialFromOIDC4VC['credential'] as String;
 
-    final jsonContent = jwtDecode.parseJwt(data);
-
-    if (format == VCFormatType.vcSdJWT.vcValue) {
-      final sdAlg = jsonContent['_sd_alg'] ?? 'sha-256';
-
-      if (sdAlg != 'sha-256') {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Only sha-256 is supported.',
-          },
-        );
-      }
-
-      credentialFromOIDC4VC = jsonContent;
-    } else {
-      credentialFromOIDC4VC = jsonContent['vc'] as Map<String, dynamic>;
-    }
-
-    if (format == VCFormatType.vcSdJWT.vcValue) {
-      /// type
-      if (!credentialFromOIDC4VC.containsKey('type')) {
-        credentialFromOIDC4VC['type'] = [credentialType];
-      }
-
-      ///credentialSubject
-      if (!credentialFromOIDC4VC.containsKey('credentialSubject')) {
-        credentialFromOIDC4VC['credentialSubject'] = {'type': credentialType};
-      }
-    }
-
-    /// id -> jti
-    if (!credentialFromOIDC4VC.containsKey('id')) {
-      if (jsonContent.containsKey('jti')) {
-        credentialFromOIDC4VC['id'] = jsonContent['jti'];
-      } else {
-        credentialFromOIDC4VC['id'] = 'urn:uuid:${const Uuid().v4()}';
-      }
-    }
-
-    /// issuer -> iss
-    if (!credentialFromOIDC4VC.containsKey('issuer')) {
-      if (jsonContent.containsKey('iss')) {
-        credentialFromOIDC4VC['issuer'] = jsonContent['iss'];
-      } else {
-        throw ResponseMessage(
-          data: {
-            'error': 'unsupported_format',
-            'error_description': 'Issuer is missing',
-          },
-        );
-      }
-    }
-
-    /// issuanceDate -> iat
-    if (!credentialFromOIDC4VC.containsKey('issuanceDate')) {
-      if (jsonContent.containsKey('iat')) {
-        credentialFromOIDC4VC['issuanceDate'] = jsonContent['iat'].toString();
-      } else if (jsonContent.containsKey('issuanceDate')) {
-        credentialFromOIDC4VC['issuanceDate'] =
-            jsonContent['issuanceDate'].toString();
-      }
-    }
-
-    /// expirationDate -> exp
-    if (!credentialFromOIDC4VC.containsKey('expirationDate')) {
-      if (jsonContent.containsKey('exp')) {
-        credentialFromOIDC4VC['expirationDate'] = jsonContent['exp'].toString();
-      } else if (jsonContent.containsKey('expirationDate')) {
-        credentialFromOIDC4VC['expirationDate'] =
-            jsonContent['expirationDate'].toString();
-      }
-    }
-
-    /// cred,tailSubject.id -> sub
-
-    // if (newCredential['id'] == null) {
-    //   newCredential['id'] = 'urn:uuid:${const Uuid().v4()}';
-    // }
-
-    // if (newCredential['credentialPreview']['id'] == null) {
-    //   newCredential['credentialPreview']['id'] =
-    //       'urn:uuid:${const Uuid().v4()}';
-    // }
-
-    credentialFromOIDC4VC['jwt'] = data;
+    credentialFromOIDC4VC = getCredentialDataFromJson(
+      data: data,
+      format: format,
+      jwtDecode: jwtDecode,
+      credentialType: credentialType,
+    );
   } else if (format == VCFormatType.ldpVc.vcValue) {
     //ldp_vc
 
