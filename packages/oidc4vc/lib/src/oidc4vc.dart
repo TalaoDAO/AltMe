@@ -519,24 +519,55 @@ class OIDC4VC {
     required String credentialEndpoint,
     required String? dPop,
   }) async {
-    final credentialHeaders = <String, dynamic>{
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
+    try {
+      final credentialHeaders = <String, dynamic>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      };
 
-    if (dPop != null) {
-      credentialHeaders['DPoP'] = dPop;
+      if (dPop != null) {
+        credentialHeaders['DPoP'] = dPop;
+      }
+
+      final dynamic credentialResponse = await dio.post<dynamic>(
+        credentialEndpoint,
+        options: Options(headers: credentialHeaders),
+        data: credentialData,
+      );
+
+      final credentialResponseData = credentialResponse.data;
+
+      return credentialResponseData;
+    } catch (e) {
+      if (count == 1) {
+        count = 0;
+        rethrow;
+      }
+
+      if (e is DioException &&
+          e.response != null &&
+          e.response!.data is Map<String, dynamic> &&
+          (e.response!.data as Map<String, dynamic>).containsKey('c_nonce')) {
+        count++;
+
+        final nonce = e.response!.data['c_nonce'].toString();
+
+        final credentialResponseDataValue = await getSingleCredential(
+          openIdConfiguration: openIdConfiguration,
+          accessToken: accessToken,
+          nonce: nonce,
+          dio: dio,
+          credentialData: credentialData,
+          credentialEndpoint: credentialEndpoint,
+          dPop: dPop,
+        );
+        count = 0;
+        return credentialResponseDataValue;
+      } else {
+        count = 0;
+        rethrow;
+      }
     }
-
-    final dynamic credentialResponse = await dio.post<dynamic>(
-      credentialEndpoint,
-      options: Options(headers: credentialHeaders),
-      data: credentialData,
-    );
-
-    final credentialResponseData = credentialResponse.data;
-
-    return credentialResponseData;
   }
 
   /// get Deferred credential from url
