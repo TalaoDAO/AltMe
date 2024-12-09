@@ -11,9 +11,5 @@
     "keyBindingHeader",
     "keyBindingPayload",
     "ebsiV4DecentralizedId"
-  ],
-
-  "fr": [
-    "addedCredential"
   ]
 }

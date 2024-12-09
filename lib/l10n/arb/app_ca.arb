@@ -1158,7 +1158,7 @@
   "english": "English",
   "thisFeatureIsNotSupportedYetForEtherlink": "Aquesta funció encara no és compatible amb Etherlink Chain.",
   "walletSecurityAndBackup": "Seguretat i còpia de seguretat de la cartera",
-  "addedCredential": "Credencial {credencial} afegida per {dominio}",
+  "addedCredential": "Credencial {credential} afegida per {domain}",
   "@addedCredentialDescription": {
     "description": "name of the credential",
     "type": "text",
