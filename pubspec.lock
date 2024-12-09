@@ -659,10 +659,10 @@ packages:
     dependency: transitive
     description:
       name: dio_cache_interceptor
-      sha256: fb7905c0d12075d8786a6b63bffd64ae062d053f682cfaf28d145a2686507308
+      sha256: "1346705a2057c265014d7696e3e2318b560bfb00b484dac7f9b01e2ceaebb07d"
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.0"
+    version: "3.5.1"
   dio_cache_interceptor_hive_store:
     dependency: transitive
     description:
