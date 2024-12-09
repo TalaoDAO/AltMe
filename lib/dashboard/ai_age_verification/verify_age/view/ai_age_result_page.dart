@@ -237,34 +237,30 @@ class FailureWidget extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(
-          height: Sizes.spaceNormal,
-        ),
-        MyElevatedButton(
-          text: l10n.kyc,
-          verticalSpacing: 16,
-          borderRadius: Sizes.largeRadius,
-          onPressed: () async {
-            await securityCheck(
-              context: context,
-              title: l10n.typeYourPINCodeToAuthenticate,
-              localAuthApi: LocalAuthApi(),
-              onSuccess: () {
-                context
-                    .read<KycVerificationCubit>()
-                    .startKycVerifcation(vcType: KycVcType.verifiableId);
-              },
-            );
-            await Navigator.pushAndRemoveUntil<void>(
-              context,
-              DashboardPage.route(),
-              (Route<dynamic> route) => route.isFirst,
-            );
-          },
-        ),
-        const SizedBox(
-          height: Sizes.spaceNormal,
-        ),
+        const SizedBox(height: Sizes.spaceNormal),
+        // MyElevatedButton(
+        //   text: l10n.kyc,
+        //   verticalSpacing: 16,
+        //   borderRadius: Sizes.largeRadius,
+        //   onPressed: () async {
+        //     await securityCheck(
+        //       context: context,
+        //       title: l10n.typeYourPINCodeToAuthenticate,
+        //       localAuthApi: LocalAuthApi(),
+        //       onSuccess: () {
+        //         context
+        //             .read<KycVerificationCubit>()
+        //             .startKycVerifcation(vcType: KycVcType.verifiableId);
+        //       },
+        //     );
+        //     await Navigator.pushAndRemoveUntil<void>(
+        //       context,
+        //       DashboardPage.route(),
+        //       (Route<dynamic> route) => route.isFirst,
+        //     );
+        //   },
+        // ),
+        // const SizedBox(height: Sizes.spaceNormal),
         MyElevatedButton(
           text: l10n.decline,
           verticalSpacing: 16,
