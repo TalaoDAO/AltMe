@@ -3,20 +3,14 @@
     "payload",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId",
-    "thisFeatureIsNotSupportedYetForEtherlink",
-    "walletSecurityAndBackup",
-    "addedCredential"
+    "ebsiV4DecentralizedId"
   ],
 
   "es": [
     "payload",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId",
-    "thisFeatureIsNotSupportedYetForEtherlink",
-    "walletSecurityAndBackup",
-    "addedCredential"
+    "ebsiV4DecentralizedId"
   ],
 
   "fr": [

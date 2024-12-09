@@ -1121,5 +1121,21 @@
   "storageFee": "Storage Fee",
   "doYouWantToSetupTheProfile": "Souhaitez vous paramétrer ce profil",
   "thisFeatureIsNotSupportedYetForEtherlink": "Cette fonctionalité n'est pas supportée sur Etherlink.",
-  "walletSecurityAndBackup": "Sécurité et Sauvegarde du Wallet"
+  "walletSecurityAndBackup": "Sécurité et Sauvegarde du Wallet",
+  "addedCredential": "Added credential {credential} by {domain}",  
+  "@addedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "@addedCredentialDomain": {
+    "description": "domain of the credential",
+    "type": "text",
+    "placeholders": {
+      "domain": {}
+    }
+  }
+
 }
