@@ -1169,5 +1169,6 @@
     "placeholders": {
       "domain": {}
     }
-  }
+  },
+  "reject": "Reject"
 }

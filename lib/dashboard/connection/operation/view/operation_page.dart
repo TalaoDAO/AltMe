@@ -264,7 +264,7 @@ class _OperationViewState extends State<OperationView> {
                     const SizedBox(height: 8),
                     MyOutlinedButton(
                       borderRadius: Sizes.normalRadius,
-                      text: l10n.cancel,
+                      text: isSmartContract ? l10n.reject : l10n.cancel,
                       onPressed: () {
                         context.read<OperationCubit>().rejectOperation(
                               connectionBridgeType: widget.connectionBridgeType,
