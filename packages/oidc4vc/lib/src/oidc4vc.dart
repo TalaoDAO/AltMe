@@ -513,7 +513,6 @@ class OIDC4VC {
   Future<dynamic> getSingleCredential({
     required OpenIdConfiguration openIdConfiguration,
     required String accessToken,
-    required String? nonce,
     required Dio dio,
     required Map<String, dynamic> credentialData,
     required String credentialEndpoint,
@@ -539,34 +538,7 @@ class OIDC4VC {
 
       return credentialResponseData;
     } catch (e) {
-      if (count == 1) {
-        count = 0;
-        rethrow;
-      }
-
-      if (e is DioException &&
-          e.response != null &&
-          e.response!.data is Map<String, dynamic> &&
-          (e.response!.data as Map<String, dynamic>).containsKey('c_nonce')) {
-        count++;
-
-        final nonce = e.response!.data['c_nonce'].toString();
-
-        final credentialResponseDataValue = await getSingleCredential(
-          openIdConfiguration: openIdConfiguration,
-          accessToken: accessToken,
-          nonce: nonce,
-          dio: dio,
-          credentialData: credentialData,
-          credentialEndpoint: credentialEndpoint,
-          dPop: dPop,
-        );
-        count = 0;
-        return credentialResponseDataValue;
-      } else {
-        count = 0;
-        rethrow;
-      }
+      rethrow;
     }
   }
 

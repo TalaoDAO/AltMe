@@ -1497,23 +1497,63 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           }
 
           /// get credentials
-          final result = await getCredential(
-            isEBSI: isEBSI,
-            credential: selectedCredentials[i],
-            issuer: issuer,
-            cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
-            oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
-            didKeyType: customOidc4vcProfile.defaultDid,
-            clientId: clientId,
-            profileCubit: profileCubit,
-            accessToken: savedAccessToken!,
-            cnonce: savedNonce,
-            authorizationDetails: savedAuthorizationDetails,
-            openIdConfiguration:
-                OpenIdConfiguration.fromJson(openIdConfigurationData),
-            qrCodeScanCubit: qrCodeScanCubit,
-            publicKeyForDPop: publicKeyForDPop,
-          );
+          (List<dynamic>?, String?, String?)? result;
+          try {
+            result = await getCredential(
+              isEBSI: isEBSI,
+              credential: selectedCredentials[i],
+              issuer: issuer,
+              cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
+              oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+              didKeyType: customOidc4vcProfile.defaultDid,
+              clientId: clientId,
+              profileCubit: profileCubit,
+              accessToken: savedAccessToken!,
+              cnonce: savedNonce,
+              authorizationDetails: savedAuthorizationDetails,
+              openIdConfiguration:
+                  OpenIdConfiguration.fromJson(openIdConfigurationData),
+              qrCodeScanCubit: qrCodeScanCubit,
+              publicKeyForDPop: publicKeyForDPop,
+            );
+          } catch (e) {
+            if (count == 1) {
+              count = 0;
+              rethrow;
+            }
+
+            if (e is DioException &&
+                e.response != null &&
+                e.response!.data is Map<String, dynamic> &&
+                (e.response!.data as Map<String, dynamic>)
+                    .containsKey('c_nonce')) {
+              count++;
+
+              final nonce = e.response!.data['c_nonce'].toString();
+              savedNonce = nonce;
+              result = await getCredential(
+                isEBSI: isEBSI,
+                credential: selectedCredentials[i],
+                issuer: issuer,
+                cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
+                oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+                didKeyType: customOidc4vcProfile.defaultDid,
+                clientId: clientId,
+                profileCubit: profileCubit,
+                accessToken: savedAccessToken!,
+                cnonce: nonce,
+                authorizationDetails: savedAuthorizationDetails,
+                openIdConfiguration:
+                    OpenIdConfiguration.fromJson(openIdConfigurationData),
+                qrCodeScanCubit: qrCodeScanCubit,
+                publicKeyForDPop: publicKeyForDPop,
+              );
+              count = 0;
+            } else {
+              count = 0;
+              rethrow;
+            }
+          }
 
           if (result == null) {
             return emit(state.copyWith(qrScanStatus: QrScanStatus.idle));
