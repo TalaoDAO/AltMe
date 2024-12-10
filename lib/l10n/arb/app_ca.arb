@@ -1155,5 +1155,22 @@
   "french": "Français",
   "spanish": "Español",
   "catalan": "Català",
-  "english": "English"
+  "english": "English",
+  "thisFeatureIsNotSupportedYetForEtherlink": "Aquesta funció encara no és compatible amb Etherlink Chain.",
+  "walletSecurityAndBackup": "Seguretat i còpia de seguretat de la cartera",
+  "addedCredential": "Credencial {credential} afegida per {domain}",
+  "@addedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "@addedCredentialDomain": {
+    "description": "domain of the credential",
+    "type": "text",
+    "placeholders": {
+      "domain": {}
+    }
+  }
 }
