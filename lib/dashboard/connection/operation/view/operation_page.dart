@@ -136,9 +136,8 @@ class _OperationViewState extends State<OperationView> {
             sender = tezosOperationDetails!.first.source!;
             reciever = tezosOperationDetails.first.destination!;
           }
-          // check if it smart contract or not
-          // smart contarct address start with KT1
-          if (!reciever.startsWith('tz')) isSmartContract = true;
+
+          if (isContract(reciever)) isSmartContract = true;
         } else if (transaction != null) {
           symbol = state.cryptoAccountData?.blockchainType.symbol;
           sender = transaction.from!.toString();

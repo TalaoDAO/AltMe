@@ -2410,3 +2410,11 @@ Map<String, dynamic> getCredentialDataFromJson({
 
   return credential;
 }
+
+bool isContract(String reciever) {
+  // check if it smart contract or not
+  // smart contarct address start with KT1
+  if (reciever.startsWith('tz')) return false;
+  if (reciever.startsWith('KT1')) return true;
+  return false;
+}

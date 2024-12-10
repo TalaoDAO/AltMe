@@ -30,6 +30,26 @@ class TransactionItem extends StatelessWidget {
       value: operationModel.parameter?.value?.value ??
           operationModel.amount.toString(),
     );
+
+    var button = l10n.send;
+
+    final isSmartContract = isContract(operationModel.target.address);
+
+    if (isSmartContract) {
+      button = l10n.operation;
+    } else {
+      final isSender = operationModel.isSender(
+        walletAddress:
+            context.read<WalletCubit>().state.currentAccount!.walletAddress,
+      );
+
+      if (isSender) {
+        button = l10n.send;
+      } else {
+        button = l10n.receive;
+      }
+    }
+
     return InkWell(
       onTap: onTap,
       child: Column(
@@ -42,24 +62,33 @@ class TransactionItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                operationModel.formatedDateTime,
-                style: Theme.of(context).textTheme.bodyMedium,
+              Flexible(
+                flex: 8,
+                child: MyText(
+                  operationModel.formatedDateTime,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
               const Spacer(),
-              Text(
-                l10n.seeTransaction,
-                style: Theme.of(context).textTheme.bodyMedium,
+              Flexible(
+                flex: 4,
+                child: MyText(
+                  l10n.seeTransaction,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
-              const SizedBox(
-                width: Sizes.spaceSmall,
-              ),
-              Text(
-                tokenUsdPrice != null
-                    ? (tokenUsdPrice! * amount).decimalNumber(2).formatNumber +
-                        r'$'
-                    : r'$--.--',
-                style: Theme.of(context).textTheme.bodyMedium,
+              const Spacer(),
+              Flexible(
+                flex: 1,
+                child: MyText(
+                  tokenUsdPrice != null
+                      ? (tokenUsdPrice! * amount)
+                              .decimalNumber(2)
+                              .formatNumber +
+                          r'$'
+                      : r'$--.--',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
             ],
           ),
@@ -86,15 +115,7 @@ class TransactionItem extends StatelessWidget {
                 width: Sizes.space2XSmall,
               ),
               Text(
-                operationModel.isSender(
-                  walletAddress: context
-                      .read<WalletCubit>()
-                      .state
-                      .currentAccount!
-                      .walletAddress,
-                )
-                    ? l10n.send
-                    : l10n.receive,
+                button,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(

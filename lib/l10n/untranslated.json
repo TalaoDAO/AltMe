@@ -4,7 +4,8 @@
     "keyBindingHeader",
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
-    "reject"
+    "reject",
+    "operation"
   ],
 
   "es": [
@@ -12,10 +13,12 @@
     "keyBindingHeader",
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
-    "reject"
+    "reject",
+    "operation"
   ],
 
   "fr": [
-    "reject"
+    "reject",
+    "operation"
   ]
 }

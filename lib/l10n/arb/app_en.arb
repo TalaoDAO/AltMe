@@ -1170,5 +1170,6 @@
       "domain": {}
     }
   },
-  "reject": "Reject"
+  "reject": "Reject",
+  "operation": "Operation"
 }
