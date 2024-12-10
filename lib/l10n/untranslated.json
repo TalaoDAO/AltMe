@@ -3,13 +3,22 @@
     "payload",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "reject",
+    "operation"
   ],
 
   "es": [
     "payload",
     "keyBindingHeader",
     "keyBindingPayload",
-    "ebsiV4DecentralizedId"
+    "ebsiV4DecentralizedId",
+    "reject",
+    "operation"
+  ],
+
+  "fr": [
+    "reject",
+    "operation"
   ]
 }

@@ -1169,5 +1169,7 @@
     "placeholders": {
       "domain": {}
     }
-  }
+  },
+  "reject": "Reject",
+  "operation": "Operation"
 }

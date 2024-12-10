@@ -243,11 +243,12 @@ class WalletCubit extends Cubit<WalletState> {
     int derivePathIndex = 0;
     final bool isCreated = !isImported;
 
+    final String? savedDerivePathIndex =
+        await secureStorageProvider.get(blockchainType.derivePathIndexKey);
+
     log.i('isImported - $isImported');
     if (isCreated) {
       /// Note: while adding derivePathIndex is always increased
-      final String? savedDerivePathIndex =
-          await secureStorageProvider.get(blockchainType.derivePathIndexKey);
 
       if (savedDerivePathIndex != null && savedDerivePathIndex.isNotEmpty) {
         derivePathIndex = int.parse(savedDerivePathIndex) + 1;
@@ -262,6 +263,11 @@ class WalletCubit extends Cubit<WalletState> {
     log.i('derivePathIndex - $derivePathIndex');
 
     /// Note: while importing derivePathIndex is always 0
+
+    if (savedDerivePathIndex == null) {
+      // at start it should be 0
+      await secureStorageProvider.set(blockchainType.derivePathIndexKey, '0');
+    }
 
     late String walletAddress;
     late String secretKey;
