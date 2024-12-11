@@ -13,4 +13,6 @@ enum AppStatus {
   updateEnterpriseAccount,
   replaceEnterpriseAccount,
   restoreWallet,
+  successAdd,
+  successUpdate,
 }

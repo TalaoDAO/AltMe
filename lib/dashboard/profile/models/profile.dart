@@ -241,7 +241,7 @@ class ProfileModel extends Equatable {
               clientId: clientId,
               clientSecret: clientSecret,
               vcFormatType: VCFormatType.auto,
-              proofType: ProofType.ldpVp,
+              proofType: ProofType.jwt,
               formatsSupported: const [
                 VCFormatType.jwtVcJson,
                 VCFormatType.jwtVcJsonLd,

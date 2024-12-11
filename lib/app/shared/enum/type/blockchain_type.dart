@@ -79,6 +79,37 @@ extension BlockchainTypeX on BlockchainType {
     }
   }
 
+  bool get supportWert {
+    switch (this) {
+      case BlockchainType.tezos:
+      case BlockchainType.ethereum:
+      case BlockchainType.polygon:
+      case BlockchainType.binance:
+        return true;
+
+      case BlockchainType.etherlink:
+      case BlockchainType.fantom:
+        return false;
+    }
+  }
+
+  // commodity, network, commodityId
+  (String, String, String) get commodityData {
+    switch (this) {
+      case BlockchainType.tezos:
+        return ('XTZ', 'tezos', 'xtz.simple.tezos');
+      case BlockchainType.ethereum:
+        return ('ETH', 'ethereum', 'eth.simple.ethereum');
+      case BlockchainType.polygon:
+        return ('POL', 'polygon', 'pol.simple.polygon');
+      case BlockchainType.binance:
+        return ('BNB', 'bsc', 'bnb.simple.bsc');
+      case BlockchainType.etherlink:
+      case BlockchainType.fantom:
+        return ('', '', '');
+    }
+  }
+
   String get chain {
     String name = '';
     switch (this) {

@@ -513,30 +513,33 @@ class OIDC4VC {
   Future<dynamic> getSingleCredential({
     required OpenIdConfiguration openIdConfiguration,
     required String accessToken,
-    required String? nonce,
     required Dio dio,
     required Map<String, dynamic> credentialData,
     required String credentialEndpoint,
     required String? dPop,
   }) async {
-    final credentialHeaders = <String, dynamic>{
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
+    try {
+      final credentialHeaders = <String, dynamic>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      };
 
-    if (dPop != null) {
-      credentialHeaders['DPoP'] = dPop;
+      if (dPop != null) {
+        credentialHeaders['DPoP'] = dPop;
+      }
+
+      final dynamic credentialResponse = await dio.post<dynamic>(
+        credentialEndpoint,
+        options: Options(headers: credentialHeaders),
+        data: credentialData,
+      );
+
+      final credentialResponseData = credentialResponse.data;
+
+      return credentialResponseData;
+    } catch (e) {
+      rethrow;
     }
-
-    final dynamic credentialResponse = await dio.post<dynamic>(
-      credentialEndpoint,
-      options: Options(headers: credentialHeaders),
-      data: credentialData,
-    );
-
-    final credentialResponseData = credentialResponse.data;
-
-    return credentialResponseData;
   }
 
   /// get Deferred credential from url

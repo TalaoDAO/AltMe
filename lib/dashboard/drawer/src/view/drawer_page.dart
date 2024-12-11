@@ -83,7 +83,7 @@ class DrawerView extends StatelessWidget {
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
                       DrawerCategoryItem(
-                        title: l10n.walletSecurity,
+                        title: l10n.walletSecurityAndBackup,
                         subTitle: l10n.walletSecurityDescription,
                         onClick: () {
                           Navigator.of(context)

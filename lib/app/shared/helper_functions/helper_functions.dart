@@ -1973,7 +1973,19 @@ Map<String, dynamic> createJsonByDecryptingSDValues({
             final content = sh256HashToContent[sdValue];
             if (content is Map) {
               content.forEach((key, value) {
-                json[key.toString()] = value;
+                if (value is Map<String, dynamic>) {
+                  if (value.containsKey('_sd')) {
+                    final nestedJson = createJsonByDecryptingSDValues(
+                      selectiveDisclosure: selectiveDisclosure,
+                      encryptedJson: value,
+                    );
+                    json[key.toString()] = nestedJson;
+                  } else {
+                    json[key.toString()] = value;
+                  }
+                } else {
+                  json[key.toString()] = value;
+                }
               });
             }
           }
@@ -2302,4 +2314,107 @@ String generateP256KeyForDPop() {
   final publicKeyForDPop = sortedPrivateJwk(randomKey);
 
   return publicKeyForDPop;
+}
+
+Map<String, dynamic> getCredentialDataFromJson({
+  required String data,
+  required String format,
+  required JWTDecode jwtDecode,
+  required String credentialType,
+}) {
+  late Map<String, dynamic> credential;
+
+  final jsonContent = jwtDecode.parseJwt(data);
+  if (format == VCFormatType.vcSdJWT.vcValue) {
+    final sdAlg = jsonContent['_sd_alg'] ?? 'sha-256';
+
+    if (sdAlg != 'sha-256') {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Only sha-256 is supported.',
+        },
+      );
+    }
+
+    credential = jsonContent;
+  } else {
+    credential = jsonContent['vc'] as Map<String, dynamic>;
+  }
+
+  if (format == VCFormatType.vcSdJWT.vcValue) {
+    /// type
+    if (!credential.containsKey('type')) {
+      credential['type'] = [credentialType];
+    }
+
+    ///credentialSubject
+    if (!credential.containsKey('credentialSubject')) {
+      credential['credentialSubject'] = {'type': credentialType};
+    }
+  }
+
+  /// id -> jti
+  if (!credential.containsKey('id')) {
+    if (jsonContent.containsKey('jti')) {
+      credential['id'] = jsonContent['jti'];
+    } else {
+      credential['id'] = 'urn:uuid:${const Uuid().v4()}';
+    }
+  }
+
+  /// issuer -> iss
+  if (!credential.containsKey('issuer')) {
+    if (jsonContent.containsKey('iss')) {
+      credential['issuer'] = jsonContent['iss'];
+    } else {
+      throw ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'Issuer is missing',
+        },
+      );
+    }
+  }
+
+  /// issuanceDate -> iat
+  if (!credential.containsKey('issuanceDate')) {
+    if (jsonContent.containsKey('iat')) {
+      credential['issuanceDate'] = jsonContent['iat'].toString();
+    } else if (jsonContent.containsKey('issuanceDate')) {
+      credential['issuanceDate'] = jsonContent['issuanceDate'].toString();
+    }
+  }
+
+  /// expirationDate -> exp
+  if (!credential.containsKey('expirationDate')) {
+    if (jsonContent.containsKey('exp')) {
+      credential['expirationDate'] = jsonContent['exp'].toString();
+    } else if (jsonContent.containsKey('expirationDate')) {
+      credential['expirationDate'] = jsonContent['expirationDate'].toString();
+    }
+  }
+
+  /// cred,tailSubject.id -> sub
+
+  // if (newCredential['id'] == null) {
+  //   newCredential['id'] = 'urn:uuid:${const Uuid().v4()}';
+  // }
+
+  // if (newCredential['credentialPreview']['id'] == null) {
+  //   newCredential['credentialPreview']['id'] =
+  //       'urn:uuid:${const Uuid().v4()}';
+  // }
+
+  credential['jwt'] = data;
+
+  return credential;
+}
+
+bool isContract(String reciever) {
+  // check if it smart contract or not
+  // smart contarct address start with KT1
+  if (reciever.startsWith('tz')) return false;
+  if (reciever.startsWith('KT1')) return true;
+  return false;
 }

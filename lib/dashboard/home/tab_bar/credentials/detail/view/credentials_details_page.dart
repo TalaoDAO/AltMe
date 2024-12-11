@@ -160,6 +160,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
             credentialSubjectType == CredentialSubjectType.identityCredential ||
             credentialSubjectType == CredentialSubjectType.verifiableIdCard;
 
+    final isOver18OfDippV3 = profileData.profileType == ProfileType.diipv3 &&
+        credentialSubjectType == CredentialSubjectType.over18;
+
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -296,12 +299,15 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           ],
 
                           /// credential manifest details
-                          if (credentialManifestSupport &&
-                              outputDescriptors != null) ...[
-                            CredentialManifestDetails(
-                              outputDescriptor: outputDescriptors.firstOrNull,
-                              credentialModel: widget.credentialModel,
-                            ),
+                          if (!isOver18OfDippV3) ...[
+                            if (!isDeveloperMode &&
+                                credentialManifestSupport &&
+                                outputDescriptors != null) ...[
+                              CredentialManifestDetails(
+                                outputDescriptor: outputDescriptors.firstOrNull,
+                                credentialModel: widget.credentialModel,
+                              ),
+                            ],
                           ],
 
                           /// display widget
@@ -341,9 +347,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           // ],
 
                           //// wallet attestation data
-                          if (widget.credentialModel.credentialPreview
-                                  .credentialSubjectModel
-                              is WalletCredentialModel) ...[
+                          if (!isDeveloperMode &&
+                              widget.credentialModel.credentialPreview
+                                      .credentialSubjectModel
+                                  is WalletCredentialModel) ...[
                             WalletCredentialetailsWidget(
                               credentialModel: widget.credentialModel,
                             ),

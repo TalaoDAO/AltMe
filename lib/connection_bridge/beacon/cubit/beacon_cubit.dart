@@ -54,7 +54,7 @@ class BeaconCubit extends Cubit<BeaconState> {
             debounce?.cancel();
           }
 
-          debounce = Timer(const Duration(seconds: 1), () {
+          debounce = Timer(const Duration(seconds: 2), () {
             switch (beaconRequest.type) {
               case RequestType.permission:
                 emit(

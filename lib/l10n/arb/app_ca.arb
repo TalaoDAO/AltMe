@@ -675,7 +675,6 @@
   "decline": "Rebutjar",
   "yotiCameraAppbarTitle": "Col·loca la cara al centre",
   "cameraSubtitle": "Tens 5 segons per fer la foto.\nMira que hi hagi prou llum abans de començar.",
-  "walletSecurity": "Seguretat de la cartera",
   "walletSecurityDescription": "Protegeix la cartera amb el codi PIN i l’autenticació biomètrica",
   "blockchainSettings": "Configuració de blockchain",
   "blockchainSettingsDescription": "Administrar comptes, frase de recuperació, dApps connectades i xarxes",
@@ -752,8 +751,7 @@
   "credentialsRequestedBy": "credencials demanades per",
   "transactionIsLikelyToFail": "La transacció probablement fallarà.",
   "buy": "Comprar",
-  "thisFeatureIsNotSupportedYetForFantom": "Aquesta funció encara no s'admet a Fantom.",
-  "thisFeatureIsNotSupportedYetForBinance": "Aquesta funció encara no s'admet a BNB Chain.",
+  "thisFeatureIsNotSupportedYetForFantom": "Aquesta funció encara no s'admet a Fantom.", 
   "faqs": "Preguntes freqüents",
   "softwareLicenses": "Llicències de software",
   "notAValidWalletAddress": "Adreça de cartera invàlida.",
@@ -1014,152 +1012,165 @@
   "theWalletIsSuspended": "La cartera està suspesa.",
   "jwkThumbprintP256Key": "Empremta digital JWK P-256",
   "walletBlockedPopupTitle": "Bloquejat 10 minuts",
-"walletBlockedPopupDescription": "Massa intents fallits, la teva cartera digital està bloquejada per seguretat.\nReinicia la teva cartera per utilitzar els serveis de nou.",
-"deleteMyWalletForWrontPincodeTitle": "Compte bloquejat després de 3 intents fallits",
-"deleteMyWalletForWrontPincodeDescription": "Per la teva seguretat, has de reiniciar la teva cartera digital per utilitzar els nostres serveis de nou.",
-"walletBloced": "Compte bloquejat",
-"deleteMyWallet": "Eliminar el meu compte",
-"pincodeRules": "El teu codi secret no pot ser una seqüència ni tenir 4 dígits idèntics.",
-"pincodeSerie": "No pots tenir 4 dígits idèntics.",
-"pincodeSequence": "No pots tenir una seqüència de 4 dígits.",
-"pincodeDifferent": "Codi incorrecte.\nEls codis no són iguals.",
-"codeSecretIncorrectDescription": "Ves amb compte, et queden {count} intent{plural}.",
-"@codeSecretIncorrectDescription": {
-  "description": "",
-  "placeholders": {
-    "count": {},
-    "plural": {}
+  "walletBlockedPopupDescription": "Massa intents fallits, la teva cartera digital està bloquejada per seguretat.\nReinicia la teva cartera per utilitzar els serveis de nou.",
+  "deleteMyWalletForWrontPincodeTitle": "Compte bloquejat després de 3 intents fallits",
+  "deleteMyWalletForWrontPincodeDescription": "Per la teva seguretat, has de reiniciar la teva cartera digital per utilitzar els nostres serveis de nou.",
+  "walletBloced": "Compte bloquejat",
+  "deleteMyWallet": "Eliminar el meu compte",
+  "pincodeRules": "El teu codi secret no pot ser una seqüència ni tenir 4 dígits idèntics.",
+  "pincodeSerie": "No pots tenir 4 dígits idèntics.",
+  "pincodeSequence": "No pots tenir una seqüència de 4 dígits.",
+  "pincodeDifferent": "Codi incorrecte.\nEls codis no són iguals.",
+  "codeSecretIncorrectDescription": "Ves amb compte, et queden {count} intent{plural}.",
+  "@codeSecretIncorrectDescription": {
+    "description": "",
+    "placeholders": {
+      "count": {},
+      "plural": {}
+    }
+  },
+  "languageSettings": "Configuració d'idioma",
+  "languageSettingsDescription": "Escull el teu idioma",
+  "themeSettings": "Configuració de tema",
+  "themeSettingsDescription": "Escull el teu tema",
+  "couldNotFindTheAccountWithThisAddress": "No s'ha pogut trobar l'adreça {address} a la teva llista de comptes.",
+  "@couldNotFindTheAccountWithThisAddress": {
+    "description": "couldNotFindTheAccountWithThisAddress",
+    "type": "text",
+    "placeholders": {
+      "address": {}
+    }
+  },
+  "deleteAccountMessage": "Estàs segur que vols eliminar {account}?",
+  "@deleteAccountMessage": {
+    "description": "Mesage to delete crypto account",
+    "type": "text",
+    "placeholders": {
+      "account": {}
+    }
+  },
+  "cannotDeleteCurrentAccount": "Ho sento, no pots eliminar el compte actual",
+  "invalidClientErrorDescription": "client_id no compleix amb client_id_scheme",
+  "vpFormatsNotSupportedErrorDescription": "La cartera digital no admet cap dels formats sol·licitats pel Verificador, com els inclosos en el paràmetre de registre vp_formats.",
+  "invalidPresentationDefinitionUriErrorDescription": "No es pot accedir a la URL de 'Definició de Presentació'.",
+  "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings": "Per deixar de mostrar aquesta finestra, desactiva el 'mode desenvolupador' a la configuració.",
+  "warningDialogSubtitle": "La pàgina de recuperació conté informació sensible. Si us plau, assegura't de mantenir-la privada.",
+  "accountPrivateKeyAlert": "La pàgina de recuperació conté informació sensible. Si us plau, assegura't de mantenir-la privada.",
+  "etherlinkNetwork": "Xarxa Etherlink",
+  "etherlinkAccount": "Compte Etherlink",
+  "etherlinkAccountDescription": "Crear una nova adreça blockchain Etherlink",
+  "etherlinkAccountCreationCongratulations": "El teu nou compte Etherlink ha estat creat amb èxit.",
+  "etherlinkProofMessage": "",
+  "notification": "Notificació",
+  "notifications": "Notificacions",
+  "notificationTitle": "¡Benvingut a les Notificacions!\nMantingueu-vos informat d'actualitzacions importants.",
+  "chatRoom": "Sala de xat",
+  "notificationRoom": "Sala de notificacions",
+  "notificationSubtitle": "Habilitar per rebre notificacions",
+  "header": "Encapçalament",
+  "data": "Dades",
+  "noNotificationsYet": "Encara no hi ha notificacions",
+  "activityLog": "Registre d'Activitat",
+  "activityLogDescription": "Veure les teves activitats",
+  "walletInitialized": "Cartera digital inicialitzada",
+  "backupCredentials": "Credencials de còpia de seguretat",
+  "restoredCredentials": "Credencials restaurades",
+  "deletedCredential": "Credencial {credential} eliminada",
+  "@deletedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "presentedCredential": "Credencial {credential} presentada a {domain}",
+  "@presentedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "@presentedCredentialDomain": {
+    "description": "domain of the credential",
+    "type": "text",
+    "placeholders": { 
+      "domain": {}
+    }
+  },
+  "keysImported": "Claus importades",
+  "approveProfileTitle": "Instal·lar configuració",
+  "approveProfileDescription": "Autoritzes instal·lar la configuració de {company}?",
+  "@approveProfileDescription": {
+    "description": "Nom de l'empresa propietària de la configuració",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  },
+  "updateProfileTitle": "Actualitzar configuració",
+  "updateProfileDescription": "Autoritzes actualitzar la configuració de {company}?",
+  "@updateProfileDescription": {
+    "description": "Nom de l'empresa propietària de la configuració",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  },
+  "replaceProfileTitle": "Instal·lar una nova configuració",
+  "replaceProfileDescription": "Autoritzes reemplaçar la configuració actual amb la de {company}?",
+  "@replaceProfileDescription": {
+    "description": "Nom de l'empresa propietària de la configuració",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  },
+  "saveBackupCredentialSubtitle2": "Per recuperar les teves credencials necessitaràs aquest fitxer de còpia de seguretat.",
+  "createWallet": "Crear cartera digital",
+  "restoreWallet": "Restaurar cartera digital",
+  "showWalletRecoveryPhraseSubtitle2": "Aquesta frase de recuperació serà requerida per restaurar una cartera digital a la instal·lació.",
+  "documentation": "Documentació",
+  "restoreACryptoWallet": "Restaurar una cripto cartera",
+  "restoreAnAppBackup": "Restaurar una còpia de seguretat de {appName}",
+  "@restoreAnAppBackup": {
+    "description": "Nom de l'aplicació",
+    "type": "text",
+    "placeholders": {
+      "appName": {}
+    }
+  },
+  "credentialPickShare": "Compartir",
+  "credentialPickTitle": "Escull la(es) credencial(s) que vols obtenir",
+  "credentialShareTitle": "Escull la(es) credencial(s) per compartir",
+  "enterYourSecretCode": "Introdueix el teu codi secret.",
+  "jwk": "JWK",
+  "typeYourPINCodeToOpenTheWallet": "Introdueix el teu codi PIN per obrir la cartera",
+  "typeYourPINCodeToShareTheData": "Introdueix el teu codi PIN per compartir les dades",
+  "typeYourPINCodeToAuthenticate": "Introdueix el teu codi PIN per autenticar-te",
+  "credentialIssuanceIsStillPending": "L'emissió de la credencial està pendent",
+  "bakerFee": "Comissió de Baker",
+  "storageFee": "Comissió d'emmagatzematge",
+  "doYouWantToSetupTheProfile": "Vols configurar el perfil?",
+  "french": "Français",
+  "spanish": "Español",
+  "catalan": "Català",
+  "english": "English",
+  "thisFeatureIsNotSupportedYetForEtherlink": "Aquesta funció encara no és compatible amb Etherlink Chain.",
+  "walletSecurityAndBackup": "Seguretat i còpia de seguretat de la cartera",
+  "addedCredential": "Credencial {credential} afegida per {domain}",
+  "@addedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "@addedCredentialDomain": {
+    "description": "domain of the credential",
+    "type": "text",
+    "placeholders": {
+      "domain": {}
+    }
   }
-},
-"languageSettings": "Configuració d'idioma",
-"languageSettingsDescription": "Escull el teu idioma",
-"themeSettings": "Configuració de tema",
-"themeSettingsDescription": "Escull el teu tema",
-"couldNotFindTheAccountWithThisAddress": "No s'ha pogut trobar l'adreça {address} a la teva llista de comptes.",
-"@couldNotFindTheAccountWithThisAddress": {
-  "description": "couldNotFindTheAccountWithThisAddress",
-  "type": "text",
-  "placeholders": {
-    "address": {}
-  }
-},
-"deleteAccountMessage": "Estàs segur que vols eliminar {account}?",
-"@deleteAccountMessage": {
-  "description": "Mesage to delete crypto account",
-  "type": "text",
-  "placeholders": {
-    "account": {}
-  }
-},
-"cannotDeleteCurrentAccount": "Ho sento, no pots eliminar el compte actual",
-"invalidClientErrorDescription": "client_id no compleix amb client_id_scheme",
-"vpFormatsNotSupportedErrorDescription": "La cartera digital no admet cap dels formats sol·licitats pel Verificador, com els inclosos en el paràmetre de registre vp_formats.",
-"invalidPresentationDefinitionUriErrorDescription": "No es pot accedir a la URL de 'Definició de Presentació'.",
-"toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings": "Per deixar de mostrar aquesta finestra, desactiva el 'mode desenvolupador' a la configuració.",
-"warningDialogSubtitle": "La pàgina de recuperació conté informació sensible. Si us plau, assegura't de mantenir-la privada.",
-"accountPrivateKeyAlert": "La pàgina de recuperació conté informació sensible. Si us plau, assegura't de mantenir-la privada.",
-"etherlinkNetwork": "Xarxa Etherlink",
-"etherlinkAccount": "Compte Etherlink",
-"etherlinkAccountDescription": "Crear una nova adreça blockchain Etherlink",
-"etherlinkAccountCreationCongratulations": "El teu nou compte Etherlink ha estat creat amb èxit.",
-"etherlinkProofMessage": "",
-"notification": "Notificació",
-"notifications": "Notificacions",
-"notificationTitle": "¡Benvingut a les Notificacions!\nMantingueu-vos informat d'actualitzacions importants.",
-"chatRoom": "Sala de xat",
-"notificationRoom": "Sala de notificacions",
-"notificationSubtitle": "Habilitar per rebre notificacions",
-"header": "Encapçalament",
-"data": "Dades",
-"noNotificationsYet": "Encara no hi ha notificacions",
-"activityLog": "Registre d'Activitat",
-"activityLogDescription": "Veure les teves activitats",
-"walletInitialized": "Cartera digital inicialitzada",
-"backupCredentials": "Credencials de còpia de seguretat",
-"restoredCredentials": "Credencials restaurades",
-"addedCredential": "Credencial {credential} afegida",
-"@addedCredentialDescription": {
-  "description": "Nom de la credencial afegida",
-  "type": "text",
-  "placeholders": {
-    "credential": {}
-  }
-},
-"deletedCredential": "Credencial {credential} eliminada",
-"@deletedCredentialDescription": {
-  "description": "Nom de la credencial eliminada",
-  "type": "text",
-  "placeholders": {
-    "credential": {}
-  }
-},
-"presentedCredential": "Credencial {credential} presentada a {domain}",
-"@presentedCredentialDescription": {
-  "description": "Nom de la credencial presentada",
-  "type": "text",
-  "placeholders": {
-    "credential": {}
-  }
-},
-"@presentedCredentialDomain": {
-  "description": "Nom del domini de la credencial",
-  "type": "text",
-  "placeholders": {
-    "domain": {}
-  }
-},
-"keysImported": "Claus importades",
-"approveProfileTitle": "Instal·lar configuració",
-"approveProfileDescription": "Autoritzes instal·lar la configuració de {company}?",
-"@approveProfileDescription": {
-  "description": "Nom de l'empresa propietària de la configuració",
-  "type": "text",
-  "placeholders": {
-    "company": {}
-  }
-},
-"updateProfileTitle": "Actualitzar configuració",
-"updateProfileDescription": "Autoritzes actualitzar la configuració de {company}?",
-"@updateProfileDescription": {
-  "description": "Nom de l'empresa propietària de la configuració",
-  "type": "text",
-  "placeholders": {
-    "company": {}
-  }
-},
-"replaceProfileTitle": "Instal·lar una nova configuració",
-"replaceProfileDescription": "Autoritzes reemplaçar la configuració actual amb la de {company}?",
-"@replaceProfileDescription": {
-  "description": "Nom de l'empresa propietària de la configuració",
-  "type": "text",
-  "placeholders": {
-    "company": {}
-  }
-},
-"saveBackupCredentialSubtitle2": "Per recuperar les teves credencials necessitaràs aquest fitxer de còpia de seguretat.",
-"createWallet": "Crear cartera digital",
-"restoreWallet": "Restaurar cartera digital",
-"showWalletRecoveryPhraseSubtitle2": "Aquesta frase de recuperació serà requerida per restaurar una cartera digital a la instal·lació.",
-"documentation": "Documentació",
-"restoreACryptoWallet": "Restaurar una cripto cartera",
-"restoreAnAppBackup": "Restaurar una còpia de seguretat de {appName}",
-"@restoreAnAppBackup": {
-  "description": "Nom de l'aplicació",
-  "type": "text",
-  "placeholders": {
-    "appName": {}
-  }
-},
-"credentialPickShare": "Compartir",
-"credentialPickTitle": "Escull la(es) credencial(s) que vols obtenir",
-"credentialShareTitle": "Escull la(es) credencial(s) per compartir",
-"enterYourSecretCode": "Introdueix el teu codi secret.",
-"jwk": "JWK",
-"typeYourPINCodeToOpenTheWallet": "Introdueix el teu codi PIN per obrir la cartera",
-"typeYourPINCodeToShareTheData": "Introdueix el teu codi PIN per compartir les dades",
-"typeYourPINCodeToAuthenticate": "Introdueix el teu codi PIN per autenticar-te",
-"credentialIssuanceIsStillPending": "L'emissió de la credencial està pendent",
-"bakerFee": "Comissió de Baker",
-"storageFee": "Comissió d'emmagatzematge",
-"doYouWantToSetupTheProfile": "Vols configurar el perfil?"
 }

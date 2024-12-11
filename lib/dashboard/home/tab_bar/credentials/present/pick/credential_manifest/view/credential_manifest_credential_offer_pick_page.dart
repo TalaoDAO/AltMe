@@ -96,6 +96,57 @@ class CredentialManifestOfferPickView extends StatefulWidget {
 
 class _CredentialManifestOfferPickViewState
     extends State<CredentialManifestOfferPickView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final isVcSdJWT = context
+              .read<CredentialManifestPickCubit>()
+              .state
+              .filteredCredentialList
+              .firstOrNull
+              ?.getFormat ==
+          VCFormatType.vcSdJWT.vcValue;
+      if (isVcSdJWT) {
+        final element = context
+            .read<CredentialManifestPickCubit>()
+            .state
+            .filteredCredentialList;
+        final containsSingleElement = element.isNotEmpty && element.length == 1;
+        if (containsSingleElement) {
+          final PresentationDefinition? presentationDefinition = context
+              .read<CredentialManifestPickCubit>()
+              .state
+              .presentationDefinition;
+          if (presentationDefinition != null) {
+            context.read<CredentialManifestPickCubit>().toggle(
+                  index: 0,
+                  inputDescriptor: presentationDefinition
+                      .inputDescriptors[widget.inputDescriptorIndex],
+                  isVcSdJWT: isVcSdJWT,
+                );
+
+            final credentialManifestState =
+                context.read<CredentialManifestPickCubit>().state;
+            final firstOne = credentialManifestState
+                .filteredCredentialList[credentialManifestState.selected.first];
+
+            Navigator.of(context).pushReplacement<void, void>(
+              SelectiveDisclosurePickPage.route(
+                uri: widget.uri,
+                issuer: widget.issuer,
+                credential: widget.credential,
+                inputDescriptorIndex: widget.inputDescriptorIndex,
+                credentialsToBePresented: widget.credentialsToBePresented,
+                presentationDefinition: presentationDefinition,
+                selectedCredential: firstOne,
+              ),
+            );
+          }
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

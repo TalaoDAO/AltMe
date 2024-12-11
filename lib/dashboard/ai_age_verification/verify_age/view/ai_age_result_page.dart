@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
@@ -155,7 +154,6 @@ class SuccessWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.normal,
-                  color: Theme.of(context).colorScheme.onTertiary,
                 ),
           ),
         ),
@@ -237,34 +235,30 @@ class FailureWidget extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(
-          height: Sizes.spaceNormal,
-        ),
-        MyElevatedButton(
-          text: l10n.kyc,
-          verticalSpacing: 16,
-          borderRadius: Sizes.largeRadius,
-          onPressed: () async {
-            await securityCheck(
-              context: context,
-              title: l10n.typeYourPINCodeToAuthenticate,
-              localAuthApi: LocalAuthApi(),
-              onSuccess: () {
-                context
-                    .read<KycVerificationCubit>()
-                    .startKycVerifcation(vcType: KycVcType.verifiableId);
-              },
-            );
-            await Navigator.pushAndRemoveUntil<void>(
-              context,
-              DashboardPage.route(),
-              (Route<dynamic> route) => route.isFirst,
-            );
-          },
-        ),
-        const SizedBox(
-          height: Sizes.spaceNormal,
-        ),
+        const SizedBox(height: Sizes.spaceNormal),
+        // MyElevatedButton(
+        //   text: l10n.kyc,
+        //   verticalSpacing: 16,
+        //   borderRadius: Sizes.largeRadius,
+        //   onPressed: () async {
+        //     await securityCheck(
+        //       context: context,
+        //       title: l10n.typeYourPINCodeToAuthenticate,
+        //       localAuthApi: LocalAuthApi(),
+        //       onSuccess: () {
+        //         context
+        //             .read<KycVerificationCubit>()
+        //             .startKycVerifcation(vcType: KycVcType.verifiableId);
+        //       },
+        //     );
+        //     await Navigator.pushAndRemoveUntil<void>(
+        //       context,
+        //       DashboardPage.route(),
+        //       (Route<dynamic> route) => route.isFirst,
+        //     );
+        //   },
+        // ),
+        // const SizedBox(height: Sizes.spaceNormal),
         MyElevatedButton(
           text: l10n.decline,
           verticalSpacing: 16,

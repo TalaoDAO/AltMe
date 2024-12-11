@@ -157,6 +157,7 @@ class App extends StatelessWidget {
             create: (context) => ManageNetworkCubit(
               secureStorageProvider: secureStorageProvider,
               walletCubit: context.read<WalletCubit>(),
+              profileCubit: context.read<ProfileCubit>(),
             ),
           ),
           BlocProvider<PolygonIdCubit>(

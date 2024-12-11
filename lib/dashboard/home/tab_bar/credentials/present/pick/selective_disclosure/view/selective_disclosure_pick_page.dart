@@ -162,12 +162,13 @@ class _SelectiveDisclosurePickViewState
                 const SizedBox(height: 20),
                 ConsumeSelectiveDisclosureCubit(
                   credentialModel: widget.selectedCredential,
-                  onPressed: (claimKey, claimKeyId, threeDotValue) {
+                  onPressed: (claimKey, claimKeyId, threeDotValue, sd) {
                     context.read<SelectiveDisclosureCubit>().disclosureAction(
                           claimsKey: claimKey,
                           credentialModel: widget.selectedCredential,
                           threeDotValue: threeDotValue,
                           claimKeyId: claimKeyId,
+                          sd: sd,
                         );
                   },
                   showVertically: true,

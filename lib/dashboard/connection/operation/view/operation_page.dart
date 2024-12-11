@@ -113,6 +113,8 @@ class _OperationViewState extends State<OperationView> {
         late String reciever;
         late String? symbol;
 
+        bool isSmartContract = false;
+
         final BeaconRequest? beaconRequest =
             context.read<BeaconCubit>().state.beaconRequest;
 
@@ -134,6 +136,8 @@ class _OperationViewState extends State<OperationView> {
             sender = tezosOperationDetails!.first.source!;
             reciever = tezosOperationDetails.first.destination!;
           }
+
+          if (isContract(reciever)) isSmartContract = true;
         } else if (transaction != null) {
           symbol = state.cryptoAccountData?.blockchainType.symbol;
           sender = transaction.from!.toString();
@@ -247,7 +251,7 @@ class _OperationViewState extends State<OperationView> {
                     MyElevatedButton(
                       verticalSpacing: 15,
                       borderRadius: Sizes.normalRadius,
-                      text: l10n.send,
+                      text: isSmartContract ? l10n.confirm : l10n.send,
                       onPressed: state.status != AppStatus.idle
                           ? null
                           : () {
@@ -259,7 +263,7 @@ class _OperationViewState extends State<OperationView> {
                     const SizedBox(height: 8),
                     MyOutlinedButton(
                       borderRadius: Sizes.normalRadius,
-                      text: l10n.cancel,
+                      text: isSmartContract ? l10n.reject : l10n.cancel,
                       onPressed: () {
                         context.read<OperationCubit>().rejectOperation(
                               connectionBridgeType: widget.connectionBridgeType,
