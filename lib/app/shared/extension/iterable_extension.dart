@@ -13,4 +13,13 @@ extension IterableExtension<E> on Iterable<E> {
     }
     return result;
   }
+
+  int? indexWhereOrNull(bool Function(E) test) {
+    int index = 0;
+    for (final element in this) {
+      if (test(element)) return index;
+      index++;
+    }
+    return null;
+  }
 }

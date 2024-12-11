@@ -10,10 +10,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PolygonIdCredentialOfferPage extends StatelessWidget {
   const PolygonIdCredentialOfferPage({
     super.key,
+    required this.uri,
   });
 
-  static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (context) => const PolygonIdCredentialOfferPage(),
+  final Uri uri;
+
+  static Route<dynamic> route(Uri uri) => MaterialPageRoute<void>(
+        builder: (context) => PolygonIdCredentialOfferPage(uri: uri),
         settings: const RouteSettings(name: '/PolygonIdCredentialOffer'),
       );
 
@@ -149,6 +152,7 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                   onSuccess: () {
                     context.read<PolygonIdCubit>().addPolygonIdCredentials(
                           qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                          uri: uri,
                         );
                   },
                 );

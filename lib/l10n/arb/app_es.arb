@@ -1011,153 +1011,166 @@
   "statusListIndex": "Índice de lista de estados",
   "theWalletIsSuspended": "La cartera digital está suspendida.",
   "jwkThumbprintP256Key": "Huella digital JWK P-256",
-"walletBlockedPopupTitle": "Bloqueado 10 minutos",
-"walletBlockedPopupDescription": "Demasiados intentos fallidos, tu cartera digital está bloqueada por seguridad.\nReinicia tu cartera para usar los servicios nuevamente.",
-"deleteMyWalletForWrontPincodeTitle": "Cuenta bloqueada después de 3 intentos fallidos",
-"deleteMyWalletForWrontPincodeDescription": "Por tu seguridad debes reiniciar tu cartera digital para usar nuestros servicios nuevamente.",
-"walletBloced": "Cuenta bloqueada",
-"deleteMyWallet": "Eliminar mi cuenta",
-"pincodeRules": "Tu código secreto no puede ser una secuencia ni tener 4 dígitos idénticos.",
-"pincodeSerie": "No puedes tener 4 dígitos idénticos.",
-"pincodeSequence": "No puedes tener una secuencia de 4 dígitos.",
-"pincodeDifferent": "Código incorrecto.\nLos códigos no son iguales.",
-"codeSecretIncorrectDescription": "Ten cuidado, te quedan {count} intento{plural}.",
-"@codeSecretIncorrectDescription": {
-  "description": "",
-  "placeholders": {
-    "count": {},
-    "plural": {}
+  "walletBlockedPopupTitle": "Bloqueado 10 minutos",
+  "walletBlockedPopupDescription": "Demasiados intentos fallidos, tu cartera digital está bloqueada por seguridad.\nReinicia tu cartera para usar los servicios nuevamente.",
+  "deleteMyWalletForWrontPincodeTitle": "Cuenta bloqueada después de 3 intentos fallidos",
+  "deleteMyWalletForWrontPincodeDescription": "Por tu seguridad debes reiniciar tu cartera digital para usar nuestros servicios nuevamente.",
+  "walletBloced": "Cuenta bloqueada",
+  "deleteMyWallet": "Eliminar mi cuenta",
+  "pincodeRules": "Tu código secreto no puede ser una secuencia ni tener 4 dígitos idénticos.",
+  "pincodeSerie": "No puedes tener 4 dígitos idénticos.",
+  "pincodeSequence": "No puedes tener una secuencia de 4 dígitos.",
+  "pincodeDifferent": "Código incorrecto.\nLos códigos no son iguales.",
+  "codeSecretIncorrectDescription": "Ten cuidado, te quedan {count} intento{plural}.",
+  "@codeSecretIncorrectDescription": {
+    "description": "",
+    "placeholders": {
+      "count": {},
+      "plural": {}
+    }
+  },
+  "languageSettings": "Configuración de idioma",
+  "languageSettingsDescription": "Elige tu idioma",
+  "themeSettings": "Configuración de tema",
+  "themeSettingsDescription": "Elige tu tema",
+  "couldNotFindTheAccountWithThisAddress": "No se pudo encontrar la dirección {address} en tu lista de cuentas.",
+  "@couldNotFindTheAccountWithThisAddress": {
+    "description": "couldNotFindTheAccountWithThisAddress",
+    "type": "text",
+    "placeholders": {
+      "address": {}
+    }
+  },
+  "deleteAccountMessage": "¿Estás seguro de que quieres eliminar {account}?",
+  "@deleteAccountMessage": {
+    "description": "Mesage to delete crypto account",
+    "type": "text",
+    "placeholders": {
+      "account": {}
+    }
+  },
+  "cannotDeleteCurrentAccount": "Lo siento, no puedes eliminar la cuenta actual",
+  "invalidClientErrorDescription": "client_id no cumple con client_id_scheme",
+  "vpFormatsNotSupportedErrorDescription": "La cartera digital no admite ninguno de los formatos solicitados por el Verificador, como los incluidos en el parámetro de registro vp_formats.",
+  "invalidPresentationDefinitionUriErrorDescription": "No se puede acceder a la URL de 'Definición de Presentación'.",
+  "toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings": "Para dejar de mostrar esta ventana, desactiva el 'modo desarrollador' en la configuración.",
+  "warningDialogSubtitle": "La página de recuperación contiene información sensible. Por favor, asegúrate de mantenerla privada.",
+  "accountPrivateKeyAlert": "La página de recuperación contiene información sensible. Por favor, asegúrate de mantenerla privada.",
+  "etherlinkNetwork": "Red Etherlink",
+  "etherlinkAccount": "Cuenta Etherlink",
+  "etherlinkAccountDescription": "Crear una nueva dirección blockchain Etherlink",
+  "etherlinkAccountCreationCongratulations": "Tu nueva cuenta Etherlink ha sido creada exitosamente.",
+  "etherlinkProofMessage": "",
+  "notification": "Notificación",
+  "notifications": "Notificaciones",
+  "notificationTitle": "¡Bienvenido a las Notificaciones!\nMantente informado de actualizaciones importantes.",
+  "chatRoom": "Sala de chat",
+  "notificationRoom": "Sala de notificaciones",
+  "notificationSubtitle": "Habilitar para recibir notificaciones",
+  "header": "Encabezado",
+  "data": "Datos",
+  "noNotificationsYet": "Aún no hay notificaciones",
+  "activityLog": "Registro de Actividad",
+  "activityLogDescription": "Ver tus actividades",
+  "walletInitialized": "Cartera digital inicializada",
+  "backupCredentials": "Credenciales de respaldo",
+  "restoredCredentials": "Credenciales restauradas",
+  "deletedCredential": "Credencial {credential} eliminada",
+  "@deletedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "presentedCredential": "Credencial {credential} presentada a {domain}",
+  "@presentedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "@presentedCredentialDomain": {
+    "description": "domain of the credential",
+    "type": "text",
+    "placeholders": { 
+      "domain": {}
+    }
+  },
+  "keysImported": "Claves importadas",
+  "approveProfileTitle": "Instalar configuración",
+  "approveProfileDescription": "¿Autorizas instalar la configuración de {company}?",
+  "@approveProfileDescription": {
+    "description": "Nombre de la empresa propietaria de la configuración",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  },
+  "updateProfileTitle": "Actualizar configuración",
+  "updateProfileDescription": "¿Autorizas actualizar la configuración de {company}?",
+  "@updateProfileDescription": {
+    "description": "Nombre de la empresa propietaria de la configuración",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  },
+  "replaceProfileTitle": "Instalar una nueva configuración", 
+  "replaceProfileDescription": "¿Autorizas reemplazar la configuración actual con la de {company}?",
+  "@replaceProfileDescription": {
+    "description": "Nombre de la empresa propietaria de la configuración",
+    "type": "text",
+    "placeholders": {
+      "company": {}
+    }
+  },
+  "saveBackupCredentialSubtitle2": "Para recuperar tus credenciales necesitarás este archivo de respaldo.",
+  "createWallet": "Crear cartera digital",
+  "restoreWallet": "Restaurar cartera digital",
+  "showWalletRecoveryPhraseSubtitle2": "Esta frase de recuperación será requerida para restaurar una cartera digital en la instalación.",
+  "documentation": "Documentación",
+  "restoreACryptoWallet": "Restaurar una cripto billetera",
+  "restoreAnAppBackup": "Restaurar un respaldo de {appName}",
+  "@restoreAnAppBackup": {
+    "description": "Nombre de la app",
+    "type": "text",
+    "placeholders": {
+      "appName": {}
+    }
+  },
+  "credentialPickShare": "Compartir",
+  "credentialPickTitle": "Elige la(s) credencial(es) que quieres obtener",
+  "credentialShareTitle": "Elige la(s) credencial(es) para compartir",
+  "enterYourSecretCode": "Introduce tu código secreto.",
+  "jwk": "JWK",
+  "typeYourPINCodeToOpenTheWallet": "Introduce tu código PIN para abrir la billetera",
+  "typeYourPINCodeToShareTheData": "Introduce tu código PIN para compartir los datos",
+  "typeYourPINCodeToAuthenticate": "Introduce tu código PIN para autenticarte",
+  "credentialIssuanceIsStillPending": "La emisión de la credencial está pendiente",
+  "bakerFee": "Comisión de Baker",
+  "storageFee": "Comisión de almacenamiento",
+  "doYouWantToSetupTheProfile": "¿Quieres configurar el perfil?",
+  "french": "Français",
+  "spanish": "Español",
+  "catalan": "Català",
+  "english": "English",
+    "thisFeatureIsNotSupportedYetForEtherlink": "Esta función aún no es compatible con Etherlink Chain.",
+  "walletSecurityAndBackup": "Seguridad y respaldo de la billetera",
+  "addedCredential": "Credencial {credential} añadida por {domain}",
+    "@addedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "@addedCredentialDomain": {
+    "description": "domain of the credential",
+    "type": "text",
+    "placeholders": {
+      "domain": {}
+    }
   }
-},
-"languageSettings": "Configuración de idioma",
-"languageSettingsDescription": "Elige tu idioma",
-"themeSettings": "Configuración de tema",
-"themeSettingsDescription": "Elige tu tema",
-"couldNotFindTheAccountWithThisAddress": "No se pudo encontrar la dirección {address} en tu lista de cuentas.",
-"@couldNotFindTheAccountWithThisAddress": {
-  "description": "couldNotFindTheAccountWithThisAddress",
-  "type": "text",
-  "placeholders": {
-    "address": {}
-  }
-},
-"deleteAccountMessage": "¿Estás seguro de que quieres eliminar {account}?",
-"@deleteAccountMessage": {
-  "description": "Mesage to delete crypto account",
-  "type": "text",
-  "placeholders": {
-    "account": {}
-  }
-},
-"cannotDeleteCurrentAccount": "Lo siento, no puedes eliminar la cuenta actual",
-"invalidClientErrorDescription": "client_id no cumple con client_id_scheme",
-"vpFormatsNotSupportedErrorDescription": "La cartera digital no admite ninguno de los formatos solicitados por el Verificador, como los incluidos en el parámetro de registro vp_formats.",
-"invalidPresentationDefinitionUriErrorDescription": "No se puede acceder a la URL de 'Definición de Presentación'.",
-"toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings": "Para dejar de mostrar esta ventana, desactiva el 'modo desarrollador' en la configuración.",
-"warningDialogSubtitle": "La página de recuperación contiene información sensible. Por favor, asegúrate de mantenerla privada.",
-"accountPrivateKeyAlert": "La página de recuperación contiene información sensible. Por favor, asegúrate de mantenerla privada.",
-"etherlinkNetwork": "Red Etherlink",
-"etherlinkAccount": "Cuenta Etherlink",
-"etherlinkAccountDescription": "Crear una nueva dirección blockchain Etherlink",
-"etherlinkAccountCreationCongratulations": "Tu nueva cuenta Etherlink ha sido creada exitosamente.",
-"etherlinkProofMessage": "",
-"notification": "Notificación",
-"notifications": "Notificaciones",
-"notificationTitle": "¡Bienvenido a las Notificaciones!\nMantente informado de actualizaciones importantes.",
-"chatRoom": "Sala de chat",
-"notificationRoom": "Sala de notificaciones",
-"notificationSubtitle": "Habilitar para recibir notificaciones",
-"header": "Encabezado",
-"data": "Datos",
-"noNotificationsYet": "Aún no hay notificaciones",
-"activityLog": "Registro de Actividad",
-"activityLogDescription": "Ver tus actividades",
-"walletInitialized": "Cartera digital inicializada",
-"backupCredentials": "Credenciales de respaldo",
-"restoredCredentials": "Credenciales restauradas",
-"addedCredential": "Credencial {credential} agregada",  
-"@addedCredentialDescription": {
-  "description": "Nombre de la credencial agregada",
-  "type": "text",
-  "placeholders": {
-    "credential": {}
-  }
-},
-"deletedCredential": "Credencial {credential} eliminada",
-"@deletedCredentialDescription": {
-  "description": "Nombre de la credencial eliminada",
-  "type": "text",
-  "placeholders": {
-    "credential": {}
-  }
-},
-"presentedCredential": "Credencial {credential} presentada a {domain}",
-"@presentedCredentialDescription": {
-  "description": "Nombre de la credencial presentada",
-  "type": "text",
-  "placeholders": {
-    "credential": {}
-  }
-},
-"@presentedCredentialDomain": {
-  "description": "Nombre del dominio de la credencial",
-  "type": "text",
-  "placeholders": { 
-    "domain": {}
-  }
-},
-"keysImported": "Claves importadas",
-"approveProfileTitle": "Instalar configuración",
-"approveProfileDescription": "¿Autorizas instalar la configuración de {company}?",
-"@approveProfileDescription": {
-  "description": "Nombre de la empresa propietaria de la configuración",
-  "type": "text",
-  "placeholders": {
-    "company": {}
-  }
-},
-"updateProfileTitle": "Actualizar configuración",
-"updateProfileDescription": "¿Autorizas actualizar la configuración de {company}?",
-"@updateProfileDescription": {
-  "description": "Nombre de la empresa propietaria de la configuración",
-  "type": "text",
-  "placeholders": {
-    "company": {}
-  }
-},
-"replaceProfileTitle": "Instalar una nueva configuración", 
-"replaceProfileDescription": "¿Autorizas reemplazar la configuración actual con la de {company}?",
-"@replaceProfileDescription": {
-  "description": "Nombre de la empresa propietaria de la configuración",
-  "type": "text",
-  "placeholders": {
-    "company": {}
-  }
-},
-"saveBackupCredentialSubtitle2": "Para recuperar tus credenciales necesitarás este archivo de respaldo.",
-"createWallet": "Crear cartera digital",
-"restoreWallet": "Restaurar cartera digital",
-"showWalletRecoveryPhraseSubtitle2": "Esta frase de recuperación será requerida para restaurar una cartera digital en la instalación.",
-"documentation": "Documentación",
-"restoreACryptoWallet": "Restaurar una cripto billetera",
-"restoreAnAppBackup": "Restaurar un respaldo de {appName}",
-"@restoreAnAppBackup": {
-  "description": "Nombre de la app",
-  "type": "text",
-  "placeholders": {
-    "appName": {}
-  }
-},
-"credentialPickShare": "Compartir",
-"credentialPickTitle": "Elige la(s) credencial(es) que quieres obtener",
-"credentialShareTitle": "Elige la(s) credencial(es) para compartir",
-"enterYourSecretCode": "Introduce tu código secreto.",
-"jwk": "JWK",
-"typeYourPINCodeToOpenTheWallet": "Introduce tu código PIN para abrir la billetera",
-"typeYourPINCodeToShareTheData": "Introduce tu código PIN para compartir los datos",
-"typeYourPINCodeToAuthenticate": "Introduce tu código PIN para autenticarte",
-"credentialIssuanceIsStillPending": "La emisión de la credencial está pendiente",
-"bakerFee": "Comisión de Baker",
-"storageFee": "Comisión de almacenamiento",
-"doYouWantToSetupTheProfile": "¿Quieres configurar el perfil?"
 }

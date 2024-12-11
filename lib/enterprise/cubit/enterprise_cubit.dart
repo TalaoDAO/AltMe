@@ -188,16 +188,12 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         walletType: WalletType.enterprise,
       );
 
-      final testnet = profileSetting.blockchainOptions?.testnet;
-      if (testnet != null) {
-        final blockchainType =
-            manageNetworkCubit.walletCubit.state.currentAccount!.blockchainType;
-        final currentNetworkList = blockchainType.networks;
-        if (testnet) {
-          await manageNetworkCubit.setNetwork(currentNetworkList[1]);
-        } else {
-          await manageNetworkCubit.setNetwork(currentNetworkList[0]);
-        }
+      final blockchainOptions = profileSetting.blockchainOptions;
+      if (blockchainOptions != null) {
+        await setUpBlockChainOptions(
+          blockchainOptions: blockchainOptions,
+          manageNetworkCubit: manageNetworkCubit,
+        );
       }
 
       // if enterprise and walletAttestation data is available and added
@@ -205,11 +201,14 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         blockchainType:
             credentialsCubit.walletCubit.state.currentAccount?.blockchainType,
         qrCodeScanCubit: qrCodeScanCubit,
+        uri: Uri.parse(Parameters.walletIssuer),
       );
 
       emit(
         state.copyWith(
-          status: AppStatus.success,
+          status: status == AppStatus.addEnterpriseAccount
+              ? AppStatus.successAdd
+              : AppStatus.successUpdate,
           message: StateMessage.success(
             messageHandler: ResponseMessage(
               message: status == AppStatus.addEnterpriseAccount
@@ -574,16 +573,12 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         await matrixNotificationCubit.init();
       }
 
-      final testnet = profileSetting.blockchainOptions?.testnet;
-      if (testnet != null) {
-        final blockchainType =
-            manageNetworkCubit.walletCubit.state.currentAccount!.blockchainType;
-        final currentNetworkList = blockchainType.networks;
-        if (testnet) {
-          await manageNetworkCubit.setNetwork(currentNetworkList[1]);
-        } else {
-          await manageNetworkCubit.setNetwork(currentNetworkList[0]);
-        }
+      final blockchainOptions = profileSetting.blockchainOptions;
+      if (blockchainOptions != null) {
+        await setUpBlockChainOptions(
+          blockchainOptions: blockchainOptions,
+          manageNetworkCubit: manageNetworkCubit,
+        );
       }
 
       emit(
@@ -599,6 +594,52 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       );
     } catch (e) {
       emitError(e);
+    }
+  }
+
+  Future<void> setUpBlockChainOptions({
+    required ManageNetworkCubit manageNetworkCubit,
+    required BlockchainOptions blockchainOptions,
+  }) async {
+    final testnet = blockchainOptions.testnet;
+    if (testnet != null) {
+      final blockchainType =
+          manageNetworkCubit.walletCubit.state.currentAccount!.blockchainType;
+      final currentNetworkList = blockchainType.networks;
+
+      var network = currentNetworkList[0];
+      if (testnet) network = currentNetworkList[1];
+
+      await manageNetworkCubit.setNetwork(network);
+      await manageNetworkCubit.resetOtherNetworks(network);
+    }
+
+    final cryptoAccountDataList =
+        credentialsCubit.walletCubit.state.cryptoAccount.data;
+
+    BlockchainType? blockchainType;
+
+    if (blockchainOptions.bnbSupport) {
+      blockchainType = BlockchainType.binance;
+    } else if (blockchainOptions.ethereumSupport) {
+      blockchainType = BlockchainType.ethereum;
+    } else if (blockchainOptions.fantomSupport) {
+      blockchainType = BlockchainType.fantom;
+    } else if (blockchainOptions.polygonSupport) {
+      blockchainType = BlockchainType.polygon;
+    } else if (blockchainOptions.etherlinkSupport != null &&
+        blockchainOptions.etherlinkSupport!) {
+      blockchainType = BlockchainType.etherlink;
+    } else if (blockchainOptions.tezosSupport) {
+      blockchainType = BlockchainType.tezos;
+    }
+
+    if (blockchainType != null) {
+      final index = cryptoAccountDataList
+          .indexWhereOrNull((a) => a.blockchainType == blockchainType);
+      if (index != null) {
+        await credentialsCubit.walletCubit.setCurrentWalletAccount(index);
+      }
     }
   }
 

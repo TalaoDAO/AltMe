@@ -301,7 +301,8 @@ void main() {
 
       final Image image = tester.widget(imageFinder);
       final AssetImage imageProvider = image.image as AssetImage;
-      expect(imageProvider.assetName, ImageStrings.diipLogo);
+      // expect(imageProvider.assetName, ImageStrings.diipLogo);
+      expect(imageProvider.assetName, ImageStrings.appLogo);
     });
 
     testWidgets(

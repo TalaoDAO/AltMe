@@ -14,7 +14,12 @@ class ConsumeSelectiveDisclosureCubit extends StatelessWidget {
 
   final CredentialModel credentialModel;
   final bool showVertically;
-  final void Function(String?, String, String?)? onPressed;
+  final void Function(
+    String?,
+    String,
+    String?,
+    String?,
+  )? onPressed;
 
   final String? parentKeyId;
 

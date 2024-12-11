@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
@@ -52,21 +54,21 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     }
   }
 
-  void toggle(String claimKeyId) {
+  void toggle(String claimKeyId, String? sd) {
     final List<SelectedClaimsKeyIds> selectedClaimsKeys =
         List.of(state.selectedClaimsKeyIds);
 
     late List<SelectedClaimsKeyIds> ids;
 
-    final selectedKey =
-        selectedClaimsKeys.firstWhereOrNull((ele) => ele.keyId == claimKeyId);
+    final selectedKey = selectedClaimsKeys
+        .firstWhereOrNull((ele) => ele.keyId == '$claimKeyId#$sd');
 
     if (selectedKey != null) {
       ids = List<SelectedClaimsKeyIds>.from(state.selectedClaimsKeyIds)
-        ..removeWhere((element) => element.keyId == claimKeyId)
+        ..removeWhere((element) => element.keyId == '$claimKeyId#$sd')
         ..add(
           SelectedClaimsKeyIds(
-            keyId: claimKeyId,
+            keyId: '$claimKeyId#$sd',
             isSelected: !selectedKey.isSelected,
           ),
         );
@@ -75,7 +77,7 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
       ids = [
         ...state.selectedClaimsKeyIds,
         ...[
-          SelectedClaimsKeyIds(keyId: claimKeyId, isSelected: true),
+          SelectedClaimsKeyIds(keyId: '$claimKeyId#$sd', isSelected: true),
         ],
       ];
     }
@@ -86,19 +88,30 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     String? claimsKey,
     required CredentialModel credentialModel,
     String? threeDotValue,
+    String? sd,
   }) {
     final selectiveDisclosure = SelectiveDisclosure(credentialModel);
 
     int? index;
 
-    if (threeDotValue != null) {
+    if (sd != null) {
+      index = selectiveDisclosure.disclosureFromJWT
+          .indexWhere((entry) => entry == sd);
+    } else if (threeDotValue != null) {
       index = selectiveDisclosure.disclosureFromJWT
           .indexWhere((entry) => entry == threeDotValue);
     } else if (claimsKey != null) {
       index = selectiveDisclosure.disclosureListToContent.entries
           .toList()
           .indexWhere(
-            (entry) => entry.value.toString().contains(claimsKey),
+            (entry) =>
+                selectiveDisclosure
+                    .getMapFromList(
+                      jsonDecode(entry.value.toString()) as List,
+                    )
+                    .keys
+                    .first ==
+                claimsKey,
           );
     }
 
@@ -127,12 +140,14 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     required CredentialModel credentialModel,
     String? threeDotValue,
     String? claimsKey,
+    String? sd,
   }) {
-    toggle(claimKeyId);
+    toggle(claimKeyId, sd);
     saveIndexOfSDJWT(
       claimsKey: claimsKey,
       credentialModel: credentialModel,
       threeDotValue: threeDotValue,
+      sd: sd,
     );
   }
 }

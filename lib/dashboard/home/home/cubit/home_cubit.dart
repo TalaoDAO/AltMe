@@ -175,8 +175,15 @@ class HomeCubit extends Cubit<HomeState> {
       dynamic response;
 
       emit(state.copyWith(status: AppStatus.loading));
+
+      final newUrl = '${Uri.parse(url)}?vc_format=${vcFormatType.urlValue(
+        isEmailPassOrPhonePass:
+            credentialSubjectType == CredentialSubjectType.emailPass ||
+                credentialSubjectType == CredentialSubjectType.phonePass,
+      )}';
+
       response = await client.post(
-        url,
+        newUrl,
         headers: <String, dynamic>{
           'accept': 'application/json',
           'Content-Type': 'application/json',
@@ -186,13 +193,30 @@ class HomeCubit extends Cubit<HomeState> {
       );
 
       if (response != null) {
-        final credential =
-            jsonDecode(response as String) as Map<String, dynamic>;
+        late Map<String, dynamic> credential;
+
+        if (vcFormatType == VCFormatType.jwtVc ||
+            vcFormatType == VCFormatType.jwtVcJson ||
+            vcFormatType == VCFormatType.vcSdJWT ||
+            vcFormatType == VCFormatType.jwtVcJsonLd) {
+          credential = getCredentialDataFromJson(
+            data: response.toString(),
+            format: vcFormatType.vcValue,
+            jwtDecode: profileCubit.jwtDecode,
+            credentialType: credentialSubjectType.name,
+          );
+        } else if (vcFormatType == VCFormatType.ldpVc) {
+          //ldp_vc
+          credential = jsonDecode(response as String) as Map<String, dynamic>;
+        } else {
+          throw Exception();
+        }
 
         final Map<String, dynamic> newCredential =
             Map<String, dynamic>.from(credential);
-        newCredential['credentialPreview'] = credential;
+
         newCredential['format'] = vcFormatType.vcValue;
+        newCredential['credentialPreview'] = credential;
         final CredentialManifest credentialManifest =
             await getCredentialManifestFromAltMe(
           oidc4vc: oidc4vc,
@@ -222,6 +246,7 @@ class HomeCubit extends Cubit<HomeState> {
           credential: credentialModel,
           showMessage: true,
           blockchainType: blockchainType,
+          uri: Uri.parse(url),
         );
         await cameraCubit.incrementAcquiredCredentialsQuantity();
         emit(state.copyWith(status: AppStatus.success));

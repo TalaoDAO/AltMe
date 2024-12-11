@@ -319,7 +319,7 @@
   "getIt": "Get it",
   "getItNow": "Get it Now",
   "getThisCard": "Get This Card",
-  "drawerBiometrics": "Biometrics authentication",
+  "drawerBiometrics": "Biometric authentication",
   "drawerTalaoCommunityCard": "Talao Community Card",
   "drawerTalaoCommunityCardTitle": "Import your Ethereum address and get your Community Card.",
   "drawerTalaoCommunityCardSubtitle": "It will give you access to the best discounts, memberships and vouchers cards from our ecosystem of partners.",
@@ -344,9 +344,9 @@
   "termsOfUse": "Terms of Use & Confidentiality",
   "scanFingerprintToAuthenticate": "Scan Fingerprint to Authenticate",
   "biometricsNotSupported": "Biometrics not supported",
-  "deviceDoNotSupportBiometricsAuthentication": "Your device dose not supports biometrics authentication",
+  "deviceDoNotSupportBiometricsAuthentication": "Your device does not support biometric authentication",
   "biometricsEnabledMessage": "You can now unlock app with your biometrics.",
-  "biometricsDisabledMessage": "Your biometrics has been disabled.",
+  "biometricsDisabledMessage": "Biometric authentication has been disabled.",
   "exportSecretKey": "Export secret key",
   "secretKey": "Secret Key",
   "chooseNetWork": "Choose Network",
@@ -367,7 +367,7 @@
   "onBoardingThirdTitle": "Manage your data with full autonomy, security and privacy.",
   "onBoardingThirdSubtitle": "Our wallet use SSI cryptography to give you full control over your data. Nothing goes out of your phone.",
   "onBoardingStart": "Start",
-  "learnMoreAboutAltme": "Learn more about our wallet",
+  "learnMoreAboutAltme": "Learn more about your wallet",
   "scroll": "Scroll",
   "agreeTermsAndConditionCheckBox": "I agree to the terms and conditions.",
   "readTermsOfUseCheckBox": "I have read the terms of use.",
@@ -672,13 +672,13 @@
   "decline": "Decline",
   "yotiCameraAppbarTitle": "Please, position your face in the center",
   "cameraSubtitle": "You have 5 seconds to take your photo.\nMake sure there’s enough light before starting.",
-  "walletSecurityDescription": "Protect your wallet with Pin Code and Biometrics Authentication",
+  "walletSecurityDescription": "Protect your wallet with Pin code and biometric authentication",
   "blockchainSettings": "Blockchain Settings",
-  "blockchainSettingsDescription": "Manage accounts, Recovery Phrase, Connected dApps and Networks",
+  "blockchainSettingsDescription": "Manage accounts, recovery phrase, connected DApps and networks",
   "ssi": "Self Sovereign Identity Settings",
-  "ssiDescription": "Manage Decentralized Identifiers (DIDs) and protocol options",
+  "ssiDescription": "Manage decentralized identifiers (DIDs) and protocol options",
   "helpCenter": "Help Center",
-  "helpCenterDescription": "Contact us and get support if you need assistance on using our wallet",
+  "helpCenterDescription": "Contact us and get support if you need assistance on using your wallet",
   "about": "About",
   "aboutDescription": "Read about terms of use, confidentiality and licenses",
   "resetWallet": "Reset Wallet",
@@ -703,7 +703,7 @@
   "failedToSendEmail": "Failed to send email.",
   "selectAMethodToAddAccount": "Select a method to add account",
   "createAccount": "Create account",
-  "createAccountDescription": "Create an account protected by your Recovery Phrase",
+  "createAccountDescription": "Create an account protected by your recovery phrase",
   "importAccountDescription": "Import an account from an existing wallet",
   "chooseABlockchainForAccountCreation": "Choose the blockchain on which you want to create a new account.",
   "tezosAccount": "Tezos account",
@@ -772,7 +772,7 @@
   "backToHome": "Back to home",
   "help": "Help",
   "searchCredentials": "Search credentials",
-  "supportChatWelcomeMessage": "Welcome to our chat support! We're here to assist you with any questions or concerns you may have about our wallet.",
+  "supportChatWelcomeMessage": "Welcome to our chat support! We're here to assist you with any questions or concerns you may have about your wallet.",
   "cardChatWelcomeMessage": "Welcome to our chat support! We're here to assist you with any questions or concerns.",
   "creator": "Creator",
   "contractAddress": "Contract address",
@@ -892,13 +892,13 @@
   "pleaseSwitchToCorrectOIDC4VCProfile": "Please switch to correct OIDC4VC profile.",
   "authenticationSuccess": "Authentication Success",
   "format": "Format",
-  "verifyIssuerWebsiteIdentity": "Verify issuer website identity",
-  "verifyIssuerWebsiteIdentitySubtitle": "Enable to verify website identity before access. Default: Off.",
+  "verifyIssuerWebsiteIdentity": "Verify issuer identity",
+  "verifyIssuerWebsiteIdentitySubtitle": "Enable to verify issuer identity before access. Default: Off.",
   "developerMode": "Developer Mode",
   "developerModeSubtitle": "Enable developer mode to access advanced debugging tools",
   "confirmVerifierAccess": "Confirm verifier access",
   "confirmVerifierAccessSubtitle": "Disable to skip confirmation when you share your verifiable credentials. Default: On.",
-  "secureAuthenticationWithPINCode": "Secure Authentication with PIN Code",
+  "secureAuthenticationWithPINCode": "Secure authentication with PIN code",
   "secureAuthenticationWithPINCodeSubtitle": "Turn off to skip PIN code for website authentication (not recommended). Default: On.",
   "youcanSelectOnlyXCredential": "You can select only {count} credential(s).",
   "@youcanSelectOnlyXCredential": {
@@ -949,16 +949,16 @@
   "theIssuanceOfThisCredentialIsPending": "The issuance of this credential is pending",
   "clientId": "Client Id",
   "clientSecret": "Client Secret",
-  "walletProfiles": "Wallet Profiles",
-  "walletProfilesDescription": "Choose your SSI profile or customize your own",
+  "walletProfiles": "Wallet Profile",
+  "walletProfilesDescription": "Choose your wallet profile or customize your own",
   "protectYourWallet": "Protect your wallet",
   "protectYourWalletMessage": "Use your fingerprint, face, or device PIN to secure and unlock your wallet. Your data is securely encrypted on this device.",
   "pinUnlock": "PIN unlock",
   "secureWithDevicePINOnly": "Secure with Device PIN only",
   "biometricUnlock": "Biometric unlock",
-  "secureWithFingerprint": "Secure with Fingerprint",
-  "pinUnlockAndBiometric2FA": "PIN unlock + Biometric (2FA)",
-  "secureWithFingerprintAndPINBackup": "Secure with Fingerprint + PIN backup",
+  "secureWithFingerprint": "Secure with fingerprint or facial recognition",
+  "pinUnlockAndBiometric2FA": "PIN + biometric unlock (2FA)",
+  "secureWithFingerprintAndPINBackup": "Secure with fingerprint or facial recognition + PIN code",
   "secureYourWalletWithPINCodeAndBiometrics": "Secure your wallet with PIN code and Biometrics",
   "twoFactorAuthenticationHasBeenEnabled": "Two factor authentication has been enabled.",
   "initialization": "Initialization",
@@ -1076,14 +1076,6 @@
   "walletInitialized": "Wallet Initialized",
   "backupCredentials": "Backup Credentials",
   "restoredCredentials": "Restored Credentials",
-  "addedCredential": "Added credential {credential}",  
-  "@addedCredentialDescription": {
-    "description": "name of the credential",
-    "type": "text",
-    "placeholders": {
-      "credential": {}
-    }
-  },
   "deletedCredential": "Deleted credential {credential}",
   "@deletedCredentialDescription": {
     "description": "name of the credential",
@@ -1101,7 +1093,7 @@
     }
   },
   "@presentedCredentialDomain": {
-    "description": "name of the credential",
+    "description": "domain of the credential",
     "type": "text",
     "placeholders": { 
       "domain": {}
@@ -1162,5 +1154,22 @@
   "storageFee": "Storage Fee",
   "doYouWantToSetupTheProfile": "Do you want to setup the profile?",
   "thisFeatureIsNotSupportedYetForEtherlink": "This feature is not supported yet for Etherlink Chain.",
-  "walletSecurityAndBackup": "Wallet Security and Backup"
+  "walletSecurityAndBackup": "Wallet Security and Backup", 
+  "addedCredential": "Added credential {credential} by {domain}",  
+  "@addedCredentialDescription": {
+    "description": "name of the credential",
+    "type": "text",
+    "placeholders": {
+      "credential": {}
+    }
+  },
+  "@addedCredentialDomain": {
+    "description": "domain of the credential",
+    "type": "text",
+    "placeholders": {
+      "domain": {}
+    }
+  },
+  "reject": "Reject",
+  "operation": "Operation"
 }

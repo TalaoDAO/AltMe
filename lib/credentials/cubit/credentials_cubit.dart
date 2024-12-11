@@ -131,6 +131,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> addWalletCredential({
     required BlockchainType? blockchainType,
     required QRCodeScanCubit qrCodeScanCubit,
+    required Uri uri,
   }) async {
     final log = getLogger('addRequiredCredentials');
 
@@ -195,6 +196,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         credential: walletCredential,
         showMessage: false,
         blockchainType: blockchainType,
+        uri: uri,
       );
     }
   }
@@ -291,6 +293,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> insertCredential({
     required CredentialModel credential,
+    required Uri uri,
     required BlockchainType? blockchainType,
     bool showMessage = true,
     bool showStatus = true,
@@ -356,7 +359,11 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     await activityLogManager.saveLog(
       LogData(
         type: LogType.addVC,
-        vcInfo: VCInfo(id: credential.id, name: credential.getName),
+        vcInfo: VCInfo(
+          id: credential.id,
+          name: credential.getName,
+          domain: uri.host,
+        ),
       ),
     );
 
@@ -584,6 +591,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         credential: credential,
         blockchainType: cryptoAccountData.blockchainType,
         showMessage: false,
+        uri: Uri.parse(Parameters.walletIssuer),
       );
     }
   }

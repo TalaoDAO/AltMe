@@ -90,7 +90,7 @@ class _ActivityLogViewState extends State<ActivityLogView> {
                 case LogType.restoreWallet:
                   message = l10n.restoredCredentials;
                 case LogType.addVC:
-                  message = l10n.addedCredential(credentialName);
+                  message = l10n.addedCredential(credentialName, domainName);
                 case LogType.deleteVC:
                   message = l10n.deletedCredential(credentialName);
                 case LogType.presentVC:

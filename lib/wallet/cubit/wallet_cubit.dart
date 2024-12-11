@@ -214,6 +214,9 @@ class WalletCubit extends Cubit<WalletState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
     await walletConnectCubit.initialise();
 
+    /// set new account as current
+    await setCurrentWalletAccount(cryptoAccountDataList.length - 1);
+
     emitCryptoAccount(updatedCryptoAccount);
 
     onComplete?.call(
@@ -222,9 +225,6 @@ class WalletCubit extends Cubit<WalletState> {
         message: ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
       ),
     );
-
-    /// set new account as current
-    await setCurrentWalletAccount(cryptoAccountDataList.length - 1);
   }
 
   Future<CryptoAccountData> _createBlockchainAccount({
@@ -243,11 +243,12 @@ class WalletCubit extends Cubit<WalletState> {
     int derivePathIndex = 0;
     final bool isCreated = !isImported;
 
+    final String? savedDerivePathIndex =
+        await secureStorageProvider.get(blockchainType.derivePathIndexKey);
+
     log.i('isImported - $isImported');
     if (isCreated) {
       /// Note: while adding derivePathIndex is always increased
-      final String? savedDerivePathIndex =
-          await secureStorageProvider.get(blockchainType.derivePathIndexKey);
 
       if (savedDerivePathIndex != null && savedDerivePathIndex.isNotEmpty) {
         derivePathIndex = int.parse(savedDerivePathIndex) + 1;
@@ -262,6 +263,11 @@ class WalletCubit extends Cubit<WalletState> {
     log.i('derivePathIndex - $derivePathIndex');
 
     /// Note: while importing derivePathIndex is always 0
+
+    if (savedDerivePathIndex == null) {
+      // at start it should be 0
+      await secureStorageProvider.set(blockchainType.derivePathIndexKey, '0');
+    }
 
     late String walletAddress;
     late String secretKey;
@@ -313,9 +319,15 @@ class WalletCubit extends Cubit<WalletState> {
     /// If we are not using crypto in the wallet we are not generating
     /// AssociatedAddress credentials.
     if (Parameters.walletHandlesCrypto) {
+      // only for default profile at wallet creation
+      // get crurrent current profile type from profileCubit
+      final ProfileType currentProfileType =
+          credentialsCubit.profileCubit.state.model.profileType;
+      await credentialsCubit.profileCubit.setProfile(ProfileType.defaultOne);
       await credentialsCubit.insertAssociatedWalletCredential(
         cryptoAccountData: cryptoAccountData,
       );
+      await credentialsCubit.profileCubit.setProfile(currentProfileType);
     }
 
     return cryptoAccountData;

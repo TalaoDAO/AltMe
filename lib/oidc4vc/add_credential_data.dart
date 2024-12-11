@@ -94,6 +94,7 @@ Future<void> addCredentialData({
             isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
         isPendingCredential: true,
         blockchainType: blockchainType,
+        uri: Uri.parse(issuer),
       );
     } else {
       await addOIDC4VCCredential(

@@ -125,8 +125,8 @@ final walletBlocAccountChangeListener = BlocListener<WalletCubit, WalletState>(
   },
   listener: (context, state) async {
     try {
+      await context.read<ManageNetworkCubit>().loadNetwork();
       if (Parameters.walletHandlesCrypto) {
-        await context.read<ManageNetworkCubit>().loadNetwork();
         unawaited(context.read<TokensCubit>().fetchFromZero());
         unawaited(context.read<NftCubit>().fetchFromZero());
       }
@@ -797,8 +797,17 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
     if (state.polygonAction == PolygonIdAction.offer) {
       try {
         LoadingView().hide();
+
+        var uri = Uri.parse('');
+
+        try {
+          uri = Uri.parse(state.scannedResponse!);
+        } catch (e) {
+          //
+        }
+
         await Navigator.of(context)
-            .push<void>(PolygonIdCredentialOfferPage.route());
+            .push<void>(PolygonIdCredentialOfferPage.route(uri));
       } catch (e) {
         final l10n = context.l10n;
         LoadingView().hide();
@@ -905,7 +914,7 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
         builder: (_) => const WalletRevokedDialog(),
       );
     }
-    if (state.status == AppStatus.success) {
+    if (state.status == AppStatus.successAdd) {
       // TODO: when we create vc+sd-jwt associated address cards, we need to check also for vc+sd-jwt
       if (context
               .read<ProfileCubit>()

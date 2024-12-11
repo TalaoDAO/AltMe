@@ -32,7 +32,12 @@ class SelectiveDisclosureDisplayMap {
   final String? parentKeyId;
   final Map<String, dynamic> filters;
   final List<SelectedClaimsKeyIds> selectedClaimsKeyIds;
-  final void Function(String?, String, String?)? onPressed;
+  final void Function(
+    String?,
+    String,
+    String?,
+    String?,
+  )? onPressed;
 
   Map<String, dynamic> get buildMap {
     final builtMap = <String, dynamic>{};
@@ -129,7 +134,7 @@ class SelectiveDisclosureDisplayMap {
         /// keep going only if element is in the nested value of the parentKeyId
         /// either in the payload or the claims
         final nestedValue =
-            selectiveDisclosure.extractedValuesFromJwt[parentKeyId] ??
+            selectiveDisclosure.extractedValuesFromJwtWithSd[parentKeyId] ??
                 SelectiveDisclosure(credentialModel).payload[parentKeyId];
         if (nestedValue == null) continue;
         bool displayElement = false;
@@ -156,8 +161,7 @@ class SelectiveDisclosureDisplayMap {
           .value;
 
       final element = value.entries.first;
-      if (!currentClaims.containsKey(element.key) ||
-          currentClaims[element.key].length == 0) {
+      if (!currentClaims.containsKey(element.key)) {
         if (element.value is Map) {
           builtMap.addAll(MapForNestedClaimWithoutDisplay(element, null));
           continue;
@@ -212,7 +216,14 @@ class SelectiveDisclosureDisplayMap {
           .entries
           .toList()
           .indexWhere(
-            (entry) => entry.value.toString().contains(element.key.toString()),
+            (entry) =>
+                SelectiveDisclosure(credentialModel)
+                    .getMapFromList(
+                      jsonDecode(entry.value.toString()) as List,
+                    )
+                    .keys
+                    .first ==
+                element.key.toString(),
           );
       if (index == -1 && element.threeDotValue == null) isDisabled = true;
       if (value['_sd'] != null) {
@@ -231,14 +242,16 @@ class SelectiveDisclosureDisplayMap {
           ).buildMap,
         );
       }
-
+      // final threeDotValue =
+      // (element?.threeDotValue != null) ? element.threeDotValue : null;
       builtMap[title ?? element.key.toString()] = {
         'mapKey': element.key.toString(),
         'claimKey': element.key.toString(),
-        'threeDotValue': element.threeDotValue,
+        'threeDotValue': null,
         'value': value,
         'hasCheckbox': !isDisabled && isPresentation,
         'isCompulsary': isCompulsary,
+        'sd': null,
       };
     }
 
@@ -252,8 +265,7 @@ class SelectiveDisclosureDisplayMap {
     String? parentKeyId,
   ) {
     final claimDataMap = <String, dynamic>{};
-    final List<ClaimsData> claimsData =
-        SelectiveDisclosure(credentialModel).getClaimsData(
+    final (claimsData, sd) = SelectiveDisclosure(credentialModel).getClaimsData(
       key: mapKey,
       parentKeyId: parentKeyId,
     );
@@ -271,8 +283,8 @@ class SelectiveDisclosureDisplayMap {
       final isCompulsary = limitDisclosure == 'required';
 
       bool isDisabled = isCompulsary;
-      final selectedKeyId =
-          selectedClaimsKeyIds.firstWhereOrNull((ele) => ele.keyId == claimKey);
+      final selectedKeyId = selectedClaimsKeyIds
+          .firstWhereOrNull((ele) => ele.keyId == '$claimKey#$sd');
       if (isPresentation) {
         if (filters.isNotEmpty) {
           isDisabled = isCompulsary;
@@ -287,6 +299,7 @@ class SelectiveDisclosureDisplayMap {
                     key,
                     claimKey,
                     element.threeDotValue,
+                    sd,
                   );
                 }
               }
@@ -298,6 +311,7 @@ class SelectiveDisclosureDisplayMap {
                     key,
                     claimKey,
                     null,
+                    sd,
                   );
                 }
               }
@@ -310,9 +324,17 @@ class SelectiveDisclosureDisplayMap {
           .entries
           .toList()
           .indexWhere(
-            (entry) => entry.value.toString().contains(claimKey),
+            (entry) =>
+                SelectiveDisclosure(credentialModel)
+                    .getMapFromList(
+                      jsonDecode(entry.value.toString()) as List,
+                    )
+                    .keys
+                    .first ==
+                claimKey,
           );
-      if (indexInDisclosure == -1 && element.threeDotValue == null) {
+      if ((indexInDisclosure == -1 && element.threeDotValue == null) ||
+          (sd == null && parentKeyId != null)) {
         isDisabled = true;
       } else if (isDisabled) {
         // Don't add in the map if limitDisclosure is required and the
@@ -337,6 +359,7 @@ class SelectiveDisclosureDisplayMap {
         'hasCheckbox': !isDisabled && isPresentation,
         'isCompulsary': isCompulsary,
         'type': type,
+        'sd': sd,
       };
       if (claimsData.length > 1) {
         if (index == 0) {

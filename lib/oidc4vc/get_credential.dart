@@ -125,16 +125,19 @@ Future<
           return null;
         }
       }
-
-      final credentialResponseDataValue = await getSingleCredentialData(
-        profileCubit: profileCubit,
-        openIdConfiguration: openIdConfiguration,
-        accessToken: accessToken,
-        cnonce: nonce,
-        dio: Dio(),
-        credentialData: credentialData,
-        publicKeyForDPop: publicKeyForDPop,
-      );
+dynamic credentialResponseDataValue;
+       try {
+  credentialResponseDataValue = await getSingleCredentialData(
+   profileCubit: profileCubit,
+   openIdConfiguration: openIdConfiguration,
+   accessToken: accessToken,
+   dio: Dio(),
+   credentialData: credentialData,
+   publicKeyForDPop: publicKeyForDPop,
+        );
+} catch (e) {
+  rethrow;
+}
 
       /// update nonce value
       if (credentialResponseDataValue is Map<String, dynamic>) {
@@ -182,16 +185,19 @@ Future<
         return null;
       }
     }
-
-    final credentialResponseDataValue = await getSingleCredentialData(
-      profileCubit: profileCubit,
-      openIdConfiguration: openIdConfiguration,
-      accessToken: accessToken,
-      cnonce: cnonce,
-      dio: Dio(),
-      credentialData: credentialData,
-      publicKeyForDPop: publicKeyForDPop,
-    );
+    dynamic credentialResponseDataValue;
+    try {
+      credentialResponseDataValue = await getSingleCredentialData(
+        profileCubit: profileCubit,
+        openIdConfiguration: openIdConfiguration,
+        accessToken: accessToken,
+        dio: Dio(),
+        credentialData: credentialData,
+        publicKeyForDPop: publicKeyForDPop,
+      );
+    } catch (e) {
+      rethrow;
+    }
 
     credentialResponseData.add(credentialResponseDataValue);
   }
@@ -212,7 +218,6 @@ Future<dynamic> getSingleCredentialData({
   required ProfileCubit profileCubit,
   required OpenIdConfiguration openIdConfiguration,
   required String accessToken,
-  required String? cnonce,
   required Dio dio,
   required Map<String, dynamic> credentialData,
   required String publicKeyForDPop,
@@ -238,7 +243,6 @@ Future<dynamic> getSingleCredentialData({
         await profileCubit.oidc4vc.getSingleCredential(
       openIdConfiguration: openIdConfiguration,
       accessToken: accessToken,
-      nonce: cnonce,
       dio: Dio(),
       credentialData: credentialData,
       credentialEndpoint: credentialEndpoint,
@@ -247,45 +251,6 @@ Future<dynamic> getSingleCredentialData({
 
     return credentialResponseDataValue;
   } catch (e) {
-    if (count == 1) {
-      count = 0;
-      rethrow;
-    }
-
-    if (e is DioException &&
-        e.response != null &&
-        e.response!.data is Map<String, dynamic> &&
-        (e.response!.data as Map<String, dynamic>).containsKey('c_nonce')) {
-      count++;
-
-      String? dPop2;
-
-      if (customOidc4vcProfile.dpopSupport) {
-        dPop2 = await getDPopJwt(
-          oidc4vc: profileCubit.oidc4vc,
-          url: credentialEndpoint,
-          accessToken: accessToken,
-          publicKey: publicKeyForDPop,
-        );
-      }
-
-      final nonce = e.response!.data['c_nonce'].toString();
-
-      final credentialResponseDataValue =
-          await profileCubit.oidc4vc.getSingleCredential(
-        openIdConfiguration: openIdConfiguration,
-        accessToken: accessToken,
-        nonce: nonce,
-        dio: dio,
-        credentialData: credentialData,
-        credentialEndpoint: credentialEndpoint,
-        dPop: dPop2,
-      );
-      count = 0;
-      return credentialResponseDataValue;
-    } else {
-      count = 0;
-      rethrow;
-    }
+    rethrow;
   }
 }
