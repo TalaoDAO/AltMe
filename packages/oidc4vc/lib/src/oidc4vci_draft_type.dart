@@ -5,6 +5,8 @@ enum OIDC4VCIDraftType {
   draft11,
   @JsonValue('13')
   draft13,
+  @JsonValue('14')
+  draft14,
 }
 
 extension OIDC4VCIDraftTypeX on OIDC4VCIDraftType {
@@ -14,6 +16,8 @@ extension OIDC4VCIDraftTypeX on OIDC4VCIDraftType {
         return 'Draft 11';
       case OIDC4VCIDraftType.draft13:
         return 'Draft 13';
+      case OIDC4VCIDraftType.draft14:
+        return 'Draft 14';
     }
   }
 
@@ -23,6 +27,20 @@ extension OIDC4VCIDraftTypeX on OIDC4VCIDraftType {
         return '11';
       case OIDC4VCIDraftType.draft13:
         return '13';
+      case OIDC4VCIDraftType.draft14:
+        return '14';
+    }
+  }
+
+  bool get getNonce {
+    /// For OIDC4VCI draft > =14,
+    /// the token endpoint does not return a c_nonce.
+    switch (this) {
+      case OIDC4VCIDraftType.draft11:
+      case OIDC4VCIDraftType.draft13:
+        return false;
+      case OIDC4VCIDraftType.draft14:
+        return true;
     }
   }
 }
