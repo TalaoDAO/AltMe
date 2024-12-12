@@ -179,9 +179,7 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
                         ? null
                         : () => context
                             .read<RestoreCredentialCubit>()
-                            .recoverWallet(
-                              isFromOnBoarding: widget.fromOnBoarding,
-                            ),
+                            .recoverWallet(),
                     text: l10n.loadFile,
                   );
                 },

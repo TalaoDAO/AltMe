@@ -39,38 +39,23 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
     emit(state.copyWith(backupFilePath: filePath));
   }
 
-  Future<void> recoverWallet({
-    required bool isFromOnBoarding,
-  }) async {
+  Future<void> recoverWallet() async {
     if (state.backupFilePath == null) return;
     await Future<void>.delayed(const Duration(milliseconds: 500));
     emit(state.loading());
 
     late String stringForBackup;
 
-    if (Parameters.importAndRestoreAtOnboarding) {
-      final String? recoveryMnemonic = await secureStorageProvider
-          .get(SecureStorageKeys.recoverCredentialMnemonics);
+    final String? ssiMnemonic =
+        await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
-      if (recoveryMnemonic == null) {
-        throw ResponseMessage(
-          message: ResponseString
-              .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-        );
-      }
-      stringForBackup = recoveryMnemonic;
-    } else {
-      final String? ssiMnemonic =
-          await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
-
-      if (ssiMnemonic == null) {
-        throw ResponseMessage(
-          message: ResponseString
-              .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-        );
-      }
-      stringForBackup = ssiMnemonic;
+    if (ssiMnemonic == null) {
+      throw ResponseMessage(
+        message:
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+      );
     }
+    stringForBackup = ssiMnemonic;
 
     try {
       final file = File(state.backupFilePath!);
@@ -190,16 +175,12 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
 
       await activityLogManager.saveLog(LogData(type: LogType.restoreWallet));
 
-      if (isFromOnBoarding) {
-        emit(
-          state.copyWith(
-            status: AppStatus.restoreWallet,
-            recoveredCredentialLength: credentialList.length,
-          ),
-        );
-      } else {
-        emit(state.success(recoveredCredentialLength: credentialList.length));
-      }
+      emit(
+        state.copyWith(
+          status: AppStatus.restoreWallet,
+          recoveredCredentialLength: credentialList.length,
+        ),
+      );
     } catch (e) {
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
