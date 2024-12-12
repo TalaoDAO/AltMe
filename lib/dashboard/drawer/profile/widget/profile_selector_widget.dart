@@ -42,7 +42,7 @@ class ProfileSelectorWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Choose your SSI profile or customize your own',
+                          context.l10n.chooseYourSSIProfileOrCustomizeYourOwn,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
