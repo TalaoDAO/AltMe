@@ -30,19 +30,21 @@ class ResetWalletView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.resetWallet,
       useSafeArea: true,
       scrollView: false,
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-      titleLeading: const BackLeadingButton(),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: BlocBuilder<ResetWalletCubit, ResetWalletState>(
         builder: (context, state) {
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
+              const BackLeadingButton(padding: EdgeInsets.zero),
+              const DrawerLogo(),
+              const AppVersionDrawer(),
+              const SizedBox(height: Sizes.spaceNormal),
               Text(
                 l10n.resetWalletTitle,
                 textAlign: TextAlign.center,

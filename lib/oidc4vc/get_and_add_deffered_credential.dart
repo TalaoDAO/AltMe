@@ -34,6 +34,7 @@ Future<void> getAndAddDefferedCredential({
         'Authorization': 'Bearer $acceptanceToken',
       };
     case OIDC4VCIDraftType.draft13:
+    case OIDC4VCIDraftType.draft14:
 
       /// trasanction_id is NEW for draft 13. it was
       /// acceptance_token for draft 11

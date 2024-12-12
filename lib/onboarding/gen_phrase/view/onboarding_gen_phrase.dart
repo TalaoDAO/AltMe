@@ -148,7 +148,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  MyOutlinedButton(
+                  MyElevatedButton(
                     text: l10n.verifyLater,
                     verticalSpacing: 18,
                     onPressed: () async {
@@ -161,7 +161,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  MyElevatedButton(
+                  MyOutlinedButton(
                     text: l10n.verifyNow,
                     verticalSpacing: 18,
                     onPressed: () {
