@@ -29,6 +29,7 @@ OpenIdConfiguration _$OpenIdConfigurationFromJson(Map<String, dynamic> json) =>
       subjectSyntaxTypesSupported:
           json['subject_syntax_types_supported'] as List<dynamic>?,
       tokenEndpoint: json['token_endpoint'] as String?,
+      nonceEndpoint: json['nonce_endpoint'] as String?,
       batchEndpoint: json['batch_endpoint'] as String?,
       authorizationEndpoint: json['authorization_endpoint'] as String?,
       subjectTrustFrameworksSupported:
@@ -61,6 +62,7 @@ Map<String, dynamic> _$OpenIdConfigurationToJson(
       'display': instance.display,
       'subject_syntax_types_supported': instance.subjectSyntaxTypesSupported,
       'token_endpoint': instance.tokenEndpoint,
+      'nonce_endpoint': instance.nonceEndpoint,
       'batch_endpoint': instance.batchEndpoint,
       'authorization_endpoint': instance.authorizationEndpoint,
       'pushed_authorization_request_endpoint':

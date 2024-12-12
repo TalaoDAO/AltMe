@@ -481,6 +481,7 @@ class OIDC4VC {
     required String? oAuthClientAttestation,
     required String? oAuthClientAttestationPop,
     required String? dPop,
+    required String issuer,
   }) async {
     Map<String, dynamic>? tokenResponse;
     String? accessToken;
@@ -506,6 +507,28 @@ class OIDC4VC {
         tokenResponse['authorization_details'] as List<dynamic>?;
 
     return (tokenResponse, accessToken, cnonce, authorizationDetails);
+  }
+
+  /// nonce
+  Future<String?> getNonceReponse({
+    required Dio dio,
+    required String nonceEndpoint,
+  }) async {
+    String? cnonce;
+
+    final headers = {'Content-Type': 'application/json; charset=UTF-8'};
+    final dynamic response = await dio.post<dynamic>(
+      nonceEndpoint,
+      options: Options(headers: headers),
+    );
+
+    final data = response.data;
+
+    if (data is Map<String, dynamic> && data.containsKey('c_nonce')) {
+      cnonce = data['c_nonce'] as String;
+    }
+
+    return cnonce;
   }
 
   int count = 0;
@@ -792,6 +815,40 @@ class OIDC4VC {
     return tokenEndPoint;
   }
 
+  Future<String> getNonceEndPoint({
+    required OpenIdConfiguration openIdConfiguration,
+    required String issuer,
+    required Dio dio,
+    required bool useOAuthAuthorizationServerLink,
+    SecureStorageProvider? secureStorage,
+  }) async {
+    var nonceEndPoint = '$issuer/nonce';
+
+    if (openIdConfiguration.nonceEndpoint != null) {
+      nonceEndPoint = openIdConfiguration.nonceEndpoint!;
+    } else {
+      final authorizationServer =
+          openIdConfiguration.authorizationServer ?? issuer;
+
+      final authorizationServerConfigurationData =
+          await getAuthorizationServerMetaData(
+        baseUrl: authorizationServer,
+        dio: dio,
+        secureStorage: secureStorage,
+        useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+      );
+
+      final authorizationServerConfiguration =
+          OpenIdConfiguration.fromJson(authorizationServerConfigurationData);
+
+      if (authorizationServerConfiguration.nonceEndpoint != null) {
+        nonceEndPoint = authorizationServerConfiguration.nonceEndpoint!;
+      }
+    }
+
+    return nonceEndPoint;
+  }
+
   Future<String> readAuthorizationEndPoint({
     required OpenIdConfiguration openIdConfiguration,
     required String issuer,
@@ -829,6 +886,7 @@ class OIDC4VC {
           }
         }
       case OIDC4VCIDraftType.draft13:
+      case OIDC4VCIDraftType.draft14:
 
         /// Extract the authorization endpoint from from first element of
         /// authorization_servers in opentIdConfiguration.authorizationServers
@@ -1077,6 +1135,7 @@ class OIDC4VC {
       //   }
 
       case OIDC4VCIDraftType.draft13:
+      case OIDC4VCIDraftType.draft14:
         credentialData['format'] = format;
 
         if (credentialDefinition != null) {
