@@ -319,9 +319,15 @@ class WalletCubit extends Cubit<WalletState> {
     /// If we are not using crypto in the wallet we are not generating
     /// AssociatedAddress credentials.
     if (Parameters.walletHandlesCrypto) {
+      // only for default profile at wallet creation
+      // get crurrent current profile type from profileCubit
+      final ProfileType currentProfileType =
+          credentialsCubit.profileCubit.state.model.profileType;
+      await credentialsCubit.profileCubit.setProfile(ProfileType.defaultOne);
       await credentialsCubit.insertAssociatedWalletCredential(
         cryptoAccountData: cryptoAccountData,
       );
+      await credentialsCubit.profileCubit.setProfile(currentProfileType);
     }
 
     return cryptoAccountData;

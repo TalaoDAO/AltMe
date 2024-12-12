@@ -562,7 +562,6 @@ void main() {
         final credentialResponseData = await oidc4vc.getSingleCredential(
           openIdConfiguration: configuration,
           accessToken: accessToken,
-          nonce: nonce,
           dio: client,
           credentialData: {},
           dPop: null,
