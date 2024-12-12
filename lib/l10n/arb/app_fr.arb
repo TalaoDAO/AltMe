@@ -401,7 +401,7 @@
   "accountName": "Nom du compte",
   "importWalletText": "Entrez ici votre phrase de récupération ou votre clé privée.",
   "importWalletTextRecoveryPhraseOnly": "Saisissez votre phrase de récupération ici.",
-  "recoveryPhraseDescriptions": "Une phrase de récupération est une liste de 12 mots générés par votre wallet crypto donnant accès à vos actifs",
+  "recoveryPhraseDescriptions": "Une phrase de récupération est une liste de 12 mots générés par votre crypto wallet donnant accès à vos actifs",
   "importEasilyFrom": "Importez votre compte depuis :",
   "templeWallet": "Temple",
   "temple": "Temple",
@@ -686,16 +686,16 @@
   "decline": "Refuser",
   "yotiCameraAppbarTitle": "Rapprochez votre visage au plus près du smartphone avant de prendre la photo",
   "cameraSubtitle": "Vous avez 5 secondes pour prendre votre photo. Rapprochez votre visage au plus près avant de commencer.",
-  "walletSecurityDescription": "Protégez votre wallet avec le code PIN et l'authentification biométrique",
+  "walletSecurityDescription": "Protégez votre wallet avec le code PIN ou l'authentification biométrique et faites une sauvegarde",
   "blockchainSettings": "Paramètres pour les blockchains",
   "blockchainSettingsDescription": "Gérez vos comptes, votre phrase de récupération et les dApps",
   "ssi": "Identité décentralisée (DID)",
-  "ssiDescription": "Gérez votre identité décentralisée et sauvegardez ou restaurez vos attestations digitales",
+  "ssiDescription": "Gérez votre identité décentralisée et recherchez des attestations digitales",
   "helpCenter": "Centre d'aide",
   "helpCenterDescription": "Contactez-nous, accédez à la documentation ou obtenez de l'aide",
   "about": "À propos",
-  "aboutDescription": "En savoir plus sur les conditions générales d'utilisation (CGU), la protection des données et les licences",
-  "resetWallet": "Réinitialiser le wallet",
+  "aboutDescription": "En savoir plus sur les conditions générales d'utilisation, la protection des données et les licences",
+  "resetWallet": "Réinitialisation",
   "resetWalletDescription": "Effacez les données stockées sur votre téléphone et réinitialisez le wallet",
   "showWalletRecoveryPhrase": "Afficher la phrase de récupération",
   "showWalletRecoveryPhraseSubtitle": "La phrase de récupération est nécessaire pour restaurer votre wallet.",
@@ -1121,8 +1121,8 @@
   "storageFee": "Storage Fee",
   "doYouWantToSetupTheProfile": "Souhaitez vous paramétrer ce profil",
   "thisFeatureIsNotSupportedYetForEtherlink": "Cette fonctionalité n'est pas supportée sur Etherlink.",
-  "walletSecurityAndBackup": "Sécurité et sauvegarde du wallet",
-  "addedCredential": "Added credential {credential} by {domain}",  
+  "walletSecurityAndBackup": "Sécurité et sauvegarde",
+  "addedCredential": "Attestation {credential} de {domain} ajoutée",  
   "@addedCredentialDescription": {
     "description": "name of the credential",
     "type": "text",
@@ -1138,5 +1138,6 @@
     }
   },
   "reject": "Rejet",
-  "operation": "Opération"
+  "operation": "Opération",
+  "chooseYourSSIProfileOrCustomizeYourOwn": "Choisissez un écosystème pour votre wallet"
 }

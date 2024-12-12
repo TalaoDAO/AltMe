@@ -5,7 +5,8 @@
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
     "reject",
-    "operation"
+    "operation",
+    "chooseYourSSIProfileOrCustomizeYourOwn"
   ],
 
   "es": [
@@ -14,6 +15,7 @@
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
     "reject",
-    "operation"
+    "operation",
+    "chooseYourSSIProfileOrCustomizeYourOwn"
   ]
 }

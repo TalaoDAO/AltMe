@@ -1301,6 +1301,13 @@ MessageHandler getMessageHandler(dynamic e) {
           'error_description': 'Kid does not match the did document.',
         },
       );
+    } else if (stringException.contains('C_NONCE_NOT_AVAILABLE')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'c_nonce is not avaiable.',
+        },
+      );
     } else {
       return ResponseMessage(
         message:

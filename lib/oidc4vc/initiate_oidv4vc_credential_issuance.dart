@@ -125,6 +125,14 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         final String? oAuthClientAttestationPop =
             jwt['oAuthClientAttestationPop'] as String?;
         final String publicKeyForDPop = jwt['publicKeyForDPop'].toString();
+        final String oidc4vciDraft = jwt['oidc4vciDraft'].toString();
+
+        final OIDC4VCIDraftType? oidc4vciDraftType = OIDC4VCIDraftType.values
+            .firstWhereOrNull((ele) => ele.numbering == oidc4vciDraft);
+
+        if (oidc4vciDraftType == null) {
+          throw Exception();
+        }
 
         final selectedCredentials = stateOfCredentialsSelected
             .map((index) => credentials[index])
@@ -146,6 +154,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           oAuthClientAttestationPop: oAuthClientAttestationPop,
           qrCodeScanCubit: qrCodeScanCubit,
           publicKeyForDPop: publicKeyForDPop,
+          oidc4vciDraftType: oidc4vciDraftType,
         );
       }
     }

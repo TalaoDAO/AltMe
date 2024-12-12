@@ -1311,6 +1311,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           oAuthClientAttestationPop: oAuthClientAttestationPop,
           qrCodeScanCubit: qrCodeScanCubit,
           publicKeyForDPop: publicKeyForDPop,
+          oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
         );
       } else {
         emit(state.loading());
@@ -1372,6 +1373,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? clientSecret,
     required QRCodeScanCubit qrCodeScanCubit,
     required String publicKeyForDPop,
+    required OIDC4VCIDraftType oidc4vciDraftType,
     String? oAuthClientAttestation,
     String? oAuthClientAttestationPop,
   }) async {
@@ -1464,6 +1466,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               dio: client.dio,
               tokenData: tokenData,
               dPop: dPop,
+              issuer: issuer,
             );
 
             savedAccessToken = accessToken;
@@ -1494,6 +1497,33 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 'error_description': 'Access token is not provided.',
               },
             );
+          }
+
+          if (oidc4vciDraftType.getNonce) {
+            final nonceEndpoint = await oidc4vc.getNonceEndPoint(
+              issuer: issuer,
+              openIdConfiguration:
+                  OpenIdConfiguration.fromJson(openIdConfigurationData),
+              dio: client.dio,
+              useOAuthAuthorizationServerLink:
+                  useOauthServerAuthEndPoint(profileCubit.state.model),
+            );
+
+            final nonce = await oidc4vc.getNonceReponse(
+              dio: client.dio,
+              nonceEndpoint: nonceEndpoint,
+            );
+
+            if (nonce == null) {
+              throw ResponseMessage(
+                data: {
+                  'error': 'invalid_request',
+                  'error_description': 'c_nonce is not avaiable.',
+                },
+              );
+            }
+
+            savedNonce = nonce;
           }
 
           /// get credentials
@@ -1806,6 +1836,14 @@ ${state.uri}
           statePayload['oAuthClientAttestationPop'] as String?;
       final String publicKeyForDPop =
           statePayload['publicKeyForDPop'].toString();
+      final String oidc4vciDraft = statePayload['oidc4vciDraft'].toString();
+
+      final OIDC4VCIDraftType? oidc4vciDraftType = OIDC4VCIDraftType.values
+          .firstWhereOrNull((ele) => ele.numbering == oidc4vciDraft);
+
+      if (oidc4vciDraftType == null) {
+        throw Exception();
+      }
 
       await addCredentialsInLoop(
         selectedCredentials: selectedCredentials,
@@ -1823,6 +1861,7 @@ ${state.uri}
         oAuthClientAttestationPop: oAuthClientAttestationPop,
         qrCodeScanCubit: qrCodeScanCubit,
         publicKeyForDPop: publicKeyForDPop,
+        oidc4vciDraftType: oidc4vciDraftType,
       );
     } catch (e) {
       emitError(e);

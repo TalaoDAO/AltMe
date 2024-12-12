@@ -243,7 +243,7 @@ CustomOidc4VcProfile _$CustomOidc4VcProfileFromJson(
       cryptoHolderBinding: json['cryptoHolderBinding'] as bool,
       defaultDid: $enumDecode(_$DidKeyTypeEnumMap, json['defaultDid']),
       oidc4vciDraft:
-          CustomOidc4VcProfile.oidc4vciDraftFromJson(json['oidc4vciDraft']),
+          $enumDecode(_$OIDC4VCIDraftTypeEnumMap, json['oidc4vciDraft']),
       oidc4vpDraft:
           $enumDecode(_$OIDC4VPDraftTypeEnumMap, json['oidc4vpDraft']),
       scope: json['scope'] as bool,
@@ -316,6 +316,12 @@ const _$DidKeyTypeEnumMap = {
       'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation',
 };
 
+const _$OIDC4VCIDraftTypeEnumMap = {
+  OIDC4VCIDraftType.draft11: '11',
+  OIDC4VCIDraftType.draft13: '13',
+  OIDC4VCIDraftType.draft14: '14',
+};
+
 const _$OIDC4VPDraftTypeEnumMap = {
   OIDC4VPDraftType.draft10: '10',
   OIDC4VPDraftType.draft13: '13',
@@ -341,11 +347,6 @@ const _$ProofHeaderTypeEnumMap = {
 const _$ProofTypeEnumMap = {
   ProofType.ldpVp: 'ldp_vp',
   ProofType.jwt: 'jwt',
-};
-
-const _$OIDC4VCIDraftTypeEnumMap = {
-  OIDC4VCIDraftType.draft11: '11',
-  OIDC4VCIDraftType.draft13: '13',
 };
 
 SettingsMenu _$SettingsMenuFromJson(Map<String, dynamic> json) => SettingsMenu(

@@ -59,6 +59,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
     'issuer': issuer,
     'isEBSI': isEBSI,
     'publicKeyForDPop': publicKeyForDPop,
+    'oidc4vciDraft': oidc4vciDraftType.numbering,
   };
 
   switch (clientAuthentication) {

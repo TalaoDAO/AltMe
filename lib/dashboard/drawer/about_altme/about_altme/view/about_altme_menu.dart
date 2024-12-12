@@ -86,19 +86,19 @@ class AboutAltmeView extends StatelessWidget {
                 ),
               ],
               const SizedBox(height: Sizes.spaceXSmall),
-              FutureBuilder<PackageInfo>(
-                future: PackageInfo.fromPlatform(),
-                builder: (_, snapShot) {
-                  var appVersion = '...';
-                  if (snapShot.connectionState == ConnectionState.done) {
-                    appVersion = snapShot.data?.version ?? '0.1.0';
-                  }
-                  return DrawerItem(
-                    title: '${l10n.yourAppVersion} : $appVersion',
-                    trailing: Container(),
-                  );
-                },
-              ),
+              // FutureBuilder<PackageInfo>(
+              //   future: PackageInfo.fromPlatform(),
+              //   builder: (_, snapShot) {
+              //     var appVersion = '...';
+              //     if (snapShot.connectionState == ConnectionState.done) {
+              //       appVersion = snapShot.data?.version ?? '0.1.0';
+              //     }
+              //     return DrawerItem(
+              //       title: '${l10n.yourAppVersion} : $appVersion',
+              //       trailing: Container(),
+              //     );
+              //   },
+              // ),
               DrawerItem(
                 title: l10n.termsOfUse,
                 onTap: () =>
