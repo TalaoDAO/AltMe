@@ -323,11 +323,17 @@ class WalletCubit extends Cubit<WalletState> {
       // get crurrent current profile type from profileCubit
       final ProfileType currentProfileType =
           credentialsCubit.profileCubit.state.model.profileType;
-      await credentialsCubit.profileCubit.setProfile(ProfileType.defaultOne);
+      if (currentProfileType != ProfileType.enterprise) {
+        await credentialsCubit.profileCubit.setProfile(ProfileType.defaultOne);
       await credentialsCubit.insertAssociatedWalletCredential(
         cryptoAccountData: cryptoAccountData,
       );
       await credentialsCubit.profileCubit.setProfile(currentProfileType);
+      } else {
+        await credentialsCubit.insertAssociatedWalletCredential(
+          cryptoAccountData: cryptoAccountData,
+        );
+      }
     }
 
     return cryptoAccountData;
