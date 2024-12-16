@@ -797,6 +797,12 @@ class ResponseMessage with MessageHandler {
               .localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage:
+          return ResponseString
+              .RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage.localise(
+            context,
+          );
       }
     }
     return '';

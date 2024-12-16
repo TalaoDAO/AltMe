@@ -58,7 +58,7 @@ class OnBoardingVerifyPhraseState extends Equatable {
   }) {
     return OnBoardingVerifyPhraseState(
       status: status,
-      message: message ?? this.message,
+      message: message,
       isVerified: isVerified ?? this.isVerified,
       mnemonicStates: mnemonicStates ?? this.mnemonicStates,
     );
@@ -75,6 +75,7 @@ class MnemonicState extends Equatable {
   const MnemonicState({
     this.mnemonicStatus = MnemonicStatus.unselected,
     required this.order,
+    this.userSelectedOrder,
   });
 
   factory MnemonicState.fromJson(Map<String, dynamic> json) =>
@@ -82,18 +83,25 @@ class MnemonicState extends Equatable {
 
   final MnemonicStatus mnemonicStatus;
   final int order;
+  final int? userSelectedOrder;
 
   MnemonicState copyWith({
     required MnemonicStatus mnemonicStatus,
+    required int? userSelectedOrder,
   }) {
     return MnemonicState(
       order: order,
       mnemonicStatus: mnemonicStatus,
+      userSelectedOrder: userSelectedOrder,
     );
   }
 
   Map<String, dynamic> toJson() => _$MnemonicStateToJson(this);
 
   @override
-  List<Object?> get props => [mnemonicStatus, order];
+  List<Object?> get props => [
+        mnemonicStatus,
+        order,
+        userSelectedOrder,
+      ];
 }
