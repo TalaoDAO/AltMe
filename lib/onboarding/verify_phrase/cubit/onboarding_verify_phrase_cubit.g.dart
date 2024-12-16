@@ -54,16 +54,17 @@ MnemonicState _$MnemonicStateFromJson(Map<String, dynamic> json) =>
               _$MnemonicStatusEnumMap, json['mnemonicStatus']) ??
           MnemonicStatus.unselected,
       order: (json['order'] as num).toInt(),
+      userSelectedOrder: (json['userSelectedOrder'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$MnemonicStateToJson(MnemonicState instance) =>
     <String, dynamic>{
       'mnemonicStatus': _$MnemonicStatusEnumMap[instance.mnemonicStatus]!,
       'order': instance.order,
+      'userSelectedOrder': instance.userSelectedOrder,
     };
 
 const _$MnemonicStatusEnumMap = {
   MnemonicStatus.unselected: 'unselected',
   MnemonicStatus.selected: 'selected',
-  MnemonicStatus.wrongSelection: 'wrongSelection',
 };

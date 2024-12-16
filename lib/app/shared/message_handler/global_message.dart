@@ -398,4 +398,7 @@ class GlobalMessage {
 
   String get RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription =>
       l10n.invalidPresentationDefinitionUriErrorDescription;
+
+  String get RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage =>
+      l10n.recoveryPhraseIncorrectErrorMessage;
 }
