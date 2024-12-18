@@ -13,7 +13,7 @@ class ClientTypeWidget extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return OptionContainer(
-          title: 'Wallet Client_id Scheme',
+          title: 'OIDC4VCI client_id value',
           body: ListView.builder(
             itemCount: ClientType.values.length,
             shrinkWrap: true,
