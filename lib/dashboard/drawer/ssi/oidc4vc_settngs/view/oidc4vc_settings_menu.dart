@@ -36,7 +36,7 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SecurityLevelWidget(),
-          const DidKeyTypeWidget(),
+          const KeyIdentifierAndKeyTypeWidget(),
           const DraftTypeWidget(),
           const CryptographicHolderBindingWidget(),
           const ScopeParameterWidget(),
