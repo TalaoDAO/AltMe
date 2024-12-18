@@ -1349,6 +1349,7 @@ ResponseString getErrorResponseString(String errorString) {
       return ResponseString.RESPONSE_STRING_theWalletIsNotRegistered;
 
     case 'invalid_grant':
+      return ResponseString.RESPONSE_STRING_invalidCode;
     case 'invalid_token':
       return ResponseString.RESPONSE_STRING_credentialIssuanceDenied;
 

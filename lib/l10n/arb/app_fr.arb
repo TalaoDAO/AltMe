@@ -1139,5 +1139,6 @@
   },
   "reject": "Rejet",
   "operation": "Opération",
-  "chooseYourSSIProfileOrCustomizeYourOwn": "Choisissez un écosystème pour votre wallet"
+  "chooseYourSSIProfileOrCustomizeYourOwn": "Choisissez un écosystème pour votre wallet",
+  "invalidCode": "Code invalide"
 }
