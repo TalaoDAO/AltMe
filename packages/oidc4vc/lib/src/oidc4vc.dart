@@ -1649,7 +1649,9 @@ class OIDC4VC {
           case ProofHeaderType.jwk:
             vpBuilder.setProtectedHeader(
               'jwk',
-              tokenParameters.publicJWK,
+              tokenParameters.publicJWK
+                ..removeWhere((key, value) => key == 'use')
+                ..removeWhere((key, value) => key == 'alg'),
             );
         }
       }
