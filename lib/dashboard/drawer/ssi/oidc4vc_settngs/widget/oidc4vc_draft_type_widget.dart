@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
-class DraftTypeWidget extends StatelessWidget {
-  const DraftTypeWidget({super.key});
+class OIDC4VCDraftTypeWidget extends StatelessWidget {
+  const OIDC4VCDraftTypeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -718,7 +718,7 @@ class CustomOidc4VcProfile extends Equatable {
         cryptoHolderBinding: true,
         defaultDid: DidKeyType.edDSA,
         oidc4vciDraft: OIDC4VCIDraftType.draft13,
-        oidc4vpDraft: OIDC4VPDraftType.draft18,
+        oidc4vpDraft: OIDC4VPDraftType.draft21,
         scope: false,
         securityLevel: false,
         siopv2Draft: SIOPV2DraftType.draft12,
