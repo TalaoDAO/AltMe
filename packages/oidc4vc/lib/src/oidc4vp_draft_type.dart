@@ -36,4 +36,8 @@ extension OIDC4VPDraftTypeX on OIDC4VPDraftType {
         return 'Draft 23';
     }
   }
+
+  bool get draft22AndAbove {
+    return this == OIDC4VPDraftType.draft22 || this == OIDC4VPDraftType.draft23;
+  }
 }

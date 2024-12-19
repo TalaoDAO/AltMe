@@ -1504,6 +1504,7 @@ Future<dynamic> fetchRequestUriPayload({
 String getUpdatedUrlForSIOPV2OIC4VP({
   required Uri uri,
   required Map<String, dynamic> response,
+  required String clientId,
 }) {
   final responseType = response['response_type'];
   final redirectUri = response['redirect_uri'];
@@ -1511,7 +1512,6 @@ String getUpdatedUrlForSIOPV2OIC4VP({
   final responseUri = response['response_uri'];
   final responseMode = response['response_mode'];
   final nonce = response['nonce'];
-  final clientId = response['client_id'];
   final claims = response['claims'];
   final stateValue = response['state'];
   final presentationDefinition = response['presentation_definition'];
@@ -1526,7 +1526,7 @@ String getUpdatedUrlForSIOPV2OIC4VP({
     queryJson['scope'] = scope;
   }
 
-  if (!uri.queryParameters.containsKey('client_id') && clientId != null) {
+  if (!uri.queryParameters.containsKey('client_id')) {
     queryJson['client_id'] = clientId;
   }
 
@@ -2425,4 +2425,22 @@ bool isContract(String reciever) {
   if (reciever.startsWith('tz')) return false;
   if (reciever.startsWith('KT1')) return true;
   return false;
+}
+
+String getClientIdForPresentation({
+  required bool draft22AndAbove,
+  required String? clientId,
+}) {
+  if (clientId == null) return '';
+  if (draft22AndAbove) {
+    final parts = clientId.split(':');
+    if (parts.length == 2) {
+      return parts[1];
+    } else {
+      // this is mistake though
+      return clientId;
+    }
+  } else {
+    return clientId;
+  }
 }

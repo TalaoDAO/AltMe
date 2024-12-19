@@ -200,7 +200,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         if (requestUri != null || request != null) {
           /// verifier side (oidc4vp) or (siopv2 oidc4vc) with request_uri
           /// verify the encoded data first
-          await verifyJWTBeforeLaunchingOIDC4VCANDSIOPV2Flow();
+          await verifyJWTBeforeLaunchingOIDC4VPANDSIOPV2Flow();
           return;
         } else {
           emit(state.acceptHost());
@@ -611,6 +611,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     final String? requestUri = uri.queryParameters['request_uri'];
     final String? request = uri.queryParameters['request'];
 
+    final bool draft22AndAbove = profileCubit
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .oidc4vpDraft
+        .draft22AndAbove;
+
+    final clientId = getClientIdForPresentation(
+      draft22AndAbove: draft22AndAbove,
+      clientId: state.uri!.queryParameters['client_id'],
+    );
+
     /// check if request uri is provided or not
     if (requestUri != null || request != null) {
       late dynamic encodedData;
@@ -634,6 +648,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final String newUrl = getUpdatedUrlForSIOPV2OIC4VP(
         uri: uri,
         response: response,
+        clientId: clientId,
       );
 
       emit(
@@ -713,8 +728,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     final redirectUri = state.uri!.queryParameters['redirect_uri'];
     final responseUri = state.uri!.queryParameters['response_uri'];
-    final clientId = state.uri!.queryParameters['client_id'];
-    final isClientIdUrl = isURL(clientId.toString());
+
+    final isClientIdUrl = isURL(clientId);
 
     /// id_token only
     if (isIDTokenOnly(responseType)) {
@@ -791,7 +806,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       if (isSecurityHigh &&
           responseUri != null &&
           isClientIdUrl &&
-          !responseUri.contains(clientId.toString())) {
+          !responseUri.contains(clientId)) {
         throw ResponseMessage(
           data: {
             'error': 'invalid_request',
@@ -806,7 +821,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       if (isSecurityHigh &&
           redirectUri != null &&
           isClientIdUrl &&
-          !redirectUri.contains(clientId.toString())) {
+          !redirectUri.contains(clientId)) {
         throw ResponseMessage(
           data: {
             'error': 'invalid_request',
@@ -1070,7 +1085,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   /// verify jwt
-  Future<void> verifyJWTBeforeLaunchingOIDC4VCANDSIOPV2Flow() async {
+  Future<void> verifyJWTBeforeLaunchingOIDC4VPANDSIOPV2Flow() async {
     final String? requestUri = state.uri?.queryParameters['request_uri'];
     final String? request = state.uri?.queryParameters['request'];
 
@@ -1079,10 +1094,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     if (request != null) {
       encodedData = request;
     } else if (requestUri != null) {
-      encodedData = await fetchRequestUriPayload(
-        url: requestUri,
-        client: client,
-      );
+      encodedData =
+          await fetchRequestUriPayload(url: requestUri, client: client);
     }
 
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
@@ -1094,7 +1107,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final Map<String, dynamic> payload =
           jwtDecode.parseJwt(encodedData as String);
 
-      final String clientId = payload['client_id'].toString();
+      var clientId = payload['client_id'].toString();
 
       //check Signature
       try {
@@ -1117,7 +1130,42 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         Map<String, dynamic>? publicKeyJwk;
 
-        final clientIdScheme = payload['client_id_scheme'];
+        var clientIdScheme = payload['client_id_scheme'];
+
+        /// With OIDC4VP Draft 22 and above the client_id_scheme is removed
+        /// from the authorization request but the value is added to the
+        /// client_id to be the new client_id value
+        ///
+        /// in the client_id Authorization Request parameter and other places
+        /// where the Client Identifier is used, the Client Identifier Schemes
+        /// are prefixed to the usual Client Identifier, separated by a :
+        /// (colon) character: <client_id_scheme>:<orig_client_id>
+
+        if (clientIdScheme == null) {
+          final draft22AndAbove = profileCubit
+              .state
+              .model
+              .profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile
+              .oidc4vpDraft
+              .draft22AndAbove;
+
+          if (draft22AndAbove) {
+            final parts = clientId.split(':');
+            if (parts.length == 2) {
+              clientIdScheme = parts[0];
+              clientId = parts[1];
+            } else {
+              throw ResponseMessage(
+                data: {
+                  'error': 'invalid_request',
+                  'error_description': 'Invalid client_id',
+                },
+              );
+            }
+          }
+        }
 
         if (clientIdScheme != null) {
           final Map<String, dynamic> header =
@@ -1174,7 +1222,16 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final redirectUri = state.uri!.queryParameters['redirect_uri'];
       final responseUri = state.uri!.queryParameters['response_uri'];
 
-      final clientId = state.uri!.queryParameters['client_id'] ?? '';
+      final customOidc4vcProfile = profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+      final bool draft22AndAbove =
+          customOidc4vcProfile.oidc4vpDraft.draft22AndAbove;
+
+      final clientId = getClientIdForPresentation(
+        draft22AndAbove: draft22AndAbove,
+        clientId: state.uri!.queryParameters['client_id'],
+      );
 
       final nonce = state.uri?.queryParameters['nonce'];
       final stateValue = state.uri?.queryParameters['state'];
@@ -1182,8 +1239,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       // final bool? isEBSI =
       //     await isEBSIForVerifier(client: client, uri: state.uri!);
 
-      final didKeyType = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+      final didKeyType = customOidc4vcProfile.defaultDid;
 
       final privateKey = await fetchPrivateKey(
         profileCubit: profileCubit,
@@ -1195,9 +1251,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         profileCubit: profileCubit,
         didKeyType: didKeyType,
       );
-
-      final customOidc4vcProfile = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile;
 
       final Map<String, dynamic> responseData =
           await oidc4vc.getDataForSiopV2Flow(
