@@ -1109,8 +1109,8 @@
   "restoreACryptoWallet": "Restaurer un wallet crypto",
   "restoreAnAppBackup": "Restaurer une sauvegarde de {appName}",
   "credentialPickShare": "Partagez",
-  "credentialPickTitle": "Choisissez la ou les attestation(s) que vous souhaitez obtenir",
-  "credentialShareTitle": "Choisissez la ou les attestation(s) à partager",
+  "credentialPickTitle": "Choisissez une ou plusieurs attestation(s)",
+  "credentialShareTitle": "Choisissez une ou plusieurs attestation(s)",
   "enterYourSecretCode": "Entrez votre code secret.",
   "jwk": "JWK",
   "typeYourPINCodeToOpenTheWallet": "Entrez votre code PIN pour ouvrir le wallet",
@@ -1140,5 +1140,7 @@
   "reject": "Rejet",
   "operation": "Opération",
   "chooseYourSSIProfileOrCustomizeYourOwn": "Choisissez un écosystème pour votre wallet",
+  "recoveryPhraseIncorrectErrorMessage": "Veuillez recommencer dans le bon ordre.",
   "invalidCode": "Code invalide"
+
 }
