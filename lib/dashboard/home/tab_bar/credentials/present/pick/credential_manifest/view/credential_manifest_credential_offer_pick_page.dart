@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -327,7 +329,17 @@ class _CredentialManifestOfferPickViewState
                                 const SizedBox(height: 8),
                                 MyOutlinedButton(
                                   text: l10n.cancel,
-                                  onPressed: () => Navigator.of(context).pop(),
+                                  onPressed: () {
+                                    unawaited(
+                                      context
+                                          .read<ScanCubit>()
+                                          .sendErrorToServer(
+                                        uri: widget.uri,
+                                        data: {'error': 'access_denied'},
+                                      ),
+                                    );
+                                    Navigator.of(context).pop();
+                                  },
                                 ),
                               ],
                             ),

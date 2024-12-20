@@ -725,6 +725,24 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
+  Future<void> sendErrorToServer({
+    required Uri uri,
+    required Map<String, dynamic> data,
+  }) async {
+    final String responseOrRedirectUri = uri.queryParameters['redirect_uri'] ??
+        uri.queryParameters['response_uri']!;
+
+    await client.dio.post<dynamic>(
+      responseOrRedirectUri,
+      data: data,
+      options: Options(
+        headers: <String, dynamic>{
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      ),
+    );
+  }
+
   Future<(Map<String, dynamic>, VCFormatType)> getPresentationSubmission({
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
