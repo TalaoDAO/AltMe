@@ -432,6 +432,12 @@ class _CredentialManifestOfferPickViewState
         );
 
         if (!authenticated) {
+          unawaited(
+            context.read<ScanCubit>().sendErrorToServer(
+              uri: widget.uri,
+              data: {'error': 'access_denied'},
+            ),
+          );
           return;
         }
       }
