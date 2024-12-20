@@ -9,9 +9,7 @@ class RequiredCredentialNotFound extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.credentialPickTitle,
       titleAlignment: Alignment.topCenter,
-      titleLeading: const BackLeadingButton(),
       scrollView: false,
       padding: const EdgeInsets.only(
         right: Sizes.spaceNormal,
@@ -21,50 +19,25 @@ class RequiredCredentialNotFound extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            l10n.requiredCredentialNotFoundTitle,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const Spacer(
-            flex: 3,
-          ),
           Image.asset(
             ImageStrings.cardMissing,
             width: 127,
             fit: BoxFit.fitWidth,
           ),
-          const Spacer(
-            flex: 1,
-          ),
+          const SizedBox(height: 30),
           Text(
             l10n.requiredCredentialNotFoundSubTitle,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const Spacer(
-            flex: 1,
-          ),
-          Text(
-            l10n.requiredCredentialNotFoundDescription,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          Text(
-            AltMeStrings.appSupportMail,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const Spacer(
-            flex: 3,
           ),
         ],
       ),
       navigation: Padding(
         padding: const EdgeInsets.all(Sizes.spaceXSmall),
         child: MyElevatedButton(
-          text: l10n.backToHome,
+          text: l10n.back,
           onPressed: () {
             Navigator.popUntil(
               context,

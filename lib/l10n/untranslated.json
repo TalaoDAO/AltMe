@@ -8,7 +8,8 @@
     "operation",
     "chooseYourSSIProfileOrCustomizeYourOwn",
     "recoveryPhraseIncorrectErrorMessage",
-    "invalidCode"
+    "invalidCode",
+    "back"
   ],
 
   "es": [
@@ -20,6 +21,11 @@
     "operation",
     "chooseYourSSIProfileOrCustomizeYourOwn",
     "recoveryPhraseIncorrectErrorMessage",
-    "invalidCode"
+    "invalidCode",
+    "back"
+  ],
+
+  "fr": [
+    "back"
   ]
 }
