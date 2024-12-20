@@ -1108,7 +1108,7 @@
   "documentation": "Documentation",
   "restoreACryptoWallet": "Restaurer un wallet crypto",
   "restoreAnAppBackup": "Restaurer une sauvegarde de {appName}",
-  "credentialPickShare": "Partagez",
+  "credentialPickShare": "Partager",
   "credentialPickTitle": "Choisissez une ou plusieurs attestation(s)",
   "credentialShareTitle": "Choisissez une ou plusieurs attestation(s)",
   "enterYourSecretCode": "Entrez votre code secret.",
