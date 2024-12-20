@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:flutter/material.dart';
@@ -48,18 +47,12 @@ class RequiredCredentialNotFound extends StatelessWidget {
           child: MyElevatedButton(
             text: l10n.back,
             onPressed: () {
-              if (context
-                  .read<CredentialManifestPickCubit>()
-                  .state
-                  .filteredCredentialList
-                  .isEmpty) {
-                unawaited(
-                  context.read<ScanCubit>().sendErrorToServer(
-                    uri: uri,
-                    data: {'error': 'access_denied'},
-                  ),
-                );
-              }
+              unawaited(
+                context.read<ScanCubit>().sendErrorToServer(
+                  uri: uri,
+                  data: {'error': 'access_denied'},
+                ),
+              );
               Navigator.popUntil(
                 context,
                 (route) => route.settings.name == AltMeStrings.dashBoardPage,
