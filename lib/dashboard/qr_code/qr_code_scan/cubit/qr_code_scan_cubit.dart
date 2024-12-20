@@ -664,19 +664,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     // }
 
     if (!keys.contains('response_type')) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'The response_type is missing.',
-        },
-      );
+      final error = {
+        'error': 'invalid_request',
+        'error_description': 'The response_type is missing.',
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
     } else if (!keys.contains('client_id')) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'The client_id is missing.',
-        },
-      );
+      final error = {
+        'error': 'invalid_request',
+        'error_description': 'The client_id is missing.',
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
     }
 
     final String? responseMode = state.uri!.queryParameters['response_mode'];
@@ -687,12 +687,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     /// check response mode value
     if (!correctResponeMode) {
-      throw ResponseMessage(
-        data: {
-          'error': 'unsupported_response_type',
-          'error_description': 'The response mode is not supported.',
-        },
-      );
+      final error = {
+        'error': 'unsupported_response_type',
+        'error_description': 'The response mode is not supported.',
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
     }
 
     final bool isSecurityHigh = profileCubit.state.model.profileSetting
@@ -706,12 +706,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           registrationMap['subject_syntax_types_supported'] as List<dynamic>;
       if (!data.contains('did:key')) {
         if (isSecurityHigh) {
-          throw ResponseMessage(
-            data: {
-              'error': 'unsupported_response_type',
-              'error_description': 'The subject syntax type is not supported.',
-            },
-          );
+          final error = {
+            'error': 'unsupported_response_type',
+            'error_description': 'The subject syntax type is not supported.',
+          };
+          unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+          throw ResponseMessage(data: error);
         }
       }
     }
@@ -724,22 +724,21 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     /// id_token only
     if (isIDTokenOnly(responseType)) {
       if (redirectUri == null && responseUri == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description':
-                'Only response_uri or redirect_uri is required.',
-          },
-        );
+        final error = {
+          'error': 'invalid_request',
+          'error_description': 'Only response_uri or redirect_uri is required.',
+        };
+        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        throw ResponseMessage(data: error);
       }
 
       if (isSecurityHigh && !keys.contains('nonce')) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'The nonce is missing.',
-          },
-        );
+        final error = {
+          'error': 'invalid_request',
+          'error_description': 'The nonce is missing.',
+        };
+        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        throw ResponseMessage(data: error);
       }
     }
 
@@ -747,25 +746,25 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     if (hasIDToken(responseType)) {
       final scope = state.uri!.queryParameters['scope'];
       if (scope == null || !scope.contains('openid')) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description':
-                'The openid scope is required in the scope list.',
-          },
-        );
+        final error = {
+          'error': 'invalid_request',
+          'error_description':
+              'The openid scope is required in the scope list.',
+        };
+        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        throw ResponseMessage(data: error);
       }
     }
 
     /// contain vp_token but may or may not contain id_token
     if (hasVPToken(responseType)) {
       if (!keys.contains('nonce')) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'The nonce is missing.',
-          },
-        );
+        final error = {
+          'error': 'invalid_request',
+          'error_description': 'The nonce is missing.',
+        };
+        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        throw ResponseMessage(data: error);
       }
 
       if (responseMode == 'direct_post') {
@@ -773,23 +772,23 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final bothAbsent = redirectUri == null && responseUri == null;
 
         if (bothAbsent) {
-          throw ResponseMessage(
-            data: {
-              'error': 'invalid_request',
-              'error_description':
-                  'The response_uri and redirect_uri are missing.',
-            },
-          );
+          final error = {
+            'error': 'invalid_request',
+            'error_description':
+                'The response_uri and redirect_uri are missing.',
+          };
+          unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+          throw ResponseMessage(data: error);
         }
 
         if (bothPresent) {
-          throw ResponseMessage(
-            data: {
-              'error': 'invalid_request',
-              'error_description':
-                  'Only response_uri or redirect_uri is required.',
-            },
-          );
+          final error = {
+            'error': 'invalid_request',
+            'error_description':
+                'Only response_uri or redirect_uri is required.',
+          };
+          unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+          throw ResponseMessage(data: error);
         }
       }
 
@@ -797,12 +796,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           responseUri != null &&
           isClientIdUrl &&
           !responseUri.contains(clientId.toString())) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'The client_id must be equal to response_uri.',
-          },
-        );
+        final error = {
+          'error': 'invalid_request',
+          'error_description': 'The client_id must be equal to response_uri.',
+        };
+        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        throw ResponseMessage(data: error);
       }
     }
 
@@ -812,12 +811,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           redirectUri != null &&
           isClientIdUrl &&
           !redirectUri.contains(clientId.toString())) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'The client_id must be equal to redirect_uri.',
-          },
-        );
+        final error = {
+          'error': 'invalid_request',
+          'error_description': 'The client_id must be equal to redirect_uri.',
+        };
+        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        throw ResponseMessage(data: error);
       }
     }
 
@@ -837,13 +836,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         uri: state.uri!,
       );
     } else {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description':
-              'The response type supported is id_token, or vp_token or both.',
-        },
-      );
+      final error = {
+        'error': 'invalid_request',
+        'error_description':
+            'The response type supported is id_token, or vp_token or both.',
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
     }
   }
 
@@ -965,51 +964,51 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }) async {
     if (!keys.contains('presentation_definition') &&
         !keys.contains('presentation_definition_uri')) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description':
-              'The presentation_definition or presentation_definition_uri is '
-                  'required, only one but one is required.',
-        },
-      );
+      final error = {
+        'error': 'invalid_request',
+        'error_description':
+            'The presentation_definition or presentation_definition_uri is '
+                'required, only one but one is required.',
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
     }
 
     final Map<String, dynamic>? presentationDefinitionData =
         await getPresentationDefinition(client: client, uri: uri);
 
     if (presentationDefinitionData == null) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'Presentation definition is invalid',
-        },
-      );
+      final error = {
+        'error': 'invalid_request',
+        'error_description': 'Presentation definition is invalid',
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
     }
 
     final PresentationDefinition presentationDefinition =
         PresentationDefinition.fromJson(presentationDefinitionData);
 
     if (presentationDefinition.inputDescriptors.isEmpty) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description':
-              'The input_descriptors is required in the presentation_definition'
-                  ' object',
-        },
-      );
+      final error = {
+        'error': 'invalid_request',
+        'error_description':
+            'The input_descriptors is required in the presentation_definition'
+                ' object',
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
     }
 
     if (presentationDefinition.inputDescriptors.isEmpty) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description':
-              'The input_descriptors is required in the presentation_definition'
-                  ' object',
-        },
-      );
+      final error = {
+        'error': 'invalid_request',
+        'error_description':
+            'The input_descriptors is required in the presentation_definition'
+                ' object',
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
     }
 
     Map<String, dynamic>? clientMetaData;
@@ -1019,24 +1018,24 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       if (clientMetaData != null) {
         if (!clientMetaData.containsKey('vp_formats')) {
-          throw ResponseMessage(
-            data: {
-              'error': 'invalid_request',
-              'error_description': 'Format is missing.',
-            },
-          );
+          final error = {
+            'error': 'invalid_request',
+            'error_description': 'Format is missing.',
+          };
+          unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+          throw ResponseMessage(data: error);
         }
       }
     }
 
     for (final descriptor in presentationDefinition.inputDescriptors) {
       if (descriptor.constraints == null) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Presentation definition is invalid',
-          },
-        );
+        final error = {
+          'error': 'invalid_request',
+          'error_description': 'Presentation definition is invalid',
+        };
+        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        throw ResponseMessage(data: error);
       }
     }
 
@@ -1147,12 +1146,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               clientIdScheme = parts[0];
               clientId = parts[1];
             } else {
-              throw ResponseMessage(
-                data: {
-                  'error': 'invalid_request',
-                  'error_description': 'Invalid client_id',
-                },
-              );
+              final error = {
+                'error': 'invalid_request',
+                'error_description': 'Invalid client_id',
+              };
+              unawaited(
+                  scanCubit.sendErrorToServer(uri: state.uri!, data: error));
+              throw ResponseMessage(data: error);
             }
           }
         }
