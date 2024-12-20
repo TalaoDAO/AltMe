@@ -187,7 +187,7 @@ class _CredentialManifestOfferPickViewState
             }
           },
           child: credentialManifestState.filteredCredentialList.isEmpty
-              ? const RequiredCredentialNotFound()
+              ? RequiredCredentialNotFound(uri: widget.uri)
               : BasePage(
                   title: l10n.credentialShareTitle,
                   titleAlignment: Alignment.topCenter,
