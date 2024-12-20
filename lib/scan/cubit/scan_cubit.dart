@@ -561,12 +561,8 @@ class ScanCubit extends Cubit<ScanState> {
         final customOidc4vcProfile = profileCubit.state.model.profileSetting
             .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-        final bool draft22AndAbove =
-            customOidc4vcProfile.oidc4vpDraft.draft22AndAbove;
-
         final clientId = getClientIdForPresentation(
-          draft22AndAbove: draft22AndAbove,
-          clientId: uri.queryParameters['client_id'],
+          uri.queryParameters['client_id'],
         );
 
         final didKeyType = customOidc4vcProfile.defaultDid;
@@ -846,12 +842,8 @@ class ScanCubit extends Cubit<ScanState> {
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-    final bool draft22AndAbove =
-        customOidc4vcProfile.oidc4vpDraft.draft22AndAbove;
-
     final clientId = getClientIdForPresentation(
-      draft22AndAbove: draft22AndAbove,
-      clientId: uri.queryParameters['client_id'],
+      uri.queryParameters['client_id'],
     );
 
     if (formatFromPresentationSubmission == VCFormatType.vcSdJWT) {
@@ -874,7 +866,7 @@ class ScanCubit extends Cubit<ScanState> {
       );
 
       final vpToken = await oidc4vc.extractVpToken(
-        clientId: clientId,
+        clientId: clientId.toString(),
         credentialsToBePresented: credentialList,
         did: did,
         kid: kid,
@@ -951,18 +943,14 @@ class ScanCubit extends Cubit<ScanState> {
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-    final bool draft22AndAbove =
-        customOidc4vcProfile.oidc4vpDraft.draft22AndAbove;
-
     final clientId = getClientIdForPresentation(
-      draft22AndAbove: draft22AndAbove,
-      clientId: uri.queryParameters['client_id'],
+      uri.queryParameters['client_id'],
     );
 
     final nonce = uri.queryParameters['nonce'] ?? '';
 
     final idToken = await oidc4vc.extractIdToken(
-      clientId: clientId,
+      clientId: clientId.toString(),
       credentialsToBePresented: credentialList,
       did: did,
       kid: kid,

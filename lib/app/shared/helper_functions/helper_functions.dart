@@ -1128,7 +1128,10 @@ Future<String> getHost({
     ).host;
   } else {
     /// verification case
-    final clientId = uri.queryParameters['client_id'];
+
+    final clientId = getClientIdForPresentation(
+      uri.queryParameters['client_id'],
+    );
 
     if (clientId != null) {
       return clientId;
@@ -2427,17 +2430,13 @@ bool isContract(String reciever) {
   return false;
 }
 
-String getClientIdForPresentation({
-  required bool draft22AndAbove,
-  required String? clientId,
-}) {
+String? getClientIdForPresentation(String? clientId) {
   if (clientId == null) return '';
-  if (draft22AndAbove) {
+  if (clientId.contains(':')) {
     final parts = clientId.split(':');
     if (parts.length == 2) {
       return parts[1];
     } else {
-      // this is mistake though
       return clientId;
     }
   } else {
