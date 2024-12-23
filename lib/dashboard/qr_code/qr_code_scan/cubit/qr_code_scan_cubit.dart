@@ -607,13 +607,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
   }
 
-  Future<void> startSIOPV2OIDC4VPProcess(Uri uri) async {
-    final String? requestUri = uri.queryParameters['request_uri'];
-    final String? request = uri.queryParameters['request'];
-
-    final clientId = getClientIdForPresentation(
-      state.uri!.queryParameters['client_id'],
-    );
+  Future<void> startSIOPV2OIDC4VPProcess(Uri oldUri) async {
+    final String? requestUri = oldUri.queryParameters['request_uri'];
+    final String? request = oldUri.queryParameters['request'];
+    final String? clientId = oldUri.queryParameters['client_id'];
 
     /// check if request uri is provided or not
     if (requestUri != null || request != null) {
@@ -636,7 +633,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
 
       final String newUrl = getUpdatedUrlForSIOPV2OIC4VP(
-        uri: uri,
+        uri: oldUri,
         response: response,
         clientId: clientId.toString(),
       );
@@ -668,14 +665,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         'error': 'invalid_request',
         'error_description': 'The response_type is missing.',
       };
-      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
       throw ResponseMessage(data: error);
     } else if (!keys.contains('client_id')) {
       final error = {
         'error': 'invalid_request',
         'error_description': 'The client_id is missing.',
       };
-      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
       throw ResponseMessage(data: error);
     }
 
@@ -691,7 +688,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         'error': 'unsupported_response_type',
         'error_description': 'The response mode is not supported.',
       };
-      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
       throw ResponseMessage(data: error);
     }
 
@@ -710,7 +707,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             'error': 'unsupported_response_type',
             'error_description': 'The subject syntax type is not supported.',
           };
-          unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+          unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
           throw ResponseMessage(data: error);
         }
       }
@@ -728,7 +725,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           'error': 'invalid_request',
           'error_description': 'Only response_uri or redirect_uri is required.',
         };
-        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
         throw ResponseMessage(data: error);
       }
 
@@ -737,7 +734,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           'error': 'invalid_request',
           'error_description': 'The nonce is missing.',
         };
-        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
         throw ResponseMessage(data: error);
       }
     }
@@ -751,7 +748,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           'error_description':
               'The openid scope is required in the scope list.',
         };
-        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
         throw ResponseMessage(data: error);
       }
     }
@@ -763,7 +760,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           'error': 'invalid_request',
           'error_description': 'The nonce is missing.',
         };
-        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
         throw ResponseMessage(data: error);
       }
 
@@ -777,7 +774,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             'error_description':
                 'The response_uri and redirect_uri are missing.',
           };
-          unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+          unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
           throw ResponseMessage(data: error);
         }
 
@@ -787,7 +784,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             'error_description':
                 'Only response_uri or redirect_uri is required.',
           };
-          unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+          unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
           throw ResponseMessage(data: error);
         }
       }
@@ -800,7 +797,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           'error': 'invalid_request',
           'error_description': 'The client_id must be equal to response_uri.',
         };
-        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
         throw ResponseMessage(data: error);
       }
     }
@@ -815,7 +812,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           'error': 'invalid_request',
           'error_description': 'The client_id must be equal to redirect_uri.',
         };
-        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
         throw ResponseMessage(data: error);
       }
     }
@@ -841,7 +838,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         'error_description':
             'The response type supported is id_token, or vp_token or both.',
       };
-      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
       throw ResponseMessage(data: error);
     }
   }
