@@ -1151,7 +1151,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 'error_description': 'Invalid client_id',
               };
               unawaited(
-                  scanCubit.sendErrorToServer(uri: state.uri!, data: error));
+                scanCubit.sendErrorToServer(uri: state.uri!, data: error),
+              );
               throw ResponseMessage(data: error);
             }
           }
