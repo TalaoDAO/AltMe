@@ -23,7 +23,10 @@ class OIDC4VPDraftTypeWidget extends StatelessWidget {
             itemBuilder: (context, index) {
               final draftType = OIDC4VPDraftType.values[index];
 
-              if (draftType == OIDC4VPDraftType.draft23) return Container();
+              if (draftType == OIDC4VPDraftType.draft10 ||
+                  draftType == OIDC4VPDraftType.draft13 ||
+                  draftType == OIDC4VPDraftType.draft18 ||
+                  draftType == OIDC4VPDraftType.draft23) return Container();
 
               return Column(
                 children: [
