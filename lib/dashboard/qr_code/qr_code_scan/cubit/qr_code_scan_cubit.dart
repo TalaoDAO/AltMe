@@ -1174,6 +1174,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           } else if (clientIdScheme == 'redirect_uri') {
             /// no need to verify
             return emit(state.acceptHost());
+          } else if (clientIdScheme == 'did') {
+            /// bypass
+          } else {
+            /// if client_id_scheme is not in the list -> did, redirect_uri,
+            /// verifier_attestation, x509_san_dns
+            final error = {
+              'error': 'invalid_request',
+              'error_description': 'Invalid client_id_scheme',
+            };
+            unawaited(
+              scanCubit.sendErrorToServer(uri: state.uri!, data: error),
+            );
+            throw ResponseMessage(data: error);
           }
 
           final VerificationType isVerified = await verifyEncodedData(
