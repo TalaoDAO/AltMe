@@ -2,18 +2,22 @@ part of 'credential_subject_type.dart';
 
 extension CredentialSubjectTypeExtension on CredentialSubjectType {
   Color backgroundColor(CredentialModel credentialModel) {
-    final Color backgroundColor;
-    if (credentialModel.display?.backgroundColor != null) {
-      backgroundColor = Color(
-        int.parse(
-          'FF${credentialModel.display?.backgroundColor!.replaceAll('#', '')}',
-          radix: 16,
-        ),
-      );
-    } else {
-      backgroundColor = defaultBackgroundColor;
+    try {
+      final Color backgroundColor;
+      if (credentialModel.display?.backgroundColor != null) {
+        backgroundColor = Color(
+          int.parse(
+            'FF${credentialModel.display?.backgroundColor!.replaceAll('#', '')}',
+            radix: 16,
+          ),
+        );
+      } else {
+        backgroundColor = defaultBackgroundColor;
+      }
+      return backgroundColor;
+    } catch (e) {
+      return defaultBackgroundColor;
     }
-    return backgroundColor;
   }
 
   Color get defaultBackgroundColor {
@@ -31,7 +35,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.selfIssued:
         return const Color(0xffEFF0F6);
       case CredentialSubjectType.defaultCredential:
-        return Colors.white;
+        return const Color(0xff6600FF);
       case CredentialSubjectType.professionalStudentCard:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.kycAgeCredential:
@@ -88,7 +92,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
       case CredentialSubjectType.pid:
-        return Colors.white;
+        return const Color(0xff6600FF);
     }
   }
 

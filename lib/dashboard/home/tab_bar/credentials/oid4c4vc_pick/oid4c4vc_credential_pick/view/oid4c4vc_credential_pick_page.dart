@@ -167,7 +167,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                               ),
                               credDisplayType: CredDisplayType.List,
                               profileSetting: profileSetting,
-                              displyalDescription: false,
+                              displyalDescription: true,
                               isDiscover: false,
                             )
                           else

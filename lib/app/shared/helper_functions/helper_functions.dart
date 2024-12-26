@@ -1756,7 +1756,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
               (Display display) => display.locale.toString().contains('en'),
             ) ??
             credSupportedDisplay.firstWhereOrNull(
-              (Display display) => display.locale != null,
+              (Display display) => display.locale == null,
             ) ??
             credSupportedDisplay.first; // if local is not provided
       }
@@ -1791,7 +1791,8 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
                 ) ??
                 displays.firstWhereOrNull(
                   (Display display) => display.locale != null,
-                );
+                ) ??
+                displays.first; // if local is not provided
           }
         }
       }
@@ -1808,8 +1809,9 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           (Display display) => display.locale.toString().contains('en'),
         ) ??
         displays.firstWhereOrNull(
-          (Display display) => display.locale != null,
-        );
+          (Display display) => display.locale == null,
+        ) ??
+        displays.first; // if local is not provided;
   }
   return (display, credentialSupported);
 }
