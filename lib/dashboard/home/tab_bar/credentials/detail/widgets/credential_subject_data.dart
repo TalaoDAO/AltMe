@@ -70,7 +70,6 @@ class CredentialSubjectData extends StatelessWidget {
     if (credentialSubjectData is! Map<String, dynamic>) return Container();
 
     final languageCode = context.read<LangCubit>().state.locale.languageCode;
-
     return displayWidget(
       credentialSubjectReference,
       languageCode,
@@ -79,38 +78,42 @@ class CredentialSubjectData extends StatelessWidget {
   }
 
   Widget displayWidget(
-    Map<String, dynamic> credentialSubjectReference,
+    Map<String, dynamic> displayInstructions,
     String languageCode,
     Map<String, dynamic> credentialSubjectData,
   ) {
-    return Column(
+    final Widget column = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: credentialSubjectReference.entries
-          .map((MapEntry<String, dynamic> map) {
+      children:
+          displayInstructions.entries.map((MapEntry<String, dynamic> map) {
         String? title;
         String? data;
 
-        final key = map.key;
-        final value = map.value;
+        final displayInstructionKey = map.key;
+        final displayInstructionValue = map.value;
 
-        if (value is! Map<String, dynamic>) return const SizedBox.shrink();
+        if (displayInstructionValue is! Map<String, dynamic>) {
+          return const SizedBox.shrink();
+        }
 
-        if (value.containsKey('display')) {
-          final display = getDisplay(value, languageCode);
+        if (displayInstructionValue.containsKey('display')) {
+          final display = getDisplay(displayInstructionValue, languageCode);
           if (display == null) return const SizedBox.shrink();
 
-          if (credentialSubjectData.containsKey(key)) {
+          if (credentialSubjectData.containsKey(displayInstructionKey)) {
             title = display['name'].toString();
-            data = credentialSubjectData[key] is Map
-                ? jsonEncode(credentialSubjectData[key])
-                : credentialSubjectData[key].toString();
+            data = credentialSubjectData[displayInstructionKey] is Map ||
+                    credentialSubjectData[displayInstructionKey] is List
+                ? jsonEncode(credentialSubjectData[displayInstructionKey])
+                : credentialSubjectData[displayInstructionKey].toString();
           }
         } else {
-          if (credentialSubjectData[key] != null) {
+          if (credentialSubjectData[displayInstructionKey] != null) {
             title = null;
-            data = credentialSubjectData[key] is Map
-                ? jsonEncode(credentialSubjectData[key])
-                : credentialSubjectData[key].toString();
+            data = credentialSubjectData[displayInstructionKey] is Map ||
+                    credentialSubjectData[displayInstructionKey] is List
+                ? jsonEncode(credentialSubjectData[displayInstructionKey])
+                : credentialSubjectData[displayInstructionKey].toString();
           } else {
             return const SizedBox.shrink();
           }
@@ -118,40 +121,40 @@ class CredentialSubjectData extends StatelessWidget {
 
         if (data == null) return const SizedBox.shrink();
         late Widget widget;
-        final nestedFields = Map<String, dynamic>.from(value);
-        nestedFields.remove('display').remove('value_type');
-        if (nestedFields.isNotEmpty) {
+        final nestedFieldsFromDisplayInstruction =
+            Map<String, dynamic>.from(displayInstructionValue);
+        nestedFieldsFromDisplayInstruction.remove('display');
+        nestedFieldsFromDisplayInstruction.remove('value_type');
+        if (nestedFieldsFromDisplayInstruction.isNotEmpty) {
           try {
             final json = jsonDecode(data);
-            if (json is! Map<String, dynamic>) {
-              return const SizedBox.shrink();
-            }
             final List<Widget> column = [];
-
-            /// for each element in Map toto, call displayWidget
-
-            for (final element in nestedFields.entries) {
-              final elementValue = element.value;
-              if (elementValue is Map<String, dynamic>) {
-                if (elementValue.isEmpty) {
+            if (json is Map<String, dynamic>) {
+              column.addAll(
+                toto(json, nestedFieldsFromDisplayInstruction, languageCode),
+              );
+            }
+            if (json is List<dynamic>) {
+              for (final listElement in json) {
+                if (listElement is Map<String, dynamic>) {
                   column.add(
-                    DisplayCredentialField(
-                      title: element.key,
-                      data: json[element.key],
-                      showVertically: showVertically,
-                    ),
-                  );
-                } else {
-                  column.add(
-                    displayWidget(
-                      {element.key: elementValue},
-                      languageCode,
-                      json,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: toto(
+                          listElement,
+                          nestedFieldsFromDisplayInstruction,
+                          languageCode,
+                        ),
+                      ),
                     ),
                   );
                 }
               }
             }
+
+            /// for each element in Map toto, call displayWidget
 
             widget = IndentedCredentialFields(
               title: title,
@@ -164,7 +167,7 @@ class CredentialSubjectData extends StatelessWidget {
           widget = DisplayCredentialField(
             title: title,
             data: data,
-            type: value['value_type'].toString(),
+            type: displayInstructionValue['value_type'].toString(),
             showVertically: showVertically,
           );
         }
@@ -172,6 +175,37 @@ class CredentialSubjectData extends StatelessWidget {
         return widget;
       }).toList(),
     );
+    return column;
+  }
+
+  List<Widget> toto(
+      Map<String, dynamic> json,
+      Map<String, dynamic> nestedFieldsFromDisplayInstruction,
+      String languageCode) {
+    final List<Widget> column = [];
+    for (final element in nestedFieldsFromDisplayInstruction.entries) {
+      final elementValue = element.value;
+      if (elementValue is Map<String, dynamic>) {
+        if (elementValue.isEmpty) {
+          column.add(
+            DisplayCredentialField(
+              title: element.key,
+              data: json[element.key],
+              showVertically: showVertically,
+            ),
+          );
+        } else {
+          column.add(
+            displayWidget(
+              {element.key: elementValue},
+              languageCode,
+              json,
+            ),
+          );
+        }
+      }
+    }
+    return column;
   }
 }
 
