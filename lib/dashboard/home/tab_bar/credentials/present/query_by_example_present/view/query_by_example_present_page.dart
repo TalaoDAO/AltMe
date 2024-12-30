@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -84,6 +86,12 @@ class _QueryByExamplePresentPageState extends State<QueryByExamplePresentPage> {
               const SizedBox(height: 8),
               MyOutlinedButton(
                 onPressed: () {
+                  unawaited(
+                    context.read<ScanCubit>().sendErrorToServer(
+                      uri: widget.uri,
+                      data: {'error': 'access_denied'},
+                    ),
+                  );
                   Navigator.of(context).pop();
                 },
                 text: l10n.credentialPresentCancel,

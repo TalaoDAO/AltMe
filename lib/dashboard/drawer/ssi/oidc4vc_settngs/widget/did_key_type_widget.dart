@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
-class DidKeyTypeWidget extends StatelessWidget {
-  const DidKeyTypeWidget({super.key});
+class KeyIdentifierAndKeyTypeWidget extends StatelessWidget {
+  const KeyIdentifierAndKeyTypeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return OptionContainer(
-          title: 'Default DID',
-          subtitle: 'Select one of the DIDs',
+          title: 'Key identifier and key type',
+          subtitle: 'Select jwk thumbprint or a DID method',
           body: ListView.builder(
             itemCount: DidKeyType.values.length,
             shrinkWrap: true,

@@ -803,6 +803,11 @@ class ResponseMessage with MessageHandler {
               .RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage.localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_invalidCode:
+          return ResponseString.RESPONSE_STRING_invalidCode.localise(
+            context,
+          );
       }
     }
     return '';

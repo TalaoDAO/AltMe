@@ -522,6 +522,9 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage:
         return globalMessage
             .RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage;
+
+      case ResponseString.RESPONSE_STRING_invalidCode:
+        return globalMessage.RESPONSE_STRING_invalidCode;
     }
   }
 }

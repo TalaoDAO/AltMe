@@ -7,7 +7,9 @@
     "reject",
     "operation",
     "chooseYourSSIProfileOrCustomizeYourOwn",
-    "recoveryPhraseIncorrectErrorMessage"
+    "recoveryPhraseIncorrectErrorMessage",
+    "invalidCode",
+    "back"
   ],
 
   "es": [
@@ -18,10 +20,12 @@
     "reject",
     "operation",
     "chooseYourSSIProfileOrCustomizeYourOwn",
-    "recoveryPhraseIncorrectErrorMessage"
+    "recoveryPhraseIncorrectErrorMessage",
+    "invalidCode",
+    "back"
   ],
 
   "fr": [
-    "recoveryPhraseIncorrectErrorMessage"
+    "back"
   ]
 }
