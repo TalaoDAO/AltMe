@@ -331,9 +331,14 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     token: encodedData as String,
                   );
 
+                  final clientId = getClientIdForPresentation(
+                    state.uri!.queryParameters['client_id'],
+                  );
+
                   url = getUpdatedUrlForSIOPV2OIC4VP(
                     uri: state.uri!,
                     response: response,
+                    clientId: clientId.toString(),
                   );
                 }
 

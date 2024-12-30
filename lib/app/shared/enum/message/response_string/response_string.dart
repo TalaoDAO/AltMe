@@ -163,4 +163,5 @@ enum ResponseString {
   RESPONSE_STRING_vpFormatsNotSupportedErrorDescription,
   RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription,
   RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage,
+  RESPONSE_STRING_invalidCode,
 }

@@ -24,14 +24,17 @@ class DisplayNameCard extends StatelessWidget {
 
   String getName(BuildContext context) {
     var nameValue = credentialModel.display?.name ?? '';
-    if (nameValue == '') {
-      nameValue = credentialModel.credentialPreview.type.last;
-    }
-    if (nameValue == '') {
-      nameValue = GetTranslation.getTranslation(
-        credentialModel.credentialPreview.name,
-        context.l10n,
-      );
+
+    if (credentialModel.display == null) {
+      if (nameValue == '') {
+        nameValue = credentialModel.credentialPreview.type.last;
+      }
+      if (nameValue == '') {
+        nameValue = GetTranslation.getTranslation(
+          credentialModel.credentialPreview.name,
+          context.l10n,
+        );
+      }
     }
 
     return nameValue;

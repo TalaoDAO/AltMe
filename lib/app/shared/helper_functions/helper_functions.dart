@@ -1128,7 +1128,10 @@ Future<String> getHost({
     ).host;
   } else {
     /// verification case
-    final clientId = uri.queryParameters['client_id'];
+
+    final clientId = getClientIdForPresentation(
+      uri.queryParameters['client_id'],
+    );
 
     if (clientId != null) {
       return clientId;
@@ -1349,6 +1352,7 @@ ResponseString getErrorResponseString(String errorString) {
       return ResponseString.RESPONSE_STRING_theWalletIsNotRegistered;
 
     case 'invalid_grant':
+      return ResponseString.RESPONSE_STRING_invalidCode;
     case 'invalid_token':
       return ResponseString.RESPONSE_STRING_credentialIssuanceDenied;
 
@@ -1503,6 +1507,7 @@ Future<dynamic> fetchRequestUriPayload({
 String getUpdatedUrlForSIOPV2OIC4VP({
   required Uri uri,
   required Map<String, dynamic> response,
+  required String clientId,
 }) {
   final responseType = response['response_type'];
   final redirectUri = response['redirect_uri'];
@@ -1510,7 +1515,6 @@ String getUpdatedUrlForSIOPV2OIC4VP({
   final responseUri = response['response_uri'];
   final responseMode = response['response_mode'];
   final nonce = response['nonce'];
-  final clientId = response['client_id'];
   final claims = response['claims'];
   final stateValue = response['state'];
   final presentationDefinition = response['presentation_definition'];
@@ -1525,7 +1529,7 @@ String getUpdatedUrlForSIOPV2OIC4VP({
     queryJson['scope'] = scope;
   }
 
-  if (!uri.queryParameters.containsKey('client_id') && clientId != null) {
+  if (!uri.queryParameters.containsKey('client_id')) {
     queryJson['client_id'] = clientId;
   }
 
@@ -1752,7 +1756,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
               (Display display) => display.locale.toString().contains('en'),
             ) ??
             credSupportedDisplay.firstWhereOrNull(
-              (Display display) => display.locale != null,
+              (Display display) => display.locale == null,
             ) ??
             credSupportedDisplay.first; // if local is not provided
       }
@@ -1787,7 +1791,8 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
                 ) ??
                 displays.firstWhereOrNull(
                   (Display display) => display.locale != null,
-                );
+                ) ??
+                displays.first; // if local is not provided
           }
         }
       }
@@ -1804,8 +1809,9 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           (Display display) => display.locale.toString().contains('en'),
         ) ??
         displays.firstWhereOrNull(
-          (Display display) => display.locale != null,
-        );
+          (Display display) => display.locale == null,
+        ) ??
+        displays.first; // if local is not provided;
   }
   return (display, credentialSupported);
 }
@@ -2424,4 +2430,18 @@ bool isContract(String reciever) {
   if (reciever.startsWith('tz')) return false;
   if (reciever.startsWith('KT1')) return true;
   return false;
+}
+
+String? getClientIdForPresentation(String? clientId) {
+  if (clientId == null) return '';
+  if (clientId.contains(':')) {
+    final parts = clientId.split(':');
+    if (parts.length == 2) {
+      return parts[1];
+    } else {
+      return clientId;
+    }
+  } else {
+    return clientId;
+  }
 }

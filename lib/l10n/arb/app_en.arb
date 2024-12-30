@@ -1173,5 +1173,7 @@
   "reject": "Reject",
   "operation": "Operation",
   "chooseYourSSIProfileOrCustomizeYourOwn": "Choose your wallet profile or customize your own",
-  "recoveryPhraseIncorrectErrorMessage": " Please try again with correct order."
+  "recoveryPhraseIncorrectErrorMessage": "Please try again with correct order.",
+  "invalidCode": "Invalid code",
+  "back": "Back"
 }
