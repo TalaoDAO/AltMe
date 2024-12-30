@@ -131,7 +131,11 @@ class CredentialSubjectData extends StatelessWidget {
             final List<Widget> column = [];
             if (json is Map<String, dynamic>) {
               column.addAll(
-                toto(json, nestedFieldsFromDisplayInstruction, languageCode),
+                displayBlock(
+                  json,
+                  nestedFieldsFromDisplayInstruction,
+                  languageCode,
+                ),
               );
             }
             if (json is List<dynamic>) {
@@ -142,7 +146,7 @@ class CredentialSubjectData extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: toto(
+                        children: displayBlock(
                           listElement,
                           nestedFieldsFromDisplayInstruction,
                           languageCode,
@@ -178,18 +182,28 @@ class CredentialSubjectData extends StatelessWidget {
     return column;
   }
 
-  List<Widget> toto(
-      Map<String, dynamic> json,
-      Map<String, dynamic> nestedFieldsFromDisplayInstruction,
-      String languageCode) {
+  List<Widget> displayBlock(
+    Map<String, dynamic> json,
+    Map<String, dynamic> nestedFieldsFromDisplayInstruction,
+    String languageCode,
+  ) {
     final List<Widget> column = [];
+    late String? title;
     for (final element in nestedFieldsFromDisplayInstruction.entries) {
       final elementValue = element.value;
       if (elementValue is Map<String, dynamic>) {
+        if (elementValue.containsKey('display')) {
+          final display = getDisplay(elementValue, languageCode);
+
+          title = display['name'].toString();
+        } else {
+          title = null;
+        }
+
         if (elementValue.isEmpty) {
           column.add(
             DisplayCredentialField(
-              title: element.key,
+              title: title,
               data: json[element.key],
               showVertically: showVertically,
             ),
