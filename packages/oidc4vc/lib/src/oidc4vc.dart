@@ -875,7 +875,7 @@ class OIDC4VC {
         if (authorizationServerFromCredentialOffer != null) {
           if (listOpenIDConfiguration
               .contains(authorizationServerFromCredentialOffer)) {
-            return '$authorizationServerFromCredentialOffer/authorize';
+            return authorizationServerFromCredentialOffer;
           } else {
             // that's forbidden and we can't continue the process
             throw Exception('AUTHORIZATION_SERVER_NOT_FOUND');
@@ -884,7 +884,7 @@ class OIDC4VC {
         if (listOpenIDConfiguration.isNotEmpty) {
           if (listOpenIDConfiguration.length == 1) {
             authorizationEndpoint =
-                '${listOpenIDConfiguration.first}/authorize';
+                listOpenIDConfiguration.first;
           } else {
             try {
               /// Extract the authorization endpoint from from
@@ -898,7 +898,7 @@ class OIDC4VC {
                   .first
                   .value! as String;
               if (listOpenIDConfiguration.contains(data)) {
-                authorizationEndpoint = '$data/authorize';
+                authorizationEndpoint = data;
               }
             } catch (e) {
               final jsonPathCredentialOffer = JsonPath(
@@ -909,7 +909,7 @@ class OIDC4VC {
                   .first
                   .value! as String;
               if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
-                authorizationEndpoint = '$data/authorize';
+                authorizationEndpoint = data;
               }
             }
           }
