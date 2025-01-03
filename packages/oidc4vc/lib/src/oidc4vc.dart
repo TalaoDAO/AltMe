@@ -859,6 +859,7 @@ class OIDC4VC {
         }
       case OIDC4VCIDraftType.draft13:
       case OIDC4VCIDraftType.draft14:
+        String? authorizationServer;
 
         /// Extract the authorization endpoint from from first element of
         /// authorization_servers in opentIdConfiguration.authorizationServers
@@ -875,16 +876,16 @@ class OIDC4VC {
         if (authorizationServerFromCredentialOffer != null) {
           if (listOpenIDConfiguration
               .contains(authorizationServerFromCredentialOffer)) {
-            return authorizationServerFromCredentialOffer;
+            authorizationServer = authorizationServerFromCredentialOffer;
           } else {
             // that's forbidden and we can't continue the process
             throw Exception('AUTHORIZATION_SERVER_NOT_FOUND');
           }
         }
-        if (listOpenIDConfiguration.isNotEmpty) {
+
+        if (listOpenIDConfiguration.isNotEmpty && authorizationServer == null) {
           if (listOpenIDConfiguration.length == 1) {
-            authorizationEndpoint =
-                listOpenIDConfiguration.first;
+            authorizationServer = listOpenIDConfiguration.first;
           } else {
             try {
               /// Extract the authorization endpoint from from
@@ -898,7 +899,7 @@ class OIDC4VC {
                   .first
                   .value! as String;
               if (listOpenIDConfiguration.contains(data)) {
-                authorizationEndpoint = data;
+                authorizationServer = data;
               }
             } catch (e) {
               final jsonPathCredentialOffer = JsonPath(
@@ -909,10 +910,24 @@ class OIDC4VC {
                   .first
                   .value! as String;
               if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
-                authorizationEndpoint = data;
+                authorizationServer = data;
               }
             }
           }
+        }
+        if (authorizationServer != null) {
+          final authorizationServerConfigurationData =
+              await getAuthorizationServerMetaData(
+            baseUrl: authorizationServer,
+            dio: dio,
+            secureStorage: secureStorage,
+            useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+          );
+          final authorizationServerConfiguration = OpenIdConfiguration.fromJson(
+            authorizationServerConfigurationData,
+          );
+          authorizationEndpoint =
+              authorizationServerConfiguration.authorizationEndpoint;
         }
     }
 
