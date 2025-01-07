@@ -773,7 +773,7 @@ Future<
     }
   }
 
-  String? authorizationServer;
+  late String? authorizationServer;
   if (oidc4vciDraftType == OIDC4VCIDraftType.draft13 ||
       oidc4vciDraftType == OIDC4VCIDraftType.draft14) {
     /// TODO: code mutualisation. Following logic is duplicate from readAuthorizationEndpoint in oidc4VC package
@@ -832,8 +832,9 @@ Future<
         }
       }
     }
+  } else {
+    authorizationServer = openIdConfiguration.authorizationServer;
   }
-  authorizationServer ??= openIdConfiguration.authorizationServer;
 
   Map<String, dynamic>? authorizationServerConfigurationData;
 
