@@ -189,11 +189,9 @@ class _OnBoardingVerifyPhraseViewState
                               Expanded(
                                 child: PhraseWord(
                                   key: Key(col1Mnemonics.order.toString()),
-                                  order: col1Mnemonics.order,
+                                  order: col1Mnemonics.userSelectedOrder,
                                   word:
                                       widget.mnemonic[col1Mnemonics.order - 1],
-                                  showOrder:
-                                      col1Mnemonics.mnemonicStatus.showOrder,
                                   color: col1Mnemonics.mnemonicStatus
                                       .color(context),
                                   onTap: () {
@@ -208,11 +206,9 @@ class _OnBoardingVerifyPhraseViewState
                               Expanded(
                                 child: PhraseWord(
                                   key: Key(col2Mnemonics.order.toString()),
-                                  order: col2Mnemonics.order,
+                                  order: col2Mnemonics.userSelectedOrder,
                                   word:
                                       widget.mnemonic[col2Mnemonics.order - 1],
-                                  showOrder:
-                                      col2Mnemonics.mnemonicStatus.showOrder,
                                   color: col2Mnemonics.mnemonicStatus
                                       .color(context),
                                   onTap: () {
@@ -227,11 +223,9 @@ class _OnBoardingVerifyPhraseViewState
                               Expanded(
                                 child: PhraseWord(
                                   key: Key(col3Mnemonics.order.toString()),
-                                  order: col3Mnemonics.order,
+                                  order: col3Mnemonics.userSelectedOrder,
                                   word:
                                       widget.mnemonic[col3Mnemonics.order - 1],
-                                  showOrder:
-                                      col3Mnemonics.mnemonicStatus.showOrder,
                                   color: col3Mnemonics.mnemonicStatus
                                       .color(context),
                                   onTap: () {

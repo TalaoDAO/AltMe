@@ -5,17 +5,15 @@ import 'package:flutter/material.dart';
 class PhraseWord extends StatelessWidget {
   const PhraseWord({
     super.key,
-    required this.order,
+    this.order,
     required this.word,
     this.color,
-    this.showOrder = true,
     this.onTap,
   });
 
-  final int order;
+  final int? order;
   final String word;
   final Color? color;
-  final bool showOrder;
   final void Function()? onTap;
 
   @override
@@ -40,7 +38,7 @@ class PhraseWord extends StatelessWidget {
           height: 25,
           child: Center(
             child: MyText(
-              showOrder ? '$order. $word' : word,
+              order == null ? word : '$order. $word',
               textAlign: TextAlign.center,
             ),
           ),

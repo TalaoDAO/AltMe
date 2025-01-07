@@ -125,19 +125,19 @@ Future<
           return null;
         }
       }
-dynamic credentialResponseDataValue;
-       try {
-  credentialResponseDataValue = await getSingleCredentialData(
-   profileCubit: profileCubit,
-   openIdConfiguration: openIdConfiguration,
-   accessToken: accessToken,
-   dio: Dio(),
-   credentialData: credentialData,
-   publicKeyForDPop: publicKeyForDPop,
+      dynamic credentialResponseDataValue;
+      try {
+        credentialResponseDataValue = await getSingleCredentialData(
+          profileCubit: profileCubit,
+          openIdConfiguration: openIdConfiguration,
+          accessToken: accessToken,
+          dio: Dio(),
+          credentialData: credentialData,
+          publicKeyForDPop: publicKeyForDPop,
         );
-} catch (e) {
-  rethrow;
-}
+      } catch (e) {
+        rethrow;
+      }
 
       /// update nonce value
       if (credentialResponseDataValue is Map<String, dynamic>) {

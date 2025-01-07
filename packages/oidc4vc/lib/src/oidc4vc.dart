@@ -859,15 +859,33 @@ class OIDC4VC {
         }
       case OIDC4VCIDraftType.draft13:
       case OIDC4VCIDraftType.draft14:
+        String? authorizationServer;
 
         /// Extract the authorization endpoint from from first element of
         /// authorization_servers in opentIdConfiguration.authorizationServers
         final listOpenIDConfiguration =
             openIdConfiguration.authorizationServers ?? [];
-        if (listOpenIDConfiguration.isNotEmpty) {
+
+        // check if authorization server is present in the credential offer
+        final authorizationServerFromCredentialOffer =
+            getAuthorizationServerFromCredentialOffer(credentialOfferJson);
+        // if authorization server is present in the credential offer
+        // we check if it is present in the authorization servers
+        // from credential issuer metadata
+        // https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-credential-issuer-metadata-p
+        if (authorizationServerFromCredentialOffer != null) {
+          if (listOpenIDConfiguration
+              .contains(authorizationServerFromCredentialOffer)) {
+            authorizationServer = authorizationServerFromCredentialOffer;
+          } else {
+            // that's forbidden and we can't continue the process
+            throw Exception('AUTHORIZATION_SERVER_NOT_FOUND');
+          }
+        }
+
+        if (listOpenIDConfiguration.isNotEmpty && authorizationServer == null) {
           if (listOpenIDConfiguration.length == 1) {
-            authorizationEndpoint =
-                '${listOpenIDConfiguration.first}/authorize';
+            authorizationServer = listOpenIDConfiguration.first;
           } else {
             try {
               /// Extract the authorization endpoint from from
@@ -881,7 +899,7 @@ class OIDC4VC {
                   .first
                   .value! as String;
               if (listOpenIDConfiguration.contains(data)) {
-                authorizationEndpoint = '$data/authorize';
+                authorizationServer = data;
               }
             } catch (e) {
               final jsonPathCredentialOffer = JsonPath(
@@ -892,10 +910,24 @@ class OIDC4VC {
                   .first
                   .value! as String;
               if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
-                authorizationEndpoint = '$data/authorize';
+                authorizationServer = data;
               }
             }
           }
+        }
+        if (authorizationServer != null) {
+          final authorizationServerConfigurationData =
+              await getAuthorizationServerMetaData(
+            baseUrl: authorizationServer,
+            dio: dio,
+            secureStorage: secureStorage,
+            useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+          );
+          final authorizationServerConfiguration = OpenIdConfiguration.fromJson(
+            authorizationServerConfigurationData,
+          );
+          authorizationEndpoint =
+              authorizationServerConfiguration.authorizationEndpoint;
         }
     }
 
@@ -1649,7 +1681,9 @@ class OIDC4VC {
           case ProofHeaderType.jwk:
             vpBuilder.setProtectedHeader(
               'jwk',
-              tokenParameters.publicJWK,
+              tokenParameters.publicJWK
+                ..removeWhere((key, value) => key == 'use')
+                ..removeWhere((key, value) => key == 'alg'),
             );
         }
       }
@@ -1977,5 +2011,24 @@ class OIDC4VC {
       'x': pubKey,
     };
     return jwk;
+  }
+
+  String? getAuthorizationServerFromCredentialOffer(
+    dynamic credentialOfferJson,
+  ) {
+    try {
+      /// Extract the authorization endpoint from from
+      /// authorization_server in credentialOfferJson
+      final jsonPathAuthorizationServer = JsonPath(
+        r'$..authorization_server',
+      );
+      final data = jsonPathAuthorizationServer
+          .read(credentialOfferJson)
+          .first
+          .value! as String;
+      return data;
+    } catch (e) {
+      return null;
+    }
   }
 }

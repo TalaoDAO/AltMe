@@ -9,6 +9,12 @@ enum OIDC4VPDraftType {
   draft18,
   @JsonValue('20')
   draft20,
+  @JsonValue('21')
+  draft21,
+  @JsonValue('22')
+  draft22,
+  @JsonValue('23')
+  draft23,
 }
 
 extension OIDC4VPDraftTypeX on OIDC4VPDraftType {
@@ -22,6 +28,16 @@ extension OIDC4VPDraftTypeX on OIDC4VPDraftType {
         return 'Draft 18';
       case OIDC4VPDraftType.draft20:
         return 'Draft 20';
+      case OIDC4VPDraftType.draft21:
+        return 'Draft 21';
+      case OIDC4VPDraftType.draft22:
+        return 'Draft 22 (Partial)';
+      case OIDC4VPDraftType.draft23:
+        return 'Draft 23';
     }
+  }
+
+  bool get draft22AndAbove {
+    return this == OIDC4VPDraftType.draft22 || this == OIDC4VPDraftType.draft23;
   }
 }

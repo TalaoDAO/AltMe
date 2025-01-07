@@ -558,10 +558,12 @@ class ScanCubit extends Cubit<ScanState> {
       if (responseMode == 'direct_post.jwt') {
         final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
 
-        final clientId = uri.queryParameters['client_id'] ?? '';
-
         final customOidc4vcProfile = profileCubit.state.model.profileSetting
             .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+        final clientId = getClientIdForPresentation(
+          uri.queryParameters['client_id'],
+        );
 
         final didKeyType = customOidc4vcProfile.defaultDid;
 
@@ -723,6 +725,24 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
+  Future<void> sendErrorToServer({
+    required Uri uri,
+    required Map<String, dynamic> data,
+  }) async {
+    final String responseOrRedirectUri = uri.queryParameters['redirect_uri'] ??
+        uri.queryParameters['response_uri']!;
+
+    await client.dio.post<dynamic>(
+      responseOrRedirectUri,
+      data: data,
+      options: Options(
+        headers: <String, dynamic>{
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      ),
+    );
+  }
+
   Future<(Map<String, dynamic>, VCFormatType)> getPresentationSubmission({
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
@@ -836,10 +856,13 @@ class ScanCubit extends Cubit<ScanState> {
     VCFormatType? formatFromPresentationSubmission,
   }) async {
     final nonce = uri.queryParameters['nonce'] ?? '';
-    final clientId = uri.queryParameters['client_id'] ?? '';
 
-    final customOidc4vcProfile =
-        profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+    final clientId = getClientIdForPresentation(
+      uri.queryParameters['client_id'],
+    );
 
     if (formatFromPresentationSubmission == VCFormatType.vcSdJWT) {
       final credentialListJwt = getStringCredentialsForToken(
@@ -861,7 +884,7 @@ class ScanCubit extends Cubit<ScanState> {
       );
 
       final vpToken = await oidc4vc.extractVpToken(
-        clientId: clientId,
+        clientId: clientId.toString(),
         credentialsToBePresented: credentialList,
         did: did,
         kid: kid,
@@ -935,14 +958,17 @@ class ScanCubit extends Cubit<ScanState> {
       profileCubit: profileCubit,
     );
 
-    final nonce = uri.queryParameters['nonce'] ?? '';
-    final clientId = uri.queryParameters['client_id'] ?? '';
-
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
+    final clientId = getClientIdForPresentation(
+      uri.queryParameters['client_id'],
+    );
+
+    final nonce = uri.queryParameters['nonce'] ?? '';
+
     final idToken = await oidc4vc.extractIdToken(
-      clientId: clientId,
+      clientId: clientId.toString(),
       credentialsToBePresented: credentialList,
       did: did,
       kid: kid,

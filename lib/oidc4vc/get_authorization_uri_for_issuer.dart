@@ -149,6 +149,8 @@ Future<Uri?> getAuthorizationUriForIssuer({
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
+    /// TODO: return an error message if
+    /// openIdConfiguration.pushedAuthorizationRequestEndpoint is null
     final parUrl = openIdConfiguration.pushedAuthorizationRequestEndpoint ??
         '$authorizationEndpoint/par';
 

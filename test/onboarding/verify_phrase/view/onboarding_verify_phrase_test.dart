@@ -583,12 +583,6 @@ void main() {
 
       await tester.tap(find.byKey(Key(mnemonicState.order.toString())));
 
-      await tester.pumpAndSettle();
-      expect(
-        onBoardingVerifyPhraseCubit.state.mnemonicStates[index].mnemonicStatus,
-        MnemonicStatus.wrongSelection,
-      );
-
       await tester.tap(find.byKey(Key(mnemonicState.order.toString())));
 
       await tester.pumpAndSettle();

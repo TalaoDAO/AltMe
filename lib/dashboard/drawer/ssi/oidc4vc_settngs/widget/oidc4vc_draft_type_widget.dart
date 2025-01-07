@@ -5,28 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
-class ClientTypeWidget extends StatelessWidget {
-  const ClientTypeWidget({super.key});
+class OIDC4VCDraftTypeWidget extends StatelessWidget {
+  const OIDC4VCDraftTypeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return OptionContainer(
-          title: 'OIDC4VCI client_id value',
+          title: 'OIDC4VCI',
+          subtitle: 'Protocole standard release',
           body: ListView.builder(
-            itemCount: ClientType.values.length,
+            itemCount: OIDC4VCIDraftType.values.length,
             shrinkWrap: true,
             physics: const ScrollPhysics(),
             padding: EdgeInsets.zero,
             itemBuilder: (context, index) {
-              final clientType = ClientType.values[index];
+              final draftType = OIDC4VCIDraftType.values[index];
               return Column(
                 children: [
                   ListTile(
                     onTap: () {
                       context.read<ProfileCubit>().updateProfileSetting(
-                            clientType: clientType,
+                            oidc4vciDraftType: draftType,
                           );
                     },
                     shape: RoundedRectangleBorder(
@@ -36,13 +37,13 @@ class ClientTypeWidget extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                      clientType.getTitle,
+                      draftType.formattedString,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     trailing: Icon(
                       state.model.profileSetting.selfSovereignIdentityOptions
-                                  .customOidc4vcProfile.clientType ==
-                              clientType
+                                  .customOidc4vcProfile.oidc4vciDraft ==
+                              draftType
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,
                       size: Sizes.icon2x,

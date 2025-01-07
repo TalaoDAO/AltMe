@@ -4,7 +4,6 @@ import 'package:altme/l10n/l10n.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 class AboutAltmeMenu extends StatelessWidget {
   const AboutAltmeMenu({super.key});
