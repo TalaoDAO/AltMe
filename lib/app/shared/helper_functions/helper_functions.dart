@@ -773,67 +773,7 @@ Future<
     }
   }
 
-  String? authorizationServer;
-  if (oidc4vciDraftType == OIDC4VCIDraftType.draft13 ||
-      oidc4vciDraftType == OIDC4VCIDraftType.draft14) {
-    /// TODO: code mutualisation. Following logic is duplicate from readAuthorizationEndpoint in oidc4VC package
-
-    /// Extract the authorization endpoint from from first element of
-    /// authorization_servers in opentIdConfiguration.authorizationServers
-    final listOpenIDConfiguration =
-        openIdConfiguration.authorizationServers ?? [];
-
-    // check if authorization server is present in the credential offer
-    final authorizationServerFromCredentialOffer = OIDC4VC()
-        .getAuthorizationServerFromCredentialOffer(credentialOfferJson);
-    // if authorization server is present in the credential offer
-    // we check if it is present in the authorization servers
-    // from credential issuer metadata
-    // https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-credential-issuer-metadata-p
-    if (authorizationServerFromCredentialOffer != null) {
-      if (listOpenIDConfiguration
-          .contains(authorizationServerFromCredentialOffer)) {
-        authorizationServer = authorizationServerFromCredentialOffer;
-      } else {
-        // that's forbidden and we can't continue the process
-        throw Exception('AUTHORIZATION_SERVER_NOT_FOUND');
-      }
-    }
-
-    if (listOpenIDConfiguration.isNotEmpty && authorizationServer == null) {
-      if (listOpenIDConfiguration.length == 1) {
-        authorizationServer = listOpenIDConfiguration.first;
-      } else {
-        try {
-          /// Extract the authorization endpoint from from
-          /// authorization_server in credentialOfferJson
-          final jsonPathCredentialOffer = JsonPath(
-            // ignore: lines_longer_than_80_chars
-            r'$..["urn:ietf:params:oauth:grant-type:pre-authorized_code"].authorization_server',
-          );
-          final data = jsonPathCredentialOffer
-              .read(credentialOfferJson)
-              .first
-              .value! as String;
-          if (listOpenIDConfiguration.contains(data)) {
-            authorizationServer = data;
-          }
-        } catch (e) {
-          final jsonPathCredentialOffer = JsonPath(
-            r'$..authorization_code.authorization_server',
-          );
-          final data = jsonPathCredentialOffer
-              .read(credentialOfferJson)
-              .first
-              .value! as String;
-          if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
-            authorizationServer = data;
-          }
-        }
-      }
-    }
-  }
-  authorizationServer ??= openIdConfiguration.authorizationServer;
+  final authorizationServer = openIdConfiguration.authorizationServer;
 
   Map<String, dynamic>? authorizationServerConfigurationData;
 
