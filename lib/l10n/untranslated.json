@@ -6,7 +6,10 @@
     "ebsiV4DecentralizedId",
     "reject",
     "operation",
-    "chooseYourSSIProfileOrCustomizeYourOwn"
+    "chooseYourSSIProfileOrCustomizeYourOwn",
+    "recoveryPhraseIncorrectErrorMessage",
+    "invalidCode",
+    "back"
   ],
 
   "es": [
@@ -16,6 +19,13 @@
     "ebsiV4DecentralizedId",
     "reject",
     "operation",
-    "chooseYourSSIProfileOrCustomizeYourOwn"
+    "chooseYourSSIProfileOrCustomizeYourOwn",
+    "recoveryPhraseIncorrectErrorMessage",
+    "invalidCode",
+    "back"
+  ],
+
+  "fr": [
+    "back"
   ]
 }

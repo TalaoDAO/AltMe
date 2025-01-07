@@ -33,7 +33,7 @@ class Credential {
     return Credential(
       'dummy1',
       ['dummy2'],
-      ['dummy3'],
+      [''],
       'dummy4',
       'dummy5',
       '', //date

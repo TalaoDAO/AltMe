@@ -232,7 +232,7 @@ class ProfileModel extends Equatable {
               cryptoHolderBinding: true,
               defaultDid: Parameters.didKeyTypeForDefault,
               oidc4vciDraft: OIDC4VCIDraftType.draft13,
-              oidc4vpDraft: OIDC4VPDraftType.draft18,
+              oidc4vpDraft: OIDC4VPDraftType.draft20,
               scope: false,
               securityLevel: false,
               proofHeader: ProofHeaderType.kid, // N/A
@@ -316,7 +316,7 @@ class ProfileModel extends Equatable {
               cryptoHolderBinding: true,
               defaultDid: Parameters.didKeyTypeForOwfBaselineProfile,
               oidc4vciDraft: OIDC4VCIDraftType.draft13,
-              oidc4vpDraft: OIDC4VPDraftType.draft18,
+              oidc4vpDraft: OIDC4VPDraftType.draft20,
               scope: true,
               securityLevel: true,
               proofHeader: ProofHeaderType.kid,

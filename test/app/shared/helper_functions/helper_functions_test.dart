@@ -1058,8 +1058,11 @@ void main() {
             'client_metadata_uri': 'https://example.com/client_metadata',
           };
 
-          final updatedUrl =
-              getUpdatedUrlForSIOPV2OIC4VP(uri: uri, response: response);
+          final updatedUrl = getUpdatedUrlForSIOPV2OIC4VP(
+            uri: uri,
+            response: response,
+            clientId: 'client123',
+          );
 
           expect(
             updatedUrl.split('&'),

@@ -70,52 +70,156 @@ class CredentialSubjectData extends StatelessWidget {
     if (credentialSubjectData is! Map<String, dynamic>) return Container();
 
     final languageCode = context.read<LangCubit>().state.locale.languageCode;
+    return displayWidget(
+      credentialSubjectReference,
+      languageCode,
+      credentialSubjectData,
+    );
+  }
 
-    return Column(
+  Widget displayWidget(
+    Map<String, dynamic> displayInstructions,
+    String languageCode,
+    Map<String, dynamic> credentialSubjectData,
+  ) {
+    final Widget column = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: credentialSubjectReference.entries
-          .map((MapEntry<String, dynamic> map) {
+      children:
+          displayInstructions.entries.map((MapEntry<String, dynamic> map) {
         String? title;
         String? data;
 
-        final key = map.key;
-        final value = map.value;
+        final displayInstructionKey = map.key;
+        final displayInstructionValue = map.value;
 
-        if (value is! Map<String, dynamic>) return Container();
+        if (displayInstructionValue is! Map<String, dynamic>) {
+          return const SizedBox.shrink();
+        }
 
-        if (value.containsKey('display')) {
-          final display = getDisplay(value, languageCode);
-          if (display == null) return Container();
+        if (displayInstructionValue.containsKey('display')) {
+          final display = getDisplay(displayInstructionValue, languageCode);
+          if (display == null) return const SizedBox.shrink();
 
-          if (credentialSubjectData.containsKey(key)) {
+          if (credentialSubjectData.containsKey(displayInstructionKey)) {
             title = display['name'].toString();
-            data = credentialSubjectData[key] is Map
-                ? jsonEncode(credentialSubjectData[key])
-                : credentialSubjectData[key].toString();
+            data = credentialSubjectData[displayInstructionKey] is Map ||
+                    credentialSubjectData[displayInstructionKey] is List
+                ? jsonEncode(credentialSubjectData[displayInstructionKey])
+                : credentialSubjectData[displayInstructionKey].toString();
           }
         } else {
-          if (credentialSubjectData[key] != null) {
+          if (credentialSubjectData[displayInstructionKey] != null) {
             title = null;
-            data = credentialSubjectData[key] is Map
-                ? jsonEncode(credentialSubjectData[key])
-                : credentialSubjectData[key].toString();
+            data = credentialSubjectData[displayInstructionKey] is Map ||
+                    credentialSubjectData[displayInstructionKey] is List
+                ? jsonEncode(credentialSubjectData[displayInstructionKey])
+                : credentialSubjectData[displayInstructionKey].toString();
           } else {
-            return Container();
+            return const SizedBox.shrink();
           }
         }
 
-        if (data == null) return Container();
+        if (data == null) return const SizedBox.shrink();
+        late Widget widget;
+        final nestedFieldsFromDisplayInstruction =
+            Map<String, dynamic>.from(displayInstructionValue);
+        nestedFieldsFromDisplayInstruction.remove('display');
+        nestedFieldsFromDisplayInstruction.remove('value_type');
+        if (nestedFieldsFromDisplayInstruction.isNotEmpty) {
+          try {
+            final json = jsonDecode(data);
+            final List<Widget> column = [];
+            if (json is Map<String, dynamic>) {
+              column.addAll(
+                displayBlock(
+                  json,
+                  nestedFieldsFromDisplayInstruction,
+                  languageCode,
+                ),
+              );
+            }
+            if (json is List<dynamic>) {
+              for (final listElement in json) {
+                if (listElement is Map<String, dynamic>) {
+                  column.add(
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: displayBlock(
+                          listElement,
+                          nestedFieldsFromDisplayInstruction,
+                          languageCode,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              }
+            }
 
-        final widget = DisplayCredentialField(
-          title: title,
-          data: data,
-          type: value['value_type'].toString(),
-          showVertically: showVertically,
-        );
+            /// for each element in Map toto, call displayWidget
+
+            widget = IndentedCredentialFields(
+              title: title,
+              children: column,
+            );
+          } catch (e) {
+            return const SizedBox.shrink();
+          }
+        } else {
+          widget = DisplayCredentialField(
+            title: title,
+            data: data,
+            type: displayInstructionValue['value_type'].toString(),
+            showVertically: showVertically,
+          );
+        }
 
         return widget;
       }).toList(),
     );
+    return column;
+  }
+
+  List<Widget> displayBlock(
+    Map<String, dynamic> json,
+    Map<String, dynamic> nestedFieldsFromDisplayInstruction,
+    String languageCode,
+  ) {
+    final List<Widget> column = [];
+    late String? title;
+    for (final element in nestedFieldsFromDisplayInstruction.entries) {
+      final elementValue = element.value;
+      if (elementValue is Map<String, dynamic>) {
+        if (elementValue.containsKey('display')) {
+          final display = getDisplay(elementValue, languageCode);
+
+          title = display['name'].toString();
+        } else {
+          title = null;
+        }
+
+        if (elementValue.isEmpty) {
+          column.add(
+            DisplayCredentialField(
+              title: title,
+              data: json[element.key],
+              showVertically: showVertically,
+            ),
+          );
+        } else {
+          column.add(
+            displayWidget(
+              {element.key: elementValue},
+              languageCode,
+              json,
+            ),
+          );
+        }
+      }
+    }
+    return column;
   }
 }
 

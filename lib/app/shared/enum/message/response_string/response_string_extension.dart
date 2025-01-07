@@ -518,6 +518,13 @@ extension ResponseStringX on ResponseString {
             .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription:
         return globalMessage
             .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription;
+
+      case ResponseString.RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage:
+        return globalMessage
+            .RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage;
+
+      case ResponseString.RESPONSE_STRING_invalidCode:
+        return globalMessage.RESPONSE_STRING_invalidCode;
     }
   }
 }

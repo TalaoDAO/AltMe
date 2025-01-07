@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
@@ -199,7 +200,15 @@ class _SelectiveDisclosurePickViewState
                     const SizedBox(height: 8),
                     MyOutlinedButton(
                       text: l10n.cancel,
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () {
+                        unawaited(
+                          context.read<ScanCubit>().sendErrorToServer(
+                            uri: widget.uri,
+                            data: {'error': 'access_denied'},
+                          ),
+                        );
+                        Navigator.of(context).pop();
+                      },
                     ),
                   ],
                 ),
@@ -320,6 +329,12 @@ class _SelectiveDisclosurePickViewState
           );
 
           if (!authenticated) {
+            unawaited(
+              context.read<ScanCubit>().sendErrorToServer(
+                uri: widget.uri,
+                data: {'error': 'access_denied'},
+              ),
+            );
             return;
           }
         }

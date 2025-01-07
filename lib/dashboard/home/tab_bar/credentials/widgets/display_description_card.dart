@@ -26,12 +26,13 @@ class DisplayDescriptionCard extends StatelessWidget {
   }
 
   String getDescription(BuildContext context) {
-    var nameValue = GetTranslation.getTranslation(
-      credentialModel.credentialPreview.description,
-      context.l10n,
-    );
-    if (nameValue == '') {
-      nameValue = credentialModel.display?.description ?? '';
+    var nameValue = credentialModel.display?.description ?? '';
+
+    if (credentialModel.display == null) {
+      nameValue = GetTranslation.getTranslation(
+        credentialModel.credentialPreview.description,
+        context.l10n,
+      );
     }
 
     return nameValue;
