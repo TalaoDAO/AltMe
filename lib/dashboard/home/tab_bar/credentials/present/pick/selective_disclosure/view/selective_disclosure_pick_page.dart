@@ -265,7 +265,7 @@ class _SelectiveDisclosurePickViewState
       );
 
       final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-      final sdHash = OIDC4VC().sh256Hash(newJwt);
+      final sdHash = sh256Hash(newJwt);
 
       final nonce = uri.queryParameters['nonce'] ?? '';
       final clientId = uri.queryParameters['client_id'] ?? '';
@@ -280,7 +280,7 @@ class _SelectiveDisclosurePickViewState
 // If there no cnf in the payload, then no need to add signature
       if (widget.selectedCredential.data['cnf'] != null) {
         /// sign and get token
-        final jwtToken = profileCubit.oidc4vc.generateToken(
+        final jwtToken = generateToken(
           payload: payload,
           tokenParameters: tokenParameters,
           ignoreProofHeaderType: true,

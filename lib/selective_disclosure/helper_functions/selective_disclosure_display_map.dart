@@ -106,10 +106,9 @@ class SelectiveDisclosureDisplayMap {
     for (final disclosure in selectiveDisclosure.disclosureFromJWT) {
       /// check if disclosure is in a nested value
       /// if so, return empty container
-      final oidc4vc = OIDC4VC();
       final content = selectiveDisclosure.disclosureToContent(disclosure);
 
-      final digest = oidc4vc.sh256HashOfContent(
+      final digest = sh256HashOfContent(
         content,
       );
       final disclosuresContent = Map<String, dynamic>.from(

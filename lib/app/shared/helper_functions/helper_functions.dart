@@ -289,7 +289,7 @@ Future<String> getPrivateKey({
         isEBSI: true,
         didKeyType: didKeyType,
       );
-      final key = profileCubit.oidc4vc.privateKeyFromMnemonic(
+      final key = privateKeyFromMnemonic(
         mnemonic: mnemonic!,
         indexValue: index,
       );
@@ -304,7 +304,7 @@ Future<String> getPrivateKey({
         didKeyType: didKeyType,
       );
 
-      final key = profileCubit.oidc4vc.p256PrivateKeyFromMnemonics(
+      final key = p256PrivateKeyFromMnemonics(
         mnemonic: mnemonic!,
         indexValue: indexValue,
       );
@@ -1701,7 +1701,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           'jti': const Uuid().v4(),
         };
 
-        final jwtProofOfPossession = profileCubit.oidc4vc.generateToken(
+        final jwtProofOfPossession = generateToken(
           payload: payload,
           tokenParameters: tokenParameters,
           ignoreProofHeaderType: true,
@@ -2281,7 +2281,6 @@ bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
 }
 
 Future<String> getDPopJwt({
-  required OIDC4VC oidc4vc,
   required String url,
   required String publicKey,
   String? accessToken,
@@ -2308,13 +2307,13 @@ Future<String> getDPopJwt({
   };
 
   if (accessToken != null) {
-    final hash = oidc4vc.sh256Hash(accessToken);
+    final hash = sh256Hash(accessToken);
     payload['ath'] = hash;
   }
 
   // if (nonce != null) payload['nonce'] = nonce;
 
-  final jwtToken = oidc4vc.generateToken(
+  final jwtToken = generateToken(
     payload: payload,
     tokenParameters: tokenParameters,
     ignoreProofHeaderType: false,

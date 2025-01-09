@@ -232,7 +232,6 @@ Future<dynamic> getSingleCredentialData({
 
     if (customOidc4vcProfile.dpopSupport) {
       dPop = await getDPopJwt(
-        oidc4vc: profileCubit.oidc4vc,
         url: credentialEndpoint,
         accessToken: accessToken,
         publicKey: publicKeyForDPop,

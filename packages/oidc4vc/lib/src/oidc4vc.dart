@@ -1,23 +1,16 @@
-// ignore_for_file: avoid_dynamic_calls, public_member_api_docs
+// ignore_for_file: avoid_dynamic_calls
 
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:bip32/bip32.dart' as bip32;
-import 'package:bip39/bip39.dart' as bip393;
-import 'package:bs58/bs58.dart';
-import 'package:crypto/crypto.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
-import 'package:elliptic/elliptic.dart' as elliptic;
 import 'package:flutter/foundation.dart';
-import 'package:hex/hex.dart';
 import 'package:jose_plus/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:oidc4vc/src/helper_function.dart';
-import 'package:secp256k1/secp256k1.dart';
+import 'package:oidc4vc/src/functions/dio_get.dart';
+import 'package:oidc4vc/src/functions/get_authorization_server_from_credential_offer.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -26,103 +19,9 @@ import 'package:uuid/uuid.dart';
 /// {@endtemplate}
 class OIDC4VC {
   /// {@macro ebsi}
-  OIDC4VC();
+  OIDC4VC({this.walletClientMetadata = const {}});
 
-  /// create JWK from mnemonic
-  String privateKeyFromMnemonic({
-    required String mnemonic,
-    required int indexValue,
-  }) {
-    final seed = bip393.mnemonicToSeed(mnemonic);
-
-    final rootKey = bip32.BIP32.fromSeed(seed); //Instance of 'BIP32'
-    final child = rootKey.derivePath(
-      "m/44'/5467'/0'/$indexValue'",
-    ); //Instance of 'BIP32'
-    final Iterable<int> iterable = child.privateKey!;
-    final seedBytes = Uint8List.fromList(List.from(iterable));
-
-    final key = jwkFromSeed(
-      seedBytes: seedBytes,
-    );
-
-    return jsonEncode(key);
-  }
-
-  /// create JWK from seed
-  Map<String, String> jwkFromSeed({required Uint8List seedBytes}) {
-    // generate JWK for secp256k from bip39 mnemonic
-    // see https://iancoleman.io/bip39/
-    final epk = HEX.encode(seedBytes);
-    final pk = PrivateKey.fromHex(epk); //Instance of 'PrivateKey'
-    final pub = pk.publicKey.toHex().substring(2);
-    final ad = HEX.decode(epk);
-    final d = base64Url.encode(ad).substring(0, 43);
-    // remove "=" padding 43/44
-    final mx = pub.substring(0, 64);
-    // first 32 bytes
-    final ax = HEX.decode(mx);
-    final x = base64Url.encode(ax).substring(0, 43);
-    // remove "=" padding 43/44
-    final my = pub.substring(64);
-    // last 32 bytes
-    final ay = HEX.decode(my);
-    final y = base64Url.encode(ay).substring(0, 43);
-    // ATTENTION !!!!!
-    /// we were using P-256K for dart library conformance which is
-    /// the same as secp256k1, but we are using secp256k1 now
-    final jwk = {
-      'crv': 'secp256k1',
-      'd': d.replaceAll('=', ''),
-      'kty': 'EC',
-      'x': x.replaceAll('=', ''),
-      'y': y.replaceAll('=', ''),
-    };
-    return jwk;
-  }
-
-  String p256PrivateKeyFromMnemonics({
-    required String mnemonic,
-    required int indexValue,
-  }) {
-    final seed = bip393.mnemonicToSeed(mnemonic);
-    final rootKey = bip32.BIP32.fromSeed(seed);
-
-    final child = rootKey.derivePath("m/44'/5467'/0'/$indexValue'");
-
-    final iterable = child.privateKey!;
-    final keySeed = HEX.encode(List.from(iterable));
-
-    // calculate teh pub key
-    final ec = elliptic.getP256();
-    final priv = elliptic.PrivateKey.fromHex(ec, keySeed);
-    final pub = priv.publicKey.toString();
-
-    // format the "d"
-    final ad = HEX.decode(priv.toString());
-    final d = base64Url.encode(ad);
-
-    // extract the "x"
-    final mx = pub.substring(2, 66);
-
-    /// start at 2 to remove first byte of the pub key
-    final ax = HEX.decode(mx);
-    final x = base64Url.encode(ax);
-    // extract the "y"
-    final my = pub.substring(66, 130); // last 32 bytes
-    final ay = HEX.decode(my);
-    final y = base64Url.encode(ay);
-
-    final key = {
-      'kty': 'EC',
-      'crv': 'P-256',
-      'd': d.replaceAll('=', ''),
-      'x': x.replaceAll('=', ''),
-      'y': y.replaceAll('=', ''),
-    };
-
-    return jsonEncode(key);
-  }
+  final Map<String, dynamic> walletClientMetadata;
 
   /// https://www.rfc-editor.org/rfc/rfc7638
   /// Received JWT is already filtered on required members
@@ -338,12 +237,6 @@ class OIDC4VC {
     }
 
     final codeChallenge = pkcePair.codeChallenge;
-    final tokenEndpointAuthMethod = clientAuthentication.value;
-
-    final clientMetaData = getWalletClientMetadata(
-      authorizationEndPoint,
-      tokenEndpointAuthMethod,
-    );
 
     final myRequest = <String, dynamic>{
       'response_type': 'code',
@@ -361,9 +254,9 @@ class OIDC4VC {
     if (isEBSIProfile) {
       if (secureAuthorizedFlow) {
         myRequest['client_metadata'] =
-            Uri.encodeComponent(jsonEncode(clientMetaData));
+            Uri.encodeComponent(jsonEncode(walletClientMetadata));
       } else if (clientAuthentication != ClientAuthentication.clientSecretJwt) {
-        myRequest['client_metadata'] = jsonEncode(clientMetaData);
+        myRequest['client_metadata'] = jsonEncode(walletClientMetadata);
         // paramètre config du portail,
         // on ne met pas si : client authentication :
       }
@@ -393,49 +286,6 @@ class OIDC4VC {
       myRequest['authorization_details'] = jsonEncode(authorizationDetails);
     }
     return myRequest;
-  }
-
-  Map<String, dynamic> getWalletClientMetadata(
-    String authorizationEndPoint,
-    String tokenEndpointAuthMethod,
-  ) {
-    return {
-      'authorization_endpoint': authorizationEndPoint,
-      'scopes_supported': ['openid'],
-      'response_types_supported': ['vp_token', 'id_token'],
-      'client_id_schemes_supported': ['redirect_uri', 'did'],
-      'grant_types_supported': ['authorization_code', 'pre-authorized_code'],
-      'subject_types_supported': ['public'],
-      'id_token_signing_alg_values_supported': ['ES256', 'ES256K'],
-      'request_object_signing_alg_values_supported': ['ES256', 'ES256K'],
-      'request_parameter_supported': true,
-      'request_uri_parameter_supported': true,
-      'request_authentication_methods_supported': {
-        'authorization_endpoint': ['request_object'],
-      },
-      'vp_formats_supported': {
-        'jwt_vp': {
-          'alg_values_supported': ['ES256', 'ES256K'],
-        },
-        'jwt_vc': {
-          'alg_values_supported': ['ES256', 'ES256K'],
-        },
-      },
-      'subject_syntax_types_supported': [
-        'urn:ietf:params:oauth:jwk-thumbprint',
-        'did:key',
-        'did:pkh',
-        'did:key',
-        'did:polygonid',
-      ],
-      'subject_syntax_types_discriminations': [
-        'did:key:jwk_jcs-pub',
-        'did:ebsi:v1',
-      ],
-      'subject_trust_frameworks_supported': ['ebsi'],
-      'id_token_types_supported': ['subject_signed_id_token'],
-      'token_endpoint_auth_method': tokenEndpointAuthMethod,
-    };
   }
 
   ///deferredCredentialEndpoint
@@ -1340,34 +1190,7 @@ class OIDC4VC {
     }
   }
 
-  String generateTokenEdDSA({
-    required Map<String, dynamic> payload,
-    required Map<String, dynamic> privateKey,
-    required String kid,
-    required MediaType mediaType,
-  }) {
-    final d = base64Url.decode(privateKey['d'].toString());
-    final x = base64Url.decode(privateKey['x'].toString());
-
-    final secretKey = [...d, ...x];
-
-    final jwt = JWT(
-      payload,
-      header: {
-        'typ': mediaType.typ,
-        'alg': 'EdDSA',
-        'kid': kid,
-      },
-    );
-
-    final token = jwt.sign(
-      EdDSAPrivateKey(secretKey),
-      algorithm: JWTAlgorithm.EdDSA,
-    );
-
-    return token;
-  }
-
+ 
   bool verifyTokenEdDSA({
     required String token,
     required Map<String, dynamic> publicKey,
@@ -1630,72 +1453,7 @@ class OIDC4VC {
     return verifierVpJwt;
   }
 
-  /// getSignedJwt
-  String generateToken({
-    required Map<String, dynamic> payload,
-    required TokenParameters tokenParameters,
-    bool ignoreProofHeaderType = false,
-  }) {
-    final kty = tokenParameters.privateKey['kty'].toString();
-
-    if (kty == 'OKP') {
-      final jwt = generateTokenEdDSA(
-        payload: payload,
-        privateKey: tokenParameters.privateKey,
-        kid: tokenParameters.kid ?? tokenParameters.thumbprint,
-        mediaType: tokenParameters.mediaType,
-      );
-
-      return jwt;
-    } else {
-      final vpVerifierClaims = JsonWebTokenClaims.fromJson(payload);
-      // create a builder, decoding the JWT in a JWS, so using a
-      // JsonWebSignatureBuilder
-      final privateKey = Map<String, dynamic>.from(tokenParameters.privateKey);
-
-      if (tokenParameters.privateKey['crv'] == 'secp256k1') {
-        privateKey['crv'] = 'P-256K';
-      }
-
-      final key = JsonWebKey.fromJson(privateKey);
-
-      final vpBuilder = JsonWebSignatureBuilder()
-        // set the content
-        ..jsonContent = vpVerifierClaims.toJson()
-        ..setProtectedHeader('alg', tokenParameters.alg)
-
-        // add a key to sign, can only add one for JWT
-        ..addRecipient(key, algorithm: tokenParameters.alg)
-        ..setProtectedHeader('typ', tokenParameters.mediaType.typ);
-
-      if (!ignoreProofHeaderType) {
-        /// Proof Header Type is ignored for KB jwt
-
-        switch (tokenParameters.proofHeaderType) {
-          case ProofHeaderType.kid:
-            vpBuilder.setProtectedHeader(
-              'kid',
-              tokenParameters.kid ?? tokenParameters.thumbprint,
-            );
-
-          case ProofHeaderType.jwk:
-            vpBuilder.setProtectedHeader(
-              'jwk',
-              tokenParameters.publicJWK
-                ..removeWhere((key, value) => key == 'use')
-                ..removeWhere((key, value) => key == 'alg'),
-            );
-        }
-      }
-
-      // build the jws
-      final vpJws = vpBuilder.build();
-
-      // output the compact serialization
-      final verifierVpJwt = vpJws.toCompactSerialization();
-      return verifierVpJwt;
-    }
-  }
+  
 
   @visibleForTesting
   Future<String> getIdToken(VerifierTokenParameters tokenParameters) async {
@@ -1736,48 +1494,6 @@ class OIDC4VC {
     );
     return verifierIdJwt;
   }
-
-  // Future<String> getDidFromMnemonic({
-  //   required String did,
-  //   required String kid,
-  //   required int indexValue,
-  //   String? mnemonic,
-  //   String? privateKey,
-  // }) async {
-  //   final private = await getPrivateKey(
-  //     mnemonic: mnemonic,
-  //     privateKey: privateKey,
-  //     indexValue: indexValue,
-  //   );
-
-  //   final tokenParameters = TokenParameters(
-  //     privateKey: private,
-  //     did: did,
-  //     kid: kid,
-  //   );
-  //   return tokenParameters.did;
-  // }
-
-  // Future<String?> getKid({
-  //   required String did,
-  //   required String kid,
-  //   required int indexValue,
-  //   String? mnemonic,
-  //   String? privateKey,
-  // }) async {
-  //   final private = await getPrivateKey(
-  //     mnemonic: mnemonic,
-  //     privateKey: privateKey,
-  //     indexValue: indexValue,
-  //   );
-
-  //   final tokenParameters = TokenParameters(
-  //     privateKey: private,
-  //     did: did,
-  //     kid: kid,
-  //   );
-  //   return tokenParameters.kid;
-  // }
 
   Future<Map<String, dynamic>> getAuthorizationServerMetaData({
     required String baseUrl,
@@ -1866,169 +1582,6 @@ class OIDC4VC {
       return data;
     } catch (e) {
       throw Exception('ISSUER_METADATA_ISSUE');
-    }
-  }
-
-  String sh256Hash(String text) {
-    final bytes = utf8.encode(text);
-    final digest = sha256.convert(bytes);
-    return base64Url.encode(digest.bytes).replaceAll('=', '');
-  }
-
-  String getDisclosure(String content) {
-    final disclosure =
-        base64Url.encode(utf8.encode(content)).replaceAll('=', '');
-
-    return disclosure;
-  }
-
-  String sh256HashOfContent(String content) {
-    final disclosure = getDisclosure(content);
-    final hash = sh256Hash(disclosure);
-    return hash;
-  }
-
-  int getPositionOfZlibBit(int index) => index % 8;
-
-  int getPositionOfGZipBit(int index) => 7 - (index % 8);
-
-  int getByte(int index) => index ~/ 8;
-
-  int getBit({
-    required int byte,
-    required int bitPosition,
-  }) {
-    // byte => 32 =0100000
-    // The bit in position 5 is set to 1 !!!
-    // so bit = 1
-    final bit = (byte & (1 << bitPosition)) != 0;
-    return bit ? 1 : 0;
-  }
-
-  List<int> decodeAndZlibDecompress(String lst) {
-    final paddedBase64 = lst.padRight((lst.length + 3) & ~3, '=');
-    final compressedBytes = base64Url.decode(paddedBase64);
-
-    final zlib = ZLibCodec();
-    final decompressedBytes = zlib.decode(compressedBytes);
-
-    return decompressedBytes;
-  }
-
-  List<int> decodeAndGzibDecompress(String lst) {
-    final paddedBase64 = lst.padRight((lst.length + 3) & ~3, '=');
-    final compressedBytes = base64Url.decode(paddedBase64);
-
-    final gzib = GZipCodec();
-    final decompressedBytes = gzib.decode(compressedBytes);
-
-    return decompressedBytes;
-  }
-
-  Future<dynamic> dioGet(
-    String uri, {
-    required Dio dio,
-    Map<String, dynamic> headers = const <String, dynamic>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    bool isCachingEnabled = false,
-    SecureStorageProvider? secureStorage,
-  }) async {
-    try {
-      final secureStorageProvider = secureStorage ?? getSecureStorage;
-      // final cachedData = await secureStorageProvider.get(uri);
-      // TODO(hawkbee): To be removed.
-      /// temporary solution to purge faulty stored data
-      /// Will be removed in the future
-      await secureStorageProvider.delete(uri);
-
-      /// end of temporary solution
-      dynamic response;
-
-      dio.options.headers = headers;
-
-      // if (isCachingEnabled) {
-      //   final secureStorageProvider = getSecureStorage;
-      //   final cachedData = await secureStorageProvider.get(uri);
-      //   if (cachedData == null) {
-      //     response = await dio.get<dynamic>(uri);
-      //   } else {
-      //     final cachedDataJson = jsonDecode(cachedData);
-      //     final expiry = int.parse(cachedDataJson['expiry'].toString());
-
-      //     final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
-
-      //     if (isExpired) {
-      //       response = await dio.get<dynamic>(uri);
-      //     } else {
-      //       /// directly return cached data
-      //       /// returned here to avoid the caching override everytime
-      //       final response = await cachedDataJson['data'];
-      //       return response;
-      //     }
-      //   }
-      // }
-      // temporary deactiviting this caching du to issue with
-      // flutter_secure_storage on ios #2657
-      // final expiry =
-      //     DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
-
-      // final value = {'expiry': expiry, 'data': response.data};
-      // await secureStorageProvider.set(uri, jsonEncode(value));
-      response = await dio.get<dynamic>(
-        uri,
-        options: Options().copyWith(
-          sendTimeout: const Duration(seconds: 10),
-          receiveTimeout: const Duration(seconds: 10),
-        ),
-      );
-
-      return response.data;
-    } on FormatException {
-      throw Exception();
-    } catch (e) {
-      if (e is DioException) {
-        throw Exception();
-      } else {
-        rethrow;
-      }
-    }
-  }
-
-  Map<String, dynamic> publicKeyBase58ToPublicJwk(String publicKeyBase58) {
-    ///step 1 : change the publicKeyBase58 format from base58 to base64 :
-    ///decode base58 then encode in base64 urlsafe
-
-    final pubKey =
-        base64UrlEncode(base58.decode(publicKeyBase58)).replaceAll('=', '');
-
-    ///step 2 : create the JWK for the "type": "Ed
-    ///25519VerificationKey2018",
-    ///it is a edDSA key
-    final jwk = {
-      'crv': 'Ed25519',
-      'kty': 'OKP',
-      'x': pubKey,
-    };
-    return jwk;
-  }
-
-  String? getAuthorizationServerFromCredentialOffer(
-    dynamic credentialOfferJson,
-  ) {
-    try {
-      /// Extract the authorization endpoint from from
-      /// authorization_server in credentialOfferJson
-      final jsonPathAuthorizationServer = JsonPath(
-        r'$..authorization_server',
-      );
-      final data = jsonPathAuthorizationServer
-          .read(credentialOfferJson)
-          .first
-          .value! as String;
-      return data;
-    } catch (e) {
-      return null;
     }
   }
 }

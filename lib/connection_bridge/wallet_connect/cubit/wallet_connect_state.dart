@@ -40,15 +40,16 @@ class WalletConnectState extends Equatable {
     );
   }
 
-  WalletConnectState copyWith(
-      {WalletConnectStatus status = WalletConnectStatus.idle,
-      StateMessage? message,
-      SessionProposalEvent? sessionProposalEvent,
-      String? sessionTopic,
-      dynamic parameters,
-      String? signType,
-      Transaction? transaction,
-      List<OperationDetails>? operationDetails}) {
+  WalletConnectState copyWith({
+    WalletConnectStatus status = WalletConnectStatus.idle,
+    StateMessage? message,
+    SessionProposalEvent? sessionProposalEvent,
+    String? sessionTopic,
+    dynamic parameters,
+    String? signType,
+    Transaction? transaction,
+    List<OperationDetails>? operationDetails,
+  }) {
     return WalletConnectState(
       status: status,
       message: message,

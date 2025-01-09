@@ -58,7 +58,7 @@ Future<void> bootstrap(FlavorMode flavor) async {
       runApp(App(
         flavorMode: flavor,
         themeRepository: themeRepository,
-      ));
+      ),);
     },
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );

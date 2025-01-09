@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
 import 'package:altme/oidc4vc/verify_encoded_data.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:did_kit/did_kit.dart';
@@ -190,17 +191,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   newStatusList is Map<String, dynamic>) {
                 final lst = newStatusList['lst'].toString();
 
-                final bytes = profileCubit.oidc4vc.getByte(statusListIndex);
-
-                // '$idx = $bytes X 8 + $posOfBit'
-                final decompressedBytes =
-                    profileCubit.oidc4vc.decodeAndZlibDecompress(lst);
-                final byteToCheck = decompressedBytes[bytes];
-
-                final posOfBit =
-                    profileCubit.oidc4vc.getPositionOfZlibBit(statusListIndex);
-                final bit = profileCubit.oidc4vc
-                    .getBit(byte: byteToCheck, bitPosition: posOfBit);
+                final bit = getBit(index: statusListIndex, encodedList: lst);
 
                 if (bit == 0) {
                   // active
@@ -280,17 +271,12 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   final encodedList = credentialSubject['encodedList'];
 
                   if (encodedList != null && encodedList is String) {
-                    final decompressedBytes = profileCubit.oidc4vc
-                        .decodeAndGzibDecompress(encodedList);
-
                     statusListIndex = int.parse(data.statusListIndex);
 
-                    final bytes = profileCubit.oidc4vc.getByte(statusListIndex);
-                    final byteToCheck = decompressedBytes[bytes];
-                    final posOfBit = profileCubit.oidc4vc
-                        .getPositionOfGZipBit(statusListIndex);
-                    final bit = profileCubit.oidc4vc
-                        .getBit(byte: byteToCheck, bitPosition: posOfBit);
+                    final bit = getBit(
+                      index: statusListIndex,
+                      encodedList: encodedList,
+                    );
 
                     if (bit == 0) {
                       // active

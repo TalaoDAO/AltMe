@@ -595,7 +595,7 @@ class ScanCubit extends Cubit<ScanState> {
           clientId: '', // just added as it is required field
         );
 
-        final jwtProofOfPossession = profileCubit.oidc4vc.generateToken(
+        final jwtProofOfPossession = generateToken(
           payload: responseData,
           tokenParameters: tokenParameters,
         );

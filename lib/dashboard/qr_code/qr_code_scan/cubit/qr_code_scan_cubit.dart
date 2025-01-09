@@ -1494,7 +1494,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
             if (customOidc4vcProfile.dpopSupport) {
               dPop = await getDPopJwt(
-                oidc4vc: profileCubit.oidc4vc,
                 url: tokenEndPoint,
                 accessToken: savedAccessToken,
                 nonce: savedNonce,

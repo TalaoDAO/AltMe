@@ -156,7 +156,6 @@ Future<Uri?> getAuthorizationUriForIssuer({
 
     if (customOidc4vcProfile.dpopSupport) {
       dPop = await getDPopJwt(
-        oidc4vc: profileCubit.oidc4vc,
         url: parUrl,
         // accessToken: savedAccessToken,
         // nonce: savedNonce,
