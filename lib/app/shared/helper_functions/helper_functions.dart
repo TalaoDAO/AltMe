@@ -687,15 +687,7 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
 
 /// OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?,
 /// credentialOfferJson, issuer, pre-authorizedCode
-Future<
-    (
-      OIDC4VCType?,
-      Map<String, dynamic>?,
-      Map<String, dynamic>?,
-      dynamic,
-      String?,
-      String?,
-    )> getIssuanceData({
+Future<Oidc4vcParameters> getIssuanceData({
   required String url,
   required DioClient client,
   required OIDC4VC oidc4vc,
@@ -707,36 +699,39 @@ Future<
   final keys = <String>[];
   uri.queryParameters.forEach((key, value) => keys.add(key));
 
-  dynamic credentialOfferJson;
+  late Map<String, dynamic> credentialOfferJson;
   String? issuer;
   String? preAuthorizedCode;
 
   if (keys.contains('credential_offer') ||
       keys.contains('credential_offer_uri')) {
     ///  issuance case 2
-    credentialOfferJson = await getCredentialOfferJson(
+    credentialOfferJson = await getCredentialOffer(
       scannedResponse: uri.toString(),
       dioClient: client,
     );
 
-    if (credentialOfferJson != null) {
-      final grants = credentialOfferJson['grants'];
+    final grants = credentialOfferJson['grants'];
 
-      if (grants != null && grants is Map) {
-        final dynamic preAuthorizedCodeGrant =
-            grants['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
-        if (preAuthorizedCodeGrant != null &&
-            preAuthorizedCodeGrant is Map &&
-            preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
-          preAuthorizedCode =
-              preAuthorizedCodeGrant['pre-authorized_code'] as String;
-        }
-      } else {
-        ///
+    if (grants != null && grants is Map) {
+      final dynamic preAuthorizedCodeGrant =
+          grants['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
+      if (preAuthorizedCodeGrant != null &&
+          preAuthorizedCodeGrant is Map &&
+          preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
+        preAuthorizedCode =
+            preAuthorizedCodeGrant['pre-authorized_code'] as String;
       }
 
       issuer = credentialOfferJson['credential_issuer'].toString();
     }
+  } else {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description': 'The credential offer is missing.',
+      },
+    );
   }
 
   if (keys.contains('issuer')) {
@@ -748,19 +743,19 @@ Future<
   }
 
   if (issuer == null) {
-    return (null, null, null, null, null, null);
+    return Oidc4vcParameters(
+      oidc4vciDraftType: oidc4vciDraftType,
+      useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+    );
   }
 
-  final openIdConfigurationData = await oidc4vc.getIssuerMetaData(
+  final issuerOpenIdConfiguration = await oidc4vc.getIssuerMetaData(
     baseUrl: issuer,
     dio: client.dio,
   );
 
-  final openIdConfiguration =
-      OpenIdConfiguration.fromJson(openIdConfigurationData);
-
   if (preAuthorizedCode == null) {
-    final grantTypesSupported = openIdConfiguration.grantTypesSupported;
+    final grantTypesSupported = issuerOpenIdConfiguration.grantTypesSupported;
     if (grantTypesSupported != null && grantTypesSupported.isNotEmpty) {
       if (!grantTypesSupported.contains('authorization_code')) {
         throw ResponseMessage(
@@ -773,20 +768,22 @@ Future<
     }
   }
 
-  final authorizationServer = openIdConfiguration.authorizationServer;
-
-  Map<String, dynamic>? authorizationServerConfigurationData;
-
-  authorizationServerConfigurationData =
-      await oidc4vc.getAuthorizationServerMetaData(
-    baseUrl: authorizationServer ?? issuer,
-    dio: client.dio,
+  final Oidc4vcParameters oidc4vcParametersfromIssuer = Oidc4vcParameters(
+    oidc4vciDraftType: oidc4vciDraftType,
     useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+    classIssuerOpenIdConfiguration: issuerOpenIdConfiguration,
+    classCredentialOffer: credentialOfferJson,
+    preAuthorizedCode: preAuthorizedCode,
+    classIssuer: issuer,
   );
-
-  final credentialsSupported = openIdConfiguration.credentialsSupported;
+  final Oidc4vcParameters oidc4vcParameters =
+      await oidc4vc.authorizationParameters(
+    oidc4vcParameters: oidc4vcParametersfromIssuer,
+    dio: Dio(),
+  );
+  final credentialsSupported = issuerOpenIdConfiguration.credentialsSupported;
   final credentialConfigurationsSupported =
-      openIdConfiguration.credentialConfigurationsSupported;
+      issuerOpenIdConfiguration.credentialConfigurationsSupported;
 
   if (credentialsSupported == null &&
       credentialConfigurationsSupported == null) {
@@ -803,114 +800,63 @@ Future<
   if (credentialsSupported != null) {
     credSupported = credentialsSupported[0];
   }
-
   for (final oidc4vcType in OIDC4VCType.values) {
     if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
       if (oidc4vcType == OIDC4VCType.DEFAULT ||
           oidc4vcType == OIDC4VCType.EBSI) {
         if (credSupported?.trustFramework != null &&
             credSupported == credSupported?.trustFramework) {
-          return (
-            OIDC4VCType.DEFAULT,
-            openIdConfigurationData,
-            authorizationServerConfigurationData,
-            credentialOfferJson,
-            issuer,
-            preAuthorizedCode,
+          return oidc4vcParameters.copyWith(
+            oidc4vcType: OIDC4VCType.DEFAULT,
           );
         }
 
         if (credSupported?.trustFramework?.name != null &&
             credSupported?.trustFramework?.name == 'ebsi') {
-          return (
-            OIDC4VCType.EBSI,
-            openIdConfigurationData,
-            authorizationServerConfigurationData,
-            credentialOfferJson,
-            issuer,
-            preAuthorizedCode,
+          return oidc4vcParameters.copyWith(
+            oidc4vcType: OIDC4VCType.EBSI,
           );
         } else {
-          return (
-            OIDC4VCType.DEFAULT,
-            openIdConfigurationData,
-            authorizationServerConfigurationData,
-            credentialOfferJson,
-            issuer,
-            preAuthorizedCode,
+          return oidc4vcParameters.copyWith(
+            oidc4vcType: OIDC4VCType.DEFAULT,
           );
         }
       }
-      return (
-        oidc4vcType,
-        openIdConfigurationData,
-        authorizationServerConfigurationData,
-        credentialOfferJson,
-        issuer,
-        preAuthorizedCode,
+      return oidc4vcParameters.copyWith(
+        oidc4vcType: oidc4vcType,
       );
     }
   }
 
-  return (
-    null,
-    openIdConfigurationData,
-    authorizationServerConfigurationData,
-    credentialOfferJson,
-    issuer,
-    preAuthorizedCode,
-  );
+  return oidc4vcParameters;
 }
 
 Future<void> handleErrorForOID4VCI({
   required String url,
-  required Map<String, dynamic> openIdConfigurationData,
-  required Map<String, dynamic>? authorizationServerConfigurationData,
+  required Oidc4vcParameters oidc4vcParameters,
 }) async {
-  final openIdConfiguration =
-      OpenIdConfiguration.fromJson(openIdConfigurationData);
+  List<dynamic>? subjectSyntaxTypesSupported = oidc4vcParameters
+      .classIssuerOpenIdConfiguration.subjectSyntaxTypesSupported;
 
-  final authorizationServer = openIdConfiguration.authorizationServer;
-
-  List<dynamic>? subjectSyntaxTypesSupported;
-  String? tokenEndpoint;
-
-  if (openIdConfiguration.subjectSyntaxTypesSupported != null) {
-    subjectSyntaxTypesSupported =
-        openIdConfiguration.subjectSyntaxTypesSupported;
+  if (oidc4vcParameters.classAuthorizationServerOpenIdConfiguration
+          .subjectSyntaxTypesSupported !=
+      null) {
+    subjectSyntaxTypesSupported = oidc4vcParameters
+        .classAuthorizationServerOpenIdConfiguration
+        .subjectSyntaxTypesSupported;
   }
 
-  if (openIdConfiguration.tokenEndpoint != null) {
-    tokenEndpoint = openIdConfiguration.tokenEndpoint;
-  }
-
-  if (authorizationServer != null &&
-      authorizationServerConfigurationData != null) {
-    final authorizationServerConfiguration =
-        OpenIdConfiguration.fromJson(authorizationServerConfigurationData);
-    if (subjectSyntaxTypesSupported == null &&
-        authorizationServerConfiguration.subjectSyntaxTypesSupported != null) {
-      subjectSyntaxTypesSupported =
-          authorizationServerConfiguration.subjectSyntaxTypesSupported;
-    }
-
-    if (tokenEndpoint == null &&
-        authorizationServerConfiguration.tokenEndpoint != null) {
-      tokenEndpoint = authorizationServerConfiguration.tokenEndpoint;
-    }
-  }
-
-  if (authorizationServer != null && tokenEndpoint == null) {
+  if (oidc4vcParameters.classTokenEndpoint == '') {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
-        'error_description': 'The issuer configuration is invalid. '
-            'The token_endpoint is missing.',
+        'error_description': 'The token_endpoint is missing.',
       },
     );
   }
 
-  if (openIdConfiguration.credentialEndpoint == null) {
+  if (oidc4vcParameters.classIssuerOpenIdConfiguration.credentialEndpoint ==
+      null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -920,7 +866,8 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (openIdConfiguration.credentialIssuer == null) {
+  if (oidc4vcParameters.classIssuerOpenIdConfiguration.credentialIssuer ==
+      null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -930,8 +877,11 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (openIdConfiguration.credentialsSupported == null &&
-      openIdConfiguration.credentialConfigurationsSupported == null) {
+  if (oidc4vcParameters.classIssuerOpenIdConfiguration.credentialsSupported ==
+          null &&
+      oidc4vcParameters.classIssuerOpenIdConfiguration
+              .credentialConfigurationsSupported ==
+          null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -1038,13 +988,11 @@ Future<bool?> isEBSIForVerifiers({
     final isUrl = isURL(clientId);
     if (!isUrl) return false;
 
-    final openIdConfigurationData = await oidc4vc.getIssuerMetaData(
+    final openIdConfiguration = await oidc4vc.getIssuerMetaData(
       baseUrl: clientId,
       dio: Dio(),
     );
 
-    final openIdConfiguration =
-        OpenIdConfiguration.fromJson(openIdConfigurationData);
     final subjectTrustFrameworksSupported =
         openIdConfiguration.subjectTrustFrameworksSupported;
 
@@ -1110,7 +1058,7 @@ Future<String> getHost({
   } else if (keys.contains('credential_offer') ||
       keys.contains('credential_offer_uri')) {
     ///  issuance case 2
-    final dynamic credentialOfferJson = await getCredentialOfferJson(
+    final dynamic credentialOfferJson = await getCredentialOffer(
       scannedResponse: uri.toString(),
       dioClient: client,
     );
@@ -1415,20 +1363,16 @@ bool hasIDTokenOrVPToken(String responseType) {
 
 String getFormattedStringOIDC4VCI({
   required String url,
-  required String tokenEndpoint,
-  required String credentialEndpoint,
-  Map<String, dynamic>? openIdConfigurationData,
-  Map<String, dynamic>? authorizationServerConfigurationData,
-  dynamic credentialOfferJson,
+  required Oidc4vcParameters oidc4vcParameters,
 }) {
   return '''
 <b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
 <b>CREDENTIAL OFFER  :</b> 
-${credentialOfferJson != null ? const JsonEncoder.withIndent('  ').convert(credentialOfferJson) : 'None'}\n
+${const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.classCredentialOffer)}\n
 <b>AUTHORIZATION SERVER CONFIGURATION :</b>
-${authorizationServerConfigurationData != null ? const JsonEncoder.withIndent('  ').convert(authorizationServerConfigurationData) : 'None'}\n
+${oidc4vcParameters.classAuthorizationServerOpenIdConfiguration != null ? const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.classAuthorizationServerOpenIdConfiguration) : 'None'}\n
 <b>CREDENTIAL ISSUER CONFIGURATION :</b> 
-${openIdConfigurationData != null ? const JsonEncoder.withIndent('  ').convert(openIdConfigurationData) : 'None'}
+${const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.classIssuerOpenIdConfiguration)}
 ''';
 }
 

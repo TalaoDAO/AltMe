@@ -539,6 +539,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           }
         }
 
+// 
+
         if (userPinRequired != null && userPinRequired) {
           emit(
             state.copyWith(
@@ -855,14 +857,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final customOidc4vcProfile = profileCubit.state.model.profileSetting
           .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-      final (
-        _,
-        Map<String, dynamic>? openIdConfigurationData,
-        Map<String, dynamic>? authorizationServerConfigurationData,
-        _,
-        String? issuer,
-        _,
-      ) = await getIssuanceData(
+      final oidc4vcParameters = await getIssuanceData(
         url: url,
         client: client,
         oidc4vc: oidc4vc,
@@ -871,19 +866,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             useOauthServerAuthEndPoint(profileCubit.state.model),
       );
 
-      if (openIdConfigurationData != null) {
         await handleErrorForOID4VCI(
           url: url,
-          openIdConfigurationData: openIdConfigurationData,
-          authorizationServerConfigurationData:
-              authorizationServerConfigurationData,
+          oidc4vcParameters: oidc4vcParameters,
         );
-      }
 
       await getAndAddDefferedCredential(
         credentialModel: credentialModel,
         credentialsCubit: credentialsCubit,
-        issuer: issuer,
+        issuer: oidc4vcParameters.classIssuer,
         oidc4vc: oidc4vc,
         jwtDecode: jwtDecode,
         blockchainType: walletCubit.state.currentAccount!.blockchainType,

@@ -18,10 +18,7 @@ import 'package:uuid/uuid.dart';
 /// EBSI wallet compliance
 /// {@endtemplate}
 class OIDC4VC {
-  /// {@macro ebsi}
-  OIDC4VC({this.walletClientMetadata = const {}});
-
-  final Map<String, dynamic> walletClientMetadata;
+  OIDC4VC();
 
   /// https://www.rfc-editor.org/rfc/rfc7638
   /// Received JWT is already filtered on required members
@@ -56,16 +53,13 @@ class OIDC4VC {
     String? oAuthClientAttestationPop,
   }) async {
     try {
-      final openIdConfigurationData = await getIssuerMetaData(
+      final openIdConfiguration = await getIssuerMetaData(
         baseUrl: issuer,
         dio: dio,
         secureStorage: secureStorage,
       );
 
-      final openIdConfiguration =
-          OpenIdConfiguration.fromJson(openIdConfigurationData);
-
-      final credentialAuthorizationEndpoint = await readAuthorizationEndPoint(
+      final credentialAuthorizationEndpoint = await authorizationParameters(
         openIdConfiguration: openIdConfiguration,
         issuer: issuer,
         oidc4vciDraftType: oidc4vciDraftType,
@@ -671,40 +665,40 @@ class OIDC4VC {
     return nonceEndPoint;
   }
 
-  Future<String> readAuthorizationEndPoint({
-    required OpenIdConfiguration openIdConfiguration,
-    required String issuer,
-    required OIDC4VCIDraftType oidc4vciDraftType,
+  Future<Oidc4vcParameters> authorizationParameters({
+    required Oidc4vcParameters oidc4vcParameters,
     required Dio dio,
-    required dynamic credentialOfferJson,
-    required bool useOAuthAuthorizationServerLink,
-    SecureStorageProvider? secureStorage,
   }) async {
+    OpenIdConfiguration? authorizationServerConfiguration;
     String? authorizationEndpoint;
+    String? tokenEndpoint;
 
-    switch (oidc4vciDraftType) {
+    switch (oidc4vcParameters.oidc4vciDraftType) {
       case OIDC4VCIDraftType.draft11:
-        if (openIdConfiguration.authorizationEndpoint != null) {
-          authorizationEndpoint = openIdConfiguration.authorizationEndpoint;
+        if (oidc4vcParameters
+                .classIssuerOpenIdConfiguration.authorizationEndpoint !=
+            null) {
+          authorizationEndpoint = oidc4vcParameters
+              .classIssuerOpenIdConfiguration.authorizationEndpoint;
+          tokenEndpoint =
+              oidc4vcParameters.classIssuerOpenIdConfiguration.tokenEndpoint;
         } else {
-          final authorizationServer =
-              openIdConfiguration.authorizationServer ?? issuer;
+          final authorizationServer = oidc4vcParameters
+                  .classIssuerOpenIdConfiguration.authorizationServer ??
+              oidc4vcParameters.classIssuer;
 
-          final authorizationServerConfigurationData =
+          authorizationServerConfiguration =
               await getAuthorizationServerMetaData(
             baseUrl: authorizationServer,
             dio: dio,
-            secureStorage: secureStorage,
-            useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-          );
-
-          final authorizationServerConfiguration = OpenIdConfiguration.fromJson(
-            authorizationServerConfigurationData,
+            useOAuthAuthorizationServerLink:
+                oidc4vcParameters.useOAuthAuthorizationServerLink,
           );
 
           if (authorizationServerConfiguration.authorizationEndpoint != null) {
             authorizationEndpoint =
                 authorizationServerConfiguration.authorizationEndpoint;
+            tokenEndpoint = authorizationServerConfiguration.tokenEndpoint;
           }
         }
       case OIDC4VCIDraftType.draft13:
@@ -713,12 +707,15 @@ class OIDC4VC {
 
         /// Extract the authorization endpoint from from first element of
         /// authorization_servers in opentIdConfiguration.authorizationServers
-        final listOpenIDConfiguration =
-            openIdConfiguration.authorizationServers ?? [];
+        final listOpenIDConfiguration = oidc4vcParameters
+                .classIssuerOpenIdConfiguration.authorizationServers ??
+            [];
 
         // check if authorization server is present in the credential offer
         final authorizationServerFromCredentialOffer =
-            getAuthorizationServerFromCredentialOffer(credentialOfferJson);
+            getAuthorizationServerFromCredentialOffer(
+          oidc4vcParameters.classCredentialOffer,
+        );
         // if authorization server is present in the credential offer
         // we check if it is present in the authorization servers
         // from credential issuer metadata
@@ -745,7 +742,7 @@ class OIDC4VC {
                 r'$..["urn:ietf:params:oauth:grant-type:pre-authorized_code"].authorization_server',
               );
               final data = jsonPathCredentialOffer
-                  .read(credentialOfferJson)
+                  .read(oidc4vcParameters.classCredentialOffer)
                   .first
                   .value! as String;
               if (listOpenIDConfiguration.contains(data)) {
@@ -756,7 +753,7 @@ class OIDC4VC {
                 r'$..authorization_code.authorization_server',
               );
               final data = jsonPathCredentialOffer
-                  .read(credentialOfferJson)
+                  .read(oidc4vcParameters.classCredentialOffer)
                   .first
                   .value! as String;
               if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
@@ -766,41 +763,40 @@ class OIDC4VC {
           }
         }
         if (authorizationServer != null) {
-          final authorizationServerConfigurationData =
+          authorizationServerConfiguration =
               await getAuthorizationServerMetaData(
             baseUrl: authorizationServer,
             dio: dio,
-            secureStorage: secureStorage,
-            useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-          );
-          final authorizationServerConfiguration = OpenIdConfiguration.fromJson(
-            authorizationServerConfigurationData,
+            useOAuthAuthorizationServerLink:
+                oidc4vcParameters.useOAuthAuthorizationServerLink,
           );
           authorizationEndpoint =
               authorizationServerConfiguration.authorizationEndpoint;
+          tokenEndpoint = authorizationServerConfiguration.tokenEndpoint;
         }
     }
 
     // If authorizationEndpoint is null, we fetch from oauth-
     if (authorizationEndpoint == null) {
-      final authorizationServerConfigurationData =
-          await getAuthorizationServerMetaData(
-        baseUrl: issuer,
+      authorizationServerConfiguration = await getAuthorizationServerMetaData(
+        baseUrl: oidc4vcParameters.classIssuer,
         dio: dio,
-        secureStorage: secureStorage,
-        useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-      );
-      final authorizationServerConfiguration = OpenIdConfiguration.fromJson(
-        authorizationServerConfigurationData,
+        useOAuthAuthorizationServerLink:
+            oidc4vcParameters.useOAuthAuthorizationServerLink,
       );
       authorizationEndpoint =
           authorizationServerConfiguration.authorizationEndpoint;
+      tokenEndpoint = authorizationServerConfiguration.tokenEndpoint;
     }
 
     // If authorizationEndpoint is null, we consider the issuer
     // as the authorizationEndpoint
-
-    return authorizationEndpoint ??= '$issuer/authorize';
+    return oidc4vcParameters.copyWith(
+      classAuthorizationEndpoint: authorizationEndpoint,
+      classTokenEndpoint: tokenEndpoint,
+      classAuthorizationServerOpenIdConfiguration:
+          authorizationServerConfiguration,
+    );
   }
 
   String readIssuerDid(
@@ -1190,7 +1186,6 @@ class OIDC4VC {
     }
   }
 
- 
   bool verifyTokenEdDSA({
     required String token,
     required Map<String, dynamic> publicKey,
@@ -1453,8 +1448,6 @@ class OIDC4VC {
     return verifierVpJwt;
   }
 
-  
-
   @visibleForTesting
   Future<String> getIdToken(VerifierTokenParameters tokenParameters) async {
     /// build id token
@@ -1495,7 +1488,7 @@ class OIDC4VC {
     return verifierIdJwt;
   }
 
-  Future<Map<String, dynamic>> getAuthorizationServerMetaData({
+  Future<OpenIdConfiguration> getAuthorizationServerMetaData({
     required String baseUrl,
     required bool useOAuthAuthorizationServerLink,
     required Dio dio,
@@ -1530,7 +1523,7 @@ class OIDC4VC {
           ? jsonDecode(response) as Map<String, dynamic>
           : response as Map<String, dynamic>;
 
-      return data;
+      return OpenIdConfiguration.fromJson(data);
     } catch (e) {
       try {
         final response = await dioGet(
@@ -1543,14 +1536,14 @@ class OIDC4VC {
             ? jsonDecode(response) as Map<String, dynamic>
             : response as Map<String, dynamic>;
 
-        return data;
+        return OpenIdConfiguration.fromJson(data);
       } catch (e) {
         throw Exception('AUTHORIZATION_SERVER_METADATA_ISSUE');
       }
     }
   }
 
-  Future<Map<String, dynamic>> getIssuerMetaData({
+  Future<OpenIdConfiguration> getIssuerMetaData({
     required String baseUrl,
     required Dio dio,
     bool isCachingEnabled = false,
@@ -1579,7 +1572,7 @@ class OIDC4VC {
           ? jsonDecode(response) as Map<String, dynamic>
           : response as Map<String, dynamic>;
 
-      return data;
+      return OpenIdConfiguration.fromJson(data);
     } catch (e) {
       throw Exception('ISSUER_METADATA_ISSUE');
     }

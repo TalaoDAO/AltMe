@@ -7,6 +7,7 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:oidc4vc/src/models/oidc4vc_parameters.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
@@ -245,14 +246,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           String? preAuthorizedCodeForIssuance;
 
           if (isOpenIDUrl || isFromDeeplink) {
-            final (
-              OIDC4VCType? oidc4vcType,
-              Map<String, dynamic>? openIdConfigurationData,
-              Map<String, dynamic>? authorizationServerConfigurationData,
-              dynamic credentialOfferJson,
-              String? issuer,
-              String? preAuthorizedCode,
-            ) = await getIssuanceData(
+            final Oidc4vcParameters oidc4vcParameters = await getIssuanceData(
               url: state.uri.toString(),
               client: client,
               oidc4vc: oidc4vc,
@@ -262,47 +256,14 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   useOauthServerAuthEndPoint(profileCubit.state.model),
             );
 
-            oidc4vcTypeForIssuance = oidc4vcType;
-            credentialOfferJsonForIssuance = credentialOfferJson;
-            if (openIdConfigurationData != null) {
-              openIdConfiguration =
-                  OpenIdConfiguration.fromJson(openIdConfigurationData);
-            }
-
-            issuerForIssuance = issuer;
-            preAuthorizedCodeForIssuance = preAuthorizedCode;
-
             /// if dev mode is ON show some dialog to show data
             if (profileCubit.state.model.isDeveloperMode) {
               late String formattedData;
-              if (oidc4vcTypeForIssuance != null) {
+              if (oidc4vcParameters.oidc4vcType != null) {
                 /// issuance case
-
-                var tokenEndPoint = 'None';
-                var credentialEndpoint = 'None';
-
-                if (openIdConfiguration != null && issuer != null) {
-                  tokenEndPoint = await oidc4vc.readTokenEndPoint(
-                    openIdConfiguration: openIdConfiguration,
-                    issuer: issuer,
-                    oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
-                    dio: Dio(),
-                    useOAuthAuthorizationServerLink:
-                        useOauthServerAuthEndPoint(profileCubit.state.model),
-                  );
-
-                  credentialEndpoint =
-                      oidc4vc.readCredentialEndpoint(openIdConfiguration);
-                }
-
                 formattedData = getFormattedStringOIDC4VCI(
                   url: state.uri.toString(),
-                  authorizationServerConfigurationData:
-                      authorizationServerConfigurationData,
-                  credentialOfferJson: credentialOfferJson,
-                  openIdConfigurationData: openIdConfigurationData,
-                  tokenEndpoint: tokenEndPoint,
-                  credentialEndpoint: credentialEndpoint,
+                  oidc4vcParameters: oidc4vcParameters,
                 );
               } else {
                 var url = state.uri!.toString();
@@ -380,14 +341,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               if (!moveAhead) return;
             }
 
-            if (openIdConfigurationData != null) {
               await handleErrorForOID4VCI(
                 url: state.uri.toString(),
-                openIdConfigurationData: openIdConfigurationData,
-                authorizationServerConfigurationData:
-                    authorizationServerConfigurationData,
+                oidc4vcParameters: oidc4vcParameters,
               );
-            }
           }
 
           if (showPrompt) {

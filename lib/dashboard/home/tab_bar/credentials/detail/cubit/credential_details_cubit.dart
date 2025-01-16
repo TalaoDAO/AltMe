@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
-import 'package:altme/oidc4vc/verify_encoded_data.dart';
+import 'package:altme/oidc4vc/helper_function/verify_encoded_data.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
