@@ -14,29 +14,26 @@ Future<
       String?,
       String?,
     )?> getCredential({
-  required bool isEBSI,
+  required Oidc4vcParameters oidc4vcParameters,
   required dynamic credential,
   required ProfileCubit profileCubit,
-  required String issuer,
   required bool cryptoHolderBinding,
-  required OIDC4VCIDraftType oidc4vciDraftType,
   required DidKeyType didKeyType,
   required String? clientId,
   required String accessToken,
-  required String? cnonce,
-  required OpenIdConfiguration openIdConfiguration,
   required List<dynamic>? authorizationDetails,
   required QRCodeScanCubit qrCodeScanCubit,
   required String publicKeyForDPop,
+  required String? cnonce,
 }) async {
   final privateKey = await fetchPrivateKey(
-    isEBSI: isEBSI,
+    isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
     didKeyType: didKeyType,
     profileCubit: profileCubit,
   );
 
   final (did, kid) = await fetchDidAndKid(
-    isEBSI: isEBSI,
+    isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
     privateKey: privateKey,
     didKeyType: didKeyType,
     profileCubit: profileCubit,
@@ -49,7 +46,7 @@ Future<
 
   final (credentialType, types, credentialDefinition, vct, format) =
       await profileCubit.oidc4vc.getCredentialData(
-    openIdConfiguration: openIdConfiguration,
+    openIdConfiguration: oidc4vcParameters.classIssuerOpenIdConfiguration,
     credential: credential,
   );
 
@@ -59,7 +56,7 @@ Future<
     privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
     did: did,
     kid: kid,
-    issuer: issuer,
+    issuer: oidc4vcParameters.classIssuer,
     mediaType: MediaType.proofOfOwnership,
     clientType: customOidc4vcProfile.clientType,
     proofHeaderType: customOidc4vcProfile.proofHeader,
@@ -92,22 +89,20 @@ Future<
       final credentialData = await profileCubit.oidc4vc.buildCredentialData(
         nonce: nonce,
         issuerTokenParameters: issuerTokenParameters,
-        openIdConfiguration: openIdConfiguration,
         credentialType: credentialType,
         types: types,
         format: format,
         credentialIdentifier: credentialIdentifier,
         cryptoHolderBinding: cryptoHolderBinding,
-        oidc4vciDraftType: oidc4vciDraftType,
         credentialDefinition: credentialDefinition,
         clientAuthentication: customOidc4vcProfile.clientAuthentication,
         vct: vct,
         proofType: customOidc4vcProfile.proofType,
         did: did,
-        issuer: issuer,
         kid: kid,
         privateKey: privateKey,
         formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
+        oidc4vcParameters: oidc4vcParameters,
       );
 
       if (profileCubit.state.model.isDeveloperMode) {
@@ -129,7 +124,7 @@ Future<
       try {
         credentialResponseDataValue = await getSingleCredentialData(
           profileCubit: profileCubit,
-          openIdConfiguration: openIdConfiguration,
+          openIdConfiguration: oidc4vcParameters.classIssuerOpenIdConfiguration,
           accessToken: accessToken,
           dio: Dio(),
           credentialData: credentialData,
@@ -152,22 +147,20 @@ Future<
     final credentialData = await profileCubit.oidc4vc.buildCredentialData(
       nonce: nonce,
       issuerTokenParameters: issuerTokenParameters,
-      openIdConfiguration: openIdConfiguration,
       credentialType: credentialType,
       types: types,
       format: format,
       credentialIdentifier: null,
       cryptoHolderBinding: cryptoHolderBinding,
-      oidc4vciDraftType: oidc4vciDraftType,
       credentialDefinition: credentialDefinition,
       clientAuthentication: customOidc4vcProfile.clientAuthentication,
       vct: vct,
       proofType: customOidc4vcProfile.proofType,
       did: did,
-      issuer: issuer,
       kid: kid,
       privateKey: privateKey,
       formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
+      oidc4vcParameters: oidc4vcParameters,
     );
 
     if (profileCubit.state.model.isDeveloperMode) {
@@ -189,7 +182,7 @@ Future<
     try {
       credentialResponseDataValue = await getSingleCredentialData(
         profileCubit: profileCubit,
-        openIdConfiguration: openIdConfiguration,
+        openIdConfiguration: oidc4vcParameters.classIssuerOpenIdConfiguration,
         accessToken: accessToken,
         dio: Dio(),
         credentialData: credentialData,
@@ -203,7 +196,9 @@ Future<
   }
 
   final deferredCredentialEndpoint =
-      profileCubit.oidc4vc.getDeferredCredentialEndpoint(openIdConfiguration);
+      profileCubit.oidc4vc.getDeferredCredentialEndpoint(
+    oidc4vcParameters.classIssuerOpenIdConfiguration,
+  );
 
   return (
     credentialResponseData,
@@ -240,7 +235,6 @@ Future<dynamic> getSingleCredentialData({
 
     final credentialResponseDataValue =
         await profileCubit.oidc4vc.getSingleCredential(
-      openIdConfiguration: openIdConfiguration,
       accessToken: accessToken,
       dio: Dio(),
       credentialData: credentialData,

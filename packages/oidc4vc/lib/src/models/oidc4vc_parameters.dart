@@ -6,6 +6,7 @@ class Oidc4vcParameters {
     required this.useOAuthAuthorizationServerLink,
     required this.initialUri,
     required this.userPinRequired,
+    required this.issuerState,
     this.walletClientMetadata = const {},
     this.classIssuer = '',
     this.classCredentialOffer = const {},
@@ -15,6 +16,7 @@ class Oidc4vcParameters {
         const OpenIdConfiguration(requirePushedAuthorizationRequests: false),
     this.classAuthorizationEndpoint = '',
     this.classTokenEndpoint = '',
+    this.nonceEndpoint = '',
     this.oidc4vcType,
     this.preAuthorizedCode,
     this.txCode,
@@ -27,6 +29,7 @@ class Oidc4vcParameters {
   final OpenIdConfiguration classAuthorizationServerOpenIdConfiguration;
   final String classAuthorizationEndpoint;
   final String classTokenEndpoint;
+  final String nonceEndpoint;
   final OIDC4VCType? oidc4vcType;
   final String? preAuthorizedCode;
   final OIDC4VCIDraftType oidc4vciDraftType;
@@ -34,6 +37,7 @@ class Oidc4vcParameters {
   final Uri initialUri;
   final bool userPinRequired;
   final TxCode? txCode;
+  final String? issuerState;
 
   Oidc4vcParameters copyWith({
     Map<String, dynamic>? walletClientMetadata,
@@ -46,6 +50,7 @@ class Oidc4vcParameters {
     OIDC4VCType? oidc4vcType,
     String? preAuthorizedCode,
     TxCode? txCode,
+    String? nonceEndpoint,
   }) {
     return Oidc4vcParameters(
       oidc4vciDraftType: oidc4vciDraftType,
@@ -66,6 +71,8 @@ class Oidc4vcParameters {
       userPinRequired: userPinRequired,
       preAuthorizedCode: preAuthorizedCode ?? this.preAuthorizedCode,
       txCode: txCode ?? this.txCode,
+      issuerState: issuerState,
+      nonceEndpoint: nonceEndpoint ?? this.nonceEndpoint,
     );
   }
 }

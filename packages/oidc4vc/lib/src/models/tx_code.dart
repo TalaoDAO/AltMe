@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+part 'tx_code.g.dart';
+
 @JsonSerializable()
 class TxCode extends Equatable {
   const TxCode({

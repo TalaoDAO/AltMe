@@ -104,9 +104,6 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           selectedCredentials: selectedCredentials,
           userPin: userPin,
           txCode: txCode,
-          issuer: issuer,
-          preAuthorizedCode: null,
-          isEBSI: isEBSI,
           codeForAuthorisedFlow: codeForAuthorisedFlow,
           codeVerifier: codeVerifier,
           authorization: authorization,
@@ -114,9 +111,8 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           clientSecret: clientSecret,
           oAuthClientAttestation: oAuthClientAttestation,
           oAuthClientAttestationPop: oAuthClientAttestationPop,
-          qrCodeScanCubit: qrCodeScanCubit,
           publicKeyForDPop: publicKeyForDPop,
-          oidc4vciDraftType: oidc4vciDraftType,
+          oidc4vcParameters: oidc4vcParameters,
         );
       }
     }
