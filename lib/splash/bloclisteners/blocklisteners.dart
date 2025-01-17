@@ -7,7 +7,7 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:oidc4vc/src/models/oidc4vc_parameters.dart';
+import 'package:altme/oidc4vc/helper_function/accept_host.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
@@ -22,7 +22,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -220,8 +219,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           final approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
 
           final profileSetting = profileCubit.state.model.profileSetting;
-          final customOidc4vcProfile =
-              profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
 
           final walletSecurityOptions = profileSetting.walletSecurityOptions;
 
@@ -255,143 +252,37 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               useOAuthAuthorizationServerLink:
                   useOauthServerAuthEndPoint(profileCubit.state.model),
             );
-
-            /// if dev mode is ON show some dialog to show data
-            if (profileCubit.state.model.isDeveloperMode) {
-              late String formattedData;
-              if (oidc4vcParameters.oidc4vcType != null) {
-                /// issuance case
-                formattedData = getFormattedStringOIDC4VCI(
-                  url: state.uri.toString(),
-                  oidc4vcParameters: oidc4vcParameters,
-                );
-              } else {
-                var url = state.uri!.toString();
-
-                /// verification case
-                final String? requestUri =
-                    state.uri!.queryParameters['request_uri'];
-                final String? request = state.uri!.queryParameters['request'];
-
-                Map<String, dynamic>? response;
-
-                if (requestUri != null || request != null) {
-                  late dynamic encodedData;
-
-                  if (request != null) {
-                    encodedData = request;
-                  } else if (requestUri != null) {
-                    encodedData = await fetchRequestUriPayload(
-                      url: requestUri,
-                      client: client,
-                    );
-                  }
-
-                  response = decodePayload(
-                    jwtDecode: JWTDecode(),
-                    token: encodedData as String,
-                  );
-
-                  final clientId = getClientIdForPresentation(
-                    state.uri!.queryParameters['client_id'],
-                  );
-
-                  url = getUpdatedUrlForSIOPV2OIC4VP(
-                    uri: state.uri!,
-                    response: response,
-                    clientId: clientId.toString(),
-                  );
-                }
-
-                formattedData = await getFormattedStringOIDC4VPSIOPV2(
-                  url: url,
-                  client: client,
-                  response: response,
-                );
-              }
-
-              LoadingView().hide();
-              final bool moveAhead = await showDialog<bool>(
-                    context: context,
-                    builder: (_) {
-                      return DeveloperModeDialog(
-                        onDisplay: () async {
-                          final returnedValue =
-                              await Navigator.of(context).push<dynamic>(
-                            JsonViewerPage.route(
-                              title: l10n.display,
-                              data: formattedData,
-                            ),
-                          );
-
-                          if (returnedValue != null &&
-                              returnedValue is bool &&
-                              returnedValue) {
-                            Navigator.of(context).pop(true);
-                          }
-                          return;
-                        },
-                        onSkip: () {
-                          Navigator.of(context).pop(true);
-                        },
-                      );
-                    },
-                  ) ??
-                  true;
-              if (!moveAhead) return;
-            }
-
-              await handleErrorForOID4VCI(
-                url: state.uri.toString(),
-                oidc4vcParameters: oidc4vcParameters,
-              );
+            await oidc4vciAcceptHost(
+              oidc4vcParameters: oidc4vcParameters,
+              context: context,
+              isDeveloperMode: profileCubit.state.model.isDeveloperMode,
+              client: client,
+              showPrompt: verifySecurityIssuerWebsiteIdentity,
+              approvedIssuer: approvedIssuer,
+            );
           }
 
-          if (showPrompt) {
-            if (isOpenIDUrl || isFromDeeplink) {
-              /// OIDC4VCI Case
+          if (showPrompt && verifySecurityIssuerWebsiteIdentity) {
+            final String title = l10n.scanPromptHost;
 
-              if (oidc4vcTypeForIssuance != null) {
-                /// issuance case
-                if (!verifySecurityIssuerWebsiteIdentity) showPrompt = false;
-              } else {
-                /// verification case
-                if (!confirmSecurityVerifierAccess) showPrompt = false;
-              }
-            } else {
-              /// normal Case
-              if (!verifySecurityIssuerWebsiteIdentity) showPrompt = false;
-            }
+            String subtitle = (approvedIssuer.did.isEmpty)
+                ? state.uri!.host
+                : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
 
-            if (showPrompt) {
-              final String title = l10n.scanPromptHost;
-
-              String subtitle = (approvedIssuer.did.isEmpty)
-                  ? state.uri!.host
-                  : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
-
-              if (isOpenIDUrl) {
-                subtitle = await getHost(
-                  uri: state.uri!,
-                  client: client,
-                );
-              }
-
-              LoadingView().hide();
-              acceptHost = await showDialog<bool>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return ConfirmDialog(
-                        title: title,
-                        subtitle: subtitle,
-                        yes: l10n.communicationHostAllow,
-                        no: l10n.communicationHostDeny,
-                        //lock: state.uri!.scheme == 'http',
-                      );
-                    },
-                  ) ??
-                  false;
-            }
+            LoadingView().hide();
+            acceptHost = await showDialog<bool>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ConfirmDialog(
+                      title: title,
+                      subtitle: subtitle,
+                      yes: l10n.communicationHostAllow,
+                      no: l10n.communicationHostDeny,
+                      //lock: state.uri!.scheme == 'http',
+                    );
+                  },
+                ) ??
+                false;
           }
           LoadingView().hide();
           if (acceptHost) {

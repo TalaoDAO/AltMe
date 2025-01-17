@@ -702,6 +702,8 @@ Future<Oidc4vcParameters> getIssuanceData({
   late Map<String, dynamic> credentialOfferJson;
   String? issuer;
   String? preAuthorizedCode;
+  bool userPinRequired = false;
+  TxCode? txCode;
 
   if (keys.contains('credential_offer') ||
       keys.contains('credential_offer_uri')) {
@@ -716,11 +718,22 @@ Future<Oidc4vcParameters> getIssuanceData({
     if (grants != null && grants is Map) {
       final dynamic preAuthorizedCodeGrant =
           grants['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
-      if (preAuthorizedCodeGrant != null &&
-          preAuthorizedCodeGrant is Map &&
-          preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
-        preAuthorizedCode =
-            preAuthorizedCodeGrant['pre-authorized_code'] as String;
+      if (preAuthorizedCodeGrant != null && preAuthorizedCodeGrant is Map) {
+        if (preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
+          preAuthorizedCode =
+              preAuthorizedCodeGrant['pre-authorized_code'] as String;
+        }
+        if (preAuthorizedCodeGrant.containsKey('user_pin_required')) {
+          userPinRequired = preAuthorizedCodeGrant['user_pin_required'] as bool;
+        } else if (preAuthorizedCodeGrant.containsKey('tx_code')) {
+          /// draft 13
+          final txCodeMap = preAuthorizedCodeGrant['tx_code'];
+
+          if (txCodeMap is Map<String, dynamic>) {
+            txCode = TxCode.fromJson(txCodeMap);
+            userPinRequired = true;
+          }
+        }
       }
 
       issuer = credentialOfferJson['credential_issuer'].toString();
@@ -746,6 +759,7 @@ Future<Oidc4vcParameters> getIssuanceData({
     return Oidc4vcParameters(
       oidc4vciDraftType: oidc4vciDraftType,
       useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+      initialUri: uri,
     );
   }
 
@@ -771,10 +785,13 @@ Future<Oidc4vcParameters> getIssuanceData({
   final Oidc4vcParameters oidc4vcParametersfromIssuer = Oidc4vcParameters(
     oidc4vciDraftType: oidc4vciDraftType,
     useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+    initialUri: uri,
     classIssuerOpenIdConfiguration: issuerOpenIdConfiguration,
     classCredentialOffer: credentialOfferJson,
     preAuthorizedCode: preAuthorizedCode,
     classIssuer: issuer,
+    userPinRequired: userPinRequired,
+    txCode: txCode,
   );
   final Oidc4vcParameters oidc4vcParameters =
       await oidc4vc.authorizationParameters(
@@ -832,7 +849,6 @@ Future<Oidc4vcParameters> getIssuanceData({
 }
 
 Future<void> handleErrorForOID4VCI({
-  required String url,
   required Oidc4vcParameters oidc4vcParameters,
 }) async {
   List<dynamic>? subjectSyntaxTypesSupported = oidc4vcParameters
@@ -1370,7 +1386,7 @@ String getFormattedStringOIDC4VCI({
 <b>CREDENTIAL OFFER  :</b> 
 ${const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.classCredentialOffer)}\n
 <b>AUTHORIZATION SERVER CONFIGURATION :</b>
-${oidc4vcParameters.classAuthorizationServerOpenIdConfiguration != null ? const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.classAuthorizationServerOpenIdConfiguration) : 'None'}\n
+${oidc4vcParameters.classAuthorizationServerOpenIdConfiguration != const OpenIdConfiguration(requirePushedAuthorizationRequests: false) ? const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.classAuthorizationServerOpenIdConfiguration) : 'None'}\n
 <b>CREDENTIAL ISSUER CONFIGURATION :</b> 
 ${const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.classIssuerOpenIdConfiguration)}
 ''';

@@ -1,10 +1,11 @@
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:oidc4vc/src/models/oidc4vc_type.dart';
 
 class Oidc4vcParameters {
   const Oidc4vcParameters({
     required this.oidc4vciDraftType,
     required this.useOAuthAuthorizationServerLink,
+    required this.initialUri,
+    required this.userPinRequired,
     this.walletClientMetadata = const {},
     this.classIssuer = '',
     this.classCredentialOffer = const {},
@@ -16,6 +17,7 @@ class Oidc4vcParameters {
     this.classTokenEndpoint = '',
     this.oidc4vcType,
     this.preAuthorizedCode,
+    this.txCode,
   });
 
   final Map<String, dynamic> walletClientMetadata;
@@ -29,6 +31,9 @@ class Oidc4vcParameters {
   final String? preAuthorizedCode;
   final OIDC4VCIDraftType oidc4vciDraftType;
   final bool useOAuthAuthorizationServerLink;
+  final Uri initialUri;
+  final bool userPinRequired;
+  final TxCode? txCode;
 
   Oidc4vcParameters copyWith({
     Map<String, dynamic>? walletClientMetadata,
@@ -39,10 +44,13 @@ class Oidc4vcParameters {
     String? classAuthorizationEndpoint,
     String? classTokenEndpoint,
     OIDC4VCType? oidc4vcType,
+    String? preAuthorizedCode,
+    TxCode? txCode,
   }) {
     return Oidc4vcParameters(
       oidc4vciDraftType: oidc4vciDraftType,
       useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+      initialUri: initialUri,
       walletClientMetadata: walletClientMetadata ?? this.walletClientMetadata,
       classIssuer: classIssuer ?? this.classIssuer,
       classCredentialOffer: classCredentialOffer ?? this.classCredentialOffer,
@@ -55,6 +63,9 @@ class Oidc4vcParameters {
           classAuthorizationEndpoint ?? this.classAuthorizationEndpoint,
       classTokenEndpoint: classTokenEndpoint ?? this.classTokenEndpoint,
       oidc4vcType: oidc4vcType ?? this.oidc4vcType,
+      userPinRequired: userPinRequired,
+      preAuthorizedCode: preAuthorizedCode ?? this.preAuthorizedCode,
+      txCode: txCode ?? this.txCode,
     );
   }
 }
