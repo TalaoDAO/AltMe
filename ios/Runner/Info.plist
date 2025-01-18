@@ -130,6 +130,16 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>openid</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>altme-openid-credential-offer</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>wc-altme</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
