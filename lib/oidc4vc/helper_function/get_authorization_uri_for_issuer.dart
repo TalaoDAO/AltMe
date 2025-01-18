@@ -42,6 +42,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
     'isEBSI': oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
     'publicKeyForDPop': publicKeyForDPop,
     'oidc4vciDraft': oidc4vcParameters.oidc4vciDraftType.numbering,
+    'tokenEndpoint': oidc4vcParameters.classTokenEndpoint,
   };
 
   switch (clientAuthentication) {

@@ -632,15 +632,19 @@ class OIDC4VC {
                 authorizationServer = data;
               }
             } catch (e) {
-              final jsonPathCredentialOffer = JsonPath(
-                r'$..authorization_code.authorization_server',
-              );
-              final data = jsonPathCredentialOffer
-                  .read(oidc4vcParameters.classCredentialOffer)
-                  .first
-                  .value! as String;
-              if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
-                authorizationServer = data;
+              try {
+                final jsonPathCredentialOffer = JsonPath(
+                  r'$..authorization_code.authorization_server',
+                );
+                final data = jsonPathCredentialOffer
+                    .read(oidc4vcParameters.classCredentialOffer)
+                    .first
+                    .value! as String;
+                if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
+                  authorizationServer = data;
+                }
+              } catch (e) {
+                // nothing to do
               }
             }
           }

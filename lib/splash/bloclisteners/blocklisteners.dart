@@ -261,49 +261,50 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               showPrompt: verifySecurityIssuerWebsiteIdentity,
               approvedIssuer: approvedIssuer,
             );
-          }
-
-          if (showPrompt && verifySecurityIssuerWebsiteIdentity) {
-            final String title = l10n.scanPromptHost;
-
-            String subtitle = (approvedIssuer.did.isEmpty)
-                ? state.uri!.host
-                : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
-
-            LoadingView().hide();
-            acceptHost = await showDialog<bool>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return ConfirmDialog(
-                      title: title,
-                      subtitle: subtitle,
-                      yes: l10n.communicationHostAllow,
-                      no: l10n.communicationHostDeny,
-                      //lock: state.uri!.scheme == 'http',
-                    );
-                  },
-                ) ??
-                false;
-          }
-          LoadingView().hide();
-          if (acceptHost) {
-            await context.read<QRCodeScanCubit>().accept(
-                  approvedIssuer: approvedIssuer,
-                  qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-                  oidcType: oidc4vcTypeForIssuance,
-                  credentialOfferJson: credentialOfferJsonForIssuance,
-                  openIdConfiguration: openIdConfiguration,
-                  issuer: issuerForIssuance,
-                  preAuthorizedCode: preAuthorizedCodeForIssuance,
-                  uri: state.uri!,
-                );
-          } else {
-            context.read<QRCodeScanCubit>().emitError(
-                  ResponseMessage(
-                    message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
-                  ),
-                );
             return;
+          } else {
+            if (showPrompt && verifySecurityIssuerWebsiteIdentity) {
+              final String title = l10n.scanPromptHost;
+
+              String subtitle = (approvedIssuer.did.isEmpty)
+                  ? state.uri!.host
+                  : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
+
+              LoadingView().hide();
+              acceptHost = await showDialog<bool>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ConfirmDialog(
+                        title: title,
+                        subtitle: subtitle,
+                        yes: l10n.communicationHostAllow,
+                        no: l10n.communicationHostDeny,
+                        //lock: state.uri!.scheme == 'http',
+                      );
+                    },
+                  ) ??
+                  false;
+            }
+            LoadingView().hide();
+            if (acceptHost) {
+              await context.read<QRCodeScanCubit>().accept(
+                    approvedIssuer: approvedIssuer,
+                    qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                    oidcType: oidc4vcTypeForIssuance,
+                    credentialOfferJson: credentialOfferJsonForIssuance,
+                    openIdConfiguration: openIdConfiguration,
+                    issuer: issuerForIssuance,
+                    preAuthorizedCode: preAuthorizedCodeForIssuance,
+                    uri: state.uri!,
+                  );
+            } else {
+              context.read<QRCodeScanCubit>().emitError(
+                    ResponseMessage(
+                      message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+                    ),
+                  );
+              return;
+            }
           }
         }
       }

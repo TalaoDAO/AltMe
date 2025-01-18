@@ -1806,8 +1806,8 @@ ${const JsonEncoder.withIndent('  ').convert(payload)}
       final containsAllRequiredKey = statePayload.containsKey('credentials') &&
           statePayload.containsKey('codeVerifier') &&
           statePayload.containsKey('issuer') &&
-          statePayload.containsKey('isEBSI');
-
+          statePayload.containsKey('isEBSI') &&
+          statePayload.containsKey('tokenEndpoint');
       if (!containsAllRequiredKey) {
         throw ResponseMessage(
           data: {
@@ -1858,6 +1858,11 @@ ${state.uri}
       if (oidc4vciDraftType == null) {
         throw Exception();
       }
+      final issuerOpenIdConfiguration = await oidc4vc.getIssuerMetaData(
+        baseUrl: issuer,
+        dio: client.dio,
+      );
+
       await addCredentialsInLoop(
         selectedCredentials: selectedCredentials,
         userPin: null,
@@ -1878,6 +1883,8 @@ ${state.uri}
           issuerState: null,
           classIssuer: issuer,
           oidc4vcType: isEBSI ? OIDC4VCType.EBSI : null,
+          classTokenEndpoint: statePayload['tokenEndpoint'].toString(),
+          classIssuerOpenIdConfiguration: issuerOpenIdConfiguration,
         ),
       );
     } catch (e) {

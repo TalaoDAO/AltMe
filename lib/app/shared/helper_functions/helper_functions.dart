@@ -685,8 +685,6 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
   return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
 }
 
-
-
 Future<void> handleErrorForOID4VCI({
   required Oidc4vcParameters oidc4vcParameters,
 }) async {
@@ -2066,8 +2064,7 @@ bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
       profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
 
   final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
-      profileModel.profileType == ProfileType.ebsiV4 ||
-      profileModel.profileType == ProfileType.defaultOne;
+      profileModel.profileType == ProfileType.ebsiV4;
 
   if (notEligible) return false;
 
