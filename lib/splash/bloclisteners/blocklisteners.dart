@@ -229,10 +229,13 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           final bool confirmSecurityVerifierAccess =
               walletSecurityOptions.confirmSecurityVerifierAccess;
 
-          bool showPrompt = verifySecurityIssuerWebsiteIdentity ||
+          final bool showPrompt = verifySecurityIssuerWebsiteIdentity ||
               confirmSecurityVerifierAccess;
 
           final bool isOpenIDUrl = isOIDC4VCIUrl(state.uri!);
+          final bool isPresentation = isSIOPV2OROIDC4VPUrl(state.uri!) &&
+              (state.uri!.queryParameters['request_uri'] != null ||
+                  state.uri!.queryParameters['request'] != null);
           final bool isFromDeeplink = state.uri
                   .toString()
                   .startsWith(Parameters.authorizeEndPoint) ||
@@ -244,7 +247,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           String? issuerForIssuance;
           String? preAuthorizedCodeForIssuance;
 
-          if (isSIOPV2OROIDC4VPUrl(state.uri!)) {
+          if (isPresentation) {
             await oidc4vpSiopV2AcceptHost(
               uri: state.uri!,
               context: context,
@@ -278,7 +281,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             if (showPrompt && verifySecurityIssuerWebsiteIdentity) {
               final String title = l10n.scanPromptHost;
 
-              String subtitle = (approvedIssuer.did.isEmpty)
+              final String subtitle = (approvedIssuer.did.isEmpty)
                   ? state.uri!.host
                   : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
 

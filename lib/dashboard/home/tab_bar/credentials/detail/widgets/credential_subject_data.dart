@@ -125,6 +125,7 @@ class CredentialSubjectData extends StatelessWidget {
             Map<String, dynamic>.from(displayInstructionValue);
         nestedFieldsFromDisplayInstruction.remove('display');
         nestedFieldsFromDisplayInstruction.remove('value_type');
+        nestedFieldsFromDisplayInstruction.remove('mandatory');
         if (nestedFieldsFromDisplayInstruction.isNotEmpty) {
           try {
             final json = jsonDecode(data);

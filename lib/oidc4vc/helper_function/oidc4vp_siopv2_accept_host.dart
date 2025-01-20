@@ -20,48 +20,47 @@ Future<void> oidc4vpSiopV2AcceptHost({
 
   if (isDeveloperMode) {
     late String formattedData;
-      /// verification case
-      final String? requestUri =
-          uri.queryParameters['request_uri'];
-      final String? request =
-          uri.queryParameters['request'];
 
-      Map<String, dynamic>? response;
-      late String url;
+    /// verification case
+    final String? requestUri = uri.queryParameters['request_uri'];
+    final String? request = uri.queryParameters['request'];
 
-      if (requestUri != null || request != null) {
-        late dynamic encodedData;
+    Map<String, dynamic>? response;
+    late String url;
 
-        if (request != null) {
-          encodedData = request;
-        } else if (requestUri != null) {
-          encodedData = await fetchRequestUriPayload(
-            url: requestUri,
-            client: client,
-          );
-        }
+    if (requestUri != null || request != null) {
+      late dynamic encodedData;
 
-        response = decodePayload(
-          jwtDecode: JWTDecode(),
-          token: encodedData as String,
-        );
-
-        final clientId = getClientIdForPresentation(
-          uri.queryParameters['client_id'],
-        );
-
-        url = getUpdatedUrlForSIOPV2OIC4VP(
-          uri: uri,
-          response: response,
-          clientId: clientId.toString(),
+      if (request != null) {
+        encodedData = request;
+      } else if (requestUri != null) {
+        encodedData = await fetchRequestUriPayload(
+          url: requestUri,
+          client: client,
         );
       }
 
-      formattedData = await getFormattedStringOIDC4VPSIOPV2(
-        url: url,
-        client: client,
-        response: response,
+      response = decodePayload(
+        jwtDecode: JWTDecode(),
+        token: encodedData as String,
       );
+
+      final clientId = getClientIdForPresentation(
+        uri.queryParameters['client_id'],
+      );
+
+      url = getUpdatedUrlForSIOPV2OIC4VP(
+        uri: uri,
+        response: response,
+        clientId: clientId.toString(),
+      );
+    }
+
+    formattedData = await getFormattedStringOIDC4VPSIOPV2(
+      url: url,
+      client: client,
+      response: response,
+    );
 
     LoadingView().hide();
     final bool moveAhead = await showDialog<bool>(
@@ -94,7 +93,6 @@ Future<void> oidc4vpSiopV2AcceptHost({
   }
 
   if (showPrompt) {
-
     final String title = l10n.scanPromptHost;
 
     String subtitle = (approvedIssuer.did.isEmpty)
