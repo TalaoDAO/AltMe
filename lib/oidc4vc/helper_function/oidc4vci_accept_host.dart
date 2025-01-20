@@ -5,7 +5,6 @@ import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 Future<void> oidc4vciAcceptHost({
@@ -20,57 +19,11 @@ Future<void> oidc4vciAcceptHost({
   var acceptHost = true;
 
   if (isDeveloperMode) {
-    late String formattedData;
-    if (oidc4vcParameters.oidc4vcType != null) {
-      /// issuance case
-      formattedData = getFormattedStringOIDC4VCI(
-        url: oidc4vcParameters.initialUri.toString(),
-        oidc4vcParameters: oidc4vcParameters,
-      );
-    } else {
-      /// verification case
-      final String? requestUri =
-          oidc4vcParameters.initialUri.queryParameters['request_uri'];
-      final String? request =
-          oidc4vcParameters.initialUri.queryParameters['request'];
-
-      Map<String, dynamic>? response;
-      late String url;
-
-      if (requestUri != null || request != null) {
-        late dynamic encodedData;
-
-        if (request != null) {
-          encodedData = request;
-        } else if (requestUri != null) {
-          encodedData = await fetchRequestUriPayload(
-            url: requestUri,
-            client: client,
-          );
-        }
-
-        response = decodePayload(
-          jwtDecode: JWTDecode(),
-          token: encodedData as String,
-        );
-
-        final clientId = getClientIdForPresentation(
-          oidc4vcParameters.initialUri.queryParameters['client_id'],
-        );
-
-        url = getUpdatedUrlForSIOPV2OIC4VP(
-          uri: oidc4vcParameters.initialUri,
-          response: response,
-          clientId: clientId.toString(),
-        );
-      }
-
-      formattedData = await getFormattedStringOIDC4VPSIOPV2(
-        url: url,
-        client: client,
-        response: response,
-      );
-    }
+    /// issuance case
+    final formattedData = getFormattedStringOIDC4VCI(
+      url: oidc4vcParameters.initialUri.toString(),
+      oidc4vcParameters: oidc4vcParameters,
+    );
 
     LoadingView().hide();
     final bool moveAhead = await showDialog<bool>(

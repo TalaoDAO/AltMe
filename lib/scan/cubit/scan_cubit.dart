@@ -785,6 +785,7 @@ class ScanCubit extends Cubit<ScanState> {
             if (credentialsToBePresented.length == 1) {
               descriptor['path'] = r'$';
             } else {
+              // ignore: prefer_interpolation_to_compose_strings
               descriptor['path'] = r'$[' + i.toString() + ']';
             }
           } else {

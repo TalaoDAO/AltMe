@@ -7,8 +7,9 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/oidc4vc/helper_function/accept_host.dart';
 import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
+import 'package:altme/oidc4vc/helper_function/oidc4vci_accept_host.dart';
+import 'package:altme/oidc4vc/helper_function/oidc4vp_siopv2_accept_host.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
@@ -243,6 +244,17 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           String? issuerForIssuance;
           String? preAuthorizedCodeForIssuance;
 
+          if (isSIOPV2OROIDC4VPUrl(state.uri!)) {
+            await oidc4vpSiopV2AcceptHost(
+              uri: state.uri!,
+              context: context,
+              isDeveloperMode: profileCubit.state.model.isDeveloperMode,
+              client: client,
+              showPrompt: showPrompt,
+              approvedIssuer: approvedIssuer,
+            );
+            return;
+          }
           if (isOpenIDUrl || isFromDeeplink) {
             final Oidc4vcParameters oidc4vcParameters = await getIssuanceData(
               url: state.uri.toString(),
@@ -279,7 +291,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                         subtitle: subtitle,
                         yes: l10n.communicationHostAllow,
                         no: l10n.communicationHostDeny,
-                        //lock: state.uri!.scheme == 'http',
                       );
                     },
                   ) ??
@@ -770,7 +781,8 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
       );
     }
     if (state.status == AppStatus.successAdd) {
-      // TODO: when we create vc+sd-jwt associated address cards, we need to check also for vc+sd-jwt
+      // TODO: when we create vc+sd-jwt associated address cards, we need
+      //to check also for vc+sd-jwt
       if (context
               .read<ProfileCubit>()
               .state

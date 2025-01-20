@@ -7,6 +7,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       if (credentialModel.display?.backgroundColor != null) {
         backgroundColor = Color(
           int.parse(
+            // ignore: lines_longer_than_80_chars
             'FF${credentialModel.display?.backgroundColor!.replaceAll('#', '')}',
             radix: 16,
           ),

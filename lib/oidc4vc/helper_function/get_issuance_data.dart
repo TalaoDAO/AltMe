@@ -119,7 +119,7 @@ Future<Oidc4vcParameters> getIssuanceData({
     classIssuer: issuer,
     userPinRequired: userPinRequired,
     txCode: txCode,
-    issuerState: '',
+    issuerState: issuerState,
   );
   final Oidc4vcParameters oidc4vcParameters =
       await oidc4vc.authorizationParameters(
