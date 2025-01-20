@@ -38,11 +38,11 @@ Future<Uri?> getAuthorizationUriForIssuer({
   final data = {
     'codeVerifier': pkcePair.codeVerifier,
     'credentials': selectedCredentials,
-    'issuer': oidc4vcParameters.classIssuer,
+    'issuer': oidc4vcParameters.issuer,
     'isEBSI': oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
     'publicKeyForDPop': publicKeyForDPop,
     'oidc4vciDraft': oidc4vcParameters.oidc4vciDraftType.numbering,
-    'tokenEndpoint': oidc4vcParameters.classTokenEndpoint,
+    'tokenEndpoint': oidc4vcParameters.tokenEndpoint,
   };
 
   switch (clientAuthentication) {
@@ -91,7 +91,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
   );
 
   final requirePushedAuthorizationRequests = oidc4vcParameters
-      .classAuthorizationServerOpenIdConfiguration
+      .authorizationServerOpenIdConfiguration
       .requirePushedAuthorizationRequests;
 
   final isSecure = requirePushedAuthorizationRequests || secureAuthorizedFlow;
@@ -120,9 +120,9 @@ Future<Uri?> getAuthorizationUriForIssuer({
 
     // TODO(hawkbee): return an error message if
     // openIdConfiguration.pushedAuthorizationRequestEndpoint is null
-    final parUrl = oidc4vcParameters.classIssuerOpenIdConfiguration
-            .pushedAuthorizationRequestEndpoint ??
-        '${oidc4vcParameters.classAuthorizationEndpoint}/par';
+    final parUrl = oidc4vcParameters
+            .issuerOpenIdConfiguration.pushedAuthorizationRequestEndpoint ??
+        '${oidc4vcParameters.authorizationEndpoint}/par';
 
     if (customOidc4vcProfile.dpopSupport) {
       dPop = await getDPopJwt(
@@ -180,10 +180,10 @@ ${const JsonEncoder.withIndent('  ').convert(response)}\n
 
     final parameters = {'client_id': clientId, 'request_uri': requestUri};
 
-    final uri = Uri.parse(oidc4vcParameters.classAuthorizationEndpoint);
+    final uri = Uri.parse(oidc4vcParameters.authorizationEndpoint);
     authorizationUri = Uri.https(uri.authority, uri.path, parameters);
   } else {
-    final uri = Uri.parse(oidc4vcParameters.classAuthorizationEndpoint);
+    final uri = Uri.parse(oidc4vcParameters.authorizationEndpoint);
     authorizationUri =
         Uri.https(uri.authority, uri.path, authorizationRequestParemeters);
   }

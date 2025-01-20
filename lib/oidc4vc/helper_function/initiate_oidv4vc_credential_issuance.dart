@@ -29,12 +29,12 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   if (keys.contains('credential_type')) {
     credentials = uriFromScannedResponse.queryParameters['credential_type'];
   }
-  if (oidc4vcParameters.classCredentialOffer.containsKey('credentials')) {
-    credentials = oidc4vcParameters.classCredentialOffer['credentials'];
-  } else if (oidc4vcParameters.classCredentialOffer
+  if (oidc4vcParameters.credentialOffer.containsKey('credentials')) {
+    credentials = oidc4vcParameters.credentialOffer['credentials'];
+  } else if (oidc4vcParameters.credentialOffer
       .containsKey('credential_configuration_ids')) {
     credentials =
-        oidc4vcParameters.classCredentialOffer['credential_configuration_ids'];
+        oidc4vcParameters.credentialOffer['credential_configuration_ids'];
   } else {
     throw ResponseMessage(
       data: {

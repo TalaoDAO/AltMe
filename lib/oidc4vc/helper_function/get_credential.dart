@@ -46,7 +46,7 @@ Future<
 
   final (credentialType, types, credentialDefinition, vct, format) =
       await profileCubit.oidc4vc.getCredentialData(
-    openIdConfiguration: oidc4vcParameters.classIssuerOpenIdConfiguration,
+    openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
     credential: credential,
   );
 
@@ -56,7 +56,7 @@ Future<
     privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
     did: did,
     kid: kid,
-    issuer: oidc4vcParameters.classIssuer,
+    issuer: oidc4vcParameters.issuer,
     mediaType: MediaType.proofOfOwnership,
     clientType: customOidc4vcProfile.clientType,
     proofHeaderType: customOidc4vcProfile.proofHeader,
@@ -124,7 +124,7 @@ Future<
       try {
         credentialResponseDataValue = await getSingleCredentialData(
           profileCubit: profileCubit,
-          openIdConfiguration: oidc4vcParameters.classIssuerOpenIdConfiguration,
+          openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
           accessToken: accessToken,
           dio: Dio(),
           credentialData: credentialData,
@@ -182,7 +182,7 @@ Future<
     try {
       credentialResponseDataValue = await getSingleCredentialData(
         profileCubit: profileCubit,
-        openIdConfiguration: oidc4vcParameters.classIssuerOpenIdConfiguration,
+        openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
         accessToken: accessToken,
         dio: Dio(),
         credentialData: credentialData,
@@ -197,7 +197,7 @@ Future<
 
   final deferredCredentialEndpoint =
       profileCubit.oidc4vc.getDeferredCredentialEndpoint(
-    oidc4vcParameters.classIssuerOpenIdConfiguration,
+    oidc4vcParameters.issuerOpenIdConfiguration,
   );
 
   return (

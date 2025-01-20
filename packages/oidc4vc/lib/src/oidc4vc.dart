@@ -44,11 +44,10 @@ class OIDC4VC {
     for (final credential in selectedCredentials) {
       late Map<String, dynamic> data;
       if (credential is String) {
-        if (oidc4vcParameters
-                .classIssuerOpenIdConfiguration.credentialsSupported !=
+        if (oidc4vcParameters.issuerOpenIdConfiguration.credentialsSupported !=
             null) {
-          final credentialsSupported = oidc4vcParameters
-              .classIssuerOpenIdConfiguration.credentialsSupported;
+          final credentialsSupported =
+              oidc4vcParameters.issuerOpenIdConfiguration.credentialsSupported;
 
           dynamic credentailData;
 
@@ -69,18 +68,18 @@ class OIDC4VC {
 
           data = {
             'type': 'openid_credential',
-            'locations': [oidc4vcParameters.classIssuer],
+            'locations': [oidc4vcParameters.issuer],
             'format': credentailData['format'],
             'types': credentailData['types'],
           };
 
           credentials.add((credentailData['types'] as List<dynamic>).last);
-        } else if (oidc4vcParameters.classIssuerOpenIdConfiguration
-                .credentialConfigurationsSupported !=
+        } else if (oidc4vcParameters
+                .issuerOpenIdConfiguration.credentialConfigurationsSupported !=
             null) {
           // draft 13 case
           final credentialsSupported = oidc4vcParameters
-              .classIssuerOpenIdConfiguration.credentialConfigurationsSupported;
+              .issuerOpenIdConfiguration.credentialConfigurationsSupported;
 
           if (credentialsSupported is! Map<String, dynamic>) {
             throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
@@ -138,7 +137,7 @@ class OIDC4VC {
       } else if (credential is Map<String, dynamic>) {
         data = {
           'type': 'openid_credential',
-          'locations': [oidc4vcParameters.classIssuer],
+          'locations': [oidc4vcParameters.issuer],
           'format': credential['format'],
           'types': credential['types'],
         };
@@ -555,19 +554,18 @@ class OIDC4VC {
 
     switch (oidc4vcParameters.oidc4vciDraftType) {
       case OIDC4VCIDraftType.draft11:
-        if (oidc4vcParameters
-                .classIssuerOpenIdConfiguration.authorizationEndpoint !=
+        if (oidc4vcParameters.issuerOpenIdConfiguration.authorizationEndpoint !=
             null) {
-          authorizationEndpoint = oidc4vcParameters
-              .classIssuerOpenIdConfiguration.authorizationEndpoint;
+          authorizationEndpoint =
+              oidc4vcParameters.issuerOpenIdConfiguration.authorizationEndpoint;
           tokenEndpoint =
-              oidc4vcParameters.classIssuerOpenIdConfiguration.tokenEndpoint;
+              oidc4vcParameters.issuerOpenIdConfiguration.tokenEndpoint;
           nonceEndpoint =
-              oidc4vcParameters.classIssuerOpenIdConfiguration.nonceEndpoint;
+              oidc4vcParameters.issuerOpenIdConfiguration.nonceEndpoint;
         } else {
-          final authorizationServer = oidc4vcParameters
-                  .classIssuerOpenIdConfiguration.authorizationServer ??
-              oidc4vcParameters.classIssuer;
+          final authorizationServer =
+              oidc4vcParameters.issuerOpenIdConfiguration.authorizationServer ??
+                  oidc4vcParameters.issuer;
 
           authorizationServerConfiguration =
               await getAuthorizationServerMetaData(
@@ -590,14 +588,14 @@ class OIDC4VC {
 
         /// Extract the authorization endpoint from from first element of
         /// authorization_servers in opentIdConfiguration.authorizationServers
-        final listOpenIDConfiguration = oidc4vcParameters
-                .classIssuerOpenIdConfiguration.authorizationServers ??
-            [];
+        final listOpenIDConfiguration =
+            oidc4vcParameters.issuerOpenIdConfiguration.authorizationServers ??
+                [];
 
         // check if authorization server is present in the credential offer
         final authorizationServerFromCredentialOffer =
             getAuthorizationServerFromCredentialOffer(
-          oidc4vcParameters.classCredentialOffer,
+          oidc4vcParameters.credentialOffer,
         );
         // if authorization server is present in the credential offer
         // we check if it is present in the authorization servers
@@ -625,7 +623,7 @@ class OIDC4VC {
                 r'$..["urn:ietf:params:oauth:grant-type:pre-authorized_code"].authorization_server',
               );
               final data = jsonPathCredentialOffer
-                  .read(oidc4vcParameters.classCredentialOffer)
+                  .read(oidc4vcParameters.credentialOffer)
                   .first
                   .value! as String;
               if (listOpenIDConfiguration.contains(data)) {
@@ -637,7 +635,7 @@ class OIDC4VC {
                   r'$..authorization_code.authorization_server',
                 );
                 final data = jsonPathCredentialOffer
-                    .read(oidc4vcParameters.classCredentialOffer)
+                    .read(oidc4vcParameters.credentialOffer)
                     .first
                     .value! as String;
                 if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
@@ -667,7 +665,7 @@ class OIDC4VC {
     // If authorizationEndpoint is null, we fetch from oauth-
     if (authorizationEndpoint == null) {
       authorizationServerConfiguration = await getAuthorizationServerMetaData(
-        baseUrl: oidc4vcParameters.classIssuer,
+        baseUrl: oidc4vcParameters.issuer,
         dio: dio,
         useOAuthAuthorizationServerLink:
             oidc4vcParameters.useOAuthAuthorizationServerLink,
@@ -681,10 +679,9 @@ class OIDC4VC {
     // If authorizationEndpoint is null, we consider the issuer
     // as the authorizationEndpoint
     return oidc4vcParameters.copyWith(
-      classAuthorizationEndpoint: authorizationEndpoint,
-      classTokenEndpoint: tokenEndpoint,
-      classAuthorizationServerOpenIdConfiguration:
-          authorizationServerConfiguration,
+      authorizationEndpoint: authorizationEndpoint,
+      tokenEndpoint: tokenEndpoint,
+      authorizationServerOpenIdConfiguration: authorizationServerConfiguration,
       nonceEndpoint: nonceEndpoint,
     );
   }
@@ -814,7 +811,7 @@ class OIDC4VC {
           final options = <String, dynamic>{
             'verificationMethod': kid,
             'proofPurpose': 'authentication',
-            'domain': oidc4vcParameters.classIssuer,
+            'domain': oidc4vcParameters.issuer,
           };
 
           if (nonce != null) {
@@ -1410,8 +1407,8 @@ class OIDC4VC {
       final data = response is String
           ? jsonDecode(response) as Map<String, dynamic>
           : response as Map<String, dynamic>;
-
-      return OpenIdConfiguration.fromJson(data);
+      final openIdConfiguration = OpenIdConfiguration.fromJson(data);
+      return openIdConfiguration.copyWith(rawConfiguration: data);
     } catch (e) {
       try {
         final response = await dioGet(
@@ -1459,8 +1456,8 @@ class OIDC4VC {
       final data = response is String
           ? jsonDecode(response) as Map<String, dynamic>
           : response as Map<String, dynamic>;
-
-      return OpenIdConfiguration.fromJson(data);
+      final openIdConfiguration = OpenIdConfiguration.fromJson(data);
+      return openIdConfiguration.copyWith(rawConfiguration: data);
     } catch (e) {
       throw Exception('ISSUER_METADATA_ISSUE');
     }

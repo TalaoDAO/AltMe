@@ -113,7 +113,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                     // fetch for displaying the image
                     final (Display? display, _) = fetchDisplay(
                       openIdConfiguration:
-                          oidc4vcParameters.classIssuerOpenIdConfiguration,
+                          oidc4vcParameters.issuerOpenIdConfiguration,
                       credentialType: credential,
                       languageCode: languageCode,
                     );

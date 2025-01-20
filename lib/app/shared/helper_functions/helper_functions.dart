@@ -689,18 +689,17 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
 Future<void> handleErrorForOID4VCI({
   required Oidc4vcParameters oidc4vcParameters,
 }) async {
-  List<dynamic>? subjectSyntaxTypesSupported = oidc4vcParameters
-      .classIssuerOpenIdConfiguration.subjectSyntaxTypesSupported;
+  List<dynamic>? subjectSyntaxTypesSupported =
+      oidc4vcParameters.issuerOpenIdConfiguration.subjectSyntaxTypesSupported;
 
-  if (oidc4vcParameters.classAuthorizationServerOpenIdConfiguration
-          .subjectSyntaxTypesSupported !=
+  if (oidc4vcParameters
+          .authorizationServerOpenIdConfiguration.subjectSyntaxTypesSupported !=
       null) {
     subjectSyntaxTypesSupported = oidc4vcParameters
-        .classAuthorizationServerOpenIdConfiguration
-        .subjectSyntaxTypesSupported;
+        .authorizationServerOpenIdConfiguration.subjectSyntaxTypesSupported;
   }
 
-  if (oidc4vcParameters.classTokenEndpoint == '') {
+  if (oidc4vcParameters.tokenEndpoint == '') {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -709,8 +708,7 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (oidc4vcParameters.classIssuerOpenIdConfiguration.credentialEndpoint ==
-      null) {
+  if (oidc4vcParameters.issuerOpenIdConfiguration.credentialEndpoint == null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -720,8 +718,7 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (oidc4vcParameters.classIssuerOpenIdConfiguration.credentialIssuer ==
-      null) {
+  if (oidc4vcParameters.issuerOpenIdConfiguration.credentialIssuer == null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -731,10 +728,10 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (oidc4vcParameters.classIssuerOpenIdConfiguration.credentialsSupported ==
+  if (oidc4vcParameters.issuerOpenIdConfiguration.credentialsSupported ==
           null &&
-      oidc4vcParameters.classIssuerOpenIdConfiguration
-              .credentialConfigurationsSupported ==
+      oidc4vcParameters
+              .issuerOpenIdConfiguration.credentialConfigurationsSupported ==
           null) {
     throw ResponseMessage(
       data: {
@@ -1222,11 +1219,11 @@ String getFormattedStringOIDC4VCI({
   return '''
 <b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
 <b>CREDENTIAL OFFER  :</b> 
-${const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.classCredentialOffer)}\n
+${const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.credentialOffer)}\n
 <b>AUTHORIZATION SERVER CONFIGURATION :</b>
-${oidc4vcParameters.classAuthorizationServerOpenIdConfiguration != const OpenIdConfiguration(requirePushedAuthorizationRequests: false) ? const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.classAuthorizationServerOpenIdConfiguration) : 'None'}\n
+${oidc4vcParameters.authorizationServerOpenIdConfiguration != const OpenIdConfiguration(requirePushedAuthorizationRequests: false) ? const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.authorizationServerOpenIdConfiguration.rawConfiguration) : 'None'}\n
 <b>CREDENTIAL ISSUER CONFIGURATION :</b> 
-${const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.classIssuerOpenIdConfiguration)}
+${const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration)}
 ''';
 }
 

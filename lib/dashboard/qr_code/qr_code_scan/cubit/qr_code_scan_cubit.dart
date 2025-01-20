@@ -904,7 +904,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       await getAndAddDefferedCredential(
         credentialModel: credentialModel,
         credentialsCubit: credentialsCubit,
-        issuer: oidc4vcParameters.classIssuer,
+        issuer: oidc4vcParameters.issuer,
         oidc4vc: oidc4vc,
         jwtDecode: jwtDecode,
         blockchainType: walletCubit.state.currentAccount!.blockchainType,
@@ -1345,7 +1345,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       ) = await getClientDetails(
         profileCubit: profileCubit,
         isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
-        issuer: oidc4vcParameters.classIssuer,
+        issuer: oidc4vcParameters.issuer,
       );
 
       final customOidc4vcProfile = profileCubit.state.model.profileSetting
@@ -1476,7 +1476,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
             if (customOidc4vcProfile.dpopSupport) {
               dPop = await getDPopJwt(
-                url: oidc4vcParameters.classTokenEndpoint,
+                url: oidc4vcParameters.tokenEndpoint,
                 accessToken: savedAccessToken,
                 nonce: savedNonce,
                 publicKey: publicKeyForDPop,
@@ -1491,13 +1491,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               List<dynamic>? authorizationDetails,
             ) = await oidc4vc.getTokenResponse(
               authorization: authorization,
-              tokenEndPoint: oidc4vcParameters.classTokenEndpoint,
+              tokenEndPoint: oidc4vcParameters.tokenEndpoint,
               oAuthClientAttestation: oAuthClientAttestation,
               oAuthClientAttestationPop: oAuthClientAttestationPop,
               dio: client.dio,
               tokenData: tokenData,
               dPop: dPop,
-              issuer: oidc4vcParameters.classIssuer,
+              issuer: oidc4vcParameters.issuer,
             );
 
             savedAccessToken = accessToken;
@@ -1643,15 +1643,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             secureStorageProvider: getSecureStorage,
             credential: selectedCredentials[i],
             isLastCall: i + 1 == selectedCredentials.length,
-            issuer: oidc4vcParameters.classIssuer,
+            issuer: oidc4vcParameters.issuer,
             jwtDecode: jwtDecode,
             blockchainType: walletCubit.state.currentAccount!.blockchainType,
             deferredCredentialEndpoint: deferredCredentialEndpoint,
             encodedCredentialOrFutureTokens: encodedCredentialOrFutureTokens,
             format: format!,
             qrCodeScanCubit: this,
-            openIdConfiguration:
-                oidc4vcParameters.classIssuerOpenIdConfiguration,
+            openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
           );
         } else {
           throw ResponseMessage(
@@ -1881,10 +1880,10 @@ ${state.uri}
           initialUri: Uri(),
           userPinRequired: false,
           issuerState: null,
-          classIssuer: issuer,
+          issuer: issuer,
           oidc4vcType: isEBSI ? OIDC4VCType.EBSI : null,
-          classTokenEndpoint: statePayload['tokenEndpoint'].toString(),
-          classIssuerOpenIdConfiguration: issuerOpenIdConfiguration,
+          tokenEndpoint: statePayload['tokenEndpoint'].toString(),
+          issuerOpenIdConfiguration: issuerOpenIdConfiguration,
         ),
       );
     } catch (e) {

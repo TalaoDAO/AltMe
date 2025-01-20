@@ -8,14 +8,14 @@ class Oidc4vcParameters {
     required this.userPinRequired,
     required this.issuerState,
     this.walletClientMetadata = const {},
-    this.classIssuer = '',
-    this.classCredentialOffer = const {},
-    this.classIssuerOpenIdConfiguration =
+    this.issuer = '',
+    this.credentialOffer = const {},
+    this.issuerOpenIdConfiguration =
         const OpenIdConfiguration(requirePushedAuthorizationRequests: false),
-    this.classAuthorizationServerOpenIdConfiguration =
+    this.authorizationServerOpenIdConfiguration =
         const OpenIdConfiguration(requirePushedAuthorizationRequests: false),
-    this.classAuthorizationEndpoint = '',
-    this.classTokenEndpoint = '',
+    this.authorizationEndpoint = '',
+    this.tokenEndpoint = '',
     this.nonceEndpoint = '',
     this.oidc4vcType,
     this.preAuthorizedCode,
@@ -23,12 +23,12 @@ class Oidc4vcParameters {
   });
 
   final Map<String, dynamic> walletClientMetadata;
-  final String classIssuer;
-  final Map<String, dynamic> classCredentialOffer;
-  final OpenIdConfiguration classIssuerOpenIdConfiguration;
-  final OpenIdConfiguration classAuthorizationServerOpenIdConfiguration;
-  final String classAuthorizationEndpoint;
-  final String classTokenEndpoint;
+  final String issuer;
+  final Map<String, dynamic> credentialOffer;
+  final OpenIdConfiguration issuerOpenIdConfiguration;
+  final OpenIdConfiguration authorizationServerOpenIdConfiguration;
+  final String authorizationEndpoint;
+  final String tokenEndpoint;
   final String nonceEndpoint;
   final OIDC4VCType? oidc4vcType;
   final String? preAuthorizedCode;
@@ -41,12 +41,12 @@ class Oidc4vcParameters {
 
   Oidc4vcParameters copyWith({
     Map<String, dynamic>? walletClientMetadata,
-    String? classIssuer,
-    Map<String, dynamic>? classCredentialOffer,
-    OpenIdConfiguration? classIssuerOpenIdConfiguration,
-    OpenIdConfiguration? classAuthorizationServerOpenIdConfiguration,
-    String? classAuthorizationEndpoint,
-    String? classTokenEndpoint,
+    String? issuer,
+    Map<String, dynamic>? credentialOffer,
+    OpenIdConfiguration? issuerOpenIdConfiguration,
+    OpenIdConfiguration? authorizationServerOpenIdConfiguration,
+    String? authorizationEndpoint,
+    String? tokenEndpoint,
     OIDC4VCType? oidc4vcType,
     String? preAuthorizedCode,
     TxCode? txCode,
@@ -57,16 +57,16 @@ class Oidc4vcParameters {
       useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
       initialUri: initialUri,
       walletClientMetadata: walletClientMetadata ?? this.walletClientMetadata,
-      classIssuer: classIssuer ?? this.classIssuer,
-      classCredentialOffer: classCredentialOffer ?? this.classCredentialOffer,
-      classIssuerOpenIdConfiguration:
-          classIssuerOpenIdConfiguration ?? this.classIssuerOpenIdConfiguration,
-      classAuthorizationServerOpenIdConfiguration:
-          classAuthorizationServerOpenIdConfiguration ??
-              this.classAuthorizationServerOpenIdConfiguration,
-      classAuthorizationEndpoint:
-          classAuthorizationEndpoint ?? this.classAuthorizationEndpoint,
-      classTokenEndpoint: classTokenEndpoint ?? this.classTokenEndpoint,
+      issuer: issuer ?? this.issuer,
+      credentialOffer: credentialOffer ?? this.credentialOffer,
+      issuerOpenIdConfiguration:
+          issuerOpenIdConfiguration ?? this.issuerOpenIdConfiguration,
+      authorizationServerOpenIdConfiguration:
+          authorizationServerOpenIdConfiguration ??
+              this.authorizationServerOpenIdConfiguration,
+      authorizationEndpoint:
+          authorizationEndpoint ?? this.authorizationEndpoint,
+      tokenEndpoint: tokenEndpoint ?? this.tokenEndpoint,
       oidc4vcType: oidc4vcType ?? this.oidc4vcType,
       userPinRequired: userPinRequired,
       preAuthorizedCode: preAuthorizedCode ?? this.preAuthorizedCode,
