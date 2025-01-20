@@ -148,6 +148,7 @@ Future<Oidc4vcParameters> getIssuanceData({
   for (final oidc4vcType in OIDC4VCType.values) {
     if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
       if (oidc4vcType == OIDC4VCType.DEFAULT ||
+          oidc4vcType == OIDC4VCType.WALLET ||
           oidc4vcType == OIDC4VCType.EBSI) {
         if (credSupported?.trustFramework != null &&
             credSupported == credSupported?.trustFramework) {

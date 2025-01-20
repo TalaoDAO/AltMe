@@ -27,6 +27,7 @@ class Parameters {
 
   static const oidc4vcUniversalLink =
       'https://app.altme.io/app/download/callback';
+  static const walletDeepLink = 'altme-openid-credential-offer';
 
   static const authorizeEndPoint =
       'https://app.altme.io/app/download/authorize';

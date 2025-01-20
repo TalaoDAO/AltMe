@@ -1493,10 +1493,10 @@ packages:
     dependency: transitive
     description:
       name: local_auth_darwin
-      sha256: "5c5127061107278ab4cafa1ac51b3b6760282bf1a2abf011270908a429d1634b"
+      sha256: "630996cd7b7f28f5ab92432c4b35d055dd03a747bc319e5ffbb3c4806a3e50d2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.2"
+    version: "1.4.3"
   local_auth_platform_interface:
     dependency: transitive
     description:

@@ -668,13 +668,13 @@ bool isPolygonIdUrl(String url) =>
 
 bool isOIDC4VCIUrl(Uri uri) {
   return uri.toString().startsWith('openid') ||
-      uri.toString().startsWith('haip');
+      uri.toString().startsWith('haip') ||
+      uri.toString().startsWith(Parameters.walletDeepLink);
 }
 
 bool isSIOPV2OROIDC4VPUrl(Uri uri) {
   final isOpenIdUrl = uri.toString().startsWith('openid://?') ||
       uri.toString().startsWith('openid-vc://?') ||
-      uri.toString().startsWith('altme-openid-credential-offer://') ||
       uri.toString().startsWith('openid-hedera://?') ||
       uri.toString().startsWith('haip://?') ||
       uri.toString().startsWith('haip://authorize?');
