@@ -57,7 +57,6 @@ extension OIDC4VCTypeX on OIDC4VCType {
         return true;
       case OIDC4VCType.JWTVC:
         return false;
-      // TODO: Handle this case.
     }
   }
 }
