@@ -7,8 +7,8 @@ enum OIDC4VCType {
   ),
 
   WALLET(
-    offerPrefix: '$walletDeepLink://',
-    presentationPrefix: 'openid-vc://',
+    offerPrefix: '$walletOfferDeepLink://',
+    presentationPrefix: '$walletPresentationDeepLink://',
   ),
 
   GAIAX(
