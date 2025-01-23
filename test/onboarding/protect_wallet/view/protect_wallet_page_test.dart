@@ -163,7 +163,7 @@ void main() {
     ).thenAnswer((_) async => mnemonicString);
 
     when(
-      () => oidc4vc.p256PrivateKeyFromMnemonics(
+      () => p256PrivateKeyFromMnemonics(
         mnemonic: mnemonicString,
         indexValue: 5,
       ),

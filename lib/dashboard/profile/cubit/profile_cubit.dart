@@ -654,21 +654,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           ),
         );
 
-      // case ProfileType.diipv2point1:
-      //   await update(
-      //     ProfileModel.diipv2point1(
-      //       polygonIdNetwork: state.model.polygonIdNetwork,
-      //       walletProtectionType: state.model.walletProtectionType,
-      //       isDeveloperMode: state.model.isDeveloperMode,
-      //       walletType: state.model.walletType,
-      //       enterpriseWalletName: state.model.enterpriseWalletName,
-      //       clientId: state.model.profileSetting.selfSovereignIdentityOptions
-      //           .customOidc4vcProfile.clientId,
-      //       clientSecret: state.model.profileSetting
-      //           .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
-      //     ),
-      //   );
-
       case ProfileType.diipv3:
         await update(
           ProfileModel.diipv3(
