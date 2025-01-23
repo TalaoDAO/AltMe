@@ -27,8 +27,8 @@ class Parameters {
 
   static const oidc4vcUniversalLink =
       'https://app.talao.co/app/download/callback';
-  static const walletOfferDeepLink = 'altme-openid-credential-offer';
-  static const walletPresentationDeepLink = 'altme-openid-vc';
+  static const walletOfferDeepLink = 'talao-openid-credential-offer';
+  static const walletPresentationDeepLink = 'talao-openid-vc';
 
   static const authorizeEndPoint =
       'https://app.talao.co/app/download/authorize';

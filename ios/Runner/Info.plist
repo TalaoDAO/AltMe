@@ -133,7 +133,7 @@
 			<string>openid</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>altme-openid-vc</string>
+				<string>talao-openid-vc</string>
 			</array>
 		</dict>
 		<dict>
@@ -143,7 +143,7 @@
 			<string>openid</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>altme-openid-credential-offer</string>
+				<string>talao-openid-credential-offer</string>
 			</array>
 		</dict>
 		<dict>
