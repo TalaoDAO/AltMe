@@ -94,7 +94,7 @@ void main() {
 
       const index = 0;
       test('JWK from mnemonic', () {
-        final jwk = oidc4vc.privateKeyFromMnemonic(
+        final jwk = privateKeyFromMnemonic(
           mnemonic: mnemonic,
           indexValue: index,
         );
@@ -102,14 +102,13 @@ void main() {
       });
 
       test('JWK from seeds', () {
-        final jwk =
-            oidc4vc.jwkFromSeed(seedBytes: Uint8List.fromList(seedBytes));
+        final jwk = jwkFromSeed(seedBytes: Uint8List.fromList(seedBytes));
         expect(jwk, expectedECJwk);
       });
     });
 
     test('P256 JWK from mnemonics', () {
-      final jwk = oidc4vc.p256PrivateKeyFromMnemonics(
+      final jwk = p256PrivateKeyFromMnemonics(
         mnemonic: mnemonic,
         indexValue: 0,
       );
@@ -140,7 +139,7 @@ void main() {
       const kid = '3623b877bbb24b08ba390f3585418f53';
 
       test('sign and verify with edDSA', () async {
-        final token = oidc4vc.generateTokenEdDSA(
+        final token = generateTokenEdDSA(
           payload: payload,
           privateKey: privateKey,
           kid: kid,
@@ -166,12 +165,12 @@ void main() {
       const expectedHash = 's0BKYsLWxQQeU8tVlltM7MKsIRTrEIa1PkJmqxBBf5U';
 
       test('get disclosure', () {
-        final disclosure = oidc4vc.getDisclosure(content);
+        final disclosure = getDisclosure(content);
         expect(disclosure, expectedDisclosure);
       });
 
       test('sh256 hash of Disclosure test', () {
-        final sha256Hash = oidc4vc.sh256HashOfContent(content);
+        final sha256Hash = sh256HashOfContent(content);
         expect(sha256Hash, expectedHash);
       });
     });
@@ -186,7 +185,7 @@ void main() {
       };
 
       test('convert publicKeyBase58 to PublicJwk', () {
-        final publicKey = oidc4vc.publicKeyBase58ToPublicJwk(publicKeyBase58);
+        final publicKey = publicKeyBase58ToPublicJwk(publicKeyBase58);
         expect(publicKey, expectedPublicJWK);
       });
     });

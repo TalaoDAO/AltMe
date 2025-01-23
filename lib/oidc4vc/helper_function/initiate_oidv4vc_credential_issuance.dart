@@ -9,90 +9,56 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 Future<void> initiateOIDC4VCCredentialIssuance({
-  required String scannedResponse,
-  required OIDC4VC oidc4vc,
-  required bool isEBSI,
+  required Oidc4vcParameters oidc4vcParameters,
   required QRCodeScanCubit qrCodeScanCubit,
   required DIDKitProvider didKitProvider,
   required CredentialsCubit credentialsCubit,
-  required OIDC4VCIDraftType oidc4vciDraftType,
   required ProfileCubit profileCubit,
   required SecureStorageProvider secureStorageProvider,
   required DioClient dioClient,
   required String? userPin,
   required String? txCode,
-  required dynamic credentialOfferJson,
   required bool cryptoHolderBinding,
-  required OpenIdConfiguration? openIdConfiguration,
-  required String issuer,
-  required String? preAuthorizedCode,
 }) async {
-  final Uri uriFromScannedResponse = Uri.parse(scannedResponse);
-
   final keys = <String>[];
-  uriFromScannedResponse.queryParameters.forEach((key, value) => keys.add(key));
-
+  oidc4vcParameters.initialUri.queryParameters
+      .forEach((key, value) => keys.add(key));
+  final uriFromScannedResponse = oidc4vcParameters.initialUri;
   late dynamic credentials;
 
   if (keys.contains('credential_type')) {
     credentials = uriFromScannedResponse.queryParameters['credential_type'];
+  }
+  if (oidc4vcParameters.credentialOffer.containsKey('credentials')) {
+    credentials = oidc4vcParameters.credentialOffer['credentials'];
+  } else if (oidc4vcParameters.credentialOffer
+      .containsKey('credential_configuration_ids')) {
+    credentials =
+        oidc4vcParameters.credentialOffer['credential_configuration_ids'];
   } else {
-    final validCredentialOffer = credentialOfferJson != null &&
-        credentialOfferJson is Map<String, dynamic>;
-
-    if (!validCredentialOffer) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_issuer_metadata',
-          'error_description': 'The issuer configuration is invalid. '
-              'The credential offer is missing.',
-        },
-      );
-    }
-
-    if (credentialOfferJson.containsKey('credentials')) {
-      credentials = credentialOfferJson['credentials'];
-    } else if (credentialOfferJson
-        .containsKey('credential_configuration_ids')) {
-      credentials = credentialOfferJson['credential_configuration_ids'];
-    } else {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_issuer_metadata',
-          'error_description': 'The issuer configuration is invalid. '
-              'The credential offer is missing.',
-        },
-      );
-    }
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_issuer_metadata',
+        'error_description': 'The issuer configuration is invalid. '
+            'The credential offer is missing.',
+      },
+    );
   }
 
   //cleared up to here
 
   if (credentials is List<dynamic>) {
     final codeForAuthorisedFlow =
-        Uri.parse(scannedResponse).queryParameters['code'];
-    final state = Uri.parse(scannedResponse).queryParameters['state'];
+        oidc4vcParameters.initialUri.queryParameters['code'];
+    final state = oidc4vcParameters.initialUri.queryParameters['state'];
 
-    if (openIdConfiguration == null) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_issuer_metadata',
-          'error_description': 'The open id configuration is invalid.',
-        },
-      );
-    }
-
-    if (preAuthorizedCode != null) {
+    if (oidc4vcParameters.preAuthorizedCode != null) {
       /// full phase flow of preAuthorized
       qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
         credentials: credentials,
         userPin: userPin,
         txCode: txCode,
-        issuer: issuer,
-        preAuthorizedCode: preAuthorizedCode,
-        isEBSI: isEBSI,
-        credentialOfferJson: credentialOfferJson,
-        openIdConfiguration: openIdConfiguration,
+        oidc4vcParameters: oidc4vcParameters,
       );
     } else {
       if (codeForAuthorisedFlow == null || state == null) {
@@ -101,11 +67,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           credentials: credentials,
           userPin: userPin,
           txCode: txCode,
-          issuer: issuer,
-          preAuthorizedCode: preAuthorizedCode,
-          isEBSI: isEBSI,
-          credentialOfferJson: credentialOfferJson,
-          openIdConfiguration: openIdConfiguration,
+          oidc4vcParameters: oidc4vcParameters,
         );
       } else {
         /// second phase flow of authorised
@@ -142,9 +104,6 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           selectedCredentials: selectedCredentials,
           userPin: userPin,
           txCode: txCode,
-          issuer: issuer,
-          preAuthorizedCode: null,
-          isEBSI: isEBSI,
           codeForAuthorisedFlow: codeForAuthorisedFlow,
           codeVerifier: codeVerifier,
           authorization: authorization,
@@ -152,9 +111,8 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           clientSecret: clientSecret,
           oAuthClientAttestation: oAuthClientAttestation,
           oAuthClientAttestationPop: oAuthClientAttestationPop,
-          qrCodeScanCubit: qrCodeScanCubit,
           publicKeyForDPop: publicKeyForDPop,
-          oidc4vciDraftType: oidc4vciDraftType,
+          oidc4vcParameters: oidc4vcParameters,
         );
       }
     }
@@ -163,12 +121,8 @@ Future<void> initiateOIDC4VCCredentialIssuance({
     await qrCodeScanCubit.processSelectedCredentials(
       userPin: userPin,
       txCode: txCode,
-      issuer: issuer,
-      preAuthorizedCode: preAuthorizedCode,
-      isEBSI: isEBSI,
-      credentialOfferJson: credentialOfferJson,
       selectedCredentials: [credentials],
-      qrCodeScanCubit: qrCodeScanCubit,
+      oidc4vcParameters: oidc4vcParameters,
     );
   }
 }

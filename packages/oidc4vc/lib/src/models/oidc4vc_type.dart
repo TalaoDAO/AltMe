@@ -1,7 +1,14 @@
+import 'package:oidc4vc/src/constants.dart';
+
 enum OIDC4VCType {
   DEFAULT(
     offerPrefix: 'openid-credential-offer://',
     presentationPrefix: 'openid-vc://',
+  ),
+
+  WALLET(
+    offerPrefix: '$walletOfferDeepLink://',
+    presentationPrefix: '$walletPresentationDeepLink://',
   ),
 
   GAIAX(
@@ -46,6 +53,7 @@ extension OIDC4VCTypeX on OIDC4VCType {
       case OIDC4VCType.GREENCYPHER:
       case OIDC4VCType.EBSI:
       case OIDC4VCType.HAIP:
+      case OIDC4VCType.WALLET:
         return true;
       case OIDC4VCType.JWTVC:
         return false;

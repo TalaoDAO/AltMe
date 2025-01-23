@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:dio/dio.dart';
@@ -272,7 +273,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     };
 
     /// sign and get token
-    final jwtToken = profileCubit.oidc4vc.generateToken(
+    final jwtToken = generateToken(
       payload: payload,
       tokenParameters: tokenParameters,
     );
@@ -369,16 +370,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
           if (newStatusList != null && newStatusList is Map<String, dynamic>) {
             final lst = newStatusList['lst'].toString();
 
-            final bytes = profileCubit.oidc4vc.getByte(idx);
-
-            // '$idx = $bytes X 8 + $posOfBit'
-            final decompressedBytes =
-                profileCubit.oidc4vc.decodeAndZlibDecompress(lst);
-            final byteToCheck = decompressedBytes[bytes];
-
-            final posOfBit = profileCubit.oidc4vc.getPositionOfZlibBit(idx);
-            final bit = profileCubit.oidc4vc
-                .getBit(byte: byteToCheck, bitPosition: posOfBit);
+            final bit = getBit(index: idx, encodedList: lst);
 
             if (bit == 0) {
               // active
@@ -440,16 +432,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
                 newStatusList is Map<String, dynamic>) {
               final lst = newStatusList['lst'].toString();
 
-              final bytes = profileCubit.oidc4vc.getByte(idx);
-
-              // '$idx = $bytes X 8 + $posOfBit'
-              final decompressedBytes =
-                  profileCubit.oidc4vc.decodeAndZlibDecompress(lst);
-              final byteToCheck = decompressedBytes[bytes];
-
-              final posOfBit = profileCubit.oidc4vc.getPositionOfZlibBit(idx);
-              final bit = profileCubit.oidc4vc
-                  .getBit(byte: byteToCheck, bitPosition: posOfBit);
+              final bit = getBit(index: idx, encodedList: lst);
 
               if (bit == 0) {
                 // active

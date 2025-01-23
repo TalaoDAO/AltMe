@@ -102,7 +102,7 @@ class _ActivityLogViewState extends State<ActivityLogView> {
                         message = l10n.deletedCredential(credentialName);
                       case LogType.presentVC:
                         message = l10n.presentedCredential(
-                            credentialName, domainName);
+                            credentialName, domainName,);
                       case LogType.importKey:
                         message = l10n.keysImported;
                     }

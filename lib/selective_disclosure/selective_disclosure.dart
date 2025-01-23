@@ -132,7 +132,7 @@ class SelectiveDisclosure {
   ) {
     final data = <String, dynamic>{};
     try {
-      final sh256Hash = OIDC4VC().sh256HashOfContent(element);
+      final sh256Hash = sh256HashOfContent(element);
       // print('element: $element');
       final lisString = jsonDecode(element);
       if (lisString is List) {
@@ -253,8 +253,7 @@ class SelectiveDisclosure {
 
             if (threeDotValue != null) {
               for (final element in contents) {
-                final oidc4vc = OIDC4VC();
-                final sh256Hash = oidc4vc.sh256HashOfContent(element);
+                final sh256Hash = sh256HashOfContent(element);
 
                 if (sh256Hash == threeDotValue) {
                   if (element.startsWith('[') && element.endsWith(']')) {
@@ -265,7 +264,7 @@ class SelectiveDisclosure {
                       ClaimsData(
                         isfromDisclosureOfJWT: true,
                         data: trimmedElement.last.replaceAll('"', ''),
-                        threeDotValue: oidc4vc.getDisclosure(element),
+                        threeDotValue: getDisclosure(element),
                       ),
                     );
                   }
@@ -312,7 +311,7 @@ class SelectiveDisclosure {
           for (final sdElement in sdList) {
             for (final element in disclosureListToContent.entries.toList()) {
               final digest =
-                  OIDC4VC().sh256HashOfContent(element.value.toString());
+                  sh256HashOfContent(element.value.toString());
               if (digest == sdElement) {
                 final toto = getMapFromList(
                   jsonDecode(element.value.toString()) as List,
@@ -415,7 +414,7 @@ class SelectiveDisclosure {
           for (final digest in digestList) {
             for (final element in disclosureListToContent.entries.toList()) {
               final digestFromSd =
-                  OIDC4VC().sh256HashOfContent(element.value.toString());
+                  sh256HashOfContent(element.value.toString());
               if (digestFromSd == digest) {
                 final keyFromSd = getMapFromList(
                   jsonDecode(element.value.toString()) as List,

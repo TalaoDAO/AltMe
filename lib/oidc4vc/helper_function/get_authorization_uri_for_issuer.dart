@@ -11,18 +11,13 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:uuid/uuid.dart';
 
 Future<Uri?> getAuthorizationUriForIssuer({
-  required String scannedResponse,
-  required OIDC4VC oidc4vc,
-  required bool isEBSI,
+  required Oidc4vcParameters oidc4vcParameters,
   required DIDKitProvider didKitProvider,
   required List<dynamic> selectedCredentials,
-  required String issuer,
-  required dynamic credentialOfferJson,
   required bool scope,
   required String? clientId,
   required String? clientSecret,
   required ClientAuthentication clientAuthentication,
-  required OIDC4VCIDraftType oidc4vciDraftType,
   required List<VCFormatType> formatsSupported,
   required bool secureAuthorizedFlow,
   required DioClient client,
@@ -37,29 +32,17 @@ Future<Uri?> getAuthorizationUriForIssuer({
 }) async {
   /// this is first phase flow for authorization_code
 
-  String? issuerState;
-
-  final grants = credentialOfferJson['grants'];
-
-  if (grants != null && grants is Map) {
-    final dynamic authorizedCode = grants['authorization_code'];
-    if (authorizedCode != null &&
-        authorizedCode is Map &&
-        authorizedCode.containsKey('issuer_state')) {
-      issuerState = authorizedCode['issuer_state'] as String;
-    }
-  }
-
   final String nonce = const Uuid().v4();
   final PkcePair pkcePair = PkcePair.generate();
 
   final data = {
     'codeVerifier': pkcePair.codeVerifier,
     'credentials': selectedCredentials,
-    'issuer': issuer,
-    'isEBSI': isEBSI,
+    'issuer': oidc4vcParameters.issuer,
+    'isEBSI': oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
     'publicKeyForDPop': publicKeyForDPop,
-    'oidc4vciDraft': oidc4vciDraftType.numbering,
+    'oidc4vciDraft': oidc4vcParameters.oidc4vciDraftType.numbering,
+    'tokenEndpoint': oidc4vcParameters.tokenEndpoint,
   };
 
   switch (clientAuthentication) {
@@ -89,41 +72,27 @@ Future<Uri?> getAuthorizationUriForIssuer({
 
   late Uri authorizationUri;
 
-  final (
-    authorizationEndpoint,
-    authorizationRequestParemeters,
-    openIdConfigurationData
-  ) = await oidc4vc.getAuthorizationData(
+  final authorizationRequestParemeters =
+      OIDC4VC().getAuthorizationRequestParemeters(
     selectedCredentials: selectedCredentials,
     clientId: clientId,
     clientSecret: clientSecret,
     redirectUri: Parameters.oidc4vcUniversalLink,
-    issuer: issuer,
-    issuerState: issuerState,
     nonce: nonce,
     pkcePair: pkcePair,
     state: jwtToken,
-    authorizationEndPoint: Parameters.authorizeEndPoint,
     scope: scope,
     clientAuthentication: clientAuthentication,
-    oidc4vciDraftType: oidc4vciDraftType,
-    formatsSupported: formatsSupported,
-    oAuthClientAttestation: oAuthClientAttestation,
-    oAuthClientAttestationPop: oAuthClientAttestationPop,
+    formatsSuported: formatsSupported,
     secureAuthorizedFlow: secureAuthorizedFlow,
-    credentialOfferJson: credentialOfferJson,
-    dio: client.dio,
-    isEBSIProfile:
-        profileType == ProfileType.ebsiV3 || profileType == ProfileType.ebsiV4,
+    isEBSIProfile: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
     walletIssuer: walletIssuer,
-    useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+    oidc4vcParameters: oidc4vcParameters,
   );
 
-  final openIdConfiguration =
-      OpenIdConfiguration.fromJson(openIdConfigurationData);
-
-  final requirePushedAuthorizationRequests =
-      openIdConfiguration.requirePushedAuthorizationRequests;
+  final requirePushedAuthorizationRequests = oidc4vcParameters
+      .authorizationServerOpenIdConfiguration
+      .requirePushedAuthorizationRequests;
 
   final isSecure = requirePushedAuthorizationRequests || secureAuthorizedFlow;
 
@@ -149,14 +118,14 @@ Future<Uri?> getAuthorizationUriForIssuer({
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-    /// TODO: return an error message if
-    /// openIdConfiguration.pushedAuthorizationRequestEndpoint is null
-    final parUrl = openIdConfiguration.pushedAuthorizationRequestEndpoint ??
-        '$authorizationEndpoint/par';
+    // TODO(hawkbee): return an error message if
+    // openIdConfiguration.pushedAuthorizationRequestEndpoint is null
+    final parUrl = oidc4vcParameters
+            .issuerOpenIdConfiguration.pushedAuthorizationRequestEndpoint ??
+        '${oidc4vcParameters.authorizationEndpoint}/par';
 
     if (customOidc4vcProfile.dpopSupport) {
       dPop = await getDPopJwt(
-        oidc4vc: profileCubit.oidc4vc,
         url: parUrl,
         // accessToken: savedAccessToken,
         // nonce: savedNonce,
@@ -211,12 +180,12 @@ ${const JsonEncoder.withIndent('  ').convert(response)}\n
 
     final parameters = {'client_id': clientId, 'request_uri': requestUri};
 
-    final url = Uri.parse(authorizationEndpoint);
-    authorizationUri = Uri.https(url.authority, url.path, parameters);
+    final uri = Uri.parse(oidc4vcParameters.authorizationEndpoint);
+    authorizationUri = Uri.https(uri.authority, uri.path, parameters);
   } else {
-    final url = Uri.parse(authorizationEndpoint);
+    final uri = Uri.parse(oidc4vcParameters.authorizationEndpoint);
     authorizationUri =
-        Uri.https(url.authority, url.path, authorizationRequestParemeters);
+        Uri.https(uri.authority, uri.path, authorizationRequestParemeters);
   }
 
   return authorizationUri;

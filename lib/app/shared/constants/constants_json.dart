@@ -350,7 +350,7 @@ abstract class ConstantsJson {
       'client_secret_basic',
       'client_secret_jwt',
     ],
-    'credential_offer_endpoint': ['openid-credential-offer://', 'haip://'],
+    'credential_offer_endpoint': ['openid-credential-offer://', 'haip://', 'altme-openid-credential-offer'],
     'client_name': '${Parameters.appName} wallet',
     'contacts': ['contact@talao.io'],
   };

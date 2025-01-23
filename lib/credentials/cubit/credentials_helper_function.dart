@@ -258,7 +258,7 @@ Future<CredentialModel> _createCredential({
     );
 
     /// sign and get token
-    jwt = oidc4vc.generateToken(
+    jwt = generateToken(
       payload: jsonContent,
       tokenParameters: tokenParameters,
     );
