@@ -166,7 +166,7 @@ class _SplashViewState extends State<SplashView> {
       }
     });
 
-    if (isOIDC4VCIUrl(uri)) {
+    if (isOIDC4VCIUrl(uri) || isSIOPV2OROIDC4VPUrl(uri)) {
       context.read<DeepLinkCubit>().addDeepLink(uri.toString());
       return;
     }

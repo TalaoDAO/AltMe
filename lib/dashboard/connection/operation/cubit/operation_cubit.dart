@@ -244,7 +244,7 @@ class OperationCubit extends Cubit<OperationState> {
           operationDetails = tezosOperationDetails!;
           sourceAddress = operationDetails.first.source!;
 
-          /// todo(bibash): check later
+          // TODO(bibash): check later
           networkType = NetworkType.mainnet;
         }
 
@@ -451,7 +451,7 @@ class OperationCubit extends Cubit<OperationState> {
           operationDetails = tezosOperationDetails!;
           sourceAddress = operationDetails.first.source!;
 
-          /// todo(bibash): check later
+          // TODO(bibash): check later
           networkType = NetworkType.mainnet;
         }
 

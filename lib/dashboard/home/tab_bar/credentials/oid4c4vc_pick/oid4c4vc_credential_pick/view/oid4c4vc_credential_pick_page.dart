@@ -12,42 +12,26 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     required this.credentials,
     required this.userPin,
     required this.txCode,
-    required this.preAuthorizedCode,
-    required this.issuer,
-    required this.isEBSI,
-    required this.credentialOfferJson,
-    required this.openIdConfiguration,
+    required this.oidc4vcParameters,
   });
 
   final List<dynamic> credentials;
   final String? userPin;
   final String? txCode;
-  final String? preAuthorizedCode;
-  final String issuer;
-  final bool isEBSI;
-  final dynamic credentialOfferJson;
-  final OpenIdConfiguration openIdConfiguration;
+  final Oidc4vcParameters oidc4vcParameters;
 
   static Route<dynamic> route({
     required List<dynamic> credentials,
     required String? userPin,
     required String? txCode,
-    required String? preAuthorizedCode,
-    required String issuer,
-    required bool isEBSI,
-    required dynamic credentialOfferJson,
-    required OpenIdConfiguration openIdConfiguration,
+    required Oidc4vcParameters oidc4vcParameters,
   }) =>
       MaterialPageRoute<void>(
         builder: (context) => Oidc4vcCredentialPickPage(
           credentials: credentials,
           userPin: userPin,
           txCode: txCode,
-          issuer: issuer,
-          preAuthorizedCode: preAuthorizedCode,
-          isEBSI: isEBSI,
-          credentialOfferJson: credentialOfferJson,
-          openIdConfiguration: openIdConfiguration,
+          oidc4vcParameters: oidc4vcParameters,
         ),
         settings: const RouteSettings(name: '/Oidc4vcCredentialPickPage'),
       );
@@ -60,11 +44,7 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
         credentials: credentials,
         userPin: userPin,
         txCode: txCode,
-        issuer: issuer,
-        preAuthorizedCode: preAuthorizedCode,
-        isEBSI: isEBSI,
-        credentialOfferJson: credentialOfferJson,
-        openIdConfiguration: openIdConfiguration,
+        oidc4vcParameters: oidc4vcParameters,
       ),
     );
   }
@@ -76,21 +56,13 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
     required this.credentials,
     required this.userPin,
     required this.txCode,
-    required this.preAuthorizedCode,
-    required this.issuer,
-    required this.isEBSI,
-    required this.credentialOfferJson,
-    required this.openIdConfiguration,
+    required this.oidc4vcParameters,
   });
 
   final List<dynamic> credentials;
   final String? userPin;
   final String? txCode;
-  final String? preAuthorizedCode;
-  final String issuer;
-  final bool isEBSI;
-  final dynamic credentialOfferJson;
-  final OpenIdConfiguration openIdConfiguration;
+  final Oidc4vcParameters oidc4vcParameters;
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +112,8 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
 
                     // fetch for displaying the image
                     final (Display? display, _) = fetchDisplay(
-                      openIdConfiguration: openIdConfiguration,
+                      openIdConfiguration:
+                          oidc4vcParameters.issuerOpenIdConfiguration,
                       credentialType: credential,
                       languageCode: languageCode,
                     );
@@ -215,12 +188,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                 selectedCredentials: selectedCredentials,
                                 userPin: userPin,
                                 txCode: txCode,
-                                issuer: issuer,
-                                preAuthorizedCode: preAuthorizedCode,
-                                isEBSI: isEBSI,
-                                credentialOfferJson: credentialOfferJson,
-                                qrCodeScanCubit:
-                                    context.read<QRCodeScanCubit>(),
+                                oidc4vcParameters: oidc4vcParameters,
                               );
                         },
                   text: l10n.proceed,
