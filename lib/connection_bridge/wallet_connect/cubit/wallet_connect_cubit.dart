@@ -79,7 +79,13 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           name: 'Wallet (Altme)',
           description: 'Altme Wallet',
           url: 'https://altme.io',
-          icons: [],
+          icons: [
+            'https://unicorn-images.b-cdn.net/c5a08f4c-0ad3-425b-add7-4ec916fff504?optimizer=gif&width=70&height=70',
+          ],
+          redirect: Redirect(
+            native: Parameters.walletOfferDeepLink,
+            universal: Parameters.oidc4vcUniversalLink,
+          ),
         ),
       );
 
@@ -113,15 +119,23 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           var chain = '';
 
           if (accounts.blockchainType == BlockchainType.tezos) {
+            chain = 'tezos:ghostnet';
+            _reownWalletKit!.registerAccount(
+              chainId: chain,
+              accountAddress: accounts.walletAddress,
+            );
             chain = 'tezos:mainnet';
+            _reownWalletKit!.registerAccount(
+              chainId: chain,
+              accountAddress: accounts.walletAddress,
+            );
           } else {
             chain = accounts.blockchainType.chain;
+            _reownWalletKit!.registerAccount(
+              chainId: chain,
+              accountAddress: accounts.walletAddress,
+            );
           }
-
-          _reownWalletKit!.registerAccount(
-            chainId: chain,
-            accountAddress: accounts.walletAddress,
-          );
         }
       }
 
@@ -133,7 +147,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         var chain = '';
 
         if (blockchainType == BlockchainType.tezos) {
-          chain = 'tezos:mainnet';
+          chain = 'tezos:ghostnet';
         } else {
           chain = blockchainType.chain;
         }
@@ -162,19 +176,37 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   }
 
   void registerRequestHandler(String chain) {
-    for (final handler in methodRequestHandlers.entries) {
+    if (chain.startsWith('tezos')) {
       _reownWalletKit!.registerRequestHandler(
         chainId: chain,
-        method: handler.key,
-        handler: handler.value,
+        method: Parameters.TEZOS_SEND,
+        handler: tezosSend,
       );
-    }
-    for (final handler in sessionRequestHandlers.entries) {
       _reownWalletKit!.registerRequestHandler(
         chainId: chain,
-        method: handler.key,
-        handler: handler.value,
+        method: Parameters.TEZOS_SIGN,
+        handler: tezosSign,
       );
+      _reownWalletKit!.registerRequestHandler(
+        chainId: chain,
+        method: Parameters.TEZOS_GET_ACCOUNTS,
+        handler: tezosGetAccounts,
+      );
+    } else {
+      for (final handler in methodRequestHandlers.entries) {
+        _reownWalletKit!.registerRequestHandler(
+          chainId: chain,
+          method: handler.key,
+          handler: handler.value,
+        );
+      }
+      for (final handler in sessionRequestHandlers.entries) {
+        _reownWalletKit!.registerRequestHandler(
+          chainId: chain,
+          method: handler.key,
+          handler: handler.value,
+        );
+      }
     }
   }
 

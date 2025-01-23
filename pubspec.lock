@@ -532,10 +532,10 @@ packages:
     dependency: "direct main"
     description:
       name: dart_jsonwebtoken
-      sha256: "866787dc17afaef46a9ea7dd33eefe60c6d82084b4a36d70e8e788d091cd04ef"
+      sha256: "3e95b720491e595618d790f01c81563546c0c1630ad2592c8caecde0b1052217"
       url: "https://pub.dev"
     source: hosted
-    version: "2.14.2"
+    version: "2.15.0"
   dart_style:
     dependency: transitive
     description:
@@ -565,10 +565,10 @@ packages:
     dependency: transitive
     description:
       name: dbus
-      sha256: "365c771ac3b0e58845f39ec6deebc76e3276aa9922b0cc60840712094d9047ac"
+      sha256: "79e0c23480ff85dc68de79e2cd6334add97e48f7f4865d17686dd6ea81a47e8c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.10"
+    version: "0.7.11"
   decimal:
     dependency: "direct main"
     description:
