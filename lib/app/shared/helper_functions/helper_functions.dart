@@ -677,12 +677,14 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
       uri.toString().startsWith('openid-vc://?') ||
       uri.toString().startsWith(Parameters.walletPresentationDeepLink) ||
       uri.toString().startsWith('openid-hedera://?') ||
-      uri.toString().startsWith('haip://?') ||
-      uri.toString().startsWith('haip://authorize?');
+      uri.toString().startsWith('haip://?') &&
+          (uri.queryParameters['request_uri'] != null ||
+              uri.queryParameters['request'] != null);
 
   final isSiopv2Url = uri.toString().startsWith('siopv2://?');
   final isAuthorizeEndPoint =
-      uri.toString().startsWith(Parameters.authorizeEndPoint);
+      uri.toString().startsWith(Parameters.authorizeEndPoint) ||
+          uri.toString().startsWith('haip://authorize?');
 
   return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
 }
