@@ -32,6 +32,14 @@ class EmailPassWidget extends StatelessWidget {
             context.read<ProfileCubit>().state.model.isDeveloperMode,
         selectedClaimsKeyIds: <SelectedClaimsKeyIds>[],
         onPressed: null,
+        displayMode: context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .displayMode,
       ).buildMap;
 
       final email = mapToDisplay['Email'];

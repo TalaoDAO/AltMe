@@ -267,6 +267,7 @@ CustomOidc4VcProfile _$CustomOidc4VcProfileFromJson(
               ?.map((e) => $enumDecode(_$VCFormatTypeEnumMap, e))
               .toList() ??
           const [],
+      displayMode: json['displayMode'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$CustomOidc4VcProfileToJson(
@@ -294,6 +295,7 @@ Map<String, dynamic> _$CustomOidc4VcProfileToJson(
           .toList(),
       'proofType': _$ProofTypeEnumMap[instance.proofType]!,
       'dpopSupport': instance.dpopSupport,
+      'displayMode': instance.displayMode,
     };
 
 const _$ClientAuthenticationEnumMap = {
