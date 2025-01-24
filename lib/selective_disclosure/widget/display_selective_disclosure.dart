@@ -51,6 +51,14 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
       selectedClaimsKeyIds:
           selectiveDisclosureState?.selectedClaimsKeyIds ?? [],
       onPressed: onPressed,
+      displayMode: context
+          .read<ProfileCubit>()
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile
+          .displayMode,
     ).buildMap;
 
     final List<Widget> listOfClaims =

@@ -342,10 +342,10 @@ packages:
     dependency: transitive
     description:
       name: camera_avfoundation
-      sha256: "3f81ee3e88a79b0b010f0233d42625926299551b05d5dc995267a0b35bc33247"
+      sha256: "55eb9c216f25339a3faa55fc42826e2c4a45becefa1387fd50fce6ae9dd0c574"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.18"
+    version: "0.9.18+1"
   camera_platform_interface:
     dependency: transitive
     description:
@@ -532,10 +532,10 @@ packages:
     dependency: "direct main"
     description:
       name: dart_jsonwebtoken
-      sha256: "3e95b720491e595618d790f01c81563546c0c1630ad2592c8caecde0b1052217"
+      sha256: "06e02e18827d047f206e1051c15b493c9c29a2dba0f9b2a905d73748dec4f931"
       url: "https://pub.dev"
     source: hosted
-    version: "2.15.0"
+    version: "2.16.0"
   dart_style:
     dependency: transitive
     description:
@@ -1013,10 +1013,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_olm
-      sha256: "9233fd8699e1dec0e4d5cfb9b0d0f7293db3308daf412c57093b69b461bb4a18"
+      sha256: f98cafb434b3858d46446a93eb269a8e97eb38ccc5f8e0281b167d66d95c15dc
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.2"
+    version: "1.4.1"
   flutter_openssl_crypto:
     dependency: "direct main"
     description:
@@ -1151,10 +1151,10 @@ packages:
     dependency: transitive
     description:
       name: glob
-      sha256: "0e7014b3b7d4dac1ca4d6114f82bf1782ee86745b9b42a92c9289c23d8a0ab63"
+      sha256: c3f1ee72c96f8f78935e18aa8cecced9ab132419e8625dc187e1c2408efc20de
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.3"
   google_fonts:
     dependency: "direct main"
     description:
@@ -1239,10 +1239,10 @@ packages:
     dependency: "direct overridden"
     description:
       name: http
-      sha256: b9c29a161230ee03d3ccf545097fccd9b87a5264228c5d348202e0f0c28f9010
+      sha256: fe7ab022b76f3034adc518fb6ea04a82387620e19977665ea18d30a1cf43442f
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.2"
+    version: "1.3.0"
   http_mock_adapter:
     dependency: "direct dev"
     description:
@@ -1319,10 +1319,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_macos
-      sha256: "3f5ad1e8112a9a6111c46d0b57a7be2286a9a07fc6e1976fdf5be2bd31d4ff62"
+      sha256: "1b90ebbd9dcf98fb6c1d01427e49a55bd96b5d67b8c67cf955d60a5de74207c1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.1+1"
+    version: "0.2.1+2"
   image_picker_platform_interface:
     dependency: transitive
     description:

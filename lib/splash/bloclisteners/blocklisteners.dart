@@ -233,9 +233,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               confirmSecurityVerifierAccess;
 
           final bool isOpenIDUrl = isOIDC4VCIUrl(state.uri!);
-          final bool isPresentation = isSIOPV2OROIDC4VPUrl(state.uri!) &&
-              (state.uri!.queryParameters['request_uri'] != null ||
-                  state.uri!.queryParameters['request'] != null);
+          final bool isPresentation = isSIOPV2OROIDC4VPUrl(state.uri!);
           final bool isFromDeeplink = state.uri
                   .toString()
                   .startsWith(Parameters.authorizeEndPoint) ||

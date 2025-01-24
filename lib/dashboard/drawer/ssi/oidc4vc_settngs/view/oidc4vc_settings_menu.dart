@@ -50,6 +50,7 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           const PushAuthorizationRequesWidget(),
           const StatusListCachingWidget(),
           const DPopSupoprtWidget(),
+          const DisplayModeWidget(),
           DrawerItem(
             title: 'Wallet metadata for issuers',
             onTap: () {

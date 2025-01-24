@@ -443,6 +443,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     bool? statusListCaching,
     bool? displayNotification,
     bool? dpopSupport,
+    bool? displayMode,
   }) async {
     final profileModel = state.model.copyWith(
       profileSetting: state.model.profileSetting.copyWith(
@@ -481,6 +482,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             statusListCache: statusListCaching,
             dpopSupport: dpopSupport,
             formatsSupported: formatsSupported,
+            displayMode: displayMode,
           ),
         ),
       ),
