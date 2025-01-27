@@ -2,6 +2,7 @@ export 'client_authentication_widget.dart';
 export 'client_type_widget.dart';
 export 'cryptograhic_holder_binding.dart';
 export 'did_key_type_widget.dart';
+export 'display_mode_widget.dart';
 export 'dpop_support_widget.dart';
 export 'oidc4vc_draft_type_widget.dart';
 export 'oidc4vp_draft_type_widget.dart';
