@@ -17,6 +17,7 @@ class SelectiveDisclosureDisplayMap {
     required this.limitDisclosure,
     required this.filters,
     required this.isDeveloperMode,
+    required this.displayMode,
     this.claims,
     this.parentKeyId,
     required this.selectedClaimsKeyIds,
@@ -32,6 +33,7 @@ class SelectiveDisclosureDisplayMap {
   final String? parentKeyId;
   final Map<String, dynamic> filters;
   final List<SelectedClaimsKeyIds> selectedClaimsKeyIds;
+  final bool displayMode;
   final void Function(
     String?,
     String,
@@ -54,7 +56,7 @@ class SelectiveDisclosureDisplayMap {
       if (mapValue is! Map<String, dynamic>) return;
 
       final display = getDisplay(mapValue, languageCode);
-
+      if (displayMode && display == null && !isPresentation) return;
       title =
           display?['name'].toString() ?? '${Parameters.doNotDisplayMe}$index';
 
@@ -75,6 +77,7 @@ class SelectiveDisclosureDisplayMap {
           isDeveloperMode: isDeveloperMode,
           selectedClaimsKeyIds: selectedClaimsKeyIds,
           onPressed: onPressed,
+          displayMode: displayMode,
         ).buildMap;
         if (nestedMap.isNotEmpty) {
           builtMap[title] = nestedMap;
@@ -200,6 +203,7 @@ class SelectiveDisclosureDisplayMap {
         isDeveloperMode: isDeveloperMode,
         selectedClaimsKeyIds: selectedClaimsKeyIds,
         onPressed: onPressed,
+        displayMode: displayMode,
       ).buildMap;
       if (mapNestedSelectiveDisclosure.isNotEmpty) {
         builtMap.addAll({
@@ -238,6 +242,7 @@ class SelectiveDisclosureDisplayMap {
             parentKeyId: element.key.toString(),
             selectedClaimsKeyIds: selectedClaimsKeyIds,
             onPressed: onPressed,
+            displayMode: displayMode,
           ).buildMap,
         );
       }

@@ -710,6 +710,7 @@ class CustomOidc4VcProfile extends Equatable {
     this.statusListCache = true,
     this.dpopSupport = false,
     this.formatsSupported = const [],
+    this.displayMode = true,
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
@@ -725,6 +726,7 @@ class CustomOidc4VcProfile extends Equatable {
         clientType: ClientType.did,
         clientId: Parameters.clientId,
         clientSecret: randomString(12),
+        displayMode: false,
       );
 
   factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) {
@@ -761,6 +763,7 @@ class CustomOidc4VcProfile extends Equatable {
   final List<VCFormatType>? formatsSupported;
   final ProofType proofType;
   final bool dpopSupport;
+  final bool displayMode;
 
   Map<String, dynamic> toJson() => _$CustomOidc4VcProfileToJson(this);
 
@@ -784,6 +787,7 @@ class CustomOidc4VcProfile extends Equatable {
     List<VCFormatType>? formatsSupported,
     ProofType? proofType,
     bool? dpopSupport,
+    bool? displayMode,
   }) =>
       CustomOidc4VcProfile(
         clientAuthentication: clientAuthentication ?? this.clientAuthentication,
@@ -807,6 +811,7 @@ class CustomOidc4VcProfile extends Equatable {
         proofType: proofType ?? this.proofType,
         dpopSupport: dpopSupport ?? this.dpopSupport,
         formatsSupported: formatsSupported ?? this.formatsSupported,
+        displayMode: displayMode ?? this.displayMode,
       );
 
   @override
@@ -830,6 +835,7 @@ class CustomOidc4VcProfile extends Equatable {
         formatsSupported,
         proofType,
         dpopSupport,
+        displayMode,
       ];
 }
 
