@@ -1841,7 +1841,7 @@ packages:
     source: hosted
     version: "0.1.3+5"
   permission_handler_platform_interface:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: permission_handler_platform_interface
       sha256: fe0ffe274d665be8e34f9c59705441a7d248edebbe5d9e3ec2665f88b79358ea
