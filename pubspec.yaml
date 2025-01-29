@@ -1,7 +1,7 @@
 name: altme
 description: AltMe Flutter App
 
-version: 2.20.1+5603
+version: 2.20.4+5606
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 environment:
@@ -89,7 +89,7 @@ dependencies:
     path: packages/oidc4vc
   open_filex: ^4.3.2
   path: ^1.8.3
-  permission_handler: ^11.0.1
+  permission_handler: ^11.3.1
   platform_device_id: ^1.0.1
   polygonid:
     path: packages/polygonid
@@ -123,7 +123,7 @@ dependency_overrides:
   intl: ^0.19.0 #force pinned version of intl because polygonID use older version
   # logger: ^2.0.1
   package_info_plus: ^7.0.0 #polygonid from path requires package_info_plus ^4.0.1
-  permission_handler_platform_interface: 4.2.2 #issue on ios when getting openId configuration for local testing credentials
+  # permission_handler_platform_interface: 4.2.2 #issue on ios when getting openId configuration for local testing credentials
   pointycastle: ^3.7.4 #polygonid from path requires pointycastle 3.7.3
   uuid: ^3.0.7 #web3dart >=2.7.2 depends on uuid ^4.0.0
   web3dart: ^2.5.1 #alletconnect_flutter_v2 >=2.2.2-beta01 depends on web3dart ^2.7.3

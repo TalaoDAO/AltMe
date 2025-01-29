@@ -211,8 +211,8 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
 
     if (isAndroid) {
       final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      if (int.parse(androidInfo.version.release) > 12) {
-        storagePermission = await Permission.photos.request();
+      if (int.parse(androidInfo.version.release) >= 13) {
+        storagePermission = await Permission.manageExternalStorage.request();
       } else {
         storagePermission = await Permission.storage.request();
       }
