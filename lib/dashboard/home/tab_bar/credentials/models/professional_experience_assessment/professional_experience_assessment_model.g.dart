@@ -35,31 +35,22 @@ ProfessionalExperienceAssessmentModel
         );
 
 Map<String, dynamic> _$ProfessionalExperienceAssessmentModelToJson(
-    ProfessionalExperienceAssessmentModel instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'type': instance.type,
-    'issuedBy': instance.issuedBy?.toJson(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('offeredBy', instance.offeredBy?.toJson());
-  val['skills'] = instance.skills?.map((e) => e.toJson()).toList();
-  val['title'] = instance.title;
-  val['description'] = instance.description;
-  val['familyName'] = instance.familyName;
-  val['givenName'] = instance.givenName;
-  val['endDate'] = instance.endDate;
-  val['startDate'] = instance.startDate;
-  val['expires'] = instance.expires;
-  val['email'] = instance.email;
-  val['review'] = instance.review?.map((e) => e.toJson()).toList();
-  val['signatureLines'] =
-      instance.signatureLines?.map((e) => e.toJson()).toList();
-  return val;
-}
+        ProfessionalExperienceAssessmentModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': instance.type,
+      'issuedBy': instance.issuedBy?.toJson(),
+      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
+      'skills': instance.skills?.map((e) => e.toJson()).toList(),
+      'title': instance.title,
+      'description': instance.description,
+      'familyName': instance.familyName,
+      'givenName': instance.givenName,
+      'endDate': instance.endDate,
+      'startDate': instance.startDate,
+      'expires': instance.expires,
+      'email': instance.email,
+      'review': instance.review?.map((e) => e.toJson()).toList(),
+      'signatureLines':
+          instance.signatureLines?.map((e) => e.toJson()).toList(),
+    };

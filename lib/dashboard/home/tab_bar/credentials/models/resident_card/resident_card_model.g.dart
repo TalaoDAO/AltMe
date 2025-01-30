@@ -24,29 +24,20 @@ ResidentCardModel _$ResidentCardModelFromJson(Map<String, dynamic> json) =>
       givenName: json['givenName'] as String? ?? '',
     );
 
-Map<String, dynamic> _$ResidentCardModelToJson(ResidentCardModel instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'type': instance.type,
-    'issuedBy': instance.issuedBy?.toJson(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('offeredBy', instance.offeredBy?.toJson());
-  val['gender'] = instance.gender;
-  val['maritalStatus'] = instance.maritalStatus;
-  val['birthPlace'] = instance.birthPlace;
-  val['nationality'] = instance.nationality;
-  val['address'] = instance.address;
-  val['identifier'] = instance.identifier;
-  val['familyName'] = instance.familyName;
-  val['image'] = instance.image;
-  val['birthDate'] = instance.birthDate;
-  val['givenName'] = instance.givenName;
-  return val;
-}
+Map<String, dynamic> _$ResidentCardModelToJson(ResidentCardModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': instance.type,
+      'issuedBy': instance.issuedBy?.toJson(),
+      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
+      'gender': instance.gender,
+      'maritalStatus': instance.maritalStatus,
+      'birthPlace': instance.birthPlace,
+      'nationality': instance.nationality,
+      'address': instance.address,
+      'identifier': instance.identifier,
+      'familyName': instance.familyName,
+      'image': instance.image,
+      'birthDate': instance.birthDate,
+      'givenName': instance.givenName,
+    };

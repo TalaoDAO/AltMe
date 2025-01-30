@@ -1,0 +1,8 @@
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
+app_identifier("io.altme.wallet")
+apple_id("googandads@gmail.com") 
+
+itc_team_id("1633216869")
+team_id("Z8P3N79J42")
+

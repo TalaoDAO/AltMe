@@ -10,7 +10,6 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -42,7 +41,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.beacon,
     required this.walletConnectCubit,
     required this.secureStorageProvider,
-    required this.polygonIdCubit,
     required this.didKitProvider,
     required this.oidc4vc,
     required this.walletCubit,
@@ -60,7 +58,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final Beacon beacon;
   final WalletConnectCubit walletConnectCubit;
   final SecureStorageProvider secureStorageProvider;
-  final PolygonIdCubit polygonIdCubit;
   final DIDKitProvider didKitProvider;
   final OIDC4VC oidc4vc;
   final WalletCubit walletCubit;
@@ -106,10 +103,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         /// wallet connect
         await walletConnectCubit.connect(scannedResponse);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-      } else if (isPolygonIdUrl(scannedResponse)) {
-        /// polygon id
-        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-        await polygonIdCubit.polygonIdFunction(scannedResponse);
       } else if (scannedResponse.startsWith('${Urls.appDeepLink}?uri=')) {
         final url = Uri.decodeFull(
           scannedResponse.substring('${Urls.appDeepLink}?uri='.length),

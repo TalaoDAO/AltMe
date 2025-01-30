@@ -19,21 +19,12 @@ IdentityPassModel _$IdentityPassModelFromJson(Map<String, dynamic> json) =>
       type: json['type'],
     );
 
-Map<String, dynamic> _$IdentityPassModelToJson(IdentityPassModel instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'type': instance.type,
-    'issuedBy': instance.issuedBy?.toJson(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('offeredBy', instance.offeredBy?.toJson());
-  val['recipient'] = instance.recipient?.toJson();
-  val['expires'] = instance.expires;
-  return val;
-}
+Map<String, dynamic> _$IdentityPassModelToJson(IdentityPassModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': instance.type,
+      'issuedBy': instance.issuedBy?.toJson(),
+      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
+      'recipient': instance.recipient?.toJson(),
+      'expires': instance.expires,
+    };

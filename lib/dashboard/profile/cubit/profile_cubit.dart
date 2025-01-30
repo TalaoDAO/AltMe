@@ -6,7 +6,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:altme/dashboard/profile/models/models.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
-import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
@@ -397,19 +396,6 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     final profileModel =
         state.model.copyWith(walletProtectionType: walletProtectionType);
-    await update(profileModel);
-  }
-
-  Future<void> updatePolygonIdNetwork({
-    required PolygonIdNetwork polygonIdNetwork,
-    required PolygonIdCubit polygonIdCubit,
-  }) async {
-    emit(state.copyWith(status: AppStatus.loading));
-    final profileModel =
-        state.model.copyWith(polygonIdNetwork: polygonIdNetwork);
-
-    await polygonIdCubit.setEnv(polygonIdNetwork);
-
     await update(profileModel);
   }
 

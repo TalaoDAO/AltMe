@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -7,12 +6,10 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class SplashPage extends StatelessWidget {
@@ -67,8 +64,6 @@ class _SplashViewState extends State<SplashView> {
     _linkSubscription?.cancel();
     super.dispose();
   }
-
-  bool isPolygonFunctionCalled = false;
 
   String? _deeplink;
 
@@ -125,27 +120,6 @@ class _SplashViewState extends State<SplashView> {
         );
         return;
       }
-
-      /// decrypt iden3MessageEntity
-      final encryptedIden3MessageEntity =
-          uri.toString().split('iden3comm://?i_m=')[1];
-
-      final JWTDecode jwtDecode = JWTDecode();
-      final iden3MessageEntityJson =
-          jwtDecode.parsePolygonIdJwtHeader(encryptedIden3MessageEntity);
-
-      if (isPolygonFunctionCalled) return;
-
-      isPolygonFunctionCalled = true;
-
-      await context
-          .read<PolygonIdCubit>()
-          .polygonIdFunction(jsonEncode(iden3MessageEntityJson));
-
-      // Reset the flag variable after 2 seconds
-      Timer(const Duration(seconds: 1), () {
-        isPolygonFunctionCalled = false;
-      });
     }
 
     uri!.queryParameters.forEach((key, value) async {
@@ -190,7 +164,6 @@ class _SplashViewState extends State<SplashView> {
         qrCodeBlocListener,
         beaconBlocListener,
         walletConnectBlocListener,
-        polygonIdBlocListener,
         enterpriseBlocListener,
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(
