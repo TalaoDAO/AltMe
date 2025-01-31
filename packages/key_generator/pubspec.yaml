@@ -10,7 +10,9 @@ dependencies:
   bip32: ^2.0.0
   bip39: ^1.0.6
   dart_bip32_bip44: ^0.2.0
-  dart_web3: ^0.0.3
+  dart_web3:
+    git:
+      url: https://github.com/TalaoDAO/dart_web3.git
   ed25519_hd_key: ^2.2.0
   hex: ^0.2.0
   pinenacl: ^0.6.0

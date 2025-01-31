@@ -552,18 +552,19 @@ packages:
   dart_web3:
     dependency: transitive
     description:
-      name: dart_web3
-      sha256: e0bddc69ab4eba5cc815dc28f174e56edabd4ec4ebaa969b2bd99f6ca597993e
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "9b0a47bb55c3b225aa80b67a133a0527666bf673"
+      url: "https://github.com/TalaoDAO/dart_web3.git"
+    source: git
     version: "0.0.3"
   dartez:
     dependency: "direct main"
     description:
       path: "."
       ref: main
-      resolved-ref: "2a581511cde364aa365080b9a50d929b4b8c2e80"
-      url: "https://github.com/TalebRafiepour/Dartez.git"
+      resolved-ref: "8fb45ef8e74be2aa65a01617cc32d276f86ade66"
+      url: "https://github.com/TalaoDAO/Dartez.git"
     source: git
     version: "1.0.0"
   dbus:
@@ -986,10 +987,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_olm
-      sha256: "9233fd8699e1dec0e4d5cfb9b0d0f7293db3308daf412c57093b69b461bb4a18"
+      sha256: f98cafb434b3858d46446a93eb269a8e97eb38ccc5f8e0281b167d66d95c15dc
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.2"
+    version: "1.4.1"
   flutter_openssl_crypto:
     dependency: "direct main"
     description:
@@ -1124,10 +1125,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_fonts
-      sha256: f0b8d115a13ecf827013ec9fc883390ccc0e87a96ed5347a3114cac177ef18e8
+      sha256: b1ac0fe2832c9cc95e5e88b57d627c5e68c223b9657f4b96e1487aa9098c7b82
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "6.2.1"
   google_mlkit_barcode_scanning:
     dependency: "direct main"
     description:
@@ -1193,7 +1194,7 @@ packages:
     source: hosted
     version: "2.0.0"
   http:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: http
       sha256: fe7ab022b76f3034adc518fb6ea04a82387620e19977665ea18d30a1cf43442f
@@ -1297,7 +1298,7 @@ packages:
     source: hosted
     version: "0.2.1+1"
   intl:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: intl
       sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
@@ -1902,7 +1903,7 @@ packages:
     source: hosted
     version: "2.1.8"
   pointycastle:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: pointycastle
       sha256: "4be0097fcf3fd3e8449e53730c631200ebc7b88016acecab2b0da2f0149222fe"
@@ -2265,6 +2266,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
+  sprintf:
+    dependency: transitive
+    description:
+      name: sprintf
+      sha256: "1fc9ffe69d4df602376b52949af107d8f5703b77cda567c4d7d86a0693120f23"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
   sqflite:
     dependency: transitive
     description:
@@ -2499,13 +2508,13 @@ packages:
     source: hosted
     version: "3.1.4"
   uuid:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: uuid
-      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
+      sha256: a5be9ef6618a7ac1e964353ef476418026db906c4facdedaa299b7a2e71690ff
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.7"
+    version: "4.5.1"
   vector_graphics:
     dependency: transitive
     description:
@@ -2587,7 +2596,7 @@ packages:
     source: hosted
     version: "1.1.0"
   web3dart:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: web3dart
       sha256: "885e5e8f0cc3c87c09f160a7fce6279226ca41316806f7ece2001959c62ecced"

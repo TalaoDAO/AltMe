@@ -15,7 +15,9 @@ dependencies:
   crypto: ^3.0.3
   dart_bip32_bip44: ^0.2.0
   dart_jsonwebtoken: ^2.13.0
-  dart_web3: ^0.0.3
+  dart_web3:
+    git:
+      url: https://github.com/TalaoDAO/dart_web3.git
   did_kit:
     path: ../did_kit
   dio: ^5.3.2
@@ -37,7 +39,7 @@ dependencies:
     git:
       url: https://github.com/autonomy-system/tezart.git
       ref: 85070e8ddafe5140c0bfd2cb9d569ecf986e7234
-  uuid: ^3.0.7
+  uuid: ^4.5.1
 
 dependency_overrides:
   ffi: 2.1.0 #didkit from path which depends on ffi ^1.0.0

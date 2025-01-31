@@ -34,7 +34,7 @@ dependencies:
   dart_jsonwebtoken: ^2.12.1
   dartez:
     git:
-      url: https://github.com/TalebRafiepour/Dartez.git
+      url: https://github.com/TalaoDAO/Dartez.git
       ref: main
   decimal: ^2.3.3
   device_info_plus: ^9.0.1
@@ -65,7 +65,7 @@ dependencies:
   flutter_openssl_crypto: ^0.3.0
   flutter_slidable: ^3.1.1
   flutter_svg: ^2.0.6
-  google_fonts: 6.1.0
+  google_fonts: ^6.2.1
   #google_mlkit_face_detection: ^0.5.0
   google_mlkit_barcode_scanning: ^0.10.0
   image: ^4.0.17
@@ -119,14 +119,11 @@ dependencies:
 
 dependency_overrides:
   ffi: 2.1.0 #didkit from path which depends on ffi ^1.0.0
-  http: ^1.0.0 #web3dart ^2.6.1 reqgetuires http ^0.13.5
-  intl: ^0.19.0 #force pinned version of intl because polygonID use older version
-  # logger: ^2.0.1
-  # package_info_plus: ^7.0.0 #polygonid from path requires package_info_plus ^4.0.1
-  # permission_handler_platform_interface: 4.2.2 #issue on ios when getting openId configuration for local testing credentials
-  pointycastle: ^3.7.4 #polygonid from path requires pointycastle 3.7.3
-  uuid: ^3.0.7 #web3dart >=2.7.2 depends on uuid ^4.0.0
-  web3dart: ^2.5.1 #alletconnect_flutter_v2 >=2.2.2-beta01 depends on web3dart ^2.7.3
+  # http: ^1.0.0 #web3dart ^2.6.1 reqgetuires http ^0.13.5
+  # intl: ^0.19.0 #force pinned version of intl because polygonID use older version
+  # pointycastle: ^3.7.4 #polygonid from path requires pointycastle 3.7.3
+  # uuid: ^3.0.7 #web3dart >=2.7.2 depends on uuid ^4.0.0
+  # web3dart: ^2.5.1 #alletconnect_flutter_v2 >=2.2.2-beta01 depends on web3dart ^2.7.3
 
 dev_dependencies:
   bloc_test: ^9.1.2
