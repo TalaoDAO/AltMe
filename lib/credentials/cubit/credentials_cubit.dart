@@ -6,6 +6,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -14,7 +15,6 @@ import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 import 'package:secure_storage/secure_storage.dart';

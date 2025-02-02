@@ -35,10 +35,6 @@ dependencies:
   secp256k1: ^0.3.0
   secure_storage:
     path: ../secure_storage
-  tezart:
-    git:
-      url: https://github.com/autonomy-system/tezart.git
-      ref: 85070e8ddafe5140c0bfd2cb9d569ecf986e7234
   uuid: ^4.5.1
 
 dependency_overrides:

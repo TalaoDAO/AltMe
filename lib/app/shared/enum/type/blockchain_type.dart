@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:key_generator/key_generator.dart';
 
 enum BlockchainType {
   tezos,

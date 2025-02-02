@@ -3,11 +3,11 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
-import 'package:key_generator/key_generator.dart';
 
 Future<void> generateAccount({
   required List<String> mnemonic,

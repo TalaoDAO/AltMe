@@ -14,6 +14,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
@@ -36,7 +37,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 

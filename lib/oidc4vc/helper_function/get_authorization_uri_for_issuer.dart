@@ -36,7 +36,6 @@ Future<Uri?> getAuthorizationUriForIssuer({
   final PkcePair pkcePair = PkcePair.generate();
 
   final data = {
-    'codeVerifier': pkcePair.codeVerifier,
     'credentials': selectedCredentials,
     'issuer': oidc4vcParameters.issuer,
     'isEBSI': oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
@@ -44,6 +43,8 @@ Future<Uri?> getAuthorizationUriForIssuer({
     'oidc4vciDraft': oidc4vcParameters.oidc4vciDraftType.numbering,
     'tokenEndpoint': oidc4vcParameters.tokenEndpoint,
   };
+
+
 
   switch (clientAuthentication) {
     case ClientAuthentication.none:

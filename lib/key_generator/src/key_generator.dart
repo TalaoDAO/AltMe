@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:altme/key_generator/src/enum.dart';
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
 import 'package:dart_bip32_bip44/dart_bip32_bip44.dart';
@@ -7,7 +8,6 @@ import 'package:dart_web3/crypto.dart';
 import 'package:dart_web3/dart_web3.dart';
 import 'package:ed25519_hd_key/ed25519_hd_key.dart';
 import 'package:hex/hex.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:secp256k1/secp256k1.dart';
 // ignore: implementation_imports
 import 'package:tezart/src/crypto/crypto.dart' as crypto hide Prefixes;

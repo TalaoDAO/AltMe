@@ -154,13 +154,13 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: fca8038d3c6378341a2e57d2cb1cceaba9f35561
-      resolved-ref: fca8038d3c6378341a2e57d2cb1cceaba9f35561
+      ref: f829c6bde29826d87640f8626c6ec380091018f0
+      resolved-ref: f829c6bde29826d87640f8626c6ec380091018f0
       url: "https://github.com/TalaoDAO/beacon.git"
     source: git
-    version: "1.0.9"
+    version: "2.0.0"
   bip32:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: bip32
       sha256: "54787cd7a111e9d37394aabbf53d1fc5e2e0e0af2cd01c459147a97c0e3f8a97"
@@ -307,26 +307,26 @@ packages:
     dependency: "direct main"
     description:
       name: cached_network_image
-      sha256: "28ea9690a8207179c319965c13cd8df184d5ee721ae2ce60f398ced1219cea1f"
+      sha256: "7c1183e361e5c8b0a0f21a28401eecdbde252441106a9816400dd4c2b2424916"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.1"
+    version: "3.4.1"
   cached_network_image_platform_interface:
     dependency: transitive
     description:
       name: cached_network_image_platform_interface
-      sha256: "9e90e78ae72caa874a323d78fa6301b3fb8fa7ea76a8f96dc5b5bf79f283bf2f"
+      sha256: "35814b016e37fbdc91f7ae18c8caf49ba5c88501813f73ce8a07027a395e2829"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
+    version: "4.1.1"
   cached_network_image_web:
     dependency: transitive
     description:
       name: cached_network_image_web
-      sha256: "205d6a9f1862de34b93184f22b9d2d94586b2f05c581d546695e3d8f6a805cd7"
+      sha256: "980842f4e8e2535b8dbd3d5ca0b1f0ba66bf61d14cc3a17a9b4788a3685ba062"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "1.3.1"
   camera:
     dependency: "direct main"
     description:
@@ -526,7 +526,7 @@ packages:
     source: hosted
     version: "0.17.3"
   dart_bip32_bip44:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: dart_bip32_bip44
       sha256: ca8417bac434f2ece417b03818d91fe2d1d036e5aa568743872dede401660560
@@ -550,7 +550,7 @@ packages:
     source: hosted
     version: "2.3.8"
   dart_web3:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "."
       ref: HEAD
@@ -563,7 +563,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "8fb45ef8e74be2aa65a01617cc32d276f86ade66"
+      resolved-ref: b2a99745a4cd24fb186203e37ef324399087447d
       url: "https://github.com/TalaoDAO/Dartez.git"
     source: git
     version: "1.0.0"
@@ -583,30 +583,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.3"
-  device_info:
-    dependency: transitive
-    description:
-      name: device_info
-      sha256: f4a8156cb7b7480d969cb734907d18b333c8f0bc0b1ad0b342cdcecf30d62c48
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.3"
-  device_info_platform_interface:
-    dependency: transitive
-    description:
-      name: device_info_platform_interface
-      sha256: b148e0bf9640145d09a4f8dea96614076f889e7f7f8b5ecab1c7e5c2dbc73c1b
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   device_info_plus:
     dependency: "direct main"
     description:
       name: device_info_plus
-      sha256: "77f757b789ff68e4eaf9c56d1752309bd9f7ad557cb105b938a7f8eb89e59110"
+      sha256: e3fc9a65820fef83035af8ee8c09004a719d5d1d54e6de978fcb0d84bbeb241a
       url: "https://pub.dev"
     source: hosted
-    version: "9.1.2"
+    version: "11.2.2"
   device_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -854,10 +838,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_cache_manager
-      sha256: "8207f27539deb83732fdda03e259349046a39a4c767269285f449ade355d54ba"
+      sha256: "400b6592f16a4409a7f2bb929a9a7e38c72cceb8ffb99ee57bbf2cb2cecf8386"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.1"
+    version: "3.4.1"
   flutter_chat_types:
     dependency: "direct main"
     description:
@@ -975,14 +959,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.23"
-  flutter_native_timezone:
-    dependency: "direct main"
-    description:
-      name: flutter_native_timezone
-      sha256: ed7bfb982f036243de1c068e269182a877100c994f05143c8b26a325e28c1b02
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   flutter_olm:
     dependency: "direct main"
     description:
@@ -1074,10 +1050,11 @@ packages:
   flutter_sodium:
     dependency: transitive
     description:
-      name: flutter_sodium
-      sha256: "0e8c475088f8c9a60fda0ef19ee42cdcb574f8549c8ea809f736ef60e8ad51a6"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: ec7f50d3e1a2779c88447ee277ec0d12b43506e6
+      url: "https://github.com/TalaoDAO/flutter_sodium.git"
+    source: git
     version: "0.2.0"
   flutter_svg:
     dependency: "direct main"
@@ -1162,7 +1139,7 @@ packages:
     source: hosted
     version: "2.1.0"
   hex:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: hex
       sha256: "4e7cd54e4b59ba026432a6be2dd9d96e4c5205725194997193bf871703b82c4a"
@@ -1373,13 +1350,6 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/jwt_decode"
-      relative: true
-    source: path
-    version: "1.0.0+1"
-  key_generator:
-    dependency: "direct main"
-    description:
-      path: "packages/key_generator"
       relative: true
     source: path
     version: "1.0.0+1"
@@ -1831,7 +1801,7 @@ packages:
     source: hosted
     version: "0.15.0"
   pinenacl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: pinenacl
       sha256: "57e907beaacbc3c024a098910b6240758e899674de07d6949a67b52fd984cbdf"
@@ -1846,54 +1816,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.6"
-  platform_device_id:
-    dependency: "direct main"
-    description:
-      name: platform_device_id
-      sha256: "7a12ec84de4a823bb10eba2f0e1ad29e2365abba17790489a0d78029904f562e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
-  platform_device_id_linux:
-    dependency: transitive
-    description:
-      name: platform_device_id_linux
-      sha256: "994b1608593e527a629af2d5aeb241c60d308d3434bc78b0f6fcb3c1a02dff43"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
-  platform_device_id_macos:
-    dependency: transitive
-    description:
-      name: platform_device_id_macos
-      sha256: "968db2a504c611294b12a031b3734432d6df10553a0d3ae3b33ed21abfdbaba0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
-  platform_device_id_platform_interface:
-    dependency: transitive
-    description:
-      name: platform_device_id_platform_interface
-      sha256: c61607594252aaddacf3e4c4371ab08f2ef85ff427817fa6e48a169429610c46
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
-  platform_device_id_web:
-    dependency: transitive
-    description:
-      name: platform_device_id_web
-      sha256: "58e124594e1165db7f108395a780b1d1e1cd403021978e5228cf4289fbe736d5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
-  platform_device_id_windows:
-    dependency: transitive
-    description:
-      name: platform_device_id_windows
-      sha256: dbf8dcf03ad8555320ebae2403a3081b79f137f37661874e161fe2de0a84eeeb
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -2050,10 +1972,10 @@ packages:
     dependency: transitive
     description:
       name: rxdart
-      sha256: "2ef8b4e91cb3b55d155e0e34eeae0ac7107974e451495c955ac04ddee8cc21fd"
+      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.26.0"
+    version: "0.27.7"
   scroll_to_index:
     dependency: transitive
     description:
@@ -2079,7 +2001,7 @@ packages:
     source: hosted
     version: "1.1.0"
   secp256k1:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: secp256k1
       sha256: "66310c1fce68d0c3cfae61f9f23aba11f459fb8c84a50bdc6520548c62a4828a"
@@ -2089,11 +2011,12 @@ packages:
   secure_application:
     dependency: "direct main"
     description:
-      name: secure_application
-      sha256: d8aee3e3177f4a594586efe252a79bba6c6032f30af9573d8dcd3379a3c5a0ee
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.8.0"
+      path: "."
+      ref: HEAD
+      resolved-ref: e32051c50aae277b5c8c30be19e8f6173bd29adb
+      url: "https://github.com/TalaoDAO/secure_application.git"
+    source: git
+    version: "4.0.1"
   secure_storage:
     dependency: "direct main"
     description:
@@ -2406,9 +2329,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "85070e8ddafe5140c0bfd2cb9d569ecf986e7234"
-      resolved-ref: "85070e8ddafe5140c0bfd2cb9d569ecf986e7234"
-      url: "https://github.com/autonomy-system/tezart.git"
+      ref: fd37711c1ae33995202adc0e684bc8324db399b7
+      resolved-ref: fd37711c1ae33995202adc0e684bc8324db399b7
+      url: "https://github.com/TalaoDAO/tezart.git"
     source: git
     version: "2.0.4"
   timezone:
@@ -2519,10 +2442,10 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics
-      sha256: "7ed22c21d7fdcc88dd6ba7860384af438cd220b251ad65dfc142ab722fabef61"
+      sha256: a1870d398158844fe5db12441611ed9a2222ff4340258b539eaf3590c1b4bd7e
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.16"
+    version: "1.1.17"
   vector_graphics_codec:
     dependency: transitive
     description:

@@ -16,9 +16,11 @@ dependencies:
   beacon_flutter:
     git:
       url: https://github.com/TalaoDAO/beacon.git
-      ref: fca8038d3c6378341a2e57d2cb1cceaba9f35561
+      ref: f829c6bde29826d87640f8626c6ec380091018f0
+      
   # beacon_flutter:
   #   path: ../beacon
+  bip32: ^2.0.0
   bip39: ^1.0.6
   bloc: ^8.1.2
   cached_network_image: ^3.2.3
@@ -31,13 +33,17 @@ dependencies:
   crypto: ^3.0.3
   cryptocurrency_keys:
     path: packages/cryptocurrency_keys
+  dart_bip32_bip44: ^0.2.0
   dart_jsonwebtoken: ^2.12.1
+  dart_web3:
+    git:
+      url: https://github.com/TalaoDAO/dart_web3.git
   dartez:
     git:
       url: https://github.com/TalaoDAO/Dartez.git
       ref: main
   decimal: ^2.3.3
-  device_info_plus: ^9.0.1
+  device_info_plus: ^11.2.2
   devicelocale: ^0.7.0
   did_kit:
     path: packages/did_kit
@@ -60,7 +66,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_markdown: ^0.6.9 #flutter_markdown ^0.6.14 requires markdown ^7.0.0
-  flutter_native_timezone: ^2.0.0
   flutter_olm: ^1.4.1
   flutter_openssl_crypto: ^0.3.0
   flutter_slidable: ^3.1.1
@@ -68,6 +73,7 @@ dependencies:
   google_fonts: ^6.2.1
   #google_mlkit_face_detection: ^0.5.0
   google_mlkit_barcode_scanning: ^0.10.0
+  hex: ^0.2.0
   image: ^4.0.17
   image_picker: ^1.0.7
   jose_plus: ^0.4.5
@@ -75,8 +81,6 @@ dependencies:
   json_path: ^0.7.2
   jwt_decode:
     path: packages/jwt_decode
-  key_generator:
-    path: packages/key_generator
   local_auth: ^2.1.6
   markdown: ^7.2.0 #matrix 0.20.2 depends on markdown ^4.0.0
   matrix: ^0.25.5
@@ -90,14 +94,17 @@ dependencies:
   open_filex: ^4.3.2
   path: ^1.8.3
   permission_handler: ^11.3.1
-  platform_device_id: ^1.0.1
   # polygonid:
   #   path: packages/polygonid
+  pinenacl: ^0.6.0
   pretty_qr_code: ^3.1.0
   qr_flutter: ^4.1.0
   random_string: ^2.3.1
   reown_walletkit: ^1.1.0
-  secure_application: ^3.8.0
+  secp256k1: ^0.3.0
+  secure_application:
+    git:
+      url: https://github.com/TalaoDAO/secure_application.git
   secure_storage:
     path: packages/secure_storage
   share_plus: ^7.0.2
@@ -107,8 +114,8 @@ dependencies:
   switcher: ^1.0.0
   tezart:
     git:
-      url: https://github.com/autonomy-system/tezart.git
-      ref: 85070e8ddafe5140c0bfd2cb9d569ecf986e7234
+      url: https://github.com/TalaoDAO/tezart.git
+      ref: fd37711c1ae33995202adc0e684bc8324db399b7
   timezone: ^0.9.2
   url_launcher: ^6.1.11
   visibility_detector: ^0.4.0+2

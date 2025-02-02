@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:test/test.dart';
 
 void main() {

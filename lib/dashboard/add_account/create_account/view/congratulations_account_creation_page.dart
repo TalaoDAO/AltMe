@@ -1,11 +1,11 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
 
 class CongratulationsAccountCreationPage extends StatelessWidget {
   const CongratulationsAccountCreationPage({

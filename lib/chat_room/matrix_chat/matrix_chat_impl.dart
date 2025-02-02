@@ -18,7 +18,6 @@ import 'package:matrix/matrix.dart' hide User;
 import 'package:mime/mime.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -89,16 +88,11 @@ class MatrixChatImpl extends MatrixChatInterface {
         SecureStorageKeys.isUserRegisteredMatrix,
         true.toString(),
       );
-      userId = await login(
-        username: username,
-        password: await _getPasswordForDID(),
-      );
-    } else {
-      userId = await login(
-        username: username,
-        password: await _getPasswordForDID(),
-      );
     }
+    userId = await login(
+      username: username,
+      password: await _getPasswordForDID(),
+    );
     user = User(id: userId);
     return user!;
   }
@@ -592,11 +586,9 @@ class MatrixChatImpl extends MatrixChatInterface {
       final isLogged = client!.isLogged();
       if (isLogged) return client!.userID!;
       client!.homeserver = Uri.parse(Urls.matrixHomeServer);
-      final deviceId = await PlatformDeviceId.getDeviceId;
       final loginResonse = await client!.login(
         LoginType.mLoginPassword,
         password: password,
-        deviceId: deviceId,
         identifier: AuthenticationUserIdentifier(user: username),
       );
       return loginResonse.userId;

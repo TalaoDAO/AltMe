@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -8,7 +9,6 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 import 'package:secure_storage/secure_storage.dart';
 

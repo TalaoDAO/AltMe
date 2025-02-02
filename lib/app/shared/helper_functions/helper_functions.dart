@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:asn1lib/asn1lib.dart' as asn1lib;
@@ -15,7 +16,6 @@ import 'package:intl/intl.dart';
 import 'package:jose_plus/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
