@@ -9,7 +9,6 @@ part 'profile.g.dart';
 @JsonSerializable()
 class ProfileModel extends Equatable {
   const ProfileModel({
-    required this.polygonIdNetwork,
     required this.walletType,
     required this.walletProtectionType,
     required this.isDeveloperMode,
@@ -22,7 +21,6 @@ class ProfileModel extends Equatable {
       _$ProfileModelFromJson(json);
 
   factory ProfileModel.empty() => ProfileModel(
-        polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
         walletType: WalletType.personal,
         walletProtectionType: WalletProtectionType.pinCode,
         isDeveloperMode: false,
@@ -31,7 +29,6 @@ class ProfileModel extends Equatable {
       );
 
   factory ProfileModel.ebsiV3({
-    required PolygonIdNetwork polygonIdNetwork,
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
@@ -41,7 +38,6 @@ class ProfileModel extends Equatable {
   }) =>
       ProfileModel(
         enterpriseWalletName: enterpriseWalletName,
-        polygonIdNetwork: polygonIdNetwork,
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
@@ -107,7 +103,6 @@ class ProfileModel extends Equatable {
       );
 
   factory ProfileModel.ebsiV4({
-    required PolygonIdNetwork polygonIdNetwork,
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
@@ -117,7 +112,6 @@ class ProfileModel extends Equatable {
   }) =>
       ProfileModel(
         enterpriseWalletName: enterpriseWalletName,
-        polygonIdNetwork: polygonIdNetwork,
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
@@ -187,7 +181,6 @@ class ProfileModel extends Equatable {
       );
 
   factory ProfileModel.defaultOne({
-    required PolygonIdNetwork polygonIdNetwork,
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
@@ -197,7 +190,6 @@ class ProfileModel extends Equatable {
   }) =>
       ProfileModel(
         enterpriseWalletName: enterpriseWalletName,
-        polygonIdNetwork: polygonIdNetwork,
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
@@ -265,7 +257,6 @@ class ProfileModel extends Equatable {
       );
 
   factory ProfileModel.diipv3({
-    required PolygonIdNetwork polygonIdNetwork,
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
@@ -275,7 +266,6 @@ class ProfileModel extends Equatable {
   }) =>
       ProfileModel(
         enterpriseWalletName: enterpriseWalletName,
-        polygonIdNetwork: polygonIdNetwork,
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
@@ -350,7 +340,6 @@ class ProfileModel extends Equatable {
         ),
       );
 
-  final PolygonIdNetwork polygonIdNetwork;
   final WalletType walletType;
   final WalletProtectionType walletProtectionType;
   final bool isDeveloperMode;
@@ -360,7 +349,6 @@ class ProfileModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        polygonIdNetwork,
         walletType,
         walletProtectionType,
         isDeveloperMode,
@@ -372,7 +360,6 @@ class ProfileModel extends Equatable {
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
 
   ProfileModel copyWith({
-    PolygonIdNetwork? polygonIdNetwork,
     WalletType? walletType,
     WalletProtectionType? walletProtectionType,
     bool? isDeveloperMode,
@@ -381,7 +368,6 @@ class ProfileModel extends Equatable {
     String? enterpriseWalletName,
   }) {
     return ProfileModel(
-      polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
       walletType: walletType ?? this.walletType,
       walletProtectionType: walletProtectionType ?? this.walletProtectionType,
       isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,

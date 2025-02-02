@@ -75,20 +75,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     final log = getLogger('ProfileCubit - load');
     try {
-      /// polygon id network
-      var polygonIdNetwork = PolygonIdNetwork.PolygonMainnet;
-
-      final polygonIdNetworkString =
-          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
-
-      if (polygonIdNetworkString != null) {
-        final enumVal = PolygonIdNetwork.values.firstWhereOrNull(
-          (ele) => ele.toString() == polygonIdNetworkString,
-        );
-        if (enumVal != null) {
-          polygonIdNetwork = enumVal;
-        }
-      }
 
       /// walletType
       var walletType = WalletType.personal;
@@ -105,7 +91,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         }
       }
 
-      /// polygon id network
       var walletProtectionType = WalletProtectionType.pinCode;
 
       final walletProtectionTypeString = await secureStorageProvider
@@ -183,7 +168,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           }
 
           profileModel = ProfileModel(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -205,7 +189,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
           profileModel = ProfileModel.defaultOne(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -227,7 +210,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
           profileModel = ProfileModel.ebsiV3(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -249,7 +231,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
           profileModel = ProfileModel.ebsiV4(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -291,7 +272,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
           profileModel = ProfileModel.diipv3(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -311,7 +291,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           }
 
           profileModel = ProfileModel(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -343,10 +322,10 @@ class ProfileCubit extends Cubit<ProfileState> {
     final log = getLogger('ProfileCubit - update');
 
     try {
-      await secureStorageProvider.set(
-        SecureStorageKeys.polygonIdNetwork,
-        profileModel.polygonIdNetwork.toString(),
-      );
+      // await secureStorageProvider.set(
+      //   SecureStorageKeys.polygonIdNetwork,
+      //   profileModel.polygonIdNetwork.toString(),
+      // );
 
       await secureStorageProvider.set(
         SecureStorageKeys.walletType,
@@ -602,7 +581,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.ebsiV3:
         await update(
           ProfileModel.ebsiV3(
-            polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
@@ -616,7 +594,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.ebsiV4:
         await update(
           ProfileModel.ebsiV4(
-            polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
@@ -630,7 +607,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.defaultOne:
         await update(
           ProfileModel.defaultOne(
-            polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
@@ -645,7 +621,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.diipv3:
         await update(
           ProfileModel.diipv3(
-            polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
