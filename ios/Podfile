@@ -47,13 +47,13 @@ post_install do |installer|
     config.build_settings["EXCLUDED_ARCHS[sdk=*]"] = "armv7"
     config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $iOSVersion
   end
-
+  target.build_configurations.each do |config|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
         # Google's ML Kit Barcode Scanning setup 
         if Gem::Version.new($iOSVersion) > Gem::Version.new(config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'])
           config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $iOSVersion
         end
-      end
   end
+end
 end
