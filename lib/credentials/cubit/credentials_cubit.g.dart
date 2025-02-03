@@ -62,6 +62,5 @@ const _$CredentialCategoryEnumMap = {
   CredentialCategory.walletIntegrity: 'walletIntegrity',
   CredentialCategory.blockchainAccountsCards: 'blockchainAccountsCards',
   CredentialCategory.othersCards: 'othersCards',
-  CredentialCategory.polygonidCards: 'polygonidCards',
   CredentialCategory.pendingCards: 'pendingCards',
 };

@@ -61,9 +61,7 @@ class CredentialDisplay extends StatelessWidget {
         }
 
       case CredentialSubjectType.defaultCredential:
-        if (credentialModel.isPolygonIdCard) {
-          return DefaultPolygonIdCardWidget(credentialModel: credentialModel);
-        } else if (credentialModel.pendingInfo != null) {
+        if (credentialModel.pendingInfo != null) {
           final credentialName = credentialModel.credentialPreview.type[0];
           final CredentialSubjectType credentialSubjectType =
               getCredTypeFromName(credentialName) ??
@@ -335,17 +333,6 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.binancePooAddress:
         return BinancePooAddressWidget(credentialModel: credentialModel);
 
-      case CredentialSubjectType.kycAgeCredential:
-        return KYCAgeCredentialWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.kycCountryOfResidence:
-        return KYCCountryOfResidenceWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.proofOfTwitterStats:
-        return ProofOfTwitterStatsWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.civicPassCredential:
-        return CivicPassCredentialWidget(credentialModel: credentialModel);
     }
   }
 }

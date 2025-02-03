@@ -94,21 +94,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         } else {
           updatedCredentials.add(updatedCredential);
         }
-      } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
-        final updatedCredential = credential.copyWith(
-          credentialPreview: credential.credentialPreview.copyWith(
-            credentialSubjectModel:
-                credential.credentialPreview.credentialSubjectModel.copyWith(
-              credentialCategory: CredentialCategory.polygonidCards,
-            ),
-          ),
-        );
-
-        if (profileLinked != null) {
-          if (profileLinked == vcId) updatedCredentials.add(updatedCredential);
-        } else {
-          updatedCredentials.add(updatedCredential);
-        }
       } else {
         if (profileLinked != null) {
           if (profileLinked == vcId) updatedCredentials.add(credential);
@@ -318,23 +303,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       }
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
-    } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
-      final updatedCredential = credential.copyWith(
-        credentialPreview: credential.credentialPreview.copyWith(
-          credentialSubjectModel:
-              credential.credentialPreview.credentialSubjectModel.copyWith(
-            credentialCategory: CredentialCategory.polygonidCards,
-          ),
-        ),
-      );
-      if (!isPendingCredential) {
-        await modifyCredential(
-          credential: updatedCredential,
-          blockchainType: blockchainType,
-        );
-      }
-      await credentialsRepository.insert(updatedCredential);
-      credentials = List.of(state.credentials)..add(updatedCredential);
     } else {
       if (!isPendingCredential) {
         await modifyCredential(
@@ -427,7 +395,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       case CredentialCategory.humanityProofCards:
       case CredentialCategory.socialMediaCards:
       case CredentialCategory.walletIntegrity:
-      case CredentialCategory.polygonidCards:
       case CredentialCategory.pendingCards:
         break;
     }
@@ -939,8 +906,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
           case CredentialCategory.othersCards:
-            break;
-          case CredentialCategory.polygonidCards:
             break;
           case CredentialCategory.pendingCards:
             break;

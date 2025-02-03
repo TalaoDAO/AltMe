@@ -13,7 +13,6 @@ enum CredentialCategory {
   walletIntegrity,
   blockchainAccountsCards,
   othersCards,
-  polygonidCards,
   pendingCards,
 }
 
@@ -52,8 +51,6 @@ extension CredentialCategoryX on CredentialCategory {
         return 90;
       case CredentialCategory.walletIntegrity:
         return 80;
-      case CredentialCategory.polygonidCards:
-        return 75;
       case CredentialCategory.pendingCards:
         return 9;
     }
@@ -73,7 +70,6 @@ extension CredentialCategoryX on CredentialCategory {
       case CredentialCategory.humanityProofCards:
       case CredentialCategory.socialMediaCards:
       case CredentialCategory.walletIntegrity:
-      case CredentialCategory.polygonidCards:
       case CredentialCategory.pendingCards:
         return false;
     }
@@ -157,13 +153,6 @@ extension CredentialCategoryX on CredentialCategory {
           homeSubTitle: l10n.walletIntegrityCredentialsHomeSubtitle,
           discoverTitle: l10n.walletIntegrityCredentialsDiscoverTitle,
           discoverSubTitle: l10n.walletIntegrityCredentialsDiscoverSubtitle,
-        );
-      case CredentialCategory.polygonidCards:
-        return CredentialCategoryConfig(
-          homeTitle: l10n.polygonCredentialsHomeTitle,
-          homeSubTitle: l10n.polygonCredentialsHomeSubtitle,
-          discoverTitle: l10n.polygonCredentialsDiscoverTitle,
-          discoverSubTitle: l10n.polygonCredentialsDiscoverSubtitle,
         );
       case CredentialCategory.pendingCards:
         return CredentialCategoryConfig(
