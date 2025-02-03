@@ -667,14 +667,13 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   void addOidc4VCI(Oidc4VCIState data) {
-    final Oidc4VCIStack oidc4VCIStack =
-        Oidc4VCIStack(stack: state.model.oidc4VCIStack!.stack);
-    final stackLength = oidc4VCIStack.stack.length;
+    final list = List<Oidc4VCIState>.from(state.model.oidc4VCIStack!.stack);
+    final stackLength = list.length;
     if (stackLength > 4) {
-      oidc4VCIStack.stack.removeAt(0);
+      list.removeAt(0);
     }
-    oidc4VCIStack.stack.add(data);
-    update(state.model.copyWith(oidc4VCIStack: oidc4VCIStack));
+    list.add(data);
+    update(state.model.copyWith(oidc4VCIStack: Oidc4VCIStack(stack: list)));
   }
 
   Oidc4VCIState? getOidc4VCIStateFromJWT(String? key) {
