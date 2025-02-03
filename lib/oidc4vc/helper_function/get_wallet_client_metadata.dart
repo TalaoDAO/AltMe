@@ -30,7 +30,6 @@ Map<String, dynamic> walletClientMetadata(
         'did:key',
         'did:pkh',
         'did:key',
-        'did:polygonid',
       ],
       'subject_syntax_types_discriminations': [
         'did:key:jwk_jcs-pub',

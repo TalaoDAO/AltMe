@@ -431,17 +431,6 @@ void main() {
         expect(result, expected);
       });
 
-      test('isPolygonIdUrl returns correct value for valid Polygon ID URLs',
-          () {
-        expect(isPolygonIdUrl('{"id":'), true);
-        expect(isPolygonIdUrl('{"body":{"'), true);
-        expect(isPolygonIdUrl('{"from": "did:polygonid:'), true);
-        expect(isPolygonIdUrl('{"to": "did:polygonid:'), true);
-        expect(isPolygonIdUrl('{"thid":'), true);
-        expect(isPolygonIdUrl('{"typ":'), true);
-        expect(isPolygonIdUrl('{"type":'), true);
-      });
-
       test('isOIDC4VCIUrl returns true for valid OIDC4VCI URLs', () {
         expect(isOIDC4VCIUrl(Uri.parse('openid://some/path')), true);
         expect(isOIDC4VCIUrl(Uri.parse('haip://another/path')), true);

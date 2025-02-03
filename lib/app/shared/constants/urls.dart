@@ -3,14 +3,9 @@ class Urls {
   static const String checkIssuerTalaoUrl =
       'https://talao.co/trusted-issuers-registry/v1/issuers';
 
-  static const String checkIssuerPolygonTestnetUrl =
-      'https://issuer-demo.polygonid.me/';
-  static const String checkIssuerPolygonUrl = 'checkIssuerPolygonUrl';
   static const String checkIssuerEbsiUrl =
       'https://api.conformance.intebsi.xyz/trusted-issuers-registry/v2/issuers';
   static const Set<String> issuerUrls = {
-    checkIssuerPolygonTestnetUrl,
-    checkIssuerPolygonUrl,
     checkIssuerEbsiUrl,
   };
 
@@ -32,26 +27,6 @@ class Urls {
 
   /// id360 url
   static const String id360Url = 'https://talao.co/id360/oidc4vc';
-
-  /// polygon
-  static const String defaultPolygonIdCardUrl =
-      'https://issuer.talao.co/credential-manifest/polygonid/default';
-
-  /// KYC Age
-  static const String kycAgeCredentialUrl =
-      'https://issuer.talao.co/credential-manifest/polygonid/kycagecredential';
-
-  /// KYC Country
-  static const String kycCountryOfResidenceUrl =
-      'https://issuer.talao.co/credential-manifest/polygonid/kyccountryofresidencecredential';
-
-  /// twitter proof
-  static const String proofOfTwitterStatsUrl =
-      'https://issuer.talao.co/credential-manifest/polygonid/ProofOfTwitterStats';
-
-  /// civic pass
-  static const String civicPassCredentialUrl =
-      'https://issuer.talao.co/credential-manifest/polygonid/civicpasscredential';
 
   /// chainborn membership
   static const String chainbornMembershipCardUrl =

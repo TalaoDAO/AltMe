@@ -657,15 +657,6 @@ String sortedPrivateJwk(String privateKey) {
   return jsonString;
 }
 
-bool isPolygonIdUrl(String url) =>
-    url.startsWith('{"id":') ||
-    url.startsWith('{"body":{"') ||
-    url.startsWith('{"from": "did:polygonid:') ||
-    url.startsWith('{"to": "did:polygonid:') ||
-    url.startsWith('{"thid":') ||
-    url.startsWith('{"typ":') ||
-    url.startsWith('{"type":');
-
 bool isOIDC4VCIUrl(Uri uri) {
   return uri.toString().startsWith('openid') ||
       uri.toString().startsWith('haip') ||

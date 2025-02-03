@@ -9,7 +9,6 @@ import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/credential
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
-import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
