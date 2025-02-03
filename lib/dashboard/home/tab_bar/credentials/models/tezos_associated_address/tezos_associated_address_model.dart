@@ -8,16 +8,11 @@ part 'tezos_associated_address_model.g.dart';
 class TezosAssociatedAddressModel extends CredentialSubjectModel {
   TezosAssociatedAddressModel({
     this.associatedAddress,
-    this.accountName,
-    required String id,
-    required String type,
-    required Author issuedBy,
+    required String super.id,
+    required String super.type,
   }) : super(
-          id: id,
-          type: type,
           credentialSubjectType: CredentialSubjectType.tezosAssociatedWallet,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
-          issuedBy: issuedBy,
         );
 
   factory TezosAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>
@@ -25,9 +20,6 @@ class TezosAssociatedAddressModel extends CredentialSubjectModel {
 
   @JsonKey(defaultValue: '')
   final String? associatedAddress;
-
-  @JsonKey(defaultValue: '')
-  final String? accountName;
 
   @override
   Map<String, dynamic> toJson() => _$TezosAssociatedAddressModelToJson(this);

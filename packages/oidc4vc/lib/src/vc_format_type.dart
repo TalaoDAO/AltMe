@@ -11,6 +11,8 @@ enum VCFormatType {
   jwtVcJsonLd,
   @JsonValue('vc+sd-jwt')
   vcSdJWT,
+  @JsonValue('auto')
+  auto,
 }
 
 extension VCFormatTypeX on VCFormatType {
@@ -26,10 +28,14 @@ extension VCFormatTypeX on VCFormatType {
         return 'jwt_vc_json-ld';
       case VCFormatType.vcSdJWT:
         return 'vc+sd-jwt';
+      case VCFormatType.auto:
+        return 'auto';
     }
   }
 
-  String get urlValue {
+  String urlValue({
+    required bool isEmailPassOrPhonePass,
+  }) {
     switch (this) {
       case VCFormatType.ldpVc:
         return 'ldp_vc';
@@ -40,7 +46,14 @@ extension VCFormatTypeX on VCFormatType {
       case VCFormatType.jwtVcJsonLd:
         return 'jwt_vc_json-ld';
       case VCFormatType.vcSdJWT:
-        return 'vcsd-jwt';
+        if (isEmailPassOrPhonePass) {
+          return 'vc_sd_jwt';
+        } else {
+          return 'vcsd-jwt';
+        }
+
+      case VCFormatType.auto:
+        return 'auto';
     }
   }
 
@@ -52,6 +65,7 @@ extension VCFormatTypeX on VCFormatType {
       case VCFormatType.jwtVc:
       case VCFormatType.jwtVcJsonLd:
       case VCFormatType.vcSdJWT:
+      case VCFormatType.auto:
         return false;
     }
   }
@@ -68,6 +82,20 @@ extension VCFormatTypeX on VCFormatType {
         return 'jwt_vp_json-ld';
       case VCFormatType.vcSdJWT:
         return 'vc+sd-jwt';
+      case VCFormatType.auto:
+        return 'auto';
     }
   }
+}
+
+VCFormatType getVcFormatType(String formatString) {
+  for (final element in VCFormatType.values) {
+    if (element.vcValue == formatString) {
+      return element;
+    }
+    if (element.vpValue == formatString) {
+      return element;
+    }
+  }
+  throw Exception('Invalid VCFormatType');
 }

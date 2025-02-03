@@ -4,7 +4,6 @@ import 'package:altme/l10n/l10n.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 class AboutAltmeMenu extends StatelessWidget {
   const AboutAltmeMenu({super.key});
@@ -49,7 +48,7 @@ class AboutAltmeView extends StatelessWidget {
               const DrawerLogo(),
               const AppVersionDrawer(),
               if (profileModel.profileType == ProfileType.enterprise) ...[
-                const SizedBox(height: Sizes.spaceLarge),
+                const SizedBox(height: Sizes.spaceXSmall),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: Sizes.spaceXSmall,
@@ -62,17 +61,15 @@ class AboutAltmeView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: Sizes.spaceXSmall),
-                EnterpriseData(
-                  title: l10n.profileName,
-                  value: profileSetting.generalOptions.profileName,
+                DrawerItem(
+                  title: '${l10n.profileName} :'
+                      ' ${profileSetting.generalOptions.profileName}',
+                  trailing: Container(),
                 ),
-                // EnterpriseData(
-                //   title: l10n.companyName,
-                //   value: profileSetting.generalOptions.companyName,
-                // ),
-                EnterpriseData(
-                  title: l10n.configFileIdentifier,
-                  value: profileSetting.generalOptions.profileId,
+                DrawerItem(
+                  title: '${l10n.configFileIdentifier} :'
+                      ' ${profileSetting.generalOptions.profileId}',
+                  trailing: Container(),
                 ),
                 const SizedBox(height: Sizes.spaceSmall),
                 Padding(
@@ -88,19 +85,19 @@ class AboutAltmeView extends StatelessWidget {
                 ),
               ],
               const SizedBox(height: Sizes.spaceXSmall),
-              FutureBuilder<PackageInfo>(
-                future: PackageInfo.fromPlatform(),
-                builder: (_, snapShot) {
-                  var appVersion = '...';
-                  if (snapShot.connectionState == ConnectionState.done) {
-                    appVersion = snapShot.data?.version ?? '0.1.0';
-                  }
-                  return DrawerItem(
-                    title: '${l10n.yourAppVersion} : $appVersion',
-                    trailing: const Center(),
-                  );
-                },
-              ),
+              // FutureBuilder<PackageInfo>(
+              //   future: PackageInfo.fromPlatform(),
+              //   builder: (_, snapShot) {
+              //     var appVersion = '...';
+              //     if (snapShot.connectionState == ConnectionState.done) {
+              //       appVersion = snapShot.data?.version ?? '0.1.0';
+              //     }
+              //     return DrawerItem(
+              //       title: '${l10n.yourAppVersion} : $appVersion',
+              //       trailing: Container(),
+              //     );
+              //   },
+              // ),
               DrawerItem(
                 title: l10n.termsOfUse,
                 onTap: () =>

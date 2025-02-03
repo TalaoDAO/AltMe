@@ -1,16 +1,20 @@
+import 'package:altme/activity_log/activity_log_manager.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
-
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingGenPhrasePage extends StatelessWidget {
   const OnBoardingGenPhrasePage({super.key});
@@ -30,7 +34,12 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
         walletCubit: context.read<WalletCubit>(),
         splashCubit: context.read<SplashCubit>(),
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
+        matrixNotificationCubit: context.read<MatrixNotificationCubit>(),
         profileCubit: context.read<ProfileCubit>(),
+        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+        activityLogManager: ActivityLogManager(getSecureStorage),
+        credentialsCubit: context.read<CredentialsCubit>(),
+        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: const OnBoardingGenPhraseView(),
     );
@@ -117,27 +126,11 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                       const SizedBox(height: Sizes.spaceNormal),
                       if (mnemonic != null)
                         MnemonicDisplay(mnemonic: mnemonic!),
-                      // const SizedBox(
-                      //   height: Sizes.spaceSmall,
-                      // ),
-                      // TextButton(
-                      //   onPressed: () {
-                      //     Clipboard.setData(
-                      //       ClipboardData(
-                      //         text: state.mnemonic.join(' '),
-                      //       ),
-                      //     );
-                      //   },
-                      //   child: Text(
-                      //     l10n.copyToClipboard,
-                      //     style: Theme.of(context).textTheme.bodyMedium!,
-                      //   ),
-                      // ),
                       const SizedBox(height: Sizes.spaceLarge),
                       Text(
                         l10n.onboardingAltmeMessage,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
                   ),
@@ -154,7 +147,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  MyOutlinedButton(
+                  MyElevatedButton(
                     text: l10n.verifyLater,
                     verticalSpacing: 18,
                     onPressed: () async {
@@ -167,7 +160,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  MyElevatedButton(
+                  MyOutlinedButton(
                     text: l10n.verifyNow,
                     verticalSpacing: 18,
                     onPressed: () {

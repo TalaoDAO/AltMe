@@ -6,7 +6,6 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -60,7 +59,6 @@ class CredentialsDetailsPage extends StatelessWidget {
             ),
             jwtDecode: JWTDecode(),
             profileCubit: context.read<ProfileCubit>(),
-            polygonIdCubit: context.read<PolygonIdCubit>(),
           ),
         ),
         if (cardChatSupportCubit != null)
@@ -70,7 +68,6 @@ class CredentialsDetailsPage extends StatelessWidget {
       ],
       child: CredentialsDetailsView(
         credentialModel: credentialModel,
-        readOnly: readOnly,
         cardChatSupportCubit: cardChatSupportCubit,
       ),
     );
@@ -81,12 +78,10 @@ class CredentialsDetailsView extends StatefulWidget {
   const CredentialsDetailsView({
     super.key,
     required this.credentialModel,
-    required this.readOnly,
     required this.cardChatSupportCubit,
   });
 
   final CredentialModel credentialModel;
-  final bool readOnly;
   final CardChatSupportCubit? cardChatSupportCubit;
 
   @override
@@ -163,6 +158,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
             credentialSubjectType == CredentialSubjectType.identityCredential ||
             credentialSubjectType == CredentialSubjectType.verifiableIdCard;
 
+    final isOver18OfDippV3 = profileData.profileType == ProfileType.diipv3 &&
+        credentialSubjectType == CredentialSubjectType.over18;
+
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -194,7 +192,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
             context.read<ProfileCubit>().state.model.profileSetting;
 
         return BasePage(
-          title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
+          title: l10n.cardDetails,
           titleAlignment: Alignment.topCenter,
           titleLeading: const BackLeadingButton(),
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -235,20 +233,19 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                         ),
                                   ),
                                 ),
-                                if (!widget.readOnly)
-                                  Expanded(
-                                    child: CredentialDetailTabbar(
-                                      isSelected: state
-                                              .credentialDetailTabStatus ==
-                                          CredentialDetailTabStatus.activity,
-                                      title: l10n.credentialDetailsActivity,
-                                      onTap: () => context
-                                          .read<CredentialDetailsCubit>()
-                                          .changeTabStatus(
+                                Expanded(
+                                  child: CredentialDetailTabbar(
+                                    isSelected:
+                                        state.credentialDetailTabStatus ==
                                             CredentialDetailTabStatus.activity,
-                                          ),
-                                    ),
+                                    title: l10n.credentialDetailsActivity,
+                                    onTap: () => context
+                                        .read<CredentialDetailsCubit>()
+                                        .changeTabStatus(
+                                          CredentialDetailTabStatus.activity,
+                                        ),
                                   ),
+                                ),
                                 if (widget.cardChatSupportCubit != null)
                                   Expanded(
                                     child: StreamBuilder(
@@ -300,17 +297,21 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           ],
 
                           /// credential manifest details
-                          if (credentialManifestSupport &&
-                              outputDescriptors != null) ...[
-                            CredentialManifestDetails(
-                              outputDescriptor: outputDescriptors.firstOrNull,
-                              credentialModel: widget.credentialModel,
-                            ),
+                          if (!isOver18OfDippV3) ...[
+                            if (!isDeveloperMode &&
+                                credentialManifestSupport &&
+                                outputDescriptors != null) ...[
+                              CredentialManifestDetails(
+                                outputDescriptor: outputDescriptors.firstOrNull,
+                                credentialModel: widget.credentialModel,
+                              ),
+                            ],
                           ],
 
                           /// display widget
                           if (!credentialManifestSupport &&
-                              widget.credentialModel.display != null) ...[
+                              widget.credentialModel.display != null &&
+                              !isDeveloperMode) ...[
                             const SizedBox(height: 10),
                             DisplayWidget(
                               display: widget.credentialModel.display!,
@@ -318,20 +319,20 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           ],
 
                           /// credentialSubjectData
-                          CredentialSubjectData(
-                            credentialModel: widget.credentialModel,
-                            showVertically: showVerticalDescription,
-                          ),
+                          if (!isDeveloperMode)
+                            CredentialSubjectData(
+                              credentialModel: widget.credentialModel,
+                              showVertically: showVerticalDescription,
+                            ),
 
                           /// selective disclouse data - _sd
                           /// and normal data too
-                          if (containClaims) ...[
+                          if (!isDeveloperMode)
                             DisplaySelectiveDisclosure(
                               credentialModel: widget.credentialModel,
                               claims: null,
                               showVertically: showVerticalDescription,
                             ),
-                          ],
 
                           // /// normal claims data
                           // if (widget.credentialModel.credentialSupported !=
@@ -344,9 +345,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           // ],
 
                           //// wallet attestation data
-                          if (widget.credentialModel.credentialPreview
-                                  .credentialSubjectModel
-                              is WalletCredentialModel) ...[
+                          if (!isDeveloperMode &&
+                              widget.credentialModel.credentialPreview
+                                      .credentialSubjectModel
+                                  is WalletCredentialModel) ...[
                             WalletCredentialetailsWidget(
                               credentialModel: widget.credentialModel,
                             ),
@@ -392,110 +394,93 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               ),
             ],
           ),
-          navigation: widget.readOnly
-              ? null
-              : SafeArea(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 5,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        MyOutlinedButton(
-                          onPressed: widget.credentialModel.disAllowDelete
-                              ? null
-                              : delete,
-                          text: l10n.credentialDetailDeleteCard,
-                        ),
-                        const SizedBox(height: 8),
-                        if (widget.credentialModel.pendingInfo == null) ...[
-                          if (isDeveloperMode)
-                            MyOutlinedButton(
-                              text: widget.credentialModel.isLinkeInCard
-                                  ? l10n.exportToLinkedIn
-                                  : l10n.download,
-                              onPressed: () {
-                                if (widget.credentialModel.isLinkeInCard) {
-                                  Navigator.of(context).push<void>(
-                                    GetLinkedinInfoPage.route(
-                                      credentialModel: widget.credentialModel,
-                                    ),
-                                  );
-                                } else {
-                                  if (widget.credentialModel.isEbsiCard) {
-                                    /// removing type that was added in add_ebsi_credential.dart
-                                    widget.credentialModel
-                                        .data['credentialSubject']
-                                        .remove('type');
-                                  }
-
-                                  late String data;
-                                  final String? jwt =
-                                      widget.credentialModel.jwt;
-                                  if (jwt != null) {
-                                    data = jwt;
-                                  } else {
-                                    data =
-                                        jsonEncode(widget.credentialModel.data);
-                                  }
-
-                                  getLogger(
-                                    'CredentialDetailsPage - shared date',
-                                  ).i(data);
-
-                                  final box =
-                                      context.findRenderObject() as RenderBox?;
-                                  final subject = l10n.shareWith;
-
-                                  Share.share(
-                                    data,
-                                    subject: subject,
-                                    sharePositionOrigin:
-                                        box!.localToGlobal(Offset.zero) &
-                                            box.size,
-                                  );
-                                }
-                              },
-                            ),
-                        ] else ...[
-                          MyOutlinedButton(
-                            text: l10n.getItNow,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              context
-                                  .read<QRCodeScanCubit>()
-                                  .startOIDC4VCDeferedCredentialIssuance(
-                                    credentialModel: widget.credentialModel,
-                                  );
-                            },
-                          ),
-                        ],
-                        if (widget.credentialModel.shareLink != '')
-                          MyOutlinedButton.icon(
-                            icon: SvgPicture.asset(
-                              IconStrings.qrCode,
-                              width: 24,
-                              height: 24,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).push<void>(
-                                QrCodeDisplayPage.route(
-                                  title: '',
-                                  data: widget.credentialModel.shareLink,
-                                ),
-                              );
-                            },
-                            text: l10n.credentialDetailShare,
-                          )
-                        else
-                          Container(),
-                      ],
-                    ),
+          navigation: SafeArea(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 5,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MyOutlinedButton(
+                    onPressed:
+                        widget.credentialModel.disAllowDelete ? null : delete,
+                    text: l10n.credentialDetailDeleteCard,
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  if (widget.credentialModel.pendingInfo == null) ...[
+                    if (isDeveloperMode)
+                      MyOutlinedButton(
+                        text: l10n.download,
+                        onPressed: () {
+                          if (widget.credentialModel.isEbsiCard) {
+                            /// removing type that was added in add_ebsi_credential.dart
+                            widget.credentialModel.data['credentialSubject']
+                                .remove('type');
+                          }
+
+                          late String data;
+                          final String? jwt = widget.credentialModel.jwt;
+                          if (jwt != null) {
+                            data = jwt;
+                          } else {
+                            data = jsonEncode(widget.credentialModel.data);
+                          }
+
+                          getLogger(
+                            'CredentialDetailsPage - shared date',
+                          ).i(data);
+
+                          final box = context.findRenderObject() as RenderBox?;
+                          final subject = l10n.shareWith;
+
+                          Share.share(
+                            data,
+                            subject: subject,
+                            sharePositionOrigin:
+                                box!.localToGlobal(Offset.zero) & box.size,
+                          );
+                        },
+                      ),
+                  ] else ...[
+                    MyOutlinedButton(
+                      text: l10n.getItNow,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        context
+                            .read<QRCodeScanCubit>()
+                            .startOIDC4VCDeferedCredentialIssuance(
+                              credentialModel: widget.credentialModel,
+                              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                            );
+                      },
+                    ),
+                  ],
+                  if (widget.credentialModel.shareLink != '')
+                    MyOutlinedButton.icon(
+                      icon: SvgPicture.asset(
+                        IconStrings.qrCode,
+                        width: 24,
+                        height: 24,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push<void>(
+                          QrCodeDisplayPage.route(
+                            title: '',
+                            data: widget.credentialModel.shareLink,
+                          ),
+                        );
+                      },
+                      text: l10n.credentialDetailShare,
+                    )
+                  else
+                    Container(),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );

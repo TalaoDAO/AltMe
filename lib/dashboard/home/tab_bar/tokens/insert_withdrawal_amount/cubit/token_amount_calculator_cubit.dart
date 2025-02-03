@@ -1,4 +1,4 @@
-import 'package:altme/app/logger/logger.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
 import 'package:decimal/decimal.dart';
@@ -23,21 +23,35 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     Decimal validAmount = Decimal.parse('0');
     String insertedAmount = '';
     try {
-      if (amount.isEmpty ||
-          amount == '0' ||
-          amount == '0.0' ||
-          amount == '00') {
+      emit(state.loading());
+      if (amount.isEmpty) {
         validAmount = Decimal.parse('0');
         insertedAmount = '';
+      } else if (amount == '0' || amount == '00') {
+        validAmount = Decimal.parse('0');
+        insertedAmount = '0';
+      } else if (amount == '.') {
+        validAmount = Decimal.parse('0.');
+        insertedAmount = '0.';
       } else {
-        insertedAmount = amount.replaceAll(',', '');
-        final bool isValid =
-            isValidateAmount(amount: amount, selectedToken: selectedToken);
+        String trimmedAmount = amount;
+
+        // Check if the amount starts with zero(s) but not a decimal number
+        if (RegExp(r'^0+(\d+)').hasMatch(amount)) {
+          trimmedAmount = amount.replaceAll(RegExp('^0+'), '');
+        }
+
+        insertedAmount = trimmedAmount.replaceAll(',', '');
+        final bool isValid = isValidateAmount(
+          amount: trimmedAmount,
+          selectedToken: selectedToken,
+        );
         validAmount = isValid
-            ? Decimal.parse(amount.replaceAll(',', ''))
+            ? Decimal.parse(trimmedAmount.replaceAll(',', ''))
             : Decimal.parse('0');
       }
     } catch (e, s) {
+      emit(state.copyWith(status: AppStatus.idle));
       getLogger(runtimeType.toString())
           .e('error in calculate amount,e: $e, s: $s');
     }
@@ -56,10 +70,10 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     required String? amount,
     required TokenModel selectedToken,
   }) {
-    if (amount == null) return false;
+    if (amount == null || amount.isEmpty) return true;
+    // true => to avoid error => No balance
     try {
       final insertedAmount = Decimal.parse(amount.replaceAll(',', ''));
-      if (insertedAmount <= Decimal.parse('0.0')) return false;
       final maxAmount = Decimal.parse(selectedToken.calculatedBalance);
       if (insertedAmount > maxAmount) {
         return false;

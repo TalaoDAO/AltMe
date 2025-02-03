@@ -1,76 +1,64 @@
+import 'dart:async';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/scan/scan.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RequiredCredentialNotFound extends StatelessWidget {
-  const RequiredCredentialNotFound({super.key});
+  const RequiredCredentialNotFound({super.key, required this.uri});
+
+  final Uri uri;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BasePage(
-      title: l10n.credentialPickTitle,
-      titleAlignment: Alignment.topCenter,
-      titleLeading: const BackLeadingButton(),
-      scrollView: false,
-      padding: const EdgeInsets.only(
-        right: Sizes.spaceNormal,
-        left: Sizes.spaceNormal,
-        bottom: Sizes.spaceNormal,
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            l10n.requiredCredentialNotFoundTitle,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium,
+    return PopScope(
+      canPop: false,
+      child: BasePage(
+        titleAlignment: Alignment.topCenter,
+        scrollView: false,
+        padding: const EdgeInsets.only(
+          right: Sizes.spaceNormal,
+          left: Sizes.spaceNormal,
+          bottom: Sizes.spaceNormal,
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              ImageStrings.cardMissing,
+              width: 127,
+              fit: BoxFit.fitWidth,
+            ),
+            const SizedBox(height: 30),
+            Text(
+              l10n.requiredCredentialNotFoundSubTitle,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ],
+        ),
+        navigation: Padding(
+          padding: const EdgeInsets.all(Sizes.spaceXSmall),
+          child: MyElevatedButton(
+            text: l10n.back,
+            onPressed: () {
+              unawaited(
+                context.read<ScanCubit>().sendErrorToServer(
+                  uri: uri,
+                  data: {'error': 'access_denied'},
+                ),
+              );
+              Navigator.popUntil(
+                context,
+                (route) => route.settings.name == AltMeStrings.dashBoardPage,
+              );
+            },
           ),
-          const Spacer(
-            flex: 3,
-          ),
-          Image.asset(
-            ImageStrings.cardMissing,
-            width: 127,
-            fit: BoxFit.fitWidth,
-          ),
-          const Spacer(
-            flex: 1,
-          ),
-          Text(
-            l10n.requiredCredentialNotFoundSubTitle,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const Spacer(
-            flex: 1,
-          ),
-          Text(
-            l10n.requiredCredentialNotFoundDescription,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          Text(
-            AltMeStrings.appSupportMail,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const Spacer(
-            flex: 3,
-          ),
-        ],
-      ),
-      navigation: Padding(
-        padding: const EdgeInsets.all(Sizes.spaceXSmall),
-        child: MyElevatedButton(
-          text: l10n.backToHome,
-          onPressed: () {
-            Navigator.popUntil(
-              context,
-              (route) => route.settings.name == AltMeStrings.dashBoardPage,
-            );
-          },
         ),
       ),
     );

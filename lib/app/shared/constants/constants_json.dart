@@ -102,6 +102,56 @@ abstract class ConstantsJson {
     'presentation_definition': <String, dynamic>{},
   };
 
+  static const etherlinkAssociatedAddressCredentialManifestJson =
+      <String, dynamic>{
+    'id': 'EtherlinkAssociatedAddress',
+    'issuer': {'id': '', 'name': 'Wallet issuer'},
+    'output_descriptors': [
+      {
+        'id': '',
+        'schema': 'EtherlinkAssociatedAddress',
+        'display': {
+          'title': {
+            'path': <dynamic>[],
+            'schema': {'type': 'string'},
+            'fallback': 'Etherlink address',
+          },
+          'subtitle': {
+            'path': <dynamic>[],
+            'schema': {'type': 'string'},
+            'fallback': '',
+          },
+          'description': {
+            'path': <dynamic>[],
+            'schema': {'type': 'string'},
+            'fallback': 'This is the proof that you own this crypto address',
+          },
+          'properties': [
+            {
+              'path': [r'$.expirationDate'],
+              'schema': {'type': 'string', 'format': 'date'},
+              'fallback': 'None',
+              'label': 'Expires',
+            },
+            {
+              'path': [r'$.credentialSubject.associatedAddress'],
+              'schema': {'type': 'string'},
+              'fallback': 'Unknown',
+              'label': 'Address',
+            },
+            {
+              'path': [r'$.credentialSubject.issuedBy.name'],
+              'schema': {'type': 'string'},
+              'fallback': 'My Wallet',
+              'label': 'Verified by',
+            }
+          ],
+        },
+      }
+    ],
+    'presentation_definition': <String, dynamic>{},
+  };
+
   static const fantomAssociatedAddressCredentialManifestJson =
       <String, dynamic>{
     'id': 'FantomAssociatedAddress',
@@ -255,19 +305,19 @@ abstract class ConstantsJson {
   static const walletMetadataForIssuers = <String, dynamic>{
     'vp_formats_supported': {
       'jwt_vp': {
-        'alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
+        'alg': ['ES256', 'ES256K', 'EdDSA'],
       },
       'jwt_vc': {
-        'alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
+        'alg': ['ES256', 'ES256K', 'EdDSA'],
       },
       'jwt_vp_json': {
-        'alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
+        'alg': ['ES256', 'ES256K', 'EdDSA'],
       },
       'jwt_vc_json': {
-        'alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
+        'alg': ['ES256', 'ES256K', 'EdDSA'],
       },
       'vc+sd-jwt': {
-        'alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
+        'alg': ['ES256', 'ES256K', 'EdDSA'],
       },
       'ldp_vp': {
         'proof_type': [
@@ -287,13 +337,12 @@ abstract class ConstantsJson {
       },
     },
     'grant_types': ['authorization code', 'pre-authorized_code'],
-    'redirect_uris': [Parameters.redirectUri],
+    'redirect_uris': [Parameters.authorizationEndPoint],
     'subject_syntax_types_supported': ['did:key', 'did:jwk'],
     'subject_syntax_types_discriminations': [
       'did:key:jwk_jcs-pub',
       'did:ebsi:v1',
     ],
-    'response_types_supported': ['vp_token', 'id_token'],
     'token_endpoint_auth_method_supported': [
       'none',
       'client_id',
@@ -301,19 +350,14 @@ abstract class ConstantsJson {
       'client_secret_basic',
       'client_secret_jwt',
     ],
-    'credential_offer_endpoint_supported': [
-      'openid-credential-offer://',
-      'haip://',
-    ],
+    'credential_offer_endpoint': ['openid-credential-offer://', 'haip://', 'altme-openid-credential-offer'],
+    'client_name': '${Parameters.appName} wallet',
     'contacts': ['contact@talao.io'],
   };
 
   static const walletMetadataForVerifiers = <String, dynamic>{
-    'wallet_name': Parameters.walletName,
-    'key_type': 'software',
-    'user_authentication': 'system_biometry',
+    'client_name': Parameters.walletName,
     'authorization_endpoint': Parameters.authorizationEndPoint,
-    'grant_types_supported': ['authorization_code', 'pre-authorized_code'],
     'response_types_supported': ['vp_token', 'id_token'],
     'vp_formats_supported': {
       'jwt_vc_json': {
@@ -348,7 +392,7 @@ abstract class ConstantsJson {
       'x509_san_dns',
       'verifier_attestation',
     ],
-    'request_object_signing_alg_values_supported': ['ES256', 'ES256K'],
+    'request_object_signing_alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
     'presentation_definition_uri_supported': true,
     'contacts': ['contact@talao.io'],
   };

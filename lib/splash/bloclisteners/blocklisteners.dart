@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -6,9 +7,11 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
+import 'package:altme/oidc4vc/helper_function/oidc4vci_accept_host.dart';
+import 'package:altme/oidc4vc/helper_function/oidc4vp_siopv2_accept_host.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
@@ -20,20 +23,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:share_plus/share_plus.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
     if (state.status == SplashStatus.routeToPassCode) {
       securityCheck(
         context: context,
+        title: context.l10n.typeYourPINCodeToOpenTheWallet,
         localAuthApi: LocalAuthApi(),
         onSuccess: () {
           Navigator.of(context).push<void>(DashboardPage.route());
+          context.read<SplashCubit>().authenticated();
         },
       );
     }
@@ -124,8 +126,10 @@ final walletBlocAccountChangeListener = BlocListener<WalletCubit, WalletState>(
   listener: (context, state) async {
     try {
       await context.read<ManageNetworkCubit>().loadNetwork();
-      unawaited(context.read<TokensCubit>().fetchFromZero());
-      unawaited(context.read<NftCubit>().fetchFromZero());
+      if (Parameters.walletHandlesCrypto) {
+        unawaited(context.read<TokensCubit>().fetchFromZero());
+        unawaited(context.read<NftCubit>().fetchFromZero());
+      }
     } catch (e, s) {
       getLogger('BlocListeners: e: $e , s: $s');
     }
@@ -215,8 +219,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           final approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
 
           final profileSetting = profileCubit.state.model.profileSetting;
-          final customOidc4vcProfile =
-              profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
 
           final walletSecurityOptions = profileSetting.walletSecurityOptions;
 
@@ -225,10 +227,11 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           final bool confirmSecurityVerifierAccess =
               walletSecurityOptions.confirmSecurityVerifierAccess;
 
-          bool showPrompt = verifySecurityIssuerWebsiteIdentity ||
+          final bool showPrompt = verifySecurityIssuerWebsiteIdentity ||
               confirmSecurityVerifierAccess;
 
           final bool isOpenIDUrl = isOIDC4VCIUrl(state.uri!);
+          final bool isPresentation = isSIOPV2OROIDC4VPUrl(state.uri!);
           final bool isFromDeeplink = state.uri
                   .toString()
                   .startsWith(Parameters.authorizeEndPoint) ||
@@ -236,177 +239,47 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
           OIDC4VCType? oidc4vcTypeForIssuance;
           dynamic credentialOfferJsonForIssuance;
-          OpenIdConfiguration? openIdConfigurationForIssuance;
+          OpenIdConfiguration? openIdConfiguration;
           String? issuerForIssuance;
           String? preAuthorizedCodeForIssuance;
 
+          if (isPresentation) {
+            await oidc4vpSiopV2AcceptHost(
+              uri: state.uri!,
+              context: context,
+              isDeveloperMode: profileCubit.state.model.isDeveloperMode,
+              client: client,
+              showPrompt: showPrompt,
+              approvedIssuer: approvedIssuer,
+            );
+            return;
+          }
           if (isOpenIDUrl || isFromDeeplink) {
-            final (
-              OIDC4VCType? oidc4vcType,
-              OpenIdConfiguration? openIdConfiguration,
-              OpenIdConfiguration? authorizationServerConfiguration,
-              dynamic credentialOfferJson,
-              String? issuer,
-              String? preAuthorizedCode,
-            ) = await getIssuanceData(
+            final Oidc4vcParameters oidc4vcParameters = await getIssuanceData(
               url: state.uri.toString(),
               client: client,
               oidc4vc: oidc4vc,
               oidc4vciDraftType: profileSetting.selfSovereignIdentityOptions
                   .customOidc4vcProfile.oidc4vciDraft,
+              useOAuthAuthorizationServerLink:
+                  useOauthServerAuthEndPoint(profileCubit.state.model),
             );
-
-            oidc4vcTypeForIssuance = oidc4vcType;
-            credentialOfferJsonForIssuance = credentialOfferJson;
-            openIdConfigurationForIssuance = openIdConfiguration;
-            issuerForIssuance = issuer;
-            preAuthorizedCodeForIssuance = preAuthorizedCode;
-
-            /// if dev mode is ON show some dialog to show data
-            if (profileCubit.state.model.isDeveloperMode) {
-              late String formattedData;
-              if (oidc4vcTypeForIssuance != null) {
-                /// issuance case
-
-                var tokenEndPoint = 'None';
-                var credentialEndpoint = 'None';
-
-                if (openIdConfiguration != null && issuer != null) {
-                  tokenEndPoint = await oidc4vc.readTokenEndPoint(
-                    openIdConfiguration: openIdConfiguration,
-                    issuer: issuer,
-                    oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
-                    dio: Dio(),
-                  );
-
-                  credentialEndpoint =
-                      oidc4vc.readCredentialEndpoint(openIdConfiguration);
-                }
-
-                formattedData = getFormattedStringOIDC4VCI(
-                  url: state.uri.toString(),
-                  authorizationServerConfiguration:
-                      authorizationServerConfiguration,
-                  credentialOfferJson: credentialOfferJson,
-                  openIdConfiguration: openIdConfiguration,
-                  tokenEndpoint: tokenEndPoint,
-                  credentialEndpoint: credentialEndpoint,
-                );
-              } else {
-                var url = state.uri!.toString();
-
-                /// verification case
-                final String? requestUri =
-                    state.uri!.queryParameters['request_uri'];
-                final String? request = state.uri!.queryParameters['request'];
-
-                Map<String, dynamic>? response;
-
-                if (requestUri != null || request != null) {
-                  late dynamic encodedData;
-
-                  if (request != null) {
-                    encodedData = request;
-                  } else if (requestUri != null) {
-                    encodedData = await fetchRequestUriPayload(
-                      url: requestUri,
-                      client: client,
-                    );
-                  }
-
-                  response = decodePayload(
-                    jwtDecode: JWTDecode(),
-                    token: encodedData as String,
-                  );
-
-                  url = getUpdatedUrlForSIOPV2OIC4VP(
-                    uri: state.uri!,
-                    response: response,
-                  );
-                }
-
-                formattedData = await getFormattedStringOIDC4VPSIOPV2(
-                  url: url,
-                  client: client,
-                  response: response,
-                );
-              }
-
-              LoadingView().hide();
-              final bool moveAhead = await showDialog<bool>(
-                    context: context,
-                    builder: (_) {
-                      return DeveloperModeDialog(
-                        onDisplay: () {
-                          Navigator.of(context).push<void>(
-                            JsonViewerPage.route(
-                              title: l10n.display,
-                              data: formattedData,
-                            ),
-                          );
-                          return;
-                        },
-                        onDownload: () {
-                          final box = context.findRenderObject() as RenderBox?;
-                          final subject = l10n.shareWith;
-
-                          Share.share(
-                            formattedData,
-                            subject: subject,
-                            sharePositionOrigin:
-                                box!.localToGlobal(Offset.zero) & box.size,
-                          );
-                          return;
-                        },
-                        onSkip: () {
-                          Navigator.of(context).pop(true);
-                        },
-                      );
-                    },
-                  ) ??
-                  true;
-              if (!moveAhead) return;
-            }
-
-            if (openIdConfiguration != null) {
-              await handleErrorForOID4VCI(
-                url: state.uri.toString(),
-                openIdConfiguration: openIdConfiguration,
-                authorizationServerConfiguration:
-                    authorizationServerConfiguration,
-              );
-            }
-          }
-
-          if (showPrompt) {
-            if (isOpenIDUrl || isFromDeeplink) {
-              /// OIDC4VCI Case
-
-              if (oidc4vcTypeForIssuance != null) {
-                /// issuance case
-                if (!verifySecurityIssuerWebsiteIdentity) showPrompt = false;
-              } else {
-                /// verification case
-                if (!confirmSecurityVerifierAccess) showPrompt = false;
-              }
-            } else {
-              /// normal Case
-              if (!verifySecurityIssuerWebsiteIdentity) showPrompt = false;
-            }
-
-            if (showPrompt) {
+            await oidc4vciAcceptHost(
+              oidc4vcParameters: oidc4vcParameters,
+              context: context,
+              isDeveloperMode: profileCubit.state.model.isDeveloperMode,
+              client: client,
+              showPrompt: verifySecurityIssuerWebsiteIdentity,
+              approvedIssuer: approvedIssuer,
+            );
+            return;
+          } else {
+            if (showPrompt && verifySecurityIssuerWebsiteIdentity) {
               final String title = l10n.scanPromptHost;
 
-              String subtitle = (approvedIssuer.did.isEmpty)
+              final String subtitle = (approvedIssuer.did.isEmpty)
                   ? state.uri!.host
                   : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
-
-              if (isOpenIDUrl) {
-                subtitle = await getHost(
-                  uri: state.uri!,
-                  client: client,
-                );
-              }
 
               LoadingView().hide();
               acceptHost = await showDialog<bool>(
@@ -417,31 +290,31 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                         subtitle: subtitle,
                         yes: l10n.communicationHostAllow,
                         no: l10n.communicationHostDeny,
-                        //lock: state.uri!.scheme == 'http',
                       );
                     },
                   ) ??
                   false;
             }
-          }
-          LoadingView().hide();
-          if (acceptHost) {
-            await context.read<QRCodeScanCubit>().accept(
-                  approvedIssuer: approvedIssuer,
-                  qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-                  oidcType: oidc4vcTypeForIssuance,
-                  credentialOfferJson: credentialOfferJsonForIssuance,
-                  openIdConfiguration: openIdConfigurationForIssuance,
-                  issuer: issuerForIssuance,
-                  preAuthorizedCode: preAuthorizedCodeForIssuance,
-                );
-          } else {
-            context.read<QRCodeScanCubit>().emitError(
-                  ResponseMessage(
-                    message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
-                  ),
-                );
-            return;
+            LoadingView().hide();
+            if (acceptHost) {
+              await context.read<QRCodeScanCubit>().accept(
+                    approvedIssuer: approvedIssuer,
+                    qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                    oidcType: oidc4vcTypeForIssuance,
+                    credentialOfferJson: credentialOfferJsonForIssuance,
+                    openIdConfiguration: openIdConfiguration,
+                    issuer: issuerForIssuance,
+                    preAuthorizedCode: preAuthorizedCodeForIssuance,
+                    uri: state.uri!,
+                  );
+            } else {
+              context.read<QRCodeScanCubit>().emitError(
+                    ResponseMessage(
+                      message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+                    ),
+                  );
+              return;
+            }
           }
         }
       }
@@ -495,6 +368,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             await context.read<QRCodeScanCubit>().authorizedFlowCompletion(
                   statePayload: statePayload,
                   codeForAuthorisedFlow: codeForAuthorisedFlow,
+                  qrCodeScanCubit: context.read<QRCodeScanCubit>(),
                 );
           }
         } catch (e) {
@@ -518,6 +392,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           bool authenticated = false;
           await securityCheck(
             context: context,
+            title: l10n.typeYourPINCodeToAuthenticate,
             localAuthApi: LocalAuthApi(),
             onSuccess: () {
               authenticated = true;
@@ -541,25 +416,21 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               context: context,
               builder: (_) {
                 return DeveloperModeDialog(
-                  onDisplay: () {
-                    Navigator.of(context).push<void>(
+                  onDisplay: () async {
+                    final returnedValue =
+                        await Navigator.of(context).push<dynamic>(
                       JsonViewerPage.route(
                         title: l10n.display,
                         data: data,
                       ),
                     );
-                    return;
-                  },
-                  onDownload: () {
-                    final box = context.findRenderObject() as RenderBox?;
-                    final subject = l10n.shareWith;
 
-                    Share.share(
-                      data,
-                      subject: subject,
-                      sharePositionOrigin:
-                          box!.localToGlobal(Offset.zero) & box.size,
-                    );
+                    if (returnedValue != null &&
+                        returnedValue is bool &&
+                        returnedValue) {
+                      Navigator.of(context).pop(true);
+                    }
+
                     return;
                   },
                   onSkip: () {
@@ -570,7 +441,29 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             ) ??
             true;
 
-        context.read<QRCodeScanCubit>().completer!.complete(moveAhead);
+        context.read<QRCodeScanCubit>().completer?.complete(moveAhead);
+        LoadingView().show(context: context);
+      }
+
+      if (state.status == QrScanStatus.pauseForDisplay) {
+        LoadingView().hide();
+
+        final data = state.dialogData ?? '';
+
+        final returnedValue = await Navigator.of(context).push<dynamic>(
+          JsonViewerPage.route(
+            title: l10n.display,
+            data: data,
+          ),
+        );
+
+        var moveAhead = false;
+
+        if (returnedValue != null && returnedValue is bool && returnedValue) {
+          moveAhead = true;
+        }
+
+        context.read<QRCodeScanCubit>().completer?.complete(moveAhead);
         LoadingView().show(context: context);
       }
 
@@ -741,132 +634,104 @@ final walletConnectBlocListener =
   },
 );
 
-final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
-  listener: (BuildContext context, PolygonIdState state) async {
-    final polygonIdCubit = context.read<PolygonIdCubit>();
-
-    if (state.status == AppStatus.loading) {
-      final MessageHandler? messageHandler = state.loadingText;
-      final String? message =
-          messageHandler?.getMessage(context, messageHandler);
-
-      LoadingView().show(context: context, text: message);
-    } else {
-      LoadingView().hide();
-    }
-
-    if (state.status == AppStatus.goBack) {
-      Navigator.of(context).pop();
-    }
-
-    if (state.message != null) {
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: state.message!,
-      );
-    }
-
-    if (state.polygonAction == PolygonIdAction.offer) {
-      try {
-        LoadingView().hide();
-        await Navigator.of(context)
-            .push<void>(PolygonIdCredentialOfferPage.route());
-      } catch (e) {
-        final l10n = context.l10n;
-        LoadingView().hide();
-        AlertMessage.showStateMessage(
-          context: context,
-          stateMessage: StateMessage.error(
-            stringMessage: l10n.somethingsWentWrongTryAgainLater,
-          ),
-        );
-      }
-    }
-
-    if (state.polygonAction == PolygonIdAction.verifier) {
-      final Iden3MessageEntity iden3MessageEntity =
-          await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
-      LoadingView().hide();
-      await Navigator.of(context).push<void>(
-        PolygonIdVerificationPage.route(iden3MessageEntity: iden3MessageEntity),
-      );
-    }
-
-    if (state.polygonAction == PolygonIdAction.issuer) {
-      var accept = true;
-      final profileCubit = context.read<ProfileCubit>();
-
-      final bool verifySecurityIssuerWebsiteIdentity = profileCubit
-          .state
-          .model
-          .profileSetting
-          .walletSecurityOptions
-          .verifySecurityIssuerWebsiteIdentity;
-
-      final l10n = context.l10n;
-
-      if (verifySecurityIssuerWebsiteIdentity) {
-        /// checking if it is issuer side
-
-        LoadingView().hide();
-
-        // TODO(all): later choose url based on mainnet and testnet
-        accept = await showDialog<bool>(
-              context: context,
-              builder: (BuildContext context) {
-                return ConfirmDialog(
-                  title: l10n.scanPromptHost,
-                  subtitle: Urls.checkIssuerPolygonTestnetUrl,
-                  no: l10n.communicationHostDeny,
-                );
-              },
-            ) ??
-            false;
-      }
-
-      LoadingView().hide();
-
-      if (accept) {
-        final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
-            .getIden3Message(message: state.scannedResponse!);
-
-        await securityCheck(
-          context: context,
-          localAuthApi: LocalAuthApi(),
-          onSuccess: () {
-            context.read<PolygonIdCubit>().authenticateOrGenerateProof(
-                  iden3MessageEntity: iden3MessageEntity,
-                  isGenerateProof: false,
-                );
-          },
-        );
-
-        return;
-      }
-    }
-
-    if (state.polygonAction == PolygonIdAction.contractFunctionCall) {
-      LoadingView().hide();
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: const StateMessage.error(
-          stringMessage: 'This feature is not available yet in our app.',
-        ),
-      );
-    }
-  },
-);
-
 final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
-  listener: (BuildContext context, EnterpriseState state) {
+  listener: (BuildContext context, EnterpriseState state) async {
     if (state.status == AppStatus.loading) {
       LoadingView().show(context: context);
-    } else {
-      LoadingView().hide();
     }
 
     if (state.status == AppStatus.goBack) {
       Navigator.of(context).pop();
+      LoadingView().hide();
+    }
+
+    if (state.status == AppStatus.revoked) {
+      LoadingView().hide();
+      await showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const WalletRevokedDialog(),
+      );
+    }
+    if (state.status == AppStatus.successAdd) {
+      // TODO: when we create vc+sd-jwt associated address cards, we need
+      //to check also for vc+sd-jwt
+      if (context
+              .read<ProfileCubit>()
+              .state
+              .model
+              .profileSetting
+              .blockchainOptions
+              ?.associatedAddressFormat ==
+          VCFormatType.ldpVc) {
+        // get list of crypto accounts from profile cubit
+        final manageAccountsCubit = ManageAccountsCubit(
+          credentialsCubit: context.read<CredentialsCubit>(),
+          manageNetworkCubit: context.read<ManageNetworkCubit>(),
+        );
+        final cryptoAccounts = manageAccountsCubit.state.cryptoAccount.data;
+        // generate crypto accounts cards
+        await context.read<CredentialsCubit>().generateCryptoAccountsCards(
+              cryptoAccounts,
+            );
+      }
+    }
+    if (state.status == AppStatus.addEnterpriseAccount ||
+        state.status == AppStatus.updateEnterpriseAccount ||
+        state.status == AppStatus.replaceEnterpriseAccount) {
+      final settingJson = state.profileSettingJson;
+      if (settingJson != null) {
+        final l10n = context.l10n;
+        final profileSetting = ProfileSetting.fromJson(
+          jsonDecode(settingJson) as Map<String, dynamic>,
+        );
+
+        var title = l10n.approveProfileTitle;
+        var subTitle = l10n.approveProfileDescription(
+          profileSetting.generalOptions.companyName,
+        );
+
+        if (state.status == AppStatus.updateEnterpriseAccount) {
+          title = l10n.updateProfileTitle;
+          subTitle = l10n.updateProfileDescription(
+            profileSetting.generalOptions.companyName,
+          );
+        }
+
+        if (state.status == AppStatus.replaceEnterpriseAccount) {
+          title = l10n.replaceProfileTitle;
+          subTitle = l10n.replaceProfileDescription(
+            profileSetting.generalOptions.companyName,
+          );
+        }
+        LoadingView().hide();
+
+        final confirm = await showDialog<bool>(
+              context: context,
+              builder: (_) => ConfirmDialog(
+                title: title,
+                subtitle: subTitle,
+                yes: l10n.showDialogYes,
+                no: l10n.showDialogNo,
+              ),
+            ) ??
+            false;
+
+        if (confirm) {
+          await context.read<EnterpriseCubit>().applyConfiguration(
+                qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                manageNetworkCubit: context.read<ManageNetworkCubit>(),
+                status: state.status,
+              );
+        } else {
+          /// Need to remove the enterprise email from secure storage
+          /// because we may think later that the entreprise profile is
+          /// already installed.
+          await getSecureStorage.delete(
+            SecureStorageKeys.enterpriseEmail,
+          );
+        }
+      }
     }
 
     if (state.message != null) {

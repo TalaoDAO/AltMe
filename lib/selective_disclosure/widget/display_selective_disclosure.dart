@@ -1,7 +1,12 @@
-import 'package:altme/app/app.dart';
+import 'dart:convert';
+
+import 'package:altme/app/shared/constants/parameters.dart';
+import 'package:altme/app/shared/extension/iterable_extension.dart';
+import 'package:altme/app/shared/widget/base/credential_field.dart';
+import 'package:altme/app/shared/widget/transparent_ink_well.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
-import 'package:altme/selective_disclosure/selective_disclosure.dart';
+import 'package:altme/selective_disclosure/helper_functions/selective_disclosure_display_map.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,237 +25,364 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
   final CredentialModel credentialModel;
   final bool showVertically;
   final Map<String, dynamic>? claims;
-  final void Function(String?, String, String?)? onPressed;
+  final void Function(
+    String?,
+    String,
+    String?,
+    String?,
+  )? onPressed;
   final SelectiveDisclosureState? selectiveDisclosureState;
-
   final String? parentKeyId;
 
   @override
   Widget build(BuildContext context) {
-    final selectiveDisclosure = SelectiveDisclosure(credentialModel);
-    final currentClaims = claims ?? selectiveDisclosure.claims;
     final languageCode = context.read<LangCubit>().state.locale.languageCode;
+    final limitDisclosure = selectiveDisclosureState?.limitDisclosure ?? '';
+    final filters = selectiveDisclosureState?.filters ?? {};
 
+    final mapToDisplay = SelectiveDisclosureDisplayMap(
+      credentialModel: credentialModel,
+      claims: claims,
+      isPresentation: selectiveDisclosureState != null,
+      languageCode: languageCode,
+      limitDisclosure: limitDisclosure,
+      filters: filters,
+      isDeveloperMode: context.read<ProfileCubit>().state.model.isDeveloperMode,
+      selectedClaimsKeyIds:
+          selectiveDisclosureState?.selectedClaimsKeyIds ?? [],
+      onPressed: onPressed,
+      displayMode: context
+          .read<ProfileCubit>()
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile
+          .displayMode,
+    ).buildMap;
+
+    final List<Widget> listOfClaims =
+        mapToDisplay.entries.map((MapEntry<String, dynamic> map) {
+      return DisplaySelectiveDisclosureValue(
+        onPressed: onPressed,
+        showVertically: showVertically,
+        disclosure: {
+          map.key: map.value,
+        },
+      );
+    }).toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: currentClaims.entries.map((MapEntry<String, dynamic> map) {
-        String? title;
-
-        final key = map.key;
-        final value = map.value;
-
-        /// nested day contains more data
-        if (value is! Map<String, dynamic>) return Container();
-
-        final display = getDisplay(key, value, languageCode);
-
-        if (display == null) return Container();
-        title = display['name'].toString();
-
-        final bool hasNestedData =
-            value.values.any((element) => element is Map<String, dynamic>);
-
-        if (hasNestedData && parentKeyId == null) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: DisplaySelectiveDisclosure(
-                  credentialModel: credentialModel,
-                  claims: value,
-                  showVertically: showVertically,
-                  selectiveDisclosureState: selectiveDisclosureState,
-                  parentKeyId: key,
-                  onPressed: (nestedKey, _, threeDotValue) {
-                    onPressed?.call(
-                      nestedKey,
-                      '$key-$nestedKey',
-                      threeDotValue,
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        } else {
-          final List<ClaimsData> claimsData =
-              SelectiveDisclosure(credentialModel).getClaimsData(
-            key: key,
-          );
-
-          if (claimsData.isEmpty) return Container();
-
-          return Column(
-            children: claimsData.map(
-              (ClaimsData claims) {
-                final index = claimsData.indexOf(claims);
-                var keyToCheck = key;
-                var claimKey = key;
-
-                if (parentKeyId != null) {
-                  keyToCheck = '$parentKeyId-$key';
-                }
-
-                final isFirstElement = index == 0;
-
-                if (!isFirstElement) {
-                  title = null;
-                  keyToCheck = '$keyToCheck-$index';
-                  claimKey = '$claimKey-$index';
-                }
-
-                bool? disable;
-                bool selected = false;
-
-                if (selectiveDisclosureState != null) {
-                  final limitDisclosure =
-                      selectiveDisclosureState!.limitDisclosure;
-
-                  if (limitDisclosure != null) {
-                    final filters = selectiveDisclosureState!.filters;
-                    if (filters != null) {
-                      if (limitDisclosure == 'required') {
-                        disable = true;
-
-                        filters.forEach((key, value) {
-                          if (claims.threeDotValue != null) {
-                            if (claimKey.contains(key) &&
-                                claims.data.replaceAll(' ', '') ==
-                                    value['element']) {
-                              disable = false;
-                              selected = value['optional'] as bool;
-                              if (!selectiveDisclosureState!
-                                      .selectedClaimsKeyIds
-                                      .contains(keyToCheck) &&
-                                  selected == true) {
-                                context
-                                    .read<SelectiveDisclosureCubit>()
-                                    .disclosureAction(
-                                      claimsKey: key,
-                                      credentialModel: credentialModel,
-                                      threeDotValue: claims.threeDotValue,
-                                      claimKeyId: claimKey,
-                                    );
-                              }
-                            }
-                          } else {
-                            if (claimKey == key &&
-                                claims.data == value['element']) {
-                              disable = false;
-                              selected = !(value['optional'] as bool);
-                              if (!selectiveDisclosureState!
-                                      .selectedClaimsKeyIds
-                                      .contains(keyToCheck) &&
-                                  selected == true) {
-                                context
-                                    .read<SelectiveDisclosureCubit>()
-                                    .disclosureAction(
-                                      claimsKey: key,
-                                      credentialModel: credentialModel,
-                                      threeDotValue: claims.threeDotValue,
-                                      claimKeyId: claimKey,
-                                    );
-                              }
-                            }
-                          }
-                        });
-                      }
-                    }
-                  }
-                }
-
-                return TransparentInkWell(
-                  onTap: () {
-                    if ((disable != null && disable!) || selected == true) {
-                      return;
-                    }
-
-                    onPressed?.call(key, claimKey, claims.threeDotValue);
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      CredentialField(
-                        padding: EdgeInsets.only(top: isFirstElement ? 10 : 0),
-                        title: title,
-                        value: claims.data,
-                        titleColor: Theme.of(context).colorScheme.onSurface,
-                        valueColor: Theme.of(context).colorScheme.onSurface,
-                        showVertically: showVertically,
-                      ),
-                      if (selectiveDisclosureState != null &&
-                          claims.isfromDisclosureOfJWT) ...[
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 0, right: 10),
-                          child: Icon(
-                            selectiveDisclosureState!.selectedClaimsKeyIds
-                                    .contains(keyToCheck)
-                                ? Icons.check_box
-                                : Icons.check_box_outline_blank,
-                            size: 25,
-                            color: disable != null && disable!
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.3)
-                                : Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                );
-              },
-            ).toList(),
-          );
-        }
-      }).toList(),
+      children: listOfClaims,
     );
   }
+}
 
-  dynamic getDisplay(String key, dynamic value, String languageCode) {
-    if (value is! Map<String, dynamic>) return null;
+class DisplaySelectiveDisclosureValue extends StatelessWidget {
+  const DisplaySelectiveDisclosureValue({
+    super.key,
+    required this.disclosure,
+    required this.showVertically,
+    required this.onPressed,
+  });
+  final Map<String, dynamic> disclosure;
+  final bool showVertically;
+  final void Function(
+    String?,
+    String,
+    String?,
+    String?,
+  )? onPressed;
 
-    if (value.isEmpty) return null;
-
-    if (value.containsKey('display')) {
-      final displays = value['display'];
-      if (displays is! List<dynamic>) return null;
-      if (displays.isEmpty) return null;
-
-      final display = displays.firstWhere(
-        (element) =>
-            element is Map<String, dynamic> &&
-            element.containsKey('locale') &&
-            element['locale'].toString().contains(languageCode),
-        orElse: () => displays.firstWhere(
-          (element) =>
-              element is Map<String, dynamic> &&
-              element.containsKey('locale') &&
-              element['locale'].toString().contains('en'),
-          orElse: () => displays.firstWhere(
-            (element) =>
-                element is Map<String, dynamic> &&
-                element.containsKey('locale'),
-            orElse: () => null,
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> widgetList = [];
+    for (final element in disclosure.entries) {
+      if (element.value is Map<String, dynamic>) {
+        if (element.value['value'] is Map<String, dynamic>) {
+          widgetList.add(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DisclosureTitle(
+                  element: element,
+                  onPressed: onPressed,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: DisplaySelectiveDisclosureValue(
+                    onPressed: onPressed,
+                    showVertically: showVertically,
+                    disclosure: element.value['value'] as Map<String, dynamic>,
+                  ),
+                ),
+              ],
+            ),
+          );
+          continue;
+        }
+        if (element.value['value'] is String ||
+            element.value['value'] is bool ||
+            element.value['value'] is num) {
+          widgetList.add(
+            DisclosureLine(
+              onPressed: onPressed,
+              elementKey: element.key,
+              elementValue: element.value,
+              showVertically: showVertically,
+            ),
+          );
+          continue;
+        }
+        if (element.value['value'] == null) {
+          widgetList.add(
+            Padding(
+              padding: (element.key.startsWith(Parameters.doNotDisplayMe) &&
+                      element.value['hasCheckbox'] != true)
+                  ? EdgeInsets.zero
+                  : const EdgeInsets.only(top: 8),
+              child: Column(
+                children: [
+                  DisclosureTitle(
+                    element: element,
+                    onPressed: onPressed,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: DisplaySelectiveDisclosureValue(
+                      onPressed: onPressed,
+                      showVertically: showVertically,
+                      disclosure: element.value as Map<String, dynamic>,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+          continue;
+        }
+        if (element.value['value'] is List) {
+          final List<Widget> nestedList = [];
+          for (final nestedListElement in element.value['value'] as List) {
+            nestedList.add(
+              DisclosureLine(
+                onPressed: onPressed,
+                elementKey: null,
+                elementValue: nestedListElement,
+                showVertically: showVertically,
+              ),
+            );
+          }
+          widgetList.add(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DisclosureTitle(
+                  element: element,
+                  onPressed: onPressed,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: nestedList,
+                  ),
+                ),
+              ],
+            ),
+          );
+          continue;
+        }
+      }
+      if (element.value is String ||
+          element.value is num ||
+          element.value is bool) {
+        widgetList.add(
+          CredentialField(
+            padding: const EdgeInsets.only(top: 8),
+            title: element.key,
+            value: element.value.toString(),
+            titleColor: Theme.of(context).colorScheme.onSurface,
+            valueColor: Theme.of(context).colorScheme.onSurface,
+            showVertically: showVertically,
           ),
-        ),
-      );
-
-      return display;
-    } else {
-      return null;
+        );
+        continue;
+      }
     }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: widgetList,
+    );
+  }
+}
+
+class DisclosureTitle extends StatelessWidget {
+  const DisclosureTitle({
+    super.key,
+    required this.element,
+    this.onPressed,
+  });
+  final void Function(String?, String, String?, String?)? onPressed;
+  final MapEntry<String, dynamic> element;
+
+  @override
+  Widget build(BuildContext context) {
+    if (element.key.startsWith(Parameters.doNotDisplayMe) &&
+        element.value['hasCheckbox'] != true) {
+      return const SizedBox();
+    }
+    return TransparentInkWell(
+      onTap: () {
+        if (element.value['hasCheckbox'] != true ||
+            element.value['isCompulsary'] == true) {
+          return;
+        }
+
+        onPressed?.call(
+          element.value['mapKey'].toString(),
+          element.value['claimKey'].toString(),
+          element.value['threeDotValue']?.toString(),
+          element.value['sd']?.toString(),
+        );
+      },
+      child: Row(
+        children: [
+          Text(
+            displayKeyValueFromMap(element.key),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const Spacer(),
+          if (element.value['hasCheckbox'] == true &&
+              element.value['isCompulsary'] == false) ...[
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: BlocBuilder<SelectiveDisclosureCubit,
+                  SelectiveDisclosureState>(
+                builder: (context, state) {
+                  final selectedKeyId =
+                      state.selectedClaimsKeyIds.firstWhereOrNull(
+                    (ele) =>
+                        ele.keyId ==
+                        '${element.value["claimKey"]}#${element.value["sd"]}',
+                  );
+
+                  return Center(
+                    child: Icon(
+                      (selectedKeyId != null && selectedKeyId.isSelected)
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                      size: 25,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+String displayKeyValueFromMap(String key) =>
+    key.startsWith(Parameters.doNotDisplayMe) ? '' : key;
+
+class DisclosureLine extends StatelessWidget {
+  const DisclosureLine({
+    super.key,
+    required this.onPressed,
+    required this.showVertically,
+    this.elementKey,
+    required this.elementValue,
+  });
+
+  final void Function(
+    String?,
+    String,
+    String?,
+    String?,
+  )? onPressed;
+  final bool showVertically;
+  final String? elementKey;
+  final dynamic elementValue;
+
+  @override
+  Widget build(BuildContext context) {
+    String? title = elementKey;
+    if (title != null) {
+      title = title.startsWith(Parameters.doNotDisplayMe) ? null : title;
+    }
+    late String value;
+
+    if (elementValue['value'] is Map<String, dynamic>) {
+      value = jsonEncode(elementValue['value']);
+    } else {
+      value = elementValue['value'].toString();
+    }
+    return TransparentInkWell(
+      onTap: () {
+        if (elementValue['hasCheckbox'] != true ||
+            elementValue['isCompulsary'] == true) {
+          return;
+        }
+
+        onPressed?.call(
+          elementValue['mapKey'].toString(),
+          elementValue['claimKey'].toString(),
+          elementValue['threeDotValue']?.toString(),
+          elementValue['sd']?.toString(),
+        );
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: CredentialField(
+              padding: const EdgeInsets.only(top: 8),
+              title: title,
+              value: value,
+              titleColor: Theme.of(context).colorScheme.onSurface,
+              valueColor: Theme.of(context).colorScheme.onSurface,
+              showVertically: showVertically,
+              type: elementValue['type'].toString(),
+            ),
+          ),
+          if (elementValue['hasCheckbox'] == true &&
+              elementValue['isCompulsary'] == false) ...[
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: BlocBuilder<SelectiveDisclosureCubit,
+                  SelectiveDisclosureState>(
+                builder: (context, state) {
+                  final selectedKeyId =
+                      state.selectedClaimsKeyIds.firstWhereOrNull(
+                    (ele) =>
+                        ele.keyId ==
+                        '${elementValue["claimKey"]}#${elementValue["sd"]}',
+                  );
+
+                  return Center(
+                    child: Icon(
+                      (selectedKeyId != null && selectedKeyId.isSelected)
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                      size: 25,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
   }
 }

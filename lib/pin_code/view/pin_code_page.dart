@@ -3,28 +3,33 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class PinCodePage extends StatelessWidget {
   const PinCodePage({
     super.key,
+    required this.title,
     required this.isValidCallback,
     this.restrictToBack = true,
     required this.localAuthApi,
     required this.walletProtectionType,
   });
 
+  final String title;
   final VoidCallback isValidCallback;
   final bool restrictToBack;
   final LocalAuthApi localAuthApi;
   final WalletProtectionType walletProtectionType;
 
   static Route<dynamic> route({
+    required String title,
     required VoidCallback isValidCallback,
     required WalletProtectionType walletProtectionType,
     bool restrictToBack = true,
   }) =>
       MaterialPageRoute<void>(
         builder: (_) => PinCodePage(
+          title: title,
           isValidCallback: isValidCallback,
           restrictToBack: restrictToBack,
           localAuthApi: LocalAuthApi(),
@@ -36,8 +41,12 @@ class PinCodePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PinCodeViewCubit(totalPermitedLoginAttempt: 3),
+      create: (context) => PinCodeViewCubit(
+        totalPermitedLoginAttempt: 3,
+        secureStorageProvider: getSecureStorage,
+      ),
       child: PinCodeView(
+        title: title,
         isValidCallback: isValidCallback,
         restrictToBack: restrictToBack,
         localAuthApi: localAuthApi,
@@ -50,12 +59,14 @@ class PinCodePage extends StatelessWidget {
 class PinCodeView extends StatefulWidget {
   const PinCodeView({
     super.key,
+    required this.title,
     required this.isValidCallback,
     this.restrictToBack = true,
     required this.localAuthApi,
     required this.walletProtectionType,
   });
 
+  final String title;
   final VoidCallback isValidCallback;
   final bool restrictToBack;
   final LocalAuthApi localAuthApi;
@@ -69,29 +80,19 @@ class _PinCodeViewState extends State<PinCodeView> {
   final totalPermitedLoginAttempt = 3;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return PopScope(
       canPop: !widget.restrictToBack,
       child: BasePage(
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title: '',
+        appBarHeight: Sizes.defaltAppBarHeight,
         titleAlignment: Alignment.topCenter,
         titleLeading: widget.restrictToBack ? null : const BackLeadingButton(),
         scrollView: false,
         body: PinCodeWidget(
-          title: l10n.enterYourPinCode,
-          subTitle: l10n.pinCodeMessage,
+          title: widget.title,
           deleteButton: Text(
             l10n.delete,
             style: Theme.of(context).textTheme.labelLarge,

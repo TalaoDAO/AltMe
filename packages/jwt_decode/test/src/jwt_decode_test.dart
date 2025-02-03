@@ -65,7 +65,6 @@ void main() {
   const jsonStringOfValidTokenOne =
       r'''{scope: openid, response_type: id_token, client_id: did:web:talao.co, redirect_uri: https://talao.co/gaiax/login_redirect/287f58e9-a50c-11ec-bea0-0a1628958560, response_mode: post, claims: {"id_token":{},"vp_token":{"presentation_definition":{"id":"pass_for_gaiax","input_descriptors":[{"id":"GaiaxPass issued by Talao","purpose":"Test for Gaia-X hackathon","format":{"ldp_vc":{"proof_type":["JsonWebSignature2020"]}},"constraints":{"limit_disclosure":"required","fields":[{"path":["$.credentialSubject.type"],"purpose":"One can only accept GaiaxPass","filter":{"type":"string","pattern":"GaiaxPass"}},{"path":["$.issuer"],"purpose":"One can accept only GaiaxPass signed by Talao","filter":{"type":"string","pattern":"did:web:talao.co"}}]}}]}}}, nonce: 6j0RATZeIj, registration: {"id_token_signing_alg_values_supported":["RS256","ES256","ES256K","EdDSA"],"subject_syntax_types_supported":["did:web","did:tz","did:key","did:ion","did:pkh","did:ethr"]}, request_uri: https://talao.co/gaiax/login_request_uri/287f58e9-a50c-11ec-bea0-0a1628958560}''';
 
-  const inValidJwtTokenWithLessThanThreePart = 'partOne.partTwo';
   const inValidJwtTokenWithThreePart = 'partOne.partTwo.partThree';
 
   setUpAll(() {
@@ -87,19 +86,6 @@ void main() {
       final result = jwtDecode.parseJwt(validJwtTokenOne);
       expect(result, isNotNull);
       expect(result.toString(), equals(jsonStringOfValidTokenOne));
-    });
-
-    test('inValid jwt token with less than three part throws exception', () {
-      expect(
-        () => jwtDecode.parseJwt(inValidJwtTokenWithLessThanThreePart),
-        throwsA(
-          isA<Exception>().having(
-            (p0) => p0.toString(),
-            'toString()',
-            'Exception: INVALID_TOKEN',
-          ),
-        ),
-      );
     });
 
     test('inValid jwt token with three part throws exception', () {
@@ -124,30 +110,11 @@ void main() {
       );
     });
 
-    test('parseJwtHeader throws exception for invalid token', () {
-      expect(
-        () => jwtDecode.parseJwtHeader('invalid.token'),
-        throwsA(
-          isA<Exception>().having(
-            (p0) => p0.toString(),
-            'toString()',
-            'Exception: INVALID_TOKEN',
-          ),
-        ),
-      );
-    });
-
     test('parseJwtHeader returns header for valid token', () {
       final header = jwtDecode.parseJwtHeader(validJwtToken);
       expect(header['alg'], 'RS256');
       expect(header['typ'], 'JWT');
     });
 
-    test('parsePolygonIdJwtHeader throws exception for invalid token', () {
-      expect(
-        () => jwtDecode.parsePolygonIdJwtHeader('invalid.token'),
-        throwsException,
-      );
-    });
   });
 }

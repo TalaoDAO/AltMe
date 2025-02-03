@@ -1,6 +1,11 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/flavor.dart';
+import 'package:altme/key_generator/key_generator.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/helper_function/helper_function.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -8,10 +13,8 @@ import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:key_generator/key_generator.dart';
 
 part 'onboarding_verify_phrase_cubit.g.dart';
-
 part 'onboarding_verify_phrase_state.dart';
 
 class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
@@ -19,22 +22,32 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     required this.keyGenerator,
     required this.didKitProvider,
     required this.homeCubit,
-    required this.walletCubit,
+    required this.qrCodeScanCubit,
+    required this.profileCubit,
     required this.splashCubit,
     required this.flavorCubit,
     required this.altmeChatSupportCubit,
-    required this.profileCubit,
+    required this.matrixNotificationCubit,
+    required this.activityLogManager,
+    required this.walletCubit,
+    required this.walletConnectCubit,
+    required this.credentialsCubit,
   }) : super(OnBoardingVerifyPhraseState());
 
   final KeyGenerator keyGenerator;
   final DIDKitProvider didKitProvider;
 
   final HomeCubit homeCubit;
-  final WalletCubit walletCubit;
+  final QRCodeScanCubit qrCodeScanCubit;
   final FlavorCubit flavorCubit;
   final SplashCubit splashCubit;
   final AltmeChatSupportCubit altmeChatSupportCubit;
+  final MatrixNotificationCubit matrixNotificationCubit;
   final ProfileCubit profileCubit;
+  final WalletCubit walletCubit;
+  final CredentialsCubit credentialsCubit;
+  final WalletConnectCubit walletConnectCubit;
+  final ActivityLogManager activityLogManager;
 
   final log = getLogger('OnBoardingVerifyPhraseCubit');
 
@@ -52,55 +65,65 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     emit(state.copyWith(mnemonicStates: oldState, status: AppStatus.idle));
   }
 
-  List<String> tempMnemonics = [];
+  List<int> selectionorder = [];
 
   Future<void> verify({
     required List<String> mnemonic,
     required int index,
   }) async {
     final mnemonicState = state.mnemonicStates[index];
-    final int clickCount = tempMnemonics.length;
-
-    if (mnemonicState.order <= clickCount) return;
-
-    if (mnemonicState.mnemonicStatus != MnemonicStatus.wrongSelection) {
-      for (final mnemonicState in state.mnemonicStates) {
-        if (mnemonicState.mnemonicStatus == MnemonicStatus.wrongSelection) {
-          return;
-        }
-      }
-    }
 
     final updatedList = List<MnemonicState>.from(state.mnemonicStates);
-    if (mnemonicState.order == clickCount + 1) {
-      tempMnemonics.add(mnemonic[mnemonicState.order - 1]);
-      updatedList[index] =
-          mnemonicState.copyWith(mnemonicStatus: MnemonicStatus.selected);
-    } else {
-      if (mnemonicState.mnemonicStatus == MnemonicStatus.unselected) {
+
+    switch (mnemonicState.mnemonicStatus) {
+      case MnemonicStatus.unselected:
+        // new selection
         updatedList[index] = mnemonicState.copyWith(
-          mnemonicStatus: MnemonicStatus.wrongSelection,
+          mnemonicStatus: MnemonicStatus.selected,
+          userSelectedOrder: selectionorder.length + 1,
         );
-      } else {
-        updatedList[index] =
-            mnemonicState.copyWith(mnemonicStatus: MnemonicStatus.unselected);
-      }
+        selectionorder.add(mnemonicState.order);
+      case MnemonicStatus.selected:
+        // remove selection
+        final order = mnemonicState.order;
+        updatedList[index] = mnemonicState.copyWith(
+          mnemonicStatus: MnemonicStatus.unselected,
+          userSelectedOrder: null,
+        );
+
+        if (selectionorder.last != order) {
+          // if first or middle elements are removed then we need to reorder
+          // the selection
+
+          selectionorder.remove(order);
+
+          var count = 0;
+
+          for (int i = 0; i < updatedList.length; i++) {
+            if (index == i) continue; // already operated in this index
+
+            final element = updatedList[i];
+            if (selectionorder.contains(element.order)) {
+              // reorder remaining list
+              updatedList[i] = updatedList[i].copyWith(
+                mnemonicStatus: MnemonicStatus.selected,
+                userSelectedOrder: count + 1,
+              );
+              count++;
+            }
+          }
+        } else {
+          selectionorder.remove(order);
+        }
     }
 
-    emit(state.copyWith(status: AppStatus.idle, mnemonicStates: updatedList));
-
-    if (tempMnemonics.length >= 6) {
-      if (mnemonic[0] == tempMnemonics[0] &&
-          mnemonic[1] == tempMnemonics[1] &&
-          mnemonic[2] == tempMnemonics[2] &&
-          mnemonic[3] == tempMnemonics[3] &&
-          mnemonic[4] == tempMnemonics[4] &&
-          mnemonic[5] == tempMnemonics[5]) {
-        emit(state.copyWith(isVerified: true, status: AppStatus.idle));
-      } else {
-        emit(state.copyWith(isVerified: false, status: AppStatus.idle));
-      }
-    }
+    emit(
+      state.copyWith(
+        status: AppStatus.idle,
+        mnemonicStates: updatedList,
+        isVerified: selectionorder.length == 12,
+      ),
+    );
   }
 
   Future<void> generateSSIAndCryptoAccount({
@@ -108,17 +131,60 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     required bool isFromOnboarding,
   }) async {
     emit(state.loading());
+
     try {
+      if (selectionorder.length == 12) {
+        var verified = true;
+        final updatedList = List<MnemonicState>.from(state.mnemonicStates);
+        for (var i = 0; i < 12; i++) {
+          if (updatedList[i].order == updatedList[i].userSelectedOrder) {
+            verified = true;
+          } else {
+            verified = false;
+            break;
+          }
+        }
+
+        if (!verified) {
+          selectionorder = [];
+          for (var i = 0; i < 12; i++) {
+            updatedList[i] = updatedList[i].copyWith(
+              mnemonicStatus: MnemonicStatus.unselected,
+              userSelectedOrder: null,
+            );
+          }
+
+          emit(
+            state.copyWith(
+              status: AppStatus.error,
+              mnemonicStates: updatedList,
+              message: StateMessage.error(
+                showDialog: true,
+                messageHandler: ResponseMessage(
+                  message: ResponseString
+                      .RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage,
+                ),
+              ),
+            ),
+          );
+          return;
+        }
+      }
       if (isFromOnboarding) {
         await generateAccount(
           mnemonic: mnemonic,
           keyGenerator: keyGenerator,
           didKitProvider: didKitProvider,
           homeCubit: homeCubit,
-          walletCubit: walletCubit,
           splashCubit: splashCubit,
           altmeChatSupportCubit: altmeChatSupportCubit,
+          matrixNotificationCubit: matrixNotificationCubit,
+          activityLogManager: activityLogManager,
+          qrCodeScanCubit: qrCodeScanCubit,
+          credentialsCubit: credentialsCubit,
+          walletCubit: walletCubit,
           profileCubit: profileCubit,
+          walletConnectCubit: walletConnectCubit,
         );
       }
       await profileCubit.secureStorageProvider.set(

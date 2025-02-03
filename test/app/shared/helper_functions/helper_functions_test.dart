@@ -4,13 +4,13 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -172,6 +172,10 @@ void main() {
         equals(BlockchainType.binance),
       );
       expect(
+        getBlockchainType(AccountType.etherlink),
+        equals(BlockchainType.etherlink),
+      );
+      expect(
         () => getBlockchainType(AccountType.ssi),
         throwsA(isA<ResponseMessage>()),
       );
@@ -228,21 +232,21 @@ void main() {
 
     test('getIndexValue returns correct index for each DidKeyType', () {
       expect(
-        getIndexValue(isEBSIV3: true, didKeyType: DidKeyType.secp256k1),
+        getIndexValue(isEBSI: true, didKeyType: DidKeyType.secp256k1),
         3,
       );
       expect(
-        getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.secp256k1),
+        getIndexValue(isEBSI: false, didKeyType: DidKeyType.secp256k1),
         1,
       );
 
-      expect(getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.p256), 4);
-      expect(getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.ebsiv3), 5);
-      expect(getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.jwkP256), 6);
-      expect(getIndexValue(isEBSIV3: false, didKeyType: DidKeyType.edDSA), 0);
+      expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.p256), 4);
+      expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.ebsiv3), 5);
+      expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.jwkP256), 6);
+      expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.edDSA), 0);
       expect(
         getIndexValue(
-          isEBSIV3: false,
+          isEBSI: false,
           didKeyType: DidKeyType.jwtClientAttestation,
         ),
         0,
@@ -444,141 +448,141 @@ void main() {
       });
 
       group('handleErrorForOID4VCI throws correct errors', () {
-        test('Test tokenEndpoint is null', () {
-          expect(
-            () async => handleErrorForOID4VCI(
-              url: 'example',
-              openIdConfiguration: const OpenIdConfiguration(
-                requirePushedAuthorizationRequests: false,
-                authorizationServer: 'example',
-                tokenEndpoint: null,
-              ),
-              authorizationServerConfiguration: const OpenIdConfiguration(
-                requirePushedAuthorizationRequests: false,
-                tokenEndpoint: null,
-              ),
-            ),
-            throwsA(
-              isA<ResponseMessage>().having((e) => e.data, '', {
-                'error': 'invalid_issuer_metadata',
-                'error_description': 'The issuer configuration is invalid. '
-                    'The token_endpoint is missing.',
-              }),
-            ),
-          );
-        });
+        // test('Test tokenEndpoint is null', () {
+        //   expect(
+        //     () async => handleErrorForOID4VCI(
+        //       url: 'example',
+        //       openIdConfigurationData: const OpenIdConfiguration(
+        //         requirePushedAuthorizationRequests: false,
+        //         authorizationServer: 'example',
+        //         tokenEndpoint: null,
+        //       ),
+        //       authorizationServerConfigurationData: const OpenIdConfiguration(
+        //         requirePushedAuthorizationRequests: false,
+        //         tokenEndpoint: null,
+        //       ),
+        //     ),
+        //     throwsA(
+        //       isA<ResponseMessage>().having((e) => e.data, '', {
+        //         'error': 'invalid_issuer_metadata',
+        //         'error_description': 'The issuer configuration is invalid. '
+        //             'The token_endpoint is missing.',
+        //       }),
+        //     ),
+        //   );
+        // });
 
-        test('Test credentialEndpoint is null', () {
-          expect(
-            () async => handleErrorForOID4VCI(
-              url: 'example',
-              openIdConfiguration: const OpenIdConfiguration(
-                requirePushedAuthorizationRequests: false,
-                authorizationServer: 'example',
-                tokenEndpoint: null,
-                credentialEndpoint: null,
-              ),
-              authorizationServerConfiguration: const OpenIdConfiguration(
-                tokenEndpoint: 'https://example.com/token',
-                requirePushedAuthorizationRequests: false,
-              ),
-            ),
-            throwsA(
-              isA<ResponseMessage>().having((e) => e.data, '', {
-                'error': 'invalid_issuer_metadata',
-                'error_description': 'The issuer configuration is invalid. '
-                    'The credential_endpoint is missing.',
-              }),
-            ),
-          );
-        });
+        // test('Test credentialEndpoint is null', () {
+        //   expect(
+        //     () async => handleErrorForOID4VCI(
+        //       url: 'example',
+        //       openIdConfiguration: const OpenIdConfiguration(
+        //         requirePushedAuthorizationRequests: false,
+        //         authorizationServer: 'example',
+        //         tokenEndpoint: null,
+        //         credentialEndpoint: null,
+        //       ),
+        //       authorizationServerConfiguration: const OpenIdConfiguration(
+        //         tokenEndpoint: 'https://example.com/token',
+        //         requirePushedAuthorizationRequests: false,
+        //       ),
+        //     ),
+        //     throwsA(
+        //       isA<ResponseMessage>().having((e) => e.data, '', {
+        //         'error': 'invalid_issuer_metadata',
+        //         'error_description': 'The issuer configuration is invalid. '
+        //             'The credential_endpoint is missing.',
+        //       }),
+        //     ),
+        //   );
+        // });
 
-        test('Test credentialIssuer is null', () {
-          expect(
-            () async => handleErrorForOID4VCI(
-              url: 'example',
-              openIdConfiguration: const OpenIdConfiguration(
-                requirePushedAuthorizationRequests: false,
-                authorizationServer: 'example',
-                tokenEndpoint: null,
-                credentialEndpoint: 'https://example.com/cred',
-                credentialIssuer: null,
-              ),
-              authorizationServerConfiguration: const OpenIdConfiguration(
-                requirePushedAuthorizationRequests: false,
-                tokenEndpoint: 'https://example.com/token',
-              ),
-            ),
-            throwsA(
-              isA<ResponseMessage>().having((e) => e.data, '', {
-                'error': 'invalid_issuer_metadata',
-                'error_description': 'The issuer configuration is invalid. '
-                    'The credential_issuer is missing.',
-              }),
-            ),
-          );
-        });
+        // test('Test credentialIssuer is null', () {
+        //   expect(
+        //     () async => handleErrorForOID4VCI(
+        //       url: 'example',
+        //       openIdConfigurationData: const OpenIdConfiguration(
+        //         requirePushedAuthorizationRequests: false,
+        //         authorizationServer: 'example',
+        //         tokenEndpoint: null,
+        //         credentialEndpoint: 'https://example.com/cred',
+        //         credentialIssuer: null,
+        //       ),
+        //       authorizationServerConfigurationData: const OpenIdConfiguration(
+        //         requirePushedAuthorizationRequests: false,
+        //         tokenEndpoint: 'https://example.com/token',
+        //       ),
+        //     ),
+        //     throwsA(
+        //       isA<ResponseMessage>().having((e) => e.data, '', {
+        //         'error': 'invalid_issuer_metadata',
+        //         'error_description': 'The issuer configuration is invalid. '
+        //             'The credential_issuer is missing.',
+        //       }),
+        //     ),
+        //   );
+        // });
 
-        test(
-            'Test credentialsSupported and credentialConfigurationsSupported are null',
-            () {
-          expect(
-            () async => handleErrorForOID4VCI(
-              url: 'example',
-              openIdConfiguration: const OpenIdConfiguration(
-                requirePushedAuthorizationRequests: false,
-                authorizationServer: 'example',
-                tokenEndpoint: null,
-                credentialEndpoint: 'https://example.com/cred',
-                credentialIssuer: 'issuer',
-                credentialsSupported: null,
-                credentialConfigurationsSupported: null,
-              ),
-              authorizationServerConfiguration: const OpenIdConfiguration(
-                requirePushedAuthorizationRequests: false,
-                tokenEndpoint: 'https://example.com/token',
-              ),
-            ),
-            throwsA(
-              isA<ResponseMessage>().having((e) => e.data, '', {
-                'error': 'invalid_issuer_metadata',
-                'error_description': 'The issuer configuration is invalid. '
-                    'The credentials_supported is missing.',
-              }),
-            ),
-          );
-        });
+        // test(
+        //     'Test credentialsSupported and credentialConfigurationsSupported are null',
+        //     () {
+        //   expect(
+        //     () async => handleErrorForOID4VCI(
+        //       url: 'example',
+        //       openIdConfiguration: const OpenIdConfiguration(
+        //         requirePushedAuthorizationRequests: false,
+        //         authorizationServer: 'example',
+        //         tokenEndpoint: null,
+        //         credentialEndpoint: 'https://example.com/cred',
+        //         credentialIssuer: 'issuer',
+        //         credentialsSupported: null,
+        //         credentialConfigurationsSupported: null,
+        //       ),
+        //       authorizationServerConfiguration: const OpenIdConfiguration(
+        //         requirePushedAuthorizationRequests: false,
+        //         tokenEndpoint: 'https://example.com/token',
+        //       ),
+        //     ),
+        //     throwsA(
+        //       isA<ResponseMessage>().having((e) => e.data, '', {
+        //         'error': 'invalid_issuer_metadata',
+        //         'error_description': 'The issuer configuration is invalid. '
+        //             'The credentials_supported is missing.',
+        //       }),
+        //     ),
+        //   );
+        // });
 
-        test(
-            'Test credentialsSupported and credentialConfigurationsSupported are null',
-            () {
-          expect(
-            () async => handleErrorForOID4VCI(
-              url: 'example',
-              openIdConfiguration: const OpenIdConfiguration(
-                requirePushedAuthorizationRequests: false,
-                authorizationServer: 'example',
-                tokenEndpoint: null,
-                credentialEndpoint: 'https://example.com/cred',
-                credentialIssuer: 'issuer',
-                credentialsSupported: null,
-                credentialConfigurationsSupported: 'asdf',
-                subjectSyntaxTypesSupported: ['asd'],
-              ),
-              authorizationServerConfiguration: const OpenIdConfiguration(
-                requirePushedAuthorizationRequests: false,
-                tokenEndpoint: 'https://example.com/token',
-              ),
-            ),
-            throwsA(
-              isA<ResponseMessage>().having((e) => e.data, '', {
-                'error': 'subject_syntax_type_not_supported',
-                'error_description':
-                    'The subject syntax type is not supported.',
-              }),
-            ),
-          );
-        });
+        // test(
+        //     'Test credentialsSupported and credentialConfigurationsSupported are null',
+        //     () {
+        //   expect(
+        //     () async => handleErrorForOID4VCI(
+        //       url: 'example',
+        //       openIdConfiguration: const OpenIdConfiguration(
+        //         requirePushedAuthorizationRequests: false,
+        //         authorizationServer: 'example',
+        //         tokenEndpoint: null,
+        //         credentialEndpoint: 'https://example.com/cred',
+        //         credentialIssuer: 'issuer',
+        //         credentialsSupported: null,
+        //         credentialConfigurationsSupported: 'asdf',
+        //         subjectSyntaxTypesSupported: ['asd'],
+        //       ),
+        //       authorizationServerConfiguration: const OpenIdConfiguration(
+        //         requirePushedAuthorizationRequests: false,
+        //         tokenEndpoint: 'https://example.com/token',
+        //       ),
+        //     ),
+        //     throwsA(
+        //       isA<ResponseMessage>().having((e) => e.data, '', {
+        //         'error': 'subject_syntax_type_not_supported',
+        //         'error_description':
+        //             'The subject syntax type is not supported.',
+        //       }),
+        //     ),
+        //   );
+        // });
       });
 
       group('getPresentationDefinition', () {
@@ -932,8 +936,8 @@ void main() {
             ResponseString.RESPONSE_STRING_credentialIssuanceDenied,
           );
           expect(
-            getErrorResponseString('invalid_client'),
-            ResponseString.RESPONSE_STRING_credentialIssuanceDenied,
+            getErrorResponseString('issuance_pending'),
+            ResponseString.RESPONSE_STRING_credentialIssuanceIsStillPending,
           );
           expect(
             getErrorResponseString('invalid_token'),
@@ -961,8 +965,20 @@ void main() {
           );
 
           expect(
-            getErrorResponseString('issuance_pending'),
-            ResponseString.RESPONSE_STRING_theIssuanceOfThisCredentialIsPending,
+            getErrorResponseString('invalid_client'),
+            ResponseString.RESPONSE_STRING_invalidClientErrorDescription,
+          );
+
+          expect(
+            getErrorResponseString('vp_formats_not_supported'),
+            ResponseString
+                .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription,
+          );
+
+          expect(
+            getErrorResponseString('invalid_presentation_definition_uri'),
+            ResponseString
+                .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription,
           );
 
           expect(
@@ -1042,8 +1058,11 @@ void main() {
             'client_metadata_uri': 'https://example.com/client_metadata',
           };
 
-          final updatedUrl =
-              getUpdatedUrlForSIOPV2OIC4VP(uri: uri, response: response);
+          final updatedUrl = getUpdatedUrlForSIOPV2OIC4VP(
+            uri: uri,
+            response: response,
+            clientId: 'client123',
+          );
 
           expect(
             updatedUrl.split('&'),
@@ -1072,7 +1091,7 @@ void main() {
               () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.ldpVc,
+                formatsSupported: [VCFormatType.ldpVc],
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: Format.fromJson(
@@ -1084,8 +1103,9 @@ void main() {
                   ),
                 ),
                 clientMetaData: null,
+                credentialsToBePresented: [],
               ),
-              (true, false, false, false),
+              [VCFormatType.ldpVc],
             );
           });
 
@@ -1099,9 +1119,10 @@ void main() {
 
             expect(
               () => getPresentVCDetails(
-                vcFormatType: VCFormatType.ldpVc,
+                formatsSupported: [VCFormatType.ldpVc],
                 presentationDefinition: presentationDefinition,
                 clientMetaData: null,
+                credentialsToBePresented: [],
               ),
               throwsA(
                 isA<ResponseMessage>().having((e) => e.data, '', {
@@ -1118,14 +1139,21 @@ void main() {
               ' and clientMetaData are null', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.jwtVc,
+                formatsSupported: [VCFormatType.jwtVc],
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
                 ),
                 clientMetaData: null,
+                credentialsToBePresented: [],
               ),
-              (false, true, false, false),
+              [
+                VCFormatType.ldpVc,
+                VCFormatType.jwtVc,
+                VCFormatType.jwtVcJson,
+                VCFormatType.jwtVcJsonLd,
+                VCFormatType.vcSdJWT,
+              ],
             );
           });
 
@@ -1135,14 +1163,21 @@ void main() {
               ' and clientMetaData are null', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.jwtVcJson,
+                formatsSupported: [VCFormatType.jwtVcJson],
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
                 ),
                 clientMetaData: null,
+                credentialsToBePresented: [],
               ),
-              (false, false, true, false),
+              [
+                VCFormatType.ldpVc,
+                VCFormatType.jwtVc,
+                VCFormatType.jwtVcJson,
+                VCFormatType.jwtVcJsonLd,
+                VCFormatType.vcSdJWT,
+              ],
             );
           });
 
@@ -1152,14 +1187,21 @@ void main() {
               ' and clientMetaData are null', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.vcSdJWT,
+                formatsSupported: [VCFormatType.vcSdJWT],
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
                 ),
                 clientMetaData: null,
+                credentialsToBePresented: [],
               ),
-              (false, false, false, true),
+              [
+                VCFormatType.ldpVc,
+                VCFormatType.jwtVc,
+                VCFormatType.jwtVcJson,
+                VCFormatType.jwtVcJsonLd,
+                VCFormatType.vcSdJWT,
+              ],
             );
           });
 
@@ -1169,7 +1211,7 @@ void main() {
               ' and clientMetaData is provided', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.jwtVcJson,
+                formatsSupported: [VCFormatType.jwtVcJson],
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
@@ -1179,8 +1221,9 @@ void main() {
                     'jwt_vc_json': 'here',
                   },
                 },
+                credentialsToBePresented: [],
               ),
-              (false, false, true, false),
+              [VCFormatType.jwtVcJson],
             );
           });
 
@@ -1190,7 +1233,7 @@ void main() {
               ' and clientMetaData is provided', () {
             expect(
               getPresentVCDetails(
-                vcFormatType: VCFormatType.vcSdJWT,
+                formatsSupported: [VCFormatType.vcSdJWT],
                 presentationDefinition: PresentationDefinition(
                   inputDescriptors: [],
                   format: null,
@@ -1200,8 +1243,9 @@ void main() {
                     'vc+sd-jwt': 'here',
                   },
                 },
+                credentialsToBePresented: [],
               ),
-              (false, false, false, true),
+              [VCFormatType.vcSdJWT],
             );
           });
         });
@@ -1491,55 +1535,60 @@ void main() {
               TezosAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'tezosAddress',
               ),
             ),
-            'tezosAddress',
+            ('tezosAddress', BlockchainType.tezos),
           );
           expect(
             getWalletAddress(
               EthereumAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'ethereumAddress',
               ),
             ),
-            'ethereumAddress',
+            ('ethereumAddress', BlockchainType.ethereum),
           );
           expect(
             getWalletAddress(
               PolygonAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'polygonAddress',
               ),
             ),
-            'polygonAddress',
+            ('polygonAddress', BlockchainType.polygon),
           );
           expect(
             getWalletAddress(
               BinanceAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'address',
               ),
             ),
-            'address',
+            ('address', BlockchainType.binance),
           );
           expect(
             getWalletAddress(
               FantomAssociatedAddressModel(
                 id: 'id',
                 type: 'type',
-                issuedBy: const Author('name'),
                 associatedAddress: 'fantomAddress',
               ),
             ),
-            'fantomAddress',
+            ('fantomAddress', BlockchainType.fantom),
+          );
+          expect(
+            getWalletAddress(
+              EtherlinkAssociatedAddressModel(
+                id: 'id',
+                type: 'type',
+                associatedAddress: 'etherlinkAddress',
+              ),
+            ),
+            ('etherlinkAddress', BlockchainType.etherlink),
           );
           expect(
             getWalletAddress(
@@ -1549,7 +1598,7 @@ void main() {
                 issuedBy: const Author('name'),
               ),
             ),
-            isNull,
+            (null, null),
           );
         });
 

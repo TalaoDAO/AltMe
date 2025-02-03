@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -74,8 +75,8 @@ class _WalletReadyViewState extends State<WalletReadyView> {
     final l10n = context.l10n;
     return BlocBuilder<WalletReadyCubit, WalletReadyState>(
       builder: (context, state) {
-        return WillPopScope(
-          onWillPop: () async => false,
+        return PopScope(
+          canPop: false,
           child: Stack(
             alignment: Alignment.topCenter,
             fit: StackFit.expand,
@@ -89,7 +90,6 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       WalletLogo(
-                        profileModel: widget.profileCubit.state.model,
                         height: 90,
                         width: MediaQuery.of(context).size.shortestSide * 0.5,
                         showPoweredBy: true,
@@ -99,22 +99,23 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                       ),
                       Text(
                         l10n.walletReadyTitle,
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
-                      const SizedBox(
-                        height: Sizes.spaceNormal,
-                      ),
-                      Text(
-                        l10n.walletReadySubtitle,
-                        textAlign: TextAlign.center,
-                        style:
-                            Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.normal,
-                                ),
-                      ),
-                      const SizedBox(
-                        height: Sizes.space3XLarge,
-                      ),
+                      // const SizedBox(height: Sizes.spaceNormal),
+                      // Text(
+                      //   l10n.walletReadySubtitle,
+                      //   textAlign: TextAlign.center,
+                      //   style:
+                      //    Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      //             fontWeight: FontWeight.normal,
+                      //           ),
+                      // ),
+                      const SizedBox(height: Sizes.space3XLarge),
                     ],
                   ),
                 ),
@@ -209,6 +210,14 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                                     DashboardPage.route(),
                                     (Route<dynamic> route) => route.isFirst,
                                   );
+                                  // Check with API if it is an  organization
+                                  // wallet
+
+                                  context
+                                      .read<EnterpriseCubit>()
+                                      .getWalletProviderAccount(
+                                        context.read<QRCodeScanCubit>(),
+                                      );
                                 }
                               : null,
                         ),

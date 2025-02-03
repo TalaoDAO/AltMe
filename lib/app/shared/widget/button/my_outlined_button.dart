@@ -63,10 +63,10 @@ class MyOutlinedButton extends StatelessWidget {
                       color: onPressed == null
                           ? Theme.of(context)
                               .colorScheme
-                              .onSurface
+                              .inverseSurface
                               .withOpacity(0.12)
                           : textColor ??
-                              Theme.of(context).colorScheme.secondaryContainer,
+                              Theme.of(context).colorScheme.inverseSurface,
                     ),
               ),
             )
@@ -118,11 +118,11 @@ ButtonStyle outlinedStyleFrom({
   return OutlinedButton.styleFrom(
     padding: EdgeInsets.symmetric(vertical: verticalSpacing),
     elevation: elevation,
-    backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.surface,
+    backgroundColor: backgroundColor ?? Colors.transparent,
     side: BorderSide(
       color: onPressed == null
-          ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
-          : borderColor ?? Theme.of(context).colorScheme.secondaryContainer,
+          ? Theme.of(context).colorScheme.inverseSurface.withOpacity(0.12)
+          : borderColor ?? Theme.of(context).colorScheme.inverseSurface,
       width: 2,
     ),
     shape: RoundedRectangleBorder(

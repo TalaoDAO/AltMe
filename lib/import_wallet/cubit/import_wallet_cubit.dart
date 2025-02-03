@@ -1,5 +1,9 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
@@ -7,8 +11,6 @@ import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:key_generator/key_generator.dart';
-
 import 'package:secure_storage/secure_storage.dart';
 
 part 'import_wallet_cubit.g.dart';
@@ -20,17 +22,24 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
     required this.secureStorageProvider,
     required this.keyGenerator,
     required this.homeCubit,
-    required this.walletCubit,
+    required this.qrCodeScanCubit,
     required this.splashCubit,
+    required this.walletCubit,
+    required this.credentialsCubit,
+    required this.walletConnectCubit,
+    required this.activityLogManager,
   }) : super(const ImportWalletState());
 
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;
   final HomeCubit homeCubit;
-
+  final QRCodeScanCubit qrCodeScanCubit;
   final WalletCubit walletCubit;
+  final CredentialsCubit credentialsCubit;
   final SplashCubit splashCubit;
+  final WalletConnectCubit walletConnectCubit;
+  final ActivityLogManager activityLogManager;
 
   void isMnemonicsOrKeyValid(String value) {
     //different type of tezos private keys start with 'edsk' ,
@@ -48,12 +57,14 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
 
   Future<void> import({
     required String mnemonicOrKey,
-    required bool isFromOnboarding,
+    required RestoreType? restoreType,
     String? accountName,
   }) async {
     final log = getLogger('ImportWalletCubit - import');
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    final isFromOnboarding = restoreType != null;
 
     try {
       log.i('isFromOnboarding: $isFromOnboarding');
@@ -87,15 +98,19 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
           accountType: AccountType.ssi,
         );
         await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
+        await activityLogManager.saveLog(LogData(type: LogType.walletInit));
       }
 
       /// crypto wallet with unknown blockchain type
       await walletCubit.createCryptoWallet(
         accountName: accountName,
         mnemonicOrKey: mnemonicOrKey,
-        isImported: !isFromOnboarding,
+        isImported: true,
         isFromOnboarding: isFromOnboarding,
         blockchainType: null,
+        qrCodeScanCubit: qrCodeScanCubit,
+        credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
         onComplete: ({
           required CryptoAccount cryptoAccount,
           required MessageHandler messageHandler,
@@ -115,7 +130,10 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         );
       }
 
+      await activityLogManager.saveLog(LogData(type: LogType.importKey));
+
       await homeCubit.emitHasWallet();
+
       emit(state.success());
     } catch (e, s) {
       log.e(

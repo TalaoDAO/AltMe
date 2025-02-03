@@ -2,18 +2,23 @@ part of 'credential_subject_type.dart';
 
 extension CredentialSubjectTypeExtension on CredentialSubjectType {
   Color backgroundColor(CredentialModel credentialModel) {
-    final Color backgroundColor;
-    if (credentialModel.display?.backgroundColor != null) {
-      backgroundColor = Color(
-        int.parse(
-          'FF${credentialModel.display?.backgroundColor!.replaceAll('#', '')}',
-          radix: 16,
-        ),
-      );
-    } else {
-      backgroundColor = defaultBackgroundColor;
+    try {
+      final Color backgroundColor;
+      if (credentialModel.display?.backgroundColor != null) {
+        backgroundColor = Color(
+          int.parse(
+            // ignore: lines_longer_than_80_chars
+            'FF${credentialModel.display?.backgroundColor!.replaceAll('#', '')}',
+            radix: 16,
+          ),
+        );
+      } else {
+        backgroundColor = defaultBackgroundColor;
+      }
+      return backgroundColor;
+    } catch (e) {
+      return defaultBackgroundColor;
     }
-    return backgroundColor;
   }
 
   Color get defaultBackgroundColor {
@@ -31,7 +36,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.selfIssued:
         return const Color(0xffEFF0F6);
       case CredentialSubjectType.defaultCredential:
-        return Colors.white;
+        return const Color(0xff6600FF);
       case CredentialSubjectType.professionalStudentCard:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.kycAgeCredential:
@@ -47,7 +52,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.gender:
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.verifiableIdCard:
-      case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.over13:
       case CredentialSubjectType.over15:
       case CredentialSubjectType.over18:
@@ -73,6 +77,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.fantomAssociatedWallet:
       case CredentialSubjectType.polygonAssociatedWallet:
       case CredentialSubjectType.binanceAssociatedWallet:
+      case CredentialSubjectType.etherlinkAssociatedWallet:
       case CredentialSubjectType.ethereumPooAddress:
       case CredentialSubjectType.fantomPooAddress:
       case CredentialSubjectType.polygonPooAddress:
@@ -88,7 +93,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
       case CredentialSubjectType.pid:
-        return Colors.white;
+        return const Color(0xff6600FF);
     }
   }
 
@@ -122,6 +127,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'PolygonAssociatedAddress';
       case CredentialSubjectType.binanceAssociatedWallet:
         return 'BinanceAssociatedAddress';
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+        return 'EtherlinkAssociatedAddress';
       case CredentialSubjectType.ethereumPooAddress:
         return 'EthereumPooAddress';
       case CredentialSubjectType.fantomPooAddress:
@@ -140,8 +147,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'IdentityPass';
       case CredentialSubjectType.verifiableIdCard:
         return 'VerifiableId';
-      case CredentialSubjectType.linkedInCard:
-        return 'LinkedinCard';
       case CredentialSubjectType.learningAchievement:
         return 'LearningAchievement';
       case CredentialSubjectType.over13:
@@ -247,6 +252,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return PolygonAssociatedAddressModel.fromJson(json);
       case CredentialSubjectType.binanceAssociatedWallet:
         return BinanceAssociatedAddressModel.fromJson(json);
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+        return EtherlinkAssociatedAddressModel.fromJson(json);
       case CredentialSubjectType.certificateOfEmployment:
         return CertificateOfEmploymentModel.fromJson(json);
       case CredentialSubjectType.emailPass:
@@ -303,8 +310,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return AragoOver18Model.fromJson(json);
       case CredentialSubjectType.pcdsAgentCertificate:
         return PcdsAgentCertificateModel.fromJson(json);
-      case CredentialSubjectType.linkedInCard:
-        return LinkedinCardModel.fromJson(json);
       case CredentialSubjectType.ethereumPooAddress:
         return EthereumPooAddressModel.fromJson(json);
       case CredentialSubjectType.fantomPooAddress:
@@ -418,8 +423,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.ageRange ||
         this == CredentialSubjectType.nationality ||
         this == CredentialSubjectType.gender ||
-        this == CredentialSubjectType.passportFootprint ||
-        this == CredentialSubjectType.linkedInCard) {
+        this == CredentialSubjectType.passportFootprint) {
       return true;
     }
     return false;
@@ -438,7 +442,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.ethereumAssociatedWallet ||
         this == CredentialSubjectType.binanceAssociatedWallet ||
         this == CredentialSubjectType.fantomAssociatedWallet ||
-        this == CredentialSubjectType.polygonAssociatedWallet) {
+        this == CredentialSubjectType.polygonAssociatedWallet ||
+        this == CredentialSubjectType.etherlinkAssociatedWallet) {
       return true;
     }
     return false;
@@ -455,6 +460,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       return const BinanceAssociatedAddressWidget();
     } else if (this == CredentialSubjectType.fantomAssociatedWallet) {
       return const FantomAssociatedAddressWidget();
+    } else if (this == CredentialSubjectType.etherlinkAssociatedWallet) {
+      return const EtherlinkAssociatedAddressWidget();
     }
     return null;
   }
@@ -489,6 +496,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Polygon Associated Address';
       case CredentialSubjectType.binanceAssociatedWallet:
         return 'BNB Chain Associated Address';
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+        return 'Etherlink Associated Address';
       case CredentialSubjectType.ethereumPooAddress:
         return 'Ethereum Poo Address';
       case CredentialSubjectType.fantomPooAddress:
@@ -507,8 +516,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Identity Pass';
       case CredentialSubjectType.verifiableIdCard:
         return 'VerifiableId';
-      case CredentialSubjectType.linkedInCard:
-        return 'Linkedin Card';
       case CredentialSubjectType.learningAchievement:
         return 'Learning Achievement';
       case CredentialSubjectType.over13:
@@ -607,12 +614,13 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.tezVoucher:
       case CredentialSubjectType.diplomaCard:
       case CredentialSubjectType.twitterCard:
+        return true;
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.ethereumAssociatedWallet:
       case CredentialSubjectType.fantomAssociatedWallet:
       case CredentialSubjectType.polygonAssociatedWallet:
       case CredentialSubjectType.binanceAssociatedWallet:
-        return true;
+      case CredentialSubjectType.etherlinkAssociatedWallet:
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.tezosPooAddress:
       case CredentialSubjectType.ethereumPooAddress:
@@ -622,7 +630,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.defaultCredential:
       case CredentialSubjectType.emailPass:
-      case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.phonePass:
       case CredentialSubjectType.professionalExperienceAssessment:
@@ -658,6 +665,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.polygonAssociatedWallet:
       case CredentialSubjectType.binanceAssociatedWallet:
       case CredentialSubjectType.tezosAssociatedWallet:
+      case CredentialSubjectType.etherlinkAssociatedWallet:
         return VCFormatType.values;
 
       case CredentialSubjectType.over13:
@@ -665,12 +673,21 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over21:
       case CredentialSubjectType.over50:
       case CredentialSubjectType.over65:
-      case CredentialSubjectType.gender:
       case CredentialSubjectType.ageRange:
-      case CredentialSubjectType.defiCompliance:
-      case CredentialSubjectType.tezotopiaMembership:
+      case CredentialSubjectType.gender:
       case CredentialSubjectType.chainbornMembership:
-        return [VCFormatType.ldpVc];
+      case CredentialSubjectType.tezotopiaMembership:
+      case CredentialSubjectType.defiCompliance:
+        return [VCFormatType.ldpVc, VCFormatType.auto];
+
+      case CredentialSubjectType.over18:
+      case CredentialSubjectType.livenessCard:
+      case CredentialSubjectType.phonePass:
+        return [
+          VCFormatType.ldpVc,
+          VCFormatType.jwtVcJson,
+          VCFormatType.auto,
+        ];
 
       case CredentialSubjectType.verifiableIdCard:
         return [
@@ -678,21 +695,22 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
           VCFormatType.jwtVcJson,
           VCFormatType.vcSdJWT,
           VCFormatType.jwtVc,
+          VCFormatType.auto,
         ];
 
-      case CredentialSubjectType.identityCredential:
-      case CredentialSubjectType.eudiPid:
-      case CredentialSubjectType.pid:
-        return [VCFormatType.vcSdJWT];
-
-      case CredentialSubjectType.over18:
-      case CredentialSubjectType.phonePass:
-      case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.emailPass:
         return [
           VCFormatType.ldpVc,
           VCFormatType.jwtVcJson,
+          VCFormatType.auto,
+          VCFormatType.vcSdJWT,
         ];
+
+      /// Exceptions
+      case CredentialSubjectType.identityCredential:
+      case CredentialSubjectType.eudiPid:
+      case CredentialSubjectType.pid:
+        return [VCFormatType.vcSdJWT, VCFormatType.auto];
 
       case CredentialSubjectType.nationality:
       case CredentialSubjectType.identityPass:
@@ -710,7 +728,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.binancePooAddress:
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.defaultCredential:
-      case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.professionalExperienceAssessment:
       case CredentialSubjectType.professionalSkillAssessment:
@@ -731,11 +748,14 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.civicPassCredential:
       case CredentialSubjectType.employeeCredential:
       case CredentialSubjectType.legalPersonalCredential:
-        return [VCFormatType.jwtVc];
+        return [VCFormatType.jwtVc, VCFormatType.auto];
     }
   }
 
-  DiscoverDummyCredential dummyCredential(ProfileSetting profileSetting) {
+  DiscoverDummyCredential dummyCredential({
+    required ProfileSetting profileSetting,
+    required VCFormatType assignedVCFormatType,
+  }) {
     String? image;
     String? link;
     String? websiteLink;
@@ -744,11 +764,17 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     ResponseString? howToGetIt;
     ResponseString? longDescription;
 
-    final vcFormatType = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
+    /// handles the dummy casse
 
     final oidc4vcDraftType = profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile.oidc4vciDraft;
+
+    final isEmailPassOrPhonePass = this == CredentialSubjectType.emailPass ||
+        this == CredentialSubjectType.phonePass;
+
+    final format = assignedVCFormatType.urlValue(
+      isEmailPassOrPhonePass: isEmailPassOrPhonePass,
+    );
 
     switch (this) {
       case CredentialSubjectType.defiCompliance:
@@ -789,7 +815,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.emailPassUrl}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}';
+            '&format=$format';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard;
         expirationDateDetails =
@@ -801,7 +827,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=over13';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over13WhyGetThisCard;
@@ -814,7 +840,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=over15';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over15WhyGetThisCard;
@@ -827,7 +853,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=over18';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -840,7 +866,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=over21';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -853,7 +879,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=over50';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -866,7 +892,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=over65';
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_over18WhyGetThisCard;
@@ -894,19 +920,30 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         howToGetIt = ResponseString.RESPONSE_STRING_tezVoucherHowToGetIt;
 
       case CredentialSubjectType.verifiableIdCard:
+        var type = 'verifiableid';
         image = ImageStrings.dummyVerifiableIdCard;
 
-        var type = 'verifiableid';
+        final discoverCardsOptions = profileSetting.discoverCardsOptions;
 
-        if (vcFormatType == VCFormatType.vcSdJWT) {
-          type = 'identitycredential';
-        } else if (vcFormatType == VCFormatType.jwtVc) {
+        if (discoverCardsOptions != null) {
+          if (discoverCardsOptions.displayVerifiableIdSdJwt &&
+              assignedVCFormatType == VCFormatType.vcSdJWT) {
+            type = 'pid';
+            image = ImageStrings.dummyPIDCard;
+          } else if (discoverCardsOptions.displayVerifiableIdJwt &&
+              assignedVCFormatType == VCFormatType.jwtVcJson) {
+            type = 'verifiableid';
+          } else if (discoverCardsOptions.displayVerifiableId &&
+              assignedVCFormatType == VCFormatType.ldpVc) {
+            type = 'verifiableid';
+          }
+        } else if (assignedVCFormatType == VCFormatType.jwtVc) {
           type = 'individualverifiableattestation';
         }
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=$type';
 
         whyGetThisCard =
@@ -914,15 +951,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_verifiableIdCardExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_verifiableIdCardHowToGetIt;
-
-      case CredentialSubjectType.linkedInCard:
-        image = ImageStrings.dummyLinkedinCard;
-        link = Urls.linkedinCardUrl;
-        whyGetThisCard =
-            ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard;
-        expirationDateDetails =
-            ResponseString.RESPONSE_STRING_linkedinCardExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt;
 
       case CredentialSubjectType.tezotopiaMembership:
         image = ImageStrings.tezotopiaMemberShipDummy;
@@ -962,7 +990,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.phonePassUrl}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}';
+            '&format=$format';
 
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_phoneProofWhyGetThisCard;
@@ -975,7 +1003,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         link = '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
-            '&format=${vcFormatType.urlValue}'
+            '&format=$format'
             '&type=liveness';
 
         whyGetThisCard =
@@ -996,6 +1024,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         image = ImageStrings.binanceOwnershipCard;
       case CredentialSubjectType.tezosAssociatedWallet:
         image = ImageStrings.tezosOwnershipCard;
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+        image = ImageStrings.etherlinkOwnershipCard;
 
       case CredentialSubjectType.employeeCredential:
         image = ImageStrings.dummyEmployeeCard;
@@ -1053,6 +1083,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       longDescription: longDescription == null
           ? null
           : ResponseMessage(message: longDescription),
+      vcFormatType: assignedVCFormatType,
     );
   }
 
@@ -1085,6 +1116,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 71;
       case CredentialSubjectType.binanceAssociatedWallet:
         return 70;
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+        return 72;
       case CredentialSubjectType.tezosPooAddress:
         return 0;
       case CredentialSubjectType.ethereumPooAddress:
@@ -1105,8 +1138,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 90;
       case CredentialSubjectType.verifiableIdCard:
         return 97.5;
-      case CredentialSubjectType.linkedInCard:
-        return 86;
       case CredentialSubjectType.learningAchievement:
         return 0;
       case CredentialSubjectType.over13:

@@ -23,10 +23,11 @@ void main() {
       );
 
       expect(
-          App(
-            themeRepository: themeRepository,
-          ).flavorMode,
-          FlavorMode.production);
+        App(
+          themeRepository: themeRepository,
+        ).flavorMode,
+        FlavorMode.production,
+      );
     });
 
     // testWidgets('renders SplashPage', (tester) async {

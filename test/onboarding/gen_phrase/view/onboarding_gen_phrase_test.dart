@@ -1,6 +1,11 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/connection_bridge/wallet_connect/cubit/wallet_connect_cubit.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
@@ -10,7 +15,6 @@ import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:mockingjay/mockingjay.dart';
 
 import '../../../helpers/helpers.dart';
@@ -45,6 +49,9 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     required String mnemonicOrKey,
     required bool isImported,
     required bool isFromOnboarding,
+    required QRCodeScanCubit qrCodeScanCubit,
+    required CredentialsCubit credentialsCubit,
+    required WalletConnectCubit walletConnectCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -59,10 +66,29 @@ class MockSplashCubit extends MockCubit<SplashState> implements SplashCubit {}
 class MockAltmeChatSupportCubit extends MockCubit<ChatRoomState>
     implements AltmeChatSupportCubit {}
 
+class MockMatrixNotificationCubit extends MockCubit<ChatRoomState>
+    implements MatrixNotificationCubit {}
+
 class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
   @override
   final state = ProfileState(model: ProfileModel.empty());
 }
+
+class MockActivityLogManager extends Mock implements ActivityLogManager {}
+
+class MockQRCodeScanCubit extends MockCubit<QRCodeScanState>
+    implements QRCodeScanCubit {}
+
+class MockCredentialsCubit extends MockCubit<CredentialsState>
+    implements CredentialsCubit {
+  @override
+  Future<void> loadAllCredentials({
+    required BlockchainType blockchainType,
+  }) async {}
+}
+
+class MockWalletConnectCubit extends MockCubit<WalletConnectState>
+    implements WalletConnectCubit {}
 
 void main() {
   late DIDKitProvider didKitProvider;
@@ -71,8 +97,13 @@ void main() {
   late WalletCubit walletCubit;
   late SplashCubit splashCubit;
   late AltmeChatSupportCubit altmeChatSupportCubit;
+  late MatrixNotificationCubit matrixNotificationCubit;
   late ProfileCubit profileCubit;
   late OnboardingCubit onboardingCubit;
+  late MockActivityLogManager activityLogManager;
+  late MockQRCodeScanCubit qrCodeScanCubit;
+  late MockCredentialsCubit credentialsCubit;
+  late MockWalletConnectCubit walletConnectCubit;
 
   setUpAll(() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -82,8 +113,13 @@ void main() {
     splashCubit = MockSplashCubit();
     walletCubit = MockWalletCubit();
     altmeChatSupportCubit = MockAltmeChatSupportCubit();
+    matrixNotificationCubit = MockMatrixNotificationCubit();
     profileCubit = MockProfileCubit();
     onboardingCubit = OnboardingCubit();
+    activityLogManager = MockActivityLogManager();
+    qrCodeScanCubit = MockQRCodeScanCubit();
+    credentialsCubit = MockCredentialsCubit();
+    walletConnectCubit = MockWalletConnectCubit();
   });
 
   group('OnBoarding GenPhrase Page', () {
@@ -99,7 +135,12 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
+        walletConnectCubit: walletConnectCubit,
       );
       navigator = MockNavigator();
       when(navigator.canPop).thenReturn(true);
@@ -150,6 +191,9 @@ void main() {
             BlocProvider<SplashCubit>.value(value: splashCubit),
             BlocProvider<AltmeChatSupportCubit>.value(
               value: altmeChatSupportCubit,
+            ),
+            BlocProvider<MatrixNotificationCubit>.value(
+              value: matrixNotificationCubit,
             ),
             BlocProvider<ProfileCubit>.value(value: profileCubit),
           ],

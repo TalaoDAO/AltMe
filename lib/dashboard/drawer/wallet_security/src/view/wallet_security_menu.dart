@@ -28,6 +28,7 @@ class WalletSecurityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return BasePage(
@@ -49,6 +50,7 @@ class WalletSecurityView extends StatelessWidget {
                 onTap: () async {
                   await securityCheck(
                     context: context,
+                    title: l10n.typeYourPINCodeToAuthenticate,
                     localAuthApi: LocalAuthApi(),
                     onSuccess: () {
                       Navigator.of(context)
@@ -59,11 +61,13 @@ class WalletSecurityView extends StatelessWidget {
               ),
               DrawerItem(
                 title: l10n.showWalletRecoveryPhrase,
-                subtitle: l10n.showWalletRecoveryPhraseSubtitle,
+                subtitle: Parameters.importAndRestoreAtOnboarding
+                    ? l10n.showWalletRecoveryPhraseSubtitle
+                    : l10n.showWalletRecoveryPhraseSubtitle2,
                 onTap: () async {
                   final confirm = await showDialog<bool>(
                         context: context,
-                        builder: (context) => ConfirmDialog(
+                        builder: (_) => ConfirmDialog(
                           title: l10n.warningDialogTitle,
                           subtitle: l10n.warningDialogSubtitle,
                           yes: l10n.showDialogYes,
@@ -75,6 +79,7 @@ class WalletSecurityView extends StatelessWidget {
                   if (confirm) {
                     await securityCheck(
                       context: context,
+                      title: l10n.typeYourPINCodeToAuthenticate,
                       localAuthApi: LocalAuthApi(),
                       onSuccess: () {
                         Navigator.of(context)
@@ -84,8 +89,8 @@ class WalletSecurityView extends StatelessWidget {
                   }
                 },
               ),
-              if (context.read<ProfileCubit>().state.model.profileType ==
-                  ProfileType.custom)
+              if (state.model.profileSetting.walletSecurityOptions
+                  .displaySecurityAdvancedSettings)
                 DrawerItem(
                   title: l10n.advancedSecuritySettings,
                   onTap: () {
@@ -94,6 +99,27 @@ class WalletSecurityView extends StatelessWidget {
                     );
                   },
                 ),
+              DrawerItem(
+                title: l10n.backup,
+                onTap: () async {
+                  await securityCheck(
+                    context: context,
+                    title: l10n.typeYourPINCodeToAuthenticate,
+                    localAuthApi: LocalAuthApi(),
+                    onSuccess: () {
+                      Navigator.of(context).push<void>(
+                        BackupMnemonicPage.route(
+                          title: l10n.backupCredential,
+                          isValidCallback: () {
+                            Navigator.of(context)
+                                .push<void>(BackupCredentialPage.route());
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ],
           ),
         );

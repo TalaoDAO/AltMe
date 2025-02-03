@@ -1,5 +1,4 @@
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,12 +7,12 @@ class CryptographicHolderBindingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return OptionContainer(
-          title: l10n.cryptographicHolderBinding,
-          subtitle: l10n.cryptographicHolderBindingSubtitle,
+          title: 'Cryptographic Holder Binding',
+          subtitle: 'Disable cryptographic binding for claim based'
+              ' binding credentials. Default: On.',
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(

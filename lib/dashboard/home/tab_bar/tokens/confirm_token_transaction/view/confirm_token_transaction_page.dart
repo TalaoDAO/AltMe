@@ -1,13 +1,12 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/l10n/l10n.dart';
-
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:decimal/decimal.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ConfirmTokenTransactionPage extends StatelessWidget {
@@ -179,14 +178,10 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: Sizes.spaceSmall),
-                  MyText(
+                  Text(
                     amountAndSymbol,
                     textAlign: TextAlign.center,
-                    minFontSize: 12,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                        ),
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: Sizes.spaceSmall),
                   const FromAccountWidget(isEnabled: false),
@@ -224,6 +219,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     child: Image.asset(
                       IconStrings.arrowDown,
                       height: Sizes.icon3x,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   ConfirmTransactionDetailsCard(
@@ -269,6 +265,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     ? () async {
                         await securityCheck(
                           context: context,
+                          title: l10n.typeYourPINCodeToAuthenticate,
                           localAuthApi: LocalAuthApi(),
                           onSuccess: () {
                             context

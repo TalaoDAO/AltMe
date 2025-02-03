@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,7 +49,7 @@ class ThemeRepository implements ThemePersistence {
           _controller.add(ThemeMode.dark);
       }
     } else {
-      _controller.add(ThemeMode.dark);
+      _controller.add(Parameters.defaultTheme);
     }
   }
 

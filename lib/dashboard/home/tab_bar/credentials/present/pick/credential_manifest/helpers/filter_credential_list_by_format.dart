@@ -4,7 +4,7 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 List<CredentialModel> filterCredenialListByFormat({
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
   required Map<String, dynamic>? clientMetaData,
   required List<CredentialModel> credentialList,
   required PresentationDefinition presentationDefinition,
@@ -12,44 +12,22 @@ List<CredentialModel> filterCredenialListByFormat({
 }) {
   final credentials = List<CredentialModel>.from(credentialList);
   if (filterList.isNotEmpty) {
-    final isJwtVpInJwtVCRequired = presentationDefinition.format?.jwtVp != null;
-
-    if (isJwtVpInJwtVCRequired) {
-      credentials.removeWhere(
-        (CredentialModel credentialModel) => credentialModel.jwt == null,
-      );
-    }
-
-    final (presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt) =
-        getPresentVCDetails(
+    final supportingFormats = getPresentVCDetails(
       clientMetaData: clientMetaData,
       presentationDefinition: presentationDefinition,
-      vcFormatType: vcFormatType,
+      formatsSupported: formatsSupported,
+      credentialsToBePresented: credentials,
     );
-
     credentials.removeWhere(
       (CredentialModel credentialModel) {
-        /// remove ldpVc
-        if (presentLdpVc) {
-          return credentialModel.getFormat != VCFormatType.ldpVc.vcValue;
+        /// we keep credential whose format are supported
+        bool remove = true;
+        for (final supportingFormat in supportingFormats) {
+          if (credentialModel.getFormat == supportingFormat.vcValue) {
+            remove = false;
+          }
         }
-
-        /// remove jwtVc
-        if (presentJwtVc) {
-          return credentialModel.getFormat != VCFormatType.jwtVc.vcValue;
-        }
-
-        /// remove JwtVcJson
-        if (presentJwtVcJson) {
-          return credentialModel.getFormat != VCFormatType.jwtVcJson.vcValue;
-        }
-
-        /// remove vcSdJwt
-        if (presentVcSdJwt) {
-          return credentialModel.getFormat != VCFormatType.vcSdJWT.vcValue;
-        }
-
-        return false;
+        return remove;
       },
     );
   }

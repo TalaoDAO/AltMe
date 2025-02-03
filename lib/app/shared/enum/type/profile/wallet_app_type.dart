@@ -1,1 +1,1 @@
-enum WalletAppType { altme, talao }
+enum WalletAppType { altme, talao, talao4eu }

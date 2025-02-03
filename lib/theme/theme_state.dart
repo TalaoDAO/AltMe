@@ -1,8 +1,9 @@
 part of 'theme_cubit.dart';
 
 class ThemeState extends Equatable {
-  const ThemeState(
-      {this.themeMode = ThemeMode.dark,}); // Default theme = light theme
+  const ThemeState({
+    this.themeMode = ThemeMode.dark,
+  }); // Default theme = light theme
 
   final ThemeMode themeMode;
 

@@ -6,7 +6,8 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:altme/dashboard/profile/models/models.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
-import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
+import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
+import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
@@ -76,21 +77,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     final log = getLogger('ProfileCubit - load');
     try {
-      /// polygon id network
-      var polygonIdNetwork = PolygonIdNetwork.PolygonMainnet;
-
-      final polygonIdNetworkString =
-          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
-
-      if (polygonIdNetworkString != null) {
-        final enumVal = PolygonIdNetwork.values.firstWhereOrNull(
-          (ele) => ele.toString() == polygonIdNetworkString,
-        );
-        if (enumVal != null) {
-          polygonIdNetwork = enumVal;
-        }
-      }
-
       /// walletType
       var walletType = WalletType.personal;
 
@@ -106,7 +92,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         }
       }
 
-      /// polygon id network
       var walletProtectionType = WalletProtectionType.pinCode;
 
       final walletProtectionTypeString = await secureStorageProvider
@@ -144,6 +129,11 @@ class ProfileCubit extends Cubit<ProfileState> {
           profileType = enumVal;
         }
       }
+      final oidc4VCIStackJsonString =
+          await secureStorageProvider.get(SecureStorageKeys.oidc4VCIStack);
+      final oidc4VCIStack = Oidc4VCIStack.fromJson(
+        json.decode(oidc4VCIStackJsonString ?? '[]') as Map<String, dynamic>,
+      );
 
       String? enterpriseWalletName;
 
@@ -184,7 +174,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           }
 
           profileModel = ProfileModel(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -206,7 +195,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
           profileModel = ProfileModel.defaultOne(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -228,7 +216,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
           profileModel = ProfileModel.ebsiV3(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -237,20 +224,19 @@ class ProfileCubit extends Cubit<ProfileState> {
             enterpriseWalletName: enterpriseWalletName,
           );
 
-        case ProfileType.dutch:
+        case ProfileType.ebsiV4:
           final privateKey = await getPrivateKey(
-            didKeyType: Parameters.didKeyTypeForDutch,
+            didKeyType: Parameters.didKeyTypeForEbsiV4,
             profileCubit: this,
           );
 
           final (did, _) = await getDidAndKid(
-            didKeyType: Parameters.didKeyTypeForDutch,
+            didKeyType: Parameters.didKeyTypeForEbsiV4,
             privateKey: privateKey,
             profileCubit: this,
           );
 
-          profileModel = ProfileModel.dutch(
-            polygonIdNetwork: polygonIdNetwork,
+          profileModel = ProfileModel.ebsiV4(
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -259,7 +245,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             enterpriseWalletName: enterpriseWalletName,
           );
 
-        case ProfileType.owfBaselineProfile:
+        case ProfileType.diipv3:
           final privateKey = await getPrivateKey(
             didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
             profileCubit: this,
@@ -271,8 +257,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileCubit: this,
           );
 
-          profileModel = ProfileModel.owfBaselineProfile(
-            polygonIdNetwork: polygonIdNetwork,
+          profileModel = ProfileModel.diipv3(
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -292,7 +277,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           }
 
           profileModel = ProfileModel(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -302,7 +286,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
       }
 
-      await update(profileModel);
+      await update(profileModel.copyWith(oidc4VCIStack: oidc4VCIStack));
     } catch (e, s) {
       log.e(
         'something went wrong',
@@ -325,8 +309,8 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     try {
       await secureStorageProvider.set(
-        SecureStorageKeys.polygonIdNetwork,
-        profileModel.polygonIdNetwork.toString(),
+        SecureStorageKeys.oidc4VCIStack,
+        jsonEncode(profileModel.oidc4VCIStack),
       );
 
       await secureStorageProvider.set(
@@ -380,19 +364,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
-  Future<void> updatePolygonIdNetwork({
-    required PolygonIdNetwork polygonIdNetwork,
-    required PolygonIdCubit polygonIdCubit,
-  }) async {
-    emit(state.copyWith(status: AppStatus.loading));
-    final profileModel =
-        state.model.copyWith(polygonIdNetwork: polygonIdNetwork);
-
-    await polygonIdCubit.setEnv(polygonIdNetwork);
-
-    await update(profileModel);
-  }
-
   Future<void> setWalletType({
     required WalletType walletType,
   }) async {
@@ -413,12 +384,17 @@ class ProfileCubit extends Cubit<ProfileState> {
     bool? secureSecurityAuthenticationWithPinCode,
     bool? verifySecurityIssuerWebsiteIdentity,
     OIDC4VCIDraftType? oidc4vciDraftType,
+    OIDC4VPDraftType? oidc4vpDraftType,
     ClientType? clientType,
     VCFormatType? vcFormatType,
+    List<VCFormatType>? formatsSupported,
     ProofHeaderType? proofHeaderType,
     ProofType? proofType,
     bool? pushAuthorizationRequest,
     bool? statusListCaching,
+    bool? displayNotification,
+    bool? dpopSupport,
+    bool? displayMode,
   }) async {
     final profileModel = state.model.copyWith(
       profileSetting: state.model.profileSetting.copyWith(
@@ -429,6 +405,10 @@ class ProfileCubit extends Cubit<ProfileState> {
               verifySecurityIssuerWebsiteIdentity,
           secureSecurityAuthenticationWithPinCode:
               secureSecurityAuthenticationWithPinCode,
+        ),
+        helpCenterOptions:
+            state.model.profileSetting.helpCenterOptions.copyWith(
+          displayNotification: displayNotification,
         ),
         selfSovereignIdentityOptions:
             state.model.profileSetting.selfSovereignIdentityOptions.copyWith(
@@ -445,11 +425,15 @@ class ProfileCubit extends Cubit<ProfileState> {
             clientId: clientId,
             clientSecret: clientSecret,
             oidc4vciDraft: oidc4vciDraftType,
+            oidc4vpDraft: oidc4vpDraftType,
             clientType: clientType,
             vcFormatType: vcFormatType,
             proofType: proofType,
             pushAuthorizationRequest: pushAuthorizationRequest,
             statusListCache: statusListCaching,
+            dpopSupport: dpopSupport,
+            formatsSupported: formatsSupported,
+            displayMode: displayMode,
           ),
         ),
       ),
@@ -532,10 +516,28 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
     }
 
+    String? companyLogoLight = profileSetting.generalOptions.companyLogoLight;
+
+    ///company Logo Light
+
+    if (companyLogoLight != null && isURL(companyLogoLight)) {
+      try {
+        final http.Response response =
+            await http.get(Uri.parse(companyLogoLight));
+        if (response.statusCode == 200) {
+          companyLogoLight = base64Encode(response.bodyBytes);
+        }
+      } catch (e) {
+        //
+      }
+    }
+
     final profileModel = state.model.copyWith(
       profileSetting: profileSetting.copyWith(
-        generalOptions:
-            profileSetting.generalOptions.copyWith(companyLogo: companyLogo),
+        generalOptions: profileSetting.generalOptions.copyWith(
+          companyLogo: companyLogo,
+          companyLogoLight: companyLogoLight,
+        ),
         discoverCardsOptions: profileSetting.discoverCardsOptions?.copyWith(
           displayExternalIssuer: updatedExternalIssuer,
         ),
@@ -565,7 +567,19 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.ebsiV3:
         await update(
           ProfileModel.ebsiV3(
-            polygonIdNetwork: state.model.polygonIdNetwork,
+            walletProtectionType: state.model.walletProtectionType,
+            isDeveloperMode: state.model.isDeveloperMode,
+            walletType: state.model.walletType,
+            enterpriseWalletName: state.model.enterpriseWalletName,
+            clientId: state.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.clientId,
+            clientSecret: state.model.profileSetting
+                .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
+          ),
+        );
+      case ProfileType.ebsiV4:
+        await update(
+          ProfileModel.ebsiV4(
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
@@ -579,7 +593,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.defaultOne:
         await update(
           ProfileModel.defaultOne(
-            polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
@@ -590,24 +603,10 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
           ),
         );
-      case ProfileType.dutch:
+
+      case ProfileType.diipv3:
         await update(
-          ProfileModel.dutch(
-            polygonIdNetwork: state.model.polygonIdNetwork,
-            walletProtectionType: state.model.walletProtectionType,
-            isDeveloperMode: state.model.isDeveloperMode,
-            walletType: state.model.walletType,
-            enterpriseWalletName: state.model.enterpriseWalletName,
-            clientId: state.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.clientId,
-            clientSecret: state.model.profileSetting
-                .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
-          ),
-        );
-      case ProfileType.owfBaselineProfile:
-        await update(
-          ProfileModel.owfBaselineProfile(
-            polygonIdNetwork: state.model.polygonIdNetwork,
+          ProfileModel.diipv3(
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
@@ -665,5 +664,50 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> resetProfile() async {
     final profileModel = ProfileModel.empty();
     await update(profileModel);
+  }
+
+  void addOidc4VCI(Oidc4VCIState data) {
+    final Oidc4VCIStack oidc4VCIStack =
+        Oidc4VCIStack(stack: state.model.oidc4VCIStack!.stack);
+    final stackLength = oidc4VCIStack.stack.length;
+    if (stackLength > 4) {
+      oidc4VCIStack.stack.removeAt(0);
+    }
+    oidc4VCIStack.stack.add(data);
+    update(state.model.copyWith(oidc4VCIStack: oidc4VCIStack));
+  }
+
+  Oidc4VCIState? getOidc4VCIStateFromJWT(String? key) {
+    if (key == null) {
+      return null;
+    }
+    final jwt = decodePayload(
+      jwtDecode: JWTDecode(),
+      token: key,
+    );
+    final challenge = jwt['challenge'] as String;
+    return getOidc4VCIState(challenge);
+  }
+
+  Oidc4VCIState? getOidc4VCIState(String? key) {
+    if (key == null) {
+      return null;
+    }
+    final candidates = state.model.oidc4VCIStack!.stack
+        .where((element) => element.challenge == key)
+        .toList();
+    return candidates[0];
+  }
+
+  Future<void> deleteOidc4VCIState(String? key) async {
+    if (key == null) {
+      return Future.value();
+    }
+
+    final Oidc4VCIStack oidc4VCIStack = state.model.oidc4VCIStack!;
+    oidc4VCIStack.stack.removeWhere((element) => element.challenge == key);
+    final profilModel = state.model.copyWith(oidc4VCIStack: oidc4VCIStack);
+    await update(profilModel);
+    return Future.value();
   }
 }

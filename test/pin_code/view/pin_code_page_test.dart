@@ -27,15 +27,25 @@ class MockFlavorCubit extends MockCubit<FlavorMode> implements FlavorCubit {
 
 void main() {
   group('Pincode Page', () {
-    final PinCodeViewCubit pinCodeViewCubit = PinCodeViewCubit();
-    final MockNavigator navigator = MockNavigator();
-    final MockSecureStorageProvider secureStorageProvider =
-        MockSecureStorageProvider();
-    final MockProfleCubit profleCubit = MockProfleCubit();
-    final MockLocalAuthApi localAuthApi = MockLocalAuthApi();
-    final MockFlavorCubit flavorCubit = MockFlavorCubit();
+    late MockSecureStorageProvider secureStorageProvider;
+    late PinCodeViewCubit pinCodeViewCubit;
+    late MockNavigator navigator;
+    late MockProfleCubit profleCubit;
+    late MockLocalAuthApi localAuthApi;
+    late MockFlavorCubit flavorCubit;
 
     setUpAll(() {
+      secureStorageProvider = MockSecureStorageProvider();
+
+      pinCodeViewCubit = PinCodeViewCubit(
+        secureStorageProvider: secureStorageProvider,
+      );
+
+      navigator = MockNavigator();
+      profleCubit = MockProfleCubit();
+      localAuthApi = MockLocalAuthApi();
+      flavorCubit = MockFlavorCubit();
+
       when(() => secureStorageProvider.get(any())).thenAnswer((_) async => '');
 
       when(() => secureStorageProvider.set(any(), any()))
@@ -60,6 +70,7 @@ void main() {
                   Navigator.of(context).push<void>(
                     PinCodePage.route(
                       isValidCallback: () {},
+                      title: '',
                       walletProtectionType: WalletProtectionType.FA2,
                     ),
                   );
@@ -83,44 +94,43 @@ void main() {
       ).called(1);
     });
 
-    // testWidgets('renders PinCodePage', (tester) async {
-    //   await tester.pumpApp(
-    //     MultiBlocProvider(
-    //       providers: [
-    //         BlocProvider<ProfileCubit>.value(value: profleCubit),
-    //         BlocProvider<PinCodeViewCubit>.value(value: pinCodeViewCubit),
-    //         BlocProvider<FlavorCubit>.value(value: flavorCubit),
-    //       ],
-    //       child: PinCodePage(
-    //         isValidCallback: () {},
-    //         walletProtectionType: WalletProtectionType.FA2,
-    //         secureStorageProvider: secureStorageProvider,
-    //         localAuthApi: localAuthApi,
-    //       ),
-    //     ),
-    //   );
-    //   expect(find.byType(PinCodeView), findsOneWidget);
-    // });
+    testWidgets('renders PinCodePage', (tester) async {
+      await tester.pumpApp(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<ProfileCubit>.value(value: profleCubit),
+            BlocProvider<PinCodeViewCubit>.value(value: pinCodeViewCubit),
+            BlocProvider<FlavorCubit>.value(value: flavorCubit),
+          ],
+          child: PinCodePage(
+            title: '',
+            isValidCallback: () {},
+            walletProtectionType: WalletProtectionType.FA2,
+            localAuthApi: localAuthApi,
+          ),
+        ),
+      );
+      expect(find.byType(PinCodeView), findsOneWidget);
+    });
 
-    // testWidgets('renders UI correctly', (tester) async {
-    //   await tester.pumpApp(
-    //     MultiBlocProvider(
-    //       providers: [
-    //         BlocProvider<ProfileCubit>.value(value: profleCubit),
-    //         BlocProvider<PinCodeViewCubit>.value(value: pinCodeViewCubit),
-    //         BlocProvider<FlavorCubit>.value(value: flavorCubit),
-    //       ],
-    //       child: PinCodeView(
-    //         isValidCallback: () {},
-    //         walletProtectionType: WalletProtectionType.FA2,
-    //         secureStorageProvider: secureStorageProvider,
-    //         localAuthApi: localAuthApi,
-    //         profileCubit: profleCubit,
-    //       ),
-    //     ),
-    //   );
-    //   expect(find.byType(BasePage), findsOneWidget);
-    //   expect(find.byType(PinCodeWidget), findsOneWidget);
-    // });
+    testWidgets('renders UI correctly', (tester) async {
+      await tester.pumpApp(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<ProfileCubit>.value(value: profleCubit),
+            BlocProvider<PinCodeViewCubit>.value(value: pinCodeViewCubit),
+            BlocProvider<FlavorCubit>.value(value: flavorCubit),
+          ],
+          child: PinCodeView(
+            isValidCallback: () {},
+            walletProtectionType: WalletProtectionType.FA2,
+            localAuthApi: localAuthApi,
+            title: '',
+          ),
+        ),
+      );
+      expect(find.byType(BasePage), findsOneWidget);
+      expect(find.byType(PinCodeWidget), findsOneWidget);
+    });
   });
 }

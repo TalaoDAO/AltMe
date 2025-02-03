@@ -67,66 +67,71 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
         ),
         borderRadius: const BorderRadius.all(Radius.circular(25)),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            widget.title,
-            style: Theme.of(context)
-                .textTheme
-                .headlineMedium!
-                .copyWith(color: text),
-            textAlign: TextAlign.center,
-          ),
-          if (widget.subtitle != null)
+      content: SizedBox(
+        width: MediaQuery.of(context).size.shortestSide * 0.8,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
             Text(
-              widget.subtitle!,
-              style:
-                  Theme.of(context).textTheme.titleLarge!.copyWith(color: text),
+              widget.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium!
+                  .copyWith(color: text),
               textAlign: TextAlign.center,
             ),
-          const SizedBox(height: 24),
-          BaseTextField(
-            label: widget.label,
-            controller: controller,
-            borderRadius: Sizes.smallRadius,
-            textCapitalization: TextCapitalization.sentences,
-            fillColor: Theme.of(context).highlightColor,
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: Sizes.spaceSmall,
-              horizontal: Sizes.spaceSmall,
+            if (widget.subtitle != null)
+              Text(
+                widget.subtitle!,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(color: text),
+                textAlign: TextAlign.center,
+              ),
+            const SizedBox(height: 24),
+            BaseTextField(
+              label: widget.label,
+              controller: controller,
+              borderRadius: Sizes.smallRadius,
+              textCapitalization: TextCapitalization.sentences,
+              fillColor: Theme.of(context).highlightColor,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: Sizes.spaceSmall,
+                horizontal: Sizes.spaceSmall,
+              ),
+              borderColor: Theme.of(context).colorScheme.onInverseSurface,
             ),
-            borderColor: Theme.of(context).colorScheme.onInverseSurface,
-          ),
-          const SizedBox(height: 24),
-          MyElevatedButton(
-            text: yes,
-            verticalSpacing: Sizes.normalRadius,
-            elevation: 10,
-            borderRadius: Sizes.smallRadius,
-            backgroundColor: color,
-            textColor: Theme.of(context).colorScheme.onSurface,
-            fontSize: 15,
-            onPressed: () {
-              Navigator.of(context).pop(controller.text);
-            },
-          ),
-          const SizedBox(width: Sizes.spaceNormal),
-          MyOutlinedButton(
-            text: no,
-            verticalSpacing: Sizes.smallRadius,
-            fontSize: 12,
-            elevation: 0,
-            borderRadius: Sizes.smallRadius,
-            borderColor:
-                Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
-            backgroundColor: background,
-            textColor: Theme.of(context).colorScheme.onSurface,
-            onPressed: () {
-              Navigator.of(context).pop('');
-            },
-          ),
-        ],
+            const SizedBox(height: 24),
+            MyElevatedButton(
+              text: yes,
+              verticalSpacing: Sizes.normalRadius,
+              elevation: 10,
+              borderRadius: Sizes.smallRadius,
+              backgroundColor: color,
+              textColor: Theme.of(context).colorScheme.onSurface,
+              fontSize: 15,
+              onPressed: () {
+                Navigator.of(context).pop(controller.text);
+              },
+            ),
+            const SizedBox(width: Sizes.spaceNormal),
+            MyOutlinedButton(
+              text: no,
+              verticalSpacing: Sizes.smallRadius,
+              fontSize: 12,
+              elevation: 0,
+              borderRadius: Sizes.smallRadius,
+              borderColor:
+                  Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+              backgroundColor: background,
+              textColor: Theme.of(context).colorScheme.onSurface,
+              onPressed: () {
+                Navigator.of(context).pop('');
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

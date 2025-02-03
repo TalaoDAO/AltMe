@@ -31,7 +31,6 @@ void main() {
         when(() => mockProfileCubit.state).thenReturn(
           ProfileState(
             model: ProfileModel(
-              polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
               walletType: WalletType.personal,
               walletProtectionType: WalletProtectionType.biometrics,
               isDeveloperMode: false,
@@ -52,7 +51,6 @@ void main() {
         when(() => mockProfileCubit.state).thenReturn(
           ProfileState(
             model: ProfileModel(
-              polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
               walletType: WalletType.personal,
               walletProtectionType: WalletProtectionType.pinCode,
               isDeveloperMode: false,

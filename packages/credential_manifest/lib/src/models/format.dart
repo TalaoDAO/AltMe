@@ -13,6 +13,8 @@ class Format {
     this.ldpVp,
     this.ldpVc,
     this.vcSdJwt,
+    this.jwtVcJsonLd,
+    this.jwtVpJsonLd,
   });
 
   factory Format.fromJson(Map<String, dynamic> json) => _$FormatFromJson(json);
@@ -25,6 +27,10 @@ class Format {
   FormatType? jwtVpJson;
   @JsonKey(name: 'jwt_vc_json')
   FormatType? jwtVcJson;
+  @JsonKey(name: 'jwt_vp_json_ld')
+  FormatType? jwtVpJsonLd;
+  @JsonKey(name: 'jwt_vc_json_ld')
+  FormatType? jwtVcJsonLd;
   @JsonKey(name: 'ldp_vp')
   FormatType? ldpVp;
   @JsonKey(name: 'ldp_vc')

@@ -3,13 +3,13 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  app_links
   connectivity_plus
   file_saver
   file_selector_windows
   flutter_secure_storage_windows
   local_auth_windows
   permission_handler_windows
-  platform_device_id_windows
   secure_application
   share_plus
   url_launcher_windows

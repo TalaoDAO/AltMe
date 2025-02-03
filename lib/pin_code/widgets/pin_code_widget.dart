@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +24,7 @@ class PinCodeWidget extends StatefulWidget {
     this.onLoginAttempt,
     this.isNewCode = false,
     this.isUserPin = false,
+    this.showKeyboard = false,
   })  : circleUIConfig = circleUIConfig ?? const CircleUIConfig(),
         keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
 
@@ -49,6 +49,7 @@ class PinCodeWidget extends StatefulWidget {
 
   final Color? backgroundColor;
   final Widget? bottomWidget;
+  final bool showKeyboard;
 
   @override
   State<StatefulWidget> createState() => _PinCodeWidgetState();
@@ -59,6 +60,10 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
   bool isConfirmationPage = false;
 
   final log = getLogger('PinCodeWidget');
+  final FocusNode _focusNode = FocusNode();
+  final TextEditingController _controller = TextEditingController();
+  String _latestKey = '';
+  String _previousText = '';
 
   @override
   void initState() {
@@ -70,7 +75,37 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
           isConfirmationPage = true;
         });
       }
+      if (widget.showKeyboard) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          FocusScope.of(context).requestFocus(_focusNode);
+        });
+        _controller.addListener(() {
+          final currentText = _controller.text;
+
+          if (currentText.length > _previousText.length) {
+            _latestKey = currentText.substring(currentText.length - 1);
+            context.read<PinCodeViewCubit>().onKeyboardButtonPressed(
+                  passwordDigits: widget.passwordDigits,
+                  text: _latestKey,
+                  cancelCallback: widget.cancelCallback,
+                  isNewCode: widget.isNewCode,
+                );
+          } else if (currentText.length < _previousText.length) {
+            context
+                .read<PinCodeViewCubit>()
+                .onDeleteCancelButtonPressed(widget.cancelCallback);
+          }
+          _previousText = currentText;
+        });
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -100,6 +135,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                       children: [
                         Stack(
                           children: [
+                            if (widget.showKeyboard) const BackLeadingButton(),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -107,10 +143,6 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                   widget.header!
                                 else
                                   WalletLogo(
-                                    profileModel: context
-                                        .read<ProfileCubit>()
-                                        .state
-                                        .model,
                                     height: 90,
                                     width: MediaQuery.of(context)
                                             .size
@@ -118,6 +150,8 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                         0.5,
                                     showPoweredBy: true,
                                   ),
+                                if (widget.showKeyboard)
+                                  const SizedBox(height: 80),
                                 const SizedBox(height: Sizes.spaceSmall),
                                 PinCodeTitle(
                                   title: widget.title,
@@ -155,18 +189,31 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                 PinCodeErrorMessage(
                                   isConfirmationPage: isConfirmationPage,
                                 ),
-                                NumKeyboard(
-                                  keyboardUIConfig: widget.keyboardUIConfig,
-                                  passwordDigits: widget.passwordDigits,
-                                  cancelCallback: widget.cancelCallback,
-                                  allowAction: true,
-                                  isNewCode: widget.isNewCode,
-                                  keyboardButton:
-                                      KeyboardButton(widget: widget),
-                                ),
+                                if (!widget.showKeyboard)
+                                  NumKeyboard(
+                                    keyboardUIConfig: widget.keyboardUIConfig,
+                                    passwordDigits: widget.passwordDigits,
+                                    cancelCallback: widget.cancelCallback,
+                                    allowAction: true,
+                                    isNewCode: widget.isNewCode,
+                                    keyboardButton:
+                                        KeyboardButton(widget: widget),
+                                  ),
                                 widget.bottomWidget ?? Container(),
                               ],
                             ),
+                            if (widget.showKeyboard)
+                              Offstage(
+                                child: TextField(
+                                  focusNode: _focusNode,
+                                  controller: _controller,
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                  onEditingComplete: () {},
+                                  onSubmitted: (value) {},
+                                ),
+                              ),
                           ],
                         ),
                       ],
@@ -243,18 +290,32 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                     )
                                   else
                                     Container(),
+                                  if (widget.showKeyboard)
+                                    Offstage(
+                                      child: TextField(
+                                        focusNode: _focusNode,
+                                        controller: _controller,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                        onEditingComplete: () {},
+                                        onSubmitted: (value) {},
+                                      ),
+                                    ),
                                 ],
                               ),
                             ),
-                            Expanded(
-                              child: NumKeyboard(
-                                keyboardUIConfig: widget.keyboardUIConfig,
-                                passwordDigits: widget.passwordDigits,
-                                cancelCallback: widget.cancelCallback,
-                                allowAction: true,
-                                keyboardButton: KeyboardButton(widget: widget),
+                            if (!widget.showKeyboard)
+                              Expanded(
+                                child: NumKeyboard(
+                                  keyboardUIConfig: widget.keyboardUIConfig,
+                                  passwordDigits: widget.passwordDigits,
+                                  cancelCallback: widget.cancelCallback,
+                                  allowAction: true,
+                                  keyboardButton:
+                                      KeyboardButton(widget: widget),
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       ),
@@ -291,10 +352,10 @@ class PinCodeErrorMessage extends StatelessWidget {
 
     return BlocBuilder<PinCodeViewCubit, PinCodeViewState>(
       builder: (context, state) {
-        Widget errorWidget = const SizedBox.shrink();
+        Widget errorWidget = const PinCodeErrorText('');
         switch (state.pinCodeError) {
           case PinCodeErrors.none:
-            errorWidget = const SizedBox.shrink();
+            errorWidget = const PinCodeErrorText('');
           case PinCodeErrors.errorSerie:
             errorWidget = PinCodeErrorText(l10n.pincodeSerie);
           case PinCodeErrors.errorSequence:

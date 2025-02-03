@@ -47,8 +47,8 @@ void main() {
     });
 
     test(
-        'formatDateForCredentialCard returns formatted date for credential card',
-        () {
+        'formatDateForCredentialCard returns '
+        'formatted date for credential card', () {
       const timestamp = '1643738400';
       expect(UiDate.formatDateForCredentialCard(timestamp), '2022-02-01');
     });

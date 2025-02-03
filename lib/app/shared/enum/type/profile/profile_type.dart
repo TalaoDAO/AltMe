@@ -1,45 +1,63 @@
-import 'package:altme/l10n/l10n.dart';
-
 enum ProfileType {
   defaultOne,
   ebsiV3,
-  dutch,
-  owfBaselineProfile,
+  ebsiV4,
+  //diipv2point1,
+  diipv3,
   custom,
   enterprise,
 }
 
 extension ProfileTypeX on ProfileType {
-  String getTitle({
-    required AppLocalizations l10n,
-    required String name,
-  }) {
+  String getTitle({required String name}) {
     switch (this) {
       case ProfileType.custom:
-        return l10n.profileCustom;
+        return 'Custom';
       case ProfileType.ebsiV3:
-        return l10n.profileEbsiV3;
-      case ProfileType.dutch:
-        return l10n.decentralizedIdentityInteropProfile;
+        return 'European Blockchain Services Infrastructure (EBSI v3.x)';
+      case ProfileType.ebsiV4:
+        return 'European Blockchain Services Infrastructure (EBSI v4.0)';
       case ProfileType.enterprise:
-        return name.isEmpty ? l10n.enterprise : name;
-      case ProfileType.owfBaselineProfile:
-        return l10n.oWFBaselineProfile;
+        return name.isEmpty ? 'Enterprise' : name;
+      // case ProfileType.diipv2point1:
+      //   return 'Decentralized Identity Interop Profile (DIIP v2.1)';
+      case ProfileType.diipv3:
+        return 'Decentralized Identity Interop Profile (DIIP v3.0)';
       case ProfileType.defaultOne:
-        return l10n.defaultProfile;
+        return 'Default';
     }
   }
+
+  String get profileId => name;
 
   bool get showSponseredBy {
     switch (this) {
       case ProfileType.custom:
       case ProfileType.defaultOne:
-      case ProfileType.dutch:
+        // case ProfileType.diipv2point1:
         return false;
       case ProfileType.ebsiV3:
+      case ProfileType.ebsiV4:
       case ProfileType.enterprise:
-      case ProfileType.owfBaselineProfile:
+      case ProfileType.diipv3:
         return true;
+    }
+  }
+
+  String get getVCId {
+    switch (this) {
+      case ProfileType.custom:
+        return 'A7G9B4C';
+      case ProfileType.ebsiV3:
+        return 'Q2X5T8L';
+      case ProfileType.ebsiV4:
+        return 'J9R3N6P';
+      case ProfileType.diipv3:
+        return 'M5K8Y2W';
+      case ProfileType.defaultOne:
+        return 'Z4C7T1X';
+      case ProfileType.enterprise:
+        return 'L8F6V3P';
     }
   }
 }

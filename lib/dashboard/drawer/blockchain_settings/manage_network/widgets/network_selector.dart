@@ -18,26 +18,34 @@ class NetworkSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
       builder: (context, state) {
-        return RadioListTile(
-          value: network,
-          groupValue: groupValue,
-          contentPadding: EdgeInsets.zero,
-          activeColor: Theme.of(context).colorScheme.onPrimary,
-          dense: true,
-          visualDensity: VisualDensity.compact,
-          title: Text(
-            network.title!,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          subtitle: Text(
-            network.subTitle!,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          onChanged: (BlockchainNetwork? value) async {
-            if (value != null) {
-              await context.read<ManageNetworkCubit>().setNetwork(value);
-            }
+        return ListTile(
+          onTap: () async {
+            await context.read<ManageNetworkCubit>().setNetwork(network);
           },
+          title: RichText(
+            text: TextSpan(
+              children: <InlineSpan>[
+                TextSpan(
+                  text: network.title,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const TextSpan(text: '\n'),
+                TextSpan(
+                  text: network.subTitle,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ],
+            ),
+          ),
+          trailing: Icon(
+            state.network == network
+                ? Icons.radio_button_checked
+                : Icons.radio_button_unchecked,
+            size: Sizes.icon2x,
+            color: Theme.of(context).colorScheme.primary,
+          ),
         );
       },
     );

@@ -33,7 +33,7 @@ class Credential {
     return Credential(
       'dummy1',
       ['dummy2'],
-      ['dummy3'],
+      [''],
       'dummy4',
       'dummy5',
       '', //date
@@ -56,10 +56,10 @@ class Credential {
   @JsonKey(name: '@context')
   final List<dynamic>? context;
   final List<String> type;
-  final String issuer;
+  final dynamic issuer;
   @JsonKey(fromJson: _fromJsonTranslations)
   final List<Translation> description;
-  @JsonKey(defaultValue: <Translation>[])
+  @JsonKey(defaultValue: <Translation>[], fromJson: _fromJsonTranslations)
   final List<Translation> name;
   @JsonKey(defaultValue: '')
   final String expirationDate;
@@ -125,6 +125,9 @@ class Credential {
       return json
           .map((dynamic e) => Translation.fromJson(e as Map<String, dynamic>))
           .toList();
+    }
+    if (json is String) {
+      return [Translation('en', json)];
     }
     return [Translation.fromJson(json as Map<String, dynamic>)];
   }

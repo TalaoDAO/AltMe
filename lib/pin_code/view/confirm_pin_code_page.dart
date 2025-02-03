@@ -4,6 +4,7 @@ import 'package:altme/onboarding/widgets/m_stepper.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class ConfirmPinCodePage extends StatelessWidget {
   const ConfirmPinCodePage({
@@ -35,7 +36,9 @@ class ConfirmPinCodePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PinCodeViewCubit(),
+      create: (context) => PinCodeViewCubit(
+        secureStorageProvider: getSecureStorage,
+      ),
       child: ConfirmPinCodeView(
         storedPassword: storedPassword,
         isValidCallback: isValidCallback,
@@ -77,8 +80,8 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return WillPopScope(
-      onWillPop: () async => !widget.isFromOnboarding,
+    return PopScope(
+      canPop: !widget.isFromOnboarding,
       child: BasePage(
         scrollView: false,
         title: '',
@@ -90,7 +93,7 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
           title: l10n.confirmYourPinCode,
           header: widget.isFromOnboarding
               ? MStepper(
-                  step: 1,
+                  step: 2,
                   totalStep: byPassScreen ? 2 : 3,
                 )
               : null,

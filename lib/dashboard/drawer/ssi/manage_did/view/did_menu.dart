@@ -1,9 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DidMenu extends StatelessWidget {
   const DidMenu({super.key});
@@ -40,7 +38,6 @@ class DidView extends StatelessWidget {
                   padding: EdgeInsets.zero,
                 ),
                 WalletLogo(
-                  profileModel: context.read<ProfileCubit>().state.model,
                   height: 90,
                   width: MediaQuery.of(context).size.shortestSide * 0.5,
                   showPoweredBy: true,
@@ -56,6 +53,11 @@ class DidView extends StatelessWidget {
                       return Container();
                     }
 
+                    /// there is no new key for EBSI V4
+                    if (didKeyType == DidKeyType.ebsiv4) {
+                      return Container();
+                    }
+
                     final title = didKeyType.getTitle(l10n);
                     return DrawerItem(
                       title: title,
@@ -67,32 +69,6 @@ class DidView extends StatelessWidget {
                         );
                       },
                     );
-                  },
-                ),
-                DrawerItem(
-                  title: l10n.polygonDecentralizedID,
-                  onTap: () async {
-                    LoadingView().show(context: context);
-                    try {
-                      final polygonIdCubit = context.read<PolygonIdCubit>();
-                      await polygonIdCubit.initialise();
-                      LoadingView().hide();
-                      await Navigator.of(context)
-                          .push<void>(ManageDidPolygonIdPage.route());
-                    } catch (e) {
-                      LoadingView().hide();
-                      AlertMessage.showStateMessage(
-                        context: context,
-                        stateMessage: StateMessage.error(
-                          showDialog: true,
-                          //stringMessage: e.toString(),
-                          messageHandler: ResponseMessage(
-                            message: ResponseString
-                                .RESPONSE_STRING_deviceIncompatibilityMessage,
-                          ),
-                        ),
-                      );
-                    }
                   },
                 ),
                 DrawerItem(

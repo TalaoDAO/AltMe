@@ -18,13 +18,14 @@ class TokenItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: BackgroundCard(
-        color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: ListTile(
           contentPadding: EdgeInsets.zero,
           minVerticalPadding: 0,
-          leading: token.iconUrl == null
-              ? const CircleAvatar()
+          leading: token.iconUrl == null || token.iconUrl == 'null'
+              ? CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                )
               : CachedImageFromNetwork(
                   token.iconUrl!,
                   width: Sizes.tokenLogoSize,

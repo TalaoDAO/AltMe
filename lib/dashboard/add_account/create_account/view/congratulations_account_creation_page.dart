@@ -1,10 +1,11 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/splash/splash.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
 
 class CongratulationsAccountCreationPage extends StatelessWidget {
   const CongratulationsAccountCreationPage({
@@ -91,6 +92,9 @@ class _CongratulationsAccountCreationViewState
 
       case AccountType.binance:
         message = l10n.binanceAccountCreationCongratulations;
+
+      case AccountType.etherlink:
+        message = l10n.etherlinkAccountCreationCongratulations;
     }
 
     return Stack(
@@ -106,7 +110,6 @@ class _CongratulationsAccountCreationViewState
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 WalletLogo(
-                  profileModel: context.read<ProfileCubit>().state.model,
                   height: Sizes.logo2XLarge,
                   width: MediaQuery.of(context).size.shortestSide * 0.5,
                   showPoweredBy: true,
@@ -121,9 +124,11 @@ class _CongratulationsAccountCreationViewState
                 const SizedBox(
                   height: Sizes.spaceNormal,
                 ),
-                Text(message,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineSmall),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
                 const SizedBox(
                   height: Sizes.space3XLarge,
                 ),
@@ -142,6 +147,7 @@ class _CongratulationsAccountCreationViewState
                   DashboardPage.route(),
                   (Route<dynamic> route) => route.isFirst,
                 );
+                context.read<SplashCubit>().authenticated();
               },
             ),
           ),

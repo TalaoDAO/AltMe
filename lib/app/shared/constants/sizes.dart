@@ -23,11 +23,10 @@ abstract class Sizes {
   ///borderRadius
   static const double credentialBorderRadius = 16;
   static const double smallRadius = 8;
-  static const double normalRadius = 12;
+  static const double normalRadius = 10;
   static const double largeRadius = 18;
 
   static const double credentialAspectRatio = 500 / 300;
-  static const double linkedinBannerAspectRatio = 1584 / 396;
 
   //Icon
   static const double iconXSmall = 12;
@@ -44,6 +43,7 @@ abstract class Sizes {
 
   //TextField height
   static const double appBarHeight = 89;
+  static const double defaltAppBarHeight = 56;
 
   //Button height
   static const double normalButton = 38;

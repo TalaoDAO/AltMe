@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:oidc4vc/src/helper_function.dart';
+import 'package:oidc4vc/src/functions/list_to_string.dart';
 
 void main() {
   group('listToString', () {

@@ -1,10 +1,13 @@
 export 'client_authentication_widget.dart';
 export 'client_type_widget.dart';
-export 'confidential_client_widget.dart';
 export 'cryptograhic_holder_binding.dart';
 export 'did_key_type_widget.dart';
-export 'draft_type_widget.dart';
+export 'display_mode_widget.dart';
+export 'dpop_support_widget.dart';
+export 'oidc4vc_draft_type_widget.dart';
+export 'oidc4vp_draft_type_widget.dart';
 export 'option_container.dart';
+export 'pre_registered_widget.dart';
 export 'proof_header_widget.dart';
 export 'proof_type_widget.dart';
 export 'push_authorization_request.dart';

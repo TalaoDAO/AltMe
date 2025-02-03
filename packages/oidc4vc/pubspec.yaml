@@ -15,7 +15,9 @@ dependencies:
   crypto: ^3.0.3
   dart_bip32_bip44: ^0.2.0
   dart_jsonwebtoken: ^2.13.0
-  dart_web3: ^0.0.3
+  dart_web3:
+    git:
+      url: https://github.com/TalaoDAO/dart_web3.git
   did_kit:
     path: ../did_kit
   dio: ^5.3.2
@@ -29,21 +31,17 @@ dependencies:
   jose_plus: ^0.4.5
   json_annotation: ^4.8.1
   json_path: ^0.7.2 #latest version creates test issue
+  pinenacl: ^0.6.0
   secp256k1: ^0.3.0
   secure_storage:
     path: ../secure_storage
-  tezart:
-    git:
-      url: https://github.com/autonomy-system/tezart.git
-      ref: e53e4ab9eaabea53cbf70e814efd2245b4659f48
-  uuid: ^3.0.7
+  uuid: ^4.5.1
 
 dependency_overrides:
   ffi: 2.1.0 #didkit from path which depends on ffi ^1.0.0
-  pinenacl: ^0.5.1 # tezart from git depends on pinenacl ^0.3.3
 
 dev_dependencies:
-  build_runner: ^2.4.4
+  build_runner: ^2.4.11
   flutter_test:
     sdk: flutter
   json_serializable: ^6.7.0

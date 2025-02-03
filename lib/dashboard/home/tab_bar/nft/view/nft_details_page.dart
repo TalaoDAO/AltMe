@@ -405,16 +405,8 @@ class SendButton extends StatelessWidget {
         child: MyElevatedButton(
           text: l10n.send,
           onPressed: () {
-            Navigator.of(context).push<void>(
-              ConfirmTokenTransactionPage.route(
-                selectedToken: isTezos
-                    ? (widget.nftModel as TezosNftModel).getToken()
-                    : (widget.nftModel as EthereumNftModel).getToken(),
-                withdrawalAddress: '',
-                amount: '1',
-                isNFT: true,
-              ),
-            );
+            Navigator.of(context)
+                .push<void>(SendToPage.route(nftModel: widget.nftModel));
           },
         ),
       ),

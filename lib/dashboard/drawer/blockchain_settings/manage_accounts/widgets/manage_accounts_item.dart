@@ -32,19 +32,8 @@ class ManageAccountsItem extends StatelessWidget {
         ? '${l10n.cryptoAccount} ${listIndex + 1}'
         : cryptoAccountData.name;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: Sizes.spaceSmall),
-      padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(Sizes.normalRadius),
-        ),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
-          width: 0.25,
-        ),
-      ),
+    return BackgroundCard(
+      padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +64,7 @@ class ManageAccountsItem extends StatelessWidget {
                   child: Icon(
                     Icons.edit,
                     size: 20,
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(width: Sizes.spaceXSmall),
@@ -96,9 +85,7 @@ class ManageAccountsItem extends StatelessWidget {
                   InkWell(
                     onTap: () async {
                       await Clipboard.setData(
-                        ClipboardData(
-                          text: walletAddressExtracted,
-                        ),
+                        ClipboardData(text: cryptoAccountData.walletAddress),
                       );
                       AlertMessage.showStateMessage(
                         context: context,
@@ -111,6 +98,7 @@ class ManageAccountsItem extends StatelessWidget {
                       IconStrings.copy,
                       width: Sizes.icon,
                       height: Sizes.icon,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(width: Sizes.spaceSmall),
@@ -121,49 +109,51 @@ class ManageAccountsItem extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SeeAddressButton(
-                onTap: () {
-                  Navigator.of(context).push<void>(
-                    AccountPublicAddressPage.route(
-                      accountName: accountName,
-                      accountAddress: cryptoAccountData.walletAddress,
-                    ),
-                  );
-                },
+              Expanded(
+                child: SeeAddressButton(
+                  onTap: () {
+                    Navigator.of(context).push<void>(
+                      AccountPublicAddressPage.route(
+                        accountName: accountName,
+                        accountAddress: cryptoAccountData.walletAddress,
+                      ),
+                    );
+                  },
+                ),
               ),
               const SizedBox(width: Sizes.spaceSmall),
-              RevealPrivateKeyButton(
-                onTap: () async {
-                  final confirm = await showDialog<bool>(
-                        context: context,
-                        builder: (context) => ConfirmDialog(
-                          title: l10n.warningDialogTitle,
-                          subtitle: l10n.accountPrivateKeyAlert,
-                          yes: l10n.showDialogYes,
-                          no: l10n.showDialogNo,
-                        ),
-                      ) ??
-                      false;
-
-                  if (confirm) {
-                    await securityCheck(
-                      context: context,
-                      localAuthApi: LocalAuthApi(),
-                      onSuccess: () {
-                        Navigator.of(context).push<void>(
-                          AccountPrivateKeyPage.route(
-                            privateKey: cryptoAccountData.secretKey,
+              Expanded(
+                child: RevealPrivateKeyButton(
+                  onTap: () async {
+                    final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => ConfirmDialog(
+                            title: l10n.warningDialogTitle,
+                            subtitle: l10n.accountPrivateKeyAlert,
+                            yes: l10n.showDialogYes,
+                            no: l10n.showDialogNo,
                           ),
-                        );
-                      },
-                    );
-                  }
-                },
+                        ) ??
+                        false;
+
+                    if (confirm) {
+                      await securityCheck(
+                        context: context,
+                        title: l10n.typeYourPINCodeToAuthenticate,
+                        localAuthApi: LocalAuthApi(),
+                        onSuccess: () {
+                          Navigator.of(context).push<void>(
+                            AccountPrivateKeyPage.route(
+                              privateKey: cryptoAccountData.secretKey,
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
               ),
             ],
-          ),
-          const SizedBox(
-            height: Sizes.spaceSmall,
           ),
         ],
       ),

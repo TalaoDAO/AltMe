@@ -1,7 +1,7 @@
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:reown_walletkit/reown_walletkit.dart';
 
 part 'saved_dapp_data.g.dart';
 

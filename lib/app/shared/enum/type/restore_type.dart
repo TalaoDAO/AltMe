@@ -1,0 +1,1 @@
+enum RestoreType { cryptoWallet, appBackup }

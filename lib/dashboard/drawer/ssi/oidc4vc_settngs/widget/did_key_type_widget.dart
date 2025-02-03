@@ -1,21 +1,20 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/widget/divider_for_radio_list.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
-class DidKeyTypeWidget extends StatelessWidget {
-  const DidKeyTypeWidget({super.key});
+class KeyIdentifierAndKeyTypeWidget extends StatelessWidget {
+  const KeyIdentifierAndKeyTypeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return OptionContainer(
-          title: l10n.defaultDid,
-          subtitle: l10n.selectOneOfTheDid,
+          title: 'Key identifier and key type',
+          subtitle: 'Select jwk thumbprint or a DID method',
           body: ListView.builder(
             itemCount: DidKeyType.values.length,
             shrinkWrap: true,
@@ -27,19 +26,14 @@ class DidKeyTypeWidget extends StatelessWidget {
               if (didKeyType == DidKeyType.jwtClientAttestation) {
                 return Container();
               }
+
+              /// there is no new key for EBSI V4
+              if (didKeyType == DidKeyType.ebsiv4) {
+                return Container();
+              }
+
               return Column(
                 children: [
-                  if (index != 0)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Divider(
-                        height: 0,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.12),
-                      ),
-                    ),
                   ListTile(
                     onTap: () {
                       final customOidc4vcProfile = state.model.profileSetting
@@ -52,14 +46,15 @@ class DidKeyTypeWidget extends StatelessWidget {
                           VCFormatType.ldpVc;
 
                       final isUnmatchedDid = didKeyType == DidKeyType.ebsiv3 ||
+                          didKeyType == DidKeyType.ebsiv4 ||
                           didKeyType == DidKeyType.jwkP256;
 
                       if (isldpVc && isUnmatchedDid) {
                         showDialog<bool>(
                           context: context,
-                          builder: (context) => ErrorDetailsDialog(
-                            erroDescription:
-                                l10n.theLdpFormatIsNotSupportedByThisDIDMethod,
+                          builder: (context) => const ErrorDetailsDialog(
+                            erroDescription: 'The ldp_format is not supported'
+                                ' by this DID method.',
                           ),
                         );
 
@@ -70,17 +65,15 @@ class DidKeyTypeWidget extends StatelessWidget {
                             didKeyType: didKeyType,
                           );
                     },
-                    shape: const RoundedRectangleBorder(
+                    shape: RoundedRectangleBorder(
                       side: BorderSide(
-                        color: Color(0xFFDDDDEE),
+                        color: Theme.of(context).colorScheme.onSurface,
                         width: 0.5,
                       ),
                     ),
                     title: Text(
-                      didKeyType.formattedString,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
+                      didKeyType.didString,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     trailing: Icon(
                       state.model.profileSetting.selfSovereignIdentityOptions
@@ -89,9 +82,10 @@ class DidKeyTypeWidget extends StatelessWidget {
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,
                       size: Sizes.icon2x,
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
+                  const DividerForRadioList(),
                 ],
               );
             },

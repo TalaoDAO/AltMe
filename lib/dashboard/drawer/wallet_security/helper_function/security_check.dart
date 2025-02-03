@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> securityCheck({
   required BuildContext context,
+  required String title,
   required VoidCallback onSuccess,
   required LocalAuthApi localAuthApi,
 }) async {
@@ -19,13 +20,13 @@ Future<void> securityCheck({
     case WalletProtectionType.FA2:
       await Navigator.of(context).push<void>(
         PinCodePage.route(
+          title: title,
           isValidCallback: onSuccess.call,
           restrictToBack: false,
           walletProtectionType: walletProtectionType,
         ),
       );
     case WalletProtectionType.biometrics:
-      final LocalAuthApi localAuthApi = LocalAuthApi();
       final authenticated = await localAuthApi.authenticate(
         localizedReason: l10n.scanFingerprintToAuthenticate,
       );

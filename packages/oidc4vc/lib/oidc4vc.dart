@@ -10,6 +10,11 @@ library ebsi;
 
 export 'src/client_authentication.dart';
 export 'src/client_type.dart';
+export 'src/functions/disclosure.dart';
+export 'src/functions/generate_token.dart';
+export 'src/functions/list_to_string.dart';
+export 'src/functions/private_key.dart';
+export 'src/functions/public_key_base58_to_public_jwk.dart';
 export 'src/issuer_token_parameters.dart';
 export 'src/media_type.dart';
 export 'src/models/models.dart';

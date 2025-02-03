@@ -9,6 +9,7 @@ class BackgroundCard extends StatelessWidget {
     this.color,
     this.height,
     this.width,
+    this.borderRadius = 10,
   });
 
   final Widget? child;
@@ -17,6 +18,7 @@ class BackgroundCard extends StatelessWidget {
   final Color? color;
   final double? height;
   final double? width;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class BackgroundCard extends StatelessWidget {
       width: width,
       decoration: BoxDecoration(
         color: color ?? Theme.of(context).colorScheme.surfaceContainer,
-        borderRadius: const BorderRadius.all(Radius.circular(15)),
+        borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
       ),
       child: child,
     );

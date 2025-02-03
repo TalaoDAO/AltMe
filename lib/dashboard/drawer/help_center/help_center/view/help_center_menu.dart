@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -75,13 +76,21 @@ class HelpCenterView extends StatelessWidget {
           const DrawerLogo(),
           if (helpCenterOptions.displayChatSupport && isEnterprise) ...[
             DrawerItem(
-              title: '${l10n.chatWith} $customChatSupportName',
+              title: l10n.chatRoom,
               onTap: () {
                 Navigator.of(context).push<void>(
                   AltmeSupportChatPage.route(
                     appBarTitle: '${l10n.chatWith} $customChatSupportName',
                   ),
                 );
+              },
+            ),
+          ],
+          if (helpCenterOptions.displayNotification && isEnterprise) ...[
+            DrawerItem(
+              title: l10n.notificationRoom,
+              onTap: () {
+                Navigator.of(context).push<void>(NotificationPage.route());
               },
             ),
           ],
@@ -95,17 +104,23 @@ class HelpCenterView extends StatelessWidget {
             ),
           ],
           DrawerItem(
-            title: l10n.faqs,
             onTap: () {
-              Navigator.of(context).push<void>(FAQsPage.route());
+              LaunchUrl.launch('https://doc.wallet-provider.io/welcome');
             },
+            title: l10n.documentation,
           ),
-          DrawerItem(
-            onTap: () {
-              LaunchUrl.launch('https://${AltMeStrings.appContactWebsiteName}');
-            },
-            title: l10n.officialWebsite,
-          ),
+          // DrawerItem(
+          //   title: l10n.faqs,
+          //   onTap: () {
+          //     Navigator.of(context).push<void>(FAQsPage.route());
+          //   },
+          // ),
+          // DrawerItem(
+          //   onTap: () {
+          //     LaunchUrl.launch('https://${AltMeStrings.appContactWebsiteName}');
+          //   },
+          //   title: l10n.officialWebsite,
+          // ),
         ],
       ),
     );

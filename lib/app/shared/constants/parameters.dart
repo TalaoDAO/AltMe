@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class Parameters {
   static const int multipleCredentialsProcessDelay = 1;
 
+  // 'false' for talao
+  // 'true' for altme
   static const bool walletHandlesCrypto = true;
 
   static const AdvanceSettingsState defaultAdvanceSettingsState =
@@ -25,6 +27,8 @@ class Parameters {
 
   static const oidc4vcUniversalLink =
       'https://app.altme.io/app/download/callback';
+  static const walletOfferDeepLink = 'altme-openid-credential-offer';
+  static const walletPresentationDeepLink = 'altme-openid-vc';
 
   static const authorizeEndPoint =
       'https://app.altme.io/app/download/authorize';
@@ -53,7 +57,7 @@ class Parameters {
   static const ETH_SEND_TRANSACTION = 'eth_sendTransaction';
   static const ETH_SIGN_TYPE_DATA_V4 = 'eth_signTypedData_v4';
 
-  static const walletConnectMethods = [
+  static const evmConnectMethods = [
     PERSONAL_SIGN,
     ETH_SIGN,
     ETH_SIGN,
@@ -63,36 +67,82 @@ class Parameters {
     ETH_SIGN_TYPE_DATA_V4,
   ];
 
-  static const walletConnectEvents = ['chainChanged', 'accountsChanged'];
+  static const TEZOS_SIGN = 'tezos_sign';
+  static const TEZOS_SEND = 'tezos_send';
+  static const TEZOS_GET_ACCOUNTS = 'tezos_getAccounts';
+
+  static const tezosConnectMethods = [
+    TEZOS_SIGN,
+    TEZOS_SEND,
+    TEZOS_GET_ACCOUNTS,
+  ];
+
+  static const tezosEvents = <String>[];
+
+  static const chainChanged = 'chainChanged';
+  static const accountsChanged = 'accountsChanged';
+
+  static const requiredEvents = [
+    chainChanged,
+    accountsChanged,
+  ];
+
+  static const optionalEvents = ['message', 'disconnect', 'connect'];
+
+  static const allEvents = [
+    ...tezosEvents,
+    ...requiredEvents,
+    ...optionalEvents,
+  ];
 
   static const String clientId = 'urn:altme:0001';
   static const int maxEntries = 3;
 
   // 'Talao'for talao
+  // 'Altme' for altme
   static const String appName = 'Altme';
 
+  // 'false' for talao
+  // 'true' for altme
+  static const bool importAndRestoreAtOnboarding = true;
+
   // false for talao
+  // 'true' for altme
   static const bool supportDefiCompliance = true;
+
   // false for talao
+  // 'true' for altme
   static const bool supportCryptoAccountOwnershipInDiscoverForEnterpriseMode =
       true;
-  // false for talao
-  static const bool showChainbornCard = false;
-  // false for talao
-  static const bool showTezotopiaCard = false;
 
-  //'https://app.talao.co/app/download/authorize' for Talao
-  static const String redirectUri =
-      'https://app.altme.io/app/download/authorize';
+  // false for talao
+  // 'true' for altme
+  static const bool showChainbornCard = true;
+
+  // false for talao
+  // true for altme
+  static const bool showTezotopiaCard = true;
 
   //'https://app.talao.co/app/download/callback' for Talao
+  // 'https://app.altme.io/app/download/callback' for altme
   static const String authorizationEndPoint =
       'https://app.altme.io/app/download/callback';
 
-  // 'talao_wallet'for talao
-  static const String walletName = 'altme_wallet';
+  // 'Talao_wallet'for talao
+  // 'Altme_wallet' for altme
+  static const String walletName = 'Altme_wallet';
+
+  // 'https://app.talao.co/wallet_issuer'for talao
+  // 'https://app.altme.io/wallet_issuer' for altme
+  static const String walletIssuer = 'https://app.altme.io/wallet_issuer';
+
+  // 'https://app.talao.co/wallet-issuer/.well-known/openid-configuration'for talao
+  // 'https://app.altme.io/wallet-issuer/.well-known/openid-configuration' for altme
+  static const String walletMetadataForVerifier =
+      'https://app.altme.io/wallet-issuer/.well-known/openid-configuration';
 
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
+  static const DidKeyType didKeyTypeForEbsiV4 = DidKeyType.ebsiv4;
   static const DidKeyType didKeyTypeForDefault = DidKeyType.edDSA;
   static const DidKeyType didKeyTypeForDutch = DidKeyType.jwkP256;
   static const DidKeyType didKeyTypeForOwfBaselineProfile = DidKeyType.jwkP256;
@@ -102,4 +152,14 @@ class Parameters {
   static const Color seedColor = Color(0xff6600FF);
   // Talao
   // static const Color seedColor = Color(0xff1EAADC);
+
+  // ThemeMode.light for talao
+  // 'ThemeMode.dark' for altme
+  static const ThemeMode defaultTheme = ThemeMode.dark;
+
+// Used to prevent display
+// This key tells the app to not display the field and it allows use of maps
+// with display of key value. See displayKeyValueFromMap
+
+  static const String doNotDisplayMe = 'doNotDisplayMeMggK5GvU7';
 }

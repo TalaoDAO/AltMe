@@ -99,11 +99,6 @@ class ResponseMessage with MessageHandler {
               .RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE
               .localise(context);
 
-        case ResponseString.RESPONSE_STRING_linkedInBannerSuccessfullyExported:
-          return ResponseString
-                  .RESPONSE_STRING_linkedInBannerSuccessfullyExported
-              .localise(context);
-
         case ResponseString.RESPONSE_STRING_credentialSuccessfullyExported:
           return ResponseString.RESPONSE_STRING_credentialSuccessfullyExported
               .localise(context);
@@ -524,23 +519,6 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
-        case ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard:
-          return ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard
-              .localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_linkedinCardExpirationDate:
-          return ResponseString.RESPONSE_STRING_linkedinCardExpirationDate
-              .localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt:
-          return ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt.localise(
-            context,
-          );
-
         case ResponseString.RESPONSE_STRING_verifiableIdCardDummyDesc:
           return ResponseString.RESPONSE_STRING_verifiableIdCardDummyDesc
               .localise(
@@ -722,6 +700,12 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
+        case ResponseString.RESPONSE_STRING_credentialIssuanceIsStillPending:
+          return ResponseString.RESPONSE_STRING_credentialIssuanceIsStillPending
+              .localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_thisCredentialFormatIsNotSupported:
           return ResponseString
               .RESPONSE_STRING_thisCredentialFormatIsNotSupported.localise(
@@ -782,6 +766,46 @@ class ResponseMessage with MessageHandler {
           );
         case ResponseString.RESPONSE_STRING_theWalletIsSuspended:
           return ResponseString.RESPONSE_STRING_theWalletIsSuspended.localise(
+            context,
+          );
+        case ResponseString
+              .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress:
+          return ResponseString
+              .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress.localise(
+            context,
+            injectedMessage: injectedMessage,
+          );
+
+        case ResponseString.RESPONSE_STRING_invalidClientErrorDescription:
+          return ResponseString.RESPONSE_STRING_invalidClientErrorDescription
+              .localise(
+            context,
+          );
+
+        case ResponseString
+              .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription:
+          return ResponseString
+              .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription.localise(
+            context,
+          );
+
+        case ResponseString
+              .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription:
+          return ResponseString
+                  // ignore: lines_longer_than_80_chars
+                  .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage:
+          return ResponseString
+              .RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_invalidCode:
+          return ResponseString.RESPONSE_STRING_invalidCode.localise(
             context,
           );
       }

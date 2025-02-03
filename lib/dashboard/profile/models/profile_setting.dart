@@ -94,22 +94,29 @@ class BlockchainOptions extends Equatable {
     required this.tzproRpcNode,
     this.tzproApiKey,
     this.infuraApiKey,
+    this.etherlinkSupport,
+    this.testnet,
+    this.associatedAddressFormat = VCFormatType.ldpVc,
   });
 
   factory BlockchainOptions.fromJson(Map<String, dynamic> json) =>
       _$BlockchainOptionsFromJson(json);
 
   factory BlockchainOptions.initial() => const BlockchainOptions(
+        associatedAddressFormat: VCFormatType.ldpVc,
         bnbSupport: true,
         ethereumSupport: true,
         fantomSupport: true,
         hederaSupport: true,
         infuraRpcNode: false,
         polygonSupport: true,
+        etherlinkSupport: true,
         tezosSupport: true,
         tzproRpcNode: false,
+        testnet: false,
       );
 
+  final VCFormatType? associatedAddressFormat;
   final bool bnbSupport;
   final bool ethereumSupport;
   final bool fantomSupport;
@@ -117,13 +124,16 @@ class BlockchainOptions extends Equatable {
   final String? infuraApiKey;
   final bool infuraRpcNode;
   final bool polygonSupport;
+  final bool? etherlinkSupport;
   final bool tezosSupport;
   final String? tzproApiKey;
   final bool tzproRpcNode;
+  final bool? testnet;
 
   Map<String, dynamic> toJson() => _$BlockchainOptionsToJson(this);
 
   BlockchainOptions copyWth({
+    VCFormatType? associatedAddressFormat,
     bool? bnbSupport,
     bool? ethereumSupport,
     bool? fantomSupport,
@@ -131,26 +141,33 @@ class BlockchainOptions extends Equatable {
     String? infuraApiKey,
     bool? infuraRpcNode,
     bool? polygonSupport,
+    bool? etherlinkSupport,
     bool? tezosSupport,
     String? tzproApiKey,
     bool? tzproRpcNode,
+    bool? testnet,
   }) {
     return BlockchainOptions(
+      associatedAddressFormat:
+          associatedAddressFormat ?? this.associatedAddressFormat,
       bnbSupport: bnbSupport ?? this.bnbSupport,
       ethereumSupport: ethereumSupport ?? this.ethereumSupport,
       fantomSupport: fantomSupport ?? this.fantomSupport,
       hederaSupport: hederaSupport ?? this.hederaSupport,
       infuraRpcNode: infuraRpcNode ?? this.infuraRpcNode,
       polygonSupport: polygonSupport ?? this.polygonSupport,
+      etherlinkSupport: etherlinkSupport ?? this.etherlinkSupport,
       tezosSupport: tezosSupport ?? this.tezosSupport,
       tzproRpcNode: tzproRpcNode ?? this.tzproRpcNode,
       infuraApiKey: infuraApiKey ?? this.infuraApiKey,
       tzproApiKey: tzproApiKey ?? this.tzproApiKey,
+      testnet: testnet ?? this.testnet,
     );
   }
 
   @override
   List<Object?> get props => [
+        associatedAddressFormat,
         bnbSupport,
         ethereumSupport,
         fantomSupport,
@@ -158,9 +175,11 @@ class BlockchainOptions extends Equatable {
         infuraApiKey,
         infuraRpcNode,
         polygonSupport,
+        etherlinkSupport,
         tezosSupport,
         tzproApiKey,
         tzproRpcNode,
+        testnet,
       ];
 }
 
@@ -180,15 +199,18 @@ class DiscoverCardsOptions extends Equatable {
     required this.displayVerifiableId,
     required this.displayExternalIssuer,
     this.displayOver18Jwt = false,
-    this.displayVerifiableIdJwt = true,
-    this.displayVerifiableIdSdJwt = true,
+    this.displayOver18SdJwt = false,
+    this.displayVerifiableIdJwt = false,
+    this.displayVerifiableIdSdJwt = false,
     this.displayEmailPass = true,
     this.displayEmailPassJwt = true,
     this.displayPhonePass = true,
     this.displayPhonePassJwt = true,
+    this.displayPhonePassSdJwt = false,
     this.displayChainborn = false,
     this.displayTezotopia = false,
     this.displayHumanityJwt = false,
+    this.displayEmailPassSdJwt = false,
   });
 
   factory DiscoverCardsOptions.fromJson(Map<String, dynamic> json) =>
@@ -232,6 +254,7 @@ class DiscoverCardsOptions extends Equatable {
         displayAgeRange: false,
         displayGender: false,
         displayExternalIssuer: [],
+        displayEmailPassSdJwt: false,
       );
 
   final bool displayDefi;
@@ -241,6 +264,7 @@ class DiscoverCardsOptions extends Equatable {
   final bool displayOver15;
   final bool displayOver18;
   final bool displayOver18Jwt;
+  final bool displayOver18SdJwt;
   final bool displayOver21;
   final bool displayOver50;
   final bool displayOver65;
@@ -248,6 +272,7 @@ class DiscoverCardsOptions extends Equatable {
   final bool displayEmailPassJwt;
   final bool displayPhonePass;
   final bool displayPhonePassJwt;
+  final bool displayPhonePassSdJwt;
   final bool displayAgeRange;
   final bool displayVerifiableId;
   final bool displayVerifiableIdJwt;
@@ -256,6 +281,7 @@ class DiscoverCardsOptions extends Equatable {
   final List<DisplayExternalIssuer> displayExternalIssuer;
   final bool displayChainborn;
   final bool displayTezotopia;
+  final bool displayEmailPassSdJwt;
 
   Map<String, dynamic> toJson() => _$DiscoverCardsOptionsToJson(this);
 
@@ -267,20 +293,24 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayOver15,
     bool? displayOver18,
     bool? displayOver18Jwt,
+    bool? displayOver18SdJwt,
     bool? displayVerifiableId,
     bool? displayVerifiableIdJwt,
+    bool? displayVerifiableIdSdJwt,
     bool? displayOver21,
     bool? displayOver65,
     bool? displayEmailPass,
     bool? displayEmailPassJwt,
     bool? displayPhonePass,
     bool? displayPhonePassJwt,
+    bool? displayPhonePassSdJwt,
     bool? displayAgeRange,
     bool? displayGender,
     bool? displayOver50,
     List<DisplayExternalIssuer>? displayExternalIssuer,
     bool? displayChainborn,
     bool? displayTezotopia,
+    bool? displayEmailPassSdJwt,
   }) {
     return DiscoverCardsOptions(
       displayDefi: displayDefi ?? this.displayDefi,
@@ -290,15 +320,20 @@ class DiscoverCardsOptions extends Equatable {
       displayOver15: displayOver15 ?? this.displayOver15,
       displayOver18: displayOver18 ?? this.displayOver18,
       displayOver18Jwt: displayOver18Jwt ?? this.displayOver18Jwt,
+      displayOver18SdJwt: displayOver18SdJwt ?? this.displayOver18SdJwt,
       displayVerifiableId: displayVerifiableId ?? this.displayVerifiableId,
       displayVerifiableIdJwt:
           displayVerifiableIdJwt ?? this.displayVerifiableIdJwt,
+      displayVerifiableIdSdJwt:
+          displayVerifiableIdSdJwt ?? this.displayVerifiableIdSdJwt,
       displayOver21: displayOver21 ?? this.displayOver21,
       displayOver65: displayOver65 ?? this.displayOver65,
       displayEmailPass: displayEmailPass ?? this.displayEmailPass,
       displayEmailPassJwt: displayEmailPassJwt ?? this.displayEmailPassJwt,
       displayPhonePass: displayPhonePass ?? this.displayPhonePass,
       displayPhonePassJwt: displayPhonePassJwt ?? this.displayPhonePassJwt,
+      displayPhonePassSdJwt:
+          displayPhonePassSdJwt ?? this.displayPhonePassSdJwt,
       displayAgeRange: displayAgeRange ?? this.displayAgeRange,
       displayGender: displayGender ?? this.displayGender,
       displayOver50: displayOver50 ?? this.displayOver50,
@@ -306,7 +341,106 @@ class DiscoverCardsOptions extends Equatable {
           displayExternalIssuer ?? this.displayExternalIssuer,
       displayChainborn: displayChainborn ?? this.displayChainborn,
       displayTezotopia: displayTezotopia ?? this.displayTezotopia,
+      displayEmailPassSdJwt:
+          displayEmailPassSdJwt ?? this.displayEmailPassSdJwt,
     );
+  }
+
+  VCFormatType vcFormatTypeForAuto({
+    required CredentialSubjectType credentialSubjectType,
+    required VCFormatType vcFormatType,
+  }) {
+    final isLdpVc = vcFormatType == VCFormatType.ldpVc;
+    final isJwtVcJson = vcFormatType == VCFormatType.jwtVcJson;
+    final isVcSdJWT = vcFormatType == VCFormatType.vcSdJWT;
+
+    switch (credentialSubjectType) {
+      case CredentialSubjectType.defiCompliance:
+        if (isLdpVc && displayDefi) return VCFormatType.ldpVc;
+      case CredentialSubjectType.livenessCard:
+        if (isLdpVc && displayHumanity) return VCFormatType.ldpVc;
+        if (isJwtVcJson && displayHumanityJwt) return VCFormatType.vcSdJWT;
+      case CredentialSubjectType.gender:
+        if (isLdpVc && displayGender) return VCFormatType.ldpVc;
+      case CredentialSubjectType.verifiableIdCard:
+        if (isLdpVc && displayVerifiableId) return VCFormatType.ldpVc;
+        if (isJwtVcJson && displayVerifiableIdJwt) {
+          return VCFormatType.jwtVcJson;
+        }
+        if (isVcSdJWT && displayVerifiableIdSdJwt) return VCFormatType.vcSdJWT;
+      case CredentialSubjectType.over13:
+        if (isLdpVc && displayOver13) return VCFormatType.ldpVc;
+      case CredentialSubjectType.over15:
+        if (isLdpVc && displayOver15) return VCFormatType.ldpVc;
+      case CredentialSubjectType.over18:
+        if (isLdpVc && displayOver18) return VCFormatType.ldpVc;
+        if (isJwtVcJson && displayOver18Jwt) return VCFormatType.jwtVcJson;
+        if (isVcSdJWT && displayOver18SdJwt) return VCFormatType.vcSdJWT;
+      case CredentialSubjectType.over21:
+        if (isLdpVc && displayOver21) return VCFormatType.ldpVc;
+      case CredentialSubjectType.over50:
+        if (isLdpVc && displayOver50) return VCFormatType.ldpVc;
+      case CredentialSubjectType.over65:
+        if (isLdpVc && displayOver65) return VCFormatType.ldpVc;
+      case CredentialSubjectType.emailPass:
+        if (isLdpVc && displayEmailPass) return VCFormatType.ldpVc;
+        if (isJwtVcJson && displayEmailPassJwt) return VCFormatType.jwtVcJson;
+        if (isVcSdJWT && displayEmailPassSdJwt) return VCFormatType.vcSdJWT;
+      case CredentialSubjectType.learningAchievement:
+      case CredentialSubjectType.phonePass:
+        if (isLdpVc && displayPhonePass) return VCFormatType.ldpVc;
+        if (isJwtVcJson && displayPhonePassJwt) return VCFormatType.jwtVcJson;
+      case CredentialSubjectType.identityPass:
+      case CredentialSubjectType.tezotopiaMembership:
+      case CredentialSubjectType.chainbornMembership:
+      case CredentialSubjectType.ageRange:
+      case CredentialSubjectType.nationality:
+      case CredentialSubjectType.passportFootprint:
+      case CredentialSubjectType.residentCard:
+      case CredentialSubjectType.voucher:
+      case CredentialSubjectType.tezVoucher:
+      case CredentialSubjectType.diplomaCard:
+      case CredentialSubjectType.twitterCard:
+      case CredentialSubjectType.tezosAssociatedWallet:
+      case CredentialSubjectType.ethereumAssociatedWallet:
+      case CredentialSubjectType.fantomAssociatedWallet:
+      case CredentialSubjectType.polygonAssociatedWallet:
+      case CredentialSubjectType.binanceAssociatedWallet:
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+      case CredentialSubjectType.walletCredential:
+      case CredentialSubjectType.tezosPooAddress:
+      case CredentialSubjectType.ethereumPooAddress:
+      case CredentialSubjectType.fantomPooAddress:
+      case CredentialSubjectType.polygonPooAddress:
+      case CredentialSubjectType.binancePooAddress:
+      case CredentialSubjectType.certificateOfEmployment:
+      case CredentialSubjectType.defaultCredential:
+      case CredentialSubjectType.professionalExperienceAssessment:
+      case CredentialSubjectType.professionalSkillAssessment:
+      case CredentialSubjectType.professionalStudentCard:
+      case CredentialSubjectType.selfIssued:
+      case CredentialSubjectType.studentCard:
+      case CredentialSubjectType.aragoPass:
+      case CredentialSubjectType.aragoEmailPass:
+      case CredentialSubjectType.aragoIdentityCard:
+      case CredentialSubjectType.aragoLearningAchievement:
+      case CredentialSubjectType.aragoOver18:
+      case CredentialSubjectType.pcdsAgentCertificate:
+      case CredentialSubjectType.euDiplomaCard:
+      case CredentialSubjectType.euVerifiableId:
+      case CredentialSubjectType.kycAgeCredential:
+      case CredentialSubjectType.kycCountryOfResidence:
+      case CredentialSubjectType.proofOfTwitterStats:
+      case CredentialSubjectType.civicPassCredential:
+      case CredentialSubjectType.employeeCredential:
+      case CredentialSubjectType.legalPersonalCredential:
+      case CredentialSubjectType.identityCredential:
+      case CredentialSubjectType.eudiPid:
+      case CredentialSubjectType.pid:
+        return VCFormatType.ldpVc;
+    }
+
+    return VCFormatType.ldpVc;
   }
 
   @override
@@ -316,6 +450,8 @@ class DiscoverCardsOptions extends Equatable {
         displayOver13,
         displayOver15,
         displayOver18,
+        displayOver18Jwt,
+        displayOver18SdJwt,
         displayVerifiableId,
         displayOver21,
         displayOver65,
@@ -326,6 +462,7 @@ class DiscoverCardsOptions extends Equatable {
         displayEmailPassJwt,
         displayPhonePass,
         displayPhonePassJwt,
+        displayPhonePassSdJwt,
         displayExternalIssuer,
         displayHumanityJwt,
         displayOver18Jwt,
@@ -350,6 +487,7 @@ class GeneralOptions extends Equatable {
     required this.profileId,
     required this.customerPlan,
     this.primaryColor,
+    this.companyLogoLight,
   });
 
   factory GeneralOptions.fromJson(Map<String, dynamic> json) =>
@@ -374,6 +512,7 @@ class GeneralOptions extends Equatable {
   final String companyName;
   final String companyWebsite;
   final String companyLogo;
+  final String? companyLogoLight;
   final String tagLine;
   final String? splashScreenTitle;
   final String profileName;
@@ -390,6 +529,7 @@ class GeneralOptions extends Equatable {
     String? companyName,
     String? companyWebsite,
     String? companyLogo,
+    String? companyLogoLight,
     String? splashScreenTitle,
     String? tagLine,
     String? profileName,
@@ -404,6 +544,7 @@ class GeneralOptions extends Equatable {
       companyName: companyName ?? this.companyName,
       companyWebsite: companyWebsite ?? this.companyWebsite,
       companyLogo: companyLogo ?? this.companyLogo,
+      companyLogoLight: companyLogoLight ?? this.companyLogoLight,
       tagLine: tagLine ?? this.tagLine,
       splashScreenTitle: splashScreenTitle ?? this.splashScreenTitle,
       profileName: profileName ?? this.profileName,
@@ -436,11 +577,14 @@ class GeneralOptions extends Equatable {
 class HelpCenterOptions extends Equatable {
   const HelpCenterOptions({
     required this.customChatSupport,
-    this.customChatSupportName,
-    this.customEmail,
     required this.customEmailSupport,
     required this.displayChatSupport,
     required this.displayEmailSupport,
+    required this.displayNotification,
+    this.customChatSupportName,
+    this.customEmail,
+    this.customNotification,
+    this.customNotificationRoom,
   });
 
   factory HelpCenterOptions.fromJson(Map<String, dynamic> json) =>
@@ -451,6 +595,7 @@ class HelpCenterOptions extends Equatable {
         customEmailSupport: false,
         displayChatSupport: true,
         displayEmailSupport: true,
+        displayNotification: true,
       );
 
   final bool customChatSupport;
@@ -459,6 +604,9 @@ class HelpCenterOptions extends Equatable {
   final bool customEmailSupport;
   final bool displayChatSupport;
   final bool displayEmailSupport;
+  final bool displayNotification;
+  final bool? customNotification;
+  final String? customNotificationRoom;
 
   Map<String, dynamic> toJson() => _$HelpCenterOptionsToJson(this);
 
@@ -469,6 +617,9 @@ class HelpCenterOptions extends Equatable {
     bool? customEmailSupport,
     bool? displayChatSupport,
     bool? displayEmailSupport,
+    bool? displayNotification,
+    bool? customNotification,
+    String? customNotificationRoom,
   }) =>
       HelpCenterOptions(
         customChatSupport: customChatSupport ?? this.customChatSupport,
@@ -478,6 +629,10 @@ class HelpCenterOptions extends Equatable {
         customChatSupportName:
             customChatSupportName ?? this.customChatSupportName,
         customEmail: customEmail ?? this.customEmail,
+        displayNotification: displayNotification ?? this.displayNotification,
+        customNotification: customNotification ?? this.customNotification,
+        customNotificationRoom:
+            customNotificationRoom ?? this.customNotificationRoom,
       );
 
   @override
@@ -488,6 +643,10 @@ class HelpCenterOptions extends Equatable {
         customEmailSupport,
         displayChatSupport,
         displayEmailSupport,
+        displayNotification,
+        customNotification,
+        customNotificationRoom,
+        displayNotification,
       ];
 }
 
@@ -549,27 +708,39 @@ class CustomOidc4VcProfile extends Equatable {
     this.proofType = ProofType.jwt,
     this.pushAuthorizationRequest = false,
     this.statusListCache = true,
+    this.dpopSupport = false,
+    this.formatsSupported = const [],
+    this.displayMode = true,
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
         clientAuthentication: ClientAuthentication.clientId,
         credentialManifestSupport: false,
         cryptoHolderBinding: true,
-        defaultDid: DidKeyType.p256,
-        oidc4vciDraft: OIDC4VCIDraftType.draft11,
-        oidc4vpDraft: OIDC4VPDraftType.draft18,
+        defaultDid: DidKeyType.edDSA,
+        oidc4vciDraft: OIDC4VCIDraftType.draft13,
+        oidc4vpDraft: OIDC4VPDraftType.draft21,
         scope: false,
         securityLevel: false,
         siopv2Draft: SIOPV2DraftType.draft12,
         clientType: ClientType.did,
         clientId: Parameters.clientId,
         clientSecret: randomString(12),
+        displayMode: false,
       );
 
-  factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) =>
-      _$CustomOidc4VcProfileFromJson(json);
+  factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) {
+    final profileFromJson = _$CustomOidc4VcProfileFromJson(json);
+    if (profileFromJson.formatsSupported!.isEmpty) {
+      return profileFromJson.copyWith(
+        formatsSupported: <VCFormatType>[profileFromJson.vcFormatType],
+      );
+    }
+    return profileFromJson;
+  }
 
   final ClientAuthentication clientAuthentication;
+  @JsonKey(defaultValue: false)
   final bool credentialManifestSupport;
   @JsonKey(name: 'client_id')
   final String? clientId;
@@ -577,11 +748,6 @@ class CustomOidc4VcProfile extends Equatable {
   final String? clientSecret;
   final bool cryptoHolderBinding;
   final DidKeyType defaultDid;
-  // TODO(bibash): temporary solution to avoid who have chosen 12
-  @JsonKey(
-    includeFromJson: true,
-    fromJson: oidc4vciDraftFromJson,
-  )
   final OIDC4VCIDraftType oidc4vciDraft;
   final OIDC4VPDraftType oidc4vpDraft;
   final bool scope;
@@ -594,24 +760,12 @@ class CustomOidc4VcProfile extends Equatable {
   final ClientType clientType;
   @JsonKey(name: 'vcFormat')
   final VCFormatType vcFormatType;
+  final List<VCFormatType>? formatsSupported;
   final ProofType proofType;
+  final bool dpopSupport;
+  final bool displayMode;
 
   Map<String, dynamic> toJson() => _$CustomOidc4VcProfileToJson(this);
-
-  static OIDC4VCIDraftType oidc4vciDraftFromJson(dynamic value) {
-    if (value == '11') {
-      return OIDC4VCIDraftType.draft11;
-    } else if (value == '12' || value == '13') {
-      return OIDC4VCIDraftType.draft13;
-    } else {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_format',
-          'error_description': 'Error with oidc4vc draft type.',
-        },
-      );
-    }
-  }
 
   CustomOidc4VcProfile copyWith({
     ClientAuthentication? clientAuthentication,
@@ -630,7 +784,10 @@ class CustomOidc4VcProfile extends Equatable {
     SIOPV2DraftType? siopv2Draft,
     ClientType? clientType,
     VCFormatType? vcFormatType,
+    List<VCFormatType>? formatsSupported,
     ProofType? proofType,
+    bool? dpopSupport,
+    bool? displayMode,
   }) =>
       CustomOidc4VcProfile(
         clientAuthentication: clientAuthentication ?? this.clientAuthentication,
@@ -652,6 +809,9 @@ class CustomOidc4VcProfile extends Equatable {
         clientSecret: clientSecret ?? this.clientSecret,
         vcFormatType: vcFormatType ?? this.vcFormatType,
         proofType: proofType ?? this.proofType,
+        dpopSupport: dpopSupport ?? this.dpopSupport,
+        formatsSupported: formatsSupported ?? this.formatsSupported,
+        displayMode: displayMode ?? this.displayMode,
       );
 
   @override
@@ -672,7 +832,10 @@ class CustomOidc4VcProfile extends Equatable {
         siopv2Draft,
         clientType,
         vcFormatType,
+        formatsSupported,
         proofType,
+        dpopSupport,
+        displayMode,
       ];
 }
 
@@ -683,6 +846,7 @@ class SettingsMenu extends Equatable {
     required this.displayHelpCenter,
     required this.displayProfile,
     this.displaySelfSovereignIdentity = true,
+    this.displayActivityLog = true,
   });
 
   factory SettingsMenu.fromJson(Map<String, dynamic> json) =>
@@ -698,6 +862,7 @@ class SettingsMenu extends Equatable {
   final bool displayHelpCenter;
   final bool displayProfile;
   final bool displaySelfSovereignIdentity;
+  final bool displayActivityLog;
 
   Map<String, dynamic> toJson() => _$SettingsMenuToJson(this);
 
@@ -706,6 +871,7 @@ class SettingsMenu extends Equatable {
     bool? displayHelpCenter,
     bool? displayProfile,
     bool? displaySelfSovereignIdentity,
+    bool? displayActivityLog,
   }) =>
       SettingsMenu(
         displayDeveloperMode: displayDeveloperMode ?? this.displayDeveloperMode,
@@ -713,6 +879,7 @@ class SettingsMenu extends Equatable {
         displayProfile: displayProfile ?? this.displayProfile,
         displaySelfSovereignIdentity:
             displaySelfSovereignIdentity ?? this.displaySelfSovereignIdentity,
+        displayActivityLog: displayActivityLog ?? this.displayActivityLog,
       );
 
   @override
@@ -721,6 +888,7 @@ class SettingsMenu extends Equatable {
         displayHelpCenter,
         displayProfile,
         displaySelfSovereignIdentity,
+        displayActivityLog,
       ];
 }
 

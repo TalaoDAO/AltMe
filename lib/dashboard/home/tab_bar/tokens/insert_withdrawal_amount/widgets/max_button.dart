@@ -18,7 +18,7 @@ class MaxButton extends StatelessWidget {
           horizontal: Sizes.spaceSmall,
         ),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.primaryContainer,
           borderRadius: const BorderRadius.all(
             Radius.circular(5),
           ),

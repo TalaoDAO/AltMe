@@ -1,16 +1,20 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/flavor.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
-
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingVerifyPhrasePage extends StatelessWidget {
   const OnBoardingVerifyPhrasePage({
@@ -41,11 +45,16 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),
-        walletCubit: context.read<WalletCubit>(),
         splashCubit: context.read<SplashCubit>(),
         flavorCubit: context.read<FlavorCubit>(),
         altmeChatSupportCubit: context.read<AltmeChatSupportCubit>(),
+        matrixNotificationCubit: context.read<MatrixNotificationCubit>(),
+        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+        activityLogManager: ActivityLogManager(getSecureStorage),
+        credentialsCubit: context.read<CredentialsCubit>(),
+        walletCubit: context.read<WalletCubit>(),
         profileCubit: context.read<ProfileCubit>(),
+        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: Builder(
         builder: (context) {
@@ -179,11 +188,9 @@ class _OnBoardingVerifyPhraseViewState
                               Expanded(
                                 child: PhraseWord(
                                   key: Key(col1Mnemonics.order.toString()),
-                                  order: col1Mnemonics.order,
+                                  order: col1Mnemonics.userSelectedOrder,
                                   word:
                                       widget.mnemonic[col1Mnemonics.order - 1],
-                                  showOrder:
-                                      col1Mnemonics.mnemonicStatus.showOrder,
                                   color: col1Mnemonics.mnemonicStatus
                                       .color(context),
                                   onTap: () {
@@ -198,11 +205,9 @@ class _OnBoardingVerifyPhraseViewState
                               Expanded(
                                 child: PhraseWord(
                                   key: Key(col2Mnemonics.order.toString()),
-                                  order: col2Mnemonics.order,
+                                  order: col2Mnemonics.userSelectedOrder,
                                   word:
                                       widget.mnemonic[col2Mnemonics.order - 1],
-                                  showOrder:
-                                      col2Mnemonics.mnemonicStatus.showOrder,
                                   color: col2Mnemonics.mnemonicStatus
                                       .color(context),
                                   onTap: () {
@@ -217,11 +222,9 @@ class _OnBoardingVerifyPhraseViewState
                               Expanded(
                                 child: PhraseWord(
                                   key: Key(col3Mnemonics.order.toString()),
-                                  order: col3Mnemonics.order,
+                                  order: col3Mnemonics.userSelectedOrder,
                                   word:
                                       widget.mnemonic[col3Mnemonics.order - 1],
-                                  showOrder:
-                                      col3Mnemonics.mnemonicStatus.showOrder,
                                   color: col3Mnemonics.mnemonicStatus
                                       .color(context),
                                   onTap: () {

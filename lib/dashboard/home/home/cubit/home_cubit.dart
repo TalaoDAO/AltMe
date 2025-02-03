@@ -44,6 +44,7 @@ class HomeCubit extends Cubit<HomeState> {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required BlockchainType blockchainType,
     required VCFormatType vcFormatType,
+    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     // launch url to get Over18, Over15, Over13,Over21,Over50,Over65,
     // AgeRange Credentials
@@ -75,17 +76,19 @@ class HomeCubit extends Cubit<HomeState> {
       'domain': 'issuer.talao.co',
     };
 
-    final String did_auth = await didKitProvider.didAuth(
-      did,
-      jsonEncode(options),
-      privateKey,
-    );
-
     final data = <String, dynamic>{
       'base64_encoded_string': base64EncodedImage,
-      'vp': did_auth,
       'did': did,
     };
+
+    if (vcFormatType != VCFormatType.vcSdJWT) {
+      final String did_auth = await didKitProvider.didAuth(
+        did,
+        jsonEncode(options),
+        privateKey,
+      );
+      data['vp'] = did_auth;
+    }
 
     await dotenv.load();
     final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');
@@ -101,6 +104,7 @@ class HomeCubit extends Cubit<HomeState> {
         oidc4vciDraftType: oidc4vciDraftType,
         blockchainType: blockchainType,
         vcFormatType: vcFormatType,
+        qrCodeScanCubit: qrCodeScanCubit,
       );
 
       await ageEstimate(
@@ -160,6 +164,7 @@ class HomeCubit extends Cubit<HomeState> {
     required OIDC4VCIDraftType oidc4vciDraftType,
     required BlockchainType blockchainType,
     required VCFormatType vcFormatType,
+    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     /// if credential of this type is already in the wallet do nothing
     /// Ensure credentialType = name of credential type in CredentialModel
@@ -170,8 +175,15 @@ class HomeCubit extends Cubit<HomeState> {
       dynamic response;
 
       emit(state.copyWith(status: AppStatus.loading));
+
+      final newUrl = '${Uri.parse(url)}?vc_format=${vcFormatType.urlValue(
+        isEmailPassOrPhonePass:
+            credentialSubjectType == CredentialSubjectType.emailPass ||
+                credentialSubjectType == CredentialSubjectType.phonePass,
+      )}';
+
       response = await client.post(
-        url,
+        newUrl,
         headers: <String, dynamic>{
           'accept': 'application/json',
           'Content-Type': 'application/json',
@@ -181,13 +193,30 @@ class HomeCubit extends Cubit<HomeState> {
       );
 
       if (response != null) {
-        final credential =
-            jsonDecode(response as String) as Map<String, dynamic>;
+        late Map<String, dynamic> credential;
+
+        if (vcFormatType == VCFormatType.jwtVc ||
+            vcFormatType == VCFormatType.jwtVcJson ||
+            vcFormatType == VCFormatType.vcSdJWT ||
+            vcFormatType == VCFormatType.jwtVcJsonLd) {
+          credential = getCredentialDataFromJson(
+            data: response.toString(),
+            format: vcFormatType.vcValue,
+            jwtDecode: profileCubit.jwtDecode,
+            credentialType: credentialSubjectType.name,
+          );
+        } else if (vcFormatType == VCFormatType.ldpVc) {
+          //ldp_vc
+          credential = jsonDecode(response as String) as Map<String, dynamic>;
+        } else {
+          throw Exception();
+        }
 
         final Map<String, dynamic> newCredential =
             Map<String, dynamic>.from(credential);
-        newCredential['credentialPreview'] = credential;
+
         newCredential['format'] = vcFormatType.vcValue;
+        newCredential['credentialPreview'] = credential;
         final CredentialManifest credentialManifest =
             await getCredentialManifestFromAltMe(
           oidc4vc: oidc4vc,
@@ -211,11 +240,13 @@ class HomeCubit extends Cubit<HomeState> {
           ),
           newData: credential,
           activities: [Activity(acquisitionAt: DateTime.now())],
+          profileType: qrCodeScanCubit.profileCubit.state.model.profileType,
         );
         await credentialsCubit.insertCredential(
           credential: credentialModel,
           showMessage: true,
           blockchainType: blockchainType,
+          uri: Uri.parse(url),
         );
         await cameraCubit.incrementAcquiredCredentialsQuantity();
         emit(state.copyWith(status: AppStatus.success));

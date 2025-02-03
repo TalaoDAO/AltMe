@@ -1,11 +1,12 @@
 class SecureStorageKeys {
   static const String isUserRegisteredMatrix = 'isUserRegisteredMatrix';
-  static const String supportRoomId = 'MatrixSupportRoomId';
+  static const String chatSupportRoomId = 'MatrixSupportRoomId';
+  static const String notificationSupportRoomId =
+      'MatrixNotificationSupportRoomId';
+  static const String notificationRoomName = 'notificationRoomName';
   static const String isFirstSelectedTokenContracts =
       'isFirstSelectedTokenContracts';
   static const String selectedContracts = 'selectedContracts';
-  static const String lastNotifiedUNORewardId = 'lastNotifiedUNORewardId';
-  static const String lastNotifiedXTZRewardId = 'lastNotifiedXTZRewardId';
   static const String isIdentityEnabled = 'isIdentityEnabled';
   static const String isProfessionalEnabled = 'isProfessionalEnabled';
   static const String isCommunityEnabled = 'isCommunityEnabled';
@@ -28,7 +29,7 @@ class SecureStorageKeys {
   static const String data = 'data';
   static const String rsaKeyJson = 'RSAKeyJson';
 
-  static const String polygonIdNetwork = 'profile/polygonIdNetwork';
+  static const String oidc4VCIStack = 'profile/oidc4VCIStack';
 
   static const String blockChainNetworksIndexing = 'blockChainNetworksIndexing';
   static const String credentialKey = 'credential';
@@ -46,6 +47,7 @@ class SecureStorageKeys {
 
   static const String tezosDerivePathIndex = 'tezosDerivePathIndex';
   static const String ethereumDerivePathIndex = 'ethereumDerivePathIndex';
+  static const String etherlinkDerivePathIndex = ' etherlinkDerivePathIndex';
   static const String fantomDerivePathIndex = 'fantomDerivePathIndex';
   static const String polygonDerivePathIndex = 'polygonDerivePathIndex';
   static const String binanceDerivePathIndex = 'binanceDerivePathIndex';

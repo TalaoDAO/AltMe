@@ -21,10 +21,10 @@ function buildRunner {
     (
       echo "$d"
       cd "packages/$d"
-      dart pub run build_runner build --delete-conflicting-outputs
+      dart run build_runner build --delete-conflicting-outputs
     )
   done 
-  dart pub run build_runner build --delete-conflicting-outputs
+  dart run build_runner build --delete-conflicting-outputs
   flutter pub get
 }
 

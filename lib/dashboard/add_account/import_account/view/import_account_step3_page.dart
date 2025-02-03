@@ -1,13 +1,14 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ImportAccountStep3Page extends StatelessWidget {
@@ -31,7 +32,10 @@ class ImportAccountStep3Page extends StatelessWidget {
         didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),
+        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+        credentialsCubit: context.read<CredentialsCubit>(),
         walletCubit: context.read<WalletCubit>(),
+        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: ImportAccountStep3View(
         accountType: accountType,
@@ -110,7 +114,7 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
                     hint: l10n.importWalletHintText(
                       state.accountType == AccountType.tezos ? 54 : 64,
                     ),
-                    fillColor: Colors.transparent,
+                    fillColor: Theme.of(context).colorScheme.surfaceContainer,
                     hintStyle: Theme.of(context).textTheme.bodyMedium,
                     maxLines: 10,
                     borderRadius: Sizes.normalRadius,

@@ -1,10 +1,15 @@
 import 'dart:convert';
 
+import 'package:altme/activity_log/activity_log_manager.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
 import 'package:altme/lang/lang.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
@@ -15,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -50,6 +54,9 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     required String mnemonicOrKey,
     required bool isImported,
     required bool isFromOnboarding,
+    required QRCodeScanCubit qrCodeScanCubit,
+    required CredentialsCubit credentialsCubit,
+    required WalletConnectCubit walletConnectCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -64,11 +71,30 @@ class MockSplashCubit extends MockCubit<SplashState> implements SplashCubit {}
 class MockAltmeChatSupportCubit extends MockCubit<ChatRoomState>
     implements AltmeChatSupportCubit {}
 
+class MockMatrixNotificationCubit extends MockCubit<ChatRoomState>
+    implements MatrixNotificationCubit {}
+
 class MockSecureStorageProvider extends Mock implements SecureStorageProvider {}
 
 class MockLangCubit extends MockCubit<LangState> implements LangCubit {}
 
 class MockOIDC4VC extends Mock implements OIDC4VC {}
+
+class MockActivityLogManager extends Mock implements ActivityLogManager {}
+
+class MockCredentialsCubit extends MockCubit<CredentialsState>
+    implements CredentialsCubit {
+  @override
+  Future<void> loadAllCredentials({
+    required BlockchainType blockchainType,
+  }) async {}
+}
+
+class MockQRCodeScanCubit extends MockCubit<QRCodeScanState>
+    implements QRCodeScanCubit {}
+
+class MockWalletConnectCubit extends MockCubit<WalletConnectState>
+    implements WalletConnectCubit {}
 
 void main() {
   late DIDKitProvider didKitProvider;
@@ -77,9 +103,14 @@ void main() {
   late WalletCubit walletCubit;
   late SplashCubit splashCubit;
   late AltmeChatSupportCubit altmeChatSupportCubit;
+  late MatrixNotificationCubit matrixNotificationCubit;
   late OnboardingCubit onboardingCubit;
   late MockSecureStorageProvider secureStorageProvider;
   late MockOIDC4VC oidc4vc;
+  late MockActivityLogManager activityLogManager;
+  late MockQRCodeScanCubit qrCodeScanCubit;
+  late MockCredentialsCubit credentialsCubit;
+  late MockWalletConnectCubit walletConnectCubit;
 
   const mnemonicString =
       'notice photo opera keen climb agent soft parrot best joke field devote';
@@ -100,10 +131,14 @@ void main() {
     splashCubit = MockSplashCubit();
     walletCubit = MockWalletCubit();
     altmeChatSupportCubit = MockAltmeChatSupportCubit();
+    matrixNotificationCubit = MockMatrixNotificationCubit();
     onboardingCubit = OnboardingCubit();
     secureStorageProvider = MockSecureStorageProvider();
     oidc4vc = MockOIDC4VC();
-
+    activityLogManager = MockActivityLogManager();
+    credentialsCubit = MockCredentialsCubit();
+    qrCodeScanCubit = MockQRCodeScanCubit();
+    walletConnectCubit = MockWalletConnectCubit();
     when(() => secureStorageProvider.get(any())).thenAnswer((_) async => '');
 
     when(() => secureStorageProvider.set(any(), any()))
@@ -128,7 +163,7 @@ void main() {
     ).thenAnswer((_) async => mnemonicString);
 
     when(
-      () => oidc4vc.p256PrivateKeyFromMnemonics(
+      () => p256PrivateKeyFromMnemonics(
         mnemonic: mnemonicString,
         indexValue: 5,
       ),
@@ -192,6 +227,7 @@ void main() {
                 walletCubit: walletCubit,
                 splashCubit: splashCubit,
                 altmeChatSupportCubit: altmeChatSupportCubit,
+                matrixNotificationCubit: matrixNotificationCubit,
                 profileCubit: ProfileCubit(
                   didKitProvider: didKitProvider,
                   jwtDecode: JWTDecode(),
@@ -199,6 +235,10 @@ void main() {
                   secureStorageProvider: secureStorageProvider,
                   langCubit: MockLangCubit(),
                 ),
+                activityLogManager: activityLogManager,
+                qrCodeScanCubit: qrCodeScanCubit,
+                credentialsCubit: credentialsCubit,
+                walletConnectCubit: walletConnectCubit,
               ),
             ),
             BlocProvider<HomeCubit>.value(value: homeCubit),
@@ -241,7 +281,12 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
+        qrCodeScanCubit: qrCodeScanCubit,
+        credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -284,7 +329,12 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
+        qrCodeScanCubit: qrCodeScanCubit,
+        credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -327,7 +377,12 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
+        qrCodeScanCubit: qrCodeScanCubit,
+        credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -382,7 +437,12 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
+        qrCodeScanCubit: qrCodeScanCubit,
+        credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -437,7 +497,12 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
+        qrCodeScanCubit: qrCodeScanCubit,
+        credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -492,7 +557,12 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
+        qrCodeScanCubit: qrCodeScanCubit,
+        credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -548,7 +618,12 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
+        qrCodeScanCubit: qrCodeScanCubit,
+        credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -613,7 +688,12 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
+        qrCodeScanCubit: qrCodeScanCubit,
+        credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -667,7 +747,12 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: profileCubit,
+        activityLogManager: activityLogManager,
+        qrCodeScanCubit: qrCodeScanCubit,
+        credentialsCubit: credentialsCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(

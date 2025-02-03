@@ -1,8 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/drawer/reset_wallet/helper_functions/reset_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,19 +30,21 @@ class ResetWalletView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.resetWallet,
       useSafeArea: true,
       scrollView: false,
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-      titleLeading: const BackLeadingButton(),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: BlocBuilder<ResetWalletCubit, ResetWalletState>(
         builder: (context, state) {
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
+              const BackLeadingButton(padding: EdgeInsets.zero),
+              const DrawerLogo(),
+              const AppVersionDrawer(),
+              const SizedBox(height: Sizes.spaceNormal),
               Text(
                 l10n.resetWalletTitle,
                 textAlign: TextAlign.center,
@@ -103,6 +103,7 @@ class ResetWalletView extends StatelessWidget {
                       ? () async {
                           await securityCheck(
                             context: context,
+                            title: l10n.typeYourPINCodeToAuthenticate,
                             localAuthApi: LocalAuthApi(),
                             onSuccess: () async {
                               await resetWallet(context);

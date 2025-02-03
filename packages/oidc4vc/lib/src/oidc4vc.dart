@@ -1,23 +1,16 @@
-// ignore_for_file: avoid_dynamic_calls, public_member_api_docs
+// ignore_for_file: avoid_dynamic_calls
 
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:bip32/bip32.dart' as bip32;
-import 'package:bip39/bip39.dart' as bip393;
-import 'package:bs58/bs58.dart';
-import 'package:crypto/crypto.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
-import 'package:elliptic/elliptic.dart' as elliptic;
 import 'package:flutter/foundation.dart';
-import 'package:hex/hex.dart';
 import 'package:jose_plus/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:oidc4vc/src/helper_function.dart';
-import 'package:secp256k1/secp256k1.dart';
+import 'package:oidc4vc/src/functions/dio_get.dart';
+import 'package:oidc4vc/src/functions/get_authorization_server_from_credential_offer.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -25,199 +18,23 @@ import 'package:uuid/uuid.dart';
 /// EBSI wallet compliance
 /// {@endtemplate}
 class OIDC4VC {
-  /// {@macro ebsi}
   OIDC4VC();
 
-  /// create JWK from mnemonic
-  String privateKeyFromMnemonic({
-    required String mnemonic,
-    required int indexValue,
-  }) {
-    final seed = bip393.mnemonicToSeed(mnemonic);
-
-    final rootKey = bip32.BIP32.fromSeed(seed); //Instance of 'BIP32'
-    final child = rootKey.derivePath(
-      "m/44'/5467'/0'/$indexValue'",
-    ); //Instance of 'BIP32'
-    final Iterable<int> iterable = child.privateKey!;
-    final seedBytes = Uint8List.fromList(List.from(iterable));
-
-    final key = jwkFromSeed(
-      seedBytes: seedBytes,
-    );
-
-    return jsonEncode(key);
-  }
-
-  /// create JWK from seed
-  Map<String, String> jwkFromSeed({required Uint8List seedBytes}) {
-    // generate JWK for secp256k from bip39 mnemonic
-    // see https://iancoleman.io/bip39/
-    final epk = HEX.encode(seedBytes);
-    final pk = PrivateKey.fromHex(epk); //Instance of 'PrivateKey'
-    final pub = pk.publicKey.toHex().substring(2);
-    final ad = HEX.decode(epk);
-    final d = base64Url.encode(ad).substring(0, 43);
-    // remove "=" padding 43/44
-    final mx = pub.substring(0, 64);
-    // first 32 bytes
-    final ax = HEX.decode(mx);
-    final x = base64Url.encode(ax).substring(0, 43);
-    // remove "=" padding 43/44
-    final my = pub.substring(64);
-    // last 32 bytes
-    final ay = HEX.decode(my);
-    final y = base64Url.encode(ay).substring(0, 43);
-    // ATTENTION !!!!!
-    /// we were using P-256K for dart library conformance which is
-    /// the same as secp256k1, but we are using secp256k1 now
-    final jwk = {
-      'crv': 'secp256k1',
-      'd': d.replaceAll('=', ''),
-      'kty': 'EC',
-      'x': x.replaceAll('=', ''),
-      'y': y.replaceAll('=', ''),
-    };
-    return jwk;
-  }
-
-  String p256PrivateKeyFromMnemonics({
-    required String mnemonic,
-    required int indexValue,
-  }) {
-    final seed = bip393.mnemonicToSeed(mnemonic);
-    final rootKey = bip32.BIP32.fromSeed(seed);
-
-    final child = rootKey.derivePath("m/44'/5467'/0'/$indexValue'");
-
-    final iterable = child.privateKey!;
-    final keySeed = HEX.encode(List.from(iterable));
-
-    // calculate teh pub key
-    final ec = elliptic.getP256();
-    final priv = elliptic.PrivateKey.fromHex(ec, keySeed);
-    final pub = priv.publicKey.toString();
-
-    // format the "d"
-    final ad = HEX.decode(priv.toString());
-    final d = base64Url.encode(ad);
-
-    // extract the "x"
-    final mx = pub.substring(2, 66);
-
-    /// start at 2 to remove first byte of the pub key
-    final ax = HEX.decode(mx);
-    final x = base64Url.encode(ax);
-    // extract the "y"
-    final my = pub.substring(66, 130); // last 32 bytes
-    final ay = HEX.decode(my);
-    final y = base64Url.encode(ay);
-
-    final key = {
-      'kty': 'EC',
-      'crv': 'P-256',
-      'd': d.replaceAll('=', ''),
-      'x': x.replaceAll('=', ''),
-      'y': y.replaceAll('=', ''),
-    };
-
-    return jsonEncode(key);
-  }
-
-  /// https://www.rfc-editor.org/rfc/rfc7638
-  /// Received JWT is already filtered on required members
-  /// Received JWT keys are already sorted in lexicographic order
-
-  /// authorization endpoint, authorizationRequestParemeters,
-  /// OpenIdConfiguration
-  Future<(String, Map<String, dynamic>, OpenIdConfiguration)>
-      getAuthorizationData({
-    required List<dynamic> selectedCredentials,
-    required String? clientId,
-    required String? clientSecret,
-    required String redirectUri,
-    required String issuer,
-    required String? issuerState,
-    required String nonce,
-    required PkcePair pkcePair,
-    required String state,
-    required String authorizationEndPoint,
-    required bool scope,
-    required ClientAuthentication clientAuthentication,
-    required OIDC4VCIDraftType oidc4vciDraftType,
-    required VCFormatType vcFormatType,
-    required String? clientAssertion,
-    required bool secureAuthorizedFlow,
-    required Dio dio,
-    required dynamic credentialOfferJson,
-    SecureStorageProvider? secureStorage,
-  }) async {
-    try {
-      final openIdConfiguration = await getOpenIdConfig(
-        baseUrl: issuer,
-        isAuthorizationServer: false,
-        dio: dio,
-        secureStorage: secureStorage,
-      );
-
-      final credentialAuthorizationEndpoint = await readAuthorizationEndPoint(
-        openIdConfiguration: openIdConfiguration,
-        issuer: issuer,
-        oidc4vciDraftType: oidc4vciDraftType,
-        dio: dio,
-        credentialOfferJson: credentialOfferJson,
-        secureStorage: secureStorage,
-      );
-
-      final authorizationRequestParemeters = getAuthorizationRequestParemeters(
-        selectedCredentials: selectedCredentials,
-        openIdConfiguration: openIdConfiguration,
-        clientId: clientId,
-        clientSecret: clientSecret,
-        issuer: issuer,
-        redirectUri: redirectUri,
-        issuerState: issuerState,
-        nonce: nonce,
-        pkcePair: pkcePair,
-        state: state,
-        authorizationEndPoint: authorizationEndPoint,
-        scope: scope,
-        clientAuthentication: clientAuthentication,
-        oidc4vciDraftType: oidc4vciDraftType,
-        vcFormatType: vcFormatType,
-        clientAssertion: clientAssertion,
-        secureAuthorizedFlow: secureAuthorizedFlow,
-      );
-
-      return (
-        credentialAuthorizationEndpoint,
-        authorizationRequestParemeters,
-        openIdConfiguration,
-      );
-    } catch (e) {
-      throw Exception('NOT_A_VALID_OPENID_URL');
-    }
-  }
-
-  @visibleForTesting
   Map<String, dynamic> getAuthorizationRequestParemeters({
+    required Oidc4vcParameters oidc4vcParameters,
     required List<dynamic> selectedCredentials,
     required String? clientId,
     required String? clientSecret,
-    required String issuer,
-    required String? issuerState,
     required String nonce,
-    required OpenIdConfiguration openIdConfiguration,
     required String redirectUri,
-    required String authorizationEndPoint,
     required PkcePair pkcePair,
     required String state,
     required bool scope,
     required ClientAuthentication clientAuthentication,
-    required OIDC4VCIDraftType oidc4vciDraftType,
-    required VCFormatType vcFormatType,
-    required String? clientAssertion,
+    required List<VCFormatType> formatsSuported,
     required bool secureAuthorizedFlow,
+    required bool isEBSIProfile,
+    required String walletIssuer,
   }) {
     //https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-successful-authorization-re
 
@@ -227,8 +44,10 @@ class OIDC4VC {
     for (final credential in selectedCredentials) {
       late Map<String, dynamic> data;
       if (credential is String) {
-        if (openIdConfiguration.credentialsSupported != null) {
-          final credentialsSupported = openIdConfiguration.credentialsSupported;
+        if (oidc4vcParameters.issuerOpenIdConfiguration.credentialsSupported !=
+            null) {
+          final credentialsSupported =
+              oidc4vcParameters.issuerOpenIdConfiguration.credentialsSupported;
 
           dynamic credentailData;
 
@@ -249,17 +68,18 @@ class OIDC4VC {
 
           data = {
             'type': 'openid_credential',
-            'locations': [issuer],
+            'locations': [oidc4vcParameters.issuer],
             'format': credentailData['format'],
             'types': credentailData['types'],
           };
 
           credentials.add((credentailData['types'] as List<dynamic>).last);
-        } else if (openIdConfiguration.credentialConfigurationsSupported !=
+        } else if (oidc4vcParameters
+                .issuerOpenIdConfiguration.credentialConfigurationsSupported !=
             null) {
           // draft 13 case
-          final credentialsSupported =
-              openIdConfiguration.credentialConfigurationsSupported;
+          final credentialsSupported = oidc4vcParameters
+              .issuerOpenIdConfiguration.credentialConfigurationsSupported;
 
           if (credentialsSupported is! Map<String, dynamic>) {
             throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
@@ -286,8 +106,18 @@ class OIDC4VC {
             'type': 'openid_credential',
             'credential_configuration_id': credential,
           };
-          if (oidc4vciDraftType == OIDC4VCIDraftType.draft13 &&
-              vcFormatType == VCFormatType.vcSdJWT) {
+          late VCFormatType credentialSupportedType;
+          try {
+            credentialSupportedType = getVcFormatType(
+              credentialSupported['format'] as String,
+            );
+          } catch (e) {
+            throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+          }
+
+          if (oidc4vcParameters.oidc4vciDraftType ==
+                  OIDC4VCIDraftType.draft13 &&
+              credentialSupportedType == VCFormatType.vcSdJWT) {
             data = {
               'type': 'openid_credential',
               'format': 'vc+sd-jwt',
@@ -307,7 +137,7 @@ class OIDC4VC {
       } else if (credential is Map<String, dynamic>) {
         data = {
           'type': 'openid_credential',
-          'locations': [issuer],
+          'locations': [oidc4vcParameters.issuer],
           'format': credential['format'],
           'types': credential['types'],
         };
@@ -320,12 +150,6 @@ class OIDC4VC {
     }
 
     final codeChallenge = pkcePair.codeChallenge;
-    final tokenEndpointAuthMethod = clientAuthentication.value;
-
-    final clientMetaData = getWalletClientMetadata(
-      authorizationEndPoint,
-      tokenEndpointAuthMethod,
-    );
 
     final myRequest = <String, dynamic>{
       'response_type': 'code',
@@ -336,17 +160,27 @@ class OIDC4VC {
       'code_challenge_method': 'S256',
     };
 
-    if (issuerState != null) {
-      myRequest['issuer_state'] = issuerState;
+    if (oidc4vcParameters.issuerState != null) {
+      myRequest['issuer_state'] = oidc4vcParameters.issuerState;
     }
 
-    if (secureAuthorizedFlow) {
-      myRequest['client_metadata'] =
-          Uri.encodeComponent(jsonEncode(clientMetaData));
-    } else if (clientAuthentication != ClientAuthentication.clientSecretJwt) {
-      myRequest['client_metadata'] = jsonEncode(clientMetaData);
-      // paramètre config du portail, on ne met pas si : client authentication :
+    if (isEBSIProfile) {
+      if (secureAuthorizedFlow) {
+        myRequest['client_metadata'] = Uri.encodeComponent(
+          jsonEncode(
+            oidc4vcParameters.walletClientMetadata,
+          ),
+        );
+      } else if (clientAuthentication != ClientAuthentication.clientSecretJwt) {
+        myRequest['client_metadata'] =
+            jsonEncode(oidc4vcParameters.walletClientMetadata);
+        // paramètre config du portail,
+        // on ne met pas si : client authentication :
+      }
+    } else {
+      myRequest['wallet_issuer'] = walletIssuer;
     }
+
     switch (clientAuthentication) {
       case ClientAuthentication.none:
         break;
@@ -360,13 +194,6 @@ class OIDC4VC {
         myRequest['client_id'] = clientId;
       case ClientAuthentication.clientSecretJwt:
         myRequest['client_id'] = clientId;
-        if (secureAuthorizedFlow ||
-            openIdConfiguration.requirePushedAuthorizationRequests) {
-          myRequest['client_assertion'] = clientAssertion;
-          myRequest['client_assertion_type'] =
-              // ignore: lines_longer_than_80_chars
-              'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
-        }
     }
 
     if (scope) {
@@ -378,89 +205,10 @@ class OIDC4VC {
     return myRequest;
   }
 
-  Map<String, dynamic> getWalletClientMetadata(
-    String authorizationEndPoint,
-    String tokenEndpointAuthMethod,
+  ///deferredCredentialEndpoint
+  String? getDeferredCredentialEndpoint(
+    OpenIdConfiguration openIdConfiguration,
   ) {
-    return {
-      'authorization_endpoint': authorizationEndPoint,
-      'scopes_supported': ['openid'],
-      'response_types_supported': ['vp_token', 'id_token'],
-      'client_id_schemes_supported': ['redirect_uri', 'did'],
-      'grant_types_supported': ['authorization_code', 'pre-authorized_code'],
-      'subject_types_supported': ['public'],
-      'id_token_signing_alg_values_supported': ['ES256', 'ES256K'],
-      'request_object_signing_alg_values_supported': ['ES256', 'ES256K'],
-      'request_parameter_supported': true,
-      'request_uri_parameter_supported': true,
-      'request_authentication_methods_supported': {
-        'authorization_endpoint': ['request_object'],
-      },
-      'vp_formats_supported': {
-        'jwt_vp': {
-          'alg_values_supported': ['ES256', 'ES256K'],
-        },
-        'jwt_vc': {
-          'alg_values_supported': ['ES256', 'ES256K'],
-        },
-      },
-      'subject_syntax_types_supported': [
-        'urn:ietf:params:oauth:jwk-thumbprint',
-        'did:key',
-        'did:pkh',
-        'did:key',
-        'did:polygonid',
-      ],
-      'subject_syntax_types_discriminations': [
-        'did:key:jwk_jcs-pub',
-        'did:ebsi:v1',
-      ],
-      'subject_trust_frameworks_supported': ['ebsi'],
-      'id_token_types_supported': ['subject_signed_id_token'],
-      'token_endpoint_auth_method': tokenEndpointAuthMethod,
-    };
-  }
-
-  /// Retreive credential_type from url
-  /// credentialResponseData, deferredCredentialEndpoint, format
-
-  Future<
-      (
-        List<dynamic>,
-        String?,
-        String,
-      )> getCredential({
-    required String issuer,
-    required dynamic credential,
-    required String did,
-    required String? clientId,
-    required String kid,
-    required String privateKey,
-    required bool cryptoHolderBinding,
-    required ClientType clientType,
-    required ProofHeaderType proofHeaderType,
-    required OIDC4VCIDraftType oidc4vciDraftType,
-    required ClientAuthentication clientAuthentication,
-    required ProofType proofType,
-    required OpenIdConfiguration openIdConfiguration,
-    required String accessToken,
-    required String? cnonce,
-    required Dio dio,
-    List<dynamic>? authorizationDetails,
-  }) async {
-    var nonce = cnonce;
-
-    final issuerTokenParameters = IssuerTokenParameters(
-      privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
-      did: did,
-      kid: kid,
-      issuer: issuer,
-      mediaType: MediaType.proofOfOwnership,
-      clientType: clientType,
-      proofHeaderType: proofHeaderType,
-      clientId: clientId ?? '',
-    );
-
     String? deferredCredentialEndpoint;
 
     if (openIdConfiguration.deferredCredentialEndpoint != null) {
@@ -468,148 +216,53 @@ class OIDC4VC {
           openIdConfiguration.deferredCredentialEndpoint;
     }
 
-    final (credentialType, types, credentialDefinition, vct, format) =
-        await getCredentialData(
-      openIdConfiguration: openIdConfiguration,
-      credential: credential,
-    );
-
-    final credentialResponseData = <dynamic>[];
-
-    if (authorizationDetails != null) {
-      final dynamic authDetailForCredential = authorizationDetails
-          .where(
-            (dynamic ele) =>
-                ele is Map<String, dynamic> &&
-                ((ele.containsKey('types') &&
-                        (ele['types'] as List).contains(credentialType)) ||
-                    (ele.containsKey('credential_definition') &&
-                        (ele['credential_definition']['type'] as List)
-                            .contains(credentialType))),
-          )
-          .firstOrNull;
-
-      if (authDetailForCredential == null) {
-        throw Exception('AUTHORIZATION_DETAIL_ERROR');
-      }
-
-      final credentialIdentifiers =
-          (authDetailForCredential['credential_identifiers'] as List<dynamic>)
-              .map((dynamic element) => element.toString())
-              .toList();
-
-      for (final credentialIdentifier in credentialIdentifiers) {
-        final credentialResponseDataValue = await getSingleCredential(
-          issuerTokenParameters: issuerTokenParameters,
-          openIdConfiguration: openIdConfiguration,
-          credentialType: credentialType,
-          types: types,
-          format: format,
-          credentialIdentifier: credentialIdentifier,
-          cryptoHolderBinding: cryptoHolderBinding,
-          oidc4vciDraftType: oidc4vciDraftType,
-          credentialDefinition: credentialDefinition,
-          clientAuthentication: clientAuthentication,
-          vct: vct,
-          proofType: proofType,
-          did: did,
-          issuer: issuer,
-          kid: kid,
-          privateKey: privateKey,
-          accessToken: accessToken,
-          nonce: nonce,
-          dio: dio,
-        );
-
-        /// update nonce value
-        if (credentialResponseDataValue is Map<String, dynamic>) {
-          if (credentialResponseDataValue.containsKey('c_nonce')) {
-            nonce = credentialResponseDataValue['c_nonce'].toString();
-          }
-        }
-
-        credentialResponseData.add(credentialResponseDataValue);
-      }
-//
-    } else {
-      final credentialResponseDataValue = await getSingleCredential(
-        issuerTokenParameters: issuerTokenParameters,
-        openIdConfiguration: openIdConfiguration,
-        credentialType: credentialType,
-        types: types,
-        format: format,
-        cryptoHolderBinding: cryptoHolderBinding,
-        oidc4vciDraftType: oidc4vciDraftType,
-        credentialDefinition: credentialDefinition,
-        clientAuthentication: clientAuthentication,
-        vct: vct,
-        credentialIdentifier: null,
-        proofType: proofType,
-        did: did,
-        issuer: issuer,
-        kid: kid,
-        privateKey: privateKey,
-        accessToken: accessToken,
-        nonce: cnonce,
-        dio: dio,
-      );
-
-      credentialResponseData.add(credentialResponseDataValue);
-    }
-
-    return (
-      credentialResponseData,
-      deferredCredentialEndpoint,
-      format,
-    );
+    return deferredCredentialEndpoint;
   }
 
-  /// tokenResponse, accessToken, cnonce, authorizationDetails
-  Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
-      getTokenResponse({
+  /// tokenEndPoint
+  Future<String> getTokenEndPoint({
     required String issuer,
-    required String? clientId,
-    required String? clientSecret,
     required OIDC4VCIDraftType oidc4vciDraftType,
-    required String redirectUri,
     required OpenIdConfiguration openIdConfiguration,
     required Dio dio,
-    String? preAuthorizedCode,
-    String? userPin,
-    String? code,
-    String? codeVerifier,
-    String? authorization,
-    String? clientAssertion,
+    required bool useOAuthAuthorizationServerLink,
   }) async {
     final tokenEndPoint = await readTokenEndPoint(
       openIdConfiguration: openIdConfiguration,
       issuer: issuer,
       oidc4vciDraftType: oidc4vciDraftType,
       dio: dio,
+      useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
     );
 
+    return tokenEndPoint;
+  }
+
+  /// tokenResponse, accessToken, cnonce, authorizationDetails
+  Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
+      getTokenResponse({
+    required Dio dio,
+    required String tokenEndPoint,
+    required Map<String, dynamic> tokenData,
+    required String? authorization,
+    required String? oAuthClientAttestation,
+    required String? oAuthClientAttestationPop,
+    required String? dPop,
+    required String issuer,
+  }) async {
     Map<String, dynamic>? tokenResponse;
     String? accessToken;
     String? cnonce;
     List<dynamic>? authorizationDetails;
-
-    final tokenData = buildTokenData(
-      preAuthorizedCode: preAuthorizedCode,
-      userPin: userPin,
-      code: code,
-      codeVerifier: codeVerifier,
-      clientId: clientId,
-      clientSecret: clientSecret,
-      authorization: authorization,
-      redirectUri: redirectUri,
-      clientAssertion: clientAssertion,
-    );
 
     tokenResponse = await getToken(
       tokenEndPoint: tokenEndPoint,
       tokenData: tokenData,
       authorization: authorization,
       dio: dio,
+      oAuthClientAttestation: oAuthClientAttestation,
+      oAuthClientAttestationPop: oAuthClientAttestationPop,
+      dPop: dPop,
     );
 
     if (tokenResponse.containsKey('c_nonce')) {
@@ -623,65 +276,59 @@ class OIDC4VC {
     return (tokenResponse, accessToken, cnonce, authorizationDetails);
   }
 
-  Future<dynamic> getSingleCredential({
-    required IssuerTokenParameters issuerTokenParameters,
-    required OpenIdConfiguration openIdConfiguration,
-    required String credentialType,
-    required List<String>? types,
-    required String format,
-    required bool cryptoHolderBinding,
-    required OIDC4VCIDraftType oidc4vciDraftType,
-    required ClientAuthentication clientAuthentication,
-    required String? credentialIdentifier,
-    required Map<String, dynamic>? credentialDefinition,
-    required String? vct,
-    required ProofType proofType,
-    required String did,
-    required String issuer,
-    required String kid,
-    required String privateKey,
-    required String accessToken,
-    required String? nonce,
+  /// nonce
+  Future<String?> getNonceReponse({
     required Dio dio,
+    required String nonceEndpoint,
   }) async {
-    final credentialData = await buildCredentialData(
-      nonce: nonce,
-      issuerTokenParameters: issuerTokenParameters,
-      openIdConfiguration: openIdConfiguration,
-      credentialType: credentialType,
-      types: types,
-      format: format,
-      credentialIdentifier: credentialIdentifier,
-      cryptoHolderBinding: cryptoHolderBinding,
-      oidc4vciDraftType: oidc4vciDraftType,
-      credentialDefinition: credentialDefinition,
-      clientAuthentication: clientAuthentication,
-      vct: vct,
-      proofType: proofType,
-      did: did,
-      issuer: issuer,
-      kid: kid,
-      privateKey: privateKey,
+    String? cnonce;
+
+    final headers = {'Content-Type': 'application/json; charset=UTF-8'};
+    final dynamic response = await dio.post<dynamic>(
+      nonceEndpoint,
+      options: Options(headers: headers),
     );
 
-    /// sign proof
+    final data = response.data;
 
-    final credentialEndpoint = readCredentialEndpoint(openIdConfiguration);
+    if (data is Map<String, dynamic> && data.containsKey('c_nonce')) {
+      cnonce = data['c_nonce'] as String;
+    }
 
-    final credentialHeaders = <String, dynamic>{
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
+    return cnonce;
+  }
 
-    final dynamic credentialResponse = await dio.post<dynamic>(
-      credentialEndpoint,
-      options: Options(headers: credentialHeaders),
-      data: credentialData,
-    );
+  int count = 0;
 
-    final credentialResponseData = credentialResponse.data;
+  Future<dynamic> getSingleCredential({
+    required String accessToken,
+    required Dio dio,
+    required Map<String, dynamic> credentialData,
+    required String credentialEndpoint,
+    required String? dPop,
+  }) async {
+    try {
+      final credentialHeaders = <String, dynamic>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      };
 
-    return credentialResponseData;
+      if (dPop != null) {
+        credentialHeaders['DPoP'] = dPop;
+      }
+
+      final dynamic credentialResponse = await dio.post<dynamic>(
+        credentialEndpoint,
+        options: Options(headers: credentialHeaders),
+        data: credentialData,
+      );
+
+      final credentialResponseData = credentialResponse.data;
+
+      return credentialResponseData;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   /// get Deferred credential from url
@@ -704,12 +351,14 @@ class OIDC4VC {
     required String redirectUri,
     String? preAuthorizedCode,
     String? userPin,
+    String? txCode,
     String? code,
     String? codeVerifier,
     String? clientId,
     String? clientSecret,
     String? authorization,
-    String? clientAssertion,
+    String? oAuthClientAttestation,
+    String? oAuthClientAttestationPop,
   }) {
     late Map<String, dynamic> tokenData;
 
@@ -734,18 +383,17 @@ class OIDC4VC {
       if (clientSecret != null) tokenData['client_secret'] = clientSecret;
     }
 
-    if (clientAssertion != null) {
-      tokenData['client_assertion_type'] =
-          'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation';
-      tokenData['client_assertion'] = clientAssertion;
+    if (oAuthClientAttestation != null && oAuthClientAttestationPop != null) {
       tokenData['client_id'] = clientId;
     }
 
     if (userPin != null) {
       tokenData['user_pin'] = userPin;
+    }
 
-      /// draft 13
-      tokenData['tx_code'] = userPin;
+    /// draft 13 and above
+    if (txCode != null) {
+      tokenData['tx_code'] = txCode;
     }
 
     return tokenData;
@@ -756,6 +404,8 @@ class OIDC4VC {
     required bool fromStatusList,
     required bool isCachingEnabled,
     required Dio dio,
+    required bool useOAuthAuthorizationServerLink,
+    required bool isSdJwtVc,
     SecureStorageProvider? secureStorage,
   }) async {
     try {
@@ -763,42 +413,75 @@ class OIDC4VC {
         OpenIdConfiguration openIdConfiguration;
 
         var isAuthorizationServer = false;
+        var useOAuthAuthorizationServer = useOAuthAuthorizationServerLink;
 
         if (fromStatusList) {
           ///as this is not a VC issuer
           isAuthorizationServer = true;
+
+          useOAuthAuthorizationServer = false;
         }
 
-        openIdConfiguration = await getOpenIdConfig(
-          baseUrl: didKey,
-          isAuthorizationServer: isAuthorizationServer,
-          isCachingEnabled: isCachingEnabled,
-          dio: dio,
-          secureStorage: secureStorage,
-        );
+        if (isAuthorizationServer) {
+          openIdConfiguration = await getAuthorizationServerMetaData(
+            baseUrl: didKey,
+            isCachingEnabled: isCachingEnabled,
+            dio: dio,
+            secureStorage: secureStorage,
+            useOAuthAuthorizationServerLink: useOAuthAuthorizationServer,
+          );
+        } else {
+          openIdConfiguration = await getIssuerMetaData(
+            baseUrl: didKey,
+            isCachingEnabled: isCachingEnabled,
+            dio: dio,
+            secureStorage: secureStorage,
+            isSdJwtVc: isSdJwtVc,
+          );
+        }
 
         final authorizationServer = openIdConfiguration.authorizationServer;
 
         if (authorizationServer != null) {
-          openIdConfiguration = await getOpenIdConfig(
+          openIdConfiguration = await getAuthorizationServerMetaData(
             baseUrl: authorizationServer,
-            isAuthorizationServer: true,
+            isCachingEnabled: isCachingEnabled,
+            dio: dio,
+            secureStorage: secureStorage,
+            useOAuthAuthorizationServerLink: useOAuthAuthorizationServer,
+          );
+        }
+
+        // **for ldp_vc, jwt_vc_json and jwt_vc_json-ld **,
+        // take the iss attribute (or theissuer attribute for ldp_vc)
+        //
+        // if this attribute is not a DID this attribute
+        // is the credential_issuer url
+        //
+        // wallet must fetch the keys from <credential_issuer>/.well-known/jwks
+
+        // for sd-jwt
+        // take the iss attribute , if this attribute is not a DID this
+        // attribute is the credential_issuer url
+        //
+        // the keys to validate the signature of the VC are situated in
+        // -> /.well-known/jwt-vc-issuer if credential_issuer = <domain>
+        // -> /.well-known/jwt-vc-issuer/<path> if credential_issuer = <domain>/<path>
+
+        late dynamic response;
+
+        if (openIdConfiguration.jwksUri != null) {
+          response = await dioGet(
+            openIdConfiguration.jwksUri!,
             isCachingEnabled: isCachingEnabled,
             dio: dio,
             secureStorage: secureStorage,
           );
-        }
-
-        if (openIdConfiguration.jwksUri == null) {
+        } else if (openIdConfiguration.jwks != null) {
+          response = openIdConfiguration.jwks;
+        } else {
           throw Exception();
         }
-
-        final response = await dioGet(
-          openIdConfiguration.jwksUri!,
-          isCachingEnabled: isCachingEnabled,
-          dio: dio,
-          secureStorage: secureStorage,
-        );
 
         return response as Map<String, dynamic>;
       } else {
@@ -833,6 +516,7 @@ class OIDC4VC {
     required String issuer,
     required OIDC4VCIDraftType oidc4vciDraftType,
     required Dio dio,
+    required bool useOAuthAuthorizationServerLink,
     SecureStorageProvider? secureStorage,
   }) async {
     var tokenEndPoint = '$issuer/token';
@@ -843,11 +527,12 @@ class OIDC4VC {
       final authorizationServer =
           openIdConfiguration.authorizationServer ?? issuer;
 
-      final authorizationServerConfiguration = await getOpenIdConfig(
+      final authorizationServerConfiguration =
+          await getAuthorizationServerMetaData(
         baseUrl: authorizationServer,
-        isAuthorizationServer: true,
         dio: dio,
         secureStorage: secureStorage,
+        useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
       );
 
       if (authorizationServerConfiguration.tokenEndpoint != null) {
@@ -858,46 +543,77 @@ class OIDC4VC {
     return tokenEndPoint;
   }
 
-  Future<String> readAuthorizationEndPoint({
-    required OpenIdConfiguration openIdConfiguration,
-    required String issuer,
-    required OIDC4VCIDraftType oidc4vciDraftType,
+  Future<Oidc4vcParameters> authorizationParameters({
+    required Oidc4vcParameters oidc4vcParameters,
     required Dio dio,
-    required dynamic credentialOfferJson,
-    SecureStorageProvider? secureStorage,
   }) async {
+    OpenIdConfiguration? authorizationServerConfiguration;
     String? authorizationEndpoint;
+    String? tokenEndpoint;
+    String? nonceEndpoint;
 
-    switch (oidc4vciDraftType) {
+    switch (oidc4vcParameters.oidc4vciDraftType) {
       case OIDC4VCIDraftType.draft11:
-        if (openIdConfiguration.authorizationEndpoint != null) {
-          authorizationEndpoint = openIdConfiguration.authorizationEndpoint;
+        if (oidc4vcParameters.issuerOpenIdConfiguration.authorizationEndpoint !=
+            null) {
+          authorizationEndpoint =
+              oidc4vcParameters.issuerOpenIdConfiguration.authorizationEndpoint;
+          tokenEndpoint =
+              oidc4vcParameters.issuerOpenIdConfiguration.tokenEndpoint;
+          nonceEndpoint =
+              oidc4vcParameters.issuerOpenIdConfiguration.nonceEndpoint;
         } else {
           final authorizationServer =
-              openIdConfiguration.authorizationServer ?? issuer;
+              oidc4vcParameters.issuerOpenIdConfiguration.authorizationServer ??
+                  oidc4vcParameters.issuer;
 
-          final authorizationServerConfiguration = await getOpenIdConfig(
+          authorizationServerConfiguration =
+              await getAuthorizationServerMetaData(
             baseUrl: authorizationServer,
-            isAuthorizationServer: true,
             dio: dio,
-            secureStorage: secureStorage,
+            useOAuthAuthorizationServerLink:
+                oidc4vcParameters.useOAuthAuthorizationServerLink,
           );
 
           if (authorizationServerConfiguration.authorizationEndpoint != null) {
             authorizationEndpoint =
                 authorizationServerConfiguration.authorizationEndpoint;
+            tokenEndpoint = authorizationServerConfiguration.tokenEndpoint;
+            nonceEndpoint = authorizationServerConfiguration.nonceEndpoint;
           }
         }
       case OIDC4VCIDraftType.draft13:
+      case OIDC4VCIDraftType.draft14:
+        String? authorizationServer;
 
         /// Extract the authorization endpoint from from first element of
         /// authorization_servers in opentIdConfiguration.authorizationServers
         final listOpenIDConfiguration =
-            openIdConfiguration.authorizationServers ?? [];
-        if (listOpenIDConfiguration.isNotEmpty) {
+            oidc4vcParameters.issuerOpenIdConfiguration.authorizationServers ??
+                [];
+
+        // check if authorization server is present in the credential offer
+        final authorizationServerFromCredentialOffer =
+            getAuthorizationServerFromCredentialOffer(
+          oidc4vcParameters.credentialOffer,
+        );
+        // if authorization server is present in the credential offer
+        // we check if it is present in the authorization servers
+        // from credential issuer metadata
+        // https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-credential-issuer-metadata-p
+        if (authorizationServerFromCredentialOffer != null) {
+          if (listOpenIDConfiguration
+              .contains(authorizationServerFromCredentialOffer)) {
+            authorizationServer = authorizationServerFromCredentialOffer;
+          } else {
+            // that's forbidden and we can't continue the process
+            throw Exception('AUTHORIZATION_SERVER_NOT_FOUND');
+          }
+        }
+
+        if (listOpenIDConfiguration.isNotEmpty && authorizationServer == null) {
           if (listOpenIDConfiguration.length == 1) {
-            authorizationEndpoint =
-                '${listOpenIDConfiguration.first}/authorize';
+            authorizationServer = listOpenIDConfiguration.first;
           } else {
             try {
               /// Extract the authorization endpoint from from
@@ -907,31 +623,67 @@ class OIDC4VC {
                 r'$..["urn:ietf:params:oauth:grant-type:pre-authorized_code"].authorization_server',
               );
               final data = jsonPathCredentialOffer
-                  .read(credentialOfferJson)
+                  .read(oidc4vcParameters.credentialOffer)
                   .first
                   .value! as String;
               if (listOpenIDConfiguration.contains(data)) {
-                authorizationEndpoint = '$data/authorize';
+                authorizationServer = data;
               }
             } catch (e) {
-              final jsonPathCredentialOffer = JsonPath(
-                r'$..authorization_code.authorization_server',
-              );
-              final data = jsonPathCredentialOffer
-                  .read(credentialOfferJson)
-                  .first
-                  .value! as String;
-              if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
-                authorizationEndpoint = '$data/authorize';
+              try {
+                final jsonPathCredentialOffer = JsonPath(
+                  r'$..authorization_code.authorization_server',
+                );
+                final data = jsonPathCredentialOffer
+                    .read(oidc4vcParameters.credentialOffer)
+                    .first
+                    .value! as String;
+                if (data.isNotEmpty && listOpenIDConfiguration.contains(data)) {
+                  authorizationServer = data;
+                }
+              } catch (e) {
+                // nothing to do
               }
             }
           }
         }
+        if (authorizationServer != null) {
+          authorizationServerConfiguration =
+              await getAuthorizationServerMetaData(
+            baseUrl: authorizationServer,
+            dio: dio,
+            useOAuthAuthorizationServerLink:
+                oidc4vcParameters.useOAuthAuthorizationServerLink,
+          );
+          authorizationEndpoint =
+              authorizationServerConfiguration.authorizationEndpoint;
+          tokenEndpoint = authorizationServerConfiguration.tokenEndpoint;
+          nonceEndpoint = authorizationServerConfiguration.nonceEndpoint;
+        }
     }
+
+    // If authorizationEndpoint is null, we fetch from oauth-
+    if (authorizationEndpoint == null) {
+      authorizationServerConfiguration = await getAuthorizationServerMetaData(
+        baseUrl: oidc4vcParameters.issuer,
+        dio: dio,
+        useOAuthAuthorizationServerLink:
+            oidc4vcParameters.useOAuthAuthorizationServerLink,
+      );
+      authorizationEndpoint =
+          authorizationServerConfiguration.authorizationEndpoint;
+      tokenEndpoint = authorizationServerConfiguration.tokenEndpoint;
+      nonceEndpoint = authorizationServerConfiguration.nonceEndpoint;
+    }
+
     // If authorizationEndpoint is null, we consider the issuer
     // as the authorizationEndpoint
-
-    return authorizationEndpoint ??= '$issuer/authorize';
+    return oidc4vcParameters.copyWith(
+      authorizationEndpoint: authorizationEndpoint,
+      tokenEndpoint: tokenEndpoint,
+      authorizationServerOpenIdConfiguration: authorizationServerConfiguration,
+      nonceEndpoint: nonceEndpoint,
+    );
   }
 
   String readIssuerDid(
@@ -968,17 +720,35 @@ class OIDC4VC {
 
       return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
     } else {
+      final idAndVerificationMethodPath =
+          JsonPath(r'$..[?(@.verificationMethod)]');
+      final idAndVerificationMethod = (idAndVerificationMethodPath
+          .read(didDocument)
+          .first
+          .value!) as Map<String, dynamic>;
       final jsonPath = JsonPath(r'$..verificationMethod');
       late List<dynamic> data;
 
       if (holderKid == null) {
         data = (jsonPath.read(didDocument).first.value! as List).toList();
       } else {
-        data = (jsonPath.read(didDocument).first.value! as List)
-            .where(
-              (dynamic e) => e['id'].toString() == holderKid,
-            )
-            .toList();
+        data = (idAndVerificationMethod['verificationMethod'] as List).where(
+          (dynamic e) {
+            final id = idAndVerificationMethod['id'];
+            final kid = e['id'].toString();
+
+            if (kid.startsWith('#')) {
+              if (holderKid == id + kid) return true;
+            } else {
+              if (holderKid == kid) return true;
+            }
+            return false;
+          },
+        ).toList();
+      }
+
+      if (data.isEmpty) {
+        throw Exception('KID_DOES_NOT_MATCH_DIDDOCUMENT');
       }
 
       final method = data.first as Map<String, dynamic>;
@@ -999,13 +769,12 @@ class OIDC4VC {
   }
 
   Future<Map<String, dynamic>> buildCredentialData({
+    required Oidc4vcParameters oidc4vcParameters,
     required IssuerTokenParameters issuerTokenParameters,
-    required OpenIdConfiguration openIdConfiguration,
     required String credentialType,
     required List<String>? types,
     required String format,
     required bool cryptoHolderBinding,
-    required OIDC4VCIDraftType oidc4vciDraftType,
     required ClientAuthentication clientAuthentication,
     required String? credentialIdentifier,
     required String? nonce,
@@ -1013,11 +782,21 @@ class OIDC4VC {
     required Map<String, dynamic>? credentialDefinition,
     required ProofType proofType,
     required String did,
-    required String issuer,
     required String kid,
     required String privateKey,
+    required List<VCFormatType> formatsSupported,
   }) async {
     final credentialData = <String, dynamic>{};
+// check if we support the requested format
+    late VCFormatType vcFormatType;
+    try {
+      vcFormatType = getVcFormatType(format);
+    } catch (e) {
+      throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+    }
+    if (!formatsSupported.contains(vcFormatType)) {
+      throw Exception('CREDENTIAL_SUPPORT_DATA_ERROR');
+    }
 
     if (cryptoHolderBinding) {
       var currentProofType = proofType;
@@ -1032,7 +811,7 @@ class OIDC4VC {
           final options = <String, dynamic>{
             'verificationMethod': kid,
             'proofPurpose': 'authentication',
-            'domain': issuer,
+            'domain': oidc4vcParameters.issuer,
           };
 
           if (nonce != null) {
@@ -1067,7 +846,7 @@ class OIDC4VC {
       }
     }
 
-    switch (oidc4vciDraftType) {
+    switch (oidc4vcParameters.oidc4vciDraftType) {
       // case OIDC4VCIDraftType.draft8:
       //   credentialData['type'] = credentialType;
       //   credentialData['format'] = format;
@@ -1091,9 +870,19 @@ class OIDC4VC {
       //   }
 
       case OIDC4VCIDraftType.draft13:
+      case OIDC4VCIDraftType.draft14:
         credentialData['format'] = format;
 
         if (credentialDefinition != null) {
+          if (vcFormatType == VCFormatType.jwtVcJson) {
+            credentialDefinition.removeWhere((key, _) => key != 'type');
+          }
+
+          if (vcFormatType == VCFormatType.ldpVc ||
+              vcFormatType == VCFormatType.jwtVcJsonLd) {
+            credentialDefinition
+                .removeWhere((key, _) => key != 'type' && key != '@context');
+          }
           credentialData['credential_definition'] = credentialDefinition;
         }
 
@@ -1221,6 +1010,8 @@ class OIDC4VC {
     required bool fromStatusList,
     required bool isCachingEnabled,
     required Dio dio,
+    required bool useOAuthAuthorizationServerLink,
+    bool isSdJwtVc = false,
   }) async {
     try {
       Map<String, dynamic>? publicKeyJwk;
@@ -1233,6 +1024,8 @@ class OIDC4VC {
           fromStatusList: fromStatusList,
           isCachingEnabled: isCachingEnabled,
           dio: dio,
+          useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+          isSdJwtVc: isSdJwtVc,
         );
 
         publicKeyJwk = readPublicKeyJwk(
@@ -1247,6 +1040,8 @@ class OIDC4VC {
       if (publicKeyJwk['crv'] == 'secp256k1') {
         publicKeyJwk['crv'] = 'P-256K';
       }
+
+      publicKeyJwk.remove('kid');
 
       late final bool isVerified;
       if (kty == 'OKP') {
@@ -1272,35 +1067,8 @@ class OIDC4VC {
         return VerificationType.notVerified;
       }
     } catch (e) {
-      return VerificationType.unKnown;
+      rethrow;
     }
-  }
-
-  String generateTokenEdDSA({
-    required Map<String, dynamic> payload,
-    required Map<String, dynamic> privateKey,
-    required String kid,
-  }) {
-    final d = base64Url.decode(privateKey['d'].toString());
-    final x = base64Url.decode(privateKey['x'].toString());
-
-    final secretKey = [...d, ...x];
-
-    final jwt = JWT(
-      payload,
-      header: {
-        'typ': 'openid4vci-proof+jwt',
-        'alg': 'EdDSA',
-        'kid': kid,
-      },
-    );
-
-    final token = jwt.sign(
-      EdDSAPrivateKey(secretKey),
-      algorithm: JWTAlgorithm.EdDSA,
-    );
-
-    return token;
   }
 
   bool verifyTokenEdDSA({
@@ -1348,7 +1116,7 @@ class OIDC4VC {
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round() - 30;
 
     final payload = {
-      'iss': iss,
+      //'iss': iss,
       'iat': iat,
       'aud': tokenParameters.issuer,
     };
@@ -1370,6 +1138,9 @@ class OIDC4VC {
     required Map<String, dynamic> tokenData,
     required String? authorization,
     required Dio dio,
+    required String? oAuthClientAttestation,
+    required String? oAuthClientAttestationPop,
+    required String? dPop,
   }) async {
     /// getting token
     final tokenHeaders = <String, dynamic>{
@@ -1378,6 +1149,15 @@ class OIDC4VC {
 
     if (authorization != null) {
       tokenHeaders['Authorization'] = 'Basic $authorization';
+    }
+
+    if (oAuthClientAttestation != null && oAuthClientAttestationPop != null) {
+      tokenHeaders['OAuth-Client-Attestation'] = oAuthClientAttestation;
+      tokenHeaders['OAuth-Client-Attestation-PoP'] = oAuthClientAttestationPop;
+    }
+
+    if (dPop != null) {
+      tokenHeaders['DPoP'] = dPop;
     }
 
     final dynamic tokenResponse = await dio.post<Map<String, dynamic>>(
@@ -1454,7 +1234,7 @@ class OIDC4VC {
     }
   }
 
-  Future<Response<dynamic>> siopv2Flow({
+  Future<Map<String, dynamic>> getDataForSiopV2Flow({
     required String clientId,
     required String did,
     required String kid,
@@ -1463,40 +1243,47 @@ class OIDC4VC {
     required String privateKey,
     required String? stateValue,
     required ClientType clientType,
-    required ProofHeaderType proofHeaderType,
-    required Dio dio,
+    required ProofHeaderType proofHeader,
   }) async {
+    final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
+    final tokenParameters = VerifierTokenParameters(
+      privateKey: private,
+      did: did,
+      kid: kid,
+      audience: clientId,
+      credentials: [],
+      nonce: nonce,
+      mediaType: MediaType.basic,
+      clientType: clientType,
+      proofHeaderType: proofHeader,
+      clientId: clientId,
+    );
+
+    // structures
+    final verifierIdToken = await getIdToken(tokenParameters);
+
+    final responseData = <String, dynamic>{
+      'id_token': verifierIdToken,
+    };
+
+    if (stateValue != null) {
+      responseData['state'] = stateValue;
+    }
+
+    return responseData;
+  }
+
+  Future<Response<dynamic>> siopv2Flow({
+    required String redirectUri,
+    required Dio dio,
+    required Map<String, dynamic> responseData,
+  }) async {
+    final responseHeaders = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
     try {
-      final private = jsonDecode(privateKey) as Map<String, dynamic>;
-
-      final tokenParameters = VerifierTokenParameters(
-        privateKey: private,
-        did: did,
-        kid: kid,
-        audience: clientId,
-        credentials: [],
-        nonce: nonce,
-        mediaType: MediaType.basic,
-        clientType: clientType,
-        proofHeaderType: proofHeaderType,
-        clientId: clientId,
-      );
-
-      // structures
-      final verifierIdToken = await getIdToken(tokenParameters);
-
-      final responseHeaders = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      };
-
-      final responseData = <String, dynamic>{
-        'id_token': verifierIdToken,
-      };
-
-      if (stateValue != null) {
-        responseData['state'] = stateValue;
-      }
-
       final response = await dio.post<dynamic>(
         redirectUri,
         options: Options(
@@ -1546,70 +1333,6 @@ class OIDC4VC {
     return verifierVpJwt;
   }
 
-  /// getSignedJwt
-  String generateToken({
-    required Map<String, dynamic> payload,
-    required TokenParameters tokenParameters,
-    bool ignoreProofHeaderType = false,
-  }) {
-    final kty = tokenParameters.privateKey['kty'].toString();
-
-    if (kty == 'OKP') {
-      final jwt = generateTokenEdDSA(
-        payload: payload,
-        privateKey: tokenParameters.privateKey,
-        kid: tokenParameters.kid ?? tokenParameters.thumbprint,
-      );
-
-      return jwt;
-    } else {
-      final vpVerifierClaims = JsonWebTokenClaims.fromJson(payload);
-      // create a builder, decoding the JWT in a JWS, so using a
-      // JsonWebSignatureBuilder
-      final privateKey = Map<String, dynamic>.from(tokenParameters.privateKey);
-
-      if (tokenParameters.privateKey['crv'] == 'secp256k1') {
-        privateKey['crv'] = 'P-256K';
-      }
-
-      final key = JsonWebKey.fromJson(privateKey);
-
-      final vpBuilder = JsonWebSignatureBuilder()
-        // set the content
-        ..jsonContent = vpVerifierClaims.toJson()
-        ..setProtectedHeader('alg', tokenParameters.alg)
-
-        // add a key to sign, can only add one for JWT
-        ..addRecipient(key, algorithm: tokenParameters.alg)
-        ..setProtectedHeader('typ', tokenParameters.mediaType.typ);
-
-      if (!ignoreProofHeaderType) {
-        /// Proof Header Type is ignored for KB jwt
-
-        switch (tokenParameters.proofHeaderType) {
-          case ProofHeaderType.kid:
-            vpBuilder.setProtectedHeader(
-              'kid',
-              tokenParameters.kid ?? tokenParameters.thumbprint,
-            );
-
-          case ProofHeaderType.jwk:
-            vpBuilder.setProtectedHeader(
-              'jwk',
-              tokenParameters.publicJWK,
-            );
-        }
-      }
-
-      // build the jws
-      final vpJws = vpBuilder.build();
-
-      // output the compact serialization
-      final verifierVpJwt = vpJws.toCompactSerialization();
-      return verifierVpJwt;
-    }
-  }
-
   @visibleForTesting
   Future<String> getIdToken(VerifierTokenParameters tokenParameters) async {
     /// build id token
@@ -1650,51 +1373,9 @@ class OIDC4VC {
     return verifierIdJwt;
   }
 
-  // Future<String> getDidFromMnemonic({
-  //   required String did,
-  //   required String kid,
-  //   required int indexValue,
-  //   String? mnemonic,
-  //   String? privateKey,
-  // }) async {
-  //   final private = await getPrivateKey(
-  //     mnemonic: mnemonic,
-  //     privateKey: privateKey,
-  //     indexValue: indexValue,
-  //   );
-
-  //   final tokenParameters = TokenParameters(
-  //     privateKey: private,
-  //     did: did,
-  //     kid: kid,
-  //   );
-  //   return tokenParameters.did;
-  // }
-
-  // Future<String?> getKid({
-  //   required String did,
-  //   required String kid,
-  //   required int indexValue,
-  //   String? mnemonic,
-  //   String? privateKey,
-  // }) async {
-  //   final private = await getPrivateKey(
-  //     mnemonic: mnemonic,
-  //     privateKey: privateKey,
-  //     indexValue: indexValue,
-  //   );
-
-  //   final tokenParameters = TokenParameters(
-  //     privateKey: private,
-  //     did: did,
-  //     kid: kid,
-  //   );
-  //   return tokenParameters.kid;
-  // }
-
-  Future<OpenIdConfiguration> getOpenIdConfig({
+  Future<OpenIdConfiguration> getAuthorizationServerMetaData({
     required String baseUrl,
-    required bool isAuthorizationServer,
+    required bool useOAuthAuthorizationServerLink,
     required Dio dio,
     bool isCachingEnabled = false,
     SecureStorageProvider? secureStorage,
@@ -1706,16 +1387,14 @@ class OIDC4VC {
     ///the wallet is the authorization server the verifier metadata are in
     ////openid-configuration
 
-    final url = '$baseUrl/.well-known/openid-configuration';
+    var url = '$baseUrl/.well-known/openid-configuration';
 
-    if (!isAuthorizationServer) {
-      final data = await getOpenIdConfigSecondMethod(
-        baseUrl,
-        isCachingEnabled: isCachingEnabled,
-        dio: dio,
-        secureStorage: secureStorage,
-      );
-      return data;
+    final oAuthUrl = '$baseUrl/.well-known/oauth-authorization-server';
+    var fallbackUrl = oAuthUrl;
+
+    if (useOAuthAuthorizationServerLink) {
+      fallbackUrl = url;
+      url = oAuthUrl;
     }
 
     try {
@@ -1728,178 +1407,59 @@ class OIDC4VC {
       final data = response is String
           ? jsonDecode(response) as Map<String, dynamic>
           : response as Map<String, dynamic>;
-
-      return OpenIdConfiguration.fromJson(data);
+      final openIdConfiguration = OpenIdConfiguration.fromJson(data);
+      return openIdConfiguration.copyWith(rawConfiguration: data);
     } catch (e) {
-      final data = await getOpenIdConfigSecondMethod(
-        baseUrl,
-        isCachingEnabled: isCachingEnabled,
-        dio: dio,
-      );
-      return data;
-    }
-  }
+      try {
+        final response = await dioGet(
+          fallbackUrl,
+          isCachingEnabled: isCachingEnabled,
+          dio: dio,
+          secureStorage: secureStorage,
+        );
+        final data = response is String
+            ? jsonDecode(response) as Map<String, dynamic>
+            : response as Map<String, dynamic>;
 
-  Future<OpenIdConfiguration> getOpenIdConfigSecondMethod(
-    String baseUrl, {
-    required bool isCachingEnabled,
-    required Dio dio,
-    SecureStorageProvider? secureStorage,
-  }) async {
-    final url = '$baseUrl/.well-known/openid-credential-issuer';
-
-    try {
-      final response = await dioGet(
-        url,
-        isCachingEnabled: isCachingEnabled,
-        dio: dio,
-        secureStorage: secureStorage,
-      );
-      final data = response is String
-          ? jsonDecode(response) as Map<String, dynamic>
-          : response as Map<String, dynamic>;
-
-      return OpenIdConfiguration.fromJson(data);
-    } catch (e) {
-      throw Exception('OPENID-CONFIGURATION-ISSUE');
-    }
-  }
-
-  String sh256Hash(String text) {
-    final bytes = utf8.encode(text);
-    final digest = sha256.convert(bytes);
-    return base64Url.encode(digest.bytes).replaceAll('=', '');
-  }
-
-  String getDisclosure(String content) {
-    final disclosure =
-        base64Url.encode(utf8.encode(content)).replaceAll('=', '');
-
-    return disclosure;
-  }
-
-  String sh256HashOfContent(String content) {
-    final disclosure = getDisclosure(content);
-    final hash = sh256Hash(disclosure);
-    return hash;
-  }
-
-  int getPositionOfZlibBit(int index) => index % 8;
-
-  int getPositionOfGZipBit(int index) => 7 - (index % 8);
-
-  int getByte(int index) => index ~/ 8;
-
-  int getBit({
-    required int byte,
-    required int bitPosition,
-  }) {
-    // byte => 32 =0100000
-    // The bit in position 5 is set to 1 !!!
-    // so bit = 1
-    final bit = (byte & (1 << bitPosition)) != 0;
-    return bit ? 1 : 0;
-  }
-
-  List<int> decodeAndZlibDecompress(String lst) {
-    final paddedBase64 = lst.padRight((lst.length + 3) & ~3, '=');
-    final compressedBytes = base64Url.decode(paddedBase64);
-
-    final zlib = ZLibCodec();
-    final decompressedBytes = zlib.decode(compressedBytes);
-
-    return decompressedBytes;
-  }
-
-  List<int> decodeAndGzibDecompress(String lst) {
-    final paddedBase64 = lst.padRight((lst.length + 3) & ~3, '=');
-    final compressedBytes = base64Url.decode(paddedBase64);
-
-    final gzib = GZipCodec();
-    final decompressedBytes = gzib.decode(compressedBytes);
-
-    return decompressedBytes;
-  }
-
-  Future<dynamic> dioGet(
-    String uri, {
-    required Dio dio,
-    Map<String, dynamic> headers = const <String, dynamic>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    bool isCachingEnabled = false,
-    SecureStorageProvider? secureStorage,
-  }) async {
-    try {
-      final secureStorageProvider = secureStorage ?? getSecureStorage;
-      // final cachedData = await secureStorageProvider.get(uri);
-      // TODO(hawkbee): To be removed.
-      /// temporary solution to purge faulty stored data
-      /// Will be removed in the future
-      await secureStorageProvider.delete(uri);
-
-      /// end of temporary solution
-      dynamic response;
-
-      dio.options.headers = headers;
-
-      // if (isCachingEnabled) {
-      //   final secureStorageProvider = getSecureStorage;
-      //   final cachedData = await secureStorageProvider.get(uri);
-      //   if (cachedData == null) {
-      //     response = await dio.get<dynamic>(uri);
-      //   } else {
-      //     final cachedDataJson = jsonDecode(cachedData);
-      //     final expiry = int.parse(cachedDataJson['expiry'].toString());
-
-      //     final isExpired = DateTime.now().millisecondsSinceEpoch > expiry;
-
-      //     if (isExpired) {
-      //       response = await dio.get<dynamic>(uri);
-      //     } else {
-      //       /// directly return cached data
-      //       /// returned here to avoid the caching override everytime
-      //       final response = await cachedDataJson['data'];
-      //       return response;
-      //     }
-      //   }
-      // }
-      // temporary deactiviting this caching du to issue with
-      // flutter_secure_storage on ios #2657
-      // final expiry =
-      //     DateTime.now().add(const Duration(days: 2)).millisecondsSinceEpoch;
-
-      // final value = {'expiry': expiry, 'data': response.data};
-      // await secureStorageProvider.set(uri, jsonEncode(value));
-      response = await dio.get<dynamic>(uri);
-
-      return response.data;
-    } on FormatException {
-      throw Exception();
-    } catch (e) {
-      if (e is DioException) {
-        throw Exception();
-      } else {
-        rethrow;
+        return OpenIdConfiguration.fromJson(data);
+      } catch (e) {
+        throw Exception('AUTHORIZATION_SERVER_METADATA_ISSUE');
       }
     }
   }
 
-  Map<String, dynamic> publicKeyBase58ToPublicJwk(String publicKeyBase58) {
-    ///step 1 : change the publicKeyBase58 format from base58 to base64 :
-    ///decode base58 then encode in base64 urlsafe
+  Future<OpenIdConfiguration> getIssuerMetaData({
+    required String baseUrl,
+    required Dio dio,
+    bool isCachingEnabled = false,
+    bool isSdJwtVc = false,
+    SecureStorageProvider? secureStorage,
+  }) async {
+    var url = '$baseUrl/.well-known/openid-credential-issuer';
 
-    final pubKey =
-        base64UrlEncode(base58.decode(publicKeyBase58)).replaceAll('=', '');
+    if (isSdJwtVc) {
+      final uri = Uri.parse(baseUrl);
 
-    ///step 2 : create the JWK for the "type": "Ed
-    ///25519VerificationKey2018",
-    ///it is a edDSA key
-    final jwk = {
-      'crv': 'Ed25519',
-      'kty': 'OKP',
-      'x': pubKey,
-    };
-    return jwk;
+      final domain = '${uri.scheme}://${uri.host}';
+      final extraPath = uri.path;
+
+      url = '$domain/.well-known/jwt-vc-issuer$extraPath';
+    }
+
+    try {
+      final response = await dioGet(
+        url,
+        isCachingEnabled: isCachingEnabled,
+        dio: dio,
+        secureStorage: secureStorage,
+      );
+      final data = response is String
+          ? jsonDecode(response) as Map<String, dynamic>
+          : response as Map<String, dynamic>;
+      final openIdConfiguration = OpenIdConfiguration.fromJson(data);
+      return openIdConfiguration.copyWith(rawConfiguration: data);
+    } catch (e) {
+      throw Exception('ISSUER_METADATA_ISSUE');
+    }
   }
 }

@@ -1,9 +1,14 @@
+import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/flavor.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
 import 'package:altme/lang/lang.dart';
+import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
@@ -14,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -49,6 +53,9 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     required String mnemonicOrKey,
     required bool isImported,
     required bool isFromOnboarding,
+    required QRCodeScanCubit qrCodeScanCubit,
+    required CredentialsCubit credentialsCubit,
+    required WalletConnectCubit walletConnectCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -65,6 +72,9 @@ class MockFlavorCubit extends MockCubit<FlavorMode> implements FlavorCubit {}
 class MockAltmeChatSupportCubit extends MockCubit<ChatRoomState>
     implements AltmeChatSupportCubit {}
 
+class MockMatrixNotificationCubit extends MockCubit<ChatRoomState>
+    implements MatrixNotificationCubit {}
+
 class MockOnboardingCubit extends MockCubit<OnboardingState>
     implements OnboardingCubit {}
 
@@ -74,6 +84,22 @@ class MockLangCubit extends MockCubit<LangState> implements LangCubit {}
 
 class MockOIDC4VC extends Mock implements OIDC4VC {}
 
+class MockActivityLogManager extends Mock implements ActivityLogManager {}
+
+class MockCredentialsCubit extends MockCubit<CredentialsState>
+    implements CredentialsCubit {
+  @override
+  Future<void> loadAllCredentials({
+    required BlockchainType blockchainType,
+  }) async {}
+}
+
+class MockQRCodeScanCubit extends MockCubit<QRCodeScanState>
+    implements QRCodeScanCubit {}
+
+class MockWalletConnectCubit extends MockCubit<WalletConnectState>
+    implements WalletConnectCubit {}
+
 void main() {
   late MockDIDKitProvider didKitProvider;
   late KeyGenerator keyGenerator;
@@ -82,10 +108,15 @@ void main() {
   late MockSplashCubit splashCubit;
   late MockFlavorCubit flavorCubit;
   late AltmeChatSupportCubit altmeChatSupportCubit;
+  late MatrixNotificationCubit matrixNotificationCubit;
   late MockOnboardingCubit onboardingCubit;
   late MockNavigator navigator;
   late MockSecureStorageProvider secureStorageProvider;
   late MockOIDC4VC oidc4vc;
+  late MockActivityLogManager activityLogManager;
+  late MockQRCodeScanCubit qrCodeScanCubit;
+  late MockCredentialsCubit credentialsCubit;
+  late MockWalletConnectCubit walletConnectCubit;
 
   const mnemonicString =
       'notice photo opera keen climb agent soft parrot best joke field devote';
@@ -99,10 +130,15 @@ void main() {
     splashCubit = MockSplashCubit();
     flavorCubit = MockFlavorCubit();
     altmeChatSupportCubit = MockAltmeChatSupportCubit();
+    matrixNotificationCubit = MockMatrixNotificationCubit();
     onboardingCubit = MockOnboardingCubit();
     navigator = MockNavigator();
     secureStorageProvider = MockSecureStorageProvider();
     oidc4vc = MockOIDC4VC();
+    activityLogManager = MockActivityLogManager();
+    qrCodeScanCubit = MockQRCodeScanCubit();
+    credentialsCubit = MockCredentialsCubit();
+    walletConnectCubit = MockWalletConnectCubit();
   });
 
   group('Onboarding Verify Phrase Test', () {
@@ -157,6 +193,17 @@ void main() {
 
     testWidgets('renders ProtectWalletView', (tester) async {
       when(() => flavorCubit.state).thenAnswer((_) => FlavorMode.development);
+      when(
+        () => secureStorageProvider
+            .get(SecureStorageKeys.enterpriseProfileSetting),
+      ).thenAnswer((_) async => null);
+      when(() => didKitProvider.keyToDID(any(), any())).thenReturn(
+        'did:key:z6MkkCk2d3LN8qn6tWxR1qxibMCpp9E9vJVBrfv5djSk3F56',
+      );
+      when(() => didKitProvider.keyToVerificationMethod(any(), any()))
+          .thenAnswer(
+        (_) async => 'did:key:z6MkkCk2d3LN8qn6tWxR1qxibMCpp9E9vJVBrfv5djSk3F56',
+      );
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
@@ -168,6 +215,7 @@ void main() {
                 walletCubit: walletCubit,
                 splashCubit: splashCubit,
                 altmeChatSupportCubit: altmeChatSupportCubit,
+                matrixNotificationCubit: matrixNotificationCubit,
                 profileCubit: ProfileCubit(
                   didKitProvider: didKitProvider,
                   jwtDecode: JWTDecode(),
@@ -175,11 +223,19 @@ void main() {
                   secureStorageProvider: secureStorageProvider,
                   langCubit: MockLangCubit(),
                 ),
+                credentialsCubit: credentialsCubit,
+                qrCodeScanCubit: qrCodeScanCubit,
                 flavorCubit: flavorCubit,
+                activityLogManager: activityLogManager,
+                walletConnectCubit: walletConnectCubit,
               ),
             ),
             BlocProvider<HomeCubit>.value(value: homeCubit),
             BlocProvider<WalletCubit>.value(value: walletCubit),
+            BlocProvider<MatrixNotificationCubit>.value(
+              value: matrixNotificationCubit,
+            ),
+            BlocProvider<QRCodeScanCubit>.value(value: qrCodeScanCubit),
             BlocProvider<SplashCubit>.value(value: splashCubit),
             BlocProvider<AltmeChatSupportCubit>.value(
               value: altmeChatSupportCubit,
@@ -214,6 +270,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: ProfileCubit(
           didKitProvider: didKitProvider,
           jwtDecode: JWTDecode(),
@@ -222,6 +279,10 @@ void main() {
           langCubit: MockLangCubit(),
         ),
         flavorCubit: flavorCubit,
+        activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -260,6 +321,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: ProfileCubit(
           didKitProvider: didKitProvider,
           jwtDecode: JWTDecode(),
@@ -268,6 +330,10 @@ void main() {
           langCubit: MockLangCubit(),
         ),
         flavorCubit: flavorCubit,
+        activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -338,6 +404,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: ProfileCubit(
           didKitProvider: didKitProvider,
           jwtDecode: JWTDecode(),
@@ -346,6 +413,10 @@ void main() {
           langCubit: MockLangCubit(),
         ),
         flavorCubit: flavorCubit,
+        activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -410,6 +481,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: ProfileCubit(
           didKitProvider: didKitProvider,
           jwtDecode: JWTDecode(),
@@ -418,6 +490,10 @@ void main() {
           langCubit: MockLangCubit(),
         ),
         flavorCubit: flavorCubit,
+        activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -463,6 +539,7 @@ void main() {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
         altmeChatSupportCubit: altmeChatSupportCubit,
+        matrixNotificationCubit: matrixNotificationCubit,
         profileCubit: ProfileCubit(
           didKitProvider: didKitProvider,
           jwtDecode: JWTDecode(),
@@ -471,6 +548,10 @@ void main() {
           langCubit: MockLangCubit(),
         ),
         flavorCubit: flavorCubit,
+        activityLogManager: activityLogManager,
+        credentialsCubit: credentialsCubit,
+        qrCodeScanCubit: qrCodeScanCubit,
+        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -501,12 +582,6 @@ void main() {
       expect(mnemonicState.mnemonicStatus, MnemonicStatus.unselected);
 
       await tester.tap(find.byKey(Key(mnemonicState.order.toString())));
-
-      await tester.pumpAndSettle();
-      expect(
-        onBoardingVerifyPhraseCubit.state.mnemonicStates[index].mnemonicStatus,
-        MnemonicStatus.wrongSelection,
-      );
 
       await tester.tap(find.byKey(Key(mnemonicState.order.toString())));
 

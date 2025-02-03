@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -15,12 +16,12 @@ class ManageNetworkCubit extends Cubit<ManageNetworkState> {
   ManageNetworkCubit({
     required this.secureStorageProvider,
     required this.walletCubit,
-  }) : super(ManageNetworkState(network: TezosNetwork.mainNet())) {
-    loadNetwork();
-  }
+    required this.profileCubit,
+  }) : super(ManageNetworkState(network: TezosNetwork.mainNet()));
 
   final SecureStorageProvider secureStorageProvider;
   final WalletCubit walletCubit;
+  final ProfileCubit profileCubit;
 
   Future<void> loadNetwork() async {
     final blockchainType = walletCubit.state.currentAccount?.blockchainType;
@@ -41,21 +42,22 @@ class ManageNetworkCubit extends Cubit<ManageNetworkState> {
       if (jsonData.containsKey(key)) {
         final index = jsonData[key] as int;
         blockchainNetwork = blockchainType.networks[index];
+        emit(state.copyWith(network: blockchainNetwork));
       } else {
-        // take index 0 of the current account
-        blockchainNetwork = blockchainType.networks[0];
+        await addNewNetwork(
+          blockchainType: blockchainType,
+          networkJsonData: jsonData,
+        );
       }
     } else {
-      // take index 0 of the current account
-      blockchainNetwork = blockchainType.networks[0];
+      await addNewNetwork(
+        blockchainType: blockchainType,
+        networkJsonData: <String, dynamic>{},
+      );
     }
-
-    emit(state.copyWith(network: blockchainNetwork));
   }
 
   Future<void> setNetwork(BlockchainNetwork network) async {
-    if (network == state.network) return;
-
     final blockchainNetworkJson = await secureStorageProvider
         .get(SecureStorageKeys.blockChainNetworksIndexing);
 
@@ -67,6 +69,43 @@ class ManageNetworkCubit extends Cubit<ManageNetworkState> {
       jsonData = <String, dynamic>{};
     }
 
+    await saveAndEmitNetwork(network: network, networkJsonData: jsonData);
+  }
+
+  Future<void> addNewNetwork({
+    required BlockchainType blockchainType,
+    required Map<String, dynamic> networkJsonData,
+  }) async {
+    final profileModel = profileCubit.state.model;
+    if (profileModel.profileType == ProfileType.enterprise) {
+      final testnet = profileModel.profileSetting.blockchainOptions?.testnet;
+      if (testnet != null) {
+        final currentNetworkList = blockchainType.networks;
+        if (testnet) {
+          await saveAndEmitNetwork(
+            network: currentNetworkList[1],
+            networkJsonData: networkJsonData,
+          );
+        } else {
+          await saveAndEmitNetwork(
+            network: currentNetworkList[0],
+            networkJsonData: networkJsonData,
+          );
+        }
+      }
+    } else {
+      final blockchainNetwork = blockchainType.networks[0];
+      await saveAndEmitNetwork(
+        network: blockchainNetwork,
+        networkJsonData: networkJsonData,
+      );
+    }
+  }
+
+  Future<void> saveAndEmitNetwork({
+    required BlockchainNetwork network,
+    required Map<String, dynamic> networkJsonData,
+  }) async {
     final blockchainType = network.type;
     final supportedNetworks = blockchainType.networks;
     final key = blockchainType.name;
@@ -76,13 +115,29 @@ class ManageNetworkCubit extends Cubit<ManageNetworkState> {
     /// map with index is saved
     /// {'tezos': 1 , 'ethereum': 1}
 
-    jsonData[key] = index;
+    networkJsonData[key] = index;
 
     await secureStorageProvider.set(
       SecureStorageKeys.blockChainNetworksIndexing,
-      jsonEncode(jsonData),
+      jsonEncode(networkJsonData),
     );
 
     emit(state.copyWith(network: network));
+  }
+
+  Future<void> resetOtherNetworks(BlockchainNetwork network) async {
+    final blockchainType = walletCubit.state.currentAccount?.blockchainType;
+
+    if (blockchainType == null) return;
+
+    final supportedNetworks = blockchainType.networks;
+    final key = blockchainType.name;
+
+    final index = supportedNetworks.indexOf(network);
+    final networkJsonData = {key: index};
+    await secureStorageProvider.set(
+      SecureStorageKeys.blockChainNetworksIndexing,
+      jsonEncode(networkJsonData),
+    );
   }
 }

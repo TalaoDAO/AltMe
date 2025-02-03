@@ -1,5 +1,4 @@
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,12 +7,12 @@ class PushAuthorizationRequesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return OptionContainer(
-          title: l10n.pushAuthorizationRequestTitle,
-          subtitle: l10n.pushAuthorizationRequestSubTitle,
+          title: 'Push Authorization Request (PAR)',
+          subtitle:
+              'Enable to secure the authorization code flow. Default: false.',
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(

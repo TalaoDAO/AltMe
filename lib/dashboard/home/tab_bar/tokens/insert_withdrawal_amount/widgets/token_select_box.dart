@@ -117,7 +117,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                           Icon(
                             Icons.keyboard_arrow_down_outlined,
                             size: Sizes.icon,
-                            color: Theme.of(context).colorScheme.inversePrimary,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           const Spacer(flex: 1),
                           MyText(

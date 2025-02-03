@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
@@ -42,10 +44,7 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
             final searchList = getTextsFromCredential(path, credentialData);
             for (final element in searchList) {
               final key = path.split('.').toList().last;
-              json[key] = {
-                'element': element,
-                'optional': field.optional,
-              };
+              json[key] = element;
             }
           }
         }
@@ -55,69 +54,85 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     }
   }
 
-  void toggle(String claimKeyId) {
-    final List<String> selectedClaimsKeys = List.of(state.selectedClaimsKeyIds);
+  void toggle(String claimKeyId, String? sd) {
+    final List<SelectedClaimsKeyIds> selectedClaimsKeys =
+        List.of(state.selectedClaimsKeyIds);
 
-    late List<String> id;
+    late List<SelectedClaimsKeyIds> ids;
 
-    if (selectedClaimsKeys.contains(claimKeyId)) {
-      /// deSelecting the credential
-      id = List<String>.from(state.selectedClaimsKeyIds)
-        ..removeWhere((element) => element == claimKeyId);
+    final selectedKey = selectedClaimsKeys
+        .firstWhereOrNull((ele) => ele.keyId == '$claimKeyId#$sd');
+
+    if (selectedKey != null) {
+      ids = List<SelectedClaimsKeyIds>.from(state.selectedClaimsKeyIds)
+        ..removeWhere((element) => element.keyId == '$claimKeyId#$sd')
+        ..add(
+          SelectedClaimsKeyIds(
+            keyId: '$claimKeyId#$sd',
+            isSelected: !selectedKey.isSelected,
+          ),
+        );
     } else {
-      /// selecting the credential
-      id = [
+      /// adding
+      ids = [
         ...state.selectedClaimsKeyIds,
-        ...[claimKeyId],
+        ...[
+          SelectedClaimsKeyIds(keyId: '$claimKeyId#$sd', isSelected: true),
+        ],
       ];
     }
-    emit(state.copyWith(selectedClaimsKeyIds: id));
+    emit(state.copyWith(selectedClaimsKeyIds: ids));
   }
 
   void saveIndexOfSDJWT({
     String? claimsKey,
     required CredentialModel credentialModel,
     String? threeDotValue,
+    String? sd,
   }) {
     final selectiveDisclosure = SelectiveDisclosure(credentialModel);
 
     int? index;
 
-    if (threeDotValue != null) {
+    if (sd != null) {
+      index = selectiveDisclosure.disclosureFromJWT
+          .indexWhere((entry) => entry == sd);
+    } else if (threeDotValue != null) {
       index = selectiveDisclosure.disclosureFromJWT
           .indexWhere((entry) => entry == threeDotValue);
     } else if (claimsKey != null) {
-      index =
-          selectiveDisclosure.disclosureToContent.entries.toList().indexWhere(
-                (entry) => entry.value.toString().contains(claimsKey),
-              );
+      index = selectiveDisclosure.disclosureListToContent.entries
+          .toList()
+          .indexWhere(
+            (entry) =>
+                selectiveDisclosure
+                    .getMapFromList(
+                      jsonDecode(entry.value.toString()) as List,
+                    )
+                    .keys
+                    .first ==
+                claimsKey,
+          );
     }
 
-    if (index == null || index == -1) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'Issue with the dislosure of jwt.',
-        },
-      );
+    if (!(index == null || index == -1)) {
+      final bool isSelected = state.selectedSDIndexInJWT.contains(index);
+
+      late List<int> selected;
+
+      if (isSelected) {
+        /// deSelecting the credential
+        selected = List<int>.from(state.selectedSDIndexInJWT)
+          ..removeWhere((element) => element == index);
+      } else {
+        /// selecting the credential
+        selected = [
+          ...state.selectedSDIndexInJWT,
+          ...[index],
+        ];
+      }
+      emit(state.copyWith(selectedSDIndexInJWT: selected));
     }
-
-    final bool isSelected = state.selectedSDIndexInJWT.contains(index);
-
-    late List<int> selected;
-
-    if (isSelected) {
-      /// deSelecting the credential
-      selected = List<int>.from(state.selectedSDIndexInJWT)
-        ..removeWhere((element) => element == index);
-    } else {
-      /// selecting the credential
-      selected = [
-        ...state.selectedSDIndexInJWT,
-        ...[index],
-      ];
-    }
-    emit(state.copyWith(selectedSDIndexInJWT: selected));
   }
 
   void disclosureAction({
@@ -125,12 +140,14 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     required CredentialModel credentialModel,
     String? threeDotValue,
     String? claimsKey,
+    String? sd,
   }) {
-    toggle(claimKeyId);
+    toggle(claimKeyId, sd);
     saveIndexOfSDJWT(
       claimsKey: claimsKey,
       credentialModel: credentialModel,
       threeDotValue: threeDotValue,
+      sd: sd,
     );
   }
 }

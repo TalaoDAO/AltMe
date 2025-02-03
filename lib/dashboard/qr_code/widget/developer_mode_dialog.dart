@@ -6,17 +6,14 @@ class DeveloperModeDialog extends StatelessWidget {
   const DeveloperModeDialog({
     super.key,
     required this.onDisplay,
-    required this.onDownload,
     required this.onSkip,
   });
 
   final VoidCallback onDisplay;
-  final VoidCallback onDownload;
   final VoidCallback onSkip;
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.primary;
     final background = Theme.of(context).colorScheme.surface;
     final textColor = Theme.of(context).colorScheme.onSurface;
 
@@ -28,41 +25,43 @@ class DeveloperModeDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Image.asset(
-            IconStrings.cardReceive,
-            width: 50,
-            height: 50,
-            color: textColor,
-          ),
-          const SizedBox(height: 15),
-          MyElevatedButton(
-            text: l10n.display,
-            verticalSpacing: 14,
-            fontSize: 15,
-            elevation: 0,
-            onPressed: onDisplay,
-          ),
-          const SizedBox(height: Sizes.spaceSmall),
-          MyElevatedButton(
-            text: l10n.download,
-            verticalSpacing: 14,
-            fontSize: 15,
-            elevation: 0,
-            onPressed: onDownload,
-          ),
-          const SizedBox(height: Sizes.spaceSmall),
-          MyElevatedButton(
-            text: l10n.skip,
-            verticalSpacing: 14,
-            fontSize: 15,
-            elevation: 0,
-            onPressed: onSkip,
-          ),
-          const SizedBox(height: 15),
-        ],
+      content: SizedBox(
+        width: MediaQuery.of(context).size.shortestSide * 0.8,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              IconStrings.cardReceive,
+              width: 50,
+              height: 50,
+              color: textColor,
+            ),
+            const SizedBox(height: 15),
+            Text(
+              // ignore: lines_longer_than_80_chars
+              l10n.toStopDisplayingThisPopupDeactivateTheDeveloperModeInTheSettings,
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            MyElevatedButton(
+              text: l10n.display,
+              verticalSpacing: 14,
+              fontSize: 15,
+              elevation: 0,
+              onPressed: onDisplay,
+            ),
+            const SizedBox(height: Sizes.spaceSmall),
+            MyElevatedButton(
+              text: l10n.skip,
+              verticalSpacing: 14,
+              fontSize: 15,
+              elevation: 0,
+              onPressed: onSkip,
+            ),
+            const SizedBox(height: 15),
+          ],
+        ),
       ),
     );
   }

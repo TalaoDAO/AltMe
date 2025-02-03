@@ -41,14 +41,21 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
     super.build(context);
     return BasePage(
       scrollView: false,
-      padding: EdgeInsets.zero,
+      padding: Parameters.walletHandlesCrypto
+          ? EdgeInsets.zero
+          : const EdgeInsets.fromLTRB(
+              Sizes.spaceSmall,
+              Sizes.spaceSmall,
+              Sizes.spaceSmall,
+              0,
+            ),
       backgroundColor: Colors.transparent,
       body: BlocListener<ProfileCubit, ProfileState>(
         listenWhen: (previous, current) {
           if (current.model.profileSetting.selfSovereignIdentityOptions
-                  .customOidc4vcProfile.vcFormatType !=
+                  .customOidc4vcProfile.formatsSupported !=
               previous.model.profileSetting.selfSovereignIdentityOptions
-                  .customOidc4vcProfile.vcFormatType) {
+                  .customOidc4vcProfile.formatsSupported) {
             return true;
           }
 
@@ -70,9 +77,7 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
               message = messageHandler.getMessage(context, messageHandler);
             }
 
-            if (state.status == CredentialsStatus.loading) {
-              return const CredentialListShimmer();
-            } else if (state.status == CredentialsStatus.error) {
+            if (state.status == CredentialsStatus.error) {
               return ErrorView(message: message, onTap: onRefresh);
             } else {
               return HomeCredentialCategoryList(

@@ -28,26 +28,29 @@ class KYCButton extends StatelessWidget {
               l10n.needEmailPass,
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: MyOutlinedButton(
-                        borderColor:
-                            Theme.of(context).colorScheme.secondaryContainer,
-                        textColor:
-                            Theme.of(context).colorScheme.secondaryContainer,
-                        onPressed: () {
-                          Navigator.of(context).pop(true);
-                        },
-                        text: l10n.ok,
+            content: SizedBox(
+              width: MediaQuery.of(context).size.shortestSide * 0.8,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: MyOutlinedButton(
+                          borderColor:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          textColor:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          onPressed: () {
+                            Navigator.of(context).pop(true);
+                          },
+                          text: l10n.ok,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );

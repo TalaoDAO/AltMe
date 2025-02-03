@@ -94,7 +94,7 @@ void main() {
 
       const index = 0;
       test('JWK from mnemonic', () {
-        final jwk = oidc4vc.privateKeyFromMnemonic(
+        final jwk = privateKeyFromMnemonic(
           mnemonic: mnemonic,
           indexValue: index,
         );
@@ -102,14 +102,13 @@ void main() {
       });
 
       test('JWK from seeds', () {
-        final jwk =
-            oidc4vc.jwkFromSeed(seedBytes: Uint8List.fromList(seedBytes));
+        final jwk = jwkFromSeed(seedBytes: Uint8List.fromList(seedBytes));
         expect(jwk, expectedECJwk);
       });
     });
 
     test('P256 JWK from mnemonics', () {
-      final jwk = oidc4vc.p256PrivateKeyFromMnemonics(
+      final jwk = p256PrivateKeyFromMnemonics(
         mnemonic: mnemonic,
         indexValue: 0,
       );
@@ -140,10 +139,11 @@ void main() {
       const kid = '3623b877bbb24b08ba390f3585418f53';
 
       test('sign and verify with edDSA', () async {
-        final token = oidc4vc.generateTokenEdDSA(
+        final token = generateTokenEdDSA(
           payload: payload,
           privateKey: privateKey,
           kid: kid,
+          mediaType: MediaType.proofOfOwnership,
         );
 
         final value = oidc4vc.verifyTokenEdDSA(
@@ -165,12 +165,12 @@ void main() {
       const expectedHash = 's0BKYsLWxQQeU8tVlltM7MKsIRTrEIa1PkJmqxBBf5U';
 
       test('get disclosure', () {
-        final disclosure = oidc4vc.getDisclosure(content);
+        final disclosure = getDisclosure(content);
         expect(disclosure, expectedDisclosure);
       });
 
       test('sh256 hash of Disclosure test', () {
-        final sha256Hash = oidc4vc.sh256HashOfContent(content);
+        final sha256Hash = sh256HashOfContent(content);
         expect(sha256Hash, expectedHash);
       });
     });
@@ -185,7 +185,7 @@ void main() {
       };
 
       test('convert publicKeyBase58 to PublicJwk', () {
-        final publicKey = oidc4vc.publicKeyBase58ToPublicJwk(publicKeyBase58);
+        final publicKey = publicKeyBase58ToPublicJwk(publicKeyBase58);
         expect(publicKey, expectedPublicJWK);
       });
     });
@@ -252,10 +252,16 @@ void main() {
                 '[{\"type\":\"openid_credential\",\"credential_configuration_id\":\"EmailPass\"}]',
           };
 
-          dioAdapter.onGet(
-            'https://talao.co/issuer/mfyttabosy/.well-known/openid-credential-issuer',
-            (request) => request.reply(200, jsonDecode(openIdConfiguration)),
-          );
+          dioAdapter
+            ..onGet(
+              'https://talao.co/issuer/mfyttabosy/.well-known/openid-credential-issuer',
+              (request) => request.reply(200, jsonDecode(openIdConfiguration)),
+            )
+            ..onGet(
+              'https://talao.co/issuer/mfyttabosy/.well-known/openid-configuration',
+              (request) => request.reply(200, jsonDecode(openIdConfiguration)),
+            );
+
           final (authorizationEndpoint, authorizationRequestParemeters, _) =
               await oidc4vc.getAuthorizationData(
             selectedCredentials: selectedCredentials,
@@ -270,13 +276,15 @@ void main() {
             scope: false,
             clientAuthentication: ClientAuthentication.clientId,
             oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-            vcFormatType: VCFormatType.jwtVcJson,
-            clientAssertion: null,
+            formatsSupported: [VCFormatType.jwtVcJson],
             secureAuthorizedFlow: false,
             issuer: issuer,
             dio: client,
             credentialOfferJson: credentialOfferJson,
             secureStorage: mockSecureStorage,
+            isEBSIProfile: true,
+            walletIssuer: 'https://app.talao.co/wallet_issuer',
+            useOAuthAuthorizationServerLink: false,
           );
 
           expect(authorizationEndpoint, expectedAuthorizationEndpoint);
@@ -303,16 +311,19 @@ void main() {
                 '',
               ),
               authorizationEndPoint: '',
-              clientAssertion: '',
               clientAuthentication: ClientAuthentication.clientId,
               clientSecret: '',
               oidc4vciDraftType: OIDC4VCIDraftType.draft11,
               redirectUri: '',
               scope: false,
               secureAuthorizedFlow: false,
-              vcFormatType: VCFormatType.jwtVc,
+              formatsSupported: [VCFormatType.jwtVc],
               credentialOfferJson: credentialOfferJson,
               dio: client,
+              isEBSIProfile: true,
+              walletIssuer: 'https://app.talao.co/wallet_issuer',
+              useOAuthAuthorizationServerLink: false,
+              secureStorage: mockSecureStorage,
             ),
             throwsA(
               isA<Exception>().having(
@@ -336,11 +347,10 @@ void main() {
             selectedCredentials: selectedCredentials,
             clientId: clientId,
             authorizationEndPoint: authorizationEndPoint,
-            clientAssertion: null,
             scope: false,
             clientAuthentication: ClientAuthentication.clientId,
             oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-            vcFormatType: VCFormatType.jwtVcJson,
+            formatsSuported: [VCFormatType.jwtVcJson],
             secureAuthorizedFlow: false,
             issuer: issuer,
             issuerState: issuerState,
@@ -352,6 +362,8 @@ void main() {
               jsonDecode(openIdConfiguration) as Map<String, dynamic>,
             ),
             redirectUri: redirectUri,
+            isEBSIProfile: true,
+            walletIssuer: 'https://app.talao.co/wallet_issuer',
           );
 
           expect(
@@ -426,14 +438,19 @@ void main() {
               scope: false,
               clientAuthentication: ClientAuthentication.clientId,
               oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-              vcFormatType: VCFormatType.jwtVcJson,
-              clientAssertion:
-                  'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA~eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4YjZwSEVrbUljU3ZwbWgzTFBFTTdkakhRdkxlRll4RmthVHhiMURiZlpRIiwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvZ3Jsdnpja29meSIsIm5iZiI6MTcxODYzMDkwNCwiZXhwIjoxNzE4NjMwOTY0fQ.versm2Ejz9W5uVbejGiOl1ytAoAHSeo5zZLer-hhiWBm8y1QgCmFB5xay4xWi3Nlx2KC2f1wsZ6tMVsrfZD2rg',
+              formatsSupported: [VCFormatType.jwtVcJson],
+              oAuthClientAttestation:
+                  'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA',
+              oAuthClientAttestationPop:
+                  'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4YjZwSEVrbUljU3ZwbWgzTFBFTTdkakhRdkxlRll4RmthVHhiMURiZlpRIiwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvZ3Jsdnpja29meSIsIm5iZiI6MTcxODYzMDkwNCwiZXhwIjoxNzE4NjMwOTY0fQ.versm2Ejz9W5uVbejGiOl1ytAoAHSeo5zZLer-hhiWBm8y1QgCmFB5xay4xWi3Nlx2KC2f1wsZ6tMVsrfZD2rg',
               secureAuthorizedFlow: true,
               issuer: issuer,
               dio: client,
               credentialOfferJson: credentialOfferJsonAuthorizedTest10,
               secureStorage: mockSecureStorage,
+              isEBSIProfile: true,
+              walletIssuer: 'https://app.talao.co/wallet_issuer',
+              useOAuthAuthorizationServerLink: false,
             );
 
             expect(authorizationEndpoint, expectedAuthorizationEndpoint);
@@ -486,14 +503,19 @@ void main() {
               scope: false,
               clientAuthentication: ClientAuthentication.clientId,
               oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-              vcFormatType: VCFormatType.jwtVcJson,
-              clientAssertion:
-                  'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA~eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4YjZwSEVrbUljU3ZwbWgzTFBFTTdkakhRdkxlRll4RmthVHhiMURiZlpRIiwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvZ3Jsdnpja29meSIsIm5iZiI6MTcxODYzMDkwNCwiZXhwIjoxNzE4NjMwOTY0fQ.versm2Ejz9W5uVbejGiOl1ytAoAHSeo5zZLer-hhiWBm8y1QgCmFB5xay4xWi3Nlx2KC2f1wsZ6tMVsrfZD2rg',
+              formatsSupported: [VCFormatType.jwtVcJson],
+              oAuthClientAttestation:
+                  'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA',
+              oAuthClientAttestationPop:
+                  'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4YjZwSEVrbUljU3ZwbWgzTFBFTTdkakhRdkxlRll4RmthVHhiMURiZlpRIiwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvZ3Jsdnpja29meSIsIm5iZiI6MTcxODYzMDkwNCwiZXhwIjoxNzE4NjMwOTY0fQ.versm2Ejz9W5uVbejGiOl1ytAoAHSeo5zZLer-hhiWBm8y1QgCmFB5xay4xWi3Nlx2KC2f1wsZ6tMVsrfZD2rg',
               secureAuthorizedFlow: true,
               issuer: issuer,
               dio: client,
               credentialOfferJson: credentialOfferJsonPreAuthorizedTest10,
               secureStorage: mockSecureStorage,
+              isEBSIProfile: true,
+              walletIssuer: 'https://app.talao.co/wallet_issuer',
+              useOAuthAuthorizationServerLink: false,
             );
 
             expect(authorizationEndpoint, expectedAuthorizationEndpoint);
@@ -507,26 +529,6 @@ void main() {
     });
 
     group('OIC4VC request credential', () {
-      const issuer = 'https://talao.co/issuer/zxhaokccsi';
-
-      const credential = {
-        'format': 'jwt_vc',
-        'types': [
-          'VerifiableCredential',
-          'VerifiableAttestation',
-          'VerifiableDiploma2',
-        ],
-      };
-
-      const did =
-          'did:key:z2dmzD81cgPx8Vki7JbuuMmFYrWPgYoytykUZ3eyqht1j9Kbrbpg5is8LfTLuQ1RsW5r7s7ZjbDDFbDgy1tLrdc7Bj3itBGQkuGUQyfzKhFqbUNW2PqJPMSSzWoF2DGSvDSijCtJtYCSRsjSVLrwu5oHNbnPFvSEC4iRZPpU6B6nExRBTa';
-
-      const kid =
-          'did:key:z2dmzD81cgPx8Vki7JbuuMmFYrWPgYoytykUZ3eyqht1j9Kbrbpg5is8LfTLuQ1RsW5r7s7ZjbDDFbDgy1tLrdc7Bj3itBGQkuGUQyfzKhFqbUNW2PqJPMSSzWoF2DGSvDSijCtJtYCSRsjSVLrwu5oHNbnPFvSEC4iRZPpU6B6nExRBTa#z2dmzD81cgPx8Vki7JbuuMmFYrWPgYoytykUZ3eyqht1j9Kbrbpg5is8LfTLuQ1RsW5r7s7ZjbDDFbDgy1tLrdc7Bj3itBGQkuGUQyfzKhFqbUNW2PqJPMSSzWoF2DGSvDSijCtJtYCSRsjSVLrwu5oHNbnPFvSEC4iRZPpU6B6nExRBTa';
-
-      const privateKey =
-          '{"kty":"EC","crv":"P-256","d":"amrwK13ZiYoJ5g0fc6MvXc86RB9ID8VuK_dMowU68FE","x":"fJQ2c9P_YDep3jzidwykcSlyoC4omqBvd9RHP1nz0cw","y":"K7VxrW-S1ONuX5cxrWIltF36ac1K8kj9as_o5cyc2zk"}';
-
       const openIdConfiguration =
           '{"authorization_server":"https://talao.co/issuer/zxhaokccsi","credential_endpoint":"https://talao.co/issuer/zxhaokccsi/credential","credential_issuer":"https://talao.co/issuer/zxhaokccsi","subject_syntax_types_supported":null,"token_endpoint":null,"batch_endpoint":null,"authorization_endpoint":null,"subject_trust_frameworks_supported":null,"credentials_supported":[{"display":[{"locale":"en-US","name":"EU Diploma","description":"This the official EBSI VC Diploma","text_color":"#FFFFFF","background_color":"#3B6F6D","background_image":{"url":"https://i.ibb.co/CHqjxrJ/dbc-card-hig-res.png","alt_text":"Connected open cubes in blue with one orange cube as a background of the card"},"logo":{"url":"https://dutchblockchaincoalition.org/assets/images/icons/Logo-DBC.png","alt_text":"An orange block shape, with the text Dutch Blockchain Coalition next to it, portraying the logo of the Dutch Blockchain Coalition."}}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableDiploma2"],"id":null,"scope":null,"credentialSubject":{"dateOfBirth":{"display":[{"locale":"en-US","name":"Birth Date"},{"locale":"fr-FR","name":"Date de naissance"}]},"familyName":{"display":[{"locale":"en-US","name":"Family Name"},{"locale":"fr-FR","name":"Nom"}]},"givenNames":{"display":[{"locale":"en-US","name":"First Name"},{"locale":"fr-FR","name":"Prénom"}]}}},{"display":[{"locale":"en-US","name":"Individual attestation","description":"This is the EBSI Individual Verifiable Attestation","text_color":"#FFFFFF","background_color":"#3B6F6D","background_image":null,"logo":null}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","IndividualVerifiableAttestation"],"id":null,"scope":null,"credentialSubject":{"dateOfBirth":{"display":[{"locale":"en-US","name":"Birth Date"},{"locale":"fr-FR","name":"Date de naissance"}]},"familyName":{"display":[{"locale":"en-US","name":"Family Name"},{"locale":"fr-FR","name":"Nom"}]},"firstName":{"display":[{"locale":"en-US","name":"First Name"},{"locale":"fr-FR","name":"Prénom"}]},"issuing_country":{"display":[{"locale":"en-US","name":"Issued by"},{"locale":"fr-FR","name":"Délivré par"}]},"placeOfBirth":{"display":[{"locale":"en-US","name":"Birth Place"},{"locale":"fr-FR","name":"Lieu de naissance"}]}}},{"display":[{"locale":"en-GB","name":"Email proof","description":"This is a verifiable credential","text_color":null,"background_color":null,"background_image":null,"logo":null}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","EmailPass"],"id":null,"scope":null,"credentialSubject":null},{"display":[{"locale":"en-GB","name":"Verifiable Id","description":"This is a verifiable credential","text_color":null,"background_color":null,"background_image":null,"logo":null}],"format":"jwt_vc","trust_framework":{"name":"ebsi","type":"Accreditation","uri":"TIR link towards accreditation"},"types":["VerifiableCredential","VerifiableAttestation","VerifiableId"],"id":null,"scope":null,"credentialSubject":null}],"credential_configurations_supported":null,"deferred_credential_endpoint":"https://talao.co/issuer/zxhaokccsi/deferred","service_documentation":null,"credential_manifest":null,"credential_manifests":null,"issuer":null,"jwks_uri":null,"grant_types_supported":null}';
 
@@ -549,62 +551,22 @@ void main() {
 
       test('When getCredentialType receive url it returns json response',
           () async {
-        final (credentialResponseData, deferredCredentialEndpoint, format) =
-            await oidc4vc.getCredential(
-          issuer: issuer,
-          credential: credential,
-          did: did,
-          clientId: did,
-          kid: kid,
-          privateKey: privateKey,
-          cryptoHolderBinding: true,
-          clientType: ClientType.did,
-          proofHeaderType: ProofHeaderType.kid,
-          oidc4vciDraftType: OIDC4VCIDraftType.draft11,
-          clientAuthentication: ClientAuthentication.clientId,
-          proofType: ProofType.jwt,
-          openIdConfiguration: OpenIdConfiguration.fromJson(
-            jsonDecode(openIdConfiguration) as Map<String, dynamic>,
-          ),
+        final configuration = OpenIdConfiguration.fromJson(
+          jsonDecode(openIdConfiguration) as Map<String, dynamic>,
+        );
+
+        final credentialEndpoint =
+            oidc4vc.readCredentialEndpoint(configuration);
+
+        final credentialResponseData = await oidc4vc.getSingleCredential(
           accessToken: accessToken,
-          cnonce: nonce,
           dio: client,
+          credentialData: {},
+          dPop: null,
+          credentialEndpoint: credentialEndpoint,
         );
 
-        expect(credentialResponseData, [expecedCredentialResponse]);
-        expect(
-          deferredCredentialEndpoint,
-          'https://talao.co/issuer/zxhaokccsi/deferred',
-        );
-        expect(format, 'jwt_vc');
-      });
-
-      test('throw Exception when token is not verified', () {
-        expect(
-          () async {
-            await oidc4vc.getCredential(
-              issuer: '',
-              credential: null,
-              did: '',
-              clientId: null,
-              kid: '',
-              privateKey: '',
-              cryptoHolderBinding: true,
-              clientType: ClientType.did,
-              proofHeaderType: ProofHeaderType.kid,
-              oidc4vciDraftType: OIDC4VCIDraftType.draft11,
-              clientAuthentication: ClientAuthentication.clientId,
-              proofType: ProofType.jwt,
-              openIdConfiguration: OpenIdConfiguration.fromJson(
-                jsonDecode(openIdConfiguration) as Map<String, dynamic>,
-              ),
-              accessToken: '',
-              cnonce: null,
-              dio: client,
-            );
-          },
-          throwsA(isA<FormatException>()),
-        );
+        expect(credentialResponseData, expecedCredentialResponse);
       });
     });
 
@@ -703,6 +665,7 @@ void main() {
           jsonDecode(openidConfigurationResponse) as Map<String, dynamic>,
         ),
         secureStorage: mockSecureStorage,
+        useOAuthAuthorizationServerLink: false,
       );
 
       expect(tokenEndpoint, expectedTokenEndpoint);
@@ -767,21 +730,31 @@ void main() {
           fromStatusList: false,
           isCachingEnabled: false,
           publicJwk: null,
+          useOAuthAuthorizationServerLink: false,
         );
         expect(isVerified, VerificationType.verified);
       });
 
-      test('returns VerificationType.unKnown', () async {
-        final isVerified = await oidc4vc.verifyEncodedData(
-          issuer: issuer,
-          jwt: jwt,
-          issuerKid: issuerKid2,
-          dio: client,
-          fromStatusList: false,
-          isCachingEnabled: false,
-          publicJwk: null,
+      test('throws exception KID_DOES_NOT_MATCH_DIDDOCUMENT', () async {
+        expect(
+          () async => oidc4vc.verifyEncodedData(
+            issuer: issuer,
+            jwt: jwt,
+            issuerKid: issuerKid2,
+            dio: client,
+            fromStatusList: false,
+            isCachingEnabled: false,
+            publicJwk: null,
+            useOAuthAuthorizationServerLink: false,
+          ),
+          throwsA(
+            isA<Exception>().having(
+              (p0) => p0.toString(),
+              'toString()',
+              'Exception: KID_DOES_NOT_MATCH_DIDDOCUMENT',
+            ),
+          ),
         );
-        expect(isVerified, VerificationType.unKnown);
       });
 
       test('returns VerificationType.notVerified', () async {
@@ -795,6 +768,7 @@ void main() {
           fromStatusList: false,
           isCachingEnabled: false,
           publicJwk: null,
+          useOAuthAuthorizationServerLink: false,
         );
         expect(isVerified, VerificationType.notVerified);
       });
@@ -812,6 +786,7 @@ void main() {
           fromStatusList: false,
           isCachingEnabled: false,
           publicJwk: null,
+          useOAuthAuthorizationServerLink: false,
         );
         expect(isVerified, VerificationType.notVerified);
       });
@@ -844,6 +819,11 @@ void main() {
           tokenData: tokenData,
           tokenEndPoint: tokenEndPoint,
           authorization: null,
+          oAuthClientAttestation:
+              'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA',
+          oAuthClientAttestationPop:
+              'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4YjZwSEVrbUljU3ZwbWgzTFBFTTdkakhRdkxlRll4RmthVHhiMURiZlpRIiwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvZ3Jsdnpja29meSIsIm5iZiI6MTcxODYzMDkwNCwiZXhwIjoxNzE4NjMwOTY0fQ.versm2Ejz9W5uVbejGiOl1ytAoAHSeo5zZLer-hhiWBm8y1QgCmFB5xay4xWi3Nlx2KC2f1wsZ6tMVsrfZD2rg',
+          dPop: null,
         );
 
         expect(jsonEncode(token), expectedValue);
@@ -867,6 +847,11 @@ void main() {
               tokenData: tokenData,
               tokenEndPoint: tokenEndPoint,
               authorization: null,
+              oAuthClientAttestation:
+                  'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA',
+              oAuthClientAttestationPop:
+                  'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4YjZwSEVrbUljU3ZwbWgzTFBFTTdkakhRdkxlRll4RmthVHhiMURiZlpRIiwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvZ3Jsdnpja29meSIsIm5iZiI6MTcxODYzMDkwNCwiZXhwIjoxNzE4NjMwOTY0fQ.versm2Ejz9W5uVbejGiOl1ytAoAHSeo5zZLer-hhiWBm8y1QgCmFB5xay4xWi3Nlx2KC2f1wsZ6tMVsrfZD2rg',
+              dPop: null,
             );
           },
           throwsA(isA<Exception>()),
@@ -895,6 +880,8 @@ void main() {
             fromStatusList: false,
             isCachingEnabled: false,
             dio: client,
+            useOAuthAuthorizationServerLink: false,
+            isSdJwtVc: false,
           );
 
           expect(value, jsonDecode(didDocument));
@@ -933,10 +920,13 @@ void main() {
             fromStatusList: false,
             isCachingEnabled: false,
             dio: client,
+            useOAuthAuthorizationServerLink: false,
+            isSdJwtVc: false,
           );
 
           expect(value, jsonDecode(didDocument));
         });
+
         test('get corresponding did document', () async {
           const issuer = 'https://talao.co/issuer/zxhaokccsi';
           const openidConfigurationResponse1 =
@@ -971,6 +961,8 @@ void main() {
             isCachingEnabled: false,
             dio: client,
             secureStorage: mockSecureStorage,
+            useOAuthAuthorizationServerLink: false,
+            isSdJwtVc: false,
           );
           expect(value, jsonDecode(expectedDidDocument));
         });

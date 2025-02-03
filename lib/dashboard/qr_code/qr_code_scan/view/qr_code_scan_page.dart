@@ -82,9 +82,10 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
             if (isScanned) return;
             isScanned = true;
 
-            await context
-                .read<QRCodeScanCubit>()
-                .process(scannedResponse: barcodes.first.rawValue);
+            await context.read<QRCodeScanCubit>().process(
+                  scannedResponse: barcodes.first.rawValue,
+                  qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                );
           }
         },
         initialCameraLensDirection: _cameraLensDirection,

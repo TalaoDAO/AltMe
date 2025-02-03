@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class CredentialDisplay extends StatelessWidget {
   const CredentialDisplay({
@@ -69,7 +70,10 @@ class CredentialDisplay extends StatelessWidget {
                   CredentialSubjectType.defaultCredential;
 
           final DiscoverDummyCredential discoverDummyCredential =
-              credentialSubjectType.dummyCredential(profileSetting);
+              credentialSubjectType.dummyCredential(
+            profileSetting: profileSetting,
+            assignedVCFormatType: VCFormatType.ldpVc, // just assigning
+          );
 
           return Opacity(
             opacity: 0.5,
@@ -136,9 +140,6 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.verifiableIdCard:
         return VerifiableIdCardWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.linkedInCard:
-        return LinkedinCardWidget(credentialModel: credentialModel);
 
       case CredentialSubjectType.euDiplomaCard:
         return EUDiplomaCardWidget(credentialModel: credentialModel);
@@ -311,6 +312,11 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.binanceAssociatedWallet:
         return BinanceAssociatedAddressWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.etherlinkAssociatedWallet:
+        return EtherlinkAssociatedAddressWidget(
+          credentialModel: credentialModel,
+        );
 
       case CredentialSubjectType.ethereumPooAddress:
         return EthereumPooAddressWidget(

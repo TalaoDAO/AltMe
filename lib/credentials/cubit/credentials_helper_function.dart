@@ -10,32 +10,24 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   required CustomOidc4VcProfile customOidc4vcProfile,
   required OIDC4VC oidc4vc,
   required Map<String, dynamic> privateKey,
+  required ProfileType profileType,
   String? oldId,
 }) async {
   final log =
       getLogger('CredentialsCubit - generateAssociatedWalletCredential');
   log.i(blockchainType);
   try {
-    late String didMethod;
+    final didMethod = getDidMethod(blockchainType);
 
-    switch (blockchainType) {
-      case BlockchainType.tezos:
-        didMethod = AltMeStrings.cryptoTezosDIDMethod;
-
-      case BlockchainType.ethereum:
-      case BlockchainType.fantom:
-      case BlockchainType.polygon:
-      case BlockchainType.binance:
-        didMethod = AltMeStrings.cryptoEVMDIDMethod;
-    }
+    log.i('didMethod - $didMethod');
 
     final String jwkKey = await keyGenerator.jwkFromSecretKey(
       secretKey: cryptoAccountData.secretKey,
       accountType: blockchainType.accountType,
     );
 
-    final issuer = didKitProvider.keyToDID(didMethod, jwkKey);
-    log.i('didMethod - $didMethod');
+    final String issuer = didKitProvider.keyToDID(didMethod, jwkKey);
+
     log.i('jwkKey - $jwkKey');
     log.i('didKitProvider.keyToDID - $issuer');
 
@@ -54,9 +46,13 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       case BlockchainType.fantom:
       case BlockchainType.polygon:
       case BlockchainType.binance:
-        verificationMethod = '$issuer#Recovery2020';
+      case BlockchainType.etherlink:
+        //verificationMethod = '$issuer#Recovery2020';
+        verificationMethod =
+            await didKitProvider.keyToVerificationMethod(didMethod, jwkKey);
     }
-    log.i('hardcoded verificationMethod - $verificationMethod');
+
+    log.i('verificationMethod - $verificationMethod');
 
     final options = {
       'proofPurpose': 'assertionMethod',
@@ -69,7 +65,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     final issuanceDate = '${formatter.format(DateTime.now())}Z';
 
     late dynamic associatedAddressCredential;
-
     switch (blockchainType) {
       case BlockchainType.tezos:
         associatedAddressCredential = TezosAssociatedAddressCredential(
@@ -78,10 +73,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: TezosAssociatedAddressModel(
             id: did,
-            accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'TezosAssociatedAddress',
-            issuedBy: const Author('My wallet'),
           ),
         );
 
@@ -92,10 +85,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: EthereumAssociatedAddressModel(
             id: did,
-            accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'EthereumAssociatedAddress',
-            issuedBy: const Author('My wallet'),
           ),
         );
 
@@ -106,10 +97,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: FantomAssociatedAddressModel(
             id: did,
-            accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'FantomAssociatedAddress',
-            issuedBy: const Author('My wallet'),
           ),
         );
 
@@ -120,10 +109,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: PolygonAssociatedAddressModel(
             id: did,
-            accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'PolygonAssociatedAddress',
-            issuedBy: const Author('My wallet'),
           ),
         );
 
@@ -134,10 +121,20 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: BinanceAssociatedAddressModel(
             id: did,
-            accountName: cryptoAccountData.name,
             associatedAddress: cryptoAccountData.walletAddress,
             type: 'BinanceAssociatedAddress',
-            issuedBy: const Author('My wallet'),
+          ),
+        );
+
+      case BlockchainType.etherlink:
+        associatedAddressCredential = EtherlinkAssociatedAddressCredential(
+          id: id,
+          issuer: issuer,
+          issuanceDate: issuanceDate,
+          credentialSubjectModel: EtherlinkAssociatedAddressModel(
+            id: did,
+            associatedAddress: cryptoAccountData.walletAddress,
+            type: 'EtherlinkAssociatedAddress',
           ),
         );
     }
@@ -181,7 +178,9 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           oidc4vc: oidc4vc,
           privateKey: privateKey,
           kid: verificationMethod,
-          issuer: issuer,
+          did: did,
+          profileType: profileType,
+          vcFormatType: VCFormatType.ldpVc,
         );
       }
     } else {
@@ -193,7 +192,9 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         oidc4vc: oidc4vc,
         privateKey: privateKey,
         kid: verificationMethod,
-        issuer: issuer,
+        did: did,
+        profileType: profileType,
+        vcFormatType: VCFormatType.ldpVc,
       );
     }
   } catch (e, s) {
@@ -212,8 +213,10 @@ Future<CredentialModel> _createCredential({
   required CustomOidc4VcProfile customOidc4vcProfile,
   required OIDC4VC oidc4vc,
   required Map<String, dynamic> privateKey,
-  required String issuer,
+  required String did,
   required String kid,
+  required ProfileType profileType,
+  required VCFormatType vcFormatType,
   String? oldId,
 }) async {
   final jsonLd = jsonDecode(vc) as Map<String, dynamic>;
@@ -221,7 +224,7 @@ Future<CredentialModel> _createCredential({
   String? jwt;
   DateTime dateTime = DateTime.now();
 
-  if (customOidc4vcProfile.vcFormatType != VCFormatType.ldpVc) {
+  if (vcFormatType != VCFormatType.ldpVc) {
     /// id -> jti (optional)
     /// issuer -> iss (compulsary)
     /// issuanceDate -> iat (optional)
@@ -240,13 +243,13 @@ Future<CredentialModel> _createCredential({
       'exp': iat + 1000,
       'iss': jsonLd['issuer'],
       'jti': jsonLd['id'] ?? 'urn:uuid:${const Uuid().v4()}',
-      'sub': issuer,
+      'sub': did,
       'vc': jsonLd,
     };
 
     final tokenParameters = TokenParameters(
       privateKey: privateKey,
-      did: issuer,
+      did: did,
       kid: kid,
       mediaType: MediaType.basic,
       clientType: customOidc4vcProfile.clientType,
@@ -255,7 +258,7 @@ Future<CredentialModel> _createCredential({
     );
 
     /// sign and get token
-    jwt = oidc4vc.generateToken(
+    jwt = generateToken(
       payload: jsonContent,
       tokenParameters: tokenParameters,
     );
@@ -268,9 +271,10 @@ Future<CredentialModel> _createCredential({
     data: jsonLd,
     shareLink: '',
     jwt: jwt,
-    format: customOidc4vcProfile.vcFormatType.vcValue,
+    format: vcFormatType.vcValue,
     credentialPreview: Credential.fromJson(jsonLd),
     credentialManifest: credentialManifest,
     activities: [Activity(acquisitionAt: dateTime)],
+    profileLinkedId: profileType.getVCId,
   );
 }

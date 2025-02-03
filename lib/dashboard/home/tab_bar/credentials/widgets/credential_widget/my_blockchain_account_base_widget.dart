@@ -49,7 +49,7 @@ class MyBlockchainAccountBaseWidget extends StatelessWidget {
                   child: MyText(
                     walletAddress,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
+                          color: Colors.white,
                         ),
                     minFontSize: 8,
                     maxLines: 2,

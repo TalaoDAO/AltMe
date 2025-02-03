@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
-import 'package:altme/dashboard/profile/profile.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 
 import 'package:altme/wallet/wallet.dart';
@@ -12,8 +12,6 @@ class ProfileSelectorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     final profile = context.read<ProfileCubit>().state.model;
 
     final walletContainsEnterpriseProfile =
@@ -44,7 +42,7 @@ class ProfileSelectorWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          l10n.walletProfilesDescription,
+                          context.l10n.chooseYourSSIProfileOrCustomizeYourOwn,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
@@ -66,20 +64,26 @@ class ProfileSelectorWidget extends StatelessWidget {
 
                       return Column(
                         children: [
-                          if (index != 0)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Divider(
-                                height: 0,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.12),
-                              ),
-                            ),
                           ListTile(
                             onTap: () async {
+                              if (profileType == ProfileType.custom) {
+                                final l10n = context.l10n;
+                                final bool moveAhead = await showDialog<bool>(
+                                      context: context,
+                                      builder: (_) {
+                                        return ConfirmDialog(
+                                          title:
+                                              l10n.doYouWantToSetupTheProfile,
+                                          yes: l10n.yes,
+                                          showNoButton: true,
+                                          no: l10n.no,
+                                        );
+                                      },
+                                    ) ??
+                                    false;
+                                if (!moveAhead) return;
+                              }
+
                               await context
                                   .read<ProfileCubit>()
                                   .setProfile(profileType);
@@ -92,16 +96,20 @@ class ProfileSelectorWidget extends StatelessWidget {
                                         .currentAccount!
                                         .blockchainType,
                                   );
+
+                              if (profileType == ProfileType.custom) {
+                                return Navigator.of(context)
+                                    .push<void>(Oidc4vcSettingMenu.route());
+                              }
                             },
-                            shape: const RoundedRectangleBorder(
+                            shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: Color(0xFFDDDDEE),
+                                color: Theme.of(context).colorScheme.onSurface,
                                 width: 0.5,
                               ),
                             ),
                             title: Text(
                               profileType.getTitle(
-                                l10n: l10n,
                                 name: profile.enterpriseWalletName ?? '',
                               ),
                               style: Theme.of(context).textTheme.bodyLarge,
@@ -112,6 +120,16 @@ class ProfileSelectorWidget extends StatelessWidget {
                                   : Icons.radio_button_unchecked,
                               size: Sizes.icon2x,
                               color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Divider(
+                              height: 0,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.12),
                             ),
                           ),
                         ],

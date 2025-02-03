@@ -34,9 +34,7 @@ class PickProfileMenuView extends StatelessWidget {
       body: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BackLeadingButton(
-            padding: EdgeInsets.zero,
-          ),
+          BackLeadingButton(padding: EdgeInsets.zero),
           DrawerLogo(),
           ProfileSelectorWidget(),
         ],

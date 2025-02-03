@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 class DummyCredentialImage extends StatelessWidget {
@@ -34,6 +35,8 @@ class DummyCredentialImage extends StatelessWidget {
       credential = credentialName!;
     }
 
+    final profileModel = context.read<ProfileCubit>().state.model;
+
     late Widget dummyCredentialImage;
     if (image == null) {
       dummyCredentialImage = DefaultCredentialWidget(
@@ -63,6 +66,7 @@ class DummyCredentialImage extends StatelessWidget {
           shareLink: '',
           jwt: null,
           format: 'ldp_vc',
+          profileLinkedId: profileModel.profileType.getVCId,
         ),
         showBgDecoration: false,
         isDiscover: true,
@@ -130,6 +134,7 @@ class DummyCredentialImage extends StatelessWidget {
             shareLink: '',
             jwt: null,
             format: 'ldp_vc',
+            profileLinkedId: profileModel.profileType.getVCId,
           ),
           showBgDecoration: false,
           isDiscover: true,

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -7,18 +6,11 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/view/pin_code_page.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:flutter/foundation.dart';
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' as services;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
-import 'package:uni_links/uni_links.dart';
-
-bool _initialUriIsHandled = false;
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -37,80 +29,48 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-  StreamSubscription<Uri?>? _sub;
+  late AppLinks _appLinks;
+  StreamSubscription<Uri?>? _linkSubscription;
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        final Uri? initialUri = await _handleInitialUri(context);
-
         await context.read<SplashCubit>().initialiseApp();
-
-        /// In case app is opened through deeplink we need to handle
-        /// incoming request.
-        if (initialUri != null) {
-          await Navigator.of(context).push<void>(
-            PinCodePage.route(
-              restrictToBack: true,
-              isValidCallback: () {
-                Navigator.of(context).push<void>(DashboardPage.route());
-              },
-              walletProtectionType: WalletProtectionType.pinCode,
-            ),
-          );
-
-          await processIncomingUri(
-            initialUri,
-            context,
-          );
-        }
+        await initDeepLinks();
       },
     );
     super.initState();
   }
 
+  Future<void> initDeepLinks() async {
+    _appLinks = AppLinks();
+
+    // Handle links
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      debugPrint('onAppLink: $uri');
+      Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (context.read<SplashCubit>().state.status ==
+            SplashStatus.authenticated) {
+          timer.cancel();
+          processIncomingUri(uri);
+        }
+      });
+    });
+  }
+
   @override
   void dispose() {
-    _sub?.cancel();
+    _linkSubscription?.cancel();
     super.dispose();
   }
 
-  /// Handle incoming links - the ones that the app will recieve from the OS
-  /// while already started.
-  void _handleIncomingLinks(BuildContext context) {
-    final log = getLogger('DeepLink - _handleIncomingLinks');
-
-    if (!kIsWeb) {
-      // It will handle app links while the app is already started - be it in
-      // the foreground or in the background.
-      _sub = uriLinkStream.listen(
-        (Uri? uri) async {
-          if (!mounted) return;
-          log.i('got uri: $uri');
-          await processIncomingUri(uri, context);
-        },
-        onError: (Object err) {
-          if (!mounted) return;
-          log.e('got err: $err');
-        },
-      );
-    }
-  }
-
-  bool isPolygonFunctionCalled = false;
-
   String? _deeplink;
 
-  Future<void> processIncomingUri(Uri? uri, BuildContext context) async {
+  Future<void> processIncomingUri(Uri? uri) async {
     final l10n = context.l10n;
     String beaconData = '';
     bool isBeaconRequest = false;
-
-    Timer.periodic(const Duration(seconds: 3), (timer) {
-      timer.cancel();
-      _deeplink = null;
-    });
 
     if (_deeplink != null && _deeplink == uri.toString()) {
       return;
@@ -133,13 +93,15 @@ class _SplashViewState extends State<SplashView> {
     }
 
     if (uri.toString().startsWith('configuration://?')) {
-      await context.read<EnterpriseCubit>().requestTheConfiguration(uri!);
+      await context.read<EnterpriseCubit>().requestTheConfiguration(
+            uri: uri!,
+            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+          );
       return;
     }
 
     if (uri.toString().startsWith(Parameters.authorizeEndPoint)) {
       context.read<DeepLinkCubit>().addDeepLink(uri!.toString());
-      await context.read<QRCodeScanCubit>().deepLink();
       return;
     }
 
@@ -158,37 +120,15 @@ class _SplashViewState extends State<SplashView> {
         );
         return;
       }
-
-      /// decrypt iden3MessageEntity
-      final encryptedIden3MessageEntity =
-          uri.toString().split('iden3comm://?i_m=')[1];
-
-      final JWTDecode jwtDecode = JWTDecode();
-      final iden3MessageEntityJson =
-          jwtDecode.parsePolygonIdJwtHeader(encryptedIden3MessageEntity);
-
-      if (isPolygonFunctionCalled) return;
-
-      isPolygonFunctionCalled = true;
-
-      await context
-          .read<PolygonIdCubit>()
-          .polygonIdFunction(jsonEncode(iden3MessageEntityJson));
-
-      // Reset the flag variable after 2 seconds
-      Timer(const Duration(seconds: 1), () {
-        isPolygonFunctionCalled = false;
-      });
     }
 
     uri!.queryParameters.forEach((key, value) async {
       if (key == 'uri') {
         final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
-        context.read<DeepLinkCubit>().addDeepLink(url);
         final ssiKey =
             await secure_storage.getSecureStorage.get(SecureStorageKeys.ssiKey);
         if (ssiKey != null) {
-          await context.read<QRCodeScanCubit>().deepLink();
+          context.read<DeepLinkCubit>().addDeepLink(url);
           return;
         }
       }
@@ -200,9 +140,8 @@ class _SplashViewState extends State<SplashView> {
       }
     });
 
-    if (isOIDC4VCIUrl(uri)) {
+    if (isOIDC4VCIUrl(uri) || isSIOPV2OROIDC4VPUrl(uri)) {
       context.read<DeepLinkCubit>().addDeepLink(uri.toString());
-      await context.read<QRCodeScanCubit>().deepLink();
       return;
     }
 
@@ -213,47 +152,8 @@ class _SplashViewState extends State<SplashView> {
     }
   }
 
-  /// Handle the initial Uri - the one the app was started with
-  ///
-  /// **ATTENTION**: `getInitialLink`/`getInitialUri` should be handled
-  /// ONLY ONCE in your app's lifetime, since it is not meant to change
-  /// throughout your app's life.
-  ///
-  /// We handle all exceptions, since it is called from initState.
-  Future<Uri?> _handleInitialUri(BuildContext context) async {
-    // In this example app this is an almost useless guard, but it is here to
-    // show we are not going to call getInitialUri multiple times, even if this
-    // was a widget that will be disposed of (ex. a navigation route change).
-    final log = getLogger('DeepLink - _handleInitialUri');
-    if (!mounted) return null;
-    if (!_initialUriIsHandled) {
-      _initialUriIsHandled = true;
-
-      try {
-        final uri = await getInitialUri();
-        if (uri == null) {
-          log.i('no initial uri');
-        } else {
-          log.i('got initial uri: $uri');
-          if (!mounted) return null;
-          log.i('got uri: $uri');
-          return uri;
-        }
-      } on services.PlatformException {
-        // Platform messages may fail but we ignore the exception
-        log.e('falied to get initial uri');
-      } on FormatException catch (err) {
-        if (!mounted) return null;
-        log.e('malformed initial uri: $err');
-      }
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
-    _handleIncomingLinks(context);
-    _handleInitialUri(context);
     return MultiBlocListener(
       listeners: [
         splashBlocListener,
@@ -264,7 +164,6 @@ class _SplashViewState extends State<SplashView> {
         qrCodeBlocListener,
         beaconBlocListener,
         walletConnectBlocListener,
-        polygonIdBlocListener,
         enterpriseBlocListener,
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(
@@ -283,7 +182,6 @@ class _SplashViewState extends State<SplashView> {
                     children: [
                       const Spacer(flex: 2),
                       WalletLogo(
-                        profileModel: state.model,
                         width: MediaQuery.of(context).size.shortestSide * 0.6,
                         height: MediaQuery.of(context).size.longestSide * 0.2,
                       ),

@@ -14,7 +14,6 @@ class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
   @override
   final state = ProfileState(
     model: ProfileModel(
-      polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
       walletType: WalletType.personal,
       walletProtectionType: WalletProtectionType.FA2,
       isDeveloperMode: false,

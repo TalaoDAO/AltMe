@@ -30,6 +30,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
     return BackgroundCard(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
@@ -55,7 +56,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                   if (tokenUSDRate > 0)
                     Text(
                       r'$' +
-                          (double.parse(grandTotal) * tokenUSDRate)
+                          (Decimal.parse(grandTotal).toDouble() * tokenUSDRate)
                               .decimalNumber(2)
                               .formatNumber,
                       style: Theme.of(context).textTheme.bodyMedium,
@@ -64,39 +65,97 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
               ),
             ],
           ),
-          if (networkFee != null) _buildDivider(context),
-          if (networkFee != null)
-            Row(
-              children: [
-                Text(
-                  l10n.networkFee,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                const SizedBox(
-                  width: Sizes.spaceXSmall,
-                ),
-                if (networkFees != null)
+          if (networkFee != null) ...[
+            _buildDivider(context),
+            if (networkFee!.bakerFee == null) ...[
+              Row(
+                children: [
+                  Text(
+                    l10n.networkFee,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(
+                    width: Sizes.spaceXSmall,
+                  ),
                   EditButton(
                     onTap: onEditButtonPressed,
                   ),
-                const Spacer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      '''${networkFee!.fee.decimalNumber(6).formatNumber} ${networkFee!.tokenSymbol}''',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    if (tokenUSDRate > 0 && networkFee?.tokenSymbol == symbol)
+                  const Spacer(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
                       Text(
-                        r'$' +
-                            networkFee!.feeInUSD.decimalNumber(2).formatNumber,
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        '''${networkFee!.totalFee.decimalNumber(6).formatNumber} ${networkFee!.tokenSymbol}''',
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
-                  ],
-                ),
-              ],
-            ),
+                      if (tokenUSDRate > 0 && networkFee?.tokenSymbol == symbol)
+                        Text(
+                          r'$' +
+                              networkFee!.feeInUSD
+                                  .decimalNumber(2)
+                                  .formatNumber,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ] else ...[
+              Row(
+                children: [
+                  Text(
+                    l10n.bakerFee,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const Spacer(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '''${networkFee!.bakerFee!.decimalNumber(6).formatNumber} ${networkFee!.tokenSymbol}''',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      if (tokenUSDRate > 0 && networkFee?.tokenSymbol == symbol)
+                        Text(
+                          r'$' +
+                              networkFee!.feeInUSD
+                                  .decimalNumber(2)
+                                  .formatNumber,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+              _buildDivider(context),
+              Row(
+                children: [
+                  Text(
+                    l10n.storageFee,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const Spacer(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '''${(Decimal.parse(networkFee!.totalFee) - Decimal.parse(networkFee!.bakerFee!)).toString().decimalNumber(6).formatNumber} ${networkFee!.tokenSymbol}''',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      if (tokenUSDRate > 0 && networkFee?.tokenSymbol == symbol)
+                        Text(
+                          r'$' +
+                              networkFee!.feeInUSD
+                                  .decimalNumber(2)
+                                  .formatNumber,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ],
           _buildDivider(context),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +175,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                   if (tokenUSDRate > 0)
                     Text(
                       r'$' +
-                          (double.parse(amount) * tokenUSDRate)
+                          (Decimal.parse(amount).toDouble() * tokenUSDRate)
                               .decimalNumber(2)
                               .formatNumber,
                       style: Theme.of(context).textTheme.bodyMedium,

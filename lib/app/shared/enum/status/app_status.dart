@@ -8,5 +8,11 @@ enum AppStatus {
   success,
   idle,
   goBack,
-  //gotTokenReward,
+  revoked,
+  addEnterpriseAccount,
+  updateEnterpriseAccount,
+  replaceEnterpriseAccount,
+  restoreWallet,
+  successAdd,
+  successUpdate,
 }

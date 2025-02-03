@@ -42,6 +42,13 @@ class UiDate {
     return outputFormat.format(dateTime);
   }
 
+  static String formatDatetime(DateTime dateTime) {
+    final date = '${dateTime.year}.${dateTime.month}.${dateTime.day}';
+    final time = '${dateTime.hour}:${dateTime.minute}:${dateTime.second}';
+
+    return '$date $time';
+  }
+
   static String? formatTime(String formattedString) {
     try {
       final DateTime dt =
@@ -102,6 +109,17 @@ class UiDate {
     } catch (e, s) {
       getLogger('date').e('e: $e, s: $s');
       return null;
+    }
+  }
+
+  static DateTime parseExpirationDate(String input) {
+    if (RegExp(r'^\d+$').hasMatch(input)) {
+      // numeric date string
+      final int timestamp = int.parse(input);
+      return DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    } else {
+      // ISO 8601 formatted date string
+      return DateTime.parse(input);
     }
   }
 }

@@ -8,16 +8,11 @@ part 'binance_associated_address_model.g.dart';
 class BinanceAssociatedAddressModel extends CredentialSubjectModel {
   BinanceAssociatedAddressModel({
     this.associatedAddress,
-    this.accountName,
-    required String id,
-    required String type,
-    required Author issuedBy,
+    required String super.id,
+    required String super.type,
   }) : super(
-          id: id,
-          type: type,
           credentialSubjectType: CredentialSubjectType.binanceAssociatedWallet,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
-          issuedBy: issuedBy,
         );
 
   factory BinanceAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>
@@ -25,9 +20,6 @@ class BinanceAssociatedAddressModel extends CredentialSubjectModel {
 
   @JsonKey(defaultValue: '')
   final String? associatedAddress;
-
-  @JsonKey(defaultValue: '')
-  final String? accountName;
 
   @override
   Map<String, dynamic> toJson() => _$BinanceAssociatedAddressModelToJson(this);

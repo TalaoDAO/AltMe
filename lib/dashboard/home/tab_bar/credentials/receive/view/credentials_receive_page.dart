@@ -102,7 +102,9 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                     tilePadding: const EdgeInsets.symmetric(horizontal: 8),
                     title: Text(
                       l10n.credentialManifestDescription,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     children: <Widget>[
                       Padding(
@@ -143,12 +145,13 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                       );
                     } else {
                       context.read<ScanCubit>().credentialOfferOrPresent(
-                        uri: widget.uri,
-                        credentialModel: credentialModel,
-                        keyId: SecureStorageKeys.ssiKey,
-                        issuer: widget.issuer,
-                        credentialsToBePresented: [],
-                      );
+                            uri: widget.uri,
+                            credentialModel: credentialModel,
+                            keyId: SecureStorageKeys.ssiKey,
+                            issuer: widget.issuer,
+                            credentialsToBePresented: [],
+                            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                          );
                     }
                   },
                 ),

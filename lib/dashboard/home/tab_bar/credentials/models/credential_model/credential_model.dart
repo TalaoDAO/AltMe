@@ -21,6 +21,7 @@ class CredentialModel extends Equatable {
     required this.credentialPreview,
     required this.shareLink,
     required this.data,
+    this.profileLinkedId,
     this.format,
     this.display,
     this.expirationDate,
@@ -57,6 +58,7 @@ class CredentialModel extends Equatable {
     required CredentialModel oldCredentialModel,
     required Map<String, dynamic> newData,
     required List<Activity> activities,
+    required ProfileType profileType,
     Display? display,
     CredentialManifest? credentialManifest,
   }) {
@@ -79,6 +81,8 @@ class CredentialModel extends Equatable {
       selectiveDisclosureJwt: oldCredentialModel.selectiveDisclosureJwt,
       format: oldCredentialModel.format,
       credentialSupported: oldCredentialModel.credentialSupported,
+      pendingInfo: oldCredentialModel.pendingInfo,
+      profileLinkedId: profileType.getVCId,
     );
   }
 
@@ -104,6 +108,7 @@ class CredentialModel extends Equatable {
   final PendingInfo? pendingInfo;
   final String? format;
   final Map<String, dynamic>? credentialSupported;
+  final String? profileLinkedId;
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
@@ -126,6 +131,7 @@ class CredentialModel extends Equatable {
     String? format,
     Map<String, dynamic>? claims,
     Map<String, dynamic>? credentialSupported,
+    String? profileLinkedId,
   }) {
     return CredentialModel(
       id: id ?? this.id,
@@ -146,10 +152,24 @@ class CredentialModel extends Equatable {
       pendingInfo: pendingInfo ?? this.pendingInfo,
       format: format ?? this.format,
       credentialSupported: credentialSupported ?? this.credentialSupported,
+      profileLinkedId: profileLinkedId ?? this.profileLinkedId,
     );
   }
 
-  String get issuer => data['issuer'] == null ? '' : data['issuer'] as String;
+  String get issuer {
+    final issuer = data['issuer'];
+
+    if (issuer == null) return '';
+
+    if (issuer is String) {
+      return issuer;
+    } else if (issuer is Map) {
+      final id = issuer['id'];
+      if (id != null) return id.toString();
+    }
+
+    return '';
+  }
 
   static String fromJsonId(dynamic json) {
     if (json == null || json == '') {
@@ -233,18 +253,37 @@ class CredentialModel extends Equatable {
       credentialPreview.credentialSubjectModel.credentialSubjectType ==
       CredentialSubjectType.defaultCredential;
 
-  bool get isLinkeInCard =>
-      credentialPreview.credentialSubjectModel.credentialSubjectType ==
-      CredentialSubjectType.linkedInCard;
-
   bool get isEbsiCard =>
       credentialPreview.credentialSubjectModel.credentialSubjectType.isEbsiCard;
 
   bool get disAllowDelete =>
       credentialPreview.credentialSubjectModel.credentialSubjectType ==
-      CredentialSubjectType.walletCredential;
+          CredentialSubjectType.walletCredential ||
+      credentialPreview
+          .credentialSubjectModel.credentialSubjectType.isBlockchainAccount;
 
   String get getFormat => format != null ? format! : 'ldp_vc';
+
+  String get getName {
+    try {
+      var name =
+          credentialPreview.credentialSubjectModel.credentialSubjectType.name;
+
+      if (name.isNotEmpty) return name;
+
+      name = display?.name ?? '';
+
+      if (name.isNotEmpty) return name;
+
+      name = credentialPreview.type.last;
+
+      if (name.isNotEmpty) return name;
+
+      return '';
+    } catch (e) {
+      return '';
+    }
+  }
 
   @override
   List<Object?> get props => [

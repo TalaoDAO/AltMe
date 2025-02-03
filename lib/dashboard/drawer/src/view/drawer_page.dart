@@ -52,7 +52,6 @@ class DrawerView extends StatelessWidget {
                           padding: EdgeInsets.zero,
                         ),
                       ),
-
                       const DrawerLogo(),
                       const AppVersionDrawer(),
                       const SizedBox(height: Sizes.spaceLarge),
@@ -60,17 +59,17 @@ class DrawerView extends StatelessWidget {
                           ProfileType.enterprise) ...[
                         DrawerCategoryItem(
                           title: l10n.updateYourWalletConfigNow,
-                          padding: const EdgeInsets.all(16),
                           onClick: () async {
                             Navigator.of(context).pop();
                             await context
                                 .read<EnterpriseCubit>()
-                                .updateTheConfiguration();
+                                .updateTheConfiguration(
+                                  context.read<ManageNetworkCubit>(),
+                                );
                           },
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
-
                       if (profileModel
                           .profileSetting.settingsMenu.displayProfile) ...[
                         DrawerCategoryItem(
@@ -83,9 +82,8 @@ class DrawerView extends StatelessWidget {
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
-
                       DrawerCategoryItem(
-                        title: l10n.walletSecurity,
+                        title: l10n.walletSecurityAndBackup,
                         subTitle: l10n.walletSecurityDescription,
                         onClick: () {
                           Navigator.of(context)
@@ -114,11 +112,8 @@ class DrawerView extends StatelessWidget {
                               },
                             ),
                           ],
-                        )
-                      else
-                        const SizedBox.shrink(),
+                        ),
                       const SizedBox(height: Sizes.spaceSmall),
-
                       if (profileModel.profileSetting.settingsMenu
                           .displaySelfSovereignIdentity) ...[
                         DrawerCategoryItem(
@@ -130,7 +125,6 @@ class DrawerView extends StatelessWidget {
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
-
                       if (profileModel.profileSetting.settingsMenu
                           .displayDeveloperMode) ...[
                         DrawerCategoryItem(
@@ -157,17 +151,6 @@ class DrawerView extends StatelessWidget {
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
-
-                      // DrawerCategoryItem(
-                      //   title: l10n.checkLinkedinProfile,
-                      //   subTitle: l10n.checkLinkedinProfile,
-                      //   onClick: () {
-                      //     Navigator.of(context)
-                      //         .push<void>(CheckForLinkedInProfile.route());
-                      //   },
-                      // ),
-                      //const SizedBox(height: Sizes.spaceSmall),
-
                       if (profileModel
                           .profileSetting.settingsMenu.displayHelpCenter) ...[
                         DrawerCategoryItem(
@@ -180,7 +163,6 @@ class DrawerView extends StatelessWidget {
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
-
                       DrawerCategoryItem(
                         title: l10n.about,
                         subTitle: l10n.aboutDescription,
@@ -190,6 +172,18 @@ class DrawerView extends StatelessWidget {
                         },
                       ),
                       const SizedBox(height: Sizes.spaceSmall),
+                      if (profileModel
+                          .profileSetting.settingsMenu.displayActivityLog) ...[
+                        DrawerCategoryItem(
+                          title: l10n.activityLog,
+                          subTitle: l10n.activityLogDescription,
+                          onClick: () {
+                            Navigator.of(context)
+                                .push<void>(ActivityLogPage.route());
+                          },
+                        ),
+                        const SizedBox(height: Sizes.spaceSmall),
+                      ],
                       DrawerCategoryItem(
                         title: l10n.resetWallet,
                         subTitle: l10n.resetWalletDescription,

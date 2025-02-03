@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class UserPinPage extends StatelessWidget {
   const UserPinPage({
@@ -37,7 +38,10 @@ class UserPinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PinCodeViewCubit(isUserPin: true),
+      create: (context) => PinCodeViewCubit(
+        isUserPin: true,
+        secureStorageProvider: getSecureStorage,
+      ),
       child: UserPinView(
         onCancel: onCancel,
         onProceed: onProceed,
@@ -78,15 +82,14 @@ class _UserPinViewState extends State<UserPinView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: BasePage(
         backgroundColor: Theme.of(context).colorScheme.surface,
         scrollView: false,
         body: PinCodeWidget(
-          title: widget.txCode?.description ??
-              l10n.pleaseInsertTheSecredCodeReceived,
-          passwordDigits: widget.txCode?.length ?? 4,
+          title: widget.txCode?.description ?? l10n.enterYourSecretCode,
+          passwordDigits: widget.txCode?.length ?? 6,
           deleteButton: Text(
             l10n.delete,
             style: Theme.of(context).textTheme.labelLarge,
@@ -96,10 +99,13 @@ class _UserPinViewState extends State<UserPinView> {
             style: Theme.of(context).textTheme.labelLarge,
           ),
           cancelCallback: _onPasscodeCancelled,
+          showKeyboard:
+              widget.txCode != null && widget.txCode!.inputMode != 'numeric',
           isValidCallback: () {
             Navigator.pop(context);
-            widget.onProceed
-                .call(context.read<PinCodeViewCubit>().state.enteredPasscode);
+            widget.onProceed.call(
+              context.read<PinCodeViewCubit>().state.enteredPasscode,
+            );
           },
           isUserPin: true,
         ),

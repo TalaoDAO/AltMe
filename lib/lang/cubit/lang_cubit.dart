@@ -87,6 +87,13 @@ class LangCubit extends Cubit<LangState> {
     if (AppLocalizations.supportedLocales
         .contains(Locale(newLocale.languageCode))) {
       emit(LangState(languageType: newlanguageType, locale: newLocale));
+    } else {
+      emit(
+        LangState(
+          languageType: newlanguageType,
+          locale: const Locale('en'),
+        ),
+      );
     }
   }
 }

@@ -40,7 +40,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
   final log = getLogger('SignPayloadCubit');
 
-  late String encodedPayload;
+  late String encodedPayloaForTezos;
   SigningType signingType = SigningType.micheline;
 
   Future<void> init({
@@ -62,16 +62,16 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           final String payload = beaconRequest.request!.payload!;
           log.i('payload - $payload');
           if (payload.startsWith('05')) {
-            encodedPayload = beaconRequest.request!.payload!;
+            encodedPayloaForTezos = beaconRequest.request!.payload!;
             signingType = SigningType.micheline;
           } else if (payload.startsWith('03')) {
-            encodedPayload = beaconRequest.request!.payload!;
+            encodedPayloaForTezos = beaconRequest.request!.payload!;
             signingType = SigningType.operation;
           } else {
-            encodedPayload = stringToHexPrefixedWith05(payload: payload);
+            encodedPayloaForTezos = stringToHexPrefixedWith05(payload: payload);
             signingType = SigningType.raw;
           }
-          final bytes = hexToBytes(encodedPayload).filterPayload;
+          final bytes = hexToBytes(encodedPayloaForTezos).filterPayload;
 
           payloadMessage = utf8.decode(bytes, allowMalformed: true);
 
@@ -84,6 +84,11 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             payloadMessage = getUtf8Message(
               walletConnectCubit.state.parameters[1] as String,
             );
+          } else if (walletConnectCubit.state.signType ==
+              Parameters.TEZOS_SIGN) {
+            final payload = walletConnectCubit.state.parameters['payload'];
+            payloadMessage = getUtf8Message(payload.toString());
+            encodedPayloaForTezos = payloadMessage;
           } else if (walletConnectCubit.state.signType ==
                   Parameters.ETH_SIGN_TYPE_DATA ||
               walletConnectCubit.state.signType ==
@@ -168,24 +173,27 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         case ConnectionBridgeType.beacon:
           final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
 
-          final CryptoAccountData? currentAccount = walletCubit
-              .getCryptoAccountData(beaconRequest.request!.sourceAddress!);
+          final address = beaconRequest.request!.sourceAddress!;
+
+          final CryptoAccountData? currentAccount =
+              walletCubit.getCryptoAccountData(address);
 
           if (currentAccount == null) {
-            throw ResponseMessage(
-              message: ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            return emit(
+              state.copyWith(
+                status: AppStatus.error,
+                message: StateMessage.error(
+                  messageHandler: ResponseMessage(
+                    message: ResponseString
+                        .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress,
+                  ),
+                  injectedMessage: address,
+                ),
+              ),
             );
           }
 
-          final dynamic signer = await Dartez.createSigner(
-            Dartez.writeKeyWithHint(currentAccount.secretKey, 'edsk'),
-          );
-
-          final signature = Dartez.signPayload(
-            signer: signer as SoftSigner,
-            payload: encodedPayload,
-          );
+          final String signature = await tezosSigning(currentAccount.secretKey);
 
           final Map<dynamic, dynamic> response =
               await beacon.signPayloadResponse(
@@ -209,6 +217,10 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
               walletConnectCubit.state.signType == Parameters.ETH_SIGN) {
             publicKey = walletConnectState.parameters[0].toString();
           } else if (walletConnectCubit.state.signType ==
+              Parameters.TEZOS_SIGN) {
+            publicKey =
+                walletConnectCubit.state.parameters['account'].toString();
+          } else if (walletConnectCubit.state.signType ==
               Parameters.PERSONAL_SIGN) {
             publicKey = walletConnectState.parameters[1].toString();
           } else if (walletConnectCubit.state.signType ==
@@ -226,18 +238,25 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
           log.i('currentAccount -$currentAccount');
           if (currentAccount == null) {
-            throw ResponseMessage(
-              message: ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            return emit(
+              state.copyWith(
+                status: AppStatus.error,
+                message: StateMessage.error(
+                  messageHandler: ResponseMessage(
+                    message: ResponseString
+                        .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress,
+                  ),
+                  injectedMessage: publicKey,
+                ),
+              ),
             );
           }
-
-          final Credentials credentials =
-              EthPrivateKey.fromHex(currentAccount.secretKey);
 
           /// sign
           if (walletConnectCubit.state.signType == Parameters.PERSONAL_SIGN ||
               walletConnectCubit.state.signType == Parameters.ETH_SIGN) {
+            final Credentials credentials =
+                EthPrivateKey.fromHex(currentAccount.secretKey);
             final String signature = hex.encode(
               credentials.signPersonalMessageToUint8List(
                 Uint8List.fromList(
@@ -263,7 +282,17 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
                 .complete(signTypedData);
             success = true;
           } else if (walletConnectCubit.state.signType ==
+              Parameters.TEZOS_SIGN) {
+            final String signature =
+                await tezosSigning(currentAccount.secretKey);
+            walletConnectCubit
+                .completer[walletConnectCubit.completer.length - 1]!
+                .complete(signature);
+            success = true;
+          } else if (walletConnectCubit.state.signType ==
               Parameters.ETH_SIGN_TRANSACTION) {
+            final Credentials credentials =
+                EthPrivateKey.fromHex(currentAccount.secretKey);
             await dotenv.load();
             final infuraApiKey = dotenv.get('INFURA_API_KEY');
             final ethRpcUrl = Urls.infuraBaseUrl + infuraApiKey;
@@ -297,19 +326,34 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         if (state.payloadMessage != null &&
             state.payloadMessage!.contains('#')) {
           final String url = state.payloadMessage!.split('#')[1];
-          final uri = Uri.parse(url);
-          emit(
-            state.copyWith(
-              status: AppStatus.success,
-              message: StateMessage.success(
-                messageHandler: ResponseMessage(
-                  message: ResponseString
-                      .RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+          try {
+            final uri = Uri.parse(url);
+            emit(
+              state.copyWith(
+                status: AppStatus.success,
+                message: StateMessage.success(
+                  messageHandler: ResponseMessage(
+                    message: ResponseString
+                        .RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+                  ),
                 ),
               ),
-            ),
-          );
-          await qrCodeScanCubit.verify(uri: uri, isScan: false);
+            );
+            await qrCodeScanCubit.verify(uri: uri, isScan: false);
+          } catch (e) {
+            log.e('Invalid url, e: $e');
+            emit(
+              state.copyWith(
+                status: AppStatus.success,
+                message: StateMessage.success(
+                  messageHandler: ResponseMessage(
+                    message: ResponseString
+                        .RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+                  ),
+                ),
+              ),
+            );
+          }
         } else {
           emit(
             state.copyWith(
@@ -343,6 +387,19 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         );
       }
     }
+  }
+
+  Future<String> tezosSigning(String secretKey) async {
+    final dynamic signer = await Dartez.createSigner(
+      Dartez.writeKeyWithHint(secretKey, 'edsk'),
+    );
+
+    final signature = Dartez.signPayload(
+      signer: signer as SoftSigner,
+      payload: encodedPayloaForTezos,
+    );
+
+    return signature;
   }
 
   void rejectSigning({

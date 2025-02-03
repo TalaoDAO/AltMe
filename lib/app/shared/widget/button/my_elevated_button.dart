@@ -1,5 +1,5 @@
+import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class MyElevatedButton extends StatelessWidget {
   const MyElevatedButton({
@@ -53,17 +53,18 @@ class MyElevatedButton extends StatelessWidget {
                 onPressed: onPressed,
               ),
               onPressed: onPressed,
-              child: Text(
+              child: MyText(
                 text.toUpperCase(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
               ),
             )
           : ElevatedButton.icon(
               icon: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  textColor ?? Theme.of(context).textTheme.titleLarge!.color!,
+                  textColor ?? Theme.of(context).colorScheme.onPrimaryContainer,
                   BlendMode.srcIn,
                 ),
                 child: icon,
@@ -77,10 +78,11 @@ class MyElevatedButton extends StatelessWidget {
                 onPressed: onPressed,
               ),
               onPressed: onPressed,
-              label: Text(
+              label: MyText(
                 text.toUpperCase(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
               ),
             ),
@@ -104,7 +106,15 @@ ButtonStyle elevatedStyleFrom({
     backgroundColor: WidgetStateProperty.all(
       onPressed == null
           ? Theme.of(context).colorScheme.outline
-          : backgroundColor ?? Theme.of(context).colorScheme.secondaryContainer,
+          : backgroundColor ?? Theme.of(context).colorScheme.primaryContainer,
+    ),
+    side: WidgetStatePropertyAll(
+      BorderSide(
+        color: onPressed == null
+            ? Theme.of(context).colorScheme.outline
+            : Theme.of(context).colorScheme.primaryContainer,
+        width: 2,
+      ),
     ),
     shape: WidgetStateProperty.all(
       RoundedRectangleBorder(
@@ -131,7 +141,7 @@ class ElevatedButtonText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.toUpperCase(),
-      style: GoogleFonts.nunito(
+      style: TextStyle(
         color: textColor ?? Theme.of(context).colorScheme.onPrimary,
         fontSize: fontSize,
         fontWeight: FontWeight.w700,

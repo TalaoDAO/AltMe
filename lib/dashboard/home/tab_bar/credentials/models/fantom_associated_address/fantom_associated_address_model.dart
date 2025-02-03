@@ -8,16 +8,11 @@ part 'fantom_associated_address_model.g.dart';
 class FantomAssociatedAddressModel extends CredentialSubjectModel {
   FantomAssociatedAddressModel({
     this.associatedAddress,
-    this.accountName,
-    required String id,
-    required String type,
-    required Author issuedBy,
+    required String super.id,
+    required String super.type,
   }) : super(
-          id: id,
-          type: type,
           credentialSubjectType: CredentialSubjectType.fantomAssociatedWallet,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
-          issuedBy: issuedBy,
         );
 
   factory FantomAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>
@@ -25,9 +20,6 @@ class FantomAssociatedAddressModel extends CredentialSubjectModel {
 
   @JsonKey(defaultValue: '')
   final String? associatedAddress;
-
-  @JsonKey(defaultValue: '')
-  final String? accountName;
 
   @override
   Map<String, dynamic> toJson() => _$FantomAssociatedAddressModelToJson(this);

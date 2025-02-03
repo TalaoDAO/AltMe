@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/chat_room/widget/mxc_image.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart' hide Message;
+import 'package:flutter_chat_ui/flutter_chat_ui.dart'
+    hide ImageMessage, Message;
+import 'package:matrix/matrix.dart' hide User;
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ChatRoomView<B extends ChatRoomCubit> extends StatefulWidget {
@@ -51,6 +56,11 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final adaptiveOnPrimary = colorScheme.primaryContainer.adaptiveTopColor;
+    final adaptiveOnSurface = colorScheme.surface.adaptiveTopColor;
+
     return BasePage(
       title: widget.appBarTitle,
       scrollView: false,
@@ -103,8 +113,108 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                 alignment: Alignment.topCenter,
                 children: [
                   Chat(
-                    theme: const DarkChatTheme(),
+                    theme: DefaultChatTheme(
+                      primaryColor: colorScheme.primaryContainer,
+                      secondaryColor: colorScheme.secondaryContainer,
+                      backgroundColor: colorScheme.surface,
+                      inputBackgroundColor: colorScheme.secondaryContainer,
+                      inputTextColor: adaptiveOnSurface,
+                      errorColor: colorScheme.error,
+                      sentMessageBodyTextStyle: TextStyle(
+                        color: adaptiveOnPrimary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        height: 1.5,
+                      ),
+                      sentMessageBodyBoldTextStyle: TextStyle(
+                        color: adaptiveOnPrimary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        height: 1.333,
+                      ),
+                      sentMessageDocumentIconColor: adaptiveOnPrimary,
+                      sentMessageLinkTitleTextStyle: TextStyle(
+                        color: adaptiveOnPrimary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        height: 1.375,
+                      ),
+                      sentMessageCaptionTextStyle: TextStyle(
+                        color: adaptiveOnPrimary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        height: 1,
+                      ),
+                      systemMessageTheme: SystemMessageTheme(
+                        margin: const EdgeInsets.only(
+                          bottom: 24,
+                          top: 8,
+                          left: 8,
+                          right: 8,
+                        ),
+                        textStyle: TextStyle(
+                          color: adaptiveOnPrimary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          height: 1.333,
+                        ),
+                      ),
+                      receivedMessageBodyTextStyle: TextStyle(
+                        color: adaptiveOnSurface,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        height: 1.5,
+                      ),
+                      receivedMessageCaptionTextStyle: TextStyle(
+                        color: adaptiveOnSurface,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        height: 1.333,
+                      ),
+                      receivedMessageDocumentIconColor: adaptiveOnSurface,
+                      receivedMessageLinkDescriptionTextStyle: TextStyle(
+                        color: adaptiveOnSurface,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        height: 1.428,
+                      ),
+                      receivedMessageLinkTitleTextStyle: TextStyle(
+                        color: adaptiveOnSurface,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        height: 1.375,
+                      ),
+                    ),
                     messages: state.messages,
+                    disableImageGallery: true,
+                    imageMessageBuilder: (p0, {required messageWidth}) {
+                      final link = p0.uri;
+
+                      if (link.isEmpty) return Container();
+
+                      if (link.startsWith('mxc')) {
+                        final event = p0.metadata!['event'] as Event;
+                        return MxcImage(
+                          url: link,
+                          event: event,
+                          fit: BoxFit.contain,
+                        );
+                      } else {
+                        return TransparentInkWell(
+                          onTap: () {
+                            Navigator.of(context).push<void>(
+                              PhotoViewer.route(
+                                imageProvider: AssetImage(link),
+                              ),
+                            );
+                          },
+                          child: Image.file(
+                            File(link),
+                            fit: BoxFit.contain,
+                          ),
+                        );
+                      }
+                    },
                     onSendPressed: (partialText) {
                       FocusManager.instance.primaryFocus?.unfocus();
                       liveChatCubit!.onSendPressed(partialText);
@@ -214,6 +324,10 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
   }
 
   Future<void> _handleMessageTap(BuildContext _, Message message) async {
-    await liveChatCubit!.handleMessageTap(message);
+    if (message is ImageMessage) {
+      return;
+    } else {
+      await liveChatCubit!.handleMessageTap(message);
+    }
   }
 }

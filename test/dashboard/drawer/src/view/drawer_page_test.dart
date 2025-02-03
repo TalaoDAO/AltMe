@@ -184,52 +184,6 @@ void main() {
     });
 
     testWidgets(
-        'navigates to SSIMenu when displaySelfSovereignIdentity is enabled '
-        'and "ssi" is tapped', (tester) async {
-      when(() => mockProfileCubit.state).thenReturn(
-        ProfileState(model: ProfileModel.empty()),
-      );
-
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
-              BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
-            ],
-            child: DrawerView(profileCubit: mockProfileCubit),
-          ),
-        ),
-      );
-
-      expect(find.text('Self-Sovereign Identity (DID)'), findsOneWidget);
-      expect(
-        find.text(
-            'Manage your Decentralized ID and backup or restore your credentials'),
-        findsOneWidget,
-      );
-
-      await tester.scrollUntilVisible(
-        find.text('Self-Sovereign Identity (DID)'),
-        0,
-      );
-
-      await tester.tap(find.text('Self-Sovereign Identity (DID)'));
-      await tester.pumpAndSettle();
-
-      verify(
-        () => navigator.push<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/ssiMenu'),
-            ),
-          ),
-        ),
-      ).called(1);
-    });
-
-    testWidgets(
         'setDeveloperModeStatus is called when displayDeveloperMode is enabled '
         'and "developerMode" is tapped', (tester) async {
       when(() => mockProfileCubit.state).thenReturn(

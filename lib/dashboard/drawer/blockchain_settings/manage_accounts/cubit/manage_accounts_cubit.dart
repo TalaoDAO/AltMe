@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -12,11 +13,13 @@ part 'manage_accounts_state.dart';
 class ManageAccountsCubit extends Cubit<ManageAccountsState> {
   ManageAccountsCubit({
     required this.credentialsCubit,
+    required this.manageNetworkCubit,
   }) : super(const ManageAccountsState()) {
     initialise();
   }
 
   final CredentialsCubit credentialsCubit;
+  final ManageNetworkCubit manageNetworkCubit;
 
   WalletCubit get walletCubit => credentialsCubit.walletCubit;
 
@@ -33,6 +36,12 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
   Future<void> setCurrentWalletAccount(int index) async {
     emit(state.loading());
     await walletCubit.setCurrentWalletAccount(index);
+
+    final blockchainType =
+        walletCubit.state.cryptoAccount.data[index].blockchainType;
+    await credentialsCubit.loadAllCredentials(
+      blockchainType: blockchainType,
+    );
     emit(state.success(currentCryptoIndex: index));
   }
 
@@ -49,6 +58,27 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
       credentialsCubit: credentialsCubit,
       onComplete: (cryptoAccount) {
         emit(state.success(cryptoAccount: cryptoAccount));
+      },
+    );
+  }
+
+  Future<void> deleteCryptoAccount({
+    required int index,
+    required BlockchainType blockchainType,
+  }) async {
+    // should not be able to delete correct index
+    emit(state.loading());
+    await walletCubit.deleteCryptoAccount(
+      index: index,
+      blockchainType: blockchainType,
+      credentialsCubit: credentialsCubit,
+      onComplete: (cryptoAccount, newIndex) {
+        emit(
+          state.success(
+            cryptoAccount: cryptoAccount,
+            currentCryptoIndex: newIndex,
+          ),
+        );
       },
     );
   }

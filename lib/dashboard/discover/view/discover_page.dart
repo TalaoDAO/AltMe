@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/widget/widget.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -29,7 +29,16 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget build(BuildContext context) {
     return BasePage(
       scrollView: false,
-      padding: EdgeInsets.zero,
+      padding:
+          // Parameters.walletHandlesCrypto
+          // ? EdgeInsets.zero
+          // :
+          const EdgeInsets.fromLTRB(
+        Sizes.spaceSmall,
+        Sizes.spaceSmall,
+        Sizes.spaceSmall,
+        0,
+      ),
       backgroundColor: Colors.transparent,
       body: BlocListener<ProfileCubit, ProfileState>(
         listenWhen: (previous, current) {

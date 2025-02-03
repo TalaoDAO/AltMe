@@ -1,7 +1,7 @@
 class AltMeStrings {
   static const String defaultDIDMethod = 'key';
   static const String cryptoTezosDIDMethod = 'pkh:tz';
-  static const String cryptoEVMDIDMethod = 'pkh:eth';
+  static const String cryptoEVMDIDMethod = 'key';
   static const String defaultDIDMethodName = 'Tezos';
   static const String databaseFilename = 'wallet.db';
   static const String appContactWebsiteName = 'www.altme.io';
@@ -18,7 +18,7 @@ class AltMeStrings {
   static const String time = 'time';
 
   //page
-  static const String matrixSupportId = '@support:matrix.talao.co';
+  //static const String matrixChatSupportId = '@support:matrix.talao.co';
 
   //Chat
   static const String dashBoardPage = '/dashboardPage';

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class Oidc4vcSettingMenu extends StatelessWidget {
@@ -26,9 +25,8 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BasePage(
-      title: l10n.oidc4vc_settings,
+      title: 'OIDC4VC Settings',
       useSafeArea: true,
       scrollView: true,
       titleAlignment: Alignment.topCenter,
@@ -38,44 +36,40 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SecurityLevelWidget(),
-          const DidKeyTypeWidget(),
-          const DraftTypeWidget(),
+          const KeyIdentifierAndKeyTypeWidget(),
+          const OIDC4VCDraftTypeWidget(),
+          const OIDC4VPDraftTypeWidget(),
           const CryptographicHolderBindingWidget(),
           const ScopeParameterWidget(),
           const ClientAuthenticationWidget(),
           const ClientTypeWidget(),
-          const ConfidentialClientWidget(),
+          const PreRegisteredWidget(),
           const VCFormatWidget(),
           const ProofTypeWidget(),
           const ProofHeaderWidget(),
           const PushAuthorizationRequesWidget(),
           const StatusListCachingWidget(),
+          const DPopSupoprtWidget(),
+          const DisplayModeWidget(),
           DrawerItem(
-            title: l10n.walletMetadataForIssuers,
+            title: 'Wallet metadata for issuers',
             onTap: () {
               final value = const JsonEncoder.withIndent('  ').convert(
                 ConstantsJson.walletMetadataForIssuers,
               );
               Navigator.of(context).push<void>(
                 JsonViewerPage.route(
-                  title: l10n.walletMetadataForIssuers,
+                  title: 'Wallet metadata for issuers',
                   data: value,
+                  showButton: false,
                 ),
               );
             },
           ),
           DrawerItem(
-            title: l10n.walletMetadataForVerifiers,
+            title: 'Wallet metadata for verifiers',
             onTap: () {
-              final value = const JsonEncoder.withIndent('  ').convert(
-                ConstantsJson.walletMetadataForVerifiers,
-              );
-              Navigator.of(context).push<void>(
-                JsonViewerPage.route(
-                  title: l10n.walletMetadataForVerifiers,
-                  data: value,
-                ),
-              );
+              Navigator.of(context).push<void>(VerifiersMetadataPage.route());
             },
           ),
         ],

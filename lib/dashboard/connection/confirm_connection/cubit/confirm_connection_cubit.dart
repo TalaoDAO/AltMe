@@ -8,7 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:reown_walletkit/reown_walletkit.dart';
 
 part 'confirm_connection_cubit.g.dart';
 part 'confirm_connection_state.dart';
@@ -85,36 +85,72 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           final SessionProposalEvent? sessionProposalEvent =
               walletConnectState.sessionProposalEvent;
 
-          final eVMAccounts = walletCubit.state.cryptoAccount.data
-              .where((e) => e.blockchainType != BlockchainType.tezos)
-              .toList();
+          final cryptoAccounts = walletCubit.state.cryptoAccount.data.toList();
 
-          final accounts = <String>[];
+          final params = sessionProposalEvent!.params;
 
-          final allowedNamespaces = [
-            ...sessionProposalEvent!
-                .params.optionalNamespaces['eip155']!.chains!,
-            ...sessionProposalEvent
-                .params.requiredNamespaces['eip155']!.chains!,
-          ];
+          final allowedNamespaces = <String>[];
 
-          log.i(allowedNamespaces);
+          if (params.optionalNamespaces.isNotEmpty) {
+            if (params.optionalNamespaces.containsKey('eip155')) {
+              allowedNamespaces
+                  .addAll(params.optionalNamespaces['eip155']!.chains!);
+            }
 
-          for (final evm in eVMAccounts) {
-            if (allowedNamespaces.contains(evm.blockchainType.chain)) {
-              accounts.add('${evm.blockchainType.chain}:${evm.walletAddress}');
+            if (params.optionalNamespaces.containsKey('tezos')) {
+              allowedNamespaces
+                  .addAll(params.optionalNamespaces['tezos']!.chains!);
             }
           }
 
-          final walletNamespaces = {
-            'eip155': Namespace(
-              accounts: accounts,
-              methods: Parameters.walletConnectMethods,
-              events: Parameters.walletConnectEvents,
-            ),
-          };
+          if (params.requiredNamespaces.isNotEmpty) {
+            if (params.requiredNamespaces.containsKey('eip155')) {
+              allowedNamespaces
+                  .addAll(params.requiredNamespaces['eip155']!.chains!);
+            }
 
-          await walletConnectCubit.web3Wallet!.approveSession(
+            if (params.requiredNamespaces.containsKey('tezos')) {
+              allowedNamespaces
+                  .addAll(params.requiredNamespaces['tezos']!.chains!);
+            }
+          }
+
+          log.i(allowedNamespaces);
+
+          final accounts = <String>[];
+
+          for (final account in cryptoAccounts) {
+            if (account.blockchainType == BlockchainType.tezos) {
+              final namespace = allowedNamespaces[0];
+              accounts.add(
+                '$namespace:${account.walletAddress}',
+              );
+            } else {
+              accounts.add(
+                '${account.blockchainType.chain}:${account.walletAddress}',
+              );
+            }
+          }
+
+          final walletNamespaces = <String, Namespace>{};
+
+          if (accounts.any((acc) => acc.startsWith('tezos'))) {
+            walletNamespaces['tezos'] = Namespace(
+              accounts:
+                  accounts.where((acc) => acc.startsWith('tezos')).toList(),
+              methods: Parameters.tezosConnectMethods,
+              events: Parameters.tezosEvents,
+            );
+          } else {
+            walletNamespaces['eip155'] = Namespace(
+              accounts:
+                  accounts.where((acc) => acc.startsWith('eip155')).toList(),
+              methods: Parameters.evmConnectMethods,
+              events: Parameters.allEvents,
+            );
+          }
+
+          await walletConnectCubit.reownWalletKit!.approveSession(
             id: sessionProposalEvent.id,
             namespaces: walletNamespaces,
           );
@@ -167,11 +203,11 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
         final SessionProposalEvent? sessionProposalEvent =
             walletConnectState.sessionProposalEvent;
 
-        walletConnectCubit.web3Wallet!.rejectSession(
+        walletConnectCubit.reownWalletKit!.rejectSession(
           id: sessionProposalEvent!.id,
           reason: Errors.getSdkError(
             Errors.USER_REJECTED,
-          ),
+          ).toSignError(),
         );
     }
     emit(state.copyWith(appStatus: AppStatus.goBack));

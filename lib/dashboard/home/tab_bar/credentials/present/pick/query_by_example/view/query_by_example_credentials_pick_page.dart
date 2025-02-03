@@ -133,7 +133,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                       ? Container(
                           padding: const EdgeInsets.all(16),
                           child: Tooltip(
-                            message: l10n.credentialPickPresent,
+                            message: l10n.credentialPickShare,
                             child: Builder(
                               builder: (context) {
                                 return MyElevatedButton(
@@ -178,6 +178,8 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                           bool authenticated = false;
                                           await securityCheck(
                                             context: context,
+                                            title: context.l10n
+                                                .typeYourPINCodeToShareTheData,
                                             localAuthApi: LocalAuthApi(),
                                             onSuccess: () {
                                               authenticated = true;
@@ -202,7 +204,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                                 issuer: issuer,
                                               );
                                         },
-                                  text: l10n.credentialPickPresent,
+                                  text: l10n.credentialPickShare,
                                 );
                               },
                             ),

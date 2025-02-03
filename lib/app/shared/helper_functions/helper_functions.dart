@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:asn1lib/asn1lib.dart' as asn1lib;
@@ -15,10 +16,10 @@ import 'package:intl/intl.dart';
 import 'package:jose_plus/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:uuid/uuid.dart';
 import 'package:x509/x509.dart' as x509;
 import 'package:x509/x509.dart';
 
@@ -98,7 +99,7 @@ String getCredentialName(String constraints) {
   final dynamic constraintsJson = jsonDecode(constraints);
   final fieldsPath = JsonPath(r'$..fields');
   final dynamic credentialField =
-      (fieldsPath.read(constraintsJson).first.value as List)
+      (fieldsPath.read(constraintsJson).first.value! as List)
           .where(
             (dynamic e) =>
                 e['path'].toString() == r'[$.credentialSubject.type]',
@@ -112,7 +113,7 @@ String getIssuersName(String constraints) {
   final dynamic constraintsJson = jsonDecode(constraints);
   final fieldsPath = JsonPath(r'$..fields');
   final dynamic issuerField =
-      (fieldsPath.read(constraintsJson).first.value as List)
+      (fieldsPath.read(constraintsJson).first.value! as List)
           .where(
             (dynamic e) => e['path'].toString() == r'[$.issuer]',
           )
@@ -140,6 +141,8 @@ BlockchainType getBlockchainType(AccountType accountType) {
       return BlockchainType.polygon;
     case AccountType.binance:
       return BlockchainType.binance;
+    case AccountType.etherlink:
+      return BlockchainType.etherlink;
   }
 }
 
@@ -154,7 +157,7 @@ CredentialSubjectType? getCredTypeFromName(String credentialName) {
 
 Future<bool> isCredentialPresentable({
   required CredentialSubjectType? credentialSubjectType,
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
 }) async {
   if (credentialSubjectType == null) {
     return true;
@@ -162,7 +165,7 @@ Future<bool> isCredentialPresentable({
 
   final isPresentable = await isCredentialAvaialble(
     credentialSubjectType: credentialSubjectType,
-    vcFormatType: vcFormatType,
+    formatsSupported: formatsSupported,
   );
 
   return isPresentable;
@@ -170,7 +173,7 @@ Future<bool> isCredentialPresentable({
 
 Future<bool> isCredentialAvaialble({
   required CredentialSubjectType credentialSubjectType,
-  required VCFormatType vcFormatType,
+  required List<VCFormatType> formatsSupported,
 }) async {
   /// fetching all the credentials
   final CredentialsRepository repository =
@@ -182,8 +185,11 @@ Future<bool> isCredentialAvaialble({
     final matchSubjectType = credentialSubjectType ==
         credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
-
-    final matchFormat = vcFormatType.vcValue == credential.format;
+    final formatsSupportedStrings =
+        formatsSupported.map((e) => e.vcValue).toList();
+    final matchFormat =
+        formatsSupportedStrings.contains(credential.getFormat) ||
+            credential.getFormat == 'auto';
     if (matchSubjectType && matchFormat) {
       return true;
     }
@@ -231,12 +237,12 @@ String getDateTimeWithoutSpace({DateTime? dateTime}) {
 }
 
 int getIndexValue({
-  required bool isEBSIV3,
+  required bool isEBSI,
   required DidKeyType didKeyType,
 }) {
   switch (didKeyType) {
     case DidKeyType.secp256k1:
-      if (isEBSIV3) {
+      if (isEBSI) {
         return 3;
       } else {
         return 1;
@@ -247,7 +253,8 @@ int getIndexValue({
       return 5;
     case DidKeyType.jwkP256:
       return 6;
-
+    case DidKeyType.ebsiv4:
+      return 7;
     case DidKeyType.edDSA:
     case DidKeyType.jwtClientAttestation:
       return 0; // it is not needed, just assigned
@@ -279,10 +286,10 @@ Future<String> getPrivateKey({
 
     case DidKeyType.secp256k1:
       final index = getIndexValue(
-        isEBSIV3: true,
+        isEBSI: true,
         didKeyType: didKeyType,
       );
-      final key = profileCubit.oidc4vc.privateKeyFromMnemonic(
+      final key = privateKeyFromMnemonic(
         mnemonic: mnemonic!,
         indexValue: index,
       );
@@ -290,13 +297,14 @@ Future<String> getPrivateKey({
 
     case DidKeyType.p256:
     case DidKeyType.ebsiv3:
+    case DidKeyType.ebsiv4:
     case DidKeyType.jwkP256:
       final indexValue = getIndexValue(
-        isEBSIV3: false,
+        isEBSI: false,
         didKeyType: didKeyType,
       );
 
-      final key = profileCubit.oidc4vc.p256PrivateKeyFromMnemonics(
+      final key = p256PrivateKeyFromMnemonics(
         mnemonic: mnemonic!,
         indexValue: indexValue,
       );
@@ -395,9 +403,9 @@ DidKeyType? getDidKeyFromString(String? didKeyTypeString) {
 Future<String> fetchPrivateKey({
   required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
-  bool? isEBSIV3,
+  bool? isEBSI,
 }) async {
-  if (isEBSIV3 != null && isEBSIV3) {
+  if (isEBSI != null && isEBSI) {
     final privateKey = await getPrivateKey(
       profileCubit: profileCubit,
       didKeyType: DidKeyType.ebsiv3,
@@ -461,6 +469,12 @@ String birthDateFormater(int birthData) {
   return formattedBirthdate;
 }
 
+String chatTimeFormatter(int birthData) {
+  final dateTime = DateTime.fromMillisecondsSinceEpoch(birthData);
+  final formattedDate = DateFormat('dd.MM.yyyy').format(dateTime);
+  return formattedDate;
+}
+
 String getSignatureType(String circuitId) {
   if (circuitId == 'credentialAtomicQuerySigV2' ||
       circuitId == 'credentialAtomicQuerySigV2OnChain') {
@@ -515,6 +529,7 @@ Future<(String, String)> getDidAndKid({
 
   switch (didKeyType) {
     case DidKeyType.ebsiv3:
+    case DidKeyType.ebsiv4:
 
       //b'\xd1\xd6\x03' in python
       final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
@@ -574,11 +589,11 @@ Future<(String, String)> getDidAndKid({
 
 Future<(String, String)> fetchDidAndKid({
   required String privateKey,
-  bool? isEBSIV3,
+  bool? isEBSI,
   required ProfileCubit profileCubit,
   required DidKeyType didKeyType,
 }) async {
-  if (isEBSIV3 != null && isEBSIV3) {
+  if (isEBSI != null && isEBSI) {
     final (did, kid) = await getDidAndKid(
       didKeyType: DidKeyType.ebsiv3,
       privateKey: privateKey,
@@ -620,6 +635,28 @@ String sortedPublcJwk(String privateKey) {
   return jsonString;
 }
 
+String sortedPrivateJwk(String privateKey) {
+  final private = jsonDecode(privateKey) as Map<String, dynamic>;
+
+  /// we use crv P-256K in the rest of the package to ensure compatibility
+  /// with jose dart package. In fact our crv is secp256k1 wich change the
+  /// fingerprint
+
+  final sortedJwk = Map.fromEntries(
+    private.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
+  )
+    ..removeWhere((key, value) => key == 'use')
+    ..removeWhere((key, value) => key == 'alg');
+
+  /// this test is to be crv agnostic and respect https://www.rfc-editor.org/rfc/rfc7638
+  if (sortedJwk['crv'] == 'P-256K') {
+    sortedJwk['crv'] = 'secp256k1';
+  }
+
+  final jsonString = jsonEncode(sortedJwk).replaceAll(' ', '');
+  return jsonString;
+}
+
 bool isPolygonIdUrl(String url) =>
     url.startsWith('{"id":') ||
     url.startsWith('{"body":{"') ||
@@ -631,240 +668,50 @@ bool isPolygonIdUrl(String url) =>
 
 bool isOIDC4VCIUrl(Uri uri) {
   return uri.toString().startsWith('openid') ||
-      uri.toString().startsWith('haip');
+      uri.toString().startsWith('haip') ||
+      uri.toString().startsWith(Parameters.walletOfferDeepLink);
 }
 
 bool isSIOPV2OROIDC4VPUrl(Uri uri) {
   final isOpenIdUrl = uri.toString().startsWith('openid://?') ||
       uri.toString().startsWith('openid-vc://?') ||
+      uri.toString().startsWith(Parameters.walletPresentationDeepLink) ||
       uri.toString().startsWith('openid-hedera://?') ||
-      uri.toString().startsWith('haip://?');
+      uri.toString().startsWith('haip://?') &&
+          (uri.queryParameters['request_uri'] != null ||
+              uri.queryParameters['request'] != null);
 
   final isSiopv2Url = uri.toString().startsWith('siopv2://?');
   final isAuthorizeEndPoint =
-      uri.toString().startsWith(Parameters.authorizeEndPoint);
+      uri.toString().startsWith(Parameters.authorizeEndPoint) ||
+          uri.toString().startsWith('haip://authorize?');
 
   return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
 }
 
-/// OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?,
-/// credentialOfferJson, issuer, pre-authorizedCode
-Future<
-    (
-      OIDC4VCType?,
-      OpenIdConfiguration?,
-      OpenIdConfiguration?,
-      dynamic,
-      String?,
-      String?,
-    )> getIssuanceData({
-  required String url,
-  required DioClient client,
-  required OIDC4VC oidc4vc,
-  required OIDC4VCIDraftType oidc4vciDraftType,
-}) async {
-  final uri = Uri.parse(url);
-
-  final keys = <String>[];
-  uri.queryParameters.forEach((key, value) => keys.add(key));
-
-  dynamic credentialOfferJson;
-  String? issuer;
-  String? preAuthorizedCode;
-
-  if (keys.contains('credential_offer') ||
-      keys.contains('credential_offer_uri')) {
-    ///  issuance case 2
-    credentialOfferJson = await getCredentialOfferJson(
-      scannedResponse: uri.toString(),
-      dioClient: client,
-    );
-
-    if (credentialOfferJson != null) {
-      final grants = credentialOfferJson['grants'];
-
-      if (grants != null && grants is Map) {
-        final dynamic preAuthorizedCodeGrant =
-            grants['urn:ietf:params:oauth:grant-type:pre-authorized_code'];
-        if (preAuthorizedCodeGrant != null &&
-            preAuthorizedCodeGrant is Map &&
-            preAuthorizedCodeGrant.containsKey('pre-authorized_code')) {
-          preAuthorizedCode =
-              preAuthorizedCodeGrant['pre-authorized_code'] as String;
-        }
-      } else {
-        ///
-      }
-
-      issuer = credentialOfferJson['credential_issuer'].toString();
-    }
-  }
-
-  if (keys.contains('issuer')) {
-    /// issuance case 1
-    issuer = uri.queryParameters['issuer'].toString();
-
-    /// preAuthorizedCode can be null
-    preAuthorizedCode = uri.queryParameters['pre-authorized_code'];
-  }
-
-  if (issuer == null) {
-    return (null, null, null, null, null, null);
-  }
-
-  final OpenIdConfiguration openIdConfiguration = await oidc4vc.getOpenIdConfig(
-    baseUrl: issuer,
-    isAuthorizationServer: false,
-    dio: client.dio,
-  );
-
-  if (preAuthorizedCode == null) {
-    final grantTypesSupported = openIdConfiguration.grantTypesSupported;
-    if (grantTypesSupported != null && grantTypesSupported.isNotEmpty) {
-      if (!grantTypesSupported.contains('authorization_code')) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'No grant specified.',
-          },
-        );
-      }
-    }
-  }
-
-  final authorizationServer = openIdConfiguration.authorizationServer;
-
-  OpenIdConfiguration? authorizationServerConfiguration;
-
-  if (authorizationServer != null) {
-    authorizationServerConfiguration = await oidc4vc.getOpenIdConfig(
-      baseUrl: authorizationServer,
-      isAuthorizationServer: true,
-      dio: client.dio,
-    );
-  }
-
-  final credentialsSupported = openIdConfiguration.credentialsSupported;
-  final credentialConfigurationsSupported =
-      openIdConfiguration.credentialConfigurationsSupported;
-
-  if (credentialsSupported == null &&
-      credentialConfigurationsSupported == null) {
-    throw ResponseMessage(
-      data: {
-        'error': 'invalid_request',
-        'error_description': 'The credential supported is missing.',
-      },
-    );
-  }
-
-  CredentialsSupported? credSupported;
-
-  if (credentialsSupported != null) {
-    credSupported = credentialsSupported[0];
-  }
-
-  for (final oidc4vcType in OIDC4VCType.values) {
-    if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
-      if (oidc4vcType == OIDC4VCType.DEFAULT ||
-          oidc4vcType == OIDC4VCType.EBSIV3) {
-        if (credSupported?.trustFramework != null &&
-            credSupported == credSupported?.trustFramework) {
-          return (
-            OIDC4VCType.DEFAULT,
-            openIdConfiguration,
-            authorizationServerConfiguration,
-            credentialOfferJson,
-            issuer,
-            preAuthorizedCode,
-          );
-        }
-
-        if (credSupported?.trustFramework?.name != null &&
-            credSupported?.trustFramework?.name == 'ebsi') {
-          return (
-            OIDC4VCType.EBSIV3,
-            openIdConfiguration,
-            authorizationServerConfiguration,
-            credentialOfferJson,
-            issuer,
-            preAuthorizedCode,
-          );
-        } else {
-          return (
-            OIDC4VCType.DEFAULT,
-            openIdConfiguration,
-            authorizationServerConfiguration,
-            credentialOfferJson,
-            issuer,
-            preAuthorizedCode,
-          );
-        }
-      }
-      return (
-        oidc4vcType,
-        openIdConfiguration,
-        authorizationServerConfiguration,
-        credentialOfferJson,
-        issuer,
-        preAuthorizedCode,
-      );
-    }
-  }
-
-  return (
-    null,
-    openIdConfiguration,
-    authorizationServerConfiguration,
-    credentialOfferJson,
-    issuer,
-    preAuthorizedCode,
-  );
-}
-
 Future<void> handleErrorForOID4VCI({
-  required String url,
-  required OpenIdConfiguration openIdConfiguration,
-  required OpenIdConfiguration? authorizationServerConfiguration,
+  required Oidc4vcParameters oidc4vcParameters,
 }) async {
-  final authorizationServer = openIdConfiguration.authorizationServer;
+  List<dynamic>? subjectSyntaxTypesSupported =
+      oidc4vcParameters.issuerOpenIdConfiguration.subjectSyntaxTypesSupported;
 
-  List<dynamic>? subjectSyntaxTypesSupported;
-  String? tokenEndpoint;
-
-  if (openIdConfiguration.subjectSyntaxTypesSupported != null) {
-    subjectSyntaxTypesSupported =
-        openIdConfiguration.subjectSyntaxTypesSupported;
+  if (oidc4vcParameters
+          .authorizationServerOpenIdConfiguration.subjectSyntaxTypesSupported !=
+      null) {
+    subjectSyntaxTypesSupported = oidc4vcParameters
+        .authorizationServerOpenIdConfiguration.subjectSyntaxTypesSupported;
   }
 
-  if (openIdConfiguration.tokenEndpoint != null) {
-    tokenEndpoint = openIdConfiguration.tokenEndpoint;
-  }
-
-  if (authorizationServer != null && authorizationServerConfiguration != null) {
-    if (subjectSyntaxTypesSupported == null &&
-        authorizationServerConfiguration.subjectSyntaxTypesSupported != null) {
-      subjectSyntaxTypesSupported =
-          authorizationServerConfiguration.subjectSyntaxTypesSupported;
-    }
-
-    if (tokenEndpoint == null &&
-        authorizationServerConfiguration.tokenEndpoint != null) {
-      tokenEndpoint = authorizationServerConfiguration.tokenEndpoint;
-    }
-  }
-
-  if (authorizationServer != null && tokenEndpoint == null) {
+  if (oidc4vcParameters.tokenEndpoint == '') {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
-        'error_description': 'The issuer configuration is invalid. '
-            'The token_endpoint is missing.',
+        'error_description': 'The token_endpoint is missing.',
       },
     );
   }
 
-  if (openIdConfiguration.credentialEndpoint == null) {
+  if (oidc4vcParameters.issuerOpenIdConfiguration.credentialEndpoint == null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -874,7 +721,7 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (openIdConfiguration.credentialIssuer == null) {
+  if (oidc4vcParameters.issuerOpenIdConfiguration.credentialIssuer == null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -884,8 +731,11 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (openIdConfiguration.credentialsSupported == null &&
-      openIdConfiguration.credentialConfigurationsSupported == null) {
+  if (oidc4vcParameters.issuerOpenIdConfiguration.credentialsSupported ==
+          null &&
+      oidc4vcParameters
+              .issuerOpenIdConfiguration.credentialConfigurationsSupported ==
+          null) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
@@ -979,7 +829,7 @@ Future<Map<String, dynamic>?> getClientMetada({
   }
 }
 
-Future<bool?> isEBSIV3ForVerifiers({
+Future<bool?> isEBSIForVerifiers({
   required Uri uri,
   required OIDC4VC oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
@@ -992,10 +842,8 @@ Future<bool?> isEBSIV3ForVerifiers({
     final isUrl = isURL(clientId);
     if (!isUrl) return false;
 
-    final OpenIdConfiguration openIdConfiguration =
-        await oidc4vc.getOpenIdConfig(
+    final openIdConfiguration = await oidc4vc.getIssuerMetaData(
       baseUrl: clientId,
-      isAuthorizationServer: false,
       dio: Dio(),
     );
 
@@ -1064,7 +912,7 @@ Future<String> getHost({
   } else if (keys.contains('credential_offer') ||
       keys.contains('credential_offer_uri')) {
     ///  issuance case 2
-    final dynamic credentialOfferJson = await getCredentialOfferJson(
+    final dynamic credentialOfferJson = await getCredentialOffer(
       scannedResponse: uri.toString(),
       dioClient: client,
     );
@@ -1082,7 +930,10 @@ Future<String> getHost({
     ).host;
   } else {
     /// verification case
-    final clientId = uri.queryParameters['client_id'];
+
+    final clientId = getClientIdForPresentation(
+      uri.queryParameters['client_id'],
+    );
 
     if (clientId != null) {
       return clientId;
@@ -1177,11 +1028,19 @@ MessageHandler getMessageHandler(dynamic e) {
           'error_description': 'SSI does not support this process.',
         },
       );
-    } else if (stringException.contains('OPENID-CONFIGURATION-ISSUE')) {
+    } else if (stringException
+        .contains('AUTHORIZATION_SERVER_METADATA_ISSUE')) {
       return ResponseMessage(
         data: {
           'error': 'unsupported_format',
-          'error_description': 'Openid configuration response issue.',
+          'error_description': 'Authorization server metadata response issue.',
+        },
+      );
+    } else if (stringException.contains('ISSUER_METADATA_ISSUE')) {
+      return ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'Issuer metadata response issue.',
         },
       );
     } else if (stringException.contains('NOT_A_VALID_OPENID_URL')) {
@@ -1240,6 +1099,20 @@ MessageHandler getMessageHandler(dynamic e) {
           'error_description': 'Issue while restoring claims.',
         },
       );
+    } else if (stringException.contains('KID_DOES_NOT_MATCH_DIDDOCUMENT')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Kid does not match the did document.',
+        },
+      );
+    } else if (stringException.contains('C_NONCE_NOT_AVAILABLE')) {
+      return ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'c_nonce is not avaiable.',
+        },
+      );
     } else {
       return ResponseMessage(
         message:
@@ -1281,9 +1154,12 @@ ResponseString getErrorResponseString(String errorString) {
       return ResponseString.RESPONSE_STRING_theWalletIsNotRegistered;
 
     case 'invalid_grant':
-    case 'invalid_client':
+      return ResponseString.RESPONSE_STRING_invalidCode;
     case 'invalid_token':
       return ResponseString.RESPONSE_STRING_credentialIssuanceDenied;
+
+    case 'issuance_pending':
+      return ResponseString.RESPONSE_STRING_credentialIssuanceIsStillPending;
 
     case 'unsupported_credential_format':
       return ResponseString.RESPONSE_STRING_thisCredentialFormatIsNotSupported;
@@ -1297,9 +1173,16 @@ ResponseString getErrorResponseString(String errorString) {
     case 'server_error':
       return ResponseString.RESPONSE_STRING_theServiceIsNotAvailable;
 
-    case 'issuance_pending':
+    case 'invalid_client':
+      return ResponseString.RESPONSE_STRING_invalidClientErrorDescription;
+
+    case 'vp_formats_not_supported':
       return ResponseString
-          .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending;
+          .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription;
+
+    case 'invalid_presentation_definition_uri':
+      return ResponseString
+          .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription;
 
     default:
       return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported;
@@ -1334,28 +1217,16 @@ bool hasIDTokenOrVPToken(String responseType) {
 
 String getFormattedStringOIDC4VCI({
   required String url,
-  required String tokenEndpoint,
-  required String credentialEndpoint,
-  OpenIdConfiguration? openIdConfiguration,
-  OpenIdConfiguration? authorizationServerConfiguration,
-  dynamic credentialOfferJson,
+  required Oidc4vcParameters oidc4vcParameters,
 }) {
   return '''
 <b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
 <b>CREDENTIAL OFFER  :</b> 
-${credentialOfferJson != null ? const JsonEncoder.withIndent('  ').convert(credentialOfferJson) : 'None'}\n
-<b>ENDPOINTS :</b>
-    authorization server endpoint : ${openIdConfiguration?.authorizationServer ?? 'None'}
-    token endpoint : $tokenEndpoint}
-    credential endpoint : $credentialEndpoint}
-    deferred endpoint : ${openIdConfiguration?.deferredCredentialEndpoint ?? 'None'}
-    batch endpoint : ${openIdConfiguration?.batchEndpoint ?? 'None'}\n
-<b>CREDENTIAL SUPPORTED :</b> 
-${openIdConfiguration?.credentialsSupported != null ? const JsonEncoder.withIndent('  ').convert(openIdConfiguration!.credentialsSupported) : 'None'}\n
+${const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.credentialOffer)}\n
 <b>AUTHORIZATION SERVER CONFIGURATION :</b>
-${authorizationServerConfiguration != null ? const JsonEncoder.withIndent('  ').convert(authorizationServerConfiguration) : 'None'}\n
-<b>CRDENTIAL ISSUER CONFIGURATION :</b> 
-${openIdConfiguration != null ? const JsonEncoder.withIndent('  ').convert(openIdConfiguration) : 'None'}
+${oidc4vcParameters.authorizationServerOpenIdConfiguration != const OpenIdConfiguration(requirePushedAuthorizationRequests: false) ? const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.authorizationServerOpenIdConfiguration.rawConfiguration) : 'None'}\n
+<b>CREDENTIAL ISSUER CONFIGURATION :</b> 
+${const JsonEncoder.withIndent('  ').convert(oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration)}
 ''';
 }
 
@@ -1393,22 +1264,14 @@ Future<String> getFormattedStringOIDC4VPSIOPV2({
     uri: Uri.parse(url),
   );
 
-  final registration = Uri.parse(url).queryParameters['registration'];
-
-  final registrationMap = registration != null
-      ? jsonDecode(registration) as Map<String, dynamic>
-      : null;
-
   final data = '''
 <b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
 <b>AUTHORIZATION REQUEST :</b>
-${response != null ? const JsonEncoder.withIndent('  ').convert(response) : 'None'}\n
+${response != null ? const JsonEncoder.withIndent('  ').convert(response) : Uri.decodeComponent(url)}\n
 <b>CLIENT METADATA  :</b>  
 ${clientMetaData != null ? const JsonEncoder.withIndent('  ').convert(clientMetaData) : 'None'}\n
 <b>PRESENTATION DEFINITION  :</b> 
-${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}\n
-<b>REGISTRATION  :</b> 
-${registrationMap != null ? const JsonEncoder.withIndent('  ').convert(registrationMap) : 'None'}
+${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}
 ''';
 
   return data;
@@ -1442,6 +1305,7 @@ Future<dynamic> fetchRequestUriPayload({
 String getUpdatedUrlForSIOPV2OIC4VP({
   required Uri uri,
   required Map<String, dynamic> response,
+  required String clientId,
 }) {
   final responseType = response['response_type'];
   final redirectUri = response['redirect_uri'];
@@ -1449,7 +1313,6 @@ String getUpdatedUrlForSIOPV2OIC4VP({
   final responseUri = response['response_uri'];
   final responseMode = response['response_mode'];
   final nonce = response['nonce'];
-  final clientId = response['client_id'];
   final claims = response['claims'];
   final stateValue = response['state'];
   final presentationDefinition = response['presentation_definition'];
@@ -1464,7 +1327,7 @@ String getUpdatedUrlForSIOPV2OIC4VP({
     queryJson['scope'] = scope;
   }
 
-  if (!uri.queryParameters.containsKey('client_id') && clientId != null) {
+  if (!uri.queryParameters.containsKey('client_id')) {
     queryJson['client_id'] = clientId;
   }
 
@@ -1532,52 +1395,22 @@ String getUpdatedUrlForSIOPV2OIC4VP({
   return newUrl;
 }
 
-bool supportCryptoCredential(ProfileModel profileModel) {
-  final isEnterpriseProfile =
-      profileModel.profileType == ProfileType.enterprise;
-
-  if (isEnterpriseProfile &&
-      !Parameters.supportCryptoAccountOwnershipInDiscoverForEnterpriseMode) {
-    return false;
-  }
-
-  final profileSetting = profileModel.profileSetting;
-
-  final customOidc4vcProfile =
-      profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
-
-  /// suported VC format
-  final supportCryptoCredentialByVCFormat =
-      customOidc4vcProfile.vcFormatType.supportCryptoCredential;
-
-  /// supported did key
-  final supportCryptoCredentialByDidKey =
-      customOidc4vcProfile.defaultDid.supportCryptoCredential;
-
-  /// match format 1
-  final matchFormat1 =
-      supportCryptoCredentialByVCFormat && supportCryptoCredentialByDidKey;
-
-  /// match format 2
-  final matchFormat2 = customOidc4vcProfile.defaultDid == DidKeyType.edDSA &&
-      customOidc4vcProfile.vcFormatType == VCFormatType.ldpVc &&
-      !customOidc4vcProfile.cryptoHolderBinding;
-
-  final supportAssociatedCredential = matchFormat1 || matchFormat2;
-
-  return supportAssociatedCredential;
-}
-
-Future<(String?, String?, String?, String?)> getClientDetails({
+// clientId,
+// clientSecret,
+// authorization,
+// oAuthClientAttestation,
+// oAuthClientAttestationPop
+Future<(String?, String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
-  required bool isEBSIV3,
+  required bool isEBSI,
   required String issuer,
 }) async {
   try {
     String? clientId;
     String? clientSecret;
     String? authorization;
-    String? clientAssertion;
+    String? oAuthClientAttestation;
+    String? oAuthClientAttestationPop;
 
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
@@ -1586,13 +1419,13 @@ Future<(String?, String?, String?, String?)> getClientDetails({
 
     final String privateKey = await fetchPrivateKey(
       profileCubit: profileCubit,
-      isEBSIV3: isEBSIV3,
+      isEBSI: isEBSI,
       didKeyType: didKeyType,
     );
 
     final (did, _) = await fetchDidAndKid(
       privateKey: privateKey,
-      isEBSIV3: isEBSIV3,
+      isEBSI: isEBSI,
       profileCubit: profileCubit,
       didKeyType: didKeyType,
     );
@@ -1663,20 +1496,28 @@ Future<(String?, String?, String?, String?)> getClientDetails({
           'aud': issuer,
           'nbf': nbf,
           'exp': nbf + 60,
+          'jti': const Uuid().v4(),
         };
 
-        final jwtProofOfPossession = profileCubit.oidc4vc.generateToken(
+        final jwtProofOfPossession = generateToken(
           payload: payload,
           tokenParameters: tokenParameters,
           ignoreProofHeaderType: true,
         );
 
-        clientAssertion = '$walletAttestationData~$jwtProofOfPossession';
+        oAuthClientAttestation = walletAttestationData;
+        oAuthClientAttestationPop = jwtProofOfPossession;
     }
 
-    return (clientId, clientSecret, authorization, clientAssertion);
+    return (
+      clientId,
+      clientSecret,
+      authorization,
+      oAuthClientAttestation,
+      oAuthClientAttestationPop
+    );
   } catch (e) {
-    return (null, null, null, null);
+    return (null, null, null, null, null);
   }
 }
 
@@ -1687,6 +1528,7 @@ Future<(String?, String?, String?, String?)> getClientDetails({
 }) {
   Display? display;
   dynamic credentialSupported;
+
   if (openIdConfiguration.credentialsSupported != null) {
     final credentialsSupported = openIdConfiguration.credentialsSupported!;
     final CredentialsSupported? credSupported =
@@ -1712,8 +1554,9 @@ Future<(String?, String?, String?, String?)> getClientDetails({
               (Display display) => display.locale.toString().contains('en'),
             ) ??
             credSupportedDisplay.firstWhereOrNull(
-              (Display display) => display.locale != null,
-            );
+              (Display display) => display.locale == null,
+            ) ??
+            credSupportedDisplay.first; // if local is not provided
       }
     }
   } else if (openIdConfiguration.credentialConfigurationsSupported != null) {
@@ -1746,11 +1589,27 @@ Future<(String?, String?, String?, String?)> getClientDetails({
                 ) ??
                 displays.firstWhereOrNull(
                   (Display display) => display.locale != null,
-                );
+                ) ??
+                displays.first; // if local is not provided
           }
         }
       }
     }
+  }
+
+  if (display == null && openIdConfiguration.display != null) {
+    final displays = openIdConfiguration.display!;
+
+    display = displays.firstWhereOrNull(
+          (Display display) => display.locale.toString().contains(languageCode),
+        ) ??
+        displays.firstWhereOrNull(
+          (Display display) => display.locale.toString().contains('en'),
+        ) ??
+        displays.firstWhereOrNull(
+          (Display display) => display.locale == null,
+        ) ??
+        displays.first; // if local is not provided;
   }
   return (display, credentialSupported);
 }
@@ -1760,9 +1619,8 @@ List<String> getStringCredentialsForToken({
   required ProfileCubit profileCubit,
 }) {
   final credentialList = credentialsToBePresented.map((item) {
-    final isVcSdJWT = profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType ==
-        VCFormatType.vcSdJWT;
+    final isVcSdJWT = item.getFormat == VCFormatType.vcSdJWT.vcValue;
+
     if (isVcSdJWT) {
       return item.selectiveDisclosureJwt ?? jsonEncode(item.toJson());
     }
@@ -1774,17 +1632,19 @@ List<String> getStringCredentialsForToken({
 }
 
 //(presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt)
-(bool, bool, bool, bool) getPresentVCDetails({
-  required VCFormatType vcFormatType,
+List<VCFormatType> getPresentVCDetails({
+  required List<VCFormatType> formatsSupported,
   required PresentationDefinition presentationDefinition,
   required Map<String, dynamic>? clientMetaData,
+  required List<CredentialModel> credentialsToBePresented,
 }) {
   bool presentLdpVc = false;
   bool presentJwtVc = false;
   bool presentJwtVcJson = false;
+  bool presentJwtVcJsonLd = false;
   bool presentVcSdJwt = false;
 
-  final supportingFormats = <String>[];
+  final supportingFormats = <VCFormatType>[];
 
   if (presentationDefinition.format != null) {
     final format = presentationDefinition.format;
@@ -1798,47 +1658,49 @@ List<String> getStringCredentialsForToken({
     /// jwt_vc_json
     presentJwtVcJson = format?.jwtVcJson != null || format?.jwtVpJson != null;
 
+    /// jwt_vc_json_ld
+    presentJwtVcJsonLd =
+        format?.jwtVcJsonLd != null || format?.jwtVpJson != null;
+
     /// vc+sd-jwt
     presentVcSdJwt = format?.vcSdJwt != null;
   } else {
     if (clientMetaData == null) {
       /// credential manifest case
-      if (vcFormatType == VCFormatType.ldpVc) {
-        presentLdpVc = true;
-      } else if (vcFormatType == VCFormatType.jwtVc) {
-        presentJwtVc = true;
-      } else if (vcFormatType == VCFormatType.jwtVcJson) {
-        presentJwtVcJson = true;
-      } else if (vcFormatType == VCFormatType.vcSdJWT) {
-        presentVcSdJwt = true;
-      }
+      presentLdpVc = true;
+      presentJwtVc = true;
+      presentJwtVcJson = true;
+      presentJwtVcJsonLd = true;
+      presentVcSdJwt = true;
     } else {
       final vpFormats = clientMetaData['vp_formats'] as Map<String, dynamic>;
 
       /// ldp_vc
-      presentLdpVc = vpFormats.containsKey('ldp_vc');
+      presentLdpVc =
+          vpFormats.containsKey('ldp_vc') || vpFormats.containsKey('ldp_vp');
 
       /// jwt_vc
-      presentJwtVc = vpFormats.containsKey('jwt_vc');
+      presentJwtVc =
+          vpFormats.containsKey('jwt_vc') || vpFormats.containsKey('jwt_vp');
 
       /// jwt_vc_json
-      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json');
+      presentJwtVcJson = vpFormats.containsKey('jwt_vc_json') ||
+          vpFormats.containsKey('jwt_vp_json');
+
+      /// jwt_vc_json-ld
+      presentJwtVcJsonLd = vpFormats.containsKey('jwt_vc_json-ld') ||
+          vpFormats.containsKey('jwt_vp_json-ld');
 
       /// vc+sd-jwt
       presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
     }
-    if (!presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
-      presentLdpVc = true;
-    } else if (!presentJwtVc && vcFormatType == VCFormatType.jwtVc) {
-      presentJwtVc = true;
-    } else if (!presentJwtVcJson && vcFormatType == VCFormatType.jwtVcJson) {
-      presentJwtVcJson = true;
-    } else if (!presentVcSdJwt && vcFormatType == VCFormatType.vcSdJWT) {
-      presentVcSdJwt = true;
-    }
   }
 
-  if (!presentLdpVc && !presentJwtVc && !presentJwtVcJson && !presentVcSdJwt) {
+  if (!presentLdpVc &&
+      !presentJwtVc &&
+      !presentJwtVcJson &&
+      !presentJwtVcJsonLd &&
+      !presentVcSdJwt) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_request',
@@ -1848,48 +1710,24 @@ List<String> getStringCredentialsForToken({
   }
 
   /// create list of supported formats
-  if (presentLdpVc) supportingFormats.add(VCFormatType.ldpVc.vcValue);
-  if (presentJwtVc) supportingFormats.add(VCFormatType.jwtVc.vcValue);
-  if (presentJwtVcJson) supportingFormats.add(VCFormatType.jwtVcJson.vcValue);
-  if (presentVcSdJwt) supportingFormats.add(VCFormatType.jwtVcJson.vcValue);
-
-  /// make sure only one of all are true
-  if (presentLdpVc && vcFormatType == VCFormatType.ldpVc) {
-    presentLdpVc = true;
-    presentJwtVc = false;
-    presentJwtVcJson = false;
-    presentVcSdJwt = false;
-  } else if (presentJwtVc && vcFormatType == VCFormatType.jwtVc) {
-    presentLdpVc = false;
-    presentJwtVc = true;
-    presentJwtVcJson = false;
-    presentVcSdJwt = false;
-  } else if (presentJwtVcJson && vcFormatType == VCFormatType.jwtVcJson) {
-    presentLdpVc = false;
-    presentJwtVc = false;
-    presentJwtVcJson = true;
-    presentVcSdJwt = false;
-  } else if (presentVcSdJwt && vcFormatType == VCFormatType.vcSdJWT) {
-    presentLdpVc = false;
-    presentJwtVc = false;
-    presentJwtVcJson = false;
-    presentVcSdJwt = true;
+  if (presentLdpVc && formatsSupported.contains(VCFormatType.ldpVc)) {
+    supportingFormats.add(VCFormatType.ldpVc);
+  }
+  if (presentJwtVc && formatsSupported.contains(VCFormatType.jwtVc)) {
+    supportingFormats.add(VCFormatType.jwtVc);
+  }
+  if (presentJwtVcJson && formatsSupported.contains(VCFormatType.jwtVcJson)) {
+    supportingFormats.add(VCFormatType.jwtVcJson);
+  }
+  if (presentJwtVcJsonLd &&
+      formatsSupported.contains(VCFormatType.jwtVcJsonLd)) {
+    supportingFormats.add(VCFormatType.jwtVcJsonLd);
+  }
+  if (presentVcSdJwt && formatsSupported.contains(VCFormatType.vcSdJWT)) {
+    supportingFormats.add(VCFormatType.vcSdJWT);
   }
 
-  if ((presentLdpVc && vcFormatType != VCFormatType.ldpVc) ||
-      (presentJwtVc && vcFormatType != VCFormatType.jwtVc) ||
-      presentJwtVcJson && vcFormatType != VCFormatType.jwtVcJson ||
-      presentVcSdJwt && vcFormatType != VCFormatType.vcSdJWT) {
-    throw ResponseMessage(
-      data: {
-        'error': 'invalid_request',
-        'error_description': 'Please switch to profile that supports format '
-            '${supportingFormats.join('/')}.',
-      },
-    );
-  }
-
-  return (presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt);
+  return supportingFormats;
 }
 
 List<dynamic> collectSdValues(Map<String, dynamic> data) {
@@ -1946,7 +1784,19 @@ Map<String, dynamic> createJsonByDecryptingSDValues({
             final content = sh256HashToContent[sdValue];
             if (content is Map) {
               content.forEach((key, value) {
-                json[key.toString()] = value;
+                if (value is Map<String, dynamic>) {
+                  if (value.containsKey('_sd')) {
+                    final nestedJson = createJsonByDecryptingSDValues(
+                      selectiveDisclosure: selectiveDisclosure,
+                      encryptedJson: value,
+                    );
+                    json[key.toString()] = nestedJson;
+                  } else {
+                    json[key.toString()] = value;
+                  }
+                } else {
+                  json[key.toString()] = value;
+                }
               });
             }
           }
@@ -2121,19 +1971,42 @@ Future<Map<String, dynamic>?> checkVerifierAttestation({
   return cnf['jwk'] as Map<String, dynamic>;
 }
 
-String? getWalletAddress(CredentialSubjectModel credentialSubjectModel) {
+/// walletaddress and blockchain type
+(String?, BlockchainType?) getWalletAddress(
+  CredentialSubjectModel credentialSubjectModel,
+) {
   if (credentialSubjectModel is TezosAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.tezos,
+    );
   } else if (credentialSubjectModel is EthereumAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.ethereum,
+    );
   } else if (credentialSubjectModel is PolygonAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.polygon,
+    );
   } else if (credentialSubjectModel is BinanceAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.binance,
+    );
   } else if (credentialSubjectModel is FantomAssociatedAddressModel) {
-    return credentialSubjectModel.associatedAddress;
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.fantom,
+    );
+  } else if (credentialSubjectModel is EtherlinkAssociatedAddressModel) {
+    return (
+      credentialSubjectModel.associatedAddress,
+      BlockchainType.etherlink,
+    );
   }
-  return null;
+  return (null, null);
 }
 
 Future<String> fetchRpcUrl({
@@ -2143,7 +2016,8 @@ Future<String> fetchRpcUrl({
   String rpcUrl = '';
 
   if (blockchainNetwork is BinanceNetwork ||
-      blockchainNetwork is FantomNetwork) {
+      blockchainNetwork is FantomNetwork ||
+      blockchainNetwork is EtherlinkNetwork) {
     rpcUrl = blockchainNetwork.rpcNodeUrl as String;
   } else {
     if (blockchainNetwork.networkname == 'Mainnet') {
@@ -2165,4 +2039,205 @@ Future<String> fetchRpcUrl({
   }
 
   return rpcUrl;
+}
+
+String getDidMethod(BlockchainType blockchainType) {
+  late String didMethod;
+
+  switch (blockchainType) {
+    case BlockchainType.tezos:
+      didMethod = AltMeStrings.cryptoTezosDIDMethod;
+
+    case BlockchainType.ethereum:
+    case BlockchainType.fantom:
+    case BlockchainType.polygon:
+    case BlockchainType.binance:
+    case BlockchainType.etherlink:
+      didMethod = AltMeStrings.cryptoEVMDIDMethod;
+  }
+
+  return didMethod;
+}
+
+bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
+  final profileSetting = profileModel.profileSetting;
+  final customOidc4vcProfile =
+      profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
+
+  final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
+      profileModel.profileType == ProfileType.ebsiV4;
+
+  if (notEligible) return false;
+
+  final bool greaterThanDraft13 =
+      customOidc4vcProfile.oidc4vciDraft != OIDC4VCIDraftType.draft11;
+
+  if (greaterThanDraft13) return true;
+
+  return false;
+}
+
+Future<String> getDPopJwt({
+  required String url,
+  required String publicKey,
+  String? accessToken,
+  String? nonce,
+}) async {
+  final tokenParameters = TokenParameters(
+    privateKey: jsonDecode(publicKey) as Map<String, dynamic>,
+    mediaType: MediaType.dPop,
+    did: '', // just added as it is required field
+    clientType:
+        ClientType.p256JWKThumprint, // just added as it is required field
+    proofHeaderType: ProofHeaderType.jwk,
+    clientId: '', // just added as it is required field
+  );
+
+  final jti = const Uuid().v4();
+  final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+
+  final payload = {
+    'jti': jti,
+    'htm': 'POST',
+    'htu': url,
+    'iat': iat,
+  };
+
+  if (accessToken != null) {
+    final hash = sh256Hash(accessToken);
+    payload['ath'] = hash;
+  }
+
+  // if (nonce != null) payload['nonce'] = nonce;
+
+  final jwtToken = generateToken(
+    payload: payload,
+    tokenParameters: tokenParameters,
+    ignoreProofHeaderType: false,
+  );
+  return jwtToken;
+}
+
+String generateP256KeyForDPop() {
+  final randomKey = generateRandomP256Key();
+  final publicKeyForDPop = sortedPrivateJwk(randomKey);
+
+  return publicKeyForDPop;
+}
+
+Map<String, dynamic> getCredentialDataFromJson({
+  required String data,
+  required String format,
+  required JWTDecode jwtDecode,
+  required String credentialType,
+}) {
+  late Map<String, dynamic> credential;
+
+  final jsonContent = jwtDecode.parseJwt(data);
+  if (format == VCFormatType.vcSdJWT.vcValue) {
+    final sdAlg = jsonContent['_sd_alg'] ?? 'sha-256';
+
+    if (sdAlg != 'sha-256') {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'Only sha-256 is supported.',
+        },
+      );
+    }
+
+    credential = jsonContent;
+  } else {
+    credential = jsonContent['vc'] as Map<String, dynamic>;
+  }
+
+  if (format == VCFormatType.vcSdJWT.vcValue) {
+    /// type
+    if (!credential.containsKey('type')) {
+      credential['type'] = [credentialType];
+    }
+
+    ///credentialSubject
+    if (!credential.containsKey('credentialSubject')) {
+      credential['credentialSubject'] = {'type': credentialType};
+    }
+  }
+
+  /// id -> jti
+  if (!credential.containsKey('id')) {
+    if (jsonContent.containsKey('jti')) {
+      credential['id'] = jsonContent['jti'];
+    } else {
+      credential['id'] = 'urn:uuid:${const Uuid().v4()}';
+    }
+  }
+
+  /// issuer -> iss
+  if (!credential.containsKey('issuer')) {
+    if (jsonContent.containsKey('iss')) {
+      credential['issuer'] = jsonContent['iss'];
+    } else {
+      throw ResponseMessage(
+        data: {
+          'error': 'unsupported_format',
+          'error_description': 'Issuer is missing',
+        },
+      );
+    }
+  }
+
+  /// issuanceDate -> iat
+  if (!credential.containsKey('issuanceDate')) {
+    if (jsonContent.containsKey('iat')) {
+      credential['issuanceDate'] = jsonContent['iat'].toString();
+    } else if (jsonContent.containsKey('issuanceDate')) {
+      credential['issuanceDate'] = jsonContent['issuanceDate'].toString();
+    }
+  }
+
+  /// expirationDate -> exp
+  if (!credential.containsKey('expirationDate')) {
+    if (jsonContent.containsKey('exp')) {
+      credential['expirationDate'] = jsonContent['exp'].toString();
+    } else if (jsonContent.containsKey('expirationDate')) {
+      credential['expirationDate'] = jsonContent['expirationDate'].toString();
+    }
+  }
+
+  /// cred,tailSubject.id -> sub
+
+  // if (newCredential['id'] == null) {
+  //   newCredential['id'] = 'urn:uuid:${const Uuid().v4()}';
+  // }
+
+  // if (newCredential['credentialPreview']['id'] == null) {
+  //   newCredential['credentialPreview']['id'] =
+  //       'urn:uuid:${const Uuid().v4()}';
+  // }
+
+  credential['jwt'] = data;
+
+  return credential;
+}
+
+bool isContract(String reciever) {
+  // check if it smart contract or not
+  // smart contarct address start with KT1
+  if (reciever.startsWith('tz')) return false;
+  if (reciever.startsWith('KT1')) return true;
+  return false;
+}
+
+String? getClientIdForPresentation(String? clientId) {
+  if (clientId == null) return '';
+  if (clientId.contains(':')) {
+    final parts = clientId.split(':');
+    if (parts.length == 2) {
+      return parts[1];
+    } else {
+      return clientId;
+    }
+  } else {
+    return clientId;
+  }
 }

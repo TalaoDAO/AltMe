@@ -11,39 +11,27 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     super.key,
     required this.credentials,
     required this.userPin,
-    required this.preAuthorizedCode,
-    required this.issuer,
-    required this.isEBSIV3,
-    required this.credentialOfferJson,
-    required this.openIdConfiguration,
+    required this.txCode,
+    required this.oidc4vcParameters,
   });
 
   final List<dynamic> credentials;
   final String? userPin;
-  final String? preAuthorizedCode;
-  final String issuer;
-  final bool isEBSIV3;
-  final dynamic credentialOfferJson;
-  final OpenIdConfiguration openIdConfiguration;
+  final String? txCode;
+  final Oidc4vcParameters oidc4vcParameters;
 
   static Route<dynamic> route({
     required List<dynamic> credentials,
     required String? userPin,
-    required String? preAuthorizedCode,
-    required String issuer,
-    required bool isEBSIV3,
-    required dynamic credentialOfferJson,
-    required OpenIdConfiguration openIdConfiguration,
+    required String? txCode,
+    required Oidc4vcParameters oidc4vcParameters,
   }) =>
       MaterialPageRoute<void>(
         builder: (context) => Oidc4vcCredentialPickPage(
           credentials: credentials,
           userPin: userPin,
-          issuer: issuer,
-          preAuthorizedCode: preAuthorizedCode,
-          isEBSIV3: isEBSIV3,
-          credentialOfferJson: credentialOfferJson,
-          openIdConfiguration: openIdConfiguration,
+          txCode: txCode,
+          oidc4vcParameters: oidc4vcParameters,
         ),
         settings: const RouteSettings(name: '/Oidc4vcCredentialPickPage'),
       );
@@ -55,11 +43,8 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
       child: Oidc4vcCredentialPickView(
         credentials: credentials,
         userPin: userPin,
-        issuer: issuer,
-        preAuthorizedCode: preAuthorizedCode,
-        isEBSIV3: isEBSIV3,
-        credentialOfferJson: credentialOfferJson,
-        openIdConfiguration: openIdConfiguration,
+        txCode: txCode,
+        oidc4vcParameters: oidc4vcParameters,
       ),
     );
   }
@@ -70,20 +55,14 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
     super.key,
     required this.credentials,
     required this.userPin,
-    required this.preAuthorizedCode,
-    required this.issuer,
-    required this.isEBSIV3,
-    required this.credentialOfferJson,
-    required this.openIdConfiguration,
+    required this.txCode,
+    required this.oidc4vcParameters,
   });
 
   final List<dynamic> credentials;
   final String? userPin;
-  final String? preAuthorizedCode;
-  final String issuer;
-  final bool isEBSIV3;
-  final dynamic credentialOfferJson;
-  final OpenIdConfiguration openIdConfiguration;
+  final String? txCode;
+  final Oidc4vcParameters oidc4vcParameters;
 
   @override
   Widget build(BuildContext context) {
@@ -116,15 +95,25 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                         getCredTypeFromName(credential) ??
                             CredentialSubjectType.defaultCredential;
 
-                    final profileSetting =
-                        context.read<ProfileCubit>().state.model.profileSetting;
+                    final profileModel =
+                        context.read<ProfileCubit>().state.model;
+
+                    final profileSetting = profileModel.profileSetting;
+                    final formatType = profileSetting
+                        .selfSovereignIdentityOptions
+                        .customOidc4vcProfile
+                        .vcFormatType;
 
                     final DiscoverDummyCredential discoverDummyCredential =
-                        credentialSubjectType.dummyCredential(profileSetting);
+                        credentialSubjectType.dummyCredential(
+                      profileSetting: profileSetting,
+                      assignedVCFormatType: formatType,
+                    );
 
                     // fetch for displaying the image
                     final (Display? display, _) = fetchDisplay(
-                      openIdConfiguration: openIdConfiguration,
+                      openIdConfiguration:
+                          oidc4vcParameters.issuerOpenIdConfiguration,
                       credentialType: credential,
                       languageCode: languageCode,
                     );
@@ -146,10 +135,12 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                                 shareLink: '',
                                 data: const <String, dynamic>{},
                                 display: display,
+                                profileLinkedId:
+                                    profileModel.profileType.getVCId,
                               ),
                               credDisplayType: CredDisplayType.List,
                               profileSetting: profileSetting,
-                              displyalDescription: false,
+                              displyalDescription: true,
                               isDiscover: false,
                             )
                           else
@@ -157,6 +148,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                               credentialSubjectType: credentialSubjectType,
                               image: discoverDummyCredential.image,
                               credentialName: credential,
+                              displayExternalIssuer: display,
                             ),
                           Align(
                             alignment: Alignment.centerRight,
@@ -195,10 +187,8 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                               .processSelectedCredentials(
                                 selectedCredentials: selectedCredentials,
                                 userPin: userPin,
-                                issuer: issuer,
-                                preAuthorizedCode: preAuthorizedCode,
-                                isEBSIV3: isEBSIV3,
-                                credentialOfferJson: credentialOfferJson,
+                                txCode: txCode,
+                                oidc4vcParameters: oidc4vcParameters,
                               );
                         },
                   text: l10n.proceed,

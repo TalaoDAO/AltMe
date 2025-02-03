@@ -18,7 +18,6 @@ import 'package:matrix/matrix.dart' hide User;
 import 'package:mime/mime.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -59,16 +58,16 @@ class MatrixChatImpl extends MatrixChatInterface {
       return user!;
     }
 
-    final didKeyType = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+    // final didKeyType = profileCubit.state.model.profileSetting
+    //     .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
 
     final privateKey = await getPrivateKey(
       profileCubit: profileCubit,
-      didKeyType: didKeyType,
+      didKeyType: DidKeyType.edDSA,
     );
 
     final (did, kid) = await getDidAndKid(
-      didKeyType: didKeyType,
+      didKeyType: DidKeyType.edDSA,
       privateKey: privateKey,
       profileCubit: profileCubit,
     );
@@ -89,16 +88,11 @@ class MatrixChatImpl extends MatrixChatInterface {
         SecureStorageKeys.isUserRegisteredMatrix,
         true.toString(),
       );
-      userId = await login(
-        username: username,
-        password: await _getPasswordForDID(),
-      );
-    } else {
-      userId = await login(
-        username: username,
-        password: await _getPasswordForDID(),
-      );
     }
+    userId = await login(
+      username: username,
+      password: await _getPasswordForDID(),
+    );
     user = User(id: userId);
     return user!;
   }
@@ -128,13 +122,18 @@ class MatrixChatImpl extends MatrixChatInterface {
   }
 
   @override
-  Future<String?> getRoomIdFromStorage() async {
-    return secureStorageProvider.get(SecureStorageKeys.supportRoomId);
+  Future<String?> getRoomIdFromStorage(String roomIdStoredKey) async {
+    return secureStorageProvider.get(roomIdStoredKey);
   }
 
   @override
-  Future<void> setRoomIdInStorage(String roomId) async {
-    await secureStorageProvider.set(SecureStorageKeys.supportRoomId, roomId);
+  Future<void> setRoomIdInStorage(String roomIdStoredKey, String roomId) async {
+    await secureStorageProvider.set(roomIdStoredKey, roomId);
+  }
+
+  @override
+  Future<void> clearRoomIdInStorage(String roomIdStoredKey) async {
+    await secureStorageProvider.delete(roomIdStoredKey);
   }
 
   @override
@@ -172,6 +171,7 @@ class MatrixChatImpl extends MatrixChatInterface {
           ..sort(
             (e1, e2) => e2.originServerTs.compareTo(e1.originServerTs),
           );
+
     return messageEvents.map(mapEventToMessage).toList();
   }
 
@@ -187,28 +187,34 @@ class MatrixChatImpl extends MatrixChatInterface {
     }
 
     if (event.messageType == 'm.text') {
+      final redactedBecause = event.unsigned?['redacted_because'];
+
       message = TextMessage(
         id: event.unsigned?['transaction_id'] as String? ?? const Uuid().v4(),
         remoteId: event.eventId,
-        text: event.plaintextBody,
+        text: redactedBecause != null ? 'Message deleted' : event.plaintextBody,
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         status: mapEventStatusToMessageStatus(event.status),
-        author: User(
-          id: event.senderId,
-        ),
+        author: User(id: event.senderId),
       );
     } else if (event.messageType == 'm.image') {
+      final content = event.content;
+
+      final file = content['file'];
+
+      final url =
+          (file != null && file is Map<String, dynamic>) ? file['url'] : '';
+
       message = ImageMessage(
         id: const Uuid().v4(),
         remoteId: event.eventId,
         name: event.plaintextBody,
         size: size,
-        uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
+        uri: url.toString(),
+        metadata: {'event': event},
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
-        author: User(
-          id: event.senderId,
-        ),
+        author: User(id: event.senderId),
       );
     } else if (event.messageType == 'm.file') {
       message = FileMessage(
@@ -216,7 +222,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         remoteId: event.eventId,
         name: event.plaintextBody,
         size: size,
-        uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
+        uri: getThumbnail(url: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         author: User(
@@ -243,7 +249,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         ),
         name: event.plaintextBody,
         size: size,
-        uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
+        uri: getThumbnail(url: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         author: User(
@@ -460,14 +466,36 @@ class MatrixChatImpl extends MatrixChatInterface {
     }
   }
 
+  /// join room with [roomName]
   @override
-  String getUrlFromUri({
-    required String uri,
+  Future<String> joinRoom(String roomName) async {
+    try {
+      if (client == null) {
+        await _initClient();
+      }
+      final roomId = await client!.joinRoom(roomName);
+      await enableRoomEncyption(roomId);
+      return roomId;
+    } catch (e, s) {
+      logger.e('e: $e, s: $s');
+      throw Exception();
+    }
+  }
+
+  @override
+  String getThumbnail({
+    required String url,
     int width = 500,
     int height = 500,
   }) {
-    if (uri.trim().isEmpty) return '';
-    return '${Urls.matrixHomeServer}/_matrix/media/v3/thumbnail/${Urls.matrixHomeServer.replaceAll('https://', '')}/${uri.split('/').last}?width=$width&height=$height';
+    if (url.trim().isEmpty) return '';
+    final Uri uri = Uri.parse(url).getThumbnail(
+      client!,
+      height: height,
+      width: width,
+      animated: false,
+    );
+    return uri.toString();
   }
 
   @override
@@ -558,11 +586,9 @@ class MatrixChatImpl extends MatrixChatInterface {
       final isLogged = client!.isLogged();
       if (isLogged) return client!.userID!;
       client!.homeserver = Uri.parse(Urls.matrixHomeServer);
-      final deviceId = await PlatformDeviceId.getDeviceId;
       final loginResonse = await client!.login(
         LoginType.mLoginPassword,
         password: password,
-        deviceId: deviceId,
         identifier: AuthenticationUserIdentifier(user: username),
       );
       return loginResonse.userId;

@@ -10,9 +10,10 @@ class CustomAppBar extends PreferredSize {
     this.leading,
     this.trailing,
     this.titleAlignment = Alignment.bottomCenter,
+    this.appBarHeight = Sizes.appBarHeight,
   }) : super(
           child: Container(),
-          preferredSize: const Size.fromHeight(Sizes.appBarHeight),
+          preferredSize: Size.fromHeight(appBarHeight),
         );
 
   final String? title;
@@ -20,13 +21,14 @@ class CustomAppBar extends PreferredSize {
   final Widget? trailing;
   final EdgeInsets titleMargin;
   final Alignment titleAlignment;
+  final double appBarHeight;
 
   @override
   Widget build(BuildContext context) => ColoredBox(
         color: Theme.of(context).colorScheme.surface,
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.fromLTRB(10, 0, 15, 0),
             child: Stack(
               alignment: Alignment.topCenter,
               children: [
@@ -50,7 +52,9 @@ class CustomAppBar extends PreferredSize {
                     title ?? '',
                     maxLines: 2,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
               ],

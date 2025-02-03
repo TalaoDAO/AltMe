@@ -15,8 +15,10 @@ class OpenIdConfiguration extends Equatable {
     this.credentialEndpoint,
     this.pushedAuthorizationRequestEndpoint,
     this.credentialIssuer,
+    this.display,
     this.subjectSyntaxTypesSupported,
     this.tokenEndpoint,
+    this.nonceEndpoint,
     this.batchEndpoint,
     this.authorizationEndpoint,
     this.subjectTrustFrameworksSupported,
@@ -26,7 +28,9 @@ class OpenIdConfiguration extends Equatable {
     this.credentialManifests,
     this.issuer,
     this.jwksUri,
+    this.jwks,
     this.grantTypesSupported,
+    this.rawConfiguration,
   });
 
   factory OpenIdConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -40,10 +44,13 @@ class OpenIdConfiguration extends Equatable {
   final String? credentialEndpoint;
   @JsonKey(name: 'credential_issuer')
   final String? credentialIssuer;
+  final List<Display>? display;
   @JsonKey(name: 'subject_syntax_types_supported')
   final List<dynamic>? subjectSyntaxTypesSupported;
   @JsonKey(name: 'token_endpoint')
   final String? tokenEndpoint;
+  @JsonKey(name: 'nonce_endpoint')
+  final String? nonceEndpoint;
   @JsonKey(name: 'batch_endpoint')
   final String? batchEndpoint;
   @JsonKey(name: 'authorization_endpoint')
@@ -67,12 +74,76 @@ class OpenIdConfiguration extends Equatable {
   final String? issuer;
   @JsonKey(name: 'jwks_uri')
   final String? jwksUri;
+  final Map<String, dynamic>? jwks;
   @JsonKey(name: 'require_pushed_authorization_requests', defaultValue: false)
   final bool requirePushedAuthorizationRequests;
   @JsonKey(name: 'grant_types_supported')
   final List<String>? grantTypesSupported;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final Map<String, dynamic>? rawConfiguration;
 
   Map<String, dynamic> toJson() => _$OpenIdConfigurationToJson(this);
+
+  OpenIdConfiguration copyWith({
+    bool? requirePushedAuthorizationRequests,
+    String? authorizationServer,
+    List<String>? authorizationServers,
+    List<CredentialsSupported>? credentialsSupported,
+    dynamic credentialConfigurationsSupported,
+    String? credentialEndpoint,
+    String? pushedAuthorizationRequestEndpoint,
+    String? credentialIssuer,
+    List<Display>? display,
+    List<dynamic>? subjectSyntaxTypesSupported,
+    String? tokenEndpoint,
+    String? nonceEndpoint,
+    String? batchEndpoint,
+    String? authorizationEndpoint,
+    List<dynamic>? subjectTrustFrameworksSupported,
+    String? deferredCredentialEndpoint,
+    String? serviceDocumentation,
+    CredentialManifest? credentialManifest,
+    List<CredentialManifest>? credentialManifests,
+    String? issuer,
+    String? jwksUri,
+    Map<String, dynamic>? jwks,
+    List<String>? grantTypesSupported,
+    Map<String, dynamic>? rawConfiguration,
+  }) {
+    return OpenIdConfiguration(
+      requirePushedAuthorizationRequests: requirePushedAuthorizationRequests ??
+          this.requirePushedAuthorizationRequests,
+      authorizationServer: authorizationServer ?? this.authorizationServer,
+      authorizationServers: authorizationServers ?? this.authorizationServers,
+      credentialsSupported: credentialsSupported ?? this.credentialsSupported,
+      credentialConfigurationsSupported: credentialConfigurationsSupported ??
+          this.credentialConfigurationsSupported,
+      credentialEndpoint: credentialEndpoint ?? this.credentialEndpoint,
+      pushedAuthorizationRequestEndpoint: pushedAuthorizationRequestEndpoint ??
+          this.pushedAuthorizationRequestEndpoint,
+      credentialIssuer: credentialIssuer ?? this.credentialIssuer,
+      display: display ?? this.display,
+      subjectSyntaxTypesSupported:
+          subjectSyntaxTypesSupported ?? this.subjectSyntaxTypesSupported,
+      tokenEndpoint: tokenEndpoint ?? this.tokenEndpoint,
+      nonceEndpoint: nonceEndpoint ?? this.nonceEndpoint,
+      batchEndpoint: batchEndpoint ?? this.batchEndpoint,
+      authorizationEndpoint:
+          authorizationEndpoint ?? this.authorizationEndpoint,
+      subjectTrustFrameworksSupported: subjectTrustFrameworksSupported ??
+          this.subjectTrustFrameworksSupported,
+      deferredCredentialEndpoint:
+          deferredCredentialEndpoint ?? this.deferredCredentialEndpoint,
+      serviceDocumentation: serviceDocumentation ?? this.serviceDocumentation,
+      credentialManifest: credentialManifest ?? this.credentialManifest,
+      credentialManifests: credentialManifests ?? this.credentialManifests,
+      issuer: issuer ?? this.issuer,
+      jwksUri: jwksUri ?? this.jwksUri,
+      jwks: jwks ?? this.jwks,
+      grantTypesSupported: grantTypesSupported ?? this.grantTypesSupported,
+      rawConfiguration: rawConfiguration ?? this.rawConfiguration,
+    );
+  }
 
   @override
   List<Object?> get props => [
@@ -80,8 +151,10 @@ class OpenIdConfiguration extends Equatable {
         authorizationServers,
         credentialEndpoint,
         credentialIssuer,
+        display,
         subjectSyntaxTypesSupported,
         tokenEndpoint,
+        nonceEndpoint,
         batchEndpoint,
         authorizationEndpoint,
         subjectTrustFrameworksSupported,
@@ -93,8 +166,10 @@ class OpenIdConfiguration extends Equatable {
         credentialManifests,
         issuer,
         jwksUri,
+        jwks,
         requirePushedAuthorizationRequests,
         grantTypesSupported,
+        rawConfiguration,
       ];
 }
 
@@ -206,6 +281,7 @@ class DisplayDetails extends Equatable {
   const DisplayDetails({
     this.url,
     this.altText,
+    this.uri,
   });
 
   factory DisplayDetails.fromJson(Map<String, dynamic> json) =>
@@ -214,6 +290,7 @@ class DisplayDetails extends Equatable {
   final String? url;
   @JsonKey(name: 'alt_text')
   final String? altText;
+  final String? uri;
 
   Map<String, dynamic> toJson() => _$DisplayDetailsToJson(this);
 
@@ -221,5 +298,6 @@ class DisplayDetails extends Equatable {
   List<Object?> get props => [
         url,
         altText,
+        uri,
       ];
 }

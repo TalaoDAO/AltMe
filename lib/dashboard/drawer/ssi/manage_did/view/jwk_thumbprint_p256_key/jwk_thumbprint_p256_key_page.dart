@@ -77,7 +77,7 @@ class _JWKThumbprintP256KeyPageState extends State<JWKThumbprintP256KeyPage>
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              l10n.jwkThumbprintP256Key,
+              l10n.jwk,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(

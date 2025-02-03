@@ -1,12 +1,14 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/widgets/m_stepper.dart';
 
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
 
 class CreateAccountStep2Page extends StatelessWidget {
   const CreateAccountStep2Page({
@@ -27,7 +29,10 @@ class CreateAccountStep2Page extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => CreateAccountCubit(
+        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+        credentialsCubit: context.read<CredentialsCubit>(),
         walletCubit: context.read<WalletCubit>(),
+        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: CreateAccountStep2View(
         accountType: accountType,

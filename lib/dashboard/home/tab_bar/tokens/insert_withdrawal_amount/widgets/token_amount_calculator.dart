@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:decimal/decimal.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -57,6 +58,12 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
   Future<void> _onPaste(TextSelectionDelegate value) async {
     final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
     final text = data?.text ?? '';
+
+    final isValidAmount = Decimal.tryParse(text);
+    if (isValidAmount == null) {
+      return;
+    }
+
     if (text.isEmpty) {
       return;
     } else {
@@ -114,7 +121,6 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                       selectionControls: _selectionControls,
                       controller: amountController,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: Colors.white,
                             fontWeight: FontWeight.w600,
                           ),
                       maxLines: 1,
@@ -161,7 +167,6 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                         suffixText: widget.selectedToken.symbol,
                         suffixStyle:
                             Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  color: Colors.white,
                                   fontWeight: FontWeight.w900,
                                 ),
                       ),
@@ -225,7 +230,7 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                           icon: Image.asset(
                             IconStrings.keyboardDelete,
                             width: Sizes.icon2x,
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           allowAction: true,
                           onLongPress: (_) {

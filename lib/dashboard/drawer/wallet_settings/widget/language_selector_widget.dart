@@ -55,27 +55,15 @@ class LanguageSelectorWidget extends StatelessWidget {
 
                       return Column(
                         children: [
-                          if (index != 0)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Divider(
-                                height: 0,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.12),
-                              ),
-                            ),
                           ListTile(
                             onTap: () async {
                               await context
                                   .read<LangCubit>()
                                   .setLocale(Locale(languageType.name));
                             },
-                            shape: const RoundedRectangleBorder(
+                            shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: Color(0xFFDDDDEE),
+                                color: Theme.of(context).colorScheme.onSurface,
                                 width: 0.5,
                               ),
                             ),
@@ -84,9 +72,7 @@ class LanguageSelectorWidget extends StatelessWidget {
                                 l10n: l10n,
                                 name: languageType.name,
                               ),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             trailing: Icon(
                               state.languageType == languageType
@@ -94,6 +80,16 @@ class LanguageSelectorWidget extends StatelessWidget {
                                   : Icons.radio_button_unchecked,
                               size: Sizes.icon2x,
                               color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Divider(
+                              height: 0,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.12),
                             ),
                           ),
                         ],

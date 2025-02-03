@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/oidc4vc/verify_encoded_data.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
-import 'package:altme/selective_disclosure/selective_disclosure.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
+import 'package:altme/oidc4vc/helper_function/verify_encoded_data.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'credential_details_cubit.g.dart';
@@ -24,7 +23,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     required this.client,
     required this.jwtDecode,
     required this.profileCubit,
-    required this.polygonIdCubit,
   }) : super(const CredentialDetailsState());
 
   final DIDKitProvider didKitProvider;
@@ -32,7 +30,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   final DioClient client;
   final JWTDecode jwtDecode;
   final ProfileCubit profileCubit;
-  final PolygonIdCubit polygonIdCubit;
 
   void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {
     emit(state.copyWith(credentialDetailTabStatus: credentialDetailTabStatus));
@@ -89,7 +86,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
       if (item.expirationDate != null) {
         final DateTime dateTimeExpirationDate =
-            DateTime.parse(item.expirationDate!);
+            UiDate.parseExpirationDate(item.expirationDate!);
         if (!dateTimeExpirationDate.isAfter(DateTime.now())) {
           emit(
             state.copyWith(
@@ -112,25 +109,25 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       final listOfSd = collectSdValues(data);
 
       if (claims != null && listOfSd.isNotEmpty) {
-        final selectiveDisclosure = SelectiveDisclosure(item);
-        final decryptedDatas = selectiveDisclosure.contents;
+        // final selectiveDisclosure = SelectiveDisclosure(item);
+        // final decryptedDatas = selectiveDisclosure.contents;
 
-        /// check if sd already contain sh256 hash
-        for (final element in decryptedDatas) {
-          final sh256Hash = profileCubit.oidc4vc.sh256HashOfContent(element);
+        // /// check if sd already contain sh256 hash
+        // for (final element in decryptedDatas) {
+        //   final sh256Hash = profileCubit.oidc4vc.sh256HashOfContent(element);
 
-          if (!listOfSd.contains(sh256Hash)) {
-            emit(
-              state.copyWith(
-                credentialStatus: CredentialStatus.invalidSignature,
-                status: AppStatus.idle,
-                statusListIndex: statusListIndex,
-                statusListUrl: statusListUri,
-              ),
-            );
-            return;
-          }
-        }
+        //   if (!listOfSd.contains(sh256Hash)) {
+        //     emit(
+        //       state.copyWith(
+        //         credentialStatus: CredentialStatus.invalidSignature,
+        //         status: AppStatus.idle,
+        //         statusListIndex: statusListIndex,
+        //         statusListUrl: statusListUri,
+        //       ),
+        //     );
+        //     return;
+        //   }
+        // }
 
         /// check the status
         final status = item.data['status'];
@@ -153,6 +150,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 statusListUri,
                 headers: headers,
                 isCachingEnabled: customOidc4vcProfile.statusListCache,
+                options: Options().copyWith(
+                  sendTimeout: const Duration(seconds: 10),
+                  receiveTimeout: const Duration(seconds: 10),
+                ),
               );
 
               final payload = jwtDecode.parseJwt(response.toString());
@@ -164,6 +165,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 jwt: response.toString(),
                 fromStatusList: true,
                 isCachingEnabled: customOidc4vcProfile.statusListCache,
+                useOAuthAuthorizationServerLink:
+                    useOauthServerAuthEndPoint(profileCubit.state.model),
               );
 
               if (isVerified != VerificationType.verified) {
@@ -184,17 +187,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   newStatusList is Map<String, dynamic>) {
                 final lst = newStatusList['lst'].toString();
 
-                final bytes = profileCubit.oidc4vc.getByte(statusListIndex);
-
-                // '$idx = $bytes X 8 + $posOfBit'
-                final decompressedBytes =
-                    profileCubit.oidc4vc.decodeAndZlibDecompress(lst);
-                final byteToCheck = decompressedBytes[bytes];
-
-                final posOfBit =
-                    profileCubit.oidc4vc.getPositionOfZlibBit(statusListIndex);
-                final bit = profileCubit.oidc4vc
-                    .getBit(byte: byteToCheck, bitPosition: posOfBit);
+                final bit = getBit(index: statusListIndex, encodedList: lst);
 
                 if (bit == 0) {
                   // active
@@ -202,7 +195,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   // revoked
                   emit(
                     state.copyWith(
-                      credentialStatus: CredentialStatus.invalidStatus,
+                      credentialStatus:
+                          CredentialStatus.statusListInvalidSignature,
                       status: AppStatus.idle,
                       statusListIndex: statusListIndex,
                       statusListUrl: statusListUri,
@@ -233,6 +227,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 statusListUri,
                 headers: headers,
                 isCachingEnabled: customOidc4vcProfile.statusListCache,
+                options: Options().copyWith(
+                  sendTimeout: const Duration(seconds: 10),
+                  receiveTimeout: const Duration(seconds: 10),
+                ),
               );
 
               final payload = jwtDecode.parseJwt(response.toString());
@@ -244,6 +242,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 jwt: response.toString(),
                 fromStatusList: true,
                 isCachingEnabled: customOidc4vcProfile.statusListCache,
+                useOAuthAuthorizationServerLink:
+                    useOauthServerAuthEndPoint(profileCubit.state.model),
               );
 
               if (isVerified != VerificationType.verified) {
@@ -267,17 +267,12 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                   final encodedList = credentialSubject['encodedList'];
 
                   if (encodedList != null && encodedList is String) {
-                    final decompressedBytes = profileCubit.oidc4vc
-                        .decodeAndGzibDecompress(encodedList);
-
                     statusListIndex = int.parse(data.statusListIndex);
 
-                    final bytes = profileCubit.oidc4vc.getByte(statusListIndex);
-                    final byteToCheck = decompressedBytes[bytes];
-                    final posOfBit = profileCubit.oidc4vc
-                        .getPositionOfGZipBit(statusListIndex);
-                    final bit = profileCubit.oidc4vc
-                        .getBit(byte: byteToCheck, bitPosition: posOfBit);
+                    final bit = getBit(
+                      index: statusListIndex,
+                      encodedList: encodedList,
+                    );
 
                     if (bit == 0) {
                       // active
@@ -323,6 +318,9 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           jwtDecode: jwtDecode,
           jwt: jwt,
           publicKeyJwk: publicKeyJwk,
+          useOAuthAuthorizationServerLink:
+              useOauthServerAuthEndPoint(profileCubit.state.model),
+          isSdJwtVc: item.getFormat == VCFormatType.vcSdJWT.vcValue,
         );
 
         if (isVerified == VerificationType.verified) {
@@ -344,52 +342,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             ),
           );
         }
-      } else if (item.isPolygonssuer) {
-        final mnemonic =
-            await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
-        await polygonIdCubit.initialise();
-
-        String network = Parameters.POLYGON_MAIN_NETWORK;
-
-        if (item.issuer.contains('polygon:main')) {
-          network = Parameters.POLYGON_MAIN_NETWORK;
-        } else {
-          network = Parameters.POLYGON_TEST_NETWORK;
-        }
-
-        final List<ClaimEntity> claim =
-            await polygonIdCubit.polygonId.getClaimById(
-          claimId: item.id,
-          mnemonic: mnemonic!,
-          network: network,
-        );
-
-        late CredentialStatus credentialStatus;
-
-        if (claim.isEmpty) {
-          credentialStatus = CredentialStatus.invalidStatus;
-        } else {
-          switch (claim[0].state) {
-            case ClaimState.active:
-              credentialStatus = CredentialStatus.active;
-            case ClaimState.expired:
-              credentialStatus = CredentialStatus.expired;
-            case ClaimState.pending:
-              credentialStatus = CredentialStatus.pending;
-            case ClaimState.revoked:
-              credentialStatus = CredentialStatus.invalidStatus;
-          }
-        }
-
-        emit(
-          state.copyWith(
-            credentialStatus: credentialStatus,
-            status: AppStatus.idle,
-            statusListIndex: statusListIndex,
-            statusListUrl: statusListUri,
-          ),
-        );
-      } else {
+      }  else {
         if (item.credentialPreview.credentialStatus != null) {
           final CredentialStatus credentialStatus =
               await item.checkRevocationStatus();

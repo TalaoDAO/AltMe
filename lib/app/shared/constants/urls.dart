@@ -60,9 +60,6 @@ class Urls {
   /// twitter card
   static const String twitterCardUrl = 'https://issuer.talao.co/twitter/';
 
-  /// linkedin card
-  static const String linkedinCardUrl =
-      'https://issuer.talao.co/passbase/endpoint/linkedincard/';
   // static const String talaoIpfsGafteway = 'https://talao.mypinata.cloud/ipfs/';
   static const String ipfsGateway = 'https://ipfs.io/ipfs/';
 
@@ -124,4 +121,10 @@ class Urls {
   // wallet provider
   static const walletProvider = 'https://wallet-provider.talao.co';
   static const walletTestProvider = 'https://preprod.wallet-provider.talao.co';
+
+  // wallet provider
+  static const walletConfigurationAltme = 'https://app.altme.io/configuration';
+  static const walletConfigurationTalao = 'https://app.talao.co/configuration';
+
+
 }

@@ -6,6 +6,7 @@ import 'package:credential_manifest/credential_manifest.dart';
 List<CredentialModel> getCredentialsFromFilterList({
   required List<Field> filterList,
   required List<CredentialModel> credentialList,
+  required ProfileType profileType,
 }) {
   /// If we have some instructions we filter the wallet's
   /// crendential list whith it
@@ -13,57 +14,103 @@ List<CredentialModel> getCredentialsFromFilterList({
     /// remove ldp_vp if jwt_vp is required
 
     final selectedCredential = <CredentialModel>[];
-    for (final field in filterList) {
-      for (final credential in credentialList) {
-        for (final path in field.path) {
-          final credentialData = createJsonByDecryptingSDValues(
-            encryptedJson: credential.data,
-            selectiveDisclosure: SelectiveDisclosure(credential),
-          );
 
-          final searchList = getTextsFromCredential(path, credentialData);
-          if (searchList.isNotEmpty) {
-            /// remove unmatched credential
-            searchList.removeWhere(
-              (searchParameter) {
-                String? pattern;
+    for (final credential in credentialList) {
+      /// profile should be matched for vc
+      final profileLinkedId = credential.profileLinkedId;
+      if (profileLinkedId != null && profileLinkedId != profileType.getVCId) {
+        continue;
+      }
 
-                if (field.filter?.pattern != null) {
-                  pattern = field.filter!.pattern;
-                } else if (field.filter?.contains?.containsConst != null) {
-                  pattern = field.filter?.contains?.containsConst;
-                } else if (field.filter?.containsConst != null) {
-                  pattern = field.filter?.containsConst;
-                } else {
-                  /// sd-jwt vc bool case
-                  if (searchParameter == 'true') return false;
-                }
-
-                if (pattern == null) return true;
-
-                if (pattern.endsWith(r'$')) {
-                  final RegExp regEx = RegExp(pattern);
-                  final Match? match = regEx.firstMatch(searchParameter);
-
-                  if (match != null) return false;
-                } else {
-                  if (searchParameter == pattern) return false;
-                }
-
-                return true;
-              },
+      bool allConditionsSatisfied = false;
+      fieldLoop:
+      for (final field in filterList) {
+        /// if optional not need to compute
+        if (field.optional) {
+          allConditionsSatisfied = true;
+        } else {
+          pathLoop:
+          for (final path in field.path) {
+            final credentialData = createJsonByDecryptingSDValues(
+              encryptedJson: credential.data,
+              selectiveDisclosure: SelectiveDisclosure(credential),
             );
-          }
 
-          /// if [searchList] is not empty we mark this credential as
-          /// a valid candidate
-          if (searchList.isNotEmpty) {
-            selectedCredential.add(credential);
+            final searchList = getTextsFromCredential(path, credentialData);
+            if (searchList.isNotEmpty) {
+              /// remove unmatched credential
+              searchList.removeWhere(
+                (searchParameter) {
+                  final filter = field.filter;
+
+                  /// condition matched - no further filtration needed
+                  if (filter == null) return false;
+
+                  String? pattern = filter.pattern;
+                  if (pattern != null) {
+                    pattern = filter.pattern;
+                  } else if (filter.contains?.containsConst != null) {
+                    pattern = filter.contains?.containsConst;
+                  } else if (filter.containsConst != null) {
+                    pattern = filter.containsConst;
+                  } else {
+                    /// sd-jwt vc bool case
+                    if (searchParameter == 'true') return false;
+                  }
+
+                  if (pattern == null) {
+                    return false;
+                  } else if (pattern.endsWith(r'$')) {
+                    final RegExp regEx = RegExp(pattern);
+                    final Match? match = regEx.firstMatch(searchParameter);
+
+                    if (match != null) return false;
+                  } else {
+                    if (searchParameter == pattern) return false;
+                  }
+
+                  return true;
+                },
+              );
+            }
+
+            /// if [searchList] is not empty we mark this credential as
+            /// a valid candidate
+            if (searchList.isNotEmpty) {
+              allConditionsSatisfied = true;
+              break pathLoop;
+            } else {
+              allConditionsSatisfied = false;
+            }
+          }
+          // if one field is not satisfied then condition is not satisfied
+          if (!allConditionsSatisfied) {
+            break fieldLoop;
           }
         }
       }
+      if (allConditionsSatisfied) {
+        selectedCredential.add(credential);
+      }
     }
-    return selectedCredential.toSet().toList();
+
+    final credentials = selectedCredential.toSet().toList();
+
+    credentials.sort(
+      (a, b) {
+        final firstCredName = a.display?.name ??
+            a.credentialPreview.credentialSubjectModel.credentialSubjectType
+                .name;
+        final secondCredName = b.display?.name ??
+            b.credentialPreview.credentialSubjectModel.credentialSubjectType
+                .name;
+
+        return firstCredName.compareTo(secondCredName);
+      },
+    );
+
+    return credentials;
   }
+
   return credentialList;
 }

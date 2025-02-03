@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -8,7 +9,7 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
+import 'package:reown_walletkit/reown_walletkit.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class OperationPage extends StatelessWidget {
@@ -108,27 +109,39 @@ class _OperationViewState extends State<OperationView> {
         }
       },
       builder: (context, state) {
+        late String sender;
+        late String reciever;
+        late String? symbol;
+
+        bool isSmartContract = false;
+
         final BeaconRequest? beaconRequest =
             context.read<BeaconCubit>().state.beaconRequest;
 
         final WalletConnectState walletConnectState =
             context.read<WalletConnectCubit>().state;
 
-        late String sender;
-        late String reciever;
+        final List<OperationDetails>? tezosOperationDetails =
+            walletConnectState.operationDetails;
 
-        late String? symbol;
+        final Transaction? transaction = walletConnectState.transaction;
 
-        switch (widget.connectionBridgeType) {
-          case ConnectionBridgeType.beacon:
+        if (beaconRequest != null || tezosOperationDetails != null) {
+          if (beaconRequest != null) {
             symbol = 'XTZ';
-            sender = beaconRequest!.request!.sourceAddress!;
+            sender = beaconRequest.request!.sourceAddress!;
             reciever = beaconRequest.operationDetails!.first.destination!;
+          } else {
+            symbol = 'XTZ';
+            sender = tezosOperationDetails!.first.source!;
+            reciever = tezosOperationDetails.first.destination!;
+          }
 
-          case ConnectionBridgeType.walletconnect:
-            symbol = state.cryptoAccountData?.blockchainType.symbol;
-            sender = walletConnectState.transaction!.from!.toString();
-            reciever = walletConnectState.transaction!.to!.toString();
+          if (isContract(reciever)) isSmartContract = true;
+        } else if (transaction != null) {
+          symbol = state.cryptoAccountData?.blockchainType.symbol;
+          sender = transaction.from!.toString();
+          reciever = transaction.to!.toString();
         }
 
         String message = '';
@@ -137,12 +150,15 @@ class _OperationViewState extends State<OperationView> {
           message = messageHandler.getMessage(context, messageHandler);
         }
 
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          onPopInvoked: (didPop) {
+            if (didPop) {
+              return;
+            }
             context.read<OperationCubit>().rejectOperation(
                   connectionBridgeType: widget.connectionBridgeType,
                 );
-            return true;
+            if (didPop) Navigator.of(context).pop();
           },
           child: BasePage(
             scrollView: false,
@@ -213,7 +229,8 @@ class _OperationViewState extends State<OperationView> {
                                 amount: state.amount,
                                 symbol: symbol,
                                 tokenUSDRate: state.usdRate,
-                                fee: state.fee,
+                                totalFee: state.totalFee,
+                                bakerFee: state.bakerFee,
                               ),
                             const SizedBox(height: Sizes.spaceNormal),
                           ],
@@ -234,7 +251,7 @@ class _OperationViewState extends State<OperationView> {
                     MyElevatedButton(
                       verticalSpacing: 15,
                       borderRadius: Sizes.normalRadius,
-                      text: l10n.send,
+                      text: isSmartContract ? l10n.confirm : l10n.send,
                       onPressed: state.status != AppStatus.idle
                           ? null
                           : () {
@@ -246,7 +263,7 @@ class _OperationViewState extends State<OperationView> {
                     const SizedBox(height: 8),
                     MyOutlinedButton(
                       borderRadius: Sizes.normalRadius,
-                      text: l10n.cancel,
+                      text: isSmartContract ? l10n.reject : l10n.cancel,
                       onPressed: () {
                         context.read<OperationCubit>().rejectOperation(
                               connectionBridgeType: widget.connectionBridgeType,

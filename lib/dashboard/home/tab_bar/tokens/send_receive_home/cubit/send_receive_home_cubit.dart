@@ -84,6 +84,12 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
           walletAddress: walletAddress,
           contractAddress: state.selectedToken.contractAddress,
         );
+      } else if (blockchainType == BlockchainType.etherlink) {
+        operations = await _getEtherlinkOperations(
+          walletAddress: walletAddress,
+          contractAddress: state.selectedToken.contractAddress,
+          ehtereumNetwork: manageNetworkCubit.state.network as EthereumNetwork,
+        );
       } else {
         operations = await _getEthereumOperations(
           walletAddress: walletAddress,
@@ -184,6 +190,57 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
       getLogger(toString()).e('e: $e, s: $s');
       return [];
     }
+  }
+
+  Future<List<OperationModel>> _getEtherlinkOperations({
+    required String walletAddress,
+    required String contractAddress,
+    required EthereumNetwork ehtereumNetwork,
+  }) async {
+    List<dynamic> result;
+    List<OperationModel> operations = [];
+
+    try {
+      final dynamic response = await client.get(
+        '${ehtereumNetwork.apiUrl}/v2/addresses/$walletAddress/transactions',
+        headers: <String, dynamic>{'Content-Type': 'application/json'},
+      );
+
+      result = response['items'] as List<dynamic>;
+
+      operations = result.map(
+        (dynamic e) {
+          return OperationModel(
+            type: '',
+            id: -1,
+            level: 0,
+            timestamp: e['timestamp'] as String,
+            block: e['block'].toString(),
+            hash: e['hash'] as String,
+            counter: 0,
+            sender: OperationAddressModel(address: e['from']['hash'] as String),
+            gasLimit: int.parse(e['gas_limit'].toString()),
+            gasUsed: int.parse(e['gas_used'].toString()),
+            storageLimit: 0,
+            storageUsed: 0,
+            bakerFee: 0,
+            storageFee: 0,
+            allocationFee: 0,
+            target: OperationAddressModel(address: e['to']['hash'] as String),
+            amount: e['value'].toString(),
+            status: e['result'].toString(),
+            hasInternals: false,
+          );
+        },
+      ).toList();
+    } catch (e, s) {
+      getLogger(toString()).e('having issue: $e, stack: $s');
+    }
+
+    operations.sort(
+      (a, b) => b.dateTime.compareTo(a.dateTime),
+    );
+    return operations;
   }
 
   Future<List<OperationModel>> _getEthereumOperations({

@@ -8,7 +8,6 @@ The Web 3 revolution is all about redistributing the power to the average consum
 This is why we are building Altme, to help you get control over your data back.
 Here is the last security audit done on our solution: [AltMe security audit report for Web3 Digital Wallet.pdf](https://github.com/TalaoDAO/AltMe/files/13362734/AltMe.security.audit.report.for.Web3.Digital.Wallet.pdf)
 
-
 ---
 
 ## Getting Started 🚀
@@ -334,19 +333,6 @@ $ flutter build appbundle --flavor "staging" --target "lib/main_staging.dart"
 $ flutter build appbundle --flavor "production" --target "lib/main_production.dart"
 ```
 
-### iOS .app for Simulator
-
-```bash
-# Development
-$ flutter build ios --simulator --flavor "development" --target "lib/main_development.dart"
-
-# Staging
-$ flutter build ios --simulator --flavor "staging" --target "lib/main_staging.dart"
-
-# Production
-$ flutter build ios --simulator --flavor "production" --target "lib/main_production.dart"
-```
-
 ### iOS .app for Devices
 
 ```bash
@@ -384,6 +370,10 @@ $ flutter build ios --release --flavor "production" --target "lib/main_productio
 $ $cd ios
 $ fastlane beta
 ```
+
+### Wallet Setup
+
+[`https://doc.wallet-provider.io/wallet/setup_wallet`](https://doc.wallet-provider.io/wallet/setup_wallet)
 
 ## Troubleshooting
 
@@ -638,8 +628,8 @@ $ ./script.sh -deploy ios
 $ sudo chmod 777 script.sh
 ```
 
-
 ## Current store's versions
+
 <pre>prod  
   altme  
     android:    365 (2.2.3)  
@@ -654,7 +644,7 @@ test
   talao  
     android: 	368 (2.2.6)  
     ios: 	    368 (2.2.6)  
-</pre> 
+</pre>
 
 [coverage_badge]: coverage_badge.svg
 [flutter_localizations_link]: https://api.flutter.dev/flutter/flutter_localizations/flutter_localizations-library.html
