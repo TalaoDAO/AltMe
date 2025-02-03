@@ -15,6 +15,10 @@ ProfileModel _$ProfileModelFromJson(Map<String, dynamic> json) => ProfileModel(
       profileSetting: ProfileSetting.fromJson(
           json['profileSetting'] as Map<String, dynamic>),
       enterpriseWalletName: json['enterpriseWalletName'] as String?,
+      oidc4VCIStack: json['oidc4VCIStack'] == null
+          ? null
+          : Oidc4VCIStack.fromJson(
+              json['oidc4VCIStack'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
@@ -26,6 +30,7 @@ Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
       'profileSetting': instance.profileSetting,
       'profileType': _$ProfileTypeEnumMap[instance.profileType]!,
       'enterpriseWalletName': instance.enterpriseWalletName,
+      'oidc4VCIStack': instance.oidc4VCIStack,
     };
 
 const _$WalletTypeEnumMap = {

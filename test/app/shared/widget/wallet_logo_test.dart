@@ -26,7 +26,6 @@ void main() {
       when(() => mockProfileCubit.state).thenReturn(
         ProfileState(
           model: ProfileModel.defaultOne(
-            polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
             walletType: WalletType.personal,
             walletProtectionType: WalletProtectionType.FA2,
             isDeveloperMode: true,
@@ -221,7 +220,6 @@ void main() {
       when(() => mockProfileCubit.state).thenReturn(
         ProfileState(
           model: ProfileModel.ebsiV3(
-            polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
             walletType: WalletType.personal,
             walletProtectionType: WalletProtectionType.FA2,
             isDeveloperMode: true,
@@ -266,7 +264,6 @@ void main() {
       when(() => mockProfileCubit.state).thenReturn(
         ProfileState(
           model: ProfileModel.diipv3(
-            polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
             walletType: WalletType.personal,
             walletProtectionType: WalletProtectionType.FA2,
             isDeveloperMode: true,
@@ -312,7 +309,6 @@ void main() {
       when(() => mockProfileCubit.state).thenReturn(
         ProfileState(
           model: ProfileModel(
-            polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
             walletType: WalletType.personal,
             walletProtectionType: WalletProtectionType.pinCode,
             isDeveloperMode: false,

@@ -6,6 +6,8 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:altme/dashboard/profile/models/models.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
+import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
+import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
@@ -75,7 +77,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     final log = getLogger('ProfileCubit - load');
     try {
-
       /// walletType
       var walletType = WalletType.personal;
 
@@ -128,6 +129,11 @@ class ProfileCubit extends Cubit<ProfileState> {
           profileType = enumVal;
         }
       }
+      final oidc4VCIStackJsonString =
+          await secureStorageProvider.get(SecureStorageKeys.oidc4VCIStack);
+      final oidc4VCIStack = Oidc4VCIStack.fromJson(
+        json.decode(oidc4VCIStackJsonString ?? '[]') as Map<String, dynamic>,
+      );
 
       String? enterpriseWalletName;
 
@@ -239,26 +245,6 @@ class ProfileCubit extends Cubit<ProfileState> {
             enterpriseWalletName: enterpriseWalletName,
           );
 
-        // case ProfileType.diipv2point1:
-        //   final privateKey = await getPrivateKey(
-        //     didKeyType: Parameters.didKeyTypeForDutch,
-        //     profileCubit: this,
-        //   );
-        //   final (did, _) = await getDidAndKid(
-        //     didKeyType: Parameters.didKeyTypeForDutch,
-        //     privateKey: privateKey,
-        //     profileCubit: this,
-        //   );
-        //   profileModel = ProfileModel.diipv2point1(
-        //     polygonIdNetwork: polygonIdNetwork,
-        //     walletType: walletType,
-        //     walletProtectionType: walletProtectionType,
-        //     isDeveloperMode: isDeveloperMode,
-        //     clientId: did,
-        //     clientSecret: randomString(12),
-        //     enterpriseWalletName: enterpriseWalletName,
-        //   );
-
         case ProfileType.diipv3:
           final privateKey = await getPrivateKey(
             didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
@@ -300,7 +286,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
       }
 
-      await update(profileModel);
+      await update(profileModel.copyWith(oidc4VCIStack: oidc4VCIStack));
     } catch (e, s) {
       log.e(
         'something went wrong',
@@ -322,10 +308,10 @@ class ProfileCubit extends Cubit<ProfileState> {
     final log = getLogger('ProfileCubit - update');
 
     try {
-      // await secureStorageProvider.set(
-      //   SecureStorageKeys.polygonIdNetwork,
-      //   profileModel.polygonIdNetwork.toString(),
-      // );
+      await secureStorageProvider.set(
+        SecureStorageKeys.oidc4VCIStack,
+        jsonEncode(profileModel.oidc4VCIStack),
+      );
 
       await secureStorageProvider.set(
         SecureStorageKeys.walletType,
@@ -678,5 +664,50 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> resetProfile() async {
     final profileModel = ProfileModel.empty();
     await update(profileModel);
+  }
+
+  void addOidc4VCI(Oidc4VCIState data) {
+    final Oidc4VCIStack oidc4VCIStack =
+        Oidc4VCIStack(stack: state.model.oidc4VCIStack!.stack);
+    final stackLength = oidc4VCIStack.stack.length;
+    if (stackLength > 4) {
+      oidc4VCIStack.stack.removeAt(0);
+    }
+    oidc4VCIStack.stack.add(data);
+    update(state.model.copyWith(oidc4VCIStack: oidc4VCIStack));
+  }
+
+  Oidc4VCIState? getOidc4VCIStateFromJWT(String? key) {
+    if (key == null) {
+      return null;
+    }
+    final jwt = decodePayload(
+      jwtDecode: JWTDecode(),
+      token: key,
+    );
+    final challenge = jwt['challenge'] as String;
+    return getOidc4VCIState(challenge);
+  }
+
+  Oidc4VCIState? getOidc4VCIState(String? key) {
+    if (key == null) {
+      return null;
+    }
+    final candidates = state.model.oidc4VCIStack!.stack
+        .where((element) => element.challenge == key)
+        .toList();
+    return candidates[0];
+  }
+
+  Future<void> deleteOidc4VCIState(String? key) async {
+    if (key == null) {
+      return Future.value();
+    }
+
+    final Oidc4VCIStack oidc4VCIStack = state.model.oidc4VCIStack!;
+    oidc4VCIStack.stack.removeWhere((element) => element.challenge == key);
+    final profilModel = state.model.copyWith(oidc4VCIStack: oidc4VCIStack);
+    await update(profilModel);
+    return Future.value();
   }
 }

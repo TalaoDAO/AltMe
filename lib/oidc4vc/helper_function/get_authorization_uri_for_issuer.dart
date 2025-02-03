@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 import 'package:did_kit/did_kit.dart';
@@ -35,35 +36,46 @@ Future<Uri?> getAuthorizationUriForIssuer({
   final String nonce = const Uuid().v4();
   final PkcePair pkcePair = PkcePair.generate();
 
-  final data = {
-    'credentials': selectedCredentials,
-    'issuer': oidc4vcParameters.issuer,
-    'isEBSI': oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
-    'publicKeyForDPop': publicKeyForDPop,
-    'oidc4vciDraft': oidc4vcParameters.oidc4vciDraftType.numbering,
-    'tokenEndpoint': oidc4vcParameters.tokenEndpoint,
-  };
-
-
-
+  final initialOidc4VCIState = Oidc4VCIState(
+    codeVerifier: pkcePair.codeVerifier,
+    challenge: pkcePair.codeChallenge,
+    selectedCredentials: selectedCredentials,
+    issuer: oidc4vcParameters.issuer,
+    isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
+    publicKeyForDPo: publicKeyForDPop,
+    oidc4vciDraft: oidc4vcParameters.oidc4vciDraftType.numbering,
+    tokenEndpoint: oidc4vcParameters.tokenEndpoint,
+  );
+  late Oidc4VCIState oidc4VCIState;
   switch (clientAuthentication) {
     case ClientAuthentication.none:
-      break;
+      oidc4VCIState = initialOidc4VCIState;
     case ClientAuthentication.clientSecretBasic:
-      data['authorization'] =
-          base64UrlEncode(utf8.encode('$clientId:$clientSecret'));
+      oidc4VCIState = initialOidc4VCIState.copyWith(
+        authorization: base64UrlEncode(utf8.encode('$clientId:$clientSecret')),
+      );
     case ClientAuthentication.clientSecretPost:
-      data['client_id'] = clientId!;
-      data['client_secret'] = clientSecret!;
+      oidc4VCIState = initialOidc4VCIState.copyWith(
+        clientId: clientId,
+        clientSecret: clientSecret,
+      );
     case ClientAuthentication.clientId:
-      data['client_id'] = clientId!;
+      oidc4VCIState = initialOidc4VCIState.copyWith(
+        clientId: clientId,
+      );
     case ClientAuthentication.clientSecretJwt:
-      data['client_id'] = clientId!;
-      data['oAuthClientAttestation'] = oAuthClientAttestation!;
-      data['oAuthClientAttestationPop'] = oAuthClientAttestationPop!;
+      oidc4VCIState = initialOidc4VCIState.copyWith(
+        clientId: clientId,
+        oAuthClientAttestationPop: oAuthClientAttestationPop,
+        oAuthClientAttestation: oAuthClientAttestation,
+      );
   }
 
-  final jwt = JWT(data);
+// save the state and give the id for the jwt
+  profileCubit.addOidc4VCI(
+    oidc4VCIState,
+  );
+  final jwt = JWT({'challenge': pkcePair.codeChallenge});
 
   await dotenv.load();
   final String authorizationUriSecretKey =

@@ -1052,7 +1052,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ec7f50d3e1a2779c88447ee277ec0d12b43506e6
+      resolved-ref: b66a5d9f57f68f62106205452ee05c337068ae5d
       url: "https://github.com/TalaoDAO/flutter_sodium.git"
     source: git
     version: "0.2.0"

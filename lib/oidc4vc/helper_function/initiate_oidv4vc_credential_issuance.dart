@@ -1,9 +1,9 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
 
 import 'package:did_kit/did_kit.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 import 'package:secure_storage/secure_storage.dart';
@@ -50,7 +50,9 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   if (credentials is List<dynamic>) {
     final codeForAuthorisedFlow =
         oidc4vcParameters.initialUri.queryParameters['code'];
-    final state = oidc4vcParameters.initialUri.queryParameters['state'];
+    final Oidc4VCIState? state = profileCubit.getOidc4VCIStateFromJWT(
+      oidc4vcParameters.initialUri.queryParameters['state'],
+    );
 
     if (oidc4vcParameters.preAuthorizedCode != null) {
       /// full phase flow of preAuthorized
@@ -72,22 +74,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       } else {
         /// second phase flow of authorised
 
-        final jwt = decodePayload(
-          jwtDecode: JWTDecode(),
-          token: state,
-        );
-
-        final stateOfCredentialsSelected = jwt['options'] as List<dynamic>;
-        final String codeVerifier = jwt['codeVerifier'].toString();
-        final String? authorization = jwt['authorization'] as String?;
-        final String? clientId = jwt['client_id'] as String?;
-        final String? clientSecret = jwt['client_secret'] as String?;
-        final String? oAuthClientAttestation =
-            jwt['oAuthClientAttestation'] as String?;
-        final String? oAuthClientAttestationPop =
-            jwt['oAuthClientAttestationPop'] as String?;
-        final String publicKeyForDPop = jwt['publicKeyForDPop'].toString();
-        final String oidc4vciDraft = jwt['oidc4vciDraft'].toString();
+        final String oidc4vciDraft = state.oidc4vciDraft;
 
         final OIDC4VCIDraftType? oidc4vciDraftType = OIDC4VCIDraftType.values
             .firstWhereOrNull((ele) => ele.numbering == oidc4vciDraft);
@@ -96,24 +83,21 @@ Future<void> initiateOIDC4VCCredentialIssuance({
           throw Exception();
         }
 
-        final selectedCredentials = stateOfCredentialsSelected
-            .map((index) => credentials[index])
-            .toList();
-
         await qrCodeScanCubit.addCredentialsInLoop(
-          selectedCredentials: selectedCredentials,
+          selectedCredentials: state.selectedCredentials,
           userPin: userPin,
           txCode: txCode,
           codeForAuthorisedFlow: codeForAuthorisedFlow,
-          codeVerifier: codeVerifier,
-          authorization: authorization,
-          clientId: clientId,
-          clientSecret: clientSecret,
-          oAuthClientAttestation: oAuthClientAttestation,
-          oAuthClientAttestationPop: oAuthClientAttestationPop,
-          publicKeyForDPop: publicKeyForDPop,
+          codeVerifier: state.codeVerifier,
+          authorization: state.authorization,
+          clientId: state.clientId,
+          clientSecret: state.clientSecret,
+          oAuthClientAttestation: state.oAuthClientAttestation,
+          oAuthClientAttestationPop: state.oAuthClientAttestationPop,
+          publicKeyForDPop: state.publicKeyForDPo,
           oidc4vcParameters: oidc4vcParameters,
         );
+        await profileCubit.deleteOidc4VCIState(state.challenge);
       }
     }
   } else {
