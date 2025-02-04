@@ -105,23 +105,6 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
-    if (uri.toString().startsWith('iden3comm://')) {
-      /// if wallet has not been created then alert user
-      final ssiKey =
-          await secure_storage.getSecureStorage.get(SecureStorageKeys.ssiKey);
-      if (ssiKey == null) {
-        await showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return ConfirmDialog(
-              title: l10n.createWalletMessage,
-            );
-          },
-        );
-        return;
-      }
-    }
-
     uri!.queryParameters.forEach((key, value) async {
       if (key == 'uri') {
         final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
