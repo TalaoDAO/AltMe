@@ -1,4 +1,4 @@
-import 'package:altme/app/app.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:test/test.dart';
 
 void main() {

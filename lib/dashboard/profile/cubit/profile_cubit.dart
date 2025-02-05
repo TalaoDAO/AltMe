@@ -6,7 +6,8 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:altme/dashboard/profile/models/models.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
-import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
+import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
+import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
@@ -76,21 +77,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     final log = getLogger('ProfileCubit - load');
     try {
-      /// polygon id network
-      var polygonIdNetwork = PolygonIdNetwork.PolygonMainnet;
-
-      final polygonIdNetworkString =
-          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
-
-      if (polygonIdNetworkString != null) {
-        final enumVal = PolygonIdNetwork.values.firstWhereOrNull(
-          (ele) => ele.toString() == polygonIdNetworkString,
-        );
-        if (enumVal != null) {
-          polygonIdNetwork = enumVal;
-        }
-      }
-
       /// walletType
       var walletType = WalletType.personal;
 
@@ -106,7 +92,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         }
       }
 
-      /// polygon id network
       var walletProtectionType = WalletProtectionType.pinCode;
 
       final walletProtectionTypeString = await secureStorageProvider
@@ -144,6 +129,11 @@ class ProfileCubit extends Cubit<ProfileState> {
           profileType = enumVal;
         }
       }
+      final oidc4VCIStackJsonString =
+          await secureStorageProvider.get(SecureStorageKeys.oidc4VCIStack);
+      final oidc4VCIStack = Oidc4VCIStack.fromJson(
+        json.decode(oidc4VCIStackJsonString ?? '[]') as Map<String, dynamic>,
+      );
 
       String? enterpriseWalletName;
 
@@ -184,7 +174,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           }
 
           profileModel = ProfileModel(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -206,7 +195,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
           profileModel = ProfileModel.defaultOne(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -228,7 +216,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
           profileModel = ProfileModel.ebsiV3(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -250,7 +237,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
           profileModel = ProfileModel.ebsiV4(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -258,26 +244,6 @@ class ProfileCubit extends Cubit<ProfileState> {
             clientSecret: randomString(12),
             enterpriseWalletName: enterpriseWalletName,
           );
-
-        // case ProfileType.diipv2point1:
-        //   final privateKey = await getPrivateKey(
-        //     didKeyType: Parameters.didKeyTypeForDutch,
-        //     profileCubit: this,
-        //   );
-        //   final (did, _) = await getDidAndKid(
-        //     didKeyType: Parameters.didKeyTypeForDutch,
-        //     privateKey: privateKey,
-        //     profileCubit: this,
-        //   );
-        //   profileModel = ProfileModel.diipv2point1(
-        //     polygonIdNetwork: polygonIdNetwork,
-        //     walletType: walletType,
-        //     walletProtectionType: walletProtectionType,
-        //     isDeveloperMode: isDeveloperMode,
-        //     clientId: did,
-        //     clientSecret: randomString(12),
-        //     enterpriseWalletName: enterpriseWalletName,
-        //   );
 
         case ProfileType.diipv3:
           final privateKey = await getPrivateKey(
@@ -292,7 +258,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
           profileModel = ProfileModel.diipv3(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -312,7 +277,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           }
 
           profileModel = ProfileModel(
-            polygonIdNetwork: polygonIdNetwork,
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -322,7 +286,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
       }
 
-      await update(profileModel);
+      await update(profileModel.copyWith(oidc4VCIStack: oidc4VCIStack));
     } catch (e, s) {
       log.e(
         'something went wrong',
@@ -345,8 +309,8 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     try {
       await secureStorageProvider.set(
-        SecureStorageKeys.polygonIdNetwork,
-        profileModel.polygonIdNetwork.toString(),
+        SecureStorageKeys.oidc4VCIStack,
+        jsonEncode(profileModel.oidc4VCIStack),
       );
 
       await secureStorageProvider.set(
@@ -397,19 +361,6 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     final profileModel =
         state.model.copyWith(walletProtectionType: walletProtectionType);
-    await update(profileModel);
-  }
-
-  Future<void> updatePolygonIdNetwork({
-    required PolygonIdNetwork polygonIdNetwork,
-    required PolygonIdCubit polygonIdCubit,
-  }) async {
-    emit(state.copyWith(status: AppStatus.loading));
-    final profileModel =
-        state.model.copyWith(polygonIdNetwork: polygonIdNetwork);
-
-    await polygonIdCubit.setEnv(polygonIdNetwork);
-
     await update(profileModel);
   }
 
@@ -616,7 +567,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.ebsiV3:
         await update(
           ProfileModel.ebsiV3(
-            polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
@@ -630,7 +580,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.ebsiV4:
         await update(
           ProfileModel.ebsiV4(
-            polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
@@ -644,7 +593,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.defaultOne:
         await update(
           ProfileModel.defaultOne(
-            polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
@@ -659,7 +607,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.diipv3:
         await update(
           ProfileModel.diipv3(
-            polygonIdNetwork: state.model.polygonIdNetwork,
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
@@ -717,5 +664,49 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> resetProfile() async {
     final profileModel = ProfileModel.empty();
     await update(profileModel);
+  }
+
+  void addOidc4VCI(Oidc4VCIState data) {
+    final list = List<Oidc4VCIState>.from(state.model.oidc4VCIStack!.stack);
+    final stackLength = list.length;
+    if (stackLength > 4) {
+      list.removeAt(0);
+    }
+    list.add(data);
+    update(state.model.copyWith(oidc4VCIStack: Oidc4VCIStack(stack: list)));
+  }
+
+  Oidc4VCIState? getOidc4VCIStateFromJWT(String? key) {
+    if (key == null) {
+      return null;
+    }
+    final jwt = decodePayload(
+      jwtDecode: JWTDecode(),
+      token: key,
+    );
+    final challenge = jwt['challenge'] as String;
+    return getOidc4VCIState(challenge);
+  }
+
+  Oidc4VCIState? getOidc4VCIState(String? key) {
+    if (key == null) {
+      return null;
+    }
+    final candidates = state.model.oidc4VCIStack!.stack
+        .where((element) => element.challenge == key)
+        .toList();
+    return candidates[0];
+  }
+
+  Future<void> deleteOidc4VCIState(String? key) async {
+    if (key == null) {
+      return Future.value();
+    }
+
+    final Oidc4VCIStack oidc4VCIStack = state.model.oidc4VCIStack!;
+    oidc4VCIStack.stack.removeWhere((element) => element.challenge == key);
+    final profilModel = state.model.copyWith(oidc4VCIStack: oidc4VCIStack);
+    await update(profilModel);
+    return Future.value();
   }
 }

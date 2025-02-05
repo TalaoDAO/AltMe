@@ -10,7 +10,6 @@ import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'restore_credential_cubit.g.dart';
@@ -22,7 +21,6 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
     required this.credentialsCubit,
     required this.cryptoKeys,
     required this.secureStorageProvider,
-    required this.polygonId,
     required this.activityLogManager,
     required this.profileCubit,
   }) : super(const RestoreCredentialState());
@@ -31,7 +29,6 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
   final CredentialsCubit credentialsCubit;
   final CryptocurrencyKeys cryptoKeys;
   final SecureStorageProvider secureStorageProvider;
-  final PolygonId polygonId;
   final ActivityLogManager activityLogManager;
   final ProfileCubit profileCubit;
 

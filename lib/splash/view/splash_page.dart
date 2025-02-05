@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -7,12 +6,10 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class SplashPage extends StatelessWidget {
@@ -68,8 +65,6 @@ class _SplashViewState extends State<SplashView> {
     super.dispose();
   }
 
-  bool isPolygonFunctionCalled = false;
-
   String? _deeplink;
 
   Future<void> processIncomingUri(Uri? uri) async {
@@ -108,44 +103,6 @@ class _SplashViewState extends State<SplashView> {
     if (uri.toString().startsWith(Parameters.authorizeEndPoint)) {
       context.read<DeepLinkCubit>().addDeepLink(uri!.toString());
       return;
-    }
-
-    if (uri.toString().startsWith('iden3comm://')) {
-      /// if wallet has not been created then alert user
-      final ssiKey =
-          await secure_storage.getSecureStorage.get(SecureStorageKeys.ssiKey);
-      if (ssiKey == null) {
-        await showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return ConfirmDialog(
-              title: l10n.createWalletMessage,
-            );
-          },
-        );
-        return;
-      }
-
-      /// decrypt iden3MessageEntity
-      final encryptedIden3MessageEntity =
-          uri.toString().split('iden3comm://?i_m=')[1];
-
-      final JWTDecode jwtDecode = JWTDecode();
-      final iden3MessageEntityJson =
-          jwtDecode.parsePolygonIdJwtHeader(encryptedIden3MessageEntity);
-
-      if (isPolygonFunctionCalled) return;
-
-      isPolygonFunctionCalled = true;
-
-      await context
-          .read<PolygonIdCubit>()
-          .polygonIdFunction(jsonEncode(iden3MessageEntityJson));
-
-      // Reset the flag variable after 2 seconds
-      Timer(const Duration(seconds: 1), () {
-        isPolygonFunctionCalled = false;
-      });
     }
 
     uri!.queryParameters.forEach((key, value) async {
@@ -190,7 +147,6 @@ class _SplashViewState extends State<SplashView> {
         qrCodeBlocListener,
         beaconBlocListener,
         walletConnectBlocListener,
-        polygonIdBlocListener,
         enterpriseBlocListener,
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(

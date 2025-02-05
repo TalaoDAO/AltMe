@@ -383,10 +383,6 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage:
         return globalMessage.RESPONSE_STRING_deviceIncompatibilityMessage;
 
-      case ResponseString.RESPONSE_STRING_backupPolygonIdCredentialEmptyError:
-        return globalMessage
-            .RESPONSE_STRING_backupPolygonIdCredentialEmptyError;
-
       case ResponseString.RESPONSE_STRING_downloadingCircuitLoadingMessage:
         return globalMessage.RESPONSE_STRING_downloadingCircuitLoadingMessage;
 

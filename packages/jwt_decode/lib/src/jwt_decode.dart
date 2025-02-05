@@ -30,17 +30,6 @@ class JWTDecode {
     return headerMap;
   }
 
-  ///parse polygonId Jwt to get header
-  Map<String, dynamic> parsePolygonIdJwtHeader(String token) {
-    final header = _decodeBase64(token);
-
-    final dynamic headerMap = json.decode(header);
-    if (headerMap is! Map<String, dynamic>) {
-      throw Exception('INVALID_PAYLOAD');
-    }
-    return headerMap;
-  }
-
   String _decodeBase64(String str) {
     var output = str.replaceAll('-', '+').replaceAll('_', '/');
     switch (output.length % 4) {

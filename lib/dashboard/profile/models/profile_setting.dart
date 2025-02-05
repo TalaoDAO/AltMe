@@ -428,10 +428,6 @@ class DiscoverCardsOptions extends Equatable {
       case CredentialSubjectType.pcdsAgentCertificate:
       case CredentialSubjectType.euDiplomaCard:
       case CredentialSubjectType.euVerifiableId:
-      case CredentialSubjectType.kycAgeCredential:
-      case CredentialSubjectType.kycCountryOfResidence:
-      case CredentialSubjectType.proofOfTwitterStats:
-      case CredentialSubjectType.civicPassCredential:
       case CredentialSubjectType.employeeCredential:
       case CredentialSubjectType.legalPersonalCredential:
       case CredentialSubjectType.identityCredential:

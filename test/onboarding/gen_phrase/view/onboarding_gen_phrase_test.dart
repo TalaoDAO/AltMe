@@ -4,6 +4,7 @@ import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/connection_bridge/wallet_connect/cubit/wallet_connect_cubit.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -14,7 +15,6 @@ import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:mockingjay/mockingjay.dart';
 
 import '../../../helpers/helpers.dart';

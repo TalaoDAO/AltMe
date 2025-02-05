@@ -29,7 +29,7 @@ class SecureStorageKeys {
   static const String data = 'data';
   static const String rsaKeyJson = 'RSAKeyJson';
 
-  static const String polygonIdNetwork = 'profile/polygonIdNetwork';
+  static const String oidc4VCIStack = 'profile/oidc4VCIStack';
 
   static const String blockChainNetworksIndexing = 'blockChainNetworksIndexing';
   static const String credentialKey = 'credential';

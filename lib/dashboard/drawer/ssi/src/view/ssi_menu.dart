@@ -69,13 +69,6 @@ class SSIView extends StatelessWidget {
                 Navigator.of(context).push<void>(Oidc4vcSettingMenu.route());
               },
             ),
-            // DrawerItem(
-            //   title: l10n.trustFramework,
-            //   onTap: () async {
-            //     await Navigator.of(context)
-            //         .push<void>(TrustFrameworkPage.route());
-            //   },
-            // ),
           ],
         ],
       ),

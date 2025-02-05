@@ -6,7 +6,6 @@ import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/starter/starter.dart';
-import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -83,12 +82,6 @@ class MockWalletConnectCubit extends MockCubit<WalletConnectState>
   final state = const WalletConnectState();
 }
 
-class MockPolygonIdCubit extends MockCubit<PolygonIdState>
-    implements PolygonIdCubit {
-  @override
-  final state = const PolygonIdState();
-}
-
 class MockEnterpriseCubit extends MockCubit<EnterpriseState>
     implements EnterpriseCubit {
   @override
@@ -131,7 +124,6 @@ void main() {
   late QRCodeScanCubit qRCodeScanCubit;
   late BeaconCubit beaconCubit;
   late WalletConnectCubit walletConnectCubit;
-  late PolygonIdCubit polygonIdCubit;
   late EnterpriseCubit enterpriseCubit;
 
   setUpAll(() async {
@@ -145,7 +137,6 @@ void main() {
     qRCodeScanCubit = MockQRCodeScanCubit();
     beaconCubit = MockBeaconCubit();
     walletConnectCubit = MockWalletConnectCubit();
-    polygonIdCubit = MockPolygonIdCubit();
     enterpriseCubit = MockEnterpriseCubit();
     when(() => splashCubit.state)
         .thenReturn(const SplashState(status: SplashStatus.init));
@@ -167,7 +158,6 @@ void main() {
         ),
         BlocProvider<WalletCubit>(create: (context) => walletCubit),
         BlocProvider<CredentialsCubit>(create: (context) => credentialsCubit),
-        BlocProvider<PolygonIdCubit>(create: (context) => polygonIdCubit),
         BlocProvider<EnterpriseCubit>(create: (context) => enterpriseCubit),
         BlocProvider<ScanCubit>(create: (context) => scanCubit),
         BlocProvider<QRCodeScanCubit>(create: (context) => qRCodeScanCubit),

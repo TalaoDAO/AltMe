@@ -20,26 +20,17 @@ CredentialSubjectModel _$CredentialSubjectModelFromJson(
     );
 
 Map<String, dynamic> _$CredentialSubjectModelToJson(
-    CredentialSubjectModel instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'type': instance.type,
-    'issuedBy': instance.issuedBy?.toJson(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('offeredBy', instance.offeredBy?.toJson());
-  val['credentialSubjectType'] =
-      _$CredentialSubjectTypeEnumMap[instance.credentialSubjectType]!;
-  val['credentialCategory'] =
-      _$CredentialCategoryEnumMap[instance.credentialCategory]!;
-  return val;
-}
+        CredentialSubjectModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': instance.type,
+      'issuedBy': instance.issuedBy?.toJson(),
+      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
+      'credentialSubjectType':
+          _$CredentialSubjectTypeEnumMap[instance.credentialSubjectType]!,
+      'credentialCategory':
+          _$CredentialCategoryEnumMap[instance.credentialCategory]!,
+    };
 
 const _$CredentialSubjectTypeEnumMap = {
   CredentialSubjectType.ageRange: 'ageRange',
@@ -66,8 +57,6 @@ const _$CredentialSubjectTypeEnumMap = {
   CredentialSubjectType.fantomPooAddress: 'fantomPooAddress',
   CredentialSubjectType.gender: 'gender',
   CredentialSubjectType.identityPass: 'identityPass',
-  CredentialSubjectType.kycAgeCredential: 'kycAgeCredential',
-  CredentialSubjectType.kycCountryOfResidence: 'kycCountryOfResidence',
   CredentialSubjectType.learningAchievement: 'learningAchievement',
   CredentialSubjectType.nationality: 'nationality',
   CredentialSubjectType.over13: 'over13',
@@ -97,8 +86,6 @@ const _$CredentialSubjectTypeEnumMap = {
   CredentialSubjectType.verifiableIdCard: 'verifiableIdCard',
   CredentialSubjectType.voucher: 'voucher',
   CredentialSubjectType.walletCredential: 'walletCredential',
-  CredentialSubjectType.proofOfTwitterStats: 'proofOfTwitterStats',
-  CredentialSubjectType.civicPassCredential: 'civicPassCredential',
   CredentialSubjectType.employeeCredential: 'employeeCredential',
   CredentialSubjectType.legalPersonalCredential: 'legalPersonalCredential',
   CredentialSubjectType.identityCredential: 'identityCredential',
@@ -118,6 +105,5 @@ const _$CredentialCategoryEnumMap = {
   CredentialCategory.walletIntegrity: 'walletIntegrity',
   CredentialCategory.blockchainAccountsCards: 'blockchainAccountsCards',
   CredentialCategory.othersCards: 'othersCards',
-  CredentialCategory.polygonidCards: 'polygonidCards',
   CredentialCategory.pendingCards: 'pendingCards',
 };

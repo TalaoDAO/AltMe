@@ -5,7 +5,6 @@ import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
@@ -23,7 +22,6 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
     required this.cryptoKeys,
     required this.credentialsCubit,
     required this.fileSaver,
-    required this.polygonIdCubit,
     required this.activityLogManager,
     required this.profileCubit,
   }) : super(const BackupCredentialState());
@@ -32,7 +30,6 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
   final CryptocurrencyKeys cryptoKeys;
   final CredentialsCubit credentialsCubit;
   final FileSaver fileSaver;
-  final PolygonIdCubit polygonIdCubit;
   final ActivityLogManager activityLogManager;
   final ProfileCubit profileCubit;
 

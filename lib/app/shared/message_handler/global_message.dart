@@ -321,8 +321,6 @@ class GlobalMessage {
   String get RESPONSE_STRING_authenticationFailed => l10n.authenticationFailed;
   String get RESPONSE_STRING_deviceIncompatibilityMessage =>
       l10n.deviceIncompatibilityMessage;
-  String get RESPONSE_STRING_backupPolygonIdCredentialEmptyError =>
-      l10n.backupPolygonIdCredentialEmptyError;
   String get RESPONSE_STRING_downloadingCircuitLoadingMessage =>
       l10n.downloadingCircuitLoadingMessage;
   String get RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST =>
