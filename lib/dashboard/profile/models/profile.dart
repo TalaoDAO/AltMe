@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/profile/models/profile_setting.dart';
+import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -7,22 +8,24 @@ import 'package:oidc4vc/oidc4vc.dart';
 part 'profile.g.dart';
 
 @JsonSerializable()
+// ignore: must_be_immutable
 class ProfileModel extends Equatable {
-  const ProfileModel({
-    required this.polygonIdNetwork,
+  ProfileModel({
     required this.walletType,
     required this.walletProtectionType,
     required this.isDeveloperMode,
     required this.profileType,
     required this.profileSetting,
     this.enterpriseWalletName,
-  });
+    this.oidc4VCIStack,
+  }) {
+oidc4VCIStack ??= Oidc4VCIStack.initial();
+  }
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
       _$ProfileModelFromJson(json);
 
   factory ProfileModel.empty() => ProfileModel(
-        polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
         walletType: WalletType.personal,
         walletProtectionType: WalletProtectionType.pinCode,
         isDeveloperMode: false,
@@ -31,7 +34,6 @@ class ProfileModel extends Equatable {
       );
 
   factory ProfileModel.ebsiV3({
-    required PolygonIdNetwork polygonIdNetwork,
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
@@ -41,7 +43,6 @@ class ProfileModel extends Equatable {
   }) =>
       ProfileModel(
         enterpriseWalletName: enterpriseWalletName,
-        polygonIdNetwork: polygonIdNetwork,
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
@@ -107,7 +108,6 @@ class ProfileModel extends Equatable {
       );
 
   factory ProfileModel.ebsiV4({
-    required PolygonIdNetwork polygonIdNetwork,
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
@@ -117,7 +117,6 @@ class ProfileModel extends Equatable {
   }) =>
       ProfileModel(
         enterpriseWalletName: enterpriseWalletName,
-        polygonIdNetwork: polygonIdNetwork,
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
@@ -187,7 +186,6 @@ class ProfileModel extends Equatable {
       );
 
   factory ProfileModel.defaultOne({
-    required PolygonIdNetwork polygonIdNetwork,
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
@@ -197,7 +195,6 @@ class ProfileModel extends Equatable {
   }) =>
       ProfileModel(
         enterpriseWalletName: enterpriseWalletName,
-        polygonIdNetwork: polygonIdNetwork,
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
@@ -265,7 +262,6 @@ class ProfileModel extends Equatable {
       );
 
   factory ProfileModel.diipv3({
-    required PolygonIdNetwork polygonIdNetwork,
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
@@ -275,7 +271,6 @@ class ProfileModel extends Equatable {
   }) =>
       ProfileModel(
         enterpriseWalletName: enterpriseWalletName,
-        polygonIdNetwork: polygonIdNetwork,
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
@@ -350,44 +345,44 @@ class ProfileModel extends Equatable {
         ),
       );
 
-  final PolygonIdNetwork polygonIdNetwork;
   final WalletType walletType;
   final WalletProtectionType walletProtectionType;
   final bool isDeveloperMode;
   final ProfileSetting profileSetting;
   final ProfileType profileType;
   final String? enterpriseWalletName;
+  late Oidc4VCIStack? oidc4VCIStack;
 
   @override
   List<Object?> get props => [
-        polygonIdNetwork,
         walletType,
         walletProtectionType,
         isDeveloperMode,
         profileType,
         enterpriseWalletName,
         profileSetting,
+        oidc4VCIStack,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
 
   ProfileModel copyWith({
-    PolygonIdNetwork? polygonIdNetwork,
     WalletType? walletType,
     WalletProtectionType? walletProtectionType,
     bool? isDeveloperMode,
     ProfileType? profileType,
     ProfileSetting? profileSetting,
     String? enterpriseWalletName,
+    Oidc4VCIStack? oidc4VCIStack,
   }) {
     return ProfileModel(
-      polygonIdNetwork: polygonIdNetwork ?? this.polygonIdNetwork,
       walletType: walletType ?? this.walletType,
       walletProtectionType: walletProtectionType ?? this.walletProtectionType,
       isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
       profileType: profileType ?? this.profileType,
       profileSetting: profileSetting ?? this.profileSetting,
       enterpriseWalletName: enterpriseWalletName ?? this.enterpriseWalletName,
+      oidc4VCIStack: oidc4VCIStack ?? this.oidc4VCIStack,
     );
   }
 }

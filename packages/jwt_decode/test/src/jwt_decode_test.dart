@@ -116,11 +116,5 @@ void main() {
       expect(header['typ'], 'JWT');
     });
 
-    test('parsePolygonIdJwtHeader throws exception for invalid token', () {
-      expect(
-        () => jwtDecode.parsePolygonIdJwtHeader('invalid.token'),
-        throwsException,
-      );
-    });
   });
 }

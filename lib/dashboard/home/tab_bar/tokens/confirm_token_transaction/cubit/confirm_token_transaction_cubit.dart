@@ -5,13 +5,13 @@ import 'dart:math';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:decimal/decimal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:tezart/tezart.dart';
 import 'package:web3dart/json_rpc.dart';
 import 'package:web3dart/web3dart.dart';

@@ -23,24 +23,15 @@ ProfessionalSkillAssessmentModel _$ProfessionalSkillAssessmentModelFromJson(
     );
 
 Map<String, dynamic> _$ProfessionalSkillAssessmentModelToJson(
-    ProfessionalSkillAssessmentModel instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'type': instance.type,
-    'issuedBy': instance.issuedBy?.toJson(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('offeredBy', instance.offeredBy?.toJson());
-  val['skills'] = instance.skills?.map((e) => e.toJson()).toList();
-  val['familyName'] = instance.familyName;
-  val['givenName'] = instance.givenName;
-  val['signatureLines'] =
-      instance.signatureLines?.map((e) => e.toJson()).toList();
-  return val;
-}
+        ProfessionalSkillAssessmentModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': instance.type,
+      'issuedBy': instance.issuedBy?.toJson(),
+      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
+      'skills': instance.skills?.map((e) => e.toJson()).toList(),
+      'familyName': instance.familyName,
+      'givenName': instance.givenName,
+      'signatureLines':
+          instance.signatureLines?.map((e) => e.toJson()).toList(),
+    };

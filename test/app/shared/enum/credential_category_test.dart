@@ -103,11 +103,7 @@ class MockAppLocalizations extends Mock implements AppLocalizations {
   final walletIntegrityCredentialsDiscoverSubtitle = 'A4';
 
   @override
-  final polygonCredentialsHomeTitle = 'A1';
-  @override
   final polygonCredentialsHomeSubtitle = 'A2';
-  @override
-  final polygonCredentialsDiscoverTitle = 'A3';
   @override
   final polygonCredentialsDiscoverSubtitle = 'A4';
 
@@ -129,7 +125,6 @@ void main() {
       CredentialCategory.humanityProofCards,
       CredentialCategory.socialMediaCards,
       CredentialCategory.walletIntegrity,
-      CredentialCategory.polygonidCards,
       CredentialCategory.blockchainAccountsCards,
       CredentialCategory.othersCards,
       CredentialCategory.pendingCards,
@@ -152,7 +147,6 @@ void main() {
       expect(CredentialCategory.humanityProofCards.order, 100);
       expect(CredentialCategory.socialMediaCards.order, 90);
       expect(CredentialCategory.walletIntegrity.order, 80);
-      expect(CredentialCategory.polygonidCards.order, 75);
       expect(CredentialCategory.pendingCards.order, 9);
     });
 
@@ -178,7 +172,6 @@ void main() {
       );
       expect(CredentialCategory.socialMediaCards.showInHomeIfListEmpty, false);
       expect(CredentialCategory.walletIntegrity.showInHomeIfListEmpty, false);
-      expect(CredentialCategory.polygonidCards.showInHomeIfListEmpty, false);
       expect(CredentialCategory.pendingCards.showInHomeIfListEmpty, false);
     });
 
@@ -277,15 +270,6 @@ void main() {
       );
       expect(
         CredentialCategory.walletIntegrity.config(localizations),
-        const CredentialCategoryConfig(
-          homeTitle: 'A1',
-          homeSubTitle: 'A2',
-          discoverTitle: 'A3',
-          discoverSubTitle: 'A4',
-        ),
-      );
-      expect(
-        CredentialCategory.polygonidCards.config(localizations),
         const CredentialCategoryConfig(
           homeTitle: 'A1',
           homeSubTitle: 'A2',

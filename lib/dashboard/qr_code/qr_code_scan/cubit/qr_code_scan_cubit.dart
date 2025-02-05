@@ -10,7 +10,6 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -42,7 +41,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.beacon,
     required this.walletConnectCubit,
     required this.secureStorageProvider,
-    required this.polygonIdCubit,
     required this.didKitProvider,
     required this.oidc4vc,
     required this.walletCubit,
@@ -60,7 +58,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final Beacon beacon;
   final WalletConnectCubit walletConnectCubit;
   final SecureStorageProvider secureStorageProvider;
-  final PolygonIdCubit polygonIdCubit;
   final DIDKitProvider didKitProvider;
   final OIDC4VC oidc4vc;
   final WalletCubit walletCubit;
@@ -106,10 +103,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         /// wallet connect
         await walletConnectCubit.connect(scannedResponse);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-      } else if (isPolygonIdUrl(scannedResponse)) {
-        /// polygon id
-        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-        await polygonIdCubit.polygonIdFunction(scannedResponse);
       } else if (scannedResponse.startsWith('${Urls.appDeepLink}?uri=')) {
         final url = Uri.decodeFull(
           scannedResponse.substring('${Urls.appDeepLink}?uri='.length),
@@ -1802,11 +1795,7 @@ ${const JsonEncoder.withIndent('  ').convert(payload)}
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     try {
-      final containsAllRequiredKey = statePayload.containsKey('credentials') &&
-          statePayload.containsKey('codeVerifier') &&
-          statePayload.containsKey('issuer') &&
-          statePayload.containsKey('isEBSI') &&
-          statePayload.containsKey('tokenEndpoint');
+      final containsAllRequiredKey = statePayload.containsKey('challenge');
       if (!containsAllRequiredKey) {
         throw ResponseMessage(
           data: {
@@ -1835,21 +1824,9 @@ ${state.uri}
           return;
         }
       }
-
-      final selectedCredentials = statePayload['credentials'] as List<dynamic>;
-      final String codeVerifier = statePayload['codeVerifier'].toString();
-      final String issuer = statePayload['issuer'].toString();
-      final bool isEBSI = statePayload['isEBSI'] as bool;
-      final String? authorization = statePayload['authorization'] as String?;
-      final String? clientId = statePayload['client_id'] as String?;
-      final String? clientSecret = statePayload['client_secret'] as String?;
-      final String? oAuthClientAttestation =
-          statePayload['oAuthClientAttestation'] as String?;
-      final String? oAuthClientAttestationPop =
-          statePayload['oAuthClientAttestationPop'] as String?;
-      final String publicKeyForDPop =
-          statePayload['publicKeyForDPop'].toString();
-      final String oidc4vciDraft = statePayload['oidc4vciDraft'].toString();
+      final oidc4VCIState =
+          profileCubit.getOidc4VCIState(statePayload['challenge'] as String);
+      final String oidc4vciDraft = oidc4VCIState!.oidc4vciDraft;
 
       final OIDC4VCIDraftType? oidc4vciDraftType = OIDC4VCIDraftType.values
           .firstWhereOrNull((ele) => ele.numbering == oidc4vciDraft);
@@ -1858,34 +1835,35 @@ ${state.uri}
         throw Exception();
       }
       final issuerOpenIdConfiguration = await oidc4vc.getIssuerMetaData(
-        baseUrl: issuer,
+        baseUrl: oidc4VCIState.issuer,
         dio: client.dio,
       );
 
       await addCredentialsInLoop(
-        selectedCredentials: selectedCredentials,
+        selectedCredentials: oidc4VCIState.selectedCredentials,
         userPin: null,
         txCode: null,
         codeForAuthorisedFlow: codeForAuthorisedFlow,
-        codeVerifier: codeVerifier,
-        authorization: authorization,
-        clientId: clientId,
-        clientSecret: clientSecret,
-        oAuthClientAttestation: oAuthClientAttestation,
-        oAuthClientAttestationPop: oAuthClientAttestationPop,
-        publicKeyForDPop: publicKeyForDPop,
+        codeVerifier: oidc4VCIState.codeVerifier,
+        authorization: oidc4VCIState.authorization,
+        clientId: oidc4VCIState.clientId,
+        clientSecret: oidc4VCIState.clientSecret,
+        oAuthClientAttestation: oidc4VCIState.oAuthClientAttestation,
+        oAuthClientAttestationPop: oidc4VCIState.oAuthClientAttestationPop,
+        publicKeyForDPop: oidc4VCIState.publicKeyForDPo,
         oidc4vcParameters: Oidc4vcParameters(
           oidc4vciDraftType: oidc4vciDraftType,
           useOAuthAuthorizationServerLink: false,
           initialUri: Uri(),
           userPinRequired: false,
           issuerState: null,
-          issuer: issuer,
-          oidc4vcType: isEBSI ? OIDC4VCType.EBSI : null,
-          tokenEndpoint: statePayload['tokenEndpoint'].toString(),
+          issuer: oidc4VCIState.issuer,
+          oidc4vcType: oidc4VCIState.isEBSI ? OIDC4VCType.EBSI : null,
+          tokenEndpoint: oidc4VCIState.tokenEndpoint,
           issuerOpenIdConfiguration: issuerOpenIdConfiguration,
         ),
       );
+      await profileCubit.deleteOidc4VCIState(oidc4VCIState.challenge);
     } catch (e) {
       emitError(e);
     }

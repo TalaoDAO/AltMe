@@ -9,13 +9,10 @@ import 'package:altme/onboarding/onboarding.dart';
 
 import 'package:altme/wallet/wallet.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class RestoreCredentialPage extends StatelessWidget {
@@ -42,7 +39,6 @@ class RestoreCredentialPage extends StatelessWidget {
         cryptoKeys: const CryptocurrencyKeys(),
         walletCubit: context.read<WalletCubit>(),
         credentialsCubit: context.read<CredentialsCubit>(),
-        polygonId: PolygonId(),
         activityLogManager: ActivityLogManager(getSecureStorage),
         profileCubit: context.read<ProfileCubit>(),
       ),
@@ -203,65 +199,9 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
   }
 
   Future<void> _pickRestoreFile() async {
-    final l10n = context.l10n;
-    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-
-    /// storage permission has changed with android 13
-    late final PermissionStatus storagePermission;
-
-    if (isAndroid) {
-      final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      if (int.parse(androidInfo.version.release) >= 13) {
-        storagePermission = await Permission.manageExternalStorage.request();
-      } else {
-        storagePermission = await Permission.storage.request();
-      }
-    } else {
-      storagePermission = await Permission.storage.request();
-    }
-
-    if (storagePermission.isDenied) {
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: StateMessage.success(
-          stringMessage: l10n.storagePermissionDeniedMessage,
-        ),
-      );
-      return;
-    }
-
-    if (storagePermission.isPermanentlyDenied) {
-      await _showPermissionPopup();
-      return;
-    }
-
-    if (storagePermission.isGranted || storagePermission.isLimited) {
-      final pickedFile = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowMultiple: false,
-        allowedExtensions: ['txt'],
-      );
-      context
-          .read<RestoreCredentialCubit>()
-          .setFilePath(filePath: pickedFile?.files.first.path);
-    }
-  }
-
-  Future<void> _showPermissionPopup() async {
-    final localizations = context.l10n;
-    final confirm = await showDialog<bool>(
-          context: context,
-          builder: (context) => ConfirmDialog(
-            title: localizations.storagePermissionRequired,
-            subtitle: localizations.storagePermissionPermanentlyDeniedMessage,
-            yes: localizations.ok,
-            no: localizations.cancel,
-          ),
-        ) ??
-        false;
-
-    if (confirm) {
-      await openAppSettings();
-    }
+    final pickedFile = await FilePicker.platform.pickFiles();
+    context
+        .read<RestoreCredentialCubit>()
+        .setFilePath(filePath: pickedFile?.files.first.path);
   }
 }

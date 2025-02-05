@@ -7,8 +7,6 @@ part of 'profile.dart';
 // **************************************************************************
 
 ProfileModel _$ProfileModelFromJson(Map<String, dynamic> json) => ProfileModel(
-      polygonIdNetwork:
-          $enumDecode(_$PolygonIdNetworkEnumMap, json['polygonIdNetwork']),
       walletType: $enumDecode(_$WalletTypeEnumMap, json['walletType']),
       walletProtectionType: $enumDecode(
           _$WalletProtectionTypeEnumMap, json['walletProtectionType']),
@@ -17,11 +15,14 @@ ProfileModel _$ProfileModelFromJson(Map<String, dynamic> json) => ProfileModel(
       profileSetting: ProfileSetting.fromJson(
           json['profileSetting'] as Map<String, dynamic>),
       enterpriseWalletName: json['enterpriseWalletName'] as String?,
+      oidc4VCIStack: json['oidc4VCIStack'] == null
+          ? null
+          : Oidc4VCIStack.fromJson(
+              json['oidc4VCIStack'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
     <String, dynamic>{
-      'polygonIdNetwork': _$PolygonIdNetworkEnumMap[instance.polygonIdNetwork]!,
       'walletType': _$WalletTypeEnumMap[instance.walletType]!,
       'walletProtectionType':
           _$WalletProtectionTypeEnumMap[instance.walletProtectionType]!,
@@ -29,12 +30,8 @@ Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
       'profileSetting': instance.profileSetting,
       'profileType': _$ProfileTypeEnumMap[instance.profileType]!,
       'enterpriseWalletName': instance.enterpriseWalletName,
+      'oidc4VCIStack': instance.oidc4VCIStack,
     };
-
-const _$PolygonIdNetworkEnumMap = {
-  PolygonIdNetwork.PolygonMainnet: 'PolygonMainnet',
-  PolygonIdNetwork.PolygonMumbai: 'PolygonMumbai',
-};
 
 const _$WalletTypeEnumMap = {
   WalletType.personal: 'personal',

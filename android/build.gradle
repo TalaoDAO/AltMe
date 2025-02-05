@@ -1,28 +1,16 @@
-buildscript {
-    ext.kotlin_version = '1.8.0'
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
     }
 }
 
-rootProject.buildDir = '../build'
+rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-    project.evaluationDependsOn(':app')
+}
+subprojects {
+    project.evaluationDependsOn(":app")
 }
 
 tasks.register("clean", Delete) {

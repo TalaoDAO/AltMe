@@ -6,6 +6,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -14,7 +15,6 @@ import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 import 'package:secure_storage/secure_storage.dart';
@@ -85,21 +85,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             credentialSubjectModel:
                 credential.credentialPreview.credentialSubjectModel.copyWith(
               credentialCategory: CredentialCategory.educationCards,
-            ),
-          ),
-        );
-
-        if (profileLinked != null) {
-          if (profileLinked == vcId) updatedCredentials.add(updatedCredential);
-        } else {
-          updatedCredentials.add(updatedCredential);
-        }
-      } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
-        final updatedCredential = credential.copyWith(
-          credentialPreview: credential.credentialPreview.copyWith(
-            credentialSubjectModel:
-                credential.credentialPreview.credentialSubjectModel.copyWith(
-              credentialCategory: CredentialCategory.polygonidCards,
             ),
           ),
         );
@@ -318,23 +303,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       }
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
-    } else if (credential.isDefaultCredential && credential.isPolygonIdCard) {
-      final updatedCredential = credential.copyWith(
-        credentialPreview: credential.credentialPreview.copyWith(
-          credentialSubjectModel:
-              credential.credentialPreview.credentialSubjectModel.copyWith(
-            credentialCategory: CredentialCategory.polygonidCards,
-          ),
-        ),
-      );
-      if (!isPendingCredential) {
-        await modifyCredential(
-          credential: updatedCredential,
-          blockchainType: blockchainType,
-        );
-      }
-      await credentialsRepository.insert(updatedCredential);
-      credentials = List.of(state.credentials)..add(updatedCredential);
     } else {
       if (!isPendingCredential) {
         await modifyCredential(
@@ -427,7 +395,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       case CredentialCategory.humanityProofCards:
       case CredentialCategory.socialMediaCards:
       case CredentialCategory.walletIntegrity:
-      case CredentialCategory.polygonidCards:
       case CredentialCategory.pendingCards:
         break;
     }
@@ -939,8 +906,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             }
 
           case CredentialCategory.othersCards:
-            break;
-          case CredentialCategory.polygonidCards:
             break;
           case CredentialCategory.pendingCards:
             break;

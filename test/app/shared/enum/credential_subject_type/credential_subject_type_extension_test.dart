@@ -82,16 +82,6 @@ void main() {
       );
 
       expect(
-        CredentialSubjectType.kycAgeCredential.defaultBackgroundColor,
-        equals(const Color(0xff8247E5)),
-      );
-
-      expect(
-        CredentialSubjectType.kycCountryOfResidence.defaultBackgroundColor,
-        equals(const Color(0xff8247E5)),
-      );
-
-      expect(
         CredentialSubjectType.walletCredential.defaultBackgroundColor,
         equals(Colors.white),
       );
@@ -307,16 +297,6 @@ void main() {
       );
 
       expect(
-        CredentialSubjectType.proofOfTwitterStats.defaultBackgroundColor,
-        equals(Colors.white),
-      );
-
-      expect(
-        CredentialSubjectType.civicPassCredential.defaultBackgroundColor,
-        equals(Colors.white),
-      );
-
-      expect(
         CredentialSubjectType.employeeCredential.defaultBackgroundColor,
         equals(Colors.white),
       );
@@ -494,22 +474,6 @@ void main() {
         equals(
           'https://api-conformance.ebsi.eu/trusted-schemas-registry/v2/schemas/z22ZAMdQtNLwi51T2vdZXGGZaYyjrsuP1yzWyXZirCAHv',
         ),
-      );
-      expect(
-        CredentialSubjectType.kycAgeCredential.name,
-        equals('KYCAgeCredential'),
-      );
-      expect(
-        CredentialSubjectType.kycCountryOfResidence.name,
-        equals('KYCCountryOfResidenceCredential'),
-      );
-      expect(
-        CredentialSubjectType.proofOfTwitterStats.name,
-        equals('ProofOfTwitterStats'),
-      );
-      expect(
-        CredentialSubjectType.civicPassCredential.name,
-        equals('CivicPassCredential'),
       );
       expect(
         CredentialSubjectType.identityCredential.name,
@@ -774,22 +738,6 @@ void main() {
       expect(CredentialSubjectType.euDiplomaCard.title, 'EU Diploma');
       expect(CredentialSubjectType.euVerifiableId.title, 'EU VerifiableID');
       expect(
-        CredentialSubjectType.kycAgeCredential.title,
-        'KYC Age Credential',
-      );
-      expect(
-        CredentialSubjectType.kycCountryOfResidence.title,
-        'KYC Country of Residence',
-      );
-      expect(
-        CredentialSubjectType.proofOfTwitterStats.title,
-        'Proof Of Twitter Stats',
-      );
-      expect(
-        CredentialSubjectType.civicPassCredential.title,
-        'Civic Pass Credential',
-      );
-      expect(
         CredentialSubjectType.employeeCredential.title,
         'Employee Credential',
       );
@@ -899,19 +847,6 @@ void main() {
       );
       expect(CredentialSubjectType.euDiplomaCard.supportSingleOnly, false);
       expect(CredentialSubjectType.euVerifiableId.supportSingleOnly, false);
-      expect(CredentialSubjectType.kycAgeCredential.supportSingleOnly, false);
-      expect(
-        CredentialSubjectType.kycCountryOfResidence.supportSingleOnly,
-        false,
-      );
-      expect(
-        CredentialSubjectType.proofOfTwitterStats.supportSingleOnly,
-        false,
-      );
-      expect(
-        CredentialSubjectType.civicPassCredential.supportSingleOnly,
-        false,
-      );
       expect(CredentialSubjectType.employeeCredential.supportSingleOnly, false);
       expect(
         CredentialSubjectType.legalPersonalCredential.supportSingleOnly,
@@ -1018,10 +953,6 @@ void main() {
           case CredentialSubjectType.pcdsAgentCertificate:
           case CredentialSubjectType.euDiplomaCard:
           case CredentialSubjectType.euVerifiableId:
-          case CredentialSubjectType.kycAgeCredential:
-          case CredentialSubjectType.kycCountryOfResidence:
-          case CredentialSubjectType.proofOfTwitterStats:
-          case CredentialSubjectType.civicPassCredential:
           case CredentialSubjectType.employeeCredential:
           case CredentialSubjectType.legalPersonalCredential:
             verifyVCFormatType(type, [VCFormatType.jwtVc, VCFormatType.auto]);
@@ -1081,10 +1012,6 @@ void main() {
       expect(CredentialSubjectType.twitterCard.order, 83);
       expect(CredentialSubjectType.euDiplomaCard.order, 67);
       expect(CredentialSubjectType.euVerifiableId.order, 92);
-      expect(CredentialSubjectType.kycAgeCredential.order, 0);
-      expect(CredentialSubjectType.kycCountryOfResidence.order, 0);
-      expect(CredentialSubjectType.proofOfTwitterStats.order, 0);
-      expect(CredentialSubjectType.civicPassCredential.order, 0);
       expect(CredentialSubjectType.employeeCredential.order, 0);
       expect(CredentialSubjectType.legalPersonalCredential.order, 0);
       expect(CredentialSubjectType.identityCredential.order, 0);

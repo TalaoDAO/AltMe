@@ -4,6 +4,7 @@ import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
@@ -14,7 +15,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:key_generator/key_generator.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
@@ -173,7 +173,6 @@ void main() {
 
       await profileCubit.update(
         ProfileModel(
-          polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
           walletType: WalletType.enterprise,
           walletProtectionType: WalletProtectionType.pinCode,
           isDeveloperMode: false,

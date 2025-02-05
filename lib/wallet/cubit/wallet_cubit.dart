@@ -5,16 +5,14 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/wallet_connect/cubit/wallet_connect_cubit.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:key_generator/key_generator.dart';
-
 import 'package:secure_storage/secure_storage.dart';
 
 part 'wallet_cubit.g.dart';
-
 part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {

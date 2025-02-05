@@ -3,6 +3,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
@@ -11,10 +12,8 @@ import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:key_generator/key_generator.dart';
 
 part 'onboarding_gen_phrase_cubit.g.dart';
-
 part 'onboarding_gen_phrase_state.dart';
 
 class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
