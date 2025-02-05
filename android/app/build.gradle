@@ -44,7 +44,7 @@ subprojects {
 }
 
 android {
-    namespace = "co.altme.alt.me.altme"
+    namespace = "co.talao.wallet"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
