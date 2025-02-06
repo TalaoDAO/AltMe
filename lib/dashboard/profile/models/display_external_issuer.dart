@@ -22,6 +22,7 @@ class DisplayExternalIssuer extends Equatable {
     this.website,
     this.why_get_this_card,
     this.title,
+    this.url,
   });
 
   factory DisplayExternalIssuer.fromJson(Map<String, dynamic> json) =>
@@ -43,6 +44,7 @@ class DisplayExternalIssuer extends Equatable {
   final String? why_get_this_card;
   final String? website;
   final String? title;
+  final String? url;
 
   Map<String, dynamic> toJson() => _$DisplayExternalIssuerToJson(this);
 
@@ -63,6 +65,7 @@ class DisplayExternalIssuer extends Equatable {
     String? why_get_this_card,
     String? website,
     String? title,
+    String? url,
   }) =>
       DisplayExternalIssuer(
         name: name ?? this.name,
@@ -81,6 +84,7 @@ class DisplayExternalIssuer extends Equatable {
         why_get_this_card: why_get_this_card ?? this.why_get_this_card,
         website: website ?? this.website,
         title: title ?? this.title,
+        url: url ?? this.url,
       );
 
   @override
@@ -101,5 +105,6 @@ class DisplayExternalIssuer extends Equatable {
         why_get_this_card,
         website,
         title,
+        url,
       ];
 }

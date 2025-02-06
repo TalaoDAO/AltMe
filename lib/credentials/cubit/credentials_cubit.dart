@@ -999,7 +999,7 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
       .map(
         (e) => DiscoverDummyCredential(
           credentialSubjectType: CredentialSubjectType.defaultCredential,
-          link: e.redirect,
+          link: e.url,
           image: e.background_url,
           display: Display(
             backgroundColor: e.background_color,
