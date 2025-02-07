@@ -561,9 +561,7 @@ class ScanCubit extends Cubit<ScanState> {
         final customOidc4vcProfile = profileCubit.state.model.profileSetting
             .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-        final clientId = getClientIdForPresentation(
-          uri.queryParameters['client_id'],
-        );
+        final clientId = uri.queryParameters['client_id'];
 
         final didKeyType = customOidc4vcProfile.defaultDid;
 
@@ -861,9 +859,7 @@ class ScanCubit extends Cubit<ScanState> {
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-    final clientId = getClientIdForPresentation(
-      uri.queryParameters['client_id'],
-    );
+    final clientId = uri.queryParameters['client_id'];
 
     if (formatFromPresentationSubmission == VCFormatType.vcSdJWT) {
       final credentialListJwt = getStringCredentialsForToken(
@@ -874,7 +870,7 @@ class ScanCubit extends Cubit<ScanState> {
       if (credentialListJwt.length == 1) {
         return credentialListJwt.first;
       } else {
-        return credentialListJwt.toString();
+        return jsonEncode(credentialListJwt);
       }
     } else if (formatFromPresentationSubmission == VCFormatType.jwtVc ||
         formatFromPresentationSubmission == VCFormatType.jwtVcJson ||
