@@ -5,7 +5,6 @@ import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/enterprise.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +67,6 @@ class _SplashViewState extends State<SplashView> {
   String? _deeplink;
 
   Future<void> processIncomingUri(Uri? uri) async {
-    final l10n = context.l10n;
     String beaconData = '';
     bool isBeaconRequest = false;
 
