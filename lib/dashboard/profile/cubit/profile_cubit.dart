@@ -131,9 +131,14 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
       final oidc4VCIStackJsonString =
           await secureStorageProvider.get(SecureStorageKeys.oidc4VCIStack);
-      final oidc4VCIStack = Oidc4VCIStack.fromJson(
-        json.decode(oidc4VCIStackJsonString ?? '[]') as Map<String, dynamic>,
-      );
+      late Oidc4VCIStack oidc4VCIStack;
+      if (oidc4VCIStackJsonString == null) {
+        oidc4VCIStack = Oidc4VCIStack();
+      } else {
+        oidc4VCIStack = Oidc4VCIStack.fromJson(
+          json.decode(oidc4VCIStackJsonString) as Map<String, dynamic>,
+        );
+      }
 
       String? enterpriseWalletName;
 
