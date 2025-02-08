@@ -25,6 +25,7 @@ DisplayExternalIssuer _$DisplayExternalIssuerFromJson(
       website: json['website'] as String?,
       why_get_this_card: json['why_get_this_card'] as String?,
       title: json['title'] as String?,
+      url: json['url'] as String?,
     );
 
 Map<String, dynamic> _$DisplayExternalIssuerToJson(
@@ -46,4 +47,5 @@ Map<String, dynamic> _$DisplayExternalIssuerToJson(
       'why_get_this_card': instance.why_get_this_card,
       'website': instance.website,
       'title': instance.title,
+      'url': instance.url,
     };
