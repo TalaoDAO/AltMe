@@ -212,10 +212,6 @@ class App extends StatelessWidget {
                 secureStorageProvider: secureStorageProvider,
                 dio: Dio(),
               ),
-              requestClient: DioClient(
-                secureStorageProvider: secureStorageProvider,
-                dio: Dio(),
-              ),
               scanCubit: context.read<ScanCubit>(),
               queryByExampleCubit: context.read<QueryByExampleCubit>(),
               deepLinkCubit: context.read<DeepLinkCubit>(),

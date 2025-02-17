@@ -31,7 +31,6 @@ part 'qr_code_scan_state.dart';
 class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   QRCodeScanCubit({
     required this.client,
-    required this.requestClient,
     required this.scanCubit,
     required this.profileCubit,
     required this.credentialsCubit,
@@ -48,7 +47,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }) : super(const QRCodeScanState());
 
   final DioClient client;
-  final DioClient requestClient;
   final ScanCubit scanCubit;
   final ProfileCubit profileCubit;
   final CredentialsCubit credentialsCubit;

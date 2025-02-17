@@ -332,7 +332,6 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.binancePooAddress:
         return BinancePooAddressWidget(credentialModel: credentialModel);
-
     }
   }
 }
