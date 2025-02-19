@@ -21,7 +21,6 @@ Future<void> addCredentialData({
   required String issuer,
   required bool isLastCall,
   required JWTDecode jwtDecode,
-  required BlockchainType blockchainType,
   required QRCodeScanCubit qrCodeScanCubit,
 }) async {
   final profileModel = credentialsCubit.profileCubit.state.model;
@@ -93,7 +92,6 @@ Future<void> addCredentialData({
         showMessage:
             isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
         isPendingCredential: true,
-        blockchainType: blockchainType,
         uri: Uri.parse(issuer),
       );
     } else {
@@ -107,7 +105,6 @@ Future<void> addCredentialData({
         format: format,
         openIdConfiguration: openIdConfiguration,
         jwtDecode: jwtDecode,
-        blockchainType: blockchainType,
         qrCodeScanCubit: qrCodeScanCubit,
       );
     }

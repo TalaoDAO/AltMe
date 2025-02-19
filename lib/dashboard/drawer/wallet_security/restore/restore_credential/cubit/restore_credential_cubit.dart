@@ -165,9 +165,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
       /// restore profile if it is enterprise account
 
       if (walletCubit.state.currentAccount != null) {
-        await credentialsCubit.loadAllCredentials(
-          blockchainType: walletCubit.state.currentAccount!.blockchainType,
-        );
+        await credentialsCubit.loadAllCredentials();
       }
 
       await activityLogManager.saveLog(LogData(type: LogType.restoreWallet));

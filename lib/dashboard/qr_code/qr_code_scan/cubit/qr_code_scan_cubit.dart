@@ -31,7 +31,6 @@ part 'qr_code_scan_state.dart';
 class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   QRCodeScanCubit({
     required this.client,
-    required this.requestClient,
     required this.scanCubit,
     required this.profileCubit,
     required this.credentialsCubit,
@@ -48,7 +47,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }) : super(const QRCodeScanState());
 
   final DioClient client;
-  final DioClient requestClient;
   final ScanCubit scanCubit;
   final ProfileCubit profileCubit;
   final CredentialsCubit credentialsCubit;
@@ -900,7 +898,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         issuer: oidc4vcParameters.issuer,
         oidc4vc: oidc4vc,
         jwtDecode: jwtDecode,
-        blockchainType: walletCubit.state.currentAccount!.blockchainType,
+        blockchainType: walletCubit.state.currentAccount?.blockchainType,
         oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
         qrCodeScanCubit: qrCodeScanCubit,
         profileCubit: profileCubit,
@@ -1638,7 +1636,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             isLastCall: i + 1 == selectedCredentials.length,
             issuer: oidc4vcParameters.issuer,
             jwtDecode: jwtDecode,
-            blockchainType: walletCubit.state.currentAccount!.blockchainType,
             deferredCredentialEndpoint: deferredCredentialEndpoint,
             encodedCredentialOrFutureTokens: encodedCredentialOrFutureTokens,
             format: format!,

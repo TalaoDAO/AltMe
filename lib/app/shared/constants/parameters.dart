@@ -158,4 +158,12 @@ class Parameters {
 // with display of key value. See displayKeyValueFromMap
 
   static const String doNotDisplayMe = 'doNotDisplayMeMggK5GvU7';
+
+// Used to display picture on the card. This picture is found in the credential
+// data
+  static const pictureOnCardKeyList = ['picture', 'face', 'portrait'];
+  static const pictureOnCardValueTypeList = [
+    'image/jpeg',
+    'image/png',
+  ];
 }

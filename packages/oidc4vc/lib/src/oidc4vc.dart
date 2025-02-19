@@ -485,19 +485,30 @@ class OIDC4VC {
 
         return response as Map<String, dynamic>;
       } else {
-        try {
-          final didDocument = await dio.get<dynamic>(
-            'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
-          );
-          return didDocument.data as Map<String, dynamic>;
-        } catch (e) {
+        if (didKey.startsWith('did:ebsi')) {
           try {
             final didDocument = await dio.get<dynamic>(
-              'https://dev.uniresolver.io/1.0/identifiers/$didKey',
+              'https://api-pilot.ebsi.eu/did-registry/v5/identifiers/$didKey',
             );
             return didDocument.data as Map<String, dynamic>;
           } catch (e) {
-            rethrow;
+              rethrow;
+          }
+        } else {
+          try {
+            final didDocument = await dio.get<dynamic>(
+              'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
+            );
+            return didDocument.data as Map<String, dynamic>;
+          } catch (e) {
+            try {
+              final didDocument = await dio.get<dynamic>(
+                'https://dev.uniresolver.io/1.0/identifiers/$didKey',
+              );
+              return didDocument.data as Map<String, dynamic>;
+            } catch (e) {
+              rethrow;
+            }
           }
         }
       }

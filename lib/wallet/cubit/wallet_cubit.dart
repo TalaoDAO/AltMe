@@ -57,6 +57,11 @@ class WalletCubit extends Cubit<WalletState> {
       required MessageHandler messageHandler,
     })? onComplete,
   }) async {
+// if wallet has no crypto do nothing and return
+    if (!Parameters.walletHandlesCrypto) {
+      return;
+    }
+
     // if (isFromOnboarding) {
     //   // if enterprise and walletAttestation data is available and added
     //   await credentialsCubit.addWalletCredential(
@@ -323,10 +328,10 @@ class WalletCubit extends Cubit<WalletState> {
           credentialsCubit.profileCubit.state.model.profileType;
       if (currentProfileType != ProfileType.enterprise) {
         await credentialsCubit.profileCubit.setProfile(ProfileType.defaultOne);
-      await credentialsCubit.insertAssociatedWalletCredential(
-        cryptoAccountData: cryptoAccountData,
-      );
-      await credentialsCubit.profileCubit.setProfile(currentProfileType);
+        await credentialsCubit.insertAssociatedWalletCredential(
+          cryptoAccountData: cryptoAccountData,
+        );
+        await credentialsCubit.profileCubit.setProfile(currentProfileType);
       } else {
         await credentialsCubit.insertAssociatedWalletCredential(
           cryptoAccountData: cryptoAccountData,
