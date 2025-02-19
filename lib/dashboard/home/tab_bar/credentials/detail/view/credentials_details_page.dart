@@ -6,6 +6,7 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/ldp_vc/ldp_vc.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -148,6 +149,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
     if (containClaims) {
       credentialImage = SelectiveDisclosure(widget.credentialModel).getPicture;
+    }
+
+    if(widget.credentialModel.format == 'ldp_vc') {
+      credentialImage = LdpVc(widget.credentialModel).getPicture;
     }
 
     final credentialSubjectType = widget.credentialModel.credentialPreview
