@@ -13,7 +13,7 @@ Future<void> getAndAddDefferedCredential({
   required OIDC4VC oidc4vc,
   required JWTDecode jwtDecode,
   required OIDC4VCIDraftType oidc4vciDraftType,
-  required BlockchainType blockchainType,
+  required BlockchainType? blockchainType,
   required String? issuer,
   required QRCodeScanCubit qrCodeScanCubit,
   required ProfileCubit profileCubit,
@@ -86,7 +86,6 @@ Future<void> getAndAddDefferedCredential({
     credentialIdToBeDeleted: credentialModel.id,
     openIdConfiguration: null,
     jwtDecode: jwtDecode,
-    blockchainType: blockchainType,
     qrCodeScanCubit: qrCodeScanCubit,
   );
 }

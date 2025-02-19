@@ -245,7 +245,6 @@ class HomeCubit extends Cubit<HomeState> {
         await credentialsCubit.insertCredential(
           credential: credentialModel,
           showMessage: true,
-          blockchainType: blockchainType,
           uri: Uri.parse(url),
         );
         await cameraCubit.incrementAcquiredCredentialsQuantity();

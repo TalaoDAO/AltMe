@@ -11,7 +11,6 @@ import 'package:oidc4vc/oidc4vc.dart';
 Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
   required CredentialsCubit credentialsCubit,
-  required BlockchainType blockchainType,
   required String credentialType,
   required bool isLastCall,
   required String format,
@@ -113,7 +112,6 @@ Future<void> addOIDC4VCCredential({
     await credentialsCubit.deleteById(
       id: credentialIdToBeDeleted,
       showMessage: false,
-      blockchainType: blockchainType,
     );
   }
 
@@ -122,7 +120,6 @@ Future<void> addOIDC4VCCredential({
     credential: credentialModel,
     showStatus: false,
     showMessage: isLastCall,
-    blockchainType: blockchainType,
     uri: Uri.parse(issuer ?? ''),
   );
 }

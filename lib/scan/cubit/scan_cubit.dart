@@ -276,7 +276,6 @@ class ScanCubit extends Cubit<ScanState> {
         CredentialManifest? credentialManifest;
 
         await credentialsCubit.insertCredential(
-          blockchainType: walletCubit.state.currentAccount!.blockchainType,
           credential: CredentialModel.copyWithData(
             oldCredentialModel: credentialModel,
             newData: jsonCredential as Map<String, dynamic>,

@@ -3,7 +3,6 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 
-import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -89,13 +88,7 @@ class ProfileSelectorWidget extends StatelessWidget {
                                   .setProfile(profileType);
                               await context
                                   .read<CredentialsCubit>()
-                                  .loadAllCredentials(
-                                    blockchainType: context
-                                        .read<WalletCubit>()
-                                        .state
-                                        .currentAccount!
-                                        .blockchainType,
-                                  );
+                                  .loadAllCredentials();
 
                               if (profileType == ProfileType.custom) {
                                 return Navigator.of(context)
