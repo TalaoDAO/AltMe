@@ -100,7 +100,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>openid</string>
+			<string>talao-openid-vc</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>talao-openid-vc</string>
@@ -110,7 +110,17 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>openid</string>
+			<string>openid4vp</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>openid4vp</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>talao-openid-credential-offer</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>talao-openid-credential-offer</string>
