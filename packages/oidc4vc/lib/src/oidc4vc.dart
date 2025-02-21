@@ -492,7 +492,7 @@ class OIDC4VC {
             );
             return didDocument.data as Map<String, dynamic>;
           } catch (e) {
-              rethrow;
+            rethrow;
           }
         } else {
           try {

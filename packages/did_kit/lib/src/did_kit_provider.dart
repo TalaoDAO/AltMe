@@ -49,7 +49,28 @@ class DIDKitProvider {
     String options,
     String key,
   ) async {
-    return didKit.issuePresentation(presentation, options, key);
+    final newPresentation = jsonDecode(presentation);
+    // ignore: avoid_dynamic_calls
+    if (newPresentation['verifiableCredential'] != null) {
+      var verifiableCredential =
+          // ignore: avoid_dynamic_calls
+          newPresentation['verifiableCredential'];
+      if (verifiableCredential is List) {
+        for (var i = 0; i < verifiableCredential.length; i++) {
+          final credential = jsonEncode(verifiableCredential[i]);
+          final credentialWithEbeddedContext = await _loadContext(credential);
+          verifiableCredential[i] = jsonDecode(credentialWithEbeddedContext);
+        }
+      } else {
+        final credentialWithEbeddedContext =
+            await _loadContext(jsonEncode(verifiableCredential));
+        verifiableCredential = jsonDecode(credentialWithEbeddedContext);
+      }
+      // ignore: avoid_dynamic_calls
+      newPresentation['verifiableCredential'] = verifiableCredential;
+    }
+
+    return didKit.issuePresentation(jsonEncode(newPresentation), options, key);
   }
 
   Future<String> verifyPresentation(
