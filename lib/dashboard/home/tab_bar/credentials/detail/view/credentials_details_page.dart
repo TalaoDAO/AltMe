@@ -148,7 +148,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
       credentialImage = SelectiveDisclosure(widget.credentialModel).getPicture;
     }
 
-    if(widget.credentialModel.format == 'ldp_vc') {
+    if (widget.credentialModel.format == 'ldp_vc') {
       credentialImage = LdpVc(widget.credentialModel).getPicture;
     }
 
