@@ -6,9 +6,12 @@ class LdpVc {
   final CredentialModel credentialModel;
 
   String? get getPicture {
-    final credentialSubject = credentialModel
-        .credentialSupported?['credentialSubject'] as Map<String, dynamic>?;
-// check if member of keyList is a key in credentialSubject. If that's the case check if value contains value_type with value in valueTypeList
+    final credentialSubject =
+        (credentialModel.credentialSupported?['credentialSubject'] ??
+            credentialModel.credentialSupported?['credential_definition']
+                ['credentialSubject']) as Map<String, dynamic>?;
+// check if member of keyList is a key in credentialSubject. If that's the case
+// check if value contains value_type with value in valueTypeList
     for (final key in Parameters.pictureOnCardKeyList) {
       final keyPresent = credentialSubject?.containsKey(key) ?? false;
       if (keyPresent) {
