@@ -332,6 +332,11 @@ class MaterialAppDefinition extends StatelessWidget {
                   ],
                   supportedLocales: AppLocalizations.supportedLocales,
                   home: const SplashPage(),
+                  onUnknownRoute: (settings) => MaterialPageRoute(
+                    builder: (context) => const ContactUsPage(
+                      email: 'googandads@gmail.com',
+                    ),
+                  ),
                 );
               },
             );
