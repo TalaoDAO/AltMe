@@ -11,6 +11,7 @@ import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/src/view/page_not_found.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
@@ -333,9 +334,7 @@ class MaterialAppDefinition extends StatelessWidget {
                   supportedLocales: AppLocalizations.supportedLocales,
                   home: const SplashPage(),
                   onUnknownRoute: (settings) => MaterialPageRoute(
-                    builder: (context) => const ContactUsPage(
-                      email: 'googandads@gmail.com',
-                    ),
+                    builder: (context) => const PageNotFound(),
                   ),
                 );
               },
