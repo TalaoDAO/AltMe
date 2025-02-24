@@ -75,6 +75,9 @@ class _SplashViewState extends State<SplashView> {
     }
 
     _deeplink = uri.toString();
+    Future.delayed(const Duration(seconds: 2), () async {
+      _deeplink = null;
+    });
 
     if (uri.toString().startsWith('${Urls.appDeepLink}/dashboard')) {
       await Navigator.pushAndRemoveUntil<void>(

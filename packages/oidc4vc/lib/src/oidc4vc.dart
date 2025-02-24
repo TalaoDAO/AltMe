@@ -731,12 +731,18 @@ class OIDC4VC {
 
       return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
     } else {
-      final idAndVerificationMethodPath =
-          JsonPath(r'$..[?(@.verificationMethod)]');
-      final idAndVerificationMethod = (idAndVerificationMethodPath
-          .read(didDocument)
-          .first
-          .value!) as Map<String, dynamic>;
+      Map<String, dynamic> idAndVerificationMethod;
+      final topLevelDid = didDocument['verificationMethod'] != null;
+      if (topLevelDid) {
+        idAndVerificationMethod = didDocument;
+      } else {
+        final idAndVerificationMethodPath =
+            JsonPath(r'$..[?(@.verificationMethod)]');
+        idAndVerificationMethod = (idAndVerificationMethodPath
+            .read(didDocument)
+            .first
+            .value!) as Map<String, dynamic>;
+      }
       final jsonPath = JsonPath(r'$..verificationMethod');
       late List<dynamic> data;
 
