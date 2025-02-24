@@ -54,9 +54,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   final log = getLogger('CredentialsCubit');
 
-  Future<void> loadAllCredentials({
-    required BlockchainType blockchainType,
-  }) async {
+  Future<void> loadAllCredentials() async {
     final log = getLogger('loadAllCredentials');
     final String? ssiKey =
         await secureStorageProvider.get(SecureStorageKeys.ssiKey);
@@ -69,7 +67,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final savedCredentials = await credentialsRepository.findAll(/* filters */);
     final dummies = _getAvalaibleDummyCredentials(
       credentials: savedCredentials,
-      blockchainType: blockchainType,
     );
 
     final List<CredentialModel> updatedCredentials = <CredentialModel>[];
@@ -180,7 +177,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       await insertCredential(
         credential: walletCredential,
         showMessage: false,
-        blockchainType: blockchainType,
         uri: uri,
       );
     }
@@ -197,7 +193,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> deleteById({
     required String id,
-    required BlockchainType? blockchainType,
     bool showMessage = true,
   }) async {
     emit(state.loading());
@@ -210,7 +205,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       ..removeWhere((element) => element.id == id);
     final dummies = _getAvalaibleDummyCredentials(
       credentials: credentials,
-      blockchainType: blockchainType,
     );
 
     await activityLogManager.saveLog(
@@ -279,7 +273,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> insertCredential({
     required CredentialModel credential,
     required Uri uri,
-    required BlockchainType? blockchainType,
     bool showMessage = true,
     bool showStatus = true,
     bool isPendingCredential = false,
@@ -298,7 +291,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       if (!isPendingCredential) {
         await modifyCredential(
           credential: updatedCredential,
-          blockchainType: blockchainType,
         );
       }
       await credentialsRepository.insert(updatedCredential);
@@ -307,7 +299,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       if (!isPendingCredential) {
         await modifyCredential(
           credential: credential,
-          blockchainType: blockchainType,
         );
       }
       await credentialsRepository.insert(credential);
@@ -321,7 +312,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     final dummies = _getAvalaibleDummyCredentials(
       credentials: credentials,
-      blockchainType: blockchainType,
     );
 
     await activityLogManager.saveLog(
@@ -403,7 +393,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> modifyCredential({
     required CredentialModel credential,
     bool showMessage = true,
-    required BlockchainType? blockchainType,
   }) async {
     final credentialSubjectModel =
         credential.credentialPreview.credentialSubjectModel;
@@ -453,7 +442,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             await deleteById(
               id: storedCredential.id,
               showMessage: false,
-              blockchainType: blockchainType,
             );
             break;
           } else {
@@ -463,7 +451,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               await deleteById(
                 id: storedCredential.id,
                 showMessage: false,
-                blockchainType: blockchainType,
               );
               break;
             } else {
@@ -475,7 +462,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           await deleteById(
             id: storedCredential.id,
             showMessage: false,
-            blockchainType: blockchainType,
           );
         }
       }
@@ -551,12 +537,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     if (credential != null) {
       await modifyCredential(
         credential: credential,
-        blockchainType: cryptoAccountData.blockchainType,
       );
 
       await insertCredential(
         credential: credential,
-        blockchainType: cryptoAccountData.blockchainType,
         showMessage: false,
         uri: Uri.parse(Parameters.walletIssuer),
       );
@@ -567,7 +551,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Map<CredentialCategory, List<DiscoverDummyCredential>>
       _getAvalaibleDummyCredentials({
     required List<CredentialModel> credentials,
-    required BlockchainType? blockchainType,
   }) {
     final dummies = <CredentialCategory, List<DiscoverDummyCredential>>{};
     // entreprise user may have options to display some dummies (true/false)

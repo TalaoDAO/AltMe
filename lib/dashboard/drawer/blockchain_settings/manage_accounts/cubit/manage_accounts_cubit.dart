@@ -37,11 +37,7 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
     emit(state.loading());
     await walletCubit.setCurrentWalletAccount(index);
 
-    final blockchainType =
-        walletCubit.state.cryptoAccount.data[index].blockchainType;
-    await credentialsCubit.loadAllCredentials(
-      blockchainType: blockchainType,
-    );
+    await credentialsCubit.loadAllCredentials();
     emit(state.success(currentCryptoIndex: index));
   }
 

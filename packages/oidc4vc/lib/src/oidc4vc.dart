@@ -485,19 +485,30 @@ class OIDC4VC {
 
         return response as Map<String, dynamic>;
       } else {
-        try {
-          final didDocument = await dio.get<dynamic>(
-            'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
-          );
-          return didDocument.data as Map<String, dynamic>;
-        } catch (e) {
+        if (didKey.startsWith('did:ebsi')) {
           try {
             final didDocument = await dio.get<dynamic>(
-              'https://dev.uniresolver.io/1.0/identifiers/$didKey',
+              'https://api-pilot.ebsi.eu/did-registry/v5/identifiers/$didKey',
             );
             return didDocument.data as Map<String, dynamic>;
           } catch (e) {
             rethrow;
+          }
+        } else {
+          try {
+            final didDocument = await dio.get<dynamic>(
+              'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
+            );
+            return didDocument.data as Map<String, dynamic>;
+          } catch (e) {
+            try {
+              final didDocument = await dio.get<dynamic>(
+                'https://dev.uniresolver.io/1.0/identifiers/$didKey',
+              );
+              return didDocument.data as Map<String, dynamic>;
+            } catch (e) {
+              rethrow;
+            }
           }
         }
       }
@@ -720,12 +731,18 @@ class OIDC4VC {
 
       return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
     } else {
-      final idAndVerificationMethodPath =
-          JsonPath(r'$..[?(@.verificationMethod)]');
-      final idAndVerificationMethod = (idAndVerificationMethodPath
-          .read(didDocument)
-          .first
-          .value!) as Map<String, dynamic>;
+      Map<String, dynamic> idAndVerificationMethod;
+      final topLevelDid = didDocument['verificationMethod'] != null;
+      if (topLevelDid) {
+        idAndVerificationMethod = didDocument;
+      } else {
+        final idAndVerificationMethodPath =
+            JsonPath(r'$..[?(@.verificationMethod)]');
+        idAndVerificationMethod = (idAndVerificationMethodPath
+            .read(didDocument)
+            .first
+            .value!) as Map<String, dynamic>;
+      }
       final jsonPath = JsonPath(r'$..verificationMethod');
       late List<dynamic> data;
 

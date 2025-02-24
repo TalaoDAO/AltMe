@@ -190,7 +190,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       );
 
       final blockchainOptions = profileSetting.blockchainOptions;
-      if (blockchainOptions != null) {
+      if (blockchainOptions != null && Parameters.walletHandlesCrypto) {
         await setUpBlockChainOptions(
           blockchainOptions: blockchainOptions,
           manageNetworkCubit: manageNetworkCubit,
@@ -557,7 +557,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       }
 
       final blockchainOptions = profileSetting.blockchainOptions;
-      if (blockchainOptions != null) {
+      if (blockchainOptions != null && Parameters.walletHandlesCrypto) {
         await setUpBlockChainOptions(
           blockchainOptions: blockchainOptions,
           manageNetworkCubit: manageNetworkCubit,

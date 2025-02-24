@@ -174,24 +174,26 @@ class SelectiveDisclosure {
     final claims = credentialSupported['claims'];
     if (claims is! Map<String, dynamic>) return null;
 
-    final picture = claims['picture'];
-    if (picture == null) return null;
-    if (picture is! Map<String, dynamic>) return null;
+    for (final key in Parameters.pictureOnCardKeyList) {
+      final keyPresent = claims.containsKey(key);
+      if (keyPresent) {
+        final value = claims[key];
+        if (value is Map<String, dynamic>) {
+          final valueType = value['value_type'];
+          if (Parameters.pictureOnCardValueTypeList.contains(valueType)) {
+            final (claimsData, _) = getClaimsData(
+              key: key,
+              parentKeyId: null,
+            );
 
-    final valueType = picture['value_type'];
-    if (valueType == null) return null;
-
-    if (valueType == 'image/jpeg') {
-      final (claimsData, _) = getClaimsData(
-        key: 'picture',
-        parentKeyId: null,
-      );
-
-      if (claimsData.isEmpty) return null;
-      return claimsData[0].data;
-    } else {
-      return null;
+            if (claimsData.isEmpty) return null;
+            return claimsData[0].data;
+          }
+        }
+      }
     }
+
+    return null;
   }
 
   (List<ClaimsData>, String?) getClaimsData({
@@ -310,8 +312,7 @@ class SelectiveDisclosure {
           final sdList = value['_sd'] as List;
           for (final sdElement in sdList) {
             for (final element in disclosureListToContent.entries.toList()) {
-              final digest =
-                  sh256HashOfContent(element.value.toString());
+              final digest = sh256HashOfContent(element.value.toString());
               if (digest == sdElement) {
                 final toto = getMapFromList(
                   jsonDecode(element.value.toString()) as List,
@@ -413,8 +414,7 @@ class SelectiveDisclosure {
           final digestList = value['_sd'] as List;
           for (final digest in digestList) {
             for (final element in disclosureListToContent.entries.toList()) {
-              final digestFromSd =
-                  sh256HashOfContent(element.value.toString());
+              final digestFromSd = sh256HashOfContent(element.value.toString());
               if (digestFromSd == digest) {
                 final keyFromSd = getMapFromList(
                   jsonDecode(element.value.toString()) as List,

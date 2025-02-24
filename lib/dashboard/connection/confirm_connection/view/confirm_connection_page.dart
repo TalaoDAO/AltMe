@@ -162,7 +162,7 @@ class ConfirmConnectionView extends StatelessWidget {
                   BlocBuilder<WalletCubit, WalletState>(
                     builder: (context, walletState) {
                       if (connectionBridgeType == ConnectionBridgeType.beacon &&
-                          walletState.currentAccount!.blockchainType
+                          walletState.currentAccount?.blockchainType
                                   .connectionBridge !=
                               connectionBridgeType) {
                         return Container();
