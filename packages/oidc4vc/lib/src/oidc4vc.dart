@@ -802,6 +802,7 @@ class OIDC4VC {
     required String kid,
     required String privateKey,
     required List<VCFormatType> formatsSupported,
+    required String? clientId,
   }) async {
     final credentialData = <String, dynamic>{};
 // check if we support the requested format
@@ -860,6 +861,9 @@ class OIDC4VC {
             'proof_type': 'jwt',
             'jwt': vcJwt,
           };
+      }
+      if (clientId != null) {
+        credentialData['proof']['iss'] = clientId;
       }
     }
 
