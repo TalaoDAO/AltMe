@@ -891,17 +891,6 @@ class ScanCubit extends Cubit<ScanState> {
 
       return vpToken;
     } else if (formatFromPresentationSubmission == VCFormatType.ldpVc) {
-      ///didkit does not support did:jwk
-      if (did.startsWith('did:jwk')) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_format',
-            'error_description':
-                'This VC format is not supported with this profile.',
-          },
-        );
-      }
-
       /// proof is done with a creation date 20 seconds in the past to avoid
       /// proof check to fail because of time difference on server
       final options = jsonEncode({
