@@ -1490,7 +1490,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               dPop: dPop,
               issuer: oidc4vcParameters.issuer,
             );
-
             savedAccessToken = accessToken;
             savedNonce = cnonce;
             savedAuthorizationDetails = authorizationDetails;
@@ -1537,10 +1536,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             }
 
             savedNonce = nonce;
-          }
-// if pre-authorized flow we remove client_id from the token data
-          if (oidc4vcParameters.preAuthorizedCode != null) {
-            tokenData?['client_id'] = null;
           }
 
           /// get credentials

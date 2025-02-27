@@ -1138,7 +1138,6 @@ class OIDC4VC {
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round() - 30;
 
     final payload = {
-      'iss': iss,
       'iat': iat,
       'aud': tokenParameters.issuer,
     };
