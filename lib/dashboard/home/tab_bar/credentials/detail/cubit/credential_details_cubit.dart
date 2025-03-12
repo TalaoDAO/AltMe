@@ -77,8 +77,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           state.copyWith(
             credentialStatus: CredentialStatus.active,
             status: AppStatus.idle,
-            statusListIndex: statusListIndex,
-            statusListUrl: statusListUri,
           ),
         );
         return;
@@ -92,8 +90,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             state.copyWith(
               credentialStatus: CredentialStatus.expired,
               status: AppStatus.idle,
-              statusListIndex: statusListIndex,
-              statusListUrl: statusListUri,
             ),
           );
           return;
@@ -109,26 +105,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       final listOfSd = collectSdValues(data);
 
       if (claims != null && listOfSd.isNotEmpty) {
-        // final selectiveDisclosure = SelectiveDisclosure(item);
-        // final decryptedDatas = selectiveDisclosure.contents;
-
-        // /// check if sd already contain sh256 hash
-        // for (final element in decryptedDatas) {
-        //   final sh256Hash = profileCubit.oidc4vc.sh256HashOfContent(element);
-
-        //   if (!listOfSd.contains(sh256Hash)) {
-        //     emit(
-        //       state.copyWith(
-        //         credentialStatus: CredentialStatus.invalidSignature,
-        //         status: AppStatus.idle,
-        //         statusListIndex: statusListIndex,
-        //         statusListUrl: statusListUri,
-        //       ),
-        //     );
-        //     return;
-        //   }
-        // }
-
         /// check the status
         final status = item.data['status'];
 
@@ -175,8 +151,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                     credentialStatus:
                         CredentialStatus.statusListInvalidSignature,
                     status: AppStatus.idle,
-                    statusListIndex: statusListIndex,
-                    statusListUrl: statusListUri,
                   ),
                 );
                 return;
@@ -198,8 +172,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                       credentialStatus:
                           CredentialStatus.statusListInvalidSignature,
                       status: AppStatus.idle,
-                      statusListIndex: statusListIndex,
-                      statusListUrl: statusListUri,
                     ),
                   );
                   return;
@@ -212,85 +184,21 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
       final credentialStatus = item.credentialPreview.credentialStatus;
       if (credentialStatus != null) {
+        if (credentialStatus is Map<String, dynamic>) {
+          final isStatusInvalid = await checkStatusList(
+            credentialStatus: credentialStatus,
+            item: item,
+          );
+          if (isStatusInvalid) return;
+        }
         if (credentialStatus is List<dynamic>) {
           for (final iteratedData in credentialStatus) {
             if (iteratedData is Map<String, dynamic>) {
-              final data = CredentialStatusField.fromJson(iteratedData);
-
-              statusListUri = data.statusListCredential;
-              final headers = {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'accept': 'application/statuslist+jwt',
-              };
-
-              final response = await client.get(
-                statusListUri,
-                headers: headers,
-                isCachingEnabled: customOidc4vcProfile.statusListCache,
-                options: Options().copyWith(
-                  sendTimeout: const Duration(seconds: 10),
-                  receiveTimeout: const Duration(seconds: 10),
-                ),
+              final isStatusInvalid = await checkStatusList(
+                credentialStatus: iteratedData,
+                item: item,
               );
-
-              final payload = jwtDecode.parseJwt(response.toString());
-
-              // verify the signature of the VC with the kid of the JWT
-              final VerificationType isVerified = await verifyEncodedData(
-                issuer: payload['iss']?.toString() ?? item.issuer,
-                jwtDecode: jwtDecode,
-                jwt: response.toString(),
-                fromStatusList: true,
-                isCachingEnabled: customOidc4vcProfile.statusListCache,
-                useOAuthAuthorizationServerLink:
-                    useOauthServerAuthEndPoint(profileCubit.state.model),
-              );
-
-              if (isVerified != VerificationType.verified) {
-                emit(
-                  state.copyWith(
-                    credentialStatus:
-                        CredentialStatus.statusListInvalidSignature,
-                    status: AppStatus.idle,
-                    statusListIndex: statusListIndex,
-                    statusListUrl: statusListUri,
-                  ),
-                );
-                return;
-              }
-
-              final vc = payload['vc'];
-              if (vc != null && vc is Map<String, dynamic>) {
-                final credentialSubject = vc['credentialSubject'];
-                if (credentialSubject != null &&
-                    credentialSubject is Map<String, dynamic>) {
-                  final encodedList = credentialSubject['encodedList'];
-
-                  if (encodedList != null && encodedList is String) {
-                    statusListIndex = int.parse(data.statusListIndex);
-
-                    final bit = getBit(
-                      index: statusListIndex,
-                      encodedList: encodedList,
-                    );
-
-                    if (bit == 0) {
-                      // active
-                    } else {
-                      // revoked
-                      emit(
-                        state.copyWith(
-                          credentialStatus: CredentialStatus.invalidStatus,
-                          status: AppStatus.idle,
-                          statusListIndex: statusListIndex,
-                          statusListUrl: statusListUri,
-                        ),
-                      );
-                      return;
-                    }
-                  }
-                }
-              }
+              if (isStatusInvalid) return;
             }
           }
         }
@@ -328,8 +236,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             state.copyWith(
               credentialStatus: CredentialStatus.active,
               status: AppStatus.idle,
-              statusListIndex: statusListIndex,
-              statusListUrl: statusListUri,
             ),
           );
         } else {
@@ -337,8 +243,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             state.copyWith(
               credentialStatus: CredentialStatus.invalidSignature,
               status: AppStatus.idle,
-              statusListIndex: statusListIndex,
-              statusListUrl: statusListUri,
             ),
           );
         }
@@ -353,8 +257,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
               state.copyWith(
                 credentialStatus: CredentialStatus.invalidStatus,
                 status: AppStatus.idle,
-                statusListIndex: statusListIndex,
-                statusListUrl: statusListUri,
               ),
             );
           }
@@ -417,5 +319,85 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         ),
       );
     }
+  }
+
+  Future<bool> checkStatusList({
+    required Map<String, dynamic> credentialStatus,
+    required CredentialModel item,
+  }) async {
+    final data = CredentialStatusField.fromJson(credentialStatus);
+
+    final statusListUri = data.statusListCredential;
+    final headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'accept': 'application/statuslist+jwt',
+    };
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+    final response = await client.get(
+      statusListUri,
+      headers: headers,
+      isCachingEnabled: customOidc4vcProfile.statusListCache,
+      options: Options().copyWith(
+        sendTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
+      ),
+    );
+
+    final payload = jwtDecode.parseJwt(response.toString());
+
+    // verify the signature of the VC with the kid of the JWT
+    final VerificationType isVerified = await verifyEncodedData(
+      issuer: payload['iss']?.toString() ?? item.issuer,
+      jwtDecode: jwtDecode,
+      jwt: response.toString(),
+      fromStatusList: true,
+      isCachingEnabled: customOidc4vcProfile.statusListCache,
+      useOAuthAuthorizationServerLink:
+          useOauthServerAuthEndPoint(profileCubit.state.model),
+    );
+
+    if (isVerified != VerificationType.verified) {
+      emit(
+        state.copyWith(
+          credentialStatus: CredentialStatus.statusListInvalidSignature,
+          status: AppStatus.idle,
+        ),
+      );
+      return true;
+    }
+
+    final vc = payload['vc'];
+    if (vc != null && vc is Map<String, dynamic>) {
+      final credentialSubject = vc['credentialSubject'];
+      if (credentialSubject != null &&
+          credentialSubject is Map<String, dynamic>) {
+        final encodedList = credentialSubject['encodedList'];
+
+        if (encodedList != null && encodedList is String) {
+          final statusListIndex = int.parse(data.statusListIndex);
+
+          final bit = getBit(
+            index: statusListIndex,
+            encodedList: encodedList,
+          );
+
+          if (bit == 0) {
+            // active
+          } else {
+            // revoked
+            emit(
+              state.copyWith(
+                credentialStatus: CredentialStatus.invalidStatus,
+                status: AppStatus.idle,
+              ),
+            );
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 }

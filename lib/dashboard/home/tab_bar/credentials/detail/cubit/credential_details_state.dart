@@ -7,8 +7,6 @@ class CredentialDetailsState extends Equatable {
     this.message,
     this.credentialStatus,
     this.credentialDetailTabStatus = CredentialDetailTabStatus.informations,
-    this.statusListUrl,
-    this.statusListIndex,
   });
 
   factory CredentialDetailsState.fromJson(Map<String, dynamic> json) =>
@@ -18,8 +16,6 @@ class CredentialDetailsState extends Equatable {
   final StateMessage? message;
   final CredentialStatus? credentialStatus;
   final CredentialDetailTabStatus credentialDetailTabStatus;
-  final String? statusListUrl;
-  final int? statusListIndex;
 
   CredentialDetailsState loading() {
     return copyWith(status: AppStatus.loading);
@@ -36,8 +32,6 @@ class CredentialDetailsState extends Equatable {
     StateMessage? message,
     CredentialStatus? credentialStatus,
     CredentialDetailTabStatus? credentialDetailTabStatus,
-    String? statusListUrl,
-    int? statusListIndex,
   }) {
     return CredentialDetailsState(
       status: status ?? this.status,
@@ -45,8 +39,6 @@ class CredentialDetailsState extends Equatable {
       credentialStatus: credentialStatus ?? this.credentialStatus,
       credentialDetailTabStatus:
           credentialDetailTabStatus ?? this.credentialDetailTabStatus,
-      statusListUrl: statusListUrl ?? this.statusListUrl,
-      statusListIndex: statusListIndex ?? this.statusListIndex,
     );
   }
 
@@ -58,7 +50,5 @@ class CredentialDetailsState extends Equatable {
         message,
         status,
         credentialDetailTabStatus,
-        statusListUrl,
-        statusListIndex,
       ];
 }
