@@ -235,7 +235,39 @@ class SelectiveDisclosure {
           ),
         );
       } catch (e) {
-        data = null;
+        if (parentKeyId != null) {
+          final JsonPath fallbackDataPath = JsonPath(
+            // ignore: prefer_interpolation_to_compose_strings
+            r'$..["' + key + '"]',
+          );
+          try {
+            final uncryptedDataPath =
+                fallbackDataPath.read(extractedValuesFromJwt).first;
+            data = uncryptedDataPath.value;
+
+            value.add(
+              ClaimsData(
+                isfromDisclosureOfJWT: true,
+                data: data is Map ? jsonEncode(data) : data.toString(),
+              ),
+            );
+          } catch (e) {
+            try {
+              final credentialModelPath =
+                  fallbackDataPath.read(credentialModel.data).first;
+              data = credentialModelPath.value;
+
+              value.add(
+                ClaimsData(
+                  isfromDisclosureOfJWT: false,
+                  data: data is Map ? jsonEncode(data) : data.toString(),
+                ),
+              );
+            } catch (e) {
+              data = null;
+            }
+          }
+        }
       }
     }
 
