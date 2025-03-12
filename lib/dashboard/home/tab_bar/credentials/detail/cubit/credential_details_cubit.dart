@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
@@ -13,7 +14,6 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'credential_details_cubit.g.dart';
-
 part 'credential_details_state.dart';
 
 class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
@@ -330,7 +330,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     final statusListUri = data.statusListCredential;
     final headers = {
       'Content-Type': 'application/json; charset=UTF-8',
-      'accept': 'application/statuslist+jwt',
     };
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
