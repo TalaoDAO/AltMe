@@ -1240,7 +1240,7 @@ ${credentialData != null ? const JsonEncoder.withIndent('  ').convert(credential
 ''';
 }
 
-Future<String> getFormattedStringOIDC4VPSIOPV2({
+Future<String> getFormattedStringOIDC4VPSIOPV2FromRequest({
   required String url,
   required DioClient client,
   required Map<String, dynamic>? response,
@@ -1256,7 +1256,23 @@ Future<String> getFormattedStringOIDC4VPSIOPV2({
     uri: Uri.parse(url),
   );
 
-  final data = '''
+  final data = getFormattedStringOIDC4VPSIOPV2(
+    url,
+    response,
+    clientMetaData,
+    presentationDefinition,
+  );
+
+  return data;
+}
+
+String getFormattedStringOIDC4VPSIOPV2(
+  String url,
+  Map<String, dynamic>? response,
+  Map<String, dynamic>? clientMetaData,
+  Map<String, dynamic>? presentationDefinition,
+) {
+  return '''
 <b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
 <b>AUTHORIZATION REQUEST :</b>
 ${response != null ? const JsonEncoder.withIndent('  ').convert(response) : Uri.decodeComponent(url)}\n
@@ -1265,8 +1281,6 @@ ${clientMetaData != null ? const JsonEncoder.withIndent('  ').convert(clientMeta
 <b>PRESENTATION DEFINITION  :</b> 
 ${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}
 ''';
-
-  return data;
 }
 
 String getSchemeFromUrl(String url) {
@@ -1538,17 +1552,10 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
       final credSupportedDisplay = credSupported.display;
 
       if (credSupportedDisplay != null) {
-        display = credSupportedDisplay.firstWhereOrNull(
-              (Display display) =>
-                  display.locale.toString().contains(languageCode),
-            ) ??
-            credSupportedDisplay.firstWhereOrNull(
-              (Display display) => display.locale.toString().contains('en'),
-            ) ??
-            credSupportedDisplay.firstWhereOrNull(
-              (Display display) => display.locale == null,
-            ) ??
-            credSupportedDisplay.first; // if local is not provided
+        display = extractDisplay(
+          credSupportedDisplay,
+          languageCode,
+        ); // if local is not provided
       }
     }
   } else if (openIdConfiguration.credentialConfigurationsSupported != null) {
@@ -1572,17 +1579,10 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
                 .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
                 .toList();
 
-            display = displays.firstWhereOrNull(
-                  (Display display) =>
-                      display.locale.toString().contains(languageCode),
-                ) ??
-                displays.firstWhereOrNull(
-                  (Display display) => display.locale.toString().contains('en'),
-                ) ??
-                displays.firstWhereOrNull(
-                  (Display display) => display.locale != null,
-                ) ??
-                displays.first; // if local is not provided
+            display = extractDisplay(
+              displays,
+              languageCode,
+            ); // if local is not provided
           }
         }
       }
@@ -1592,18 +1592,32 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
   if (display == null && openIdConfiguration.display != null) {
     final displays = openIdConfiguration.display!;
 
-    display = displays.firstWhereOrNull(
-          (Display display) => display.locale.toString().contains(languageCode),
-        ) ??
-        displays.firstWhereOrNull(
-          (Display display) => display.locale.toString().contains('en'),
-        ) ??
-        displays.firstWhereOrNull(
-          (Display display) => display.locale == null,
-        ) ??
-        displays.first; // if local is not provided;
+    display = extractDisplay(
+      displays,
+      languageCode,
+    ); // if local is not provided;
   }
   return (display, credentialSupported);
+}
+
+Display? extractDisplay(
+  List<Display> credSupportedDisplay,
+  String languageCode,
+) {
+  try {
+    return credSupportedDisplay.firstWhereOrNull(
+          (Display display) => display.locale.toString().contains(languageCode),
+        ) ??
+        credSupportedDisplay.firstWhereOrNull(
+          (Display display) => display.locale.toString().contains('en'),
+        ) ??
+        credSupportedDisplay.firstWhereOrNull(
+          (Display display) => display.locale == null,
+        ) ??
+        credSupportedDisplay.first;
+  } catch (e) {
+    return null;
+  }
 }
 
 List<String> getStringCredentialsForToken({

@@ -11,6 +11,7 @@ import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:oidc4vc/src/functions/dio_get.dart';
 import 'package:oidc4vc/src/functions/get_authorization_server_from_credential_offer.dart';
+import 'package:oidc4vc/src/functions/public_key_multibase_to_public_jwk.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -777,6 +778,9 @@ class OIDC4VC {
       } else if (method.containsKey('publicKeyBase58')) {
         publicKeyJwk =
             publicKeyBase58ToPublicJwk(method['publicKeyBase58'].toString());
+      } else if (method.containsKey('publicKeyMultibase')) {
+        publicKeyJwk = publicKeyMultibaseToPublicJwk(
+            method['publicKeyMultibase'].toString());
       } else {
         throw Exception('PUBLICKEYJWK_EXTRACTION_ERROR');
       }
@@ -802,6 +806,7 @@ class OIDC4VC {
     required String kid,
     required String privateKey,
     required List<VCFormatType> formatsSupported,
+    required String? clientId,
   }) async {
     final credentialData = <String, dynamic>{};
 // check if we support the requested format
@@ -853,7 +858,7 @@ class OIDC4VC {
             tokenParameters: issuerTokenParameters,
             clientAuthentication: clientAuthentication,
             cnonce: nonce,
-            iss: issuerTokenParameters.clientId,
+            iss: clientId,
           );
 
           credentialData['proof'] = {
@@ -1127,17 +1132,18 @@ class OIDC4VC {
   Future<String> getIssuerJwt({
     required IssuerTokenParameters tokenParameters,
     required ClientAuthentication clientAuthentication,
-    required String iss,
+    required String? iss,
     String? cnonce,
   }) async {
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round() - 30;
 
     final payload = {
-      //'iss': iss,
       'iat': iat,
       'aud': tokenParameters.issuer,
     };
-
+    if (iss != null) {
+      payload['iss'] = iss;
+    }
     if (cnonce != null) {
       payload['nonce'] = cnonce;
     }
