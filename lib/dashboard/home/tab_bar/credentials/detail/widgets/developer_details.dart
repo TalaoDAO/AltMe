@@ -13,14 +13,10 @@ class DeveloperDetails extends StatelessWidget {
     super.key,
     required this.credentialModel,
     required this.showVertically,
-    required this.statusListUri,
-    required this.statusListIndex,
   });
 
   final CredentialModel credentialModel;
   final bool showVertically;
-  final String? statusListUri;
-  final int? statusListIndex;
 
   @override
   Widget build(BuildContext context) {

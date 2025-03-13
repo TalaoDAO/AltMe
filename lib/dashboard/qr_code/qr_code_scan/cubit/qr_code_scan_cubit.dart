@@ -1431,10 +1431,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           /// this is full phase flow for preAuthorizedCode
 
           /// get openid configuration
-
+          Map<String, dynamic>? tokenData;
           if (savedAccessToken == null) {
             /// get tokendata
-            final tokenData = oidc4vc.buildTokenData(
+            tokenData = oidc4vc.buildTokenData(
               preAuthorizedCode: oidc4vcParameters.preAuthorizedCode,
               userPin: userPin,
               code: codeForAuthorisedFlow,
@@ -1490,7 +1490,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               dPop: dPop,
               issuer: oidc4vcParameters.issuer,
             );
-
             savedAccessToken = accessToken;
             savedNonce = cnonce;
             savedAuthorizationDetails = authorizationDetails;
@@ -1546,7 +1545,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               credential: selectedCredentials[i],
               cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
               didKeyType: customOidc4vcProfile.defaultDid,
-              clientId: clientId,
+              clientId: tokenData?['client_id'] != null ? clientId : null,
               profileCubit: profileCubit,
               accessToken: savedAccessToken!,
               cnonce: savedNonce,
@@ -1574,7 +1573,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 credential: selectedCredentials[i],
                 cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
                 didKeyType: customOidc4vcProfile.defaultDid,
-                clientId: clientId,
+                clientId: tokenData?['client_id'] != null ? clientId : null,
                 profileCubit: profileCubit,
                 accessToken: savedAccessToken!,
                 cnonce: nonce,

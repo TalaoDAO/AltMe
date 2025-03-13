@@ -118,7 +118,12 @@ class CredentialSubjectData extends StatelessWidget {
             return const SizedBox.shrink();
           }
         }
-
+// check if that's a picture which is displayed on the card.
+        final valueType = displayInstructionValue['value_type'];
+        if (Parameters.pictureOnCardValueTypeList.contains(valueType) &&
+            Parameters.pictureOnCardKeyList.contains(displayInstructionKey)) {
+          return const SizedBox.shrink();
+        }
         if (data == null) return const SizedBox.shrink();
         late Widget widget;
         final nestedFieldsFromDisplayInstruction =
