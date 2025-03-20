@@ -59,7 +59,6 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SelectiveDisclosureCubit(
-        oidc4vc: OIDC4VC(),
       ),
       child: SelectiveDisclosurePickView(
         uri: uri,
