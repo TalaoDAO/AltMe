@@ -410,7 +410,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                   ),
                   const SizedBox(height: 8),
                   if (widget.credentialModel.pendingInfo == null) ...[
-                    if (isDeveloperMode)
                       MyOutlinedButton(
                         text: l10n.download,
                         onPressed: () {
