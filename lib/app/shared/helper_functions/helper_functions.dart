@@ -683,6 +683,8 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
 
 Future<void> handleErrorForOID4VCI({
   required Oidc4vcParameters oidc4vcParameters,
+  required DidKeyType didKeyType,
+  required ClientType clientType,
 }) async {
   List<dynamic>? subjectSyntaxTypesSupported =
       oidc4vcParameters.issuerOpenIdConfiguration.subjectSyntaxTypesSupported;
@@ -737,14 +739,31 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (subjectSyntaxTypesSupported != null &&
-      !subjectSyntaxTypesSupported.contains('did:key')) {
-    throw ResponseMessage(
-      data: {
-        'error': 'subject_syntax_type_not_supported',
-        'error_description': 'The subject syntax type is not supported.',
-      },
-    );
+// Check we are handling one of the subjectSyntaxTypesSupported, if present
+// #3285
+
+  if (subjectSyntaxTypesSupported != null) {
+    switch (clientType) {
+      case ClientType.p256JWKThumprint:
+        break;
+      case ClientType.confidential:
+        break;
+      case ClientType.did:
+        // check if subjectSyntaxTypesSupported has an element which start with
+        // didKeyType.subjectSyntaxTypesSupported
+        if (subjectSyntaxTypesSupported
+            .where((element) => element.toString().startsWith(
+                  didKeyType.subjectSyntaxTypesSupported,
+                ))
+            .isEmpty) {
+          throw ResponseMessage(
+            data: {
+              'error': 'subject_syntax_type_not_supported',
+              'error_description': 'The subject syntax type is not supported.',
+            },
+          );
+        }
+    }
   }
 }
 
@@ -1304,6 +1323,7 @@ Future<dynamic> fetchRequestUriPayload({
       error: e,
       stackTrace: s,
     );
+    data = '';
   }
   return data;
 }
@@ -1772,7 +1792,7 @@ List<dynamic> collectSdValues(Map<String, dynamic> data) {
   return result;
 }
 
-Map<String, dynamic> createJsonByDecryptingSDValues({
+Map<String, dynamic> valuesJson({
   required Map<String, dynamic> encryptedJson,
   required SelectiveDisclosure selectiveDisclosure,
 }) {
@@ -1792,7 +1812,7 @@ Map<String, dynamic> createJsonByDecryptingSDValues({
               content.forEach((key, value) {
                 if (value is Map<String, dynamic>) {
                   if (value.containsKey('_sd')) {
-                    final nestedJson = createJsonByDecryptingSDValues(
+                    final nestedJson = valuesJson(
                       selectiveDisclosure: selectiveDisclosure,
                       encryptedJson: value,
                     );
@@ -1810,7 +1830,7 @@ Map<String, dynamic> createJsonByDecryptingSDValues({
       }
     } else {
       if (value is Map<String, dynamic>) {
-        final nestedJson = createJsonByDecryptingSDValues(
+        final nestedJson = valuesJson(
           selectiveDisclosure: selectiveDisclosure,
           encryptedJson: value,
         );
@@ -1843,6 +1863,79 @@ Map<String, dynamic> createJsonByDecryptingSDValues({
 
   return json;
 }
+
+// Map<String, dynamic> createJsonByDecryptingSDValues({
+//   required Map<String, dynamic> encryptedJson,
+//   required SelectiveDisclosure selectiveDisclosure,
+//   required bool isValue,
+// }) {
+//   final json = <String, dynamic>{};
+
+//   final sh256HashToContent = selectiveDisclosure.sh256HashToContent;
+
+//   encryptedJson.forEach((key, value) {
+//     if (key == '_sd') {
+//       final sd = encryptedJson['_sd'];
+
+//       if (sd is List<dynamic>) {
+//         for (final sdValue in sd) {
+//           if (sh256HashToContent.containsKey(sdValue)) {
+//             final content = sh256HashToContent[sdValue];
+//             if (content is Map) {
+//               content.forEach((key, value) {
+//                 if (value is Map<String, dynamic>) {
+//                   if (value.containsKey('_sd')) {
+//                     final nestedJson = createJsonByDecryptingSDValues(
+//                       selectiveDisclosure: selectiveDisclosure,
+//                       encryptedJson: value,
+//                     );
+//                     json[key.toString()] = nestedJson;
+//                   } else {
+//                     json[key.toString()] = value;
+//                   }
+//                 } else {
+//                   json[key.toString()] = value;
+//                 }
+//               });
+//             }
+//           }
+//         }
+//       }
+//     } else {
+//       if (value is Map<String, dynamic>) {
+//         final nestedJson = createJsonByDecryptingSDValues(
+//           selectiveDisclosure: selectiveDisclosure,
+//           encryptedJson: value,
+//         );
+//         json[key] = nestedJson;
+//       } else if (value is List<dynamic>) {
+//         final list = <String>[];
+
+//         for (final ele in value) {
+//           if (ele is Map) {
+//             final threeDotValue = ele['...'];
+//             if (sh256HashToContent.containsKey(threeDotValue)) {
+//               final content = sh256HashToContent[threeDotValue];
+//               if (content is Map) {
+//                 content.forEach((key, value) {
+//                   list.add(value.toString());
+//                 });
+//               }
+//             }
+//           } else {
+//             list.add(ele.toString());
+//           }
+//         }
+
+//         json[key] = list;
+//       } else {
+//         json[key] = value;
+//       }
+//     }
+//   });
+
+//   return json;
+// }
 
 Future<Map<String, dynamic>?> checkX509({
   required String encodedData,
