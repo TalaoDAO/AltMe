@@ -752,9 +752,11 @@ Future<void> handleErrorForOID4VCI({
         // check if subjectSyntaxTypesSupported has an element which start with
         // didKeyType.subjectSyntaxTypesSupported
         if (subjectSyntaxTypesSupported
-            .where((element) => element.toString().startsWith(
-                  didKeyType.subjectSyntaxTypesSupported,
-                ))
+            .where(
+              (element) => element.toString().startsWith(
+                    didKeyType.subjectSyntaxTypesSupported,
+                  ),
+            )
             .isEmpty) {
           throw ResponseMessage(
             data: {
@@ -1864,78 +1866,77 @@ Map<String, dynamic> valuesJson({
   return json;
 }
 
-// Map<String, dynamic> createJsonByDecryptingSDValues({
-//   required Map<String, dynamic> encryptedJson,
-//   required SelectiveDisclosure selectiveDisclosure,
-//   required bool isValue,
-// }) {
-//   final json = <String, dynamic>{};
+Map<String, dynamic> valuesSD({
+  required Map<String, dynamic> encryptedJson,
+  required SelectiveDisclosure selectiveDisclosure,
+}) {
+  final json = <String, dynamic>{};
 
-//   final sh256HashToContent = selectiveDisclosure.sh256HashToContent;
+  final sh256HashToContent = selectiveDisclosure.sh256HashToContent;
 
-//   encryptedJson.forEach((key, value) {
-//     if (key == '_sd') {
-//       final sd = encryptedJson['_sd'];
+  encryptedJson.forEach((key, value) {
+    if (key == '_sd') {
+      final sd = encryptedJson['_sd'];
 
-//       if (sd is List<dynamic>) {
-//         for (final sdValue in sd) {
-//           if (sh256HashToContent.containsKey(sdValue)) {
-//             final content = sh256HashToContent[sdValue];
-//             if (content is Map) {
-//               content.forEach((key, value) {
-//                 if (value is Map<String, dynamic>) {
-//                   if (value.containsKey('_sd')) {
-//                     final nestedJson = createJsonByDecryptingSDValues(
-//                       selectiveDisclosure: selectiveDisclosure,
-//                       encryptedJson: value,
-//                     );
-//                     json[key.toString()] = nestedJson;
-//                   } else {
-//                     json[key.toString()] = value;
-//                   }
-//                 } else {
-//                   json[key.toString()] = value;
-//                 }
-//               });
-//             }
-//           }
-//         }
-//       }
-//     } else {
-//       if (value is Map<String, dynamic>) {
-//         final nestedJson = createJsonByDecryptingSDValues(
-//           selectiveDisclosure: selectiveDisclosure,
-//           encryptedJson: value,
-//         );
-//         json[key] = nestedJson;
-//       } else if (value is List<dynamic>) {
-//         final list = <String>[];
+      if (sd is List<dynamic>) {
+        for (final sdValue in sd) {
+          if (sh256HashToContent.containsKey(sdValue)) {
+            final content = sh256HashToContent[sdValue];
+            if (content is Map) {
+              content.forEach((key, value) {
+                if (value is Map<String, dynamic>) {
+                  if (value.containsKey('_sd')) {
+                    final nestedJson = valuesSD(
+                      selectiveDisclosure: selectiveDisclosure,
+                      encryptedJson: value,
+                    );
+                    json[key.toString()] = nestedJson;
+                  } else {
+                    json[key.toString()] = value;
+                  }
+                } else {
+                  json[key.toString()] = value;
+                }
+              });
+            }
+          }
+        }
+      }
+    } else {
+      if (value is Map<String, dynamic>) {
+        final nestedJson = valuesSD(
+          selectiveDisclosure: selectiveDisclosure,
+          encryptedJson: value,
+        );
+        json[key] = nestedJson;
+      } else if (value is List<dynamic>) {
+        final list = <String>[];
 
-//         for (final ele in value) {
-//           if (ele is Map) {
-//             final threeDotValue = ele['...'];
-//             if (sh256HashToContent.containsKey(threeDotValue)) {
-//               final content = sh256HashToContent[threeDotValue];
-//               if (content is Map) {
-//                 content.forEach((key, value) {
-//                   list.add(value.toString());
-//                 });
-//               }
-//             }
-//           } else {
-//             list.add(ele.toString());
-//           }
-//         }
+        for (final ele in value) {
+          if (ele is Map) {
+            final threeDotValue = ele['...'];
+            if (sh256HashToContent.containsKey(threeDotValue)) {
+              final content = sh256HashToContent[threeDotValue];
+              if (content is Map) {
+                content.forEach((key, value) {
+                  list.add(value.toString());
+                });
+              }
+            }
+          } else {
+            list.add(ele.toString());
+          }
+        }
 
-//         json[key] = list;
-//       } else {
-//         json[key] = value;
-//       }
-//     }
-//   });
+        json[key] = list;
+      } else {
+        json[key] = value;
+      }
+    }
+  });
 
-//   return json;
-// }
+  return json;
+}
 
 Future<Map<String, dynamic>?> checkX509({
   required String encodedData,

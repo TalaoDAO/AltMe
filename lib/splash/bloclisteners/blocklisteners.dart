@@ -654,7 +654,7 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
       );
     }
     if (state.status == AppStatus.successAdd) {
-      // TODO: when we create vc+sd-jwt associated address cards, we need
+      // TODO(hawkbee): when we create vc+sd-jwt associated address cards, we need
       //to check also for vc+sd-jwt
       if (context
               .read<ProfileCubit>()

@@ -780,7 +780,7 @@ class OIDC4VC {
             publicKeyBase58ToPublicJwk(method['publicKeyBase58'].toString());
       } else if (method.containsKey('publicKeyMultibase')) {
         publicKeyJwk = publicKeyMultibaseToPublicJwk(
-            method['publicKeyMultibase'].toString());
+            method['publicKeyMultibase'].toString(),);
       } else {
         throw Exception('PUBLICKEYJWK_EXTRACTION_ERROR');
       }

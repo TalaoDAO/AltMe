@@ -36,13 +36,13 @@ Map<String, dynamic> publicKeyMultibaseToPublicJwk(String publicKeyMultibase) {
       'kty': 'EC',
       'crv': 'secp256k1',
       'x': base64Url.encode(x).replaceAll('=', ''),
-      'y': base64Url.encode(y).replaceAll('=', '')
+      'y': base64Url.encode(y).replaceAll('=', ''),
     };
   } else if (curve == 'Ed25519') {
     jwk = {
       'kty': 'OKP',
       'crv': 'Ed25519',
-      'x': base64Url.encode(keyData).replaceAll('=', '')
+      'x': base64Url.encode(keyData).replaceAll('=', ''),
     };
   } else {
     throw Exception('Unsupported key type.');
