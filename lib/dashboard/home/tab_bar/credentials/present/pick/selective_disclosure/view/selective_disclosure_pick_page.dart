@@ -58,8 +58,7 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SelectiveDisclosureCubit(
-      ),
+      create: (context) => SelectiveDisclosureCubit(),
       child: SelectiveDisclosurePickView(
         uri: uri,
         credential: credential,

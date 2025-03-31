@@ -232,6 +232,7 @@ class DisclosureTitle extends StatelessWidget {
         element.value['hasCheckbox'] != true) {
       return const SizedBox();
     }
+    final cubit = context.read<SelectiveDisclosureCubit>();
     return TransparentInkWell(
       onTap: () {
         if (element.value['hasCheckbox'] != true ||
@@ -239,11 +240,23 @@ class DisclosureTitle extends StatelessWidget {
           return;
         }
 
+        final isParentSelected = cubit.isSelectedDisclosure(
+          element.value['claimKey'].toString(),
+          element.value['sd']?.toString(),
+        );
         onPressed?.call(
           element.value['mapKey'].toString(),
           element.value['claimKey'].toString(),
           element.value['threeDotValue']?.toString(),
           element.value['sd']?.toString(),
+        );
+        final cascade = element.value['value'];
+        // For each element of cascade Map, if 'hasCheckbox' is true and
+        //'isCompulsary' is false, call onPressed
+        cascadeCheckBoxes(
+          cascade: cascade,
+          cubit: cubit,
+          isParentSelected: isParentSelected,
         );
       },
       child: Row(
@@ -268,6 +281,7 @@ class DisclosureTitle extends StatelessWidget {
                       state.selectedClaimsKeyIds.firstWhereOrNull(
                     (ele) =>
                         ele.keyId ==
+                        // ignore: lines_longer_than_80_chars
                         '${element.value["claimKey"]}#${element.value["sd"]}',
                   );
 
@@ -287,6 +301,38 @@ class DisclosureTitle extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void cascadeCheckBoxes({
+    required dynamic cascade,
+    required SelectiveDisclosureCubit cubit,
+    required bool isParentSelected,
+  }) {
+    if (cascade is Map<String, dynamic>) {
+      for (final entry in cascade.entries) {
+        final isEntrySelected = cubit.isSelectedDisclosure(
+          entry.value['claimKey'].toString(),
+          entry.value['sd']?.toString(),
+        );
+        if (entry.value['hasCheckbox'] == true &&
+            entry.value['isCompulsary'] == false &&
+            isEntrySelected == isParentSelected) {
+          onPressed?.call(
+            entry.value['mapKey'].toString(),
+            entry.value['claimKey'].toString(),
+            entry.value['threeDotValue']?.toString(),
+            entry.value['sd']?.toString(),
+          );
+        }
+        if (entry.value['value'] is Map<String, dynamic>) {
+          cascadeCheckBoxes(
+            cascade: entry.value['value'],
+            cubit: cubit,
+            isParentSelected: isParentSelected,
+          );
+        }
+      }
+    }
   }
 }
 

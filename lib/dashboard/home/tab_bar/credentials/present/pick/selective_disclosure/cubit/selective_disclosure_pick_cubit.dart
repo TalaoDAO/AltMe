@@ -24,7 +24,7 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     if (presentationDefinition != null) {
       final selectiveDisclosure = SelectiveDisclosure(credentialModel);
 
-      final credentialData = createJsonByDecryptingSDValues(
+      final credentialData = valuesJson(
         encryptedJson: credentialModel.data,
         selectiveDisclosure: selectiveDisclosure,
       );
@@ -77,6 +77,20 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
       ];
     }
     emit(state.copyWith(selectedClaimsKeyIds: ids));
+  }
+
+  bool isSelectedDisclosure(String claimKeyId, String? sd) {
+    final List<SelectedClaimsKeyIds> selectedClaimsKeys =
+        List.of(state.selectedClaimsKeyIds);
+
+    final selectedKey = selectedClaimsKeys
+        .firstWhereOrNull((ele) => ele.keyId == '$claimKeyId#$sd');
+
+    if (selectedKey != null) {
+      return selectedKey.isSelected;
+    } else {
+      return false;
+    }
   }
 
   void saveIndexOfSDJWT({
@@ -137,7 +151,6 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     String? claimsKey,
     String? sd,
   }) {
-    final selectiveDisclosure = SelectiveDisclosure(credentialModel);
     toggle(claimKeyId, sd);
     saveIndexOfSDJWT(
       claimsKey: claimsKey,
