@@ -232,13 +232,13 @@ class DisclosureTitle extends StatelessWidget {
         element.value['hasCheckbox'] != true) {
       return const SizedBox();
     }
-    final cubit = context.read<SelectiveDisclosureCubit>();
     return TransparentInkWell(
       onTap: () {
         if (element.value['hasCheckbox'] != true ||
             element.value['isCompulsary'] == true) {
           return;
         }
+        final cubit = context.read<SelectiveDisclosureCubit>();
 
         final isParentSelected = cubit.isSelectedDisclosure(
           element.value['claimKey'].toString(),
