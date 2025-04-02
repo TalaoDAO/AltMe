@@ -911,9 +911,8 @@ class ScanCubit extends Cubit<ScanState> {
           'type': ['VerifiablePresentation'],
           'holder': did,
           'id': presentationId,
-          'verifiableCredential': credentialsToBePresented.length == 1
-              ? credentialsToBePresented.first.data
-              : credentialsToBePresented.map((c) => c.data).toList(),
+          'verifiableCredential':
+              credentialsToBePresented.map((c) => c.data).toList(),
         }),
         options,
         privateKey,
