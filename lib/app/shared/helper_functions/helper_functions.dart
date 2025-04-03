@@ -1997,7 +1997,21 @@ Future<Map<String, dynamic>?> checkX509({
 
     final extnValue = extension.extnValue.toString();
 
-    if (!extnValue.contains(clientId)) {
+    /// clientId is an url. string domain is the domain from this url
+    final domain = Uri.parse(clientId).host;
+
+    /// valid domains is the list from the extnValue in which DNS: prefix
+    /// is removed. scheme like http:// or https:// is also removed
+    final validDomains = extnValue
+        .replaceAll('DNS:', '')
+        .split(',')
+        .map(
+          (String domain) => domain.replaceAll(RegExp('^(http|https)://'), ''),
+        )
+        .toList();
+
+    /// check if the domain is in the validDomains list
+    if (!validDomains.contains(domain)) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_format',
