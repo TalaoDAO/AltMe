@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/helper_functions/value_type_if_null.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:json_path/json_path.dart';
@@ -175,18 +176,25 @@ class SelectiveDisclosure {
     if (claims is! Map<String, dynamic>) return null;
 
     for (final key in Parameters.pictureOnCardKeyList) {
-      final keyPresent = claims.containsKey(key);
-      if (keyPresent) {
-        final value = claims[key];
-        if (value is Map<String, dynamic>) {
-          final valueType = value['value_type'];
-          if (Parameters.pictureOnCardValueTypeList.contains(valueType)) {
-            final (claimsData, _) = getClaimsData(
-              key: key,
-              parentKeyId: null,
-            );
+      // Use JsonPath to check if the key exists anywhere in the claims
+      // structure
+      final jsonPath = JsonPath(r'$..' + key);
+      final matches = jsonPath.read(claims);
 
-            if (claimsData.isEmpty) return null;
+      // keyPresent is true if the key is found at any level in the structure
+      final keyPresent = matches.isNotEmpty;
+
+      if (keyPresent) {
+        final value = matches.first.value;
+        if (value is Map<String, dynamic>) {
+          final (claimsData, _) = getClaimsData(
+            key: key,
+            parentKeyId: null,
+          );
+          if (claimsData.isEmpty) return null;
+          final valueType =
+              value['value_type'] ?? valueTypeIfNull(claimsData[0].data);
+          if (Parameters.pictureOnCardValueTypeList.contains(valueType)) {
             return claimsData[0].data;
           }
         }

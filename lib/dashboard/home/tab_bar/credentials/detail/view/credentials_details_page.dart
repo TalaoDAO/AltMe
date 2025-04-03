@@ -410,38 +410,38 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                   ),
                   const SizedBox(height: 8),
                   if (widget.credentialModel.pendingInfo == null) ...[
-                      MyOutlinedButton(
-                        text: l10n.download,
-                        onPressed: () {
-                          if (widget.credentialModel.isEbsiCard) {
-                            /// removing type that was added in add_ebsi_credential.dart
-                            widget.credentialModel.data['credentialSubject']
-                                .remove('type');
-                          }
+                    MyOutlinedButton(
+                      text: l10n.download,
+                      onPressed: () {
+                        if (widget.credentialModel.isEbsiCard) {
+                          /// removing type that was added in add_ebsi_credential.dart
+                          widget.credentialModel.data['credentialSubject']
+                              .remove('type');
+                        }
 
-                          late String data;
-                          final String? jwt = widget.credentialModel.jwt;
-                          if (jwt != null) {
-                            data = jwt;
-                          } else {
-                            data = jsonEncode(widget.credentialModel.data);
-                          }
+                        late String data;
+                        final String? jwt = widget.credentialModel.jwt;
+                        if (jwt != null) {
+                          data = jwt;
+                        } else {
+                          data = jsonEncode(widget.credentialModel.data);
+                        }
 
-                          getLogger(
-                            'CredentialDetailsPage - shared date',
-                          ).i(data);
+                        getLogger(
+                          'CredentialDetailsPage - shared date',
+                        ).i(data);
 
-                          final box = context.findRenderObject() as RenderBox?;
-                          final subject = l10n.shareWith;
+                        final box = context.findRenderObject() as RenderBox?;
+                        final subject = l10n.shareWith;
 
-                          Share.share(
-                            data,
-                            subject: subject,
-                            sharePositionOrigin:
-                                box!.localToGlobal(Offset.zero) & box.size,
-                          );
-                        },
-                      ),
+                        Share.share(
+                          data,
+                          subject: subject,
+                          sharePositionOrigin:
+                              box!.localToGlobal(Offset.zero) & box.size,
+                        );
+                      },
+                    ),
                   ] else ...[
                     MyOutlinedButton(
                       text: l10n.getItNow,

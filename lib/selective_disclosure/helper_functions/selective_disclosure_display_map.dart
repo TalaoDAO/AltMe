@@ -81,11 +81,17 @@ class SelectiveDisclosureDisplayMap {
         ).buildMap;
         if (nestedMap.isNotEmpty) {
           final fundation = claimData(mapKey, title, type, parentKeyId);
-          final fundationValue = fundation.values.first;
-          fundationValue['value'] = nestedMap;
-          builtMap.addAll(
-            {fundation.keys.first: fundationValue},
-          );
+          if (fundation.isEmpty) {
+            builtMap.addAll(
+              {title: nestedMap},
+            );
+          } else {
+            final fundationValue = fundation.values.first;
+            fundationValue['value'] = nestedMap;
+            builtMap.addAll(
+              {fundation.keys.first: fundationValue},
+            );
+          }
         } else {
           builtMap.addAll(
             claimData(mapKey, title, type, parentKeyId),

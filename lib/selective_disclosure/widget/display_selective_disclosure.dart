@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/shared/constants/parameters.dart';
 import 'package:altme/app/shared/extension/iterable_extension.dart';
+import 'package:altme/app/shared/helper_functions/value_type_if_null.dart';
 import 'package:altme/app/shared/widget/base/credential_field.dart';
 import 'package:altme/app/shared/widget/transparent_ink_well.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -371,6 +372,12 @@ class DisclosureLine extends StatelessWidget {
     } else {
       value = elementValue['value'].toString();
     }
+    late String type;
+    if (elementValue['type'].toString() == 'null') {
+      type = valueTypeIfNull(value) ?? 'string';
+    } else {
+      type = elementValue['type'].toString();
+    }
     return TransparentInkWell(
       onTap: () {
         if (elementValue['hasCheckbox'] != true ||
@@ -396,7 +403,7 @@ class DisclosureLine extends StatelessWidget {
               titleColor: Theme.of(context).colorScheme.onSurface,
               valueColor: Theme.of(context).colorScheme.onSurface,
               showVertically: showVertically,
-              type: elementValue['type'].toString(),
+              type: type,
             ),
           ),
           if (elementValue['hasCheckbox'] == true &&
