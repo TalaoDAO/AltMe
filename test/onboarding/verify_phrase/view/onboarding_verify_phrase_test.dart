@@ -89,9 +89,7 @@ class MockActivityLogManager extends Mock implements ActivityLogManager {}
 class MockCredentialsCubit extends MockCubit<CredentialsState>
     implements CredentialsCubit {
   @override
-  Future<void> loadAllCredentials({
-    required BlockchainType blockchainType,
-  }) async {}
+  Future<void> loadAllCredentials() async {}
 }
 
 class MockQRCodeScanCubit extends MockCubit<QRCodeScanState>

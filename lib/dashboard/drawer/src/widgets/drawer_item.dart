@@ -52,7 +52,7 @@ class DrawerItem extends StatelessWidget {
                                       ? Theme.of(context)
                                           .colorScheme
                                           .onSurface
-                                          .withOpacity(0.6)
+                                          .withValues(alpha: 0.6)
                                       : null,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -67,7 +67,7 @@ class DrawerItem extends StatelessWidget {
                                         ? Theme.of(context)
                                             .colorScheme
                                             .onSurface
-                                            .withOpacity(0.6)
+                                            .withValues(alpha: 0.6)
                                         : null,
                                   ),
                         ),
@@ -86,11 +86,11 @@ class DrawerItem extends StatelessWidget {
                         ? Theme.of(context)
                             .colorScheme
                             .onSurface
-                            .withOpacity(0.6)
+                            .withValues(alpha: 0.6)
                         : Theme.of(context)
                             .colorScheme
                             .onSurface
-                            .withOpacity(0.6),
+                            .withValues(alpha: 0.6),
                   ),
                 ],
               ],

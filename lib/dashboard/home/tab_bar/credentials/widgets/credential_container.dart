@@ -13,7 +13,10 @@ class CredentialContainer extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.12),
               blurRadius: 15,
               spreadRadius: 1,
               offset: const Offset(0, 4),

@@ -237,7 +237,7 @@ class BlurPainter extends CustomPainter {
 
     // Create a Paint object for the blur effect
     final Paint blurPaint = Paint();
-    blurPaint.color = Colors.black.withOpacity(0.5);
+    blurPaint.color = Colors.black.withValues(alpha: 0.5);
 
     // Calculate the size of the middle square
     final double squareSize = size.width * 0.8;

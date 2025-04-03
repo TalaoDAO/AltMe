@@ -74,7 +74,9 @@ class ActivityWidget extends StatelessWidget {
           ),
           const SizedBox(height: 5),
         ],
-        Divider(color: Theme.of(context).colorScheme.surface.withOpacity(0.07)),
+        Divider(
+          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.07),
+        ),
       ],
     );
   }
