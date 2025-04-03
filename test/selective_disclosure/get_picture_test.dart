@@ -57,6 +57,7 @@ void main() {
     });
 
     test(
+        // ignore: lines_longer_than_80_chars
         'returns null when picture key exists but getClaimsData is an empty list',
         () {
       // Arrange
@@ -283,7 +284,7 @@ void main() {
 
       // Assert
       expect(
-          result, equals(pictureData),); // Should return the first one (picture)
+          result, equals(pictureData),); // Should return the first one,
     });
 
     test('uses valueTypeIfNull when value_type is missing', () {
@@ -346,8 +347,8 @@ void main() {
   });
 }
 
-/// A test implementation of SelectiveDisclosure that allows mocking specific methods
-/// while preserving the real implementation of getPicture
+/// A test implementation of SelectiveDisclosure that allows mocking specific 
+/// methods while preserving the real implementation of getPicture
 class _MockRealSelectiveDisclosure extends SelectiveDisclosure {
   _MockRealSelectiveDisclosure(super.credentialModel);
 
@@ -355,7 +356,8 @@ class _MockRealSelectiveDisclosure extends SelectiveDisclosure {
   (List<ClaimsData>, String?)? mockGetClaimsDataResult;
   String? mockValueTypeIfNullResult;
 
-  // For more complex scenarios where different inputs should get different outputs
+  // For more complex scenarios where different inputs should 
+  // get different outputs
   (List<ClaimsData>, String?) Function(String key, String? parentKeyId)?
       mockGetClaimsDataCallback;
 

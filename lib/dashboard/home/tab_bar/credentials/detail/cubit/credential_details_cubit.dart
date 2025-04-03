@@ -335,7 +335,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-    /// TODO(hawkbee): Using Dio directly is solving the issue but it probably
+    // TODO(hawkbee): Using Dio directly is solving the issue but it probably
     /// means an issue.
     /// in the paramaers of DioClient
     /// Status invalid of an emailpass in a jwt_vc_json format #3283

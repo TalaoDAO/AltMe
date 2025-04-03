@@ -19,7 +19,6 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -502,7 +501,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
         final manageNetworkCubit = context.read<ManageNetworkCubit>();
 
         final incomingNetworkType =
-            describeEnum(beaconRequest.request!.network!.type!);
+            beaconRequest.request!.network!.type!.name;
         final currentNetworkType =
             manageNetworkCubit.state.network.networkname.toLowerCase();
 
@@ -654,8 +653,8 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
       );
     }
     if (state.status == AppStatus.successAdd) {
-      // TODO(hawkbee): when we create vc+sd-jwt associated address cards, we need
-      //to check also for vc+sd-jwt
+      // TODO(hawkbee): when we create vc+sd-jwt associated address cards
+      // we need to check also for vc+sd-jwt
       if (context
               .read<ProfileCubit>()
               .state

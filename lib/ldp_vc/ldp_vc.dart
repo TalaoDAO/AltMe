@@ -15,8 +15,9 @@ class LdpVc {
 
     if (credentialSubject == null) return null;
 
-    // check if member of keyList is a key in credentialSubject. If that's the case
-    // check if value contains value_type with value in valueTypeList
+    // check if member of keyList is a key in credentialSubject.
+    // If that's the case check if value contains value_type with value
+    // in valueTypeList
     for (final key in Parameters.pictureOnCardKeyList) {
       // Use JsonPath to check if the key exists anywhere in the structure
       final jsonPath = JsonPath(r'$..' + key);
@@ -28,7 +29,7 @@ class LdpVc {
       if (keyPresent) {
         final value = matches.first.value;
         if (value is Map<String, dynamic>) {
-          final valueType = value['value_type']?? valueTypeIfNull(value);
+          final valueType = value['value_type'] ?? valueTypeIfNull(value);
           if (Parameters.pictureOnCardValueTypeList.contains(valueType)) {
             return credentialModel.data['credentialSubject'][key] as String?;
           }
