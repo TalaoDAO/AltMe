@@ -1,4 +1,3 @@
-
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -284,7 +283,9 @@ void main() {
 
       // Assert
       expect(
-          result, equals(pictureData),); // Should return the first one,
+        result,
+        equals(pictureData),
+      ); // Should return the first one,
     });
 
     test('uses valueTypeIfNull when value_type is missing', () {
@@ -347,7 +348,7 @@ void main() {
   });
 }
 
-/// A test implementation of SelectiveDisclosure that allows mocking specific 
+/// A test implementation of SelectiveDisclosure that allows mocking specific
 /// methods while preserving the real implementation of getPicture
 class _MockRealSelectiveDisclosure extends SelectiveDisclosure {
   _MockRealSelectiveDisclosure(super.credentialModel);
@@ -356,7 +357,7 @@ class _MockRealSelectiveDisclosure extends SelectiveDisclosure {
   (List<ClaimsData>, String?)? mockGetClaimsDataResult;
   String? mockValueTypeIfNullResult;
 
-  // For more complex scenarios where different inputs should 
+  // For more complex scenarios where different inputs should
   // get different outputs
   (List<ClaimsData>, String?) Function(String key, String? parentKeyId)?
       mockGetClaimsDataCallback;
@@ -371,5 +372,4 @@ class _MockRealSelectiveDisclosure extends SelectiveDisclosure {
     }
     return mockGetClaimsDataResult ?? (<ClaimsData>[], null);
   }
-
 }

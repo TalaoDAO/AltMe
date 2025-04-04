@@ -27,6 +27,7 @@ class WalletLogo extends StatelessWidget {
         switch (profileModel.profileType) {
           case ProfileType.custom:
           case ProfileType.defaultOne:
+          case ProfileType.europeanWallet:
           case ProfileType.diipv3:
             image = flavorCubit.state == FlavorMode.development
                 ? ImageStrings.appLogoDev
@@ -45,8 +46,6 @@ class WalletLogo extends StatelessWidget {
                 ? generalOptions.companyLogoLight ?? generalOptions.companyLogo
                 : generalOptions.companyLogo;
 
-          //case ProfileType.diipv2point1:
-          //image = ImageStrings.diipLogo;
         }
 
         return Column(

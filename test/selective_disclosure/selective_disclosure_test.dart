@@ -125,10 +125,12 @@ void main() {
         final claimsData = [
           ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
         ];
-        when(mockSelectiveDisclosure.getClaimsData(
-          key: 'picture',
-          parentKeyId: null,
-        ),).thenReturn((claimsData, null));
+        when(
+          mockSelectiveDisclosure.getClaimsData(
+            key: 'picture',
+            parentKeyId: null,
+          ),
+        ).thenReturn((claimsData, null));
 
         // Act & Assert - Test method runs without exceptions
         expect(
@@ -158,10 +160,12 @@ void main() {
       final claimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
       ];
-      when(mockSelectiveDisclosure.getClaimsData(
-        key: 'picture',
-        parentKeyId: null,
-      ),).thenReturn((claimsData, null));
+      when(
+        mockSelectiveDisclosure.getClaimsData(
+          key: 'picture',
+          parentKeyId: null,
+        ),
+      ).thenReturn((claimsData, null));
 
       // Act & Assert - Test method runs without exceptions
       expect(
@@ -196,10 +200,12 @@ void main() {
       final claimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
       ];
-      when(mockSelectiveDisclosure.getClaimsData(
-        key: 'picture',
-        parentKeyId: null,
-      ),).thenReturn((claimsData, null));
+      when(
+        mockSelectiveDisclosure.getClaimsData(
+          key: 'picture',
+          parentKeyId: null,
+        ),
+      ).thenReturn((claimsData, null));
 
       // Act & Assert - Test method runs without exceptions
       expect(
@@ -233,10 +239,12 @@ void main() {
       final claimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
       ];
-      when(mockSelectiveDisclosure.getClaimsData(
-        key: 'picture',
-        parentKeyId: null,
-      ),).thenReturn((claimsData, null));
+      when(
+        mockSelectiveDisclosure.getClaimsData(
+          key: 'picture',
+          parentKeyId: null,
+        ),
+      ).thenReturn((claimsData, null));
 
       // Act & Assert - Test method runs without exceptions
       expect(
@@ -277,28 +285,34 @@ void main() {
         final pictureClaimsData = [
           ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
         ];
-        when(mockSelectiveDisclosure.getClaimsData(
-          key: 'picture',
-          parentKeyId: null,
-        ),).thenReturn((pictureClaimsData, null));
+        when(
+          mockSelectiveDisclosure.getClaimsData(
+            key: 'picture',
+            parentKeyId: null,
+          ),
+        ).thenReturn((pictureClaimsData, null));
 
         // Mock for the second key
         final faceClaimsData = [
           ClaimsData(isfromDisclosureOfJWT: true, data: faceData),
         ];
-        when(mockSelectiveDisclosure.getClaimsData(
-          key: 'face',
-          parentKeyId: null,
-        ),).thenReturn((faceClaimsData, null));
+        when(
+          mockSelectiveDisclosure.getClaimsData(
+            key: 'face',
+            parentKeyId: null,
+          ),
+        ).thenReturn((faceClaimsData, null));
 
         // Mock for the third key
         final portraitClaimsData = [
           ClaimsData(isfromDisclosureOfJWT: true, data: portraitData),
         ];
-        when(mockSelectiveDisclosure.getClaimsData(
-          key: 'portrait',
-          parentKeyId: null,
-        ),).thenReturn((portraitClaimsData, null));
+        when(
+          mockSelectiveDisclosure.getClaimsData(
+            key: 'portrait',
+            parentKeyId: null,
+          ),
+        ).thenReturn((portraitClaimsData, null));
 
         // Act & Assert - Test method runs without exceptions
         expect(
@@ -324,19 +338,23 @@ void main() {
       });
 
       // Mock empty result for picture
-      when(mockSelectiveDisclosure.getClaimsData(
-        key: 'picture',
-        parentKeyId: null,
-      ),).thenReturn((<ClaimsData>[], null));
+      when(
+        mockSelectiveDisclosure.getClaimsData(
+          key: 'picture',
+          parentKeyId: null,
+        ),
+      ).thenReturn((<ClaimsData>[], null));
 
       // Mock data for face
       final faceClaimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: faceData),
       ];
-      when(mockSelectiveDisclosure.getClaimsData(
-        key: 'face',
-        parentKeyId: null,
-      ),).thenReturn((faceClaimsData, null));
+      when(
+        mockSelectiveDisclosure.getClaimsData(
+          key: 'face',
+          parentKeyId: null,
+        ),
+      ).thenReturn((faceClaimsData, null));
 
       // Act & Assert - Test method runs without exceptions
       expect(
@@ -361,24 +379,30 @@ void main() {
       });
 
       // Mock empty result for picture and face
-      when(mockSelectiveDisclosure.getClaimsData(
-        key: 'picture',
-        parentKeyId: null,
-      ),).thenReturn((<ClaimsData>[], null));
+      when(
+        mockSelectiveDisclosure.getClaimsData(
+          key: 'picture',
+          parentKeyId: null,
+        ),
+      ).thenReturn((<ClaimsData>[], null));
 
-      when(mockSelectiveDisclosure.getClaimsData(
-        key: 'face',
-        parentKeyId: null,
-      ),).thenReturn((<ClaimsData>[], null));
+      when(
+        mockSelectiveDisclosure.getClaimsData(
+          key: 'face',
+          parentKeyId: null,
+        ),
+      ).thenReturn((<ClaimsData>[], null));
 
       // Mock data for portrait
       final portraitClaimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: portraitData),
       ];
-      when(mockSelectiveDisclosure.getClaimsData(
-        key: 'portrait',
-        parentKeyId: null,
-      ),).thenReturn((portraitClaimsData, null));
+      when(
+        mockSelectiveDisclosure.getClaimsData(
+          key: 'portrait',
+          parentKeyId: null,
+        ),
+      ).thenReturn((portraitClaimsData, null));
 
       // Act & Assert - Test method runs without exceptions
       expect(
@@ -406,10 +430,12 @@ void main() {
       final claimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
       ];
-      when(mockSelectiveDisclosure.getClaimsData(
-        key: 'picture',
-        parentKeyId: null,
-      ),).thenReturn((claimsData, null));
+      when(
+        mockSelectiveDisclosure.getClaimsData(
+          key: 'picture',
+          parentKeyId: null,
+        ),
+      ).thenReturn((claimsData, null));
 
       // Act & Assert - Test method runs without exceptions
       expect(
@@ -435,10 +461,12 @@ void main() {
       final claimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: 'pdf_data'),
       ];
-      when(mockSelectiveDisclosure.getClaimsData(
-        key: 'picture',
-        parentKeyId: null,
-      ),).thenReturn((claimsData, null));
+      when(
+        mockSelectiveDisclosure.getClaimsData(
+          key: 'picture',
+          parentKeyId: null,
+        ),
+      ).thenReturn((claimsData, null));
 
       // Act
       final result = selectiveDisclosure.getPicture;
@@ -470,10 +498,12 @@ void main() {
       final claimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
       ];
-      when(mockSelectiveDisclosure.getClaimsData(
-        key: 'picture',
-        parentKeyId: null,
-      ),).thenReturn((claimsData, null));
+      when(
+        mockSelectiveDisclosure.getClaimsData(
+          key: 'picture',
+          parentKeyId: null,
+        ),
+      ).thenReturn((claimsData, null));
 
       // Act & Assert - Test method runs without exceptions
       expect(

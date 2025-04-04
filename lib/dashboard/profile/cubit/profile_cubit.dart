@@ -147,6 +147,11 @@ class ProfileCubit extends Cubit<ProfileState> {
         SecureStorageKeys.enterpriseProfileSetting,
       );
 
+      final europeanWalletProfileSettingJsonString =
+          await secureStorageProvider.get(
+        SecureStorageKeys.europeanWalletProfileSetting,
+      );
+
       if (enterpriseProfileSettingJsonString != null) {
         final ProfileSetting enterpriseProfileSetting = ProfileSetting.fromJson(
           json.decode(enterpriseProfileSettingJsonString)
@@ -279,6 +284,24 @@ class ProfileCubit extends Cubit<ProfileState> {
             );
           } else {
             profileSetting = ProfileSetting.initial();
+          }
+
+          profileModel = ProfileModel(
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+            profileType: profileType,
+            profileSetting: profileSetting,
+            enterpriseWalletName: profileSetting.generalOptions.profileName,
+          );
+        case ProfileType.europeanWallet:
+          if (europeanWalletProfileSettingJsonString != null) {
+            profileSetting = ProfileSetting.fromJson(
+              json.decode(europeanWalletProfileSettingJsonString)
+                  as Map<String, dynamic>,
+            );
+          } else {
+            
           }
 
           profileModel = ProfileModel(
@@ -663,6 +686,9 @@ class ProfileCubit extends Cubit<ProfileState> {
                 enterpriseProfileSetting.generalOptions.profileName,
           ),
         );
+      case ProfileType.europeanWallet:
+        // TODO(hawkbee): Handle this case.
+        throw UnimplementedError();
     }
   }
 
