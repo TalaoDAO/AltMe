@@ -529,20 +529,13 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
       ) as _i16.Future<void>);
 
   @override
-  _i16.Future<void> addWalletCredential({
-    required _i15.BlockchainType? blockchainType,
-    required _i5.QRCodeScanCubit? qrCodeScanCubit,
-    required Uri? uri,
-  }) =>
+  _i16.Future<void> addWalletCredential(
+          {required _i5.QRCodeScanCubit? qrCodeScanCubit}) =>
       (super.noSuchMethod(
         Invocation.method(
           #addWalletCredential,
           [],
-          {
-            #blockchainType: blockchainType,
-            #qrCodeScanCubit: qrCodeScanCubit,
-            #uri: uri,
-          },
+          {#qrCodeScanCubit: qrCodeScanCubit},
         ),
         returnValue: _i16.Future<void>.value(),
         returnValueForMissingStub: _i16.Future<void>.value(),

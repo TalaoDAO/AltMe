@@ -111,17 +111,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   }
 
   Future<void> addWalletCredential({
-    required BlockchainType? blockchainType,
     required QRCodeScanCubit qrCodeScanCubit,
-    required Uri uri,
   }) async {
     final log = getLogger('addRequiredCredentials');
-
-    final walletType = profileCubit.state.model.walletType;
-
-    if (walletType != WalletType.enterprise) {
-      return;
-    }
 
     final walletAttestationData = await secureStorageProvider
         .get(SecureStorageKeys.walletAttestationData);
@@ -177,7 +169,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       await insertCredential(
         credential: walletCredential,
         showMessage: false,
-        uri: uri,
+        uri: Uri.parse(Parameters.walletIssuer),
       );
     }
   }

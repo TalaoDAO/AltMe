@@ -50,6 +50,17 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   },
 );
 
+final ProfileCubitListener = BlocListener<ProfileCubit, ProfileState>(
+  listener: (BuildContext context, ProfileState state) {
+    if (state.status == AppStatus.addEuropeanProfile) {
+      context.read<CredentialsCubit>().addWalletCredential(
+            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+          );
+    }
+
+  },
+);
+
 final walletBlocListener = BlocListener<WalletCubit, WalletState>(
   listener: (BuildContext context, WalletState state) async {
     if (state.message != null) {
@@ -500,8 +511,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       if (state.status != BeaconStatus.signPayload) {
         final manageNetworkCubit = context.read<ManageNetworkCubit>();
 
-        final incomingNetworkType =
-            beaconRequest.request!.network!.type!.name;
+        final incomingNetworkType = beaconRequest.request!.network!.type!.name;
         final currentNetworkType =
             manageNetworkCubit.state.network.networkname.toLowerCase();
 

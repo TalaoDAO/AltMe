@@ -27,7 +27,7 @@ extension ProfileTypeX on ProfileType {
       case ProfileType.defaultOne:
         return 'Default';
       case ProfileType.europeanWallet:
-        return 'EU Digital Identity Wallet';
+        return 'Wallet Profile for EWC';
     }
   }
 

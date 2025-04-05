@@ -51,4 +51,5 @@ const _$ProfileTypeEnumMap = {
   ProfileType.diipv3: 'diipv3',
   ProfileType.custom: 'custom',
   ProfileType.enterprise: 'enterprise',
+  ProfileType.europeanWallet: 'europeanWallet',
 };

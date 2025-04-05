@@ -5,11 +5,14 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:altme/dashboard/profile/models/models.dart';
+import 'package:altme/dashboard/profile/profile_provider/get_profile_from_provider.dart';
+import 'package:altme/dashboard/profile/profile_provider/get_wallet_attestation_data.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
@@ -296,12 +299,15 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
         case ProfileType.europeanWallet:
           if (europeanWalletProfileSettingJsonString != null) {
-            profileSetting = ProfileSetting.fromJson(
-              json.decode(europeanWalletProfileSettingJsonString)
-                  as Map<String, dynamic>,
-            );
+            final customProfileSettingMap =
+                jsonDecode(europeanWalletProfileSettingJsonString)
+                    as Map<String, dynamic>;
+
+            profileSetting = ProfileSetting.fromJson(customProfileSettingMap);
           } else {
-            
+            throw Exception(
+              'Failed to load European wallet profile setting',
+            );
           }
 
           profileModel = ProfileModel(
@@ -310,7 +316,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             isDeveloperMode: isDeveloperMode,
             profileType: profileType,
             profileSetting: profileSetting,
-            enterpriseWalletName: profileSetting.generalOptions.profileName,
+            enterpriseWalletName: enterpriseWalletName,
           );
       }
 
@@ -687,8 +693,72 @@ class ProfileCubit extends Cubit<ProfileState> {
           ),
         );
       case ProfileType.europeanWallet:
-        // TODO(hawkbee): Handle this case.
-        throw UnimplementedError();
+        final europeanWalletProfileSettingJsonString =
+            await secureStorageProvider.get(
+          SecureStorageKeys.europeanWalletProfileSetting,
+        );
+        late ProfileSetting profileSetting;
+        // Check if the European wallet profile setting is already stored
+        if (europeanWalletProfileSettingJsonString != null) {
+          profileSetting = ProfileSetting.fromJson(
+            json.decode(europeanWalletProfileSettingJsonString)
+                as Map<String, dynamic>,
+          );
+        } else {
+          // Set up European wallet profile using the deeplink
+          try {
+            /// get vc and store it in the wallet
+            const url = 'https://wallet-provider.talao.co';
+            final walletAttestationData = await getWalletAttestationData(
+              url: url,
+              secureStorageProvider: secureStorageProvider,
+              profileModel: state.model,
+              client: DioClient(
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+              jwtDecode: JWTDecode(),
+            );
+
+            final profileSettingJson = await getProfileFromProvider(
+              email: 'guest@EWC',
+              password: 'guest',
+              jwtVc: walletAttestationData,
+              url: url,
+              client: DioClient(
+                secureStorageProvider: secureStorageProvider,
+                dio: Dio(),
+              ),
+            );
+            profileSetting = ProfileSetting.fromJson(
+              json.decode(profileSettingJson) as Map<String, dynamic>,
+            );
+            profileSetting = profileSetting.copyWith(
+              settingsMenu: profileSetting.settingsMenu.copyWith(
+                displayProfile: true,
+              ),
+            );
+            await secureStorageProvider.set(
+              SecureStorageKeys.europeanWalletProfileSetting,
+              profileSettingJson,
+            );
+          } catch (e, s) {
+            final log = getLogger('ProfileCubit - loadEuropeanWallet');
+            log.e(
+              'Failed to load European wallet configuration',
+              error: e,
+              stackTrace: s,
+            );
+            throw Exception('Failed to load European wallet configuration');
+          }
+        }
+        await update(
+          state.model.copyWith(
+            profileType: profileType,
+            profileSetting: profileSetting,
+          ),
+        );
+        emit(state.copyWith(status: AppStatus.addEuropeanProfile));
     }
   }
 
